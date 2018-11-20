@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@cljs-oss/module-deps": "^1.1.1",
+    "konva": "^2.5.0",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-konva": "^16.6.0",
+    "react-spring": "^5.8.0"
+  }
+}
