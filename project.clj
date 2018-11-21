@@ -6,6 +6,7 @@
                  [compojure "1.5.0"]
                  [yogthos/config "0.8"]
                  [ring "1.4.0"]
+                 [ring/ring-json "0.4.0"]
                  [cljsjs/react "16.6.0-0"]
                  [cljsjs/react-dom "16.6.0-0"]
                  [reanimated "0.6.1"]

@@ -45,7 +45,7 @@
           (put-data object-url-key)))
     (get-data object-url-key)))
 
-(def host "http://unknown.test/api")
+(def host "/api")
 (def resources "")
 
 (defn get-course
@@ -54,7 +54,7 @@
 
 (defn get-scene
   [course-id scene-id]
-  (http/get (str host "/courses/" course-id "/scene/" scene-id) {:with-credentials? false}))
+  (http/get (str host "/courses/" course-id "/scenes/" scene-id) {:with-credentials? false}))
 
 
 (defn get-total-size
