@@ -198,6 +198,8 @@
 
 (declare transition)
 (declare group)
+(declare placeholder)
+(declare image)
 
 (defn draw-object
   [scene-id name]
@@ -205,29 +207,40 @@
         type (keyword (:type @o))]
     (case type
       :background [kimage (get-data-as-url (:src @o))]
-      :image [:> Group (prepare-group-params @o)
-                           [kimage (get-data-as-url (:src @o))]]
+      :image [image scene-id name @o]
       :transparent [:> Group (prepare-group-params @o)
                                  [:> Rect {:x 0 :width (:width @o) :height (:height @o)}]]
-      :transition [transition scene-id name o]
-      :group [group scene-id name o]
+      :transition [transition scene-id name @o]
+      :group [group scene-id name @o]
+      :placeholder [placeholder scene-id name @o]
       )))
+
+(defn placeholder
+  [scene-id name object]
+  (let [item (re-frame/subscribe [::subs/placeholder-item scene-id name])]
+    [image scene-id name (-> object
+                                   (assoc :type "image")
+                                   (assoc :src (get @item (-> object :item-src keyword))))]))
 
 (defn transition
   [scene-id name object]
   (let [component (r/atom nil)
-        params (assoc @object :ref (fn [ref] (reset! component ref)))]
+        params (assoc object :ref (fn [ref] (reset! component ref)))]
     (re-frame/dispatch [::ie/register-transition name component])
     (fn [scene-id name object]
-      (js/console.log "render transition: " (:rotation @object))
       [:> Group params
-       [draw-object scene-id (:object @object)]])))
+       [draw-object scene-id (:object object)]])))
 
 (defn group
   [scene-id name object]
-  [:> Group (prepare-group-params @object)
-   (for [child (:children @object)]
+  [:> Group (prepare-group-params object)
+   (for [child (:children object)]
      ^{:key (str scene-id child)} [draw-object scene-id child])])
+
+(defn image
+  [scene-id name object]
+  [:> Group (prepare-group-params object)
+   [kimage (get-data-as-url (:src object))]])
 
 (defn triggers
   []

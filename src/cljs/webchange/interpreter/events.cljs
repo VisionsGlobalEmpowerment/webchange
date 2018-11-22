@@ -58,7 +58,25 @@
       :animation {:dispatch [::execute-animation action]}
       :scene {:dispatch [::execute-scene action]}
       :transition {:dispatch [::execute-transition action]}
+      :placeholder-item-provider {:dispatch [::execute-placeholder-item-provider action]}
       )))
+
+(re-frame/reg-event-fx
+  ::set-placeholder-item
+  (fn [{:keys [db]} [_ placeholder-id [key item]]]
+    (js/console.log "placeholder: " placeholder-id)
+    (js/console.log item)
+    (let [scene-id (:current-scene db)]
+      {:db (assoc-in db [:scenes scene-id :placeholders placeholder-id] item)})))
+
+(re-frame/reg-event-fx
+  ::execute-placeholder-item-provider
+  (fn [{:keys [db]} [_ {:keys [from placeholders]}]]
+    (let [scene-id (:current-scene db)
+          scene (get-in db [:scenes scene-id])
+          items (shuffle (get-in scene [:datasets (keyword from)]))]
+      {:dispatch-n (->> (zipmap placeholders items)
+                       (map (fn [i] [::set-placeholder-item (first i) (second i)])))})))
 
 (re-frame/reg-event-fx
   ::execute-transition

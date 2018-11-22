@@ -589,19 +589,11 @@
    :metadata      {:autostart true}})
 
 (def map-scene {:assets
-                               [{:url  "/raw/audio/background/POL-daily-special-short.mp3",
-                                 :size 10,
-                                 :type "audio"}
-                                {:url  "/raw/audio/effects/NFF-fruit-collected.mp3",
-                                 :size 1,
-                                 :type "audio"}
+                               [{:url  "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
+                                {:url  "/raw/audio/effects/NFF-fruit-collected.mp3" :size 1 :type "audio"}
                                 {:url "/raw/audio/effects/NFF-glitter.mp3", :size 1, :type "audio"}
-                                {:url  "/raw/audio/effects/NFF-robo-elastic.mp3",
-                                 :size 1,
-                                 :type "audio"}
-                                {:url  "/raw/audio/effects/NFF-rusted-thing.mp3",
-                                 :size 1,
-                                 :type "audio"}
+                                {:url  "/raw/audio/effects/NFF-robo-elastic.mp3" :size 1 :type "audio"}
+                                {:url  "/raw/audio/effects/NFF-rusted-thing.mp3" :size 1 :type "audio"}
                                 {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
                                 {:url "/raw/img/map/background.png", :size 10, :type "image"}
                                 {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
@@ -624,12 +616,9 @@
                                 {:url "/raw/img/ui/star_02.png", :size 1, :type "image"}
                                 {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}],
                 :objects
-                               {:background
-                                {:type "background", :src "/raw/img/map/background.png"},
-                                :vera-transition
-                                {:type "transition", :x 1045, :y 540, :object "vera"},
-                                :vera
-                                {:type "image", :src "/raw/img/vera.png", :scale {:x 0.2, :y 0.2}},
+                               {:background {:type "background", :src "/raw/img/map/background.png"},
+                                :vera {:type "image":x 1045, :y 540 :scale {:x 0.2 :y 0.2}
+                                       :src "/raw/img/vera.png" :transition "vera-transition"}
                                 :home
                                 {:type   "image",
                                  :x      731,
@@ -662,7 +651,7 @@
                                           :mouseout
                                                  {:type "state", :target "feria", :id "default", :on "mouseout"},
                                           :click {:type "action", :id "move-to-feria", :on "click"}}}},
-                :scene-objects [["background" "home" "feria"] ["vera-transition"]],
+                :scene-objects [["background" "home" "feria"] ["vera"]],
                 :actions
                                {:move-to-feria-transition-1
                                             {:type          "transition",
@@ -824,18 +813,18 @@
                    :items              {:type     "group" :width 772 :height 772 :transition "items"
                                         :children ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
                                         :origin   {:type "center-center"}}
-                   :item-1             {:type "image" :width 205 :height 209 :x 599 :y 263 :transition "item-1" :rotation 360
-                                        :src  "/raw/img/ferris-wheel/words/bat_default.png" :origin {:type "center-center"}}
-                   :item-2             {:type "image" :width 205 :height 209 :x 386 :y 140 :transition "item-2" :rotation 360
-                                        :src  "/raw/img/ferris-wheel/words/broccoli_default.png" :origin {:type "center-center"}}
-                   :item-3             {:type "image" :width 205 :height 209 :x 173 :y 263 :transition "item-3" :rotation 360
-                                        :src  "/raw/img/ferris-wheel/words/dinosaur_default.png" :origin {:type "center-center"}}
-                   :item-4             {:type "image" :width 205 :height 209 :x 173 :y 509 :transition "item-4" :rotation 360
-                                        :src  "/raw/img/ferris-wheel/words/orange_default.png" :origin {:type "center-center"}}
-                   :item-5             {:type "image" :width 205 :height 209 :x 386 :y 632 :transition "item-5" :rotation 360
-                                        :src  "/raw/img/ferris-wheel/words/crocodile_default.png" :origin {:type "center-center"}}
-                   :item-6             {:type "image" :width 205 :height 209 :x 599 :y 509 :transition "item-6" :rotation 360
-                                        :src  "/raw/img/ferris-wheel/words/whale_default.png" :origin {:type "center-center"}}
+                   :item-1             {:type "placeholder" :width 205 :height 209 :x 599 :y 263 :transition "item-1" :rotation 360
+                                        :item-src "src" :origin {:type "center-center"}}
+                   :item-2             {:type "placeholder" :width 205 :height 209 :x 386 :y 140 :transition "item-2" :rotation 360
+                                        :item-src "src" :origin {:type "center-center"}}
+                   :item-3             {:type "placeholder" :width 205 :height 209 :x 173 :y 263 :transition "item-3" :rotation 360
+                                        :item-src "src" :origin {:type "center-center"}}
+                   :item-4             {:type "placeholder" :width 205 :height 209 :x 173 :y 509 :transition "item-4" :rotation 360
+                                        :item-src "src" :origin {:type "center-center"}}
+                   :item-5             {:type "placeholder" :width 205 :height 209 :x 386 :y 632 :transition "item-5" :rotation 360
+                                        :item-src "src" :origin {:type "center-center"}}
+                   :item-6             {:type "placeholder" :width 205 :height 209 :x 599 :y 509 :transition "item-6" :rotation 360
+                                        :item-src "src" :origin {:type "center-center"}}
                    },
    :actions       {:rotate-wheel {:type "parallel",
                                   :data [{:type "transition" :transition-id "wheel-1" :to {:rotation 360 :duration 30 :loop true}}
@@ -847,8 +836,18 @@
                                          {:type "transition" :transition-id "item-3" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-4" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
-                                         {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}}
-   :triggers {:rotation {:on "start" :action "rotate-wheel"}}
+                                         {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
+                   :renew-words {:type "placeholder-item-provider"
+                                 :placeholders ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
+                                 :from "items"}}
+   :triggers {:rotation {:on "start" :action "rotate-wheel"}
+              :items {:on "start" :action "renew-words"}}
+   :datasets {:items {:bat {:src "/raw/img/ferris-wheel/words/bat_default.png"}
+                      :broccoli {:src "/raw/img/ferris-wheel/words/broccoli_default.png"}
+                      :dinosaur {:src "/raw/img/ferris-wheel/words/dinosaur_default.png"}
+                      :orange {:src "/raw/img/ferris-wheel/words/orange_default.png"}
+                      :crocodile {:src "/raw/img/ferris-wheel/words/crocodile_default.png"}
+                      :whale {:src "/raw/img/ferris-wheel/words/whale_default.png"}}}
    :scene-objects [["background" "wheel"]],
    :metadata      {:autostart false}})
 
