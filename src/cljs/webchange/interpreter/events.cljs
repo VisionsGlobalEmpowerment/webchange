@@ -67,10 +67,10 @@
           transition (get-in db [:transitions scene-id transition-id])
           success-event [::flow-success flow-id action-id]]
       {:transition {:component transition
-                    :to to
-                    :on-ended #(doseq [event (list success-event next)]
-                                 (when event (re-frame/dispatch event)))}}
-      )))
+                    :to        to
+                    :on-ended  #(doseq [event (list success-event next)]
+                                  (when event (re-frame/dispatch event)))}})
+    ))
 
 (re-frame/reg-event-fx
   ::execute-scene
@@ -105,6 +105,8 @@
           current-action (-> current
                              (get-action db)
                              (with-next next (:next action)))]
+      (js/console.log "execute sequence")
+      (js/console.log current-action)
       {:dispatch [::execute-action current-action]})))
 
 (re-frame/reg-event-fx
@@ -195,7 +197,9 @@
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id]]
     (let [loaded (get-in db [:scene-loading-complete scene-id])]
-      (cond-> {:db (assoc db :current-scene scene-id)}
+      (cond-> {:db (-> db
+                       (assoc :current-scene scene-id)
+                       (assoc :scene-started false))}
               (not loaded) (assoc :load-scene [(:current-course db) scene-id])))))
 
 (re-frame/reg-event-db
@@ -205,5 +209,20 @@
 
 (re-frame/reg-event-db
   ::register-transition
-  (fn [db [_ scene-id name component]]
-    (assoc-in db [:transitions scene-id name] component)))
+  (fn [db [_ name component]]
+    (js/console.log "register transition: " name)
+    (let [scene-id (:current-scene db)]
+      (assoc-in db [:transitions scene-id name] component))))
+
+(re-frame/reg-event-fx
+  ::trigger
+  (fn [{:keys [db]} [_ trigger]]
+    (let [scene-id (:current-scene db)
+          scene (get-in db [:scenes scene-id])
+          actions (->> (:triggers scene)
+                       (filter #(= trigger (-> % second :on keyword)))
+                       (map second)
+                       (map #(-> % :action keyword))
+                       (map #(get-in scene [:actions %]))
+                       (map (fn [action] [::execute-action action])))]
+      {:dispatch-n actions})))

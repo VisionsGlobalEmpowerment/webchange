@@ -48,6 +48,11 @@
     (:playing db)))
 
 (re-frame/reg-sub
+  ::scene-started
+  (fn [db]
+    (:scene-started db)))
+
+(re-frame/reg-sub
   ::ui-screen
   (fn [db]
     (:ui-screen db)))

@@ -144,16 +144,19 @@
      [close-button (- 108) 20]]
     ))
 
-(defn scene-start-auto
+(defn scene-started
   [scene-data]
-  (get-in scene-data [:metadata :autostart] false))
+  (let [scene-started (re-frame/subscribe [::subs/scene-started])]
+    (or
+      @scene-started
+      (get-in scene-data [:metadata :autostart] false))))
 
 (defn scene-ready
   [scene-id]
   (let [scene-data (re-frame/subscribe [::subs/scene scene-id])
         loaded (re-frame/subscribe [::subs/scene-loading-complete scene-id])
         course-started (re-frame/subscribe [::subs/playing])]
-    (and @loaded @course-started (scene-start-auto @scene-data))))
+    (and @loaded @course-started (scene-started @scene-data))))
 
 (defn layers
   [objects]
@@ -169,35 +172,66 @@
   [action]
   {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ie/execute-action action])})
 
+(defn with-origin-offset
+  [{:keys [width height origin] :as object}]
+  (let [{:keys [type]} origin]
+    (case type
+      "center-center" (-> object
+                          (assoc :offset {:x (/ width 2) :y (/ height 2)}))
+      "center-top" (-> object
+                       (assoc :offset {:x (/ width 2)}))
+      object)))
+
+(defn with-transition
+  [{:keys [transition] :as object}]
+  (if transition
+    (let [component (r/atom nil)]
+      (re-frame/dispatch [::ie/register-transition transition component])
+      (assoc object :ref (fn [ref] (reset! component ref))))
+    object))
+
 (defn prepare-group-params
   [object]
-  (reduce (fn [o [k v]] (merge o (prepare-action v))) object (:actions object)))
+  (-> (reduce (fn [o [k v]] (merge o (prepare-action v))) object (:actions object))
+      with-origin-offset
+      with-transition))
 
 (declare transition)
+(declare group)
 
 (defn draw-object
   [scene-id name]
   (let [o (re-frame/subscribe [::subs/scene-object scene-id name])
         type (keyword (:type @o))]
-    (js/console.log (str "render object: " type " on scene: " scene-id))
-    (js/console.log @o)
     (case type
       :background [kimage (get-data-as-url (:src @o))]
       :image [:> Group (prepare-group-params @o)
                            [kimage (get-data-as-url (:src @o))]]
       :transparent [:> Group (prepare-group-params @o)
                                  [:> Rect {:x 0 :width (:width @o) :height (:height @o)}]]
-      :transition [transition scene-id name @o]
+      :transition [transition scene-id name o]
+      :group [group scene-id name o]
       )))
 
 (defn transition
   [scene-id name object]
   (let [component (r/atom nil)
-        params (assoc object :ref (fn [ref] (reset! component ref)))]
-    (re-frame/dispatch [::ie/register-transition scene-id name component])
+        params (assoc @object :ref (fn [ref] (reset! component ref)))]
+    (re-frame/dispatch [::ie/register-transition name component])
     (fn [scene-id name object]
+      (js/console.log "render transition: " (:rotation @object))
       [:> Group params
-       [draw-object scene-id (:object object)]])))
+       [draw-object scene-id (:object @object)]])))
+
+(defn group
+  [scene-id name object]
+  [:> Group (prepare-group-params @object)
+   (for [child (:children @object)]
+     ^{:key (str scene-id child)} [draw-object scene-id child])])
+
+(defn triggers
+  []
+  (re-frame/dispatch [::ie/trigger :start]))
 
 (defn scene
   [scene-id]
@@ -208,6 +242,7 @@
             name layer]
         ^{:key (str scene-id name)} [draw-object scene-id name])
      [menu]
+     [triggers]
      ]))
 
 (defn current-scene

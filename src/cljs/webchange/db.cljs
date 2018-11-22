@@ -3,6 +3,7 @@
 (def default-db
   {:name "re-frame"
    :playing false
+   :scene-started false
    :viewport {:width 1920
               :height 1080}
    :current-course nil

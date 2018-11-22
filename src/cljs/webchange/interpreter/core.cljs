@@ -7,6 +7,7 @@
     [react-spring :refer [Spring]]
     [reagent.core :as r]
     [react-konva :refer [Stage, Layer, Group, Rect]]
+    [konva :refer [Tween]]
     [webchange.common.kimage :refer [kimage]]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
@@ -96,8 +97,6 @@
 
 (defn length
   [cx cy x y]
-  (js/console.log "length params: " cx " " cy " " x " " y)
-  (js/console.log "length: " (Math/sqrt (+ (Math/pow (- cx x) 2) (Math/pow (- cy y) 2))))
   (Math/sqrt (+ (Math/pow (- cx x) 2) (Math/pow (- cy y) 2))))
 
 (defn transition-duration
@@ -105,7 +104,6 @@
   (let [cx (-> component (.-attrs) (.-x))
         cy (-> component (.-attrs) (.-y))
         {:keys [x y duration speed]} to]
-    (js/console.log component)
     (cond
       (> duration 0) duration
       (> speed 0) (/ (length cx cy x y) speed)
@@ -113,9 +111,17 @@
 
 (defn interpolate
   [{:keys [component to on-ended]}]
-  (let [duration (transition-duration @component to)]
-    (js/console.log "duration " duration)
-    (.to @component #js {:x (:x to)
-                         :y (:y to)
-                         :duration duration
-                         :onFinish on-ended})))
+  (let [duration (transition-duration @component to)
+        params (-> to
+                   (assoc :duration duration)
+                   (assoc :onFinish on-ended))]
+    (js/console.log "interpolate params: " params)
+    (if (:loop to)
+      (-> params
+          (assoc :node @component)
+          (assoc :onFinish (fn [] (this-as t (.reset t) (.play t))))
+          clj->js
+          Tween.
+          .play)
+      (.to @component (clj->js params)))
+    ))

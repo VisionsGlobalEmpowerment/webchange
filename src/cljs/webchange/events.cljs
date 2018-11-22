@@ -16,11 +16,6 @@
     (assoc db :viewport value)))
 
 (re-frame/reg-event-db
-  ::set-current-scene
-  (fn [db [_ value]]
-    (assoc db :current-scene value)))
-
-(re-frame/reg-event-db
   ::set-scene
   (fn [db [_ [scene-id scene]]]
     (assoc-in db [:scenes scene-id] scene)))
@@ -38,7 +33,9 @@
 (re-frame/reg-event-db
   ::start-playing
   (fn [db _]
-    (assoc db :playing true)))
+    (-> db
+        (assoc :playing true)
+        (assoc :scene-started true))))
 
 (re-frame/reg-event-db
   ::set-object-state
@@ -52,7 +49,6 @@
 (re-frame/reg-event-db
   ::open-settings
   (fn [db _]
-    (js/console.log "open settings")
     (assoc db :ui-screen :settings)))
 
 (re-frame/reg-event-db
