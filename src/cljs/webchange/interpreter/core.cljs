@@ -115,7 +115,6 @@
         params (-> to
                    (assoc :duration duration)
                    (assoc :onFinish on-ended))]
-    (js/console.log "interpolate params: " params)
     (if (:loop to)
       (-> params
           (assoc :node @component)

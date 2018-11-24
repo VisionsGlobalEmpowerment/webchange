@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.core :as i]
     [webchange.interpreter.executor :as e]
+    [webchange.interpreter.variables.events :as vars.events]
     ))
 
 (re-frame/reg-fx
@@ -58,117 +59,118 @@
       :animation {:dispatch [::execute-animation action]}
       :scene {:dispatch [::execute-scene action]}
       :transition {:dispatch [::execute-transition action]}
-      :placeholder-item-provider {:dispatch [::execute-placeholder-item-provider action]}
+      :dataset-var-provider {:dispatch [::vars.events/execute-dataset-var-provider action]}
+      :vars-var-provider {:dispatch [::vars.events/execute-vars-var-provider action]}
+      :placeholder-audio {:dispatch [::execute-placeholder-audio action]}
       )))
 
-(re-frame/reg-event-fx
-  ::set-placeholder-item
-  (fn [{:keys [db]} [_ placeholder-id [key item]]]
-    (js/console.log "placeholder: " placeholder-id)
-    (js/console.log item)
-    (let [scene-id (:current-scene db)]
-      {:db (assoc-in db [:scenes scene-id :placeholders placeholder-id] item)})))
+(defn success-event
+  [{:keys [flow-id action-id]}]
+  [::flow-success flow-id action-id])
+
+(defn dispatch-success-fn
+  [action]
+  #(re-frame/dispatch (success-event action)))
 
 (re-frame/reg-event-fx
-  ::execute-placeholder-item-provider
-  (fn [{:keys [db]} [_ {:keys [from placeholders]}]]
+  ::execute-placeholder-audio
+  (fn [{:keys [db]} [_ {:keys [var-name] :as action}]]
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
-          items (shuffle (get-in scene [:datasets (keyword from)]))]
-      {:dispatch-n (->> (zipmap placeholders items)
-                       (map (fn [i] [::set-placeholder-item (first i) (second i)])))})))
+          variable (get-in scene [:variables var-name])
+          audio-params (-> action
+                           (assoc :key (get-audio-key db (get variable (-> action :id keyword))))
+                           (assoc :start (get variable (-> action :start keyword)))
+                           (assoc :duration (get variable (-> action :duration keyword)))
+                           (assoc :offset (get variable (-> action :offset keyword))))]
+      {:execute-audio (-> audio-params
+                          (assoc :on-ended (dispatch-success-fn action)))})
+    ))
 
 (re-frame/reg-event-fx
   ::execute-transition
-  (fn [{:keys [db]} [_ {:keys [transition-id to next flow-id action-id] :as params}]]
+  (fn [{:keys [db]} [_ {:keys [transition-id to] :as action}]]
     (let [scene-id (:current-scene db)
-          transition (get-in db [:transitions scene-id transition-id])
-          success-event [::flow-success flow-id action-id]]
+          transition (get-in db [:transitions scene-id transition-id])]
       {:transition {:component transition
                     :to        to
-                    :on-ended  #(doseq [event (list success-event next)]
-                                  (when event (re-frame/dispatch event)))}})
+                    :on-ended  (dispatch-success-fn action)}})
     ))
 
 (re-frame/reg-event-fx
   ::execute-scene
-  (fn [{:keys [db]} [_ {:keys [scene-id flow-id action-id] :as params}]]
-    {:dispatch-n (list [::set-current-scene scene-id] [::flow-success flow-id action-id])}))
+  (fn [{:keys [db]} [_ {:keys [scene-id] :as action}]]
+    {:dispatch-n (list [::set-current-scene scene-id] (success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-audio
-  (fn [{:keys [db]} [_ {:keys [id next flow-id action-id] :as params}]]
-    (let [success-event [::flow-success flow-id action-id]]
-      {:execute-audio (-> params
+  (fn [{:keys [db]} [_ {:keys [id] :as action}]]
+      {:execute-audio (-> action
                           (assoc :key (get-audio-key db id))
-                          (assoc :on-ended #(doseq [event (list success-event next)]
-                                              (when event (re-frame/dispatch event)))))})))
+                          (assoc :on-ended (dispatch-success-fn action)))}))
 
-
-(defn create-sequence-action
-  [next]
-  {:type "sequence"
-   :data next})
-
-(defn with-next
-  [action next [_ {current-sequence :data}]]
-  (if next
-    (assoc action :next [::execute-sequence (create-sequence-action (concat next current-sequence))])
-    action))
+(def event-as-action
+  (re-frame/->interceptor
+    :before  (fn [context]
+               (update-in context [:coeffects :event] #(second %)))))
 
 (re-frame/reg-event-fx
   ::execute-sequence
-  (fn [{:keys [db]} [_ action]]
-    (let [[current & next] (:data action)
-          current-action (-> current
-                             (get-action db)
-                             (with-next next (:next action)))]
+  [event-as-action]
+  (fn [{:keys [db]} action]
+    (let [flow-id (random-uuid)
+          action-id (random-uuid)
+          [current & rest] (:data action)
+          next [::execute-sequence (-> action (assoc :data rest))]
+          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next}]]
       (js/console.log "execute sequence")
-      (js/console.log current-action)
-      {:dispatch [::execute-action current-action]})))
+      (js/console.log action)
+      (if current
+        {:dispatch-n (list flow-event
+                           [::execute-action (-> current
+                                                 (get-action db)
+                                                 (assoc :flow-id flow-id)
+                                                 (assoc :action-id action-id))])}
+        {:dispatch (success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-state
-  (fn [{:keys [db]} [_ {:keys [target id next flow-id action-id]}]]
+  (fn [{:keys [db]} [_ {:keys [target id next] :as action}]]
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
           object (get-in scene [:objects (keyword target)])
-          state (get-in object [:states (keyword id)])
-          success [::flow-success flow-id action-id]]
+          state (get-in object [:states (keyword id)])]
       {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state)
-       :dispatch-n (list success next)})))
+       :dispatch-n (list (success-event action) next)})))
 
 (re-frame/reg-event-fx
   ::execute-parallel
-  (fn [{:keys [db]} [_ params]]
+  (fn [{:keys [db]} [_ action]]
     (let [flow-id (random-uuid)
-          actions (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))) (:data params))
-          action-ids (into #{} (map #(get % :action-id) actions))
-          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (:next params)}]
+          actions (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))) (:data action))
+          action-ids (map #(get % :action-id) actions)
+          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
       {:dispatch-n (cons flow-event action-events)})
     ))
 
 (re-frame/reg-event-fx
   ::execute-empty
-  (fn [{:keys [db]} [_ params]]
-    (let [next (:next params)]
-      (if next
-        {:dispatch-later [{:ms (:duration params) :dispatch next}]}
-        {}))
-    ))
+  (fn [{:keys [db]} [_ action]]
+    {:dispatch-later [{:ms (:duration action) :dispatch (success-event action)}]}))
 
 (re-frame/reg-event-fx
   ::execute-animation
-  (fn [{:keys [db]} [_ {:keys [flow-id action-id] :as params}]]
-    {:dispatch-n (list [::flow-success flow-id action-id])}))
+  (fn [{:keys [db]} [_ action]]
+    {:dispatch-n (list (success-event action))}))
 
 (re-frame/reg-event-fx
   ::register-flow
   (fn [{:keys [db]} [_ flow]]
     (let [flow-id (:flow-id flow)
           current-flow (get-in db [:flows flow-id])]
-    {:db (assoc-in db [:flows flow-id] (merge current-flow flow))})))
+    {:db (assoc-in db [:flows flow-id] (merge current-flow flow))
+     :dispatch [::check-flow flow-id]})))
 
 (re-frame/reg-event-fx
   ::flow-success
@@ -179,8 +181,11 @@
 
 (defn flow-finished?
   [{:keys [type actions succeeded] :as flow}]
+  (js/console.log "flow finished?: " (str (= actions succeeded)))
+  (js/console.log actions)
+  (js/console.log succeeded)
   (case type
-    :all (if (= actions succeeded) true false)
+    :all (if (= (into #{} actions) succeeded) true false)
     :any (if (not-empty succeeded) true false)
     false))
 
@@ -228,7 +233,6 @@
 (re-frame/reg-event-db
   ::register-transition
   (fn [db [_ name component]]
-    (js/console.log "register transition: " name)
     (let [scene-id (:current-scene db)]
       (assoc-in db [:transitions scene-id name] component))))
 

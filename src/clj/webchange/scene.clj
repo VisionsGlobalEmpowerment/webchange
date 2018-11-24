@@ -802,29 +802,29 @@
                    {:url "/raw/img/ferris-wheel/words/whale_default.png", :size 1, :type "image"},
                    {:url "/raw/img/ferris-wheel/words/whale_done.png", :size 1, :type "image"},],
    :objects
-                  {:background         {:type "background", :src "/raw/img/ferris-wheel/background.png"},
-                   :wheel              {:type "group" :x 816 :y 457 :children ["wheel-1", "wheel-2", "wheel-3", "items"]}
-                   :wheel-1            {:type "image" :width 772 :height 772 :transition "wheel-1"
-                                        :src  "/raw/img/ferris-wheel/ferris_wheel_01.png" :origin {:type "center-center"}},
-                   :wheel-2            {:type "image" :width 359 :height 527
-                                        :src  "/raw/img/ferris-wheel/ferris_wheel_02.png" :origin {:type "center-top"}},
-                   :wheel-3            {:type "image" :width 261 :height 262 :transition "wheel-3"
-                                        :src  "/raw/img/ferris-wheel/ferris_wheel_03.png" :origin {:type "center-center"}},
-                   :items              {:type     "group" :width 772 :height 772 :transition "items"
-                                        :children ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
-                                        :origin   {:type "center-center"}}
-                   :item-1             {:type "placeholder" :width 205 :height 209 :x 599 :y 263 :transition "item-1" :rotation 360
-                                        :item-src "src" :origin {:type "center-center"}}
-                   :item-2             {:type "placeholder" :width 205 :height 209 :x 386 :y 140 :transition "item-2" :rotation 360
-                                        :item-src "src" :origin {:type "center-center"}}
-                   :item-3             {:type "placeholder" :width 205 :height 209 :x 173 :y 263 :transition "item-3" :rotation 360
-                                        :item-src "src" :origin {:type "center-center"}}
-                   :item-4             {:type "placeholder" :width 205 :height 209 :x 173 :y 509 :transition "item-4" :rotation 360
-                                        :item-src "src" :origin {:type "center-center"}}
-                   :item-5             {:type "placeholder" :width 205 :height 209 :x 386 :y 632 :transition "item-5" :rotation 360
-                                        :item-src "src" :origin {:type "center-center"}}
-                   :item-6             {:type "placeholder" :width 205 :height 209 :x 599 :y 509 :transition "item-6" :rotation 360
-                                        :item-src "src" :origin {:type "center-center"}}
+                  {:background {:type "background", :src "/raw/img/ferris-wheel/background.png"},
+                   :wheel      {:type "group" :x 816 :y 457 :children ["wheel-1", "wheel-2", "wheel-3", "items"]}
+                   :wheel-1    {:type "image" :width 772 :height 772 :transition "wheel-1"
+                                :src  "/raw/img/ferris-wheel/ferris_wheel_01.png" :origin {:type "center-center"}},
+                   :wheel-2    {:type "image" :width 359 :height 527
+                                :src  "/raw/img/ferris-wheel/ferris_wheel_02.png" :origin {:type "center-top"}},
+                   :wheel-3    {:type "image" :width 261 :height 262 :transition "wheel-3"
+                                :src  "/raw/img/ferris-wheel/ferris_wheel_03.png" :origin {:type "center-center"}},
+                   :items      {:type     "group" :width 772 :height 772 :transition "items"
+                                :children ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
+                                :origin   {:type "center-center"}}
+                   :item-1     {:type     "placeholder" :width 205 :height 209 :x 599 :y 263 :transition "item-1" :rotation 360
+                                :var-name "item-1" :image-src "src" :origin {:type "center-center"}}
+                   :item-2     {:type     "placeholder" :width 205 :height 209 :x 386 :y 140 :transition "item-2" :rotation 360
+                                :var-name "item-2" :image-src "src" :origin {:type "center-center"}}
+                   :item-3     {:type     "placeholder" :width 205 :height 209 :x 173 :y 263 :transition "item-3" :rotation 360
+                                :var-name "item-3" :image-src "src" :origin {:type "center-center"}}
+                   :item-4     {:type     "placeholder" :width 205 :height 209 :x 173 :y 509 :transition "item-4" :rotation 360
+                                :var-name "item-4" :image-src "src" :origin {:type "center-center"}}
+                   :item-5     {:type     "placeholder" :width 205 :height 209 :x 386 :y 632 :transition "item-5" :rotation 360
+                                :var-name "item-5" :image-src "src" :origin {:type "center-center"}}
+                   :item-6     {:type     "placeholder" :width 205 :height 209 :x 599 :y 509 :transition "item-6" :rotation 360
+                                :var-name "item-6" :image-src "src" :origin {:type "center-center"}}
                    },
    :actions       {:rotate-wheel {:type "parallel",
                                   :data [{:type "transition" :transition-id "wheel-1" :to {:rotation 360 :duration 30 :loop true}}
@@ -837,18 +837,33 @@
                                          {:type "transition" :transition-id "item-4" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
-                   :renew-words {:type "placeholder-item-provider"
-                                 :placeholders ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
-                                 :from "items"}}
-   :triggers {:rotation {:on "start" :action "rotate-wheel"}
-              :items {:on "start" :action "renew-words"}}
-   :datasets {:items {:bat {:src "/raw/img/ferris-wheel/words/bat_default.png"}
-                      :broccoli {:src "/raw/img/ferris-wheel/words/broccoli_default.png"}
-                      :dinosaur {:src "/raw/img/ferris-wheel/words/dinosaur_default.png"}
-                      :orange {:src "/raw/img/ferris-wheel/words/orange_default.png"}
-                      :crocodile {:src "/raw/img/ferris-wheel/words/crocodile_default.png"}
-                      :whale {:src "/raw/img/ferris-wheel/words/whale_default.png"}}}
-   :scene-objects [["background" "wheel"]],
+                   :renew-words  {:type      "dataset-var-provider"
+                                  :id        "words-set"
+                                  :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
+                                  :from      "items"}
+                   :renew-current-word {:type "vars-var-provider"
+                                        :id "current-word"
+                                        :variables ["current-word"]
+                                        :from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]}
+                   :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
+                   :empty-5        {:type "empty", :duration 5000},
+                   :repeat-word {:type "sequence"
+                                 :tag "repeat-word"
+                                 :data ["play-word", "empty-5", "repeat-word"]}}
+
+   :triggers      {:rotation {:on "start" :action "rotate-wheel"}
+                   :items    {:on "start" :action "renew-words"}
+                   :current-word {:on "start" :action "renew-current-word"}
+                   :repeat-word {:on "start" :action "repeat-word"}}
+
+   :datasets      {:items {:bat       {:src "/raw/img/ferris-wheel/words/bat_default.png" :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
+                           :broccoli  {:src "/raw/img/ferris-wheel/words/broccoli_default.png" :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}
+                           :dinosaur  {:src "/raw/img/ferris-wheel/words/dinosaur_default.png" :audio-id "instructions" :start 49.068, :duration 3.217 :offset 1}
+                           :orange    {:src "/raw/img/ferris-wheel/words/orange_default.png" :audio-id "instructions" :start 70.751, :duration 2.19 :offset 1}
+                           :crocodile {:src "/raw/img/ferris-wheel/words/crocodile_default.png" :audio-id "instructions" :start 11.328, :duration 2.66 :offset 1}
+                           :whale     {:src "/raw/img/ferris-wheel/words/whale_default.png" :audio-id "instructions" :start 32.891, :duration 2.043 :offset 1}}}
+   :scene-objects [["background" "wheel"]]
+   :audio {:instructions "/raw/audio/ferris-wheel/instructions.mp3"}
    :metadata      {:autostart false}})
 
 (defn get-course

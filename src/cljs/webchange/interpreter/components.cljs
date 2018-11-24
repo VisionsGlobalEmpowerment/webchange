@@ -9,6 +9,7 @@
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.executor :as e]
+    [webchange.interpreter.variables.subs :as vars.subs]
     [react-konva :refer [Stage Layer Group Rect]]
     ))
 
@@ -217,10 +218,10 @@
 
 (defn placeholder
   [scene-id name object]
-  (let [item (re-frame/subscribe [::subs/placeholder-item scene-id name])]
+  (let [item (re-frame/subscribe [::vars.subs/variable scene-id (:var-name object)])]
     [image scene-id name (-> object
                                    (assoc :type "image")
-                                   (assoc :src (get @item (-> object :item-src keyword))))]))
+                                   (assoc :src (get @item (-> object :image-src keyword))))]))
 
 (defn transition
   [scene-id name object]

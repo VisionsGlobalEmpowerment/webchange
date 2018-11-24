@@ -66,8 +66,3 @@
   ::get-effects-volume
   (fn [db]
     (:effects-volume db)))
-
-(re-frame/reg-sub
-  ::placeholder-item
-  (fn [db [_ scene-id item-id]]
-    (get-in db [:scenes scene-id :placeholders item-id])))
