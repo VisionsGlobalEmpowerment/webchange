@@ -62,6 +62,7 @@
       :dataset-var-provider {:dispatch [::vars.events/execute-dataset-var-provider action]}
       :vars-var-provider {:dispatch [::vars.events/execute-vars-var-provider action]}
       :placeholder-audio {:dispatch [::execute-placeholder-audio action]}
+      :remove-flows {:dispatch [::execute-remove-flows action]}
       )))
 
 (defn success-event
@@ -122,9 +123,7 @@
           action-id (random-uuid)
           [current & rest] (:data action)
           next [::execute-sequence (-> action (assoc :data rest))]
-          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next}]]
-      (js/console.log "execute sequence")
-      (js/console.log action)
+          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tag (:tag action)}]]
       (if current
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
@@ -149,7 +148,7 @@
     (let [flow-id (random-uuid)
           actions (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))) (:data action))
           action-ids (map #(get % :action-id) actions)
-          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action)}]
+          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tag (:tag action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
       {:dispatch-n (cons flow-event action-events)})
     ))
@@ -165,12 +164,21 @@
     {:dispatch-n (list (success-event action))}))
 
 (re-frame/reg-event-fx
+  ::execute-remove-flows
+  (fn [{:keys [db]} [_ {:keys [flow-tag] :as action}]]
+    (let [flows (->> (get-in db [:flows])
+                     (filter (fn [[k v]] (not= flow-tag (:tag v))))
+                     (into {}))]
+      {:db       (assoc db :flows flows)
+       :dispatch (success-event action)})))
+
+(re-frame/reg-event-fx
   ::register-flow
   (fn [{:keys [db]} [_ flow]]
     (let [flow-id (:flow-id flow)
           current-flow (get-in db [:flows flow-id])]
-    {:db (assoc-in db [:flows flow-id] (merge current-flow flow))
-     :dispatch [::check-flow flow-id]})))
+      {:db       (assoc-in db [:flows flow-id] (merge current-flow flow))
+       :dispatch [::check-flow flow-id]})))
 
 (re-frame/reg-event-fx
   ::flow-success
@@ -181,9 +189,6 @@
 
 (defn flow-finished?
   [{:keys [type actions succeeded] :as flow}]
-  (js/console.log "flow finished?: " (str (= actions succeeded)))
-  (js/console.log actions)
-  (js/console.log succeeded)
   (case type
     :all (if (= (into #{} actions) succeeded) true false)
     :any (if (not-empty succeeded) true false)

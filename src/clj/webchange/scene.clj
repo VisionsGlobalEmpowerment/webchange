@@ -847,14 +847,18 @@
                                         :from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]}
                    :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
                    :empty-5        {:type "empty", :duration 5000},
-                   :repeat-word {:type "sequence"
+                   :repeat-current-word {:type "sequence"
                                  :tag "repeat-word"
-                                 :data ["play-word", "empty-5", "repeat-word"]}}
+                                 :data ["play-word", "empty-5", "repeat-current-word"]}
+                   :clear-repeat-word {:type "remove-flows"
+                                       :flow-tag "repeat-word"}
+                   :start-repeat-word {:type "sequence"
+                                       :data ["clear-repeat-word" "repeat-current-word"]}}
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}
                    :items    {:on "start" :action "renew-words"}
                    :current-word {:on "start" :action "renew-current-word"}
-                   :repeat-word {:on "start" :action "repeat-word"}}
+                   :repeat-word {:on "start" :action "start-repeat-word"}}
 
    :datasets      {:items {:bat       {:src "/raw/img/ferris-wheel/words/bat_default.png" :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
                            :broccoli  {:src "/raw/img/ferris-wheel/words/broccoli_default.png" :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}
