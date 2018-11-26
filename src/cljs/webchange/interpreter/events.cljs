@@ -50,7 +50,7 @@
   ::execute-action
   (fn [{:keys [db]} [_ {:keys [type] :as action}]]
     (case (keyword type)
-      :action {:dispatch [::execute-action (get-action (:id action) db)]}
+      :action {:dispatch [::execute-action (-> action :id (get-action db) (assoc :var (:var action)))]}
       :audio {:dispatch [::execute-audio action]}
       :sequence {:dispatch [::execute-sequence action]}
       :parallel {:dispatch [::execute-parallel action]}
@@ -61,6 +61,7 @@
       :transition {:dispatch [::execute-transition action]}
       :dataset-var-provider {:dispatch [::vars.events/execute-dataset-var-provider action]}
       :vars-var-provider {:dispatch [::vars.events/execute-vars-var-provider action]}
+      :test-var {:dispatch [::vars.events/execute-test-var action]}
       :placeholder-audio {:dispatch [::execute-placeholder-audio action]}
       :remove-flows {:dispatch [::execute-remove-flows action]}
       )))
@@ -128,6 +129,7 @@
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
                                                  (get-action db)
+                                                 (assoc :var (:var action))
                                                  (assoc :flow-id flow-id)
                                                  (assoc :action-id action-id))])}
         {:dispatch (success-event action)}))))

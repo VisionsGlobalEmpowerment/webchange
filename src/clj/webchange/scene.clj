@@ -814,17 +814,23 @@
                                 :children ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
                                 :origin   {:type "center-center"}}
                    :item-1     {:type     "placeholder" :width 205 :height 209 :x 599 :y 263 :transition "item-1" :rotation 360
-                                :var-name "item-1" :image-src "src" :origin {:type "center-center"}}
+                                :var-name "item-1" :image-src "src" :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
                    :item-2     {:type     "placeholder" :width 205 :height 209 :x 386 :y 140 :transition "item-2" :rotation 360
-                                :var-name "item-2" :image-src "src" :origin {:type "center-center"}}
+                                :var-name "item-2" :image-src "src" :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
                    :item-3     {:type     "placeholder" :width 205 :height 209 :x 173 :y 263 :transition "item-3" :rotation 360
-                                :var-name "item-3" :image-src "src" :origin {:type "center-center"}}
+                                :var-name "item-3" :image-src "src" :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
                    :item-4     {:type     "placeholder" :width 205 :height 209 :x 173 :y 509 :transition "item-4" :rotation 360
-                                :var-name "item-4" :image-src "src" :origin {:type "center-center"}}
+                                :var-name "item-4" :image-src "src" :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
                    :item-5     {:type     "placeholder" :width 205 :height 209 :x 386 :y 632 :transition "item-5" :rotation 360
-                                :var-name "item-5" :image-src "src" :origin {:type "center-center"}}
+                                :var-name "item-5" :image-src "src" :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
                    :item-6     {:type     "placeholder" :width 205 :height 209 :x 599 :y 509 :transition "item-6" :rotation 360
-                                :var-name "item-6" :image-src "src" :origin {:type "center-center"}}
+                                :var-name "item-6" :image-src "src" :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
                    },
    :actions       {:rotate-wheel {:type "parallel",
                                   :data [{:type "transition" :transition-id "wheel-1" :to {:rotation 360 :duration 30 :loop true}}
@@ -838,11 +844,11 @@
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
                    :renew-words  {:type      "dataset-var-provider"
-                                  :id        "words-set"
+                                  :provider-id        "words-set"
                                   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
                                   :from      "items"}
                    :renew-current-word {:type "vars-var-provider"
-                                        :id "current-word"
+                                        :provider-id "current-word"
                                         :variables ["current-word"]
                                         :from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]}
                    :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
@@ -853,19 +859,23 @@
                    :clear-repeat-word {:type "remove-flows"
                                        :flow-tag "repeat-word"}
                    :start-repeat-word {:type "sequence"
-                                       :data ["clear-repeat-word" "repeat-current-word"]}}
+                                       :data ["clear-repeat-word" "renew-current-word" "repeat-current-word"]}
+                   :check-current-word {:type "test-var"
+                                        :var-name "current-word"
+                                        :property "src"
+                                        :success "start-repeat-word"}
+                   }
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}
                    :items    {:on "start" :action "renew-words"}
-                   :current-word {:on "start" :action "renew-current-word"}
                    :repeat-word {:on "start" :action "start-repeat-word"}}
 
-   :datasets      {:items {:bat       {:src "/raw/img/ferris-wheel/words/bat_default.png" :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
-                           :broccoli  {:src "/raw/img/ferris-wheel/words/broccoli_default.png" :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}
-                           :dinosaur  {:src "/raw/img/ferris-wheel/words/dinosaur_default.png" :audio-id "instructions" :start 49.068, :duration 3.217 :offset 1}
-                           :orange    {:src "/raw/img/ferris-wheel/words/orange_default.png" :audio-id "instructions" :start 70.751, :duration 2.19 :offset 1}
-                           :crocodile {:src "/raw/img/ferris-wheel/words/crocodile_default.png" :audio-id "instructions" :start 11.328, :duration 2.66 :offset 1}
-                           :whale     {:src "/raw/img/ferris-wheel/words/whale_default.png" :audio-id "instructions" :start 32.891, :duration 2.043 :offset 1}}}
+   :datasets      {:items {:bat       {:id "bat" :src "/raw/img/ferris-wheel/words/bat_default.png" :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
+                           :broccoli  {:id "broccoli" :src "/raw/img/ferris-wheel/words/broccoli_default.png" :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}
+                           :dinosaur  {:id "dinosaur" :src "/raw/img/ferris-wheel/words/dinosaur_default.png" :audio-id "instructions" :start 49.068, :duration 3.217 :offset 1}
+                           :orange    {:id "orange" :src "/raw/img/ferris-wheel/words/orange_default.png" :audio-id "instructions" :start 70.751, :duration 2.19 :offset 1}
+                           :crocodile {:id "crocodile" :src "/raw/img/ferris-wheel/words/crocodile_default.png" :audio-id "instructions" :start 11.328, :duration 2.66 :offset 1}
+                           :whale     {:id "whale" :src "/raw/img/ferris-wheel/words/whale_default.png" :audio-id "instructions" :start 32.891, :duration 2.043 :offset 1}}}
    :scene-objects [["background" "wheel"]]
    :audio {:instructions "/raw/audio/ferris-wheel/instructions.mp3"}
    :metadata      {:autostart false}})

@@ -171,7 +171,18 @@
 
 (defn prepare-action
   [action]
+  (js/console.log "prepare-action")
+  (js/console.log action)
   {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ie/execute-action action])})
+
+(defn prepare-actions
+  [{:keys [actions] :as object}]
+  (->> actions
+       (map second)
+       (map #(assoc % :var (:var object)))
+       (map prepare-action)
+       (into {})
+       (merge object)))
 
 (defn with-origin-offset
   [{:keys [width height origin] :as object}]
@@ -193,7 +204,8 @@
 
 (defn prepare-group-params
   [object]
-  (-> (reduce (fn [o [k v]] (merge o (prepare-action v))) object (:actions object))
+  (-> object
+      prepare-actions
       with-origin-offset
       with-transition))
 
@@ -220,8 +232,9 @@
   [scene-id name object]
   (let [item (re-frame/subscribe [::vars.subs/variable scene-id (:var-name object)])]
     [image scene-id name (-> object
-                                   (assoc :type "image")
-                                   (assoc :src (get @item (-> object :image-src keyword))))]))
+                             (assoc :type "image")
+                             (assoc :src (get @item (-> object :image-src keyword)))
+                             (assoc :var @item))]))
 
 (defn transition
   [scene-id name object]
