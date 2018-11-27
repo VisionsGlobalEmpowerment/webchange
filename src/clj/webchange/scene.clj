@@ -54,6 +54,16 @@
                    {:url "/raw/img/ui/star_01.png", :size 1, :type "image"}
                    {:url "/raw/img/ui/star_02.png", :size 1, :type "image"}
                    {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/form.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/clear.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/next_button_01.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/next_button_02.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/vera.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/settings/music.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/settings/music_icon.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
+                   {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
                    {:url  "/raw/img/ferris-wheel/words/Grapes.png",
                     :size 1,
                     :type "image"}
@@ -831,6 +841,7 @@
                    :item-6     {:type     "placeholder" :width 205 :height 209 :x 599 :y 509 :transition "item-6" :rotation 360
                                 :var-name "item-6" :image-src "src" :origin {:type "center-center"}
                                 :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
+                   :score      {:type "score" :successes "successes" :fails "fails"}
                    },
    :actions       {:rotate-wheel {:type "parallel",
                                   :data [{:type "transition" :transition-id "wheel-1" :to {:rotation 360 :duration 30 :loop true}}
@@ -843,6 +854,8 @@
                                          {:type "transition" :transition-id "item-4" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
+                   :start-game {:type "sequence"
+                                :data ["renew-words" "renew-current-word" "repeat-current-word"]}
                    :renew-words  {:type      "dataset-var-provider"
                                   :provider-id        "words-set"
                                   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
@@ -850,7 +863,8 @@
                    :renew-current-word {:type "vars-var-provider"
                                         :provider-id "current-word"
                                         :variables ["current-word"]
-                                        :from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]}
+                                        :from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
+                                        :on-end "finish-game"}
                    :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
                    :empty-5        {:type "empty", :duration 5000},
                    :repeat-current-word {:type "sequence"
@@ -858,17 +872,24 @@
                                  :data ["play-word", "empty-5", "repeat-current-word"]}
                    :clear-repeat-word {:type "remove-flows"
                                        :flow-tag "repeat-word"}
-                   :start-repeat-word {:type "sequence"
-                                       :data ["clear-repeat-word" "renew-current-word" "repeat-current-word"]}
+                   :restart-repeat-word {:type "sequence"
+                                       :data ["clear-repeat-word" "increase-success" "renew-current-word" "repeat-current-word"]}
+                   :increase-fail     {:type "counter"
+                                       :counter-action "increase"
+                                       :counter-id "fails"}
+                   :increase-success  {:type "counter"
+                                       :counter-action "increase"
+                                       :counter-id "successes"}
                    :check-current-word {:type "test-var"
                                         :var-name "current-word"
                                         :property "src"
-                                        :success "start-repeat-word"}
+                                        :success "restart-repeat-word"
+                                        :fail "increase-fail"}
+                   :finish-game {:type "set-variable" :var-name "score" :var {:visible true}}
                    }
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}
-                   :items    {:on "start" :action "renew-words"}
-                   :repeat-word {:on "start" :action "start-repeat-word"}}
+                   :start    {:on "start" :action "start-game"}}
 
    :datasets      {:items {:bat       {:id "bat" :src "/raw/img/ferris-wheel/words/bat_default.png" :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
                            :broccoli  {:id "broccoli" :src "/raw/img/ferris-wheel/words/broccoli_default.png" :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}

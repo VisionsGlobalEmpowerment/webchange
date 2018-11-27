@@ -8,9 +8,11 @@
     [webchange.common.kimage :refer [kimage]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
+    [webchange.interpreter.variables.events :as ve]
+    [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.variables.subs :as vars.subs]
-    [react-konva :refer [Stage Layer Group Rect]]
+    [react-konva :refer [Stage Layer Group Rect Text]]
     ))
 
 (defn get-viewbox
@@ -96,11 +98,11 @@
       [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
        {:x (- 108) :y 20 :on-click #(re-frame/dispatch [::events/close-settings])}]]
 
-     [kimage "/raw/img/ui/settings/settings.png" {:x 779 :y 345}]
-     [kimage "/raw/img/ui/settings/music_icon.png" {:x 675 :y 516}]
-     [kimage "/raw/img/ui/settings/music.png" {:x 763 :y 528}]
-     [kimage "/raw/img/ui/settings/sound_fx_icon.png" {:x 581 :y 647}]
-     [kimage "/raw/img/ui/settings/sound_fx.png" {:x 669 :y 645}]
+     [kimage (get-data-as-url "/raw/img/ui/settings/settings.png") {:x 779 :y 345}]
+     [kimage (get-data-as-url "/raw/img/ui/settings/music_icon.png") {:x 675 :y 516}]
+     [kimage (get-data-as-url "/raw/img/ui/settings/music.png") {:x 763 :y 528}]
+     [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx_icon.png") {:x 581 :y 647}]
+     [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx.png") {:x 669 :y 645}]
 
      [slider {:x 979 :y 556 :width 352 :height 24 :event ::ie/set-music-volume :sub ::subs/get-music-volume}]
      [slider {:x 979 :y 672 :width 352 :height 24 :event ::ie/set-effects-volume :sub ::subs/get-effects-volume}]
@@ -108,6 +110,55 @@
      ]
     )
   )
+
+(defn star
+  [result idx]
+  (let [full (* idx 2)
+        half (- (* idx 2) 1)]
+    (cond
+      (>= result full) "/raw/img/ui/star_03.png"
+      (>= result half) "/raw/img/ui/star_02.png"
+      :else "/raw/img/ui/star_01.png")))
+
+(defn score-screen
+  []
+  (let [top-right (top-right)
+        scene-id (re-frame/subscribe [::subs/current-scene])
+        successes (re-frame/subscribe [::vars.subs/variable @scene-id "successes"])
+        fails (re-frame/subscribe [::vars.subs/variable @scene-id "fails"])
+        result (* (/ @successes (+ @successes @fails)) 10)]
+    [:> Group
+     [kimage "/raw/img/bg.jpg"]
+
+     [:> Group top-right
+      [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
+       {:x (- 108) :y 20 :on-click #(re-frame/dispatch [::events/close-score])}]]
+
+     [kimage (get-data-as-url "/raw/img/ui/form.png") {:x 639 :y 155}]
+     [kimage (get-data-as-url "/raw/img/ui/clear.png") {:x 829 :y 245}]
+
+     [kimage (get-data-as-url (star result 1)) {:x 758 :y 363}]
+     [kimage (get-data-as-url (star result 2)) {:x 836 :y 363}]
+     [kimage (get-data-as-url (star result 3)) {:x 913 :y 363}]
+     [kimage (get-data-as-url (star result 4)) {:x 991 :y 363}]
+     [kimage (get-data-as-url (star result 5)) {:x 1068 :y 363}]
+
+     [:> Text {:x 880 :y 490 :text (str (Math/floor result) "/10")
+               :font-size 80 :font-family "Luckiest Guy" :fill "white"
+               :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5}]
+
+     [kimage (get-data-as-url "/raw/img/ui/vera.png") {:x 851 :y 581}]
+     [kimage (get-data-as-url "/raw/img/ui/reload_button_01.png") {:x 679 :y 857}]
+     [kimage (get-data-as-url "/raw/img/ui/next_button_01.png") {:x 796 :y 857}]
+
+     ]))
+
+(defn score
+  []
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])
+        score-var (re-frame/subscribe [::vars.subs/variable @scene-id "score"])]
+    (if (:visible @score-var)
+      [score-screen])))
 
 (defn preloader
   []
@@ -171,9 +222,7 @@
 
 (defn prepare-action
   [action]
-  (js/console.log "prepare-action")
-  (js/console.log action)
-  {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ie/execute-action action])})
+  {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action action])})
 
 (defn prepare-actions
   [{:keys [actions] :as object}]
@@ -268,6 +317,7 @@
       (for [layer @scene-objects
             name layer]
         ^{:key (str scene-id name)} [draw-object scene-id name])
+     [score]
      [menu]
      [triggers]
      ]))
