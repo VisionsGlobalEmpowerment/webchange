@@ -62,7 +62,8 @@
 (defn start-audio
   [offset start duration]
   (fn [audio]
-    (.start audio (+ (.-currentTime @audio-ctx) offset) start duration)))
+    (.start audio (+ (.-currentTime @audio-ctx) offset) start duration)
+    audio))
 
 (defn execute-audio
   [{:keys [key start duration offset on-ended]}]
@@ -70,5 +71,4 @@
   (let [audio (get-audio key)]
     (-> audio
         (.then (with-on-ended on-ended))
-        (.then (start-audio offset start duration)))
-    ))
+        (.then (start-audio offset start duration)))))

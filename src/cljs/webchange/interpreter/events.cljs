@@ -8,9 +8,10 @@
 
 (re-frame/reg-fx
   :execute-audio
-  (fn [params]
+  (fn [{:keys [flow-id] :as params}]
     (e/init)
-    (e/execute-audio params)))
+    (-> (e/execute-audio params)
+        (.then (fn [audio] (re-frame/dispatch [::ce/register-flow-remove-handler {:flow-id flow-id :handler (fn [] (.stop audio))}]))))))
 
 (re-frame/reg-fx
   :music-volume
@@ -106,11 +107,6 @@
   ::execute-animation
   (fn [{:keys [db]} [_ action]]
     {:dispatch-n (list (ce/success-event action))}))
-
-(re-frame/reg-event-fx
-  ::execute-finish-lesson
-  (fn [{:keys [db]} [_ {:keys [score] :as action}]]
-    {:dispatch [::execute-show-score {}]}))
 
 (re-frame/reg-event-fx
   ::set-music-volume

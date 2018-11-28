@@ -44,9 +44,15 @@
 (re-frame/reg-event-fx
   ::execute-remove-flows
   (fn [{:keys [db]} [_ {:keys [flow-tag] :as action}]]
-    (let [flows (->> (get-in db [:flows])
+    (let [flows-to-remove (->> (get-in db [:flows])
+                               (filter (fn [[k v]] (= flow-tag (:tag v))))
+                               (map second))
+          flows (->> (get-in db [:flows])
                      (filter (fn [[k v]] (not= flow-tag (:tag v))))
                      (into {}))]
+      (doseq [flow flows-to-remove
+              handler (:on-remove flow)]
+        (handler))
       {:db       (assoc db :flows flows)
        :dispatch (success-event action)})))
 
@@ -57,6 +63,11 @@
           current-flow (get-in db [:flows flow-id])]
       {:db       (assoc-in db [:flows flow-id] (merge current-flow flow))
        :dispatch [::check-flow flow-id]})))
+
+(re-frame/reg-event-fx
+  ::register-flow-remove-handler
+  (fn [{:keys [db]} [_ {:keys [flow-id handler]}]]
+    {:db (update-in db [:flows flow-id :on-remove] conj handler)}))
 
 (re-frame/reg-event-fx
   ::flow-success

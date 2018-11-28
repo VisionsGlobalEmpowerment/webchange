@@ -55,7 +55,6 @@
 (defn has-next
   [db items provider-id]
   (let [unprocessed (unprocessed db items provider-id)]
-    (js/console.log "has next count" (count unprocessed))
     (->> unprocessed
          count
          (< 0))))
@@ -77,7 +76,6 @@
                              keyword
                              (vector :scenes scene-id :actions)
                              (get-in db))]
-      (js/console.log "has next? " has-next)
       (if has-next
         {:db (provide db items variables provider-id)
          :dispatch (e/success-event action)}
