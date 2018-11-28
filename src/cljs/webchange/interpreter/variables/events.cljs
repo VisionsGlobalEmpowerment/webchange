@@ -66,6 +66,14 @@
      :dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
+  ::execute-clear-vars
+  (fn [{:keys [db]} [_ _]]
+    (let [scene-id (:current-scene db)]
+      {:db (-> db
+               (update-in [:scenes scene-id] dissoc :variables)
+               (update-in [:scenes scene-id] dissoc :providers))})))
+
+(re-frame/reg-event-fx
   ::execute-vars-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
     (let [items (->> from

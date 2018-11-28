@@ -8,12 +8,13 @@
     [webchange.common.kimage :refer [kimage]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
-    [webchange.interpreter.variables.events :as ve]
+    [webchange.interpreter.variables.subs :as vars.subs]
+    [webchange.interpreter.variables.events :as vars.events]
     [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
-    [webchange.interpreter.variables.subs :as vars.subs]
+
     [react-konva :refer [Stage Layer Group Rect Text]]
-    ))
+    [reagent.core :as reagent]))
 
 (defn get-viewbox
   [viewport]
@@ -132,7 +133,7 @@
 
      [:> Group top-right
       [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
-       {:x (- 108) :y 20 :on-click #(re-frame/dispatch [::events/close-score])}]]
+       {:x (- 108) :y 20 :on-click #(re-frame/dispatch [::ie/next-scene])}]]
 
      [kimage (get-data-as-url "/raw/img/ui/form.png") {:x 639 :y 155}]
      [kimage (get-data-as-url "/raw/img/ui/clear.png") {:x 829 :y 245}]
@@ -148,8 +149,8 @@
                :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5}]
 
      [kimage (get-data-as-url "/raw/img/ui/vera.png") {:x 851 :y 581}]
-     [kimage (get-data-as-url "/raw/img/ui/reload_button_01.png") {:x 679 :y 857}]
-     [kimage (get-data-as-url "/raw/img/ui/next_button_01.png") {:x 796 :y 857}]
+     [kimage (get-data-as-url "/raw/img/ui/reload_button_01.png") {:x 679 :y 857 :on-click #(re-frame/dispatch [::ie/restart-scene])}]
+     [kimage (get-data-as-url "/raw/img/ui/next_button_01.png") {:x 796 :y 857 :on-click #(re-frame/dispatch [::ie/next-scene])}]
 
      ]))
 
@@ -306,12 +307,15 @@
    [kimage (get-data-as-url (:src object))]])
 
 (defn triggers
-  []
-  (re-frame/dispatch [::ie/trigger :start]))
+  [scene-id]
+  (let [status (re-frame/subscribe [::vars.subs/variable scene-id "status"])]
+    (if (not= @status :running)
+      (do
+        (re-frame/dispatch [::vars.events/execute-set-variable {:var-name "status" :var :running}])
+        (re-frame/dispatch [::ie/trigger :start])))))
 
 (defn scene
   [scene-id]
-  (js/console.log "render scene!")
   (let [scene-objects (re-frame/subscribe [::subs/scene-objects scene-id])]
     [:> Group
       (for [layer @scene-objects
@@ -319,7 +323,7 @@
         ^{:key (str scene-id name)} [draw-object scene-id name])
      [score]
      [menu]
-     [triggers]
+     [triggers scene-id]
      ]))
 
 (defn current-scene

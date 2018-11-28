@@ -4,6 +4,7 @@
     [webchange.interpreter.core :as i]
     [webchange.interpreter.executor :as e]
     [webchange.common.events :as ce]
+    [webchange.interpreter.variables.events :as vars.events]
     ))
 
 (re-frame/reg-fx
@@ -132,7 +133,8 @@
     (let [loaded (get-in db [:scene-loading-complete scene-id])]
       (cond-> {:db (-> db
                        (assoc :current-scene scene-id)
-                       (assoc :scene-started false))}
+                       (assoc :scene-started false))
+               :dispatch [::vars.events/execute-clear-vars]}
               (not loaded) (assoc :load-scene [(:current-course db) scene-id])))))
 
 (re-frame/reg-event-db
@@ -158,3 +160,17 @@
                        (map #(get-in scene [:actions %]))
                        (map (fn [action] [::ce/execute-action action])))]
       {:dispatch-n actions})))
+
+(re-frame/reg-event-fx
+  ::next-scene
+  (fn [{:keys [db]} [_ _]]
+    (let [scene-id (:current-scene db)
+          scene (get-in db [:scenes scene-id])
+          next (get-in scene [:metadata :next])]
+      {:dispatch [::set-current-scene next]})))
+
+(re-frame/reg-event-fx
+  ::restart-scene
+  (fn [{:keys [db]} [_ _]]
+    (let [scene-id (:current-scene db)]
+      {:dispatch [::set-current-scene scene-id]})))

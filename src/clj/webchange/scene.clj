@@ -899,7 +899,8 @@
                            :whale     {:id "whale" :src "/raw/img/ferris-wheel/words/whale_default.png" :audio-id "instructions" :start 32.891, :duration 2.043 :offset 1}}}
    :scene-objects [["background" "wheel"]]
    :audio {:instructions "/raw/audio/ferris-wheel/instructions.mp3"}
-   :metadata      {:autostart false}})
+   :metadata      {:autostart false
+                   :next "feria"}})
 
 (defn get-course
   [course-id]
