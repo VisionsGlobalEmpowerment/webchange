@@ -778,7 +778,7 @@
   {:assets
                   [{:url "/raw/audio/ferris-wheel/instructions.mp3", :size 10, :type "audio"}
 
-                   {:url "/raw/img/ferris-wheel/background.png", :size 10, :type "image"},
+                   {:url "/raw/img/ferris-wheel/background.jpg", :size 10, :type "image"},
                    {:url "/raw/img/ferris-wheel/cloud_01.png", :size 1, :type "image"},
                    {:url "/raw/img/ferris-wheel/cloud_02.png", :size 1, :type "image"},
                    {:url "/raw/img/ferris-wheel/cloud_03.png", :size 1, :type "image"},
@@ -788,32 +788,20 @@
                    {:url "/raw/img/ferris-wheel/ferris_wheel_02.png", :size 1, :type "image"},
                    {:url "/raw/img/ferris-wheel/ferris_wheel_03.png", :size 1, :type "image"},
 
-                   {:url "/raw/img/ferris-wheel/words/bat_alert.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/bat_default.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/bat_done.png", :size 1, :type "image"},
+                   {:url "/raw/img/ferris-wheel/words/bat.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/broccoli.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/crocodile.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/dino.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/orange.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/whale.png", :size 1, :type "image"}
 
-                   {:url "/raw/img/ferris-wheel/words/broccoli_alert.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/broccoli_default.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/broccoli_done.png", :size 1, :type "image"},
-
-                   {:url "/raw/img/ferris-wheel/words/crocodile_alert.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/crocodile_default.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/crocodile_done.png", :size 1, :type "image"},
-
-                   {:url "/raw/img/ferris-wheel/words/dinosaur_alert.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/dinosaur_default.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/dinosaur_done.png", :size 1, :type "image"},
-
-                   {:url "/raw/img/ferris-wheel/words/orange_alert.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/orange_default.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/orange_done.png", :size 1, :type "image"},
-
-                   {:url "/raw/img/ferris-wheel/words/whale_alert.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/whale_default.png", :size 1, :type "image"},
-                   {:url "/raw/img/ferris-wheel/words/whale_done.png", :size 1, :type "image"},],
+                   {:url "/raw/img/ferris-wheel/words/form_green.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/form_red.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/form_yellow.png", :size 1, :type "image"}
+                   ],
    :objects
-                  {:background {:type "background", :src "/raw/img/ferris-wheel/background.png"},
-                   :wheel      {:type "group" :x 816 :y 457 :children ["wheel-1", "wheel-2", "wheel-3", "items"]}
+                  {:background {:type "background", :src "/raw/img/ferris-wheel/background.jpg"},
+                   :wheel      {:type "group" :x 806 :y 457 :children ["wheel-1", "wheel-2", "wheel-3", "items"]}
                    :wheel-1    {:type "image" :width 772 :height 772 :transition "wheel-1"
                                 :src  "/raw/img/ferris-wheel/ferris_wheel_01.png" :origin {:type "center-center"}},
                    :wheel-2    {:type "image" :width 359 :height 527
@@ -821,32 +809,83 @@
                    :wheel-3    {:type "image" :width 261 :height 262 :transition "wheel-3"
                                 :src  "/raw/img/ferris-wheel/ferris_wheel_03.png" :origin {:type "center-center"}},
                    :items      {:type     "group" :width 772 :height 772 :transition "items"
-                                :children ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
+                                :children ["item-1f" "item-2f" "item-3f" "item-4f" "item-5f" "item-6f"
+                                           "item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
                                 :origin   {:type "center-center"}}
-                   :item-1     {:type     "placeholder" :width 205 :height 209 :x 599 :y 263 :transition "item-1" :rotation 360
-                                :var-name "item-1" :image-src "src" :origin {:type "center-center"}
-                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
-                   :item-2     {:type     "placeholder" :width 205 :height 209 :x 386 :y 140 :transition "item-2" :rotation 360
-                                :var-name "item-2" :image-src "src" :origin {:type "center-center"}
-                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
-                   :item-3     {:type     "placeholder" :width 205 :height 209 :x 173 :y 263 :transition "item-3" :rotation 360
-                                :var-name "item-3" :image-src "src" :origin {:type "center-center"}
-                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
-                   :item-4     {:type     "placeholder" :width 205 :height 209 :x 173 :y 509 :transition "item-4" :rotation 360
-                                :var-name "item-4" :image-src "src" :origin {:type "center-center"}
-                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
-                   :item-5     {:type     "placeholder" :width 205 :height 209 :x 386 :y 632 :transition "item-5" :rotation 360
-                                :var-name "item-5" :image-src "src" :origin {:type "center-center"}
-                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
-                   :item-6     {:type     "placeholder" :width 205 :height 209 :x 599 :y 509 :transition "item-6" :rotation 360
-                                :var-name "item-6" :image-src "src" :origin {:type "center-center"}
-                                :actions {:click {:type "action", :id "check-current-word", :on "click"}}}
-                   :score      {:type "score" :successes "successes" :fails "fails"}
+
+                   :item-1f {:type "image" :width 206 :height 210 :x 599 :y 263 :transition "item-1f" :rotation 360
+                             :src "/raw/img/ferris-wheel/words/form_yellow.png" :origin {:type "center-center"}
+                             :states {:yellow {:src "/raw/img/ferris-wheel/words/form_yellow.png"}
+                                      :green {:src "/raw/img/ferris-wheel/words/form_green.png"}
+                                      :red {:src "/raw/img/ferris-wheel/words/form_red.png"}}
+                             :states-aliases {:default "yellow"}}
+                   :item-2f {:type "image" :width 206 :height 210 :x 386 :y 140 :transition "item-2f" :rotation 360
+                             :src "/raw/img/ferris-wheel/words/form_yellow.png" :origin {:type "center-center"}
+                             :states {:yellow {:src "/raw/img/ferris-wheel/words/form_yellow.png"}
+                                      :green {:src "/raw/img/ferris-wheel/words/form_green.png"}
+                                      :red {:src "/raw/img/ferris-wheel/words/form_red.png"}}
+                             :states-aliases {:default "yellow"}}
+                   :item-3f {:type "image" :width 206 :height 210 :x 173 :y 263 :transition "item-3f" :rotation 360
+                             :src "/raw/img/ferris-wheel/words/form_yellow.png" :origin {:type "center-center"}
+                             :states {:yellow {:src "/raw/img/ferris-wheel/words/form_yellow.png"}
+                                      :green {:src "/raw/img/ferris-wheel/words/form_green.png"}
+                                      :red {:src "/raw/img/ferris-wheel/words/form_red.png"}}
+                             :states-aliases {:default "yellow"}}
+                   :item-4f {:type "image" :width 206 :height 210 :x 173 :y 509 :transition "item-4f" :rotation 360
+                             :src "/raw/img/ferris-wheel/words/form_yellow.png" :origin {:type "center-center"}
+                             :states {:yellow {:src "/raw/img/ferris-wheel/words/form_yellow.png"}
+                                      :green {:src "/raw/img/ferris-wheel/words/form_green.png"}
+                                      :red {:src "/raw/img/ferris-wheel/words/form_red.png"}}
+                             :states-aliases {:default "yellow"}}
+                   :item-5f {:type "image" :width 206 :height 210 :x 386 :y 632 :transition "item-5f" :rotation 360
+                             :src "/raw/img/ferris-wheel/words/form_yellow.png" :origin {:type "center-center"}
+                             :states {:yellow {:src "/raw/img/ferris-wheel/words/form_yellow.png"}
+                                      :green {:src "/raw/img/ferris-wheel/words/form_green.png"}
+                                      :red {:src "/raw/img/ferris-wheel/words/form_red.png"}}
+                             :states-aliases {:default "yellow"}}
+                   :item-6f {:type "image" :width 206 :height 210 :x 599 :y 509 :transition "item-6f" :rotation 360
+                             :src "/raw/img/ferris-wheel/words/form_yellow.png" :origin {:type "center-center"}
+                             :states {:yellow {:src "/raw/img/ferris-wheel/words/form_yellow.png"}
+                                      :green {:src "/raw/img/ferris-wheel/words/form_green.png"}
+                                      :red {:src "/raw/img/ferris-wheel/words/form_red.png"}}
+                             :states-aliases {:default "yellow"}}
+
+                   :item-1     {:type "placeholder" :x 599 :y 263 :transition "item-1" :rotation 360
+                                :var-name "item-1" :image-src "src" :image-width "width" :image-height "height"
+                                :origin {:type "center-center"}
+                                :actions {:click {:type "action" :id "check-current-word" :on "click" :params {:form "item-1f"}}}}
+                   :item-2     {:type     "placeholder" :x 386 :y 140 :transition "item-2" :rotation 360
+                                :var-name "item-2" :image-src "src" :image-width "width" :image-height "height"
+                                :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click" :params {:form "item-2f"}}}}
+                   :item-3     {:type     "placeholder" :x 173 :y 263 :transition "item-3" :rotation 360
+                                :var-name "item-3" :image-src "src" :image-width "width" :image-height "height"
+                                :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click" :params {:form "item-3f"}}}}
+                   :item-4     {:type     "placeholder" :x 173 :y 509 :transition "item-4" :rotation 360
+                                :var-name "item-4" :image-src "src" :image-width "width" :image-height "height"
+                                :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click" :params {:form "item-4f"}}}}
+                   :item-5     {:type     "placeholder" :x 386 :y 632 :transition "item-5" :rotation 360
+                                :var-name "item-5" :image-src "src" :image-width "width" :image-height "height"
+                                :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click" :params {:form "item-5f"}}}}
+                   :item-6     {:type     "placeholder" :x 599 :y 509 :transition "item-6" :rotation 360
+                                :var-name "item-6" :image-src "src" :image-width "width" :image-height "height"
+                                :origin {:type "center-center"}
+                                :actions {:click {:type "action", :id "check-current-word", :on "click" :params {:form "item-6f"}}}}
                    },
    :actions       {:rotate-wheel {:type "parallel",
                                   :data [{:type "transition" :transition-id "wheel-1" :to {:rotation 360 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "wheel-3" :to {:rotation 360 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "items" :to {:rotation 360 :duration 30 :loop true}}
+
+                                         {:type "transition" :transition-id "item-1f" :to {:rotation 0 :duration 30 :loop true}}
+                                         {:type "transition" :transition-id "item-2f" :to {:rotation 0 :duration 30 :loop true}}
+                                         {:type "transition" :transition-id "item-3f" :to {:rotation 0 :duration 30 :loop true}}
+                                         {:type "transition" :transition-id "item-4f" :to {:rotation 0 :duration 30 :loop true}}
+                                         {:type "transition" :transition-id "item-5f" :to {:rotation 0 :duration 30 :loop true}}
+                                         {:type "transition" :transition-id "item-6f" :to {:rotation 0 :duration 30 :loop true}}
 
                                          {:type "transition" :transition-id "item-1" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-2" :to {:rotation 0 :duration 30 :loop true}}
@@ -872,8 +911,8 @@
                                  :data ["play-word", "empty-5", "repeat-current-word"]}
                    :clear-repeat-word {:type "remove-flows"
                                        :flow-tag "repeat-word"}
-                   :restart-repeat-word {:type "sequence"
-                                       :data ["clear-repeat-word" "increase-success" "renew-current-word" "repeat-current-word"]}
+                   :pick-correct {:type "sequence"
+                                       :data ["clear-repeat-word" "increase-success" "reset-forms" "set-green" "renew-current-word" "repeat-current-word"]}
                    :increase-fail     {:type "counter"
                                        :counter-action "increase"
                                        :counter-id "fails"}
@@ -882,21 +921,38 @@
                                        :counter-id "successes"}
                    :check-current-word {:type "test-var"
                                         :var-name "current-word"
-                                        :property "src"
-                                        :success "restart-repeat-word"
-                                        :fail "increase-fail"}
-                   :finish-game {:type "set-variable" :var-name "score" :var {:visible true}}
+                                        :property "id"
+                                        :success "pick-correct"
+                                        :fail "pick-wrong"}
+                   :pick-wrong {:type "sequence" :data ["increase-fail" "set-red"]}
+                   :set-red {:type "state" :from-params {:target "form"} :id "red"}
+                   :set-green {:type "parallel" :data [{:type "add-alias" :from-params {:target "form"} :alias "default" :state "green"}
+                                                       {:type "state" :from-params {:target "form"} :id "green"}]}
+
+                   :reset-forms {:type "parallel" :data [{:type "state" :target "item-1f" :id "default"}
+                                                         {:type "state" :target "item-2f" :id "default"}
+                                                         {:type "state" :target "item-3f" :id "default"}
+                                                         {:type "state" :target "item-4f" :id "default"}
+                                                         {:type "state" :target "item-5f" :id "default"}
+                                                         {:type "state" :target "item-6f" :id "default"}]}
+                   :finish-game {:type "set-variable" :var-name "score" :var-value {:visible true}}
                    }
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}
                    :start    {:on "start" :action "start-game"}}
 
-   :datasets      {:items {:bat       {:id "bat" :src "/raw/img/ferris-wheel/words/bat_default.png" :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
-                           :broccoli  {:id "broccoli" :src "/raw/img/ferris-wheel/words/broccoli_default.png" :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}
-                           :dinosaur  {:id "dinosaur" :src "/raw/img/ferris-wheel/words/dinosaur_default.png" :audio-id "instructions" :start 49.068, :duration 3.217 :offset 1}
-                           :orange    {:id "orange" :src "/raw/img/ferris-wheel/words/orange_default.png" :audio-id "instructions" :start 70.751, :duration 2.19 :offset 1}
-                           :crocodile {:id "crocodile" :src "/raw/img/ferris-wheel/words/crocodile_default.png" :audio-id "instructions" :start 11.328, :duration 2.66 :offset 1}
-                           :whale     {:id "whale" :src "/raw/img/ferris-wheel/words/whale_default.png" :audio-id "instructions" :start 32.891, :duration 2.043 :offset 1}}}
+   :datasets      {:items {:bat       {:id "bat" :src "/raw/img/ferris-wheel/words/bat.png" :width 140 :height 77
+                                       :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
+                           :broccoli  {:id "broccoli" :src "/raw/img/ferris-wheel/words/broccoli.png" :width 100 :height 100
+                                       :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}
+                           :dinosaur  {:id "dinosaur" :src "/raw/img/ferris-wheel/words/dino.png" :width 102 :height 118
+                                       :audio-id "instructions" :start 49.068, :duration 3.217 :offset 1}
+                           :orange    {:id "orange" :src "/raw/img/ferris-wheel/words/orange.png" :width 108 :height 102
+                                       :audio-id "instructions" :start 70.751, :duration 2.19 :offset 1}
+                           :crocodile {:id "crocodile" :src "/raw/img/ferris-wheel/words/crocodile.png" :width 112 :height 121
+                                       :audio-id "instructions" :start 11.328, :duration 2.66 :offset 1}
+                           :whale     {:id "whale" :src "/raw/img/ferris-wheel/words/whale.png" :width 120 :height 123
+                                       :audio-id "instructions" :start 32.891, :duration 2.043 :offset 1}}}
    :scene-objects [["background" "wheel"]]
    :audio {:instructions "/raw/audio/ferris-wheel/instructions.mp3"}
    :metadata      {:autostart false

@@ -61,8 +61,8 @@
 
 (re-frame/reg-event-fx
   ::execute-set-variable
-  (fn [{:keys [db]} [_ {:keys [var-name var] :as action}]]
-    {:db (set-variable db var-name var)
+  (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
+    {:db (set-variable db var-name var-value)
      :dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
@@ -100,12 +100,10 @@
 (re-frame/reg-event-fx
   ::execute-test-var
   (fn [{:keys [db]} [_ {:keys [var var-name property success fail] :as action}]]
-    (let [scene-id (:current-scene db)
-          scene (get-in db [:scenes scene-id])
-          test (get-variable db var-name)
+    (let [test (get-variable db var-name)
           key (keyword property)
-          success (get-in scene [:actions (keyword success)])
-          fail (get-in scene [:actions (keyword fail)])]
+          success (e/get-action success db action)
+          fail (e/get-action fail db action)]
       (if (= (key var) (key test))
         {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
         {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))

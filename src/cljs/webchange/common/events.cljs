@@ -4,13 +4,23 @@
 
 (def executors (atom {}))
 
+(defn prepare-params
+  [action params from-params]
+  (reduce-kv (fn [m k v] (assoc m k (get params (keyword v)))) action from-params))
+
+(defn prepare-action
+  [{:keys [params from-params var from-var] :as action}]
+  (-> action
+      (prepare-params params from-params)
+      (prepare-params var from-var)))
+
 (defn reg-executor
   [id executor]
   (swap! executors assoc id executor))
 
 (defn reg-simple-executor
   [id event-name]
-  (let [handler (fn [{:keys [action]}] [event-name action])]
+  (let [handler (fn [{:keys [action]}] [event-name (prepare-action action)])]
     (reg-executor id handler)))
 
 (defn success-event
@@ -26,11 +36,21 @@
     :before  (fn [context]
                (update-in context [:coeffects :event] #(second %)))))
 
-(defn get-action
-  [id db]
-  (get-in db [:scenes (:current-scene db) :actions (keyword id)]))
+(defn with-prev
+  [action prev]
+  (assoc action :var (:var prev) :params (:params prev)))
 
-(reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action :id (get-action db) (assoc :var (:var action)))]))
+(defn get-action
+  ([id db]
+    (get-action id db {}))
+  ([id db prev]
+   (let [action (get-in db [:scenes (:current-scene db) :actions (keyword id)])]
+     (with-prev action prev))))
+
+
+(reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action
+                                                                      :id
+                                                                      (get-action db action))]))
 (reg-simple-executor :sequence ::execute-sequence)
 (reg-simple-executor :parallel ::execute-parallel)
 (reg-simple-executor :remove-flows ::execute-remove-flows)
@@ -104,8 +124,7 @@
       (if current
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
-                                                    (get-action db)
-                                                    (assoc :var (:var action))
+                                                    (get-action db action)
                                                     (assoc :flow-id flow-id)
                                                     (assoc :action-id action-id))])}
         {:dispatch (success-event action)}))))
@@ -114,9 +133,10 @@
   ::execute-parallel
   (fn [{:keys [db]} [_ action]]
     (let [flow-id (random-uuid)
-          actions (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))) (:data action))
+          actions (->> (:data action)
+                      (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))))
+                      (map (fn [v] (with-prev v action))))
           action-ids (map #(get % :action-id) actions)
           flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tag (:tag action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
-      {:dispatch-n (cons flow-event action-events)})
-    ))
+      {:dispatch-n (cons flow-event action-events)})))

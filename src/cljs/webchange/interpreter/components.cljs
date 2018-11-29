@@ -281,10 +281,12 @@
 (defn placeholder
   [scene-id name object]
   (let [item (re-frame/subscribe [::vars.subs/variable scene-id (:var-name object)])]
-    [image scene-id name (-> object
-                             (assoc :type "image")
-                             (assoc :src (get @item (-> object :image-src keyword)))
-                             (assoc :var @item))]))
+    [image scene-id name (cond-> object
+                                 :always (assoc :type "image")
+                                 (contains? object :image-src) (assoc :src (get @item (-> object :image-src keyword)))
+                                 (contains? object :image-width) (assoc :width (get @item (-> object :image-width keyword)))
+                                 (contains? object :image-height) (assoc :height (get @item (-> object :image-height keyword)))
+                                 :always (assoc :var @item))]))
 
 (defn transition
   [scene-id name object]
@@ -311,7 +313,7 @@
   (let [status (re-frame/subscribe [::vars.subs/variable scene-id "status"])]
     (if (not= @status :running)
       (do
-        (re-frame/dispatch [::vars.events/execute-set-variable {:var-name "status" :var :running}])
+        (re-frame/dispatch [::vars.events/execute-set-variable {:var-name "status" :var-value :running}])
         (re-frame/dispatch [::ie/trigger :start])))))
 
 (defn scene

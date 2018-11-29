@@ -46,6 +46,7 @@
 
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :state ::execute-state)
+(ce/reg-simple-executor :add-alias ::execute-add-alias)
 (ce/reg-simple-executor :empty ::execute-empty)
 (ce/reg-simple-executor :animation ::execute-animation)
 (ce/reg-simple-executor :scene ::execute-scene)
@@ -90,12 +91,21 @@
                           (assoc :on-ended (ce/dispatch-success-fn action)))}))
 
 (re-frame/reg-event-fx
+  ::execute-add-alias
+  (fn [{:keys [db]} [_ {:keys [target alias state] :as action}]]
+    (let [scene-id (:current-scene db)]
+      {:db (assoc-in db [:scenes scene-id :objects (keyword target) :states-aliases (keyword alias)] state)
+       :dispatch (ce/success-event action)})))
+
+(re-frame/reg-event-fx
   ::execute-state
   (fn [{:keys [db]} [_ {:keys [target id] :as action}]]
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
           object (get-in scene [:objects (keyword target)])
-          state (get-in object [:states (keyword id)])]
+          states (get object :states)
+          states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
+          state (get states-with-aliases (keyword id))]
       {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state)
        :dispatch (ce/success-event action)})))
 
