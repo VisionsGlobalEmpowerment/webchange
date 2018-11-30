@@ -317,7 +317,7 @@
   [scene-id name object]
   (let [params (prepare-group-params object)]
   [:> Group params
-   [anim (:name object) (:anim object) (:speed object)]
+   [anim (:name object) (:anim object) (:speed object) #(re-frame/dispatch [::ie/register-animation (:name object) %])]
    [:> Rect (-> {:width (:width params)
                  :height (:height params)
                  :opacity 0
@@ -363,7 +363,7 @@
           ui-screen (re-frame/subscribe [::subs/ui-screen])]
       [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (- (compute-x viewbox)) :y (- (compute-y viewbox))
                  :scale-x (/ (:width @viewport) (:width viewbox)) :scale-y (/ (:height @viewport) (:height viewbox))}
-       [:> Layer {:ref (fn [ref] (if ref (re-frame/dispatch [::ie/register-canvas ref])))}
+       [:> Layer
         (if (= @ui-screen :settings)
           [settings]
           [current-scene]

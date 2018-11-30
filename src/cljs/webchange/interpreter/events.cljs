@@ -40,6 +40,11 @@
   (fn [params]
     (i/interpolate params)))
 
+(re-frame/reg-fx
+  :execute-animation
+  (fn [{:keys [state id]}]
+    (.setAnimation state 0 id true)))
+
 (defn get-audio-key
   [db id]
   (get-in db [:scenes (:current-scene db) :audio (keyword id)]))
@@ -117,7 +122,10 @@
 (re-frame/reg-event-fx
   ::execute-animation
   (fn [{:keys [db]} [_ action]]
-    {:dispatch-n (list (ce/success-event action))}))
+    (let [scene-id (:current-scene db)]
+      {:execute-animation (-> action
+                              (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+       :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::set-music-volume
@@ -159,9 +167,11 @@
       (assoc-in db [:transitions scene-id name] component))))
 
 (re-frame/reg-event-db
-  ::register-canvas
-  (fn [db [_ layer]]
-    (assoc db :canvas-context (.getContext layer))))
+  ::register-animation
+  (fn [db [_ name state]]
+    (let [scene-id (:current-scene db)]
+      (assoc-in db [:scenes scene-id :animations name] state))))
+
 
 (re-frame/reg-event-fx
   ::trigger

@@ -4,6 +4,7 @@
     [react-konva :refer [Shape]]
     [konva :refer [Animation]]
     [spine :as s]
+    [webchange.interpreter.events :as events]
     ))
 
 (def spine-manager (s/canvas.AssetManager.))
@@ -27,15 +28,17 @@
     (.start animation)))
 
 (defn anim
-  [name animation speed]
+  [name animation speed on-mount]
   (let [atlas (texture-atlas name)
         atlas-loader (s/AtlasAttachmentLoader. atlas)
         skeleton-json (s/SkeletonJson. atlas-loader)
         skeleton-data (.readSkeletonData skeleton-json (.get spine-manager (str "/raw/anim/" name "/skeleton.json")))
         skeleton (s/Skeleton. skeleton-data)
-        animation-state (s/AnimationState. (s/AnimationStateData. (.-data skeleton)))]
+        animation-state-data (s/AnimationStateData. (.-data skeleton))
+        _ (set! (.-defaultMix animation-state-data) 0.2)
+        animation-state (s/AnimationState. animation-state-data)]
     (set! (.-flipY skeleton) true)
-    (fn [name animation speed]
+    (fn [name animation speed on-mount]
       (.setAnimation animation-state 0 animation true)
       [:> Shape {:time-diff  0
                  :scene-func (fn [context shape]
@@ -44,4 +47,8 @@
                                (.updateWorldTransform skeleton)
                                (let [skeleton-renderer (s/canvas.SkeletonRenderer. context)]
                                  (.draw skeleton-renderer skeleton)))
-                 :ref        (fn [ref] (if ref (start-animation ref)))}])))
+                 :ref        (fn [ref] (if ref
+                                         (do
+                                           (start-animation ref)
+                                           (on-mount animation-state))
+                                         ))}])))

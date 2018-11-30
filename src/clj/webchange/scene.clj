@@ -104,7 +104,7 @@
 
                    :senora-vaca-audio-1 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 0.749, :duration 2.68}
-                                                {:type "state" :target "senora-vaca" :id "talk"}]}
+                                                {:type "animation" :target "senoravaca" :id "talk"}]}
                    :senora-vaca-audio-2 {:type "audio", :id "teacher", :start 4.453, :duration 6.266}
                    :senora-vaca-audio-3 {:type "audio", :id "teacher", :start 11.508, :duration 1.931}
                    :senora-vaca-audio-4 {:type "audio", :id "teacher", :start 13.478, :duration 3.232}
@@ -118,7 +118,7 @@
 
                    :vera-audio-1 {:type "parallel"
                                   :data [{:type "audio", :id "vera", :start 1.1, :duration 4.4232}
-                                         {:type "state", :target "senora-vaca" :id "idle"}]}
+                                         {:type "animation", :target "senoravaca" :id "idle"}]}
                    :vera-audio-2 {:type "audio", :id "vera", :start 6.365, :duration 1.405}
                    :vera-audio-3 {:type "audio", :id "vera", :start 7.871, :duration 2.59}
                    :vera-audio-4 {:type "audio", :id "vera", :start 11.426, :duration 1.253}
@@ -131,7 +131,7 @@
                    :syllable-cu {:type "parallel",
                                  :data [{:type "audio" :name "syllable" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
                                         {:type "audio" :name "clap" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
-                                        {:type "animation" :name "clap" :target "senoraVaca" :id "clap"}
+                                        #_{:type "animation" :name "clap" :target "senoraVaca" :id "clap"}
                                         {:type "state" :name "syllable" :target "syllable" :id "show" :params {:text "cu"}}]},
                    :syllable-te
                                    {:type "parallel",
@@ -148,7 +148,7 @@
                                             :start    4.21,
                                             :duration 0.646,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-teacher",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -164,7 +164,7 @@
                                             :start    7.625,
                                             :duration 0.552,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-vera",
                                             :target "vera",
                                             :id     "clap"}
@@ -188,7 +188,7 @@
                                             :start    2.035,
                                             :duration 0.388,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}]},
@@ -208,7 +208,7 @@
                                             :start    5.54,
                                             :duration 0.561,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-teacher",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -224,7 +224,7 @@
                                             :start    8.798,
                                             :duration 0.813,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-vera",
                                             :target "vera",
                                             :id     "clap"}
@@ -248,7 +248,7 @@
                                             :start    0.029,
                                             :duration 0.7,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -301,7 +301,7 @@
                                             :start    3.829,
                                             :duration 0.362,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -325,7 +325,7 @@
                                             :start    3.178,
                                             :duration 0.628,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -350,7 +350,7 @@
                                             :start    4.878,
                                             :duration 0.653,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-teacher",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -366,7 +366,7 @@
                                             :start    8.211,
                                             :duration 0.56,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-vera",
                                             :target "vera",
                                             :id     "clap"}
@@ -391,7 +391,7 @@
                                             :start    1.383,
                                             :duration 0.633,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}]},
@@ -434,7 +434,7 @@
                                             :start    6.743,
                                             :duration 0.87,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-teacher",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -450,7 +450,7 @@
                                             :start    8.798,
                                             :duration 0.813,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-vera",
                                             :target "vera",
                                             :id     "clap"}
@@ -493,7 +493,7 @@
                                             :start    0.744,
                                             :duration 0.607,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -517,7 +517,7 @@
                                             :start    6.119,
                                             :duration 0.615,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-teacher",
                                             :target "senoraVaca",
                                             :id     "clap"}
@@ -533,7 +533,7 @@
                                             :start    8.798,
                                             :duration 0.813,
                                             :offset   0.1}
-                                           {:type   "animation",
+                                           #_{:type   "animation",
                                             :name   "clap-vera",
                                             :target "vera",
                                             :id     "clap"}
