@@ -2,27 +2,15 @@
 
 (def home-scene
   {:assets
-                  [{:url  "/raw/audio/background/POL-daily-special-short.mp3",
-                    :size 10,
-                    :type "audio"}
-                   {:url  "/raw/audio/effects/NFF-fruit-collected.mp3",
-                    :size 1,
-                    :type "audio"}
+                  [{:url "/raw/audio/background/POL-daily-special-short.mp3", :size 10, :type "audio"}
+                   {:url "/raw/audio/effects/NFF-fruit-collected.mp3", :size 1, :type "audio"}
                    {:url "/raw/audio/effects/NFF-glitter.mp3", :size 1, :type "audio"}
-                   {:url  "/raw/audio/effects/NFF-robo-elastic.mp3",
-                    :size 1,
-                    :type "audio"}
-                   {:url  "/raw/audio/effects/NFF-rusted-thing.mp3",
-                    :size 1,
-                    :type "audio"}
+                   {:url "/raw/audio/effects/NFF-robo-elastic.mp3", :size 1, :type "audio"}
+                   {:url "/raw/audio/effects/NFF-rusted-thing.mp3", :size 1, :type "audio"}
                    {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
-                   {:url  "/raw/audio/scripts/intro/teacher.mp3",
-                    :size 5,
-                    :type "audio"}
+                   {:url "/raw/audio/scripts/intro/teacher.mp3", :size 5, :type "audio"}
                    {:url "/raw/audio/scripts/intro/vera.mp3", :size 5, :type "audio"}
-                   {:url  "/raw/audio/scripts/intro/syllables.mp3",
-                    :size 2,
-                    :type "audio"}
+                   {:url "/raw/audio/scripts/intro/syllables.mp3", :size 2, :type "audio"}
                    {:url "/raw/img/map/background.png", :size 10, :type "image"}
                    {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
                    {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
@@ -64,86 +52,87 @@
                    {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
                    {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
                    {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
-                   {:url  "/raw/img/ferris-wheel/words/Grapes.png",
-                    :size 1,
-                    :type "image"}
-                   {:url  "/raw/img/ferris-wheel/words/Spoon.png",
-                    :size 1,
-                    :type "image"}
-                   {:url  "/raw/img/ferris-wheel/words/Fork.png",
-                    :size 1,
-                    :type "image"}],
+                   {:url "/raw/img/ferris-wheel/words/Grapes.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/Spoon.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/Fork.png", :size 1, :type "image"}
+
+                   {:url "/raw/anim/senoravaca/skeleton.atlas", :size 1, :type "anim-text"}
+                   {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
+                   {:url "/raw/anim/senoravaca/skeleton.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton2.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton3.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton4.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton5.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton6.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton7.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton8.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton9.png", :size 1, :type "anim-texture"}
+                   {:url "/raw/anim/senoravaca/skeleton10.png", :size 1, :type "anim-texture"}
+
+                   {:url "/raw/anim/test/skeleton.atlas", :size 1, :type "anim-text"}
+                   {:url "/raw/anim/test/skeleton.json", :size 1, :type "anim-text"}
+                   {:url "/raw/anim/test/skeleton.png", :size 1, :type "anim-texture"}],
    :objects
-                  {:background
-                   {:type "background", :src "/raw/img/casa/background.jpg"},
-                   :vera
-                   {:type  "image",
-                    :x     1050,
-                    :y     400,
-                    :src   "/raw/img/vera.png",
-                    :layer 10,
-                    :scale {:x 1, :y 1}},
-                   :senora-vaca
-                   {:type    "image",
-                    :x       557,
-                    :y       177,
-                    :src     "/raw/img/teacher.png",
-                    :layer   10,
-                    :actions {:click {:type "action", :id "intro", :on "click"}}},
+                  {:background {:type "background", :src "/raw/img/casa/background.jpg"},
+                   :vera       {:type "image" :x 1050 :y 400 :src "/raw/img/vera.png" :scale {:x 1, :y 1}}
+                   :senora-vaca {:type "animation" :x 757 :y 960 :name "senoravaca" :anim "idle" :speed 0.4
+                                 :width 798 :height 1380
+                                 :scale {:x 0.55 :y 0.55}
+                                 :actions {:click {:type "action", :id "intro", :on "click"}}
+                                 :states {:idle {:anim "idle"}
+                                          :talk {:anim "talk"}}},
                    :door
-                   {:type   "transparent",
-                    :x      1146,
-                    :y      42,
-                    :width  732,
-                    :height 810,
-                    :states
-                            {:default {:type "transparent", :src nil},
-                             :hover   {:type "image", :src "/raw/img/casa_door.png"}},
-                    :actions
-                            {:mouseover
-                                    {:type "state", :target "door", :id "hover", :on "mouseover"},
-                             :mouseout
-                                    {:type "state", :target "door", :id "default", :on "mouseout"},
-                             :click {:type "scene", :scene-id "map", :on "click"}}}},
+                               {:type   "transparent",
+                                :x      1146,
+                                :y      42,
+                                :width  732,
+                                :height 810,
+                                :states
+                                        {:default {:type "transparent", :src nil},
+                                         :hover   {:type "image", :src "/raw/img/casa_door.png"}},
+                                :actions
+                                        {:mouseover
+                                                {:type "state", :target "door", :id "hover", :on "mouseover"},
+                                         :mouseout
+                                                {:type "state", :target "door", :id "default", :on "mouseout"},
+                                         :click {:type "scene", :scene-id "map", :on "click"}}}},
    :scene-objects [["background" "door"] ["vera" "senora-vaca"]],
    :actions
-                  {:show-word-tenedor
-                                   {:type "state", :target "wordImage", :id "tenedor"},
-                   :show-word-uvas {:type "state", :target "wordImage", :id "uvas"},
-                   :vera-audio-3
-                                   {:type "audio", :id "vera", :start 7.871, :duration 2.59},
-                   :senora-vaca-audio-5
-                                   {:type "audio", :id "teacher", :start 17.577, :duration 5.084},
-                   :senora-vaca-audio-7
-                                   {:type "audio", :id "teacher", :start 29.75, :duration 2.2},
-                   :senora-vaca-audio-2
-                                   {:type "audio", :id "teacher", :start 4.453, :duration 6.266},
-                   :show-word-cuchara
-                                   {:type "state", :target "wordImage", :id "cuchara"},
-                   :syllable-cu
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable",
-                                            :id       "syllables",
-                                            :start    2.507,
-                                            :duration 0.609,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap",
-                                            :id       "syllables",
-                                            :start    2.507,
-                                            :duration 0.609,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :name   "clap",
-                                            :target "senoraVaca",
-                                            :id     "clap"}
-                                           {:type   "state",
-                                            :name   "syllable",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "cu"}}]},
+                  {:show-word-tenedor {:type "state", :target "wordImage", :id "tenedor"}
+                   :show-word-uvas {:type "state", :target "wordImage", :id "uvas"}
+                   :show-word-cuchara {:type "state", :target "wordImage", :id "cuchara"}
+
+                   :senora-vaca-audio-1 {:type "parallel"
+                                         :data [{:type "audio", :id "teacher", :start 0.749, :duration 2.68}
+                                                {:type "state" :target "senora-vaca" :id "talk"}]}
+                   :senora-vaca-audio-2 {:type "audio", :id "teacher", :start 4.453, :duration 6.266}
+                   :senora-vaca-audio-3 {:type "audio", :id "teacher", :start 11.508, :duration 1.931}
+                   :senora-vaca-audio-4 {:type "audio", :id "teacher", :start 13.478, :duration 3.232}
+                   :senora-vaca-audio-5 {:type "audio", :id "teacher", :start 17.577, :duration 5.084}
+                   :senora-vaca-audio-6 {:type "audio", :id "teacher", :start 23.09, :duration 1.86}
+                   :senora-vaca-audio-7 {:type "audio", :id "teacher", :start 29.75, :duration 2.2}
+                   :senora-vaca-audio-8 {:type "audio", :id "teacher", :start 38.102, :duration 4.739}
+                   :senora-vaca-audio-9 {:type "audio", :id "teacher", :start 50.809, :duration 1.409}
+                   :senora-vaca-audio-10 {:type "audio", :id "teacher", :start 61.686, :duration 6.759}
+
+
+                   :vera-audio-1 {:type "parallel"
+                                  :data [{:type "audio", :id "vera", :start 1.1, :duration 4.4232}
+                                         {:type "state", :target "senora-vaca" :id "idle"}]}
+                   :vera-audio-2 {:type "audio", :id "vera", :start 6.365, :duration 1.405}
+                   :vera-audio-3 {:type "audio", :id "vera", :start 7.871, :duration 2.59}
+                   :vera-audio-4 {:type "audio", :id "vera", :start 11.426, :duration 1.253}
+                   :vera-audio-5 {:type "audio", :id "vera", :start 14.1, :duration 0.948}
+                   :vera-audio-6 {:type "audio", :id "vera", :start 16.267, :duration 3.809}
+
+                   :empty-1        {:type "empty", :duration 600}
+
+
+                   :syllable-cu {:type "parallel",
+                                 :data [{:type "audio" :name "syllable" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
+                                        {:type "audio" :name "clap" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
+                                        {:type "animation" :name "clap" :target "senoraVaca" :id "clap"}
+                                        {:type "state" :name "syllable" :target "syllable" :id "show" :params {:text "cu"}}]},
                    :syllable-te
                                    {:type "parallel",
                                     :data
@@ -203,8 +192,7 @@
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}]},
-                   :senora-vaca-audio-4
-                                   {:type "audio", :id "teacher", :start 13.478, :duration 3.232},
+
                    :syllable-dor
                                    {:type "parallel",
                                     :data
@@ -346,8 +334,7 @@
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "cha"}}]},
-                   :senora-vaca-audio-6
-                                   {:type "audio", :id "teacher", :start 23.09, :duration 1.86},
+
                    :syllable-ne
                                    {:type "parallel",
                                     :data
@@ -388,8 +375,7 @@
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "ne"}}]},
-                   :senora-vaca-audio-1
-                                   {:type "audio", :id "teacher", :start 0.749, :duration 2.68},
+
                    :syllable-ve
                                    {:type "parallel",
                                     :data
@@ -409,8 +395,7 @@
                                             :name   "clap",
                                             :target "senoraVaca",
                                             :id     "clap"}]},
-                   :senora-vaca-audio-3
-                                   {:type "audio", :id "teacher", :start 11.508, :duration 1.931},
+
                    :intro
                                    {:type "sequence",
                                     :data
@@ -492,8 +477,7 @@
                                            "empty-1"
                                            "hide-word"
                                            "hide-syllable"]},
-                   :vera-audio-1
-                                   {:type "audio", :id "vera", :start 1.1, :duration 4.4232},
+
                    :syllable-vas
                                    {:type "parallel",
                                     :data
@@ -576,22 +560,7 @@
                                            "syllable-ra2"
                                            "empty-1"
                                            "hide-word"
-                                           "hide-syllable"]},
-                   :vera-audio-4
-                                   {:type "audio", :id "vera", :start 11.426, :duration 1.253},
-                   :vera-audio-5
-                                   {:type "audio", :id "vera", :start 14.1, :duration 0.948},
-                   :empty-1        {:type "empty", :duration 600},
-                   :senora-vaca-audio-10
-                                   {:type "audio", :id "teacher", :start 61.686, :duration 6.759},
-                   :vera-audio-2
-                                   {:type "audio", :id "vera", :start 6.365, :duration 1.405},
-                   :senora-vaca-audio-9
-                                   {:type "audio", :id "teacher", :start 50.809, :duration 1.409},
-                   :senora-vaca-audio-8
-                                   {:type "audio", :id "teacher", :start 38.102, :duration 4.739},
-                   :vera-audio-6
-                                   {:type "audio", :id "vera", :start 16.267, :duration 3.809}},
+                                           "hide-syllable"]}}
    :audio
                   {:teacher   "/raw/audio/scripts/intro/teacher.mp3",
                    :vera      "/raw/audio/scripts/intro/vera.mp3",
@@ -717,7 +686,7 @@
                                    :size 1,
                                    :type "audio"}
                                   {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
-                                  {:url "/raw/img/feria/background.png", :size 10, :type "image"}
+                                  {:url "/raw/img/feria/background.jpg", :size 10, :type "image"}
                                   {:url "/raw/img/feria/back.png", :size 1, :type "image"}
                                   {:url "/raw/img/feria/back_active.png", :size 1, :type "image"}
                                   {:url "/raw/img/feria/wheel.png", :size 2, :type "image"}
@@ -736,7 +705,7 @@
                                   {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}],
                   :objects
                                  {:background
-                                  {:type "background", :src "/raw/img/feria/background.png"},
+                                  {:type "background", :src "/raw/img/feria/background.jpg"},
                                   :wheel
                                   {:type   "transparent",
                                    :x      467,

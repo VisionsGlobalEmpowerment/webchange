@@ -158,6 +158,11 @@
     (let [scene-id (:current-scene db)]
       (assoc-in db [:transitions scene-id name] component))))
 
+(re-frame/reg-event-db
+  ::register-canvas
+  (fn [db [_ layer]]
+    (assoc db :canvas-context (.getContext layer))))
+
 (re-frame/reg-event-fx
   ::trigger
   (fn [{:keys [db]} [_ trigger]]

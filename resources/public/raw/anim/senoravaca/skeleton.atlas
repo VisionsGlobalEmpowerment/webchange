@@ -1,0 +1,326 @@
+
+skeleton.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_br1
+  rotate: true
+  xy: 929, 6
+  size: 116, 35
+  orig: 116, 35
+  offset: 0, 0
+  index: -1
+vaca_br2
+  rotate: true
+  xy: 954, 227
+  size: 116, 41
+  orig: 116, 41
+  offset: 0, 0
+  index: -1
+vaca_ear
+  rotate: false
+  xy: 838, 345
+  size: 151, 386
+  orig: 151, 386
+  offset: 0, 0
+  index: -1
+vaca_hair1
+  rotate: false
+  xy: 2, 140
+  size: 834, 881
+  orig: 834, 881
+  offset: 0, 0
+  index: -1
+vaca_hand22
+  rotate: false
+  xy: 838, 31
+  size: 89, 162
+  orig: 89, 162
+  offset: 0, 0
+  index: -1
+vaca_hand23
+  rotate: false
+  xy: 2, 2
+  size: 216, 136
+  orig: 216, 136
+  offset: 0, 0
+  index: -1
+vaca_leg
+  rotate: false
+  xy: 838, 733
+  size: 175, 288
+  orig: 175, 288
+  offset: 0, 0
+  index: -1
+vaca_m
+  rotate: true
+  xy: 838, 195
+  size: 148, 114
+  orig: 148, 114
+  offset: 0, 0
+  index: -1
+vaca_pen
+  rotate: true
+  xy: 220, 23
+  size: 115, 345
+  orig: 115, 345
+  offset: 0, 0
+  index: -1
+vera_mouth1
+  rotate: true
+  xy: 929, 124
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth2
+  rotate: false
+  xy: 567, 79
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth3
+  rotate: false
+  xy: 638, 79
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth4
+  rotate: true
+  xy: 709, 69
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth5
+  rotate: true
+  xy: 770, 69
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth6
+  rotate: false
+  xy: 567, 18
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth7
+  rotate: true
+  xy: 638, 8
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth8
+  rotate: false
+  xy: 699, 8
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+
+skeleton2.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_eye1
+  rotate: false
+  xy: 2, 316
+  size: 450, 256
+  orig: 450, 256
+  offset: 0, 0
+  index: -1
+vaca_eye2
+  rotate: false
+  xy: 260, 574
+  size: 443, 238
+  orig: 443, 238
+  offset: 0, 0
+  index: -1
+vaca_eye3
+  rotate: false
+  xy: 2, 57
+  size: 442, 257
+  orig: 442, 257
+  offset: 0, 0
+  index: -1
+vaca_eye4
+  rotate: false
+  xy: 446, 2
+  size: 456, 270
+  orig: 456, 270
+  offset: 0, 0
+  index: -1
+vaca_glasses
+  rotate: false
+  xy: 454, 274
+  size: 547, 256
+  orig: 547, 256
+  offset: 0, 0
+  index: -1
+vaca_hand12
+  rotate: true
+  xy: 705, 532
+  size: 280, 307
+  orig: 280, 307
+  offset: 0, 0
+  index: -1
+vaca_hand21
+  rotate: true
+  xy: 2, 582
+  size: 230, 256
+  orig: 230, 256
+  offset: 0, 0
+  index: -1
+
+skeleton3.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_head
+  rotate: false
+  xy: 2, 2
+  size: 820, 876
+  orig: 820, 876
+  offset: 0, 0
+  index: -1
+
+skeleton4.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_clapping1
+  rotate: false
+  xy: 2, 390
+  size: 841, 587
+  orig: 841, 587
+  offset: 0, 0
+  index: -1
+vaca_hair3
+  rotate: true
+  xy: 509, 2
+  size: 386, 472
+  orig: 386, 472
+  offset: 0, 0
+  index: -1
+vaca_skirt
+  rotate: false
+  xy: 2, 5
+  size: 505, 383
+  orig: 505, 383
+  offset: 0, 0
+  index: -1
+
+skeleton5.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_body
+  rotate: false
+  xy: 452, 11
+  size: 375, 370
+  orig: 375, 370
+  offset: 0, 0
+  index: -1
+vaca_clapping2
+  rotate: false
+  xy: 2, 383
+  size: 841, 587
+  orig: 841, 587
+  offset: 0, 0
+  index: -1
+vaca_nose
+  rotate: false
+  xy: 2, 2
+  size: 448, 379
+  orig: 448, 379
+  offset: 0, 0
+  index: -1
+
+skeleton6.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_clapping3
+  rotate: false
+  xy: 2, 344
+  size: 841, 587
+  orig: 841, 587
+  offset: 0, 0
+  index: -1
+vaca_hair2
+  rotate: false
+  xy: 369, 31
+  size: 389, 311
+  orig: 389, 311
+  offset: 0, 0
+  index: -1
+vaca_hand11
+  rotate: false
+  xy: 2, 2
+  size: 365, 340
+  orig: 365, 340
+  offset: 0, 0
+  index: -1
+
+skeleton7.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_clapping4
+  rotate: false
+  xy: 2, 2
+  size: 841, 587
+  orig: 841, 587
+  offset: 0, 0
+  index: -1
+
+skeleton8.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_clapping5
+  rotate: false
+  xy: 2, 2
+  size: 841, 587
+  orig: 841, 587
+  offset: 0, 0
+  index: -1
+
+skeleton9.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_clapping6
+  rotate: false
+  xy: 2, 2
+  size: 841, 587
+  orig: 841, 587
+  offset: 0, 0
+  index: -1
+
+skeleton10.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vaca_horns
+  rotate: false
+  xy: 2, 2
+  size: 672, 433
+  orig: 672, 433
+  offset: 0, 0
+  index: -1

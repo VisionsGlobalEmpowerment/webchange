@@ -6,6 +6,7 @@
     [webchange.subs :as subs]
     [webchange.events :as events]
     [webchange.common.kimage :refer [kimage]]
+    [webchange.common.anim :refer [anim]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
@@ -13,8 +14,7 @@
     [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
 
-    [react-konva :refer [Stage Layer Group Rect Text]]
-    [reagent.core :as reagent]))
+    [react-konva :refer [Stage Layer Group Rect Text Custom]]))
 
 (defn get-viewbox
   [viewport]
@@ -167,7 +167,9 @@
         progress (re-frame/subscribe [::subs/scene-loading-progress @scene-id])
         loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])]
     [:> Group
-      [kimage "/raw/img/bg.jpg"]
+     [kimage "/raw/img/bg.jpg"]
+
+
      [:> Group {:x 628 :y 294}
       [kimage "/raw/img/ui/logo.png"]]
      [:> Group {:x 729 :y 750}
@@ -177,8 +179,7 @@
       ]
      (if @loaded
        [:> Group {:x 779 :y 863 :on-click do-start}
-        [kimage "/raw/img/ui/play_button_01.png"]]
-       )
+        [kimage "/raw/img/ui/play_button_01.png"]])
      ]))
 
 (defn close-button
@@ -242,6 +243,8 @@
                           (assoc :offset {:x (/ width 2) :y (/ height 2)}))
       "center-top" (-> object
                        (assoc :offset {:x (/ width 2)}))
+      "center-bottom" (-> object
+                          (assoc :offset {:x (/ width 2) :y height}))
       object)))
 
 (defn with-transition
@@ -263,6 +266,7 @@
 (declare group)
 (declare placeholder)
 (declare image)
+(declare animation)
 
 (defn draw-object
   [scene-id name]
@@ -276,6 +280,7 @@
       :transition [transition scene-id name @o]
       :group [group scene-id name @o]
       :placeholder [placeholder scene-id name @o]
+      :animation [animation scene-id name @o]
       )))
 
 (defn placeholder
@@ -307,6 +312,18 @@
   [scene-id name object]
   [:> Group (prepare-group-params object)
    [kimage (get-data-as-url (:src object))]])
+
+(defn animation
+  [scene-id name object]
+  (let [params (prepare-group-params object)]
+  [:> Group params
+   [anim (:name object) (:anim object) (:speed object)]
+   [:> Rect (-> {:width (:width params)
+                 :height (:height params)
+                 :opacity 0
+                 :origin {:type "center-top"}
+                 :scale-y -1}
+                (with-origin-offset))]]))
 
 (defn triggers
   [scene-id]
@@ -346,7 +363,7 @@
           ui-screen (re-frame/subscribe [::subs/ui-screen])]
       [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (- (compute-x viewbox)) :y (- (compute-y viewbox))
                  :scale-x (/ (:width @viewport) (:width viewbox)) :scale-y (/ (:height @viewport) (:height viewbox))}
-       [:> Layer
+       [:> Layer {:ref (fn [ref] (if ref (re-frame/dispatch [::ie/register-canvas ref])))}
         (if (= @ui-screen :settings)
           [settings]
           [current-scene]

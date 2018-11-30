@@ -9,6 +9,7 @@
     [react-konva :refer [Stage, Layer, Group, Rect]]
     [konva :refer [Tween]]
     [webchange.common.kimage :refer [kimage]]
+    [webchange.common.anim :as anim]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
     ))
@@ -80,7 +81,10 @@
                  (if (>= n total)
                    (re-frame/dispatch [::events/set-scene-loaded [scene-id true]]))))
     (doseq [asset assets]
-      (load-asset asset current-progress))))
+      (case (-> asset :type keyword)
+        :anim-text (anim/load-anim-text asset current-progress)
+        :anim-texture (anim/load-anim-texture asset current-progress)
+        (load-asset asset current-progress)))))
 
 (defn load-course
   [course-id cb]

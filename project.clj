@@ -31,7 +31,8 @@
                    [day8.re-frame/tracing "0.5.1"]]
 
     :plugins      [[lein-figwheel "0.5.17"]
-                   [lein-doo "0.1.8"]]}
+                   [lein-doo "0.1.8"]]
+    :main         webchange.server}
    :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths ["env/prod/clj"]
              :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]
@@ -65,6 +66,9 @@
                                            :react-spring "5.8.0"
                                            :react-konva "16.6.0"
                                            }
+                    :foreign-libs [{:file "src/libs/spine-canvas.js"
+                                    :provides ["spine"]
+                                    :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
                     }}
@@ -74,7 +78,7 @@
      :jar true
      :compiler     {:main            webchange.core
                     :output-to       "resources/public/js/compiled/app.js"
-                    :optimizations   :advanced
+                    :optimizations   :whitespace
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false
                     :npm-deps
