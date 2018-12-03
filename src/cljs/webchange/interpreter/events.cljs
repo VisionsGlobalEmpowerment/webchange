@@ -42,8 +42,9 @@
 
 (re-frame/reg-fx
   :execute-animation
-  (fn [{:keys [state id]}]
-    (.setAnimation state 0 id true)))
+  (fn [{:keys [state id] :as action}]
+    (let [loop (if (contains? action :loop) (:loop action) true)]
+      (.setAnimation state 0 id loop))))
 
 (defn get-audio-key
   [db id]

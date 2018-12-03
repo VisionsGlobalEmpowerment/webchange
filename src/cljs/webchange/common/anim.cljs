@@ -4,7 +4,6 @@
     [react-konva :refer [Shape]]
     [konva :refer [Animation]]
     [spine :as s]
-    [webchange.interpreter.events :as events]
     ))
 
 (def spine-manager (s/canvas.AssetManager.))
