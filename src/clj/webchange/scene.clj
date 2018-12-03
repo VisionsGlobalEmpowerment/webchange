@@ -744,24 +744,17 @@
                 :metadata      {:autostart true}})
 
 (def feria-scene {:assets
-                                 [{:url  "/raw/audio/background/POL-daily-special-short.mp3",
-                                   :size 10,
-                                   :type "audio"}
-                                  {:url  "/raw/audio/effects/NFF-fruit-collected.mp3",
-                                   :size 1,
-                                   :type "audio"}
+                                 [{:url "/raw/audio/background/POL-daily-special-short.mp3", :size 10, :type "audio"}
+                                  {:url "/raw/audio/effects/NFF-fruit-collected.mp3", :size 1, :type "audio"}
                                   {:url "/raw/audio/effects/NFF-glitter.mp3", :size 1, :type "audio"}
-                                  {:url  "/raw/audio/effects/NFF-robo-elastic.mp3",
-                                   :size 1,
-                                   :type "audio"}
-                                  {:url  "/raw/audio/effects/NFF-rusted-thing.mp3",
-                                   :size 1,
-                                   :type "audio"}
+                                  {:url "/raw/audio/effects/NFF-robo-elastic.mp3", :size 1, :type "audio"}
+                                  {:url "/raw/audio/effects/NFF-rusted-thing.mp3", :size 1, :type "audio"}
                                   {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
                                   {:url "/raw/img/feria/background.jpg", :size 10, :type "image"}
                                   {:url "/raw/img/feria/back.png", :size 1, :type "image"}
                                   {:url "/raw/img/feria/back_active.png", :size 1, :type "image"}
-                                  {:url "/raw/img/feria/wheel.png", :size 2, :type "image"}
+                                  {:url "/raw/img/feria/ferris_wheel_default.png", :size 2, :type "image"}
+                                  {:url "/raw/img/feria/ferris_wheel_highlight.png", :size 2, :type "image"}
                                   {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}
                                   {:url "/raw/img/ui/back_button_02.png", :size 1, :type "image"}
                                   {:url "/raw/img/ui/close_button_01.png", :size 1, :type "image"}
@@ -779,19 +772,19 @@
                                  {:background
                                   {:type "background", :src "/raw/img/feria/background.jpg"},
                                   :wheel
-                                  {:type   "transparent",
+                                  {:type "image",
+                                   :src "/raw/img/feria/ferris_wheel_default.png"
                                    :x      467,
                                    :y      105,
                                    :width  708,
-                                   :height 778,
+                                   :height 778
                                    :states
-                                           {:default {:type "transparent", :src nil},
-                                            :hover   {:type "image", :src "/raw/img/feria/wheel.png"}},
+                                           {:default {:src "/raw/img/feria/ferris_wheel_default.png"},
+                                            :hover   {:src "/raw/img/feria/ferris_wheel_highlight.png"}},
                                    :actions
                                            {:mouseover {:type "state", :target "wheel", :id "hover", :on "mouseover"},
                                             :mouseout  {:type "state", :target "wheel", :id "default", :on "mouseout"}
-                                            :click     {:type "scene", :scene-id "ferris-wheel", :on "click"}},
-                                   :src    nil},
+                                            :click     {:type "scene", :scene-id "ferris-wheel", :on "click"}}},
                                   :exit
                                   {:type "image",
                                    :x    1600,
