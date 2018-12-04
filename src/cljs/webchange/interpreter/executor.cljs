@@ -1,9 +1,6 @@
 (ns webchange.interpreter.executor
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.interpreter.core :refer [get-data create-tagged-key has-data put-data]]
-    [cljs.core.async :as a :refer [>! chan]]))
+    [webchange.interpreter.core :refer [get-data create-tagged-key has-data put-data]]))
 
 (defonce audio-ctx (atom nil))
 (defonce music-gain (atom nil))
@@ -37,11 +34,18 @@
   [data]
   (let [buffer-source (.createBufferSource @audio-ctx)]
     (set! (.-buffer buffer-source) data)
-    (.connect buffer-source @effects-gain)
     buffer-source))
 
+(defn connect
+  ([destination]
+   (fn [audio-node]
+     (connect audio-node destination)))
+  ([audio-node destination]
+    (.connect audio-node destination)
+    audio-node))
+
 (defn get-audio
-  [key]
+  [key destination]
   (let [buffer-key (create-tagged-key key "audioBuffer")]
     (when-not (has-data buffer-key)
       (let [data (get-data key)
@@ -49,7 +53,8 @@
         (put-data promise buffer-key)))
     (let [buffer-data (get-data buffer-key)]
       (-> buffer-data
-          (.then create-buffered-source)))
+          (.then create-buffered-source)
+          (.then (connect destination))))
     ))
 
 (defn with-on-ended
@@ -59,16 +64,42 @@
       (set! (.-onended audio) cb))
     audio))
 
-(defn start-audio
-  [offset start duration]
+(defn with-loop
+  [loop]
   (fn [audio]
-    (.start audio (+ (.-currentTime @audio-ctx) offset) start duration)
+    (when loop
+      (set! (.-loop audio) true))
     audio))
 
-(defn execute-audio
+(defn start-audio
+  ([offset start duration]
+    (fn [audio]
+      (.start audio (+ (.-currentTime @audio-ctx) offset) start duration)
+      audio))
+  ([offset start]
+   (fn [audio]
+     (.start audio (+ (.-currentTime @audio-ctx) offset) start)
+     audio)))
+
+(defn execute-audio-fx
   [{:keys [key start duration offset on-ended]}]
   (init)
-  (let [audio (get-audio key)]
+  (let [audio (get-audio key @effects-gain)]
     (-> audio
         (.then (with-on-ended on-ended))
         (.then (start-audio offset start duration)))))
+
+(defn execute-audio-music
+  [{:keys [key start offset on-ended]}]
+  (init)
+  (let [audio (get-audio key @music-gain)]
+    (-> audio
+        (.then (with-on-ended on-ended))
+        (.then (with-loop true))
+        (.then (start-audio offset start)))))
+
+(defn execute-audio
+  [{:keys [loop] :as audio}]
+  (if loop
+    (execute-audio-music audio)
+    (execute-audio-fx audio)))

@@ -91,7 +91,9 @@
 
 (re-frame/reg-event-fx
   ::execute-audio
-  (fn [{:keys [db]} [_ {:keys [id] :as action}]]
+  [ce/event-as-action ce/with-flow]
+  (fn [{:keys [db]} {:keys [id] :as action}]
+    (js/console.log action)
       {:execute-audio (-> action
                           (assoc :key (get-audio-key db id))
                           (assoc :on-ended (ce/dispatch-success-fn action)))}))
@@ -149,11 +151,12 @@
 (re-frame/reg-event-fx
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id]]
-    (let [loaded (get-in db [:scene-loading-complete scene-id])]
+    (let [loaded (get-in db [:scene-loading-complete scene-id])
+          current-scene (:current-scene db)]
       (cond-> {:db (-> db
                        (assoc :current-scene scene-id)
                        (assoc :scene-started false))
-               :dispatch [::vars.events/execute-clear-vars]}
+               :dispatch-n (list [::vars.events/execute-clear-vars] [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])}
               (not loaded) (assoc :load-scene [(:current-course db) scene-id])))))
 
 (re-frame/reg-event-db

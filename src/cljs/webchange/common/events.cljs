@@ -36,6 +36,25 @@
     :before  (fn [context]
                (update-in context [:coeffects :event] #(second %)))))
 
+(def with-flow
+  (re-frame/->interceptor
+    :before  (fn [context]
+               (let [flow-id (get-in context [:coeffects :event :flow-id])]
+                 (if flow-id
+                   context
+                   (-> context
+                     (update-in [:coeffects :event] assoc :flow-id (random-uuid) :action-id (random-uuid) :register-flow true))
+                   )))
+    :after (fn [context]
+             (let [action (get-in context [:coeffects :event])
+                   register-flow (:register-flow action)]
+               (if register-flow
+                 (-> context
+                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action)}])))
+                 context))
+             )))
+
+
 (defn with-prev
   [action prev]
   (assoc action :var (:var prev) :params (:params prev)))
@@ -65,10 +84,10 @@
   ::execute-remove-flows
   (fn [{:keys [db]} [_ {:keys [flow-tag] :as action}]]
     (let [flows-to-remove (->> (get-in db [:flows])
-                               (filter (fn [[k v]] (= flow-tag (:tag v))))
+                               (filter (fn [[k v]] (contains? (:tags v) flow-tag)))
                                (map second))
           flows (->> (get-in db [:flows])
-                     (filter (fn [[k v]] (not= flow-tag (:tag v))))
+                     (filter (fn [[k v]] (not (contains? (:tags v) flow-tag))))
                      (into {}))]
       (doseq [flow flows-to-remove
               handler (:on-remove flow)]
@@ -79,9 +98,14 @@
 (re-frame/reg-event-fx
   ::register-flow
   (fn [{:keys [db]} [_ flow]]
-    (let [flow-id (:flow-id flow)
-          current-flow (get-in db [:flows flow-id])]
-      {:db       (assoc-in db [:flows flow-id] (merge current-flow flow))
+    (let [scene-id (:current-scene db)
+          flow-id (:flow-id flow)
+          current-flow (get-in db [:flows flow-id])
+          flow-data (-> current-flow
+                        (merge flow)
+                        (update-in [:tags] #(into #{} %))
+                        (update-in [:tags] conj (str "scene-" scene-id)))]
+      {:db       (assoc-in db [:flows flow-id] flow-data)
        :dispatch [::check-flow flow-id]})))
 
 (re-frame/reg-event-fx
@@ -120,7 +144,7 @@
           action-id (random-uuid)
           [current & rest] (:data action)
           next [::execute-sequence (-> action (assoc :data rest))]
-          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tag (:tag action)}]]
+          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (:tags action)}]]
       (if current
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
@@ -137,6 +161,6 @@
                       (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))))
                       (map (fn [v] (with-prev v action))))
           action-ids (map #(get % :action-id) actions)
-          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tag (:tag action)}]
+          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tags (:tags action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
       {:dispatch-n (cons flow-event action-events)})))

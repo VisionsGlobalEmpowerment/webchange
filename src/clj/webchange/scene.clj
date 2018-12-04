@@ -632,11 +632,14 @@
                                            "syllable-ra2"
                                            "empty-1"
                                            "hide-word"
-                                           "hide-syllable"]}}
+                                           "hide-syllable"]}
+                   :start-background-music {:type "audio" :id "background" :loop true}}
    :audio
                   {:teacher   "/raw/audio/scripts/intro/teacher.mp3",
                    :vera      "/raw/audio/scripts/intro/vera.mp3",
-                   :syllables "/raw/audio/scripts/intro/syllables.mp3"},
+                   :syllables "/raw/audio/scripts/intro/syllables.mp3"
+                   :background "/raw/audio/background/POL-daily-special-short.mp3"},
+   :triggers      {:music {:on "start" :action "start-background-music"}}
    :metadata      {:autostart true}})
 
 (def map-scene {:assets
@@ -740,7 +743,10 @@
                                                     "move-to-feria-transition-3"
                                                     "move-to-feria-transition-4"
                                                     "move-to-feria-transition-5"
-                                                    "open-feria"]}},
+                                                    "open-feria"]}
+                                :start-background-music {:type "audio" :id "background" :loop true}},
+                :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"}
+                :triggers      {:music {:on "start" :action "start-background-music"}}
                 :metadata      {:autostart true}})
 
 (def feria-scene {:assets
@@ -804,7 +810,10 @@
                                    :x     1100,
                                    :y     650,
                                    :src   "/raw/img/vera.png",
-                                   :scale {:x 0.55, :y 0.55}}},
+                                   :scale {:x 0.55, :y 0.55}}}
+                  :actions { :start-background-music {:type "audio" :id "background" :loop true}},
+                  :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"}
+                  :triggers      {:music {:on "start" :action "start-background-music"}}
                   :scene-objects [["background" "wheel" "exit"] ["vera"]],
                   :metadata      {:autostart true}})
 
@@ -941,7 +950,7 @@
                    :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
                    :empty-5        {:type "empty", :duration 5000},
                    :repeat-current-word {:type "sequence"
-                                 :tag "repeat-word"
+                                 :tags "repeat-word"
                                  :data ["play-word", "empty-5", "repeat-current-word"]}
                    :clear-repeat-word {:type "remove-flows"
                                        :flow-tag "repeat-word"}
