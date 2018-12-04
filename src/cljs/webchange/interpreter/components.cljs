@@ -267,6 +267,7 @@
 (declare placeholder)
 (declare image)
 (declare animation)
+(declare text)
 
 (defn draw-object
   [scene-id name]
@@ -277,10 +278,10 @@
       :image [image scene-id name @o]
       :transparent [:> Group (prepare-group-params @o)
                                  [:> Rect {:x 0 :width (:width @o) :height (:height @o)}]]
-      :transition [transition scene-id name @o]
       :group [group scene-id name @o]
       :placeholder [placeholder scene-id name @o]
       :animation [animation scene-id name @o]
+      :text [text scene-id name @o]
       )))
 
 (defn placeholder
@@ -293,14 +294,9 @@
                                  (contains? object :image-height) (assoc :height (get @item (-> object :image-height keyword)))
                                  :always (assoc :var @item))]))
 
-(defn transition
+(defn text
   [scene-id name object]
-  (let [component (r/atom nil)
-        params (assoc object :ref (fn [ref] (reset! component ref)))]
-    (re-frame/dispatch [::ie/register-transition name component])
-    (fn [scene-id name object]
-      [:> Group params
-       [draw-object scene-id (:object object)]])))
+  [:> Text object])
 
 (defn group
   [scene-id name object]

@@ -57,7 +57,9 @@
 
 (defn with-prev
   [action prev]
-  (assoc action :var (:var prev) :params (:params prev)))
+  (-> action
+      (assoc :var (:var prev))
+      (update-in [:params] merge (:params prev))))
 
 (defn get-action
   ([id db]

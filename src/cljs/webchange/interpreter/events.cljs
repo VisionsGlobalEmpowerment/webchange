@@ -93,10 +93,9 @@
   ::execute-audio
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [id] :as action}]
-    (js/console.log action)
-      {:execute-audio (-> action
-                          (assoc :key (get-audio-key db id))
-                          (assoc :on-ended (ce/dispatch-success-fn action)))}))
+    {:execute-audio (-> action
+                        (assoc :key (get-audio-key db id))
+                        (assoc :on-ended (ce/dispatch-success-fn action)))}))
 
 (re-frame/reg-event-fx
   ::execute-add-alias
@@ -107,14 +106,14 @@
 
 (re-frame/reg-event-fx
   ::execute-state
-  (fn [{:keys [db]} [_ {:keys [target id] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [target id params] :as action}]]
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
           object (get-in scene [:objects (keyword target)])
           states (get object :states)
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
           state (get states-with-aliases (keyword id))]
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state)
+      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state params)
        :dispatch (ce/success-event action)})))
 
 (re-frame/reg-event-fx

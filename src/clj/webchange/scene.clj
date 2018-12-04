@@ -52,6 +52,7 @@
                    {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
                    {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
                    {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/form_green.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/Grapes.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/Spoon.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/Fork.png", :size 1, :type "image"}
@@ -115,12 +116,36 @@
                                                 {:type "state", :target "door", :id "hover", :on "mouseover"},
                                          :mouseout
                                                 {:type "state", :target "door", :id "default", :on "mouseout"},
-                                         :click {:type "scene", :scene-id "map", :on "click"}}}},
-   :scene-objects [["background" "door"] ["vera" "senora-vaca"]],
+                                         :click {:type "scene", :scene-id "map", :on "click"}}}
+                   :syllable {:type "transparent" :x 390 :y 299 :width 1 :height 1
+                              :states {:default {:type "transparent"}
+                                       :show {:type "text" :width 200 :height 200
+                                               :align "center" :vertical-align "middle"
+                                               :font-family "Luckiest Guy" :font-size 80
+                                               :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5
+                                               :fill "white"}}}
+                   :word-form {:type "transparent" :x 500 :y 210 :width 206 :height 210 :origin {:type "center-center"}
+                                :states {:default {:type "transparent"}
+                                         :show {:type "image" :src "/raw/img/ferris-wheel/words/form_green.png"}}}
+                   :word-image {:type "transparent" :x 500 :y 210 :origin {:type "center-center"}
+                                :states {:default {:type "transparent" :src nil :width 1 :height 1}
+                                         :uvas {:type "image" :width 109 :height 134
+                                                :src "/raw/img/ferris-wheel/words/Grapes.png"}
+                                         :cuchara {:type "image" :width 97 :height 126
+                                                   :src "/raw/img/ferris-wheel/words/Spoon.png"}
+                                         :tenedor {:type "image" :width 92 :height 122
+                                                   :src "/raw/img/ferris-wheel/words/Fork.png"}}}},
+   :scene-objects [["background" "door"] ["vera" "senora-vaca"] ["word-form" "word-image" "syllable"]],
    :actions
-                  {:show-word-tenedor {:type "state", :target "wordImage", :id "tenedor"}
-                   :show-word-uvas {:type "state", :target "wordImage", :id "uvas"}
-                   :show-word-cuchara {:type "state", :target "wordImage", :id "cuchara"}
+                  {:show-word-tenedor {:type "parallel"
+                                       :data [{:type "state", :target "word-image", :id "tenedor"}
+                                              {:type "state", :target "word-form", :id "show"}]}
+                   :show-word-uvas {:type "parallel"
+                                    :data [{:type "state", :target "word-image", :id "uvas"}
+                                           {:type "state", :target "word-form", :id "show"}]}
+                   :show-word-cuchara {:type "parallel"
+                                       :data [{:type "state", :target "word-image", :id "cuchara"}
+                                              {:type "state", :target "word-form", :id "show"}]}
 
                    :senora-vaca-audio-1 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 0.749, :duration 2.68}
@@ -196,16 +221,11 @@
                    :vera-anim-clapping-start {:type "animation" :target "vera" :id "clapping_start" :loop false}
                    :vera-anim-clapping-finish {:type "animation" :target "vera" :id "clapping_finish" :loop false}
 
-                   :vera-clapping {:type "sequence"
-                                   :data [{:type "animation" :target "vera" :id "clapping_start"}
-                                          {:type "animation" :target "vera" :id "clapping_1clap"}
-                                          {:type "animation" :target "vera" :id "clapping_finish"}]}
-
                    :syllable-cu {:type "parallel",
                                  :data [{:type "audio" :name "syllable" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
                                         {:type "audio" :name "clap" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping"}
-                                        {:type "state" :name "syllable" :target "syllable" :id "show" :params {:text "cu"}}]},
+                                        {:type "state" :target "syllable" :id "show" :params {:text "cu"}}]}
                    :syllable-te
                                    {:type "parallel",
                                     :data
@@ -241,7 +261,6 @@
                                             :id     "clapping_1clap"
                                             :loop false}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "te"}}]},
@@ -299,7 +318,6 @@
                                             :id     "clapping_1clap"
                                             :loop false}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "dor"}}]},
@@ -318,14 +336,14 @@
                                             :start    0.029,
                                             :duration 0.7,
                                             :offset   0.1}
+                                           {:type   "state",
+                                            :target "syllable",
+                                            :id     "show",
+                                            :params {:text "u"}}
                                            {:type   "animation",
                                             :target "senoravaca",
                                             :id     "clapping"}
-                                           {:type   "state",
-                                            :name   "syllable",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "u"}}]},
+                                           ]},
                    :group-tenedor
                                    {:type "sequence",
                                     :name "u-vas syllables",
@@ -382,7 +400,6 @@
                                             :target "senoravaca",
                                             :id     "clapping"}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "ra"}}]},
@@ -405,7 +422,6 @@
                                             :target "senoravaca",
                                             :id     "clapping"}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "cha"}}]},
@@ -445,7 +461,6 @@
                                             :id     "clapping_1clap"
                                             :loop false}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "ne"}}]},
@@ -529,11 +544,12 @@
                                             :id     "clapping_1clap"
                                             :loop false}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "dor"}}]},
-                   :hide-word      {:type "state", :target "wordImage", :id "default"},
+                   :hide-word      {:type "parallel"
+                                    :data [{:type "state", :target "word-image", :id "default"}
+                                           {:type "state", :target "word-form", :id "default"}]}
                    :hide-syllable  {:type "state", :target "syllable", :id "default"},
                    :group-uvas
                                    {:type "sequence",
@@ -571,7 +587,6 @@
                                             :target "senoravaca",
                                             :id     "clapping"}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "vas"}}]},
@@ -610,7 +625,6 @@
                                             :id     "clapping_1clap"
                                             :loop false}
                                            {:type   "state",
-                                            :name   "syllable",
                                             :target "syllable",
                                             :id     "show",
                                             :params {:text "dor"}}]},
