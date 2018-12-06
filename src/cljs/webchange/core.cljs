@@ -5,6 +5,9 @@
    [webchange.events :as events]
    [webchange.views :as views]
    [webchange.config :as config]
+
+   [webchange.interpreter.events :as ie]
+   [webchange.editor.events :as ee]
    ))
 
 
@@ -16,6 +19,11 @@
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
   (reagent/render [views/main-panel]
+                  (.getElementById js/document "app")))
+
+(defn mount-root-editor []
+  (re-frame/clear-subscription-cache!)
+  (reagent/render [views/main-panel-editor]
                   (.getElementById js/document "app")))
 
 (defn reset-viewport
@@ -34,3 +42,11 @@
   (init-viewport)
   (dev-setup)
   (mount-root))
+
+(defn ^:export editor []
+  (re-frame/dispatch-sync [::events/initialize-db])
+  (re-frame/dispatch [::ie/start-course "test-course"])
+  (re-frame/dispatch [::ee/set-screen :editor])
+  (init-viewport)
+  (dev-setup)
+  (mount-root-editor))

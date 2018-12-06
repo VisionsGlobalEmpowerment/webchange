@@ -3,7 +3,15 @@
    [re-frame.core :as re-frame]
    [webchange.subs :as subs]
    [webchange.interpreter.components :refer [course]]
+   [webchange.editor.components :refer [course] :rename {course editor}]
+   [webchange.editor.events :as ee]
+   [sodium.core :as na]
    ))
 
 (defn main-panel []
   [course "test-course"])
+
+(defn main-panel-editor []
+  [:div
+   [editor]
+   [na/button {:content "Play" :on-click #(re-frame/dispatch [::ee/set-screen :play-scene])}]])

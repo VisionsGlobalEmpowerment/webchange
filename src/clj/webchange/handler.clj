@@ -8,6 +8,7 @@
 
 (defroutes routes
            (GET "/" [] (resource-response "index.html" {:root "public"}))
+           (GET "/editor" [] (resource-response "editor.html" {:root "public"}))
            (GET "/api/courses/:course-id" [course-id] (-> course-id get-course response))
            (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (get-scene course-id scene-id) response))
            (resources "/"))

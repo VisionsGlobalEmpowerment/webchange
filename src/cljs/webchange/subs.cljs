@@ -28,9 +28,19 @@
     (get-in db [:scenes scene-id :scene-objects] [])))
 
 (re-frame/reg-sub
+  ::current-scene-objects
+  (fn [db]
+    (get-in db [:current-scene-data :scene-objects] [])))
+
+(re-frame/reg-sub
   ::scene-object
   (fn [db [_ scene-id name]]
     (get-in db [:scenes scene-id :objects (keyword name)] {})))
+
+(re-frame/reg-sub
+  ::current-scene-object
+  (fn [db [_ name]]
+    (get-in db [:current-scene-data :objects (keyword name)] {})))
 
 (re-frame/reg-sub
   ::scene-loading-progress

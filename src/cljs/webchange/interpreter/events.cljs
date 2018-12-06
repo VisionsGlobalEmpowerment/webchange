@@ -154,14 +154,17 @@
           current-scene (:current-scene db)]
       (cond-> {:db (-> db
                        (assoc :current-scene scene-id)
+                       (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false))
                :dispatch-n (list [::vars.events/execute-clear-vars] [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])}
               (not loaded) (assoc :load-scene [(:current-course db) scene-id])))))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
   ::set-scene
-  (fn [db [_ scene-id scene]]
-    (assoc-in db [:scenes scene-id] scene)))
+  (fn [{:keys [db]} [_ scene-id scene]]
+    (let [current-scene (:current-scene db)]
+      {:db (cond-> (assoc-in db [:scenes scene-id] scene)
+              (= current-scene scene-id) (assoc :current-scene-data scene))})))
 
 (re-frame/reg-event-db
   ::register-transition

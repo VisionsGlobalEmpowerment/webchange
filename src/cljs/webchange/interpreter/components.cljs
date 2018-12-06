@@ -262,7 +262,6 @@
       with-origin-offset
       with-transition))
 
-(declare transition)
 (declare group)
 (declare placeholder)
 (declare image)
@@ -319,7 +318,7 @@
                  :opacity 0
                  :origin {:type "center-top"}
                  :scale-y -1}
-                (with-origin-offset))]]))
+                with-origin-offset)]]))
 
 (defn triggers
   [scene-id]

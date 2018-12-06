@@ -117,7 +117,7 @@
                                          :mouseout
                                                 {:type "state", :target "door", :id "default", :on "mouseout"},
                                          :click {:type "scene", :scene-id "map", :on "click"}}}
-                   :syllable {:type "transparent" :x 390 :y 299 :width 1 :height 1
+                   :syllable {:type "transparent" :x 390 :y 299 :width 200 :height 200
                               :states {:default {:type "transparent"}
                                        :show {:type "text" :width 200 :height 200
                                                :align "center" :vertical-align "middle"

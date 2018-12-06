@@ -1,5 +1,5 @@
 (defproject webchange "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.439"]
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]
@@ -10,7 +10,8 @@
                  [cljsjs/react "16.6.0-0"]
                  [cljsjs/react-dom "16.6.0-0"]
                  [reanimated "0.6.1"]
-                 [cljs-http "0.1.45"]]
+                 [cljs-http "0.1.45"]
+                 [com.degel/sodium "0.12.0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
