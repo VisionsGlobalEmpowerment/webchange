@@ -964,7 +964,7 @@
                    :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
                    :empty-5        {:type "empty", :duration 5000},
                    :repeat-current-word {:type "sequence"
-                                 :tags "repeat-word"
+                                 :tags ["repeat-word"]
                                  :data ["play-word", "empty-5", "repeat-current-word"]}
                    :clear-repeat-word {:type "remove-flows"
                                        :flow-tag "repeat-word"}

@@ -12,6 +12,8 @@
   [course "test-course"])
 
 (defn main-panel-editor []
-  [:div
+  [:div {:class-name "ui container"}
+   [:h2 {:class-name "ui dividing header"} "Editor"]
    [editor]
-   [na/button {:content "Play" :on-click #(re-frame/dispatch [::ee/set-screen :play-scene])}]])
+   [na/button {:content "Play" :on-click #(re-frame/dispatch [::ee/set-screen :play-scene])}]
+   [na/button {:content "Editor" :on-click #(re-frame/dispatch [::ee/set-screen :editor])}]])
