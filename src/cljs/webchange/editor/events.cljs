@@ -16,3 +16,13 @@
   ::set-screen
   (fn [{:keys [db]} [_ screen]]
     {:db (assoc-in db [:editor :screen] screen)}))
+
+(re-frame/reg-event-fx
+  ::register-transform
+  (fn [{:keys [db]} [_ transform]]
+    {:db (assoc-in db [:editor :transform] transform)}))
+
+(re-frame/reg-event-fx
+  ::reset-transform
+  (fn [{:keys [db]} [_]]
+    {:db (update-in db [:editor] dissoc :transform)}))

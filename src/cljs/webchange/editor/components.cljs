@@ -23,8 +23,6 @@
 (declare animation)
 (declare text)
 
-(def transform-state (atom))
-
 (defn object
   [type]
   (case type
@@ -65,15 +63,24 @@
 
 (defn reset-transform
   []
-  (let [{:keys [transformer target]} @transform-state]
+  (let [state (re-frame/subscribe [::es/transform])
+        {:keys [transformer target]} @state]
     (when target (.draggable target false))
     (when transformer (.destroy transformer))))
 
+(defn remove-transform
+  []
+  (re-frame/dispatch [::events/reset-transform])
+  (reset-transform))
+
 (defn transform
   [scene-id name target]
-  (reset-transform)
   (let [transformer (Transformer.)]
-    (reset! transform-state {:transformer transformer :target target})
+    (reset-transform)
+    (re-frame/dispatch [::events/register-transform {:transformer transformer
+                                                     :target target
+                                                     :scene-id scene-id
+                                                     :name name}])
     (.draggable target true)
     (.on target "dragmove" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
     (.on target "transform" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
@@ -102,7 +109,7 @@
 (defn background
   [scene-id name object]
   [:> Group (object-params object)
-   [:> Group {:on-click reset-transform}
+   [:> Group {:on-click remove-transform}
     [kimage (get-data-as-url (:src object))]]])
 
 (defn image
@@ -198,11 +205,14 @@
     (reset! props current)))
 
 (defn properties-panel
-  [scene-id name]
+  []
   (let [prev (r/atom {})
         props (r/atom {})]
     (fn []
-      (let [o (re-frame/subscribe [::subs/scene-object scene-id name])]
+      (let [transform (re-frame/subscribe [::es/transform])
+            {:keys [scene-id name]} @transform
+            o (re-frame/subscribe [::subs/scene-object scene-id name])]
+        (js/console.log "new panel")
         (check-prev prev @o props)
         [na/form {}
          [na/form-input {:label "x" :value (:x @props) :on-change #(swap! props assoc :x (-> %2 .-value js/parseInt))}]
@@ -210,3 +220,21 @@
          [na/form-input {:label "rotation" :value (:rotation @props) :on-change #(swap! props assoc :rotation (-> %2 .-value js/parseInt))}]
          [na/form-button {:content "Save" :on-click #(do (update-object scene-id name @props)
                                                          (update-current-scene-object name @props))}]]))))
+(defn properties-rail
+  []
+  (let [transform (re-frame/subscribe [::es/transform])]
+    (if @transform
+        [:div {:class-name "ui right internal rail"}
+         [:div {:class-name "ui segment"}
+          [properties-panel]]])))
+
+(defn editor []
+  [:div {:class-name "ui segment"}
+   [:h2 {:class-name "ui dividing header"} "Editor"]
+   [:div {:class-name "ui segment"}
+    [course]
+
+    [properties-rail]
+
+    [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-screen :play-scene])}]
+    [na/button {:content "Editor" :on-click #(re-frame/dispatch [::events/set-screen :editor])}]]])

@@ -6,3 +6,8 @@
   ::screen
   (fn [db]
     (get-in db [:editor :screen])))
+
+(re-frame/reg-sub
+  ::transform
+  (fn [db]
+    (get-in db [:editor :transform])))
