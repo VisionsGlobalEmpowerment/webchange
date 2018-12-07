@@ -4,9 +4,13 @@
 
 (re-frame/reg-event-fx
   ::edit-object
+  (fn [{:keys [db]} [_ {:keys [scene-id target state]}]]
+    {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state)}))
+
+(re-frame/reg-event-fx
+  ::edit-current-scene-object
   (fn [{:keys [db]} [_ {:keys [target state]}]]
-    (let [scene-id (:current-scene db)]
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state)})))
+    {:db (update-in db [:current-scene-data :objects (keyword target)] merge state)}))
 
 (re-frame/reg-event-fx
   ::set-screen

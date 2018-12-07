@@ -12,7 +12,8 @@
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
     [konva :refer [Transformer]]
-    [react-konva :refer [Stage Layer Group Rect Text Custom]]))
+    [react-konva :refer [Stage Layer Group Rect Text Custom]]
+    [sodium.core :as na]))
 
 (declare background)
 (declare image)
@@ -21,6 +22,8 @@
 (declare placeholder)
 (declare animation)
 (declare text)
+
+(def transform-state (atom))
 
 (defn object
   [type]
@@ -35,19 +38,45 @@
     ))
 
 (defn update-object
-  [scene-id name target]
-  (re-frame/dispatch [::events/edit-object {:target name :state {:x (.x target)
-                                                                 :y (.y target)
-                                                                 :rotation (.rotation target)
-                                                                 :scale-x (.scaleX target)
-                                                                 :scale-y (.scaleY target)}}]))
+  [scene-id name state]
+  (re-frame/dispatch [::events/edit-object {:scene-id scene-id :target name
+                                            :state {:x (:x state)
+                                                    :y (:y state)
+                                                    :rotation (:rotation state)
+                                                    :scale-x (:scale-x state)
+                                                    :scale-y (:scale-y state)}}]))
+
+(defn update-current-scene-object
+  [name state]
+  (re-frame/dispatch [::events/edit-current-scene-object {:target name
+                                                          :state {:x (:x state)
+                                                                  :y (:y state)
+                                                                  :rotation (:rotation state)
+                                                                  :scale-x (:scale-x state)
+                                                                  :scale-y (:scale-y state)}}]))
+
+(defn to-props
+  [konva-node]
+  {:x (.x konva-node)
+   :y (.y konva-node)
+   :rotation (.rotation konva-node)
+   :scale-x (.scaleX konva-node)
+   :scale-y (.scaleY konva-node)})
+
+(defn reset-transform
+  []
+  (let [{:keys [transformer target]} @transform-state]
+    (when target (.draggable target false))
+    (when transformer (.destroy transformer))))
 
 (defn transform
   [scene-id name target]
+  (reset-transform)
   (let [transformer (Transformer.)]
+    (reset! transform-state {:transformer transformer :target target})
     (.draggable target true)
-    (.on target "dragmove" (fn [e] (update-object scene-id name (.-currentTarget e))))
-    (.on target "transform" (fn [e] (update-object scene-id name (.-currentTarget e))))
+    (.on target "dragmove" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
+    (.on target "transform" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
     (.attachTo transformer target)
     (.add (.getParent target) transformer)))
 
@@ -73,7 +102,8 @@
 (defn background
   [scene-id name object]
   [:> Group (object-params object)
-   [kimage (get-data-as-url (:src object))]])
+   [:> Group {:on-click reset-transform}
+    [kimage (get-data-as-url (:src object))]]])
 
 (defn image
   [scene-id name object]
@@ -160,3 +190,23 @@
             [scene]
             [preloader]))
         ]]))
+
+(defn check-prev
+  [prev current props]
+  (when (not= @prev current)
+    (reset! prev current)
+    (reset! props current)))
+
+(defn properties-panel
+  [scene-id name]
+  (let [prev (r/atom {})
+        props (r/atom {})]
+    (fn []
+      (let [o (re-frame/subscribe [::subs/scene-object scene-id name])]
+        (check-prev prev @o props)
+        [na/form {}
+         [na/form-input {:label "x" :value (:x @props) :on-change #(swap! props assoc :x (-> %2 .-value js/parseInt))}]
+         [na/form-input {:label "y" :value (:y @props) :on-change #(swap! props assoc :y (-> %2 .-value js/parseInt))}]
+         [na/form-input {:label "rotation" :value (:rotation @props) :on-change #(swap! props assoc :rotation (-> %2 .-value js/parseInt))}]
+         [na/form-button {:content "Save" :on-click #(do (update-object scene-id name @props)
+                                                         (update-current-scene-object name @props))}]]))))
