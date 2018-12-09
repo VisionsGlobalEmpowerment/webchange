@@ -38,20 +38,12 @@
 (defn update-object
   [scene-id name state]
   (re-frame/dispatch [::events/edit-object {:scene-id scene-id :target name
-                                            :state {:x (:x state)
-                                                    :y (:y state)
-                                                    :rotation (:rotation state)
-                                                    :scale-x (:scale-x state)
-                                                    :scale-y (:scale-y state)}}]))
+                                            :state state}]))
 
 (defn update-current-scene-object
   [name state]
   (re-frame/dispatch [::events/edit-current-scene-object {:target name
-                                                          :state {:x (:x state)
-                                                                  :y (:y state)
-                                                                  :rotation (:rotation state)
-                                                                  :scale-x (:scale-x state)
-                                                                  :scale-y (:scale-y state)}}]))
+                                                          :state state}]))
 
 (defn to-props
   [konva-node]
@@ -148,6 +140,7 @@
   [scene-id name object]
   (let [params (object-params object)]
     [:> Group params
+     (js/console.log "animation " (:name object) " " (:anim object) " " (:speed object))
      [anim (:name object) (:anim object) (:speed object) #(re-frame/dispatch [::ie/register-animation (:name object) %])]
      [:> Rect (-> (rect-params scene-id name object)
                   (assoc :origin {:type "center-bottom"})
@@ -204,6 +197,37 @@
     (reset! prev current)
     (reset! props current)))
 
+(defn properties-panel-common
+  [props]
+  [:div
+   [na/form-input {:label "type" :value (:type @props) :on-change #(swap! props assoc :type (-> %2 .-value))}]
+   [na/form-input {:label "x" :value (:x @props) :on-change #(swap! props assoc :x (-> %2 .-value js/parseInt))}]
+   [na/form-input {:label "y" :value (:y @props) :on-change #(swap! props assoc :y (-> %2 .-value js/parseInt))}]
+   [na/form-input {:label "width" :value (:width @props) :on-change #(swap! props assoc :width (-> %2 .-value js/parseInt))}]
+   [na/form-input {:label "height" :value (:height @props) :on-change #(swap! props assoc :height (-> %2 .-value js/parseInt))}]
+   [na/form-input {:label "rotation" :value (:rotation @props) :on-change #(swap! props assoc :rotation (-> %2 .-value js/parseInt))}]
+   [na/form-input {:label "scale x" :value (:scale-x @props) :on-change #(swap! props assoc :scale-x (-> %2 .-value js/parseFloat))}]
+   [na/form-input {:label "scale y" :value (:scale-y @props) :on-change #(swap! props assoc :scale-y (-> %2 .-value js/parseFloat))}]])
+
+(defn properties-panel-transparent
+  [props]
+  [:div
+   [properties-panel-common props]])
+
+(defn properties-panel-image
+  [props]
+  [:div
+   [na/form-input {:label "src" :value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value))}]
+   [properties-panel-common props]])
+
+(defn properties-panel-animation
+  [props]
+  [:div
+   [na/form-input {:label "name" :value (:name @props) :on-change #(swap! props assoc :name (-> %2 .-value))}]
+   [na/form-input {:label "anim" :value (:anim @props) :on-change #(swap! props assoc :anim (-> %2 .-value))}]
+   [na/form-input {:label "speed" :value (:speed @props) :on-change #(swap! props assoc :speed (-> %2 .-value js/parseFloat))}]
+   [properties-panel-common props]])
+
 (defn properties-panel
   []
   (let [prev (r/atom {})
@@ -212,12 +236,14 @@
       (let [transform (re-frame/subscribe [::es/transform])
             {:keys [scene-id name]} @transform
             o (re-frame/subscribe [::subs/scene-object scene-id name])]
-        (js/console.log "new panel")
         (check-prev prev @o props)
         [na/form {}
-         [na/form-input {:label "x" :value (:x @props) :on-change #(swap! props assoc :x (-> %2 .-value js/parseInt))}]
-         [na/form-input {:label "y" :value (:y @props) :on-change #(swap! props assoc :y (-> %2 .-value js/parseInt))}]
-         [na/form-input {:label "rotation" :value (:rotation @props) :on-change #(swap! props assoc :rotation (-> %2 .-value js/parseInt))}]
+         (case (-> @props :type keyword)
+           :image [properties-panel-image props]
+           :transparent [properties-panel-transparent props]
+           :animation [properties-panel-animation props]
+           [properties-panel-common props])
+
          [na/form-button {:content "Save" :on-click #(do (update-object scene-id name @props)
                                                          (update-current-scene-object name @props))}]]))))
 (defn properties-rail
