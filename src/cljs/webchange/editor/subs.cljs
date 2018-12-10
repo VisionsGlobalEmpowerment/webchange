@@ -11,3 +11,8 @@
   ::transform
   (fn [db]
     (get-in db [:editor :transform])))
+
+(re-frame/reg-sub
+  ::action
+  (fn [db]
+    (get-in db [:editor :action])))

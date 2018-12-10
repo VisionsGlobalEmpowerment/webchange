@@ -26,3 +26,18 @@
   ::reset-transform
   (fn [{:keys [db]} [_]]
     {:db (update-in db [:editor] dissoc :transform)}))
+
+(re-frame/reg-event-fx
+  ::reset-action
+  (fn [{:keys [db]} [_]]
+    {:db (update-in db [:editor] dissoc :action)}))
+
+(re-frame/reg-event-fx
+  ::set-current-action
+  (fn [{:keys [db]} [_ scene-id name action]]
+    {:db (assoc-in db [:editor :action] {:scene-id scene-id :name name :action action})}))
+
+(re-frame/reg-event-fx
+  ::edit-action
+  (fn [{:keys [db]} [_ {:keys [scene-id target action state]}]]
+    {:db (update-in db [:scenes scene-id :objects (keyword target) :actions (keyword action)] merge state)}))
