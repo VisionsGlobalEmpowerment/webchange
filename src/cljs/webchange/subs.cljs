@@ -38,6 +38,11 @@
     (get-in db [:scenes scene-id :objects (keyword name)] {})))
 
 (re-frame/reg-sub
+  ::scene-action
+  (fn [db [_ scene-id name]]
+    (get-in db [:scenes scene-id :actions (keyword name)] {})))
+
+(re-frame/reg-sub
   ::current-scene-object
   (fn [db [_ name]]
     (get-in db [:current-scene-data :objects (keyword name)] {})))
