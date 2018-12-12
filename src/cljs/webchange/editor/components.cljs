@@ -184,6 +184,64 @@
        [:> Rect {:width 462 :height 24 :fill "#2c9600" :corner-radius 25}]]
       ]]))
 
+(defn action-width
+  [action actions]
+  (case (-> action :type keyword)
+    :sequence (->> (:data action) (map #(get actions (keyword %))) (map #(action-width % actions)) (reduce +))
+    :parallel (->> (:data action) (map #(action-width % actions)) (reduce max))
+    150))
+
+(defn action-height
+  [action actions]
+  (case (-> action :type keyword)
+    :sequence (->> (:data action) (map #(get actions (keyword %))) (map #(action-height % actions)) (reduce max))
+    :parallel (->> (:data action) (map #(action-height % actions)) (reduce +))
+    90))
+
+(defn draw-action
+  [action actions scene-id action-id x y]
+  (let [offset-x (+ x 4)
+        offset-y (+ y 4)]
+    (case (-> action :type keyword)
+      :parallel [:> Group {:x offset-x :y offset-y}
+                 [:> Rect {:width (action-width action actions) :height (action-height action actions)
+                           :fill "#c5cae9" :stroke "#bdbdbd" :stroke-width 2
+                           :on-click #(re-frame/dispatch [::events/select-scene-action scene-id action-id])}]
+                 (let [current-y (atom 0)]
+                   (for [data-action (:data action)]
+                     ^{:key (str @current-y)}
+                     [:> Group {:y @current-y}
+                      (do
+                        (swap! current-y + (action-height data-action actions))
+                        [draw-action data-action actions scene-id action-id offset-x offset-y])]))]
+      :sequence [:> Group {:x offset-x :y offset-y}
+                 [:> Rect {:width (action-width action actions) :height (action-height action actions)
+                           :fill "#303f9f" :stroke "#bdbdbd" :stroke-width 2
+                           :on-click #(re-frame/dispatch [::events/select-scene-action scene-id action-id])}]
+                 (let [current-x (atom 0)]
+                   (for [data-action-id (:data action)]
+                     ^{:key (str @current-x)}
+                     [:> Group {:x @current-x}
+                      (do
+                        (swap! current-x + (action-width (get actions (keyword data-action-id)) actions))
+                        [draw-action (get actions (keyword data-action-id)) actions scene-id data-action-id offset-x offset-y])]))]
+      [:> Group {:x offset-x :y offset-y}
+       [:> Rect {:width (- 150 offset-x 4) :height (- 90 offset-y 4)
+                 :fill "#3f51b5" :stroke "#bdbdbd" :stroke-width 2
+                 :on-click #(re-frame/dispatch [::events/select-scene-action scene-id action-id])}]
+       [:> Text {:x 10 :y 10 :fill "white" :text (:type action)}]]
+      )))
+
+(defn draw-actions
+  []
+  (let [shown-action (re-frame/subscribe [::es/shown-scene-action])
+        scene-id (:scene-id @shown-action)
+        action-id (-> @shown-action :action keyword)
+        actions (re-frame/subscribe [::subs/scene-actions scene-id])
+        action (get @actions action-id)]
+    [:> Group {:x 300 :y 300 :draggable true}
+     [draw-action action @actions scene-id action-id 0 0]]))
+
 (defn course
   []
     (let [ui-screen (re-frame/subscribe [::es/screen])
@@ -194,6 +252,7 @@
         (if @loaded
           (case @ui-screen
             :play-scene [play-scene @scene-id]
+            :actions [draw-actions]
             [scene]
             )
           [preloader])
@@ -302,6 +361,7 @@
                                                     (reset! edit-mode false))}]]
        [:div
         (for [action (:data @props)]
+          ^{:key (str scene-id action)}
           [:p [:a {:on-click #(re-frame/dispatch [::events/select-scene-action scene-id action])} (str action)]])
         [na/form-button {:content "Edit" :on-click #(reset! edit-mode true)}]])
      ])))
@@ -323,6 +383,7 @@
                                                       (reset! edit-action nil))}]]
          [:div
           (for [action (->> @props :data (map-indexed (fn [idx itm] [idx itm])))]
+            ^{:key (str scene-id (first action))}
             [:div
              [:p [:a {:on-click #(do
                                    (reset! current-value (get-in @props [:data (first action)]))
@@ -384,6 +445,7 @@
         o (re-frame/subscribe [::subs/scene-object scene-id name])]
     [:div
      (for [action (-> @o :actions keys)]
+       ^{:key (str scene-id action)}
        [:div
         [:a {:on-click #(re-frame/dispatch [::events/select-object-action scene-id name action])} (str action)]])]))
 
@@ -440,4 +502,5 @@
 
       [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-screen :play-scene])}]
       [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::events/set-screen :editor])
-                                                   (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag (str "scene-" @scene-id)}]))}]]]))
+                                                   (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag (str "scene-" @scene-id)}]))}]
+      [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]]]))

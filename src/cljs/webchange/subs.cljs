@@ -28,6 +28,11 @@
     (get-in db [:scenes scene-id :scene-objects] [])))
 
 (re-frame/reg-sub
+  ::scene-actions
+  (fn [db [_ scene-id]]
+    (get-in db [:scenes scene-id :actions] [])))
+
+(re-frame/reg-sub
   ::current-scene-objects
   (fn [db]
     (get-in db [:current-scene-data :scene-objects] [])))
