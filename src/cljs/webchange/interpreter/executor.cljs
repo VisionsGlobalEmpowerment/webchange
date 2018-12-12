@@ -22,11 +22,11 @@
                           (js/window.AudioContext.)
                           (js/window.webkitAudioContext.)))
       (reset! music-gain (.createGain @audio-ctx))
-      (music-volume 0.5)
+      (music-volume 0.1)
       (.connect @music-gain (.-destination @audio-ctx))
 
       (reset! effects-gain (.createGain @audio-ctx))
-      (effects-volume 0.5)
+      (effects-volume 0.2)
       (.connect @effects-gain (.-destination @audio-ctx))
       )))
 

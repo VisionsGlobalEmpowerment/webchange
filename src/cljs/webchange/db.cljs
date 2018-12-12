@@ -12,6 +12,6 @@
    :scene-loading-complete {}
    :scenes {}
    :ui-screen :default
-   :music-volume 50
-   :effects-volume 50
+   :music-volume 10
+   :effects-volume 20
    })
