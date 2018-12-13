@@ -31,3 +31,8 @@
   ::shown-scene-action
   (fn [db]
     (get-in db [:editor :shown-scene-action])))
+
+(re-frame/reg-sub
+  ::shown-form
+  (fn [db]
+    (get-in db [:editor :shown-form])))

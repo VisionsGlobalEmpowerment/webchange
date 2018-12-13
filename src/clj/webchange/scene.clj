@@ -57,6 +57,8 @@
                    {:url "/raw/img/ferris-wheel/words/Spoon.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/Fork.png", :size 1, :type "image"}
 
+                   {:url "/raw/img/butterfly.png", :size 2, :type "image"}
+
                    {:url "/raw/anim/senoravaca/skeleton.atlas", :size 1, :type "anim-text"}
                    {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
                    {:url "/raw/anim/senoravaca/skeleton.png", :size 1, :type "anim-texture"}

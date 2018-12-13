@@ -17,6 +17,13 @@
     [sodium.core :as na]
     [soda-ash.core :as sa]))
 
+(def object-types [{:key :image :value :image :text "Image"}
+                   {:key :transparent :value :transparent :text "Transparent"}
+                   {:key :group :value :group :text "Group"}
+                   {:key :placeholder :value :placeholder :text "Placeholder"}
+                   {:key :animation :value :animation :text "Animation"}
+                   {:key :text :value :text :text "Text"}])
+
 (declare background)
 (declare image)
 (declare transparent)
@@ -52,6 +59,11 @@
 (defn update-scene-action
   [scene-id action state]
   (re-frame/dispatch [::events/edit-scene-action {:scene-id scene-id :action action :state state}]))
+
+(defn add-to-scene
+  [scene-id name layer]
+  (re-frame/dispatch [::events/add-to-scene {:scene-id scene-id :name name :layer layer}])
+  (re-frame/dispatch [::events/add-to-current-scene {:name name :layer layer}]))
 
 (defn to-props
   [konva-node]
@@ -267,7 +279,6 @@
 (defn properties-panel-common
   [props]
   [:div
-   [na/form-input {:label "type" :value (:type @props) :on-change #(swap! props assoc :type (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "x" :value (:x @props) :on-change #(swap! props assoc :x (-> %2 .-value js/parseInt)) :inline? true}]
    [na/form-input {:label "y" :value (:y @props) :on-change #(swap! props assoc :y (-> %2 .-value js/parseInt)) :inline? true}]
    [na/form-input {:label "width" :value (:width @props) :on-change #(swap! props assoc :width (-> %2 .-value js/parseInt)) :inline? true}]
@@ -449,6 +460,14 @@
        [:div
         [:a {:on-click #(re-frame/dispatch [::events/select-object-action scene-id name action])} (str action)]])]))
 
+(defn dispatch-properties-panel
+  [props]
+  (case (-> @props :type keyword)
+    :image [properties-panel-image props]
+    :transparent [properties-panel-transparent props]
+    :animation [properties-panel-animation props]
+    [properties-panel-common props]))
+
 (defn properties-panel
   []
   (let [prev (r/atom {})
@@ -463,12 +482,8 @@
          [sa/AccordionTitle {:active (= 0 @activeIndex) :on-click #(reset! activeIndex 0)} "Properties"]
          [sa/AccordionContent {:active (= 0 @activeIndex)}
           [na/form {}
-           (case (-> @props :type keyword)
-             :image [properties-panel-image props]
-             :transparent [properties-panel-transparent props]
-             :animation [properties-panel-animation props]
-             [properties-panel-common props])
-
+           [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :on-change #(swap! props assoc :type (.-value %2))}]
+           [dispatch-properties-panel props]
            [na/form-button {:content "Save" :on-click #(do (update-object scene-id name @props)
                                                            (update-current-scene-object name @props))}]]]
          [sa/AccordionTitle {:active (= 1 @activeIndex) :on-click #(reset! activeIndex 1)} "Actions"]
@@ -480,27 +495,80 @@
   (let [transform (re-frame/subscribe [::es/transform])
         object-action (re-frame/subscribe [::es/selected-object-action])
         scene-action (re-frame/subscribe [::es/selected-scene-action])]
-    [:div {:class-name "ui right internal rail"}
+    [:div {:class-name "ui"}
      (if @transform
        [:div {:class-name "ui segment"}
+        [na/header {:as "h4" :floated "left" :content "Object properties"}]
+        [na/header {:floated "right" :sub? true}
+         [na/icon {:name "close" :on-click remove-transform}]]
+        [na/divider {:clearing? true}]
+
         [properties-panel]])
      (if @object-action
        [:div {:class-name "ui segment"}
+        [na/header {:as "h4" :floated "left" :content "Object action"}]
+        [na/header {:floated "right" :sub? true}
+         [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-object-action])}]]
+        [na/divider {:clearing? true}]
+
         [object-action-properties-panel]])
      (if @scene-action
        [:div {:class-name "ui segment"}
+        [na/header {:as "h4" :floated "left" :content "Scene action"}]
+        [na/header {:floated "right" :sub? true}
+         [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-scene-action])}]]
+        [na/divider {:clearing? true}]
+
         [scene-action-properties-panel]])]))
+
+(defn add-object-panel
+  []
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])
+        props (r/atom {})]
+    (fn []
+      [na/segment {}
+       [na/header {:as "h4" :floated "left" :content "Object action"}]
+       [na/header {:floated "right" :sub? true}
+        [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
+       [na/divider {:clearing? true}]
+
+       [na/form {}
+        [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :on-change #(swap! props assoc :type (.-value %2))}]
+        [na/divider {}]
+        [na/form-input {:label "name" :value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
+        [na/form-input {:label "layer" :value (:scene-layer @props) :on-change #(swap! props assoc :scene-layer (-> %2 .-value js/parseInt)) :inline? true}]
+        [na/divider {}]
+        [dispatch-properties-panel props]
+        [na/divider {}]
+        [na/form-button {:content "Add" :on-click #(do (update-object @scene-id (:scene-name @props) @props)
+                                                       (update-current-scene-object (:scene-name @props) @props)
+                                                       (add-to-scene @scene-id (:scene-name @props) (:scene-layer @props))
+                                                       (re-frame/dispatch [::events/reset-shown-form]))}]
+       ]])))
+
+(defn shown-form-panel
+  []
+  (let [show-form (re-frame/subscribe [::es/shown-form])]
+    (case @show-form
+      :add-object [add-object-panel]
+      [:div])))
 
 (defn editor []
   (let [scene-id (re-frame/subscribe [::subs/current-scene])]
     [:div {:class-name "ui segment"}
      [:h2 {:class-name "ui dividing header"} "Editor"]
      [:div {:class-name "ui segment"}
-      [course]
+      [na/grid {}
+       [na/grid-column {:width 12}
+        [course]
+        [na/divider {:clearing? true}]
+        [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-screen :play-scene])}]
+        [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::events/set-screen :editor])
+                                                     (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag (str "scene-" @scene-id)}]))}]
+        [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]]
+       [na/grid-column {:width 4}
+        [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
+        [shown-form-panel]
+        [properties-rail]]]
 
-      [properties-rail]
-
-      [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-screen :play-scene])}]
-      [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::events/set-screen :editor])
-                                                   (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag (str "scene-" @scene-id)}]))}]
-      [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]]]))
+      ]]))
