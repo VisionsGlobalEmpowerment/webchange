@@ -24,6 +24,15 @@
                    {:key :animation :value :animation :text "Animation"}
                    {:key :text :value :text :text "Text"}])
 
+(def action-types [{:key :action :value :action :text "Action"}
+                   {:key :scene :value :scene :text "Scene"}
+                   {:key :state :value :state :text "State"}
+                   {:key :animation :value :animation :text "Animation"}
+                   {:key :audio :value :audio :text "Audio"}
+                   {:key :empty :value :empty :text "Empty"}
+                   {:key :sequence :value :sequence :text "Sequence"}
+                   {:key :parallel :value :parallel :text "Parallel"}])
+
 (declare background)
 (declare image)
 (declare transparent)
@@ -430,7 +439,7 @@
         ^{:key (str scene-id name action)}
         [na/form {}
          [na/form-input {:label "on" :default-value (:on action-data) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
-         (dispatch-action-panel action-data props scene-id)
+         [dispatch-action-panel action-data props scene-id]
 
          [na/form-button {:content "Save" :on-click #(update-object-action scene-id name action @props)}]]
         ))))
@@ -449,16 +458,46 @@
          [na/form-button {:content "Save" :on-click #(update-scene-action scene-id action @props)}]]
         ))))
 
+(defn add-object-action-panel
+  [scene-id name on-save]
+  (let [props (r/atom {})]
+    (fn [scene-id name on-save]
+      [na/form {}
+       [sa/Dropdown {:placeholder "Type" :search true :selection true :options action-types :on-change #(swap! props assoc :type (.-value %2))}]
+       [na/divider {}]
+       [na/form-input {:label "name" :value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
+       [na/form-input {:label "on" :value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
+       [na/divider {}]
+       [dispatch-action-panel @props props scene-id]
+       [na/divider {}]
+       [na/form-button {:content "Add" :on-click #(do (update-object-action scene-id name (:scene-name @props) @props)
+                                                      (on-save))}]
+       ])))
+
+(defn new-object-action-section
+  []
+  (let [mode (r/atom nil)]
+    (fn []
+      (let [transform (re-frame/subscribe [::es/transform])]
+        (if (= @mode :add-action)
+          [add-object-action-panel (:scene-id @transform) (:name @transform) #(reset! mode nil)]
+          [na/button {:basic? true :content "Add action" :on-click #(reset! mode :add-action)}])))))
+
 (defn actions-panel
   []
-  (let [transform (re-frame/subscribe [::es/transform])
-        {:keys [scene-id name]} @transform
-        o (re-frame/subscribe [::subs/scene-object scene-id name])]
-    [:div
-     (for [action (-> @o :actions keys)]
-       ^{:key (str scene-id action)}
-       [:div
-        [:a {:on-click #(re-frame/dispatch [::events/select-object-action scene-id name action])} (str action)]])]))
+  (let [mode (r/atom nil)]
+    (fn []
+      (let [transform (re-frame/subscribe [::es/transform])
+            {:keys [scene-id name]} @transform
+            o (re-frame/subscribe [::subs/scene-object scene-id name])]
+        [:div
+         (for [action (-> @o :actions keys)]
+           ^{:key (str scene-id action)}
+           [:div
+            [:a {:on-click #(re-frame/dispatch [::events/select-object-action scene-id name action])} (str action)]])
+         [na/divider {}]
+         [new-object-action-section]
+         ]))))
 
 (defn dispatch-properties-panel
   [props]
@@ -479,14 +518,18 @@
             o (re-frame/subscribe [::subs/scene-object scene-id name])]
         (check-prev prev @o props)
         [sa/Accordion
-         [sa/AccordionTitle {:active (= 0 @activeIndex) :on-click #(reset! activeIndex 0)} "Properties"]
+         [sa/AccordionTitle {:active (= 0 @activeIndex) :on-click #(reset! activeIndex 0)}
+          [na/icon {:name "dropdown"}]
+          "Properties"]
          [sa/AccordionContent {:active (= 0 @activeIndex)}
           [na/form {}
            [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :on-change #(swap! props assoc :type (.-value %2))}]
            [dispatch-properties-panel props]
            [na/form-button {:content "Save" :on-click #(do (update-object scene-id name @props)
                                                            (update-current-scene-object name @props))}]]]
-         [sa/AccordionTitle {:active (= 1 @activeIndex) :on-click #(reset! activeIndex 1)} "Actions"]
+         [sa/AccordionTitle {:active (= 1 @activeIndex) :on-click #(reset! activeIndex 1)}
+          [na/icon {:name "dropdown"}]
+          "Actions"]
          [sa/AccordionContent {:active (= 1 @activeIndex)} [actions-panel]]]
         ))))
 
@@ -563,8 +606,8 @@
         [course]
         [na/divider {:clearing? true}]
         [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-screen :play-scene])}]
-        [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::events/set-screen :editor])
-                                                     (re-frame/dispatch [::ce/execute-remove-flows {:flow-tag (str "scene-" @scene-id)}]))}]
+        [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
+                                                     (re-frame/dispatch [::events/set-screen :editor]))}]
         [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]]
        [na/grid-column {:width 4}
         [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
