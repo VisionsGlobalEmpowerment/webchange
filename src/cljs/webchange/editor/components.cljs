@@ -529,8 +529,26 @@
                                                            (update-current-scene-object name @props))}]]]
          [sa/AccordionTitle {:active (= 1 @activeIndex) :on-click #(reset! activeIndex 1)}
           [na/icon {:name "dropdown"}]
+          "States"]
+         [sa/AccordionContent {:active (= 1 @activeIndex)}
+          [sa/ItemGroup {:divided true}
+            (for [state (:states @o)]
+              [sa/Item {}
+                [sa/ItemContent {:vertical-align "middle"}
+                 (-> state first str)
+                 [:div {:style {:float "right"}}
+                  [na/button {:size "mini" :content "Select"}]
+                  [na/button {:size "mini" :content "Edit"}]
+                  [na/button {:size "mini" :content "Delete"}]]
+                 ]]
+               )]
+          [na/divider {}]
+          [na/button {:basic? true :content "Add"}]
+          ]
+         [sa/AccordionTitle {:active (= 2 @activeIndex) :on-click #(reset! activeIndex 2)}
+          [na/icon {:name "dropdown"}]
           "Actions"]
-         [sa/AccordionContent {:active (= 1 @activeIndex)} [actions-panel]]]
+         [sa/AccordionContent {:active (= 2 @activeIndex)} [actions-panel]]]
         ))))
 
 (defn properties-rail
