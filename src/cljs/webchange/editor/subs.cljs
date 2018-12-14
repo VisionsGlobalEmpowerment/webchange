@@ -13,9 +13,19 @@
     (get-in db [:editor :transform])))
 
 (re-frame/reg-sub
+  ::selected-object
+  (fn [db]
+    (get-in db [:editor :selected-object])))
+
+(re-frame/reg-sub
   ::selected-object-action
   (fn [db]
     (get-in db [:editor :selected-object-action])))
+
+(re-frame/reg-sub
+  ::selected-object-state
+  (fn [db]
+    (get-in db [:editor :selected-object-state])))
 
 (re-frame/reg-sub
   ::selected-scene-action

@@ -43,6 +43,47 @@
     {:db (update-in db [:scenes scene-id :objects (keyword target) :actions (keyword action)] merge state)}))
 
 (re-frame/reg-event-fx
+  ::reset-object-state
+  (fn [{:keys [db]} [_]]
+    {:db (update-in db [:editor] dissoc :selected-object-state)}))
+
+(re-frame/reg-event-fx
+  ::select-object-state
+  (fn [{:keys [db]} [_ scene-id name state]]
+    {:db (assoc-in db [:editor :selected-object-state] {:scene-id scene-id :name name :state state})}))
+
+(re-frame/reg-event-fx
+  ::edit-object-state
+  (fn [{:keys [db]} [_ {:keys [scene-id name state data]}]]
+    (let [new-state-id (:state-id data)]
+      {:db (-> db
+               (update-in [:scenes scene-id :objects (keyword name) :states] dissoc state)
+               (update-in [:scenes scene-id :objects (keyword name) :states (keyword new-state-id)] merge data))})))
+
+(re-frame/reg-event-fx
+  ::delete-object-state
+  (fn [{:keys [db]} [_ scene-id name state]]
+    {:db (update-in db [:scenes scene-id :objects (keyword name) :states] dissoc (keyword state))}))
+
+(re-frame/reg-event-fx
+  ::set-default-object-state
+  (fn [{:keys [db]} [_ scene-id name state]]
+    (let [state-data (get-in db [:scenes scene-id :objects (keyword name) :states (keyword state)])]
+      {:db (-> db
+               (update-in [:scenes scene-id :objects (keyword name)] merge state-data)
+               (update-in [:current-scene-data :objects (keyword name)] merge state-data))})))
+
+(re-frame/reg-event-fx
+  ::reset-object
+  (fn [{:keys [db]} [_]]
+    {:db (update-in db [:editor] dissoc :selected-object)}))
+
+(re-frame/reg-event-fx
+  ::select-object
+  (fn [{:keys [db]} [_ scene-id name]]
+    {:db (assoc-in db [:editor :selected-object] {:scene-id scene-id :name name})}))
+
+(re-frame/reg-event-fx
   ::reset-scene-action
   (fn [{:keys [db]} [_]]
     {:db (update-in db [:editor] dissoc :selected-scene-action)}))

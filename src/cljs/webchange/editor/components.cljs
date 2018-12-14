@@ -22,7 +22,8 @@
                    {:key :group :value :group :text "Group"}
                    {:key :placeholder :value :placeholder :text "Placeholder"}
                    {:key :animation :value :animation :text "Animation"}
-                   {:key :text :value :text :text "Text"}])
+                   {:key :text :value :text :text "Text"}
+                   {:key :background :value :background :text "Background"}])
 
 (def action-types [{:key :action :value :action :text "Action"}
                    {:key :scene :value :scene :text "Scene"}
@@ -65,6 +66,10 @@
   [scene-id name action state]
   (re-frame/dispatch [::events/edit-object-action {:scene-id scene-id :target name :action action :state state}]))
 
+(defn update-object-state
+  [scene-id name state data]
+  (re-frame/dispatch [::events/edit-object-state {:scene-id scene-id :name name :state state :data data}]))
+
 (defn update-scene-action
   [scene-id action state]
   (re-frame/dispatch [::events/edit-scene-action {:scene-id scene-id :action action :state state}]))
@@ -84,6 +89,7 @@
 
 (defn reset-transform
   []
+  (re-frame/dispatch [::events/reset-object])
   (re-frame/dispatch [::events/reset-object-action])
   (let [state (re-frame/subscribe [::es/transform])
         {:keys [transformer target]} @state]
@@ -99,10 +105,8 @@
   [scene-id name target]
   (let [transformer (Transformer.)]
     (reset-transform)
-    (re-frame/dispatch [::events/register-transform {:transformer transformer
-                                                     :target target
-                                                     :scene-id scene-id
-                                                     :name name}])
+    (re-frame/dispatch [::events/register-transform {:transformer transformer :target target}])
+    (re-frame/dispatch [::events/select-object scene-id name])
     (.draggable target true)
     (.on target "dragmove" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
     (.on target "transform" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
@@ -315,6 +319,11 @@
    [na/form-input {:label "speed" :value (:speed @props) :on-change #(swap! props assoc :speed (-> %2 .-value js/parseFloat)) :inline? true}]
    [properties-panel-common props]])
 
+(defn properties-panel-background
+  [props]
+  [:div
+   [na/form-input {:label "src" :value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value)) :inline? true}]])
+
 (declare dispatch-action-panel)
 
 (defn action-properties-panel-action
@@ -478,17 +487,17 @@
   []
   (let [mode (r/atom nil)]
     (fn []
-      (let [transform (re-frame/subscribe [::es/transform])]
+      (let [{:keys [scene-id name]} @(re-frame/subscribe [::es/selected-object])]
         (if (= @mode :add-action)
-          [add-object-action-panel (:scene-id @transform) (:name @transform) #(reset! mode nil)]
+          [add-object-action-panel scene-id name #(reset! mode nil)]
           [na/button {:basic? true :content "Add action" :on-click #(reset! mode :add-action)}])))))
 
 (defn actions-panel
   []
   (let [mode (r/atom nil)]
     (fn []
-      (let [transform (re-frame/subscribe [::es/transform])
-            {:keys [scene-id name]} @transform
+      (let [object (re-frame/subscribe [::es/selected-object])
+            {:keys [scene-id name]} @object
             o (re-frame/subscribe [::subs/scene-object scene-id name])]
         [:div
          (for [action (-> @o :actions keys)]
@@ -505,6 +514,7 @@
     :image [properties-panel-image props]
     :transparent [properties-panel-transparent props]
     :animation [properties-panel-animation props]
+    :background [properties-panel-background props]
     [properties-panel-common props]))
 
 (defn properties-panel
@@ -513,8 +523,8 @@
         props (r/atom {})
         activeIndex (r/atom -1)]
     (fn []
-      (let [transform (re-frame/subscribe [::es/transform])
-            {:keys [scene-id name]} @transform
+      (let [object (re-frame/subscribe [::es/selected-object])
+            {:keys [scene-id name]} @object
             o (re-frame/subscribe [::subs/scene-object scene-id name])]
         (check-prev prev @o props)
         [sa/Accordion
@@ -523,7 +533,8 @@
           "Properties"]
          [sa/AccordionContent {:active (= 0 @activeIndex)}
           [na/form {}
-           [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :on-change #(swap! props assoc :type (.-value %2))}]
+           [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :value (:type @props)
+                         :on-change #(swap! props assoc :type (.-value %2))}]
            [dispatch-properties-panel props]
            [na/form-button {:content "Save" :on-click #(do (update-object scene-id name @props)
                                                            (update-current-scene-object name @props))}]]]
@@ -532,18 +543,19 @@
           "States"]
          [sa/AccordionContent {:active (= 1 @activeIndex)}
           [sa/ItemGroup {:divided true}
-            (for [state (:states @o)]
+            (for [[state-id state] (:states @o)]
+              ^{:key (str scene-id state-id)}
               [sa/Item {}
                 [sa/ItemContent {:vertical-align "middle"}
-                 (-> state first str)
+                 (str state-id)
                  [:div {:style {:float "right"}}
-                  [na/button {:size "mini" :content "Select"}]
-                  [na/button {:size "mini" :content "Edit"}]
-                  [na/button {:size "mini" :content "Delete"}]]
+                  [na/button {:size "mini" :content "Set default" :on-click #(re-frame/dispatch [::events/set-default-object-state scene-id name state-id])}]
+                  [na/button {:size "mini" :content "Edit" :on-click #(re-frame/dispatch [::events/select-object-state scene-id name state-id])}]
+                  [na/button {:size "mini" :content "Delete" :on-click #(re-frame/dispatch [::events/delete-object-state scene-id name state-id])}]]
                  ]]
                )]
           [na/divider {}]
-          [na/button {:basic? true :content "Add"}]
+          [na/button {:basic? true :content "Add" :on-click #(re-frame/dispatch [::events/select-object-state scene-id name])}]
           ]
          [sa/AccordionTitle {:active (= 2 @activeIndex) :on-click #(reset! activeIndex 2)}
           [na/icon {:name "dropdown"}]
@@ -551,14 +563,33 @@
          [sa/AccordionContent {:active (= 2 @activeIndex)} [actions-panel]]]
         ))))
 
+(defn object-state-properties-panel
+  []
+  (let [props (r/atom {})]
+    (fn []
+      (let [{:keys [scene-id name state]} @(re-frame/subscribe [::es/selected-object-state])
+            object (re-frame/subscribe [::subs/scene-object scene-id name])
+            state-data (-> @object :states (get (keyword state)))]
+        (swap! props #(merge state-data %))
+        [na/form {}
+         [na/form-input {:label "id" :default-value state :on-change #(swap! props assoc :state-id (-> %2 .-value)) :inline? true}]
+         [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :value (:type @props)
+                       :on-change #(swap! props assoc :type (.-value %2))}]
+         [na/divider {}]
+         [dispatch-properties-panel props]
+
+         [na/form-button {:content "Save" :on-click #(update-object-state scene-id name state @props)}]]
+        ))))
+
 (defn properties-rail
   []
-  (let [transform (re-frame/subscribe [::es/transform])
+  (let [object (re-frame/subscribe [::es/selected-object])
         object-action (re-frame/subscribe [::es/selected-object-action])
+        object-state (re-frame/subscribe [::es/selected-object-state])
         scene-action (re-frame/subscribe [::es/selected-scene-action])]
-    [:div {:class-name "ui"}
-     (if @transform
-       [:div {:class-name "ui segment"}
+    [:div
+     (if @object
+       [na/segment {}
         [na/header {:as "h4" :floated "left" :content "Object properties"}]
         [na/header {:floated "right" :sub? true}
          [na/icon {:name "close" :on-click remove-transform}]]
@@ -566,15 +597,24 @@
 
         [properties-panel]])
      (if @object-action
-       [:div {:class-name "ui segment"}
+       [na/segment {}
         [na/header {:as "h4" :floated "left" :content "Object action"}]
         [na/header {:floated "right" :sub? true}
          [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-object-action])}]]
         [na/divider {:clearing? true}]
 
         [object-action-properties-panel]])
+     (if @object-state
+       [na/segment {}
+        [na/header {:as "h4" :floated "left" :content "Object state"}]
+        [na/header {:floated "right" :sub? true}
+         [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-object-state])}]]
+        [na/divider {:clearing? true}]
+
+        ^{:key (str (:scene-id @object-state) (:name @object-state) (:state @object-state))}
+        [object-state-properties-panel]])
      (if @scene-action
-       [:div {:class-name "ui segment"}
+       [na/segment {}
         [na/header {:as "h4" :floated "left" :content "Scene action"}]
         [na/header {:floated "right" :sub? true}
          [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-scene-action])}]]
@@ -607,11 +647,31 @@
                                                        (re-frame/dispatch [::events/reset-shown-form]))}]
        ]])))
 
+(defn list-objects-panel
+  []
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])
+        scene (re-frame/subscribe [::subs/scene @scene-id])]
+    (fn []
+      [na/segment {}
+       [na/header {:as "h4" :floated "left" :content "Objects"}]
+       [na/header {:floated "right" :sub? true}
+        [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
+       [na/divider {:clearing? true}]
+
+        [sa/ItemGroup {:divided true}
+         (for [[id object] (:objects @scene)]
+           ^{:key (str @scene-id id)}
+           [sa/Item {}
+            [sa/ItemContent {:vertical-align "middle" :content (-> id str)
+                             :on-click #(re-frame/dispatch [::events/select-object @scene-id id])}]]
+           )]])))
+
 (defn shown-form-panel
   []
   (let [show-form (re-frame/subscribe [::es/shown-form])]
     (case @show-form
       :add-object [add-object-panel]
+      :list-objects [list-objects-panel]
       [:div])))
 
 (defn editor []
@@ -629,6 +689,7 @@
         [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]]
        [na/grid-column {:width 4}
         [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
+        [na/button {:basic? true :content "List objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
         [shown-form-panel]
         [properties-rail]]]
 
