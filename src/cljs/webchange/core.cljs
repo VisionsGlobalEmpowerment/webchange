@@ -45,7 +45,7 @@
 
 (defn ^:export editor []
   (re-frame/dispatch-sync [::events/initialize-db])
-  (re-frame/dispatch [::ie/start-course "test-course"])
+  (re-frame/dispatch [::ie/start-course "reading"])
   (re-frame/dispatch [::ee/set-screen :editor])
   (init-viewport)
   (dev-setup)

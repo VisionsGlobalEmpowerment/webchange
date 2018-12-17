@@ -1,5 +1,4 @@
-(ns webchange.scene
-  (:require [webchange.demo :as d]))
+(ns webchange.demo)
 
 (def home-scene
   {:assets
@@ -9,9 +8,11 @@
                    {:url "/raw/audio/effects/NFF-robo-elastic.mp3", :size 1, :type "audio"}
                    {:url "/raw/audio/effects/NFF-rusted-thing.mp3", :size 1, :type "audio"}
                    {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
-                   {:url "/raw/audio/scripts/intro/teacher.mp3", :size 5, :type "audio"}
-                   {:url "/raw/audio/scripts/intro/vera.mp3", :size 5, :type "audio"}
-                   {:url "/raw/audio/scripts/intro/syllables.mp3", :size 2, :type "audio"}
+                   {:url "/raw/audio/demo/welcome.mp3", :size 2, :type "audio"}
+                   {:url "/raw/audio/demo/teacher.mp3", :size 5, :type "audio"}
+                   {:url "/raw/audio/demo/vera.mp3", :size 5, :type "audio"}
+                   {:url "/raw/audio/demo/intro-teacher-syllables.mp3", :size 2, :type "audio"}
+                   {:url "/raw/audio/demo/intro-finish.mp3", :size 2, :type "audio"}
                    {:url "/raw/img/map/background.png", :size 10, :type "image"}
                    {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
                    {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
@@ -54,9 +55,9 @@
                    {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
                    {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/form_green.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/Grapes.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/Spoon.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/Fork.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/flower.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/violin.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/strawberry.png", :size 1, :type "image"}
 
                    {:url "/raw/img/butterfly.png", :size 2, :type "image"}
 
@@ -118,9 +119,9 @@
                                          :mouseout
                                                 {:type "state", :target "door", :id "default", :on "mouseout"},
                                          :click {:type "scene", :scene-id "map", :on "click"}}}
-                   :syllable {:type "transparent" :x 390 :y 299 :width 200 :height 200
+                   :syllable {:type "transparent" :x 350 :y 299 :width 300 :height 200
                               :states {:default {:type "transparent"}
-                                       :show {:type "text" :width 200 :height 200
+                                       :show {:type "text" :width 300 :height 200
                                                :align "center" :vertical-align "middle"
                                                :font-family "Luckiest Guy" :font-size 80
                                                :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5
@@ -129,47 +130,47 @@
                                 :states {:default {:type "transparent"}
                                          :show {:type "image" :src "/raw/img/ferris-wheel/words/form_green.png"}}}
                    :word-image {:type "transparent" :x 500 :y 210 :origin {:type "center-center"}
-                                :states {:default {:type "transparent" :src nil :width 1 :height 1}
-                                         :uvas {:type "image" :width 109 :height 134
-                                                :src "/raw/img/ferris-wheel/words/Grapes.png"}
-                                         :cuchara {:type "image" :width 97 :height 126
-                                                   :src "/raw/img/ferris-wheel/words/Spoon.png"}
-                                         :tenedor {:type "image" :width 92 :height 122
-                                                   :src "/raw/img/ferris-wheel/words/Fork.png"}}}},
+                                :states {:default {:type "transparent" :src nil :width 100 :height 100}
+                                         :flower {:type "image" :width 73 :height 136
+                                                :src "/raw/img/ferris-wheel/words/flower.png"}
+                                         :violin {:type "image" :width 52 :height 140
+                                                   :src "/raw/img/ferris-wheel/words/violin.png"}
+                                         :strawberry {:type "image" :width 84 :height 132
+                                                   :src "/raw/img/ferris-wheel/words/strawberry.png"}}}},
    :scene-objects [["background" "door"] ["vera" "senora-vaca"] ["word-form" "word-image" "syllable"]],
    :actions
-                  {:show-word-tenedor {:type "parallel"
-                                       :data [{:type "state", :target "word-image", :id "tenedor"}
+                  {:show-word-strawberry {:type "parallel"
+                                       :data [{:type "state", :target "word-image", :id "strawberry"}
                                               {:type "state", :target "word-form", :id "show"}]}
-                   :show-word-uvas {:type "parallel"
-                                    :data [{:type "state", :target "word-image", :id "uvas"}
+                   :show-word-flower {:type "parallel"
+                                    :data [{:type "state", :target "word-image", :id "flower"}
                                            {:type "state", :target "word-form", :id "show"}]}
-                   :show-word-cuchara {:type "parallel"
-                                       :data [{:type "state", :target "word-image", :id "cuchara"}
+                   :show-word-violin {:type "parallel"
+                                       :data [{:type "state", :target "word-image", :id "violin"}
                                               {:type "state", :target "word-form", :id "show"}]}
 
                    :senora-vaca-audio-1 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 0.749, :duration 2.68}
+                                         :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-2 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 4.453, :duration 6.266}
+                                         :data [{:type "audio", :id "teacher", :start 4.72, :duration 5.84}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-3 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 11.508, :duration 1.931}
+                                         :data [{:type "audio", :id "teacher", :start 11.9, :duration 1.3}
                                                 {:type "animation" :target "senoravaca" :id "hand"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-4 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 13.478, :duration 3.232}
+                                         :data [{:type "audio", :id "teacher", :start 13.31, :duration 3.22}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-5 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 17.577, :duration 5.084}
+                                         :data [{:type "audio", :id "teacher", :start 17.92, :duration 4.55}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-6 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 23.09, :duration 1.86}
+                                         :data [{:type "audio", :id "teacher", :start 23.05, :duration 3.14}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-7 {:type "parallel"
@@ -181,37 +182,37 @@
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-9 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 50.809, :duration 1.409}
+                                         :data [{:type "audio", :id "teacher", :start 40.66, :duration 1.65}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-10 {:type "parallel"
-                                          :data [{:type "audio", :id "teacher", :start 61.686, :duration 6.759}
+                                          :data [{:type "audio", :id "teacher", :start 47.47, :duration 5.78}
                                                  {:type "animation" :target "senoravaca" :id "talk"}
                                                  {:type "animation" :target "vera" :id "idle"}]}
 
 
                    :vera-audio-1 {:type "parallel"
-                                  :data [{:type "audio", :id "vera", :start 1.1, :duration 4.4232}
+                                  :data [{:type "audio", :id "vera", :start 1.4, :duration 3.38}
                                          {:type "animation", :target "senoravaca" :id "idle"}
                                          {:type "animation" :target "vera" :id "talking"}]}
                    :vera-audio-2 {:type "parallel"
-                                  :data [{:type "audio", :id "vera", :start 6.365, :duration 1.405}
+                                  :data [{:type "audio", :id "vera", :start 5.74, :duration 1.5}
                                          {:type "animation", :target "senoravaca" :id "idle"}
                                          {:type "animation" :target "vera" :id "jump+clapping"}]}
                    :vera-audio-3 {:type "parallel"
-                                  :data [{:type "audio", :id "vera", :start 7.871, :duration 2.59}
+                                  :data [{:type "audio", :id "vera", :start 7.32, :duration 3.02}
                                          {:type "animation", :target "senoravaca" :id "idle"}
                                          {:type "animation" :target "vera" :id "talking"}]}
                    :vera-audio-4 {:type "parallel"
-                                  :data [{:type "audio", :id "vera", :start 11.426, :duration 1.253}
+                                  :data [{:type "audio", :id "vera", :start 11.85, :duration 1.37}
                                          {:type "animation", :target "senoravaca" :id "idle"}
                                          {:type "animation" :target "vera" :id "talking"}]}
                    :vera-audio-5 {:type "parallel"
-                                  :data [{:type "audio", :id "vera", :start 14.1, :duration 0.948}
+                                  :data [{:type "audio", :id "vera", :start 14.45, :duration 0.93}
                                          {:type "animation", :target "senoravaca" :id "idle"}
                                          {:type "animation" :target "vera" :id "talking"}]}
                    :vera-audio-6 {:type "parallel"
-                                  :data [{:type "audio", :id "vera", :start 16.267, :duration 3.809}
+                                  :data [{:type "audio", :id "vera", :start 16.66, :duration 3.58}
                                          {:type "animation", :target "senoravaca" :id "idle"}
                                          {:type "animation" :target "vera" :id "talking"}]}
 
@@ -224,283 +225,85 @@
                    :vera-anim-clapping-start {:type "animation" :target "vera" :id "clapping_start" :loop false}
                    :vera-anim-clapping-finish {:type "animation" :target "vera" :id "clapping_finish" :loop false}
 
-                   :syllable-cu {:type "parallel",
-                                 :data [{:type "audio" :name "syllable" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
-                                        {:type "audio" :name "clap" :id "syllables" :start 2.507 :duration 0.609 :offset 0.1}
+                   :syllable-ve {:type "parallel",
+                                 :data [{:type "audio" :id "teacher" :start 27.192 :duration 0.475 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}]}
+
+                   :syllable-ra {:type "parallel",
+                                 :data [{:type "audio" :id "teacher" :start 27.649 :duration 0.432 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}]}
+
+                   :syllable-flow {:type "parallel",
+                                 :data [{:type "audio" :id "syllables" :start 5.416 :duration 0.537 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
-                                        {:type "state" :target "syllable" :id "show" :params {:text "cu"}}]}
-                   :syllable-te
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable-teacher",
-                                            :id       "syllables",
-                                            :start    4.21,
-                                            :duration 0.646,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-teacher",
-                                            :id       "syllables",
-                                            :start    4.21,
-                                            :duration 0.646,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type     "audio",
-                                            :name     "syllable-vera",
-                                            :id       "syllables",
-                                            :start    7.625,
-                                            :duration 0.552,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-vera",
-                                            :id       "syllables",
-                                            :start    7.625,
-                                            :duration 0.552,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "vera",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "te"}}]},
-                   :syllable-ra
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable",
-                                            :id       "syllables",
-                                            :start    2.035,
-                                            :duration 0.388,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap",
-                                            :id       "syllables",
-                                            :start    2.035,
-                                            :duration 0.388,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}]},
+                                        {:type "state" :target "syllable" :id "show" :params {:text "flow"}}]}
 
-                   :syllable-dor
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable-teacher",
-                                            :id       "syllables",
-                                            :start    5.54,
-                                            :duration 0.561,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-teacher",
-                                            :id       "syllables",
-                                            :start    5.54,
-                                            :duration 0.561,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type     "audio",
-                                            :name     "syllable-vera",
-                                            :id       "syllables",
-                                            :start    8.798,
-                                            :duration 0.813,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-vera",
-                                            :id       "syllables",
-                                            :start    8.798,
-                                            :duration 0.813,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "vera",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "dor"}}]},
-                   :syllable-u
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable",
-                                            :id       "syllables",
-                                            :start    0.029,
-                                            :duration 0.7,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap",
-                                            :id       "syllables",
-                                            :start    0.029,
-                                            :duration 0.7,
-                                            :offset   0.1}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "u"}}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           ]},
-                   :group-tenedor
-                                   {:type "sequence",
-                                    :name "u-vas syllables",
-                                    :data
-                                          ["show-word-tenedor"
-                                           "senora-vaca-anim-clapping-start"
-                                           "vera-anim-clapping-start"
-                                           "empty-1"
-                                           "syllable-te"
-                                           "syllable-ne"
-                                           "syllable-dor"
-                                           "senora-vaca-anim-idle"
-                                           "vera-anim-idle"
-                                           "empty-1"
-                                           "syllable-te"
-                                           "syllable-ne"
-                                           "syllable-dor2"
-                                           "senora-vaca-anim-idle"
-                                           "vera-anim-idle"
-                                           "empty-1"
-                                           "syllable-te"
-                                           "syllable-ne"
-                                           "syllable-dor3"
-                                           "senora-vaca-anim-clapping-finish"
-                                           "vera-anim-clapping-finish"
-                                           "empty-1"
-                                           "vera-anim-idle"
-                                           "senora-vaca-anim-idle"
-                                           "hide-word"
-                                           "hide-syllable"]},
-                   :group-vera
-                                   {:type "sequence",
-                                    :name "vera syllables",
-                                    :data
-                                          ["senora-vaca-anim-clapping-start"
-                                           "empty-1"
-                                           "syllable-ve"
-                                           "syllable-ra"
-                                           "empty-1"
-                                           "syllable-ve"
-                                           "syllable-ra"
-                                           "senora-vaca-anim-clapping-finish"
-                                           "empty-1"
-                                           "senora-vaca-anim-idle"]},
-                   :syllable-ra2
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable",
-                                            :id       "syllables",
-                                            :start    3.829,
-                                            :duration 0.362,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap",
-                                            :id       "syllables",
-                                            :start    3.829,
-                                            :duration 0.362,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "ra"}}]},
-                   :syllable-cha
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable",
-                                            :id       "syllables",
-                                            :start    3.178,
-                                            :duration 0.628,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap",
-                                            :id       "syllables",
-                                            :start    3.178,
-                                            :duration 0.628,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "cha"}}]},
+                   :syllable-er {:type "parallel",
+                                   :data [{:type "audio" :id "syllables" :start 5.947 :duration 0.625 :offset 0.1}
+                                          {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
+                                          {:type "state" :target "syllable" :id "show" :params {:text "er"}}]}
 
-                   :syllable-ne
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable-teacher",
-                                            :id       "syllables",
-                                            :start    4.878,
-                                            :duration 0.653,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-teacher",
-                                            :id       "syllables",
-                                            :start    4.878,
-                                            :duration 0.653,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type     "audio",
-                                            :name     "syllable-vera",
-                                            :id       "syllables",
-                                            :start    8.211,
-                                            :duration 0.56,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-vera",
-                                            :id       "syllables",
-                                            :start    8.211,
-                                            :duration 0.56,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "vera",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "ne"}}]},
+                   :syllable-va {:type "parallel",
+                                 :data [{:type "audio" :id "syllables" :start 10.075 :duration 0.608 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "va"}}]}
 
-                   :syllable-ve
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable",
-                                            :id       "syllables",
-                                            :start    1.383,
-                                            :duration 0.633,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap",
-                                            :id       "syllables",
-                                            :start    1.383,
-                                            :duration 0.633,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}]},
+                   :syllable-o {:type "parallel",
+                                 :data [{:type "audio" :id "syllables" :start 10.641 :duration 0.52 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "o"}}]}
+
+                   :syllable-lin {:type "parallel",
+                                 :data [{:type "audio" :id "syllables" :start 11.155 :duration 0.757 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "lin"}}]}
+
+                   :syllable-straw {:type "parallel",
+                                 :data [{:type "audio" :id "syllables" :start 18.728 :duration 0.788 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
+                                        {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "straw"}}]}
+
+                   :syllable-ber {:type "parallel",
+                                 :data [{:type "audio" :id "syllables" :start 19.427 :duration 0.679 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
+                                        {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "ber"}}]}
+
+                   :syllable-ry {:type "parallel",
+                                 :data [{:type "audio" :id "syllables" :start 20.043 :duration 0.855 :offset 0.1}
+                                        {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
+                                        {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "ry"}}]}
+
+                   :group-vera {:type "sequence",
+                                :name "vera syllables",
+                                :data ["senora-vaca-anim-clapping-start" "empty-1"
+                                       "syllable-ve" "syllable-ra" "empty-1"
+                                       "syllable-ve" "syllable-ra" "senora-vaca-anim-clapping-finish" "empty-1"
+                                       "senora-vaca-anim-idle"]}
+
+                   :group-flower {:type "sequence" :name "u-vas syllables",
+                                  :data ["senora-vaca-anim-clapping-start" "empty-1" "show-word-flower"
+                                         "syllable-flow" "syllable-er" "empty-1"
+                                         "syllable-flow" "syllable-er" "empty-1"
+                                         "syllable-flow" "syllable-er" "senora-vaca-anim-clapping-finish" "empty-1"
+                                         "senora-vaca-anim-idle" "hide-word" "hide-syllable"]}
+
+                   :group-violin {:type "sequence", :name "cu-cha-ra syllables",
+                                  :data ["show-word-violin" "senora-vaca-anim-clapping-start" "empty-1"
+                                         "syllable-va" "syllable-o" "syllable-lin" "empty-1"
+                                         "syllable-va" "syllable-o" "syllable-lin" "empty-1"
+                                         "syllable-va" "syllable-o" "syllable-lin" "senora-vaca-anim-clapping-finish" "empty-1"
+                                         "senora-vaca-anim-idle" "hide-word" "hide-syllable"]}
+
+                   :group-strawberry {:type "sequence", :name "u-vas syllables",
+                                      :data ["show-word-strawberry" "senora-vaca-anim-clapping-start" "vera-anim-clapping-start" "empty-1"
+                                             "syllable-straw" "syllable-ber" "syllable-ry" "empty-1"
+                                             "syllable-straw" "syllable-ber" "syllable-ry" "empty-1"
+                                             "syllable-straw" "syllable-ber" "syllable-ry"
+                                             "senora-vaca-anim-clapping-finish" "vera-anim-clapping-finish" "empty-1"
+                                             "vera-anim-idle" "senora-vaca-anim-idle" "hide-word" "hide-syllable"]}
 
                    :intro
                                    {:type "sequence",
@@ -517,170 +320,31 @@
                                            "senora-vaca-audio-6"
                                            "group-vera"
                                            "vera-audio-5"
-                                           "senora-vaca-audio-7"
-                                           "group-uvas"
-                                           "senora-vaca-audio-8"
-                                           "group-cuchara"
+                                           "vera-anim-idle"
+
+                                           "group-flower"
+
+                                           "group-violin"
                                            "vera-audio-6"
+                                           "vera-anim-idle"
                                            "senora-vaca-audio-9"
-                                           "group-tenedor"
+                                           "group-strawberry"
                                            "senora-vaca-audio-10"
                                            "senora-vaca-anim-idle"
                                            "vera-anim-idle"]},
-                   :syllable-dor3
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable-teacher",
-                                            :id       "syllables",
-                                            :start    6.743,
-                                            :duration 0.87,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-teacher",
-                                            :id       "syllables",
-                                            :start    6.743,
-                                            :duration 0.87,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type     "audio",
-                                            :name     "syllable-vera",
-                                            :id       "syllables",
-                                            :start    8.798,
-                                            :duration 0.813,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-vera",
-                                            :id       "syllables",
-                                            :start    8.798,
-                                            :duration 0.813,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "vera",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "dor"}}]},
+
                    :hide-word      {:type "parallel"
                                     :data [{:type "state", :target "word-image", :id "default"}
                                            {:type "state", :target "word-form", :id "default"}]}
                    :hide-syllable  {:type "state", :target "syllable", :id "default"},
-                   :group-uvas
-                                   {:type "sequence",
-                                    :name "u-vas syllables",
-                                    :data
-                                          ["senora-vaca-anim-clapping-start"
-                                           "empty-1"
-                                           "show-word-uvas"
-                                           "syllable-u"
-                                           "syllable-vas"
-                                           "empty-1"
-                                           "syllable-u"
-                                           "syllable-vas"
-                                           "empty-1"
-                                           "syllable-u"
-                                           "syllable-vas"
-                                           "senora-vaca-anim-clapping-finish"
-                                           "empty-1"
-                                           "senora-vaca-anim-idle"
-                                           "hide-word"
-                                           "hide-syllable"]},
 
-                   :syllable-vas
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable",
-                                            :id       "syllables",
-                                            :start    0.744,
-                                            :duration 0.607,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap",
-                                            :id       "syllables",
-                                            :start    0.744,
-                                            :duration 0.607,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "vas"}}]},
-                   :syllable-dor2
-                                   {:type "parallel",
-                                    :data
-                                          [{:type     "audio",
-                                            :name     "syllable-teacher",
-                                            :id       "syllables",
-                                            :start    6.119,
-                                            :duration 0.615,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-teacher",
-                                            :id       "syllables",
-                                            :start    6.119,
-                                            :duration 0.615,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "senoravaca",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type     "audio",
-                                            :name     "syllable-vera",
-                                            :id       "syllables",
-                                            :start    8.798,
-                                            :duration 0.813,
-                                            :offset   0.1}
-                                           {:type     "audio",
-                                            :name     "clap-vera",
-                                            :id       "syllables",
-                                            :start    8.798,
-                                            :duration 0.813,
-                                            :offset   0.1}
-                                           {:type   "animation",
-                                            :target "vera",
-                                            :id     "clapping_1clap"
-                                            :loop false}
-                                           {:type   "state",
-                                            :target "syllable",
-                                            :id     "show",
-                                            :params {:text "dor"}}]},
-                   :group-cuchara
-                                   {:type "sequence",
-                                    :name "cu-cha-ra syllables",
-                                    :data
-                                          ["show-word-cuchara"
-                                           "senora-vaca-anim-clapping-start"
-                                           "empty-1"
-                                           "syllable-cu"
-                                           "syllable-cha"
-                                           "syllable-ra2"
-                                           "empty-1"
-                                           "syllable-cu"
-                                           "syllable-cha"
-                                           "syllable-ra2"
-                                           "empty-1"
-                                           "syllable-cu"
-                                           "syllable-cha"
-                                           "syllable-ra2"
-                                           "senora-vaca-anim-clapping-finish"
-                                           "empty-1"
-                                           "senora-vaca-anim-idle"
-                                           "hide-word"
-                                           "hide-syllable"]}
                    :start-background-music {:type "audio" :id "background" :loop true}}
    :audio
-                  {:teacher   "/raw/audio/scripts/intro/teacher.mp3",
-                   :vera      "/raw/audio/scripts/intro/vera.mp3",
-                   :syllables "/raw/audio/scripts/intro/syllables.mp3"
+                  {:welcome "/raw/audio/demo/welcome.mp3"
+                   :teacher   "/raw/audio/demo/teacher.mp3",
+                   :vera      "/raw/audio/demo/vera.mp3",
+                   :syllables "/raw/audio/demo/intro-teacher-syllables.mp3"
+                   :intro-finish "/raw/audio/demo/intro-finish.mp3"
                    :background "/raw/audio/background/POL-daily-special-short.mp3"},
    :triggers      {:music {:on "start" :action "start-background-music"}}
    :metadata      {:autostart true}})
@@ -862,7 +526,8 @@
 
 (def ferris-wheel-scene
   {:assets
-                  [{:url "/raw/audio/ferris-wheel/instructions.mp3", :size 10, :type "audio"}
+                  [{:url "/raw/audio/demo/ferris-wheel-instructions.mp3", :size 10, :type "audio"}
+                   {:url "/raw/audio/demo/ferris-wheel-syllables.mp3", :size 10, :type "audio"}
 
                    {:url "/raw/img/ferris-wheel/background.jpg", :size 10, :type "image"},
                    {:url "/raw/img/ferris-wheel/cloud_01.png", :size 1, :type "image"},
@@ -874,12 +539,12 @@
                    {:url "/raw/img/ferris-wheel/ferris_wheel_02.png", :size 1, :type "image"},
                    {:url "/raw/img/ferris-wheel/ferris_wheel_03.png", :size 1, :type "image"},
 
-                   {:url "/raw/img/ferris-wheel/words/bat.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/ladybug.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/broccoli.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/crocodile.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/dino.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/orange.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/whale.png", :size 1, :type "image"}
+                   {:url "/raw/img/ferris-wheel/words/pumpkin.png", :size 1, :type "image"}
 
                    {:url "/raw/img/ferris-wheel/words/form_green.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/form_red.png", :size 1, :type "image"}
@@ -1027,36 +692,20 @@
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}
                    :start    {:on "start" :action "start-game"}}
 
-   :datasets      {:items {:bat       {:id "bat" :src "/raw/img/ferris-wheel/words/bat.png" :width 140 :height 77
-                                       :audio-id "instructions" :start 45.119 :duration 3.184 :offset 1}
+   :datasets      {:items {:ladybug   {:id "ladybug" :src "/raw/img/ferris-wheel/words/ladybug.png" :width 98 :height 88
+                                       :audio-id "fw-syllables" :start 15.896 :duration 2.233 :offset 1}
                            :broccoli  {:id "broccoli" :src "/raw/img/ferris-wheel/words/broccoli.png" :width 100 :height 100
-                                       :audio-id "instructions" :start 21.235, :duration 2.032 :offset 1}
+                                       :audio-id "fw-syllables" :start 5.191, :duration 2.171 :offset 1}
                            :dinosaur  {:id "dinosaur" :src "/raw/img/ferris-wheel/words/dino.png" :width 102 :height 118
-                                       :audio-id "instructions" :start 49.068, :duration 3.217 :offset 1}
+                                       :audio-id "fw-syllables" :start 8.959, :duration 2.508 :offset 1}
                            :orange    {:id "orange" :src "/raw/img/ferris-wheel/words/orange.png" :width 108 :height 102
-                                       :audio-id "instructions" :start 70.751, :duration 2.19 :offset 1}
+                                       :audio-id "fw-syllables" :start 19.34, :duration 2.283 :offset 1}
                            :crocodile {:id "crocodile" :src "/raw/img/ferris-wheel/words/crocodile.png" :width 112 :height 121
-                                       :audio-id "instructions" :start 11.328, :duration 2.66 :offset 1}
-                           :whale     {:id "whale" :src "/raw/img/ferris-wheel/words/whale.png" :width 120 :height 123
-                                       :audio-id "instructions" :start 32.891, :duration 2.043 :offset 1}}}
+                                       :audio-id "fw-syllables" :start 1.335, :duration 2.308 :offset 1}
+                           :pumpkin   {:id "pumpkin" :src "/raw/img/ferris-wheel/words/pumpkin.png" :width 112 :height 114
+                                       :audio-id "fw-syllables" :start 12.939, :duration 1.585 :offset 1}}}
    :scene-objects [["background" "wheel"]]
-   :audio {:instructions "/raw/audio/ferris-wheel/instructions.mp3"}
+   :audio {:instructions "/raw/audio/demo/ferris-wheel-instructions.mp3"
+           :fw-syllables "/raw/audio/demo/ferris-wheel-syllables.mp3"}
    :metadata      {:autostart false
                    :next "feria"}})
-
-(def courses {"reading" {"home" home-scene
-                         "map" map-scene
-                         "feria" feria-scene
-                         "ferris-wheel" ferris-wheel-scene}
-              "demo" {"home" d/home-scene
-                         "map" d/map-scene
-                         "feria" d/feria-scene
-                         "ferris-wheel" d/ferris-wheel-scene}})
-(defn get-course
-  [course-id]
-  {:initial-scene "home"
-   :preload       ["home", "map", "feria"]})
-
-(defn get-scene
-  [course-id scene-id]
-  (get-in courses [course-id scene-id]))
