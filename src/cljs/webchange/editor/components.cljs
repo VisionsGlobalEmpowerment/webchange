@@ -666,12 +666,32 @@
                              :on-click #(re-frame/dispatch [::events/select-object @scene-id id])}]]
            )]])))
 
+(defn list-assets-panel
+  []
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])
+        scene (re-frame/subscribe [::subs/scene @scene-id])]
+    (fn []
+      [na/segment {}
+       [na/header {:as "h4" :floated "left" :content "Assets"}]
+       [na/header {:floated "right" :sub? true}
+        [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
+       [na/divider {:clearing? true}]
+
+       [sa/ItemGroup {:divided true}
+        (for [[key asset] (->> @scene :assets (map-indexed (fn [idx itm] [idx itm])))]
+          ^{:key (str @scene-id key)}
+          [sa/Item {}
+           [sa/ItemContent {}
+            (str key ". " (:type asset) " : " (:url asset)) ]]
+          )]])))
+
 (defn shown-form-panel
   []
   (let [show-form (re-frame/subscribe [::es/shown-form])]
     (case @show-form
       :add-object [add-object-panel]
       :list-objects [list-objects-panel]
+      :list-assets [list-assets-panel]
       [:div])))
 
 (defn editor []
@@ -690,6 +710,7 @@
        [na/grid-column {:width 4}
         [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
         [na/button {:basic? true :content "List objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
+        [na/button {:basic? true :content "List assets" :on-click #(re-frame/dispatch [::events/show-form :list-assets])}]
         [shown-form-panel]
         [properties-rail]]]
 
