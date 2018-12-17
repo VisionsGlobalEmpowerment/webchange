@@ -9,9 +9,16 @@
 
 (defn course-switch
   [course-name]
-  [na/segment {}
-   [na/button {:basic? true :content "English" :on-click #(reset! course-name "demo")}]
-   [na/button {:basic? true :content "Español" :on-click #(reset! course-name "reading")}]])
+  [na/grid {:vertical-align "middle" :columns 5 :centered? true}
+   [na/grid-row {}
+    [na/grid-column {}]]
+   [na/grid-row {}
+    [na/grid-column {}
+     [na/segment {}
+      [na/header {:as "h1" :content "Pick course"}]
+      [na/divider {}]
+      [na/button {:basic? true :content "English" :on-click #(reset! course-name "demo")}]
+      [na/button {:basic? true :content "Español" :on-click #(reset! course-name "reading")}]]]]])
 
 (defn main-panel []
   (let [course-name (r/atom nil)]

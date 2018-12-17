@@ -528,6 +528,8 @@
   {:assets
                   [{:url "/raw/audio/demo/ferris-wheel-instructions.mp3", :size 10, :type "audio"}
                    {:url "/raw/audio/demo/ferris-wheel-syllables.mp3", :size 10, :type "audio"}
+                   {:url "/raw/audio/demo/fw-thats-correct.mp3", :size 2, :type "audio"}
+                   {:url "/raw/audio/demo/fw-try-again.mp3", :size 2, :type "audio"}
 
                    {:url "/raw/img/ferris-wheel/background.jpg", :size 10, :type "image"},
                    {:url "/raw/img/ferris-wheel/cloud_01.png", :size 1, :type "image"},
@@ -549,9 +551,14 @@
                    {:url "/raw/img/ferris-wheel/words/form_green.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/form_red.png", :size 1, :type "image"}
                    {:url "/raw/img/ferris-wheel/words/form_yellow.png", :size 1, :type "image"}
+
+                   {:url "/raw/img/butterfly.png", :size 2, :type "image"}
                    ],
    :objects
-                  {:background {:type "background", :src "/raw/img/ferris-wheel/background.jpg"},
+                  {:background {:type "background", :src "/raw/img/ferris-wheel/background.jpg"}
+                   :butterfly {:type "image" :scene-name "butterfly"
+                               :src "/raw/img/butterfly.png" :x 1347 :y 520 :width 697 :height 768
+                               :scale-y 0.45 :scale-x 0.45}
                    :wheel      {:type "group" :x 806 :y 457 :children ["wheel-1", "wheel-2", "wheel-3", "items"]}
                    :wheel-1    {:type "image" :width 772 :height 772 :transition "wheel-1"
                                 :src  "/raw/img/ferris-wheel/ferris_wheel_01.png" :origin {:type "center-center"}},
@@ -645,7 +652,7 @@
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
                    :start-game {:type "sequence"
-                                :data ["renew-words" "renew-current-word" "repeat-current-word"]}
+                                :data ["renew-words" "renew-current-word" "audio-instructions" "repeat-current-word"]}
                    :renew-words  {:type      "dataset-var-provider"
                                   :provider-id        "words-set"
                                   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
@@ -663,7 +670,7 @@
                    :clear-repeat-word {:type "remove-flows"
                                        :flow-tag "repeat-word"}
                    :pick-correct {:type "sequence"
-                                       :data ["clear-repeat-word" "increase-success" "reset-forms" "set-green" "renew-current-word" "repeat-current-word"]}
+                                       :data ["clear-repeat-word" "increase-success" "reset-forms" "set-green" "audio-correct" "renew-current-word" "repeat-current-word"]}
                    :increase-fail     {:type "counter"
                                        :counter-action "increase"
                                        :counter-id "fails"}
@@ -675,7 +682,7 @@
                                         :property "id"
                                         :success "pick-correct"
                                         :fail "pick-wrong"}
-                   :pick-wrong {:type "sequence" :data ["increase-fail" "set-red"]}
+                   :pick-wrong {:type "sequence" :data ["increase-fail" "set-red" "audio-wrong"]}
                    :set-red {:type "state" :from-params {:target "form"} :id "red"}
                    :set-green {:type "parallel" :data [{:type "add-alias" :from-params {:target "form"} :alias "default" :state "green"}
                                                        {:type "state" :from-params {:target "form"} :id "green"}]}
@@ -687,6 +694,9 @@
                                                          {:type "state" :target "item-5f" :id "default"}
                                                          {:type "state" :target "item-6f" :id "default"}]}
                    :finish-game {:type "set-variable" :var-name "score" :var-value {:visible true}}
+                   :audio-instructions {:type "audio" :id "instructions" :start 0.3 :duration 6.2 :offset 0}
+                   :audio-correct {:type "audio" :id "fw-correct" :start 0 :duration 1.225 :offset 0.2}
+                   :audio-wrong {:type "audio" :id "fw-try-again" :start 0 :duration 1.755 :offset 0.2}
                    }
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}
@@ -704,8 +714,10 @@
                                        :audio-id "fw-syllables" :start 1.335, :duration 2.308 :offset 1}
                            :pumpkin   {:id "pumpkin" :src "/raw/img/ferris-wheel/words/pumpkin.png" :width 112 :height 114
                                        :audio-id "fw-syllables" :start 12.939, :duration 1.585 :offset 1}}}
-   :scene-objects [["background" "wheel"]]
+   :scene-objects [["background" "wheel"] ["butterfly"]]
    :audio {:instructions "/raw/audio/demo/ferris-wheel-instructions.mp3"
-           :fw-syllables "/raw/audio/demo/ferris-wheel-syllables.mp3"}
+           :fw-syllables "/raw/audio/demo/ferris-wheel-syllables.mp3"
+           :fw-correct "/raw/audio/demo/fw-thats-correct.mp3"
+           :fw-try-again "/raw/audio/demo/fw-try-again.mp3"}
    :metadata      {:autostart false
                    :next "feria"}})
