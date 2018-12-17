@@ -13,5 +13,5 @@
    :scenes {}
    :ui-screen :default
    :music-volume 10
-   :effects-volume 20
+   :effects-volume 30
    })

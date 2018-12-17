@@ -26,7 +26,7 @@
       (.connect @music-gain (.-destination @audio-ctx))
 
       (reset! effects-gain (.createGain @audio-ctx))
-      (effects-volume 0.2)
+      (effects-volume 0.3)
       (.connect @effects-gain (.-destination @audio-ctx))
       )))
 

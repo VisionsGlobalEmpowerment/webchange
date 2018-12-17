@@ -139,7 +139,9 @@
                                                    :src "/raw/img/ferris-wheel/words/strawberry.png"}}}},
    :scene-objects [["background" "door"] ["vera" "senora-vaca"] ["word-form" "word-image" "syllable"]],
    :actions
-                  {:show-word-strawberry {:type "parallel"
+                  {:audio-welcome {:type "audio", :id "casa-welcome", :start 0, :duration 7.622 :offset 0.7}
+                   :audio-finish {:type "audio", :id "casa-finish", :start 0, :duration 2.533 :offset 0.7}
+                   :show-word-strawberry {:type "parallel"
                                        :data [{:type "state", :target "word-image", :id "strawberry"}
                                               {:type "state", :target "word-form", :id "show"}]}
                    :show-word-flower {:type "parallel"
@@ -331,7 +333,8 @@
                                            "group-strawberry"
                                            "senora-vaca-audio-10"
                                            "senora-vaca-anim-idle"
-                                           "vera-anim-idle"]},
+                                           "vera-anim-idle"
+                                           "audio-finish"]},
 
                    :hide-word      {:type "parallel"
                                     :data [{:type "state", :target "word-image", :id "default"}
@@ -340,13 +343,14 @@
 
                    :start-background-music {:type "audio" :id "background" :loop true}}
    :audio
-                  {:welcome "/raw/audio/demo/welcome.mp3"
+                  {:casa-welcome "/raw/audio/demo/welcome.mp3"
                    :teacher   "/raw/audio/demo/teacher.mp3",
                    :vera      "/raw/audio/demo/vera.mp3",
                    :syllables "/raw/audio/demo/intro-teacher-syllables.mp3"
-                   :intro-finish "/raw/audio/demo/intro-finish.mp3"
+                   :casa-finish "/raw/audio/demo/intro-finish.mp3"
                    :background "/raw/audio/background/POL-daily-special-short.mp3"},
-   :triggers      {:music {:on "start" :action "start-background-music"}}
+   :triggers      {:music {:on "start" :action "start-background-music"}
+                   :welcome {:on "start" :action "audio-welcome"}}
    :metadata      {:autostart true}})
 
 (def map-scene {:assets
