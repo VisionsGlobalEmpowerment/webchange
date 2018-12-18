@@ -87,49 +87,31 @@
                    {:url "/raw/anim/test/skeleton.png", :size 1, :type "anim-texture"}],
    :objects
                   {:background {:type "background", :src "/raw/img/casa/background.jpg"},
-                   :vera       {:type "animation" :x 1210 :y 960 :name "vera" :anim "idle" :speed 0.3
+                   :vera       {:type "animation" :x 1128 :y 960 :name "vera" :anim "idle" :speed 0.3
                                 :width 1800 :height 2558
-                                :scale {:x 0.2 :y 0.2}
-                                :states {:idle {:anim "idle"}
-                                         :jump-clapping {:anim "jump+clapping"}
-                                         :jump {:anim "jump"}
-                                         :clapping-start {:anim "clapping-start"}
-                                         :clapping-finish {:anim "clapping-finish"}
-                                         :clapping-1clap {:anim "clapping-1clap"}
-                                         :talking {:anim "talking"}}}
-                   :senora-vaca {:type "animation" :x 757 :y 960 :name "senoravaca" :anim "idle" :speed 0.3
+                                :scale {:x 0.2 :y 0.2}}
+                   :senora-vaca {:type "animation" :x 655 :y 960 :name "senoravaca" :anim "idle" :speed 0.3
                                  :width 715 :height 1461
                                  :scale {:x 0.55 :y 0.55}
-                                 :actions {:click {:type "action", :id "intro", :on "click"}}
-                                 :states {:idle {:anim "idle"}
-                                          :talk {:anim "talk"}
-                                          :hand {:anim "hand"}}},
-                   :door
-                               {:type   "transparent",
-                                :x      1146,
-                                :y      42,
-                                :width  732,
-                                :height 810,
-                                :states
-                                        {:default {:type "transparent", :src nil},
-                                         :hover   {:type "image", :src "/raw/img/casa_door.png"}},
-                                :actions
-                                        {:mouseover
-                                                {:type "state", :target "door", :id "hover", :on "mouseover"},
-                                         :mouseout
-                                                {:type "state", :target "door", :id "default", :on "mouseout"},
-                                         :click {:type "scene", :scene-id "map", :on "click"}}}
-                   :syllable {:type "transparent" :x 350 :y 299 :width 300 :height 200
+                                 :actions {:click {:type "action" :id "intro" :on "click" :options {:unique-tag "intro"}}}}
+                   :door {:type "transparent" :x 1146 :y 42 :width 732 :height 810
+                          :states {:default {:type "transparent", :src nil}
+                                   :hover   {:type "image", :src "/raw/img/casa_door.png"}}}
+                   :door-trigger {:type "transparent" :x 1146 :y 42 :width 732 :height 810
+                                  :actions {:mouseover {:type "state", :target "door", :id "hover", :on "mouseover"}
+                                            :mouseout {:type "state", :target "door", :id "default", :on "mouseout"}
+                                            :click {:type "scene", :scene-id "map", :on "click"}}}
+                   :syllable {:type "transparent" :x 930 :y 289 :width 600 :height 200
                               :states {:default {:type "transparent"}
-                                       :show {:type "text" :width 300 :height 200
+                                       :show {:type "text" :width 600 :height 200
                                                :align "center" :vertical-align "middle"
                                                :font-family "Luckiest Guy" :font-size 80
                                                :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5
                                                :fill "white"}}}
-                   :word-form {:type "transparent" :x 500 :y 210 :width 206 :height 210 :origin {:type "center-center"}
+                   :word-form {:type "transparent" :x 1226 :y 200 :width 206 :height 210 :origin {:type "center-center"}
                                 :states {:default {:type "transparent"}
                                          :show {:type "image" :src "/raw/img/ferris-wheel/words/form_green.png"}}}
-                   :word-image {:type "transparent" :x 500 :y 210 :origin {:type "center-center"}
+                   :word-image {:type "transparent" :x 1226 :y 200 :origin {:type "center-center"}
                                 :states {:default {:type "transparent" :src nil :width 100 :height 100}
                                          :flower {:type "image" :width 73 :height 136
                                                 :src "/raw/img/ferris-wheel/words/flower.png"}
@@ -137,9 +119,9 @@
                                                    :src "/raw/img/ferris-wheel/words/violin.png"}
                                          :strawberry {:type "image" :width 84 :height 132
                                                    :src "/raw/img/ferris-wheel/words/strawberry.png"}}}},
-   :scene-objects [["background" "door"] ["vera" "senora-vaca"] ["word-form" "word-image" "syllable"]],
+   :scene-objects [["background" "door"] ["vera" "senora-vaca"] ["word-form" "word-image" "syllable"] ["door-trigger"]],
    :actions
-                  {:audio-welcome {:type "audio", :id "casa-welcome", :start 0, :duration 7.622 :offset 0.7}
+                  {:audio-welcome {:type "audio", :id "casa-welcome", :start 0, :duration 7.622 :offset 0.7 :tags ["instruction"]}
                    :audio-finish {:type "audio", :id "casa-finish", :start 0, :duration 2.533 :offset 0.7}
                    :show-word-strawberry {:type "parallel"
                                        :data [{:type "state", :target "word-image", :id "strawberry"}
@@ -243,22 +225,22 @@
                    :syllable-er {:type "parallel",
                                    :data [{:type "audio" :id "syllables" :start 5.947 :duration 0.625 :offset 0.1}
                                           {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
-                                          {:type "state" :target "syllable" :id "show" :params {:text "er"}}]}
+                                          {:type "state" :target "syllable" :id "show" :params {:text "flow-er"}}]}
 
-                   :syllable-va {:type "parallel",
+                   :syllable-vi {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 10.075 :duration 0.608 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
-                                        {:type "state" :target "syllable" :id "show" :params {:text "va"}}]}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "vi"}}]}
 
                    :syllable-o {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 10.641 :duration 0.52 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
-                                        {:type "state" :target "syllable" :id "show" :params {:text "o"}}]}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "vi-o"}}]}
 
                    :syllable-lin {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 11.155 :duration 0.757 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
-                                        {:type "state" :target "syllable" :id "show" :params {:text "lin"}}]}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "vi-o-lin"}}]}
 
                    :syllable-straw {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 18.728 :duration 0.788 :offset 0.1}
@@ -270,13 +252,13 @@
                                  :data [{:type "audio" :id "syllables" :start 19.427 :duration 0.679 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
                                         {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
-                                        {:type "state" :target "syllable" :id "show" :params {:text "ber"}}]}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "straw-ber"}}]}
 
                    :syllable-ry {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 20.043 :duration 0.855 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
                                         {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
-                                        {:type "state" :target "syllable" :id "show" :params {:text "ry"}}]}
+                                        {:type "state" :target "syllable" :id "show" :params {:text "straw-ber-ry"}}]}
 
                    :group-vera {:type "sequence",
                                 :name "vera syllables",
@@ -294,9 +276,9 @@
 
                    :group-violin {:type "sequence", :name "cu-cha-ra syllables",
                                   :data ["show-word-violin" "senora-vaca-anim-clapping-start" "empty-1"
-                                         "syllable-va" "syllable-o" "syllable-lin" "empty-1"
-                                         "syllable-va" "syllable-o" "syllable-lin" "empty-1"
-                                         "syllable-va" "syllable-o" "syllable-lin" "senora-vaca-anim-clapping-finish" "empty-1"
+                                         "syllable-vi" "syllable-o" "syllable-lin" "empty-1"
+                                         "syllable-vi" "syllable-o" "syllable-lin" "empty-1"
+                                         "syllable-vi" "syllable-o" "syllable-lin" "senora-vaca-anim-clapping-finish" "empty-1"
                                          "senora-vaca-anim-idle" "hide-word" "hide-syllable"]}
 
                    :group-strawberry {:type "sequence", :name "u-vas syllables",
@@ -309,8 +291,9 @@
 
                    :intro
                                    {:type "sequence",
-                                    :data
-                                          ["senora-vaca-audio-1"
+                                    :tags ["intro"]
+                                    :data ["clear-instruction"
+                                           "senora-vaca-audio-1"
                                            "vera-audio-1"
                                            "senora-vaca-audio-2"
                                            "vera-audio-2"
@@ -341,6 +324,7 @@
                                            {:type "state", :target "word-form", :id "default"}]}
                    :hide-syllable  {:type "state", :target "syllable", :id "default"},
 
+                   :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
                    :start-background-music {:type "audio" :id "background" :loop true}}
    :audio
                   {:casa-welcome "/raw/audio/demo/welcome.mp3"
@@ -667,14 +651,15 @@
                                         :from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
                                         :on-end "finish-game"}
                    :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
-                   :empty-5        {:type "empty", :duration 5000},
+                   :empty-5        {:type "empty", :duration 3000},
                    :repeat-current-word {:type "sequence"
                                  :tags ["repeat-word"]
                                  :data ["play-word", "empty-5", "repeat-current-word"]}
-                   :clear-repeat-word {:type "remove-flows"
-                                       :flow-tag "repeat-word"}
+                   :clear-repeat-word {:type "remove-flows" :flow-tag "repeat-word"}
                    :pick-correct {:type "sequence"
-                                       :data ["clear-repeat-word" "increase-success" "reset-forms" "set-green" "audio-correct" "renew-current-word" "repeat-current-word"]}
+                                  :data ["clear-repeat-word" "increase-success" "reset-forms" "set-green" "audio-correct" "renew-current-word" "repeat-current-word"]}
+                   :pick-wrong {:type "sequence"
+                                :data ["clear-repeat-word" "increase-fail" "set-red" "audio-wrong" "repeat-current-word"]}
                    :increase-fail     {:type "counter"
                                        :counter-action "increase"
                                        :counter-id "fails"}
@@ -686,7 +671,6 @@
                                         :property "id"
                                         :success "pick-correct"
                                         :fail "pick-wrong"}
-                   :pick-wrong {:type "sequence" :data ["increase-fail" "set-red" "audio-wrong"]}
                    :set-red {:type "state" :from-params {:target "form"} :id "red"}
                    :set-green {:type "parallel" :data [{:type "add-alias" :from-params {:target "form"} :alias "default" :state "green"}
                                                        {:type "state" :from-params {:target "form"} :id "green"}]}

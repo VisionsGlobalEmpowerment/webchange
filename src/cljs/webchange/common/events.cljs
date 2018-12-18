@@ -50,10 +50,9 @@
                    register-flow (:register-flow action)]
                (if register-flow
                  (-> context
-                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action)}])))
+                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action) :tags (:tags action)}])))
                  context))
              )))
-
 
 (defn with-prev
   [action prev]
@@ -68,6 +67,16 @@
    (let [action (get-in db [:scenes (:current-scene db) :actions (keyword id)])]
      (with-prev action prev))))
 
+(defn flow-registered?
+  [flows tag]
+  (some #(contains? (:tags %) tag) (vals flows)))
+
+(defn can-execute?
+  [db {:keys [options]}]
+  (let [unique-tag (:unique-tag options)]
+    (if (flow-registered? (:flows db) unique-tag)
+      false
+      true)))
 
 (reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action
                                                                       :id
@@ -79,8 +88,9 @@
 (re-frame/reg-event-fx
   ::execute-action
   (fn [{:keys [db]} [_ {:keys [type] :as action}]]
-    (let [handler (get @executors (keyword type))]
-      {:dispatch (handler {:db db :action action})})))
+    (if (can-execute? db action)
+      (let [handler (get @executors (keyword type))]
+        {:dispatch (handler {:db db :action action})}))))
 
 (re-frame/reg-event-fx
   ::execute-remove-flows
