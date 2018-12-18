@@ -13,6 +13,8 @@
                    {:url "/raw/audio/demo/vera.mp3", :size 5, :type "audio"}
                    {:url "/raw/audio/demo/intro-teacher-syllables.mp3", :size 2, :type "audio"}
                    {:url "/raw/audio/demo/intro-finish.mp3", :size 2, :type "audio"}
+                   {:url "/raw/audio/demo/intro-teacher-lets-do-an-example.mp3", :size 2, :type "audio"}
+                   {:url "/raw/audio/demo/intro-vera-syllables.mp3", :size 2, :type "audio"}
                    {:url "/raw/img/map/background.png", :size 10, :type "image"}
                    {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
                    {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
@@ -158,7 +160,7 @@
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-7 {:type "parallel"
-                                         :data [{:type "audio", :id "teacher", :start 29.75, :duration 2.2}
+                                         :data [{:type "audio" :id "lets-do-an-example" :start 0.178 :duration 3.348}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-8 {:type "parallel"
@@ -244,18 +246,21 @@
 
                    :syllable-straw {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 18.728 :duration 0.788 :offset 0.1}
+                                        {:type "audio" :id "vera-syllables" :start 5.828 :duration 0.809 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
                                         {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
                                         {:type "state" :target "syllable" :id "show" :params {:text "straw"}}]}
 
                    :syllable-ber {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 19.427 :duration 0.679 :offset 0.1}
+                                        {:type "audio" :id "vera-syllables" :start 6.626 :duration 0.687 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
                                         {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
                                         {:type "state" :target "syllable" :id "show" :params {:text "straw-ber"}}]}
 
                    :syllable-ry {:type "parallel",
                                  :data [{:type "audio" :id "syllables" :start 20.043 :duration 0.855 :offset 0.1}
+                                        {:type "audio" :id "vera-syllables" :start 7.318 :duration 0.958 :offset 0.1}
                                         {:type "animation" :target "senoravaca" :id "clapping_1clap" :loop false}
                                         {:type "animation" :target "vera" :id "clapping_1clap" :loop false}
                                         {:type "state" :target "syllable" :id "show" :params {:text "straw-ber-ry"}}]}
@@ -308,7 +313,7 @@
                                            "vera-anim-idle"
 
                                            "group-flower"
-
+                                           "senora-vaca-audio-7"
                                            "group-violin"
                                            "vera-audio-6"
                                            "vera-anim-idle"
@@ -331,6 +336,8 @@
                    :teacher   "/raw/audio/demo/teacher.mp3",
                    :vera      "/raw/audio/demo/vera.mp3",
                    :syllables "/raw/audio/demo/intro-teacher-syllables.mp3"
+                   :lets-do-an-example "/raw/audio/demo/intro-teacher-lets-do-an-example.mp3"
+                   :vera-syllables "/raw/audio/demo/intro-vera-syllables.mp3"
                    :casa-finish "/raw/audio/demo/intro-finish.mp3"
                    :background "/raw/audio/background/POL-daily-special-short.mp3"},
    :triggers      {:music {:on "start" :action "start-background-music"}
