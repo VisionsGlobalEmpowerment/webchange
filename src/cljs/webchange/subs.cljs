@@ -13,6 +13,11 @@
     (:viewport db)))
 
 (re-frame/reg-sub
+  ::course-scenes
+  (fn [db]
+    (-> db :course-data :scenes)))
+
+(re-frame/reg-sub
   ::current-scene
   (fn [db]
     (:current-scene db)))

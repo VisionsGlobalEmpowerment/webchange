@@ -734,6 +734,22 @@
        [na/divider {}]
        [edit-asset-section]])))
 
+(defn list-scenes-panel
+  []
+  (let [scenes (re-frame/subscribe [::subs/course-scenes])]
+    (fn []
+      [na/segment {}
+       [na/header {:as "h4" :floated "left" :content "Scenes"}]
+       [na/header {:floated "right" :sub? true}
+        [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
+       [na/divider {:clearing? true}]
+
+       [sa/ItemGroup {:divided true}
+        (for [scene-id @scenes]
+          ^{:key (str scene-id)}
+          [sa/Item {}
+           [sa/ItemContent {:as "a" :content scene-id :on-click #(re-frame/dispatch [::ie/set-current-scene scene-id])}]])]])))
+
 (defn shown-form-panel
   []
   (let [show-form (re-frame/subscribe [::es/shown-form])]
@@ -741,6 +757,7 @@
       :add-object [add-object-panel]
       :list-objects [list-objects-panel]
       :list-assets [list-assets-panel]
+      :list-scenes [list-scenes-panel]
       [:div])))
 
 (defn editor []
@@ -760,6 +777,7 @@
         [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
         [na/button {:basic? true :content "List objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
         [na/button {:basic? true :content "List assets" :on-click #(re-frame/dispatch [::events/show-form :list-assets])}]
+        [na/button {:basic? true :content "List scenes" :on-click #(re-frame/dispatch [::events/show-form :list-scenes])}]
         [shown-form-panel]
         [properties-rail]]]
 

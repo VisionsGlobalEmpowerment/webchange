@@ -28,7 +28,8 @@
 (re-frame/reg-fx
   :load-course
   (fn [course-id]
-    (i/load-course course-id (fn [course] (re-frame/dispatch [::set-current-scene (:initial-scene course)])))))
+    (i/load-course course-id (fn [course] (do (re-frame/dispatch [::set-course-data course])
+                                              (re-frame/dispatch [::set-current-scene (:initial-scene course)]))))))
 
 (re-frame/reg-fx
   :load-scene
@@ -163,6 +164,11 @@
                        (assoc :scene-started false))
                :dispatch-n (list [::vars.events/execute-clear-vars] [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])}
               (not loaded) (assoc :load-scene [(:current-course db) scene-id])))))
+
+(re-frame/reg-event-fx
+  ::set-course-data
+  (fn [{:keys [db]} [_ course]]
+    {:db (assoc db :course-data course)}))
 
 (re-frame/reg-event-fx
   ::set-scene
