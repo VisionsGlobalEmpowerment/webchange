@@ -34,6 +34,11 @@
                    {:key :sequence :value :sequence :text "Sequence"}
                    {:key :parallel :value :parallel :text "Parallel"}])
 
+(def asset-types [{:key :image :value :image :text "Image"}
+                  {:key :audio :value :audio :text "Audio"}
+                  {:key :anim-text :value :anim-text :text "Animation Text"}
+                  {:key :anim-texture :value :anim-texture :text "Animation Texture"}])
+
 (declare background)
 (declare image)
 (declare transparent)
@@ -73,6 +78,10 @@
 (defn update-scene-action
   [scene-id action state]
   (re-frame/dispatch [::events/edit-scene-action {:scene-id scene-id :action action :state state}]))
+
+(defn update-asset
+  [scene-id id state]
+  (re-frame/dispatch [::events/edit-asset {:scene-id scene-id :id id :state state}]))
 
 (defn add-to-scene
   [scene-id name layer]
@@ -666,10 +675,44 @@
                              :on-click #(re-frame/dispatch [::events/select-object @scene-id id])}]]
            )]])))
 
+(def page-elements 10)
+
+(defn prev-page-elements
+  [page]
+  (* page-elements (dec page)))
+
+(defn total-pages
+  [elements]
+  (Math/ceil (/ elements page-elements)))
+
+(defn asset-properties-panel
+  [scene-id id]
+  (let [props (r/atom {})]
+    (fn [scene-id id]
+      (let [asset (re-frame/subscribe [::subs/scene-asset scene-id id])]
+        [na/form {}
+         [sa/Dropdown {:placeholder "Type" :search true :selection true :options asset-types
+                       :default-value (:type @asset) :on-change #(swap! props assoc :type (.-value %2))}]
+         [na/divider {}]
+         [na/form-input {:label "url" :default-value (:url @asset) :on-change #(swap! props assoc :url (-> %2 .-value)) :inline? true}]
+         [na/form-input {:label "size" :value (:size @asset) :on-change #(swap! props assoc :size (-> %2 .-value js/parseInt)) :inline? true}]
+         [na/divider {}]
+         [na/form-button {:content "Save" :on-click #(do (update-asset scene-id id @props)
+                                                         (re-frame/dispatch [::events/reset-asset]))}]
+         ]))))
+
+(defn edit-asset-section
+  []
+  (let [{:keys [scene-id id]} @(re-frame/subscribe [::es/selected-asset])]
+    (if id
+      ^{:key (str scene-id id)} [asset-properties-panel scene-id id]
+      [na/button {:basic? true :content "Add asset" :on-click #(re-frame/dispatch [::events/select-new-asset])}])))
+
 (defn list-assets-panel
   []
   (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        scene (re-frame/subscribe [::subs/scene @scene-id])]
+        scene (re-frame/subscribe [::subs/scene @scene-id])
+        page (r/atom 1)]
     (fn []
       [na/segment {}
        [na/header {:as "h4" :floated "left" :content "Assets"}]
@@ -678,12 +721,18 @@
        [na/divider {:clearing? true}]
 
        [sa/ItemGroup {:divided true}
-        (for [[key asset] (->> @scene :assets (map-indexed (fn [idx itm] [idx itm])))]
+        (for [[key asset] (->> @scene :assets (map-indexed (fn [idx itm] [idx itm])) (drop (prev-page-elements @page)) (take page-elements))]
           ^{:key (str @scene-id key)}
           [sa/Item {}
-           [sa/ItemContent {}
+           [sa/ItemContent {:on-click #(re-frame/dispatch [::events/select-asset @scene-id key])}
             (str key ". " (:type asset) " : " (:url asset)) ]]
-          )]])))
+          )]
+       [na/divider {:clearing? true}]
+       [sa/Pagination {:active-page @page :total-pages (total-pages (->> @scene :assets count))
+                       :first-item nil :last-item nil :ellipsis-item nil
+                       :on-page-change #(reset! page (.-activePage %2))}]
+       [na/divider {}]
+       [edit-asset-section]])))
 
 (defn shown-form-panel
   []

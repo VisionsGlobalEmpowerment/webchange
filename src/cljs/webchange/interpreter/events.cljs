@@ -36,6 +36,11 @@
     (i/load-scene course-id scene-id (fn [scene] (re-frame/dispatch [::set-scene scene-id scene])))))
 
 (re-frame/reg-fx
+  :reload-asset
+  (fn [asset]
+    (i/load-asset asset)))
+
+(re-frame/reg-fx
   :transition
   (fn [params]
     (i/interpolate params)))

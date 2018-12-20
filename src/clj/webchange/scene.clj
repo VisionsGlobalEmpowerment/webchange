@@ -1055,7 +1055,8 @@
 (defn get-course
   [course-id]
   {:initial-scene "home"
-   :preload       ["home", "map", "feria"]})
+   :preload       ["home", "map", "feria"]
+   :scenes ["home" "map" "feria" "ferris-wheel"]})
 
 (defn get-scene
   [course-id scene-id]

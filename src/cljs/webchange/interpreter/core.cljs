@@ -65,11 +65,21 @@
        (map :size)
        (reduce +)))
 
-(defn load-asset
+(defn load-base-asset
   [asset progress]
   (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
         (put-data (:body response) (:url asset))
         (swap! progress + (:size asset)))))
+
+(defn load-asset
+  ([asset]
+   (let [progress (atom 0)]
+     (load-asset asset progress)))
+  ([asset progress]
+    (case (-> asset :type keyword)
+    :anim-text (anim/load-anim-text asset progress)
+    :anim-texture (anim/load-anim-texture asset progress)
+    (load-base-asset asset progress))))
 
 (defn load-assets
   [assets scene-id]
@@ -81,10 +91,7 @@
                  (if (>= n total)
                    (re-frame/dispatch [::events/set-scene-loaded [scene-id true]]))))
     (doseq [asset assets]
-      (case (-> asset :type keyword)
-        :anim-text (anim/load-anim-text asset current-progress)
-        :anim-texture (anim/load-anim-texture asset current-progress)
-        (load-asset asset current-progress)))))
+      (load-asset asset current-progress))))
 
 (defn load-course
   [course-id cb]

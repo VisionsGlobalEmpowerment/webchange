@@ -114,6 +114,30 @@
     {:db (update-in db [:editor] dissoc :shown-form)}))
 
 (re-frame/reg-event-fx
+  ::select-asset
+  (fn [{:keys [db]} [_ scene-id id]]
+    {:db (assoc-in db [:editor :selected-asset] {:scene-id scene-id :id id})}))
+
+(re-frame/reg-event-fx
+  ::select-new-asset
+  (fn [{:keys [db]} _]
+    (let [scene-id (:current-scene db)
+          new-id (-> db (get-in [:scenes scene-id :assets]) count)]
+      {:db (assoc-in db [:editor :selected-asset] {:scene-id scene-id :id new-id})})))
+
+(re-frame/reg-event-fx
+  ::edit-asset
+  (fn [{:keys [db]} [_ {:keys [scene-id id state]}]]
+    (let [asset (-> (get-in db [:scenes scene-id :assets id]) (merge state))]
+      {:db (assoc-in db [:scenes scene-id :assets id] asset)
+       :reload-asset asset})))
+
+(re-frame/reg-event-fx
+  ::reset-asset
+  (fn [{:keys [db]} [_]]
+    {:db (update-in db [:editor] dissoc :selected-asset)}))
+
+(re-frame/reg-event-fx
   ::add-to-scene
   (fn [{:keys [db]} [_ {:keys [scene-id name layer]}]]
     (let [layers (get-in db [:scenes scene-id :scene-objects])
