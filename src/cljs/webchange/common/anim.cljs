@@ -27,7 +27,7 @@
     (.start animation)))
 
 (defn anim
-  [name animation speed on-mount]
+  [name animation speed on-mount start]
   (let [atlas (texture-atlas name)
         atlas-loader (s/AtlasAttachmentLoader. atlas)
         skeleton-json (s/SkeletonJson. atlas-loader)
@@ -37,7 +37,7 @@
         _ (set! (.-defaultMix animation-state-data) 0.2)
         animation-state (s/AnimationState. animation-state-data)]
     (set! (.-flipY skeleton) true)
-    (fn [name animation speed on-mount]
+    (fn [name animation speed on-mount start]
       (.setAnimation animation-state 0 animation true)
       [:> Shape {:time-diff  0
                  :scene-func (fn [context shape]
@@ -48,6 +48,6 @@
                                  (.draw skeleton-renderer skeleton)))
                  :ref        (fn [ref] (if ref
                                          (do
-                                           (start-animation ref)
-                                           (on-mount animation-state))
+                                           (when start (start-animation ref))
+                                           (on-mount animation-state ref))
                                          ))}])))

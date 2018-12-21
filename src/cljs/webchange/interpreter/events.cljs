@@ -5,6 +5,7 @@
     [webchange.interpreter.executor :as e]
     [webchange.common.events :as ce]
     [webchange.interpreter.variables.events :as vars.events]
+    [webchange.common.anim :refer [start-animation]]
     ))
 
 (re-frame/reg-fx
@@ -47,10 +48,17 @@
     (i/interpolate params)))
 
 (re-frame/reg-fx
-  :execute-animation
+  :switch-animation
   (fn [{:keys [state id] :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      (.setAnimation state 0 id loop))))
+      (.setAnimation (:animation-state state) 0 id loop))))
+
+(re-frame/reg-fx
+  :start-animation
+  (fn [shape]
+    (js/console.log "start-animation")
+    (js/console.log shape)
+    (start-animation shape)))
 
 (defn get-audio-key
   [db id]
@@ -61,6 +69,7 @@
 (ce/reg-simple-executor :add-alias ::execute-add-alias)
 (ce/reg-simple-executor :empty ::execute-empty)
 (ce/reg-simple-executor :animation ::execute-animation)
+(ce/reg-simple-executor :start-animation ::execute-start-animation)
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
@@ -131,8 +140,15 @@
   ::execute-animation
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
-      {:execute-animation (-> action
+      {:switch-animation (-> action
                               (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+       :dispatch-n (list (ce/success-event action))})))
+
+(re-frame/reg-event-fx
+  ::execute-start-animation
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]) :shape)
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -185,9 +201,9 @@
 
 (re-frame/reg-event-db
   ::register-animation
-  (fn [db [_ name state]]
+  (fn [db [_ name state shape]]
     (let [scene-id (:current-scene db)]
-      (assoc-in db [:scenes scene-id :animations name] state))))
+      (assoc-in db [:scenes scene-id :animations name] {:animation-state state :shape shape}))))
 
 
 (re-frame/reg-event-fx

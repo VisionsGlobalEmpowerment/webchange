@@ -5,115 +5,94 @@ format: RGBA8888
 filter: Linear,Linear
 repeat: none
 vera_brow1
-  rotate: false
-  xy: 44, 29
-  size: 70, 35
-  orig: 70, 35
+  rotate: true
+  xy: 985, 908
+  size: 56, 28
+  orig: 56, 28
   offset: 0, 0
   index: -1
 vera_brow2
   rotate: true
-  xy: 2, 2
-  size: 62, 40
-  orig: 62, 40
+  xy: 985, 966
+  size: 50, 32
+  orig: 50, 32
   offset: 0, 0
   index: -1
-vera_hair
+vera_eye0
   rotate: false
-  xy: 2, 66
-  size: 404, 229
-  orig: 404, 229
+  xy: 604, 143
+  size: 399, 291
+  orig: 399, 291
+  offset: 0, 0
+  index: -1
+vera_glasses
+  rotate: true
+  xy: 659, 510
+  size: 506, 324
+  orig: 506, 324
   offset: 0, 0
   index: -1
 vera_hand1
-  rotate: false
-  xy: 823, 502
-  size: 156, 264
-  orig: 156, 264
+  rotate: true
+  xy: 809, 17
+  size: 124, 211
+  orig: 124, 211
   offset: 0, 0
   index: -1
 vera_helmet
   rotate: false
-  xy: 2, 297
-  size: 819, 725
-  orig: 819, 725
+  xy: 2, 436
+  size: 655, 580
+  orig: 655, 580
+  offset: 0, 0
+  index: -1
+vera_horns
+  rotate: false
+  xy: 2, 2
+  size: 600, 432
+  orig: 600, 432
   offset: 0, 0
   index: -1
 vera_leg1
-  rotate: false
-  xy: 823, 768
-  size: 169, 254
-  orig: 169, 254
-  offset: 0, 0
-  index: -1
-vera_leg2
-  rotate: false
-  xy: 737, 11
-  size: 122, 284
-  orig: 122, 284
+  rotate: true
+  xy: 604, 6
+  size: 135, 203
+  orig: 135, 203
   offset: 0, 0
   index: -1
 vera_mouth1
-  rotate: false
-  xy: 823, 426
-  size: 86, 74
-  orig: 86, 74
+  rotate: true
+  xy: 659, 439
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth2
-  rotate: false
-  xy: 823, 350
-  size: 86, 74
-  orig: 86, 74
+  rotate: true
+  xy: 720, 439
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth3
   rotate: true
-  xy: 911, 414
-  size: 86, 74
-  orig: 86, 74
+  xy: 781, 439
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth4
-  rotate: false
-  xy: 911, 338
-  size: 86, 74
-  orig: 86, 74
+  rotate: true
+  xy: 842, 439
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth5
-  rotate: false
-  xy: 861, 262
-  size: 86, 74
-  orig: 86, 74
-  offset: 0, 0
-  index: -1
-vera_mouth6
-  rotate: false
-  xy: 861, 186
-  size: 86, 74
-  orig: 86, 74
-  offset: 0, 0
-  index: -1
-vera_mouth7
-  rotate: false
-  xy: 861, 110
-  size: 86, 74
-  orig: 86, 74
-  offset: 0, 0
-  index: -1
-vera_mouth8
-  rotate: false
-  xy: 861, 34
-  size: 86, 74
-  orig: 86, 74
-  offset: 0, 0
-  index: -1
-vera_nose
-  rotate: false
-  xy: 408, 39
-  size: 327, 256
-  orig: 327, 256
+  rotate: true
+  xy: 903, 439
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 
@@ -122,32 +101,88 @@ size: 1024,1024
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-vera_glasses
+vera_eye1
+  rotate: false
+  xy: 2, 295
+  size: 399, 291
+  orig: 399, 291
+  offset: 0, 0
+  index: -1
+vera_eye2
+  rotate: false
+  xy: 571, 717
+  size: 399, 291
+  orig: 399, 291
+  offset: 0, 0
+  index: -1
+vera_eye3
   rotate: false
   xy: 2, 2
-  size: 633, 405
-  orig: 633, 405
+  size: 399, 291
+  orig: 399, 291
+  offset: 0, 0
+  index: -1
+vera_eye4
+  rotate: true
+  xy: 403, 187
+  size: 399, 291
+  orig: 399, 291
+  offset: 0, 0
+  index: -1
+vera_hair
+  rotate: false
+  xy: 403, 2
+  size: 323, 183
+  orig: 323, 183
   offset: 0, 0
   index: -1
 vera_hand2
   rotate: false
-  xy: 754, 738
-  size: 221, 211
-  orig: 221, 211
+  xy: 728, 20
+  size: 177, 169
+  orig: 177, 169
   offset: 0, 0
   index: -1
-vera_horns
+vera_head
   rotate: false
-  xy: 2, 409
-  size: 750, 540
-  orig: 750, 540
+  xy: 2, 588
+  size: 567, 420
+  orig: 567, 420
   offset: 0, 0
   index: -1
 vera_leg3
   rotate: true
-  xy: 637, 10
-  size: 397, 341
-  orig: 397, 341
+  xy: 696, 398
+  size: 317, 273
+  orig: 317, 273
+  offset: 0, 0
+  index: -1
+vera_mouth6
+  rotate: false
+  xy: 571, 656
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth7
+  rotate: false
+  xy: 571, 595
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_mouth8
+  rotate: true
+  xy: 907, 120
+  size: 69, 59
+  orig: 69, 59
+  offset: 0, 0
+  index: -1
+vera_nose
+  rotate: false
+  xy: 696, 191
+  size: 261, 205
+  orig: 261, 205
   offset: 0, 0
   index: -1
 
@@ -158,97 +193,50 @@ filter: Linear,Linear
 repeat: none
 vera_dress
   rotate: false
-  xy: 688, 14
-  size: 316, 385
-  orig: 316, 385
+  xy: 640, 617
+  size: 253, 308
+  orig: 253, 308
   offset: 0, 0
   index: -1
-vera_head
-  rotate: false
-  xy: 2, 401
-  size: 709, 525
-  orig: 709, 525
+vera_leg2
+  rotate: true
+  xy: 2, 2
+  size: 98, 227
+  orig: 98, 227
   offset: 0, 0
   index: -1
 vera_leg4
-  rotate: true
-  xy: 2, 2
-  size: 397, 341
-  orig: 397, 341
+  rotate: false
+  xy: 2, 652
+  size: 317, 273
+  orig: 317, 273
   offset: 0, 0
   index: -1
 vera_leg5
-  rotate: true
-  xy: 345, 2
-  size: 397, 341
-  orig: 397, 341
-  offset: 0, 0
-  index: -1
-
-skeleton4.png
-size: 1024,1024
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-vera_eye0
   rotate: false
-  xy: 2, 368
-  size: 499, 364
-  orig: 499, 364
-  offset: 0, 0
-  index: -1
-vera_eye1
-  rotate: false
-  xy: 2, 2
-  size: 499, 364
-  orig: 499, 364
-  offset: 0, 0
-  index: -1
-vera_eye2
-  rotate: false
-  xy: 503, 368
-  size: 499, 364
-  orig: 499, 364
-  offset: 0, 0
-  index: -1
-vera_eye3
-  rotate: false
-  xy: 503, 2
-  size: 499, 364
-  orig: 499, 364
-  offset: 0, 0
-  index: -1
-
-skeleton5.png
-size: 1024,1024
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
-vera_eye4
-  rotate: false
-  xy: 2, 345
-  size: 499, 364
-  orig: 499, 364
+  xy: 2, 377
+  size: 317, 273
+  orig: 317, 273
   offset: 0, 0
   index: -1
 vera_leg6
   rotate: false
-  xy: 2, 2
-  size: 397, 341
-  orig: 397, 341
+  xy: 321, 652
+  size: 317, 273
+  orig: 317, 273
   offset: 0, 0
   index: -1
 vera_leg7
   rotate: false
-  xy: 503, 368
-  size: 397, 341
-  orig: 397, 341
+  xy: 2, 102
+  size: 317, 273
+  orig: 317, 273
   offset: 0, 0
   index: -1
 vera_leg8
   rotate: false
-  xy: 401, 2
-  size: 397, 341
-  orig: 397, 341
+  xy: 321, 377
+  size: 317, 273
+  orig: 317, 273
   offset: 0, 0
   index: -1

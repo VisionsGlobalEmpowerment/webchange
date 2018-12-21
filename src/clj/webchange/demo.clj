@@ -80,21 +80,13 @@
                    {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
                    {:url "/raw/anim/vera/skeleton.png", :size 1, :type "anim-texture"}
                    {:url "/raw/anim/vera/skeleton2.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera/skeleton4.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera/skeleton5.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/test/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/test/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/test/skeleton.png", :size 1, :type "anim-texture"}],
+                   {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}],
    :objects
                   {:background {:type "background", :src "/raw/img/casa/background.jpg"},
                    :vera       {:type "animation" :x 1128 :y 960 :name "vera" :anim "idle" :speed 0.3
-                                :width 1800 :height 2558
-                                :scale {:x 0.2 :y 0.2}}
+                                :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
                    :senora-vaca {:type "animation" :x 655 :y 960 :name "senoravaca" :anim "idle" :speed 0.3
-                                 :width 715 :height 1461
-                                 :scale {:x 0.55 :y 0.55}
+                                 :width 715 :height 1461 :scale {:x 0.55 :y 0.55} :start true
                                  :actions {:click {:type "action" :id "intro" :on "click" :options {:unique-tag "intro"}}}}
                    :door {:type "transparent" :x 1146 :y 42 :width 732 :height 810
                           :states {:default {:type "transparent", :src nil}
@@ -370,17 +362,19 @@
                                 {:url "/raw/img/ui/settings_button_02.png", :size 1, :type "image"}
                                 {:url "/raw/img/ui/star_01.png", :size 1, :type "image"}
                                 {:url "/raw/img/ui/star_02.png", :size 1, :type "image"}
-                                {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}],
+                                {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}
+
+                                {:url "/raw/anim/vera-go/skeleton.atlas", :size 1, :type "anim-text"}
+                                {:url "/raw/anim/vera-go/skeleton.json", :size 1, :type "anim-text"}
+                                {:url "/raw/anim/vera-go/skeleton.png", :size 1, :type "anim-texture"}
+                                {:url "/raw/anim/vera-go/skeleton2.png", :size 1, :type "anim-texture"}],
                 :objects
                                {:background {:type "background", :src "/raw/img/map/background.png"},
-                                :vera {:type "image":x 1045, :y 540 :scale {:x 0.2 :y 0.2}
-                                       :src "/raw/img/vera.png" :transition "vera-transition"}
+                                :vera {:type "animation" :name "vera-go" :anim "go_front" :speed 0.5 :start false
+                                       :x 1070, :y 665 :scale {:x 0.15 :y 0.15} :width 752 :height 1175
+                                       :transition "vera-transition"}
                                 :home
-                                {:type   "image",
-                                 :x      731,
-                                 :y      340,
-                                 :width  433,
-                                 :height 380,
+                                {:type "image" :x 731 :y 340 :width 433 :height 380
                                  :src    "/raw/img/map/casa_01.png",
                                  :states
                                          {:default {:type "image", :src "/raw/img/map/casa_01.png"},
@@ -392,11 +386,7 @@
                                                  {:type "state", :target "home", :id "default", :on "mouseout"},
                                           :click {:type "action", :id "move-to-home", :on "click"}}},
                                 :feria
-                                {:type   "image",
-                                 :x      235,
-                                 :y      683,
-                                 :width  319,
-                                 :height 280,
+                                {:type "image" :x 235 :y 683 :width 319 :height 280
                                  :src    "/raw/img/map/feria_01.png",
                                  :states
                                          {:default {:type "image", :src "/raw/img/map/feria_01.png"},
@@ -409,38 +399,39 @@
                                           :click {:type "action", :id "move-to-feria", :on "click"}}}},
                 :scene-objects [["background" "home" "feria"] ["vera"]],
                 :actions
-                               {:move-to-feria-transition-1
+                               {:start-movement {:type "start-animation" :target "vera-go"}
+                                :move-to-feria-transition-1
                                             {:type          "transition",
                                              :transition-id "vera-transition",
-                                             :to            {:x 915, :y 601}},
+                                             :to            {:x 940, :y 725}},
                                 :open-home  {:type "scene", :scene-id "home"},
                                 :move-to-feria-transition-4
                                             {:type          "transition",
                                              :transition-id "vera-transition",
-                                             :to            {:x 850, :y 813}},
+                                             :to            {:x 875, :y 938}},
                                 :move-to-home-transition
                                             {:type          "transition",
                                              :transition-id "vera-transition",
-                                             :to            {:x 975, :y 495}},
+                                             :to            {:x 1000, :y 620}},
                                 :open-feria {:type "scene", :scene-id "feria"},
                                 :move-to-feria-transition-2
                                             {:type          "transition",
                                              :transition-id "vera-transition",
-                                             :to            {:x 950, :y 646}},
+                                             :to            {:x 975 :y 771}},
                                 :move-to-feria-transition-3
                                             {:type          "transition",
                                              :transition-id "vera-transition",
-                                             :to            {:x 870, :y 726}},
+                                             :to            {:x 895, :y 851}},
                                 :move-to-home
-                                            {:type "sequence", :data ["move-to-home-transition" "open-home"]},
+                                            {:type "sequence", :data ["start-movement" "move-to-home-transition" "open-home"]},
                                 :move-to-feria-transition-5
                                             {:type          "transition",
                                              :transition-id "vera-transition",
-                                             :to            {:x 565, :y 835}},
+                                             :to            {:x 590, :y 960}},
                                 :move-to-feria
                                             {:type "sequence",
-                                             :data
-                                                   ["move-to-feria-transition-1"
+                                             :data ["start-movement"
+                                                    "move-to-feria-transition-1"
                                                     "move-to-feria-transition-2"
                                                     "move-to-feria-transition-3"
                                                     "move-to-feria-transition-4"
@@ -480,12 +471,8 @@
                                  {:background
                                   {:type "background", :src "/raw/img/feria/background.jpg"},
                                   :wheel
-                                  {:type "image",
+                                  {:type "image" :x 467 :y 105 :width 708 :height 778
                                    :src "/raw/img/feria/ferris_wheel_default.png"
-                                   :x      467,
-                                   :y      105,
-                                   :width  708,
-                                   :height 778
                                    :states
                                            {:default {:src "/raw/img/feria/ferris_wheel_default.png"},
                                             :hover   {:src "/raw/img/feria/ferris_wheel_highlight.png"}},
@@ -494,9 +481,7 @@
                                             :mouseout  {:type "state", :target "wheel", :id "default", :on "mouseout"}
                                             :click     {:type "scene", :scene-id "ferris-wheel", :on "click"}}},
                                   :exit
-                                  {:type "image",
-                                   :x    1600,
-                                   :y    800,
+                                  {:type "image" :x 1600 :y 800 :width 241 :height 231
                                    :src  "/raw/img/feria/back.png",
                                    :states
                                          {:default {:src "/raw/img/feria/back.png"},
@@ -508,9 +493,7 @@
                                                  {:type "state", :target "exit", :id "default", :on "mouseout"},
                                           :click {:type "scene", :scene-id "map", :on "click"}}},
                                   :vera
-                                  {:type  "image",
-                                   :x     1100,
-                                   :y     650,
+                                  {:type  "image" :x 1100 :y 650 :width 431 :height 626
                                    :src   "/raw/img/vera.png",
                                    :scale {:x 0.55, :y 0.55}}}
                   :actions { :start-background-music {:type "audio" :id "background" :loop true}},
@@ -548,12 +531,16 @@
                    {:url "/raw/img/ferris-wheel/words/form_yellow.png", :size 1, :type "image"}
 
                    {:url "/raw/img/butterfly.png", :size 2, :type "image"}
+
+                   {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
+                   {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
+                   {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
                    ],
    :objects
                   {:background {:type "background", :src "/raw/img/ferris-wheel/background.jpg"}
-                   :butterfly {:type "image" :scene-name "butterfly"
-                               :src "/raw/img/butterfly.png" :x 1347 :y 520 :width 697 :height 768
-                               :scale-y 0.45 :scale-x 0.45}
+                   :butterfly {:type "animation" :scene-name "butterfly" :name "mari" :anim "idle" :start true :speed 0.35
+                               :x 1535 :y 715 :width 473 :height 511
+                               :scale-y 0.5 :scale-x 0.5}
                    :wheel      {:type "group" :x 806 :y 457 :children ["wheel-1", "wheel-2", "wheel-3", "items"]}
                    :wheel-1    {:type "image" :width 772 :height 772 :transition "wheel-1"
                                 :src  "/raw/img/ferris-wheel/ferris_wheel_01.png" :origin {:type "center-center"}},
@@ -647,7 +634,7 @@
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
                    :start-game {:type "sequence"
-                                :data ["renew-words" "renew-current-word" "audio-instructions" "repeat-current-word"]}
+                                :data ["renew-words" "renew-current-word" "mari-anim-talk" "audio-instructions" "mari-anim-idle" "repeat-current-word"]}
                    :renew-words  {:type      "dataset-var-provider"
                                   :provider-id        "words-set"
                                   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
@@ -661,12 +648,19 @@
                    :empty-5        {:type "empty", :duration 3000},
                    :repeat-current-word {:type "sequence"
                                  :tags ["repeat-word"]
-                                 :data ["play-word", "empty-5", "repeat-current-word"]}
+                                 :data ["mari-anim-talk" "play-word" "mari-anim-idle" "empty-5", "repeat-current-word"]}
                    :clear-repeat-word {:type "remove-flows" :flow-tag "repeat-word"}
                    :pick-correct {:type "sequence"
-                                  :data ["clear-repeat-word" "increase-success" "reset-forms" "set-green" "audio-correct" "renew-current-word" "repeat-current-word"]}
+                                  :data ["clear-repeat-word" "correct-workflow"]}
+                   :correct-workflow {:type "sequence"
+                                      :tags ["repeat-word"]
+                                      :data ["increase-success" "reset-forms" "set-green" "audio-correct"
+                                             "renew-current-word" "repeat-current-word"]}
                    :pick-wrong {:type "sequence"
-                                :data ["clear-repeat-word" "increase-fail" "set-red" "audio-wrong" "repeat-current-word"]}
+                                :data ["clear-repeat-word" "wrong-workflow"]}
+                   :wrong-workflow {:type "sequence"
+                                    :tags ["repeat-word"]
+                                    :data ["increase-fail" "set-red" "audio-wrong" "repeat-current-word"]}
                    :increase-fail     {:type "counter"
                                        :counter-action "increase"
                                        :counter-id "fails"}
@@ -692,6 +686,8 @@
                    :audio-instructions {:type "audio" :id "instructions" :start 0.3 :duration 6.2 :offset 0}
                    :audio-correct {:type "audio" :id "fw-correct" :start 0 :duration 1.225 :offset 0.2}
                    :audio-wrong {:type "audio" :id "fw-try-again" :start 0 :duration 1.755 :offset 0.2}
+                   :mari-anim-talk {:type "animation", :target "mari" :id "talking"}
+                   :mari-anim-idle {:type "animation", :target "mari" :id "idle"}
                    }
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}

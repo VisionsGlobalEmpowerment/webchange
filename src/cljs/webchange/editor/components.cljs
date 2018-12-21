@@ -157,12 +157,25 @@
   [:> Group (object-params object)
    [:> Rect (rect-params scene-id name object)]])
 
+(defn update-group-rect
+  [group rect]
+  (let [{:keys [width height]} @rect
+        group-rect (.getClientRect group #js {:skipTransform true})
+        group-width (.-width group-rect)
+        group-height (.-height group-rect)
+        group-x (.-x group-rect)
+        group-y (.-y group-rect)]
+    (when (and (= width 0) (= height 0))
+      (reset! rect {:x group-x :y group-y :width group-width :height group-height}))))
+
 (defn group
   [scene-id name object]
-  [:> Group (object-params object)
-   (for [child (:children object)]
-    ^{:key (str scene-id child)} [draw-object scene-id child])
-   [:> Rect (rect-params scene-id name object)]])
+  (let [g (r/atom {:width 0 :height 0})]
+    (fn []
+      [:> Group (merge (object-params object) {:ref #(when % (update-group-rect % g))})
+       [:> Rect (merge (rect-params scene-id name object) @g)]
+       (for [child (:children object)]
+        ^{:key (str scene-id child)} [draw-object scene-id child])])))
 
 (defn placeholder
   [scene-id name object]
@@ -182,7 +195,7 @@
   [scene-id name object]
   (let [params (object-params object)]
     [:> Group params
-     [anim (:name object) (:anim object) (:speed object) #(re-frame/dispatch [::ie/register-animation (:name object) %])]
+     [anim (:name object) (:anim object) (:speed object) #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2]) false]
      [:> Rect (-> (rect-params scene-id name object)
                   (assoc :origin {:type "center-bottom"})
                   with-origin-offset)]]))
