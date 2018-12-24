@@ -56,8 +56,6 @@
 (re-frame/reg-fx
   :start-animation
   (fn [shape]
-    (js/console.log "start-animation")
-    (js/console.log shape)
     (start-animation shape)))
 
 (defn get-audio-key

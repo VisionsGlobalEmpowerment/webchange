@@ -129,70 +129,143 @@
 
                    :senora-vaca-audio-1 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
-                                                {:type "animation" :target "senoravaca" :id "talk"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 225}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1307}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}
+                                                        {:type "empty" :duration 550}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1069}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
                    :senora-vaca-audio-2 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 4.72, :duration 5.84}
-                                                {:type "animation" :target "senoravaca" :id "talk"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 214}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 586}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}
+                                                        {:type "empty" :duration 349}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1984}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}
+                                                        {:type "empty" :duration 678}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1982}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
                    :senora-vaca-audio-3 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 11.9, :duration 1.3}
-                                                {:type "animation" :target "senoravaca" :id "hand"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 225}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 894}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
                    :senora-vaca-audio-4 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 13.31, :duration 3.22}
-                                                {:type "animation" :target "senoravaca" :id "talk"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 149}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 2975}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
                    :senora-vaca-audio-5 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 17.92, :duration 4.55}
-                                                {:type "animation" :target "senoravaca" :id "talk"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 184}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 291}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}
+                                                        {:type "empty" :duration 761}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1236}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}
+                                                        {:type "empty" :duration 273}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1610}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
                    :senora-vaca-audio-6 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 23.05, :duration 3.14}
-                                                {:type "animation" :target "senoravaca" :id "talk"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 142}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1530}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}
+                                                        {:type "empty" :duration 469}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 952}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
                    :senora-vaca-audio-7 {:type "parallel"
                                          :data [{:type "audio" :id "lets-do-an-example" :start 0.178 :duration 3.348}
-                                                {:type "animation" :target "senoravaca" :id "talk"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
-                   :senora-vaca-audio-8 {:type "parallel"
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 120}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 3001}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
+                   #_:senora-vaca-audio-8 #_{:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 38.102, :duration 4.739}
                                                 {:type "animation" :target "senoravaca" :id "talk"}
                                                 {:type "animation" :target "vera" :id "idle"}]}
                    :senora-vaca-audio-9 {:type "parallel"
                                          :data [{:type "audio", :id "teacher", :start 40.66, :duration 1.65}
-                                                {:type "animation" :target "senoravaca" :id "talk"}
-                                                {:type "animation" :target "vera" :id "idle"}]}
+                                                {:type "sequence-data"
+                                                 :data [{:type "empty" :duration 289}
+                                                        {:type "animation" :target "senoravaca" :id "talk"}
+                                                        {:type "empty" :duration 1050}
+                                                        {:type "animation" :target "senoravaca" :id "idle"}]}]}
                    :senora-vaca-audio-10 {:type "parallel"
                                           :data [{:type "audio", :id "teacher", :start 47.47, :duration 5.78}
-                                                 {:type "animation" :target "senoravaca" :id "talk"}
-                                                 {:type "animation" :target "vera" :id "idle"}]}
+                                                 {:type "sequence-data"
+                                                  :data [{:type "empty" :duration 285}
+                                                         {:type "animation" :target "senoravaca" :id "talk"}
+                                                         {:type "empty" :duration 5311}
+                                                         {:type "animation" :target "senoravaca" :id "idle"}]}]}
 
 
                    :vera-audio-1 {:type "parallel"
                                   :data [{:type "audio", :id "vera", :start 1.4, :duration 3.38}
-                                         {:type "animation", :target "senoravaca" :id "idle"}
-                                         {:type "animation" :target "vera" :id "talking"}]}
+                                         {:type "sequence-data"
+                                          :data [{:type "empty" :duration 298}
+                                                 {:type "animation" :target "vera" :id "talking"}
+                                                 {:type "empty" :duration 1240}
+                                                 {:type "animation" :target "vera" :id "idle"}
+                                                 {:type "empty" :duration 525}
+                                                 {:type "animation" :target "vera" :id "talking"}
+                                                 {:type "empty" :duration 1074}
+                                                 {:type "animation" :target "vera" :id "idle"}]}]}
                    :vera-audio-2 {:type "parallel"
                                   :data [{:type "audio", :id "vera", :start 5.74, :duration 1.5}
-                                         {:type "animation", :target "senoravaca" :id "idle"}
-                                         {:type "animation" :target "vera" :id "jump+clapping"}]}
+                                         {:type "animation" :target "vera" :id "jump+clapping" :loop false}]}
                    :vera-audio-3 {:type "parallel"
                                   :data [{:type "audio", :id "vera", :start 7.32, :duration 3.02}
-                                         {:type "animation", :target "senoravaca" :id "idle"}
-                                         {:type "animation" :target "vera" :id "talking"}]}
+                                         {:type "sequence-data"
+                                          :data [{:type "empty" :duration 341}
+                                                 {:type "animation" :target "vera" :id "talking"}
+                                                 {:type "empty" :duration 2575}
+                                                 {:type "animation" :target "vera" :id "idle"}]}]}
                    :vera-audio-4 {:type "parallel"
                                   :data [{:type "audio", :id "vera", :start 11.85, :duration 1.37}
-                                         {:type "animation", :target "senoravaca" :id "idle"}
-                                         {:type "animation" :target "vera" :id "talking"}]}
+                                         {:type "sequence-data"
+                                          :data [{:type "empty" :duration 334}
+                                                 {:type "animation" :target "vera" :id "talking"}
+                                                 {:type "empty" :duration 755}
+                                                 {:type "animation" :target "vera" :id "idle"}]}]}
                    :vera-audio-5 {:type "parallel"
                                   :data [{:type "audio", :id "vera", :start 14.45, :duration 0.93}
-                                         {:type "animation", :target "senoravaca" :id "idle"}
-                                         {:type "animation" :target "vera" :id "talking"}]}
+                                         {:type "sequence-data"
+                                          :data [{:type "empty" :duration 233}
+                                                 {:type "animation" :target "vera" :id "talking"}
+                                                 {:type "empty" :duration 586}
+                                                 {:type "animation" :target "vera" :id "idle"}]}]}
                    :vera-audio-6 {:type "parallel"
                                   :data [{:type "audio", :id "vera", :start 16.66, :duration 3.58}
-                                         {:type "animation", :target "senoravaca" :id "idle"}
-                                         {:type "animation" :target "vera" :id "talking"}]}
+                                         {:type "sequence-data"
+                                          :data [{:type "empty" :duration 223}
+                                                 {:type "animation" :target "vera" :id "talking_eeeee"}
+                                                 {:type "empty" :duration 706}
+                                                 {:type "animation" :target "vera" :id "idle"}
+                                                 {:type "empty" :duration 1297}
+                                                 {:type "animation" :target "vera" :id "talking"}
+                                                 {:type "empty" :duration 951}
+                                                 {:type "animation" :target "vera" :id "idle"}]}]}
 
                    :empty-1        {:type "empty", :duration 600}
 
@@ -634,7 +707,7 @@
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
                    :start-game {:type "sequence"
-                                :data ["renew-words" "renew-current-word" "mari-anim-talk" "audio-instructions" "mari-anim-idle" "repeat-current-word"]}
+                                :data ["renew-words" "renew-current-word" "audio-instructions" "repeat-current-word"]}
                    :renew-words  {:type      "dataset-var-provider"
                                   :provider-id        "words-set"
                                   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
@@ -645,10 +718,11 @@
                                         :from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
                                         :on-end "finish-game"}
                    :play-word {:type "placeholder-audio" :var-name "current-word" :id "audio-id" :start "start" :duration "duration" :offset "offset"}
-                   :empty-5        {:type "empty", :duration 3000},
+                   :empty-3        {:type "empty", :duration 3000},
+                   :empty-1        {:type "empty", :duration 1000},
                    :repeat-current-word {:type "sequence"
                                  :tags ["repeat-word"]
-                                 :data ["mari-anim-talk" "play-word" "mari-anim-idle" "empty-5", "repeat-current-word"]}
+                                 :data ["empty-1" "mari-anim-talk" "play-word" "mari-anim-idle" "empty-3", "repeat-current-word"]}
                    :clear-repeat-word {:type "remove-flows" :flow-tag "repeat-word"}
                    :pick-correct {:type "sequence"
                                   :data ["clear-repeat-word" "correct-workflow"]}
@@ -683,7 +757,17 @@
                                                          {:type "state" :target "item-5f" :id "default"}
                                                          {:type "state" :target "item-6f" :id "default"}]}
                    :finish-game {:type "set-variable" :var-name "score" :var-value {:visible true}}
-                   :audio-instructions {:type "audio" :id "instructions" :start 0.3 :duration 6.2 :offset 0}
+                   :audio-instructions {:type "parallel"
+                                        :data [{:type "audio" :id "instructions" :start 0.3 :duration 6.2 :offset 0}
+                                               {:type "sequence-data"
+                                                :data [{:type "empty" :duration 1159}
+                                                       {:type "animation" :target "mari" :id "talking"}
+                                                       {:type "empty" :duration 912}
+                                                       {:type "animation" :target "mari" :id "idle"}
+                                                       {:type "empty" :duration 981}
+                                                       {:type "animation" :target "mari" :id "talking"}
+                                                       {:type "empty" :duration 2443}
+                                                       {:type "animation" :target "mari" :id "idle"}]}]}
                    :audio-correct {:type "audio" :id "fw-correct" :start 0 :duration 1.225 :offset 0.2}
                    :audio-wrong {:type "audio" :id "fw-try-again" :start 0 :duration 1.755 :offset 0.2}
                    :mari-anim-talk {:type "animation", :target "mari" :id "talking"}
@@ -694,17 +778,17 @@
                    :start    {:on "start" :action "start-game"}}
 
    :datasets      {:items {:ladybug   {:id "ladybug" :src "/raw/img/ferris-wheel/words/ladybug.png" :width 98 :height 88
-                                       :audio-id "fw-syllables" :start 15.896 :duration 2.233 :offset 1}
+                                       :audio-id "fw-syllables" :start 15.896 :duration 2.233 :offset 0}
                            :broccoli  {:id "broccoli" :src "/raw/img/ferris-wheel/words/broccoli.png" :width 100 :height 100
-                                       :audio-id "fw-syllables" :start 5.191, :duration 2.171 :offset 1}
+                                       :audio-id "fw-syllables" :start 5.191, :duration 2.171 :offset 0}
                            :dinosaur  {:id "dinosaur" :src "/raw/img/ferris-wheel/words/dino.png" :width 102 :height 118
-                                       :audio-id "fw-syllables" :start 8.959, :duration 2.508 :offset 1}
+                                       :audio-id "fw-syllables" :start 8.959, :duration 2.508 :offset 0}
                            :orange    {:id "orange" :src "/raw/img/ferris-wheel/words/orange.png" :width 108 :height 102
-                                       :audio-id "fw-syllables" :start 19.34, :duration 2.283 :offset 1}
+                                       :audio-id "fw-syllables" :start 19.34, :duration 2.283 :offset 0}
                            :crocodile {:id "crocodile" :src "/raw/img/ferris-wheel/words/crocodile.png" :width 112 :height 121
-                                       :audio-id "fw-syllables" :start 1.335, :duration 2.308 :offset 1}
+                                       :audio-id "fw-syllables" :start 1.335, :duration 2.308 :offset 0}
                            :pumpkin   {:id "pumpkin" :src "/raw/img/ferris-wheel/words/pumpkin.png" :width 112 :height 114
-                                       :audio-id "fw-syllables" :start 12.939, :duration 1.585 :offset 1}}}
+                                       :audio-id "fw-syllables" :start 12.939, :duration 1.585 :offset 0}}}
    :scene-objects [["background" "wheel"] ["butterfly"]]
    :audio {:instructions "/raw/audio/demo/ferris-wheel-instructions.mp3"
            :fw-syllables "/raw/audio/demo/ferris-wheel-syllables.mp3"

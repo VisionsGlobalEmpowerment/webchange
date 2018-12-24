@@ -82,6 +82,7 @@
                                                                       :id
                                                                       (get-action db action))]))
 (reg-simple-executor :sequence ::execute-sequence)
+(reg-simple-executor :sequence-data ::execute-sequence-data)
 (reg-simple-executor :parallel ::execute-parallel)
 (reg-simple-executor :remove-flows ::execute-remove-flows)
 
@@ -163,6 +164,22 @@
                                                     (get-action db action)
                                                     (assoc :flow-id flow-id)
                                                     (assoc :action-id action-id))])}
+        {:dispatch (success-event action)}))))
+
+(re-frame/reg-event-fx
+  ::execute-sequence-data
+  [event-as-action]
+  (fn [{:keys [db]} action]
+    (let [flow-id (random-uuid)
+          action-id (random-uuid)
+          [current & rest] (:data action)
+          next [::execute-sequence-data (-> action (assoc :data rest))]
+          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (:tags action)}]]
+      (if current
+        {:dispatch-n (list flow-event
+                           [::execute-action (-> current
+                                                 (assoc :flow-id flow-id)
+                                                 (assoc :action-id action-id))])}
         {:dispatch (success-event action)}))))
 
 (re-frame/reg-event-fx

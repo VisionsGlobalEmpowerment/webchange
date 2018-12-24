@@ -195,7 +195,9 @@
   [scene-id name object]
   (let [params (object-params object)]
     [:> Group params
-     [anim (:name object) (:anim object) (:speed object) #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2]) false]
+     [anim (-> object
+               (assoc :on-mount #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2]))
+               (assoc :start false))]
      [:> Rect (-> (rect-params scene-id name object)
                   (assoc :origin {:type "center-bottom"})
                   with-origin-offset)]]))

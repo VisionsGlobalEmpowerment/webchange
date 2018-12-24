@@ -312,10 +312,8 @@
   [scene-id name object]
   (let [params (prepare-group-params object)]
   [:> Group params
-   [anim
-    (:name object) (:anim object) (:speed object)
-    #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2])
-    (:start params)]
+   [anim (-> object
+             (assoc :on-mount #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2])))]
    [:> Rect (-> {:width (:width params)
                  :height (:height params)
                  :opacity 0

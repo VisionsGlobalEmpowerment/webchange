@@ -27,18 +27,19 @@
     (.start animation)))
 
 (defn anim
-  [name animation speed on-mount start]
+  [{:keys [name anim speed on-mount start mix] :or {mix 0.2 speed 1}}]
   (let [atlas (texture-atlas name)
         atlas-loader (s/AtlasAttachmentLoader. atlas)
         skeleton-json (s/SkeletonJson. atlas-loader)
         skeleton-data (.readSkeletonData skeleton-json (.get spine-manager (str "/raw/anim/" name "/skeleton.json")))
         skeleton (s/Skeleton. skeleton-data)
         animation-state-data (s/AnimationStateData. (.-data skeleton))
-        _ (set! (.-defaultMix animation-state-data) 0.2)
+        _ (set! (.-defaultMix animation-state-data) mix)
         animation-state (s/AnimationState. animation-state-data)]
     (set! (.-flipY skeleton) true)
-    (fn [name animation speed on-mount start]
-      (.setAnimation animation-state 0 animation true)
+    (js/console.log "mix:" mix)
+    (fn [{:keys [name anim speed on-mount start mix] :or {mix 0.2 speed 1}}]
+      (.setAnimation animation-state 0 anim true)
       [:> Shape {:time-diff  0
                  :scene-func (fn [context shape]
                                (.update animation-state (* (.getAttr shape "timeDiff") speed))
