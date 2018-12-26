@@ -5,6 +5,10 @@ node {
         sh 'cp -rf $HOME/build-cache/node_modules ./'
     }
 
+    stage('Test') {
+        sh 'lein doo chrome-headless test once'
+    }
+
     stage('Build') {
         sh 'lein uberjar'
     }

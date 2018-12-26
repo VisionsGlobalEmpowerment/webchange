@@ -6,5 +6,10 @@
     "react-dom": "^16.6.0",
     "react-konva": "^16.6.0",
     "react-spring": "^5.8.0"
+  },
+  "devDependencies": {
+    "karma": "^3.1.4",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cljs-test": "^0.1.0"
   }
 }

@@ -33,11 +33,6 @@
     (get-in db [:editor :selected-scene-action])))
 
 (re-frame/reg-sub
-  ::selected-scene-action
-  (fn [db]
-    (get-in db [:editor :selected-scene-action])))
-
-(re-frame/reg-sub
   ::selected-asset
   (fn [db]
     (get-in db [:editor :selected-asset])))
