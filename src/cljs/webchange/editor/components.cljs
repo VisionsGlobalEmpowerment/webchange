@@ -593,6 +593,7 @@
             object (re-frame/subscribe [::subs/scene-object scene-id name])
             state-data (-> @object :states (get (keyword state)))]
         (swap! props #(merge state-data %))
+        (swap! props assoc :state-id state)
         [na/form {}
          [na/form-input {:label "id" :default-value state :on-change #(swap! props assoc :state-id (-> %2 .-value)) :inline? true}]
          [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :value (:type @props)
