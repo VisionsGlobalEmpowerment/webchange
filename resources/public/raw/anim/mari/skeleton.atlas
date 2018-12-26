@@ -1,139 +1,139 @@
 
 skeleton.png
-size: 1024,512
+size: 1024,128
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 mary_body
   rotate: false
-  xy: 430, 304
-  size: 222, 206
-  orig: 222, 206
+  xy: 175, 44
+  size: 89, 82
+  orig: 89, 82
   offset: 0, 0
   index: -1
 mary_brow1
   rotate: false
-  xy: 788, 142
-  size: 21, 11
-  orig: 21, 11
+  xy: 479, 73
+  size: 8, 4
+  orig: 8, 4
   offset: 0, 0
   index: -1
 mary_brow2
-  rotate: true
-  xy: 430, 277
-  size: 25, 11
-  orig: 25, 11
+  rotate: false
+  xy: 467, 73
+  size: 10, 4
+  orig: 10, 4
   offset: 0, 0
   index: -1
 mary_hand1
   rotate: false
-  xy: 204, 36
-  size: 62, 48
-  orig: 62, 48
+  xy: 560, 46
+  size: 25, 19
+  orig: 25, 19
   offset: 0, 0
   index: -1
 mary_hand2
-  rotate: false
-  xy: 893, 452
-  size: 55, 58
-  orig: 55, 58
+  rotate: true
+  xy: 2, 2
+  size: 22, 23
+  orig: 22, 23
   offset: 0, 0
   index: -1
 mary_hand3
   rotate: false
-  xy: 788, 155
-  size: 50, 71
-  orig: 50, 71
+  xy: 467, 79
+  size: 20, 28
+  orig: 20, 28
   offset: 0, 0
   index: -1
 mary_hand4
   rotate: false
-  xy: 150, 14
-  size: 52, 70
-  orig: 52, 70
+  xy: 337, 38
+  size: 21, 28
+  orig: 21, 28
   offset: 0, 0
   index: -1
 mary_head
   rotate: false
-  xy: 2, 260
-  size: 218, 250
-  orig: 218, 250
+  xy: 2, 26
+  size: 87, 100
+  orig: 87, 100
   offset: 0, 0
   index: -1
 mary_horn
   rotate: true
-  xy: 448, 100
-  size: 42, 154
-  orig: 42, 154
+  xy: 467, 109
+  size: 17, 62
+  orig: 17, 62
   offset: 0, 0
   index: -1
 mary_m0
   rotate: false
-  xy: 614, 285
-  size: 23, 17
-  orig: 23, 17
+  xy: 175, 35
+  size: 9, 7
+  orig: 9, 7
   offset: 0, 0
   index: -1
 mary_wing1
   rotate: false
-  xy: 222, 266
-  size: 206, 244
-  orig: 206, 244
+  xy: 91, 28
+  size: 82, 98
+  orig: 82, 98
   offset: 0, 0
   index: -1
 mary_wing2
   rotate: false
-  xy: 654, 377
-  size: 237, 133
-  orig: 237, 133
+  xy: 370, 73
+  size: 95, 53
+  orig: 95, 53
   offset: 0, 0
   index: -1
 mary_wing3
-  rotate: false
-  xy: 2, 2
-  size: 146, 256
-  orig: 146, 256
+  rotate: true
+  xy: 266, 68
+  size: 58, 102
+  orig: 58, 102
   offset: 0, 0
   index: -1
 mary_wing4
   rotate: false
-  xy: 448, 144
-  size: 164, 158
-  orig: 164, 158
+  xy: 492, 2
+  size: 66, 63
+  orig: 66, 63
   offset: 0, 0
   index: -1
 vera_mouth2
-  rotate: false
-  xy: 654, 228
-  size: 172, 147
-  orig: 172, 147
+  rotate: true
+  xy: 370, 2
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth3
   rotate: true
-  xy: 150, 86
-  size: 172, 147
-  orig: 172, 147
+  xy: 431, 2
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth4
-  rotate: true
-  xy: 299, 92
-  size: 172, 147
-  orig: 172, 147
+  rotate: false
+  xy: 266, 7
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth5
   rotate: false
-  xy: 614, 79
-  size: 172, 147
-  orig: 172, 147
+  xy: 531, 67
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1
 vera_mouth6
   rotate: false
-  xy: 828, 228
-  size: 172, 147
-  orig: 172, 147
+  xy: 602, 67
+  size: 69, 59
+  orig: 69, 59
   offset: 0, 0
   index: -1

@@ -401,7 +401,6 @@
         current-value (atom (clojure.string/join "\n" (:data data)))]
     (swap! props assoc :data (:data data))
     (fn [data props scene-id]
-    (js/console.log "render sequence " @edit-mode)
     [:div
      [na/form-input {:label "type" :default-value (:type data) :on-change #(swap! props assoc :type (-> %2 .-value)) :inline? true}]
      (if @edit-mode
@@ -425,7 +424,6 @@
         current-value (r/atom {})]
     (swap! props assoc :data (:data data))
     (fn [data props scene-id]
-      (js/console.log "render parallel " @edit-action)
       [:div
        [na/form-input {:label "type" :default-value (:type data) :on-change #(swap! props assoc :type (-> %2 .-value)) :inline? true}]
        (if @edit-action

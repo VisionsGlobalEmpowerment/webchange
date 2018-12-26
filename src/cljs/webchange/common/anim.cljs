@@ -37,7 +37,6 @@
         _ (set! (.-defaultMix animation-state-data) mix)
         animation-state (s/AnimationState. animation-state-data)]
     (set! (.-flipY skeleton) true)
-    (js/console.log "mix:" mix)
     (fn [{:keys [name anim speed on-mount start mix] :or {mix 0.2 speed 1}}]
       (.setAnimation animation-state 0 anim true)
       [:> Shape {:time-diff  0

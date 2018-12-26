@@ -611,7 +611,8 @@
                    ],
    :objects
                   {:background {:type "background", :src "/raw/img/ferris-wheel/background.jpg"}
-                   :butterfly {:type "animation" :scene-name "butterfly" :name "mari" :anim "idle" :start true :speed 0.35
+                   :butterfly {:type "animation" :scene-name "butterfly" :name "mari" :anim "idle"
+                               :start true :speed 0.35
                                :x 1535 :y 715 :width 473 :height 511
                                :scale-y 0.5 :scale-x 0.5}
                    :wheel      {:type "group" :x 806 :y 457 :children ["wheel-1", "wheel-2", "wheel-3", "items"]}
@@ -761,17 +762,17 @@
                                         :data [{:type "audio" :id "instructions" :start 0.3 :duration 6.2 :offset 0}
                                                {:type "sequence-data"
                                                 :data [{:type "empty" :duration 1159}
-                                                       {:type "animation" :target "mari" :id "talking"}
+                                                       {:type "animation" :target "mari" :id "talking" :track 1}
                                                        {:type "empty" :duration 912}
-                                                       {:type "animation" :target "mari" :id "idle"}
+                                                       {:type "animation" :target "mari" :id "empty" :track 1}
                                                        {:type "empty" :duration 981}
-                                                       {:type "animation" :target "mari" :id "talking"}
+                                                       {:type "animation" :target "mari" :id "talking" :track 1}
                                                        {:type "empty" :duration 2443}
-                                                       {:type "animation" :target "mari" :id "idle"}]}]}
+                                                       {:type "animation" :target "mari" :id "empty" :track 1}]}]}
                    :audio-correct {:type "audio" :id "fw-correct" :start 0 :duration 1.225 :offset 0.2}
                    :audio-wrong {:type "audio" :id "fw-try-again" :start 0 :duration 1.755 :offset 0.2}
-                   :mari-anim-talk {:type "animation", :target "mari" :id "talking"}
-                   :mari-anim-idle {:type "animation", :target "mari" :id "idle"}
+                   :mari-anim-talk {:type "animation" :target "mari" :id "talking" :track 1}
+                   :mari-anim-idle {:type "animation" :target "mari" :id "empty" :track 1}
                    }
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}

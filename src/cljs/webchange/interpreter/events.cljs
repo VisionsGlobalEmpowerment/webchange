@@ -49,9 +49,15 @@
 
 (re-frame/reg-fx
   :switch-animation
-  (fn [{:keys [state id] :as action}]
+  (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      (.setAnimation (:animation-state state) 0 id loop))))
+      (.setAnimation (:animation-state state) track id loop 0))))
+
+(re-frame/reg-fx
+  :add-animation
+  (fn [{:keys [state id track] :or {track 0} :as action}]
+    (let [loop (if (contains? action :loop) (:loop action) true)]
+      (.addAnimation (:animation-state state) track id loop 0))))
 
 (re-frame/reg-fx
   :start-animation
@@ -67,6 +73,7 @@
 (ce/reg-simple-executor :add-alias ::execute-add-alias)
 (ce/reg-simple-executor :empty ::execute-empty)
 (ce/reg-simple-executor :animation ::execute-animation)
+(ce/reg-simple-executor :add-animation ::execute-add-animation)
 (ce/reg-simple-executor :start-animation ::execute-start-animation)
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :transition ::execute-transition)
@@ -140,6 +147,14 @@
     (let [scene-id (:current-scene db)]
       {:switch-animation (-> action
                               (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+       :dispatch-n (list (ce/success-event action))})))
+
+(re-frame/reg-event-fx
+  ::execute-add-animation
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:add-animation (-> action
+                             (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
