@@ -708,7 +708,7 @@
                                          {:type "transition" :transition-id "item-5" :to {:rotation 0 :duration 30 :loop true}}
                                          {:type "transition" :transition-id "item-6" :to {:rotation 0 :duration 30 :loop true}}]}
                    :start-game {:type "sequence"
-                                :data ["renew-words" "renew-current-word" "audio-instructions" "repeat-current-word"]}
+                                :data ["reset-states" "renew-words" "renew-current-word" "audio-instructions" "repeat-current-word"]}
                    :renew-words  {:type      "dataset-var-provider"
                                   :provider-id        "words-set"
                                   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6"]
@@ -750,7 +750,8 @@
                    :set-red {:type "state" :from-params {:target "form"} :id "red"}
                    :set-green {:type "parallel" :data [{:type "add-alias" :from-params {:target "form"} :alias "default" :state "green"}
                                                        {:type "state" :from-params {:target "form"} :id "green"}]}
-
+                   :set-yellow {:type "parallel" :data [{:type "add-alias" :from-params {:target "form"} :alias "default" :state "yellow"}
+                                                       {:type "state" :from-params {:target "form"} :id "yellow"}]}
                    :reset-forms {:type "parallel" :data [{:type "state" :target "item-1f" :id "default"}
                                                          {:type "state" :target "item-2f" :id "default"}
                                                          {:type "state" :target "item-3f" :id "default"}
@@ -773,6 +774,19 @@
                    :audio-wrong {:type "audio" :id "fw-try-again" :start 0 :duration 1.755 :offset 0.2}
                    :mari-anim-talk {:type "animation" :target "mari" :id "talking" :track 1}
                    :mari-anim-idle {:type "animation" :target "mari" :id "empty" :track 1}
+                   :reset-states {:type "parallel"
+                                  :data [{:type "add-alias" :target "item-1f" :alias "default" :state "yellow"}
+                                         {:type "state" :target "item-1f" :id "yellow"}
+                                         {:type "add-alias" :target "item-2f" :alias "default" :state "yellow"}
+                                         {:type "state" :target "item-2f" :id "yellow"}
+                                         {:type "add-alias" :target "item-3f" :alias "default" :state "yellow"}
+                                         {:type "state" :target "item-3f" :id "yellow"}
+                                         {:type "add-alias" :target "item-4f" :alias "default" :state "yellow"}
+                                         {:type "state" :target "item-4f" :id "yellow"}
+                                         {:type "add-alias" :target "item-5f" :alias "default" :state "yellow"}
+                                         {:type "state" :target "item-5f" :id "yellow"}
+                                         {:type "add-alias" :target "item-6f" :alias "default" :state "yellow"}
+                                         {:type "state" :target "item-6f" :id "yellow"}]}
                    }
 
    :triggers      {:rotation {:on "start" :action "rotate-wheel"}
@@ -796,4 +810,5 @@
            :fw-correct "/raw/audio/demo/fw-thats-correct.mp3"
            :fw-try-again "/raw/audio/demo/fw-try-again.mp3"}
    :metadata      {:autostart false
-                   :next "feria"}})
+                   :next "feria"
+                   :prev "feria"}})

@@ -184,7 +184,7 @@
 
 (defn close-button
   [x y]
-  [:> Group {:x x :y y} [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
+  [:> Group {:x x :y y :on-click #(re-frame/dispatch [::ie/close-scene])} [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
 
 (defn settings-button
   [x y]

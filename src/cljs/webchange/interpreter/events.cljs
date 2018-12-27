@@ -245,3 +245,14 @@
   (fn [{:keys [db]} [_ _]]
     (let [scene-id (:current-scene db)]
       {:dispatch [::set-current-scene scene-id]})))
+
+(re-frame/reg-event-fx
+  ::close-scene
+  (fn [{:keys [db]} [_ _]]
+    (let [scene-id (:current-scene db)
+          scene (get-in db [:scenes scene-id])
+          prev (get-in scene [:metadata :prev] nil)]
+      (js/console.log prev)
+      (if prev
+        {:dispatch [::set-current-scene prev]}
+        (set! (.-location js/window) "/")))))
