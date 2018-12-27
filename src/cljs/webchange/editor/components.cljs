@@ -120,7 +120,8 @@
     (.on target "dragmove" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
     (.on target "transform" (fn [e] (update-object scene-id name (-> e .-currentTarget to-props))))
     (.attachTo transformer target)
-    (.add (.getParent target) transformer)))
+    (.add (.getParent target) transformer)
+    (-> target .getLayer .draw)))
 
 (defn rect-params
   [scene-id name object]
@@ -316,13 +317,13 @@
 (defn properties-panel-common
   [props]
   [:div
-   [na/form-input {:label "x" :value (:x @props) :on-change #(swap! props assoc :x (-> %2 .-value js/parseInt)) :inline? true}]
-   [na/form-input {:label "y" :value (:y @props) :on-change #(swap! props assoc :y (-> %2 .-value js/parseInt)) :inline? true}]
-   [na/form-input {:label "width" :value (:width @props) :on-change #(swap! props assoc :width (-> %2 .-value js/parseInt)) :inline? true}]
-   [na/form-input {:label "height" :value (:height @props) :on-change #(swap! props assoc :height (-> %2 .-value js/parseInt)) :inline? true}]
-   [na/form-input {:label "rotation" :value (:rotation @props) :on-change #(swap! props assoc :rotation (-> %2 .-value js/parseInt)) :inline? true}]
-   [na/form-input {:label "scale x" :value (:scale-x @props) :on-change #(swap! props assoc :scale-x (-> %2 .-value js/parseFloat)) :inline? true}]
-   [na/form-input {:label "scale y" :value (:scale-y @props) :on-change #(swap! props assoc :scale-y (-> %2 .-value js/parseFloat)) :inline? true}]])
+   [na/form-input {:label "x" :default-value (:x @props) :on-change #(swap! props assoc :x (-> %2 .-value js/parseInt)) :inline? true}]
+   [na/form-input {:label "y" :default-value (:y @props) :on-change #(swap! props assoc :y (-> %2 .-value js/parseInt)) :inline? true}]
+   [na/form-input {:label "width" :default-value (:width @props) :on-change #(swap! props assoc :width (-> %2 .-value js/parseInt)) :inline? true}]
+   [na/form-input {:label "height" :default-value (:height @props) :on-change #(swap! props assoc :height (-> %2 .-value js/parseInt)) :inline? true}]
+   [na/form-input {:label "rotation" :default-value (:rotation @props) :on-change #(swap! props assoc :rotation (-> %2 .-value js/parseInt)) :inline? true}]
+   [na/form-input {:label "scale x" :default-value (:scale-x @props) :on-change #(swap! props assoc :scale-x (-> %2 .-value js/parseFloat)) :inline? true}]
+   [na/form-input {:label "scale y" :default-value (:scale-y @props) :on-change #(swap! props assoc :scale-y (-> %2 .-value js/parseFloat)) :inline? true}]])
 
 (defn properties-panel-transparent
   [props]
@@ -332,21 +333,21 @@
 (defn properties-panel-image
   [props]
   [:div
-   [na/form-input {:label "src" :value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value)) :inline? true}]
+   [na/form-input {:label "src" :default-value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value)) :inline? true}]
    [properties-panel-common props]])
 
 (defn properties-panel-animation
   [props]
   [:div
-   [na/form-input {:label "name" :value (:name @props) :on-change #(swap! props assoc :name (-> %2 .-value)) :inline? true}]
-   [na/form-input {:label "anim" :value (:anim @props) :on-change #(swap! props assoc :anim (-> %2 .-value)) :inline? true}]
-   [na/form-input {:label "speed" :value (:speed @props) :on-change #(swap! props assoc :speed (-> %2 .-value js/parseFloat)) :inline? true}]
+   [na/form-input {:label "name" :default-value (:name @props) :on-change #(swap! props assoc :name (-> %2 .-value)) :inline? true}]
+   [na/form-input {:label "anim" :default-value (:anim @props) :on-change #(swap! props assoc :anim (-> %2 .-value)) :inline? true}]
+   [na/form-input {:label "speed" :default-value (:speed @props) :on-change #(swap! props assoc :speed (-> %2 .-value js/parseFloat)) :inline? true}]
    [properties-panel-common props]])
 
 (defn properties-panel-background
   [props]
   [:div
-   [na/form-input {:label "src" :value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value)) :inline? true}]])
+   [na/form-input {:label "src" :default-value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value)) :inline? true}]])
 
 (declare dispatch-action-panel)
 
@@ -496,8 +497,8 @@
       [na/form {}
        [sa/Dropdown {:placeholder "Type" :search true :selection true :options action-types :on-change #(swap! props assoc :type (.-value %2))}]
        [na/divider {}]
-       [na/form-input {:label "name" :value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
-       [na/form-input {:label "on" :value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
+       [na/form-input {:label "name" :default-value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
+       [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
        [na/divider {}]
        [dispatch-action-panel @props props scene-id]
        [na/divider {}]
@@ -557,7 +558,7 @@
           [na/form {}
            [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :value (:type @props)
                          :on-change #(swap! props assoc :type (.-value %2))}]
-           [dispatch-properties-panel props]
+           ^{:key (str scene-id name)} [dispatch-properties-panel props]
            [na/form-button {:content "Save" :on-click #(do (update-object scene-id name @props)
                                                            (update-current-scene-object name @props))}]]]
          [sa/AccordionTitle {:active (= 1 @activeIndex) :on-click #(reset! activeIndex 1)}
@@ -659,8 +660,8 @@
        [na/form {}
         [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :on-change #(swap! props assoc :type (.-value %2))}]
         [na/divider {}]
-        [na/form-input {:label "name" :value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
-        [na/form-input {:label "layer" :value (:scene-layer @props) :on-change #(swap! props assoc :scene-layer (-> %2 .-value js/parseInt)) :inline? true}]
+        [na/form-input {:label "name" :default-value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
+        [na/form-input {:label "layer" :default-value (:scene-layer @props) :on-change #(swap! props assoc :scene-layer (-> %2 .-value js/parseInt)) :inline? true}]
         [na/divider {}]
         [dispatch-properties-panel props]
         [na/divider {}]
@@ -709,7 +710,7 @@
                        :default-value (:type @asset) :on-change #(swap! props assoc :type (.-value %2))}]
          [na/divider {}]
          [na/form-input {:label "url" :default-value (:url @asset) :on-change #(swap! props assoc :url (-> %2 .-value)) :inline? true}]
-         [na/form-input {:label "size" :value (:size @asset) :on-change #(swap! props assoc :size (-> %2 .-value js/parseInt)) :inline? true}]
+         [na/form-input {:label "size" :default-value (:size @asset) :on-change #(swap! props assoc :size (-> %2 .-value js/parseInt)) :inline? true}]
          [na/divider {}]
          [na/form-button {:content "Save" :on-click #(do (update-asset scene-id id @props)
                                                          (re-frame/dispatch [::events/reset-asset]))}]
