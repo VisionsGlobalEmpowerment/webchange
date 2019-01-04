@@ -1,9 +1,9 @@
-(ns webchange.core-test
+(ns webchange.interpreter.events-test
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.test :refer-macros [deftest testing is use-fixtures]]
             [cljs.core.async :refer [<! timeout]]
             [re-frame.core :as re-frame]
-            [day8.re-frame.test :as rf-test]
+            [day8.re-frame.test :refer-macros [run-test-async wait-for]]
             [webchange.core :as core]
             [webchange.events :as events]
             [webchange.interpreter.core :as ic]
@@ -17,18 +17,11 @@
 
 (use-fixtures :each {:before (fn [] (re-frame/dispatch-sync [::events/initialize-db]))})
 
-(deftest course-can-be-loaded
-  (rf-test/run-test-async
-    (testing "initial scene is set when course is loaded"
-      (re-frame/dispatch [::ie/start-course "test-course"])
-      (rf-test/wait-for [::ie/set-current-scene]
-                        (is (= "initial-scene" (get-in @re-frame.db/app-db [:current-scene])))))))
-
-(deftest scene-can-be-loaded
-  (rf-test/run-test-async
-    (testing "load scene"
-      (re-frame/dispatch [::ie/start-course "test-course"])
-      (rf-test/wait-for [::ie/set-scene]
-        (is (= fixtures/initial-scene (get-in @re-frame.db/app-db [:scenes "initial-scene"])))))))
-
-
+(deftest state-can-be-executed
+  (run-test-async
+    (fixtures/init-scene)
+    (wait-for [::ie/set-scene]
+      (testing "object state changed"
+        (re-frame/dispatch [::ie/execute-state {:target :object-with-state :id :test-state}])
+          (wait-for [::ie/execute-state]
+            (is (= 100 (get-in @re-frame.db/app-db [:scenes "initial-scene" :objects :object-with-state :x]))))))))

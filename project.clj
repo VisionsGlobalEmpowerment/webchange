@@ -11,7 +11,9 @@
                  [cljsjs/react-dom "16.6.0-0"]
                  [reanimated "0.6.1"]
                  [cljs-http "0.1.45"]
-                 [com.degel/sodium "0.12.0"]]
+                 [com.degel/sodium "0.12.0"]
+                 [day8.re-frame/test "0.1.5"]
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
@@ -111,7 +113,6 @@
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}]
-                    :install-deps true
                     :optimizations :none}}
     ]}
   )

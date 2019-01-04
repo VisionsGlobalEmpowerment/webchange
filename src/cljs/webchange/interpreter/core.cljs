@@ -49,15 +49,34 @@
 
 (def host "/api")
 (def resources "")
+(def http-cache (atom {}))
+
+(defn course-url
+  [course-id]
+  (str host "/courses/" course-id))
 
 (defn get-course
   [course-id]
-  (http/get (str host "/courses/" course-id) {:with-credentials? false}))
+  (let [url (course-url course-id)]
+    (when (not (contains? @http-cache url))
+      (let [response (http/get url {:with-credentials? false})]
+        (js/console.log "get-course")
+        (swap! http-cache assoc url response)))
+    (get @http-cache url)))
+
+(defn scene-url
+  [course-id scene-id]
+  (str host "/courses/" course-id "/scenes/" scene-id))
 
 (defn get-scene
   [course-id scene-id]
-  (http/get (str host "/courses/" course-id "/scenes/" scene-id) {:with-credentials? false}))
-
+  (let [url (scene-url course-id scene-id)]
+    (when (not (contains? @http-cache url))
+      (let [response (http/get url {:with-credentials? false})]
+        (js/console.log "get-scene" url)
+        (js/console.log (clj->js @http-cache))
+        (swap! http-cache assoc url response)))
+    (get @http-cache url)))
 
 (defn get-total-size
   [assets]
