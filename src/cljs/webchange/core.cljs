@@ -26,6 +26,11 @@
   (reagent/render [views/main-panel-editor]
                   (.getElementById js/document "app")))
 
+(defn mount-root-login []
+  (re-frame/clear-subscription-cache!)
+  (reagent/render [views/main-panel-login]
+                  (.getElementById js/document "app")))
+
 (defn reset-viewport
   []
   (let [w (.-innerWidth js/window)
@@ -50,3 +55,9 @@
   (init-viewport)
   (dev-setup)
   (mount-root-editor))
+
+(defn ^:export login []
+  (re-frame/dispatch-sync [::events/initialize-db])
+  (init-viewport)
+  (dev-setup)
+  (mount-root-login))

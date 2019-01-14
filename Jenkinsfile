@@ -21,6 +21,13 @@ node {
         stage('Deploy') {
             sh "cp ./target/webchange.jar /srv/www/webchange/releases/${currentBuild.id}-webchange.jar"
             sh "ln -nsf /srv/www/webchange/releases/${currentBuild.id}-webchange.jar /srv/www/webchange/current.jar"
+        }
+
+        stage('Migrate') {
+            sh '/srv/www/webchange/migrate'
+        }
+
+        stage('Restart') {
             sh 'sudo systemctl restart webchange'
         }
     }

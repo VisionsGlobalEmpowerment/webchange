@@ -60,7 +60,6 @@
   (let [url (course-url course-id)]
     (when (not (contains? @http-cache url))
       (let [response (http/get url {:with-credentials? false})]
-        (js/console.log "get-course")
         (swap! http-cache assoc url response)))
     (get @http-cache url)))
 
@@ -73,8 +72,6 @@
   (let [url (scene-url course-id scene-id)]
     (when (not (contains? @http-cache url))
       (let [response (http/get url {:with-credentials? false})]
-        (js/console.log "get-scene" url)
-        (js/console.log (clj->js @http-cache))
         (swap! http-cache assoc url response)))
     (get @http-cache url)))
 

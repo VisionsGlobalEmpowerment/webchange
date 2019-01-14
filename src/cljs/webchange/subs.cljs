@@ -96,3 +96,18 @@
   ::get-effects-volume
   (fn [db]
     (:effects-volume db)))
+
+(re-frame/reg-sub
+  :loading
+  (fn [db]
+    (:loading db)))
+
+(re-frame/reg-sub
+  :errors
+  (fn [db]
+    (:errors db)))
+
+(re-frame/reg-sub
+  :active-page
+  (fn [db]
+    (:active-page db)))
