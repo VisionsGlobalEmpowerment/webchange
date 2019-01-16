@@ -36,6 +36,7 @@
   :min-lein-version "2.5.3"
 
   :source-paths ["src/clj" "src/cljs"]
+  :test-paths ["test/clj"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
                                     "test/js"]
@@ -134,6 +135,7 @@
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}]
+                    :install-deps true
                     :optimizations :none}}
     ]}
   )

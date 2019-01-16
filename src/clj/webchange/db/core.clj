@@ -5,6 +5,7 @@
     [clojure.tools.logging :as log]
     [conman.core :as conman]
     [java-time :as jt]
+    [config.core :refer [env]]
     [mount.core :refer [defstate]])
   (:import org.postgresql.util.PGobject
            java.sql.Array
@@ -15,7 +16,7 @@
             PreparedStatement]))
 
 (defstate ^:dynamic *db*
-          :start (if-let [jdbc-url (get (System/getenv) "DATABASE_URL")]
+          :start (if-let [jdbc-url (env :database-url)]
                    (conman/connect! {:jdbc-url jdbc-url})
                    (do
                      (log/warn "database connection URL was not found, please set :database-url in your config, e.g: dev-config.edn")
@@ -87,3 +88,5 @@
   IPersistentVector
   (sql-value [value] (to-pg-json value)))
 
+(defn clear-table [table]
+  (jdbc/delete! *db* table nil))
