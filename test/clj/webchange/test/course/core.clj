@@ -1,29 +1,13 @@
 (ns webchange.test.course.core
   (:require [webchange.db.core :refer [*db*] :as db]
             [webchange.course.core :as course]
-            [luminus-migrations.core :as migrations]
+            [webchange.test.fixtures.core :as f]
             [clojure.test :refer :all]
-            [clojure.java.jdbc :as jdbc]
             [config.core :refer [env]]
-            [mount.core :as mount]
             [java-time :as jt]))
 
-(use-fixtures
-  :once
-  (fn [f]
-      (mount/start
-        #'webchange.db.core/*db*)
-      (migrations/migrate ["migrate"] (select-keys env [:database-url]))
-      (f)))
-
-(use-fixtures
-  :each
-  (fn [f]
-    (db/clear-table :scene_versions)
-    (db/clear-table :scenes)
-    (db/clear-table :course_versions)
-    (db/clear-table :courses)
-    (f)))
+(use-fixtures :once f/init)
+(use-fixtures :each f/clear-db-fixture)
 
 (deftest course-can-be-retrieved
     (let [[{course-id :id}] (db/create-course! {:name "test-course"})]

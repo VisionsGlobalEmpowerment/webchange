@@ -1,7 +1,8 @@
 (ns webchange.auth.core
   (:require [buddy.hashers :as hashers]
             [webchange.db.core :refer [*db*] :as db]
-            [java-time :as jt]))
+            [java-time :as jt]
+            [clojure.tools.logging :as log]))
 
 (def error-invalid-credentials {:errors {:form "Invalid credentials"}})
 
@@ -16,6 +17,10 @@
         (assoc :last_login last-login)
         (assoc :active false)
         db/create-user!)))
+
+(defn activate-user!
+  [user-id]
+  (db/activate-user! {:id user-id}))
 
 (defn credentials-valid?
   [user password]

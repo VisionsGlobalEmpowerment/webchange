@@ -1,6 +1,6 @@
 (ns webchange.handler
   (:require [compojure.core :refer [GET POST defroutes routes]]
-            [compojure.route :refer [resources]]
+            [compojure.route :refer [resources not-found]]
             [ring.util.response :refer [resource-response response redirect]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
@@ -10,7 +10,8 @@
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [ring.middleware.session.memory :as mem]))
 
 (defn api-request? [request] (= "application/json" (:accept request)))
 
@@ -72,7 +73,10 @@
 
 (defroutes app
            pages-routes
-           api-routes)
+           api-routes
+           (not-found "Not Found"))
+
+(def dev-store (mem/memory-store))
 
 (def dev-handler (-> #'app
                      wrap-reload
@@ -80,7 +84,13 @@
                      (wrap-authentication auth-backend)
                      (wrap-json-body {:keywords? true})
                      wrap-json-response
-                     wrap-session
+                     (wrap-session {:store dev-store})
                      wrap-exception-handling))
 
-(def handler (-> #'app (wrap-json-body {:keywords? true}) wrap-json-response))
+(def handler (-> #'app
+                 (wrap-authorization auth-backend)
+                 (wrap-authentication auth-backend)
+                 (wrap-json-body {:keywords? true})
+                 wrap-json-response
+                 wrap-session
+                 wrap-exception-handling))
