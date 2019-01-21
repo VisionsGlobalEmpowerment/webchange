@@ -10,12 +10,9 @@
 (use-fixtures :each f/clear-db-fixture)
 
 (deftest course-can-be-retrieved
-    (let [[{course-id :id}] (db/create-course! {:name "test-course"})]
-      (is (= 1 (db/save-course! {:course_id course-id :data {:test "test"} :owner_id 0 :created_at (jt/local-date-time)})))
-      (is (= {:test "test"} (course/get-course-data "test-course")))))
+    (let [{course-name :name} (f/course-created)]
+      (is (= {:initial-scene "test-scene"} (course/get-course-data course-name)))))
 
 (deftest scene-can-be-retrieved
-  (let [[{course-id :id}] (db/create-course! {:name "test-course"})
-        [{scene-id :id}] (db/create-scene! {:course_id course-id :name "test-scene"})
-        _ (db/save-scene! {:scene_id scene-id :data {:test "test scene data"} :owner_id 0 :created_at (jt/local-date-time)})]
-    (is (= {:test "test scene data"} (course/get-scene-data "test-course" "test-scene")))))
+  (let [{course-name :course-name scene-name :name} (f/scene-created)]
+    (is (= {:test "test"} (course/get-scene-data course-name scene-name)))))

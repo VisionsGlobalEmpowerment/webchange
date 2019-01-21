@@ -4,8 +4,8 @@
             [ring.util.response :refer [resource-response response redirect]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
-            [webchange.scene :refer :all]
             [webchange.auth.core :refer [login! register-user!]]
+            [webchange.course.core :refer [get-course-data get-scene-data]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
@@ -64,8 +64,8 @@
            (resources "/"))
 
 (defroutes api-routes
-           (GET "/api/courses/:course-id" [course-id] (-> course-id get-course response))
-           (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (get-scene course-id scene-id) response))
+           (GET "/api/courses/:course-id" [course-id] (-> course-id get-course-data response))
+           (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (get-scene-data course-id scene-id) response))
            (POST "/api/users/login" request
              (-> request :body :user login! (handle (with-updated-session request))))
            (POST "/api/users/register-user" request

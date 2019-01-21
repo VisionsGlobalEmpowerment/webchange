@@ -31,3 +31,22 @@
                     f/user-logged-in)
         response (handler/dev-handler request)]
     (is (= 200 (:status response)))))
+
+(deftest course-can-be-retrieved
+  (let [course (f/course-created)
+        course-url (str "/api/courses/" (:name course))
+        request (-> (mock/request :get course-url)
+                    f/user-logged-in)
+        response (handler/dev-handler request)
+        body (json/read-str (:body response))]
+    (is (= 200 (:status response)))
+    (is (= (get-in course [:data :initial-scene]) (get body "initial-scene")))))
+
+(deftest scene-can-be-retrieved
+  (let [scene (f/scene-created)
+        scene-url (str "/api/courses/" (:course-name scene) "/scenes/" (:name scene))
+        request (-> (mock/request :get scene-url)
+                    f/user-logged-in)
+        response (handler/dev-handler request)]
+    (is (= 200 (:status response)))
+    (is (= (get-in scene [:data :test]) (-> response :body json/read-str (get "test"))))))

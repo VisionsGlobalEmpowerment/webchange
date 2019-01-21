@@ -6,7 +6,8 @@
             [config.core :refer [env]]
             [mount.core :as mount]
             [luminus-migrations.core :as migrations]
-            [ring.middleware.session.store :as store]))
+            [ring.middleware.session.store :as store]
+            [java-time :as jt]))
 
 (defn clear-db []
   (db/clear-table :scene_versions)
@@ -36,3 +37,23 @@
         session {:identity (:email user)}
         session-key (store/write-session handler/dev-store nil session)]
     (assoc request :cookies {"ring-session" {:value session-key}})))
+
+(defn course-created []
+  (let [course-name "test-course"
+        [{course-id :id}] (db/create-course! {:name course-name})
+        data {:initial-scene "test-scene"}]
+    (db/save-course! {:course_id course-id :data data :owner_id 0 :created_at (jt/local-date-time)})
+    {:id course-id
+     :name course-name
+     :data data}))
+
+(defn scene-created []
+  (let [{course-id :id course-name :name} (course-created)
+        scene-name "test-scene"
+        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
+        data {:test "test"}]
+    (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time)})
+    {:id scene-id
+     :course-name course-name
+     :name scene-name
+     :data data}))
