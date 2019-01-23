@@ -3,9 +3,11 @@ node {
 
     stage('Prepare') {
         sh 'cp -rf $HOME/build-cache/node_modules ./'
+        sh 'cp -rf $HOME/build-cache/profiles.clj ./'
     }
 
     stage('Test') {
+        sh 'lein test'
         sh 'lein doo chrome-headless test once'
     }
 

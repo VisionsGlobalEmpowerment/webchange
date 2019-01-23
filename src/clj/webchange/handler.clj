@@ -1,16 +1,17 @@
 (ns webchange.handler
   (:require [compojure.core :refer [GET POST defroutes routes]]
-            [compojure.route :refer [resources]]
+            [compojure.route :refer [resources not-found]]
             [ring.util.response :refer [resource-response response redirect]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
-            [webchange.scene :refer :all]
-            [webchange.auth.core :refer [login! register-user!]]
+            [webchange.auth.core :refer [login! register-user! user-id-from-identity]]
+            [webchange.course.core :refer [get-course-data get-scene-data save-scene!]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [ring.middleware.session.memory :as mem]))
 
 (defn api-request? [request] (= "application/json" (:accept request)))
 
@@ -36,7 +37,7 @@
       (handler request)
       (catch Exception e
         (log/error e)
-        {:status 400 :body (str "Invalid data e" e)}))))
+        {:status 400 :body (str "Invalid data" e)}))))
 
 (defn handle
   ([result]
@@ -53,6 +54,22 @@
   [request]
   (fn [data response] (assoc response :session (merge (:session request) {:identity (-> data :email)}))))
 
+(defn current-user
+  [request]
+  (if-not (authenticated? request)
+    (throw-unauthorized)
+    (-> request :session :identity user-id-from-identity)))
+
+(defn handle-save-scene
+  [course-id scene-id request]
+  (let [owner-id (current-user request)
+        save (fn [scene-data] (save-scene! course-id scene-id scene-data owner-id))]
+    (-> request
+        :body
+        :scene
+        save
+        handle)))
+
 (defroutes pages-routes
            (GET "/" [] (resource-response "index.html" {:root "public"}))
            (GET "/editor" request
@@ -63,8 +80,10 @@
            (resources "/"))
 
 (defroutes api-routes
-           (GET "/api/courses/:course-id" [course-id] (-> course-id get-course response))
-           (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (get-scene course-id scene-id) response))
+           (GET "/api/courses/:course-id" [course-id] (-> course-id get-course-data response))
+           (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (get-scene-data course-id scene-id) response))
+           (POST "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id :as request]
+             (handle-save-scene course-id scene-id request))
            (POST "/api/users/login" request
              (-> request :body :user login! (handle (with-updated-session request))))
            (POST "/api/users/register-user" request
@@ -72,7 +91,10 @@
 
 (defroutes app
            pages-routes
-           api-routes)
+           api-routes
+           (not-found "Not Found"))
+
+(def dev-store (mem/memory-store))
 
 (def dev-handler (-> #'app
                      wrap-reload
@@ -80,7 +102,13 @@
                      (wrap-authentication auth-backend)
                      (wrap-json-body {:keywords? true})
                      wrap-json-response
-                     wrap-session
+                     (wrap-session {:store dev-store})
                      wrap-exception-handling))
 
-(def handler (-> #'app (wrap-json-body {:keywords? true}) wrap-json-response))
+(def handler (-> #'app
+                 (wrap-authorization auth-backend)
+                 (wrap-authentication auth-backend)
+                 (wrap-json-body {:keywords? true})
+                 wrap-json-response
+                 wrap-session
+                 wrap-exception-handling))

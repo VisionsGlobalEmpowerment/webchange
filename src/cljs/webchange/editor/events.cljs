@@ -1,6 +1,8 @@
 (ns webchange.editor.events
   (:require
-    [re-frame.core :as re-frame]))
+    [re-frame.core :as re-frame]
+    [day8.re-frame.http-fx]
+    [ajax.core :refer [json-request-format json-response-format]]))
 
 (re-frame/reg-event-fx
   ::edit-object
@@ -160,3 +162,22 @@
                                                     (assoc layers idx (get layers idx [])))) layers (range 0 (inc layer)))]
       {:db (update-in db [:current-scene-data] assoc :scene-objects updated-layers)}
       )))
+
+(re-frame/reg-event-fx
+  ::save-scene
+  (fn [{:keys [db]} [_ scene-id scene-data]]
+    (let [course-id (:current-course db)]
+      {:db (update-in db [:scenes scene-id] merge scene-data)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
+                    :params          {:scene scene-data}
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::save-scene-success]
+                    :on-failure      [:api-request-error :save-scene]}})))
+
+
+(re-frame/reg-event-fx
+  ::save-scene-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :save-scene])}))

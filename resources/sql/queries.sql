@@ -1,13 +1,20 @@
--- :name create-user! :! :n
+-- :name create-user! :<!
 -- :doc creates a new user record
 INSERT INTO users
 (first_name, last_name, email, password, active, created_at, last_login)
 VALUES (:first_name, :last_name, :email, :password, :active, :created_at, :last_login)
+RETURNING id
 
 -- :name update-user! :! :n
 -- :doc updates an existing user record
 UPDATE users
 SET first_name = :first_name, last_name = :last_name, email = :email
+WHERE id = :id
+
+-- :name activate-user! :! :n
+-- :doc activates an existing user record
+UPDATE users
+SET active = true
 WHERE id = :id
 
 -- :name get-user :? :1
@@ -24,3 +31,43 @@ WHERE email = :email
 -- :doc deletes a user record given the id
 DELETE FROM users
 WHERE id = :id
+
+-- :name create-course! :<!
+-- :doc creates a new course record
+INSERT INTO courses (name) VALUES (:name) RETURNING id
+
+-- :name save-course! :! :n
+-- :doc creates a new course version record
+INSERT INTO course_versions
+(course_id, data, owner_id, created_at)
+VALUES (:course_id, :data, :owner_id, :created_at)
+
+-- :name get-course :? :1
+-- :doc retrieve a course record given the name
+SELECT * from courses
+WHERE name = :name;
+
+-- :name get-course-version :? :1
+-- :doc retrieve last version of given course
+SELECT * from course_versions
+WHERE course_id = :course_id ORDER BY created_at DESC LIMIT 1;
+
+-- :name create-scene! :<!
+-- :doc creates a new scene record
+INSERT INTO scenes (course_id, name) VALUES (:course_id, :name) RETURNING id
+
+-- :name save-scene! :! :n
+-- :doc creates a new course version record
+INSERT INTO scene_versions
+(scene_id, data, owner_id, created_at)
+VALUES (:scene_id, :data, :owner_id, :created_at)
+
+-- :name get-scene :? :1
+-- :doc retrieve a scene record given the course id and the name
+SELECT * from scenes
+WHERE course_id = :course_id AND name = :name;
+
+-- :name get-scene-version :? :1
+-- :doc retrieve last version of given scene
+SELECT * from scene_versions
+WHERE scene_id = :scene_id ORDER BY created_at DESC LIMIT 1;

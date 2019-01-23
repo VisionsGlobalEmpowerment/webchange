@@ -36,6 +36,7 @@
   :min-lein-version "2.5.3"
 
   :source-paths ["src/clj" "src/cljs"]
+  :test-paths ["test/clj"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
                                     "test/js"]
@@ -52,7 +53,8 @@
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]
                    [day8.re-frame/re-frame-10x "0.3.3"]
-                   [day8.re-frame/tracing "0.5.1"]]
+                   [day8.re-frame/tracing "0.5.1"]
+                   [ring/ring-mock "0.3.2"]]
 
     :plugins      [[lein-figwheel "0.5.17"]
                    [lein-doo "0.1.8"]]
@@ -134,6 +136,7 @@
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}]
+                    :install-deps true
                     :optimizations :none}}
     ]}
   )
