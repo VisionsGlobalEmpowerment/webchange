@@ -28,6 +28,11 @@
     (:current-course db)))
 
 (re-frame/reg-sub
+  ::course-data
+  (fn [db]
+    (:course-data db)))
+
+(re-frame/reg-sub
   ::scene
   (fn [db [_ scene-id]]
     (get-in db [:scenes scene-id] {})))

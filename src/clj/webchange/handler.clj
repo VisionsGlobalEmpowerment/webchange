@@ -5,7 +5,7 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [webchange.auth.core :refer [login! register-user! user-id-from-identity]]
-            [webchange.course.core :refer [get-course-data get-scene-data save-scene!]]
+            [webchange.course.core :refer [get-course-data get-scene-data save-scene! save-course!]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
@@ -63,10 +63,20 @@
 (defn handle-save-scene
   [course-id scene-id request]
   (let [owner-id (current-user request)
-        save (fn [scene-data] (save-scene! course-id scene-id scene-data owner-id))]
+        save (fn [data] (save-scene! course-id scene-id data owner-id))]
     (-> request
         :body
         :scene
+        save
+        handle)))
+
+(defn handle-save-course
+  [course-id request]
+  (let [owner-id (current-user request)
+        save (fn [data] (save-course! course-id data owner-id))]
+    (-> request
+        :body
+        :course
         save
         handle)))
 
@@ -84,6 +94,8 @@
            (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (get-scene-data course-id scene-id) response))
            (POST "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id :as request]
              (handle-save-scene course-id scene-id request))
+           (POST "/api/courses/:course-id" [course-id :as request]
+             (handle-save-course course-id request))
            (POST "/api/users/login" request
              (-> request :body :user login! (handle (with-updated-session request))))
            (POST "/api/users/register-user" request

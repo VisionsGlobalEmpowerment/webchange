@@ -34,19 +34,30 @@
 
 (deftest course-can-be-retrieved
   (let [course (f/course-created)
-        course-url (str "/api/courses/" (:name course))
-        request (-> (mock/request :get course-url)
-                    f/user-logged-in)
-        response (handler/dev-handler request)
+        response (f/get-course (:name course))
         body (json/read-str (:body response))]
     (is (= 200 (:status response)))
     (is (= (get-in course [:data :initial-scene]) (get body "initial-scene")))))
 
+(deftest course-can-be-saved
+  (let [course (f/course-created)
+        edited-value "test-scene-edited"
+        _ (f/save-course! (:name course) {:course {:initial-scene edited-value}})
+        retrieved-value (-> (:name course) f/get-course :body json/read-str (get "initial-scene"))]
+    (is (= edited-value retrieved-value))))
+
 (deftest scene-can-be-retrieved
   (let [scene (f/scene-created)
-        scene-url (str "/api/courses/" (:course-name scene) "/scenes/" (:name scene))
-        request (-> (mock/request :get scene-url)
-                    f/user-logged-in)
-        response (handler/dev-handler request)]
+        response (f/get-scene (:course-name scene) (:name scene))]
     (is (= 200 (:status response)))
     (is (= (get-in scene [:data :test]) (-> response :body json/read-str (get "test"))))))
+
+(deftest scene-can-be-saved
+  (let [scene (f/scene-created)
+        edited-value "test-edited"
+        _ (f/save-scene! (:course-name scene) (:name scene) {:scene {:test edited-value}})
+        retrieved-value (-> (f/get-scene (:course-name scene) (:name scene))
+                            :body
+                            json/read-str
+                            (get "test"))]
+    (is (= edited-value retrieved-value))))

@@ -292,31 +292,41 @@
     [:> Group {:x 300 :y 300 :draggable true}
      [draw-action action @actions scene-id action-id 0 0]]))
 
-(defn source
+(defn scene-source
   [scene-id]
-  (r/with-let [
-               scene-data @(re-frame/subscribe [::subs/scene scene-id])
+  (r/with-let [scene-data @(re-frame/subscribe [::subs/scene scene-id])
                value (r/atom (-> scene-data (dissoc :animations) clj->js (js/JSON.stringify nil 2)))]
             [na/form {}
              [na/text-area {:style {:min-height 750} :default-value @value :on-change #(reset! value (-> %2 .-value))}]
              [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-scene scene-id (-> @value js/JSON.parse (js->clj :keywordize-keys true))])}]
              ]))
 
+(defn course-source
+  []
+  (r/with-let [course-id @(re-frame/subscribe [::subs/current-course])
+               data @(re-frame/subscribe [::subs/course-data])
+               value (r/atom (-> data (dissoc :animations) clj->js (js/JSON.stringify nil 2)))]
+              [na/form {}
+               [na/text-area {:style {:min-height 750} :default-value @value :on-change #(reset! value (-> %2 .-value))}]
+               [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-course course-id (-> @value js/JSON.parse (js->clj :keywordize-keys true))])}]
+               ]))
+
 (defn with-stage
   [component]
   [:> Stage {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6}
    [:> Layer component]])
 
-(defn course
+(defn main-content
   []
-    (let [ui-screen (re-frame/subscribe [::es/screen])
-          scene-id (re-frame/subscribe [::subs/current-scene])
-          loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])]
+    (let [scene-id (re-frame/subscribe [::subs/current-scene])
+          loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])
+          ui-screen (re-frame/subscribe [::es/current-main-content])]
       (if @loaded
         (case @ui-screen
           :play-scene (with-stage [play-scene @scene-id])
           :actions (with-stage [draw-actions])
-          :source [source @scene-id]
+          :scene-source [scene-source @scene-id]
+          :course-source [course-source @scene-id]
           (with-stage [scene])
           )
         (with-stage [preloader]))
@@ -793,20 +803,20 @@
   (let [scene-id (re-frame/subscribe [::subs/current-scene])]
     [sa/SidebarPushable {}
      [sa/Sidebar {:visible true :inverted? true}
-      [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
+      [na/button {:basic? true :content "Edit course source" :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
       ]
     [sa/SidebarPusher {}
      [:div {:class-name "ui segment"}
       [na/header {:dividing? true} "Editor"]
       [na/grid {}
        [na/grid-column {:width 10}
-        [course]
+        [main-content]
         [na/divider {:clearing? true}]
-        [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-screen :play-scene])}]
+        [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-main-content :play-scene])}]
         [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
-                                                     (re-frame/dispatch [::events/set-screen :editor]))}]
-        [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]
-        [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-screen :source])}]]
+                                                     (re-frame/dispatch [::events/set-main-content :editor]))}]
+        [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-main-content :actions])}]
+        [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-main-content :scene-source])}]]
        [na/grid-column {:width 4}
         [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
         [na/button {:basic? true :content "List objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]

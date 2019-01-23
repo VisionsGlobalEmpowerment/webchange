@@ -3,9 +3,9 @@
     [re-frame.core :as re-frame]))
 
 (re-frame/reg-sub
-  ::screen
+  ::current-main-content
   (fn [db]
-    (get-in db [:editor :screen])))
+    (get-in db [:editor :current-main-content])))
 
 (re-frame/reg-sub
   ::transform

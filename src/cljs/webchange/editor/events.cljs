@@ -15,9 +15,9 @@
     {:db (update-in db [:current-scene-data :objects (keyword target)] merge state)}))
 
 (re-frame/reg-event-fx
-  ::set-screen
+  ::set-main-content
   (fn [{:keys [db]} [_ screen]]
-    {:db (assoc-in db [:editor :screen] screen)}))
+    {:db (assoc-in db [:editor :current-main-content] screen)}))
 
 (re-frame/reg-event-fx
   ::register-transform
@@ -181,3 +181,22 @@
   ::save-scene-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :save-scene])}))
+
+
+(re-frame/reg-event-fx
+  ::save-course
+  (fn [{:keys [db]} [_ course-id data]]
+    {:db (assoc db :course-data data)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/courses/" course-id)
+                  :params          {:course data}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::save-course-success]
+                  :on-failure      [:api-request-error :save-course]}}))
+
+
+(re-frame/reg-event-fx
+  ::save-course-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :save-course])}))
