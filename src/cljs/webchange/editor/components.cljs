@@ -292,21 +292,35 @@
     [:> Group {:x 300 :y 300 :draggable true}
      [draw-action action @actions scene-id action-id 0 0]]))
 
+(defn source
+  [scene-id]
+  (r/with-let [
+               scene-data @(re-frame/subscribe [::subs/scene scene-id])
+               value (r/atom (-> scene-data (dissoc :animations) clj->js (js/JSON.stringify nil 2)))]
+            [na/form {}
+             [na/text-area {:style {:min-height 750} :default-value @value :on-change #(reset! value (-> %2 .-value))}]
+             [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-scene scene-id (-> @value js/JSON.parse (js->clj :keywordize-keys true))])}]
+             ]))
+
+(defn with-stage
+  [component]
+  [:> Stage {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6}
+   [:> Layer component]])
+
 (defn course
   []
     (let [ui-screen (re-frame/subscribe [::es/screen])
           scene-id (re-frame/subscribe [::subs/current-scene])
           loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])]
-      [:> Stage {:width 1344 :height 756 :scale-x 0.7 :scale-y 0.7}
-       [:> Layer
-        (if @loaded
-          (case @ui-screen
-            :play-scene [play-scene @scene-id]
-            :actions [draw-actions]
-            [scene]
-            )
-          [preloader])
-        ]]))
+      (if @loaded
+        (case @ui-screen
+          :play-scene (with-stage [play-scene @scene-id])
+          :actions (with-stage [draw-actions])
+          :source [source @scene-id]
+          (with-stage [scene])
+          )
+        (with-stage [preloader]))
+      ))
 
 (defn check-prev
   [prev current props]
@@ -777,17 +791,22 @@
 
 (defn editor []
   (let [scene-id (re-frame/subscribe [::subs/current-scene])]
-    [:div {:class-name "ui segment"}
-     [:h2 {:class-name "ui dividing header"} "Editor"]
+    [sa/SidebarPushable {}
+     [sa/Sidebar {:visible true :inverted? true}
+      [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
+      ]
+    [sa/SidebarPusher {}
      [:div {:class-name "ui segment"}
+      [na/header {:dividing? true} "Editor"]
       [na/grid {}
-       [na/grid-column {:width 12}
+       [na/grid-column {:width 10}
         [course]
         [na/divider {:clearing? true}]
         [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-screen :play-scene])}]
         [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
                                                      (re-frame/dispatch [::events/set-screen :editor]))}]
-        [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]]
+        [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-screen :actions])}]
+        [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-screen :source])}]]
        [na/grid-column {:width 4}
         [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
         [na/button {:basic? true :content "List objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
@@ -796,4 +815,4 @@
         [shown-form-panel]
         [properties-rail]]]
 
-      ]]))
+      ]]]))

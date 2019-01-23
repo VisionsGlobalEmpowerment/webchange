@@ -56,3 +56,8 @@
     (if-let [user (db/find-user-by-email {:email (:email user-data)})]
       [true (visible-user user)]
       [false {:errors {:form "Invalid registration data"}}])))
+
+(defn user-id-from-identity
+  [identity]
+  (let [user (db/find-user-by-email {:email identity})]
+    (:id user)))
