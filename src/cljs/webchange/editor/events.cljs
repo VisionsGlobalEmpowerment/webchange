@@ -200,3 +200,84 @@
   ::save-course-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :save-course])}))
+
+(re-frame/reg-event-fx
+  ::open-current-course-versions
+  (fn [{:keys [db]} _]
+    (let [course-id (:current-course db)]
+      {:db (-> db
+               (assoc-in [:loading :course-versions] true)
+               (assoc-in [:editor :current-main-content] :course-versions))
+       :http-xhrio {:method          :get
+                    :uri             (str "/api/courses/" course-id "/versions")
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::open-current-course-versions-success]
+                    :on-failure      [:api-request-error :course-versions]}})))
+
+
+(re-frame/reg-event-fx
+  ::open-current-course-versions-success
+  (fn [{:keys [db]} [_ result]]
+    {:db (assoc-in db [:editor :course-versions] (:versions result))
+     :dispatch-n (list [:complete-request :course-versions])}))
+
+(re-frame/reg-event-fx
+  ::restore-course-version
+  (fn [{:keys [db]} [_ version-id]]
+    {:db (assoc-in db [:loading :restore-course-version] true)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/course-versions/" version-id "/restore")
+                  :params          {:id version-id}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::restore-course-version-success]
+                  :on-failure      [:api-request-error :restore-course-version]}}))
+
+
+(re-frame/reg-event-fx
+  ::restore-course-version-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :restore-course-version]
+                       [::open-current-course-versions])}))
+
+(re-frame/reg-event-fx
+  ::open-current-scene-versions
+  (fn [{:keys [db]} _]
+    (let [course-id (:current-course db)
+          scene-id (:current-scene db)]
+      {:db (-> db
+               (assoc-in [:loading :scene-versions] true)
+               (assoc-in [:editor :current-main-content] :scene-versions))
+       :http-xhrio {:method          :get
+                    :uri             (str "/api/courses/" course-id "/scenes/" scene-id "/versions")
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::open-current-scene-versions-success]
+                    :on-failure      [:api-request-error :scene-versions]}})))
+
+
+(re-frame/reg-event-fx
+  ::open-current-scene-versions-success
+  (fn [{:keys [db]} [_ result]]
+    {:db (assoc-in db [:editor :scene-versions] (:versions result))
+     :dispatch-n (list [:complete-request :scene-versions])}))
+
+(re-frame/reg-event-fx
+  ::restore-scene-version
+  (fn [{:keys [db]} [_ version-id]]
+    {:db (assoc-in db [:loading :restore-scene-version] true)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/scene-versions/" version-id "/restore")
+                  :params          {:id version-id}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::restore-scene-version-success]
+                  :on-failure      [:api-request-error :restore-scene-version]}}))
+
+
+(re-frame/reg-event-fx
+  ::restore-scene-version-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :restore-scene-version]
+                       [::open-current-scene-versions])}))

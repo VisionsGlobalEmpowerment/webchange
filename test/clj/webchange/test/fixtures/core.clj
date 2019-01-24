@@ -45,22 +45,24 @@
 (defn course-created []
   (let [course-name "test-course"
         [{course-id :id}] (db/create-course! {:name course-name})
-        data {:initial-scene "test-scene"}]
-    (db/save-course! {:course_id course-id :data data :owner_id 0 :created_at (jt/local-date-time)})
+        data {:initial-scene "test-scene"}
+        [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id course-id
      :name course-name
-     :data data}))
+     :data data
+     :version-id version-id}))
 
 (defn scene-created []
   (let [{course-id :id course-name :name} (course-created)
         scene-name "test-scene"
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
-        data {:test "test"}]
-    (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time)})
+        data {:test "test"}
+        [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id scene-id
      :course-name course-name
      :name scene-name
-     :data data}))
+     :data data
+     :version-id version-id}))
 
 (defn get-course
   [course-name]
@@ -77,6 +79,21 @@
                     user-logged-in)]
     (handler/dev-handler request)))
 
+(defn restore-course-version!
+  [version-id]
+  (let [url (str "/api/course-versions/" version-id "/restore")
+        request (-> (mock/request :post url (json/write-str {:id version-id}))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-course-versions
+  [course-name]
+  (let [url (str "/api/courses/" course-name "/versions")
+        request (-> (mock/request :get url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
 (defn get-scene
   [course-name scene-name]
   (let [scene-url (str "/api/courses/"course-name "/scenes/" scene-name)
@@ -89,5 +106,20 @@
   (let [url (str "/api/courses/" course-name "/scenes/" scene-name)
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn restore-scene-version!
+  [version-id]
+  (let [url (str "/api/scene-versions/" version-id "/restore")
+        request (-> (mock/request :post url (json/write-str {:id version-id}))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-scene-versions
+  [course-name scene-name]
+  (let [url (str "/api/courses/" course-name "/scenes/" scene-name "/versions")
+        request (-> (mock/request :get url)
                     user-logged-in)]
     (handler/dev-handler request)))

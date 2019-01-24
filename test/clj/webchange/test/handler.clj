@@ -61,3 +61,37 @@
                             json/read-str
                             (get "test"))]
     (is (= edited-value retrieved-value))))
+
+(deftest course-versions-can-be-retrieved
+  (let [course (f/course-created)
+        _ (f/save-course! (:name course) {:course {:initial-scene "edited-value"}})
+        versions (-> (:name course) f/get-course-versions :body json/read-str (get "versions"))]
+    (is (= 2 (count versions)))))
+
+(deftest course-version-can-be-restored
+  (let [course (f/course-created)
+        original-value (-> course :data :initial-scene)
+        _ (f/save-course! (:name course) {:course {:initial-scene "edited-value"}})
+        _ (f/restore-course-version! (:version-id course))
+        retrieved-value (-> (:name course) f/get-course :body json/read-str (get "initial-scene"))]
+    (is (= original-value retrieved-value))))
+
+(deftest scene-versions-can-be-retrieved
+  (let [scene (f/scene-created)
+        _ (f/save-scene! (:course-name scene) (:name scene) {:scene {:test "edited-value"}})
+        versions (-> (f/get-scene-versions (:course-name scene) (:name scene))
+                     :body
+                     json/read-str
+                     (get "versions"))]
+    (is (= 2 (count versions)))))
+
+(deftest scene-version-can-be-restored
+  (let [scene (f/scene-created)
+        original-value (-> scene :data :test)
+        _ (f/save-scene! (:course-name scene) (:name scene) {:scene {:test "edited-value"}})
+        _ (f/restore-scene-version! (:version-id scene))
+        retrieved-value (-> (f/get-scene (:course-name scene) (:name scene))
+                            :body
+                            json/read-str
+                            (get "test"))]
+    (is (= original-value retrieved-value))))

@@ -311,6 +311,38 @@
                [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-course course-id (-> @value js/JSON.parse (js->clj :keywordize-keys true))])}]
                ]))
 
+(defn course-versions
+  []
+  (let [loading @(re-frame/subscribe [:loading])
+        course-versions @(re-frame/subscribe [::es/course-versions])]
+    [na/segment {:loading? (when (:course-versions loading))}
+     [na/header {:as "h4" :content "Course versions"}]
+     [na/divider {:clearing? true}]
+     [sa/ItemGroup {}
+      (for [version course-versions]
+        [sa/Item {}
+         [sa/ItemContent {}
+          [:p (str (:created-at version) " " (:owner-name version))
+           [na/button {:floated "right" :basic? true :content "Restore" :on-click #(re-frame/dispatch [::events/restore-course-version (:id version)])}]
+           ]
+          ]])]]))
+
+(defn scene-versions
+  []
+  (let [loading @(re-frame/subscribe [:loading])
+        scene-versions @(re-frame/subscribe [::es/scene-versions])]
+    [na/segment {:loading? (when (:scene-versions loading))}
+     [na/header {:as "h4" :content "Scene versions"}]
+     [na/divider {:clearing? true}]
+     [sa/ItemGroup {}
+      (for [version scene-versions]
+        [sa/Item {}
+         [sa/ItemContent {}
+          [:p (str (:created-at version) " " (:owner-name version))
+           [na/button {:floated "right" :basic? true :content "Restore" :on-click #(re-frame/dispatch [::events/restore-scene-version (:id version)])}]
+           ]
+          ]])]]))
+
 (defn with-stage
   [component]
   [:> Stage {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6}
@@ -326,7 +358,9 @@
           :play-scene (with-stage [play-scene @scene-id])
           :actions (with-stage [draw-actions])
           :scene-source [scene-source @scene-id]
-          :course-source [course-source @scene-id]
+          :course-source [course-source]
+          :scene-versions [scene-versions]
+          :course-versions [course-versions]
           (with-stage [scene])
           )
         (with-stage [preloader]))
@@ -778,16 +812,15 @@
   (let [scenes (re-frame/subscribe [::subs/course-scenes])]
     (fn []
       [na/segment {}
-       [na/header {:as "h4" :floated "left" :content "Scenes"}]
-       [na/header {:floated "right" :sub? true}
-        [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
+       [na/header {:as "h4" :content "Scenes"}]
        [na/divider {:clearing? true}]
-
-       [sa/ItemGroup {:divided true}
+       [sa/ItemGroup {}
         (for [scene-id @scenes]
           ^{:key (str scene-id)}
           [sa/Item {}
-           [sa/ItemContent {:as "a" :content scene-id :on-click #(re-frame/dispatch [::ie/set-current-scene scene-id])}]])]])))
+           [sa/ItemContent {}
+            [:a {:on-click #(re-frame/dispatch [::ie/set-current-scene scene-id])} scene-id]
+            ]])]])))
 
 (defn shown-form-panel
   []
@@ -796,15 +829,23 @@
       :add-object [add-object-panel]
       :list-objects [list-objects-panel]
       :list-assets [list-assets-panel]
-      :list-scenes [list-scenes-panel]
       [:div])))
 
 (defn editor []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])]
+  (let [course-id (re-frame/subscribe [::subs/current-course])
+        scene-id (re-frame/subscribe [::subs/current-scene])]
     [sa/SidebarPushable {}
-     [sa/Sidebar {:visible true :inverted? true}
-      [na/button {:basic? true :content "Edit course source" :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
-      ]
+     [sa/Sidebar {:visible true}
+      [na/segment {}
+       [na/header {}
+        [:div {} @course-id
+         [:div {:style {:float "right"}}
+          [na/icon {:name "code" :link? true
+                    :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
+          [na/icon {:name "history" :link? true
+                    :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
+       [na/divider {:clearing? true}]
+       [list-scenes-panel]]]
     [sa/SidebarPusher {}
      [:div {:class-name "ui segment"}
       [na/header {:dividing? true} "Editor"]
@@ -816,12 +857,12 @@
         [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
                                                      (re-frame/dispatch [::events/set-main-content :editor]))}]
         [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-main-content :actions])}]
-        [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-main-content :scene-source])}]]
+        [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-main-content :scene-source])}]
+        [na/button {:content "Versions" :on-click #(re-frame/dispatch [::events/open-current-scene-versions])}]]
        [na/grid-column {:width 4}
         [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
         [na/button {:basic? true :content "List objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
         [na/button {:basic? true :content "List assets" :on-click #(re-frame/dispatch [::events/show-form :list-assets])}]
-        [na/button {:basic? true :content "List scenes" :on-click #(re-frame/dispatch [::events/show-form :list-scenes])}]
         [shown-form-panel]
         [properties-rail]]]
 

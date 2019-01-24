@@ -5,7 +5,7 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [webchange.auth.core :refer [login! register-user! user-id-from-identity]]
-            [webchange.course.core :refer [get-course-data get-scene-data save-scene! save-course!]]
+            [webchange.course.core :as course]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
@@ -63,7 +63,7 @@
 (defn handle-save-scene
   [course-id scene-id request]
   (let [owner-id (current-user request)
-        save (fn [data] (save-scene! course-id scene-id data owner-id))]
+        save (fn [data] (course/save-scene! course-id scene-id data owner-id))]
     (-> request
         :body
         :scene
@@ -73,12 +73,25 @@
 (defn handle-save-course
   [course-id request]
   (let [owner-id (current-user request)
-        save (fn [data] (save-course! course-id data owner-id))]
+        save (fn [data] (course/save-course! course-id data owner-id))]
     (-> request
         :body
         :course
         save
         handle)))
+
+(defn handle-restore-course-version
+  [version-id request]
+  (let [owner-id (current-user request)]
+    (-> (course/restore-course-version! (Integer/parseInt version-id) owner-id)
+        handle)))
+
+(defn handle-restore-scene-version
+  [version-id request]
+  (let [owner-id (current-user request)]
+    (-> (course/restore-scene-version! (Integer/parseInt version-id) owner-id)
+        handle)))
+
 
 (defroutes pages-routes
            (GET "/" [] (resource-response "index.html" {:root "public"}))
@@ -90,8 +103,8 @@
            (resources "/"))
 
 (defroutes api-routes
-           (GET "/api/courses/:course-id" [course-id] (-> course-id get-course-data response))
-           (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (get-scene-data course-id scene-id) response))
+           (GET "/api/courses/:course-id" [course-id] (-> course-id course/get-course-data response))
+           (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (course/get-scene-data course-id scene-id) response))
            (POST "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id :as request]
              (handle-save-scene course-id scene-id request))
            (POST "/api/courses/:course-id" [course-id :as request]
@@ -99,7 +112,14 @@
            (POST "/api/users/login" request
              (-> request :body :user login! (handle (with-updated-session request))))
            (POST "/api/users/register-user" request
-             (-> request :body :user register-user! handle)))
+             (-> request :body :user register-user! handle))
+
+           (GET "/api/courses/:course-id/versions" [course-id] (-> course-id course/get-course-versions response))
+           (GET "/api/courses/:course-id/scenes/:scene-id/versions" [course-id scene-id] (-> (course/get-scene-versions course-id scene-id) response))
+           (POST "/api/course-versions/:version-id/restore" [version-id :as request]
+             (handle-restore-course-version version-id request))
+           (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
+             (handle-restore-scene-version version-id request)))
 
 (defroutes app
            pages-routes

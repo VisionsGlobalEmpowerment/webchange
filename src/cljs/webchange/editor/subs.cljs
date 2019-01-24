@@ -46,3 +46,13 @@
   ::shown-form
   (fn [db]
     (get-in db [:editor :shown-form])))
+
+(re-frame/reg-sub
+  ::course-versions
+  (fn [db]
+    (get-in db [:editor :course-versions])))
+
+(re-frame/reg-sub
+  ::scene-versions
+  (fn [db]
+    (get-in db [:editor :scene-versions])))
