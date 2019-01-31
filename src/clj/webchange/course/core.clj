@@ -40,21 +40,23 @@
 
 (defn restore-course-version!
   [version-id owner-id]
-  (let [{data :data course-id :course_id} (db/get-course-version {:id version-id})
+  (let [{data :data course-id :course-id} (db/get-course-version {:id version-id})
         created-at (jt/local-date-time)]
     (db/save-course! {:course_id course-id
                       :data data
                       :owner_id owner-id
-                      :created_at created-at})))
+                      :created_at created-at})
+    [true {:created-at (str created-at)}]))
 
 (defn restore-scene-version!
   [version-id owner-id]
-  (let [{data :data scene-id :scene_id} (db/get-scene-version {:id version-id})
+  (let [{data :data scene-id :scene-id} (db/get-scene-version {:id version-id})
         created-at (jt/local-date-time)]
     (db/save-scene! {:scene_id scene-id
                      :data data
                      :owner_id owner-id
-                     :created_at created-at})))
+                     :created_at created-at})
+    [true {:created-at (str created-at)}]))
 
 (defn get-course-versions
   [course-name]
@@ -62,8 +64,7 @@
         versions (db/get-course-versions {:course_id course-id})]
     {:versions (->> versions
                     (map #(dissoc % :data))
-                    (map #(assoc % :created-at (-> % :created_at str)))
-                    (map #(dissoc % :created_at))
+                    (map #(assoc % :created-at (-> % :created-at str)))
                     (map #(assoc % :owner-name "todo")))}))
 
 (defn get-scene-versions
@@ -73,6 +74,5 @@
         versions (db/get-scene-versions {:scene_id scene-id})]
     {:versions (->> versions
                     (map #(dissoc % :data))
-                    (map #(assoc % :created-at (-> % :created_at str)))
-                    (map #(dissoc % :created_at))
+                    (map #(assoc % :created-at (-> % :created-at str)))
                     (map #(assoc % :owner-name "todo")))}))

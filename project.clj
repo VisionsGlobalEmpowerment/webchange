@@ -27,6 +27,7 @@
                  [cheshire "5.8.1"]
                  [conman "0.8.3"]
                  [mount "0.1.15"]
+                 [camel-snake-kebab "0.4.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]

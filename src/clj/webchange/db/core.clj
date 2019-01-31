@@ -6,7 +6,9 @@
     [conman.core :as conman]
     [java-time :as jt]
     [config.core :refer [env]]
-    [mount.core :refer [defstate]])
+    [mount.core :refer [defstate]]
+    [camel-snake-kebab.extras :refer [transform-keys]]
+    [camel-snake-kebab.core :refer [->kebab-case-keyword]])
   (:import org.postgresql.util.PGobject
            java.sql.Array
            clojure.lang.IPersistentMap
@@ -90,3 +92,25 @@
 
 (defn clear-table [table]
   (jdbc/delete! *db* table nil))
+
+(defn result-one-snake->kebab
+  [this result options]
+  (->> (hugsql.adapter/result-one this result options)
+       (transform-keys ->kebab-case-keyword)))
+
+(defn result-many-snake->kebab
+  [this result options]
+  (->> (hugsql.adapter/result-many this result options)
+       (map #(transform-keys ->kebab-case-keyword %))))
+
+(defmethod hugsql.core/hugsql-result-fn :1 [sym]
+  'webchange.db.core/result-one-snake->kebab)
+
+(defmethod hugsql.core/hugsql-result-fn :one [sym]
+  'webchange.db.core/result-one-snake->kebab)
+
+(defmethod hugsql.core/hugsql-result-fn :* [sym]
+  'webchange.db.core/result-many-snake->kebab)
+
+(defmethod hugsql.core/hugsql-result-fn :many [sym]
+  'webchange.db.core/result-many-snake->kebab)
