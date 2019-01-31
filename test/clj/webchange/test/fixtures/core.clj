@@ -94,6 +94,19 @@
      (->> (assoc data :id id)
           (transform-keys ->kebab-case-keyword)))))
 
+(defn lesson-set-created
+  ([]
+   (let [{item-id :id dataset-id :dataset-id} (dataset-item-created)]
+     (lesson-set-created {:dataset-id dataset-id :data {:items [{:id item-id}]}})))
+  ([options]
+   (let [defaults {:name "test-lesson-set"}
+         data (->> options
+                   (merge defaults)
+                   (transform-keys ->snake_case_keyword))
+         [{id :id}] (db/create-lesson-set! data)]
+     (->> (assoc data :id id)
+          (transform-keys ->kebab-case-keyword)))))
+
 (defn get-course
   [course-name]
   (let [course-url (str "/api/courses/" course-name)
@@ -213,6 +226,39 @@
 (defn delete-dataset-item!
   [id]
   (let [url (str "/api/dataset-items/" id)
+        request (-> (mock/request :delete url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-lesson-set
+  [name]
+  (let [url (str "/api/lesson-sets/" name)
+        request (-> (mock/request :get url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn create-lesson-set!
+  [data]
+  (let [url (str "/api/lesson-sets")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (-> (handler/dev-handler request)
+        :body
+        (json/read-str :key-fn keyword))))
+
+(defn update-lesson-set!
+  [id data]
+  (let [url (str "/api/lesson-sets/" id)
+        request (-> (mock/request :put url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+
+(defn delete-lesson-set!
+  [id]
+  (let [url (str "/api/lesson-sets/" id)
         request (-> (mock/request :delete url)
                     user-logged-in)]
     (handler/dev-handler request)))

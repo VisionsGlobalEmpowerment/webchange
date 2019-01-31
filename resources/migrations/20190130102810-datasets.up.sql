@@ -21,8 +21,7 @@ CREATE TABLE lesson_sets
 (id SERIAL,
  name VARCHAR(30) NOT NULL,
  dataset_id INTEGER references datasets(id),
- item_id INTEGER references dataset_items(id),
- item_order INTEGER NOT NULL);
+ data JSON NOT NULL);
 --;;
 ALTER TABLE ONLY lesson_sets
     ADD CONSTRAINT lesson_sets_pkey PRIMARY KEY (id);

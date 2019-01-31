@@ -55,3 +55,25 @@
   [id]
   (db/delete-dataset-item! {:id id})
   [true {:id id}])
+
+(defn get-lesson-set-by-name
+  [name]
+  (let [item (db/get-lesson-set-by-name {:name name})]
+    item))
+
+(defn create-lesson-set!
+  [data]
+  (let [prepared-data (transform-keys ->snake_case_keyword data)
+        [{id :id}] (db/create-lesson-set! prepared-data)]
+    [true {:id id}]))
+
+(defn update-lesson-set!
+  [id data]
+  (let [prepared-data (assoc data :id id)]
+    (db/update-lesson-set! prepared-data)
+    [true {:id id}]))
+
+(defn delete-lesson-set!
+  [id]
+  (db/delete-lesson-set! {:id id})
+  [true {:id id}])

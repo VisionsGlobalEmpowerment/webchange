@@ -137,20 +137,25 @@ WHERE id = :id
 DELETE FROM dataset_items
 WHERE id = :id
 
--- :name create-lesson-item! :<!
+-- :name create-lesson-set! :<!
 -- :doc creates a new lesson set item record
 INSERT INTO lesson_sets
-(name, dataset_id, item_id, item_order)
-VALUES (:name, :dataset_id, :item_id, :item_order) RETURNING id
+(name, dataset_id, data)
+VALUES (:name, :dataset_id, :data) RETURNING id
 
--- :name get-lesson-set :? :*
--- :doc retrieve lesson set given lesson set name
+-- :name get-lesson-set-by-name :? :1
+-- :doc retrieve lesson set given name
 SELECT * from lesson_sets
-WHERE name = :name ORDER BY item_order ASC;
+WHERE name = :name;
 
--- :name update-lesson-item-order! :! :n
--- :doc updates an lesson item order
+-- :name update-lesson-set! :! :n
+-- :doc updates an existing lesson set record
 UPDATE lesson_sets
-SET item_order = :item_order
+SET data = :data
+WHERE id = :id
+
+-- :name delete-lesson-set! :! :n
+-- :doc deletes lesson set
+DELETE from lesson_sets
 WHERE id = :id
 

@@ -127,6 +127,26 @@
     (-> (dataset/delete-dataset-item! (Integer/parseInt id))
         handle)))
 
+(defn handle-create-lesson-set
+  [request]
+  (let [owner-id (current-user request)
+        data (-> request :body)]
+    (-> (dataset/create-lesson-set! data)
+        handle)))
+
+(defn handle-update-lesson-set
+  [id request]
+  (let [owner-id (current-user request)
+        data (-> request :body)]
+    (-> (dataset/update-lesson-set! (Integer/parseInt id) data)
+        handle)))
+
+(defn handle-delete-lesson-set
+  [id request]
+  (let [owner-id (current-user request)]
+    (-> (dataset/delete-lesson-set! (Integer/parseInt id))
+        handle)))
+
 
 (defroutes pages-routes
            (GET "/" [] (resource-response "index.html" {:root "public"}))
@@ -167,13 +187,24 @@
            (GET "/api/dataset-items/:id" [id]
              (if-let [item (-> id Integer/parseInt dataset/get-item)]
                (response {:item item})
-               (not-found "item not found")))
+               (not-found "not found")))
            (POST "/api/dataset-items" request
              (handle-create-dataset-item request))
            (PUT "/api/dataset-items/:id" [id :as request]
              (handle-update-dataset-item id request))
            (DELETE "/api/dataset-items/:id" [id :as request]
                    (handle-delete-dataset-item id request))
+
+           (GET "/api/lesson-sets/:name" [name]
+             (if-let [item (-> name dataset/get-lesson-set-by-name)]
+               (response {:lesson-set item})
+               (not-found "not found")))
+           (POST "/api/lesson-sets" request
+             (handle-create-lesson-set request))
+           (PUT "/api/lesson-sets/:id" [id :as request]
+             (handle-update-lesson-set id request))
+           (DELETE "/api/lesson-sets/:id" [id :as request]
+             (handle-delete-lesson-set id request))
            )
 
 (defroutes app
