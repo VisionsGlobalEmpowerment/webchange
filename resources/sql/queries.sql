@@ -114,7 +114,7 @@ WHERE course_id = :course_id;
 
 -- :name create-dataset-item! :<!
 -- :doc creates a new dataset item record
-INSERT INTO dataset_items (dataset_id, data) VALUES (:dataset_id, :data) RETURNING id
+INSERT INTO dataset_items (dataset_id, name, data) VALUES (:dataset_id, :name, :data) RETURNING id
 
 -- :name get-dataset-item :? :1
 -- :doc retrieve item given id

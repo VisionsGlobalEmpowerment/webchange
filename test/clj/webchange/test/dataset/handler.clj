@@ -24,8 +24,8 @@
     (is (= (:name dataset) (:name retrieved-dataset)))))
 
 (deftest dataset-can-be-created
-  (let [{course-id :id course-name :name} (f/course-created)
-        data {:course-id course-id :name "dataset" :scheme {:fields [{:name "src" :type "string"}]}}
+  (let [{course-name :name} (f/course-created)
+        data {:course-id course-name :name "dataset" :scheme {:fields [{:name "src" :type "string"}]}}
         dataset (f/create-dataset! data)
         retrieved-dataset (-> course-name f/get-course-datasets :body (json/read-str :key-fn keyword) :datasets first)]
     (is (= (:name data) (:name retrieved-dataset)))
@@ -47,7 +47,7 @@
 
 (deftest item-can-be-created
   (let [{dataset-id :id} (f/dataset-created)
-        data {:dataset-id dataset-id :data {:src "some-test-src"}}
+        data {:dataset-id dataset-id :name "test-item" :data {:src "some-test-src"}}
         item (f/create-dataset-item! data)
         retrieved-item (-> item :id f/get-dataset-item :body (json/read-str :key-fn keyword) :item)]
     (is (= (:id item) (:id retrieved-item)))))
@@ -76,7 +76,6 @@
         data {:dataset-id dataset-id :name lesson-name :data {:items [{:id item-id}]}}
         _ (f/create-lesson-set! data)
         retrieved (-> lesson-name f/get-lesson-set :body (json/read-str :key-fn keyword) :lesson-set)]
-    (log/warn retrieved)
     (is (= item-id (-> retrieved :data :items first :id)))))
 
 (deftest lesson-set-can-be-updated

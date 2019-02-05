@@ -86,7 +86,7 @@
    (let [{dataset-id :id} (dataset-created)]
      (dataset-item-created {:dataset-id dataset-id})))
   ([options]
-   (let [defaults {:data {:src "test-src" :width 100 :height 100}}
+   (let [defaults {:name "test-item" :data {:src "test-src" :width 100 :height 100}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))

@@ -19,7 +19,10 @@
 
 (defn create-dataset!
   [data]
-  (let [prepared-data (transform-keys ->snake_case_keyword data)
+  (let [{course-id :id} (db/get-course {:name (:course-id data)})
+        prepared-data (-> data
+                          (assoc :course-id course-id)
+                          (#(transform-keys ->snake_case_keyword %)))
         [{id :id}] (db/create-dataset! prepared-data)]
     [true {:id id}]))
 

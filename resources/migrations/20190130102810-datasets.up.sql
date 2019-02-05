@@ -7,14 +7,19 @@ CREATE TABLE datasets
 ALTER TABLE ONLY datasets
     ADD CONSTRAINT datasets_pkey PRIMARY KEY (id);
 --;;
+CREATE UNIQUE INDEX datasets_name ON datasets (name);
+--;;
 
 CREATE TABLE dataset_items
 (id SERIAL,
+ name VARCHAR(30) NOT NULL,
  dataset_id INTEGER references datasets(id),
  data JSON NOT NULL);
 --;;
 ALTER TABLE ONLY dataset_items
     ADD CONSTRAINT dataset_items_pkey PRIMARY KEY (id);
+--;;
+CREATE UNIQUE INDEX dataset_items_name ON dataset_items (dataset_id, name);
 --;;
 
 CREATE TABLE lesson_sets
