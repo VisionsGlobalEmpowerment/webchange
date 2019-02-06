@@ -292,7 +292,30 @@
     [:> Group {:x 300 :y 300 :draggable true}
      [draw-action action @actions scene-id action-id 0 0]]))
 
-(defn dataset-info
+(defn dataset-lessons-panel
+  []
+  (let [lessons @(re-frame/subscribe [::es/current-dataset-lessons])]
+    [na/segment {}
+     [na/header {:as "h4"}
+      "Lessons"
+      [:div {:style {:float "right"}}
+       [na/icon {:name "add" :link? true
+                 :on-click #(re-frame/dispatch [::events/show-add-dataset-lesson-form])}]]]
+     [na/divider {:clearing? true}]
+     [sa/ItemGroup {}
+      (for [{name :name id :id} lessons]
+        ^{:key name}
+        [sa/Item {}
+         [sa/ItemContent {}
+          [:div {:style {:float "left"}} [:p name]]
+          [:div {:style {:float "right"}}
+           [na/icon {:name "edit" :link? true
+                     :on-click #(re-frame/dispatch [::events/show-edit-dataset-lesson-form id])}]
+           [na/icon {:name "remove" :link? true
+                     :on-click #(re-frame/dispatch [::events/delete-dataset-lesson id])}]]
+          ]])]]))
+
+(defn dataset-items-panel
   []
   (let [items @(re-frame/subscribe [::es/current-dataset-items])]
     [na/segment {}
@@ -307,14 +330,74 @@
         ^{:key name}
         [sa/Item {}
          [sa/ItemContent {}
-          [:p name
-           [:div {:style {:float "right"}}
-            [na/icon {:name "edit" :link? true
-                      :on-click #(re-frame/dispatch [::events/show-edit-dataset-item-form item-id])}]
-            [na/icon {:name "remove" :link? true
-                      :on-click #(re-frame/dispatch [::events/delete-dataset-item item-id])}]]
-           ]
+          [:div {:style {:float "left"}} [:p name]]
+          [:div {:style {:float "right"}}
+           [na/icon {:name "edit" :link? true
+                     :on-click #(re-frame/dispatch [::events/show-edit-dataset-item-form item-id])}]
+           [na/icon {:name "remove" :link? true
+                     :on-click #(re-frame/dispatch [::events/delete-dataset-item item-id])}]]
+
           ]])]]))
+
+(defn dataset-info
+  []
+  [na/segment-group {:horizontal? true}
+   [dataset-items-panel]
+   [dataset-lessons-panel]
+   ])
+
+(defn toggle-item-in-lesson
+  [items toggle id]
+  (if toggle
+    (conj items {:id id})
+    (filter #(not= id (:id %)) items)))
+
+(defn add-dataset-lesson-form
+  []
+  (let [data (r/atom {:items []})]
+    (fn []
+      (let [items @(re-frame/subscribe [::es/current-dataset-items])
+            loading @(re-frame/subscribe [:loading])]
+        [na/segment {:loading? (when (:add-dataset-lesson loading))}
+         [na/header {:as "h4" :content "Add dataset lesson"}]
+         [na/divider {:clearing? true}]
+         [na/form {}
+          [na/form-input {:label "name" :default-value (:name @data) :on-change #(swap! data assoc :name (-> %2 .-value)) :inline? true}]
+          [na/divider {}]
+          (for [{name :name id :id} items]
+            ^{:key name}
+            [sa/Item {}
+             [sa/ItemContent {}
+              [na/checkbox {:label name
+                            :on-change #(swap! data update-in [:data :items] toggle-item-in-lesson (.-checked %2) id)}]
+              ]])
+          [na/divider {}]
+          [na/form-button {:content "Add" :on-click #(re-frame/dispatch [::events/add-dataset-lesson @data])}]
+          ]]))))
+
+(defn edit-dataset-lesson-form
+  []
+  (let [lesson-set-id @(re-frame/subscribe [::es/current-dataset-lesson-id])
+        {{lesson-items :items} :data} @(re-frame/subscribe [::es/dataset-lesson lesson-set-id])
+        data (r/atom {:data {:items lesson-items}})]
+    (fn []
+      (let [items @(re-frame/subscribe [::es/current-dataset-items])
+            loading @(re-frame/subscribe [:loading])]
+        [na/segment {:loading? (when (:edit-dataset-lesson loading))}
+         [na/header {:as "h4" :content "Edit dataset lesson"}]
+         [na/divider {:clearing? true}]
+         [na/form {}
+          (for [{name :name id :id} items]
+            ^{:key name}
+            [sa/Item {}
+             [sa/ItemContent {}
+              [na/checkbox {:label name
+                            :default-checked? (some #(= id (:id %)) lesson-items)
+                            :on-change #(swap! data update-in [:data :items] toggle-item-in-lesson (.-checked %2) id)}]
+              ]])
+          [na/divider {}]
+          [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-dataset-lesson lesson-set-id @data])}]
+          ]]))))
 
 (defn dataset-item-fields-panel
   [data-atom]
@@ -496,6 +579,8 @@
           :dataset-info [dataset-info]
           :add-dataset-item-form [add-dataset-item-form]
           :edit-dataset-item-form [edit-dataset-item-form]
+          :add-dataset-lesson-form [add-dataset-lesson-form]
+          :edit-dataset-lesson-form [edit-dataset-lesson-form]
           (with-stage [scene])
           )
         (with-stage [preloader]))

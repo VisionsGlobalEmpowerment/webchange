@@ -195,6 +195,7 @@
            (DELETE "/api/dataset-items/:id" [id :as request]
                    (handle-delete-dataset-item id request))
 
+           (GET "/api/datasets/:id/lesson-sets" [id] (-> id Integer/parseInt dataset/get-dataset-lessons response))
            (GET "/api/lesson-sets/:name" [name]
              (if-let [item (-> name dataset/get-lesson-set-by-name)]
                (response {:lesson-set item})

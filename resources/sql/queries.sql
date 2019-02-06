@@ -148,6 +148,11 @@ VALUES (:name, :dataset_id, :data) RETURNING id
 SELECT * from lesson_sets
 WHERE name = :name;
 
+-- :name get-dataset-lessons :? :*
+-- :doc retrieve lesson sets given dataset id
+SELECT * from lesson_sets
+WHERE dataset_id = :dataset_id;
+
 -- :name update-lesson-set! :! :n
 -- :doc updates an existing lesson set record
 UPDATE lesson_sets

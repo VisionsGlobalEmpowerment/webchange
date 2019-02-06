@@ -78,6 +78,16 @@
     (get-in db [:editor :current-dataset-item-id])))
 
 (re-frame/reg-sub
+  ::current-dataset-lessons
+  (fn [db]
+    (get-in db [:editor :current-dataset-lessons])))
+
+(re-frame/reg-sub
+  ::current-dataset-lesson-id
+  (fn [db]
+    (get-in db [:editor :current-dataset-lesson-id])))
+
+(re-frame/reg-sub
   ::dataset
   (fn [db [_ id]]
     (->> (get-in db [:editor :course-datasets])
@@ -88,5 +98,12 @@
   ::dataset-item
   (fn [db [_ id]]
     (->> (get-in db [:editor :current-dataset-items])
+         (filter #(= id (:id %)))
+         first)))
+
+(re-frame/reg-sub
+  ::dataset-lesson
+  (fn [db [_ id]]
+    (->> (get-in db [:editor :current-dataset-lessons])
          (filter #(= id (:id %)))
          first)))

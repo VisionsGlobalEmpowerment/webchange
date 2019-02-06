@@ -37,6 +37,7 @@
   (let [items (db/get-dataset-items {:dataset_id dataset-id})]
     {:items items}))
 
+
 (defn get-item
   [item-id]
   (let [item (db/get-dataset-item {:id item-id})]
@@ -58,6 +59,11 @@
   [id]
   (db/delete-dataset-item! {:id id})
   [true {:id id}])
+
+(defn get-dataset-lessons
+  [dataset-id]
+  (let [items (db/get-dataset-lessons {:dataset_id dataset-id})]
+    {:lesson-sets items}))
 
 (defn get-lesson-set-by-name
   [name]

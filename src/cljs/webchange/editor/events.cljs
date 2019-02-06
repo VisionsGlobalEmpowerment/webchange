@@ -360,6 +360,7 @@
   (fn [{:keys [db]} [_ dataset-id]]
     {:db (assoc-in db [:editor :current-dataset-id] dataset-id)
      :dispatch-n (list [::load-current-dataset-items]
+                       [::load-current-dataset-lessons]
                        [::set-main-content :dataset-info])}))
 
 (re-frame/reg-event-fx
@@ -397,7 +398,7 @@
                     :params          {:dataset-id dataset-id :name name :data data}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
-                    :on-success      [::add-dataset-success]
+                    :on-success      [::add-dataset-item-success]
                     :on-failure      [:api-request-error :add-dataset-item]}})))
 
 
@@ -405,7 +406,8 @@
   ::add-dataset-item-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :add-dataset-item]
-                       [::load-current-dataset-items])}))
+                       [::load-current-dataset-items]
+                       [::set-main-content :dataset-info])}))
 
 (re-frame/reg-event-fx
   ::show-edit-dataset-item-form
@@ -430,7 +432,8 @@
   ::edit-dataset-item-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :edit-dataset-item]
-                       [::load-current-dataset-items])}))
+                       [::load-current-dataset-items]
+                       [::set-main-content :dataset-info])}))
 
 (re-frame/reg-event-fx
   ::delete-dataset-item
@@ -449,3 +452,94 @@
   (fn [_ _]
     {:dispatch-n (list [:complete-request :delete-dataset-item]
                        [::load-current-dataset-items])}))
+
+(re-frame/reg-event-fx
+  ::load-current-dataset-lessons
+  (fn [{:keys [db]} _]
+    (let [dataset-id (get-in db [:editor :current-dataset-id])]
+      {:db (-> db
+               (assoc-in [:loading :dataset-lessons] true))
+       :http-xhrio {:method          :get
+                    :uri             (str "/api/datasets/" dataset-id "/lesson-sets")
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::load-current-dataset-lessons-success]
+                    :on-failure      [:api-request-error :dataset-lessons]}})))
+
+
+(re-frame/reg-event-fx
+  ::load-current-dataset-lessons-success
+  (fn [{:keys [db]} [_ result]]
+    {:db (assoc-in db [:editor :current-dataset-lessons] (:lesson-sets result))
+     :dispatch-n (list [:complete-request :dataset-lessons])}))
+
+(re-frame/reg-event-fx
+  ::show-add-dataset-lesson-form
+  (fn [_ _]
+    {:dispatch [::set-main-content :add-dataset-lesson-form]}))
+
+(re-frame/reg-event-fx
+  ::add-dataset-lesson
+  (fn [{:keys [db]} [_ {:keys [name data]}]]
+    (let [dataset-id (get-in db [:editor :current-dataset-id])]
+      {:db (assoc-in db [:loading :add-dataset-lesson] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/lesson-sets")
+                    :params          {:dataset-id dataset-id :name name :data data}
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::add-dataset-lesson-success]
+                    :on-failure      [:api-request-error :add-dataset-lesson]}})))
+
+
+(re-frame/reg-event-fx
+  ::add-dataset-lesson-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :add-dataset-lesson]
+                       [::load-current-dataset-lessons]
+                       [::set-main-content :dataset-info])}))
+
+(re-frame/reg-event-fx
+  ::show-edit-dataset-lesson-form
+  (fn [{:keys [db]} [_ id]]
+    {:db (assoc-in db [:editor :current-dataset-lesson-id] id)
+     :dispatch [::set-main-content :edit-dataset-lesson-form]}))
+
+(re-frame/reg-event-fx
+  ::edit-dataset-lesson
+  (fn [{:keys [db]} [_ id {{items :items} :data}]]
+    (js/console.log items)
+    {:db (assoc-in db [:loading :edit-dataset-lesson] true)
+     :http-xhrio {:method          :put
+                  :uri             (str "/api/lesson-sets/" id)
+                  :params          {:data {:items items}}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::edit-dataset-lesson-success]
+                  :on-failure      [:api-request-error :edit-dataset-lesson]}}))
+
+
+(re-frame/reg-event-fx
+  ::edit-dataset-lesson-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :edit-dataset-lesson]
+                       [::load-current-dataset-lessons]
+                       [::set-main-content :dataset-info])}))
+
+(re-frame/reg-event-fx
+  ::delete-dataset-lesson
+  (fn [{:keys [db]} [_ id]]
+    {:db (assoc-in db [:loading :delete-dataset-lesson] true)
+     :http-xhrio {:method          :delete
+                  :uri             (str "/api/lesson-sets/" id)
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::delete-dataset-lesson-success]
+                  :on-failure      [:api-request-error :delete-dataset-lesson]}}))
+
+
+(re-frame/reg-event-fx
+  ::delete-dataset-lesson-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :delete-dataset-lesson]
+                       [::load-current-dataset-lessons])}))
