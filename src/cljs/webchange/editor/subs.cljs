@@ -56,3 +56,54 @@
   ::scene-versions
   (fn [db]
     (get-in db [:editor :scene-versions])))
+
+(re-frame/reg-sub
+  ::course-datasets
+  (fn [db]
+    (get-in db [:editor :course-datasets])))
+
+(re-frame/reg-sub
+  ::current-dataset-id
+  (fn [db]
+    (get-in db [:editor :current-dataset-id])))
+
+(re-frame/reg-sub
+  ::current-dataset-items
+  (fn [db]
+    (get-in db [:editor :current-dataset-items])))
+
+(re-frame/reg-sub
+  ::current-dataset-item-id
+  (fn [db]
+    (get-in db [:editor :current-dataset-item-id])))
+
+(re-frame/reg-sub
+  ::current-dataset-lessons
+  (fn [db]
+    (get-in db [:editor :current-dataset-lessons])))
+
+(re-frame/reg-sub
+  ::current-dataset-lesson-id
+  (fn [db]
+    (get-in db [:editor :current-dataset-lesson-id])))
+
+(re-frame/reg-sub
+  ::dataset
+  (fn [db [_ id]]
+    (->> (get-in db [:editor :course-datasets])
+         (filter #(= id (:id %)))
+         first)))
+
+(re-frame/reg-sub
+  ::dataset-item
+  (fn [db [_ id]]
+    (->> (get-in db [:editor :current-dataset-items])
+         (filter #(= id (:id %)))
+         first)))
+
+(re-frame/reg-sub
+  ::dataset-lesson
+  (fn [db [_ id]]
+    (->> (get-in db [:editor :current-dataset-lessons])
+         (filter #(= id (:id %)))
+         first)))

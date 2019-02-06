@@ -50,8 +50,7 @@
 
 (defn ^:export editor []
   (re-frame/dispatch-sync [::events/initialize-db])
-  (re-frame/dispatch [::ie/start-course "demo"])
-  (re-frame/dispatch [::ee/set-main-content :editor])
+  (re-frame/dispatch [::ee/init-editor])
   (init-viewport)
   (dev-setup)
   (mount-root-editor))

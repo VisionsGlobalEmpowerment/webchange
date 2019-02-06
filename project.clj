@@ -1,6 +1,6 @@
 (defproject webchange "0.1.0-SNAPSHOT"
-  :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.10.439"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
+                 [org.clojure/clojurescript "1.10.516"]
                  [org.clojure/java.jdbc "0.7.8"]
                  [org.clojure/tools.logging "0.4.1"]
                  [ch.qos.logback/logback-classic "1.2.3"]
@@ -27,11 +27,14 @@
                  [cheshire "5.8.1"]
                  [conman "0.8.3"]
                  [mount "0.1.15"]
+                 [camel-snake-kebab "0.4.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-environ "1.1.0"]
             [migratus-lein "0.7.0"]]
+
+  :jvm-opts ["-Xmx2g"]
 
   :min-lein-version "2.5.3"
 
