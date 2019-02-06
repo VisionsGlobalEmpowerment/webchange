@@ -147,14 +147,19 @@
     (-> (dataset/delete-lesson-set! (Integer/parseInt id))
         handle)))
 
+(defn public-route [] (resource-response "index.html" {:root "public"}))
+(defn authenticated-route [request] (if-not (authenticated? request)
+                         (throw-unauthorized)
+                         (resource-response "index.html" {:root "public"})))
 
 (defroutes pages-routes
-           (GET "/" [] (resource-response "index.html" {:root "public"}))
-           (GET "/editor" request
-             (if-not (authenticated? request)
-               (throw-unauthorized)
-               (resource-response "editor.html" {:root "public"})))
-           (GET "/login" [] (resource-response "login.html" {:root "public"}))
+           (GET "/" [] (public-route))
+           (GET "/login" [] (public-route))
+           (GET "/register" [] (public-route))
+
+           (GET "/editor" request (authenticated-route request))
+           (GET "/courses/:id" request (authenticated-route request))
+           (GET "/courses/:id/editor" request (authenticated-route request))
            (resources "/"))
 
 (defroutes api-routes

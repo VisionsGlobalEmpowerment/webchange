@@ -2,6 +2,7 @@
 
 (def default-db
   {:name "re-frame"
+   :active-page :home-panel
    :playing false
    :scene-started false
    :viewport {:width 1920

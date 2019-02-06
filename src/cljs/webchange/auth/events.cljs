@@ -4,6 +4,7 @@
     [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.events :as events]
     ))
 
 (re-frame/reg-event-fx
@@ -23,7 +24,7 @@
   (fn [{:keys [db]} [_ {user :user}]]
     {:db (update-in db [:user] merge user)
      :dispatch-n (list [:complete-request :login]
-                       [:set-active-page {:page :home}])}))
+                       [::events/redirect :home])}))
 
 (re-frame/reg-event-fx
   ::register-user
@@ -42,4 +43,4 @@
   (fn [{:keys [db]} [_ {user :user}]]
     {:db (update-in db [:user] merge user)
      :dispatch-n (list [:complete-request :register-user]
-                       [:set-active-page {:page :login}])}))
+                       [::events/redirect :login])}))

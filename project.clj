@@ -28,6 +28,8 @@
                  [conman "0.8.3"]
                  [mount "0.1.15"]
                  [camel-snake-kebab "0.4.0"]
+                 [bidi "2.1.5"]
+                 [kibu/pushy "0.3.8"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -80,7 +82,7 @@
      :compiler     {:main                 webchange.core
                     :output-to            "resources/public/js/compiled/app.js"
                     :output-dir           "resources/public/js/compiled/out"
-                    :asset-path           "js/compiled/out"
+                    :asset-path           "/js/compiled/out"
                     :source-map-timestamp true
                     :preloads             [devtools.preload
                                            day8.re-frame-10x.preload]

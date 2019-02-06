@@ -5,8 +5,8 @@
    [webchange.events :as events]
    [webchange.views :as views]
    [webchange.config :as config]
+   [webchange.routes :as routes]
 
-   [webchange.interpreter.events :as ie]
    [webchange.editor.events :as ee]
    ))
 
@@ -43,6 +43,7 @@
   (reset-viewport))
 
 (defn ^:export init []
+  (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (init-viewport)
   (dev-setup)

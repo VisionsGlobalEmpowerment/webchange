@@ -1,8 +1,10 @@
 (ns webchange.auth.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.routes :as routes]
+    [webchange.events :as events]
     [webchange.subs :as subs]
-    [webchange.auth.events :as events]
+    [webchange.auth.events :as auth.events]
     [sodium.core :as na]
     [soda-ash.core :as sa]
     [reagent.core :as r]))
@@ -26,9 +28,9 @@
                      [sa/Message {:error true :visible true :header "Error" :content form-error}])
 
                    [na/button {:color "teal" :fluid? true :size "large" :content "Login"
-                               :on-click #(re-frame/dispatch [::events/login @data])}]
+                               :on-click #(re-frame/dispatch [::auth.events/login @data])}]
                    ]]
-                 [sa/Message {} "New to us? " [:a {:href "#" :on-click #(re-frame/dispatch [:set-active-page {:page :register-user}])} "Sign-up"]]]]])))
+                 [sa/Message {} "New to us? " [:a {:href (routes/url-for :register-user)} "Sign-up"]]]]])))
 
 (defn register-form []
   (r/with-let [data (r/atom {})
@@ -54,6 +56,6 @@
                    (when-let [form-error (get-in errors [:register-user :form])]
                      [sa/Message {:error true :visible true :header "Error" :content form-error}])
                    [na/button {:color "teal" :fluid? true :size "large" :content "Register"
-                               :on-click #(re-frame/dispatch [::events/register-user @data])}]
+                               :on-click #(re-frame/dispatch [::auth.events/register-user @data])}]
                    ]]
-                 [sa/Message {} "Already have an account? "  [:a {:href "#" :on-click #(re-frame/dispatch [:set-active-page {:page :login}])} "Log in"]]]]]))
+                 [sa/Message {} "Already have an account? "  [:a {:href (routes/url-for :login)} "Log in"]]]]]))

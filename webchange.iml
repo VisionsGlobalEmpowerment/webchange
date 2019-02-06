@@ -17,6 +17,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Leiningen: args4j:2.0.26" level="project" />
+    <orderEntry type="library" name="Leiningen: bidi:2.1.5" level="project" />
     <orderEntry type="library" name="Leiningen: binaryage/devtools:0.9.10" level="project" />
     <orderEntry type="library" name="Leiningen: binaryage/env-config:0.2.2" level="project" />
     <orderEntry type="library" name="Leiningen: buddy/buddy-auth:2.1.0" level="project" />
@@ -93,6 +94,7 @@
     <orderEntry type="library" name="Leiningen: instaparse:1.4.0" level="project" />
     <orderEntry type="library" name="Leiningen: javax.servlet/javax.servlet-api:3.1.0" level="project" />
     <orderEntry type="library" name="Leiningen: joda-time:2.6" level="project" />
+    <orderEntry type="library" name="Leiningen: kibu/pushy:0.3.8" level="project" />
     <orderEntry type="library" name="Leiningen: luminus-migrations:0.6.3" level="project" />
     <orderEntry type="library" name="Leiningen: medley:0.7.3" level="project" />
     <orderEntry type="library" name="Leiningen: migratus:1.2.0" level="project" />
@@ -139,6 +141,7 @@
     <orderEntry type="library" name="Leiningen: org.postgresql/postgresql:42.2.5" level="project" />
     <orderEntry type="library" name="Leiningen: org.slf4j/slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Leiningen: org.tobereplaced/lettercase:1.0.0" level="project" />
+    <orderEntry type="library" name="Leiningen: prismatic/schema:1.1.7" level="project" />
     <orderEntry type="library" name="Leiningen: re-frame:0.10.5" level="project" />
     <orderEntry type="library" name="Leiningen: reagent:0.7.0" level="project" />
     <orderEntry type="library" name="Leiningen: reanimated:0.6.1" level="project" />

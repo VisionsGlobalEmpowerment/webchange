@@ -7,8 +7,8 @@
 
 (re-frame/reg-event-fx
   ::init-editor
-  (fn [_ _]
-    {:dispatch-n (list [::ie/start-course "demo"]
+  (fn [_ [_ course-id]]
+    {:dispatch-n (list [::ie/start-course course-id]
                        [::load-datasets]
                        [::set-main-content :editor]
                        )}))

@@ -179,8 +179,9 @@
 (re-frame/reg-event-fx
   ::start-course
   (fn [{:keys [db]} [_ course-id]]
-    {:db (assoc db :current-course course-id)
-     :load-course course-id}))
+    (if (not= course-id (:current-course db))
+      {:db (assoc db :current-course course-id)
+       :load-course course-id})))
 
 (re-frame/reg-event-fx
   ::set-current-scene

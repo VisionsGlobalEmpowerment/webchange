@@ -118,6 +118,6 @@
     (:errors db)))
 
 (re-frame/reg-sub
-  :active-page
+  ::active-route
   (fn [db]
-    (:active-page db)))
+    (:active-route db)))
