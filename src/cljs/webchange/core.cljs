@@ -6,8 +6,6 @@
    [webchange.views :as views]
    [webchange.config :as config]
    [webchange.routes :as routes]
-
-   [webchange.editor.events :as ee]
    ))
 
 
@@ -19,16 +17,6 @@
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
   (reagent/render [views/main-panel]
-                  (.getElementById js/document "app")))
-
-(defn mount-root-editor []
-  (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel-editor]
-                  (.getElementById js/document "app")))
-
-(defn mount-root-login []
-  (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel-login]
                   (.getElementById js/document "app")))
 
 (defn reset-viewport
@@ -48,16 +36,3 @@
   (init-viewport)
   (dev-setup)
   (mount-root))
-
-(defn ^:export editor []
-  (re-frame/dispatch-sync [::events/initialize-db])
-  (re-frame/dispatch [::ee/init-editor])
-  (init-viewport)
-  (dev-setup)
-  (mount-root-editor))
-
-(defn ^:export login []
-  (re-frame/dispatch-sync [::events/initialize-db])
-  (init-viewport)
-  (dev-setup)
-  (mount-root-login))

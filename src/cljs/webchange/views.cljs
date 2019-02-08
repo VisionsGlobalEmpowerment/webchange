@@ -11,8 +11,10 @@
     [soda-ash.core :as sa]
     [reagent.core :as r]))
 
+;; course
+
 (defn course-switch
-  [course-name]
+  []
   [na/grid {:vertical-align "middle" :columns 5 :centered? true}
    [na/grid-row {}
     [na/grid-column {}]]
@@ -26,28 +28,20 @@
    [na/grid-row {}
     [na/grid-column {}]]])
 
-;; course
-
-(defn course-panel []
-  (let [course-name (r/atom nil)]
-    (fn []
-      (if @course-name
-        [course @course-name]
-        [course-switch course-name]))))
-
 ;; editor
-(defn main-panel-editor []
-  [editor])
-
 (defn editor-panel [course-id]
   (re-frame/dispatch [::ee/init-editor course-id])
   [editor])
 
+;; dashboard
+
+(defn dashboard-panel []
+  )
 ;; main
 
 (defn- panels [panel-name route-params]
   (case panel-name
-    :home [course-panel]
+    :home [course-switch]
     :register-user [register-form]
     :login [login-form]
     :course [course (:id route-params)]
@@ -57,21 +51,3 @@
 (defn main-panel []
   (let [{:keys [handler route-params]} @(re-frame/subscribe [::subs/active-route])]
     [panels handler route-params]))
-
-(defn home []
-  [na/grid {:vertical-align "middle" :columns 5 :centered? true}
-   [na/grid-row {}
-    [na/grid-column {}]]
-   [na/grid-row {}
-    [na/grid-column {}
-     [na/segment {}
-      [na/header {:as "h1" :content "Welcome"}]]]]
-   [na/grid-row {}
-    [na/grid-column {}]]])
-
-(defn main-panel-login []
-  (let [active-page @(re-frame/subscribe [::subs/active-route])]
-    (case active-page
-      :register-user [register-form]
-      :home [home]
-      [login-form])))

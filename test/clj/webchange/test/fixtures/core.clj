@@ -14,6 +14,8 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
 
 (defn clear-db []
+  (db/clear-table :students)
+  (db/clear-table :classes)
   (db/clear-table :lesson_sets)
   (db/clear-table :dataset_items)
   (db/clear-table :datasets)
@@ -104,6 +106,32 @@
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-lesson-set! data)]
+     (->> (assoc data :id id)
+          (transform-keys ->kebab-case-keyword)))))
+
+(defn class-created
+  ([]
+   (class-created {}))
+  ([options]
+   (let [defaults {:name "test-class"}
+         data (->> options
+                   (merge defaults)
+                   (transform-keys ->snake_case_keyword))
+         [{id :id}] (db/create-class! data)]
+     (->> (assoc data :id id)
+          (transform-keys ->kebab-case-keyword)))))
+
+(defn student-created
+  ([]
+   (student-created {}))
+  ([options]
+   (let [{user-id :id} (user-created)
+         {class-id :id} (class-created)
+         defaults {:user-id user-id :class-id class-id}
+         data (->> options
+                   (merge defaults)
+                   (transform-keys ->snake_case_keyword))
+         [{id :id}] (db/create-student! data)]
      (->> (assoc data :id id)
           (transform-keys ->kebab-case-keyword)))))
 
@@ -259,6 +287,77 @@
 (defn delete-lesson-set!
   [id]
   (let [url (str "/api/lesson-sets/" id)
+        request (-> (mock/request :delete url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-classes
+  []
+  (let [url (str "/api/classes")
+        request (-> (mock/request :get url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-class
+  [id]
+  (let [url (str "/api/classes/" id)
+        request (-> (mock/request :get url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn create-class!
+  [data]
+  (let [url (str "/api/classes")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (-> (handler/dev-handler request)
+        :body
+        (json/read-str :key-fn keyword))))
+
+(defn update-class!
+  [id data]
+  (let [url (str "/api/classes/" id)
+        request (-> (mock/request :put url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn delete-class!
+  [id]
+  (let [url (str "/api/classes/" id)
+        request (-> (mock/request :delete url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-students
+  [class-id]
+  (let [url (str "/api/classes/" class-id "/students")
+        request (-> (mock/request :get url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn create-student!
+  [data]
+  (let [url (str "/api/students")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (-> (handler/dev-handler request)
+        :body
+        (json/read-str :key-fn keyword))))
+
+(defn update-student!
+  [id data]
+  (let [url (str "/api/students/" id)
+        request (-> (mock/request :put url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn delete-student!
+  [id]
+  (let [url (str "/api/students/" id)
         request (-> (mock/request :delete url)
                     user-logged-in)]
     (handler/dev-handler request)))

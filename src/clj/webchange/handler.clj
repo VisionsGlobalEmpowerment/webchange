@@ -7,12 +7,14 @@
             [webchange.auth.core :refer [login! register-user! user-id-from-identity]]
             [webchange.course.core :as course]
             [webchange.dataset.core :as dataset]
+            [webchange.class.handler :refer [class-routes]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
             [clojure.tools.logging :as log]
-            [ring.middleware.session.memory :as mem]))
+            [ring.middleware.session.memory :as mem]
+            [webchange.common.handler :refer [handle current-user]]))
 
 (defn api-request? [request] (= "application/json" (:accept request)))
 
@@ -40,26 +42,9 @@
         (log/error e)
         {:status 400 :body (str "Invalid data" e)}))))
 
-(defn handle
-  ([result]
-    (let [[ok? data] result]
-      {:status (if ok? 200 400) :body data}))
-  ([result on-success]
-   (let [[ok? data] result
-         response {:status (if ok? 200 400) :body data}]
-     (if ok?
-       (on-success data response)
-       response))))
-
 (defn with-updated-session
   [request]
   (fn [data response] (assoc response :session (merge (:session request) {:identity (-> data :email)}))))
-
-(defn current-user
-  [request]
-  (if-not (authenticated? request)
-    (throw-unauthorized)
-    (-> request :session :identity user-id-from-identity)))
 
 (defn handle-save-scene
   [course-id scene-id request]
@@ -160,6 +145,8 @@
            (GET "/editor" request (authenticated-route request))
            (GET "/courses/:id" request (authenticated-route request))
            (GET "/courses/:id/editor" request (authenticated-route request))
+
+           (GET "/dashboard" request (authenticated-route request))
            (resources "/"))
 
 (defroutes api-routes
@@ -216,6 +203,7 @@
 (defroutes app
            pages-routes
            api-routes
+           class-routes
            (not-found "Not Found"))
 
 (def dev-store (mem/memory-store))
