@@ -7,6 +7,7 @@
     [webchange.editor.components :refer [editor]]
     [webchange.editor.events :as ee]
     [webchange.auth.views :refer [login-form register-form]]
+    [webchange.dashboard.views :refer [dashboard-page]]
     [sodium.core :as na]
     [soda-ash.core :as sa]
     [reagent.core :as r]))
@@ -33,10 +34,6 @@
   (re-frame/dispatch [::ee/init-editor course-id])
   [editor])
 
-;; dashboard
-
-(defn dashboard-panel []
-  )
 ;; main
 
 (defn- panels [panel-name route-params]
@@ -46,6 +43,7 @@
     :login [login-form]
     :course [course (:id route-params)]
     :course-editor [editor-panel (:id route-params)]
+    :dashboard [dashboard-page]
     [:div "test"]))
 
 (defn main-panel []

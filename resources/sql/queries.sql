@@ -211,3 +211,8 @@ WHERE id = :id
 -- :doc retrieve students given class id
 SELECT * from students
 WHERE class_id = :class_id
+
+-- :name get-student :? :1
+-- :doc retrieve students by id
+SELECT * from students
+WHERE id = :id

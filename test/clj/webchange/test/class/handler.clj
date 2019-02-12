@@ -45,11 +45,20 @@
     (is (= 1 (count students)))))
 
 (deftest student-can-be-created
-  (let [{user-id :id} (f/user-created)
-        {class-id :id} (f/class-created)
-        _ (f/create-student! {:class-id class-id :user-id user-id})
-        retrieved (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)]
-    (is (= 1 (count retrieved)))))
+  (let [{class-id :id} (f/class-created)
+        first-name "Test"
+        last-name "Test"
+        _ (f/create-student! {:class-id class-id
+                              :first-name first-name
+                              :last-name last-name
+                              :email "test-new@example.com"
+                              :password "test"
+                              :confirm-password "test"})
+        retrieved (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)
+        user (-> retrieved first :user)]
+    (is (= 1 (count retrieved)))
+    (is (= first-name (:first-name user)))
+    (is (= last-name (:last-name user)))))
 
 (deftest student-can-be-updated
   (let [{student-id :id class-id :class-id} (f/student-created)

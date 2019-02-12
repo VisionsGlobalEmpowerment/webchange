@@ -5,7 +5,8 @@
             [webchange.class.core :as core]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
-            [webchange.common.handler :refer [handle current-user]]))
+            [webchange.common.handler :refer [handle current-user]]
+            [webchange.auth.core :as auth]))
 
 (defn handle-create-class
   [request]
@@ -31,8 +32,10 @@
 (defn handle-create-student
   [request]
   (let [owner-id (current-user request)
-        data (-> request :body)]
-    (-> (core/create-student! data)
+        data (-> request :body)
+        [{user-id :id}] (-> data auth/prepare-register-data auth/create-user!)]
+    (auth/activate-user! user-id)
+    (-> (core/create-student! {:user-id user-id :class-id (:class-id data)})
         handle)))
 
 (defn handle-update-student
@@ -62,6 +65,7 @@
              (handle-delete-class id request))
 
            (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
+           (GET "/api/students/:id" [id] (-> id Integer/parseInt core/get-student response))
            (POST "/api/students" request
              (handle-create-student request))
            (PUT "/api/students/:id" [id :as request]

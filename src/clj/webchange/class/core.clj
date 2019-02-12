@@ -2,10 +2,10 @@
   (:require [webchange.db.core :refer [*db*] :as db]
             [clojure.tools.logging :as log]
             [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword]]))
+            [camel-snake-kebab.core :refer [->snake_case_keyword]]
+            [webchange.auth.core :as auth]))
 
 (defn get-classes []
-  (log/warn "get-classes")
   (let [classes (db/get-classes)]
     {:classes classes}))
 
@@ -13,9 +13,22 @@
   (let [class (db/get-class {:id id})]
     class))
 
+(defn with-user
+  [{user-id :user-id :as item}]
+  (let [user (-> (db/get-user {:id user-id})
+                 auth/visible-user)]
+    (assoc item :user user)))
+
 (defn get-students-by-class [class-id]
-  (let [students (db/get-students-by-class {:class_id class-id})]
-    {:students students}))
+  (let [students (->> (db/get-students-by-class {:class_id class-id})
+                      (map #(with-user %)))]
+    {:class-id class-id
+     :students students}))
+
+(defn get-student [id]
+  (let [student (-> (db/get-student {:id id})
+                    with-user)]
+    {:student student}))
 
 (defn create-class!
   [data]
