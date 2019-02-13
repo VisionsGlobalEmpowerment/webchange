@@ -24,7 +24,6 @@
 
 (defn handle-delete-class
   [id request]
-  (log/warn "delete! " id)
   (let [owner-id (current-user request)]
     (-> (core/delete-class! (Integer/parseInt id))
         handle)))
