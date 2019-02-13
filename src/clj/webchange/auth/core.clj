@@ -30,8 +30,8 @@
 
 (defn visible-user
   [user]
-  {:first-name (:first_name user)
-   :last-name (:last_name user)
+  {:first-name (:first-name user)
+   :last-name (:last-name user)
    :email (:email user)})
 
 (defn login!

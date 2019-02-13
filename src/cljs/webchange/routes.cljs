@@ -8,7 +8,8 @@
                   "login"     :login
                   "register"  :register-user
                   "courses"  {["/" :id] :course
-                              ["/" :id "/editor"] :course-editor}}])
+                              ["/" :id "/editor"] :course-editor}
+                  "dashboard" :dashboard}])
 
 (defn- parse-url [url]
   (bidi/match-route routes url))
