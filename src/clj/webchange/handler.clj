@@ -8,6 +8,7 @@
             [webchange.course.core :as course]
             [webchange.dataset.core :as dataset]
             [webchange.class.handler :refer [class-routes]]
+            [webchange.progress.handler :refer [progress-routes]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
@@ -204,6 +205,7 @@
            pages-routes
            api-routes
            class-routes
+           progress-routes
            (not-found "Not Found"))
 
 (def dev-store (mem/memory-store))

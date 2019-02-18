@@ -14,6 +14,10 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
 
 (defn clear-db []
+  (db/clear-table :activity_stats)
+  (db/clear-table :course_stats)
+  (db/clear-table :course_actions)
+  (db/clear-table :course_progresses)
   (db/clear-table :students)
   (db/clear-table :classes)
   (db/clear-table :lesson_sets)
@@ -43,11 +47,14 @@
       (assoc options :id user-id))))
 
 (defn user-logged-in
-  [request]
-  (let [user (user-created)
-        session {:identity (:email user)}
-        session-key (store/write-session handler/dev-store nil session)]
-    (assoc request :cookies {"ring-session" {:value session-key}})))
+  ([request]
+    (let [{user-id :id} (user-created)]
+      (user-logged-in request user-id)))
+  ([request user-id]
+   (let [user (db/get-user {:id user-id})
+         session {:identity (:email user)}
+         session-key (store/write-session handler/dev-store nil session)]
+     (assoc request :cookies {"ring-session" {:value session-key}}))))
 
 (defn course-created []
   (let [course-name "test-course"

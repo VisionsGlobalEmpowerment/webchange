@@ -26,7 +26,7 @@
           :stop (conman/disconnect! *db*))
 
 
-(conman/bind-connection *db* "sql/queries.sql")
+(conman/bind-connection *db* "sql/queries.sql" "sql/class.sql" "sql/progress.sql")
 
 #_(def conn (conman/connect! {:jdbc-url (get (System/getenv) "DATABASE_URL")}))
 
