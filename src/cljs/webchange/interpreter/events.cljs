@@ -29,13 +29,34 @@
 (re-frame/reg-fx
   :load-course
   (fn [course-id]
-    (i/load-course course-id (fn [course] (do (re-frame/dispatch [::set-course-data course])
+    (i/load-course course-id (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
+                                              (re-frame/dispatch [::set-course-data course])
+                                              (re-frame/dispatch [::load-progress course-id])
+                                              (re-frame/dispatch [::load-lessons course-id])
                                               (re-frame/dispatch [::set-current-scene (:initial-scene course)]))))))
 
 (re-frame/reg-fx
   :load-scene
   (fn [[course-id scene-id]]
     (i/load-scene course-id scene-id (fn [scene] (re-frame/dispatch [::set-scene scene-id scene])))))
+
+(re-frame/reg-fx
+  :load-progress
+  (fn [course-id]
+    (i/load-progress course-id (fn [progress]
+                                 (re-frame/dispatch [:complete-request :load-progress])
+                                 (if progress
+                                   (re-frame/dispatch [::set-progress-data progress])
+                                   (re-frame/dispatch [::init-default-progress]))
+                                 (re-frame/dispatch [::show-scene-loading])))))
+
+(re-frame/reg-fx
+  :load-lessons
+  (fn [course-id]
+    (i/load-lessons course-id (fn [{:keys [items lesson-sets]}]
+                                (re-frame/dispatch [:complete-request :load-lessons])
+                                (re-frame/dispatch [::set-course-dataset-items items])
+                                (re-frame/dispatch [::set-course-lessons lesson-sets])))))
 
 (re-frame/reg-fx
   :reload-asset
@@ -91,8 +112,7 @@
                            (assoc :duration (get variable (-> action :duration keyword)))
                            (assoc :offset (get variable (-> action :offset keyword))))]
       {:execute-audio (-> audio-params
-                          (assoc :on-ended (ce/dispatch-success-fn action)))})
-    ))
+                          (assoc :on-ended (ce/dispatch-success-fn action)))})))
 
 (re-frame/reg-event-fx
   ::execute-transition
@@ -101,8 +121,7 @@
           transition (get-in db [:transitions scene-id transition-id])]
       {:transition {:component transition
                     :to        to
-                    :on-ended  (ce/dispatch-success-fn action)}})
-    ))
+                    :on-ended  (ce/dispatch-success-fn action)}})))
 
 (re-frame/reg-event-fx
   ::execute-scene
@@ -180,7 +199,10 @@
   ::start-course
   (fn [{:keys [db]} [_ course-id]]
     (if (not= course-id (:current-course db))
-      {:db (assoc db :current-course course-id)
+      {:db (-> db
+               (assoc :current-course course-id)
+               (assoc :ui-screen :course-loading)
+               (assoc-in [:loading :load-course] true))
        :load-course course-id})))
 
 (re-frame/reg-event-fx
@@ -206,6 +228,17 @@
     (let [current-scene (:current-scene db)]
       {:db (cond-> (assoc-in db [:scenes scene-id] scene)
               (= current-scene scene-id) (assoc :current-scene-data scene))})))
+
+(re-frame/reg-event-fx
+  ::set-progress-data
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :progress-data data)}))
+
+(re-frame/reg-event-fx
+  ::init-default-progress
+  (fn [{:keys [db]} [_ _]]
+    (let [default-progress (get-in db [:course-data :default-progress])]
+      {:db (assoc db :progress-data default-progress)})))
 
 (re-frame/reg-event-db
   ::register-transition
@@ -256,3 +289,38 @@
       (if prev
         {:dispatch [::set-current-scene prev]}
         (set! (.-location js/window) "/")))))
+
+(re-frame/reg-event-fx
+  ::load-progress
+  (fn [{:keys [db]} [_ course-id]]
+    {:db (assoc-in db [:loading :load-progress] true)
+     :load-progress course-id}))
+
+(re-frame/reg-event-fx
+  ::load-lessons
+  (fn [{:keys [db]} [_ course-id]]
+    {:db (assoc-in db [:loading :load-lessons] true)
+     :load-lessons course-id}))
+
+(re-frame/reg-event-fx
+  ::show-scene-loading
+  (fn [{:keys [db]} _]
+    {:db (assoc db :ui-screen :default)}))
+
+(re-frame/reg-event-fx
+  ::check-course-loaded
+  (fn [{:keys [db]} _]
+    (let [loading (:loading db)]
+      (if (some #(contains? loading %) [:load-course :load-progress :load-lessons])
+        {:db (assoc db :ui-screen :course-loading)}
+        {:db (assoc db :ui-screen :default)}))))
+
+(re-frame/reg-event-fx
+  ::set-course-dataset-items
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :dataset-items data)}))
+
+(re-frame/reg-event-fx
+  ::set-course-lessons
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :lessons data)}))

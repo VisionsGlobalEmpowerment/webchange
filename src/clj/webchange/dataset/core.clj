@@ -86,3 +86,10 @@
   [id]
   (db/delete-lesson-set! {:id id})
   [true {:id id}])
+
+(defn get-course-lessons [course-name]
+  (let [{course-id :id} (db/get-course {:name course-name})
+        items (db/get-course-items {:course_id course-id})
+        lesson-sets (db/get-course-lessons {:course_id course-id})]
+        {:items items
+         :lesson-sets lesson-sets}))

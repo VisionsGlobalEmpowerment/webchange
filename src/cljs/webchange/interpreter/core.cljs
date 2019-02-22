@@ -51,6 +51,12 @@
 (def resources "")
 (def http-cache (atom {}))
 
+(defn get-url [url]
+  (when (not (contains? @http-cache url))
+    (let [response (http/get url {:with-credentials? false})]
+      (swap! http-cache assoc url response)))
+  (get @http-cache url))
+
 (defn course-url
   [course-id]
   (str host "/courses/" course-id))
@@ -58,10 +64,7 @@
 (defn get-course
   [course-id]
   (let [url (course-url course-id)]
-    (when (not (contains? @http-cache url))
-      (let [response (http/get url {:with-credentials? false})]
-        (swap! http-cache assoc url response)))
-    (get @http-cache url)))
+    (get-url url)))
 
 (defn scene-url
   [course-id scene-id]
@@ -70,10 +73,25 @@
 (defn get-scene
   [course-id scene-id]
   (let [url (scene-url course-id scene-id)]
-    (when (not (contains? @http-cache url))
-      (let [response (http/get url {:with-credentials? false})]
-        (swap! http-cache assoc url response)))
-    (get @http-cache url)))
+    (get-url url)))
+
+(defn progress-url
+  [course-id]
+  (str host "/courses/" course-id "/current-progress"))
+
+(defn get-progress
+  [course-id]
+  (let [url (progress-url course-id)]
+    (get-url url)))
+
+(defn lessons-url
+  [course-id]
+  (str host "/courses/" course-id "/lesson-sets"))
+
+(defn get-lessons
+  [course-id]
+  (let [url (lessons-url course-id)]
+    (get-url url)))
 
 (defn get-total-size
   [assets]
@@ -121,6 +139,18 @@
             scene (:body scene-response)]
         (load-assets (:assets scene) scene-id)
         (cb scene))))
+
+(defn load-progress
+  [course-id cb]
+  (go (let [response (<! (get-progress course-id))
+            result (-> response :body :progress)]
+        (cb result))))
+
+(defn load-lessons
+  [course-id cb]
+  (go (let [response (<! (get-lessons course-id))
+            result (-> response :body)]
+        (cb result))))
 
 (defn length
   [cx cy x y]

@@ -368,3 +368,10 @@
         request (-> (mock/request :delete url)
                     user-logged-in)]
     (handler/dev-handler request)))
+
+(defn get-course-lessons
+  [course-name]
+  (let [url (str "/api/courses/" course-name "/lesson-sets")
+        request (-> (mock/request :get url)
+                    user-logged-in)]
+    (handler/dev-handler request)))

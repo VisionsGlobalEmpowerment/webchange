@@ -144,6 +144,14 @@
         [kimage "/raw/img/ui/play_button_01.png"]])
      ]))
 
+(defn course-loading-screen []
+  [:> Group
+   [kimage "/raw/img/bg.jpg"]
+
+   [:> Group {:x 628 :y 294}
+    [kimage "/raw/img/ui/logo.png"]]
+   ])
+
 (defn close-button
   [x y]
   [:> Group {:x x :y y :on-click #(re-frame/dispatch [::ie/close-scene])} [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
@@ -308,13 +316,12 @@
   (fn [course-id]
     (let [viewport (re-frame/subscribe [::subs/viewport])
           viewbox (get-viewbox @viewport)
-          ui-screen (re-frame/subscribe [::subs/ui-screen])]
+          ui-screen @(re-frame/subscribe [::subs/ui-screen])]
       [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (- (compute-x viewbox)) :y (- (compute-y viewbox))
                  :scale-x (/ (:width @viewport) (:width viewbox)) :scale-y (/ (:height @viewport) (:height viewbox))}
        [:> Layer
-        (if (= @ui-screen :settings)
-          [settings]
+        (case ui-screen
+          :settings [settings]
+          :course-loading [course-loading-screen]
           [current-scene]
-          )
-        ]]
-      )))
+          )]])))
