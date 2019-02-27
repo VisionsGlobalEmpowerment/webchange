@@ -2,20 +2,29 @@
   (:require [webchange.db.core :refer [*db*] :as db]
             [java-time :as jt]
             [clojure.tools.logging :as log]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [webchange.scene :as scene]))
+
+(def hardcoded {"test" true})
 
 (defn get-course-data
   [course-name]
-  (let [{course-id :id} (db/get-course {:name course-name})
-        latest-version (db/get-latest-course-version {:course_id course-id})]
-    (:data latest-version)))
+  (if (contains? hardcoded course-name)
+    (scene/get-course course-name)
+    (let [{course-id :id} (db/get-course {:name course-name})
+          latest-version (db/get-latest-course-version {:course_id course-id})]
+      (:data latest-version))))
+
 
 (defn get-scene-data
   [course-name scene-name]
-  (let [{course-id :id} (db/get-course {:name course-name})
-        {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
-        latest-version (db/get-latest-scene-version {:scene_id scene-id})]
-    (:data latest-version)))
+  (if (contains? hardcoded course-name)
+    (scene/get-scene course-name scene-name)
+    (let [{course-id :id} (db/get-course {:name course-name})
+          {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
+          latest-version (db/get-latest-scene-version {:scene_id scene-id})]
+      (:data latest-version))))
+
 
 (defn save-scene!
   [course-name scene-name scene-data owner-id]

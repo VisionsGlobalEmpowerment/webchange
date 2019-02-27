@@ -99,3 +99,13 @@
         retrieved (-> course-name f/get-course-lessons :body (json/read-str :key-fn keyword))]
     (is (= 1 (count (:items retrieved))))
     (is (= 1 (count (:lesson-sets retrieved))))))
+
+(deftest assets-for-items-can-be-retrieved
+  (let [{course-id :id course-name :name} (f/course-created)
+        {dataset-id :id} (f/dataset-created {:course-id course-id})
+        {item-id :id} (f/dataset-item-created {:dataset-id dataset-id})
+        _ (f/lesson-set-created {:dataset-id dataset-id :data {:items [{:id item-id}]}})
+        retrieved (-> course-name f/get-course-lessons :body (json/read-str :key-fn keyword))
+        asset (-> retrieved :assets first)]
+    (is (not (nil? (:url asset))))
+    (is (not (nil? (:type asset))))))

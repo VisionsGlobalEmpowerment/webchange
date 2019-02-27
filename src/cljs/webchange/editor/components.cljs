@@ -39,6 +39,11 @@
                   {:key :anim-text :value :anim-text :text "Animation Text"}
                   {:key :anim-texture :value :anim-texture :text "Animation Texture"}])
 
+(def item-field-types [{:key :number :value :number :text "Number"}
+                       {:key :string :value :string :text "String"}
+                       {:key :image :value :image :text "Image"}
+                       {:key :audio :value :audio :text "Audio"}])
+
 (declare background)
 (declare image)
 (declare transparent)
@@ -194,10 +199,11 @@
 
 (defn animation
   [scene-id name object]
-  (let [params (object-params object)]
+  (let [params (object-params object)
+        animation-name (or (:scene-name object) (:name object))]
     [:> Group params
      [anim (-> object
-               (assoc :on-mount #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2]))
+               (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %]))
                (assoc :start false))]
      [:> Rect (-> (rect-params scene-id name object)
                   (assoc :origin {:type "center-bottom"})
@@ -466,7 +472,7 @@
   (r/with-let [field-data (r/atom {})]
               [na/form-group {}
                [na/form-input {:label "name" :on-change #(swap! field-data assoc :name (-> %2 .-value)) :inline? true}]
-               [na/form-input {:label "type" :on-change #(swap! field-data assoc :type (-> %2 .-value)) :inline? true}]
+               [sa/Dropdown {:placeholder "Type" :search true :selection true :options item-field-types :on-change #(swap! field-data assoc :type (.-value %2))}]
                [na/form-button {:content "Add field" :on-click #(swap! data-atom update-in [:fields] conj @field-data)}]]))
 
 (defn add-dataset-form

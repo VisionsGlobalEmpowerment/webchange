@@ -24,12 +24,12 @@
 
 (re-frame/reg-event-db
   ::set-loading-progress
-  (fn [db [_ [scene-id value]]]
+  (fn [db [_ scene-id value]]
     (assoc-in db [:scene-loading-progress scene-id] value)))
 
 (re-frame/reg-event-db
   ::set-scene-loaded
-  (fn [db [_ [scene-id value]]]
+  (fn [db [_ scene-id value]]
     (assoc-in db [:scene-loading-complete scene-id] value)))
 
 (re-frame/reg-event-db

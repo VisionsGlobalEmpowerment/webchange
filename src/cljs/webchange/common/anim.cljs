@@ -27,7 +27,7 @@
     (.start animation)))
 
 (defn anim
-  [{:keys [name anim speed on-mount start mix] :or {mix 0.2 speed 1}}]
+  [{:keys [name anim speed on-mount start mix skin] :or {mix 0.2 speed 1 skin "default"}}]
   (let [atlas (texture-atlas name)
         atlas-loader (s/AtlasAttachmentLoader. atlas)
         skeleton-json (s/SkeletonJson. atlas-loader)
@@ -37,8 +37,9 @@
         _ (set! (.-defaultMix animation-state-data) mix)
         animation-state (s/AnimationState. animation-state-data)]
     (set! (.-flipY skeleton) true)
-    (fn [{:keys [name anim speed on-mount start mix] :or {mix 0.2 speed 1}}]
+    (fn [{:keys [name anim speed on-mount start mix skin] :or {mix 0.2 speed 1 skin "default"}}]
       (.setAnimation animation-state 0 anim true)
+      (.setSkinByName skeleton skin)
       [:> Shape {:time-diff  0
                  :scene-func (fn [context shape]
                                (.update animation-state (* (.getAttr shape "timeDiff") speed))
@@ -49,5 +50,5 @@
                  :ref        (fn [ref] (if ref
                                          (do
                                            (when start (start-animation ref))
-                                           (on-mount animation-state ref))
+                                           (on-mount {:animation-state animation-state :skeleton skeleton :shape ref}))
                                          ))}])))

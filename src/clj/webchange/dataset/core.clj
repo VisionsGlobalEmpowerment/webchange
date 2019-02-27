@@ -87,9 +87,26 @@
   (db/delete-lesson-set! {:id id})
   [true {:id id}])
 
+(defn assets-from-item [asset-fields item]
+  (map #(identity {:url (get-in item [:data (-> % :name keyword)]) :size 1 :type (:type %)}) asset-fields))
+
+(defn is-asset? [field]
+  (some #(= (:type field) %) ["audio" "image"]))
+
+(defn asset-fields [dataset]
+  (let [fields (get-in dataset [:scheme :fields])]
+    (filter is-asset? fields)))
+
+(defn assets-from-item-list [datasets items]
+  (let [asset-fields (into {} (map #(identity [(:id %) (asset-fields %)])) datasets)]
+    (mapcat #(assets-from-item (get asset-fields (:dataset-id %)) %) items)))
+
 (defn get-course-lessons [course-name]
   (let [{course-id :id} (db/get-course {:name course-name})
+        datasets (db/get-datasets-by-course {:course_id course-id})
         items (db/get-course-items {:course_id course-id})
         lesson-sets (db/get-course-lessons {:course_id course-id})]
-        {:items items
-         :lesson-sets lesson-sets}))
+    {:datasets datasets
+     :items items
+     :lesson-sets lesson-sets
+     :assets (assets-from-item-list datasets items)}))

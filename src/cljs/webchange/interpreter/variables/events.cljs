@@ -6,10 +6,13 @@
     ))
 
 (e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider)
+(e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
 (e/reg-simple-executor :vars-var-provider ::execute-vars-var-provider)
 (e/reg-simple-executor :test-var ::execute-test-var)
+(e/reg-simple-executor :test-var-scalar ::execute-test-var-scalar)
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
+(e/reg-simple-executor :copy-variable ::execute-copy-variable)
 
 (defn get-variable
   [db var-name]
@@ -42,15 +45,18 @@
          (filter #(->> % :id (contains? processed) not)))))
 
 (defn provide
-  [db items variables provider-id]
-  (let [new-items (->> (unprocessed db items provider-id)
-                       shuffle
-                       (take (count variables)))
-        processed (->> new-items (map :id) (into #{}))
-        vars (zipmap variables new-items)]
-    (-> db
-        (set-variables vars)
-        (add-processed provider-id processed))))
+  ([db items variables provider-id]
+   (provide db items variables provider-id {}))
+  ([db items variables provider-id params]
+    (let [filter (if (:shuffled params) shuffle identity)
+          new-items (->> (unprocessed db items provider-id)
+                         filter
+                         (take (count variables)))
+          processed (->> new-items (map :id) (into #{}))
+          vars (zipmap variables new-items)]
+      (-> db
+          (set-variables vars)
+          (add-processed provider-id processed)))))
 
 (defn has-next
   [db items provider-id]
@@ -64,6 +70,13 @@
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
     {:db (set-variable db var-name var-value)
      :dispatch (e/success-event action)}))
+
+(re-frame/reg-event-fx
+  ::execute-copy-variable
+  (fn [{:keys [db]} [_ {:keys [var-name from] :as action}]]
+    (let [var-value (get-variable db from)]
+      {:db (set-variable db var-name var-value)
+       :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-clear-vars
@@ -85,7 +98,7 @@
                              (vector :scenes scene-id :actions)
                              (get-in db))]
       (if has-next
-        {:db (provide db items variables provider-id)
+        {:db (provide db items variables provider-id {:shuffled true})
          :dispatch (e/success-event action)}
         {:dispatch [::e/execute-action on-end-action]}))))
 
@@ -94,6 +107,20 @@
   (fn [{:keys [db]} [_ {:keys [from variables provider-id] :as action}]]
     (let [scene-id (:current-scene db)
           items (-> (get-in db [:scenes scene-id :datasets (keyword from)]) vals)]
+      {:db (provide db items variables provider-id  {:shuffled true})
+       :dispatch (e/success-event action)})))
+
+(re-frame/reg-event-fx
+  ::execute-lesson-var-provider
+  (fn [{:keys [db]} [_ {:keys [from variables provider-id] :as action}]]
+    (let [current-lesson-id (get-in db [:progress-data :current-lesson])
+          course-lessons (get-in db [:course-data :lessons])
+          lesson-set-name (-> (filter #(= current-lesson-id (:id %)) course-lessons)
+                              first
+                              :lesson-sets
+                              (get (keyword from)))
+          lesson (get-in db [:lessons lesson-set-name])
+          items (map #(get-in db [:dataset-items % :data]) (:item-ids lesson))]
       {:db (provide db items variables provider-id)
        :dispatch (e/success-event action)})))
 
@@ -107,6 +134,17 @@
       (if (= (key var) (key test))
         {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
         {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
+
+(re-frame/reg-event-fx
+  ::execute-test-var-scalar
+  (fn [{:keys [db]} [_ {:keys [value var-name success fail] :as action}]]
+    (let [test (get-variable db var-name)
+          success (e/get-action success db action)
+          fail (e/get-action fail db action)]
+      (if (= value test)
+        {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
+        {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
+
 
 (re-frame/reg-event-fx
   ::execute-counter

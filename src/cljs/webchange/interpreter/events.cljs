@@ -6,6 +6,7 @@
     [webchange.common.events :as ce]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.common.anim :refer [start-animation]]
+    [ajax.core :refer [json-request-format json-response-format]]
     ))
 
 (re-frame/reg-fx
@@ -48,15 +49,20 @@
                                  (if progress
                                    (re-frame/dispatch [::set-progress-data progress])
                                    (re-frame/dispatch [::init-default-progress]))
-                                 (re-frame/dispatch [::show-scene-loading])))))
+                                 (re-frame/dispatch [::check-course-loaded])))))
 
 (re-frame/reg-fx
   :load-lessons
   (fn [course-id]
-    (i/load-lessons course-id (fn [{:keys [items lesson-sets]}]
-                                (re-frame/dispatch [:complete-request :load-lessons])
-                                (re-frame/dispatch [::set-course-dataset-items items])
-                                (re-frame/dispatch [::set-course-lessons lesson-sets])))))
+    (i/load-lessons course-id
+                    (fn [{:keys [items lesson-sets]}]
+                      (re-frame/dispatch [:complete-request :load-lessons])
+                      (re-frame/dispatch [::set-course-dataset-items items])
+                      (re-frame/dispatch [::set-course-lessons lesson-sets])
+                      (re-frame/dispatch [::check-course-loaded]))
+                    #(re-frame/dispatch [::set-dataset-loading-progress %])
+                    #(do (re-frame/dispatch [::set-dataset-loaded])
+                         (re-frame/dispatch [::check-course-loaded])))))
 
 (re-frame/reg-fx
   :reload-asset
@@ -85,6 +91,11 @@
   (fn [shape]
     (start-animation shape)))
 
+(re-frame/reg-fx
+  :set-skin
+  (fn [{:keys [state skin]}]
+    (.setSkinByName (:skeleton state) skin)))
+
 (defn get-audio-key
   [db id]
   (get-in db [:scenes (:current-scene db) :audio (keyword id)]))
@@ -96,6 +107,7 @@
 (ce/reg-simple-executor :animation ::execute-animation)
 (ce/reg-simple-executor :add-animation ::execute-add-animation)
 (ce/reg-simple-executor :start-animation ::execute-start-animation)
+(ce/reg-simple-executor :set-skin ::execute-set-skin)
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
@@ -184,6 +196,62 @@
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
+  ::execute-set-skin
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:set-skin (-> action
+                          (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+       :dispatch-n (list (ce/success-event action))})))
+
+(re-frame/reg-event-fx
+  ::execute-finish-activity
+  (fn [{:keys [db]} [_ action]]
+    (let [current-activity (get-in db [:progress-data :current-activity])
+          current-lesson (get-in db [:progress-data :current-lesson])
+          activity-lesson (get-in db [:activity-lesson])]
+      (if (and (= current-activity (:id action)) #_(= current-lesson activity-lesson))
+        {:dispatch [::next-workflow-action]}))))
+
+(re-frame/reg-event-fx
+  ::next-workflow-action
+  (fn [{:keys [db]} _]
+    (let [workflow-actions (get-in db [:course-data :workflow-actions])
+          finished-actions (get-in db [:progress-data :finished-workflow-actions])
+          next-action (->> workflow-actions
+                           (filter #(contains? finished-actions (:id %)))
+                           (sort-by :order)
+                           first)]
+      (case (:type next-action)
+        "set-activity" {:dispatch [::set-activity next-action]}))))
+
+(re-frame/reg-event-fx
+  ::set-activity
+  (fn [{:keys [db]} [_ action]]
+    {:db (-> db
+             (update-in [:progress-data] assoc :current-activity (:activity action))
+             (assoc-in [:progress-data :finished-workflow-actions (:id action)] true))
+     :dispatch [::progress-data-changed]}))
+
+(re-frame/reg-event-fx
+  ::progress-data-changed
+  (fn [{:keys [db]} _]
+    (let [course-id (:current-course db)
+          progress (:progress-data db)]
+      {:db (assoc-in db [:loading :save-progress] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/courses/" course-id "/current-progress")
+                    :params          {:progress progress}
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::save-progress-success]
+                    :on-failure      [:api-request-error :save-progress]}})))
+
+(re-frame/reg-event-fx
+  ::save-progress-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :save-progress])}))
+
+(re-frame/reg-event-fx
   ::set-music-volume
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db :music-volume value)
@@ -248,9 +316,9 @@
 
 (re-frame/reg-event-db
   ::register-animation
-  (fn [db [_ name state shape]]
+  (fn [db [_ name animation]]
     (let [scene-id (:current-scene db)]
-      (assoc-in db [:scenes scene-id :animations name] {:animation-state state :shape shape}))))
+      (assoc-in db [:scenes scene-id :animations name] animation))))
 
 
 (re-frame/reg-event-fx
@@ -299,7 +367,9 @@
 (re-frame/reg-event-fx
   ::load-lessons
   (fn [{:keys [db]} [_ course-id]]
-    {:db (assoc-in db [:loading :load-lessons] true)
+    {:db (-> db
+             (assoc-in [:loading :load-lessons] true)
+             (assoc-in [:loading :load-lessons-assets] true))
      :load-lessons course-id}))
 
 (re-frame/reg-event-fx
@@ -311,16 +381,31 @@
   ::check-course-loaded
   (fn [{:keys [db]} _]
     (let [loading (:loading db)]
-      (if (some #(contains? loading %) [:load-course :load-progress :load-lessons])
+      (if (some #(get loading %) [:load-course :load-progress :load-lessons :load-lessons-assets])
         {:db (assoc db :ui-screen :course-loading)}
         {:db (assoc db :ui-screen :default)}))))
 
 (re-frame/reg-event-fx
   ::set-course-dataset-items
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :dataset-items data)}))
+    (let [prepared (into {} (map #(identity [(:id %) %]) data))]
+      {:db (assoc db :dataset-items prepared)})))
+
+(defn prepare-lesson [{data :data :as lesson}]
+  (assoc lesson :item-ids (map #(:id %) (:items data))))
 
 (re-frame/reg-event-fx
   ::set-course-lessons
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :lessons data)}))
+    (let [prepared (into {} (map #(identity [(:name %) (prepare-lesson %)]) data))]
+      {:db (assoc db :lessons prepared)})))
+
+(re-frame/reg-event-db
+  ::set-dataset-loading-progress
+  (fn [db [_ value]]
+    (assoc db :dataset-loading-progress value)))
+
+(re-frame/reg-event-db
+  ::set-dataset-loaded
+  (fn [db _]
+    (assoc-in db [:loading :load-lessons-assets] false)))

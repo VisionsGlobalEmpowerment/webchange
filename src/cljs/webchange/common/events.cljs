@@ -60,12 +60,25 @@
       (assoc :var (:var prev))
       (update-in [:params] merge (:params prev))))
 
+(defn with-var-property
+  [db]
+  (fn [action {:keys [var-name var-property action-property]}]
+    (let [var (get-in db [:scenes (:current-scene db) :variables var-name])]
+      (assoc action (keyword action-property) (get var (keyword var-property))))))
+
+(defn with-var-properties
+  [action db]
+  (if-let [from-var (:from-var action)]
+    (reduce (with-var-property db) action from-var)
+    action))
+
 (defn get-action
   ([id db]
     (get-action id db {}))
   ([id db prev]
    (let [action (get-in db [:scenes (:current-scene db) :actions (keyword id)])]
-     (with-prev action prev))))
+     (-> action
+         (with-prev prev)))))
 
 (defn flow-registered?
   [flows tag]
@@ -80,7 +93,9 @@
 
 (reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action
                                                                       :id
-                                                                      (get-action db action))]))
+                                                                      (get-action db action)
+                                                                      (assoc :flow-id (:flow-id action))
+                                                                      (assoc :action-id (:action-id action)))]))
 (reg-simple-executor :sequence ::execute-sequence)
 (reg-simple-executor :sequence-data ::execute-sequence-data)
 (reg-simple-executor :parallel ::execute-parallel)
@@ -90,8 +105,10 @@
   ::execute-action
   (fn [{:keys [db]} [_ {:keys [type] :as action}]]
     (if (can-execute? db action)
-      (let [handler (get @executors (keyword type))]
-        {:dispatch (handler {:db db :action action})}))))
+      (let [handler (get @executors (keyword type))
+            prepared-action (with-var-properties action db)]
+        (js/console.log prepared-action)
+        {:dispatch (handler {:db db :action prepared-action})}))))
 
 (re-frame/reg-event-fx
   ::execute-remove-flows

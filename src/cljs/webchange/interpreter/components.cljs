@@ -230,28 +230,26 @@
 
 (defn draw-object
   [scene-id name]
-  (let [o (re-frame/subscribe [::subs/scene-object scene-id name])
-        type (keyword (:type @o))]
+  (let [o @(re-frame/subscribe [::subs/scene-object-with-var scene-id name])
+        type (keyword (:type o))]
     (case type
-      :background [kimage (get-data-as-url (:src @o))]
-      :image [image scene-id name @o]
-      :transparent [:> Group (prepare-group-params @o)
-                                 [:> Rect {:x 0 :width (:width @o) :height (:height @o)}]]
-      :group [group scene-id name @o]
-      :placeholder [placeholder scene-id name @o]
-      :animation [animation scene-id name @o]
-      :text [text scene-id name @o]
+      :background [kimage (get-data-as-url (:src o))]
+      :image [image scene-id name o]
+      :transparent [:> Group (prepare-group-params o)
+                                 [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
+      :group [group scene-id name o]
+      :placeholder [placeholder scene-id name o]
+      :animation [animation scene-id name o]
+      :text [text scene-id name o]
       )))
 
 (defn placeholder
-  [scene-id name object]
-  (let [item (re-frame/subscribe [::vars.subs/variable scene-id (:var-name object)])]
-    [image scene-id name (cond-> object
-                                 :always (assoc :type "image")
-                                 (contains? object :image-src) (assoc :src (get @item (-> object :image-src keyword)))
-                                 (contains? object :image-width) (assoc :width (get @item (-> object :image-width keyword)))
-                                 (contains? object :image-height) (assoc :height (get @item (-> object :image-height keyword)))
-                                 :always (assoc :var @item))]))
+  [scene-id name {item :var :as object}]
+  [image scene-id name (cond-> object
+                               :always (assoc :type "image")
+                               (contains? object :image-src) (assoc :src (get item (-> object :image-src keyword)))
+                               (contains? object :image-width) (assoc :width (get item (-> object :image-width keyword)))
+                               (contains? object :image-height) (assoc :height (get item (-> object :image-height keyword))))])
 
 (defn text
   [scene-id name object]
@@ -270,16 +268,17 @@
 
 (defn animation
   [scene-id name object]
-  (let [params (prepare-group-params object)]
-  [:> Group params
-   [anim (-> object
-             (assoc :on-mount #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2])))]
-   [:> Rect (-> {:width (:width params)
-                 :height (:height params)
-                 :opacity 0
-                 :origin {:type "center-top"}
-                 :scale-y -1}
-                with-origin-offset)]]))
+  (let [params (prepare-group-params object)
+        animation-name (or (:scene-name object) (:name object))]
+    [:> Group params
+     [anim (-> object
+               (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %])))]
+     [:> Rect (-> {:width (:width params)
+                   :height (:height params)
+                   :opacity 0
+                   :origin {:type "center-top"}
+                   :scale-y -1}
+                  with-origin-offset)]]))
 
 (defn triggers
   [scene-id]

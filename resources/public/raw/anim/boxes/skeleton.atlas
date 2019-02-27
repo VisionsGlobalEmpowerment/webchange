@@ -1,0 +1,153 @@
+
+skeleton.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+b1
+  rotate: false
+  xy: 2, 164
+  size: 218, 47
+  orig: 218, 47
+  offset: 0, 0
+  index: -1
+b2
+  rotate: false
+  xy: 272, 420
+  size: 218, 47
+  orig: 218, 47
+  offset: 0, 0
+  index: -1
+b3
+  rotate: true
+  xy: 542, 574
+  size: 218, 47
+  orig: 218, 47
+  offset: 0, 0
+  index: -1
+b4
+  rotate: false
+  xy: 717, 932
+  size: 218, 47
+  orig: 218, 47
+  offset: 0, 0
+  index: -1
+b5
+  rotate: false
+  xy: 2, 115
+  size: 218, 47
+  orig: 218, 47
+  offset: 0, 0
+  index: -1
+box1
+  rotate: false
+  xy: 2, 725
+  size: 268, 254
+  orig: 268, 254
+  offset: 0, 0
+  index: -1
+box2
+  rotate: false
+  xy: 2, 469
+  size: 268, 254
+  orig: 268, 254
+  offset: 0, 0
+  index: -1
+box3
+  rotate: false
+  xy: 272, 725
+  size: 268, 254
+  orig: 268, 254
+  offset: 0, 0
+  index: -1
+box4
+  rotate: false
+  xy: 2, 213
+  size: 268, 254
+  orig: 268, 254
+  offset: 0, 0
+  index: -1
+box5
+  rotate: false
+  xy: 272, 469
+  size: 268, 254
+  orig: 268, 254
+  offset: 0, 0
+  index: -1
+boxwing
+  rotate: false
+  xy: 542, 794
+  size: 173, 185
+  orig: 173, 185
+  offset: 0, 0
+  index: -1
+fx01
+  rotate: false
+  xy: 272, 307
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx02
+  rotate: true
+  xy: 591, 655
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx03
+  rotate: false
+  xy: 717, 819
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx04
+  rotate: false
+  xy: 2, 2
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx05
+  rotate: false
+  xy: 272, 194
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx06
+  rotate: true
+  xy: 411, 281
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx07
+  rotate: false
+  xy: 411, 168
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx09
+  rotate: false
+  xy: 591, 542
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx10
+  rotate: false
+  xy: 856, 819
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
+fx11
+  rotate: false
+  xy: 141, 2
+  size: 137, 111
+  orig: 137, 111
+  offset: 0, 0
+  index: -1
