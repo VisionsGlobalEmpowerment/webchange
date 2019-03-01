@@ -87,6 +87,7 @@
 (defroutes pages-routes
            (GET "/" [] (public-route))
            (GET "/login" [] (public-route))
+           (GET "/student-login" [] (public-route))
            (GET "/register" [] (public-route))
 
            (GET "/editor" request (authenticated-route request))
