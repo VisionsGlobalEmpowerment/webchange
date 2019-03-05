@@ -186,3 +186,20 @@
           .play)
       (.to @component (clj->js params)))
     ))
+
+(defn collide?
+  [shape1 shape2]
+  (let [r1 (.getClientRect @shape1)
+        r2 (.getClientRect @shape2)
+        r1x (.-x r1)
+        r1y (.-y r1)
+        r1width (.-width r1)
+        r1height (.-height r1)
+        r2x (.-x r2)
+        r2y (.-y r2)
+        r2width (.-width r2)
+        r2height (.-height r2)]
+    (not (or (> r2x (+ r1x r1width))
+             (< (+ r2x r2width) r1x)
+             (> r2y (+ r1y r1height))
+             (< (+ r2y r2height) r1y)))))

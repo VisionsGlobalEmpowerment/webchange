@@ -111,6 +111,7 @@
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
+(ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -409,3 +410,16 @@
   ::set-dataset-loaded
   (fn [db _]
     (assoc-in db [:loading :load-lessons-assets] false)))
+
+
+(re-frame/reg-event-fx
+  ::execute-test-transitions-collide
+  (fn [{:keys [db]} [_ {:keys [transition-1 transition-2 success fail] :as action}]]
+    (let [scene-id (:current-scene db)
+          transition-1-shape (get-in db [:transitions scene-id transition-1])
+          transition-2-shape (get-in db [:transitions scene-id transition-2])
+          success (ce/get-action success db action)
+          fail (ce/get-action fail db action)]
+      (if (i/collide? transition-1-shape transition-2-shape)
+        {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
+        {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))

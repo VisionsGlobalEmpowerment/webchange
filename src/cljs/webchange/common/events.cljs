@@ -107,7 +107,6 @@
     (if (can-execute? db action)
       (let [handler (get @executors (keyword type))
             prepared-action (with-var-properties action db)]
-        (js/console.log prepared-action)
         {:dispatch (handler {:db db :action prepared-action})}))))
 
 (re-frame/reg-event-fx

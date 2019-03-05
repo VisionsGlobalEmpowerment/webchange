@@ -76,7 +76,6 @@
 (defn is-number-code? [c] (re-matches #"\d" c))
 
 (defn show-code-value [c]
-  (js/console.log (is-number-code? c))
   (if (is-number-code? c)
     [:div {:style {:margin "14px 14px 14px 14px" :vertical-align "bottom" :padding-bottom "14px" :width "38px" :height "38px" :display "inline-block" :font-size "40pt"}} c]
     [:div {:style {:margin "14px" :width "38px" :height "38px" :display "inline-block"

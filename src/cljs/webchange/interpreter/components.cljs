@@ -215,12 +215,19 @@
       (assoc object :ref (fn [ref] (reset! component ref))))
     object))
 
+(defn with-draggable
+  [{:keys [draggable] :as object}]
+  (if draggable
+    (assoc object :draggable true)
+    object))
+
 (defn prepare-group-params
   [object]
   (-> object
       prepare-actions
       with-origin-offset
-      with-transition))
+      with-transition
+      with-draggable))
 
 (declare group)
 (declare placeholder)
