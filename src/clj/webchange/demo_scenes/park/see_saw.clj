@@ -124,11 +124,11 @@
                                         :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
                                                {:type "sequence-data"
                                                 :data [{:type "empty" :duration 225}
-                                                       {:type "animation" :target "mari" :id "talking" :track 1}
+                                                       {:type "animation" :target "mari" :id "talk" :track 1}
                                                        {:type "empty" :duration 1307}
                                                        {:type "animation" :target "mari" :id "empty" :track 1}
                                                        {:type "empty" :duration 550}
-                                                       {:type "animation" :target "mari" :id "talking":track 1}
+                                                       {:type "animation" :target "mari" :id "talk":track 1}
                                                        {:type "empty" :duration 1069}
                                                        {:type "animation" :target "mari" :id "empty" :track 1}]}]}
 
@@ -137,11 +137,11 @@
                                         :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
                                                {:type "sequence-data"
                                                 :data [{:type "empty" :duration 225}
-                                                       {:type "animation" :target "mari" :id "talking" :track 1}
+                                                       {:type "animation" :target "mari" :id "talk" :track 1}
                                                        {:type "empty" :duration 1307}
                                                        {:type "animation" :target "mari" :id "empty" :track 1}
                                                        {:type "empty" :duration 550}
-                                                       {:type "animation" :target "mari" :id "talking" :track 1}
+                                                       {:type "animation" :target "mari" :id "talk" :track 1}
                                                        {:type "empty" :duration 1069}
                                                        {:type "animation" :target "mari" :id "empty" :track 1}]}]}
 
@@ -311,7 +311,7 @@
                                  :data [{:type "audio", :id "syllables", :start 0.77, :duration 1.24}
                                         {:type "sequence-data"
                                          :data [{:type "empty" :duration 225}
-                                                {:type "animation" :target "mari" :id "talking"}
+                                                {:type "animation" :target "mari" :id "talk"}
                                                 {:type "empty" :duration 1307}
                                                 {:type "animation" :target "mari" :id "idle"}]}]}
 

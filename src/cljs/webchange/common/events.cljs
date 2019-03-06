@@ -103,11 +103,15 @@
 
 (re-frame/reg-event-fx
   ::execute-action
-  (fn [{:keys [db]} [_ {:keys [type] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [type return-immediately] :as action}]]
     (if (can-execute? db action)
       (let [handler (get @executors (keyword type))
             prepared-action (with-var-properties action db)]
-        {:dispatch (handler {:db db :action prepared-action})}))))
+        (js/console.log "return immediately " return-immediately)
+        (if return-immediately
+          {:dispatch-n (list (handler {:db db :action prepared-action})
+                             (success-event action))}
+          {:dispatch (handler {:db db :action prepared-action})})))))
 
 (re-frame/reg-event-fx
   ::execute-remove-flows

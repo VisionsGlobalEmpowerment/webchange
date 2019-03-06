@@ -380,7 +380,7 @@
                                          {:type "audio", :id "syllables", :start 0.77, :duration 1.24}
                                          {:type "sequence-data"
                                           :data [{:type "empty" :duration 225}
-                                                 {:type "animation" :target "vera" :id "talking"}
+                                                 {:type "animation" :target "vera" :id "talk"}
                                                  {:type "empty" :duration 1307}
                                                  {:type "animation" :target "vera" :id "idle"}]}]}
 
@@ -394,7 +394,7 @@
                                      {:type "audio", :id "syllables", :start 0.77, :duration 1.24}
                                      {:type "sequence-data"
                                       :data [{:type "empty" :duration 225}
-                                             {:type "animation" :target "vera" :id "talking"}
+                                             {:type "animation" :target "vera" :id "talk"}
                                              {:type "empty" :duration 1307}
                                              {:type "animation" :target "vera" :id "idle"}]}]}
 
@@ -408,7 +408,7 @@
                                           {:type "audio", :id "syllables", :start 0.77, :duration 1.24}
                                           {:type "sequence-data"
                                            :data [{:type "empty" :duration 225}
-                                                  {:type "animation" :target "vera" :id "talking"}
+                                                  {:type "animation" :target "vera" :id "talk"}
                                                   {:type "empty" :duration 1307}
                                                   {:type "animation" :target "vera" :id "idle"}]}]}
 
