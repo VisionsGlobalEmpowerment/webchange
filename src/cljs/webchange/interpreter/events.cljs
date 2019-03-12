@@ -96,6 +96,14 @@
   (fn [{:keys [state skin]}]
     (.setSkinByName (:skeleton state) skin)))
 
+(re-frame/reg-fx
+  :animation-props
+  (fn [{{skeleton :skeleton} :state {:keys [flipX flipY x y]} :props}]
+    (when-not (nil? flipX) (set! (.-flipX skeleton) flipX))
+    (when-not (nil? flipY) (set! (.-flipY skeleton) flipY))
+    (when x (set! (.-x skeleton) x))
+    (when y (set! (.-y skeleton) y))))
+
 (defn get-audio-key
   [db id]
   (get-in db [:scenes (:current-scene db) :audio (keyword id)]))
@@ -108,6 +116,7 @@
 (ce/reg-simple-executor :add-animation ::execute-add-animation)
 (ce/reg-simple-executor :start-animation ::execute-start-animation)
 (ce/reg-simple-executor :set-skin ::execute-set-skin)
+(ce/reg-simple-executor :animation-props ::execute-set-animation-props)
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
@@ -205,6 +214,14 @@
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
+  ::execute-set-animation-props
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:animation-props (-> action
+                     (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+       :dispatch-n (list (ce/success-event action))})))
+
+(re-frame/reg-event-fx
   ::execute-finish-activity
   (fn [{:keys [db]} [_ action]]
     (let [current-activity (get-in db [:progress-data :current-activity])
@@ -231,10 +248,10 @@
     {:db (-> db
              (update-in [:progress-data] assoc :current-activity (:activity action))
              (assoc-in [:progress-data :finished-workflow-actions (:id action)] true))
-     :dispatch [::progress-data-changed]}))
+     :dispatch [:progress-data-changed]}))
 
 (re-frame/reg-event-fx
-  ::progress-data-changed
+  :progress-data-changed
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)
           progress (:progress-data db)]

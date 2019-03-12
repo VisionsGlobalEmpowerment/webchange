@@ -87,7 +87,7 @@
                           :scene-name "box1" :draggable {:var-name "drag-box-1"} :transition "box1"
                           :states {:default {:type "transparent"}
                                    :come {:type "animation" :name "boxes" :anim "come"
-                                             :scale {:x 0.2 :y 0.2} :speed 0.3 :loop false :start true
+                                             :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true
                                              :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
                                    :initial-position {:x 600 :y 400}}
                           :actions {:drag-end {:type "action" :id "drag-box1" :on "drag-end"}}}
@@ -97,7 +97,7 @@
                           :states {:default {:type "transparent"}
                                    :come {:type "animation" :name "boxes" :anim "come"
                                              :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]
-                                             :scale {:x 0.2 :y 0.2} :speed 0.3 :loop false :start true}
+                                             :scale {:x 0.35 :y 0.35} :speed 0.3 :loop false :start true}
                                    :initial-position {:x 1000 :y 400}}
                           :actions {:drag-end {:type "action" :id "drag-box2" :on "drag-end"}}}
 
@@ -106,7 +106,7 @@
                           :states {:default {:type "transparent"}
                                    :come {:type "animation" :name "boxes" :anim "come"
                                              :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]
-                                             :scale {:x 0.2 :y 0.2} :speed 0.3 :loop false :start true}
+                                             :scale {:x 0.25 :y 0.25} :speed 0.3 :loop false :start true}
                                    :initial-position {:x 1400 :y 400}}
                           :actions {:drag-end {:type "action" :id "drag-box3" :on "drag-end"}}}
 
@@ -346,4 +346,5 @@
                    :background "/raw/audio/background/POL-daily-special-short.mp3"
                    :fw-try-again "/raw/audio/ferris-wheel/fw-try-again.mp3"},
    :triggers      {:start {:on "start" :action "start-activity"}}
-   :metadata      {:autostart true}})
+   :metadata      {:autostart true
+                   :prev "park"}})

@@ -514,4 +514,5 @@
                    :background "/raw/audio/background/POL-daily-special-short.mp3"
                    :fw-try-again "/raw/audio/ferris-wheel/fw-try-again.mp3"},
    :triggers      {:music {:on "start" :action "start-background-music"}}
-   :metadata      {:autostart true}})
+   :metadata      {:autostart true
+                   :prev "map"}})

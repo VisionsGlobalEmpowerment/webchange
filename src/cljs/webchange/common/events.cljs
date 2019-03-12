@@ -60,17 +60,63 @@
       (assoc :var (:var prev))
       (update-in [:params] merge (:params prev))))
 
+(defn from-template
+  [template value]
+  (if template
+    (clojure.string/replace template "%" value)
+    value))
+
 (defn with-var-property
   [db]
-  (fn [action {:keys [var-name var-property action-property]}]
+  (fn [action {:keys [var-name var-property action-property template]}]
     (let [var (get-in db [:scenes (:current-scene db) :variables var-name])]
-      (assoc action (keyword action-property) (get var (keyword var-property))))))
+      (if var-property
+        (assoc action (keyword action-property) (->> (keyword var-property)
+                                                     (get var)
+                                                     (from-template template)))
+        (assoc action (keyword action-property) (from-template template var))))))
 
 (defn with-var-properties
   [action db]
   (if-let [from-var (:from-var action)]
     (reduce (with-var-property db) action from-var)
     action))
+
+(defn with-param-property
+  [action {:keys [param-property action-property template]}]
+    (let [value (get-in action [:params (keyword param-property)])]
+      (assoc action (keyword action-property) (from-template template value))))
+
+(defn with-param-properties
+  [action]
+  (if-let [from-params (:from-params action)]
+    (reduce with-param-property action from-params)
+    action))
+
+(defn with-progress-property
+  [db]
+  (fn [action {:keys [progress-property action-property template]}]
+    (let [value (get-in db [:progress-data :variables (keyword progress-property)])
+          variables (get-in db [:progress-data :variables])]
+      (js/console.log "with progress " value progress-property action-property)
+      (js/console.log variables)
+      (assoc action (keyword action-property) (from-template template value)))))
+
+(defn with-progress-properties
+  [action db]
+  (if-let [from-progress (:from-progress action)]
+    (reduce (with-progress-property db) action from-progress)
+    action))
+
+(def with-vars
+  (re-frame/->interceptor
+    :before  (fn [context]
+               (let [{:keys [db event]} (:coeffects context)
+                     action (-> event
+                                (with-param-properties)
+                                (with-var-properties db)
+                                (with-progress-properties db))]
+                 (assoc-in context [:coeffects :event] action)))))
 
 (defn get-action
   ([id db]
@@ -103,15 +149,14 @@
 
 (re-frame/reg-event-fx
   ::execute-action
-  (fn [{:keys [db]} [_ {:keys [type return-immediately] :as action}]]
+  [event-as-action with-vars]
+  (fn [{:keys [db]} {:keys [type return-immediately] :as action}]
     (if (can-execute? db action)
-      (let [handler (get @executors (keyword type))
-            prepared-action (with-var-properties action db)]
-        (js/console.log "return immediately " return-immediately)
+      (let [handler (get @executors (keyword type))]
         (if return-immediately
-          {:dispatch-n (list (handler {:db db :action prepared-action})
+          {:dispatch-n (list (handler {:db db :action action})
                              (success-event action))}
-          {:dispatch (handler {:db db :action prepared-action})})))))
+          {:dispatch (handler {:db db :action action})})))))
 
 (re-frame/reg-event-fx
   ::execute-remove-flows
@@ -171,7 +216,7 @@
 
 (re-frame/reg-event-fx
   ::execute-sequence
-  [event-as-action]
+  [event-as-action with-vars]
   (fn [{:keys [db]} action]
     (let [flow-id (random-uuid)
           action-id (random-uuid)
@@ -181,14 +226,15 @@
       (if current
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
-                                                    (get-action db action)
-                                                    (assoc :flow-id flow-id)
-                                                    (assoc :action-id action-id))])}
+                                                 (get-action db action)
+                                                 (assoc :flow-id flow-id)
+                                                 (assoc :action-id action-id)
+                                                 (with-prev action))])}
         {:dispatch (success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-sequence-data
-  [event-as-action]
+  [event-as-action with-vars]
   (fn [{:keys [db]} action]
     (let [flow-id (random-uuid)
           action-id (random-uuid)
@@ -199,12 +245,14 @@
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
                                                  (assoc :flow-id flow-id)
-                                                 (assoc :action-id action-id))])}
+                                                 (assoc :action-id action-id)
+                                                 (with-prev action))])}
         {:dispatch (success-event action)}))))
 
 (re-frame/reg-event-fx
   ::execute-parallel
-  (fn [{:keys [db]} [_ action]]
+  [event-as-action with-vars]
+  (fn [{:keys [db]} action]
     (let [flow-id (random-uuid)
           actions (->> (:data action)
                       (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))))

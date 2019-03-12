@@ -10,8 +10,12 @@
 (e/reg-simple-executor :vars-var-provider ::execute-vars-var-provider)
 (e/reg-simple-executor :test-var ::execute-test-var)
 (e/reg-simple-executor :test-var-scalar ::execute-test-var-scalar)
+(e/reg-simple-executor :test-var-list ::execute-test-var-list)
+(e/reg-simple-executor :test-value ::execute-test-value)
+(e/reg-simple-executor :case ::execute-case)
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
+(e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
 
 (defn get-variable
@@ -23,6 +27,10 @@
   [db var-name value]
   (let [scene-id (:current-scene db)]
     (assoc-in db [:scenes scene-id :variables var-name] value)))
+
+(defn set-progress
+  [db var-name value]
+  (assoc-in db [:progress-data :variables (keyword var-name)] value))
 
 (defn set-variables
   [db vars]
@@ -72,6 +80,12 @@
      :dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
+  ::execute-set-progress
+  (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
+    {:db (set-progress db var-name var-value)
+     :dispatch-n (list (e/success-event action) [:progress-data-changed])}))
+
+(re-frame/reg-event-fx
   ::execute-copy-variable
   (fn [{:keys [db]} [_ {:keys [var-name from] :as action}]]
     (let [var-value (get-variable db from)]
@@ -88,7 +102,7 @@
 
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
-  (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end shuffled] :or {shuffled true} :as action}]]
     (let [items (->> from
                      (map #(get-variable db %)))
           has-next (has-next db items provider-id)
@@ -98,7 +112,7 @@
                              (vector :scenes scene-id :actions)
                              (get-in db))]
       (if has-next
-        {:db (provide db items variables provider-id {:shuffled true})
+        {:db (provide db items variables provider-id {:shuffled shuffled})
          :dispatch (e/success-event action)}
         {:dispatch [::e/execute-action on-end-action]}))))
 
@@ -145,6 +159,37 @@
         {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
         {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
 
+(re-frame/reg-event-fx
+  ::execute-test-value
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [value1 value2 success fail] :as action}]
+    (let [success (e/get-action success db action)
+          fail (e/get-action fail db action)]
+      (if (= value1 value2)
+        {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
+        {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
+
+(re-frame/reg-event-fx
+  ::execute-test-var-list
+  (fn [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
+    (let [test (map #(get-variable db %) var-names)
+          success-action (e/get-action success db action)
+          fail-action (e/get-action fail db action)]
+      (if (= values test)
+        {:dispatch-n (list [::e/execute-action success-action] (e/success-event action))}
+
+        (if fail
+          {:dispatch-n (list [::e/execute-action fail-action] (e/success-event action))}
+          {:dispatch-n (list (e/success-event action))}
+          )))))
+
+(re-frame/reg-event-fx
+  ::execute-case
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [value options] :as action}]
+    (let [success (get options (keyword value))]
+      (if value
+        {:dispatch-n (list [::e/execute-action success] (e/success-event action))}))))
 
 (re-frame/reg-event-fx
   ::execute-counter

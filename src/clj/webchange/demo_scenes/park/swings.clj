@@ -678,4 +678,5 @@
                    :background "/raw/audio/background/POL-daily-special-short.mp3"
                    :fw-try-again "/raw/audio/ferris-wheel/fw-try-again.mp3"},
    :triggers      {:start {:on "start" :action "start-activity"}}
-   :metadata      {:autostart true}})
+   :metadata      {:autostart true
+                   :prev "park"}})

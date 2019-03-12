@@ -7,13 +7,6 @@
                                 {:url  "/raw/audio/effects/NFF-robo-elastic.mp3" :size 1 :type "audio"}
                                 {:url  "/raw/audio/effects/NFF-rusted-thing.mp3" :size 1 :type "audio"}
                                 {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
-                                {:url "/raw/img/map/background.png", :size 10, :type "image"}
-                                {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
-                                {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
-                                {:url "/raw/img/map/feria_01.png", :size 1, :type "image"}
-                                {:url "/raw/img/map/feria_02.png", :size 1, :type "image"}
-                                {:url "/raw/img/map/feria_03.png", :size 1, :type "image"}
-                                {:url "/raw/img/map/feria_locked.png", :size 1, :type "image"}
                                 {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}
                                 {:url "/raw/img/ui/back_button_02.png", :size 1, :type "image"}
                                 {:url "/raw/img/ui/close_button_01.png", :size 1, :type "image"}
@@ -28,80 +21,161 @@
                                 {:url "/raw/img/ui/star_02.png", :size 1, :type "image"}
                                 {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}
 
+                                {:url "/raw/img/map/background.png", :size 10, :type "image"}
+                                {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
+                                {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
+                                {:url "/raw/img/map/feria_01.png", :size 1, :type "image"}
+                                {:url "/raw/img/map/feria_02.png", :size 1, :type "image"}
+                                {:url "/raw/img/map/feria_03.png", :size 1, :type "image"}
+                                {:url "/raw/img/map/feria_locked.png", :size 1, :type "image"}
+
                                 {:url "/raw/anim/vera-go/skeleton.atlas", :size 1, :type "anim-text"}
                                 {:url "/raw/anim/vera-go/skeleton.json", :size 1, :type "anim-text"}
                                 {:url "/raw/anim/vera-go/skeleton.png", :size 1, :type "anim-texture"}
-                                {:url "/raw/anim/vera-go/skeleton2.png", :size 1, :type "anim-texture"}],
-                :objects
-                               {:background {:type "background", :src "/raw/img/map/background.png"},
-                                :vera {:type "animation" :name "vera-go" :anim "go_front" :speed 0.5 :start false
-                                       :x 1070, :y 665 :scale {:x 0.15 :y 0.15} :width 752 :height 1175
-                                       :transition "vera-transition"}
-                                :home
-                                            {:type "image" :x 731 :y 340 :width 433 :height 380
-                                             :src    "/raw/img/map/casa_01.png",
-                                             :states
-                                             {:default {:type "image", :src "/raw/img/map/casa_01.png"},
-                                              :hover   {:type "image", :src "/raw/img/map/casa_02.png"}},
-                                             :actions
-                                             {:mouseover
-                                                     {:type "state", :target "home", :id "hover", :on "mouseover"},
-                                              :mouseout
-                                                     {:type "state", :target "home", :id "default", :on "mouseout"},
-                                              :click {:type "action", :id "move-to-home", :on "click"}}},
-                                :feria
-                                            {:type "image" :x 235 :y 683 :width 319 :height 280
-                                             :src    "/raw/img/map/feria_01.png",
-                                             :states
-                                             {:default {:type "image", :src "/raw/img/map/feria_01.png"},
-                                              :hover   {:type "image", :src "/raw/img/map/feria_02.png"}},
-                                             :actions
-                                             {:mouseover
-                                                     {:type "state", :target "feria", :id "hover", :on "mouseover"},
-                                              :mouseout
-                                                     {:type "state", :target "feria", :id "default", :on "mouseout"},
-                                              :click {:type "action", :id "move-to-feria", :on "click"}}}},
-                :scene-objects [["background" "home" "feria"] ["vera"]],
+                                {:url "/raw/anim/vera-go/skeleton2.png", :size 1, :type "anim-texture"}
+                                {:url "/raw/anim/vera-go/skeleton3.png", :size 1, :type "anim-texture"}],
+
+                :objects {:background {:type "background", :src "/raw/img/map/background.png"},
+                          :vera {:type "animation" :name "vera-go" :anim "go_front" :speed 0.5 :start false
+                                 :x 1070, :y 665 :scale {:x 0.15 :y 0.15} :width 1182 :height 1437
+                                 :transition "vera-transition"
+                                 :states {:init-home {:x 1000 :y 620}
+                                          :init-feria {:x 590 :y 960}
+                                          :init-park {:x 1325 :y 960}
+                                          :init-library {:x 299 :y 576}
+                                          :init-stadium {:x 1488 :y 399}}}
+                          :home {:type "image" :x 731 :y 340 :width 433 :height 380
+                                 :src    "/raw/img/map/casa_01.png",
+                                 :states {:default {:type "image", :src "/raw/img/map/casa_01.png"},
+                                          :hover   {:type "image", :src "/raw/img/map/casa_02.png"}},
+                                 :actions {:click {:type "action", :id "move-to" :params {:scene-id "home"}, :on "click"}}}
+
+                          :park {:type "transparent" :x 1319 :y 695 :width 350 :height 350
+                                 :actions {:click {:type "action", :id "move-to" :params {:scene-id "park"}, :on "click"}}}
+                          :library {:type "transparent" :x 88 :y 309 :width 350 :height 350
+                                    :actions {:click {:type "action", :id "move-to" :params {:scene-id "library"}, :on "click"}}}
+                          :stadium {:type "transparent" :x 1433 :y 123 :width 350 :height 350
+                                    :actions {:click {:type "action", :id "move-to" :params {:scene-id "stadium"}, :on "click"}}}
+                          :feria {:type "image" :width 531 :height 455 :x 216 :y 671
+                                  :scale {:x 0.68 :y 0.68}
+                                  :src    "/raw/img/map/feria_locked.png"}},
+
+                :scene-objects [["background" "home" "feria" "park" "library" "stadium"] ["vera"]],
                 :actions
-                               {:start-movement {:type "start-animation" :target "vera-go"}
-                                :move-to-feria-transition-1
-                                                {:type          "transition",
-                                                 :transition-id "vera-transition",
-                                                 :to            {:x 940, :y 725}},
-                                :open-home  {:type "scene", :scene-id "home"},
-                                :move-to-feria-transition-4
-                                                {:type          "transition",
-                                                 :transition-id "vera-transition",
-                                                 :to            {:x 875, :y 938}},
-                                :move-to-home-transition
-                                                {:type          "transition",
-                                                 :transition-id "vera-transition",
-                                                 :to            {:x 1000, :y 620}},
-                                :open-feria {:type "scene", :scene-id "feria"},
-                                :move-to-feria-transition-2
-                                                {:type          "transition",
-                                                 :transition-id "vera-transition",
-                                                 :to            {:x 975 :y 771}},
-                                :move-to-feria-transition-3
-                                                {:type          "transition",
-                                                 :transition-id "vera-transition",
-                                                 :to            {:x 895, :y 851}},
-                                :move-to-home
-                                                {:type "sequence", :data ["start-movement" "move-to-home-transition" "open-home"]},
-                                :move-to-feria-transition-5
-                                                {:type          "transition",
-                                                 :transition-id "vera-transition",
-                                                 :to            {:x 590, :y 960}},
-                                :move-to-feria
-                                                {:type "sequence",
-                                                 :data ["start-movement"
-                                                        "move-to-feria-transition-1"
-                                                        "move-to-feria-transition-2"
-                                                        "move-to-feria-transition-3"
-                                                        "move-to-feria-transition-4"
-                                                        "move-to-feria-transition-5"
-                                                        "open-feria"]}
-                                :start-background-music {:type "audio" :id "background" :loop true}},
+                 {:move-to {:type "test-value"
+                            :from-params [{:action-property "value1" :param-property "scene-id"}]
+                            :from-var [{:var-name "last-location" :action-property "value2"}]
+                            :success "open-scene"
+                            :fail "navigate-to-scene"}
+
+                  :open-scene {:type "scene"
+                               :from-params [{:action-property "scene-id" :param-property "scene-id"}]}
+
+                  :navigate-to-scene {:type "sequence-data"
+                                      :data [{:type "action"
+                                              :from-var [{:template "move-from-%" :action-property "id" :var-name "last-location"}]}
+                                             {:type "action"
+                                              :from-params [{:template "move-to-%" :action-property "id" :param-property "scene-id"}]}
+                                             {:type "set-progress" :var-name "last-location"
+                                              :from-params [{:action-property "var-value" :param-property "scene-id"}]}
+                                             {:type "scene"
+                                              :from-params [{:action-property "scene-id" :param-property "scene-id"}]}]}
+
+                  :move-from-home {:type "sequence-data"
+                                   :data [{:type "start-animation" :target "vera-go"}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
+
+                  :move-to-home {:type "sequence-data"
+                                 :data [{:type "start-animation" :target "vera-go"}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 1000, :y 620}}]}
+
+                  :move-from-feria {:type "sequence-data"
+                                   :data [{:type "start-animation" :target "vera-go"}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 875 :y 938}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 895 :y 851}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
+
+                  :move-to-feria {:type "sequence-data",
+                                  :data [{:type "start-animation" :target "vera-go"}
+                                         {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
+                                         {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
+                                         {:type "transition" :transition-id "vera-transition" :to {:x 895 :y 851}}
+                                         {:type "transition" :transition-id "vera-transition" :to {:x 875 :y 938}}
+                                         {:type "transition" :transition-id "vera-transition" :to {:x 590 :y 960}}]}
+
+                  :move-from-park {:type "sequence-data"
+                                   :data [{:type "start-animation" :target "vera-go"}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 915, :y 938}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 895, :y 851}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
+                                          {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
+
+                  :move-to-park {:type "sequence-data"
+                                 :data [{:type "start-animation" :target "vera-go"}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
+                                        {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
+                                        {:type "animation-props" :target "vera-go" :props {:flipX false}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 895, :y 851}}
+                                        {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 915, :y 938}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 1325, :y 960}}]}
+
+                  :move-from-library {:type "sequence-data"
+                                      :data [{:type "start-animation" :target "vera-go"}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 541, :y 644}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 691, :y 829}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 908, :y 829}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
+
+                  :move-to-library {:type "sequence-data"
+                                 :data [{:type "start-animation" :target "vera-go"}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
+                                        {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
+                                        {:type "animation-props" :target "vera-go" :props {:flipX false}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 908, :y 829}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 691, :y 829}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 541, :y 644}}
+                                        {:type "transition" :transition-id "vera-transition" :to {:x 299, :y 576}}]}
+
+                  :move-from-stadium {:type "sequence-data"
+                                      :data [{:type "start-animation" :target "vera-go"}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 1298, :y 450}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 1169, :y 454}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 1054 :y 531}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 1149, :y 583}}
+                                             {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
+
+                  :move-to-stadium {:type "sequence-data"
+                                    :data [{:type "start-animation" :target "vera-go"}
+                                           {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                           {:type "transition" :transition-id "vera-transition" :to {:x 1149, :y 583}}
+                                           {:type "animation-props" :target "vera-go" :props {:flipX false}}
+                                           {:type "transition" :transition-id "vera-transition" :to {:x 1054 :y 531}}
+                                           {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                           {:type "transition" :transition-id "vera-transition" :to {:x 1169, :y 454}}
+                                           {:type "transition" :transition-id "vera-transition" :to {:x 1298, :y 450}}
+                                           {:type "transition" :transition-id "vera-transition" :to {:x 1488, :y 399}}]}
+
+                  :init {:type "sequence-data"
+                         :data [{:type "set-variable" :var-name "last-location"
+                                 :from-progress [{:action-property "var-value" :progress-property "last-location"}]}
+                                {:type "case"
+                                 :from-var [{:var-name "last-location" :action-property "value"}]
+                                 :options {:home {:type "state" :target "vera" :id "init-home"}
+                                           :feria {:type "state" :target "vera" :id "init-feria"}
+                                           :park {:type "state" :target "vera" :id "init-park"}
+                                           :library {:type "state" :target "vera" :id "init-library"}
+                                           :stadium {:type "state" :target "vera" :id "init-stadium"}}}]}
+
+                  :start-background-music {:type "audio" :id "background" :loop true}},
                 :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"}
-                :triggers      {:music {:on "start" :action "start-background-music"}}
+                :triggers      {:music {:on "start" :action "start-background-music"}
+                                :init {:on "start" :action "init"}}
                 :metadata      {:autostart true}})
