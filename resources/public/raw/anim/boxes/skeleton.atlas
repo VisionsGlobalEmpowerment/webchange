@@ -1,0 +1,265 @@
+
+skeleton.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Elements/8
+  rotate: false
+  xy: 1894, 1917
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/airplane
+  rotate: false
+  xy: 1348, 1399
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/bear
+  rotate: false
+  xy: 1845, 1399
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/bee
+  rotate: false
+  xy: 780, 644
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/dino
+  rotate: false
+  xy: 346, 180
+  size: 87, 100
+  orig: 87, 100
+  offset: 0, 0
+  index: -1
+Elements/ear
+  rotate: false
+  xy: 436, 364
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/eyes
+  rotate: false
+  xy: 1894, 1815
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/fire
+  rotate: false
+  xy: 1845, 1297
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/iguana
+  rotate: false
+  xy: 882, 644
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/insect
+  rotate: false
+  xy: 780, 542
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/island
+  rotate: false
+  xy: 538, 364
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/magnet
+  rotate: false
+  xy: 1845, 1195
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/qwestion
+  rotate: false
+  xy: 984, 644
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/sheep
+  rotate: false
+  xy: 882, 542
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/spider
+  rotate: false
+  xy: 640, 364
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/squirrel
+  rotate: false
+  xy: 1845, 1093
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/tree
+  rotate: false
+  xy: 1086, 644
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+b1
+  rotate: false
+  xy: 675, 1264
+  size: 544, 117
+  orig: 544, 117
+  offset: 0, 0
+  index: -1
+b2
+  rotate: false
+  xy: 1348, 1900
+  size: 544, 117
+  orig: 544, 117
+  offset: 0, 0
+  index: -1
+b3
+  rotate: false
+  xy: 675, 1145
+  size: 544, 117
+  orig: 544, 117
+  offset: 0, 0
+  index: -1
+b4
+  rotate: false
+  xy: 1348, 1781
+  size: 544, 117
+  orig: 544, 117
+  offset: 0, 0
+  index: -1
+b5
+  rotate: false
+  xy: 675, 1026
+  size: 544, 117
+  orig: 544, 117
+  offset: 0, 0
+  index: -1
+box1
+  rotate: false
+  xy: 2, 1383
+  size: 671, 634
+  orig: 671, 634
+  offset: 0, 0
+  index: -1
+box4
+  rotate: false
+  xy: 2, 747
+  size: 671, 634
+  orig: 671, 634
+  offset: 0, 0
+  index: -1
+box5
+  rotate: false
+  xy: 675, 1383
+  size: 671, 634
+  orig: 671, 634
+  offset: 0, 0
+  index: -1
+boxwing
+  rotate: false
+  xy: 2, 282
+  size: 432, 463
+  orig: 432, 463
+  offset: 0, 0
+  index: -1
+fx01
+  rotate: false
+  xy: 2, 2
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx02
+  rotate: false
+  xy: 1348, 1501
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx03
+  rotate: false
+  xy: 675, 746
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx04
+  rotate: false
+  xy: 1692, 1501
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx05
+  rotate: false
+  xy: 1019, 746
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx06
+  rotate: true
+  xy: 1221, 1039
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx07
+  rotate: false
+  xy: 1501, 1221
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx08
+  rotate: false
+  xy: 1501, 941
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx09
+  rotate: false
+  xy: 1363, 661
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx10
+  rotate: true
+  xy: 1707, 597
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1
+fx11
+  rotate: false
+  xy: 436, 466
+  size: 342, 278
+  orig: 342, 278
+  offset: 0, 0
+  index: -1

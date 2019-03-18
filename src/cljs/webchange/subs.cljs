@@ -58,6 +58,15 @@
     (get-in db [:scenes scene-id :objects (keyword name)] {})))
 
 (re-frame/reg-sub
+  ::scene-object-with-var
+  (fn [db [_ scene-id name]]
+    (let [object (get-in db [:scenes scene-id :objects (keyword name)] {})
+          var-name (:var-name object)]
+      (if var-name
+        (assoc object :var (get-in db [:scenes scene-id :variables var-name]))
+        object))))
+
+(re-frame/reg-sub
   ::scene-action
   (fn [db [_ scene-id name]]
     (get-in db [:scenes scene-id :actions (keyword name)] {})))

@@ -51,6 +51,12 @@
 (def resources "")
 (def http-cache (atom {}))
 
+(defn get-url [url]
+  (when (not (contains? @http-cache url))
+    (let [response (http/get url {:with-credentials? false})]
+      (swap! http-cache assoc url response)))
+  (get @http-cache url))
+
 (defn course-url
   [course-id]
   (str host "/courses/" course-id))
@@ -58,10 +64,7 @@
 (defn get-course
   [course-id]
   (let [url (course-url course-id)]
-    (when (not (contains? @http-cache url))
-      (let [response (http/get url {:with-credentials? false})]
-        (swap! http-cache assoc url response)))
-    (get @http-cache url)))
+    (get-url url)))
 
 (defn scene-url
   [course-id scene-id]
@@ -70,10 +73,25 @@
 (defn get-scene
   [course-id scene-id]
   (let [url (scene-url course-id scene-id)]
-    (when (not (contains? @http-cache url))
-      (let [response (http/get url {:with-credentials? false})]
-        (swap! http-cache assoc url response)))
-    (get @http-cache url)))
+    (get-url url)))
+
+(defn progress-url
+  [course-id]
+  (str host "/courses/" course-id "/current-progress"))
+
+(defn get-progress
+  [course-id]
+  (let [url (progress-url course-id)]
+    (get-url url)))
+
+(defn lessons-url
+  [course-id]
+  (str host "/courses/" course-id "/lesson-sets"))
+
+(defn get-lessons
+  [course-id]
+  (let [url (lessons-url course-id)]
+    (get-url url)))
 
 (defn get-total-size
   [assets]
@@ -98,16 +116,18 @@
     (load-base-asset asset progress))))
 
 (defn load-assets
-  [assets scene-id]
+  [assets on-asset-progress on-asset-complete]
   (let [total (get-total-size assets)
         current-progress (atom 0)]
     (add-watch current-progress :inc
                (fn [_ _ _ n]
-                 (re-frame/dispatch [::events/set-loading-progress [scene-id (Math/round (* n (/ 100 total)))]])
+                 (on-asset-progress (Math/round (* n (/ 100 total))))
                  (if (>= n total)
-                   (re-frame/dispatch [::events/set-scene-loaded [scene-id true]]))))
-    (doseq [asset assets]
-      (load-asset asset current-progress))))
+                   (on-asset-complete))))
+    (if (> total 0)
+      (doseq [asset assets]
+        (load-asset asset current-progress))
+      (on-asset-complete))))
 
 (defn load-course
   [course-id cb]
@@ -119,8 +139,23 @@
   [course-id scene-id cb]
   (go (let [scene-response (<! (get-scene course-id scene-id))
             scene (:body scene-response)]
-        (load-assets (:assets scene) scene-id)
+        (load-assets (:assets scene)
+                     #(re-frame/dispatch [::events/set-loading-progress scene-id %])
+                     #(re-frame/dispatch [::events/set-scene-loaded scene-id true]))
         (cb scene))))
+
+(defn load-progress
+  [course-id cb]
+  (go (let [response (<! (get-progress course-id))
+            result (-> response :body :progress :data)]
+        (cb result))))
+
+(defn load-lessons
+  [course-id cb on-asset-progress on-asset-complete]
+  (go (let [response (<! (get-lessons course-id))
+            result (-> response :body)]
+        (load-assets (:assets result) on-asset-progress on-asset-complete)
+        (cb result))))
 
 (defn length
   [cx cy x y]
@@ -151,3 +186,29 @@
           .play)
       (.to @component (clj->js params)))
     ))
+
+(defn collide?
+  [shape1 shape2]
+  (let [r1 (.getClientRect @shape1)
+        r2 (.getClientRect @shape2)
+        r1x (.-x r1)
+        r1y (.-y r1)
+        r1width (.-width r1)
+        r1height (.-height r1)
+        r2x (.-x r2)
+        r2y (.-y r2)
+        r2width (.-width r2)
+        r2height (.-height r2)]
+    (not (or (> r2x (+ r1x r1width))
+             (< (+ r2x r2width) r1x)
+             (> r2y (+ r1y r1height))
+             (< (+ r2y r2height) r1y)))))
+
+(defn animation-actions-from-sequence [{:keys [target track offset data] :as action}]
+  (into [] (map (fn [{:keys [start end anim]}]
+                  {:type "sequence-data"
+                   :data [{:type "empty" :duration (* (- start offset) 1000)}
+                          {:type "animation" :target target :track track :id anim}
+                          {:type "empty" :duration (* (- end start) 1000)}
+                          {:type "remove-animation" :target target :track track}]})
+                data)))

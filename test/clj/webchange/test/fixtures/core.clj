@@ -83,7 +83,7 @@
    (let [{course-id :id} (course-created)]
      (dataset-created {:course-id course-id})))
   ([options]
-    (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "string"}]}}
+    (let [defaults {:name "dataset" :scheme {:fields [{:name "src" :type "image"} {:name "width" :type "number"}]}}
           data (->> options
                     (merge defaults)
                     (transform-keys ->snake_case_keyword))
@@ -366,5 +366,12 @@
   [id]
   (let [url (str "/api/students/" id)
         request (-> (mock/request :delete url)
+                    user-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-course-lessons
+  [course-name]
+  (let [url (str "/api/courses/" course-name "/lesson-sets")
+        request (-> (mock/request :get url)
                     user-logged-in)]
     (handler/dev-handler request)))

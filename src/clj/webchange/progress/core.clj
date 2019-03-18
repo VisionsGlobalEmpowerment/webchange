@@ -7,8 +7,9 @@
             [webchange.events :as events]
             [java-time :as jt]))
 
-(defn get-current-progress [course-id student-id]
-  (let [progress (db/get-progress {:user_id student-id :course_id course-id})]
+(defn get-current-progress [course-name student-id]
+  (let [{course-id :id} (db/get-course {:name course-name})
+        progress (db/get-progress {:user_id student-id :course_id course-id})]
     [true {:progress progress}]))
 
 (defn get-class-profile [course-id class-id]
@@ -36,8 +37,9 @@
   [true {:id id}])
 
 (defn save-progress!
-  [owner-id course-id {:keys [progress actions]}]
-  (save-actions! owner-id course-id actions)
-  (if-let [{id :id} (db/get-progress {:user_id owner-id :course_id course-id})]
-    (update-progress! id progress)
-    (create-progress! owner-id course-id progress)))
+  [owner-id course-name {:keys [progress actions]}]
+  (let [{course-id :id} (db/get-course {:name course-name})]
+    (save-actions! owner-id course-id actions)
+    (if-let [{id :id} (db/get-progress {:user_id owner-id :course_id course-id})]
+      (update-progress! id progress)
+      (create-progress! owner-id course-id progress))))

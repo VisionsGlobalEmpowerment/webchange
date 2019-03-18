@@ -10,7 +10,6 @@
   (fn [_ [_ course-id]]
     {:dispatch-n (list [::ie/start-course course-id]
                        [::load-datasets]
-                       [::set-main-content :editor]
                        )}))
 
 (re-frame/reg-event-fx
@@ -508,7 +507,6 @@
 (re-frame/reg-event-fx
   ::edit-dataset-lesson
   (fn [{:keys [db]} [_ id {{items :items} :data}]]
-    (js/console.log items)
     {:db (assoc-in db [:loading :edit-dataset-lesson] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/lesson-sets/" id)

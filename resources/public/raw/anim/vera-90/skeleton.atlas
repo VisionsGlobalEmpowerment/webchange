@@ -1,0 +1,110 @@
+
+skeleton.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+veraprof_brow
+  rotate: false
+  xy: 143, 48
+  size: 125, 44
+  orig: 125, 44
+  offset: 0, 0
+  index: -1
+veraprof_eye2
+  rotate: false
+  xy: 1975, 1816
+  size: 70, 157
+  orig: 70, 157
+  offset: 0, 0
+  index: -1
+veraprof_hair
+  rotate: true
+  xy: 1654, 1282
+  size: 691, 319
+  orig: 691, 319
+  offset: 0, 0
+  index: -1
+veraprof_hand2
+  rotate: false
+  xy: 1654, 754
+  size: 229, 526
+  orig: 229, 526
+  offset: 0, 0
+  index: -1
+veraprof_helmet
+  rotate: false
+  xy: 2, 512
+  size: 1650, 1461
+  orig: 1650, 1461
+  offset: 0, 0
+  index: -1
+veraprof_helmet2
+  rotate: false
+  xy: 795, 53
+  size: 749, 457
+  orig: 749, 457
+  offset: 0, 0
+  index: -1
+veraprof_horn
+  rotate: true
+  xy: 2, 94
+  size: 416, 791
+  orig: 416, 791
+  offset: 0, 0
+  index: -1
+veraprof_leg1
+  rotate: false
+  xy: 1654, 623
+  size: 89, 129
+  orig: 89, 129
+  offset: 0, 0
+  index: -1
+veraprof_leg2
+  rotate: false
+  xy: 1885, 1161
+  size: 83, 119
+  orig: 83, 119
+  offset: 0, 0
+  index: -1
+veraprof_nose
+  rotate: true
+  xy: 1546, 50
+  size: 460, 450
+  orig: 460, 450
+  offset: 0, 0
+  index: -1
+veraprof_nose2
+  rotate: false
+  xy: 2, 2
+  size: 139, 90
+  orig: 139, 90
+  offset: 0, 0
+  index: -1
+
+skeleton2.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+veraprof_body
+  rotate: true
+  xy: 2, 2
+  size: 587, 754
+  orig: 587, 754
+  offset: 0, 0
+  index: -1
+veraprof_eye1
+  rotate: false
+  xy: 1367, 1488
+  size: 208, 411
+  orig: 208, 411
+  offset: 0, 0
+  index: -1
+veraprof_head
+  rotate: false
+  xy: 2, 591
+  size: 1363, 1308
+  orig: 1363, 1308
+  offset: 0, 0
+  index: -1

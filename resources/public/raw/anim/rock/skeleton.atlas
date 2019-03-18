@@ -1,0 +1,124 @@
+
+skeleton.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+stone_big
+  rotate: false
+  xy: 2, 195
+  size: 897, 827
+  orig: 897, 827
+  offset: 0, 0
+  index: -1
+stone_brow
+  rotate: false
+  xy: 628, 166
+  size: 61, 27
+  orig: 61, 27
+  offset: 0, 0
+  index: -1
+stone_eye
+  rotate: false
+  xy: 535, 78
+  size: 49, 65
+  orig: 49, 65
+  offset: 0, 0
+  index: -1
+stone_gr1
+  rotate: false
+  xy: 901, 813
+  size: 90, 209
+  orig: 90, 209
+  offset: 0, 0
+  index: -1
+stone_gr2
+  rotate: false
+  xy: 402, 47
+  size: 131, 146
+  orig: 131, 146
+  offset: 0, 0
+  index: -1
+stone_gr3
+  rotate: true
+  xy: 901, 680
+  size: 131, 89
+  orig: 131, 89
+  offset: 0, 0
+  index: -1
+stone_hat2
+  rotate: true
+  xy: 2, 117
+  size: 76, 236
+  orig: 76, 236
+  offset: 0, 0
+  index: -1
+stone_mouth1
+  rotate: true
+  xy: 993, 842
+  size: 69, 29
+  orig: 69, 29
+  offset: 0, 0
+  index: -1
+stone_mouth2
+  rotate: false
+  xy: 144, 67
+  size: 92, 48
+  orig: 92, 48
+  offset: 0, 0
+  index: -1
+stone_mouth3
+  rotate: false
+  xy: 535, 145
+  size: 91, 48
+  orig: 91, 48
+  offset: 0, 0
+  index: -1
+stone_mouth4
+  rotate: true
+  xy: 901, 553
+  size: 125, 10
+  orig: 125, 10
+  offset: 0, 0
+  index: -1
+stone_mouth6
+  rotate: true
+  xy: 144, 2
+  size: 63, 70
+  orig: 63, 70
+  offset: 0, 0
+  index: -1
+stone_small1
+  rotate: false
+  xy: 2, 15
+  size: 140, 100
+  orig: 140, 100
+  offset: 0, 0
+  index: -1
+stone_small2
+  rotate: true
+  xy: 240, 42
+  size: 151, 160
+  orig: 151, 160
+  offset: 0, 0
+  index: -1
+stone_small5
+  rotate: true
+  xy: 993, 913
+  size: 109, 29
+  orig: 109, 29
+  offset: 0, 0
+  index: -1
+
+skeleton2.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+stone_hat
+  rotate: false
+  xy: 2, 2
+  size: 646, 368
+  orig: 646, 368
+  offset: 0, 0
+  index: -1

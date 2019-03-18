@@ -19,14 +19,16 @@
   ([] (progress-created {}))
   ([options]
    (let [{user-id :id} (f/user-created)
-         {course-id :id} (f/course-created)
+         {course-name :name course-id :id} (f/course-created)
          defaults {:user-id user-id :course-id course-id :data {:test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
-         [{id :id}] (db/create-progress! data)]
-     (->> (assoc data :id id)
-          (transform-keys ->kebab-case-keyword)))))
+         [{id :id}] (db/create-progress! data)
+         prepared-data (-> data
+                           (assoc :id id)
+                           (assoc :course-name course-name))]
+     (transform-keys ->kebab-case-keyword prepared-data))))
 
 (defn course-stat-created
   ([] (course-stat-created {}))
@@ -57,14 +59,14 @@
 
 (defn get-current-progress
   [user-id course-id]
-  (let [url (str "/api/course/" course-id "/current-progress")
+  (let [url (str "/api/courses/" course-id "/current-progress")
         request (-> (mock/request :get url)
                     (f/user-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn save-current-progress!
   [user-id course-id data]
-  (let [url (str "/api/course/" course-id "/current-progress")
+  (let [url (str "/api/courses/" course-id "/current-progress")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     (f/user-logged-in user-id))]

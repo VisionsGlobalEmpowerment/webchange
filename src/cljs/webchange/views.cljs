@@ -6,7 +6,7 @@
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.components :refer [editor]]
     [webchange.editor.events :as ee]
-    [webchange.auth.views :refer [login-form register-form]]
+    [webchange.auth.views :refer [login-form register-form student-access-form]]
     [webchange.dashboard.views :refer [dashboard-page]]
     [sodium.core :as na]
     [soda-ash.core :as sa]
@@ -25,7 +25,7 @@
       [na/header {:as "h1" :content "Pick course"}]
       [na/divider {}]
       [na/button {:basic? true :content "English" :on-click #(re-frame/dispatch [::events/redirect :course :id "demo"])}]
-      [na/button {:basic? true :content "Español" :on-click #(re-frame/dispatch [::events/redirect :course :id "reading"])}]]]]
+      [na/button {:basic? true :content "Español" :on-click #(re-frame/dispatch [::events/redirect :course :id "test"])}]]]]
    [na/grid-row {}
     [na/grid-column {}]]])
 
@@ -41,6 +41,7 @@
     :home [course-switch]
     :register-user [register-form]
     :login [login-form]
+    :student-login [student-access-form]
     :course [course (:id route-params)]
     :course-editor [editor-panel (:id route-params)]
     :dashboard [dashboard-page]

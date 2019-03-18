@@ -39,6 +39,11 @@
                   {:key :anim-text :value :anim-text :text "Animation Text"}
                   {:key :anim-texture :value :anim-texture :text "Animation Texture"}])
 
+(def item-field-types [{:key :number :value :number :text "Number"}
+                       {:key :string :value :string :text "String"}
+                       {:key :image :value :image :text "Image"}
+                       {:key :audio :value :audio :text "Audio"}])
+
 (declare background)
 (declare image)
 (declare transparent)
@@ -194,10 +199,11 @@
 
 (defn animation
   [scene-id name object]
-  (let [params (object-params object)]
+  (let [params (object-params object)
+        animation-name (or (:scene-name object) (:name object))]
     [:> Group params
      [anim (-> object
-               (assoc :on-mount #(re-frame/dispatch [::ie/register-animation (:name object) %1 %2]))
+               (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %]))
                (assoc :start false))]
      [:> Rect (-> (rect-params scene-id name object)
                   (assoc :origin {:type "center-bottom"})
@@ -348,9 +354,10 @@
 
 (defn toggle-item-in-lesson
   [items toggle id]
-  (if toggle
-    (conj items {:id id})
-    (filter #(not= id (:id %)) items)))
+  (let [items-v (into [] items)]
+    (if toggle
+      (conj items-v {:id id})
+      (filter #(not= id (:id %)) items-v))))
 
 (defn add-dataset-lesson-form
   []
@@ -375,29 +382,62 @@
           [na/form-button {:content "Add" :on-click #(re-frame/dispatch [::events/add-dataset-lesson @data])}]
           ]]))))
 
+(defn offsetX [e]
+  (let [rect (-> e .-target .getBoundingClientRect)]
+    (- (.-clientX e) (.-left rect))))
+
+(defn offsetY [e]
+  (let [rect (-> e .-target .getBoundingClientRect)]
+    (- (.-clientY e) (.-top rect))))
+
 (defn edit-dataset-lesson-form
   []
   (let [lesson-set-id @(re-frame/subscribe [::es/current-dataset-lesson-id])
-        {{lesson-items :items} :data} @(re-frame/subscribe [::es/dataset-lesson lesson-set-id])
-        data (r/atom {:data {:items lesson-items}})]
+        {{dataset-lesson :items} :data} @(re-frame/subscribe [::es/dataset-lesson lesson-set-id])
+        data (r/atom {:data {:items (into [] dataset-lesson)}})]
     (fn []
       (let [items @(re-frame/subscribe [::es/current-dataset-items])
-            loading @(re-frame/subscribe [:loading])]
+            loading @(re-frame/subscribe [:loading])
+            lesson-items (-> @data :data :items)]
         [na/segment {:loading? (when (:edit-dataset-lesson loading))}
          [na/header {:as "h4" :content "Edit dataset lesson"}]
          [na/divider {:clearing? true}]
-         [na/form {}
-          (for [{name :name id :id} items]
-            ^{:key name}
-            [sa/Item {}
-             [sa/ItemContent {}
-              [na/checkbox {:label name
-                            :default-checked? (some #(= id (:id %)) lesson-items)
-                            :on-change #(swap! data update-in [:data :items] toggle-item-in-lesson (.-checked %2) id)}]
-              ]])
+         [na/grid {:columns 2}
+          [na/divider {:vertical? true} "add"]
+          [na/grid-row {}
+           [na/grid-column {}
+            [:div {:style {:min-height 300}
+                   :on-drag-over #(.preventDefault %)
+                   :on-drop (fn [e]
+                              (swap! data update-in [:data :items] toggle-item-in-lesson false (-> e
+                                                                                                   (.-dataTransfer)
+                                                                                                   (.getData "text/plain")
+                                                                                                   (js/parseInt))))}
+              (for [{name :name id :id} items
+                    :when (not-any? #(= id (:id %)) lesson-items)]
+                ^{:key name}
+                [:div {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" id))}
+                 [sa/Item {:content name}]])]]
+           [na/grid-column {}
+            [na/segment {:dropzone "true"}
+             [:div {:style {:min-height 300}
+                    :on-drag-over #(.preventDefault %)
+                    :on-drop (fn [e]
+                               (swap! data update-in [:data :items] toggle-item-in-lesson true (-> e
+                                                                                                   (.-dataTransfer)
+                                                                                                   (.getData "text/plain")
+                                                                                                   (js/parseInt))))}
+              (for [{id :id} lesson-items
+                    :let [name (-> (filter #(= id (:id %)) items) first :name)]]
+                ^{:key name}
+                [:div {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" id))}
+                 [sa/Item {:content name}]])
+              ]]]
+           ]]
+
           [na/divider {}]
           [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-dataset-lesson lesson-set-id @data])}]
-          ]]))))
+          ]))))
 
 (defn dataset-item-fields-panel
   [data-atom]
@@ -466,7 +506,7 @@
   (r/with-let [field-data (r/atom {})]
               [na/form-group {}
                [na/form-input {:label "name" :on-change #(swap! field-data assoc :name (-> %2 .-value)) :inline? true}]
-               [na/form-input {:label "type" :on-change #(swap! field-data assoc :type (-> %2 .-value)) :inline? true}]
+               [sa/Dropdown {:placeholder "Type" :search true :selection true :options item-field-types :on-change #(swap! field-data assoc :type (.-value %2))}]
                [na/form-button {:content "Add field" :on-click #(swap! data-atom update-in [:fields] conj @field-data)}]]))
 
 (defn add-dataset-form
