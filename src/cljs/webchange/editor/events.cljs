@@ -10,7 +10,6 @@
   (fn [_ [_ course-id]]
     {:dispatch-n (list [::ie/start-course course-id]
                        [::load-datasets]
-                       [::set-main-content :editor]
                        )}))
 
 (re-frame/reg-event-fx

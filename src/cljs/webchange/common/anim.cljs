@@ -26,8 +26,10 @@
   (let [animation (Animation. (fn [frame] (.setAttr shape "timeDiff" (/ (.-timeDiff frame) 1000))) (.getLayer shape))]
     (.start animation)))
 
+
 (defn anim
-  [{:keys [name anim speed on-mount start mix skin anim-offset] :or {mix 0.2 speed 1 skin "default" anim-offset {:x 0 :y 0}}}]
+  [{:keys [name anim speed on-mount start mix skin anim-offset meshes]
+    :or {mix 0.2 speed 1 skin "default" anim-offset {:x 0 :y 0} meshes false}}]
   (let [atlas (texture-atlas name)
         atlas-loader (s/AtlasAttachmentLoader. atlas)
         skeleton-json (s/SkeletonJson. atlas-loader)
@@ -36,18 +38,20 @@
         animation-state-data (s/AnimationStateData. (.-data skeleton))
         _ (set! (.-defaultMix animation-state-data) mix)
         animation-state (s/AnimationState. animation-state-data)]
-    (set! (.-flipY skeleton) true)
+    (set! (.-scaleY skeleton) -1)
     (set! (.-x skeleton) (+ (.-x skeleton) (:x anim-offset)))
     (set! (.-y skeleton) (+ (.-y skeleton) (:y anim-offset)))
-    (fn [{:keys [name anim speed on-mount start mix skin anim-offset] :or {mix 0.2 speed 1 skin "default" anim-offset {:x 0 :y 0}}}]
+    (fn [{:keys [name anim speed on-mount start mix skin anim-offset meshes] :or {mix 0.2 speed 1 skin "default" anim-offset {:x 0 :y 0} meshes false}}]
       (.setAnimation animation-state 0 anim true)
       (.setSkinByName skeleton skin)
+      (.setToSetupPose skeleton)
       [:> Shape {:time-diff  0
                  :scene-func (fn [context shape]
                                (.update animation-state (* (.getAttr shape "timeDiff") speed))
                                (.apply animation-state skeleton)
                                (.updateWorldTransform skeleton)
                                (let [skeleton-renderer (s/canvas.SkeletonRenderer. context)]
+                                 (set! (.-triangleRendering skeleton-renderer) meshes)
                                  (.draw skeleton-renderer skeleton)))
                  :ref        (fn [ref] (if ref
                                          (do

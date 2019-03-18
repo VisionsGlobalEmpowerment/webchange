@@ -83,10 +83,12 @@
 
                   :move-from-home {:type "sequence-data"
                                    :data [{:type "start-animation" :target "vera-go"}
+                                          {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
 
                   :move-to-home {:type "sequence-data"
                                  :data [{:type "start-animation" :target "vera-go"}
+                                        {:type "animation-props" :target "vera-go" :props {:scaleX 1}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 1000, :y 620}}]}
 
                   :move-from-feria {:type "sequence-data"
@@ -109,18 +111,22 @@
                                    :data [{:type "start-animation" :target "vera-go"}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 915, :y 938}}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 895, :y 851}}
+                                          {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
+                                          {:type "animation-props" :target "vera-go" :props {:scaleX 1}}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
+                                          {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
 
                   :move-to-park {:type "sequence-data"
                                  :data [{:type "start-animation" :target "vera-go"}
+                                        {:type "animation-props" :target "vera-go" :props {:scaleX 1}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
-                                        {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                        {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
-                                        {:type "animation-props" :target "vera-go" :props {:flipX false}}
+                                        {:type "animation-props" :target "vera-go" :props {:scaleX 1}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 895, :y 851}}
-                                        {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                        {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 915, :y 938}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 1325, :y 960}}]}
 
@@ -136,9 +142,9 @@
                   :move-to-library {:type "sequence-data"
                                  :data [{:type "start-animation" :target "vera-go"}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 940, :y 725}}
-                                        {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                        {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 975 :y 771}}
-                                        {:type "animation-props" :target "vera-go" :props {:flipX false}}
+                                        {:type "animation-props" :target "vera-go" :props {:scaleX 1}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 908, :y 829}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 691, :y 829}}
                                         {:type "transition" :transition-id "vera-transition" :to {:x 541, :y 644}}
@@ -154,11 +160,11 @@
 
                   :move-to-stadium {:type "sequence-data"
                                     :data [{:type "start-animation" :target "vera-go"}
-                                           {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                           {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                            {:type "transition" :transition-id "vera-transition" :to {:x 1149, :y 583}}
-                                           {:type "animation-props" :target "vera-go" :props {:flipX false}}
+                                           {:type "animation-props" :target "vera-go" :props {:scaleX 1}}
                                            {:type "transition" :transition-id "vera-transition" :to {:x 1054 :y 531}}
-                                           {:type "animation-props" :target "vera-go" :props {:flipX true}}
+                                           {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
                                            {:type "transition" :transition-id "vera-transition" :to {:x 1169, :y 454}}
                                            {:type "transition" :transition-id "vera-transition" :to {:x 1298, :y 450}}
                                            {:type "transition" :transition-id "vera-transition" :to {:x 1488, :y 399}}]}

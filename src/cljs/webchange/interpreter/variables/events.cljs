@@ -2,6 +2,7 @@
   (:require
     [clojure.set :refer [union]]
     [re-frame.core :as re-frame]
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
     [webchange.common.events :as e]
     ))
 
@@ -102,7 +103,7 @@
 
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
-  (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end shuffled] :or {shuffled true} :as action}]]
+  (fn-traced [{:keys [db]} [_ {:keys [from variables provider-id on-end shuffled] :or {shuffled true} :as action}]]
     (let [items (->> from
                      (map #(get-variable db %)))
           has-next (has-next db items provider-id)
@@ -134,7 +135,9 @@
                               :lesson-sets
                               (get (keyword from)))
           lesson (get-in db [:lessons lesson-set-name])
-          items (map #(get-in db [:dataset-items % :data]) (:item-ids lesson))]
+          items (->> (:item-ids lesson)
+                     (map #(get-in db [:dataset-items %]))
+                     (map #(merge (:data %) {:id (:name %)})))]
       {:db (provide db items variables provider-id)
        :dispatch (e/success-event action)})))
 
@@ -171,7 +174,7 @@
 
 (re-frame/reg-event-fx
   ::execute-test-var-list
-  (fn [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
+  (fn-traced [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
     (let [test (map #(get-variable db %) var-names)
           success-action (e/get-action success db action)
           fail-action (e/get-action fail db action)]

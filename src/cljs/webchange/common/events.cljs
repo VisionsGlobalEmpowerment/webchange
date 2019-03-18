@@ -1,6 +1,7 @@
 (ns webchange.common.events
   (:require
-    [re-frame.core :as re-frame]))
+    [re-frame.core :as re-frame]
+    [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
 (def executors (atom {}))
 
@@ -150,7 +151,7 @@
 (re-frame/reg-event-fx
   ::execute-action
   [event-as-action with-vars]
-  (fn [{:keys [db]} {:keys [type return-immediately] :as action}]
+  (fn-traced [{:keys [db]} {:keys [type return-immediately] :as action}]
     (if (can-execute? db action)
       (let [handler (get @executors (keyword type))]
         (if return-immediately

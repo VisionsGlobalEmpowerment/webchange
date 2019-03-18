@@ -1,6 +1,6 @@
 {
   "skeleton": {
-    "hash": "l//za2udVkCd/6f3q5E1gPTquVg",
+    "hash": "VbMgwCBEjejGctWo4tF2pu8/0II",
     "spine": "2.1.27",
     "width": 1800.05,
     "height": 2558.81,
@@ -580,72 +580,6 @@
             }
           ]
         },
-        "bone2": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": -7.53
-            }
-          ],
-          "translate": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0
-            }
-          ],
-          "scale": [
-            {
-              "time": 0,
-              "x": 1,
-              "y": 1
-            }
-          ]
-        },
-        "bone3": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 15.51
-            }
-          ],
-          "translate": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0
-            }
-          ],
-          "scale": [
-            {
-              "time": 0,
-              "x": 1,
-              "y": 1
-            }
-          ]
-        },
-        "bone4": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 11.25
-            }
-          ],
-          "translate": [
-            {
-              "time": 0,
-              "x": -21.32,
-              "y": -13.52
-            }
-          ],
-          "scale": [
-            {
-              "time": 0,
-              "x": 1,
-              "y": 1
-            }
-          ]
-        },
         "bone5": {
           "rotate": [
             {
@@ -680,28 +614,6 @@
             },
             {
               "time": 0.2,
-              "x": 1,
-              "y": 1
-            }
-          ]
-        },
-        "bone8": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0
-            }
-          ],
-          "translate": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0
-            }
-          ],
-          "scale": [
-            {
-              "time": 0,
               "x": 1,
               "y": 1
             }
@@ -3666,67 +3578,11 @@
             {
               "time": 0,
               "angle": 0
-            },
-            {
-              "time": 0.8333,
-              "angle": -1.84
-            },
-            {
-              "time": 1.5,
-              "angle": 0
-            },
-            {
-              "time": 2.3333,
-              "angle": -1.84
-            },
-            {
-              "time": 3,
-              "angle": 0
-            },
-            {
-              "time": 3.8333,
-              "angle": -1.84
-            },
-            {
-              "time": 4.5,
-              "angle": 0
-            },
-            {
-              "time": 5.3333,
-              "angle": -1.84
-            },
-            {
-              "time": 6,
-              "angle": 0
             }
           ],
           "translate": [
             {
               "time": 0,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.5,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 3,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 4.5,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 6,
               "x": 0,
               "y": 0
             }
@@ -3734,30 +3590,6 @@
           "scale": [
             {
               "time": 0,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.5,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 3,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 4.5,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 6,
               "x": 1,
               "y": 1
             }
@@ -3768,67 +3600,11 @@
             {
               "time": 0,
               "angle": 0
-            },
-            {
-              "time": 1,
-              "angle": 3.59
-            },
-            {
-              "time": 1.5,
-              "angle": 0
-            },
-            {
-              "time": 2.5,
-              "angle": 3.59
-            },
-            {
-              "time": 3,
-              "angle": 0
-            },
-            {
-              "time": 4,
-              "angle": 3.59
-            },
-            {
-              "time": 4.5,
-              "angle": 0
-            },
-            {
-              "time": 5.5,
-              "angle": 3.59
-            },
-            {
-              "time": 6,
-              "angle": 0
             }
           ],
           "translate": [
             {
               "time": 0,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.5,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 3,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 4.5,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 6,
               "x": 0,
               "y": 0
             }
@@ -3836,30 +3612,6 @@
           "scale": [
             {
               "time": 0,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 1.5,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 3,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 4.5,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 6,
               "x": 1,
               "y": 1
             }
@@ -6474,58 +6226,9 @@
             }
           ]
         }
-      },
-      "bones": {
-        "bone2": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 0.5333,
-              "angle": 0
-            }
-          ],
-          "translate": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0,
-              "curve": "stepped"
-            },
-            {
-              "time": 0.5333,
-              "x": 0,
-              "y": 0
-            }
-          ],
-          "scale": [
-            {
-              "time": 0,
-              "x": 1,
-              "y": 1,
-              "curve": "stepped"
-            },
-            {
-              "time": 0.5333,
-              "x": 1,
-              "y": 1
-            }
-          ]
-        },
-        "bone8": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": -7.4
-            }
-          ]
-        }
       }
     },
-    "talking_eeeee": {
+    "talk_eeeee": {
       "slots": {
         "vera_mouth1": {
           "attachment": [
@@ -6535,40 +6238,7 @@
             }
           ]
         }
-      },
-      "bones": {
-        "bone2": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": 0
-            }
-          ],
-          "translate": [
-            {
-              "time": 0,
-              "x": 0,
-              "y": 0
-            }
-          ],
-          "scale": [
-            {
-              "time": 0,
-              "x": 1,
-              "y": 1
-            }
-          ]
-        },
-        "bone8": {
-          "rotate": [
-            {
-              "time": 0,
-              "angle": -7.4
-            }
-          ]
-        }
       }
-    },
-    "empty": {}
+    }
   }
 }

@@ -78,13 +78,18 @@
   :switch-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      (.setAnimation (:animation-state state) track id loop 0))))
+      (.setAnimation (:animation-state state) track id loop))))
 
 (re-frame/reg-fx
   :add-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
       (.addAnimation (:animation-state state) track id loop 0))))
+
+(re-frame/reg-fx
+  :remove-animation
+  (fn [{:keys [state track] :or {track 0} :as action}]
+    (.setEmptyAnimation (:animation-state state) track 0.2)))
 
 (re-frame/reg-fx
   :start-animation
@@ -98,9 +103,9 @@
 
 (re-frame/reg-fx
   :animation-props
-  (fn [{{skeleton :skeleton} :state {:keys [flipX flipY x y]} :props}]
-    (when-not (nil? flipX) (set! (.-flipX skeleton) flipX))
-    (when-not (nil? flipY) (set! (.-flipY skeleton) flipY))
+  (fn [{{skeleton :skeleton} :state {:keys [scaleX scaleY x y]} :props}]
+    (when scaleX (set! (.-scaleX skeleton) scaleX))
+    (when scaleY (set! (.-scaleY skeleton) scaleY))
     (when x (set! (.-x skeleton) x))
     (when y (set! (.-y skeleton) y))))
 
@@ -115,8 +120,10 @@
 (ce/reg-simple-executor :animation ::execute-animation)
 (ce/reg-simple-executor :add-animation ::execute-add-animation)
 (ce/reg-simple-executor :start-animation ::execute-start-animation)
+(ce/reg-simple-executor :remove-animation ::execute-remove-animation)
 (ce/reg-simple-executor :set-skin ::execute-set-skin)
 (ce/reg-simple-executor :animation-props ::execute-set-animation-props)
+(ce/reg-simple-executor :animation-sequence ::execute-animation-sequence)
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
@@ -191,6 +198,11 @@
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
+  ::execute-animation-sequence
+  (fn [{:keys [db]} [_ action]]
+    {:dispatch [::ce/execute-parallel (assoc action :data (i/animation-actions-from-sequence action))]}))
+
+(re-frame/reg-event-fx
   ::execute-add-animation
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
@@ -203,6 +215,14 @@
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
       {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]) :shape)
+       :dispatch-n (list (ce/success-event action))})))
+
+(re-frame/reg-event-fx
+  ::execute-remove-animation
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:remove-animation (-> action
+                             (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
        :dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx

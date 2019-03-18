@@ -14,7 +14,7 @@
                       "park" park-scene}})
 (defn get-course
   [course-id]
-  {:initial-scene "map"
+  {:initial-scene "swings"
    :scenes ["home" "map" "see-saw" "swings" "sandbox" "park"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"}}]
    :workflow-actions [{:id 1 :type "set-activity" :activity "home-introduce" :order 1}

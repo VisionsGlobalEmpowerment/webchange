@@ -203,3 +203,12 @@
              (< (+ r2x r2width) r1x)
              (> r2y (+ r1y r1height))
              (< (+ r2y r2height) r1y)))))
+
+(defn animation-actions-from-sequence [{:keys [target track offset data] :as action}]
+  (into [] (map (fn [{:keys [start end anim]}]
+                  {:type "sequence-data"
+                   :data [{:type "empty" :duration (* (- start offset) 1000)}
+                          {:type "animation" :target target :track track :id anim}
+                          {:type "empty" :duration (* (- end start) 1000)}
+                          {:type "remove-animation" :target target :track track}]})
+                data)))

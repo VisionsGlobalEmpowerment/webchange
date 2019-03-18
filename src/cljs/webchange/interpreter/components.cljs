@@ -323,11 +323,13 @@
     (let [viewport (re-frame/subscribe [::subs/viewport])
           viewbox (get-viewbox @viewport)
           ui-screen @(re-frame/subscribe [::subs/ui-screen])]
-      [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (- (compute-x viewbox)) :y (- (compute-y viewbox))
-                 :scale-x (/ (:width @viewport) (:width viewbox)) :scale-y (/ (:height @viewport) (:height viewbox))}
-       [:> Layer
-        (case ui-screen
-          :settings [settings]
-          :course-loading [course-loading-screen]
-          [current-scene]
-          )]])))
+      [:div
+       [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
+       [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (- (compute-x viewbox)) :y (- (compute-y viewbox))
+                  :scale-x (/ (:width @viewport) (:width viewbox)) :scale-y (/ (:height @viewport) (:height viewbox))}
+        [:> Layer
+         (case ui-screen
+           :settings [settings]
+           :course-loading [course-loading-screen]
+           [current-scene]
+           )]]])))
