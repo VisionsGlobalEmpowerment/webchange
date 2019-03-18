@@ -25,7 +25,7 @@
       [na/header {:as "h1" :content "Pick course"}]
       [na/divider {}]
       [na/button {:basic? true :content "English" :on-click #(re-frame/dispatch [::events/redirect :course :id "demo"])}]
-      [na/button {:basic? true :content "Español" :on-click #(re-frame/dispatch [::events/redirect :course :id "reading"])}]]]]
+      [na/button {:basic? true :content "Español" :on-click #(re-frame/dispatch [::events/redirect :course :id "test"])}]]]]
    [na/grid-row {}
     [na/grid-column {}]]])
 
