@@ -12,23 +12,23 @@
 (use-fixtures :each f/clear-db-fixture)
 
 (deftest current-progress-can-be-retrieved
-  (let [{user-id :user-id course-id :course-id data :data} (fp/progress-created)
-        retrieved (-> (fp/get-current-progress user-id course-id) :body (json/read-str :key-fn keyword) :progress)]
+  (let [{user-id :user-id course-name :course-name data :data} (fp/progress-created)
+        retrieved (-> (fp/get-current-progress user-id course-name) :body (json/read-str :key-fn keyword) :progress)]
     (is (= data (:data retrieved)))))
 
 (deftest progress-can-be-created
   (let [{user-id :id} (f/user-created)
-        {course-id :id} (f/course-created)
+        {course-name :name} (f/course-created)
         data {:actions [] :progress {:test "test"}}
-        _ (fp/save-current-progress! user-id course-id data)
-        retrieved (-> (fp/get-current-progress user-id course-id) :body (json/read-str :key-fn keyword) :progress)]
+        _ (fp/save-current-progress! user-id course-name data)
+        retrieved (-> (fp/get-current-progress user-id course-name) :body (json/read-str :key-fn keyword) :progress)]
     (is (= (:progress data) (:data retrieved)))))
 
 (deftest progress-can-be-updated
-  (let [{user-id :user-id course-id :course-id data :data} (fp/progress-created)
+  (let [{user-id :user-id course-name :course-name} (fp/progress-created)
         updated-data {:actions [] :progress {:test "updated-test"}}
-        _ (fp/save-current-progress! user-id course-id updated-data)
-        retrieved (-> (fp/get-current-progress user-id course-id) :body (json/read-str :key-fn keyword) :progress)]
+        _ (fp/save-current-progress! user-id course-name updated-data)
+        retrieved (-> (fp/get-current-progress user-id course-name) :body (json/read-str :key-fn keyword) :progress)]
     (is (= (:progress updated-data) (:data retrieved)))))
 
 (deftest class-profile-can-be-retrieved
