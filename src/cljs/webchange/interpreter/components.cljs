@@ -23,6 +23,7 @@
         height 1080
         original-ratio (/ width height)
         window-ratio (/ (:width viewport) (:height viewport))]
+    #_{:width width :height height}
     (if (< original-ratio window-ratio)
       {:width width :height (Math/round (* height (/ original-ratio window-ratio)))}
       {:width (Math/round (* width (/ original-ratio window-ratio))) :height height})))
@@ -30,12 +31,21 @@
 (defn compute-x
   [viewbox]
   (let [width 1920]
-    (/ (- width (:width viewbox)) 2)))
+    (/ (- width (:width viewbox)) 4)))
 
 (defn compute-y
   [viewbox]
   (let [height 1080]
     (/ (- height (:height viewbox)) 2)))
+
+(defn compute-scale [viewport]
+  (let [width 1920
+        height 1080
+        original-ratio (/ width height)
+        window-ratio (/ (:width viewport) (:height viewport))]
+    (if (> original-ratio window-ratio)
+      (/ (:height viewport) height)
+      (/ (:width viewport) width))))
 
 (defn do-start
   []
@@ -47,7 +57,7 @@
   (let [viewport (re-frame/subscribe [::subs/viewport])
         viewbox (get-viewbox @viewport)
         scale (/ (:width viewbox) (:width @viewport))
-        x (+ (Math/round (* (compute-x viewbox) scale)) (:width viewbox))
+        x (+ (Math/round (* (* (compute-x viewbox) scale) 4)) (:width viewbox))
         y (Math/round (* (compute-y viewbox) scale))]
     {:x x :y y}))
 
@@ -335,15 +345,14 @@
 (defn course
   [course-id]
   (re-frame/dispatch [::ie/start-course course-id])
-  (.scrollTo js/window 0 1)
   (fn [course-id]
     (let [viewport (re-frame/subscribe [::subs/viewport])
           viewbox (get-viewbox @viewport)
           ui-screen @(re-frame/subscribe [::subs/ui-screen])]
       [:div
        [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-       [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (- (compute-x viewbox)) :y (- (compute-y viewbox))
-                  :scale-x (/ (:width @viewport) (:width viewbox)) :scale-y (/ (:height @viewport) (:height viewbox))}
+       [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (compute-x viewbox) :y (- (compute-y viewbox))
+                  :scale-x (compute-scale @viewport) :scale-y (compute-scale @viewport)}
         [:> Layer
          (case ui-screen
            :settings [settings]
