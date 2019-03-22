@@ -1,0 +1,7 @@
+{
+  "short_name": "Webchange",
+  "name": "Webchange Test App",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape"
+}

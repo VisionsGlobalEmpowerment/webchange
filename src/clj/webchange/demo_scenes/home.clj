@@ -2,44 +2,7 @@
 
 (def home-scene
   {:assets
-                  [{:url "/raw/audio/background/POL-daily-special-short.mp3", :size 10, :type "audio"}
-                   {:url "/raw/audio/effects/NFF-fruit-collected.mp3", :size 1, :type "audio"}
-                   {:url "/raw/audio/effects/NFF-glitter.mp3", :size 1, :type "audio"}
-                   {:url "/raw/audio/effects/NFF-robo-elastic.mp3", :size 1, :type "audio"}
-                   {:url "/raw/audio/effects/NFF-rusted-thing.mp3", :size 1, :type "audio"}
-                   {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
-
-                   {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/back_button_02.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/close_button_01.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/close_button_02.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/play_button_01.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/play_button_02.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/reload_button_02.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/settings_button_01.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/settings_button_02.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/star_01.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/star_02.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/form.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/clear.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/next_button_01.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/next_button_02.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/vera.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/settings/music.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/settings/music_icon.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
-                   {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/form_green.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/Grapes.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/Spoon.png", :size 1, :type "image"}
-                   {:url "/raw/img/ferris-wheel/words/Fork.png", :size 1, :type "image"}
-
-                   {:url "/raw/audio/scripts/intro/intro-welcome.mp3", :size 2, :type "audio"}
-                   {:url "/raw/audio/scripts/intro/intro-finish.mp3", :size 2, :type "audio"}
-                   {:url "/raw/audio/ferris-wheel/fw-try-again.mp3", :size 2, :type "audio"}
+                  [{:url "/raw/audio/ferris-wheel/fw-try-again.mp3", :size 2, :type "audio"}
 
                    {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
                    {:url "/raw/img/casa_door.png", :size 1, :type "image"}

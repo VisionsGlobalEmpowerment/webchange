@@ -18,24 +18,31 @@
 
 (defn get-scene-data
   [course-name scene-name]
-  (if (contains? hardcoded course-name)
-    (scene/get-scene course-name scene-name)
+  (if-let [hardcoded-scene (scene/get-scene course-name scene-name)]
+    hardcoded-scene
     (let [{course-id :id} (db/get-course {:name course-name})
           {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
           latest-version (db/get-latest-scene-version {:scene_id scene-id})]
       (:data latest-version))))
 
+(defn get-or-create-scene! [course-id scene-name]
+  (if-let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]
+    scene-id
+    (let [[{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})]
+      scene-id)))
 
 (defn save-scene!
   [course-name scene-name scene-data owner-id]
   (let [{course-id :id} (db/get-course {:name course-name})
-        {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
+        scene-id (get-or-create-scene! course-id scene-name)
         created-at (jt/local-date-time)]
     (db/save-scene! {:scene_id scene-id
                      :data scene-data
                      :owner_id owner-id
                      :created_at created-at})
-    [true {:created-at (str created-at)}]))
+    [true {:id scene-id
+           :name scene-name
+           :created-at (str created-at)}]))
 
 (defn save-course!
   [course-name data owner-id]

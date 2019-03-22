@@ -59,7 +59,9 @@
 
      [:> Group top-right
       [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
-       {:x (- 108) :y 20 :on-click #(re-frame/dispatch [::events/close-settings])}]]
+       {:x (- 108) :y 20
+        :on-click #(re-frame/dispatch [::events/close-settings])
+        :on-tap #(re-frame/dispatch [::events/close-settings])}]]
 
      [kimage (get-data-as-url "/raw/img/ui/settings/settings.png") {:x 779 :y 345}]
      [kimage (get-data-as-url "/raw/img/ui/settings/music_icon.png") {:x 675 :y 516}]
@@ -95,7 +97,9 @@
 
      [:> Group top-right
       [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
-       {:x (- 108) :y 20 :on-click #(re-frame/dispatch [::ie/next-scene])}]]
+       {:x (- 108) :y 20
+        :on-click #(re-frame/dispatch [::ie/next-scene])
+        :on-tap #(re-frame/dispatch [::ie/next-scene])}]]
 
      [kimage (get-data-as-url "/raw/img/ui/form.png") {:x 639 :y 155}]
      [kimage (get-data-as-url "/raw/img/ui/clear.png") {:x 829 :y 245}]
@@ -111,8 +115,12 @@
                :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5}]
 
      [kimage (get-data-as-url "/raw/img/ui/vera.png") {:x 851 :y 581}]
-     [kimage (get-data-as-url "/raw/img/ui/reload_button_01.png") {:x 679 :y 857 :on-click #(re-frame/dispatch [::ie/restart-scene])}]
-     [kimage (get-data-as-url "/raw/img/ui/next_button_01.png") {:x 796 :y 857 :on-click #(re-frame/dispatch [::ie/next-scene])}]
+     [kimage (get-data-as-url "/raw/img/ui/reload_button_01.png") {:x 679 :y 857
+                                                                   :on-click #(re-frame/dispatch [::ie/restart-scene])
+                                                                   :on-tap #(re-frame/dispatch [::ie/restart-scene])}]
+     [kimage (get-data-as-url "/raw/img/ui/next_button_01.png") {:x 796 :y 857
+                                                                 :on-click #(re-frame/dispatch [::ie/next-scene])
+                                                                 :on-tap #(re-frame/dispatch [::ie/next-scene])}]
 
      ]))
 
@@ -140,7 +148,7 @@
         [:> Rect {:width 462 :height 24 :fill "#2c9600" :corner-radius 25}]]
       ]
      (if @loaded
-       [:> Group {:x 779 :y 863 :on-click do-start}
+       [:> Group {:x 779 :y 863 :on-click do-start :on-tap do-start}
         [kimage "/raw/img/ui/play_button_01.png"]])
      ]))
 
@@ -154,11 +162,15 @@
 
 (defn close-button
   [x y]
-  [:> Group {:x x :y y :on-click #(re-frame/dispatch [::ie/close-scene])} [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
+  [:> Group {:x x :y y
+             :on-click #(re-frame/dispatch [::ie/close-scene])
+             :on-tap #(re-frame/dispatch [::ie/close-scene])} [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
 
 (defn settings-button
   [x y]
-  [:> Group {:x x :y y :on-click #(re-frame/dispatch [::events/open-settings])} [kimage (get-data-as-url "/raw/img/ui/settings_button_01.png")]])
+  [:> Group {:x x :y y
+             :on-click #(re-frame/dispatch [::events/open-settings])
+             :on-tap #(re-frame/dispatch [::events/open-settings])} [kimage (get-data-as-url "/raw/img/ui/settings_button_01.png")]])
 
 (defn menu
   []
@@ -184,7 +196,11 @@
 
 (defn prepare-action
   [action]
-  {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action action])})
+  (let [type (:on action)]
+    (if (= type "click")
+      {:on-click #(re-frame/dispatch [::ce/execute-action action])
+       :on-tap #(re-frame/dispatch [::ce/execute-action action])}
+      {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action action])})))
 
 (defn prepare-actions
   [{:keys [actions] :as object}]
@@ -319,6 +335,7 @@
 (defn course
   [course-id]
   (re-frame/dispatch [::ie/start-course course-id])
+  (.scrollTo js/window 0 1)
   (fn [course-id]
     (let [viewport (re-frame/subscribe [::subs/viewport])
           viewbox (get-viewbox @viewport)

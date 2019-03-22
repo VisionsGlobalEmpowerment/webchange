@@ -194,7 +194,9 @@
   ::save-scene
   (fn [{:keys [db]} [_ scene-id scene-data]]
     (let [course-id (:current-course db)]
-      {:db (update-in db [:scenes scene-id] merge scene-data)
+      {:db (-> db
+               (assoc-in [:loading :save-scene] true)
+               (update-in [:scenes scene-id] merge scene-data))
        :http-xhrio {:method          :post
                     :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
                     :params          {:scene scene-data}
@@ -208,6 +210,30 @@
   ::save-scene-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :save-scene])}))
+
+(re-frame/reg-event-fx
+  ::create-scene
+  (fn [{:keys [db]} [_ scene-id]]
+    (let [course-id (:current-course db)]
+      {:db (assoc-in db [:loading :create-scene] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
+                    :params          {:scene {}}
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::create-scene-success]
+                    :on-failure      [:api-request-error :create-scene]}})))
+
+
+(re-frame/reg-event-fx
+  ::create-scene-success
+  (fn [{:keys [db]} [_ {scene-name :name}]]
+    (let [course-id (:current-course db)
+          course-data (-> (:course-data db)
+                          (update-in [:scenes] conj scene-name))]
+    {:dispatch-n (list [:complete-request :create-scene]
+                       [::save-course course-id course-data]
+                       [::set-main-content :editor])})))
 
 
 (re-frame/reg-event-fx

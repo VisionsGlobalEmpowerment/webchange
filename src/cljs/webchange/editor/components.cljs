@@ -596,6 +596,19 @@
            ]
           ]])]]))
 
+(defn add-scene-form []
+  (let [data (r/atom {})]
+    (fn []
+      (let [loading @(re-frame/subscribe [:loading])]
+        [na/segment {:loading? (when (:add-scene loading))}
+         [na/header {:as "h4" :content "Add scene"}]
+         [na/divider {:clearing? true}]
+         [na/form {}
+          [na/form-input {:label "name" :default-value (:name @data) :on-change #(swap! data assoc :name (-> %2 .-value)) :inline? true}]
+          [na/divider {}]
+          [na/form-button {:content "Add" :on-click #(re-frame/dispatch [::events/create-scene (:name @data)])}]
+          ]]))))
+
 (defn with-stage
   [component]
   [:> Stage {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6}
@@ -614,6 +627,7 @@
           :course-source [course-source]
           :scene-versions [scene-versions]
           :course-versions [course-versions]
+          :add-scene-form [add-scene-form]
           :add-dataset-form [add-dataset-form]
           :edit-dataset-form [edit-dataset-form]
           :dataset-info [dataset-info]
@@ -1072,7 +1086,11 @@
   (let [scenes (re-frame/subscribe [::subs/course-scenes])]
     (fn []
       [na/segment {}
-       [na/header {:as "h4" :content "Scenes"}]
+       [na/header {:as "h4"}
+        "Scenes"
+        [:div {:style {:float "right"}}
+         [na/icon {:name "add" :link? true
+                   :on-click #(re-frame/dispatch [::events/set-main-content :add-scene-form])}]]]
        [na/divider {:clearing? true}]
        [sa/ItemGroup {}
         (for [scene-id @scenes]

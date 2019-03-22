@@ -1,27 +1,6 @@
 (ns webchange.demo-scenes.park.park)
 
-(def park-scene {:assets
-                         [{:url  "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
-                          {:url  "/raw/audio/effects/NFF-fruit-collected.mp3" :size 1 :type "audio"}
-                          {:url "/raw/audio/effects/NFF-glitter.mp3", :size 1, :type "audio"}
-                          {:url  "/raw/audio/effects/NFF-robo-elastic.mp3" :size 1 :type "audio"}
-                          {:url  "/raw/audio/effects/NFF-rusted-thing.mp3" :size 1 :type "audio"}
-                          {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
-                          {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/back_button_02.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/close_button_01.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/close_button_02.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/play_button_01.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/play_button_02.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/reload_button_02.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/settings_button_01.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/settings_button_02.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/star_01.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/star_02.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/star_03.png", :size 1, :type "image"}
-
-                          {:url "/raw/img/park/background.jpg", :size 10, :type "image"}
+(def park-scene {:assets [{:url "/raw/img/park/background.jpg", :size 10, :type "image"}
 
                           {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
                           {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
