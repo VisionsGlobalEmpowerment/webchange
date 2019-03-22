@@ -48,7 +48,7 @@
 
   :figwheel {:css-dirs ["resources/public/css"]
              :ring-handler webchange.handler/dev-handler
-             :server-ip   "192.168.1.43" }
+             }
 
   :migratus {:store :database
              :migration-dir "migrations"
@@ -58,7 +58,7 @@
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]
-                   ;[day8.re-frame/re-frame-10x "0.3.3"]
+                   [day8.re-frame/re-frame-10x "0.3.3"]
                    [day8.re-frame/tracing "0.5.1"]
                    [ring/ring-mock "0.3.2"]]
 
@@ -87,8 +87,7 @@
                     :asset-path           "/js/compiled/out"
                     :source-map-timestamp true
                     :preloads             [devtools.preload
-                                           ]
-                                           ;day8.re-frame-10x.preload]
+                                           day8.re-frame-10x.preload]
                     :closure-defines      {"re_frame.trace.trace_enabled_QMARK_" true
                                            "day8.re_frame.tracing.trace_enabled_QMARK_" true}
                     :external-config      {:devtools/config {:features-to-install :all}}
