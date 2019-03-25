@@ -112,7 +112,7 @@
      :jar true
      :compiler     {:main            webchange.core
                     :output-to       "resources/public/js/compiled/app.js"
-                    :optimizations   :whitespace
+                    :optimizations   :simple
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false
                     :npm-deps
