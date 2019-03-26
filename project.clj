@@ -30,6 +30,7 @@
                  [camel-snake-kebab "0.4.0"]
                  [bidi "2.1.5"]
                  [kibu/pushy "0.3.8"]
+                 [net.mikera/imagez "0.12.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]

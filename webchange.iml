@@ -67,6 +67,7 @@
     <orderEntry type="library" name="Leiningen: com.google.jsinterop/jsinterop-annotations:1.0.0" level="project" />
     <orderEntry type="library" name="Leiningen: com.google.protobuf/protobuf-java:3.0.2" level="project" />
     <orderEntry type="library" name="Leiningen: com.googlecode.json-simple/json-simple:1.1.1" level="project" />
+    <orderEntry type="library" name="Leiningen: com.jhlabs/filters:2.0.235-1" level="project" />
     <orderEntry type="library" name="Leiningen: com.lambdaworks/scrypt:1.4.0" level="project" />
     <orderEntry type="library" name="Leiningen: com.layerware/hugsql-adapter-clojure-java-jdbc:0.4.9" level="project" />
     <orderEntry type="library" name="Leiningen: com.layerware/hugsql-adapter:0.4.9" level="project" />
@@ -100,6 +101,11 @@
     <orderEntry type="library" name="Leiningen: migratus:1.2.0" level="project" />
     <orderEntry type="library" name="Leiningen: mount:0.1.15" level="project" />
     <orderEntry type="library" name="Leiningen: net.cgrand/macrovich:0.2.0" level="project" />
+    <orderEntry type="library" name="Leiningen: net.mikera/clojure-utils:0.7.1" level="project" />
+    <orderEntry type="library" name="Leiningen: net.mikera/imagez:0.12.0" level="project" />
+    <orderEntry type="library" name="Leiningen: net.mikera/mathz:0.3.0" level="project" />
+    <orderEntry type="library" name="Leiningen: net.mikera/mikera-gui:0.3.1" level="project" />
+    <orderEntry type="library" name="Leiningen: net.mikera/randomz:0.3.0" level="project" />
     <orderEntry type="library" name="Leiningen: noencore:0.3.3" level="project" />
     <orderEntry type="library" name="Leiningen: nrepl:0.6.0" level="project" />
     <orderEntry type="library" name="Leiningen: ns-tracker:0.3.0" level="project" />
@@ -134,6 +140,7 @@
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-io:9.2.10.v20150310" level="project" />
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-server:9.2.10.v20150310" level="project" />
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-util:9.2.10.v20150310" level="project" />
+    <orderEntry type="library" name="Leiningen: org.imgscalr/imgscalr-lib:4.2" level="project" />
     <orderEntry type="library" name="Leiningen: org.javassist/javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" name="Leiningen: org.mozilla/rhino:1.7R5" level="project" />
     <orderEntry type="library" name="Leiningen: org.msgpack/msgpack:0.6.12" level="project" />

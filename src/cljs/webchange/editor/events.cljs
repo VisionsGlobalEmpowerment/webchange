@@ -155,6 +155,21 @@
       {:db (assoc-in db [:editor :selected-asset] {:scene-id scene-id :id new-id})})))
 
 (re-frame/reg-event-fx
+  ::show-upload-asset-form
+  (fn [_ _]
+    {:dispatch [::set-main-content :upload-asset-form]}))
+
+(re-frame/reg-event-fx
+  ::add-asset
+  (fn [{:keys [db]} [_ {:keys [scene-id state]}]]
+    (let [id (-> (get-in db [:scenes scene-id :assets]) count)
+          assets (-> db
+                     (get-in [:scenes scene-id :assets] [])
+                     (assoc id state))]
+      {:db (assoc-in db [:scenes scene-id :assets] assets)
+       :reload-asset state})))
+
+(re-frame/reg-event-fx
   ::edit-asset
   (fn [{:keys [db]} [_ {:keys [scene-id id state]}]]
     (let [asset (-> (get-in db [:scenes scene-id :assets id]) (merge state))]
@@ -169,7 +184,7 @@
 (re-frame/reg-event-fx
   ::add-to-scene
   (fn [{:keys [db]} [_ {:keys [scene-id name layer]}]]
-    (let [layers (get-in db [:scenes scene-id :scene-objects])
+    (let [layers (get-in db [:scenes scene-id :scene-objects] [])
           current-layer (get-in db [:scenes scene-id :scene-objects layer] [])
           updated-layer (conj current-layer name)
           updated-layers (reduce (fn [layers idx] (if (= layer idx)
@@ -181,7 +196,7 @@
 (re-frame/reg-event-fx
   ::add-to-current-scene
   (fn [{:keys [db]} [_ {:keys [name layer]}]]
-    (let [layers (get-in db [:current-scene-data :scene-objects])
+    (let [layers (get-in db [:current-scene-data :scene-objects] [])
           current-layer (get-in db [:current-scene-data :scene-objects layer] [])
           updated-layer (conj current-layer name)
           updated-layers (reduce (fn [layers idx] (if (= layer idx)
@@ -567,3 +582,38 @@
   (fn [_ _]
     {:dispatch-n (list [:complete-request :delete-dataset-lesson]
                        [::load-current-dataset-lessons])}))
+
+(re-frame/reg-event-fx
+  ::upload-asset
+  (fn [{:keys [db]} [_ scene-id js-file-value]]
+    (let [form-data (doto
+                      (js/FormData.)
+                      (.append "file" js-file-value))]
+      {:db (assoc-in db [:loading :upload-asset] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/assets/")
+                    :body            form-data
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::upload-asset-success scene-id]
+                    :on-failure      [:api-request-error :upload-asset]}})))
+
+
+(re-frame/reg-event-fx
+  ::upload-asset-success
+  (fn [{:keys [db]} [_ scene-id result]]
+      {:dispatch-n (list [:complete-request :upload-asset]
+                         [::add-asset {:scene-id scene-id :state result}]
+                         [::set-main-content :editor])}))
+
+(re-frame/reg-event-fx
+  ::add-object-to-current-scene
+  (fn [{:keys [db]} [_ asset-id]]
+    (let [scene-id (:current-scene db)
+          asset (get-in db [:scenes scene-id :assets asset-id])
+          state {:type :image :scene-layer 5 :scene-name "image"
+                 :src (:url asset)
+                 :width (:width asset)
+                 :height (:height asset)}]
+      (if (= "image" (:type asset))
+        {:db (assoc-in db [:editor :new-object-defaults] state)
+         :dispatch-n (list [::show-form :add-object])}))))

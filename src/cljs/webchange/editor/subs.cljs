@@ -107,3 +107,8 @@
     (->> (get-in db [:editor :current-dataset-lessons])
          (filter #(= id (:id %)))
          first)))
+
+(re-frame/reg-sub
+  ::new-object-defaults
+  (fn [db]
+    (get-in db [:editor :new-object-defaults])))

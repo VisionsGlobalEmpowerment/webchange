@@ -609,10 +609,37 @@
           [na/form-button {:content "Add" :on-click #(re-frame/dispatch [::events/create-scene (:name @data)])}]
           ]]))))
 
+(defn get-first-file [event]
+  (-> event
+      (.-dataTransfer)
+      (.-files)
+      (.item 0)))
+
+(defn upload-asset-form
+  []
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
+    [:div {:on-drag-over #(do (.stopPropagation %) (.preventDefault %))
+           :on-drop (fn [e]
+                      (.stopPropagation e)
+                      (.preventDefault e)
+                      (re-frame/dispatch [::events/upload-asset scene-id (get-first-file e)])
+                      )}
+     [na/segment {:style {:width "100%" :height "500px"}}
+      [na/header {:icon true}
+       [na/icon {:name "file outline"}]]
+      "Drag & drop your file here..."
+      ]]))
+
 (defn with-stage
   [component]
-  [:> Stage {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6}
-   [:> Layer component]])
+  [:div {:on-drag-over #(.preventDefault %)
+         :on-drop (fn [e]
+                    (re-frame/dispatch [::events/add-object-to-current-scene (-> e
+                                                                                  .-dataTransfer
+                                                                                  (.getData "text/plain")
+                                                                                  js/parseInt)]))}
+   [:> Stage {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6}
+    [:> Layer component]]])
 
 (defn main-content
   []
@@ -635,6 +662,7 @@
           :edit-dataset-item-form [edit-dataset-item-form]
           :add-dataset-lesson-form [add-dataset-lesson-form]
           :edit-dataset-lesson-form [edit-dataset-lesson-form]
+          :upload-asset-form [upload-asset-form]
           (with-stage [scene])
           )
         (with-stage [preloader]))
@@ -664,9 +692,12 @@
 
 (defn properties-panel-image
   [props]
-  [:div
-   [na/form-input {:label "src" :default-value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value)) :inline? true}]
-   [properties-panel-common props]])
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        scene @(re-frame/subscribe [::subs/scene scene-id])]
+    [:div
+     [sa/Dropdown {:placeholder "src" :search true :selection true :on-change #(swap! props assoc :src (.-value %2))
+                   :default-value (:src @props) :options (na/dropdown-list (:assets scene) :url :url) }]
+     [properties-panel-common props]]))
 
 (defn properties-panel-animation
   [props]
@@ -678,8 +709,11 @@
 
 (defn properties-panel-background
   [props]
-  [:div
-   [na/form-input {:label "src" :default-value (:src @props) :on-change #(swap! props assoc :src (-> %2 .-value)) :inline? true}]])
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        scene @(re-frame/subscribe [::subs/scene scene-id])]
+    [:div
+     [sa/Dropdown {:placeholder "src" :search true :selection true :on-change #(swap! props assoc :src (.-value %2))
+                   :default-value (:src @props) :options (na/dropdown-list (:assets scene) :url :url) }]]))
 
 (declare dispatch-action-panel)
 
@@ -980,8 +1014,9 @@
 
 (defn add-object-panel
   []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        props (r/atom {})]
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        defaults @(re-frame/subscribe [::es/new-object-defaults])
+        props (r/atom (or defaults {}))]
     (fn []
       [na/segment {}
        [na/header {:as "h4" :floated "left" :content "Object action"}]
@@ -990,16 +1025,17 @@
        [na/divider {:clearing? true}]
 
        [na/form {}
-        [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types :on-change #(swap! props assoc :type (.-value %2))}]
+        [sa/Dropdown {:placeholder "Type" :search true :selection true :options object-types
+                      :default-value (:type @props) :on-change #(swap! props assoc :type (.-value %2))}]
         [na/divider {}]
         [na/form-input {:label "name" :default-value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
         [na/form-input {:label "layer" :default-value (:scene-layer @props) :on-change #(swap! props assoc :scene-layer (-> %2 .-value js/parseInt)) :inline? true}]
         [na/divider {}]
         [dispatch-properties-panel props]
         [na/divider {}]
-        [na/form-button {:content "Add" :on-click #(do (update-object @scene-id (:scene-name @props) @props)
+        [na/form-button {:content "Add" :on-click #(do (update-object scene-id (:scene-name @props) @props)
                                                        (update-current-scene-object (:scene-name @props) @props)
-                                                       (add-to-scene @scene-id (:scene-name @props) (:scene-layer @props))
+                                                       (add-to-scene scene-id (:scene-name @props) (:scene-layer @props))
                                                        (re-frame/dispatch [::events/reset-shown-form]))}]
        ]])))
 
@@ -1022,16 +1058,6 @@
                              :on-click #(re-frame/dispatch [::events/select-object @scene-id id])}]]
            )]])))
 
-(def page-elements 10)
-
-(defn prev-page-elements
-  [page]
-  (* page-elements (dec page)))
-
-(defn total-pages
-  [elements]
-  (Math/ceil (/ elements page-elements)))
-
 (defn asset-properties-panel
   [scene-id id]
   (let [props (r/atom {})]
@@ -1053,13 +1079,14 @@
   (let [{:keys [scene-id id]} @(re-frame/subscribe [::es/selected-asset])]
     (if id
       ^{:key (str scene-id id)} [asset-properties-panel scene-id id]
-      [na/button {:basic? true :content "Add asset" :on-click #(re-frame/dispatch [::events/select-new-asset])}])))
+      [:div
+       [na/button {:basic? true :content "Add existing asset" :on-click #(re-frame/dispatch [::events/select-new-asset])}]
+       [na/button {:basic? true :content "Upload asset" :on-click #(re-frame/dispatch [::events/show-upload-asset-form])}]])))
 
 (defn list-assets-panel
   []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        scene (re-frame/subscribe [::subs/scene @scene-id])
-        page (r/atom 1)]
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        scene (re-frame/subscribe [::subs/scene scene-id])]
     (fn []
       [na/segment {}
        [na/header {:as "h4" :floated "left" :content "Assets"}]
@@ -1067,18 +1094,24 @@
         [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
        [na/divider {:clearing? true}]
 
-       [sa/ItemGroup {:divided true}
-        (for [[key asset] (->> @scene :assets (map-indexed (fn [idx itm] [idx itm])) (drop (prev-page-elements @page)) (take page-elements))]
-          ^{:key (str @scene-id key)}
-          [sa/Item {}
-           [sa/ItemContent {:on-click #(re-frame/dispatch [::events/select-asset @scene-id key])}
-            (str key ". " (:type asset) " : " (:url asset)) ]]
+       [sa/ItemGroup {:divided true :style {:overflow "auto" :max-height "500px"}}
+        (for [[key asset] (->> @scene :assets (map-indexed (fn [idx itm] [idx itm])))]
+          ^{:key (str scene-id key)}
+          [sa/Item {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" key))}
+           (cond
+             (= "image" (:type asset)) [sa/ItemImage {:size "tiny" :src (:url asset)}]
+             (= "audio" (:type asset)) [sa/ItemImage {:size "tiny"} [na/icon {:name "music" :size "huge"}]]
+             :else [sa/ItemImage {:size "tiny"} [na/icon {:name "file" :size "huge"}]])
+
+           [sa/ItemContent {:on-click #(re-frame/dispatch [::events/select-asset scene-id key])}
+            [sa/ItemHeader {:as "a"}
+             (str (:type asset))]
+
+            [sa/ItemDescription {}
+             (str (:url asset)) ]]]
           )]
        [na/divider {:clearing? true}]
-       [sa/Pagination {:active-page @page :total-pages (total-pages (->> @scene :assets count))
-                       :first-item nil :last-item nil :ellipsis-item nil
-                       :on-page-change #(reset! page (.-activePage %2))}]
-       [na/divider {}]
+
        [edit-asset-section]])))
 
 (defn list-scenes-panel

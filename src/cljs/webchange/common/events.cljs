@@ -97,10 +97,7 @@
 (defn with-progress-property
   [db]
   (fn [action {:keys [progress-property action-property template]}]
-    (let [value (get-in db [:progress-data :variables (keyword progress-property)])
-          variables (get-in db [:progress-data :variables])]
-      (js/console.log "with progress " value progress-property action-property)
-      (js/console.log variables)
+    (let [value (get-in db [:progress-data :variables (keyword progress-property)])]
       (assoc action (keyword action-property) (from-template template value)))))
 
 (defn with-progress-properties
