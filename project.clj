@@ -101,7 +101,7 @@
                                            :react-spring "5.8.0"
                                            :react-konva "16.6.0"
                                            }
-                    :foreign-libs [{:file "src/libs/spine-canvas.js"
+                    :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}]
                     :install-deps true
@@ -124,7 +124,7 @@
                                       :react-spring "5.8.0"
                                       :react-konva "16.6.0"
                                       }
-                    :foreign-libs [{:file "src/libs/spine-canvas.js"
+                    :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}]
                     :install-deps true}}
@@ -142,7 +142,7 @@
                                     :react-spring "5.8.0"
                                     :react-konva "16.6.0"
                                     }
-                    :foreign-libs [{:file "src/libs/spine-canvas.js"
+                    :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}]
                     :install-deps true

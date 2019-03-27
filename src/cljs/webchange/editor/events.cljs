@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.interpreter.events :as ie]))
+    [webchange.interpreter.events :as ie]
+    [webchange.common.anim :refer [animations]]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -40,6 +41,16 @@
   ::edit-current-scene-object
   (fn [{:keys [db]} [_ {:keys [target state]}]]
     {:db (update-in db [:current-scene-data :objects (keyword target)] merge state)}))
+
+(re-frame/reg-event-fx
+  ::remove-object
+  (fn [{:keys [db]} [_ {:keys [scene-id target]}]]
+    {:db (update-in db [:scenes scene-id :objects] dissoc (keyword target))}))
+
+(re-frame/reg-event-fx
+  ::remove-current-scene-object
+  (fn [{:keys [db]} [_ {:keys [target]}]]
+    {:db (update-in db [:current-scene-data :objects] dissoc (keyword target))}))
 
 (re-frame/reg-event-fx
   ::set-main-content
@@ -204,6 +215,35 @@
                                                     (assoc layers idx (get layers idx [])))) layers (range 0 (inc layer)))]
       {:db (update-in db [:current-scene-data] assoc :scene-objects updated-layers)}
       )))
+
+(defn in-layer? [name layer]
+  (js/console.log "name layer")
+  (js/console.log name)
+  (js/console.log layer)
+  (some #(= name %) layer))
+
+(defn remove-from-layer [layer name]
+  (let [updated (remove (fn [e] (= name e)) layer)]
+    (vec updated)))
+
+(re-frame/reg-event-fx
+  ::remove-from-scene
+  (fn [{:keys [db]} [_ {:keys [scene-id name]}]]
+    (let [layers (get-in db [:scenes scene-id :scene-objects] [])]
+      (if-let [layer-idx (first (keep-indexed (fn [idx layer] (when (in-layer? name layer) idx)) layers))]
+        {:db (update-in db [:scenes scene-id]
+                        assoc :scene-objects (update-in layers [layer-idx] remove-from-layer name))})
+      )))
+
+(re-frame/reg-event-fx
+  ::remove-from-current-scene
+  (fn [{:keys [db]} [_ {:keys [name]}]]
+    (let [layers (get-in db [:current-scene-data :scene-objects] [])]
+      (if-let [layer-idx (first (keep-indexed (fn [idx layer] (when (in-layer? name layer) idx)) layers))]
+        {:db (update-in db [:current-scene-data]
+                        assoc :scene-objects (update-in layers [layer-idx] remove-from-layer name))})
+      )))
+
 
 (re-frame/reg-event-fx
   ::save-scene
@@ -607,13 +647,34 @@
 
 (re-frame/reg-event-fx
   ::add-object-to-current-scene
-  (fn [{:keys [db]} [_ asset-id]]
+  (fn [{:keys [db]} [_ params]]
+    (js/console.log params)
+    (if (= "asset" (:type params))
+      {:dispatch [::add-image-object-to-current-scene params]}
+      {:dispatch [::add-animation-object-to-current-scene params]})))
+
+(re-frame/reg-event-fx
+  ::add-image-object-to-current-scene
+  (fn [{:keys [db]} [_ {asset-id :id x :offsetX y :offsetY}]]
     (let [scene-id (:current-scene db)
           asset (get-in db [:scenes scene-id :assets asset-id])
           state {:type :image :scene-layer 5 :scene-name "image"
+                 :x x :y y
                  :src (:url asset)
                  :width (:width asset)
                  :height (:height asset)}]
       (if (= "image" (:type asset))
         {:db (assoc-in db [:editor :new-object-defaults] state)
          :dispatch-n (list [::show-form :add-object])}))))
+
+(re-frame/reg-event-fx
+  ::add-animation-object-to-current-scene
+  (fn [{:keys [db]} [_ {id :id x :offsetX y :offsetY}]]
+    (let [animation (get animations (keyword id))
+          state {:type :animation :scene-layer 5 :scene-name "animation"
+                 :x x :y y :name id
+                 :width (:width animation) :height (:height animation)
+                 :anim (-> animation :animations first)
+                 :skin (-> animation :skins first)}]
+        {:db (assoc-in db [:editor :new-object-defaults] state)
+         :dispatch-n (list [::show-form :add-object])})))

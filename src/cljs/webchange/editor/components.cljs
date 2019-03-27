@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.common.kimage :refer [kimage]]
-    [webchange.common.anim :refer [anim]]
+    [webchange.common.anim :refer [anim animations init-spine-player]]
     [webchange.common.events :as ce]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
@@ -15,6 +15,7 @@
     [konva :refer [Transformer]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]
+    [sodium.extensions :as nax]
     [soda-ash.core :as sa]))
 
 (def object-types [{:key :image :value :image :text "Image"}
@@ -93,6 +94,17 @@
   (re-frame/dispatch [::events/add-to-scene {:scene-id scene-id :name name :layer layer}])
   (re-frame/dispatch [::events/add-to-current-scene {:name name :layer layer}]))
 
+(defn remove-from-scene
+  [scene-id object-name]
+  (let [prepared-name (name object-name)]
+    (re-frame/dispatch [::events/remove-from-scene {:scene-id scene-id :name prepared-name}])
+    (re-frame/dispatch [::events/remove-from-current-scene {:name prepared-name}])))
+
+(defn remove-object [scene-id name]
+  (remove-from-scene scene-id name)
+  (re-frame/dispatch [::events/remove-object {:scene-id scene-id :target name}])
+  (re-frame/dispatch [::events/remove-current-scene-object {:target name}]))
+
 (defn to-props
   [konva-node]
   {:x (.x konva-node)
@@ -148,7 +160,7 @@
 
 (defn background
   [scene-id name object]
-  [:> Group (object-params object)
+  [:> Group (object-params (dissoc object [:x :y]))
    [:> Group {:on-click remove-transform}
     [kimage (get-data-as-url (:src object))]]])
 
@@ -630,14 +642,21 @@
       "Drag & drop your file here..."
       ]]))
 
+(defn stage-drop-params [e]
+  (let [drop-params (-> e
+                        .-dataTransfer
+                        (.getData "text/plain")
+                        js/JSON.parse
+                        (js->clj :keywordize-keys true))
+        event-params {:offsetX (offsetX e)
+                      :offsetY (offsetY e)}]
+    (merge event-params drop-params)))
+
 (defn with-stage
   [component]
   [:div {:on-drag-over #(.preventDefault %)
          :on-drop (fn [e]
-                    (re-frame/dispatch [::events/add-object-to-current-scene (-> e
-                                                                                  .-dataTransfer
-                                                                                  (.getData "text/plain")
-                                                                                  js/parseInt)]))}
+                    (re-frame/dispatch [::events/add-object-to-current-scene (stage-drop-params e)]))}
    [:> Stage {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6}
     [:> Layer component]]])
 
@@ -699,11 +718,25 @@
                    :default-value (:src @props) :options (na/dropdown-list (:assets scene) :url :url) }]
      [properties-panel-common props]]))
 
+(defn get-animation [name]
+  (let [key (keyword name)]
+    (get animations key)))
+
 (defn properties-panel-animation
   [props]
   [:div
-   [na/form-input {:label "name" :default-value (:name @props) :on-change #(swap! props assoc :name (-> %2 .-value)) :inline? true}]
-   [na/form-input {:label "anim" :default-value (:anim @props) :on-change #(swap! props assoc :anim (-> %2 .-value)) :inline? true}]
+   [:div
+     [:label "name"]
+     [sa/Dropdown {:placeholder "name" :search true :selection true :on-change #(swap! props assoc :name (.-value %2))
+                   :default-value (:name @props) :options (na/dropdown-list (keys animations) name name) }]]
+   [:div
+     [:label "anim"]
+     [sa/Dropdown {:placeholder "anim" :search true :selection true :on-change #(swap! props assoc :anim (.-value %2))
+                   :default-value (:anim @props) :options (na/dropdown-list (-> @props :name get-animation :animations) identity identity) }]]
+   [:div
+     [:label "skin"]
+     [sa/Dropdown {:placeholder "skin" :search true :selection true :on-change #(swap! props assoc :skin (.-value %2))
+                   :default-value (:skin @props) :options (na/dropdown-list (-> @props :name get-animation :skins) identity identity) }]]
    [na/form-input {:label "speed" :default-value (:speed @props) :on-change #(swap! props assoc :speed (-> %2 .-value js/parseFloat)) :inline? true}]
    [properties-panel-common props]])
 
@@ -1041,8 +1074,8 @@
 
 (defn list-objects-panel
   []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        scene (re-frame/subscribe [::subs/scene @scene-id])]
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        scene (re-frame/subscribe [::subs/scene scene-id])]
     (fn []
       [na/segment {}
        [na/header {:as "h4" :floated "left" :content "Objects"}]
@@ -1052,11 +1085,21 @@
 
         [sa/ItemGroup {:divided true}
          (for [[id object] (:objects @scene)]
-           ^{:key (str @scene-id id)}
+           ^{:key (str scene-id id)}
            [sa/Item {}
-            [sa/ItemContent {:vertical-align "middle" :content (-> id str)
-                             :on-click #(re-frame/dispatch [::events/select-object @scene-id id])}]]
-           )]])))
+            [sa/ItemContent {:vertical-align "middle"
+                             :on-click #(re-frame/dispatch [::events/select-object scene-id id])}
+             [:div {:style {:float "left"}} (-> id str)]
+             [:div {:style {:float "right"}}
+              [na/icon {:name "eye slash outline" :link? true
+                        :on-click #(remove-from-scene scene-id id)}]
+              [na/icon {:name "remove" :link? true
+                        :on-click #(remove-object scene-id id)}]]
+             ]]
+           )]
+
+       [na/divider {}]
+       [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]])))
 
 (defn asset-properties-panel
   [scene-id id]
@@ -1083,6 +1126,10 @@
        [na/button {:basic? true :content "Add existing asset" :on-click #(re-frame/dispatch [::events/select-new-asset])}]
        [na/button {:basic? true :content "Upload asset" :on-click #(re-frame/dispatch [::events/show-upload-asset-form])}]])))
 
+(defn animation-asset? [asset]
+  (let [type (:type asset)]
+    (some #(= type %) ["anim-text" "anim-texture"])))
+
 (defn list-assets-panel
   []
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
@@ -1095,9 +1142,11 @@
        [na/divider {:clearing? true}]
 
        [sa/ItemGroup {:divided true :style {:overflow "auto" :max-height "500px"}}
-        (for [[key asset] (->> @scene :assets (map-indexed (fn [idx itm] [idx itm])))]
+        (for [[key asset] (->> @scene :assets (filter (complement animation-asset?)) (map-indexed (fn [idx itm] [idx itm])))]
           ^{:key (str scene-id key)}
-          [sa/Item {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" key))}
+          [sa/Item {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" (-> {:type "asset" :id key}
+                                                                                                      clj->js
+                                                                                                      js/JSON.stringify)))}
            (cond
              (= "image" (:type asset)) [sa/ItemImage {:size "tiny" :src (:url asset)}]
              (= "audio" (:type asset)) [sa/ItemImage {:size "tiny"} [na/icon {:name "music" :size "huge"}]]
@@ -1113,6 +1162,31 @@
        [na/divider {:clearing? true}]
 
        [edit-asset-section]])))
+
+(defn list-animations-panel
+  []
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
+    (fn []
+      [na/segment {}
+       [na/header {:as "h4" :floated "left" :content "Animations"}]
+       [na/header {:floated "right" :sub? true}
+        [na/icon {:name "close" :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
+       [na/divider {:clearing? true}]
+
+       [sa/ItemGroup {:divided true :style {:overflow "auto" :max-height "500px"}}
+        (for [[animation data] animations]
+          ^{:key animation}
+          [sa/Item {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" (-> {:type "animation" :id (name animation)}
+                                                                                                      clj->js
+                                                                                                      js/JSON.stringify)))}
+
+           [sa/ItemContent {}
+            [sa/ItemHeader {:as "a"}
+             (str animation)]
+
+            [sa/ItemDescription {}
+             [:div {:style {:width "100px" :height "100px"} :ref #(when % (init-spine-player % (name animation)))}] ]]]
+          )]])))
 
 (defn list-scenes-panel
   []
@@ -1162,42 +1236,47 @@
       :add-object [add-object-panel]
       :list-objects [list-objects-panel]
       :list-assets [list-assets-panel]
+      :list-animations [list-animations-panel]
       [:div])))
 
 (defn editor []
   (let [course-id (re-frame/subscribe [::subs/current-course])
         scene-id (re-frame/subscribe [::subs/current-scene])]
-    [sa/SidebarPushable {}
-     [sa/Sidebar {:visible true}
-      [na/segment {}
-       [na/header {}
-        [:div {} @course-id
-         [:div {:style {:float "right"}}
-          [na/icon {:name "code" :link? true
-                    :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
-          [na/icon {:name "history" :link? true
-                    :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
-       [na/divider {:clearing? true}]
-       [list-scenes-panel]
-       [list-datasets-panel]]]
-    [sa/SidebarPusher {}
-     [:div {:class-name "ui segment"}
-      [na/header {:dividing? true} "Editor"]
-      [na/grid {}
-       [na/grid-column {:width 10}
-        [main-content]
-        [na/divider {:clearing? true}]
-        [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-main-content :play-scene])}]
-        [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
-                                                     (re-frame/dispatch [::events/set-main-content :editor]))}]
-        [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-main-content :actions])}]
-        [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-main-content :scene-source])}]
-        [na/button {:content "Versions" :on-click #(re-frame/dispatch [::events/open-current-scene-versions])}]]
-       [na/grid-column {:width 4}
-        [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]
-        [na/button {:basic? true :content "List objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
-        [na/button {:basic? true :content "List assets" :on-click #(re-frame/dispatch [::events/show-form :list-assets])}]
-        [shown-form-panel]
-        [properties-rail]]]
 
-      ]]]))
+    [:div
+     [:link {:rel "stylesheet" :href "http://esotericsoftware.com/files/spine-player/3.7/spine-player.css"}]
+
+      [sa/SidebarPushable {}
+       [sa/Sidebar {:visible true}
+        [na/segment {}
+         [na/header {}
+          [:div {} @course-id
+           [:div {:style {:float "right"}}
+            [na/icon {:name "code" :link? true
+                      :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
+            [na/icon {:name "history" :link? true
+                      :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
+         [na/divider {:clearing? true}]
+         [list-scenes-panel]
+         [list-datasets-panel]]]
+      [sa/SidebarPusher {}
+       [:div {:class-name "ui segment"}
+        [na/header {:dividing? true} "Editor"]
+        [na/grid {}
+         [na/grid-column {:width 10}
+          [main-content]
+          [na/divider {:clearing? true}]
+          [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-main-content :play-scene])}]
+          [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
+                                                       (re-frame/dispatch [::events/set-main-content :editor]))}]
+          [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-main-content :actions])}]
+          [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-main-content :scene-source])}]
+          [na/button {:content "Versions" :on-click #(re-frame/dispatch [::events/open-current-scene-versions])}]]
+         [na/grid-column {:width 4}
+          [na/button {:basic? true :content "Objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
+          [na/button {:basic? true :content "Assets" :on-click #(re-frame/dispatch [::events/show-form :list-assets])}]
+          [na/button {:basic? true :content "Animations" :on-click #(re-frame/dispatch [::events/show-form :list-animations])}]
+          [shown-form-panel]
+          [properties-rail]]]
+
+      ]]]]))

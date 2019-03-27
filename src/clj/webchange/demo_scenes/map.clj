@@ -6,13 +6,7 @@
                          {:url "/raw/img/map/feria_01.png", :size 1, :type "image"}
                          {:url "/raw/img/map/feria_02.png", :size 1, :type "image"}
                          {:url "/raw/img/map/feria_03.png", :size 1, :type "image"}
-                         {:url "/raw/img/map/feria_locked.png", :size 1, :type "image"}
-
-                         {:url "/raw/anim/vera-go/skeleton.atlas", :size 1, :type "anim-text"}
-                         {:url "/raw/anim/vera-go/skeleton.json", :size 1, :type "anim-text"}
-                         {:url "/raw/anim/vera-go/skeleton.png", :size 1, :type "anim-texture"}
-                         {:url "/raw/anim/vera-go/skeleton2.png", :size 1, :type "anim-texture"}
-                         {:url "/raw/anim/vera-go/skeleton3.png", :size 1, :type "anim-texture"}],
+                         {:url "/raw/img/map/feria_locked.png", :size 1, :type "image"}],
 
                 :objects {:background {:type "background", :src "/raw/img/map/background.png"},
                           :vera {:type "animation" :name "vera-go" :anim "go_front" :speed 0.5 :start false
