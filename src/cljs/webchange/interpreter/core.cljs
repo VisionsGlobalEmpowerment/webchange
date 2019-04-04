@@ -61,6 +61,16 @@
                      {:url "/raw/anim/vera-go/skeleton2.png", :size 1, :type "anim-texture"}
                      {:url "/raw/anim/vera-go/skeleton3.png", :size 1, :type "anim-texture"}
 
+                     {:url "/raw/anim/vera-45/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-45/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-45/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton5.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton6.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton7.png", :size 1, :type "anim-texture"}
+
                      {:url "/raw/anim/vera-90/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera-90/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera-90/skeleton.png", :size 1, :type "anim-texture"}

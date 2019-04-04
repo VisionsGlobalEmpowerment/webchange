@@ -30,7 +30,19 @@
 (re-frame/reg-sub
   ::selected-scene-action
   (fn [db]
-    (get-in db [:editor :selected-scene-action])))
+    (if-let [{:keys [scene-id action path] :as selected-scene} (get-in db [:editor :selected-scene-action])]
+      (let [action-data (get-in db [:scenes scene-id :actions (keyword action)] {})
+            path-data (get-in action-data (vec (mapcat (fn [idx] [:data idx]) path)) {})]
+        (js/console.log "path: " path "path-data: " path-data)
+        (assoc selected-scene :data path-data)))))
+
+(re-frame/reg-sub
+  ::selected-scene-action-data
+  (fn [db]
+    (if-let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])]
+      (let [action-data (get-in db [:scenes scene-id :actions (keyword action)] {})
+            path-data (get-in action-data (vec (mapcat (fn [idx] [:data idx]) path)) {})]
+        (:data path-data)))))
 
 (re-frame/reg-sub
   ::selected-asset

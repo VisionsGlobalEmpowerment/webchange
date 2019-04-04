@@ -4,6 +4,7 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
+    [webchange.editor.core :as editor]
     [webchange.common.anim :refer [animations]]))
 
 (re-frame/reg-event-fx
@@ -130,18 +131,128 @@
 
 (re-frame/reg-event-fx
   ::select-scene-action
-  (fn [{:keys [db]} [_ scene-id action]]
-    {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action})}))
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action :path []})})))
 
 (re-frame/reg-event-fx
-  ::edit-scene-action
-  (fn [{:keys [db]} [_ {:keys [scene-id action state]}]]
-    {:db (update-in db [:scenes scene-id :actions (keyword action)] merge state)}))
+  ::select-scene-action-path
+  (fn [{:keys [db]} [_ step]]
+    {:db (update-in db [:editor :selected-scene-action :path] conj step)}))
+
+(re-frame/reg-event-fx
+  ::select-scene-action-path-prev
+  (fn [{:keys [db]} _]
+    (let [drop-last-vec (fn [v] (vec (drop-last v)))]
+      {:db (update-in db [:editor :selected-scene-action :path] drop-last-vec)})))
+
+(re-frame/reg-event-fx
+  ::edit-selected-scene-action
+  (fn [{:keys [db]} [_ state]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-path (->> (mapcat (fn [idx] [:data idx]) path)
+                         (concat action-path)
+                         vec)]
+      {:db (assoc-in db data-path state)
+       :dispatch [::select-scene-action-path-prev]})))
+
+(re-frame/reg-event-fx
+  ::selected-action-order-down
+  (fn [{:keys [db]} [_ index]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-path (->> (mapcat (fn [idx] [:data idx]) path)
+                         (concat action-path)
+                         (#(concat % [:data]))
+                         vec)
+          original-data (get-in db data-path)]
+      (if (< (inc index) (count original-data))
+        (let [head (subvec original-data 0 index)
+              tail (subvec original-data (inc (inc index)))
+              v1 (subvec original-data index (inc index))
+              v2 (subvec original-data (inc index) (inc (inc index)))
+              data (vec (concat head v2 v1 tail))]
+          {:db (assoc-in db data-path data)})))))
+
+(re-frame/reg-event-fx
+  ::selected-action-order-up
+  (fn [{:keys [db]} [_ index]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
+                         (concat action-path)
+                         (#(concat % [:data]))
+                         vec)
+          original-data (get-in db data-vec-path)]
+      (if (> index 0)
+        (let [head (subvec original-data 0 (dec index))
+              tail (subvec original-data (inc index))
+              v1 (subvec original-data (dec index) index)
+              v2 (subvec original-data index (inc index))
+              data (vec (concat head v2 v1 tail))]
+          {:db (assoc-in db data-vec-path data)})))))
+
+(defn insert-into [data position]
+  (cond
+    (= position 0) (vec (concat [{}] data))
+    (= position (count data)) (vec (concat data [{}]))
+    :else (let [head (subvec data 0 position)
+                tail (subvec data position)]
+            (vec (concat head [{}] tail)))))
+
+(defn remove-from [data position]
+  (let [head (subvec data 0 position)
+        tail (subvec data (inc position))]
+    (vec (concat head tail))))
+
+(re-frame/reg-event-fx
+  ::selected-action-add-above
+  (fn [{:keys [db]} [_ index]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
+                             (concat action-path)
+                             (#(concat % [:data]))
+                             vec)
+          original-data (get-in db data-vec-path)
+          data (insert-into original-data index)]
+      {:db (assoc-in db data-vec-path data)
+       :dispatch [::select-scene-action-path index]})))
+
+(re-frame/reg-event-fx
+  ::selected-action-add-below
+  (fn [{:keys [db]} [_ index]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
+                             (concat action-path)
+                             (#(concat % [:data]))
+                             vec)
+          original-data (get-in db data-vec-path)
+          data (insert-into original-data (inc index))]
+      {:db (assoc-in db data-vec-path data)
+       :dispatch [::select-scene-action-path (inc index)]})))
+
+(re-frame/reg-event-fx
+  ::selected-action-remove
+  (fn [{:keys [db]} [_ index]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
+                             (concat action-path)
+                             (#(concat % [:data]))
+                             vec)
+          original-data (get-in db data-vec-path)
+          data (remove-from original-data index)]
+      {:db (assoc-in db data-vec-path data)})))
 
 (re-frame/reg-event-fx
   ::show-scene-action
-  (fn [{:keys [db]} [_ scene-id action]]
-    {:db (assoc-in db [:editor :shown-scene-action] {:scene-id scene-id :action action})}))
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:db (assoc-in db [:editor :shown-scene-action] {:scene-id scene-id :action action})
+       :dispatch [::set-main-content :actions]})))
 
 (re-frame/reg-event-fx
   ::show-form
@@ -217,9 +328,6 @@
       )))
 
 (defn in-layer? [name layer]
-  (js/console.log "name layer")
-  (js/console.log name)
-  (js/console.log layer)
   (some #(= name %) layer))
 
 (defn remove-from-layer [layer name]
@@ -648,7 +756,6 @@
 (re-frame/reg-event-fx
   ::add-object-to-current-scene
   (fn [{:keys [db]} [_ params]]
-    (js/console.log params)
     (if (= "asset" (:type params))
       {:dispatch [::add-image-object-to-current-scene params]}
       {:dispatch [::add-animation-object-to-current-scene params]})))
@@ -667,14 +774,41 @@
         {:db (assoc-in db [:editor :new-object-defaults] state)
          :dispatch-n (list [::show-form :add-object])}))))
 
+(defn object-name [db prefix]
+  (let [scene-id (:current-scene db)
+        object-names (->> (get-in db [:scenes scene-id :objects])
+                          (map first)
+                          (map name))]
+    (loop [i 1]
+      (let [name (str prefix i)]
+        (if-not (some #(= name %) object-names)
+          name
+          (recur (inc i)))))))
+
 (re-frame/reg-event-fx
   ::add-animation-object-to-current-scene
   (fn [{:keys [db]} [_ {id :id x :offsetX y :offsetY}]]
-    (let [animation (get animations (keyword id))
-          state {:type :animation :scene-layer 5 :scene-name "animation"
+    (let [name (object-name db "animation")
+          animation (get animations (keyword id))
+          state {:type :animation :scene-layer 5 :scene-name name :start true
                  :x x :y y :name id
                  :width (:width animation) :height (:height animation)
+                 :scale-x (:scale-x animation) :scale-y (:scale-y animation)
+                 :speed (:speed animation)
                  :anim (-> animation :animations first)
                  :skin (-> animation :skins first)}]
         {:db (assoc-in db [:editor :new-object-defaults] state)
          :dispatch-n (list [::show-form :add-object])})))
+
+(re-frame/reg-event-fx
+  ::process-selected-actions
+  (fn [{:keys [db]} [_ action-names name process-name]]
+    (let [scene-id (:current-scene db)
+          new-key (keyword name)
+          keys (map keyword action-names)
+          process (case process-name
+                    :to-sequence editor/combine-to-sequence
+                    :to-parallel editor/combine-to-parallel
+                    :to-sequence-data editor/convert-to-sequence
+                    :to-parallel-data editor/convert-to-parallel)]
+      {:db (update-in db [:scenes scene-id :actions] process keys new-key)})))
