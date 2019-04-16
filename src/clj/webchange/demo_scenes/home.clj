@@ -7,33 +7,6 @@
                    {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
                    {:url "/raw/img/casa_door.png", :size 1, :type "image"}
 
-                   {:url "/raw/anim/senoravaca/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/senoravaca/skeleton.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton2.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton3.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton4.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton5.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton6.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton7.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton8.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton9.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/senoravaca/skeleton10.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/vera/skeleton.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera/skeleton2.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}
-
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio"}

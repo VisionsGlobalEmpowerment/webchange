@@ -9,14 +9,6 @@
 
                    {:url "/raw/img/park/sandbox/background.jpg", :size 10 :type "image"}
 
-                   {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}
-
                    ],
    :objects
                   {:background {:type "background", :src "/raw/img/park/sandbox/background.jpg"},

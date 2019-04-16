@@ -11,19 +11,6 @@
                    {:url "/raw/img/park/see-saw/saw_01.png", :size 1, :type "image"}
                    {:url "/raw/img/park/see-saw/saw_02.png", :size 1, :type "image"}
                    {:url "/raw/img/park/see-saw/saw_03.png", :size 1, :type "image"}
-
-                   {:url "/raw/anim/vera-90/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/vera-90/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/vera-90/skeleton.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera-90/skeleton2.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}
                    ],
    :objects
                   {:background {:type "background", :src "/raw/img/park/see-saw/background.jpg"},

@@ -1,12 +1,6 @@
 (ns webchange.demo-scenes.park.park)
 
-(def park-scene {:assets [{:url "/raw/img/park/background.jpg", :size 10, :type "image"}
-
-                          {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
-                          {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
-                          {:url "/raw/anim/vera/skeleton.png", :size 1, :type "anim-texture"}
-                          {:url "/raw/anim/vera/skeleton2.png", :size 1, :type "anim-texture"}
-                          {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}],
+(def park-scene {:assets [{:url "/raw/img/park/background.jpg", :size 10, :type "image"}],
 
                 :objects {:background {:type "background", :src "/raw/img/park/background.jpg"},
                           :vera       {:type "animation" :x 1392 :y 972 :name "vera" :anim "idle" :speed 0.3

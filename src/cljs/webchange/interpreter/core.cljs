@@ -12,6 +12,8 @@
     [webchange.common.anim :as anim]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
+    ["gsap/umd/TweenMax" :refer [TweenMax Power1]]
+    #_[gsap/all :refer [TweenLite TweenMax BezierPlugin]]
     ))
 
 (def default-assets [{:url "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
@@ -34,7 +36,60 @@
                      {:url "/raw/img/ui/settings/music_icon.png", :size 1, :type "image"}
                      {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
                      {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
-                     {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}])
+                     {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
+
+                     {:url "/raw/anim/senoravaca/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/senoravaca/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton5.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton6.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton7.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton8.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton9.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton10.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/vera-go/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-go/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-go/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-go/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-go/skeleton3.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/vera-45/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-45/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-45/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton5.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton6.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-45/skeleton7.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/vera-90/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-90/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/vera-90/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-90/skeleton2.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/rock/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/rock/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/rock/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/rock/skeleton2.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}])
 
 (def assets (atom {}))
 
@@ -199,14 +254,21 @@
         params (-> to
                    (assoc :duration duration)
                    (assoc :onFinish on-ended))]
-    (if (:loop to)
-      (-> params
-          (assoc :node @component)
-          (assoc :onFinish (fn [] (this-as t (.reset t) (.play t))))
-          clj->js
-          Tween.
-          .play)
-      (.to @component (clj->js params)))
+    (cond
+      (:loop to)
+        (-> params
+            (assoc :node @component)
+            (assoc :onFinish (fn [] (this-as t (.reset t) (.play t))))
+            clj->js
+            Tween.
+            .play)
+      (:bezier to)
+        (let [layer (.getLayer @component)]
+          (TweenMax.to @component (:duration to) (clj->js (-> to
+                                                              #_(assoc :ease Power1.easeInOut)
+                                                              (assoc :onUpdate #(.draw layer))
+                                                              (assoc :onComplete on-ended)))))
+      :else (.to @component (clj->js params)))
     ))
 
 (defn collide?

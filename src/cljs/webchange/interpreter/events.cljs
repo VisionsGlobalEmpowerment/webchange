@@ -162,7 +162,7 @@
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [id] :as action}]
     {:execute-audio (-> action
-                        (assoc :key (get-audio-key db id))
+                        (assoc :key (or (get-audio-key db id) id))
                         (assoc :on-ended (ce/dispatch-success-fn action)))}))
 
 (re-frame/reg-event-fx

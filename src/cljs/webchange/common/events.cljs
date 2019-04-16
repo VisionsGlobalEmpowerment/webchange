@@ -69,13 +69,12 @@
 
 (defn with-var-property
   [db]
-  (fn [action {:keys [var-name var-property action-property template]}]
+  (fn [action {:keys [var-name var-property action-property template to-vector]}]
     (let [var (get-in db [:scenes (:current-scene db) :variables var-name])]
-      (if var-property
-        (assoc action (keyword action-property) (->> (keyword var-property)
-                                                     (get var)
-                                                     (from-template template)))
-        (assoc action (keyword action-property) (from-template template var))))))
+      (assoc action (keyword action-property) (cond->> var
+                                                       var-property ((keyword var-property))
+                                                       to-vector (conj [])
+                                                       template (from-template template))))))
 
 (defn with-var-properties
   [action db]
@@ -97,10 +96,7 @@
 (defn with-progress-property
   [db]
   (fn [action {:keys [progress-property action-property template]}]
-    (let [value (get-in db [:progress-data :variables (keyword progress-property)])
-          variables (get-in db [:progress-data :variables])]
-      (js/console.log "with progress " value progress-property action-property)
-      (js/console.log variables)
+    (let [value (get-in db [:progress-data :variables (keyword progress-property)])]
       (assoc action (keyword action-property) (from-template template value)))))
 
 (defn with-progress-properties

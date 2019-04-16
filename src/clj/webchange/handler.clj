@@ -4,11 +4,14 @@
             [ring.util.response :refer [resource-response response redirect]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
+            [ring.middleware.params :refer [wrap-params]]
+            [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.core :refer [login! register-user! user-id-from-identity]]
             [webchange.course.core :as course]
             [webchange.class.handler :refer [class-routes]]
             [webchange.progress.handler :refer [progress-routes]]
             [webchange.dataset.handler :refer [dataset-routes]]
+            [webchange.assets.handler :refer [asset-routes]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
@@ -116,7 +119,6 @@
            (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
              (handle-restore-scene-version version-id request))
 
-
            )
 
 (defroutes app
@@ -125,6 +127,8 @@
            class-routes
            dataset-routes
            progress-routes
+           (-> asset-routes
+               wrap-multipart-params)
            (not-found "Not Found"))
 
 (def dev-store (mem/memory-store))

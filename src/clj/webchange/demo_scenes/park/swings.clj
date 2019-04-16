@@ -14,25 +14,6 @@
                    {:url "/raw/img/park/swings/swings.png", :size 1, :type "image"}
                    {:url "/raw/img/park/swings/tree.png", :size 1, :type "image"}
 
-                   {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/vera/skeleton.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera/skeleton2.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}
-
-                   {:url "/raw/anim/rock/skeleton.atlas", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/rock/skeleton.json", :size 1, :type "anim-text"}
-                   {:url "/raw/anim/rock/skeleton.png", :size 1, :type "anim-texture"}
-                   {:url "/raw/anim/rock/skeleton2.png", :size 1, :type "anim-texture"}
-
                    ],
    :objects
                   {:background {:type "background", :src "/raw/img/park/swings/background.jpg"},
