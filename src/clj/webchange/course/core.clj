@@ -9,7 +9,7 @@
 
 (defn get-course-data
   [course-name]
-  (if false #_(contains? hardcoded course-name)
+  (if (contains? hardcoded course-name)
     (scene/get-course course-name)
     (let [{course-id :id} (db/get-course {:name course-name})
           latest-version (db/get-latest-course-version {:course_id course-id})]

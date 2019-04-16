@@ -17,12 +17,13 @@
 (defn get-course
   [course-id]
   {:initial-scene "map"
-   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park"]
+   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "volleyball"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"}}]
    :workflow-actions [{:id 1 :type "set-activity" :activity "home-introduce" :order 1}
                       {:id 2 :type "set-activity" :activity "see-saw" :order 2}
                       {:id 3 :type "set-activity" :activity "swings" :order 3}
-                      {:id 3 :type "set-activity" :activity "sandbox" :order 4}]
+                      {:id 4 :type "set-activity" :activity "sandbox" :order 4}
+                      {:id 4 :type "set-activity" :activity "volleyball" :order 5}]
    :default-progress {:current-scene "home"
                       :current-activity "home"
                       :variables {:last-location "home"}
