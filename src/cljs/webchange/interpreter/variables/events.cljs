@@ -57,15 +57,17 @@
   ([db items variables provider-id]
    (provide db items variables provider-id {}))
   ([db items variables provider-id params]
-    (let [filter (if (:shuffled params) shuffle identity)
-          new-items (->> (unprocessed db items provider-id)
-                         filter
-                         (take (count variables)))
+    (let [new-items (cond->> (unprocessed db items provider-id)
+                             (:exclude-values params) (remove (into #{} (:exclude-values params)))
+                             (:limit params) (take (:limit params))
+                             (:repeat params) (#(apply concat (repeat (:repeat params) %)))
+                             (:shuffled params) shuffle
+                             :always (take (count variables)))
           processed (->> new-items (map :id) (into #{}))
           vars (zipmap variables new-items)]
-      (-> db
-          (set-variables vars)
-          (add-processed provider-id processed)))))
+      (cond-> db
+              provider-id (add-processed provider-id processed)
+              :always (set-variables vars)))))
 
 (defn has-next
   [db items provider-id]
@@ -103,9 +105,11 @@
 
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
-  (fn-traced [{:keys [db]} [_ {:keys [from variables provider-id on-end shuffled] :or {shuffled true} :as action}]]
+  (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
     (let [items (->> from
-                     (map #(get-variable db %)))
+                     (map (fn [var-name]
+                            (cond-> (get-variable db var-name)
+                                    provider-id (assoc :id var-name)))))
           has-next (has-next db items provider-id)
           scene-id (:current-scene db)
           on-end-action (->> on-end
@@ -113,7 +117,7 @@
                              (vector :scenes scene-id :actions)
                              (get-in db))]
       (if has-next
-        {:db (provide db items variables provider-id {:shuffled shuffled})
+        {:db (provide db items variables provider-id action)
          :dispatch (e/success-event action)}
         {:dispatch [::e/execute-action on-end-action]}))))
 
@@ -122,7 +126,7 @@
   (fn [{:keys [db]} [_ {:keys [from variables provider-id] :as action}]]
     (let [scene-id (:current-scene db)
           items (-> (get-in db [:scenes scene-id :datasets (keyword from)]) vals)]
-      {:db (provide db items variables provider-id  {:shuffled true})
+      {:db (provide db items variables provider-id {:shuffled true})
        :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
@@ -138,7 +142,7 @@
           items (->> (:item-ids lesson)
                      (map #(get-in db [:dataset-items %]))
                      (map #(merge (:data %) {:id (:name %)})))]
-      {:db (provide db items variables provider-id)
+      {:db (provide db items variables provider-id action)
        :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
@@ -154,13 +158,19 @@
 
 (re-frame/reg-event-fx
   ::execute-test-var-scalar
-  (fn [{:keys [db]} [_ {:keys [value var-name success fail] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [value var-name success fail flow-id action-id] :as action}]]
     (let [test (get-variable db var-name)
-          success (e/get-action success db action)
-          fail (e/get-action fail db action)]
+          success (if (string? success) (e/get-action success db action) success)
+          fail (if (string? fail) (e/get-action fail db action) fail)]
       (if (= value test)
-        {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
-        {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
+        {:dispatch [::e/execute-action (cond-> success
+                                               flow-id (assoc :flow-id flow-id)
+                                               action-id (assoc :action-id action-id)
+                                               :always (e/with-prev action))]}
+        {:dispatch [::e/execute-action (cond-> fail
+                                               flow-id (assoc :flow-id flow-id)
+                                               action-id (assoc :action-id action-id)
+                                               :always (e/with-prev action))]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-value

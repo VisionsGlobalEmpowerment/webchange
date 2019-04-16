@@ -12,6 +12,8 @@
     [webchange.common.anim :as anim]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
+    ["gsap/umd/TweenMax" :refer [TweenMax Power1]]
+    #_[gsap/all :refer [TweenLite TweenMax BezierPlugin]]
     ))
 
 (def default-assets [{:url "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
@@ -252,14 +254,21 @@
         params (-> to
                    (assoc :duration duration)
                    (assoc :onFinish on-ended))]
-    (if (:loop to)
-      (-> params
-          (assoc :node @component)
-          (assoc :onFinish (fn [] (this-as t (.reset t) (.play t))))
-          clj->js
-          Tween.
-          .play)
-      (.to @component (clj->js params)))
+    (cond
+      (:loop to)
+        (-> params
+            (assoc :node @component)
+            (assoc :onFinish (fn [] (this-as t (.reset t) (.play t))))
+            clj->js
+            Tween.
+            .play)
+      (:bezier to)
+        (let [layer (.getLayer @component)]
+          (TweenMax.to @component (:duration to) (clj->js (-> to
+                                                              #_(assoc :ease Power1.easeInOut)
+                                                              (assoc :onUpdate #(.draw layer))
+                                                              (assoc :onComplete on-ended)))))
+      :else (.to @component (clj->js params)))
     ))
 
 (defn collide?

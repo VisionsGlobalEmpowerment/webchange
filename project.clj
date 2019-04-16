@@ -1,6 +1,6 @@
 (defproject webchange "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.516"]
+                 [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/java.jdbc "0.7.8"]
                  [org.clojure/tools.logging "0.4.1"]
                  [ch.qos.logback/logback-classic "1.2.3"]
@@ -15,6 +15,7 @@
                  [cljsjs/react-dom "16.6.0-0"]
                  [reanimated "0.6.1"]
                  [cljs-http "0.1.45"]
+                 [soda-ash "0.83.0"]
                  [com.degel/sodium "0.12.0"]
                  [day8.re-frame/test "0.1.5"]
                  [day8.re-frame/http-fx "0.1.6"]
@@ -100,6 +101,8 @@
                                            :react-dom "16.6.0"
                                            :react-spring "5.8.0"
                                            :react-konva "16.6.0"
+                                           :gsap "2.1.2"
+                                           :wavesurfer.js "2.2.1"
                                            }
                     :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]
@@ -123,6 +126,8 @@
                                       :react-dom "16.6.0"
                                       :react-spring "5.8.0"
                                       :react-konva "16.6.0"
+                                      :gsap "2.1.2"
+                                      :wavesurfer.js "2.2.1"
                                       }
                     :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]
@@ -141,6 +146,8 @@
                                     :react-dom "16.6.0"
                                     :react-spring "5.8.0"
                                     :react-konva "16.6.0"
+                                    :gsap "2.1.2"
+                                    :wavesurfer.js "2.2.1"
                                     }
                     :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]

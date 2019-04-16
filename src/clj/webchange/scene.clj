@@ -4,14 +4,16 @@
             [webchange.demo-scenes.park.see-saw :refer [see-saw-scene]]
             [webchange.demo-scenes.park.swings :refer [swings-scene]]
             [webchange.demo-scenes.park.sandbox :refer [sandbox-scene]]
-            [webchange.demo-scenes.park.park :refer [park-scene]]))
+            [webchange.demo-scenes.park.park :refer [park-scene]]
+            [webchange.demo-scenes.stadium.volleyball :refer [volleyball-scene]]))
 
 (def courses {"test" {"home" home-scene
                       "map" map-scene
                       "see-saw" see-saw-scene
                       "swings" swings-scene
                       "sandbox" sandbox-scene
-                      "park" park-scene}})
+                      "park" park-scene
+                      "volleyball" volleyball-scene}})
 (defn get-course
   [course-id]
   {:initial-scene "map"

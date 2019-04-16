@@ -81,6 +81,7 @@
                                          {:type "transition" :transition-id "vera-transition" :to {:x 590 :y 960}}]}
 
                   :move-from-park {:type "sequence-data"
+                                   :params {:text "Arbol"}
                                    :data [{:type "start-animation" :target "vera-go"}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 915, :y 938}}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 895, :y 851}}

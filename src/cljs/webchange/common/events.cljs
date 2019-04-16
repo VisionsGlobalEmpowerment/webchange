@@ -69,13 +69,12 @@
 
 (defn with-var-property
   [db]
-  (fn [action {:keys [var-name var-property action-property template]}]
+  (fn [action {:keys [var-name var-property action-property template to-vector]}]
     (let [var (get-in db [:scenes (:current-scene db) :variables var-name])]
-      (if var-property
-        (assoc action (keyword action-property) (->> (keyword var-property)
-                                                     (get var)
-                                                     (from-template template)))
-        (assoc action (keyword action-property) (from-template template var))))))
+      (assoc action (keyword action-property) (cond->> var
+                                                       var-property ((keyword var-property))
+                                                       to-vector (conj [])
+                                                       template (from-template template))))))
 
 (defn with-var-properties
   [action db]

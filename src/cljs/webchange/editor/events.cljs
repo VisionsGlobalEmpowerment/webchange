@@ -217,8 +217,13 @@
                              vec)
           original-data (get-in db data-vec-path)
           data (insert-into original-data index)]
-      {:db (assoc-in db data-vec-path data)
-       :dispatch [::select-scene-action-path index]})))
+      {:db (assoc-in db data-vec-path data)})))
+
+(re-frame/reg-event-fx
+  ::selected-action-add-above-action
+  (fn [{:keys [db]} [_ index]]
+    {:dispatch-n (list [::selected-action-add-above index]
+                       [::select-scene-action-path index])}))
 
 (re-frame/reg-event-fx
   ::selected-action-add-below
@@ -231,8 +236,13 @@
                              vec)
           original-data (get-in db data-vec-path)
           data (insert-into original-data (inc index))]
-      {:db (assoc-in db data-vec-path data)
-       :dispatch [::select-scene-action-path (inc index)]})))
+      {:db (assoc-in db data-vec-path data)})))
+
+(re-frame/reg-event-fx
+  ::selected-action-add-below-action
+  (fn [{:keys [db]} [_ index]]
+    {:dispatch-n (list [::selected-action-add-below index]
+                       [::select-scene-action-path (inc index)])}))
 
 (re-frame/reg-event-fx
   ::selected-action-remove
@@ -252,7 +262,28 @@
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
       {:db (assoc-in db [:editor :shown-scene-action] {:scene-id scene-id :action action})
-       :dispatch [::set-main-content :actions]})))
+       :dispatch-n (list [::set-main-content :actions]
+                         [::select-scene-action action])})))
+
+(re-frame/reg-event-fx
+  ::add-new-scene-action
+  (fn [{:keys [db]} [_ action type]]
+    (if-not (nil? action)
+      (let [scene-id (:current-scene db)]
+        {:db (assoc-in db [:scenes scene-id :actions (keyword action)] {:type type})
+         :dispatch [::select-scene-action action]}))))
+
+(re-frame/reg-event-fx
+  ::rename-scene-action
+  (fn [{:keys [db]} [_ old-name new-name]]
+    (let [scene-id (:current-scene db)
+          old-key (keyword old-name)
+          new-key (keyword new-name)
+          action (get-in db [:scenes scene-id :actions old-key])]
+      {:db (-> db
+               (update-in [:scenes scene-id :actions] dissoc old-key)
+               (assoc-in [:scenes scene-id :actions new-key] action))
+       :dispatch-n (list [::show-scene-action new-name])})))
 
 (re-frame/reg-event-fx
   ::show-form
@@ -754,6 +785,34 @@
                          [::set-main-content :editor])}))
 
 (re-frame/reg-event-fx
+  ::upload-and-add-asset
+  (fn [{:keys [db]} [_ params js-file-value]]
+    (let [form-data (doto
+                      (js/FormData.)
+                      (.append "file" js-file-value))]
+      {:db (assoc-in db [:loading :upload-and-add-asset] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/assets/")
+                    :body            form-data
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::upload-and-add-asset-success params]
+                    :on-failure      [:api-request-error :upload-and-add-asset]}})))
+
+
+(re-frame/reg-event-fx
+  ::upload-and-add-asset-success
+  (fn [{:keys [db]} [_ params result]]
+    (let [scene-id (:current-scene db)
+          type (:type result)
+          add-to-scene-action (case type
+                                "image" [::add-image-object-to-current-scene (assoc params :asset result)]
+                                "audio" [::add-audio-action-to-current-scene {:asset result}])]
+      {:dispatch-n (list [:complete-request :upload-and-add-asset]
+                         [::add-asset {:scene-id scene-id :state result}]
+                         add-to-scene-action
+                         [::set-main-content :editor])})))
+
+(re-frame/reg-event-fx
   ::add-object-to-current-scene
   (fn [{:keys [db]} [_ params]]
     (if (= "asset" (:type params))
@@ -762,9 +821,9 @@
 
 (re-frame/reg-event-fx
   ::add-image-object-to-current-scene
-  (fn [{:keys [db]} [_ {asset-id :id x :offsetX y :offsetY}]]
+  (fn [{:keys [db]} [_ {asset-id :id x :offsetX y :offsetY asset :asset}]]
     (let [scene-id (:current-scene db)
-          asset (get-in db [:scenes scene-id :assets asset-id])
+          asset (or asset (get-in db [:scenes scene-id :assets asset-id]))
           state {:type :image :scene-layer 5 :scene-name "image"
                  :x x :y y
                  :src (:url asset)
@@ -774,16 +833,26 @@
         {:db (assoc-in db [:editor :new-object-defaults] state)
          :dispatch-n (list [::show-form :add-object])}))))
 
+(defn next-name [names prefix]
+  (loop [i 1]
+    (let [name (str prefix i)]
+      (if-not (some #(= name %) names)
+        name
+        (recur (inc i))))))
+
 (defn object-name [db prefix]
   (let [scene-id (:current-scene db)
-        object-names (->> (get-in db [:scenes scene-id :objects])
-                          (map first)
-                          (map name))]
-    (loop [i 1]
-      (let [name (str prefix i)]
-        (if-not (some #(= name %) object-names)
-          name
-          (recur (inc i)))))))
+        names (->> (get-in db [:scenes scene-id :objects])
+                   (map first)
+                   (map name))]
+    (next-name names prefix)))
+
+(defn action-name [db prefix]
+  (let [scene-id (:current-scene db)
+        names (->> (get-in db [:scenes scene-id :actions])
+                   (map first)
+                   (map name))]
+    (next-name names prefix)))
 
 (re-frame/reg-event-fx
   ::add-animation-object-to-current-scene
@@ -801,6 +870,16 @@
          :dispatch-n (list [::show-form :add-object])})))
 
 (re-frame/reg-event-fx
+  ::add-audio-action-to-current-scene
+  (fn [{:keys [db]} [_ {asset :asset}]]
+    (let [scene-id (:current-scene db)
+          name (keyword (action-name db "audio"))
+          state {:type "audio" :id (:url asset)}]
+      {:db (assoc-in db [:scenes scene-id :actions name] state)
+       :dispatch-n (list [::set-main-content :actions]
+                         [::select-scene-action name])})))
+
+(re-frame/reg-event-fx
   ::process-selected-actions
   (fn [{:keys [db]} [_ action-names name process-name]]
     (let [scene-id (:current-scene db)
@@ -812,3 +891,13 @@
                     :to-sequence-data editor/convert-to-sequence
                     :to-parallel-data editor/convert-to-parallel)]
       {:db (update-in db [:scenes scene-id :actions] process keys new-key)})))
+
+(re-frame/reg-event-fx
+  ::select-current-scene
+  (fn [{:keys [db]} [_ scene-id]]
+    {:dispatch-n (list [::ie/set-current-scene scene-id]
+                       [::reset-asset]
+                       [::reset-object]
+                       [::reset-scene-action]
+                       [::reset-shown-form]
+                       [::set-main-content :editor])}))
