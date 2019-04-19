@@ -113,13 +113,17 @@
   [arraybuffer]
   (js/Blob. [arraybuffer]))
 
+(defn get-data-as-blob [key]
+  (-> key
+      get-data
+      new-blob))
+
 (defn get-data-as-url
   [key]
   (let [object-url-key (create-tagged-key "object-url" key)]
     (when-not (has-data object-url-key)
       (-> key
-          get-data
-          new-blob
+          get-data-as-blob
           js/URL.createObjectURL
           (put-data object-url-key)))
     (get-data object-url-key)))
@@ -288,7 +292,7 @@
              (> r2y (+ r1y r1height))
              (< (+ r2y r2height) r1y)))))
 
-(defn animation-actions-from-sequence [{:keys [target track offset data] :as action}]
+(defn animation-sequence->actions [{:keys [target track offset data] :as action}]
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type "sequence-data"
                    :data [{:type "empty" :duration (* (- start offset) 1000)}
@@ -296,3 +300,10 @@
                           {:type "empty" :duration (* (- end start) 1000)}
                           {:type "remove-animation" :target target :track track}]})
                 data)))
+
+(defn animation-sequence->audio-action [{:keys [start duration audio] :as action}]
+  (if audio
+    {:type "audio"
+    :id audio
+    :start start
+    :duration duration}))

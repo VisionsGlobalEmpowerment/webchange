@@ -12,14 +12,13 @@
     [webchange.interpreter.events :as ie]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
+    [webchange.editor.form-elements :as f]
+    [webchange.editor.form-elements.wavesurfer :as ws]
     [konva :refer [Transformer]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]
     [sodium.extensions :as nax]
-    [soda-ash.core :as sa]
-    [wavesurfer.js :as WaveSurfer]
-    ["wavesurfer.js/dist/plugin/wavesurfer.regions.js" :as RegionsPlugin]
-    ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]))
+    [soda-ash.core :as sa]))
 
 (def object-types [{:key :image :value :image :text "Image"}
                    {:key :transparent :value :transparent :text "Transparent"}
@@ -849,19 +848,9 @@
 
 (defn action-properties-panel-audio
   [props]
-  (r/with-let [ws (r/atom nil)
-               region (r/atom nil)
-               modal-open (r/atom false)
-               input-values (r/atom @props)
-               scene-id @(re-frame/subscribe [::subs/current-scene])
-               scene @(re-frame/subscribe [::subs/scene scene-id])]
+  (r/with-let [input-values (r/atom @props)]
     [:div
-     [sa/Dropdown {:placeholder "Audio asset" :search true :selection true
-                   :default-value (:id @props)
-                   :options (na/dropdown-list (->> scene
-                                                   :assets
-                                                   (filter #(= "audio" (:type %)))) :url #(or (:alias %) (:url %)))
-                   :on-change #(swap! props assoc :id (.-value %2))}]
+     [f/audio-asset-dropdown props :id]
      [na/form-input {:label "start" :value (:start @input-values) :on-change #(do
                                                                         (swap! input-values assoc :start (-> %2 .-value))
                                                                         (swap! props assoc :start (-> %2 .-value js/parseFloat))) :inline? true}]
@@ -871,41 +860,14 @@
      [na/form-input {:label "offset" :default-value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value js/parseFloat)) :inline? true}]
      [na/form-input {:label "loop" :default-value (:loop @props) :on-change #(swap! props assoc :loop (-> %2 .-value (= "true"))) :inline? true}]
 
-     [sa/Modal {:trigger (r/as-element [sa/Button {:on-click #(reset! modal-open true)} "Show Waveform"]) :open @modal-open}
-      [sa/ModalHeader "Pick a region"]
-      [sa/ModalContent {}
-       [sa/ModalDescription
-        [:div {:ref #(when %
-                       (let [ws-div (.insertBefore % (js/document.createElement "div") nil)
-                             timeline-div (.insertBefore % (js/document.createElement "div") nil)
-                             wavesurfer (.create WaveSurfer (clj->js {:container ws-div
-                                                                      :height 256
-                                                                      :minPxPerSec 75
-                                                                      :scrollParent true
-                                                                      :plugins [(.create RegionsPlugin (clj->js {:dragSelection {:slop 5}}))
-                                                                                (.create TimelinePlugin (clj->js {:container timeline-div}))]}))]
-                         (.load wavesurfer (:id @props))
-                         (.on wavesurfer "region-created" (fn [e]
-                                                            (when @region (.remove @region))
-                                                            (reset! region e)))
-                         (.on wavesurfer "ready"
-                              (fn [e] (.addRegion wavesurfer (clj->js {:start (:start @props)
-                                                               :end (+ (:start @props) (:duration @props))
-                                                               :drag true}))) )
-                         (reset! ws wavesurfer)))}]
-        [:div
-         [na/button {:content "Play" :on-click #(when @region (.play @region))}]
-         [na/button {:content "Stop" :on-click #(.stop @ws)}]
-         ]
-        ]]
-      [sa/ModalActions {}
-       [na/button {:content "Cancel" :on-click #(reset! modal-open false)}]
-       [na/button {:content "Save" :on-click #(do
-                                                (reset! modal-open false)
-                                                (swap! input-values assoc :start (.-start @region))
-                                                (swap! props assoc :start (.-start @region))
-                                                (swap! input-values assoc :duration (- (.-end @region) (.-start @region)))
-                                                (swap! props assoc :duration (- (.-end @region) (.-start @region))))}]]]
+     [ws/audio-waveform-modal
+      {:key (:id @props) :start (:start @props) :end (+ (:start @props) (:duration @props))}
+      (fn [{:keys [start duration]}]
+        (swap! input-values assoc :start start)
+        (swap! props assoc :start start)
+        (swap! input-values assoc :duration duration)
+        (swap! props assoc :duration duration))]
+
      ]))
 
 (defn action-properties-panel-scene
@@ -1028,13 +990,25 @@
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
         scene @(re-frame/subscribe [::subs/scene scene-id])
         animations (animation-object-names (:objects scene))]
-    (js/console.log animations)
     [:div
-     [sa/Dropdown {:placeholder "Target" :search true :selection true
+     [sa/FormDropdown {:label "Target" :placeholder "Target" :search true :selection true :inline true
                    :options (na/dropdown-list animations identity identity)
                    :default-value (:target @props) :on-change #(swap! props assoc :target (.-value %2))}]
      [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]
-     [na/form-input {:label "offset" :default-value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value)) :inline? true}]
+     [na/form-input {:label "offset" :value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value)) :inline? true}]
+     [na/divider {}]
+     [f/audio-asset-dropdown props :audio]
+     [na/form-input {:label "start" :value (:start @props) :on-change #(swap! props assoc :start (-> %2 .-value)) :inline? true}]
+     [na/form-input {:label "duration" :value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value)) :inline? true}]
+     [ws/animation-sequence-waveform-modal
+      {:key (:audio @props) :start (:start @props) :end (+ (:start @props) (:duration @props)) :sequence-data (:data @props)}
+      (fn [{:keys [start duration regions]}]
+        (swap! props assoc :offset start)
+        (swap! props assoc :start start)
+        (swap! props assoc :duration duration)
+        (swap! props assoc :data (->> regions
+                                      (map #(assoc % :anim "talk"))
+                                      vec)))]
      [na/divider {}]
      [action-properties-panel-animation-sequence-items props]
      [na/divider {}]]))
@@ -1453,7 +1427,7 @@
        [na/divider {:clearing? true}]
 
        [sa/ItemGroup {:divided true :style {:overflow "auto" :max-height "500px"}}
-        (for [[key action] (:actions @scene)]
+        (for [[key action] (sort-by first (:actions @scene))]
           ^{:key (str scene-id key)}
           [sa/Item {}
            [sa/ItemImage {:size "mini"}

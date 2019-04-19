@@ -46,9 +46,9 @@
 
 (defn get-audio
   [key destination]
-  (let [buffer-key (create-tagged-key key "audioBuffer")]
+  (let [buffer-key (create-tagged-key "audioBuffer" key)]
     (when-not (has-data buffer-key)
-      (let [data (get-data key)
+      (let [data (-> key get-data .slice)
             promise (.decodeAudioData @audio-ctx data)]
         (put-data promise buffer-key)))
     (let [buffer-data (get-data buffer-key)]

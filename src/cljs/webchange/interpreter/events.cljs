@@ -200,7 +200,13 @@
 (re-frame/reg-event-fx
   ::execute-animation-sequence
   (fn [{:keys [db]} [_ action]]
-    {:dispatch [::ce/execute-parallel (assoc action :data (i/animation-actions-from-sequence action))]}))
+    (let [animation-actions (i/animation-sequence->actions action)
+          audio-action (i/animation-sequence->audio-action action)]
+      (if audio-action
+        {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
+        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})
+      )))
+
 
 (re-frame/reg-event-fx
   ::execute-add-animation
