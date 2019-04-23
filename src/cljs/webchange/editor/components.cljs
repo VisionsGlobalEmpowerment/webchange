@@ -14,6 +14,7 @@
     [webchange.editor.subs :as es]
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer :as ws]
+    [webchange.editor.action-properties.core :refer [action-types] :as action-properties]
     [konva :refer [Transformer]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]
@@ -27,40 +28,6 @@
                    {:key :animation :value :animation :text "Animation"}
                    {:key :text :value :text :text "Text"}
                    {:key :background :value :background :text "Background"}])
-
-(def action-types [{:key :action :value :action :text "Action"}
-                   {:key :scene :value :scene :text "Scene"}
-                   {:key :state :value :state :text "State"}
-                   {:key :animation :value :animation :text "Animation"}
-                   {:key :audio :value :audio :text "Audio"}
-                   {:key :empty :value :empty :text "Empty"}
-                   {:key :sequence :value :sequence :text "Sequence"}
-                   {:key :sequence-data :value :sequence-data :text "Sequence Data"}
-                   {:key :parallel :value :parallel :text "Parallel"}
-
-                   {:key :add-alias :value :add-alias :text "Add alias"}
-                   {:key :add-animation :value :add-animation :text "Add animation"}
-                   {:key :start-animation :value :start-animation :text "Start animation"}
-                   {:key :remove-animation :value :remove-animation :text "Remove animation"}
-                   {:key :set-skin :value :set-skin :text "Set skin"}
-                   {:key :animation-props :value :animation-props :text "Animation props"}
-                   {:key :animation-sequence :value :animation-sequence :text "Animation sequence"}
-                   {:key :transition :value :transition :text "Transition"}
-                   {:key :placeholder-audio :value :placeholder-audio :text "Placeholder audio"}
-                   {:key :test-transitions-collide :value :test-transitions-collide :text "Test transitions collide"}
-
-                   {:key :dataset-var-provider :value :dataset-var-provider :text "Dataset var provider"}
-                   {:key :lesson-var-provider :value :lesson-var-provider :text "Lesson var provider"}
-                   {:key :vars-var-provider :value :vars-var-provider :text "Vars var provider"}
-                   {:key :test-var :value :test-var :text "Test var"}
-                   {:key :test-var-scalar :value :test-var-scalar :text "Test var scalar"}
-                   {:key :test-var-list :value :test-var-list :text "Test var list"}
-                   {:key :test-value :value :test-value :text "Test value"}
-                   {:key :case :value :case :text "Case"}
-                   {:key :counter :value :counter :text "Counter"}
-                   {:key :set-variable :value :set-variable :text "set variable"}
-                   {:key :set-progress :value :set-progress :text "Set progress"}
-                   {:key :copy-variable :value :copy-variable :text "Copy variable"}])
 
 (def asset-types [{:key :image :value :image :text "Image"}
                   {:key :audio :value :audio :text "Audio"}
@@ -827,260 +794,6 @@
      [sa/Dropdown {:placeholder "src" :search true :selection true :on-change #(swap! props assoc :src (.-value %2))
                    :default-value (:src @props) :options (na/dropdown-list (:assets scene) :url :url) }]]))
 
-(declare dispatch-action-panel)
-
-(defn action-properties-panel-action
-  [props]
-  [:div
-   [na/form-input {:label "id" :default-value (:id @props) :on-change #(swap! props assoc :id (-> %2 .-value)) :inline? true}]])
-
-(defn action-properties-panel-state
-  [props]
-  [:div
-   [na/form-input {:label "target" :default-value (:target @props) :on-change #(swap! props assoc :target (-> %2 .-value)) :inline? true}]
-   [na/form-input {:label "id" :default-value (:id @props) :on-change #(swap! props assoc :id (-> %2 .-value)) :inline? true}]])
-
-(defn action-properties-panel-animation
-  [props]
-  [:div
-   [na/form-input {:label "target" :default-value (:target @props) :on-change #(swap! props assoc :target (-> %2 .-value)) :inline? true}]
-   [na/form-input {:label "id" :default-value (:id @props) :on-change #(swap! props assoc :id (-> %2 .-value)) :inline? true}]])
-
-(defn action-properties-panel-audio
-  [props]
-  (r/with-let [input-values (r/atom @props)]
-    [:div
-     [f/audio-asset-dropdown props :id]
-     [na/form-input {:label "start" :value (:start @input-values) :on-change #(do
-                                                                        (swap! input-values assoc :start (-> %2 .-value))
-                                                                        (swap! props assoc :start (-> %2 .-value js/parseFloat))) :inline? true}]
-     [na/form-input {:label "duration" :value (:duration @input-values) :on-change #(do
-                                                                              (swap! input-values assoc :duration (-> %2 .-value))
-                                                                              (swap! props assoc :duration (-> %2 .-value js/parseFloat))) :inline? true}]
-     [na/form-input {:label "offset" :default-value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value js/parseFloat)) :inline? true}]
-     [na/form-input {:label "loop" :default-value (:loop @props) :on-change #(swap! props assoc :loop (-> %2 .-value (= "true"))) :inline? true}]
-
-     [ws/audio-waveform-modal
-      {:key (:id @props) :start (:start @props) :end (+ (:start @props) (:duration @props))}
-      (fn [{:keys [start duration]}]
-        (swap! input-values assoc :start start)
-        (swap! props assoc :start start)
-        (swap! input-values assoc :duration duration)
-        (swap! props assoc :duration duration))]
-
-     ]))
-
-(defn action-properties-panel-scene
-  [props]
-  [:div
-   [na/form-input {:label "scene-id" :default-value (:scene-id @props) :on-change #(swap! props assoc :scene-id (-> %2 .-value)) :inline? true}]])
-
-(defn action-properties-panel-empty
-  [props]
-  [:div
-   [na/form-input {:label "duration" :default-value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value js/parseInt)) :inline? true}]])
-
-(defn action-properties-panel-sequence
-  [props]
-  (let [edit-mode (r/atom false)
-        current-value (atom (clojure.string/join "\n" (:data @props)))]
-    (fn [props]
-      [:div
-       [na/form-input {:label "type" :default-value (:type @props) :on-change #(swap! props assoc :type (-> %2 .-value)) :inline? true}]
-       (if @edit-mode
-         [:div
-          [na/text-area {:label "data"
-                         :default-value @current-value
-                         :on-change #(reset! current-value (-> %2 .-value))}]
-          [na/form-button {:content "OK" :on-click #(do
-                                                      (swap! props assoc :data (clojure.string/split @current-value "\n"))
-                                                      (reset! edit-mode false))}]]
-         [:div
-          (for [action (:data @props)]
-            ^{:key (str action)}
-            [:p [:a {:on-click #(re-frame/dispatch [::events/select-scene-action action])} (str action)]])
-          [na/form-button {:content "Edit" :on-click #(reset! edit-mode true)}]])
-       ])))
-
-(defn action-properties-panel-data [props]
-  (let [data @(re-frame/subscribe [::es/selected-scene-action-data])]
-    (swap! props assoc :data data)
-    [sa/ItemGroup {}
-     [sa/Item {}
-      [sa/ItemContent {}
-       [na/header {:as "h4" :floated "left" :content "Elements"}]
-       [:div {:style {:float "right"}}
-        [na/icon {:name "add" :link? true :on-click #(re-frame/dispatch [::events/selected-action-add-above-action 0])}]]]]
-     (for [[index action-name] (map-indexed (fn [idx itm] [idx itm]) data)]
-       ^{:key (str index action-name)}
-       [sa/Item {}
-        [sa/ItemContent {}
-         [:a {:on-click #(re-frame/dispatch [::events/select-scene-action-path index])} (str (:type action-name))]
-         [:div {:style {:float "right"}}
-          [na/icon {:name "arrow up" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-order-up index])}]
-          [na/icon {:name "arrow down" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-order-down index])}]
-          [na/icon {:name "level up" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-add-above-action index])}]
-          [na/icon {:name "level down" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-add-below-action index])}]
-          [na/icon {:name "remove" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-remove index])}]]
-         ]])]))
-
-(defn action-properties-panel-parallel [props]
-  [:div
-   [action-properties-panel-data props]
-   ])
-
-(defn action-properties-panel-sequence-data [props]
-  [:div
-   [action-properties-panel-data props]
-   ])
-
-(defn action-properties-panel-animation-sequence-item [item on-change on-remove]
-  (let [props (r/atom nil)]
-    (fn [{:keys [start end anim] :as item} on-change on-remove]
-      [sa/Item {}
-       (if @props
-         [sa/ItemContent {}
-          [na/form-input {:label "start" :default-value start :on-change #(swap! props assoc :start (-> %2 .-value js/parseFloat)) :inline? true}]
-          [na/form-input {:label "end" :default-value end :on-change #(swap! props assoc :end (-> %2 .-value js/parseFloat)) :inline? true}]
-          [na/form-input {:label "anim" :default-value anim :on-change #(swap! props assoc :anim (-> %2 .-value)) :inline? true}]
-
-          [na/button {:basic? true :content "save" :on-click #(do (on-change @props)
-                                                                  (reset! props nil))}]]
-         [sa/ItemContent {}
-          [:a (str "start: " start " end: " end " anim: " anim)]
-          [:div {:style {:float "right"}}
-           [na/icon {:name "edit" :link? true
-                     :on-click #(reset! props item)}]
-           [na/icon {:name "remove" :link? true
-                     :on-click on-remove}]]])
-       ])))
-
-(defn action-properties-panel-animation-sequence-items [props]
-  [:div
-   [sa/ItemGroup {}
-    [sa/Item {}
-     [sa/ItemContent {}
-      [na/header {:as "h4" :floated "left" :content "Items"}]
-      [:div {:style {:float "right"}}
-       [na/icon {:name "add" :link? true :on-click #(swap! props update-in [:data] conj {})}]]]]
-
-    (for [[idx item] (map-indexed (fn [idx itm] [idx itm]) (:data @props))]
-      ^{:key (str (:start item))}
-      [action-properties-panel-animation-sequence-item
-       item
-       (fn [item] (swap! props assoc-in [:data idx] item))
-       (fn [] (swap! props update-in [:data] #(vec (concat (subvec % 0 idx) (subvec % (inc idx))))))
-       ])]
-
-   ])
-
-(defn animation-object-names [objects]
-  (->> objects
-       (map second)
-       (map (fn [object] (or (:scene-name object) (:name object))))
-       (remove nil?)))
-
-(defn action-properties-panel-animation-sequence
-  [props]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene @(re-frame/subscribe [::subs/scene scene-id])
-        animations (animation-object-names (:objects scene))]
-    [:div
-     [sa/FormDropdown {:label "Target" :placeholder "Target" :search true :selection true :inline true
-                   :options (na/dropdown-list animations identity identity)
-                   :default-value (:target @props) :on-change #(swap! props assoc :target (.-value %2))}]
-     [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]
-     [na/form-input {:label "offset" :value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value)) :inline? true}]
-     [na/divider {}]
-     [f/audio-asset-dropdown props :audio]
-     [na/form-input {:label "start" :value (:start @props) :on-change #(swap! props assoc :start (-> %2 .-value)) :inline? true}]
-     [na/form-input {:label "duration" :value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value)) :inline? true}]
-     [ws/animation-sequence-waveform-modal
-      {:key (:audio @props) :start (:start @props) :end (+ (:start @props) (:duration @props)) :sequence-data (:data @props)}
-      (fn [{:keys [start duration regions]}]
-        (swap! props assoc :offset start)
-        (swap! props assoc :start start)
-        (swap! props assoc :duration duration)
-        (swap! props assoc :data (->> regions
-                                      (map #(assoc % :anim "talk"))
-                                      vec)))]
-     [na/divider {}]
-     [action-properties-panel-animation-sequence-items props]
-     [na/divider {}]]))
-
-(defn action-properties-panel-param [key value on-change on-remove]
-  (let [props (r/atom nil)]
-    (fn [key value on-change on-remove]
-      [sa/Item {}
-      (if @props
-        [sa/ItemContent {}
-         [na/form-input {:label "key" :default-value key :on-change #(swap! props assoc :key (-> %2 .-value keyword)) :inline? true}]
-         [na/form-input {:label "value" :default-value value :on-change #(swap! props assoc :value (-> %2 .-value)) :inline? true}]
-
-         [na/button {:basic? true :content "save" :on-click #(do (on-change (:key @props) (:value @props))
-                                                                 (reset! props nil))}]]
-        [sa/ItemContent {}
-         [:a (str (name key) ": " value)]
-         [:div {:style {:float "right"}}
-          [na/icon {:name "edit" :link? true
-                    :on-click #(reset! props {:key key :value value})}]
-          [na/icon {:name "remove" :link? true
-                    :on-click on-remove}]]])
-       ])))
-
-(defn action-properties-panel-params [props]
-  [:div
-   [sa/ItemGroup {}
-    [sa/Item {}
-      [sa/ItemContent {}
-       [na/header {:as "h4" :floated "left" :content "Params"}]
-       [:div {:style {:float "right"}}
-        [na/icon {:name "add" :link? true :on-click #(swap! props assoc-in [:params :empty] "empty")}]]]]
-
-    (for [[key value] (:params @props)]
-      ^{:key (str key)}
-      [action-properties-panel-param
-       key value
-       (fn [new-key new-value]
-         (swap! props update-in [:params] dissoc key)
-         (swap! props assoc-in [:params new-key] new-value))
-       (fn [] (swap! props update-in [:params] dissoc key))
-       ])]
-
-   ])
-
-(defn action-properties-panel-common
-  [props]
-  [:div
-   [sa/Dropdown {:placeholder "Type" :search true :selection true :options action-types
-                 :default-value (:type @props) :on-change #(swap! props assoc :type (.-value %2))}]
-   [na/form-input {:label "Description" :default-value (:description @props) :on-change #(swap! props assoc :description (-> %2 .-value)) :inline? true}]
-   [na/divider {}]
-   [action-properties-panel-params props]
-   [na/divider {}]])
-
-(defn dispatch-action-panel
-  [props]
-  [:div
-   [action-properties-panel-common props]
-   (case (-> @props :type keyword)
-     :action [action-properties-panel-action props]
-     :scene [action-properties-panel-scene props]
-     :state [action-properties-panel-state props]
-     :animation [action-properties-panel-animation props]
-     :audio [action-properties-panel-audio props]
-     :empty [action-properties-panel-empty props]
-     :sequence [action-properties-panel-sequence props]
-     :parallel [action-properties-panel-parallel props]
-     :sequence-data [action-properties-panel-sequence-data props]
-     :animation-sequence [action-properties-panel-animation-sequence props]
-     nil)])
-
 (defn object-action-properties-panel
   []
   (let [{:keys [scene-id name action]} @(re-frame/subscribe [::es/selected-object-action])
@@ -1090,7 +803,7 @@
     (fn []
       [na/form {}
        [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
-       [dispatch-action-panel props]
+       [action-properties/dispatch props]
 
        [na/form-button {:content "Save" :on-click #(update-object-action scene-id name action @props)}]]
       )))
@@ -1101,7 +814,8 @@
         props (r/atom data)]
     (fn []
       [na/form {}
-       [dispatch-action-panel props]
+       [action-properties/dispatch props]
+       [na/divider {}]
        [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-selected-scene-action @props])}]]
       )))
 
@@ -1115,7 +829,7 @@
        [na/form-input {:label "name" :default-value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
        [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
        [na/divider {}]
-       [dispatch-action-panel props]
+       [action-properties/dispatch props]
        [na/divider {}]
        [na/form-button {:content "Add" :on-click #(do (update-object-action scene-id name (:scene-name @props) @props)
                                                       (on-save))}]

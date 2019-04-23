@@ -9,7 +9,7 @@
                          {:url "/raw/img/map/feria_locked.png", :size 1, :type "image"}],
 
                 :objects {:background {:type "background", :src "/raw/img/map/background.png"},
-                          :vera {:type "animation" :name "vera-go" :anim "go_front" :speed 0.5 :start false
+                          :vera {:type "animation" :scene-name "vera-go" :name "vera-go" :anim "go_front" :speed 0.5 :start false
                                  :x 1070, :y 665 :scale {:x 0.15 :y 0.15} :width 1182 :height 1437
                                  :transition "vera-transition"
                                  :states {:init-home {:x 1000 :y 620}
@@ -81,7 +81,6 @@
                                          {:type "transition" :transition-id "vera-transition" :to {:x 590 :y 960}}]}
 
                   :move-from-park {:type "sequence-data"
-                                   :params {:text "Arbol"}
                                    :data [{:type "start-animation" :target "vera-go"}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 915, :y 938}}
                                           {:type "transition" :transition-id "vera-transition" :to {:x 895, :y 851}}
