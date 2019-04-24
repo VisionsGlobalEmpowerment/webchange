@@ -8,28 +8,45 @@
     [webchange.editor.events :as ee]
     [webchange.auth.views :refer [login-form register-form student-access-form]]
     [webchange.dashboard.views :refer [dashboard-page]]
-    [sodium.core :as na]
-    [soda-ash.core :as sa]
-    [reagent.core :as r]))
+    [soda-ash.core :as sa]))
 
 ;; course
 
 (defn course-switch
   []
-  [na/grid {:vertical-align "middle" :columns 5 :centered? true}
-   [na/grid-row {}
-    [na/grid-column {}]]
-   [na/grid-row {}
-    [na/grid-column {}
-     [na/segment {}
-      [na/header {:as "h1" :content "Pick course"}]
-      [na/divider {}]
-      [na/button {:basic? true :content "English" :on-click #(re-frame/dispatch [::events/redirect :course :id "demo"])}]
-      [na/button {:basic? true :content "Español" :on-click #(re-frame/dispatch [::events/redirect :course :id "test"])}]]]]
-   [na/grid-row {}
-    [na/grid-column {}]]])
+  [sa/Grid {:centered true
+            :columns 2
+            :container true
+            :vertical-align "middle"}
+   [sa/GridRow {}
+    [sa/GridColumn {}
+     [sa/Segment {:placeholder true}
+      [sa/Grid {:centered true
+                :vertical-align "middle"}
+       [sa/GridRow {}
+        [sa/GridColumn {:text-align "center"}
+         [sa/Header {:as "h1" :content "Pick course"}]]]
+       [sa/GridRow {}
+        [sa/GridColumn {}
+         [sa/Grid {:stackable true
+                   :text-align "center"}
+          [sa/Divider {:vertical true}
+           "Or"]
+          [sa/GridRow {:columns 2
+                       :vertical-align "middle"}
+           [sa/GridColumn {}
+            [sa/Button {:basic true
+                        :on-click #(re-frame/dispatch [::events/redirect :course :id "demo"])}
+             [sa/Flag {:name "us"}]
+             "English"]]
+           [sa/GridColumn {}
+            [sa/Button {:basic true
+                        :on-click #(re-frame/dispatch [::events/redirect :course :id "test"])}
+             [sa/Flag {:name "es"}]
+             "Español"]]]]]]]]]]])
 
 ;; editor
+
 (defn editor-panel [course-id]
   (re-frame/dispatch [::ee/init-editor course-id])
   [editor])
