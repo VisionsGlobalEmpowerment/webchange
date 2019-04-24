@@ -133,27 +133,40 @@
   ::select-scene-action
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
-      {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action :path []})})))
+      {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action :path [] :breadcrumb []})})))
 
 (re-frame/reg-event-fx
-  ::select-scene-action-path
+  ::select-scene-action-data-path
   (fn [{:keys [db]} [_ step]]
-    {:db (update-in db [:editor :selected-scene-action :path] conj step)}))
+    (let [path (get-in db [:editor :selected-scene-action :path])]
+      {:db (-> db
+               (update-in [:editor :selected-scene-action :breadcrumb] conj path)
+               (assoc-in [:editor :selected-scene-action :path] (-> path (concat [:data step]) vec)))})))
+
+(re-frame/reg-event-fx
+  ::select-scene-action-options-path
+  (fn [{:keys [db]} [_ step]]
+    (let [path (get-in db [:editor :selected-scene-action :path])]
+      {:db (-> db
+               (update-in [:editor :selected-scene-action :breadcrumb] conj path)
+               (assoc-in [:editor :selected-scene-action :path] (-> path (concat [:options step]) vec)))})))
 
 (re-frame/reg-event-fx
   ::select-scene-action-path-prev
   (fn [{:keys [db]} _]
-    (let [drop-last-vec (fn [v] (vec (drop-last v)))]
-      {:db (update-in db [:editor :selected-scene-action :path] drop-last-vec)})))
+    (let [breadcrumb (get-in db [:editor :selected-scene-action :breadcrumb])]
+      (if (peek breadcrumb)
+        {:db (-> db
+                 (assoc-in [:editor :selected-scene-action :path] (peek breadcrumb))
+                 (assoc-in [:editor :selected-scene-action :breadcrumb] (pop breadcrumb)))}))))
+
 
 (re-frame/reg-event-fx
   ::edit-selected-scene-action
   (fn [{:keys [db]} [_ state]]
     (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
           action-path [:scenes scene-id :actions (keyword action)]
-          data-path (->> (mapcat (fn [idx] [:data idx]) path)
-                         (concat action-path)
-                         vec)]
+          data-path (vec (concat action-path path))]
       {:db (assoc-in db data-path state)
        :dispatch [::select-scene-action-path-prev]})))
 
@@ -162,10 +175,7 @@
   (fn [{:keys [db]} [_ index]]
     (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
           action-path [:scenes scene-id :actions (keyword action)]
-          data-path (->> (mapcat (fn [idx] [:data idx]) path)
-                         (concat action-path)
-                         (#(concat % [:data]))
-                         vec)
+          data-path (vec (concat action-path path [:data]))
           original-data (get-in db data-path)]
       (if (< (inc index) (count original-data))
         (let [head (subvec original-data 0 index)
@@ -180,10 +190,7 @@
   (fn [{:keys [db]} [_ index]]
     (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
           action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
-                         (concat action-path)
-                         (#(concat % [:data]))
-                         vec)
+          data-vec-path (vec (concat action-path path [:data]))
           original-data (get-in db data-vec-path)]
       (if (> index 0)
         (let [head (subvec original-data 0 (dec index))
@@ -211,29 +218,32 @@
   (fn [{:keys [db]} [_ index]]
     (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
           action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
-                             (concat action-path)
-                             (#(concat % [:data]))
-                             vec)
+          data-vec-path (vec (concat action-path path [:data]))
           original-data (get-in db data-vec-path)
           data (insert-into original-data index)]
       {:db (assoc-in db data-vec-path data)})))
 
 (re-frame/reg-event-fx
+  ::selected-action-add-option
+  (fn [{:keys [db]} [_ key]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-vec-path (vec (concat action-path path [:options key]))]
+      {:db (assoc-in db data-vec-path {})
+       :dispatch [::select-scene-action-options-path key]})))
+
+(re-frame/reg-event-fx
   ::selected-action-add-above-action
   (fn [{:keys [db]} [_ index]]
     {:dispatch-n (list [::selected-action-add-above index]
-                       [::select-scene-action-path index])}))
+                       [::select-scene-action-data-path index])}))
 
 (re-frame/reg-event-fx
   ::selected-action-add-below
   (fn [{:keys [db]} [_ index]]
     (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
           action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
-                             (concat action-path)
-                             (#(concat % [:data]))
-                             vec)
+          data-vec-path (vec (concat action-path path [:data]))
           original-data (get-in db data-vec-path)
           data (insert-into original-data (inc index))]
       {:db (assoc-in db data-vec-path data)})))
@@ -242,20 +252,38 @@
   ::selected-action-add-below-action
   (fn [{:keys [db]} [_ index]]
     {:dispatch-n (list [::selected-action-add-below index]
-                       [::select-scene-action-path (inc index)])}))
+                       [::select-scene-action-data-path (inc index)])}))
 
 (re-frame/reg-event-fx
-  ::selected-action-remove
+  ::selected-action-remove-data
   (fn [{:keys [db]} [_ index]]
     (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
           action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (->> (mapcat (fn [idx] [:data idx]) path)
-                             (concat action-path)
-                             (#(concat % [:data]))
-                             vec)
+          data-vec-path (vec (concat action-path path [:data]))
           original-data (get-in db data-vec-path)
           data (remove-from original-data index)]
       {:db (assoc-in db data-vec-path data)})))
+
+(re-frame/reg-event-fx
+  ::selected-action-remove-option
+  (fn [{:keys [db]} [_ key]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          data-vec-path (vec (concat action-path path [:options]))]
+      {:db (update-in db data-vec-path dissoc key)})))
+
+(re-frame/reg-event-fx
+  ::rename-selected-scene-action-option
+  (fn [{:keys [db]} [_ old-key new-key]]
+    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]
+          options-vec-path (vec (concat action-path path [:options]))
+          option (-> db
+                     (get-in options-vec-path)
+                     old-key)]
+      {:db (-> db
+               (update-in options-vec-path dissoc key)
+               (update-in options-vec-path assoc new-key option))})))
 
 (re-frame/reg-event-fx
   ::show-scene-action

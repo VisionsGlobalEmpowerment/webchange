@@ -248,7 +248,7 @@
        ^{:key (str index action-name)}
        [sa/Item {}
         [sa/ItemContent {}
-         [:a {:on-click #(re-frame/dispatch [::events/select-scene-action-path index])} (str (:type action-name))]
+         [:a {:on-click #(re-frame/dispatch [::events/select-scene-action-data-path index])} (str (:type action-name))]
          [:div {:style {:float "right"}}
           [na/icon {:name "arrow up" :link? true
                     :on-click #(re-frame/dispatch [::events/selected-action-order-up index])}]
@@ -259,7 +259,7 @@
           [na/icon {:name "level down" :link? true
                     :on-click #(re-frame/dispatch [::events/selected-action-add-below-action index])}]
           [na/icon {:name "remove" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-remove index])}]]
+                    :on-click #(re-frame/dispatch [::events/selected-action-remove-data index])}]]
          ]])]))
 
 (defn parallel-panel [props]
@@ -352,8 +352,6 @@
    [sa/FormDropdown {:label "Type" :search true :selection true :options action-types :inline true
                  :default-value (:type @props) :on-change #(swap! props assoc :type (.-value %2))}]
    [na/form-input {:label "Description" :default-value (:description @props) :on-change #(swap! props assoc :description (-> %2 .-value)) :inline? true}]
-   [na/divider {}]
-   [key-value-params props :params]
    [na/divider {}]])
 
 (defn add-alias-panel [props]
@@ -427,6 +425,54 @@
    [f/action-dropdown props :success "success"]
    [f/action-dropdown props :fail "fail"]])
 
+(defn case-option-item-panel [key action]
+  (let [edit (r/atom nil)]
+    (fn [key action]
+      [sa/Item {}
+       [sa/ItemContent {}
+        (if @edit
+          [:div {:style {:float "left"}} [na/form-input {:label "New key" :size "mini" :default-value (name key) :on-change #(reset! edit (-> %2 .-value keyword)) :inline? true}]]
+          [:a {:on-click #(re-frame/dispatch [::events/select-scene-action-options-path key])} (str (name key) " : " (:type action))])
+
+        [:div {:style {:float "right"}}
+         (if @edit
+           [na/icon {:name "checkmark" :link? true :on-click #(do
+                                                                (re-frame/dispatch [::events/rename-selected-scene-action-option key @edit])
+                                                                (reset! edit nil))}]
+           [na/icon {:name "pencil" :link? true
+                     :on-click #(reset! edit key)}])
+         [na/icon {:name "remove" :link? true
+                   :on-click #(re-frame/dispatch [::events/selected-action-remove-option key])}]]
+        ]])))
+
+(defn case-options-panel [props]
+  (let [new-name (r/atom nil)]
+    (fn [props]
+      (let [{{options :options} :data} @(re-frame/subscribe [::es/selected-scene-action])]
+        (swap! props assoc :options options)
+        [sa/ItemGroup {}
+         [sa/Item {}
+          [sa/ItemContent {}
+           [na/grid {:columns 3}
+            [na/grid-column {}
+             [na/header {:as "h4" :content "Options"}]]
+            [na/grid-column {}
+             [:div
+              [na/form-input {:size "mini" :on-change #(reset! new-name (-> %2 .-value)) :inline? true}]]]
+            [na/grid-column {}
+             [:div {:style {:float "right"}}
+              [na/icon {:name "add" :link? true :on-click #(do
+                                                             (re-frame/dispatch [::events/selected-action-add-option @new-name])
+                                                             (reset! new-name nil))}]]]]]]
+         (for [[key action] options]
+           ^{:key (str key)}
+           [case-option-item-panel key action])]))))
+
+(defn case-panel [props]
+  [:div
+   [na/form-input {:label "value" :default-value (:value @props) :on-change #(swap! props assoc :value (-> %2 .-value)) :inline? true}]
+   [case-options-panel props]])
+
 (defn counter-panel [props]
   [:div
    [na/form-input {:label "id" :default-value (:counter-id @props) :on-change #(swap! props assoc :counter-id (-> %2 .-value)) :inline? true}]
@@ -479,8 +525,24 @@
      :test-var-scalar [test-var-scalar-panel props]
      :test-var-list [test-var-list-panel props]
      :test-value [test-var-scalar-panel props]
+     :case [case-panel props]
      :counter [counter-panel props]
      :set-variable [set-variable-panel props]
      :set-progress [set-progress-panel props]
      :copy-variable [copy-variable-panel props]
      nil)])
+
+(defn action-properties-panel [props]
+  (r/with-let [tab (r/atom :general)]
+    [:div
+     [na/menu {:tabular? true}
+      [na/menu-item {:name "general" :active? (= @tab :general) :on-click #(reset! tab :general)}]
+      [na/menu-item {:name "params" :active? (= @tab :params) :on-click #(reset! tab :params)}]
+      [na/menu-item {:name "from params" :active? (= @tab :from-params) :on-click #(reset! tab :from-params)}]
+      [na/menu-item {:name "from var" :active? (= @tab :from-var) :on-click #(reset! tab :from-var)}]]
+
+     (case @tab
+       :general [dispatch props]
+       :params [key-value-params props :params]
+       :from-params [key-value-params props :params]
+       :from-var [key-value-params props :params])]))

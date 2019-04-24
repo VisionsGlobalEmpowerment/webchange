@@ -803,7 +803,7 @@
     (fn []
       [na/form {}
        [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
-       [action-properties/dispatch props]
+       [action-properties/action-properties-panel props]
 
        [na/form-button {:content "Save" :on-click #(update-object-action scene-id name action @props)}]]
       )))
@@ -814,7 +814,7 @@
         props (r/atom data)]
     (fn []
       [na/form {}
-       [action-properties/dispatch props]
+       [action-properties/action-properties-panel props]
        [na/divider {}]
        [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-selected-scene-action @props])}]]
       )))
@@ -829,7 +829,7 @@
        [na/form-input {:label "name" :default-value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
        [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
        [na/divider {}]
-       [action-properties/dispatch props]
+       [action-properties/action-properties-panel props]
        [na/divider {}]
        [na/form-button {:content "Add" :on-click #(do (update-object-action scene-id name (:scene-name @props) @props)
                                                       (on-save))}]
