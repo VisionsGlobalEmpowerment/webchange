@@ -298,4 +298,4 @@
 
    :triggers      {:start {:on "start" :action "start-activity"}}
    :metadata      {:autostart true
-                   :prev "park"}})
+                   :prev "map"}})
