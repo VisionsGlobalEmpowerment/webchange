@@ -316,6 +316,25 @@
                                                                            (swap! scale + delta)))}
          [draw-action action @actions scene-id action-id 0 0]]))))
 
+(defn draw-triggers
+  []
+  (r/with-let [scale (r/atom 1)
+               scene-id @(re-frame/subscribe [::subs/current-scene])
+               triggers @(re-frame/subscribe [::subs/scene-triggers scene-id])
+               actions @(re-frame/subscribe [::subs/scene-actions scene-id])]
+    [:> Group {:x 50 :y 300 :scale {:x @scale :y @scale} :on-wheel (fn [e]
+                                                                     (let [delta (-> e .-evt .-deltaY (/ 1000))]
+                                                                       (-> e .-evt .preventDefault)
+                                                                       (swap! scale + delta)))}
+     (let [current-y (atom 0)]
+       (for [[key trigger] triggers]
+         ^{:key (str key)}
+         [:> Group {:x 0 :y @current-y}
+           (let [action-id (-> trigger :action keyword)
+                 action (get actions action-id)
+                 _ (swap! current-y + (action-height action actions))]
+             [draw-action action actions scene-id action-id 0 0])]))]))
+
 (defn dataset-lessons-panel
   []
   (let [lessons @(re-frame/subscribe [::es/current-dataset-lessons])]
@@ -649,19 +668,24 @@
 
 (defn upload-asset-form
   []
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
-    [:div {:on-drag-over #(do (.stopPropagation %) (.preventDefault %))
-           :on-drop (fn [e]
-                      (when (is-file-drop? e)
-                        (.stopPropagation e)
-                        (.preventDefault e)
-                        (re-frame/dispatch [::events/upload-asset scene-id (get-first-file e)]))
-                      )}
-     [na/segment {:style {:width "100%" :height "500px"}}
-      [na/header {:icon true}
-       [na/icon {:name "file outline"}]]
-      "Drag & drop your file here..."
-      ]]))
+  (let [props (r/atom {})]
+    (fn []
+      (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
+        [:div {:on-drag-over #(do (.stopPropagation %) (.preventDefault %))
+               :on-drop (fn [e]
+                          (when (is-file-drop? e)
+                            (.stopPropagation e)
+                            (.preventDefault e)
+                            (re-frame/dispatch [::events/upload-asset scene-id (get-first-file e) (:alias @props)]))
+                          )}
+
+         [sa/Segment {:placeholder true :style {:width "100%" :height "500px"}}
+          [sa/Header {:icon true}
+           [na/icon {:name "file outline"}]
+           "Drag & drop your file here..."]
+          [na/form-input {:label "Alias: " :on-change #(swap! props assoc :alias (-> %2 .-value)) :inline? true}]
+          ]]))))
+
 
 (def stage-scale 0.6)
 
@@ -703,10 +727,12 @@
     (let [scene-id (re-frame/subscribe [::subs/current-scene])
           loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])
           ui-screen (re-frame/subscribe [::es/current-main-content])]
+      ^{:key (str @ui-screen)}
       (if @loaded
         (case @ui-screen
-          :play-scene (with-stage [play-scene @scene-id])
+          :play-scene [with-stage [play-scene @scene-id]]
           :actions (with-stage [draw-actions] {:draggable true})
+          :triggers (with-stage [draw-triggers] {:draggable true})
           :scene-source [scene-source @scene-id]
           :course-source [course-source]
           :scene-versions [scene-versions]
@@ -720,7 +746,7 @@
           :add-dataset-lesson-form [add-dataset-lesson-form]
           :edit-dataset-lesson-form [edit-dataset-lesson-form]
           :upload-asset-form [upload-asset-form]
-          (with-stage [scene])
+          [with-stage [scene]]
           )
         (with-stage [preloader]))
       ))
@@ -1128,7 +1154,7 @@
           [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-main-content :play-scene])}]
           [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
                                                        (re-frame/dispatch [::events/set-main-content :editor]))}]
-          [na/button {:content "Actions" :on-click #(re-frame/dispatch [::events/set-main-content :actions])}]
+          [na/button {:content "Triggers" :on-click #(re-frame/dispatch [::events/show-current-scene-triggers])}]
           [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-main-content :scene-source])}]
           [na/button {:content "Versions" :on-click #(re-frame/dispatch [::events/open-current-scene-versions])}]]
          [na/grid-column {:width 4}

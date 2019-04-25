@@ -330,7 +330,9 @@
      [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]
      [na/form-input {:label "offset" :value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value)) :inline? true}]
      [na/divider {}]
-     [f/audio-asset-dropdown props :audio]
+     [sa/FormGroup {}
+       [f/audio-asset-dropdown props :audio]
+       [na/button {:basic? true :content "Upload new" :on-click #(re-frame/dispatch [::events/show-upload-asset-form])}]]
      [na/form-input {:label "start" :value (:start @props) :on-change #(swap! props assoc :start (-> %2 .-value)) :inline? true}]
      [na/form-input {:label "duration" :value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value)) :inline? true}]
      [ws/animation-sequence-waveform-modal
