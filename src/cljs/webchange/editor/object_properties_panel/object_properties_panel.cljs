@@ -81,12 +81,14 @@
           "Properties"]
          [sa/AccordionContent {:active (= 0 @activeIndex)}
           [na/form {}
-           [sa/Dropdown {:placeholder "Type"
-                         :search      true
-                         :selection   true
-                         :options     object-types
-                         :value       (:type @props)
-                         :on-change   #(swap! props assoc :type (.-value %2))}]
+           [sa/FormGroup {}
+            [sa/FormSelect {:label     "Type"
+                            :search    true
+                            :selection true
+                            :options   object-types
+                            :value     (:type @props)
+                            :on-change #(swap! props assoc :type (.-value %2))}]]
+           [sa/Divider]
            ^{:key (str scene-id name)} [dispatch-properties-panel props]
            [na/form-button {:content  "Save"
                             :on-click #(do (update-object scene-id name @props)
