@@ -7,13 +7,46 @@
                            Dropdown
                            FormGroup
                            FormInput
-                           FormSelect]]
-    [sodium.core :as na]))
+                           FormSelect]]))
 
-;; ToDo: Remove. Duplicated from webchange.editor.common.components
-(defn- get-animation [name]
-  (let [key (keyword name)]
-    (get animations key)))
+(defn- get-options-from-plain-list
+  [l]
+  (->> l
+       (map #(hash-map :key % :value % :text %))
+       (vec)))
+
+(defn- get-animations-names
+  []
+  (->> (keys animations)
+       (map name)))
+
+(defn- get-animation-skins
+  [animation-name]
+  (->> animation-name
+       (keyword)
+       (get animations)
+       (:skins)
+       (apply list)))
+
+(defn- get-animation-animations
+  [animation-name]
+  (->> animation-name
+       (keyword)
+       (get animations)
+       (:animations)
+       (apply list)))
+
+(defn- get-name-options
+  []
+  (get-options-from-plain-list (get-animations-names)))
+
+(defn- get-skin-options
+  [animation-name]
+  (get-options-from-plain-list (get-animation-skins animation-name)))
+
+(defn- get-animation-options
+  [animation-name]
+  (get-options-from-plain-list (get-animation-animations animation-name)))
 
 (defn properties-form-animation
   [props]
@@ -25,14 +58,14 @@
                  :selection     true
                  :on-change     #(swap! props assoc :name (.-value %2))
                  :default-value (:name @props)
-                 :options       (na/dropdown-list (keys animations) name name)}]
+                 :options       (get-name-options)}]
     [FormSelect {:label         "skin"
                  :placeholder   "Select Skin"
                  :search        true
                  :selection     true
                  :on-change     #(swap! props assoc :skin (.-value %2))
                  :default-value (:skin @props)
-                 :options       (na/dropdown-list (-> @props :name get-animation :skins) identity identity)}]
+                 :options       (get-skin-options (:name @props))}]
     ]
    [FormGroup {:width "equal"}
     [FormSelect {:label         "animation"
@@ -41,7 +74,7 @@
                  :selection     true
                  :on-change     #(swap! props assoc :anim (.-value %2))
                  :default-value (:anim @props)
-                 :options       (na/dropdown-list (-> @props :name get-animation :animations) identity identity)}]
+                 :options       (get-animation-options (:name @props))}]
     [FormInput {:label         "speed"
                 :default-value (:speed @props)
                 :on-change     #(swap! props assoc :speed (-> %2 .-value js/parseFloat))

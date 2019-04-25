@@ -31,10 +31,6 @@
   [:div
    [properties-form-common props]])
 
-(defn- get-animation [name]
-  (let [key (keyword name)]
-    (get animations key)))
-
 (defn- properties-panel-background
   [props]
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
