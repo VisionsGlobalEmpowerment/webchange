@@ -10,10 +10,10 @@
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
-    [webchange.editor.common :refer [dispatch-properties-panel
-                                     update-current-scene-object
-                                     update-object
-                                     update-object-action]]
+    [webchange.editor.common.components :refer [dispatch-properties-panel
+                                                update-current-scene-object
+                                                update-object
+                                                update-object-action]]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
     [webchange.editor.form-elements :as f]

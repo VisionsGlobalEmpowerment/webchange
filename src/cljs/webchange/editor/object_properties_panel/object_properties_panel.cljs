@@ -2,11 +2,11 @@
 
 (ns webchange.editor.object-properties-panel.object-properties-panel
   (:require
-    [webchange.editor.common :refer [dispatch-properties-panel
-                                     object-types
-                                     update-current-scene-object
-                                     update-object
-                                     update-object-action]]
+    [webchange.editor.common.components :refer [dispatch-properties-panel
+                                                object-types
+                                                update-current-scene-object
+                                                update-object
+                                                update-object-action]]
     [webchange.editor.action-properties.core :refer [action-types] :as action-properties]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
@@ -14,8 +14,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [soda-ash.core :as sa]
-    [sodium.core :as na]
-    [sodium.extensions :as nax]))
+    [sodium.core :as na]))
 
 (defn- add-object-action-panel
   [scene-id name on-save]
