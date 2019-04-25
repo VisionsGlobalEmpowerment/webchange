@@ -1265,7 +1265,7 @@
   (let [course-id (re-frame/subscribe [::subs/current-course])
         scene-id (re-frame/subscribe [::subs/current-scene])]
 
-    [:div
+    [:div#editor-container
      [:link {:rel "stylesheet" :href "http://esotericsoftware.com/files/spine-player/3.7/spine-player.css"}]
 
       [sa/SidebarPushable {}
