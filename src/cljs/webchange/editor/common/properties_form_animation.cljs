@@ -9,17 +9,20 @@
                            FormInput
                            FormSelect]]))
 
+;; ToDo: move to common ui controls helpers
 (defn- get-options-from-plain-list
   [l]
   (->> l
        (map #(hash-map :key % :value % :text %))
        (vec)))
 
+;; ToDo: move to state selectors
 (defn- get-animations-names
   []
   (->> (keys animations)
        (map name)))
 
+;; ToDo: move to state selectors
 (defn- get-animation-skins
   [animation-name]
   (->> animation-name
@@ -28,6 +31,7 @@
        (:skins)
        (apply list)))
 
+;; ToDo: move to state selectors
 (defn- get-animation-animations
   [animation-name]
   (->> animation-name
