@@ -2,7 +2,7 @@
   (:require
     [webchange.editor.form-elements.controlled-input :refer [controlled-input]]))
 
-(defn parser
+(defn- parser
   [value]
   (if (re-matches #"^[-+]?[0-9]*\.?[0-9]+$" value)
     (js/parseFloat value)
