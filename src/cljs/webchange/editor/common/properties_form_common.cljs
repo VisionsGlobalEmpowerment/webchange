@@ -1,5 +1,7 @@
 (ns webchange.editor.common.properties_form_common
   (:require
+    [webchange.editor.form-elements.integer :refer [IntegerInput]]
+    [webchange.editor.form-elements.number :refer [NumberInput]]
     [soda-ash.core :refer [FormGroup
                            FormInput]]))
 
@@ -7,35 +9,35 @@
   [props]
   [:div
    [FormGroup {:width "equal"}
-    [FormInput {:label         "x"
-                :default-value (:x @props)
-                :on-change     #(swap! props assoc :x (-> %2 .-value js/parseInt))
-                :inline?       true}]
-    [FormInput {:label         "y"
-                :default-value (:y @props)
-                :on-change     #(swap! props assoc :y (-> %2 .-value js/parseInt))
-                :inline?       true}]]
+    [IntegerInput {:label     "x"
+                   :value     (:x @props)
+                   :on-change #(swap! props assoc :x %)
+                   :inline    true}]
+    [IntegerInput {:label     "y"
+                   :value     (:y @props)
+                   :on-change #(swap! props assoc :y %)
+                   :inline    true}]]
    [FormGroup {:width "equal"}
-    [FormInput {:label         "width"
-                :default-value (:width @props)
-                :on-change     #(swap! props assoc :width (-> %2 .-value js/parseInt))
-                :inline?       true}]
-    [FormInput {:label         "height"
-                :default-value (:height @props)
-                :on-change     #(swap! props assoc :height (-> %2 .-value js/parseInt))
-                :inline?       true}]]
+    [IntegerInput {:label     "width"
+                   :value     (:width @props)
+                   :on-change #(swap! props assoc :width %)
+                   :inline    true}]
+    [IntegerInput {:label     "height"
+                   :value     (:height @props)
+                   :on-change #(swap! props assoc :height %)
+                   :inline    true}]]
    [FormGroup {}
-    [FormInput {:label         "rotation"
-                :default-value (:rotation @props)
-                :on-change     #(swap! props assoc :rotation (-> %2 .-value js/parseInt))
-                :inline?       true}]]
+    [IntegerInput {:label     "rotation"
+                   :value     (:rotation @props)
+                   :on-change #(swap! props assoc :rotation %)
+                   :inline    true}]]
    [FormGroup {:width "equal"}
-    [FormInput {:label         "scale x"
-                :default-value (:scale-x @props)
-                :on-change     #(swap! props assoc :scale-x (-> %2 .-value js/parseFloat))
-                :inline?       true}]
-    [FormInput {:label         "scale y"
-                :default-value (:scale-y @props)
-                :on-change     #(swap! props assoc :scale-y (-> %2 .-value js/parseFloat))
-                :inline?       true}]]
+    [NumberInput {:label     "scale x"
+                  :value     (:scale-x @props)
+                  :on-change #(swap! props assoc :scale-x %)
+                  :inline    true}]
+    [NumberInput {:label     "scale y"
+                  :value     (:scale-y @props)
+                  :on-change #(swap! props assoc :scale-y %)
+                  :inline    true}]]
    ])
