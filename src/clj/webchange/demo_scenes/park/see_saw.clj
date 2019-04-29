@@ -2,10 +2,10 @@
 
 (def see-saw-scene
   {:assets
-                  [{:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio"}
-                   {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio"}
-                   {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio"}
-                   {:url "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a", :size 2, :type "audio"}
+                  [{:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
+                   {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
+                   {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                   {:url "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a", :size 2, :type "audio" :alias "mari"}
 
                    {:url "/raw/img/park/see-saw/background.jpg", :size 10 :type "image"}
                    {:url "/raw/img/park/see-saw/saw_01.png", :size 1, :type "image"}
@@ -66,17 +66,15 @@
    :scene-objects [["background"] ["see-saw"] ["mari"] ["box1" "box2" "box3"]],
    :actions
                   {:mari-welcome-audio
-                   {:type "parallel"
-                    :data [{:type "audio", :id "mari", :start 0.787, :duration 9.716}
-                           {:type "animation-sequence" :target "mari" :track 1 :offset 0.787
-                            :data [{:start 1.062 :end 3.914 :anim "talk"}
-                                   {:start 4.897 :end 10.167 :anim "talk"}]}]}
+                   {:type "animation-sequence" :target "mari" :track 1 :offset 0.787
+                    :audio "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a", :start 0.787, :duration 9.716
+                    :data [{:start 1.062 :end 3.914 :anim "talk"}
+                           {:start 4.897 :end 10.167 :anim "talk"}]}
 
                    :mari-move-to-start
-                   {:type "parallel"
-                    :data [{:type "audio", :id "mari", :start 11.643, :duration 5.822}
-                           {:type "animation-sequence" :target "mari" :track 1 :offset 11.643
-                            :data [{:start 11.722 :end 17.268 :anim "talk"}]}]}
+                   {:type "animation-sequence" :target "mari" :track 1 :offset 11.643
+                    :audio "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a" :start 11.643, :duration 5.822
+                    :data [{:start 11.722 :end 17.268 :anim "talk"}]}
 
                    :show-boxes {:type "parallel"
                                 :data [{:type "state" :target "box1" :id "come"}
@@ -245,12 +243,11 @@
                                   {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "seesaw-voice-high"}]}]}
 
                    :try-another
-                   {:type "parallel"
-                    :data [{:type "audio", :id "mari", :start 21.162, :duration 5.979}
-                           {:type "animation-sequence" :target "mari" :track 1 :offset 21.162
-                            :data [{:start 21.275 :end 22.367 :anim "talk"}
-                                   {:start 22.588 :end 23.989 :anim "talk"}
-                                   {:start 24.747 :end 26.92 :anim "talk"}]}]}
+                   {:type "animation-sequence" :target "mari" :track 1 :offset 21.162
+                    :audio "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a", :start 21.162, :duration 5.979
+                    :data [{:start 21.275 :end 22.367 :anim "talk"}
+                           {:start 22.588 :end 23.989 :anim "talk"}
+                           {:start 24.747 :end 26.92 :anim "talk"}]}
 
                    :pick-wrong {:type "sequence"
                                 :data ["audio-wrong"]}
