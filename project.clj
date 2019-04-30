@@ -2,6 +2,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/java.jdbc "0.7.8"]
+                 [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.logging "0.4.1"]
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [clojure.java-time "0.3.2"]

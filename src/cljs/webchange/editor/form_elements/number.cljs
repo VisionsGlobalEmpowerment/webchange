@@ -2,18 +2,11 @@
   (:require
     [webchange.editor.form-elements.controlled-input :refer [ControlledInput]]))
 
-(defn- number-string?
+(defn parser
   [value]
-  (->> value
-       (re-matches #"^[-+]?[0-9]*\.?[0-9]+$")
-       (boolean)))
-
-(defn- parser
-  [value]
-  (if (number-string? value)
+  (if (re-matches #"^[-+]?[0-9]*\.?[0-9]+$" value)
     (js/parseFloat value)
     nil))
-
 
 (defn NumberInput
   []
