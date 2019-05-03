@@ -4,7 +4,7 @@
     [webchange.subs :as subs]
     [webchange.events :as events]
     [webchange.interpreter.components :refer [course]]
-    [webchange.editor.components :refer [editor]]
+    [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
     [webchange.auth.views :refer [login-form register-form student-access-form]]
     [webchange.dashboard.views :refer [dashboard-page]]
