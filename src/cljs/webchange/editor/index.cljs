@@ -10,6 +10,7 @@
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
+    [webchange.editor.components.main-content-navigation.index :refer [main-content-navigation]]
     [webchange.editor.components.scene-items.index :refer [scene-items]]
     [webchange.editor.common.components :refer [dispatch-properties-panel
                                                 update-object
@@ -779,14 +780,9 @@
         [na/header {:dividing? true} "Editor"]
         [na/grid {}
          [na/grid-column {:width 10}
-          [main-content]
-          [na/divider {:clearing? true}]
-          [na/button {:content "Play" :on-click #(re-frame/dispatch [::events/set-main-content :play-scene])}]
-          [na/button {:content "Editor" :on-click #(do (re-frame/dispatch [::ie/set-current-scene @scene-id])
-                                                       (re-frame/dispatch [::events/set-main-content :editor]))}]
-          [na/button {:content "Triggers" :on-click #(re-frame/dispatch [::events/show-current-scene-triggers])}]
-          [na/button {:content "Source" :on-click #(re-frame/dispatch [::events/set-main-content :scene-source])}]
-          [na/button {:content "Versions" :on-click #(re-frame/dispatch [::events/open-current-scene-versions])}]]
+           [main-content]
+           [na/divider {:clearing? true}]
+           [main-content-navigation @scene-id]]
          [na/grid-column {:width 4} [scene-items]]
          ]
       ]]]]))

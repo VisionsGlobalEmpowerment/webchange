@@ -24,7 +24,7 @@
             :list-animation-templates {:label     "Animations"
                                        :component list-animations-panel}})
 
-(defn shown-form-panel
+(defn- shown-form-panel
   []
   (let [show-form (re-frame/subscribe [::es/shown-form])]
     (if (contains? items @show-form)
@@ -32,14 +32,14 @@
       [:div])))
 
 (defn- get-menu-item
-  [{:keys [label event-key]}]
-  ^{:key event-key} [sa/Button {:basic    true
+  [{:keys [label key]}]
+  ^{:key key} [sa/Button {:basic    true
                                 :content  label
-                                :on-click #(re-frame/dispatch [::events/show-form event-key])}])
+                                :on-click #(re-frame/dispatch [::events/show-form key])}])
 
 (defn- map-items-to-list
   [items-map]
-  (map #(merge (% items-map) {:event-key %}) (keys items-map)))
+  (map #(merge (% items-map) {:key %}) (keys items-map)))
 
 (defn scene-items
   []
