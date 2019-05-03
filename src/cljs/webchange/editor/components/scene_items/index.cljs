@@ -10,6 +10,7 @@
     [webchange.editor.common.components :refer [dispatch-properties-panel
                                                 update-object-action]]
     [webchange.editor.components.scene-items.actions.index :refer [list-actions-panel]]
+    [webchange.editor.components.scene-items.animations.index :refer [list-animations-panel]]
     [webchange.editor.components.scene-items.assets.index :refer [list-assets-panel]]
     [webchange.editor.components.scene-items.objects.index :refer [add-object-panel
                                                                    list-objects-panel]]
@@ -21,31 +22,6 @@
     [webchange.editor.subs :as es]
     [webchange.subs :as subs]
     ))
-
-(defn list-animations-panel
-  []
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
-    (fn []
-      [na/segment {}
-       [na/header {:as "h4" :floated "left" :content "Animations"}]
-       [:div {:style {:float "right"}}
-        [na/icon {:name "close" :link? true :on-click #(re-frame/dispatch [::events/reset-shown-form])}]]
-       [na/divider {:clearing? true}]
-
-       [sa/ItemGroup {:divided true :style {:overflow "auto" :max-height "500px"}}
-        (for [[animation data] animations]
-          ^{:key animation}
-          [sa/Item {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" (-> {:type "animation" :id (name animation)}
-                                                                                                      clj->js
-                                                                                                      js/JSON.stringify)))}
-
-           [sa/ItemContent {}
-            [sa/ItemHeader {:as "a"}
-             (str animation)]
-
-            [sa/ItemDescription {}
-             [:div {:style {:width "100px" :height "100px"} :ref #(when % (init-spine-player % (name animation)))}] ]]]
-          )]])))
 
 (defn list-action-templates-panel
   []
