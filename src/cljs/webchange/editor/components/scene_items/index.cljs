@@ -1,7 +1,7 @@
 (ns webchange.editor.components.scene-items.index
   (:require
     [re-frame.core :as re-frame]
-    [sodium.core :as na]
+    [soda-ash.core :as sa]
     [webchange.editor.components.scene-items.action-templates.index :refer [list-action-templates-panel]]
     [webchange.editor.components.scene-items.actions.index :refer [list-actions-panel]]
     [webchange.editor.components.scene-items.animations.index :refer [list-animations-panel]]
@@ -12,29 +12,39 @@
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]))
 
+(def items {
+            :list-objects             {:label     "Objects"
+                                       :component list-objects-panel}
+            :list-actions             {:label     "Actions"
+                                       :component list-actions-panel}
+            ;:list-action-templates    {:label     "Action Templates"
+            ;                           :component list-action-templates-panel}
+            :list-asset-templates     {:label     "Assets"
+                                       :component list-assets-panel}
+            :list-animation-templates {:label     "Animations"
+                                       :component list-animations-panel}})
+
 (defn shown-form-panel
   []
   (let [show-form (re-frame/subscribe [::es/shown-form])]
-    (case @show-form
-      :add-object [add-object-panel]
-      :list-objects [list-objects-panel]
-      :list-actions [list-actions-panel]
-      :list-asset-templates [list-assets-panel]
-      :list-animation-templates [list-animations-panel]
-      :list-action-templates [list-action-templates-panel]
+    (if (contains? items @show-form)
+      [(-> items (@show-form) :component)]
       [:div])))
+
+(defn- get-menu-item
+  [{:keys [label event-key]}]
+  ^{:key event-key} [sa/Button {:basic    true
+                                :content  label
+                                :on-click #(re-frame/dispatch [::events/show-form event-key])}])
+
+(defn- map-items-to-list
+  [items-map]
+  (map #(merge (% items-map) {:event-key %}) (keys items-map)))
 
 (defn scene-items
   []
   [:div
-   [:div
-    [na/button {:basic? true :content "Objects" :on-click #(re-frame/dispatch [::events/show-form :list-objects])}]
-    [na/button {:basic? true :content "Actions" :on-click #(re-frame/dispatch [::events/show-form :list-actions])}]
-    ]
-   [:div
-    [:label "Templates: "]
-    [na/button {:basic? true :content "Assets" :on-click #(re-frame/dispatch [::events/show-form :list-asset-templates])}]
-    [na/button {:basic? true :content "Animations" :on-click #(re-frame/dispatch [::events/show-form :list-animation-templates])}]
-    #_[na/button {:basic? true :content "Actions" :on-click #(re-frame/dispatch [::events/show-form :list-action-templates])}]]
+   (for [item (map-items-to-list items)]
+     (get-menu-item item))
    [shown-form-panel]
    [properties-rail]])
