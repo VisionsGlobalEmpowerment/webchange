@@ -1,6 +1,6 @@
 (ns webchange.editor.form-elements.number
   (:require
-    [webchange.editor.form-elements.controlled-input :refer [ControlledInput]]))
+    [webchange.editor.form-elements.controlled-input :refer [controlled-input]]))
 
 (defn parser
   [value]
@@ -8,6 +8,6 @@
     (js/parseFloat value)
     nil))
 
-(defn NumberInput
+(defn number-input
   []
-  (ControlledInput {:parser parser}))
+  (controlled-input {:parser parser}))

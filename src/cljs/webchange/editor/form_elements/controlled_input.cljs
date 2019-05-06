@@ -37,7 +37,7 @@
                                                         (parse)
                                                         (on-change))})])))
 
-(defn ControlledInput
+(defn controlled-input
   [params]
   (controlled-input-core (merge params
                                 {:app-state (r/atom {:value      ""

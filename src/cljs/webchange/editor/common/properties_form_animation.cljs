@@ -82,10 +82,10 @@
     [FormInput {:label         "speed"
                 :default-value (:speed @props)
                 :on-change     #(swap! props assoc :speed (-> %2 .-value js/parseFloat))
-                :inline?       true}]
+                :inline        true}]
     ]
-   [Checkbox {:label            "start"
-              :default-checked? (:start @props)
-              :on-change        #(swap! props assoc :start (.-checked %2))}]
+   [Checkbox {:label           "start"
+              :default-checked (:start @props)
+              :on-change       #(swap! props assoc :start (.-checked %2))}]
    [Divider]
    [properties-form-common props]])
