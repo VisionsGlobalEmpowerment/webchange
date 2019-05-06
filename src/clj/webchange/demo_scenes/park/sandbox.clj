@@ -327,7 +327,11 @@
                                            :data ["mari-more-audio"
                                                   "renew-current-concept-workflow"]}
 
-                   :box-1-change-skin-var {:type "action" :from-var [{:template "box-1-set-skin-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-1"}]}
+                   :box-1-change-skin-var {:type "action"
+                                           :from-var [{:template "box-1-set-skin-%"
+                                                       :var-name "current-word"
+                                                       :action-property "id"
+                                                       :var-property "sandbox-state-word-1"}]}
                    :box-2-change-skin-var {:type "action" :from-var [{:template "box-2-set-skin-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-2"}]}
                    :box-3-change-skin-var {:type "action" :from-var [{:template "box-3-set-skin-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-3"}]}
                    :box-4-change-skin-var {:type "action" :from-var [{:template "box-4-set-skin-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-4"}]}
