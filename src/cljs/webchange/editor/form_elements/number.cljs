@@ -9,5 +9,5 @@
     nil))
 
 (defn number-input
-  []
-  (controlled-input {:parser parser}))
+  [props]
+  [controlled-input props {:parser parser}])

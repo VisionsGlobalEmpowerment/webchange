@@ -1,7 +1,7 @@
 (ns webchange.editor.form-elements.controlled-input
   (:require
     [reagent.core :as r]
-    [soda-ash.core :refer [FormInput]]))
+    [soda-ash.core :refer [FormInput] :rename {FormInput form-input}]))
 
 (defn get-value-from-props
   [props]
@@ -25,20 +25,19 @@
   value)
 
 (defn controlled-input-core
-  [{parse :parser
-    state :app-state}]
-  (fn [props]
-    (r/with-let [on-change (:on-change props)]
-                (update-state-with-props state props)
-                [FormInput (merge props
-                                  {:value     (:value @state)
-                                   :on-change #(some->> (get-value-from-event %)
-                                                        (update-state-with-value state)
-                                                        (parse)
-                                                        (on-change))})])))
+  [props {parse :parser
+          state :app-state}]
+  (r/with-let [on-change (:on-change props)]
+              (update-state-with-props state props)
+              [form-input (merge props
+                                 {:value     (:value @state)
+                                  :on-change #(some->> (get-value-from-event %)
+                                                       (update-state-with-value state)
+                                                       (parse)
+                                                       (on-change))})]))
 
 (defn controlled-input
-  [params]
-  (controlled-input-core (merge params
-                                {:app-state (r/atom {:value      ""
-                                                     :last-value ""})})))
+  [props params]
+  [controlled-input-core props (merge params
+                                      {:app-state (r/atom {:value      ""
+                                                           :last-value ""})})])
