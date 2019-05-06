@@ -6,7 +6,7 @@
     [webchange.interpreter.events :as ie]))
 
 (def items {
-            :play-scene     {:label   "Play !!!"
+            :play-scene     {:label   "Play"
                              :handler #(re-frame/dispatch [::events/set-main-content :play-scene])}
             :editor         {:label   "Editor"
                              :handler #(do (re-frame/dispatch [::ie/set-current-scene (:scene-id %)])

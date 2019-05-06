@@ -1,8 +1,7 @@
 (ns webchange.editor.components.scene-items.index
   (:require
     [re-frame.core :as re-frame]
-    [soda-ash.core :as sa]
-    [webchange.editor.components.scene-items.action-templates.index :refer [list-action-templates-panel]]
+    [soda-ash.core :refer [Button] :rename {Button button}]
     [webchange.editor.components.scene-items.actions.index :refer [list-actions-panel]]
     [webchange.editor.components.scene-items.animations.index :refer [list-animations-panel]]
     [webchange.editor.components.scene-items.assets.index :refer [list-assets-panel]]
@@ -17,8 +16,6 @@
                                        :component list-objects-panel}
             :list-actions             {:label     "Actions"
                                        :component list-actions-panel}
-            ;:list-action-templates    {:label     "Action Templates"
-            ;                           :component list-action-templates-panel}
             :list-asset-templates     {:label     "Assets"
                                        :component list-assets-panel}
             :list-animation-templates {:label     "Animations"
@@ -33,9 +30,9 @@
 
 (defn- get-menu-item
   [{:keys [label key]}]
-  ^{:key key} [sa/Button {:basic    true
-                                :content  label
-                                :on-click #(re-frame/dispatch [::events/show-form key])}])
+  ^{:key key} [button {:basic    true
+                       :content  label
+                       :on-click #(re-frame/dispatch [::events/show-form key])}])
 
 (defn- map-items-to-list
   [items-map]
