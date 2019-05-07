@@ -1,4 +1,4 @@
-(ns webchange.editor.action-properties.core
+(ns webchange.editor.common.actions.action-form
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
@@ -10,6 +10,7 @@
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
+    [webchange.editor.common.actions.action-types :refer [action-types]]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
     [webchange.editor.form-elements :as f]
@@ -20,42 +21,7 @@
     [sodium.extensions :as nax]
     [soda-ash.core :as sa]))
 
-(def action-types [{:key :action :value :action :text "Action"}
-                   {:key :scene :value :scene :text "Scene"}
-                   {:key :state :value :state :text "State"}
-                   {:key :animation :value :animation :text "Animation"}
-                   {:key :audio :value :audio :text "Audio"}
-                   {:key :empty :value :empty :text "Empty"}
-                   {:key :sequence :value :sequence :text "Sequence"}
-                   {:key :sequence-data :value :sequence-data :text "Sequence Data"}
-                   {:key :parallel :value :parallel :text "Parallel"}
-                   {:key :remove-flows :value :remove-flows :text "Remove flows"}
-
-                   {:key :add-alias :value :add-alias :text "Add alias"}
-                   {:key :add-animation :value :add-animation :text "Add animation"}
-                   {:key :start-animation :value :start-animation :text "Start animation"}
-                   {:key :remove-animation :value :remove-animation :text "Remove animation"}
-                   {:key :set-skin :value :set-skin :text "Set skin"}
-                   {:key :animation-props :value :animation-props :text "Animation props"}
-                   {:key :animation-sequence :value :animation-sequence :text "Animation sequence"}
-                   {:key :transition :value :transition :text "Transition"}
-                   {:key :placeholder-audio :value :placeholder-audio :text "Placeholder audio"}
-                   {:key :test-transitions-collide :value :test-transitions-collide :text "Test transitions collide"}
-
-                   {:key :dataset-var-provider :value :dataset-var-provider :text "Dataset var provider"}
-                   {:key :lesson-var-provider :value :lesson-var-provider :text "Lesson var provider"}
-                   {:key :vars-var-provider :value :vars-var-provider :text "Vars var provider"}
-                   {:key :test-var :value :test-var :text "Test var"}
-                   {:key :test-var-scalar :value :test-var-scalar :text "Test var scalar"}
-                   {:key :test-var-list :value :test-var-list :text "Test var list"}
-                   {:key :test-value :value :test-value :text "Test value"}
-                   {:key :case :value :case :text "Case"}
-                   {:key :counter :value :counter :text "Counter"}
-                   {:key :set-variable :value :set-variable :text "set variable"}
-                   {:key :set-progress :value :set-progress :text "Set progress"}
-                   {:key :copy-variable :value :copy-variable :text "Copy variable"}])
-
-(defn key-value-param [key value on-change on-remove]
+(defn- key-value-param [key value on-change on-remove]
   (let [props (r/atom nil)]
     (fn [key value on-change on-remove]
       [sa/Item {}
@@ -75,7 +41,7 @@
                      :on-click on-remove}]]])
        ])))
 
-(defn key-value-params [props field-name]
+(defn- key-value-params [props field-name]
   [:div
    [sa/ItemGroup {}
     [sa/Item {}
@@ -96,7 +62,7 @@
 
    ])
 
-(defn vector-param [value on-change on-remove]
+(defn- vector-param [value on-change on-remove]
   (let [props (r/atom nil)]
     (fn [value on-change on-remove]
       [sa/Item {}
@@ -115,7 +81,7 @@
                      :on-click on-remove}]]])
        ])))
 
-(defn vector-params [props field-name label]
+(defn- vector-params [props field-name label]
   [:div
    [sa/ItemGroup {}
     [sa/Item {}
@@ -134,7 +100,7 @@
 
    ])
 
-(defn action-panel
+(defn- action-panel
   [props]
   [:div
    [f/action-dropdown props :id]
@@ -142,44 +108,44 @@
                  :default-checked? (:return-immediately @props)
                  :on-change #(swap! props assoc :return-immediately (.-checked %2))}]])
 
-(defn state-panel [props]
+(defn- state-panel [props]
   [:div
    [f/object-dropdown props :target]
    [f/object-states-dropdown props :id (:target @props)]])
 
-(defn animation-panel [props]
+(defn- animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "id" :default-value (:id @props) :on-change #(swap! props assoc :id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]])
 
-(defn add-animation-panel [props]
+(defn- add-animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "id" :default-value (:id @props) :on-change #(swap! props assoc :id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]
    [na/checkbox {:label "loop" :default-checked? (:loop @props) :on-change #(swap! props assoc :loop (.-checked %2))}]])
 
-(defn start-animation-panel [props]
+(defn- start-animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]])
 
-(defn remove-animation-panel [props]
+(defn- remove-animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]])
 
-(defn set-skin-panel [props]
+(defn- set-skin-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "skin" :default-value (:skin @props) :on-change #(swap! props assoc :skin (-> %2 .-value)) :inline? true}]])
 
-(defn animation-props-panel [props]
+(defn- animation-props-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [key-value-params props :props]])
 
-(defn audio-panel
+(defn- audio-panel
   [props]
   (r/with-let [input-values (r/atom @props)]
               [:div
@@ -203,17 +169,17 @@
 
                ]))
 
-(defn scene-panel
+(defn- scene-panel
   [props]
   [:div
    [f/scene-dropdown props :scene-id]])
 
-(defn empty-panel
+(defn- empty-panel
   [props]
   [:div
    [na/form-input {:label "duration" :default-value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value js/parseInt)) :inline? true}]])
 
-(defn sequence-panel
+(defn- sequence-panel
   [props]
   (let [edit-mode (r/atom false)
         current-value (atom (clojure.string/join "\n" (:data @props)))]
@@ -235,7 +201,7 @@
           [na/form-button {:content "Edit" :on-click #(reset! edit-mode true)}]])
        ])))
 
-(defn data-panel [props]
+(defn- data-panel [props]
   (let [data @(re-frame/subscribe [::es/selected-scene-action-data])]
     (swap! props assoc :data data)
     [sa/ItemGroup {}
@@ -262,17 +228,17 @@
                     :on-click #(re-frame/dispatch [::events/selected-action-remove-data index])}]]
          ]])]))
 
-(defn parallel-panel [props]
+(defn- parallel-panel [props]
   [:div
    [data-panel props]
    ])
 
-(defn sequence-data-panel [props]
+(defn- sequence-data-panel [props]
   [:div
    [data-panel props]
    ])
 
-(defn animation-sequence-item [item on-change on-remove]
+(defn- animation-sequence-item [item on-change on-remove]
   (let [props (r/atom nil)]
     (fn [{:keys [start end anim] :as item} on-change on-remove]
       [sa/Item {}
@@ -293,7 +259,7 @@
                      :on-click on-remove}]]])
        ])))
 
-(defn animation-sequence-items [props]
+(defn- animation-sequence-items [props]
   [:div
    [sa/ItemGroup {}
     [sa/Item {}
@@ -312,13 +278,13 @@
 
    ])
 
-(defn animation-object-names [objects]
+(defn- animation-object-names [objects]
   (->> objects
        (map second)
        (map (fn [object] (or (:scene-name object) (:name object))))
        (remove nil?)))
 
-(defn animation-sequence-panel
+(defn- animation-sequence-panel
   [props]
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
         scene @(re-frame/subscribe [::subs/scene scene-id])
@@ -348,37 +314,37 @@
      [animation-sequence-items props]
      [na/divider {}]]))
 
-(defn common
+(defn- common
   [props]
   [:div
    [sa/FormDropdown {:label "Type" :search true :selection true :options action-types :inline true
-                 :default-value (:type @props) :on-change #(swap! props assoc :type (.-value %2))}]
+                     :default-value (:type @props) :on-change #(swap! props assoc :type (.-value %2))}]
    [na/form-input {:label "Description" :default-value (:description @props) :on-change #(swap! props assoc :description (-> %2 .-value)) :inline? true}]
    [na/divider {}]])
 
-(defn add-alias-panel [props]
+(defn- add-alias-panel [props]
   [:div
    [f/object-dropdown props :target]
    [na/form-input {:label "Alias" :default-value (:alias @props) :on-change #(swap! props assoc :alias (-> %2 .-value)) :inline? true}]
    [f/object-states-dropdown props :state (:target @props)]])
 
-(defn transition-panel [props]
+(defn- transition-panel [props]
   [:div
    [f/transition-dropdown props :transition-id]
    [key-value-params props :to]])
 
-(defn test-transitions-collide-panel [props]
+(defn- test-transitions-collide-panel [props]
   [:div
    [f/transition-dropdown props :transition-1 "Transition 1"]
    [f/transition-dropdown props :transition-2 "Transition 2"]
    [f/action-dropdown props :success "success"]
    [f/action-dropdown props :fail "fail"]])
 
-(defn remove-flows-panel [props]
+(defn- remove-flows-panel [props]
   [:div
    [na/form-input {:label "Flow tag" :default-value (:flow-tag @props) :on-change #(swap! props assoc :flow-tag (-> %2 .-value)) :inline? true}]])
 
-(defn dataset-var-provider-panel [props]
+(defn- dataset-var-provider-panel [props]
   [:div
    [na/form-input {:label "Provider id" :default-value (:provider-id @props) :on-change #(swap! props assoc :provider-id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "From" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]
@@ -386,7 +352,7 @@
    [vector-params props :variables "Variables"]
    [na/divider {}]])
 
-(defn lesson-var-provider-panel [props]
+(defn- lesson-var-provider-panel [props]
   [:div
    [na/form-input {:label "Provider id" :default-value (:provider-id @props) :on-change #(swap! props assoc :provider-id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "From" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]
@@ -397,7 +363,7 @@
    [na/form-input {:label "repeat" :default-value (:repeat @props) :on-change #(swap! props assoc :repeat (-> %2 .-value)) :inline? true}]
    [na/checkbox {:label "shuffled" :default-checked? (:shuffled @props) :on-change #(swap! props assoc :shuffled (.-checked %2))}]])
 
-(defn vars-var-provider-panel [props]
+(defn- vars-var-provider-panel [props]
   [:div
    [na/form-input {:label "Provider id" :default-value (:provider-id @props) :on-change #(swap! props assoc :provider-id (-> %2 .-value)) :inline? true}]
    [na/divider {}]
@@ -410,14 +376,14 @@
    [na/form-input {:label "repeat" :default-value (:repeat @props) :on-change #(swap! props assoc :repeat (-> %2 .-value)) :inline? true}]
    [na/checkbox {:label "shuffled" :default-checked? (:shuffled @props) :on-change #(swap! props assoc :shuffled (.-checked %2))}]])
 
-(defn test-var-scalar-panel [props]
+(defn- test-var-scalar-panel [props]
   [:div
    [na/form-input {:label "value1" :default-value (:value1 @props) :on-change #(swap! props assoc :value1 (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "value2" :default-value (:value2 @props) :on-change #(swap! props assoc :value2 (-> %2 .-value)) :inline? true}]
    [f/action-dropdown props :success "success"]
    [f/action-dropdown props :fail "fail"]])
 
-(defn test-var-list-panel [props]
+(defn- test-var-list-panel [props]
   [:div
    [na/divider {}]
    [vector-params props :var-names "var names"]
@@ -427,7 +393,7 @@
    [f/action-dropdown props :success "success"]
    [f/action-dropdown props :fail "fail"]])
 
-(defn case-option-item-panel [key action]
+(defn- case-option-item-panel [key action]
   (let [edit (r/atom nil)]
     (fn [key action]
       [sa/Item {}
@@ -447,7 +413,7 @@
                    :on-click #(re-frame/dispatch [::events/selected-action-remove-option key])}]]
         ]])))
 
-(defn case-options-panel [props]
+(defn- case-options-panel [props]
   (let [new-name (r/atom nil)]
     (fn [props]
       (let [{{options :options} :data} @(re-frame/subscribe [::es/selected-scene-action])]
@@ -470,32 +436,32 @@
            ^{:key (str key)}
            [case-option-item-panel key action])]))))
 
-(defn case-panel [props]
+(defn- case-panel [props]
   [:div
    [na/form-input {:label "value" :default-value (:value @props) :on-change #(swap! props assoc :value (-> %2 .-value)) :inline? true}]
    [case-options-panel props]])
 
-(defn counter-panel [props]
+(defn- counter-panel [props]
   [:div
    [na/form-input {:label "id" :default-value (:counter-id @props) :on-change #(swap! props assoc :counter-id (-> %2 .-value)) :inline? true}]
    [f/counter-action-dropdown props :counter-action]])
 
-(defn set-variable-panel [props]
+(defn- set-variable-panel [props]
   [:div
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "value" :default-value (:var-value @props) :on-change #(swap! props assoc :var-value (-> %2 .-value)) :inline? true}]])
 
-(defn set-progress-panel [props]
+(defn- set-progress-panel [props]
   [:div
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "value" :default-value (:var-value @props) :on-change #(swap! props assoc :var-value (-> %2 .-value)) :inline? true}]])
 
-(defn copy-variable-panel [props]
+(defn- copy-variable-panel [props]
   [:div
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "from" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]])
 
-(defn dispatch
+(defn- dispatch
   [props]
   [:div
    [common props]
@@ -534,17 +500,19 @@
      :copy-variable [copy-variable-panel props]
      nil)])
 
-(defn action-properties-panel [props]
+(defn action-form [props]
+  (println "action-form")
+  (println props)
   (r/with-let [tab (r/atom :general)]
-    [:div
-     [na/menu {:tabular? true}
-      [na/menu-item {:name "general" :active? (= @tab :general) :on-click #(reset! tab :general)}]
-      [na/menu-item {:name "params" :active? (= @tab :params) :on-click #(reset! tab :params)}]
-      [na/menu-item {:name "from params" :active? (= @tab :from-params) :on-click #(reset! tab :from-params)}]
-      [na/menu-item {:name "from var" :active? (= @tab :from-var) :on-click #(reset! tab :from-var)}]]
+              [:div
+               [na/menu {:tabular? true}
+                [na/menu-item {:name "general" :active? (= @tab :general) :on-click #(reset! tab :general)}]
+                [na/menu-item {:name "params" :active? (= @tab :params) :on-click #(reset! tab :params)}]
+                [na/menu-item {:name "from params" :active? (= @tab :from-params) :on-click #(reset! tab :from-params)}]
+                [na/menu-item {:name "from var" :active? (= @tab :from-var) :on-click #(reset! tab :from-var)}]]
 
-     (case @tab
-       :general [dispatch props]
-       :params [key-value-params props :params]
-       :from-params [key-value-params props :params]
-       :from-var [key-value-params props :params])]))
+               (case @tab
+                 :general [dispatch props]
+                 :params [key-value-params props :params]
+                 :from-params [key-value-params props :params]
+                 :from-var [key-value-params props :params])]))

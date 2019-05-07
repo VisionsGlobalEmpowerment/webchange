@@ -24,7 +24,6 @@
     [webchange.editor.subs :as es]
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer :as ws]
-    [webchange.editor.action-properties.core :refer [action-types] :as action-properties]
     [konva :refer [Transformer]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]

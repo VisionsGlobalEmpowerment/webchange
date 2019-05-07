@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [soda-ash.core :as sa]
     [sodium.core :as na]
-    [webchange.editor.action-properties.core :refer [action-types]]
+    [webchange.editor.common.actions.action-types :refer [action-types]]
     [webchange.editor.enums :refer [actions-with-selected-actions]]
     [webchange.editor.events :as events]
     [webchange.subs :as subs]))
@@ -29,7 +29,8 @@
          [sa/MenuItem {:position "right"}
           [sa/Dropdown {:text "New" :options action-types :scrolling true
                         :on-change #(if (:name @props)
-                                      (re-frame/dispatch [::events/add-new-scene-action (:name @props) (-> %2 .-value keyword)])
+                                      (do (println (str "new action:" (:name @props) ";" (-> %2 .-value keyword)))
+                                          (re-frame/dispatch [::events/add-new-scene-action (:name @props) (-> %2 .-value keyword)]))
                                       (swap! errors assoc :name true))}]]
          [sa/MenuItem {:position "right"}
           [sa/Dropdown {:text "Selected" :options actions-with-selected-actions

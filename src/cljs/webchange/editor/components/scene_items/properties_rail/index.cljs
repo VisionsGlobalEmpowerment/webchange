@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [soda-ash.core :as sa]
     [sodium.core :as na]
-    [webchange.editor.action-properties.core :as action-properties]
+    [webchange.editor.common.actions.action-form :refer [action-form]]
     [webchange.editor.common.components :refer [dispatch-properties-panel]]
     [webchange.editor.components.scene-items.properties-rail.object-properties-panel :refer [properties-panel]]
     [webchange.editor.enums :refer [object-types]]
@@ -57,7 +57,7 @@
         props (r/atom data)]
     (fn []
       [na/form {}
-       [action-properties/action-properties-panel props]
+       [action-form props]
        [na/divider {}]
        [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-selected-scene-action @props])}]]
       )))

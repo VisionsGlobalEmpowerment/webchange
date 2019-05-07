@@ -14,6 +14,8 @@
                            ModalContent
                            ModalHeader
                            Segment]]
+    [webchange.editor.common.actions.action-form :refer [action-form]]
+    [webchange.editor.events :as events]
     [webchange.subs :as subs]))
 
 (defmulti dataset-item-control #(:type %))
@@ -47,9 +49,12 @@
            :flipped "horizontally"}]
     "Select Scene"]])
 
+(defn- generate-action-name [] (str "action-" (.now js/Date)))
+
 (defmethod dataset-item-control "action"
   [{:keys [on-change value]}]
-  (r/with-let [modal-open (r/atom false)]
+  (r/with-let [modal-open (r/atom false)
+               selected-scene (r/atom nil)]
               [Modal {:open @modal-open
                       :trigger (r/as-element [Button {:basic    true
                                                       :on-click #(reset! modal-open true)}
@@ -59,9 +64,14 @@
                  [ModalContent {:scrolling true}
                   [FormSelect {:placeholder "Select scene"
                                :options     (get-options-from-plain-list @scenes)
-                               :on-change   #(println (.-value %2))}]
+                               :on-change   #(reset! selected-scene (.-value %2))}]
                   [Divider]
-                  [action-placeholder]])
+                  (if-not @selected-scene
+                    [action-placeholder]
+                    (let [_ (re-frame/dispatch [::events/select-current-scene @selected-scene])
+                          _ (re-frame/dispatch [::events/add-new-scene-action (generate-action-name) nil])]
+                      "Action form"))
+                  ])
                [ModalActions {}
                 [Button {:basic true
                          :on-click #(reset! modal-open false)} "Cancel"]
@@ -69,6 +79,10 @@
                          :on-click #(do (reset! modal-open false)
                                         (println "Save data"))} "Save"]]
                ]))
+
+;
+; Unknown type
+;
 
 (defmethod dataset-item-control :default
   [_]
