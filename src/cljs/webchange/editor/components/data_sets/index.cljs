@@ -7,16 +7,29 @@
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]))
 
-(def item-field-types [{:key :number :value :number :text "Number"}
-                       {:key :string :value :string :text "String"}
-                       {:key :image :value :image :text "Image"}
-                       {:key :audio :value :audio :text "Audio"}])
+(def item-field-types [
+                       {:key   :number
+                        :value :number
+                        :text  "Number"}
+                       {:key   :string
+                        :value :string
+                        :text  "String"}
+                       {:key   :image
+                        :value :image
+                        :text  "Image"}
+                       {:key   :audio
+                        :value :audio
+                        :text  "Audio"}
+                       {:key   :action
+                        :value :action
+                        :text  "Action"}
+                       ])
 
 (defn- add-dataset-field-panel
   [data-atom]
   (r/with-let [field-data (r/atom {})]
               [na/form-group {}
-               [na/form-input {:label     "name"
+               [na/form-input {:label     "Name"
                                :on-change #(swap! field-data assoc :name (-> %2 .-value))
                                :inline?   true}]
                [sa/Dropdown {:placeholder "Type"
@@ -83,5 +96,5 @@
           [na/divider {}]
           [add-dataset-field-panel data]
           [na/divider {}]
-          [na/form-button {:content  "Edit"
+          [na/form-button {:content  "Save"
                            :on-click #(re-frame/dispatch [::events/edit-dataset dataset-id @data])}]]]))))
