@@ -1,6 +1,4 @@
-;; Object properties panel
-
-(ns webchange.editor.object-properties-panel.object-properties-panel
+(ns webchange.editor.components.scene-items.properties-rail.object-properties-panel
   (:require
     [webchange.editor.common.components :refer [dispatch-properties-panel
                                                 object-types
@@ -15,6 +13,20 @@
     [reagent.core :as r]
     [soda-ash.core :as sa]
     [sodium.core :as na]))
+
+;(defn object-action-properties-panel
+;  []
+;  (let [{:keys [scene-id name action]} @(re-frame/subscribe [::es/selected-object-action])
+;        o (re-frame/subscribe [::subs/scene-object scene-id name])
+;        action-data (-> @o :actions (get (keyword action)))
+;        props (r/atom action-data)]
+;    (fn []
+;      [na/form {}
+;       [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
+;       [action-properties/action-properties-panel props]
+;
+;       [na/form-button {:content "Save" :on-click #(update-object-action scene-id name action @props)}]]
+;      )))
 
 (defn- add-object-action-panel
   [scene-id name on-save]
