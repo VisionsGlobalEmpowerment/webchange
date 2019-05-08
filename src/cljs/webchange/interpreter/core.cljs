@@ -12,7 +12,7 @@
     [webchange.common.anim :as anim]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
-    ["gsap/umd/TweenMax" :refer [TweenMax Power1]]
+    ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     #_[gsap/all :refer [TweenLite TweenMax BezierPlugin]]
     ))
 
@@ -267,11 +267,10 @@
             Tween.
             .play)
       (:bezier to)
-        (let [layer (.getLayer @component)]
-          (TweenMax.to @component (:duration to) (clj->js (-> to
-                                                              #_(assoc :ease Power1.easeInOut)
-                                                              (assoc :onUpdate #(.draw layer))
-                                                              (assoc :onComplete on-ended)))))
+        (TweenMax.to @component (:duration to) (-> to
+                                                   (assoc :ease (SlowMo.ease.config 0.1 0.4 false))
+                                                   (assoc :onComplete on-ended)
+                                                   clj->js))
       :else (.to @component (clj->js params)))
     ))
 
