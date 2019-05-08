@@ -69,7 +69,7 @@
                   (if-not @selected-scene
                     [action-placeholder]
                     (let [_ (re-frame/dispatch [::events/select-current-scene @selected-scene])
-                          _ (re-frame/dispatch [::events/add-new-scene-action (generate-action-name) nil])]
+                          _ (re-frame/dispatch [::events/add-new-scene-action (generate-action-name) nil @selected-scene])]
                       "Action form"))
                   ])
                [ModalActions {}

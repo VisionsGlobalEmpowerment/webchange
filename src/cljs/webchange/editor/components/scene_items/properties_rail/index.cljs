@@ -54,10 +54,12 @@
 (defn- scene-action-properties-panel
   []
   (let [{:keys [data]} @(re-frame/subscribe [::es/selected-scene-action])
-        props (r/atom data)]
+        scene-id @(re-frame/subscribe [::subs/current-scene])
+        props (r/atom data)
+        params {:scene-id scene-id}]
     (fn []
       [na/form {}
-       [action-form props]
+       [action-form props params]
        [na/divider {}]
        [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-selected-scene-action @props])}]]
       )))
@@ -75,7 +77,7 @@
          [:div {:style {:float "right"}}
           (if @edit
             [na/icon {:name "checkmark" :link? true :on-click #(do
-                                                                 (re-frame/dispatch [::events/rename-scene-action action (:name @edit)])
+                                                                 (re-frame/dispatch [::events/rename-scene-action action (:name @edit) scene-id])
                                                                  (reset! edit nil))}]
             [na/icon {:name "pencil" :link? true :on-click #(reset! edit {})}])
           [na/icon {:name "close" :link? true :on-click #(re-frame/dispatch [::events/reset-scene-action])}]]

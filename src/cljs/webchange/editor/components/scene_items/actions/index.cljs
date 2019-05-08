@@ -30,7 +30,7 @@
           [sa/Dropdown {:text "New" :options action-types :scrolling true
                         :on-change #(if (:name @props)
                                       (do (println (str "new action:" (:name @props) ";" (-> %2 .-value keyword)))
-                                          (re-frame/dispatch [::events/add-new-scene-action (:name @props) (-> %2 .-value keyword)]))
+                                          (re-frame/dispatch [::events/add-new-scene-action (:name @props) (-> %2 .-value keyword) scene-id]))
                                       (swap! errors assoc :name true))}]]
          [sa/MenuItem {:position "right"}
           [sa/Dropdown {:text "Selected" :options actions-with-selected-actions
@@ -53,7 +53,7 @@
                                                         (if (.-checked %2)
                                                           (conj selected key)
                                                           (disj selected key))))}]]
-           [sa/ItemContent {:on-click #(re-frame/dispatch [::events/show-scene-action key])}
+           [sa/ItemContent {:on-click #(re-frame/dispatch [::events/show-scene-action key scene-id])}
             [sa/ItemHeader {:as "a"}
              (str key)]
 

@@ -219,7 +219,7 @@
   [action actions scene-id action-id x y]
   (let [offset-x (+ x base-offset)
         offset-y (+ y base-offset)]
-    [:> Group {:x offset-x :y offset-y :on-click #(re-frame/dispatch [::events/select-scene-action action-id])}
+    [:> Group {:x offset-x :y offset-y :on-click #(re-frame/dispatch [::events/select-scene-action action-id scene-id])}
       (case (-> action :type keyword)
         :parallel [:> Group {}
                    [:> Rect {:width (action-width action actions) :height (action-height action actions)
@@ -557,16 +557,16 @@
     (merge event-params drop-params)))
 
 (defn with-stage
-  ([component]
-   (with-stage component {}))
-  ([component props]
+  ([component scene-id]
+   (with-stage component {} scene-id))
+  ([component props scene-id]
     [:div {:on-drag-over (fn [e]
                            (.stopPropagation e)
                            (.preventDefault e))
            :on-drop (fn [e]
                       (cond
-                        (is-asset-drop? e) (re-frame/dispatch [::events/add-object-to-current-scene (stage-drop-params e)])
-                        (is-file-drop? e) (re-frame/dispatch [::events/upload-and-add-asset (get-drop-event-params e) (get-first-file e)]))
+                        (is-asset-drop? e) (re-frame/dispatch [::events/add-object-to-scene (stage-drop-params e) scene-id])
+                        (is-file-drop? e) (re-frame/dispatch [::events/upload-and-add-asset (get-drop-event-params e) (get-first-file e) scene-id]))
                       (.stopPropagation e)
                       (.preventDefault e)
                       )}
@@ -581,9 +581,9 @@
       ^{:key (str @ui-screen)}
       (if @loaded
         (case @ui-screen
-          :play-scene [with-stage [play-scene @scene-id]]
-          :actions (with-stage [draw-actions] {:draggable true})
-          :triggers (with-stage [draw-triggers] {:draggable true})
+          :play-scene [with-stage [play-scene @scene-id] scene-id]
+          :actions (with-stage [draw-actions] {:draggable true} scene-id)
+          :triggers (with-stage [draw-triggers] {:draggable true} scene-id)
           :scene-source [scene-source @scene-id]
           :course-source [course-source]
           :scene-versions [scene-versions]
@@ -597,9 +597,9 @@
           :add-dataset-lesson-form [add-dataset-lesson-form]
           :edit-dataset-lesson-form [edit-dataset-lesson-form]
           :upload-asset-form [upload-asset-form]
-          [with-stage [scene]]
+          [with-stage [scene] scene-id]
           )
-        (with-stage [preloader]))
+        (with-stage [preloader] scene-id))
       ))
 
 (defn animation-asset? [asset]

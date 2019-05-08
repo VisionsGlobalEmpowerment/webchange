@@ -180,7 +180,7 @@
    [na/form-input {:label "duration" :default-value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value js/parseInt)) :inline? true}]])
 
 (defn- sequence-panel
-  [props]
+  [props {:keys [scene-id]}]
   (let [edit-mode (r/atom false)
         current-value (atom (clojure.string/join "\n" (:data @props)))]
     (fn [props]
@@ -197,7 +197,7 @@
          [:div
           (for [action (:data @props)]
             ^{:key (str action)}
-            [:p [:a {:on-click #(re-frame/dispatch [::events/select-scene-action action])} (str action)]])
+            [:p [:a {:on-click #(re-frame/dispatch [::events/select-scene-action action scene-id])} (str action)]])
           [na/form-button {:content "Edit" :on-click #(reset! edit-mode true)}]])
        ])))
 
@@ -285,9 +285,8 @@
        (remove nil?)))
 
 (defn- animation-sequence-panel
-  [props]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene @(re-frame/subscribe [::subs/scene scene-id])
+  [props {:keys [scene-id]}]
+  (let [scene @(re-frame/subscribe [::subs/scene scene-id])
         animations (animation-object-names (:objects scene))]
     [:div
      [sa/FormDropdown {:label "Target" :placeholder "Target" :search true :selection true :inline true
@@ -462,7 +461,7 @@
    [na/form-input {:label "from" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]])
 
 (defn- dispatch
-  [props]
+  [props params]
   [:div
    [common props]
    (case (-> @props :type keyword)
@@ -477,12 +476,12 @@
      :remove-animation [remove-animation-panel props]
      :set-skin [set-skin-panel props]
      :animation-props [animation-props-panel props]
-     :animation-sequence [animation-sequence-panel props]
+     :animation-sequence [animation-sequence-panel props params]
      :scene [scene-panel props]
      :transition [transition-panel props]
      :test-transitions-collide [test-transitions-collide-panel props]
 
-     :sequence [sequence-panel props]
+     :sequence [sequence-panel props params]
      :parallel [parallel-panel props]
      :sequence-data [sequence-data-panel props]
      :remove-flows [remove-flows-panel props]
@@ -500,10 +499,11 @@
      :copy-variable [copy-variable-panel props]
      nil)])
 
-(defn action-form [props]
-  (println "action-form")
-  (println props)
-  (r/with-let [tab (r/atom :general)]
+(defn action-form
+  [props {:keys [scene-id]}]
+  (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+  (r/with-let [tab (r/atom :general)
+               params {:scene-id scene-id}]
               [:div
                [na/menu {:tabular? true}
                 [na/menu-item {:name "general" :active? (= @tab :general) :on-click #(reset! tab :general)}]
@@ -512,7 +512,7 @@
                 [na/menu-item {:name "from var" :active? (= @tab :from-var) :on-click #(reset! tab :from-var)}]]
 
                (case @tab
-                 :general [dispatch props]
+                 :general [dispatch props params]
                  :params [key-value-params props :params]
                  :from-params [key-value-params props :params]
                  :from-var [key-value-params props :params])]))
