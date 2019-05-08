@@ -2,6 +2,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/java.jdbc "0.7.8"]
+                 [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.logging "0.4.1"]
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [clojure.java-time "0.3.2"]
@@ -32,6 +33,7 @@
                  [bidi "2.1.5"]
                  [kibu/pushy "0.3.8"]
                  [net.mikera/imagez "0.12.0"]
+                 [cljsjs/enzyme "3.8.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
