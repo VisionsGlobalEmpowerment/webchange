@@ -128,6 +128,7 @@
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
 (ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
+(ce/reg-simple-executor :finish-activity ::execute-finish-activity)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -254,7 +255,8 @@
           current-lesson (get-in db [:progress-data :current-lesson])
           activity-lesson (get-in db [:activity-lesson])]
       (if (and (= current-activity (:id action)) #_(= current-lesson activity-lesson))
-        {:dispatch [::next-workflow-action]}))))
+        {:dispatch-n (list [::next-workflow-action] (ce/success-event action))}
+        {:dispatch-n (list (ce/success-event action))}))))
 
 (re-frame/reg-event-fx
   ::next-workflow-action
