@@ -299,7 +299,6 @@
   ::add-new-scene-action
   (fn [{:keys [db]} [_ action type scene-id]]
     (when-not action (throw (js/Error. "Action is not defined")))
-    (when-not type (throw (js/Error. "Type is not defined")))
     (when-not scene-id (throw (js/Error. "Scene id is not defined")))
     {:db (assoc-in db [:scenes scene-id :actions (keyword action)] {:type type})
      :dispatch [::select-scene-action action scene-id]}))

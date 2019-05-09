@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [soda-ash.core :refer [Button
                            Divider
+                           FormField
                            FormInput
                            FormSelect
                            Header
@@ -15,7 +16,6 @@
                            ModalHeader
                            Segment]]
     [webchange.editor.common.actions.action-form :refer [action-form]]
-    [webchange.editor.events :as events]
     [webchange.subs :as subs]))
 
 (defmulti dataset-item-control #(:type %))
@@ -49,36 +49,39 @@
            :flipped "horizontally"}]
     "Select Scene"]])
 
-(defn- generate-action-name [] (str "action-" (.now js/Date)))
-
 (defmethod dataset-item-control "action"
   [{:keys [on-change value]}]
   (r/with-let [modal-open (r/atom false)
-               selected-scene (r/atom nil)]
-              [Modal {:open @modal-open
-                      :trigger (r/as-element [Button {:basic    true
-                                                      :on-click #(reset! modal-open true)}
-                                              (or value "Set Action")])}
-               [ModalHeader {} "Edit dataset item action"]
-               (let [scenes (re-frame/subscribe [::subs/course-scenes])]
+               selected-scene (r/atom (:scene-id value))
+               props (r/atom value)]
+              (let [scenes (re-frame/subscribe [::subs/course-scenes])
+                    params {:scene-id @selected-scene}]
+                [Modal {:open    @modal-open
+                        :trigger (r/as-element [Button {:basic    true
+                                                        :on-click #(reset! modal-open true)}
+                                                (if value "Edit Action" "Set Action")])}
+                 [ModalHeader {} "Edit dataset item action"]
                  [ModalContent {:scrolling true}
-                  [FormSelect {:placeholder "Select scene"
-                               :options     (get-options-from-plain-list @scenes)
-                               :on-change   #(reset! selected-scene (.-value %2))}]
+                  [FormField {:inline true}
+                   [FormSelect {:label         "Scene: "
+                                :placeholder   "Select scene"
+                                :default-value @selected-scene
+                                :options       (get-options-from-plain-list @scenes)
+                                :on-change     #(do (reset! props {})
+                                                    (reset! selected-scene (.-value %2)))}]]
                   [Divider]
                   (if-not @selected-scene
                     [action-placeholder]
-                    (let [_ (re-frame/dispatch [::events/select-current-scene @selected-scene])
-                          _ (re-frame/dispatch [::events/add-new-scene-action (generate-action-name) nil @selected-scene])]
-                      "Action form"))
-                  ])
-               [ModalActions {}
-                [Button {:basic true
-                         :on-click #(reset! modal-open false)} "Cancel"]
-                [Button {:primary true
-                         :on-click #(do (reset! modal-open false)
-                                        (println "Save data"))} "Save"]]
-               ]))
+                    [action-form props params])
+                  ]
+                 [ModalActions {}
+                  [Button {:basic    true
+                           :on-click #(reset! modal-open false)} "Cancel"]
+                  [Button {:primary  true
+                           :on-click #(do (on-change (merge @props {:scene-id @selected-scene}))
+                                          (reset! modal-open false))} "Save"]]
+                 ]
+                )))
 
 ;
 ; Unknown type
