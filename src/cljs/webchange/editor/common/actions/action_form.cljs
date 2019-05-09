@@ -19,7 +19,11 @@
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]
     [sodium.extensions :as nax]
-    [soda-ash.core :as sa]))
+    [soda-ash.core :as sa :refer [Divider
+                                  Form
+                                  FormDropdown
+                                  FormField
+                                  FormInput]]))
 
 (defn- key-value-param [key value on-change on-remove]
   (let [props (r/atom nil)]
@@ -316,10 +320,17 @@
 (defn- common
   [props]
   [:div
-   [sa/FormDropdown {:label "Type" :search true :selection true :options action-types :inline true
-                     :default-value (:type @props) :on-change #(swap! props assoc :type (.-value %2))}]
-   [na/form-input {:label "Description" :default-value (:description @props) :on-change #(swap! props assoc :description (-> %2 .-value)) :inline? true}]
-   [na/divider {}]])
+   [FormField {} [FormDropdown {:label         "Type"
+                                :search        true
+                                :selection     true
+                                :options       action-types
+                                :inline        true
+                                :default-value (:type @props)
+                                :on-change     #(swap! props assoc :type (.-value %2))}]]
+   [FormField {} [FormInput {:label         "Description"
+                             :default-value (:description @props)
+                             :on-change     #(swap! props assoc :description (-> %2 .-value))
+                             :inline        true}]]])
 
 (defn- add-alias-panel [props]
   [:div
@@ -464,6 +475,7 @@
   [props params]
   [:div
    [common props]
+   [Divider]
    (case (-> @props :type keyword)
      :action [action-panel props]
      :audio [audio-panel props]

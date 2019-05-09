@@ -2,7 +2,12 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [soda-ash.core :as sa]
+    [soda-ash.core :as sa :refer [Table
+                                  TableBody
+                                  TableCell
+                                  TableHeader
+                                  TableHeaderCell
+                                  TableRow]]
     [sodium.core :as na]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]))
@@ -47,16 +52,23 @@
 
 (defn- dataset-fields-panel
   [data-atom]
-  [sa/ItemGroup {}
-   (for [field (:fields @data-atom)]
-     ^{:key (:name field)}
-     [sa/Item {}
-      [sa/ItemContent {}
-       [:p (str (:name field) " " (:type field))
-        [na/button {:floated  "right"
-                    :basic?   true
-                    :content  "Delete"
-                    :on-click #(swap! data-atom remove-field (:name field))}]]]])])
+  [Table {:selectable true}
+   [TableHeader {}
+    [TableRow {}
+     [TableHeaderCell {:width 4} "Name"]
+     [TableHeaderCell {} "Type"]
+     [TableHeaderCell]]
+    ]
+   [TableBody {}
+    (for [{:keys [name type]} (:fields @data-atom)]
+      ^{:key name}
+      [TableRow {}
+       [TableCell {} name]
+       [TableCell {} type]
+       [TableCell {} [na/button {:floated  "right"
+                                 :basic?   true
+                                 :content  "Delete"
+                                 :on-click #(swap! data-atom remove-field name)}]]])]])
 
 (defn add-dataset-form
   []

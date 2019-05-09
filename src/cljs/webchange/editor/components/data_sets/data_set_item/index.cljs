@@ -20,7 +20,7 @@
     [Table {:selectable true}
      [TableHeader {}
       [TableRow {}
-       [TableHeaderCell {} "Name"]
+       [TableHeaderCell {:width 4} "Name"]
        [TableHeaderCell {} "Value"]]
       ]
      [TableBody {}

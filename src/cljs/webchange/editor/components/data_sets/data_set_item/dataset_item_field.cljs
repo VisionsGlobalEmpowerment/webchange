@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [soda-ash.core :refer [Button
                            Divider
+                           Form
                            FormField
                            FormInput
                            FormSelect
@@ -72,7 +73,7 @@
                   [Divider]
                   (if-not @selected-scene
                     [action-placeholder]
-                    [action-form props params])
+                    [Form {} [action-form props params]])
                   ]
                  [ModalActions {}
                   [Button {:basic    true
