@@ -323,10 +323,17 @@
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id]]
     (let [loaded (get-in db [:scene-loading-complete scene-id])
-          current-scene (:current-scene db)]
+          current-scene (:current-scene db)
+          dataset-actions (as-> (:dataset-items db) items
+                                (map #(:data (get items %)) (keys items))                 ;; dataset items as list
+                                (apply concat (map #(map list (keys %) (vals %)) items))  ;; all dataset items vars
+                                (filter #(= "action" (:type (second %))) items)           ;; action typed vars
+                                (zipmap (map first items) (map second items)))            ;; to hash-map
+          scene-data (get-in db [:scenes scene-id])
+          updated-scene-data {:actions (merge (:actions scene-data) dataset-actions)}]
       (cond-> {:db (-> db
                        (assoc :current-scene scene-id)
-                       (assoc :current-scene-data (get-in db [:scenes scene-id]))
+                       (assoc :current-scene-data (merge scene-data updated-scene-data))
                        (assoc :scene-started false))
                :dispatch-n (list [::vars.events/execute-clear-vars] [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])}
               (not loaded) (assoc :load-scene [(:current-course db) scene-id])))))
