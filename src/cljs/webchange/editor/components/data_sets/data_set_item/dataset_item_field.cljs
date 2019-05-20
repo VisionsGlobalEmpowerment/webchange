@@ -56,11 +56,14 @@
                selected-scene (r/atom (:scene-id value))
                props (r/atom value)]
               (let [scenes (re-frame/subscribe [::subs/course-scenes])
-                    params {:scene-id @selected-scene}]
+                    params {:scene-id @selected-scene}
+                    description (:description value)]
                 [Modal {:open    @modal-open
-                        :trigger (r/as-element [Button {:basic    true
-                                                        :on-click #(reset! modal-open true)}
-                                                (if value "Edit Action" "Set Action")])}
+                        :trigger (r/as-element [:div
+                                                [Button {:basic    true
+                                                         :on-click #(reset! modal-open true)}
+                                                 (if value "Edit Action" "Set Action")]
+                                                (and description [Label {:tag true} description])])}
                  [ModalHeader {} "Edit dataset item action"]
                  [ModalContent {:scrolling true}
                   [FormField {:inline true}
