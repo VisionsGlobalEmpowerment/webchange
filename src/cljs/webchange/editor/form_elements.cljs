@@ -18,9 +18,8 @@
     [sodium.extensions :as nax]
     [soda-ash.core :as sa]))
 
-(defn audio-asset-dropdown [props field-name]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene @(re-frame/subscribe [::subs/scene scene-id])]
+(defn audio-asset-dropdown [props field-name scene-id]
+  (let [scene @(re-frame/subscribe [::subs/scene scene-id])]
     [sa/FormDropdown {:label "Audio asset" :inline true :clearable true :search true :selection true
                       :default-value (get @props field-name)
                       :options (na/dropdown-list (->> scene
