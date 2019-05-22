@@ -395,7 +395,7 @@
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "from" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]])
 
-(defn- dispatch
+(defn dispatch
   [props params]
   [:div
    [common props]
@@ -435,24 +435,39 @@
      :copy-variable [copy-variable-panel props]
      nil)])
 
+(defn main-action-form
+  [props {:keys [current-tab
+                 change-current-tab] :as params}]
+  [:div
+   [na/menu {:tabular? true}
+    [na/menu-item {:name     "general"
+                   :active?  (= current-tab :general)
+                   :on-click #(change-current-tab :general)}]
+    [na/menu-item {:name     "params"
+                   :active?  (= current-tab :params)
+                   :on-click #(change-current-tab :params)}]
+    [na/menu-item {:name     "from params"
+                   :active?  (= current-tab :from-params)
+                   :on-click #(change-current-tab :from-params)}]
+    [na/menu-item {:name     "from var"
+                   :active?  (= current-tab :from-var)
+                   :on-click #(change-current-tab :from-var)}]]
+
+   (case current-tab
+     :general [dispatch props params]
+     :params [key-value-params props :params]
+     :from-params [key-value-params props :params]
+     :from-var [key-value-params props :params])])
+
 (defn action-form
   [props {:keys [scene-id]}]
   (when-not scene-id (throw (js/Error. "Scene id is not defined")))
   (re-frame/dispatch [::ie/load-scene scene-id])
-  (r/with-let [tab (r/atom :general)
-               scene @(re-frame/subscribe [::subs/scene scene-id])
+  (r/with-let [scene @(re-frame/subscribe [::subs/scene scene-id])
+               tab (r/atom :general)
                params {:scene-id               scene-id
                        :scene-objects          (:objects scene)
-                       :show-upload-asset-form #(re-frame/dispatch [::events/show-upload-asset-form])}]
-              [:div
-               [na/menu {:tabular? true}
-                [na/menu-item {:name "general" :active? (= @tab :general) :on-click #(reset! tab :general)}]
-                [na/menu-item {:name "params" :active? (= @tab :params) :on-click #(reset! tab :params)}]
-                [na/menu-item {:name "from params" :active? (= @tab :from-params) :on-click #(reset! tab :from-params)}]
-                [na/menu-item {:name "from var" :active? (= @tab :from-var) :on-click #(reset! tab :from-var)}]]
-
-               (case @tab
-                 :general [dispatch props params]
-                 :params [key-value-params props :params]
-                 :from-params [key-value-params props :params]
-                 :from-var [key-value-params props :params])]))
+                       :show-upload-asset-form #(re-frame/dispatch [::events/show-upload-asset-form])
+                       :current-tab            @tab
+                       :change-current-tab     #(reset! tab %)}]
+              [main-action-form props params]))
