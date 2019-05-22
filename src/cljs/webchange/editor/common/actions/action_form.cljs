@@ -2,19 +2,18 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.subs :as subs]
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :refer [anim animations init-spine-player]]
-    [webchange.common.events :as ce]
-    [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
+    [webchange.editor.common.actions.action-forms.animation-sequence :refer [animation-sequence-panel]]
     [webchange.editor.common.actions.action-types :refer [action-types]]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer :as ws]
+    [webchange.subs :as subs]
     [konva :refer [Transformer]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]
@@ -242,81 +241,6 @@
    [data-panel props]
    ])
 
-(defn- animation-sequence-item [item on-change on-remove]
-  (let [props (r/atom nil)]
-    (fn [{:keys [start end anim] :as item} on-change on-remove]
-      [sa/Item {}
-       (if @props
-         [sa/ItemContent {}
-          [na/form-input {:label "start" :default-value start :on-change #(swap! props assoc :start (-> %2 .-value js/parseFloat)) :inline? true}]
-          [na/form-input {:label "end" :default-value end :on-change #(swap! props assoc :end (-> %2 .-value js/parseFloat)) :inline? true}]
-          [na/form-input {:label "anim" :default-value anim :on-change #(swap! props assoc :anim (-> %2 .-value)) :inline? true}]
-
-          [na/button {:basic? true :content "save" :on-click #(do (on-change @props)
-                                                                  (reset! props nil))}]]
-         [sa/ItemContent {}
-          [:a (str "start: " start " end: " end " anim: " anim)]
-          [:div {:style {:float "right"}}
-           [na/icon {:name "edit" :link? true
-                     :on-click #(reset! props item)}]
-           [na/icon {:name "remove" :link? true
-                     :on-click on-remove}]]])
-       ])))
-
-(defn- animation-sequence-items [props]
-  [:div
-   [sa/ItemGroup {}
-    [sa/Item {}
-     [sa/ItemContent {}
-      [na/header {:as "h4" :floated "left" :content "Items"}]
-      [:div {:style {:float "right"}}
-       [na/icon {:name "add" :link? true :on-click #(swap! props update-in [:data] conj {})}]]]]
-
-    (for [[idx item] (map-indexed (fn [idx itm] [idx itm]) (:data @props))]
-      ^{:key (str (:start item))}
-      [animation-sequence-item
-       item
-       (fn [item] (swap! props assoc-in [:data idx] item))
-       (fn [] (swap! props update-in [:data] #(vec (concat (subvec % 0 idx) (subvec % (inc idx))))))
-       ])]
-
-   ])
-
-(defn- animation-object-names [objects]
-  (->> objects
-       (map second)
-       (map (fn [object] (or (:scene-name object) (:name object))))
-       (remove nil?)))
-
-(defn- animation-sequence-panel
-  [props {:keys [scene-id]}]
-  (let [scene @(re-frame/subscribe [::subs/scene scene-id])
-        animations (animation-object-names (:objects scene))]
-    [:div
-     [sa/FormDropdown {:label "Target" :placeholder "Target" :search true :selection true :inline true
-                       :options (na/dropdown-list animations identity identity)
-                       :default-value (:target @props) :on-change #(swap! props assoc :target (.-value %2))}]
-     [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]
-     [na/form-input {:label "offset" :value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value)) :inline? true}]
-     [na/divider {}]
-     [sa/FormGroup {}
-       [f/audio-asset-dropdown props :audio scene-id]
-       [na/button {:basic? true :content "Upload new" :on-click #(re-frame/dispatch [::events/show-upload-asset-form])}]]
-     [na/form-input {:label "start" :value (:start @props) :on-change #(swap! props assoc :start (-> %2 .-value)) :inline? true}]
-     [na/form-input {:label "duration" :value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value)) :inline? true}]
-     [ws/animation-sequence-waveform-modal
-      {:key (:audio @props) :start (:start @props) :end (+ (:start @props) (:duration @props)) :sequence-data (:data @props)}
-      (fn [{:keys [start duration regions]}]
-        (swap! props assoc :offset start)
-        (swap! props assoc :start start)
-        (swap! props assoc :duration duration)
-        (swap! props assoc :data (->> regions
-                                      (map #(assoc % :anim "talk"))
-                                      vec)))]
-     [na/divider {}]
-     [animation-sequence-items props]
-     [na/divider {}]]))
-
 (defn- common
   [props]
   [:div
@@ -516,7 +440,10 @@
   (when-not scene-id (throw (js/Error. "Scene id is not defined")))
   (re-frame/dispatch [::ie/load-scene scene-id])
   (r/with-let [tab (r/atom :general)
-               params {:scene-id scene-id}]
+               scene @(re-frame/subscribe [::subs/scene scene-id])
+               params {:scene-id               scene-id
+                       :scene-objects          (:objects scene)
+                       :show-upload-asset-form #(re-frame/dispatch [::events/show-upload-asset-form])}]
               [:div
                [na/menu {:tabular? true}
                 [na/menu-item {:name "general" :active? (= @tab :general) :on-click #(reset! tab :general)}]
