@@ -462,12 +462,12 @@
 (defn action-form
   [props {:keys [scene-id]}]
   (when-not scene-id (throw (js/Error. "Scene id is not defined")))
-  (re-frame/dispatch [::ie/load-scene scene-id])
-  (r/with-let [scene @(re-frame/subscribe [::subs/scene scene-id])
-               tab (r/atom :general)
-               params {:scene-id               scene-id
-                       :scene-objects          (:objects scene)
-                       :show-upload-asset-form #(re-frame/dispatch [::events/show-upload-asset-form])
-                       :current-tab            @tab
-                       :change-current-tab     #(reset! tab %)}]
-              [main-action-form props params]))
+  (r/with-let [_ (re-frame/dispatch [::ie/load-scene scene-id])
+               tab (r/atom :general)]
+              (let [scene @(re-frame/subscribe [::subs/scene scene-id])
+                    params {:scene-id               scene-id
+                            :scene-objects          (:objects scene)
+                            :show-upload-asset-form #(re-frame/dispatch [::events/show-upload-asset-form])
+                            :current-tab            @tab
+                            :change-current-tab     #(reset! tab %)}]
+                [main-action-form props params])))
