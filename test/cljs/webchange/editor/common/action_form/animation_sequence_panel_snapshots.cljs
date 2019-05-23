@@ -41,7 +41,7 @@
 (def animation-sequence-item-snapshot
   (str
     "<webchange.editor.common.actions.action_forms.animation_sequence.animation_sequence_item argv={{...}}>\n"
-    "  <reagent1 argv={{...}}>\n"
+    "  <reagent3 argv={{...}}>\n"
     "    <a>\n"
     "      <div className=\"content\">\n"
     "        <a>\n"
@@ -61,6 +61,6 @@
     "        </div>\n"
     "      </div>\n"
     "    </a>\n"
-    "  </reagent1>\n"
+    "  </reagent3>\n"
     "</webchange.editor.common.actions.action_forms.animation_sequence.animation_sequence_item>"
     ))
