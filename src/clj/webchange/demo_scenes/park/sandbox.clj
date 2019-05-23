@@ -90,29 +90,7 @@
                                                     {:type "empty" :duration 1069}
                                                     {:type "animation" :target "mari" :id "empty" :track 1}]}]}
 
-                   :mari-this-is-letter-a
-                   {:type "animation-sequence" :target "mari" :track 1 :offset 14.397
-                    :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 14.397, :duration 16.202
-                    :data [{:start 14.552 :end 16.639 :anim "talk"}
-                           {:start 17.341 :end 18.999 :anim "talk"}
-                           {:start 19.373 :end 20.475 :anim "talk"}
-                           {:start 20.885 :end 21.997 :anim "talk"}
-                           {:start 23.173 :end 30.417 :anim "talk"}]}
-
-                   :mari-this-is-letter-o
-                   {:type "animation-sequence" :target "mari" :track 1 :offset 53.626
-                    :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 53.626, :duration 16.284
-                    :data [{:start 53.717 :end 61.472 :anim "talk"}
-                           {:start 62.374 :end 69.746 :anim "talk"}]}
-
-                   :mari-this-is-letter-i
-                   {:type "animation-sequence" :target "mari" :track 1 :offset 83.778
-                    :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 83.778, :duration 16.63
-                    :data [{:start 83.942 :end 86.148 :anim "talk"}
-                           {:start 86.795 :end 92.025 :anim "talk"}
-                           {:start 93.228 :end 100.281 :anim "talk"}]}
-
-                   :mari-this-is-letter-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "sandbox-this-is-letter"}]}
+                   :mari-this-is-letter-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-this-is-letter-action"}]}
 
                    :complete-word-1  {:type "set-variable" :var-name "word-1" :var-value true}
                    :complete-word-2  {:type "set-variable" :var-name "word-2" :var-value true}
