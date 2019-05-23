@@ -23,9 +23,9 @@
   (let [path (r/atom src)
         i (r/atom nil)
         _ (create-image src i)]
-    (fn [src]
+    (fn [src params]
       (when-not (= @path src)
         (reset! path src)
         (create-image src i))
-      [:> Image (merge {:image @i} params)]
+      [:> Image (merge {:image @i} (if @i (assoc params :ref #(when % (.cache %))) params))]
       )))

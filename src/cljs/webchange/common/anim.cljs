@@ -26,6 +26,12 @@
   (let [animation (Animation. (fn [frame] (.setAttr shape "timeDiff" (/ (.-timeDiff frame) 1000))) (.getLayer shape))]
     (.start animation)))
 
+(defonce renderers (atom {}))
+
+(defn get-renderer [context]
+  (when-not (get @renderers context)
+    (swap! renderers assoc context (s/canvas.SkeletonRenderer. context)))
+  (get @renderers context))
 
 (defn anim
   [{:keys [name anim speed on-mount start mix skin anim-offset meshes]
@@ -50,7 +56,7 @@
                                (.update animation-state (* (.getAttr shape "timeDiff") speed))
                                (.apply animation-state skeleton)
                                (.updateWorldTransform skeleton)
-                               (let [skeleton-renderer (s/canvas.SkeletonRenderer. context)]
+                               (let [skeleton-renderer (get-renderer context)]
                                  (set! (.-triangleRendering skeleton-renderer) meshes)
                                  (.draw skeleton-renderer skeleton)))
                  :ref        (fn [ref] (if ref
@@ -121,6 +127,14 @@
                         :scale-y 0.6
                         :skins ["default"]
                         :animations ["idle" "talk"]}
+                 :book {:name "book"
+                        :width 1439
+                        :height 960
+                        :speed 0.35
+                        :scale-x 1
+                        :scale-y 1
+                        :skins ["default"]
+                        :animations ["close_idle" "idle" "open_book" "page"]}
                  :boxes {:name "boxes"
                          :width 771
                          :height 1033

@@ -8,7 +8,6 @@
     [webchange.common.events :as ce]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-blob get-data]]
-    [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
@@ -22,7 +21,7 @@
     ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]))
 
 (def audio-color "rgba(0, 0, 0, 0.1)")
-(def animation-color "rgba(0, 0, 100, 0.3)")
+(def additional-color "rgba(0, 0, 100, 0.3)")
 
 (defn create-wavesurfer [element key]
   (while (.-firstChild element) (-> element .-firstChild .remove))
@@ -60,8 +59,8 @@
   (.on wavesurfer "region-update-end" (fn [e]
                                         (reset! region-atom (-> (region->data e) (assoc :region e))))))
 
-(defn handle-animation-regions! [wavesurfer regions-atom]
-  (.enableDragSelection wavesurfer (clj->js {:color animation-color}))
+(defn handle-additional-regions! [wavesurfer regions-atom]
+  (.enableDragSelection wavesurfer (clj->js {:color additional-color}))
   (.on wavesurfer "region-created" (fn [e]
                                      (when (not= "audio" (.-id e))
                                       (swap! regions-atom assoc (.-id e) (region->data e)))))
@@ -103,15 +102,15 @@
                                                          (reset! modal-open false)
                                                          (on-save @region))}]]]))
 
-(defn init-animation-regions! [wavesurfer regions-atom sequence-data]
+(defn init-additional-regions! [wavesurfer regions-atom sequence-data]
   (if @regions-atom
     (doseq [[id {:keys [start end]}] @regions-atom]
-      (.on wavesurfer "ready" #(.addRegion wavesurfer (clj->js {:id id :start start :end end
-                                                                :color animation-color :drag true :resize true}))))
+      (.on wavesurfer "ready" #(.addRegion wavesurfer (clj->js {:id    id :start start :end end
+                                                                :color additional-color :drag true :resize true}))))
     (doseq [{:keys [start end]} sequence-data]
       (reset! regions-atom {})
       (.on wavesurfer "ready" #(.addRegion wavesurfer (clj->js {:start start :end end
-                                                                :color animation-color :drag true :resize true}))))))
+                                                                :color additional-color :drag true :resize true}))))))
 
 (defn animation-sequence-waveform-modal [{:keys [key start end sequence-data]} on-save]
   (let [ws (r/atom nil)
@@ -137,8 +136,46 @@
                           (init-audio-region! wavesurfer region (= :audio @mode))
 
                           (when (= :animations @mode)
-                            (handle-animation-regions! wavesurfer regions)
-                            (init-animation-regions! wavesurfer regions sequence-data))
+                            (handle-additional-regions! wavesurfer regions)
+                            (init-additional-regions! wavesurfer regions sequence-data))
+                          (reset! ws wavesurfer)))}]
+         [:div
+          [na/button {:content "Play" :on-click #(when (:region @region) (-> @region :region .play))}]
+          [na/button {:content "Stop" :on-click #(.stop @ws)}]
+          ]
+         ]]
+       [sa/ModalActions {}
+        [na/button {:content "Cancel" :on-click #(reset! modal-open false)}]
+        [na/button {:content "Save" :on-click #(do
+                                                 (reset! modal-open false)
+                                                 (on-save (assoc @region :regions (vals @regions))))}]]])))
+
+(defn text-animation-waveform-modal [{:keys [key start end sequence-data]} on-save]
+  (let [ws (r/atom nil)
+        region (r/atom {:start start :end end})
+        regions (r/atom nil)
+        modal-open (r/atom false)
+        mode (r/atom :audio)]
+    (fn [{:keys [key start end sequence-data]} on-save]
+      [sa/Modal {:trigger (r/as-element [sa/Button {:on-click #(do
+                                                                 (reset! region {:start start :end end})
+                                                                 (reset! regions nil)
+                                                                 (reset! mode :audio)
+                                                                 (reset! modal-open true))} "Show Waveform"]) :open @modal-open}
+       [sa/ModalHeader "Pick a region"]
+       [sa/ModalContent {}
+        [sa/ModalDescription
+         [sa/Radio {:toggle true :label "Chunks" :checked (= :chunks @mode) :on-change #(if (-> %2 .-checked)
+                                                                                                  (reset! mode :chunks)
+                                                                                                  (reset! mode :audio))}]
+         [:div {:ref #(when %
+                        (let [wavesurfer (create-wavesurfer % key)]
+                          (when (= :audio @mode) (handle-audio-region! wavesurfer region))
+                          (init-audio-region! wavesurfer region (= :audio @mode))
+
+                          (when (= :chunks @mode)
+                            (handle-additional-regions! wavesurfer regions)
+                            (init-additional-regions! wavesurfer regions sequence-data))
                           (reset! ws wavesurfer)))}]
          [:div
           [na/button {:content "Play" :on-click #(when (:region @region) (-> @region :region .play))}]

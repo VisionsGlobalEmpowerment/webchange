@@ -34,6 +34,7 @@
     <orderEntry type="library" name="Leiningen: cljs-ajax:0.8.0" level="project" />
     <orderEntry type="library" name="Leiningen: cljs-http:0.1.45" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/create-react-class:15.5.3-0" level="project" />
+    <orderEntry type="library" name="Leiningen: cljsjs/enzyme:3.8.0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/highlight:9.6.0-0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/prop-types:15.6.0-0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/react-dom-server:15.5.4-0" level="project" />
@@ -129,6 +130,7 @@
     <orderEntry type="library" name="Leiningen: org.clojure/java.classpath:0.2.2" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/java.jdbc:0.7.8" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/spec.alpha:0.2.176" level="project" />
+    <orderEntry type="library" name="Leiningen: org.clojure/test.check:0.9.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/tools.analyzer.jvm:0.7.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/tools.analyzer:0.6.9" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/tools.logging:0.4.1" level="project" />

@@ -5,7 +5,6 @@
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :refer [anim animations init-spine-player]]
     [webchange.interpreter.core :refer [get-data-as-url]]
-    [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
     [webchange.editor.common.actions.action-forms.animation-sequence :refer [animation-sequence-panel]]
     [webchange.editor.common.actions.action-types :refer [action-types]]
@@ -406,6 +405,68 @@
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "from" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]])
 
+(defn text-animation-item [item on-change on-remove]
+  (let [props (r/atom nil)]
+    (fn [{:keys [at chunk] :as item} on-change on-remove]
+      [sa/Item {}
+       (if @props
+         [sa/ItemContent {}
+          [na/form-input {:label "at" :default-value at :on-change #(swap! props assoc :at (-> %2 .-value js/parseFloat)) :inline? true}]
+          [na/form-input {:label "chunk" :default-value chunk :on-change #(swap! props assoc :chunk (-> %2 .-value js/parseInt)) :inline? true}]
+
+          [na/button {:basic? true :content "save" :on-click #(do (on-change @props)
+                                                                  (reset! props nil))}]]
+         [sa/ItemContent {}
+          [:a (str "at: " at " chunk: " chunk)]
+          [:div {:style {:float "right"}}
+           [na/icon {:name "edit" :link? true
+                     :on-click #(reset! props item)}]
+           [na/icon {:name "remove" :link? true
+                     :on-click on-remove}]]])
+       ])))
+
+(defn text-animation-items [props]
+  [:div
+   [sa/ItemGroup {}
+    [sa/Item {}
+     [sa/ItemContent {}
+      [na/header {:as "h4" :floated "left" :content "Items"}]
+      [:div {:style {:float "right"}}
+       [na/icon {:name "add" :link? true :on-click #(swap! props update-in [:data] conj {})}]]]]
+
+    (for [[idx item] (map-indexed (fn [idx itm] [idx itm]) (:data @props))]
+      ^{:key (str (:start item))}
+      [text-animation-item
+       item
+       (fn [item] (swap! props assoc-in [:data idx] item))
+       (fn [] (swap! props update-in [:data] #(vec (concat (subvec % 0 idx) (subvec % (inc idx))))))
+       ])]
+
+   ])
+
+(defn text-animation-panel
+  [props]
+  [:div
+   [f/object-dropdown props :target]
+   [na/form-input {:label "animation" :default-value (:animation @props) :on-change #(swap! props assoc :animation (-> %2 .-value)) :inline? true}]
+   [na/divider {}]
+   [sa/FormGroup {}
+    [f/audio-asset-dropdown props :audio]
+    [na/button {:basic? true :content "Upload new" :on-click #(re-frame/dispatch [::events/show-upload-asset-form])}]]
+   [na/form-input {:label "start" :value (:start @props) :on-change #(swap! props assoc :start (-> %2 .-value)) :inline? true}]
+   [na/form-input {:label "duration" :value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value)) :inline? true}]
+   [ws/text-animation-waveform-modal
+    {:key (:audio @props) :start (:start @props) :end (+ (:start @props) (:duration @props)) :sequence-data (:data @props)}
+    (fn [{:keys [start duration regions]}]
+      (swap! props assoc :start start)
+      (swap! props assoc :duration duration)
+      (swap! props assoc :data (->> regions
+                                    (map-indexed (fn [idx region] (assoc region :at (:start region) :chunk idx)))
+                                    vec)))]
+   [na/divider {}]
+   [text-animation-items props]
+   [na/divider {}]])
+
 (defn dispatch
   [props params]
   [:div
@@ -444,6 +505,8 @@
      :set-variable [set-variable-panel props]
      :set-progress [set-progress-panel props]
      :copy-variable [copy-variable-panel props]
+
+     :text-animation [text-animation-panel props]
      nil)])
 
 (defn main-action-form
