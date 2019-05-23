@@ -383,4 +383,4 @@
 
    :triggers      {:start {:on "start" :action "start-activity"}}
    :metadata      {:autostart true
-                   :prev "map"}})
+                   :prev "stadium"}})

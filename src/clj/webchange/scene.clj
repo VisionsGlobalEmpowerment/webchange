@@ -23,7 +23,7 @@
 (defn get-course
   [course-id]
   {:initial-scene "map"
-   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "volleyball" "hide-n-seek" "library" "book"]
+   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "cycling"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"
                                   :assessment-1 "assessment1"}}]
    :workflow-actions [{:id 1 :type "set-activity" :activity "home-introduce" :order 1}
@@ -32,6 +32,7 @@
                       {:id 4 :type "set-activity" :activity "sandbox" :order 4}
                       {:id 5 :type "set-activity" :activity "volleyball" :order 5}
                       {:id 6 :type "set-activity" :activity "book" :order 6}
+                      {:id 7 :type "set-activity" :activity "cycling" :order 7}
                       {:id 9 :type "set-activity" :activity "hide-n-seek" :order 9}]
    :default-progress {:current-scene "home"
                       :current-activity "home"
