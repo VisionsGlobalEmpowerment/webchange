@@ -112,7 +112,10 @@
                                         "word-1-state-var"
                                         "test-concept-complete"]}
 
-                   :word-1-state-var {:type "action" :from-var [{:template "sandbox-state-word-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-1"}]}
+                   :word-1-state-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-1-action"}]}
+                   :word-2-state-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-2-action"}]}
+                   :word-3-state-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-3-action"}]}
+                   :word-4-state-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-4-action"}]}
 
                    :box-1-jump-in {:type "parallel"
                                    :data [{:type "animation" :target "box1" :id "jump2"}
@@ -138,8 +141,6 @@
                                         "word-2-state-var"
                                         "test-concept-complete"]}
 
-                   :word-2-state-var {:type "action" :from-var [{:template "sandbox-state-word-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-2"}]}
-
                    :box-2-jump-in {:type "parallel"
                                    :data [{:type "animation" :target "box2" :id "jump2"}
                                           {:type "sequence-data"
@@ -163,8 +164,6 @@
                                         "box-3-jump-out"
                                         "word-3-state-var"
                                         "test-concept-complete"]}
-
-                   :word-3-state-var {:type "action" :from-var [{:template "sandbox-state-word-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-3"}]}
 
                    :box-3-jump-in {:type "parallel"
                                    :data [{:type "animation" :target "box3" :id "jump2"}
@@ -191,8 +190,6 @@
                                         "word-4-state-var"
                                         "test-concept-complete"]}
 
-                   :word-4-state-var {:type "action" :from-var [{:template "sandbox-state-word-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-4"}]}
-
                    :box-4-jump-in {:type "parallel"
                                    :data [{:type "animation" :target "box4" :id "jump2"}
                                           {:type "sequence-data"
@@ -206,66 +203,6 @@
                                             :data [{:type "empty" :duration 500}
                                                    {:type "transition" :transition-id "box4" :to {:x 919 :y 741 :duration 0.7 :loop false}}]}
                                            {:type "add-animation" :target "box4" :id "idle2" :loop true}]}
-
-                   :sandbox-state-word-abeja {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Abeja"}}
-                                                     {:type "audio", :id "voice-1", :start 6.218, :duration 0.871}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-arbol {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Arbol"}}
-                                                     {:type "audio", :id "voice-1", :start 7.873, :duration 0.871}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-avion {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Avion"}}
-                                                     {:type "audio", :id "voice-1", :start 9.506, :duration 0.871}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-arana {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Arana"}}
-                                                     {:type "audio", :id "voice-1", :start 11.144, :duration 1.06}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-ocho {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Ocho"}}
-                                                     {:type "audio", :id "voice-2", :start 6.496, :duration 0.864}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-oreja {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Oreja"}}
-                                                     {:type "audio", :id "voice-2", :start 7.532, :duration 1.017}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-oveja {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Oveja"}}
-                                                     {:type "audio", :id "voice-2", :start 8.511, :duration 1.103}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-ojos {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Ojos"}}
-                                                     {:type "audio", :id "voice-2", :start 9.873, :duration 0.835}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-iguana {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Iguana"}}
-                                                     {:type "audio", :id "voice-3", :start 4.828, :duration 1.27}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-incendio {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Incendio"}}
-                                                     {:type "audio", :id "voice-3", :start 6.591, :duration 1.375}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-insecto {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Insecto"}}
-                                                     {:type "audio", :id "voice-3", :start 8.699, :duration 1.465}
-                                                     {:type "state" :target "word" :id "default"}]}
-
-                   :sandbox-state-word-isla {:type "sequence-data"
-                                              :data [{:type "state" :target "word" :id "show" :params {:text "Isla"}}
-                                                     {:type "audio", :id "voice-3", :start 10.911, :duration 1.151}
-                                                     {:type "state" :target "word" :id "default"}]}
 
                    :test-concept-complete  {:type "test-var-list"
                                             :var-names ["word-1" "word-2" "word-3" "word-4"]
@@ -305,29 +242,10 @@
                                            :data ["mari-more-audio"
                                                   "renew-current-concept-workflow"]}
 
-                   :box-1-change-skin-var {:type "action"
-                                           :from-var [{:template "box-1-set-skin-%"
-                                                       :var-name "current-word"
-                                                       :action-property "id"
-                                                       :var-property "sandbox-state-word-1"}]}
-                   :box-2-change-skin-var {:type "action" :from-var [{:template "box-2-set-skin-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-2"}]}
-                   :box-3-change-skin-var {:type "action" :from-var [{:template "box-3-set-skin-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-3"}]}
-                   :box-4-change-skin-var {:type "action" :from-var [{:template "box-4-set-skin-%" :var-name "current-word" :action-property "id" :var-property "sandbox-state-word-4"}]}
-
-                   :box-1-set-skin-ocho {:type "set-skin" :target "box1" :skin "8"}
-                   :box-2-set-skin-oreja {:type "set-skin" :target "box2" :skin "ear"}
-                   :box-3-set-skin-oveja {:type "set-skin" :target "box3" :skin "sheep"}
-                   :box-4-set-skin-ojos {:type "set-skin" :target "box4" :skin "eyes"}
-
-                   :box-1-set-skin-abeja {:type "set-skin" :target "box1" :skin "bee"}
-                   :box-2-set-skin-arbol {:type "set-skin" :target "box2" :skin "tree"}
-                   :box-3-set-skin-avion {:type "set-skin" :target "box3" :skin "airplane"}
-                   :box-4-set-skin-arana {:type "set-skin" :target "box4" :skin "spider"}
-
-                   :box-1-set-skin-iguana {:type "set-skin" :target "box1" :skin "iguana"}
-                   :box-2-set-skin-incendio {:type "set-skin" :target "box2" :skin "fire"}
-                   :box-3-set-skin-insecto {:type "set-skin" :target "box3" :skin "insect"}
-                   :box-4-set-skin-isla {:type "set-skin" :target "box4" :skin "island"}
+                   :box-1-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-1-action"}]}
+                   :box-2-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-2-action"}]}
+                   :box-3-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-3-action"}]}
+                   :box-4-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-4-action"}]}
 
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
                    :start-activity {:type "sequence"
