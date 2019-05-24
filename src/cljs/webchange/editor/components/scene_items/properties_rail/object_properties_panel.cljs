@@ -5,7 +5,8 @@
                                                 update-current-scene-object
                                                 update-object
                                                 update-object-action]]
-    [webchange.editor.action-properties.core :refer [action-types] :as action-properties]
+    [webchange.editor.common.actions.action-form :refer [action-form]]
+    [webchange.editor.common.actions.action-types :refer [action-types]]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
     [webchange.subs :as subs]
@@ -13,20 +14,6 @@
     [reagent.core :as r]
     [soda-ash.core :as sa]
     [sodium.core :as na]))
-
-;(defn object-action-properties-panel
-;  []
-;  (let [{:keys [scene-id name action]} @(re-frame/subscribe [::es/selected-object-action])
-;        o (re-frame/subscribe [::subs/scene-object scene-id name])
-;        action-data (-> @o :actions (get (keyword action)))
-;        props (r/atom action-data)]
-;    (fn []
-;      [na/form {}
-;       [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
-;       [action-properties/action-properties-panel props]
-;
-;       [na/form-button {:content "Save" :on-click #(update-object-action scene-id name action @props)}]]
-;      )))
 
 (defn- add-object-action-panel
   [scene-id name on-save]
@@ -38,7 +25,7 @@
        [na/form-input {:label "name" :default-value (:scene-name @props) :on-change #(swap! props assoc :scene-name (-> %2 .-value)) :inline? true}]
        [na/form-input {:label "on" :default-value (:on @props) :on-change #(swap! props assoc :on (-> %2 .-value)) :inline? true}]
        [na/divider {}]
-       [action-properties/action-properties-panel props]
+       [action-form props {:scene-id scene-id}]
        [na/divider {}]
        [na/form-button {:content "Add" :on-click #(do (update-object-action scene-id name (:scene-name @props) @props)
                                                       (on-save))}]

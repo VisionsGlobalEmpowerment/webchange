@@ -131,9 +131,10 @@
 
 (re-frame/reg-event-fx
   ::select-scene-action
-  (fn [{:keys [db]} [_ action]]
-    (let [scene-id (:current-scene db)]
-      {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action :path [] :breadcrumb []})})))
+  (fn [{:keys [db]} [_ action scene-id]]
+    (when-not action (throw (js/Error. "Action is not defined")))
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+    {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action :path [] :breadcrumb []})}))
 
 (re-frame/reg-event-fx
   ::select-scene-action-data-path
@@ -287,31 +288,34 @@
 
 (re-frame/reg-event-fx
   ::show-scene-action
-  (fn [{:keys [db]} [_ action]]
-    (let [scene-id (:current-scene db)]
-      {:db (assoc-in db [:editor :shown-scene-action] {:scene-id scene-id :action action})
-       :dispatch-n (list [::set-main-content :actions]
-                         [::select-scene-action action])})))
+  (fn [{:keys [db]} [_ action scene-id]]
+    (when-not action (throw (js/Error. "Action is not defined")))
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+    {:db (assoc-in db [:editor :shown-scene-action] {:scene-id scene-id :action action})
+     :dispatch-n (list [::set-main-content :actions]
+                       [::select-scene-action action scene-id])}))
 
 (re-frame/reg-event-fx
   ::add-new-scene-action
-  (fn [{:keys [db]} [_ action type]]
-    (if-not (nil? action)
-      (let [scene-id (:current-scene db)]
-        {:db (assoc-in db [:scenes scene-id :actions (keyword action)] {:type type})
-         :dispatch [::select-scene-action action]}))))
+  (fn [{:keys [db]} [_ action type scene-id]]
+    (when-not action (throw (js/Error. "Action is not defined")))
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+    {:db (assoc-in db [:scenes scene-id :actions (keyword action)] {:type type})
+     :dispatch [::select-scene-action action scene-id]}))
 
 (re-frame/reg-event-fx
   ::rename-scene-action
-  (fn [{:keys [db]} [_ old-name new-name]]
-    (let [scene-id (:current-scene db)
-          old-key (keyword old-name)
+  (fn [{:keys [db]} [_ old-name new-name scene-id]]
+    (when-not old-name (throw (js/Error. "Old name is not defined")))
+    (when-not new-name (throw (js/Error. "New name is not defined")))
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+    (let [old-key (keyword old-name)
           new-key (keyword new-name)
           action (get-in db [:scenes scene-id :actions old-key])]
       {:db (-> db
                (update-in [:scenes scene-id :actions] dissoc old-key)
                (assoc-in [:scenes scene-id :actions new-key] action))
-       :dispatch-n (list [::show-scene-action new-name])})))
+       :dispatch-n (list [::show-scene-action new-name scene-id])})))
 
 (re-frame/reg-event-fx
   ::show-form
@@ -814,7 +818,8 @@
 
 (re-frame/reg-event-fx
   ::upload-and-add-asset
-  (fn [{:keys [db]} [_ params js-file-value]]
+  (fn [{:keys [db]} [_ params js-file-value scene-id]]
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
     (let [form-data (doto
                       (js/FormData.)
                       (.append "file" js-file-value))]
@@ -823,35 +828,36 @@
                     :uri             (str "/api/assets/")
                     :body            form-data
                     :response-format (json-response-format {:keywords? true})
-                    :on-success      [::upload-and-add-asset-success params]
+                    :on-success      [::upload-and-add-asset-success params scene-id]
                     :on-failure      [:api-request-error :upload-and-add-asset]}})))
 
 
 (re-frame/reg-event-fx
   ::upload-and-add-asset-success
-  (fn [{:keys [db]} [_ params result]]
-    (let [scene-id (:current-scene db)
-          type (:type result)
+  (fn [{:keys [db]} [_ params result scene-id]]
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+    (let [type (:type result)
           add-to-scene-action (case type
-                                "image" [::add-image-object-to-current-scene (assoc params :asset result)]
-                                "audio" [::add-audio-action-to-current-scene {:asset result}])]
+                                "image" [::add-image-object-to-scene (assoc params :asset result) scene-id]
+                                "audio" [::add-audio-action-to-scene {:asset result} scene-id])]
       {:dispatch-n (list [:complete-request :upload-and-add-asset]
                          [::add-asset {:scene-id scene-id :state result}]
                          add-to-scene-action
                          [::set-main-content :editor])})))
 
 (re-frame/reg-event-fx
-  ::add-object-to-current-scene
-  (fn [{:keys [db]} [_ params]]
+  ::add-object-to-scene
+  (fn [{:keys [db]} [_ params scene-id]]
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
     (if (= "asset" (:type params))
-      {:dispatch [::add-image-object-to-current-scene params]}
-      {:dispatch [::add-animation-object-to-current-scene params]})))
+      {:dispatch [::add-image-object-to-scene params scene-id]}
+      {:dispatch [::add-animation-object-to-scene params]})))
 
 (re-frame/reg-event-fx
-  ::add-image-object-to-current-scene
-  (fn [{:keys [db]} [_ {asset-id :id x :offsetX y :offsetY asset :asset}]]
-    (let [scene-id (:current-scene db)
-          asset (or asset (get-in db [:scenes scene-id :assets asset-id]))
+  ::add-image-object-to-scene
+  (fn [{:keys [db]} [_ {asset-id :id x :offsetX y :offsetY asset :asset} scene-id]]
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+    (let [asset (or asset (get-in db [:scenes scene-id :assets asset-id]))
           state {:type :image :scene-layer 5 :scene-name "image"
                  :x x :y y
                  :src (:url asset)
@@ -883,7 +889,7 @@
     (next-name names prefix)))
 
 (re-frame/reg-event-fx
-  ::add-animation-object-to-current-scene
+  ::add-animation-object-to-scene
   (fn [{:keys [db]} [_ {id :id x :offsetX y :offsetY}]]
     (let [name (object-name db "animation")
           animation (get animations (keyword id))
@@ -898,14 +904,15 @@
          :dispatch-n (list [::show-form :add-object])})))
 
 (re-frame/reg-event-fx
-  ::add-audio-action-to-current-scene
-  (fn [{:keys [db]} [_ {asset :asset}]]
-    (let [scene-id (:current-scene db)
-          name (keyword (action-name db "audio"))
+  ::add-audio-action-to-scene
+  (fn [{:keys [db]} [_ {asset :asset} scene-id]]
+    (when-not asset (throw (js/Error. "Asset is not defined")))
+    (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+    (let [name (keyword (action-name db "audio"))
           state {:type "audio" :id (:url asset)}]
       {:db (assoc-in db [:scenes scene-id :actions name] state)
        :dispatch-n (list [::set-main-content :actions]
-                         [::select-scene-action name])})))
+                         [::select-scene-action name scene-id])})))
 
 (re-frame/reg-event-fx
   ::process-selected-actions

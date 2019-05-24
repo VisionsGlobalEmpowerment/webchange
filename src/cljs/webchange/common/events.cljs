@@ -70,11 +70,15 @@
 (defn with-var-property
   [db]
   (fn [action {:keys [var-name var-property action-property template to-vector]}]
-    (let [var (get-in db [:scenes (:current-scene db) :variables var-name])]
-      (assoc action (keyword action-property) (cond->> var
-                                                       var-property ((keyword var-property))
-                                                       to-vector (conj [])
-                                                       template (from-template template))))))
+    (let [var (get-in db [:scenes (:current-scene db) :variables var-name])
+          value (cond->> var
+                         var-property ((keyword var-property))
+                         to-vector (conj [])
+                         template (from-template template))
+          should-merge-to-root (and var-name (not action-property))]
+      (if should-merge-to-root
+        (merge (dissoc action :from-var) value)
+        (assoc action (keyword action-property) value)))))
 
 (defn with-var-properties
   [action db]

@@ -1,61 +1,30 @@
-(ns webchange.editor.action-properties.core
+(ns webchange.editor.common.actions.action-form
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.subs :as subs]
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :refer [anim animations init-spine-player]]
-    [webchange.common.events :as ce]
-    [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
+    [webchange.editor.common.actions.action-forms.animation-sequence :refer [animation-sequence-panel]]
+    [webchange.editor.common.actions.action-types :refer [action-types]]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer :as ws]
+    [webchange.subs :as subs]
     [konva :refer [Transformer]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]
     [sodium.extensions :as nax]
-    [soda-ash.core :as sa]))
+    [soda-ash.core :as sa :refer [Divider
+                                  Form
+                                  FormDropdown
+                                  FormField
+                                  FormInput]]))
 
-(def action-types [{:key :action :value :action :text "Action"}
-                   {:key :scene :value :scene :text "Scene"}
-                   {:key :state :value :state :text "State"}
-                   {:key :animation :value :animation :text "Animation"}
-                   {:key :audio :value :audio :text "Audio"}
-                   {:key :empty :value :empty :text "Empty"}
-                   {:key :sequence :value :sequence :text "Sequence"}
-                   {:key :sequence-data :value :sequence-data :text "Sequence Data"}
-                   {:key :parallel :value :parallel :text "Parallel"}
-                   {:key :remove-flows :value :remove-flows :text "Remove flows"}
-
-                   {:key :add-alias :value :add-alias :text "Add alias"}
-                   {:key :add-animation :value :add-animation :text "Add animation"}
-                   {:key :start-animation :value :start-animation :text "Start animation"}
-                   {:key :remove-animation :value :remove-animation :text "Remove animation"}
-                   {:key :set-skin :value :set-skin :text "Set skin"}
-                   {:key :animation-props :value :animation-props :text "Animation props"}
-                   {:key :animation-sequence :value :animation-sequence :text "Animation sequence"}
-                   {:key :transition :value :transition :text "Transition"}
-                   {:key :placeholder-audio :value :placeholder-audio :text "Placeholder audio"}
-                   {:key :test-transitions-collide :value :test-transitions-collide :text "Test transitions collide"}
-
-                   {:key :dataset-var-provider :value :dataset-var-provider :text "Dataset var provider"}
-                   {:key :lesson-var-provider :value :lesson-var-provider :text "Lesson var provider"}
-                   {:key :vars-var-provider :value :vars-var-provider :text "Vars var provider"}
-                   {:key :test-var :value :test-var :text "Test var"}
-                   {:key :test-var-scalar :value :test-var-scalar :text "Test var scalar"}
-                   {:key :test-var-list :value :test-var-list :text "Test var list"}
-                   {:key :test-value :value :test-value :text "Test value"}
-                   {:key :case :value :case :text "Case"}
-                   {:key :counter :value :counter :text "Counter"}
-                   {:key :set-variable :value :set-variable :text "set variable"}
-                   {:key :set-progress :value :set-progress :text "Set progress"}
-                   {:key :copy-variable :value :copy-variable :text "Copy variable"}])
-
-(defn key-value-param [key value on-change on-remove]
+(defn- key-value-param [key value on-change on-remove]
   (let [props (r/atom nil)]
     (fn [key value on-change on-remove]
       [sa/Item {}
@@ -75,7 +44,7 @@
                      :on-click on-remove}]]])
        ])))
 
-(defn key-value-params [props field-name]
+(defn- key-value-params [props field-name]
   [:div
    [sa/ItemGroup {}
     [sa/Item {}
@@ -96,7 +65,7 @@
 
    ])
 
-(defn vector-param [value on-change on-remove]
+(defn- vector-param [value on-change on-remove]
   (let [props (r/atom nil)]
     (fn [value on-change on-remove]
       [sa/Item {}
@@ -115,7 +84,7 @@
                      :on-click on-remove}]]])
        ])))
 
-(defn vector-params [props field-name label]
+(defn- vector-params [props field-name label]
   [:div
    [sa/ItemGroup {}
     [sa/Item {}
@@ -134,7 +103,7 @@
 
    ])
 
-(defn action-panel
+(defn- action-panel
   [props]
   [:div
    [f/action-dropdown props :id]
@@ -142,48 +111,48 @@
                  :default-checked? (:return-immediately @props)
                  :on-change #(swap! props assoc :return-immediately (.-checked %2))}]])
 
-(defn state-panel [props]
+(defn- state-panel [props]
   [:div
    [f/object-dropdown props :target]
    [f/object-states-dropdown props :id (:target @props)]])
 
-(defn animation-panel [props]
+(defn- animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "id" :default-value (:id @props) :on-change #(swap! props assoc :id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]])
 
-(defn add-animation-panel [props]
+(defn- add-animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "id" :default-value (:id @props) :on-change #(swap! props assoc :id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]
    [na/checkbox {:label "loop" :default-checked? (:loop @props) :on-change #(swap! props assoc :loop (.-checked %2))}]])
 
-(defn start-animation-panel [props]
+(defn- start-animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]])
 
-(defn remove-animation-panel [props]
+(defn- remove-animation-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]])
 
-(defn set-skin-panel [props]
+(defn- set-skin-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [na/form-input {:label "skin" :default-value (:skin @props) :on-change #(swap! props assoc :skin (-> %2 .-value)) :inline? true}]])
 
-(defn animation-props-panel [props]
+(defn- animation-props-panel [props]
   [:div
    [f/target-animation-dropdown props :target]
    [key-value-params props :props]])
 
-(defn audio-panel
-  [props]
+(defn- audio-panel
+  [props {:keys [scene-id]}]
   (r/with-let [input-values (r/atom @props)]
               [:div
-               [f/audio-asset-dropdown props :id]
+               [f/audio-asset-dropdown props :id scene-id]
                [na/form-input {:label "start" :value (:start @input-values) :on-change #(do
                                                                                           (swap! input-values assoc :start (-> %2 .-value))
                                                                                           (swap! props assoc :start (-> %2 .-value js/parseFloat))) :inline? true}]
@@ -203,18 +172,18 @@
 
                ]))
 
-(defn scene-panel
+(defn- scene-panel
   [props]
   [:div
    [f/scene-dropdown props :scene-id]])
 
-(defn empty-panel
+(defn- empty-panel
   [props]
   [:div
    [na/form-input {:label "duration" :default-value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value js/parseInt)) :inline? true}]])
 
-(defn sequence-panel
-  [props]
+(defn- sequence-panel
+  [props {:keys [scene-id]}]
   (let [edit-mode (r/atom false)
         current-value (atom (clojure.string/join "\n" (:data @props)))]
     (fn [props]
@@ -231,11 +200,11 @@
          [:div
           (for [action (:data @props)]
             ^{:key (str action)}
-            [:p [:a {:on-click #(re-frame/dispatch [::events/select-scene-action action])} (str action)]])
+            [:p [:a {:on-click #(re-frame/dispatch [::events/select-scene-action action scene-id])} (str action)]])
           [na/form-button {:content "Edit" :on-click #(reset! edit-mode true)}]])
        ])))
 
-(defn data-panel [props]
+(defn- data-panel [props]
   (let [data @(re-frame/subscribe [::es/selected-scene-action-data])]
     (swap! props assoc :data data)
     [sa/ItemGroup {}
@@ -262,123 +231,54 @@
                     :on-click #(re-frame/dispatch [::events/selected-action-remove-data index])}]]
          ]])]))
 
-(defn parallel-panel [props]
+(defn- parallel-panel [props]
   [:div
    [data-panel props]
    ])
 
-(defn sequence-data-panel [props]
+(defn- sequence-data-panel [props]
   [:div
    [data-panel props]
    ])
 
-(defn animation-sequence-item [item on-change on-remove]
-  (let [props (r/atom nil)]
-    (fn [{:keys [start end anim] :as item} on-change on-remove]
-      [sa/Item {}
-       (if @props
-         [sa/ItemContent {}
-          [na/form-input {:label "start" :default-value start :on-change #(swap! props assoc :start (-> %2 .-value js/parseFloat)) :inline? true}]
-          [na/form-input {:label "end" :default-value end :on-change #(swap! props assoc :end (-> %2 .-value js/parseFloat)) :inline? true}]
-          [na/form-input {:label "anim" :default-value anim :on-change #(swap! props assoc :anim (-> %2 .-value)) :inline? true}]
-
-          [na/button {:basic? true :content "save" :on-click #(do (on-change @props)
-                                                                  (reset! props nil))}]]
-         [sa/ItemContent {}
-          [:a (str "start: " start " end: " end " anim: " anim)]
-          [:div {:style {:float "right"}}
-           [na/icon {:name "edit" :link? true
-                     :on-click #(reset! props item)}]
-           [na/icon {:name "remove" :link? true
-                     :on-click on-remove}]]])
-       ])))
-
-(defn animation-sequence-items [props]
-  [:div
-   [sa/ItemGroup {}
-    [sa/Item {}
-     [sa/ItemContent {}
-      [na/header {:as "h4" :floated "left" :content "Items"}]
-      [:div {:style {:float "right"}}
-       [na/icon {:name "add" :link? true :on-click #(swap! props update-in [:data] conj {})}]]]]
-
-    (for [[idx item] (map-indexed (fn [idx itm] [idx itm]) (:data @props))]
-      ^{:key (str (:start item))}
-      [animation-sequence-item
-       item
-       (fn [item] (swap! props assoc-in [:data idx] item))
-       (fn [] (swap! props update-in [:data] #(vec (concat (subvec % 0 idx) (subvec % (inc idx))))))
-       ])]
-
-   ])
-
-(defn animation-object-names [objects]
-  (->> objects
-       (map second)
-       (map (fn [object] (or (:scene-name object) (:name object))))
-       (remove nil?)))
-
-(defn animation-sequence-panel
-  [props]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene @(re-frame/subscribe [::subs/scene scene-id])
-        animations (animation-object-names (:objects scene))]
-    [:div
-     [sa/FormDropdown {:label "Target" :placeholder "Target" :search true :selection true :inline true
-                       :options (na/dropdown-list animations identity identity)
-                       :default-value (:target @props) :on-change #(swap! props assoc :target (.-value %2))}]
-     [na/form-input {:label "track" :default-value (:track @props) :on-change #(swap! props assoc :track (-> %2 .-value)) :inline? true}]
-     [na/form-input {:label "offset" :value (:offset @props) :on-change #(swap! props assoc :offset (-> %2 .-value)) :inline? true}]
-     [na/divider {}]
-     [sa/FormGroup {}
-       [f/audio-asset-dropdown props :audio]
-       [na/button {:basic? true :content "Upload new" :on-click #(re-frame/dispatch [::events/show-upload-asset-form])}]]
-     [na/form-input {:label "start" :value (:start @props) :on-change #(swap! props assoc :start (-> %2 .-value)) :inline? true}]
-     [na/form-input {:label "duration" :value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value)) :inline? true}]
-     [ws/animation-sequence-waveform-modal
-      {:key (:audio @props) :start (:start @props) :end (+ (:start @props) (:duration @props)) :sequence-data (:data @props)}
-      (fn [{:keys [start duration regions]}]
-        (swap! props assoc :offset start)
-        (swap! props assoc :start start)
-        (swap! props assoc :duration duration)
-        (swap! props assoc :data (->> regions
-                                      (map #(assoc % :anim "talk"))
-                                      vec)))]
-     [na/divider {}]
-     [animation-sequence-items props]
-     [na/divider {}]]))
-
-(defn common
+(defn- common
   [props]
   [:div
-   [sa/FormDropdown {:label "Type" :search true :selection true :options action-types :inline true
-                 :default-value (:type @props) :on-change #(swap! props assoc :type (.-value %2))}]
-   [na/form-input {:label "Description" :default-value (:description @props) :on-change #(swap! props assoc :description (-> %2 .-value)) :inline? true}]
-   [na/divider {}]])
+   [FormField {} [FormDropdown {:label         "Type"
+                                :search        true
+                                :selection     true
+                                :options       action-types
+                                :inline        true
+                                :default-value (:type @props)
+                                :on-change     #(swap! props assoc :type (.-value %2))}]]
+   [FormField {} [FormInput {:label         "Description"
+                             :default-value (:description @props)
+                             :on-change     #(swap! props assoc :description (-> %2 .-value))
+                             :inline        true}]]])
 
-(defn add-alias-panel [props]
+(defn- add-alias-panel [props]
   [:div
    [f/object-dropdown props :target]
    [na/form-input {:label "Alias" :default-value (:alias @props) :on-change #(swap! props assoc :alias (-> %2 .-value)) :inline? true}]
    [f/object-states-dropdown props :state (:target @props)]])
 
-(defn transition-panel [props]
+(defn- transition-panel [props]
   [:div
    [f/transition-dropdown props :transition-id]
    [key-value-params props :to]])
 
-(defn test-transitions-collide-panel [props]
+(defn- test-transitions-collide-panel [props]
   [:div
    [f/transition-dropdown props :transition-1 "Transition 1"]
    [f/transition-dropdown props :transition-2 "Transition 2"]
    [f/action-dropdown props :success "success"]
    [f/action-dropdown props :fail "fail"]])
 
-(defn remove-flows-panel [props]
+(defn- remove-flows-panel [props]
   [:div
    [na/form-input {:label "Flow tag" :default-value (:flow-tag @props) :on-change #(swap! props assoc :flow-tag (-> %2 .-value)) :inline? true}]])
 
-(defn dataset-var-provider-panel [props]
+(defn- dataset-var-provider-panel [props]
   [:div
    [na/form-input {:label "Provider id" :default-value (:provider-id @props) :on-change #(swap! props assoc :provider-id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "From" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]
@@ -386,7 +286,7 @@
    [vector-params props :variables "Variables"]
    [na/divider {}]])
 
-(defn lesson-var-provider-panel [props]
+(defn- lesson-var-provider-panel [props]
   [:div
    [na/form-input {:label "Provider id" :default-value (:provider-id @props) :on-change #(swap! props assoc :provider-id (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "From" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]
@@ -397,7 +297,7 @@
    [na/form-input {:label "repeat" :default-value (:repeat @props) :on-change #(swap! props assoc :repeat (-> %2 .-value)) :inline? true}]
    [na/checkbox {:label "shuffled" :default-checked? (:shuffled @props) :on-change #(swap! props assoc :shuffled (.-checked %2))}]])
 
-(defn vars-var-provider-panel [props]
+(defn- vars-var-provider-panel [props]
   [:div
    [na/form-input {:label "Provider id" :default-value (:provider-id @props) :on-change #(swap! props assoc :provider-id (-> %2 .-value)) :inline? true}]
    [na/divider {}]
@@ -410,14 +310,14 @@
    [na/form-input {:label "repeat" :default-value (:repeat @props) :on-change #(swap! props assoc :repeat (-> %2 .-value)) :inline? true}]
    [na/checkbox {:label "shuffled" :default-checked? (:shuffled @props) :on-change #(swap! props assoc :shuffled (.-checked %2))}]])
 
-(defn test-var-scalar-panel [props]
+(defn- test-var-scalar-panel [props]
   [:div
    [na/form-input {:label "value1" :default-value (:value1 @props) :on-change #(swap! props assoc :value1 (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "value2" :default-value (:value2 @props) :on-change #(swap! props assoc :value2 (-> %2 .-value)) :inline? true}]
    [f/action-dropdown props :success "success"]
    [f/action-dropdown props :fail "fail"]])
 
-(defn test-var-list-panel [props]
+(defn- test-var-list-panel [props]
   [:div
    [na/divider {}]
    [vector-params props :var-names "var names"]
@@ -427,7 +327,7 @@
    [f/action-dropdown props :success "success"]
    [f/action-dropdown props :fail "fail"]])
 
-(defn case-option-item-panel [key action]
+(defn- case-option-item-panel [key action]
   (let [edit (r/atom nil)]
     (fn [key action]
       [sa/Item {}
@@ -447,7 +347,7 @@
                    :on-click #(re-frame/dispatch [::events/selected-action-remove-option key])}]]
         ]])))
 
-(defn case-options-panel [props]
+(defn- case-options-panel [props]
   (let [new-name (r/atom nil)]
     (fn [props]
       (let [{{options :options} :data} @(re-frame/subscribe [::es/selected-scene-action])]
@@ -470,35 +370,36 @@
            ^{:key (str key)}
            [case-option-item-panel key action])]))))
 
-(defn case-panel [props]
+(defn- case-panel [props]
   [:div
    [na/form-input {:label "value" :default-value (:value @props) :on-change #(swap! props assoc :value (-> %2 .-value)) :inline? true}]
    [case-options-panel props]])
 
-(defn counter-panel [props]
+(defn- counter-panel [props]
   [:div
    [na/form-input {:label "id" :default-value (:counter-id @props) :on-change #(swap! props assoc :counter-id (-> %2 .-value)) :inline? true}]
    [f/counter-action-dropdown props :counter-action]])
 
-(defn set-variable-panel [props]
+(defn- set-variable-panel [props]
   [:div
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "value" :default-value (:var-value @props) :on-change #(swap! props assoc :var-value (-> %2 .-value)) :inline? true}]])
 
-(defn set-progress-panel [props]
+(defn- set-progress-panel [props]
   [:div
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "value" :default-value (:var-value @props) :on-change #(swap! props assoc :var-value (-> %2 .-value)) :inline? true}]])
 
-(defn copy-variable-panel [props]
+(defn- copy-variable-panel [props]
   [:div
    [na/form-input {:label "name" :default-value (:var-name @props) :on-change #(swap! props assoc :var-name (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "from" :default-value (:from @props) :on-change #(swap! props assoc :from (-> %2 .-value)) :inline? true}]])
 
 (defn dispatch
-  [props]
+  [props params]
   [:div
    [common props]
+   [Divider]
    (case (-> @props :type keyword)
      :action [action-panel props]
      :audio [audio-panel props]
@@ -511,12 +412,12 @@
      :remove-animation [remove-animation-panel props]
      :set-skin [set-skin-panel props]
      :animation-props [animation-props-panel props]
-     :animation-sequence [animation-sequence-panel props]
+     :animation-sequence [animation-sequence-panel props params]
      :scene [scene-panel props]
      :transition [transition-panel props]
      :test-transitions-collide [test-transitions-collide-panel props]
 
-     :sequence [sequence-panel props]
+     :sequence [sequence-panel props params]
      :parallel [parallel-panel props]
      :sequence-data [sequence-data-panel props]
      :remove-flows [remove-flows-panel props]
@@ -534,17 +435,39 @@
      :copy-variable [copy-variable-panel props]
      nil)])
 
-(defn action-properties-panel [props]
-  (r/with-let [tab (r/atom :general)]
-    [:div
-     [na/menu {:tabular? true}
-      [na/menu-item {:name "general" :active? (= @tab :general) :on-click #(reset! tab :general)}]
-      [na/menu-item {:name "params" :active? (= @tab :params) :on-click #(reset! tab :params)}]
-      [na/menu-item {:name "from params" :active? (= @tab :from-params) :on-click #(reset! tab :from-params)}]
-      [na/menu-item {:name "from var" :active? (= @tab :from-var) :on-click #(reset! tab :from-var)}]]
+(defn main-action-form
+  [props {:keys [current-tab
+                 change-current-tab] :as params}]
+  [:div
+   [na/menu {:tabular? true}
+    [na/menu-item {:name     "general"
+                   :active?  (= current-tab :general)
+                   :on-click #(change-current-tab :general)}]
+    [na/menu-item {:name     "params"
+                   :active?  (= current-tab :params)
+                   :on-click #(change-current-tab :params)}]
+    [na/menu-item {:name     "from params"
+                   :active?  (= current-tab :from-params)
+                   :on-click #(change-current-tab :from-params)}]
+    [na/menu-item {:name     "from var"
+                   :active?  (= current-tab :from-var)
+                   :on-click #(change-current-tab :from-var)}]]
 
-     (case @tab
-       :general [dispatch props]
-       :params [key-value-params props :params]
-       :from-params [key-value-params props :params]
-       :from-var [key-value-params props :params])]))
+   (case current-tab
+     :general [dispatch props params]
+     :params [key-value-params props :params]
+     :from-params [key-value-params props :params]
+     :from-var [key-value-params props :params])])
+
+(defn action-form
+  [props {:keys [scene-id]}]
+  (when-not scene-id (throw (js/Error. "Scene id is not defined")))
+  (r/with-let [_ (re-frame/dispatch [::ie/load-scene scene-id])
+               tab (r/atom :general)]
+              (let [scene @(re-frame/subscribe [::subs/scene scene-id])
+                    params {:scene-id               scene-id
+                            :scene-objects          (:objects scene)
+                            :show-upload-asset-form #(re-frame/dispatch [::events/show-upload-asset-form])
+                            :current-tab            @tab
+                            :change-current-tab     #(reset! tab %)}]
+                [main-action-form props params])))
