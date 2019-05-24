@@ -323,8 +323,7 @@
   ::load-scene
   (fn [{:keys [db]} [_ scene-id]]
     (let [loaded (get-in db [:scene-loading-complete scene-id])]
-      (cond-> {}
-              (not loaded) (assoc :load-scene [(:current-course db) scene-id])))))
+      (when (not loaded) {:load-scene [(:current-course db) scene-id]}))))
 
 (re-frame/reg-event-fx
   ::set-current-scene
