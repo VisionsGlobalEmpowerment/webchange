@@ -32,6 +32,6 @@
    {:key :test-value :value :test-value :text "Test value"}
    {:key :case :value :case :text "Case"}
    {:key :counter :value :counter :text "Counter"}
-   {:key :set-variable :value :set-variable :text "set variable"}
+   {:key :set-variable :value :set-variable :text "Set variable"}
    {:key :set-progress :value :set-progress :text "Set progress"}
    {:key :copy-variable :value :copy-variable :text "Copy variable"}])

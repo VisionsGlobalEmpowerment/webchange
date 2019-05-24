@@ -1,6 +1,7 @@
 (ns webchange.auth.views
   (:require
     [re-frame.core :as re-frame]
+    [webchange.config :as config]
     [webchange.routes :as routes]
     [webchange.events :as events]
     [webchange.subs :as subs]
@@ -10,7 +11,8 @@
     [reagent.core :as r]))
 
 (defn login-form []
-  (r/with-let [data (r/atom {})]
+  (r/with-let [data (r/atom (if config/debug? {:email    "demo@example.com"
+                                               :password "demo123"} {}))]
               (let [loading  @(re-frame/subscribe [:loading])
                     errors   @(re-frame/subscribe [:errors])]
               [:div {:class-name "login-form"}

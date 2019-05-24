@@ -32,7 +32,7 @@
        :body {:errors [{:message "Unauthenticated"}]}})
     (if (authenticated? request)
       (resource-response "error403.html" {:root "public"})
-      (redirect "/login"))))
+      (redirect (str "/login" "?redirect=" (:uri request))))))
 
 (def auth-backend
   (session-backend {:unauthorized-handler unauthorized-handler}))

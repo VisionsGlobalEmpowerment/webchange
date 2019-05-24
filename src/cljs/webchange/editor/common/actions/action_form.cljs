@@ -65,43 +65,54 @@
 
    ])
 
-(defn- vector-param [value on-change on-remove]
-  (let [props (r/atom nil)]
+(defn- vector-param
+  [value on-change on-remove]
+  (let [props (r/atom value)]
     (fn [value on-change on-remove]
       [sa/Item {}
        (if @props
          [sa/ItemContent {}
-          [na/form-input {:label "value" :default-value value :on-change #(swap! props assoc :value (-> %2 .-value)) :inline? true}]
+          [na/form-input {:label         "value"
+                          :default-value value
+                          :on-change     #(reset! props (-> %2 .-value))
+                          :inline?       true}]
 
-          [na/button {:basic? true :content "save" :on-click #(do (on-change @props)
-                                                                  (reset! props nil))}]]
+          [na/button {:basic?   true
+                      :content  "save"
+                      :on-click #(do (on-change @props)
+                                     (reset! props value))}]]
          [sa/ItemContent {}
           [:a (str value)]
           [:div {:style {:float "right"}}
-           [na/icon {:name "edit" :link? true
+           [na/icon {:name     "edit"
+                     :link?    true
                      :on-click #(reset! props value)}]
-           [na/icon {:name "remove" :link? true
+           [na/icon {:name     "remove"
+                     :link?    true
                      :on-click on-remove}]]])
        ])))
 
-(defn- vector-params [props field-name label]
-  [:div
-   [sa/ItemGroup {}
-    [sa/Item {}
-     [sa/ItemContent {}
-      [na/header {:as "h4" :floated "left" :content (or label "Params")}]
-      [:div {:style {:float "right"}}
-       [na/icon {:name "add" :link? true :on-click #(swap! props update-in [field-name] conj "")}]]]]
+(defn- vector-params
+  [props field-name label]
+  (let [values (or (field-name @props) [])
+        next-item-name #(str "item-" (+ (count values) 1))]
+    [:div
+     [sa/ItemGroup {}
+      [sa/Item {}
+       [sa/ItemContent {}
+        [na/header {:as "h4" :floated "left" :content (or label "Params")}]
+        [:div {:style {:float "right"}}
+         [na/icon {:name "add" :link? true :on-click #(swap! props assoc field-name (conj values (next-item-name)))}]]]]
 
-    (for [[idx value] (map-indexed (fn [idx itm] [idx itm]) (field-name @props))]
-      ^{:key (str idx)}
-      [vector-param
-       value
-       (fn [new-value] (swap! props assoc-in [field-name idx] new-value))
-       (fn [] (swap! props update-in [field-name] #(vec (concat (subvec % 0 idx) (subvec % (inc idx))))))
-       ])]
+      (for [[idx value] (map-indexed (fn [idx itm] [idx itm]) values)]
+        ^{:key (str idx)}
+        [vector-param
+         value
+         (fn [new-value] (swap! props assoc-in [field-name idx] new-value))
+         (fn [] (swap! props update-in [field-name] #(vec (concat (subvec % 0 idx) (subvec % (inc idx))))))
+         ])]
 
-   ])
+     ]))
 
 (defn- action-panel
   [props]

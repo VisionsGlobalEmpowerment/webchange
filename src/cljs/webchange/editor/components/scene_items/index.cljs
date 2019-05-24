@@ -12,6 +12,8 @@
     [webchange.editor.subs :as es]))
 
 (def items {
+            :add-object               {:label     "Add Object"
+                                       :component add-object-panel}
             :list-objects             {:label     "Objects"
                                        :component list-objects-panel}
             :list-actions             {:label     "Actions"

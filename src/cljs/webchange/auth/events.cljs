@@ -19,12 +19,26 @@
                   :on-success      [::login-success]
                   :on-failure      [:api-request-error :login]}}))
 
+(defn get-url-params
+  "Parse URL parameters into a hashmap"
+  []
+  (let [location (-> (.-location js/window) (.-search) (.split #"\?") last (.split #"\&"))]
+    (into {} (for [[k v] (map #(.split % #"=") location)]
+               [(keyword k) v]))))
+
+(re-frame/reg-cofx
+  :redirect-param
+  (fn [coeffects _]
+    (assoc coeffects :redirect (:redirect (get-url-params)))))
+
 (re-frame/reg-event-fx
   ::login-success
-  (fn [{:keys [db]} [_ {user :user}]]
-    {:db (update-in db [:user] merge user)
-     :dispatch-n (list [:complete-request :login]
-                       [::events/redirect :home])}))
+  [(re-frame/inject-cofx :redirect-param)]
+  (fn [{:keys [db redirect]} [_ {user :user}]]
+    (let [redirect-to (or redirect :home)]
+      {:db (update-in db [:user] merge user)
+       :dispatch-n (list [:complete-request :login]
+                         [::events/redirect redirect-to])})))
 
 (re-frame/reg-event-fx
   ::register-user

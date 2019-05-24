@@ -57,17 +57,19 @@
   ([db items variables provider-id]
    (provide db items variables provider-id {}))
   ([db items variables provider-id params]
-    (let [new-items (cond->> (unprocessed db items provider-id)
-                             (:exclude-values params) (remove (into #{} (:exclude-values params)))
-                             (:limit params) (take (:limit params))
-                             (:repeat params) (#(apply concat (repeat (:repeat params) %)))
-                             (:shuffled params) shuffle
-                             :always (take (count variables)))
-          processed (->> new-items (map :id) (into #{}))
-          vars (zipmap variables new-items)]
-      (cond-> db
-              provider-id (add-processed provider-id processed)
-              :always (set-variables vars)))))
+   (let [new-items (cond->> (unprocessed db items provider-id)
+                            (:exclude-values params) (remove (into #{} (:exclude-values params)))
+                            (:exclude-property-values params) (filter #(let [filter-map (:exclude-property-values params)
+                                                                             key (-> filter-map keys first)] (not (= (key filter-map) (key %)))))
+                            (:limit params) (take (:limit params))
+                            (:repeat params) (#(apply concat (repeat (:repeat params) %)))
+                            (:shuffled params) shuffle
+                            :always (take (count variables)))
+         processed (->> new-items (map :id) (into #{}))
+         vars (zipmap variables new-items)]
+     (cond-> db
+             provider-id (add-processed provider-id processed)
+             :always (set-variables vars)))))
 
 (defn has-next
   [db items provider-id]
