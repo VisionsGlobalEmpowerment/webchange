@@ -18,7 +18,7 @@
                       "hide-n-seek" hide-n-seek-scene}})
 (defn get-course
   [course-id]
-  {:initial-scene "hide-n-seek"
+  {:initial-scene "map"
    :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "volleyball" "hide-n-seek"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"
                                   :assessment-1 "assessment1"}}]
