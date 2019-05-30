@@ -7,9 +7,10 @@
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :refer [anim animations init-spine-player]]
     [webchange.common.events :as ce]
+    [webchange.common.core :refer [with-origin-offset]]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
-    [webchange.interpreter.components :refer [scene with-origin-offset] :rename {scene play-scene}]
+    [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
     [webchange.editor.components.data-sets.data-set-item.index :refer [add-dataset-item-form
                                                                        edit-dataset-item-form]]
@@ -40,6 +41,7 @@
 (declare placeholder)
 (declare animation)
 (declare text)
+(declare carousel-object)
 
 (defn object
   [type]
@@ -51,6 +53,7 @@
     :placeholder placeholder
     :animation animation
     :text text
+    :carousel carousel-object
     ))
 
 (defn to-props
@@ -171,8 +174,15 @@
 
 (defn text
   [scene-id name object]
-  [:> Group
-   [:> Text (object-params object)]
+  (let [object-params (object-params object)]
+    [:> Group object-params
+     [:> Text (dissoc object-params :x :y)]
+     [:> Rect (rect-params scene-id name object)]]))
+
+(defn carousel-object
+  [scene-id name object]
+  [:> Group (object-params object)
+   [kimage (get-data-as-url (:first object))]
    [:> Rect (rect-params scene-id name object)]])
 
 (defn scene

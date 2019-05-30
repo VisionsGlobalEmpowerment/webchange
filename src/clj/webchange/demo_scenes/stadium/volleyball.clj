@@ -153,15 +153,6 @@
 
                    :empty-before-dialog {:type "empty" :duration 3000}
 
-
-                   :try-another
-                                               {:type "parallel"
-                                                :data [{:type "audio", :id "mari-welcome", :start 40.476, :duration 8.509}
-                                                       {:type "animation-sequence" :target "mari" :track 1 :offset 40.476
-                                                        :data [{:start 41.155 :end 43.225 :anim "talk"}
-                                                               {:start 43.725 :end 45.534 :anim "talk"}
-                                                               {:start 46.32 :end 48.759 :anim "talk"}]}]}
-
                    :pick-wrong {:type "sequence-data"
                                 :data [{:type "vars-var-provider"
                                         :variables ["current-audio-try-again"]
@@ -240,15 +231,6 @@
                                         :from ["player1" "player2" "player3" "player4"]
                                         :shuffled true}
                                        ]}
-
-                   :init-current-target {:type "sequence-data"
-                                         :data [{:type "vars-var-provider"
-                                                 :variables ["current-target"]
-                                                 :from ["slot1" "slot2" "slot3" "slot4"]
-                                                 :shuffled true}
-                                                {:type "set-variable"
-                                                 :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "concept-name"}
-                                                            {:var-name "current-target" :action-property "var-name"}]}]}
 
                    :init-first-player {:type "set-variable" :var-name "current-player" :var-value "player1"}
 
@@ -383,4 +365,4 @@
 
    :triggers      {:start {:on "start" :action "start-activity"}}
    :metadata      {:autostart true
-                   :prev "map"}})
+                   :prev "stadium"}})

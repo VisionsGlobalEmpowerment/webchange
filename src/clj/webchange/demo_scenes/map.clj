@@ -31,7 +31,7 @@
                           :library {:type "image" :x 91 :y 250 :width 293 :height 373 :src "/raw/img/map/Biblioteca_Enabled.png"
                                     :actions {:click {:type "action", :id "move-to" :params {:scene-id "library"}, :on "click"}}}
                           :stadium {:type "image" :x 1481 :y 169 :width 234 :height 228 :src "/raw/img/map/Estadio_Enabled.png"
-                                    :actions {:click {:type "action", :id "move-to" :params {:scene-id "volleyball"}, :on "click"}}}
+                                    :actions {:click {:type "action", :id "move-to" :params {:scene-id "stadium"}, :on "click"}}}
                           :feria {:type "image" :width 531 :height 455 :x 216 :y 671
                                   :scale {:x 0.68 :y 0.68}
                                   :src    "/raw/img/map/feria_locked.png"}},

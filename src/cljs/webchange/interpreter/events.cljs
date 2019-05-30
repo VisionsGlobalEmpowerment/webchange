@@ -129,6 +129,7 @@
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
 (ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
 (ce/reg-simple-executor :finish-activity ::execute-finish-activity)
+(ce/reg-simple-executor :text-animation ::execute-text-animation)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -474,3 +475,13 @@
       (if (i/collide? transition-1-shape transition-2-shape)
         {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
         {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))
+
+(re-frame/reg-event-fx
+  ::execute-text-animation
+  (fn [{:keys [db]} [_ action]]
+    (let [animation-actions (i/text-animation-sequence->actions action)
+          audio-action (i/animation-sequence->audio-action action)]
+      (if audio-action
+        {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
+        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})
+      )))

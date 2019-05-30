@@ -13,7 +13,6 @@
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
-    #_[gsap/all :refer [TweenLite TweenMax BezierPlugin]]
     ))
 
 (def default-assets [{:url "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
@@ -77,6 +76,7 @@
                      {:url "/raw/anim/vera-90/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera-90/skeleton.png", :size 1, :type "anim-texture"}
                      {:url "/raw/anim/vera-90/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-90/skeleton3.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/rock/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/rock/skeleton.json", :size 1, :type "anim-text"}
@@ -89,7 +89,12 @@
 
                      {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
-                     {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}])
+                     {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/book/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/book/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/book/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/book/skeleton2.png", :size 1, :type "anim-texture"}])
 
 (def assets (atom {}))
 
@@ -306,3 +311,14 @@
     :id audio
     :start start
     :duration duration}))
+
+(defn chunk-transition-name [name index]
+  (if index (str "chunk-" name "-" index)))
+
+(defn text-animation-sequence->actions [{:keys [target animation start data] :as action}]
+  (into [] (map (fn [{:keys [at chunk]}]
+                  {:type "sequence-data"
+                   :data [{:type "empty" :duration (* (- at start) 1000)}
+                          {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y -20 :duration 0.01}}
+                          {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}]})
+                data)))

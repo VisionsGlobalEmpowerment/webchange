@@ -7,6 +7,8 @@
     [webchange.events :as events]
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :refer [anim]]
+    [webchange.common.text :refer [chunked-text]]
+    [webchange.common.carousel :refer [carousel]]
     [webchange.common.slider :refer [slider]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
@@ -14,8 +16,10 @@
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
+    [webchange.common.core :refer [prepare-group-params with-origin-offset]]
 
-    [react-konva :refer [Stage Layer Group Rect Text Custom]]))
+    [react-konva :refer [Stage Layer Group Rect Text Custom]]
+    [konva :as k]))
 
 (defn get-viewbox
   [viewport]
@@ -204,62 +208,12 @@
         course-started (re-frame/subscribe [::subs/playing])]
     (and @loaded @course-started (scene-started @scene-data))))
 
-(defn prepare-action
-  [action]
-  (let [type (:on action)]
-    (if (= type "click")
-      {:on-click #(re-frame/dispatch [::ce/execute-action action])
-       :on-tap #(re-frame/dispatch [::ce/execute-action action])}
-      {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action action])})))
-
-(defn prepare-actions
-  [{:keys [actions] :as object}]
-  (->> actions
-       (map second)
-       (map #(assoc % :var (:var object)))
-       (map prepare-action)
-       (into {})
-       (merge object)))
-
-(defn with-origin-offset
-  [{:keys [width height origin] :as object}]
-  (let [{:keys [type]} origin]
-    (case type
-      "center-center" (-> object
-                          (assoc :offset {:x (/ width 2) :y (/ height 2)}))
-      "center-top" (-> object
-                       (assoc :offset {:x (/ width 2)}))
-      "center-bottom" (-> object
-                          (assoc :offset {:x (/ width 2) :y height}))
-      object)))
-
-(defn with-transition
-  [{:keys [transition] :as object}]
-  (if transition
-    (let [component (r/atom nil)]
-      (re-frame/dispatch [::ie/register-transition transition component])
-      (assoc object :ref (fn [ref] (reset! component ref))))
-    object))
-
-(defn with-draggable
-  [{:keys [draggable] :as object}]
-  (if draggable
-    (assoc object :draggable true)
-    object))
-
-(defn prepare-group-params
-  [object]
-  (-> object
-      prepare-actions
-      with-origin-offset
-      with-transition
-      with-draggable))
-
 (declare group)
 (declare placeholder)
 (declare image)
 (declare animation)
 (declare text)
+(declare carousel-object)
 
 (defn draw-object
   [scene-id name]
@@ -274,6 +228,7 @@
       :placeholder [placeholder scene-id name o]
       :animation [animation scene-id name o]
       :text [text scene-id name o]
+      :carousel [carousel-object scene-id name o]
       )))
 
 (defn placeholder
@@ -286,7 +241,11 @@
 
 (defn text
   [scene-id name object]
-  [:> Text object])
+  [:> Group (prepare-group-params object)
+    (if (:chunks object)
+      (let [on-mount #(re-frame/dispatch [::ie/register-text %])]
+        [chunked-text scene-id name (assoc object :on-mount on-mount)])
+      [:> Text (dissoc object :x :y)])])
 
 (defn group
   [scene-id name object]
@@ -294,10 +253,15 @@
    (for [child (:children object)]
      ^{:key (str scene-id child)} [draw-object scene-id child])])
 
+(defn filter-param [{:keys [filter]}]
+  (case filter
+    "grayscale" {:filters [k/Filters.Grayscale]}
+    {:filters nil}))
+
 (defn image
   [scene-id name object]
   [:> Group (prepare-group-params object)
-   [kimage (get-data-as-url (:src object))]])
+   [kimage (get-data-as-url (:src object)) (filter-param object)]])
 
 (defn animation
   [scene-id name object]
@@ -312,6 +276,10 @@
                    :origin {:type "center-top"}
                    :scale-y -1}
                   with-origin-offset)]]))
+
+(defn carousel-object [scene-id name object]
+  [:> Group (prepare-group-params object)
+   [carousel object]])
 
 (defn triggers
   [scene-id]

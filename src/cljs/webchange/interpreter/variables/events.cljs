@@ -158,31 +158,28 @@
         {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
         {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
 
+(defn cond-action [db {:keys [flow-id action-id] :as action} params]
+  (let [action-data (if (string? params) (e/get-action params db action) params)]
+    (cond-> action-data
+            flow-id (assoc :flow-id flow-id)
+            action-id (assoc :action-id action-id)
+            :always (e/with-prev action))))
+
 (re-frame/reg-event-fx
   ::execute-test-var-scalar
-  (fn [{:keys [db]} [_ {:keys [value var-name success fail flow-id action-id] :as action}]]
-    (let [test (get-variable db var-name)
-          success (if (string? success) (e/get-action success db action) success)
-          fail (if (string? fail) (e/get-action fail db action) fail)]
+  (fn [{:keys [db]} [_ {:keys [value var-name success fail] :as action}]]
+    (let [test (get-variable db var-name)]
       (if (= value test)
-        {:dispatch [::e/execute-action (cond-> success
-                                               flow-id (assoc :flow-id flow-id)
-                                               action-id (assoc :action-id action-id)
-                                               :always (e/with-prev action))]}
-        {:dispatch [::e/execute-action (cond-> fail
-                                               flow-id (assoc :flow-id flow-id)
-                                               action-id (assoc :action-id action-id)
-                                               :always (e/with-prev action))]}))))
+        {:dispatch [::e/execute-action (cond-action db action success)]}
+        {:dispatch [::e/execute-action (cond-action db action fail)]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-value
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [value1 value2 success fail] :as action}]
-    (let [success (e/get-action success db action)
-          fail (e/get-action fail db action)]
-      (if (= value1 value2)
-        {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
-        {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
+    (if (= value1 value2)
+      {:dispatch [::e/execute-action (cond-action db action success)]}
+      {:dispatch [::e/execute-action (cond-action db action fail)]})))
 
 (re-frame/reg-event-fx
   ::execute-test-var-list
