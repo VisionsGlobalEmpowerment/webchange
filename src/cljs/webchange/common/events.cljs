@@ -69,10 +69,11 @@
 
 (defn with-var-property
   [db]
-  (fn [action {:keys [var-name var-property action-property template to-vector]}]
+  (fn [action {:keys [var-name var-property var-key action-property template to-vector]}]
     (let [var (get-in db [:scenes (:current-scene db) :variables var-name])
           value (cond->> var
                          var-property ((keyword var-property))
+                         var-key (hash-map (keyword var-key))
                          to-vector (conj [])
                          template (from-template template))
           should-merge-to-root (and var-name (not action-property))]

@@ -14,7 +14,8 @@
         scene (re-frame/subscribe [::subs/scene scene-id])
         selected (r/atom #{})
         props (r/atom {})
-        errors (r/atom {})]
+        errors (r/atom {})
+        action-type-options (sort-by :text action-types)]
     (fn []
       [na/segment {}
        [na/header {}
@@ -25,15 +26,16 @@
            [na/form-input {:placeholder "Name" :on-change #(do
                                                              (swap! errors dissoc :name)
                                                              (swap! props assoc :name (-> %2 .-value)))
-                           :error? (:name @errors)}]]]
+                           :error?      (:name @errors)}]]]
          [sa/MenuItem {:position "right"}
-          [sa/Dropdown {:text "New" :options action-types :scrolling true
+          [sa/Dropdown {:text      "New"
+                        :options   action-type-options
+                        :scrolling true
                         :on-change #(if (:name @props)
-                                      (do (println (str "new action:" (:name @props) ";" (-> %2 .-value keyword)))
-                                          (re-frame/dispatch [::events/add-new-scene-action (:name @props) (-> %2 .-value keyword) scene-id]))
+                                      (re-frame/dispatch [::events/add-new-scene-action (:name @props) (.-value %2) scene-id])
                                       (swap! errors assoc :name true))}]]
          [sa/MenuItem {:position "right"}
-          [sa/Dropdown {:text "Selected" :options actions-with-selected-actions
+          [sa/Dropdown {:text      "Selected" :options actions-with-selected-actions
                         :direction "left"
                         :on-change #(if (:name @props)
                                       (re-frame/dispatch [::events/process-selected-actions @selected (:name @props) (-> %2 .-value keyword)])

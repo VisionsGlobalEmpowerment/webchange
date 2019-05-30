@@ -1,5 +1,6 @@
 (ns webchange.editor.index
   (:require
+    [clojure.pprint :as p]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.subs :as subs]
@@ -28,7 +29,9 @@
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [sodium.core :as na]
     [sodium.extensions :as nax]
-    [soda-ash.core :as sa]))
+    [soda-ash.core :as sa :refer [Grid
+                                  GridColumn
+                                  GridRow]]))
 
 (declare background)
 (declare image)
@@ -436,11 +439,24 @@
 (defn scene-source
   [scene-id]
   (r/with-let [scene-data @(re-frame/subscribe [::subs/scene scene-id])
-               value (r/atom (-> scene-data (dissoc :animations) clj->js (js/JSON.stringify nil 2)))]
+               value-json (r/atom (-> scene-data (dissoc :animations) clj->js (js/JSON.stringify nil 2)))
+               value-map (r/atom (-> scene-data (dissoc :animations) p/pprint with-out-str))
+               text-area-style {:font-family "monospace"
+                                :font-size 12
+                                :min-height 750}]
             [na/form {}
-             [na/text-area {:style {:min-height 750} :default-value @value :on-change #(reset! value (-> %2 .-value))}]
-             [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-scene scene-id (-> @value js/JSON.parse (js->clj :keywordize-keys true))])}]
-             ]))
+             [Grid {:columns 2
+                    :divided true}
+              [GridRow {}
+               [GridColumn {}
+                [na/text-area {:style text-area-style :default-value @value-json :on-change #(reset! value-json (-> %2 .-value))}]]
+               [GridColumn {}
+                [na/text-area {:style text-area-style :default-value @value-map :on-change #(reset! value-map (-> %2 .-value))}]]
+               ]
+              [GridRow {}
+               [GridColumn {}
+                [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-scene scene-id (-> @value-json js/JSON.parse (js->clj :keywordize-keys true))])}]
+                ]]]]))
 
 (defn course-source
   []

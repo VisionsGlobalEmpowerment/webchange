@@ -27,7 +27,10 @@
 (def url-for (partial bidi/path-for routes))
 
 (defn redirect-to [& args]
-  (let [path (apply url-for args)]
+  (let [key (first args)
+        path (if (= (type key) Keyword)
+               (apply url-for args)
+               key)]
     (pushy/set-token! history path)))
 
 (re-frame/reg-fx
