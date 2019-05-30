@@ -1,6 +1,6 @@
 UPDATE datasets
 SET scheme = '{"fields": [{"name": "home-vaca-this-is", "type": "string"}, {"name": "home-vaca-question", "type": "string"}, {"name": "home-vaca-word", "type": "string"}, {"name": "home-group-word", "type": "string"}, {"name": "home-vaca-3-times", "type": "string"}, {"name": "home-group-3-times", "type": "string"}, {"name": "home-vaca-goodbye", "type": "string"}, {"name": "skin", "type": "string"}, {"name": "seesaw-voice-low", "type": "string"}, {"name": "seesaw-voice-high", "type": "string"}, {"name": "swings-dialog", "type": "string"}, {"name": "sandbox-this-is-letter", "type": "string"}, {"name": "sandbox-state-word-1", "type": "string"}, {"name": "sandbox-state-word-2", "type": "string"}, {"name": "sandbox-state-word-3", "type": "string"}, {"name": "sandbox-state-word-4", "type": "string"}, {"name": "concept-name", "type": "string"}, {"name": "sandbox-this-is-letter-action", "type": "action"}, {"name": "sandbox-state-word-1-action", "type": "action"}, {"name": "sandbox-state-word-2-action", "type": "action"}, {"name": "sandbox-state-word-3-action", "type": "action"}, {"name": "sandbox-state-word-4-action", "type": "action"}, {"name": "sandbox-change-skin-1-action", "type": "action"}, {"name": "sandbox-change-skin-2-action", "type": "action"}, {"name": "sandbox-change-skin-3-action", "type": "action"}, {"name": "sandbox-change-skin-4-action", "type": "action"}, {"name": "hide-n-seek-current-concept-audio", "type": "action"}]}'
-WHERE id = 2;
+WHERE name = 'concepts';
 
 --;;
 
