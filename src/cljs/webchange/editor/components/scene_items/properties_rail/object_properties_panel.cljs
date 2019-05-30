@@ -1,7 +1,7 @@
 (ns webchange.editor.components.scene-items.properties-rail.object-properties-panel
   (:require
+    [webchange.editor.enums :refer [object-types]]
     [webchange.editor.common.components :refer [dispatch-properties-panel
-                                                object-types
                                                 update-current-scene-object
                                                 update-object
                                                 update-object-action]]

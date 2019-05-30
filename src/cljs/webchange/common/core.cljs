@@ -5,6 +5,7 @@
     [webchange.subs :as subs]
     [webchange.events :as events]
     [webchange.interpreter.events :as ie]
+    [webchange.interpreter.variables.events :as vars.events]
     [webchange.common.events :as ce]))
 
 (defn prepare-action
@@ -57,3 +58,9 @@
       with-origin-offset
       with-transition
       with-draggable))
+
+(defn prepare-painting-area-params
+  [object]
+  (-> object
+      (merge {:on-change #(re-frame/dispatch [::vars.events/execute-set-variable {:var-name  (:var-name object)
+                                                                                  :var-value %}])})))

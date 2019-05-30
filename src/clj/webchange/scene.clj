@@ -1,5 +1,6 @@
 (ns webchange.scene
   (:require [webchange.demo-scenes.home :refer [home-scene]]
+            [webchange.demo-scenes.library.painting-tablet :refer [painting-tablet-scene]]
             [webchange.demo-scenes.map :refer [map-scene]]
             [webchange.demo-scenes.park.see-saw :refer [see-saw-scene]]
             [webchange.demo-scenes.park.swings :refer [swings-scene]]
@@ -17,6 +18,7 @@
                       "see-saw" see-saw-scene
                       "swings" swings-scene
                       "sandbox" sandbox-scene
+                      "painting-tablet" painting-tablet-scene
                       "park" park-scene
                       "volleyball" volleyball-scene
                       "hide-n-seek" hide-n-seek-scene
@@ -25,8 +27,8 @@
                       "cycling" cycling-scene}})
 (defn get-course
   [course-id]
-  {:initial-scene "map"
-   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "cycling"]
+  {:initial-scene "painting-tablet"
+   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "painting-tablet" "cycling"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"
                                   :assessment-1 "assessment1"}}]
    :workflow-actions [{:id 1 :type "set-activity" :activity "home-introduce" :order 1}
@@ -36,7 +38,8 @@
                       {:id 5 :type "set-activity" :activity "volleyball" :order 5}
                       {:id 6 :type "set-activity" :activity "book" :order 6}
                       {:id 7 :type "set-activity" :activity "cycling" :order 7}
-                      {:id 9 :type "set-activity" :activity "hide-n-seek" :order 9}]
+                      {:id 9 :type "set-activity" :activity "hide-n-seek" :order 9}
+                      {:id 10 :type "set-activity" :activity "painting-tablet" :order 10}]
    :default-progress {:current-scene "home"
                       :current-activity "home"
                       :variables {:last-location "home"}
