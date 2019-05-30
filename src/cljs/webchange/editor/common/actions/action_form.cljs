@@ -474,7 +474,7 @@
    [Divider]
    (case (-> @props :type keyword)
      :action [action-panel props]
-     :audio [audio-panel props]
+     :audio [audio-panel props params]
      :state [state-panel props]
      :add-alias [add-alias-panel props]
      :empty [empty-panel props]

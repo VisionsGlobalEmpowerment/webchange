@@ -17,6 +17,12 @@
   (let [dataset (db/get-dataset {:id dataset-id})]
     {:dataset dataset}))
 
+(defn get-dataset-by-name [course-name dataset-name]
+  (->> (get-course-datasets course-name)
+       :datasets
+       (filter #(= dataset-name (:name %)))
+       first))
+
 (defn create-dataset!
   [data]
   (let [{course-id :id} (db/get-course {:name (:course-id data)})

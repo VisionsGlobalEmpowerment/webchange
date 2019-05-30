@@ -102,7 +102,7 @@
                            :scale-x 0.4
                            :scale-y 0.4
                            :skins ["default"]
-                           :animations ["2"]}
+                           :animations ["idle" "V_idle" "V_down" "V_up" "bike_ride" "bike_jump" "bike_turndown" "bike_turnup" "run" "run_jump" "swing"]}
                  :senoravaca {:name "senoravaca"
                               :width 351
                               :height 77

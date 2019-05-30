@@ -13,7 +13,6 @@
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
-    #_[gsap/all :refer [TweenLite TweenMax BezierPlugin]]
     ))
 
 (def default-assets [{:url "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
@@ -77,6 +76,7 @@
                      {:url "/raw/anim/vera-90/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera-90/skeleton.png", :size 1, :type "anim-texture"}
                      {:url "/raw/anim/vera-90/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera-90/skeleton3.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/rock/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/rock/skeleton.json", :size 1, :type "anim-text"}

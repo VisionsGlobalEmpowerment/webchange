@@ -41,6 +41,7 @@
 (declare placeholder)
 (declare animation)
 (declare text)
+(declare carousel-object)
 
 (defn object
   [type]
@@ -52,6 +53,7 @@
     :placeholder placeholder
     :animation animation
     :text text
+    :carousel carousel-object
     ))
 
 (defn to-props
@@ -176,6 +178,12 @@
     [:> Group object-params
      [:> Text (dissoc object-params :x :y)]
      [:> Rect (rect-params scene-id name object)]]))
+
+(defn carousel-object
+  [scene-id name object]
+  [:> Group (object-params object)
+   [kimage (get-data-as-url (:first object))]
+   [:> Rect (rect-params scene-id name object)]])
 
 (defn scene
   []

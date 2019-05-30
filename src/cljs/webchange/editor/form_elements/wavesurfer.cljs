@@ -35,9 +35,6 @@
                                                                                             :slop 5
                                                                                             :color "hsla(400, 100%, 30%, 0.5)"}))
                                                            (.create TimelinePlugin (clj->js {:container timeline-div}))]}))]
-    (js/console.log key)
-    (js/console.log (get-data key))
-    (js/console.log (get-data-as-blob key))
     (.loadBlob wavesurfer (get-data-as-blob key))
     wavesurfer))
 

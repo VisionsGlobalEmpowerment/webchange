@@ -8,6 +8,7 @@
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :refer [anim]]
     [webchange.common.text :refer [chunked-text]]
+    [webchange.common.carousel :refer [carousel]]
     [webchange.common.slider :refer [slider]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
@@ -212,6 +213,7 @@
 (declare image)
 (declare animation)
 (declare text)
+(declare carousel-object)
 
 (defn draw-object
   [scene-id name]
@@ -226,6 +228,7 @@
       :placeholder [placeholder scene-id name o]
       :animation [animation scene-id name o]
       :text [text scene-id name o]
+      :carousel [carousel-object scene-id name o]
       )))
 
 (defn placeholder
@@ -273,6 +276,10 @@
                    :origin {:type "center-top"}
                    :scale-y -1}
                   with-origin-offset)]]))
+
+(defn carousel-object [scene-id name object]
+  [:> Group (prepare-group-params object)
+   [carousel object]])
 
 (defn triggers
   [scene-id]

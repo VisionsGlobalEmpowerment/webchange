@@ -8,7 +8,9 @@
             [webchange.demo-scenes.stadium.volleyball :refer [volleyball-scene]]
             [webchange.demo-scenes.park.hide-n-seek :refer [hide-n-seek-scene]]
             [webchange.demo-scenes.library.library :refer [library-scene]]
-            [webchange.demo-scenes.library.book :refer [book-scene]]))
+            [webchange.demo-scenes.library.book :refer [book-scene]]
+            [webchange.demo-scenes.stadium.cycling :refer [cycling-scene]]
+            [clojure.tools.logging :as log]))
 
 (def courses {"test" {"home" home-scene
                       "map" map-scene
@@ -19,7 +21,8 @@
                       "volleyball" volleyball-scene
                       "hide-n-seek" hide-n-seek-scene
                       "library" library-scene
-                      "book" book-scene}})
+                      "book" book-scene
+                      "cycling" cycling-scene}})
 (defn get-course
   [course-id]
   {:initial-scene "map"
