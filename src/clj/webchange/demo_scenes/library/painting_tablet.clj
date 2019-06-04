@@ -31,6 +31,8 @@
                                     :scale-y    1
                                     :rotation   0
                                     :src        "/raw/img/library/painting-tablet/felt-tip.png"
+                                    :states     {:active   {:x -216}
+                                                 :inactive {:x -316}}
                                     :actions    {:click {:type   "action"
                                                          :id     "set-current-tool"
                                                          :params {:tool "felt-tip"}
@@ -45,6 +47,8 @@
                                     :scale-y    1
                                     :rotation   0
                                     :src        "/raw/img/library/painting-tablet/brush.png"
+                                    :states     {:active   {:x -180}
+                                                 :inactive {:x -280}}
                                     :actions    {:click {:type   "action"
                                                          :id     "set-current-tool"
                                                          :params {:tool "brush"}
@@ -59,6 +63,8 @@
                                     :scale-y    1
                                     :rotation   0
                                     :src        "/raw/img/library/painting-tablet/pencil.png"
+                                    :states     {:active   {:x -183}
+                                                 :inactive {:x -283}}
                                     :actions    {:click {:type   "action"
                                                          :id     "set-current-tool"
                                                          :params {:tool "pencil"}
@@ -73,6 +79,8 @@
                                     :scale-y    1
                                     :rotation   0
                                     :src        "/raw/img/library/painting-tablet/eraser.png"
+                                    :states     {:active   {:x -18}
+                                                 :inactive {:x -118}}
                                     :actions    {:click {:type   "action"
                                                          :id     "set-current-tool"
                                                          :params {:tool "eraser"}
@@ -87,9 +95,9 @@
                                     :scale-y    1
                                     :rotation   0
                                     :src        "/raw/img/library/painting-tablet/back.png"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "finish-activity"
-                                                         :on     "click"}}}
+                                    :actions    {:click {:type "action"
+                                                         :id   "finish-activity"
+                                                         :on   "click"}}}
                    :colors-palette {:scene-name "colors-palette"
                                     :type       "colors-palette"
                                     :var-name   "current-color"
@@ -111,15 +119,33 @@
                                        :flow-tag    "instruction"}
                    :start-activity    {:type        "sequence"
                                        :description "Initial action"
-                                       :data        ["clear-instruction"]}
+                                       :data        ["clear-instruction"
+                                                     "reset-tools"
+                                                     "init-current-tool"]}
                    :finish-activity   {:type        "sequence-data"
                                        :description "Finishing action"
                                        :data        [{:type "finish-activity" :id "painting-tablet"}
                                                      {:type "scene" :scene-id "library"}]}
-                   :set-current-tool {:type        "state"
-                                      :target      "painting-area"
-                                      :id          "default"
-                                      :from-params [{:action-property "value" :param-property "tool"}]}
+                   :reset-tools       {:type "parallel"
+                                       :data [{:type "state" :id "inactive" :target "felt-tip"}
+                                              {:type "state" :id "inactive" :target "brush"}
+                                              {:type "state" :id "inactive" :target "pencil"}
+                                              {:type "state" :id "inactive" :target "eraser"}]}
+                   :init-current-tool {:type   "action" :id "set-current-tool"
+                                       :params {:tool "felt-tip"}}
+                   :set-current-tool  {:type "sequence-data"
+                                       :data [{:type        "state"
+                                               :target      "painting-area"
+                                               :id          "default"
+                                               :from-params [{:action-property "value" :param-property "tool"}]}
+                                              {:type     "state"
+                                               :id       "inactive"
+                                               :from-var [{:var-name "current-tool" :action-property "target"}]}
+                                              {:type        "state"
+                                               :id          "active"
+                                               :from-params [{:action-property "target" :param-property "tool"}]}
+                                              {:type        "set-variable" :var-name "current-tool"
+                                               :from-params [{:action-property "var-value" :param-property "tool"}]}]}
                    :set-current-color {:type        "state"
                                        :target      "painting-area"
                                        :id          "default"
