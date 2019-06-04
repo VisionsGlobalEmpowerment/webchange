@@ -19,8 +19,7 @@
                                     :height     1080
                                     :scale-x    1
                                     :scale-y    1
-                                    :rotation   0
-                                    :states     {:default {}}}
+                                    :rotation   0}
                    :felt-tip       {:type       "image"
                                     :scene-name "felt-tip"
                                     :x          -316
@@ -136,7 +135,6 @@
                    :set-current-tool  {:type "sequence-data"
                                        :data [{:type        "state"
                                                :target      "painting-area"
-                                               :id          "default"
                                                :from-params [{:action-property "value" :param-property "tool"}]}
                                               {:type     "state"
                                                :id       "inactive"
@@ -148,7 +146,6 @@
                                                :from-params [{:action-property "var-value" :param-property "tool"}]}]}
                    :set-current-color {:type        "state"
                                        :target      "painting-area"
-                                       :id          "default"
                                        :from-params [{:action-property "value" :param-property "color"}]}}
    :triggers      {:start {:on "start" :action "start-activity"}}
    :metadata      {:autostart true
