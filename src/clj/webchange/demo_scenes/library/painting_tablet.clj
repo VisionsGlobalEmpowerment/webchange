@@ -12,7 +12,7 @@
                                     :src        "/raw/img/library/painting-tablet/background.jpg"}
                    :painting-area  {:scene-name "painting-area"
                                     :type       "painting-area"
-                                    :var-name   "current-painting"
+                                    :var-name   "painting-tablet-image"
                                     :x          0
                                     :y          0
                                     :width      1920
@@ -114,10 +114,8 @@
                                        :data        ["clear-instruction"]}
                    :finish-activity   {:type        "sequence-data"
                                        :description "Finishing action"
-                                       :data        [{:type     "set-progress" :var-name "painting"
-                                                      :from-var [{:var-name "current-painting" :action-property "var-value"}]}
-                                                     {:type "finish-activity" :id "hide-n-seek"}
-                                                     {:type "scene" :scene-id "map"}]}
+                                       :data        [{:type "finish-activity" :id "painting-tablet"}
+                                                     {:type "scene" :scene-id "library"}]}
                    :set-current-tool {:type        "state"
                                       :target      "painting-area"
                                       :id          "default"
