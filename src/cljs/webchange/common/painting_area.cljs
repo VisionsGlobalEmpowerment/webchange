@@ -14,13 +14,13 @@
                        :globalCompositeOperation "source-over"}
             :brush    {:lineCap    "round"
                        :lineJoin   "round"
-                       :lineWidth  13
-                       :shadowBlur 7
+                       :lineWidth  30
+                       :shadowBlur 10
                        :globalCompositeOperation "source-over"}
             :eraser   {:lineCap    "round"
                        :lineJoin   "round"
-                       :lineWidth  15
-                       :shadowBlur 0
+                       :lineWidth  25
+                       :shadowBlur 3
                        :globalCompositeOperation "destination-out"}})
 
 (def default-props {:tool  "brush"
