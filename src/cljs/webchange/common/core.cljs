@@ -8,13 +8,21 @@
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.common.events :as ce]))
 
+(defn prepare-action-data
+  [action event]
+  (let [event-param-name (keyword (:pick-event-param action))
+        params (if event-param-name
+                 (merge (:params action) (hash-map event-param-name (get event event-param-name)))
+                 (:params action))]
+    (merge action {:params params})))
+
 (defn prepare-action
   [action]
   (let [type (:on action)]
     (if (= type "click")
       {:on-click #(re-frame/dispatch [::ce/execute-action action])
        :on-tap #(re-frame/dispatch [::ce/execute-action action])}
-      {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action action])})))
+      {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action (prepare-action-data action %)])})))
 
 (defn prepare-actions
   [{:keys [actions] :as object}]
@@ -64,3 +72,8 @@
   (-> object
       (merge {:on-change #(re-frame/dispatch [::vars.events/execute-set-variable {:var-name  (:var-name object)
                                                                                   :var-value %}])})))
+
+(defn prepare-colors-palette-params
+  [object]
+  (-> object
+      prepare-actions))

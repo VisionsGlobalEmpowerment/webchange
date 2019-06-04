@@ -1,6 +1,5 @@
 (ns webchange.common.painting-area
   (:require
-    [reagent.core :as r]
     [react-konva :refer [Image]]))
 
 (def tools {:pencil   {:lineCap    "butt"
@@ -100,10 +99,7 @@
 
 (defn finish-painting
   []
-  (let [change-handler (:on-change @state)
-        canvas (:canvas @state)]
-    (swap! state assoc :is-painting false)
-    (change-handler (.toDataURL canvas))))
+  (swap! state assoc :is-painting false))
 
 (defn get-point-relative-coordinates
   [point image stage]
@@ -150,11 +146,22 @@
     (.addEventListener stage "mousemove touchmove" process-painting)))
 
 (defn should-component-update
+  [_ _ [_ next-props]]
+  (let [color (:color next-props)
+        tool (:tool next-props)
+        canvas-context (:canvas-context @state)]
+    (update-painting-style canvas-context tool color)
+    false))
+
+(defn component-will-unmount
   []
-  false)
+  (let [change-handler (:on-change @state)
+        canvas (:canvas @state)]
+    (change-handler (.toDataURL canvas))))
 
 (def painting-area
   (with-meta painting-area-render
              {:should-component-update should-component-update
-              :component-did-mount component-did-mount}))
+              :component-did-mount component-did-mount
+              :component-will-unmount component-will-unmount}))
 
