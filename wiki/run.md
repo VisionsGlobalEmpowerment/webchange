@@ -18,7 +18,7 @@ $ lein run
 
 ```
 $ lein clean
-$ lein figwheel dev
+$ lein dev
 ```
 
 Figwheel will automatically push cljs changes to the browser.
