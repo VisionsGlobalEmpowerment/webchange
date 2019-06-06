@@ -41,6 +41,8 @@
 (declare placeholder)
 (declare animation)
 (declare text)
+(declare painting-area)
+(declare colors-palette)
 (declare carousel-object)
 
 (defn object
@@ -54,7 +56,9 @@
     :animation animation
     :text text
     :carousel carousel-object
-    ))
+    :painting-area painting-area
+    :colors-palette colors-palette
+    (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))))
 
 (defn to-props
   [konva-node]
@@ -183,6 +187,16 @@
   [scene-id name object]
   [:> Group (object-params object)
    [kimage (get-data-as-url (:first object))]
+   [:> Rect (rect-params scene-id name object)]])
+
+(defn painting-area
+  [scene-id name object]
+  [:> Group (object-params object)
+   [:> Rect (rect-params scene-id name object)]])
+
+(defn colors-palette
+  [scene-id name object]
+  [:> Group (object-params object)
    [:> Rect (rect-params scene-id name object)]])
 
 (defn scene

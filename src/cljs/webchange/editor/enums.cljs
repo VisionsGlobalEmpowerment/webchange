@@ -19,4 +19,5 @@
    {:key :placeholder :value :placeholder :text "Placeholder"}
    {:key :animation :value :animation :text "Animation"}
    {:key :text :value :text :text "Text"}
-   {:key :background :value :background :text "Background"}])
+   {:key :background :value :background :text "Background"}
+   {:key :painting-area :value :painting-area :text "Painting Area"}])

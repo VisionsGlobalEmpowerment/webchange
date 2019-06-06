@@ -9,14 +9,6 @@
     [soda-ash.core :as sa]
     [sodium.core :as na]))
 
-(def object-types [{:key :image :value :image :text "Image"}
-                   {:key :transparent :value :transparent :text "Transparent"}
-                   {:key :group :value :group :text "Group"}
-                   {:key :placeholder :value :placeholder :text "Placeholder"}
-                   {:key :animation :value :animation :text "Animation"}
-                   {:key :text :value :text :text "Text"}
-                   {:key :background :value :background :text "Background"}])
-
 (defn- properties-panel-image
   [props]
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
