@@ -5,28 +5,8 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.dashboard.classes.events :as classes-events]
-    [webchange.dashboard.classes.subs :as classes-subs]))
-
-(defn- class-form
-  [props]
-  [:form
-   [ui/text-field {:hint-text     "Class Name"
-                   :default-value (:name @props)
-                   :on-change     #(swap! props assoc :name (->> % .-target .-value))}]])
-
-(defn- class-modal
-  [class-data {:keys [title modal-open handle-save handle-close]}]
-  [ui/dialog {:title            title
-              :actions          [(r/as-element [ui/flat-button {:default  true
-                                                                :on-click handle-close} "Cancel"])
-                                 (r/as-element [ui/raised-button {:primary  true
-                                                                  :on-click #(do (handle-save @class-data)
-                                                                                 (handle-close))} "Save"])]
-              :modal            false
-              :content-style    {:width "370px"}
-              :open             modal-open
-              :on-request-close #(handle-close)}
-   [class-form class-data]])
+    [webchange.dashboard.classes.subs :as classes-subs]
+    [webchange.dashboard.classes.views-common :refer [class-modal]]))
 
 (defn- add-new-class-dashboard-item
   [{:keys [on-click]}]
@@ -62,11 +42,11 @@
                         edit-class (fn [class-data] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
                         remove-class (fn [class-data] (re-frame/dispatch [::classes-events/delete-class (:id class-data)]))
                         handle-add-click (fn [] (do (reset! current-class {})
-                                                    (swap! modal-state assoc :title "Add New Class")
+                                                    (swap! modal-state assoc :title :add)
                                                     (swap! modal-state assoc :handle-save add-class)
                                                     (open-modal)))
                         handle-edit-click (fn [class-data] (do (reset! current-class class-data)
-                                                               (swap! modal-state assoc :title "Edit Class")
+                                                               (swap! modal-state assoc :title :edit)
                                                                (swap! modal-state assoc :handle-save edit-class)
                                                                (open-modal)))]
                     [ui/card

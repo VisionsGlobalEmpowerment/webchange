@@ -1,23 +1,16 @@
 @import "classes";
 
 .dashboard {
-    display: flex;
-
     .side-bar {
-        background-color: #565656;
-
-        flex-grow: 0;
-        width: 320px;
+        top: 64px !important;
+        height: calc(100% - 64px) !important;
     }
 
     .view-port {
-        background-color: #e8e8e8;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
+        transition: margin-left 0.45s cubic-bezier(0.23, 1, 0.32, 1) 0s;
 
-        .main-content {
-            padding: 20px;
+        &.shrink {
+            margin-left: 256px;
         }
     }
 }
