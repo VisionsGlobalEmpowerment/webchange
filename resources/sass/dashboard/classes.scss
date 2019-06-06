@@ -1,0 +1,55 @@
+.classes-list {
+    background-color: #e8e8e8;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+
+    .classes-list-item {
+        $padding: 24px;
+        $size: 296px;
+
+        background-color: #ffffff;
+        border: solid 1px #d3d3d3;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px,
+                    rgba(0, 0, 0, 0.12) 0px 1px 4px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 0;
+        height: $size;
+        margin: 10px;
+        width: $size;
+
+        .classes-list-item_header {
+            font-size: 43px;
+            font-weight: 500;
+            flex-grow: 0;
+            color: #292929;
+            line-height: 43px;
+            padding: $padding;
+            text-transform: capitalize;
+        }
+
+        .classes-list-item_body {
+            flex-grow: 1;
+            padding: $padding;
+        }
+
+        .classes-list-item_actions {
+            flex-grow: 0;
+            text-align: right;
+            padding: $padding;
+        }
+
+        &.add-new {
+            background-color: #123fcf;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 36px;
+            font-weight: bold;
+            line-height: $size - 2 * $padding;
+            text-align: center;
+            user-select: none;
+        }
+    }
+}
