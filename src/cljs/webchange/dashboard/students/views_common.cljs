@@ -22,7 +22,6 @@
   []
   (let [errors (r/atom {:password nil})]
     (fn [props]
-      (println (str "student-form" @props))
       [:form
        [ui/text-field {:hint-text     "First Name"
                        :default-value (:first-name @props)
