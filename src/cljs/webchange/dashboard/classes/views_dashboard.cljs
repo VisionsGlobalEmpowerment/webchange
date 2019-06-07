@@ -1,5 +1,6 @@
 (ns webchange.dashboard.classes.views-dashboard
   (:require
+    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
@@ -14,9 +15,9 @@
    [:div.classes-list-item_body "+ New"]])
 
 (defn- classes-dashboard-item
-  [{:keys [name] :as class} {:keys [on-edit on-remove]}]
+  [{:keys [id name] :as class} {:keys [on-click on-edit on-remove]}]
   [:div.classes-list-item
-   [:div.classes-list-item_header name]
+   [:div.classes-list-item_header {:on-click #(on-click id)} name]
    [:div.classes-list-item_body]
    [:div.classes-list-item_actions
     [ui/icon-menu {:icon-button-element (r/as-element [ui/icon-button (ic/navigation-more-horiz)])
@@ -40,6 +41,7 @@
                         close-modal #(swap! modal-state assoc :open false)
                         add-class (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data]))
                         edit-class (fn [class-data] (re-frame/dispatch [::classes-events/edit-class (:id class-data) class-data]))
+                        show-class (fn [class-id] (re-frame/dispatch [::classes-events/show-class class-id]))
                         remove-class (fn [class-data] (re-frame/dispatch [::classes-events/delete-class (:id class-data)]))
                         handle-add-click (fn [] (do (reset! current-class {})
                                                     (swap! modal-state assoc :title :add)
@@ -55,7 +57,8 @@
                       [:div.classes-list
                        (for [class-data classes]
                          ^{:key (:id class-data)}
-                         [classes-dashboard-item class-data {:on-edit   handle-edit-click
+                         [classes-dashboard-item class-data {:on-click  show-class
+                                                             :on-edit   handle-edit-click
                                                              :on-remove remove-class}])
                        [add-new-class-dashboard-item {:on-click handle-add-click}]]
                       [class-modal current-class {:title        (:title @modal-state)

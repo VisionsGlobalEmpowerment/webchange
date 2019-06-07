@@ -1,19 +1,14 @@
 (ns webchange.dashboard.side-menu.views
   (:require
+    [cljsjs.material-ui]
     [cljs-react-material-ui.core :refer [get-mui-theme color]]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.dashboard.classes.views :refer [classes-list-menu]]))
-
-(defn- students-menu
-  []
-  [ui/list
-   [ui/subheader "Students"]
-   [ui/list-item {:primary-text "Mark"
-                  :inset-children true}]])
+    [webchange.dashboard.classes.views :refer [classes-list-menu]]
+    [webchange.dashboard.students.views :refer [students-list-menu]]))
 
 (defn side-menu
   []
    [:div.side-menu
     [classes-list-menu]
     [ui/divider]
-    [students-menu]])
+    [students-list-menu]])

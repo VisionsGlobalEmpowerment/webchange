@@ -8,12 +8,14 @@
     [reagent.core :as r]
     [webchange.dashboard.subs :as ds]
     [webchange.dashboard.side-menu.views :refer [side-menu]]
-    [webchange.dashboard.classes.views :refer [classes-dashboard]]))
+    [webchange.dashboard.classes.views :refer [classes-dashboard]]
+    [webchange.dashboard.students.views :refer [students-dashboard]]))
 
 (defn main-content
   [main-content]
   (case main-content
     :manage-classes [classes-dashboard]
+    :manage-students [students-dashboard]
     [:div]))
 
 (defn dashboard-page

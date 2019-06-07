@@ -1,5 +1,6 @@
 (ns webchange.dashboard.classes.views-list-menu
   (:require
+    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
@@ -9,10 +10,11 @@
     [webchange.dashboard.classes.views-common :refer [class-modal]]))
 
 (defn- classes-list-menu-item
-  [{:keys [name]}]
+  [{:keys [id name]} {:keys [on-click]}]
   [ui/list-item {:primary-text   name
+                 :on-click       #(on-click id)
                  :inset-children true
-                 :style {:text-transform "capitalize"}}])
+                 :style          {:text-transform "capitalize"}}])
 
 (defn classes-list-menu
   []
@@ -23,13 +25,14 @@
                   (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
                         open-modal #(swap! modal-state assoc :open true)
                         close-modal #(swap! modal-state assoc :open false)
-                        add-class (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data]))]
+                        add-class (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data]))
+                        show-class (fn [class-id] (re-frame/dispatch [::classes-events/show-class class-id]))]
                     [ui/list
                      [ui/list-item {:primary-text "Classes"
                                     :on-click     #(re-frame/dispatch [::classes-events/show-manage-classes])}]
                      (for [class classes]
                        ^{:key (:id class)}
-                       [classes-list-menu-item class])
+                       [classes-list-menu-item class {:on-click show-class}])
                      [ui/list-item {:primary-text "Add"
                                     :left-icon    (ic/content-add)
                                     :on-click     (fn [] (do (reset! current-class {})

@@ -50,7 +50,6 @@
 (re-frame/reg-event-fx
   ::edit-class
   (fn [{:keys [db]} [_ id data]]
-    (println (str "::edit-class " id " " data))
     {:db (assoc-in db [:loading :edit-class] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/classes/" id)
@@ -65,8 +64,7 @@
   ::edit-class-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :edit-class]
-                       [::load-classes]
-                       [::show-manage-classes])}))
+                       [::load-classes])}))
 
 (re-frame/reg-event-fx
   ::delete-class
@@ -87,14 +85,7 @@
                        [::load-classes])}))
 
 (re-frame/reg-event-fx
-  ::show-edit-class-form
-  (fn [{:keys [db]} [_ class-id]]
-    {:db (assoc-in db [:dashboard :current-class-id] class-id)
-     :dispatch [::dashboard-events/set-main-content :edit-class-form]}))
-
-(re-frame/reg-event-fx
   ::show-class
   (fn [{:keys [db]} [_ class-id]]
     {:db (assoc-in db [:dashboard :current-class-id] class-id)
-     :dispatch-n (list [::load-students class-id]
-                       [::dashboard-events/set-main-content :manage-students])}))
+     :dispatch-n (list [::dashboard-events/set-main-content :manage-students])}))

@@ -1,5 +1,6 @@
 (ns webchange.dashboard.classes.views-common
   (:require
+    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]))
 
