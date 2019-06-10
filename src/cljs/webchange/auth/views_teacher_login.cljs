@@ -1,5 +1,10 @@
 (ns webchange.auth.views-teacher-login
   (:require
+    [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.auth.events :as auth.events]
+    [webchange.config :as config]
+    [webchange.routes :as routes]
     [webchange.ui.components :as wui]
     [webchange.ui.theme :refer [with-mui-theme]]))
 
@@ -7,7 +12,8 @@
                           :last  "School"}
         :form            {:username "Username"
                           :password "Password"
-                          :sign-in  "Sign in"}
+                          :sign-in  "Sign in"
+                          :sign-up  "Sign up"}
         :remember-me     "Remember me"
         :forgot-password "Forgot Password?"
         :welcome         {:first "Welcome to"
@@ -18,57 +24,53 @@
   [path]
   (get-in t path))
 
+(def test-credentials
+  {:email    "demo@example.com"
+   :password "demo123"})
+
 (defn teacher-login-page
   []
-  [with-mui-theme
-   [:div.teacher-login-page
-    [:div.login-window
-     [:div.auth-panel
-      [:header
-       [:div.logo]
-       [:h1
-        [:span (translate [:name :first])]
-        [:span (translate [:name :last])]]]
-      [:main
-       [:form
-        [wui/text-field {:hint-text (translate [:form :username])}]
-        [wui/text-field {:type      "password"
-                         :hint-text (translate [:form :password])}]
-        [wui/raised-button {:primary true
-                            :label   (translate [:form :sign-in])
-                            :style   {:width      150
-                                      :margin-top 20}}]]]
-      [:footer
-       [:div.remember-me
-        [wui/checkbox {:label (translate [:remember-me])}]]
-       [:div.forgot-password
-        [:a (translate [:forgot-password])]]]]
-     [:div.welcome-screen
-      [:div.welcome-text
-       [:h1 (translate [:welcome :first])]
-       [:h2 (translate [:welcome :last])]]]]]])
-
-;(defn login-form []
-;  (r/with-let [data (r/atom (if config/debug? {:email    "demo@example.com"
-;                                               :password "demo123"} {}))]
-;              (let [loading  @(re-frame/subscribe [:loading])
-;                    errors   @(re-frame/subscribe [:errors])]
-;                [:div {:class-name "login-form"}
-;                 [:style "body > div, body > div > div, body > div > div > div.login-form {height: 100%;}"]
-;                 [na/grid {:text-align "center" :style {:height "100%"} :vertical-align "middle"}
-;                  [na/grid-column {:style {:max-width 450}}
-;                   [na/header {:as "h2" :color "teal" :text-align "center" :content "Log-in to your account"}]
-;                   [na/form {:size "large" :loading? (when (:login loading)) :error? (when (:login errors))}
-;                    [na/segment {:stacked? true}
-;                     [na/form-input {:fluid? true :icon "user" :icon-position "left" :placeholder "E-mail address"
-;                                     :on-change #(swap! data assoc :email (-> %2 .-value))}]
-;                     [na/form-input {:fluid? true :icon "lock" :icon-position "left" :placeholder "Password" :type "password"
-;                                     :on-change #(swap! data assoc :password (-> %2 .-value))}]
-;
-;                     (when-let [form-error (get-in errors [:login :form])]
-;                       [sa/Message {:error true :visible true :header "Error" :content form-error}])
-;
-;                     [na/button {:color "teal" :fluid? true :size "large" :content "Login"
-;                                 :on-click #(re-frame/dispatch [::auth.events/login @data])}]
-;                     ]]
-;                   [sa/Message {} "New to us? " [:a {:href (routes/url-for :register-user)} "Sign-up"]]]]])))
+  (let [data (r/atom (if config/debug? test-credentials {}))
+        change-username #(swap! data assoc :email (->> % .-target .-value))
+        change-password #(swap! data assoc :password (->> % .-target .-value))
+        change-remember #(swap! data assoc :remember-me (->> % .-target .-checked))]
+    (fn []
+      (let [form-error (get-in @(re-frame/subscribe [:errors]) [:login :form])
+            sign-in #(re-frame/dispatch [::auth.events/login @data])
+            sign-up #(routes/redirect-to :register-user)]
+        [with-mui-theme
+         [:div.teacher-login-page
+          [:div.login-window
+           [:div.auth-panel
+            [:header
+             [:div.logo]
+             [:h1
+              [:span (translate [:name :first])]
+              [:span (translate [:name :last])]]]
+            [:main
+             [wui/text-field {:on-change change-username
+                              :hint-text (translate [:form :username])}]
+             [wui/text-field {:on-change change-password
+                              :type      "password"
+                              :hint-text (translate [:form :password])}]
+             [:div.error
+              (when form-error [:span form-error])]
+             [wui/raised-button {:on-click sign-in
+                                 :primary  true
+                                 :label    (translate [:form :sign-in])
+                                 :style    {:width        100
+                                            :margin-right 10}}]
+             [wui/flat-button {:on-click sign-up
+                               :primary  true
+                               :label    (translate [:form :sign-up])
+                               :style    {:width 100}}]]
+            [:footer
+             [:div.remember-me
+              [wui/checkbox {:on-check change-remember
+                             :label    (translate [:remember-me])}]]
+             [:div.forgot-password
+              [:a (translate [:forgot-password])]]]]
+           [:div.welcome-screen
+            [:div.welcome-text
+             [:h1 (translate [:welcome :first])]
+             [:h2 (translate [:welcome :last])]]]]]]))))

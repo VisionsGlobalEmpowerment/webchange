@@ -8,6 +8,7 @@ $background-color: #222342;
 $page-background-color: darken($background-color, 5%);
 $form-background-color: $foreground-color;
 $form-text-color: $default-text-color;
+$error-text-color: $secondary-text-color;
 $logo-text-color-first: $default-text-color;
 $logo-text-color-second: $secondary-text-color;
 $welcome-background-color: $background-color;
@@ -81,6 +82,12 @@ $logo-url: url(/raw/img/teacher-login/logo.png);
 
             main {
                 flex: 0 0 auto;
+
+                .error {
+                    color: $error-text-color;
+                    height: 30px;
+                    margin: 10px 0;
+                }
 
                 button {
                     margin-top: 20px;

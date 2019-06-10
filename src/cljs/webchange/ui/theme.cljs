@@ -14,6 +14,7 @@
    (get-mui-theme {:border-radius 20
                    :palette       {:text-color (get-in w-colors [:primary])}
                    :checkbox      {:checked-color (get-in w-colors [:primary])}
+                   :flat-button   {:primary-text-color (get-in w-colors [:primary])}
                    :raised-button {:primary-color (get-in w-colors [:primary])}
                    :text-field    {:focus-color (get-in w-colors [:primary])}
                    })})
