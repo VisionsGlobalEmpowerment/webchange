@@ -6,7 +6,7 @@
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
-    [webchange.auth.views :refer [login-form register-form student-access-form]]
+    [webchange.auth.views :refer [teacher-login register-form student-access-form]]
     [webchange.dashboard.views :refer [dashboard-page]]
     [soda-ash.core :as sa]))
 
@@ -57,7 +57,7 @@
   (case panel-name
     :home [course-switch]
     :register-user [register-form]
-    :login [login-form]
+    :login [teacher-login]
     :student-login [student-access-form]
     :course [course (:id route-params)]
     :course-editor [editor-panel (:id route-params)]

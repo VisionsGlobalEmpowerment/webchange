@@ -2,6 +2,7 @@
   align-content: center;
   align-items: center;
   display: flex;
+  font-family: Roboto, sans-serif;
   height: 100vh;
   justify-content: center;
   width: 100%;
@@ -17,4 +18,5 @@
   width: 100%;
 }
 
+@import "auth/index";
 @import "dashboard/index";
