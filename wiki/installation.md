@@ -33,6 +33,12 @@ $ sudo apt install nodejs
 $ sudo npm install -g karma-cli
 ```
 
+- Install Sass
+
+```
+$ sudo apt install ruby-sass
+```
+
 - Install npm packages:
 
 ```
@@ -87,3 +93,7 @@ $ sudo apt-get install leiningen
 - [Java](https://java.com)
 - [Clojure](https://clojure.org)
 - [Leiningen](https://leiningen.org)
+  - [lein-sass](https://github.com/tuhlmann/lein-sass)
+  - [lein-cljsbuild](https://github.com/emezeske/lein-cljsbuild)
+  - [lein-environ](https://github.com/weavejester/environ)
+  - [migratus-lein](https://github.com/yogthos/migratus-lein)

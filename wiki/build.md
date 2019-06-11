@@ -26,5 +26,6 @@ To compile clojurescript to javascript:
 
 ```
 $ lein clean
+$ lein sass once
 $ lein cljsbuild once min
 ```

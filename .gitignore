@@ -2,8 +2,11 @@
 /log/*
 /target
 /*-init.clj
+/resources/public/css/
 /resources/public/js/compiled
 /.idea
+/.sass-cache
+/tmp
 webchange.iml
 /node_modules
 out

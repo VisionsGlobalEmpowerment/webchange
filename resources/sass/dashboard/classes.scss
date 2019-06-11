@@ -1,0 +1,54 @@
+.classes-list {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+
+    .classes-list-item {
+        $padding: 24px;
+        $size: 200px;
+
+        background-color: #ffffff;
+        border: solid 1px #d3d3d3;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px,
+                    rgba(0, 0, 0, 0.12) 0px 1px 4px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 0;
+        height: $size;
+        margin: 10px;
+        width: $size;
+
+        .classes-list-item_header {
+            font-size: 32px;
+            font-weight: 500;
+            flex-grow: 0;
+            color: #292929;
+            cursor: pointer;
+            line-height: 43px;
+            padding: $padding;
+        }
+
+        .classes-list-item_body {
+            flex-grow: 1;
+            padding: 0 $padding;
+        }
+
+        .classes-list-item_actions {
+            flex-grow: 0;
+            text-align: right;
+            padding: 0 $padding / 2;
+        }
+
+        &.add-new {
+            background-color: #00bcd4;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 36px;
+            font-weight: bold;
+            line-height: $size;
+            text-align: center;
+            user-select: none;
+        }
+    }
+}

@@ -14,6 +14,7 @@
                  [ring/ring-json "0.4.0"]
                  [cljsjs/react "16.6.0-0"]
                  [cljsjs/react-dom "16.6.0-0"]
+                 [cljs-react-material-ui "0.2.48"]
                  [reanimated "0.6.1"]
                  [cljs-http "0.1.45"]
                  [soda-ash "0.83.0"]
@@ -37,7 +38,9 @@
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
+            [lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]
+            [lein-sass "0.4.0"]
             [migratus-lein "0.7.0"]]
 
   :jvm-opts ["-Xmx2g"]
@@ -60,6 +63,15 @@
              :init-script "init.sql"
              :db ~(get (System/getenv) "DATABASE_URL")}
 
+  :sass {:src              "resources/sass"
+         :output-directory "resources/public/css"
+         :command          :sass}
+
+  :cooper {"styles" ["lein" "sass" "auto"]
+           "cljs"   ["lein" "figwheel" "dev"]}
+
+  :aliases {"dev" ["cooper"]}
+
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]
@@ -77,7 +89,8 @@
              :main         webchange.server
              :aot          [webchange.server]
              :uberjar-name "webchange.jar"
-             :prep-tasks   ["compile" ["cljsbuild" "once" "min"]]}
+             :prep-tasks   ["compile" ["sass" "once"]
+                            "compile" ["cljsbuild" "once" "min"]]}
    }
 
   :cljsbuild
