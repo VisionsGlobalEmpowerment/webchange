@@ -8,7 +8,7 @@
             [clojure.tools.logging :as log]))
 
 (use-fixtures :once f/init)
-(use-fixtures :each f/clear-db-fixture)
+(use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (deftest dataset-list-can-be-retrieved
   (let [{course-id :id course-name :name} (f/course-created)

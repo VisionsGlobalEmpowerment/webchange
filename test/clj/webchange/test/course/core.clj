@@ -7,7 +7,7 @@
             [java-time :as jt]))
 
 (use-fixtures :once f/init)
-(use-fixtures :each f/clear-db-fixture)
+(use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (deftest course-can-be-retrieved
     (let [{course-name :name} (f/course-created)]

@@ -6,17 +6,30 @@
 
 (def error-invalid-credentials {:errors {:form "Invalid credentials"}})
 
+(defn prepare-register-data
+  [{:keys [last-name first-name email password]}]
+  {:last_name last-name
+   :first_name first-name
+   :email email
+   :password password})
+
 (defn create-user!
   [options]
-  (let [hashed-password (hashers/derive (:password options))
-        created-at (jt/local-date-time)
+  (let [created-at (jt/local-date-time)
         last-login (jt/local-date-time)]
     (-> options
-        (assoc :password hashed-password)
+        prepare-register-data
         (assoc :created_at created-at)
         (assoc :last_login last-login)
         (assoc :active false)
         db/create-user!)))
+
+(defn create-user-with-credentials!
+  [options]
+  (let [hashed-password (hashers/derive (:password options))]
+    (-> options
+        (assoc :password hashed-password)
+        create-user!)))
 
 (defn activate-user!
   [user-id]
@@ -28,36 +41,31 @@
     (:active user)
     (hashers/check password (:password user))))
 
-(defn visible-user
-  [user]
-  {:first-name (:first-name user)
-   :last-name (:last-name user)
-   :email (:email user)})
+(defn visible-user [user]
+  (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id]))
 
-(defn login!
+(defn user->teacher [{user-id :id :as user}]
+  (let [{teacher-id :id school-id :school-id} (db/get-teacher-by-user {:user_id user-id})]
+    (assoc user :teacher-id teacher-id :school-id school-id)))
+
+(defn teacher-login!
   [{:keys [email password]}]
   (if-let [user (db/find-user-by-email {:email email})]
     (if (credentials-valid? user password)
-      [true (visible-user user)]
+      [true (-> user user->teacher visible-user)]
       [false error-invalid-credentials])
     [false error-invalid-credentials]))
 
-(defn prepare-register-data
-  [{:keys [last-name first-name email password]}]
-  {:last_name last-name
-   :first_name first-name
-   :email email
-   :password password})
+(defn student-login!
+  [{:keys [school-id access-code]}]
+  (if-let [student (db/find-student-by-code {:school_id school-id :access_code access-code})]
+    [true {:id (:user-id student)
+           :school-id (:school-id student)}]
+    [false error-invalid-credentials]))
 
 (defn register-user!
   [user-data]
-  (let [prepared-data (prepare-register-data user-data)]
-    (create-user! prepared-data)
-    (if-let [user (db/find-user-by-email {:email (:email user-data)})]
-      [true (visible-user user)]
-      [false {:errors {:form "Invalid registration data"}}])))
-
-(defn user-id-from-identity
-  [identity]
-  (let [user (db/find-user-by-email {:email identity})]
-    (:id user)))
+  (create-user-with-credentials! user-data)
+  (if-let [user (db/find-user-by-email {:email (:email user-data)})]
+    [true (visible-user user)]
+    [false {:errors {:form "Invalid registration data"}}]))

@@ -34,7 +34,7 @@
 (re-frame/reg-event-fx
   ::login-success
   [(re-frame/inject-cofx :redirect-param)]
-  (fn [{:keys [db redirect]} [_ {user :user}]]
+  (fn [{:keys [db redirect]} [_ user]]
     (let [redirect-to (or redirect :home)]
       {:db (update-in db [:user] merge user)
        :dispatch-n (list [:complete-request :login]
@@ -54,7 +54,30 @@
 
 (re-frame/reg-event-fx
   ::register-user-success
-  (fn [{:keys [db]} [_ {user :user}]]
+  (fn [{:keys [db]} [_ user]]
     {:db (update-in db [:user] merge user)
      :dispatch-n (list [:complete-request :register-user]
                        [::events/redirect :login])}))
+
+(re-frame/reg-event-fx
+  ::student-login
+  (fn [{:keys [db]} [_ access-code]]
+    (let [current-school (:school-id db)
+          credentials {:school-id current-school :access-code access-code}]
+      {:db         (assoc-in db [:loading :student-login] true)
+       :http-xhrio {:method          :post
+                    :uri             "/api/students/login"
+                    :params          credentials
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::student-login-success]
+                    :on-failure      [:api-request-error :student-login]}})))
+
+(re-frame/reg-event-fx
+  ::student-login-success
+  [(re-frame/inject-cofx :redirect-param)]
+  (fn [{:keys [db redirect]} [_ user]]
+    (let [redirect-to (or redirect :home)]
+      {:db (update-in db [:user] merge user)
+       :dispatch-n (list [:complete-request :student-login]
+                         [::events/redirect redirect-to])})))

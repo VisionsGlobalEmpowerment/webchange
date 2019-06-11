@@ -11,17 +11,12 @@
     [webchange.dashboard.students.utils :refer [flatten-student]]
     [webchange.dashboard.students.views-common :refer [student-modal]]))
 
-(defn- add-new-student-dashboard-item
-  [{:keys [on-click]}]
-  [:div.students-dashboard-item.add-new {:on-click on-click}
+(defn- add-new-student-dashboard-item []
+  [:div.students-dashboard-item.add-new {:on-click #(re-frame/dispatch [::students-events/show-add-student-form])}
    [:div.students-dashboard-item_body "+ New"]])
 
-;      (for [{id :id {first-name :first-name last-name :last-name} :user} students]
-; {:id 4, :user-id 5, :class-id 1, :user {:first-name we, :last-name nil, :email nil}}
-
 (defn- students-dashboard-item
-  [{{:keys [first-name last-name email]} :user :as student}
-   {:keys [on-edit on-remove]}]
+  [{{:keys [first-name last-name email]} :user :as student}]
   [:div.students-dashboard-item
    [ui/card
     [ui/card-header {:title    (str first-name " " last-name)
@@ -32,43 +27,21 @@
                     :anchor-origin       {:horizontal "left" :vertical "top"}
                     :target-origin       {:horizontal "left" :vertical "top"}}
       [ui/menu-item {:primary-text "Edit"
-                     :on-click     #(on-edit student)}]
+                     :on-click     #(re-frame/dispatch [::students-events/show-edit-student-form (:id student)])}]
       [ui/menu-item {:primary-text "Remove"
-                     :on-click     #(on-remove student)}]]]]])
+                     :on-click     #(re-frame/dispatch [::students-events/delete-student (:class-id student) (:id student)])}]]]]])
 
 (defn students-dashboard
   []
-  (let [current-student (r/atom {})
-        modal-state (r/atom {:open        false
-                             :title       ""
-                             :handle-save #()})]
-    (fn []
-      (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
-            _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))
-            students @(re-frame/subscribe [::students-subs/class-students class-id])
-            open-modal #(swap! modal-state assoc :open true)
-            close-modal #(swap! modal-state assoc :open false)
-            add-student (fn [student-data] (re-frame/dispatch [::students-events/add-student class-id student-data]))
-            edit-student (fn [student-data] (re-frame/dispatch [::students-events/edit-student (:class-id student-data) (:id student-data) student-data]))
-            remove-student (fn [student-data] (re-frame/dispatch [::students-events/delete-student (:class-id student-data) (:id student-data)]))
-            handle-add-click (fn [] (do (reset! current-student {})
-                                        (swap! modal-state assoc :title :add)
-                                        (swap! modal-state assoc :handle-save add-student)
-                                        (open-modal)))
-            handle-edit-click (fn [student-data] (do (reset! current-student (flatten-student student-data))
-                                                     (swap! modal-state assoc :title :edit)
-                                                     (swap! modal-state assoc :handle-save edit-student)
-                                                     (open-modal)))]
-        [ui/card
-         [ui/card-header {:title "Students"}]
-         [ui/card-media
-          [:div.students-dashboard
-           (for [student students]
-             ^{:key (:id student)}
-             [students-dashboard-item student {:on-edit   handle-edit-click
-                                               :on-remove remove-student}])
-           [add-new-student-dashboard-item {:on-click handle-add-click}]]
-          [student-modal current-student {:title        (:title @modal-state)
-                                          :modal-open   (:open @modal-state)
-                                          :handle-save  (:handle-save @modal-state)
-                                          :handle-close close-modal}]]]))))
+  (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
+        _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))
+        students @(re-frame/subscribe [::students-subs/class-students class-id])]
+    [ui/card
+     [ui/card-header {:title "Students"}]
+     [ui/card-media
+      [:div.students-dashboard
+       (for [student students]
+         ^{:key (:id student)}
+         [students-dashboard-item student])
+       [add-new-student-dashboard-item]]
+      [student-modal]]]))

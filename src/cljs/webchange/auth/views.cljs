@@ -48,62 +48,74 @@
      [show-code c5]
      [show-code c6]]))
 
+(defn enter-code [code-ratom symbol]
+  (swap! code-ratom str symbol)
+  (js/console.log (count @code-ratom))
+  (when (<= 6 (count @code-ratom))
+    (re-frame/dispatch [::auth.events/student-login @code-ratom])))
+
 (defn student-access-form []
   (r/with-let [code (r/atom "")]
               (let [loading  @(re-frame/subscribe [:loading])
                     errors   @(re-frame/subscribe [:errors])]
-                [:div {:class-name "login-form"}
-                 [:style "body {background-color: #00d2ff}"]
-                    [na/grid {:text-align "center" :centered? true}
+                (cond
+                  (:init-current-school loading) [sa/Loader {:active true :inline "centered"}]
+                  (:student-login loading) [sa/Loader {:active true :inline "centered"}]
+                  :else
+                  [:div {:class-name "login-form"}
+                   [:style "body {background-color: #00d2ff}"]
+                   [na/grid {:text-align "center" :centered? true}
 
-                     [na/grid-row {:centered? true :style {:margin-top "90px"}}
-                       [na/grid-column {}
-                        [na/header {:as "h2" :text-align "center" :style {:color "#ffffff" :font-size "40pt" :font-family "Roboto"}
-                                    :content "STUDENT ACCESS"}]]]
+                    [na/grid-row {:centered? true :style {:margin-top "90px"}}
+                     [na/grid-column {:style {:height "80px"} :text-align "center" }
+                      [na/header {:as "h2" :text-align "center" :style {:color "#ffffff" :font-size "40pt" :font-family "Roboto"}
+                                  :content "STUDENT ACCESS"}]
+                      (when (:student-login errors)
+                        [:div [sa/Message {:negative true :compact true} [:p (-> errors :student-login :form)]]])]]
 
-                     [na/grid-row {:centered? true :style {:margin-top "50px"}}
-                       [na/grid-column {}
-                        [code-form @code]]]
+                    [na/grid-row {:centered? true :style {:margin-top "50px"}}
+                     [na/grid-column {}
+                      [code-form @code]]]
 
-                     [na/grid-row {:divided? false :style {:margin-top "90px"}}
+                    [na/grid-row {:divided? false :style {:margin-top "90px"}}
 
-                      [na/grid-column {:style {:min-width 363}}
+                     [na/grid-column {:style {:min-width 363}}
 
-                         [na/grid {}
-                          [na/grid-row {:columns 3 :centered? true}
-                           [na/grid-column {} [animal-form "animal-b.png" #(swap! code str "b")]]
-                           [na/grid-column {} [animal-form "animal-c.png" #(swap! code str "c")]]
-                           [na/grid-column {} [animal-form "animal-d.png" #(swap! code str "d")]]]
-                          [na/grid-row {:columns 3 :centered? true}
-                           [na/grid-column {} [animal-form "animal-f.png" #(swap! code str "f")]]
-                           [na/grid-column {} [animal-form "animal-k.png" #(swap! code str "k")]]
-                           [na/grid-column {} [animal-form "animal-l.png" #(swap! code str "l")]]]
-                          [na/grid-row {:columns 3 :centered? true}
-                           [na/grid-column {} [animal-form "animal-s.png" #(swap! code str "s")]]
-                           [na/grid-column {} [animal-form "animal-v.png" #(swap! code str "v")]]
-                           [na/grid-column {} [animal-form "animal-w.png" #(swap! code str "w")]]]
-                          ]
-                         ]
+                      [na/grid {}
+                       [na/grid-row {:columns 3 :centered? true}
+                        [na/grid-column {} [animal-form "animal-b.png" #(enter-code code"b")]]
+                        [na/grid-column {} [animal-form "animal-c.png" #(enter-code code "c")]]
+                        [na/grid-column {} [animal-form "animal-d.png" #(enter-code code "d")]]]
+                       [na/grid-row {:columns 3 :centered? true}
+                        [na/grid-column {} [animal-form "animal-f.png" #(enter-code code "f")]]
+                        [na/grid-column {} [animal-form "animal-k.png" #(enter-code code "k")]]
+                        [na/grid-column {} [animal-form "animal-l.png" #(enter-code code "l")]]]
+                       [na/grid-row {:columns 3 :centered? true}
+                        [na/grid-column {} [animal-form "animal-s.png" #(enter-code code "s")]]
+                        [na/grid-column {} [animal-form "animal-v.png" #(enter-code code "v")]]
+                        [na/grid-column {} [animal-form "animal-w.png" #(enter-code code "w")]]]
+                       ]
+                      ]
 
-                      [na/grid-column {:style {:width 110}}
-                        [:div {:style {:margin "0 auto" :width "4px" :height "345px" :background-image "url(/raw/img/auth/asset-13.png)"}}]]
+                     [na/grid-column {:style {:width 110}}
+                      [:div {:style {:margin "0 auto" :width "4px" :height "345px" :background-image "url(/raw/img/auth/asset-13.png)"}}]]
 
-                      [na/grid-column {:style {:min-width 363}}
+                     [na/grid-column {:style {:min-width 363}}
 
-                        [na/grid {}
-                         [na/grid-row {:columns 3 :centered? true}
-                          [na/grid-column {} [number-form "1" #(swap! code str "1")]]
-                          [na/grid-column {} [number-form "2" #(swap! code str "2")]]
-                          [na/grid-column {} [number-form "3" #(swap! code str "3")]]]
-                         [na/grid-row {:columns 3 :centered? true}
-                          [na/grid-column {} [number-form "4" #(swap! code str "4")]]
-                          [na/grid-column {} [number-form "5" #(swap! code str "5")]]
-                          [na/grid-column {} [number-form "6" #(swap! code str "6")]]]
-                         [na/grid-row {:columns 3 :centered? true}
-                          [na/grid-column {} [number-form "7" #(swap! code str "7")]]
-                          [na/grid-column {} [number-form "8" #(swap! code str "8")]]
-                          [na/grid-column {} [number-form "9" #(swap! code str "9")]]]
-                         [na/grid-row {:columns 3 :centered? true}
-                          [na/grid-column {} [number-form "0" #(swap! code str "0")]]]
-                         ]]
-                       ]]])))
+                      [na/grid {}
+                       [na/grid-row {:columns 3 :centered? true}
+                        [na/grid-column {} [number-form "1" #(enter-code code "1")]]
+                        [na/grid-column {} [number-form "2" #(enter-code code "2")]]
+                        [na/grid-column {} [number-form "3" #(enter-code code "3")]]]
+                       [na/grid-row {:columns 3 :centered? true}
+                        [na/grid-column {} [number-form "4" #(enter-code code "4")]]
+                        [na/grid-column {} [number-form "5" #(enter-code code "5")]]
+                        [na/grid-column {} [number-form "6" #(enter-code code "6")]]]
+                       [na/grid-row {:columns 3 :centered? true}
+                        [na/grid-column {} [number-form "7" #(enter-code code "7")]]
+                        [na/grid-column {} [number-form "8" #(enter-code code "8")]]
+                        [na/grid-column {} [number-form "9" #(enter-code code "9")]]]
+                       [na/grid-row {:columns 3 :centered? true}
+                        [na/grid-column {} [number-form "0" #(enter-code code "0")]]]
+                       ]]
+                     ]]]))))

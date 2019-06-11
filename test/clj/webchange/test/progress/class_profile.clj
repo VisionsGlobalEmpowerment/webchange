@@ -10,7 +10,7 @@
             [java-time :as jt]))
 
 (use-fixtures :once f/init)
-(use-fixtures :each f/clear-db-fixture)
+(use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (deftest course-stat-created-on-start-course
   (let [{course-name :name course-id :id} (f/course-created)

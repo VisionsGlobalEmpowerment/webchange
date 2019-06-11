@@ -10,5 +10,5 @@
   ::start-date "course-started"
   (fn [{created-at :created-at user-id :user-id course-id :course-id}]
     (if-not (db/get-user-course-stat {:user_id user-id :course_id course-id})
-      (let [{class-id :class-id} (db/get-user-class {:user_id user-id})]
+      (let [{class-id :class-id} (db/get-student-by-user {:user_id user-id})]
         (db/create-course-stat! {:user_id user-id :class_id class-id :course_id course-id :data {:started-at created-at}})))))
