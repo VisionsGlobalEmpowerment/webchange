@@ -6,6 +6,7 @@
     [webchange.events :as events]
     [webchange.subs :as subs]
     [webchange.auth.events :as auth.events]
+    [webchange.auth.views-registration :as registration]
     [webchange.auth.views-teacher-login :as teacher-login]
     [sodium.core :as na]
     [soda-ash.core :as sa]
@@ -15,34 +16,9 @@
   [& args]
   (apply teacher-login/teacher-login-page args))
 
-(defn register-form []
-  (r/with-let [data (r/atom {})
-               loading  @(re-frame/subscribe [:loading])
-               errors   @(re-frame/subscribe [:errors])]
-              [:div {:class-name "register-user-form"}
-               [:style "body > div, body > div > div, body > div > div > div.register-user-form {height: 100%;}"]
-               [na/grid {:text-align "center" :style {:height "100%"} :vertical-align "middle"}
-                [na/grid-column {:style {:max-width 450}}
-                 [na/header {:as "h2" :color "teal" :text-align "center" :content "Register new account"}]
-                 [na/form {:size "large" :loading? (when (:register-user loading)) :error? (when (:register-user errors))}
-                  [na/segment {:stacked? true}
-                   [na/form-input {:fluid? true :placeholder "First Name"
-                                   :on-change #(swap! data assoc :first-name (-> %2 .-value))}]
-                   [na/form-input {:fluid? true :placeholder "Last Name"
-                                   :on-change #(swap! data assoc :last-name (-> %2 .-value))}]
-                   [na/form-input {:fluid? true :placeholder "E-mail address"
-                                   :on-change #(swap! data assoc :email (-> %2 .-value))}]
-                   [na/form-input {:fluid? true :placeholder "Password" :type "password"
-                                   :on-change #(swap! data assoc :password (-> %2 .-value))}]
-                   [na/form-input {:fluid? true :placeholder "Confirm Password" :type "password"
-                                   :on-change #(swap! data assoc :confirm-password (-> %2 .-value))}]
-
-                   (when-let [form-error (get-in errors [:register-user :form])]
-                     [sa/Message {:error true :visible true :header "Error" :content form-error}])
-                   [na/button {:color "teal" :fluid? true :size "large" :content "Register"
-                               :on-click #(re-frame/dispatch [::auth.events/register-user @data])}]
-                   ]]
-                 [sa/Message {} "Already have an account? "  [:a {:href (routes/url-for :login)} "Log in"]]]]]))
+(defn register-form
+  [& args]
+  (apply registration/registration-page args))
 
 (defn animal-form [image on-click]
   [:div {:on-click on-click :style {:width "101px" :height "101px" :background-image "url(/raw/img/auth/form.png)"}}
