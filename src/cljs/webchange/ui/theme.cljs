@@ -5,9 +5,11 @@
     [cljs-react-material-ui.core :refer [get-mui-theme color]]))
 
 (def w-colors
-  {:primary   "#222342"
-   :default   "#ffffff"
-   :secondary "#fd4142"})
+  {:primary        "#222342"
+   :primary-darken "#191a31"
+   :default        "#ffffff"
+   :secondary      "#fd4142"
+   :disabled       "#bababa"})
 
 (def mui-theme
   {:mui-theme
@@ -18,10 +20,6 @@
                    :raised-button {:primary-color (get-in w-colors [:primary])}
                    :text-field    {:focus-color (get-in w-colors [:primary])}
                    })})
-
-;(defn with-mui-theme
-;  [children]
-;  [ui/mui-theme-provider mui-theme children])
 
 (defn with-mui-theme
   ([children]
