@@ -13,29 +13,32 @@
 (def info-block-height (- list-item-height image-block-height))
 (def info-block-padding 15)
 
+(def border-radius 3)
+
 (def list-item-styles
-  {:border-radius 2
+  {:border-radius border-radius
    :cursor        "pointer"
    :height        list-item-height
-   :margin        10
+   :margin        "0 30px 30px 0"
    :width         list-item-width})
 
 (def image-block-styles
   {:height              image-block-height
    :background-position "center"
    :background-repeat   "no-repeat"
-   :background-size     "cover"})
+   :background-size     "cover"
+   :border-radius       (str border-radius "px " border-radius "px 0 0")})
 
 (def image-play-styles
-  {:width list-item-width
-   :height image-play-height
-   :background-image "url(/raw/img/student_dashboard/play.png)"
+  {:width               list-item-width
+   :height              image-play-height
+   :background-image    "url(/raw/img/student_dashboard/play.png)"
    :background-position "center"
-   :background-repeat "no-repeat"
-   :background-size "contain"
-   :opacity 0.6
-   :position "relative"
-   :top (str image-play-top "px")})
+   :background-repeat   "no-repeat"
+   :background-size     "contain"
+   :opacity             0.6
+   :position            "relative"
+   :top                 (str image-play-top "px")})
 
 (def info-block-wrapper-styles
   {:display         "flex"
@@ -53,6 +56,16 @@
    :flex-direction  "column"
    :justify-content "center"})
 
+(def show-more-styles
+  {:align-items      "center"
+   :background-color "#e56a93"
+   :border-radius    border-radius
+   :color            "#ffffff"
+   :display          "flex"
+   :font-size        "24px"
+   :height           "100%"
+   :justify-content  "center"})
+
 (defn- image-block
   [url {:keys [hovered?]}]
   [:div {:style (merge image-block-styles {:background-image (str "url(" url ")")})}
@@ -66,15 +79,30 @@
    [:div {:style info-block-status-styles}
     (when completed (ic/action-check-circle {:color completed-mark-color}))]])
 
+(defn list-item
+  [{:keys [image name completed]}
+   {:keys [hovered?]}]
+  [:div
+   [image-block image {:hovered? hovered?}]
+   [info-block {:name      name
+                :completed completed}]])
+
+(defn show-more-item
+  []
+  [:div {:style show-more-styles}
+   [:span "+ More"]])
+
 (defn content-list-item
-  [{:keys [id name image completed]}
+  [{:keys [id] :as item}
    {:keys [on-click]}]
-  (let [hovered? (r/atom false)]
+  (let [show-more (= id :show-more)
+        hovered? (r/atom false)]
     (fn []
-      [wui/paper {:on-click #(on-click id)
+      [wui/paper {:on-click      #(on-click id)
                   :on-mouse-over #(reset! hovered? true)
-                  :on-mouse-out #(reset! hovered? false)
-                  :style list-item-styles}
-       [image-block image {:hovered? @hovered?}]
-       [info-block {:name      name
-                    :completed completed}]])))
+                  :on-mouse-out  #(reset! hovered? false)
+                  :style         list-item-styles
+                  :z-depth       (if @hovered? 2 1)}
+       (if show-more
+         [show-more-item]
+         [list-item item {:hovered? @hovered?}])])))

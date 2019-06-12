@@ -8,7 +8,55 @@
                :name      "Swing"
                :image     "/raw/img/student_dashboard/scenes/swing.jpg"
                :completed true}
-              {:id        13
+              ;{:id        13
+              ; :name      "Sandbox"
+              ; :image     "/raw/img/student_dashboard/scenes/sandbox.jpg"
+              ; :completed false}
+              ;{:id        14
+              ; :name      "See saw"
+              ; :image     "/raw/img/student_dashboard/scenes/see_saw.jpg"
+              ; :completed true}
+              ;{:id        15
+              ; :name      "Swing"
+              ; :image     "/raw/img/student_dashboard/scenes/swing.jpg"
+              ; :completed true}
+              ;{:id        16
+              ; :name      "Sandbox"
+              ; :image     "/raw/img/student_dashboard/scenes/sandbox.jpg"
+              ; :completed false}
+              ;{:id        17
+              ; :name      "See saw"
+              ; :image     "/raw/img/student_dashboard/scenes/see_saw.jpg"
+              ; :completed true}
+              ;{:id        18
+              ; :name      "Swing"
+              ; :image     "/raw/img/student_dashboard/scenes/swing.jpg"
+              ; :completed true}
+              ;{:id        19
+              ; :name      "Sandbox"
+              ; :image     "/raw/img/student_dashboard/scenes/sandbox.jpg"
+              ; :completed false}
+              ;{:id        110
+              ; :name      "See saw"
+              ; :image     "/raw/img/student_dashboard/scenes/see_saw.jpg"
+              ; :completed true}
+              ;{:id        111
+              ; :name      "Swing"
+              ; :image     "/raw/img/student_dashboard/scenes/swing.jpg"
+              ; :completed true}
+              ;{:id        112
+              ; :name      "Sandbox"
+              ; :image     "/raw/img/student_dashboard/scenes/sandbox.jpg"
+              ; :completed false}
+              ;{:id        113
+              ; :name      "See saw"
+              ; :image     "/raw/img/student_dashboard/scenes/see_saw.jpg"
+              ; :completed true}
+              ;{:id        114
+              ; :name      "Swing"
+              ; :image     "/raw/img/student_dashboard/scenes/swing.jpg"
+              ; :completed true}
+              {:id        115
                :name      "Sandbox"
                :image     "/raw/img/student_dashboard/scenes/sandbox.jpg"
                :completed false}])
