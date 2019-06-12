@@ -51,9 +51,9 @@
                                   :add "Add New Student"
                                   :edit "Edit Student"
                                   "")
-              :actions          [(r/as-element [ui/flat-button {:default  true
+              :actions          [(r/as-element [ui/button {:default  true
                                                                 :on-click handle-close} "Cancel"])
-                                 (r/as-element [ui/raised-button {:primary  true
+                                 (r/as-element [ui/button {:primary  true
                                                                   :on-click #(do (handle-save @student-data)
                                                                                  (handle-close))} "Save"])]
               :modal            false

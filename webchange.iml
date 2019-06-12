@@ -36,6 +36,8 @@
     <orderEntry type="library" name="Leiningen: cljsjs/create-react-class:15.5.3-0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/enzyme:3.8.0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/highlight:9.6.0-0" level="project" />
+    <orderEntry type="library" name="Leiningen: cljsjs/material-ui-icons:1.1.0-1" level="project" />
+    <orderEntry type="library" name="Leiningen: cljsjs/material-ui:1.4.0-0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/prop-types:15.6.0-0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/react-dom-server:15.5.4-0" level="project" />
     <orderEntry type="library" name="Leiningen: cljsjs/react-dom:16.6.0-0" level="project" />
@@ -117,6 +119,7 @@
     <orderEntry type="library" name="Leiningen: org.bouncycastle/bcpkix-jdk15on:1.58" level="project" />
     <orderEntry type="library" name="Leiningen: org.bouncycastle/bcprov-jdk15on:1.58" level="project" />
     <orderEntry type="library" name="Leiningen: org.checkerframework/checker-qual:2.0.0" level="project" />
+    <orderEntry type="library" name="Leiningen: org.clojars.melodylane/cljs-react-material-ui:1.4.0-0.1" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/clojure:1.10.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/clojurescript:1.10.520" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/core.async:0.3.442" level="project" />
@@ -164,6 +167,7 @@
     <orderEntry type="library" name="Leiningen: ring/ring-mock:0.3.2" level="project" />
     <orderEntry type="library" name="Leiningen: ring/ring-servlet:1.4.0" level="project" />
     <orderEntry type="library" name="Leiningen: ring:1.4.0" level="project" />
+    <orderEntry type="library" name="Leiningen: sablono:0.8.0" level="project" />
     <orderEntry type="library" name="Leiningen: soda-ash:0.83.0" level="project" />
     <orderEntry type="library" name="Leiningen: tigris:0.1.1" level="project" />
     <orderEntry type="library" name="Leiningen: yogthos/config:0.8" level="project" />

@@ -20,7 +20,7 @@
    [:div.classes-list-item_header {:on-click #(on-click id)} name]
    [:div.classes-list-item_body]
    [:div.classes-list-item_actions
-    [ui/icon-menu {:icon-button-element (r/as-element [ui/icon-button (ic/navigation-more-horiz)])
+    #_[ui/menu {:icon-button-element (r/as-element [ui/icon-button (ic/more-horiz)])
                    :anchor-origin       {:horizontal "left" :vertical "top"}
                    :target-origin       {:horizontal "left" :vertical "top"}}
      [ui/menu-item {:primary-text "Edit"

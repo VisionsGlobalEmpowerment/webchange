@@ -17,9 +17,9 @@
                                   :add "Add New Class"
                                   :edit "Edit Class"
                                   "")
-              :actions          [(r/as-element [ui/flat-button {:default  true
+              :actions          [(r/as-element [ui/button {:default  true
                                                                 :on-click handle-close} "Cancel"])
-                                 (r/as-element [ui/raised-button {:primary  true
+                                 (r/as-element [ui/button {:primary  true
                                                                   :on-click #(do (handle-save @class-data)
                                                                                  (handle-close))} "Save"])]
               :modal            false

@@ -28,7 +28,7 @@
                      :subtitle email
                      :avatar   (r/as-element [ui/avatar (get first-name 0)])}]
     [ui/card-actions {:style {:text-align "right"}}
-     [ui/icon-menu {:icon-button-element (r/as-element [ui/icon-button (ic/navigation-more-horiz)])
+     #_[ui/menu {:icon-button-element (r/as-element [ui/icon-button (ic/more-horiz)])
                     :anchor-origin       {:horizontal "left" :vertical "top"}
                     :target-origin       {:horizontal "left" :vertical "top"}}
       [ui/menu-item {:primary-text "Edit"

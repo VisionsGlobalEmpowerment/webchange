@@ -13,8 +13,9 @@
 (defn- students-list-menu-item
   [{:keys [user]}]
   (let [{:keys [first-name last-name]} user]
-    [ui/list-item {:primary-text (str first-name " " last-name)
-                   :left-avatar  (r/as-element [ui/avatar (get first-name 0)])}]))
+    [ui/list-item {}
+     [ui/avatar (get first-name 0)]
+     [ui/list-item-text {}  (str first-name " " last-name)]]))
 
 (defn students-list-menu
   []
@@ -29,19 +30,18 @@
             add-student (fn [student-data] (re-frame/dispatch [::students-events/add-student class-id student-data]))]
 
         [ui/list
-         [ui/list-item {:primary-text "Students"
-                        :disabled     true}]
+         [ui/list-item {:disabled     true}
+          [ui/list-item-text {} "Students"]]
          (for [student students]
            ^{:key (:id student)}
            [students-list-menu-item student])
          (if class-id
-           [ui/list-item {:primary-text "Add"
-                          :left-icon    (ic/content-add)
-                          :on-click     (fn [] (do (reset! current-student {})
+           [ui/list-item {:on-click     (fn [] (do (reset! current-student {})
                                                    (swap! modal-state assoc :title :add)
-                                                   (open-modal)))}]
-           [ui/list-item {:disabled       true
-                          :inset-children true} [ui/chip "Select Class"]])
+                                                   (open-modal)))}
+            [ui/list-item-icon {} [ic/add]]
+            [ui/list-item-text {} "Add"]]
+           [ui/list-item {:disabled true} [ui/chip {:label "Select Class"}]])
          [student-modal current-student {:title        :add
                                          :modal-open   (:open @modal-state)
                                          :handle-save  add-student
