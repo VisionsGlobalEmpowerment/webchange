@@ -98,6 +98,7 @@
            (GET "/courses/:id/editor" request (authenticated-route request))
 
            (GET "/dashboard" request (authenticated-route request))
+           (GET "/student-dashboard" request (authenticated-route request))
            (resources "/"))
 
 (defroutes api-routes
