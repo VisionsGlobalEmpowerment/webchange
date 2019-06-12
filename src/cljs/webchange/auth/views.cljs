@@ -1,24 +1,13 @@
 (ns webchange.auth.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.config :as config]
-    [webchange.routes :as routes]
-    [webchange.events :as events]
-    [webchange.subs :as subs]
-    [webchange.auth.events :as auth.events]
-    [webchange.auth.views-registration :as registration]
     [webchange.auth.views-teacher-login :as teacher-login]
     [sodium.core :as na]
-    [soda-ash.core :as sa]
     [reagent.core :as r]))
 
 (defn teacher-login
   [& args]
   (apply teacher-login/teacher-login-page args))
-
-(defn register-form
-  [& args]
-  (apply registration/registration-page args))
 
 (defn animal-form [image on-click]
   [:div {:on-click on-click :style {:width "101px" :height "101px" :background-image "url(/raw/img/auth/form.png)"}}
