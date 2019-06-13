@@ -1,12 +1,12 @@
-(ns webchange.student-dashboard.views-life-skill-list-item
+(ns webchange.student-dashboard.life-skills.views-life-skill-list-item
   (:require
     [reagent.core :as r]
-    [webchange.student-dashboard.views-related-content-styles :as styles]
+    [webchange.student-dashboard.life-skills.views-life-skill-styles :as styles]
     [webchange.ui.components :as wui]))
 
 (def border-radius 15)
-(def list-item-width 140)
-(def list-item-height 70)
+(def list-item-min-width 150)
+(def list-item-height 100)
 (def image-block-height (int (Math/ceil (* list-item-height 0.666))))
 (def image-play-height (int (Math/ceil (* image-block-height 0.5))))
 (def image-play-top (int (Math/ceil (* (- image-block-height image-play-height) 0.5))))
@@ -15,12 +15,13 @@
 
 (def list-item-styles
   {:background-color "#1f1f1f"
-   :border-radius border-radius
-   :cursor        "pointer"
-   :flex          "1 1 auto"
-   :height        list-item-height
-   :margin        (str styles/margin "px")
-   :position      "relative"})
+   :border-radius    border-radius
+   :cursor           "pointer"
+   :flex             "1 1 auto"
+   :height           list-item-height
+   :margin           (str styles/margin "px")
+   :min-width        list-item-min-width
+   :position         "relative"})
 
 (def image-block-styles
   {:height              image-block-height
@@ -34,10 +35,10 @@
    :justify-content "space-between"})
 
 (def info-block-name-styles
-  {:color            "#ffffff"
-   :font-size        12
-   :line-height      (str info-block-height "px")
-   :padding          (str "0 " info-block-padding "px")})
+  {:color       "#ffffff"
+   :font-size   12
+   :line-height (str info-block-height "px")
+   :padding     (str "0 " info-block-padding "px")})
 
 (defn- image-block
   [url]

@@ -1,12 +1,7 @@
-(ns webchange.student-dashboard.views-life-skill-list
+(ns webchange.student-dashboard.life-skills.views-life-skill-list
   (:require
-    [webchange.student-dashboard.views-life-skill-list-item :refer [life-skill-list-item]]
-    [webchange.student-dashboard.views-life-skill-styles :as styles]))
-
-(defn translate
-  [path]
-  (get-in {:title "Life skills / Extra credit"}
-          path))
+    [webchange.student-dashboard.life-skills.views-life-skill-list-item :refer [life-skill-list-item]]
+    [webchange.student-dashboard.life-skills.views-life-skill-styles :as styles]))
 
 (def content-block-styles
   {:display        "flex"
@@ -27,9 +22,9 @@
    :margin          (str "-" styles/margin "px")})
 
 (defn life-skill-list
-  [life-skills {:keys [on-click]}]
+  [life-skills {:keys [title on-click]}]
   [:div {:style content-block-styles}
-   [:h1 {:style content-header-styles} (translate [:title])]
+   [:h1 {:style content-header-styles} title]
    [:div {:style content-body-styles}
     (for [life-skill life-skills]
       ^{:key (:id life-skill)}

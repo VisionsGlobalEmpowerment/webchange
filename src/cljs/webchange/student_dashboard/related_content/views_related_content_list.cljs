@@ -1,12 +1,7 @@
-(ns webchange.student-dashboard.views-related-content-list
+(ns webchange.student-dashboard.related-content.views-related-content-list
   (:require
-    [webchange.student-dashboard.views-related-content-list-item :refer [related-content-list-item]]
-    [webchange.student-dashboard.views-related-content-styles :as styles]))
-
-(defn translate
-  [path]
-  (get-in {:title "Related / Additional content"}
-          path))
+    [webchange.student-dashboard.related-content.views-related-content-list-item :refer [related-content-list-item]]
+    [webchange.student-dashboard.related-content.views-related-content-styles :as styles]))
 
 (def content-block-styles
   {:display        "flex"
@@ -27,9 +22,9 @@
    :margin          (str "-" styles/margin "px")})
 
 (defn related-content-list
-  [related-content {:keys [on-click]}]
+  [related-content {:keys [title on-click]}]
   [:div {:style content-block-styles}
-   [:h1 {:style content-header-styles} (translate [:title])]
+   [:h1 {:style content-header-styles} title]
    [:div {:style content-body-styles}
     (for [item related-content]
       ^{:key (:id item)}
