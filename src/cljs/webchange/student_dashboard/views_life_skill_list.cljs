@@ -1,11 +1,11 @@
-(ns webchange.student-dashboard.views-related-content-list
+(ns webchange.student-dashboard.views-life-skill-list
   (:require
-    [webchange.student-dashboard.views-related-content-list-item :refer [related-content-list-item]]
-    [webchange.student-dashboard.views-related-content-styles :as styles]))
+    [webchange.student-dashboard.views-life-skill-list-item :refer [life-skill-list-item]]
+    [webchange.student-dashboard.views-life-skill-styles :as styles]))
 
 (defn translate
   [path]
-  (get-in {:title "Related / Additional content"}
+  (get-in {:title "Life skills / Extra credit"}
           path))
 
 (def content-block-styles
@@ -26,11 +26,11 @@
    :overflow-y      "auto"
    :margin          (str "-" styles/margin "px")})
 
-(defn related-content-list
-  [related-content {:keys [on-click]}]
+(defn life-skill-list
+  [life-skills {:keys [on-click]}]
   [:div {:style content-block-styles}
    [:h1 {:style content-header-styles} (translate [:title])]
    [:div {:style content-body-styles}
-    (for [item related-content]
-      ^{:key (:id item)}
-      [related-content-list-item item {:on-click on-click}])]])
+    (for [life-skill life-skills]
+      ^{:key (:id life-skill)}
+      [life-skill-list-item life-skill {:on-click on-click}])]])

@@ -136,13 +136,63 @@
                        :image "/raw/img/student_dashboard/tmp/video3.jpg"}
                       ])
 
-(def life-skills [{:id   41
-                   :name "Tooth Brushing Song by Blippi"
-                   :type :video
-                   :link {:source :youtube
-                          :id     "Ku-ForS6G3I"}}
-                  {:id   42
-                   :name "Blippi Farm Tour"
-                   :type :video
-                   :link {:source :youtube
-                          :id     "Dqq4H6JsP5A"}}])
+(def life-skills [{:id    41
+                   :name  "The Book 1"
+                   :type  :book
+                   :image "/raw/img/student_dashboard/tmp/book1.png"}
+                  {:id    42
+                   :name  "The Book 2"
+                   :type  :book
+                   :image "/raw/img/student_dashboard/tmp/book2.jpg"}
+                  {:id    43
+                   :name  "The Book 3"
+                   :type  :book
+                   :image "/raw/img/student_dashboard/tmp/book3.jpg"}
+                  ;{:id    44
+                  ; :name  "The Game 1"
+                  ; :type  :game
+                  ; :image "/raw/img/student_dashboard/tmp/game1.jpg"}
+                  ;{:id    45
+                  ; :name  "The Game 2"
+                  ; :type  :game
+                  ; :image "/raw/img/student_dashboard/tmp/game2.jpg"}
+                  ;{:id    46
+                  ; :name  "The Game 3"
+                  ; :type  :game
+                  ; :image "/raw/img/student_dashboard/tmp/game3.jpg"}
+                  ;{:id    47
+                  ; :name  "The Video 1"
+                  ; :type  :video
+                  ; :image "/raw/img/student_dashboard/tmp/video1.jpg"}
+                  ;{:id    48
+                  ; :name  "The Video 2"
+                  ; :type  :video
+                  ; :image "/raw/img/student_dashboard/tmp/video2.jpg"}
+                  ;{:id    49
+                  ; :name  "The Video 3"
+                  ; :type  :video
+                  ; :image "/raw/img/student_dashboard/tmp/video3.jpg"}
+                  {:id    410
+                   :name  "The Game 1"
+                   :type  :game
+                   :image "/raw/img/student_dashboard/tmp/game1.jpg"}
+                  {:id    411
+                   :name  "The Game 2"
+                   :type  :game
+                   :image "/raw/img/student_dashboard/tmp/game2.jpg"}
+                  {:id    412
+                   :name  "The Game 3"
+                   :type  :game
+                   :image "/raw/img/student_dashboard/tmp/game3.jpg"}
+                  {:id    413
+                   :name  "The Video 1"
+                   :type  :video
+                   :image "/raw/img/student_dashboard/tmp/video1.jpg"}
+                  {:id    414
+                   :name  "The Video 2"
+                   :type  :video
+                   :image "/raw/img/student_dashboard/tmp/video2.jpg"}
+                  {:id    415
+                   :name  "The Video 3"
+                   :type  :video
+                   :image "/raw/img/student_dashboard/tmp/video3.jpg"}])
