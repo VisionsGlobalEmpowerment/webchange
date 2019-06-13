@@ -1,39 +1,34 @@
-(ns webchange.student-dashboard.views-additional-content)
+(ns webchange.student-dashboard.views-additional-content
+  (:require
+    [webchange.student-dashboard.views-related-content-list :refer [related-content-list]]))
 
 (def additional-content-styles
   {:background-color "#f7f7f7"
-   :flex "0 0 auto"
-   :width 400})
+   :display          "flex"
+   :flex-direction   "column"
+   :flex             "0 0 auto"
+   :padding          "50px"
+   :width            410})
 
-(defn- related-content-item
-  [{:keys [id name type link]}]
-  [:div name])
 
-(defn- related-content-block
-  [related-content]
-  [:div
-   [:h1 "Related / Additional content"]
-   [:ul
-    (for [item related-content]
-      ^{:key (:id item)}
-      [related-content-item item])]])
-
-(defn- life-skills-item
-  [{:keys [id name type link]}]
-  [:div name])
-
-(defn- life-skills-block
-  [life-skills]
-  [:div
-   [:h1 "Life skills / Extra credit"]
-   [:ul
-    (for [item life-skills]
-      ^{:key (:id item)}
-      [life-skills-item item])]])
+;(defn- life-skills-item
+;  [{:keys [id name type link]}]
+;  [:div name])
+;
+;(defn- life-skills-block
+;  [life-skills]
+;  [:div
+;   [:h1 {:style content-header-styles} "Life skills / Extra credit"]
+;   [:ul
+;    (for [item life-skills]
+;      ^{:key (:id item)}
+;      [life-skills-item item])]])
 
 
 (defn additional-content
-  [{:keys [related-content life-skills]}]
+  [{:keys [related-content on-related-content-click
+           life-skills on-life-skill-click]}]
   [:div {:style additional-content-styles}
-   [related-content-block related-content]
-   [life-skills-block life-skills]])
+   [related-content-list related-content {:on-click on-related-content-click}]
+   ;[life-skills-block life-skills]
+   ])
