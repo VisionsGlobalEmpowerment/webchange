@@ -6,8 +6,9 @@
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
-    [webchange.auth.views :refer [login-form register-form student-access-form]]
+    [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.views :refer [dashboard-page]]
+    [webchange.error-pages.page-404 :refer [page-404]]
     [soda-ash.core :as sa]))
 
 ;; course
@@ -56,13 +57,13 @@
 (defn- panels [panel-name route-params]
   (case panel-name
     :home [course-switch]
-    :register-user [register-form]
-    :login [login-form]
+    :login [teacher-login :sign-in]
+    :register-user [teacher-login :sign-up]
     :student-login [student-access-form]
     :course [course (:id route-params)]
     :course-editor [editor-panel (:id route-params)]
     :dashboard [dashboard-page]
-    [:div "test"]))
+    [page-404]))
 
 (defn main-panel []
   (let [{:keys [handler route-params]} @(re-frame/subscribe [::subs/active-route])]
