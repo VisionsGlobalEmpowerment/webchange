@@ -1,8 +1,9 @@
 (ns webchange.student-dashboard.life-skills.views-life-skill-list-item
   (:require
     [reagent.core :as r]
-    [webchange.student-dashboard.life-skills.views-life-skill-styles :as styles]
-    [webchange.ui.components :as wui]))
+    [cljsjs.material-ui]
+    [cljs-react-material-ui.reagent :as ui]
+    [webchange.student-dashboard.life-skills.views-life-skill-styles :as styles]))
 
 (def border-radius 15)
 (def list-item-min-width 150)
@@ -62,9 +63,9 @@
    {:keys [on-click]}]
   (let [hovered? (r/atom false)]
     (fn []
-      [wui/paper {:on-click      #(on-click item)
-                  :on-mouse-over #(reset! hovered? true)
-                  :on-mouse-out  #(reset! hovered? false)
-                  :style         list-item-styles
-                  :z-depth       (if @hovered? 2 1)}
+      [ui/paper {:on-click      #(on-click item)
+                 :on-mouse-over #(reset! hovered? true)
+                 :on-mouse-out  #(reset! hovered? false)
+                 :style         list-item-styles
+                 :elevation     (if @hovered? 2 1)}
        [list-item item {:hovered? @hovered?}]])))

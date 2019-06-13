@@ -16,17 +16,29 @@
 
 (defn- classes-dashboard-item
   [{:keys [id name] :as class} {:keys [on-click on-edit on-remove]}]
-  [:div.classes-list-item
-   [:div.classes-list-item_header {:on-click #(on-click id)} name]
-   [:div.classes-list-item_body]
-   [:div.classes-list-item_actions
-    [ui/icon-menu {:icon-button-element (r/as-element [ui/icon-button (ic/navigation-more-horiz)])
-                   :anchor-origin       {:horizontal "left" :vertical "top"}
-                   :target-origin       {:horizontal "left" :vertical "top"}}
-     [ui/menu-item {:primary-text "Edit"
-                    :on-click     #(on-edit class)}]
-     [ui/menu-item {:primary-text "Remove"
-                    :on-click     #(on-remove class)}]]]])
+  (let [menu-anchor (r/atom nil)
+        menu-open? (r/atom false)]
+    (fn []
+      [:div.classes-list-item
+       [:div.classes-list-item_header {:on-click #(on-click id)} name]
+       [:div.classes-list-item_body]
+       [:div.classes-list-item_actions
+        [ui/icon-button
+         {:on-click #(do (reset! menu-open? true)
+                         (reset! menu-anchor (.-currentTarget %)))}
+         [ic/more-horiz]]
+        [ui/menu
+         {:open      @menu-open?
+          :on-close  #(reset! menu-open? false)
+          :anchor-El @menu-anchor}
+         [ui/menu-item
+          {:on-click #(do (on-edit class)
+                          (reset! menu-open? false))}
+          "Edit"]
+         [ui/menu-item
+          {:on-click #(do (on-remove class)
+                          (reset! menu-open? false))}
+          "Remove"]]]])))
 
 (defn classes-dashboard
   []
@@ -53,7 +65,7 @@
                                                                (open-modal)))]
                     [ui/card
                      [ui/card-header {:title "Classes"}]
-                     [ui/card-media {}
+                     [ui/card-content
                       [:div.classes-list
                        (for [class-data classes]
                          ^{:key (:id class-data)}

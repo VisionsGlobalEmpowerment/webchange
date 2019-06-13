@@ -1,17 +1,2 @@
 @import "classes";
 @import "students";
-
-.dashboard {
-    .side-bar {
-        top: 64px !important;
-        height: calc(100% - 64px) !important;
-    }
-
-    .view-port {
-        transition: margin-left 0.45s cubic-bezier(0.23, 1, 0.32, 1) 0s;
-
-        &.shrink {
-            margin-left: 256px;
-        }
-    }
-}

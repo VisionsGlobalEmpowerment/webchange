@@ -11,10 +11,13 @@
 
 (defn- classes-list-menu-item
   [{:keys [id name]} {:keys [on-click]}]
-  [ui/list-item {:primary-text   name
-                 :on-click       #(on-click id)
-                 :inset-children true
-                 :style          {:text-transform "capitalize"}}])
+  [ui/list-item
+   {:button   true
+    :on-click #(on-click id)
+    :style    {:text-transform "capitalize"}}
+   [ui/list-item-text
+    {:inset   true
+     :primary name}]])
 
 (defn classes-list-menu
   []
@@ -27,17 +30,24 @@
                         close-modal #(swap! modal-state assoc :open false)
                         add-class (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data]))
                         show-class (fn [class-id] (re-frame/dispatch [::classes-events/show-class class-id]))]
-                    [ui/list
-                     [ui/list-item {:primary-text "Classes"
-                                    :on-click     #(re-frame/dispatch [::classes-events/show-manage-classes])}]
+                    [ui/list {:component "nav"}
+                     [ui/list-item
+                      {:button   true
+                       :on-click #(re-frame/dispatch [::classes-events/show-manage-classes])}
+                      "Classes"]
                      (for [class classes]
                        ^{:key (:id class)}
                        [classes-list-menu-item class {:on-click show-class}])
-                     [ui/list-item {:primary-text "Add"
-                                    :left-icon    (ic/content-add)
-                                    :on-click     (fn [] (do (reset! current-class {})
-                                                             (swap! modal-state assoc :title :add)
-                                                             (open-modal)))}]
+                     [ui/list-item
+                      {:button   true
+                       :on-click (fn [] (do (reset! current-class {})
+                                            (swap! modal-state assoc :title :add)
+                                            (open-modal)))}
+                      [ui/list-item-icon [ic/add]]
+                      [ui/list-item-text
+                       {:inset   true
+                        :primary "Add"}]
+                      ]
                      [class-modal current-class {:title        :add
                                                  :modal-open   (:open @modal-state)
                                                  :handle-save  add-class
