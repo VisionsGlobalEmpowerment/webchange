@@ -51,6 +51,8 @@
         _ (f/create-student! {:class-id class-id
                               :first-name first-name
                               :last-name last-name
+                              :gender 1
+                              :date-of-birth "2009-01-01"
                               :access-code "test-code"})
         retrieved (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)
         user (-> retrieved first :user)]
@@ -61,7 +63,7 @@
 (deftest student-class-can-be-updated
   (let [{student-id :id class-id :class-id} (f/student-created)
         {new-class-id :id} (f/class-created)
-        _ (f/update-student! student-id {:class-id new-class-id})
+        _ (f/update-student! student-id {:class-id new-class-id :gender 1 :date-of-birth "1999-01-01"})
         old-class-students (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)
         new-class-students (-> new-class-id f/get-students :body (json/read-str :key-fn keyword) :students)]
     (is (= 0 (count old-class-students)))
@@ -70,7 +72,7 @@
 (deftest student-access-code-can-be-updated
   (let [{student-id :id class-id :class-id} (f/student-created)
         access-code-value "new-access-code"
-        _ (f/update-student! student-id {:class-id class-id :access-code access-code-value})
+        _ (f/update-student! student-id {:class-id class-id :gender 1 :date-of-birth "1999-01-01" :access-code access-code-value})
         updated-student (-> student-id f/get-student :body (json/read-str :key-fn keyword) :student)]
     (is (= access-code-value (:access-code updated-student)))))
 

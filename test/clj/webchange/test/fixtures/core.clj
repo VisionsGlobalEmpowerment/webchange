@@ -153,7 +153,7 @@
   ([options]
    (let [{user-id :id} (student-user-created)
          {class-id :id school-id :school-id} (class-created)
-         defaults {:user-id user-id :class-id class-id :school-id school-id :access-code "123456"}
+         defaults {:user-id user-id :class-id class-id :school-id school-id :gender 1 :date-of-birth (jt/local-date) :access-code "123456"}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
