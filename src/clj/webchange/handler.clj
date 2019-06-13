@@ -84,7 +84,6 @@
                          (resource-response "index.html" {:root "public"})))
 
 (defn teacher? [request]
-  (log/info (-> request :session :identity))
   (and (authenticated? request)
        (-> request :session :identity :teacher-id)))
 

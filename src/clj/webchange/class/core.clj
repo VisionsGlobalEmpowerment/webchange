@@ -69,7 +69,6 @@
                           (assoc :date-of-birth date-of-birth)
                           (assoc :id id)
                           transform)]
-    #_(log/info prepared-data)
     (db/update-student! prepared-data)))
 
 (defn update-student-access-code!
