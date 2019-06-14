@@ -2,6 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.auth.views-teacher-login :as teacher-login]
+    [webchange.auth.events :as auth.events]
+    [soda-ash.core :as sa]
     [sodium.core :as na]
     [reagent.core :as r]))
 
