@@ -11,3 +11,13 @@
   ::current-student
   (fn [db]
     (get-in db [:dashboard :current-student])))
+
+(re-frame/reg-sub
+  ::generated-code
+  (fn [db]
+    (get-in db [:dashboard :access-code])))
+
+(re-frame/reg-sub
+  ::student-modal-state
+  (fn [db]
+    (get-in db [:dashboard :student-modal-state])))

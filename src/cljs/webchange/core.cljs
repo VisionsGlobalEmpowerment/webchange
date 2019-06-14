@@ -1,5 +1,6 @@
 (ns webchange.core
   (:require
+    [cljsjs.material-ui]
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
    [webchange.events :as events]
@@ -33,6 +34,7 @@
 (defn ^:export init []
   (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
+  (re-frame/dispatch [::events/init-current-school])
   (init-viewport)
   (dev-setup)
   (mount-root))

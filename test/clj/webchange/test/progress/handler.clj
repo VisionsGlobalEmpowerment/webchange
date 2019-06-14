@@ -9,7 +9,7 @@
             [clojure.tools.logging :as log]))
 
 (use-fixtures :once f/init)
-(use-fixtures :each f/clear-db-fixture)
+(use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (deftest current-progress-can-be-retrieved
   (let [{user-id :user-id course-name :course-name data :data} (fp/progress-created)
@@ -17,7 +17,7 @@
     (is (= data (:data retrieved)))))
 
 (deftest progress-can-be-created
-  (let [{user-id :id} (f/user-created)
+  (let [{user-id :id} (f/teacher-user-created)
         {course-name :name} (f/course-created)
         data {:actions [] :progress {:test "test"}}
         _ (fp/save-current-progress! user-id course-name data)

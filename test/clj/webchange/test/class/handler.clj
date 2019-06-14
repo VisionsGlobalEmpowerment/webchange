@@ -8,7 +8,7 @@
             [clojure.tools.logging :as log]))
 
 (use-fixtures :once f/init)
-(use-fixtures :each f/clear-db-fixture)
+(use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (deftest classes-can-be-retrieved
   (let [_ (f/class-created)
@@ -51,26 +51,37 @@
         _ (f/create-student! {:class-id class-id
                               :first-name first-name
                               :last-name last-name
-                              :email "test-new@example.com"
-                              :password "test"
-                              :confirm-password "test"})
+                              :gender 1
+                              :date-of-birth "2009-01-01"
+                              :access-code "test-code"})
         retrieved (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)
         user (-> retrieved first :user)]
     (is (= 1 (count retrieved)))
     (is (= first-name (:first-name user)))
     (is (= last-name (:last-name user)))))
 
-(deftest student-can-be-updated
+(deftest student-class-can-be-updated
   (let [{student-id :id class-id :class-id} (f/student-created)
         {new-class-id :id} (f/class-created)
-        _ (f/update-student! student-id {:class-id new-class-id})
+        _ (f/update-student! student-id {:class-id new-class-id :gender 1 :date-of-birth "1999-01-01"})
         old-class-students (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)
         new-class-students (-> new-class-id f/get-students :body (json/read-str :key-fn keyword) :students)]
     (is (= 0 (count old-class-students)))
     (is (= 1 (count new-class-students)))))
+
+(deftest student-access-code-can-be-updated
+  (let [{student-id :id class-id :class-id} (f/student-created)
+        access-code-value "new-access-code"
+        _ (f/update-student! student-id {:class-id class-id :gender 1 :date-of-birth "1999-01-01" :access-code access-code-value})
+        updated-student (-> student-id f/get-student :body (json/read-str :key-fn keyword) :student)]
+    (is (= access-code-value (:access-code updated-student)))))
 
 (deftest student-can-be-deleted
   (let [{id :id class-id :class-id} (f/student-created)
         _ (f/delete-student! id)
         students (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)]
     (is (= 0 (count students)))))
+
+(deftest current-school-can-be-retrieved
+  (let [school (-> (f/get-current-school) :body (json/read-str :key-fn keyword))]
+    (is (= f/default-school-id (:id school)))))

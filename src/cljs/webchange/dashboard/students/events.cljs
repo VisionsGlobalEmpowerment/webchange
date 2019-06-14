@@ -97,8 +97,49 @@
                        [::load-students class-id])}))
 
 (re-frame/reg-event-fx
+  ::show-add-student-form
+  (fn [{:keys [db]} _]
+    {:dispatch-n (list [::generate-access-code]
+                       [::open-student-modal :add])}))
+
+(re-frame/reg-event-fx
   ::show-edit-student-form
   (fn [{:keys [db]} [_ id]]
     {:db (assoc-in db [:dashboard :current-student-id] id)
      :dispatch-n (list [::load-student id]
-                       [::set-main-content :edit-student-form])}))
+                       [::reset-access-code]
+                       [::open-student-modal :edit])}))
+
+(re-frame/reg-event-fx
+  ::generate-access-code
+  (fn [{:keys [db]} _]
+    (let []
+      {:db (assoc-in db [:loading :generate-access-code] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/next-access-code")
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::generate-access-code-success]
+                    :on-failure      [:api-request-error :generate-access-code]}})))
+
+
+(re-frame/reg-event-fx
+  ::generate-access-code-success
+  (fn [{:keys [db]} [_ {:keys [access-code]}]]
+    {:db (assoc-in db [:dashboard :access-code] access-code)
+     :dispatch [:complete-request :generate-access-code]}))
+
+(re-frame/reg-event-fx
+  ::reset-access-code
+  (fn [{:keys [db]} _]
+    {:db (update-in db [:dashboard] dissoc :access-code)}))
+
+(re-frame/reg-event-fx
+  ::close-student-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :student-modal-state] nil)}))
+
+(re-frame/reg-event-fx
+  ::open-student-modal
+  (fn [{:keys [db]} [_ state]]
+    {:db (assoc-in db [:dashboard :student-modal-state] state)}))

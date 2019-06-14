@@ -85,7 +85,7 @@
    :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths ["env/prod/clj"]
              :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]
-             :omit-source  true
+             :omit-source  false
              :main         webchange.server
              :aot          [webchange.server]
              :uberjar-name "webchange.jar"

@@ -6,7 +6,7 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
-            [webchange.auth.core :refer [login! register-user! user-id-from-identity]]
+            [webchange.auth.handler :refer [auth-routes]]
             [webchange.course.core :as course]
             [webchange.class.handler :refer [class-routes]]
             [webchange.progress.handler :refer [progress-routes]]
@@ -46,10 +46,6 @@
         (log/error e)
         {:status 400 :body (str "Invalid data" e)}))))
 
-(defn with-updated-session
-  [request]
-  (fn [data response] (assoc response :session (merge (:session request) {:identity (-> data :email)}))))
-
 (defn handle-save-scene
   [course-id scene-id request]
   (let [owner-id (current-user request)
@@ -87,17 +83,25 @@
                          (throw-unauthorized)
                          (resource-response "index.html" {:root "public"})))
 
+(defn teacher? [request]
+  (and (authenticated? request)
+       (-> request :session :identity :teacher-id)))
+
+(defn teachers-route [request]
+  (if-not (teacher? request)
+    (throw-unauthorized)
+    (resource-response "index.html" {:root "public"})))
+
 (defroutes pages-routes
            (GET "/" [] (public-route))
            (GET "/login" [] (public-route))
            (GET "/student-login" [] (public-route))
            (GET "/register" [] (public-route))
 
-           (GET "/editor" request (authenticated-route request))
            (GET "/courses/:id" request (authenticated-route request))
-           (GET "/courses/:id/editor" request (authenticated-route request))
+           (GET "/courses/:id/editor" request (teachers-route request))
 
-           (GET "/dashboard" request (authenticated-route request))
+           (GET "/dashboard" request (teachers-route request))
            (GET "/student-dashboard" request (authenticated-route request))
            (resources "/"))
 
@@ -108,10 +112,6 @@
              (handle-save-scene course-id scene-id request))
            (POST "/api/courses/:course-id" [course-id :as request]
              (handle-save-course course-id request))
-           (POST "/api/users/login" request
-             (-> request :body :user login! (handle (with-updated-session request))))
-           (POST "/api/users/register-user" request
-             (-> request :body :user register-user! handle))
 
            (GET "/api/courses/:course-id/versions" [course-id] (-> course-id course/get-course-versions response))
            (GET "/api/courses/:course-id/scenes/:scene-id/versions" [course-id scene-id] (-> (course/get-scene-versions course-id scene-id) response))
@@ -125,6 +125,7 @@
 (defroutes app
            pages-routes
            api-routes
+           auth-routes
            class-routes
            dataset-routes
            progress-routes

@@ -1,6 +1,5 @@
 (ns webchange.common.handler
-  (:require [webchange.auth.core :refer [user-id-from-identity]]
-            [buddy.auth :refer [authenticated? throw-unauthorized]]))
+  (:require [buddy.auth :refer [authenticated? throw-unauthorized]]))
 
 (defn handle
   ([result]
@@ -17,4 +16,10 @@
   [request]
   (if-not (authenticated? request)
     (throw-unauthorized)
-    (-> request :session :identity user-id-from-identity)))
+    (-> request :session :identity :id)))
+
+(defn current-school
+  [request]
+  (if-not (authenticated? request)
+    (throw-unauthorized)
+    (-> request :session :identity :school-id)))
