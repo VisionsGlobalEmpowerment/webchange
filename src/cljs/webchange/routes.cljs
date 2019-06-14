@@ -4,13 +4,14 @@
             [re-frame.core :as re-frame]
             [webchange.events :as events]))
 
-(def routes ["/" {""              :home
-                  "login"         :login
-                  "student-login" :student-login
-                  "register"      :register-user
-                  "courses"       {["/" :id]           :course
-                                   ["/" :id "/editor"] :course-editor}
-                  "dashboard"     :dashboard}])
+(def routes ["/" {""                  :home
+                  "login"             :login
+                  "student-login"     :student-login
+                  "register"          :register-user
+                  "courses"           {["/" :id]           :course
+                                       ["/" :id "/editor"] :course-editor}
+                  "student-dashboard" :student-dashboard
+                  "dashboard"         :dashboard}])
 
 (defn- parse-url [url]
   (bidi/match-route routes url))
