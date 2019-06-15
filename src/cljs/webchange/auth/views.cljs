@@ -62,7 +62,7 @@
         (:init-current-school loading) [sa/Loader {:active true :inline "centered"}]
         (:student-login loading) [sa/Loader {:active true :inline "centered"}]
         :else
-        [:div {:class-name "login-form"}
+        [:div {:class-name "student-access-form"}
          [:style "body {background-color: #00d2ff}"]
          [na/grid {:text-align "center" :centered? true}
 

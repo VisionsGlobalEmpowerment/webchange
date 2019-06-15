@@ -35,7 +35,7 @@
   ::login-success
   [(re-frame/inject-cofx :redirect-param)]
   (fn [{:keys [db redirect]} [_ user]]
-    (let [redirect-to (or redirect :home)]
+    (let [redirect-to (or redirect :dashboard)]
       {:db (update-in db [:user] merge user)
        :dispatch-n (list [:complete-request :login]
                          [::events/redirect redirect-to])})))
@@ -77,7 +77,7 @@
   ::student-login-success
   [(re-frame/inject-cofx :redirect-param)]
   (fn [{:keys [db redirect]} [_ user]]
-    (let [redirect-to (or redirect :home)]
+    (let [redirect-to (or redirect "/courses/test")]
       {:db (update-in db [:user] merge user)
        :dispatch-n (list [:complete-request :student-login]
                          [::events/redirect redirect-to])})))
