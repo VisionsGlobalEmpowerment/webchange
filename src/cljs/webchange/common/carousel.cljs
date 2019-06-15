@@ -61,4 +61,4 @@
     (fn [props]
       (let [{:keys [first last next]} @storage]
         (if (and first last next)
-          [:> Group {:ref #(when % (start-carousel % (assoc props :first first :last last :next next)))}]))))  )
+          [:> Group {:ref #(when % (start-carousel % (assoc props :first first :last last :next next)))}])))))

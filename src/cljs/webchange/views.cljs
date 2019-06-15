@@ -12,9 +12,7 @@
     [webchange.error-pages.page-404 :refer [page-404]]
     [soda-ash.core :as sa]))
 
-;; course
-
-(defn course-switch
+(defn login-switch
   []
   [sa/Grid {:centered true
             :columns 2
@@ -27,7 +25,7 @@
                 :vertical-align "middle"}
        [sa/GridRow {}
         [sa/GridColumn {:text-align "center"}
-         [sa/Header {:as "h1" :content "Pick course"}]]]
+         [sa/Header {:as "h1" :content "Login as"}]]]
        [sa/GridRow {}
         [sa/GridColumn {}
          [sa/Grid {:stackable true
@@ -38,14 +36,12 @@
                        :vertical-align "middle"}
            [sa/GridColumn {}
             [sa/Button {:basic true
-                        :on-click #(re-frame/dispatch [::events/redirect :course :id "demo"])}
-             [sa/Flag {:name "us"}]
-             "English"]]
+                        :on-click #(re-frame/dispatch [::events/redirect :login])}
+             "Teacher"]]
            [sa/GridColumn {}
             [sa/Button {:basic true
-                        :on-click #(re-frame/dispatch [::events/redirect :course :id "test"])}
-             [sa/Flag {:name "es"}]
-             "Español"]]]]]]]]]]])
+                        :on-click #(re-frame/dispatch [::events/redirect :student-login])}
+             "Student"]]]]]]]]]]])
 
 ;; editor
 
@@ -57,7 +53,7 @@
 
 (defn- panels [panel-name route-params]
   (case panel-name
-    :home [course-switch]
+    :home [login-switch]
     :login [teacher-login :sign-in]
     :register-user [teacher-login :sign-up]
     :student-login [student-access-form]

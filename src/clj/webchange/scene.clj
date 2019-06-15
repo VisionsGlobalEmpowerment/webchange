@@ -27,7 +27,7 @@
                       "cycling" cycling-scene}})
 (defn get-course
   [course-id]
-  {:initial-scene "painting-tablet"
+  {:initial-scene "map"
    :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "painting-tablet" "cycling"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"
                                   :assessment-1 "assessment1"}}]
