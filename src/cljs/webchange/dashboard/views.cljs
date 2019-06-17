@@ -1,16 +1,17 @@
 (ns webchange.dashboard.views
   (:require
-    [cljsjs.material-ui]
-    [cljs-react-material-ui.reagent :as ui]
-    [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.dashboard.subs :as ds]
     [webchange.dashboard.side-menu.views :refer [side-menu]]
     [webchange.dashboard.classes.views :refer [classes-dashboard]]
     [webchange.dashboard.students.views :refer [students-dashboard]]
+    [webchange.dashboard.views-app-bar :refer [app-bar]]
+    [webchange.dashboard.views-common :refer [get-shift-styles]]
     [webchange.dashboard.views-drawer :refer [drawer]]
     [webchange.ui.theme :refer [with-mui-theme]]))
+
+(def drawer-width 300)
 
 (defn main-content
   [main-content]
@@ -21,23 +22,18 @@
 
 (defn dashboard-page
   []
-  (let [drawer-open (r/atom false)]
+  (let [drawer-open (r/atom true)]
     (fn []
-      (let [current-main-content @(re-frame/subscribe [::ds/current-main-content])
-            view-port-class (str "view-port" (when @drawer-open " shrink"))]
+      (let [current-main-content @(re-frame/subscribe [::ds/current-main-content])]
         [with-mui-theme
          [:div.dashboard
-          [ui/app-bar {:position "static"}
-           [ui/toolbar
-            [ui/icon-button {:color      "inherit"
-                             :aria-label "Menu"
-                             :on-click   #(reset! drawer-open true)}
-             [ic/menu]]
-            [ui/typography {:color   "inherit"
-                            :variant "h6"}
-             "Dashboard"]]]
-          [drawer {:open @drawer-open
+          [app-bar
+           {:title        "Dashboard"
+            :on-open-menu #(reset! drawer-open true)
+            :drawer-open? @drawer-open
+            :drawer-width drawer-width}]
+          [drawer {:open     @drawer-open
                    :on-close #(reset! drawer-open false)}
            [side-menu]]
-          [:div {:class view-port-class}
+          [:div {:style (get-shift-styles @drawer-open drawer-width)}
            [main-content current-main-content]]]]))))

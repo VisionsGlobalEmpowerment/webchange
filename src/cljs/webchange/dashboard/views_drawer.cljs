@@ -3,17 +3,18 @@
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
+    [webchange.ui.theme :refer [get-in-theme w-colors]]
     [webchange.ui.with-styles :refer [with-styles use-class]]))
 
 (def styles {:drawer        {:width       300
                              :flex-shrink 0}
              :drawer_paper  {:width 300}
-             :drawer_header {:display        "flex"
-                             :alignItems     "center"
-                             :padding        "0 8px"
-                             :height         64
-                             :justifyContent "flex-end"
-                             }})
+             :drawer_header {:alignItems       "center"
+                             :background-color (:primary w-colors)
+                             :display          "flex"
+                             :height           64
+                             :justify-content  "flex-end"
+                             :padding          "0 8px"}})
 
 ;; ToDo: resolve problem with props camel-casing ({:on-click onClose})
 
@@ -24,9 +25,13 @@
               :class-name (use-class classes "drawer")
               :classes    {"paper" (use-class classes "drawer_paper")}
               :open       open}
-   [:div {:class-name (use-class classes "drawer_header")}
-    [ui/icon-button {:on-click onClose}
-     [ic/chevron-left]]]
+   [ui/app-bar
+    {:color    "default"
+     :position "static"}
+    [ui/toolbar
+     [:div {:style {:flex-grow 1}}]
+     [ui/icon-button {:on-click onClose}
+      [ic/chevron-left]]]]
    [ui/divider]
    children])
 
