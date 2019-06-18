@@ -1,4 +1,4 @@
-(ns webchange.dashboard.students.dashboard-students-list.views
+(ns webchange.dashboard.students.students-list.views
   (:require
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
