@@ -192,10 +192,31 @@
     :course     "Vera La Vaquita"
     :tablet?    true}])
 
+(defn- student-mapper
+  [{:keys [id class-id user class gender date-of-birth]}]
+  (let [{:keys [first-name last-name]} user
+        age (if (and date-of-birth (not (s/blank? date-of-birth)))
+              (- (.getFullYear (let [current-time (.getTime (js/Date.))
+                                     birth-time (.getTime (js/Date. date-of-birth))
+                                     age-time (- current-time birth-time)
+                                     age-date (js/Date.)
+                                     _ (.setTime age-date age-time)]
+                                 age-date)) 1970)
+              nil)]
+    {:id         id
+     :class-id   class-id
+     :first-name first-name
+     :last-name  last-name
+     :name       (str first-name " " last-name)
+     :gender     gender
+     :age        age
+     :class      (s/upper-case (:name class))
+     :course     nil
+     :tablet?    nil}))
+
 (defn map-students-list
-  [_]
-  (map (fn [{:keys [first-name last-name] :as student}]
-         (merge student {:name (str first-name " " last-name)})) stub-students-list))
+  [students]
+  (map student-mapper students))
 
 (defn- check-student-by-filter
   [student filter]
@@ -214,21 +235,3 @@
 (defn filter-students-list
   [custom-filter students]
   (filter #(check-student-by-filter % custom-filter) students))
-
-(defn map-classes-list
-  [_]
-  [{:id   "A1"
-    :name "A1"}
-   {:id   "A2"
-    :name "A2"}
-   {:id   "B1"
-    :name "B1"}
-   {:id   "B2"
-    :name "B2"}
-   {:id   "C1"
-    :name "C1"}
-   {:id   "C2"
-    :name "C2"}
-   {:id   "C3"
-    :name "C3"}])
-

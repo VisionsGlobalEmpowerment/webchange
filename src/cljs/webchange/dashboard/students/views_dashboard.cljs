@@ -8,7 +8,7 @@
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.students.events :as students-events]
     [webchange.dashboard.students.subs :as students-subs]
-    [webchange.dashboard.students.students-list.utils :refer [map-students-list filter-students-list map-classes-list]]
+    [webchange.dashboard.students.students-list.utils :refer [map-students-list filter-students-list]]
     [webchange.dashboard.students.students-list.views :refer [students-list]]
     [webchange.dashboard.students.students-list-filter.views :refer [students-list-filter]]
     [webchange.dashboard.students.views-common :refer [student-modal]]))
@@ -26,7 +26,7 @@
   (r/with-let [filter (r/atom {:class-id nil})]
               (fn []
                 (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
-                      classes (map-classes-list @(re-frame/subscribe [::classes-subs/classes-list]))
+                      classes @(re-frame/subscribe [::classes-subs/classes-list])
                       students (->> @(re-frame/subscribe [::students-subs/class-students class-id])
                                     (map-students-list)
                                     (filter-students-list @filter))
