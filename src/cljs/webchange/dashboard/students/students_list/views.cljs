@@ -7,7 +7,13 @@
 
 (defn translate
   [path]
-  (get-in {:actions {:edit   "Edit"
+  (get-in {:items   {:age    {:title       "Age"
+                              :not-defined "---"}
+                     :class  {:title "Class"}
+                     :course {:title       "Course"
+                              :not-defined "Course is not defined"}
+                     :tablet {:title "Tablet"}}
+           :actions {:edit   "Edit"
                      :remove "Remove"}}
           path))
 
@@ -67,7 +73,7 @@
       (str title ": ")])
    (when text
      [:span {:title text
-             :style (merge (get-in styles [:content :text]) text-style) }
+             :style (merge (get-in styles [:content :text]) text-style)}
       text])
    (when children
      children)])
@@ -106,18 +112,19 @@
                           :gender     gender}]
        [list-item-content {:text  (str first-name " " last-name)
                            :style {:width 200}}]
-       [list-item-content {:title "Age"
-                           :text  (or age "---")
-                           :style {:width 60}
+       [list-item-content {:title      (translate [:items :age :title])
+                           :text       (or age (translate [:items :age :not-defined]))
+                           :style      {:width 60}
                            :text-style (if-not age {:color no-defined-color} {})}]
-       [list-item-content {:title "Class"
+       [list-item-content {:title (translate [:items :class :title])
                            :text  class
                            :style {:width 100}}]
-       [list-item-content {:title "Course"
-                           :text  (or course "Course is not defined")
-                           :style {:width 200}
+       [list-item-content {:title      (translate [:items :course :title])
+                           :text       (or course (translate [:items :course :not-defined]))
+                           :style      {:width 200}
                            :text-style (if-not course {:color no-defined-color} {})}]
-       [list-item-content {:title   "Tablet"
+       [list-item-content {:title   (translate [:items :tablet :title
+                                                ])
                            :content tablet?
                            :style   {:width 100}}
         (case tablet?

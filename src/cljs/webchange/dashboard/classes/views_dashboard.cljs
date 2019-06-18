@@ -9,20 +9,65 @@
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.classes.views-common :refer [class-modal]]))
 
+(def padding 24)
+(def size 200)
+(def classes-list-item-style
+  {:background-color "#ffffff"
+   :border           "solid 1px #d3d3d3"
+   :border-radius    "10px"
+   :box-shadow       "rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px"
+   :display          "flex"
+   :flex-direction   "column"
+   :flex-grow        0
+   :height           size
+   :margin           "10px"
+   :width            size})
+(def classes-add-new-list-item-style
+  {:background-color "#00bcd4"
+   :color            "#ffffff"
+   :cursor           "pointer"
+   :font-size        "36px"
+   :font-weight      "bold"
+   :line-height      (str size "px")
+   :text-align       "center"
+   :user-select      "none"})
+(def classes-list-item-header-style
+  {:font-size   "32px"
+   :font-weight 500
+   :flex-grow   0
+   :color       "#292929"
+   :cursor      "pointer"
+   :line-height "43px"
+   :padding     (str padding "px")})
+(def classes-list-item-body-style
+  {:flex-grow 1
+   :padding   (str 0 " " padding "px")})
+(def classes-list-item-actions-style
+  {:flex-grow  0
+   :text-align "right"
+   :padding    (str 0 " " (/ padding 2) "px")})
+
 (defn- add-new-class-dashboard-item
   [{:keys [on-click]}]
-  [:div.classes-list-item.add-new {:on-click on-click}
-   [:div.classes-list-item_body "+ New"]])
+  [:div
+   {:on-click on-click
+    :style    (merge classes-list-item-style classes-add-new-list-item-style)}
+   [:div
+    {:style classes-list-item-body-style}
+    "+ New"]])
 
 (defn- classes-dashboard-item
   [{:keys [id name] :as class} {:keys [on-click on-edit on-remove]}]
   (let [menu-anchor (r/atom nil)
         menu-open? (r/atom false)]
     (fn []
-      [:div.classes-list-item
-       [:div.classes-list-item_header {:on-click #(on-click id)} name]
-       [:div.classes-list-item_body]
-       [:div.classes-list-item_actions
+      [:div {:style classes-list-item-style}
+       [:div
+        {:on-click #(on-click id)
+         :style    classes-list-item-header-style}
+        name]
+       [:div {:style classes-list-item-body-style}]
+       [:div {:style classes-list-item-actions-style}
         [ui/icon-button
          {:on-click #(do (reset! menu-open? true)
                          (reset! menu-anchor (.-currentTarget %)))}
@@ -66,7 +111,9 @@
                     [ui/card
                      [ui/card-header {:title "Classes"}]
                      [ui/card-content
-                      [:div.classes-list
+                      [:div {:style {:display   "flex"
+                                     :flex-wrap "wrap"
+                                     :padding   20}}
                        (for [class-data classes]
                          ^{:key (:id class-data)}
                          [classes-dashboard-item class-data {:on-click  show-class
