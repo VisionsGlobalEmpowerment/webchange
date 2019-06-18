@@ -13,8 +13,8 @@
           path))
 
 (defn students-list-filter-presentation
-  [{:keys [name class classes on-class-changed on-name-changed]}]
-  [ui/toolbar
+  [{:keys [name class classes on-class-changed on-name-changed style]}]
+  [ui/toolbar {:style style}
    [ui/grid
     {:container true
      :justify   "flex-end"}
@@ -50,10 +50,11 @@
                                                        [:div])])}}]]]]])
 
 (defn students-list-filter
-  [{:keys [classes]} filter]
+  [{:keys [classes style]} filter]
   [students-list-filter-presentation
    {:name             (or (:name @filter) "")
     :class            (or (:class-id @filter) "")
     :classes          classes
     :on-class-changed #(swap! filter assoc :class-id %)
-    :on-name-changed  #(swap! filter assoc :name (if (s/blank? %) nil %))}])
+    :on-name-changed  #(swap! filter assoc :name (if (s/blank? %) nil %))
+    :style style}])

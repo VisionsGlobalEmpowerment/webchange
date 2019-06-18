@@ -128,8 +128,8 @@
   )
 
 (defn students-list
-  [props students]
-  [ui/list
+  [{:keys [style] :as props}  students]
+  [ui/list {:style style}
    (for [student students]
      ^{:key (:id student)}
      [list-item props student])])

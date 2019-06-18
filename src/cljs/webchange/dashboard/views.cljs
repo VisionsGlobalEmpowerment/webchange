@@ -11,6 +11,7 @@
     [webchange.dashboard.views-drawer :refer [drawer]]
     [webchange.ui.theme :refer [with-mui-theme]]))
 
+(def app-bar-height 64)
 (def drawer-width 300)
 
 (defn main-content
@@ -35,5 +36,6 @@
           [drawer {:open     @drawer-open
                    :on-close #(reset! drawer-open false)}
            [side-menu]]
-          [:div {:style (get-shift-styles @drawer-open drawer-width)}
+          [:div {:style (merge {:height (str "calc(100vh - " app-bar-height "px)")}
+                               (get-shift-styles @drawer-open drawer-width))}
            [main-content current-main-content]]]]))))
