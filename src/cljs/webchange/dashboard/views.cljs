@@ -22,15 +22,14 @@
     [:div]))
 
 (defn dashboard-page
-  []
+  [route-params]
   (let [drawer-open (r/atom true)]
     (fn []
       (let [current-main-content @(re-frame/subscribe [::ds/current-main-content])]
         [with-mui-theme
          [:div.dashboard
           [app-bar
-           {:title        "Dashboard"
-            :on-open-menu #(reset! drawer-open true)
+           {:on-open-menu #(reset! drawer-open true)
             :drawer-open? @drawer-open
             :drawer-width drawer-width}]
           [drawer {:open     @drawer-open

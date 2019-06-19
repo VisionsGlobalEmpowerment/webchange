@@ -3,12 +3,13 @@
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
+    [webchange.dashboard.views-breadcrumbs :refer [breadcrumbs]]
     [webchange.dashboard.views-common :refer [get-shift-styles]]))
 
 (defn app-bar
-  [{:keys [title on-open-menu drawer-open? drawer-width]}]
+  [{:keys [on-open-menu drawer-open? drawer-width]}]
   [ui/app-bar
-   {:color "default"
+   {:color    "default"
     :position "static"
     :style    (get-shift-styles drawer-open? drawer-width)}
    [ui/toolbar
@@ -17,6 +18,4 @@
                        :aria-label "Menu"
                        :on-click   on-open-menu}
        [ic/menu]])
-    [ui/typography {:color   "inherit"
-                    :variant "h6"}
-     title]]])
+    [breadcrumbs]]])

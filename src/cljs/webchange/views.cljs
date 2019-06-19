@@ -59,7 +59,9 @@
     :student-login [student-access-form]
     :course [course (:id route-params)]
     :course-editor [editor-panel (:id route-params)]
-    :dashboard [dashboard-page]
+    :dashboard [dashboard-page route-params]
+    :dashboard-classes [dashboard-page route-params]
+    :dashboard-students [dashboard-page route-params]
     :student-dashboard [student-dashboard-page]
     :finished-activities [student-dashboard-finished-page]
     [page-404]))
