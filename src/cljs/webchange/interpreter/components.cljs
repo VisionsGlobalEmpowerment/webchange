@@ -329,7 +329,6 @@
 
 (defn course
   [course-id]
-  (re-frame/dispatch [::ie/start-course course-id])
   (fn [course-id]
     (let [viewport (re-frame/subscribe [::subs/viewport])
           viewbox (get-viewbox @viewport)

@@ -2,7 +2,8 @@
   (:require [bidi.bidi :as bidi]
             [pushy.core :as pushy]
             [re-frame.core :as re-frame]
-            [webchange.events :as events]))
+            [webchange.events :as events]
+            [webchange.interpreter.events :as ie]))
 
 (def routes ["/" {""                  :home
                   "login"             :login
@@ -10,14 +11,20 @@
                   "register"          :register-user
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor}
-                  "student-dashboard" :student-dashboard
+                  "student-dashboard" {"" :student-dashboard
+                                       "/finished" :finished-activities}
                   "dashboard"         :dashboard}])
+
 
 (defn- parse-url [url]
   (bidi/match-route routes url))
 
-(defn- dispatch-route [params]
-  (re-frame/dispatch [::events/set-active-route params]))
+(defn- dispatch-route [{:keys [handler route-params] :as params}]
+  (re-frame/dispatch [::events/set-active-route params])
+  (case handler
+    :course (re-frame/dispatch [::ie/start-course (:id route-params)])
+    :student-dashboard (re-frame/dispatch [::ie/start-course "test"])
+    nil))
 
 (def history
   (pushy/pushy dispatch-route parse-url))

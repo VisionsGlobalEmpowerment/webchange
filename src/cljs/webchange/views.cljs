@@ -8,7 +8,7 @@
     [webchange.editor.events :as ee]
     [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.views :refer [dashboard-page]]
-    [webchange.student-dashboard.views :refer [student-dashboard-page]]
+    [webchange.student-dashboard.views :refer [student-dashboard-page student-dashboard-finished-page]]
     [webchange.error-pages.page-404 :refer [page-404]]
     [soda-ash.core :as sa]))
 
@@ -61,6 +61,7 @@
     :course-editor [editor-panel (:id route-params)]
     :dashboard [dashboard-page]
     :student-dashboard [student-dashboard-page]
+    :finished-activities [student-dashboard-finished-page]
     [page-404]))
 
 (defn main-panel []

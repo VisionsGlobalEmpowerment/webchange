@@ -1,17 +1,21 @@
 (ns webchange.student-dashboard.views
   (:require
+    [re-frame.core :as re-frame]
     [webchange.student-dashboard.scene-items.views-scene-list :refer [scene-list]]
     [webchange.student-dashboard.life-skills.views-life-skill-list :refer [life-skill-list]]
     [webchange.student-dashboard.related-content.views-related-content-list :refer [related-content-list]]
-    [webchange.student-dashboard.stubs :refer [stories assessments related-content life-skills]]
-    [webchange.ui.theme :refer [with-mui-theme]]))
+    [webchange.student-dashboard.stubs :refer [related-content life-skills]]
+    [webchange.ui.theme :refer [with-mui-theme]]
+    [webchange.student-dashboard.events :as sde]
+    [webchange.student-dashboard.subs :as sds]))
 
 (defn translate
   [path]
   (get-in {:story           {:title "Continue the story"}
-           :assessment      {:title "Assessment"}
+           :assessment      {:title "Assessments"}
            :related-content {:title "Related / Additional content"}
-           :life-skills     {:title "Life skills / Extra credit"}}
+           :life-skills     {:title "Life skills / Extra credit"}
+           :history         {:title "History"}}
           path))
 
 (def dashboard-container-styles
@@ -32,13 +36,27 @@
    :padding          "50px"
    :width            500})
 
+(defn- continue-the-story []
+  (let [show-more {:id :show-more}
+        finished @(re-frame/subscribe [::sds/finished-activities])
+        next-activity @(re-frame/subscribe [::sds/next-activity])
+        list (into [] (concat [show-more] (take 3 finished) [next-activity]))]
+    [scene-list list {:title (translate [:story :title])
+                      :on-click (fn [{id :id}]
+                                  (if (= id :show-more)
+                                    (re-frame/dispatch [::sde/show-more])
+                                    (re-frame/dispatch [::sde/open-activity id])))}]))
+
+(defn- assessments []
+  (let [assessments @(re-frame/subscribe [::sds/assessments])]
+    [scene-list assessments {:title (translate [:assessment :title])
+                             :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}]))
+
 (defn- main-content
-  [{:keys [stories assessments on-story-click on-assessment-click]}]
+  []
   [:div {:style main-content-styles}
-   [scene-list (into [{:id :show-more}] stories) {:title    (translate [:story :title])
-                                                  :on-click on-story-click}]
-   [scene-list assessments {:title    (translate [:assessment :title])
-                            :on-click on-assessment-click}]])
+   [continue-the-story]
+   [assessments]])
 
 (defn- additional-content
   [{:keys [related-content on-related-content-click
@@ -51,17 +69,21 @@
 
 (defn student-dashboard-page
   []
-  (let [handle-story-click #(println (str "Story clicked: " %))
-        handle-assessment-click #(println (str "Assessment clicked: " %))
-        handle-related-content-click #(println (str "Related content clicked: " %))
+  (let [handle-related-content-click #(println (str "Related content clicked: " %))
         handle-life-skill-click #(println (str "Life skill clicked: " %))]
     [with-mui-theme
      [:div {:style dashboard-container-styles}
-      [main-content {:stories             stories
-                     :assessments         assessments
-                     :on-story-click      handle-story-click
-                     :on-assessment-click handle-assessment-click}]
+      [main-content]
       [additional-content {:related-content          related-content
                            :life-skills              life-skills
                            :on-related-content-click handle-related-content-click
                            :on-life-skill-click      handle-life-skill-click}]]]))
+
+(defn student-dashboard-finished-page
+  []
+  (let [finished @(re-frame/subscribe [::sds/finished-activities])]
+    [with-mui-theme
+     [:div {:style dashboard-container-styles}
+      [:div {:style main-content-styles}
+        [scene-list finished {:title (translate [:history :title])
+                              :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}]]]]))
