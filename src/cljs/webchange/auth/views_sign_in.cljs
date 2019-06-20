@@ -1,11 +1,12 @@
 (ns webchange.auth.views-sign-in
   (:require
+    [cljsjs.material-ui]
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.auth.events :as auth.events]
     [webchange.config :as config]
     [webchange.routes :as routes]
-    [webchange.ui.components :as wui]
     [webchange.ui.theme :refer [w-colors]]))
 
 (defn translate
@@ -29,26 +30,39 @@
     (fn []
       (let [form-error (get-in @(re-frame/subscribe [:errors]) [:login :form])]
         [:div
-         [wui/text-field {:hint-text (translate [:form :username])
-                          :on-change #(swap! data assoc :email (->> % .-target .-value))}]
-         [wui/text-field {:type      "password"
-                          :hint-text (translate [:form :password])
-                          :on-change #(swap! data assoc :password (->> % .-target .-value))}]
-         [wui/checkbox {:label    (translate [:remember-me])
-                        :on-check #(swap! data assoc :remember-me (->> % .-target .-checked))
-                        :style    {:margin-top 10}}]
-         [wui/raised-button {:on-click #(re-frame/dispatch [::auth.events/login @data])
-                             :primary  true
-                             :label    (translate [:buttons :sign-in])
-                             :style    {:width        100
-                                        :margin-right 10
-                                        :margin-top   "20px"}}]
-         [wui/flat-button {:on-click #(routes/redirect-to :register-user)
-                           :primary  true
-                           :label    (translate [:buttons :sign-up])
-                           :style    {:width      100
-                                      :margin-top "20px"}}]
-         [:div {:style {:color      secondary-color
-                        :height     "30px"
-                        :margin-top 20}}
+         [ui/text-field
+          {:label     (translate [:form :username])
+           :on-change #(swap! data assoc :email (->> % .-target .-value))}]
+
+         [ui/text-field
+          {:type      "password"
+           :label     (translate [:form :password])
+           :on-change #(swap! data assoc :password (->> % .-target .-value))}]
+
+         [ui/form-control-label
+          {:label   (translate [:remember-me])
+           :control (r/as-element [ui/checkbox {:on-change #(swap! data assoc :remember-me (->> % .-target .-checked))}])
+           :style   {:margin-top 10
+                     :width      "100%"}}]
+
+         [ui/button
+          {:on-click #(re-frame/dispatch [::auth.events/login @data])
+           :color    "primary"
+           :variant  "contained"
+           :style    {:width        100
+                      :margin-right 10
+                      :margin-top   "20px"}}
+          (translate [:buttons :sign-in])]
+
+         [ui/button
+          {:on-click #(routes/redirect-to :register-user)
+
+           :style    {:width      100
+                      :margin-top "20px"}}
+          (translate [:buttons :sign-up])]
+
+         [:div
+          {:style {:color      secondary-color
+                   :height     "30px"
+                   :margin-top 20}}
           (when form-error [:span form-error])]]))))

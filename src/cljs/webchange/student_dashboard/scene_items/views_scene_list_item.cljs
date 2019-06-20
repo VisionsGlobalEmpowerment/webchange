@@ -1,8 +1,9 @@
 (ns webchange.student-dashboard.scene-items.views-scene-list-item
   (:require
     [reagent.core :as r]
-    [cljs-react-material-ui.icons :as ic]
-    [webchange.ui.components :as wui]))
+    [cljsjs.material-ui]
+    [cljs-react-material-ui.reagent :as ui]
+    [cljs-react-material-ui.icons :as ic]))
 
 (def completed-mark-color "#3d9a00")
 (def list-item-width 200)
@@ -77,7 +78,8 @@
    [:div {:style info-block-name-styles}
     name]
    [:div {:style info-block-status-styles}
-    (when completed (ic/action-check-circle {:color completed-mark-color}))]])
+    (when completed [ic/check-circle {:style {:color completed-mark-color}}])
+    ]])
 
 (defn- list-item
   [{:keys [image name completed]}
@@ -98,11 +100,12 @@
   (let [show-more (= id :show-more)
         hovered? (r/atom false)]
     (fn []
-      [wui/paper {:on-click      #(on-click item)
-                  :on-mouse-over #(reset! hovered? true)
-                  :on-mouse-out  #(reset! hovered? false)
-                  :style         list-item-styles
-                  :z-depth       (if @hovered? 2 1)}
+      [ui/paper {:on-click      #(on-click item)
+                 :on-mouse-over #(reset! hovered? true)
+                 :on-mouse-out  #(reset! hovered? false)
+                 :style         list-item-styles
+                 :elevation     (if @hovered? 2 1)}
        (if show-more
          [show-more-item]
-         [list-item item {:hovered? @hovered?}])])))
+         [list-item item {:hovered? @hovered?}])]
+      )))

@@ -1,9 +1,10 @@
 (ns webchange.student-dashboard.related-content.views-related-content-list-item
   (:require
     [reagent.core :as r]
+    [cljsjs.material-ui]
+    [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [webchange.student-dashboard.related-content.views-related-content-styles :as styles]
-    [webchange.ui.components :as wui]
     [webchange.ui.theme :refer [w-colors]]))
 
 (def secondary-color (:secondary w-colors))
@@ -90,9 +91,9 @@
   [type]
   [:div {:style tag-styles}
    (case type
-     :book (ic/action-book {:style tag-icon-styles})
-     :game (ic/hardware-videogame-asset {:style tag-icon-styles})
-     :video (ic/av-videocam {:style tag-icon-styles})
+     :book [ic/book {:style tag-icon-styles}]
+     :game [ic/videogame-asset {:style tag-icon-styles}]
+     :video [ic/videocam {:style tag-icon-styles}]
      "")])
 
 (defn related-content-list-item
@@ -100,10 +101,10 @@
    {:keys [on-click]}]
   (let [hovered? (r/atom false)]
     (fn []
-      [wui/paper {:on-click      #(on-click item)
-                  :on-mouse-over #(reset! hovered? true)
-                  :on-mouse-out  #(reset! hovered? false)
-                  :style         list-item-styles
-                  :z-depth       (if @hovered? 2 1)}
+      [ui/paper {:on-click      #(on-click item)
+                 :on-mouse-over #(reset! hovered? true)
+                 :on-mouse-out  #(reset! hovered? false)
+                 :style         list-item-styles
+                 :elevation     (if @hovered? 2 1)}
        [list-item item {:hovered? @hovered?}]
        [tag type]])))

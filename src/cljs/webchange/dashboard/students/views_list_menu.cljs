@@ -12,8 +12,13 @@
 (defn- students-list-menu-item
   [{:keys [user]}]
   (let [{:keys [first-name last-name]} user]
-    [ui/list-item {:primary-text (str first-name " " last-name)
-                   :left-avatar  (r/as-element [ui/avatar (get first-name 0)])}]))
+    [ui/list-item
+     [ui/list-item-avatar
+      [ui/avatar
+       (get first-name 0)]]
+     [ui/list-item-text
+      {:inset   true
+       :primary (str first-name " " last-name)}]]))
 
 (defn students-list-menu
   []
@@ -21,14 +26,19 @@
         _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))
         students @(re-frame/subscribe [::students-subs/class-students class-id])]
     [ui/list
-     [ui/list-item {:primary-text "Students"
-                    :disabled     true}]
+     [ui/list-item
+      "Students"]
      (for [student students]
        ^{:key (:id student)}
        [students-list-menu-item student])
      (if class-id
-       [ui/list-item {:primary-text "Add"
-                      :left-icon    (ic/content-add)
-                      :on-click     #(re-frame/dispatch [::students-events/show-add-student-form])}]
-       [ui/list-item {:disabled       true
-                      :inset-children true} [ui/chip "Select Class"]])]))
+       [ui/list-item
+        {:button   true
+         :on-click #(re-frame/dispatch [::students-events/show-add-student-form])}
+        [ui/list-item-icon [ic/add]]
+        [ui/list-item-text
+         {:inset   true
+          :primary "Add"}]]
+       [ui/list-item
+        [ui/chip
+         {:label "Select Class"}]])]))
