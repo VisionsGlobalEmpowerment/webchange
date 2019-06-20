@@ -8,10 +8,10 @@
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.students.events :as students-events]
     [webchange.dashboard.students.subs :as students-subs]
-    [webchange.dashboard.students.students-list.utils :refer [map-students-list filter-students-list]]
+    [webchange.dashboard.students.common.map-students :refer [map-students-list]]
+    [webchange.dashboard.students.students-list.utils :refer [filter-students-list]]
     [webchange.dashboard.students.students-list.views :refer [students-list]]
-    [webchange.dashboard.students.students-list-filter.views :refer [students-list-filter]]
-    [webchange.dashboard.students.views-common :refer [student-modal]]))
+    [webchange.dashboard.students.students-list-filter.views :refer [students-list-filter]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 
@@ -44,10 +44,11 @@
                       :style   {:flex "0 0 auto"}}
                      filter]
                     [students-list
-                     {:on-edit-click   (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
+                     {:on-click        (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-student-profile id]))
+                      :on-edit-click   (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
                       :on-remove-click (fn [{:keys [id class-id]}] (re-frame/dispatch [::students-events/delete-student class-id id]))
-                      :style           {:flex       "1 1 auto"
-                                        :height     "100%"
+                      :style           {:flex           "1 1 auto"
+                                        :height         "100%"
                                         :overflow-y "auto"
                                         :padding-bottom 60}}
                      students]
@@ -64,5 +65,4 @@
                                    :right    20}
                       :aria-label (translate [:add-student :text])}
                      [ic/add]
-                     (translate [:add-student :text])]
-                    [student-modal]]]))))
+                     (translate [:add-student :text])]]]))))
