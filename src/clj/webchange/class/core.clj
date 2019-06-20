@@ -36,6 +36,7 @@
 
 (defn get-student [id]
   (let [student (-> (db/get-student {:id id})
+                    (with-class)
                     (#(assoc % :date-of-birth (-> % :date-of-birth str)))
                     with-user)]
     {:student student}))
