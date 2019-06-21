@@ -109,9 +109,9 @@
 (re-frame/reg-event-fx
   ::set-active-route
   (fn-traced [{:keys [db]} [_ params]]
-             {:db (assoc db :active-route params)}))
+    {:db (assoc db :active-route params)}))
 
 (re-frame/reg-event-fx
   ::redirect
   (fn-traced [{:keys [db]} [_ & args]]
-             {:redirect args}))
+    {:redirect args}))

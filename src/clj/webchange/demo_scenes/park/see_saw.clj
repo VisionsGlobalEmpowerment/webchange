@@ -14,7 +14,7 @@
                    ],
    :objects
                   {:background {:type "background", :src "/raw/img/park/see-saw/background.jpg"},
-                   :vera       {:type "animation" :x -380 :y 61 :scene-name "vera" :name "vera-90" :anim "2" :speed 0.3 :skin "default"
+                   :vera       {:type "animation" :x -380 :y 61 :scene-name "vera" :name "vera-90" :anim "swing" :speed 0.3 :skin "default"
                                 :width 727 :height 1091 :scale {:x 0.4 :y 0.4} :start false :meshes true}
 
                    :mari {:type "animation" :scene-name "mari" :name "mari" :anim "idle"

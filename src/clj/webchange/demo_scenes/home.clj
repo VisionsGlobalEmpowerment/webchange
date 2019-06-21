@@ -387,7 +387,7 @@
                    :empty-big {:type "empty" :duration 1000}
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
                    :start-background-music {:type "audio" :id "background" :loop true}
-                   :finish-activity {:type "finish-activity" :id "home-introduce"}}
+                   :finish-activity {:type "finish-activity" :id "home"}}
    :audio
                   {:casa-welcome "/raw/audio/scripts/intro/intro-welcome.mp3"
                    :casa-finish "/raw/audio/scripts/intro/intro-finish.mp3"
