@@ -1,10 +1,8 @@
 (ns webchange.dashboard.students.student-profile.views-scores
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
-    [webchange.dashboard.common.dashboard-page :refer [dashboard-page-block]]
-    [webchange.dashboard.score-table.views :refer [score-table]]))
+    [webchange.dashboard.common.views :refer [content-page-section score-table]]))
 
 (defn translate
   [path]
@@ -15,7 +13,7 @@
   [{:keys [data]}]
   (let [current-level (r/atom (->> (:levels data) keys first))]
     (fn [{:keys [title data legend]}]
-      [dashboard-page-block
+      [content-page-section
        {:title title}
        [ui/grid {:container true :spacing 16}
         [ui/grid {:item true :xs 2}

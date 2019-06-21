@@ -1,13 +1,12 @@
-(ns webchange.dashboard.students.views-common
+(ns webchange.dashboard.students.student-modal.views
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
-    [reagent.core :as r]
+    [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.dashboard.classes.subs :as dcs]
-    [webchange.dashboard.students.subs :as dss]
     [webchange.dashboard.students.events :as dse]
-    [cljs-react-material-ui.icons :as ic]))
+    [webchange.dashboard.students.subs :as dss]))
 
 (def not-nil? (complement nil?))
 (def not-equal (complement =))

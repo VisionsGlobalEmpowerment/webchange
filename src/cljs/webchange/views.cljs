@@ -2,66 +2,52 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
-    [webchange.events :as events]
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
     [webchange.auth.views :refer [teacher-login student-access-form]]
-    [webchange.dashboard.views :refer [dashboard-page]]
+    [webchange.dashboard.events :as dashboard-events]
+    [webchange.dashboard.views :refer [dashboard]]
     [webchange.student-dashboard.views :refer [student-dashboard-page student-dashboard-finished-page]]
     [webchange.error-pages.page-404 :refer [page-404]]
-    [soda-ash.core :as sa]))
+    [webchange.views-login-switch :refer [login-switch]]))
 
-(defn login-switch
-  []
-  [sa/Grid {:centered true
-            :columns 2
-            :container true
-            :vertical-align "middle"}
-   [sa/GridRow {}
-    [sa/GridColumn {}
-     [sa/Segment {:placeholder true}
-      [sa/Grid {:centered true
-                :vertical-align "middle"}
-       [sa/GridRow {}
-        [sa/GridColumn {:text-align "center"}
-         [sa/Header {:as "h1" :content "Login as"}]]]
-       [sa/GridRow {}
-        [sa/GridColumn {}
-         [sa/Grid {:stackable true
-                   :text-align "center"}
-          [sa/Divider {:vertical true}
-           "Or"]
-          [sa/GridRow {:columns 2
-                       :vertical-align "middle"}
-           [sa/GridColumn {}
-            [sa/Button {:basic true
-                        :on-click #(re-frame/dispatch [::events/redirect :login])}
-             "Teacher"]]
-           [sa/GridColumn {}
-            [sa/Button {:basic true
-                        :on-click #(re-frame/dispatch [::events/redirect :student-login])}
-             "Student"]]]]]]]]]]])
+(defn- str->int-param
+  [map key]
+  (let [init-value (get map key)]
+    (if init-value
+      (.parseInt js/Number (re-find #"\d+" init-value))
+      nil)))
 
-;; editor
-
-(defn editor-panel [course-id]
+(defn- editor-panel [course-id]
   (re-frame/dispatch [::ee/init-editor course-id])
   [editor])
 
-;; main
+(defn- dashboard-panel
+  [content route-params]
+  (re-frame/dispatch
+    [::dashboard-events/set-main-content content
+     {:class-id   (str->int-param route-params :class-id)
+      :student-id (str->int-param route-params :student-id)}])
+  [dashboard])
 
-(defn- panels [panel-name route-params]
+(defn- panels
+  [panel-name route-params]
   (case panel-name
     :home [login-switch]
     :login [teacher-login :sign-in]
     :register-user [teacher-login :sign-up]
-    :student-login [student-access-form]
     :course [course (:id route-params)]
+    ;; editor
     :course-editor [editor-panel (:id route-params)]
-    :dashboard [dashboard-page route-params]
-    :dashboard-classes [dashboard-page route-params]
-    :dashboard-students [dashboard-page route-params]
+    ;; teacher dashboard
+    :dashboard [dashboard-panel :dashboard route-params]
+    :dashboard-classes [dashboard-panel :classes-list route-params]
+    :dashboard-class-profile [dashboard-panel :class-profile route-params]
+    :dashboard-students [dashboard-panel :students-list route-params]
+    :dashboard-student-profile [dashboard-panel :student-profile route-params]
+    ;; student dashboard
+    :student-login [student-access-form]
     :student-dashboard [student-dashboard-page]
     :finished-activities [student-dashboard-finished-page]
     [page-404]))

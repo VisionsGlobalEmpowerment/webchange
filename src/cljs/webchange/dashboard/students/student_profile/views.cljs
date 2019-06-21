@@ -1,9 +1,9 @@
 (ns webchange.dashboard.students.student-profile.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.dashboard.common.dashboard-page :refer [dashboard-page]]
+    [webchange.dashboard.common.views :refer [content-page score-table]]
     [webchange.dashboard.students.subs :as dss]
-    [webchange.dashboard.score-table.views :refer [score-table]]
+    [webchange.dashboard.students.events :as students-events]
     [webchange.dashboard.students.common.map-students :refer [map-student]]
     [webchange.dashboard.students.student-profile.stubs :refer [scores-stub]]
     [webchange.dashboard.students.student-profile.views-personal-data :refer [personal-data]]
@@ -23,9 +23,9 @@
           path))
 
 (defn student-profile
-  []
-  (let [student (map-student @(re-frame/subscribe [::dss/current-student]))]
-    [dashboard-page
+  [{:keys [student]}]
+  (let [student (map-student student)]
+    [content-page
      {:title (translate [:header])}
      [personal-data student]
      [student-scores [{:title  (translate [:cumulative-scores :title])
@@ -34,3 +34,11 @@
                       {:title  (translate [:activity-scores :title])
                        :data   (scores-stub)
                        :legend (translate [:activity-scores :legend])}]]]))
+
+(defn student-profile-page
+  []
+  (let [student-id @(re-frame/subscribe [::dss/current-student-id])
+        student @(re-frame/subscribe [::dss/current-student])
+        _ (when student-id (re-frame/dispatch [::students-events/load-student student-id]))]
+    [student-profile
+     {:student student}]))

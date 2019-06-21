@@ -1,11 +1,10 @@
-(ns webchange.dashboard.common.dashboard-page
+(ns webchange.dashboard.common.views-content-wrappers
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]))
 
 (def padding 20)
 
-(defn dashboard-page
+(defn content-page
   [{:keys [title]} & children]
   [ui/grid
    {:container true
@@ -26,7 +25,7 @@
        {:style {:padding padding}}
        child]])])
 
-(defn dashboard-page-block
+(defn content-page-section
   [{:keys [title]} & children]
   [ui/grid
    {:container true

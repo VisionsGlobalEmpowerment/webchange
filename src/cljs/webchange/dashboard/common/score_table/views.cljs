@@ -1,6 +1,5 @@
-(ns webchange.dashboard.score-table.views
+(ns webchange.dashboard.common.score-table.views
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.dashboard.score-table.views-legend :refer [score-table-legend]]
     [webchange.dashboard.score-table.views-theme :refer [score-colors]]))
@@ -75,7 +74,7 @@
 (defn score-table
   [{:keys [legend levels title items-title]} data]
   (let [items data
-        values-number (apply max (map #(->> % :values count) items))]
+        values-number (or (apply max (map #(->> % :values count) items)) 0)]
     [:div
      {:style {:padding border-width}}
      [ui/table

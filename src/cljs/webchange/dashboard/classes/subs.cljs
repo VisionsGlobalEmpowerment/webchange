@@ -18,3 +18,17 @@
   ::current-class-id
   (fn [db]
     (get-in db [:dashboard :current-class-id])))
+
+(re-frame/reg-sub
+  ::current-class
+  (fn [db]
+    (let [current-class-id (get-in db [:dashboard :current-class-id])]
+      (->> (get-in db [:dashboard :classes])
+           (filter #(= current-class-id (:id %)))
+           first))))
+
+
+(re-frame/reg-sub
+  ::class-modal-state
+  (fn [db]
+    (get-in db [:dashboard :class-modal-state])))
