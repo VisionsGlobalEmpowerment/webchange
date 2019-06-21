@@ -89,8 +89,9 @@
          ^{:key (:name item)}
          [ui/table-row
           [ui/table-cell
-           {:align "center"
-            :style {:border "none"}}
+           {:align "right"
+            :style {:border "none"
+                    :max-width 50}}
            (:name item)]
           (let [values (align-values-list (:values item) values-number)]
             (map-indexed (fn [index value]

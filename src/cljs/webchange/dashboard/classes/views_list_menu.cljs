@@ -29,7 +29,7 @@
                         open-modal #(swap! modal-state assoc :open true)
                         close-modal #(swap! modal-state assoc :open false)
                         add-class (fn [class-data] (re-frame/dispatch [::classes-events/add-class class-data]))
-                        show-class (fn [class-id] (re-frame/dispatch [::classes-events/show-class class-id]))]
+                        show-class (fn [class-id] (re-frame/dispatch [::classes-events/show-class-profile class-id]))]
                     [ui/list {:component "nav"}
                      [ui/list-item
                       {:button   true

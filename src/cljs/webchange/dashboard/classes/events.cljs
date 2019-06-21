@@ -89,3 +89,9 @@
   (fn [{:keys [db]} [_ class-id]]
     {:db (assoc-in db [:dashboard :current-class-id] class-id)
      :dispatch-n (list [::dashboard-events/set-main-content :manage-students])}))
+
+(re-frame/reg-event-fx
+  ::show-class-profile
+  (fn [{:keys [db]} [_ id]]
+    {:db (assoc-in db [:dashboard :current-class-id] id)
+     :dispatch-n (list [::dashboard-events/set-main-content :class-profile])}))
