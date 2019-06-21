@@ -5,6 +5,7 @@
     [webchange.dashboard.subs :as ds]
     [webchange.dashboard.side-menu.views :refer [side-menu]]
     [webchange.dashboard.classes.views :refer [classes-dashboard]]
+    [webchange.dashboard.classes.class-profile.views :refer [class-profile]]
     [webchange.dashboard.students.views :refer [students-dashboard student-profile]]
     [webchange.dashboard.views-app-bar :refer [app-bar]]
     [webchange.dashboard.views-common :refer [get-shift-styles]]
@@ -21,6 +22,7 @@
     :manage-classes [classes-dashboard]
     :manage-students [students-dashboard]
     :student-profile [student-profile]
+    :class-profile [class-profile]
     [:div]))
 
 (defn dashboard-page
