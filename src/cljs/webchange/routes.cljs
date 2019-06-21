@@ -13,9 +13,11 @@
                                        ["/" :id "/editor"] :course-editor}
                   "student-dashboard" {""          :student-dashboard
                                        "/finished" :finished-activities}
-                  "dashboard"         {[""]                                :dashboard
-                                       ["/classes"]                        :dashboard-classes
-                                       ["/classes/" :class-id "/students"] :dashboard-students}}])
+                  "dashboard"         {[""]                                             :dashboard
+                                       ["/classes"]                                     :dashboard-classes
+                                       ["/classes/" :class-id]                          :dashboard-class-profile
+                                       ["/classes/" :class-id "/students"]              :dashboard-students
+                                       ["/classes/" :class-id "/students/" :student-id] :dashboard-student-profile}}])
 
 
 (defn- parse-url [url]

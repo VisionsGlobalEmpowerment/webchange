@@ -1,7 +1,6 @@
 (ns webchange.student-dashboard.related-content.views-related-content-list-item
   (:require
     [reagent.core :as r]
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [webchange.student-dashboard.related-content.views-related-content-styles :as styles]

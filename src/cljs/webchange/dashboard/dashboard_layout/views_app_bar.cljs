@@ -1,10 +1,9 @@
-(ns webchange.dashboard.views-app-bar
+(ns webchange.dashboard.dashboard-layout.views-app-bar
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
-    [webchange.dashboard.views-breadcrumbs :refer [breadcrumbs]]
-    [webchange.dashboard.views-common :refer [get-shift-styles]]))
+    [webchange.dashboard.dashboard-layout.views-breadcrumbs :refer [breadcrumbs]]
+    [webchange.dashboard.dashboard-layout.utils :refer [get-shift-styles]]))
 
 (defn app-bar
   [{:keys [on-open-menu drawer-open? drawer-width]}]

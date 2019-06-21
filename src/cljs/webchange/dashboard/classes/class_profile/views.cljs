@@ -1,16 +1,15 @@
 (ns webchange.dashboard.classes.class-profile.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.dashboard.students.subs :as students-subs]
-    [webchange.dashboard.students.common.map-students :refer [map-students-list]]
-    [webchange.dashboard.students.events :as students-events]
+    [webchange.dashboard.common.views :refer [content-page content-page-section score-table]]
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.classes.class-profile.stubs :refer [scores-stub profile-stub]]
     [webchange.dashboard.classes.class-profile.views-profile-table :refer [profile-table]]
-    [webchange.dashboard.common.dashboard-page :refer [dashboard-page dashboard-page-block]]
-    [webchange.dashboard.score-table.views :refer [score-table]]))
+    [webchange.dashboard.students.common.map-students :refer [map-students-list]]
+    [webchange.dashboard.students.events :as students-events]
+    [webchange.dashboard.students.subs :as students-subs]))
 
-(defn translate
+(defn- translate
   [path]
   (get-in {:header     "Class Profile"
            :course     {:header "Course"}
@@ -23,31 +22,37 @@
                                             :red    "Scored 79% or below"}}}
           path))
 
-(defn class-profile
-  []
-  (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
-        students (->> @(re-frame/subscribe [::students-subs/class-students class-id])
-                      (map-students-list))
-        profile-data (profile-stub students)
+(defn- class-profile
+  [{:keys [students]}]
+  (let [profile-data (profile-stub students)
         assessment-data (scores-stub students)
         assessment-levels [80 95]
-        course-name "Vera La Vaquita"
-        _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))]
-    [dashboard-page
+        course-name "Vera La Vaquita"]
+    [content-page
      {:title (translate [:header])}
-     [dashboard-page-block
+     [content-page-section
       {:title (translate [:course :header])}
       course-name]
-     [dashboard-page-block
+     [content-page-section
       {:title (translate [:class :header])}
       [profile-table
        {:columns (:columns profile-data)}
        (:data profile-data)]]
-     [dashboard-page-block
+     [content-page-section
       {:title (translate [:assessment :header])}
       [score-table
        {:title       (translate [:assessment :table-title])
         :items-title (translate [:assessment :table-items-title])
         :levels      assessment-levels
         :legend      (translate [:assessment :legend])}
-       assessment-data]]]))
+       assessment-data]
+      ]]))
+
+(defn class-profile-page
+  []
+  (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
+        students @(re-frame/subscribe [::students-subs/class-students class-id])
+        _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))]
+    (when students
+      [class-profile
+       {:students (map-students-list students)}])))

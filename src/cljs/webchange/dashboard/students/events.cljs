@@ -2,8 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
-    [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.dashboard.events :as dashboard-events]))
+    [ajax.core :refer [json-request-format json-response-format]]))
 
 (re-frame/reg-event-fx
   ::load-students
@@ -81,7 +80,6 @@
 (re-frame/reg-event-fx
   ::delete-student
   (fn [{:keys [db]} [_ class-id id]]
-    (println (str "Delete student " class-id "|" id))
     {:db (assoc-in db [:loading :delete-student] true)
      :http-xhrio {:method          :delete
                   :uri             (str "/api/students/" id)
@@ -93,14 +91,14 @@
 (re-frame/reg-event-fx
   ::delete-student-success
   (fn [_ [_ class-id]]
-    (println (str "::delete-student-success " class-id))
     {:dispatch-n (list [:complete-request :delete-student]
                        [::load-students class-id])}))
 
 (re-frame/reg-event-fx
   ::show-add-student-form
   (fn [{:keys [db]} _]
-    {:dispatch-n (list [::generate-access-code]
+    {:db (assoc-in db [:dashboard :current-student-id] nil)
+     :dispatch-n (list [::generate-access-code]
                        [::open-student-modal :add])}))
 
 (re-frame/reg-event-fx
@@ -110,6 +108,11 @@
      :dispatch-n (list [::load-student id]
                        [::reset-access-code]
                        [::open-student-modal :edit])}))
+
+(re-frame/reg-event-fx
+  ::set-current-student
+  (fn [{:keys [db]} [_ student-id]]
+    {:db (assoc-in db [:dashboard :current-student-id] student-id)}))
 
 (re-frame/reg-event-fx
   ::generate-access-code
@@ -144,10 +147,3 @@
   ::open-student-modal
   (fn [{:keys [db]} [_ state]]
     {:db (assoc-in db [:dashboard :student-modal-state] state)}))
-
-(re-frame/reg-event-fx
-  ::show-student-profile
-  (fn [{:keys [db]} [_ id]]
-    {:db (assoc-in db [:dashboard :current-student-id] id)
-     :dispatch-n (list [::load-student id]
-                       [::dashboard-events/set-main-content :student-profile])}))

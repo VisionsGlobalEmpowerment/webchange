@@ -2,36 +2,48 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.dashboard.subs :as ds]
-    [webchange.dashboard.side-menu.views :refer [side-menu]]
-    [webchange.dashboard.classes.views :refer [classes-dashboard]]
-    [webchange.dashboard.classes.class-profile.views :refer [class-profile]]
-    [webchange.dashboard.students.views :refer [students-dashboard student-profile]]
-    [webchange.dashboard.views-app-bar :refer [app-bar]]
-    [webchange.dashboard.views-common :refer [get-shift-styles]]
-    [webchange.dashboard.views-drawer :refer [drawer]]
-    [webchange.ui.theme :refer [with-mui-theme]]
-    [webchange.dashboard.students.views-common :refer [student-modal]]))
+    [webchange.dashboard.common.views :refer [content-page]]
+    [webchange.dashboard.dashboard-layout.views :refer [app-bar drawer progress-bar side-menu]]
+    [webchange.dashboard.dashboard-layout.utils :refer [get-shift-styles]]
+    [webchange.dashboard.classes.views :refer [classes-list class-modal class-profile]]
+    [webchange.dashboard.students.views :refer [students-list student-modal student-profile]]
+    [webchange.dashboard.subs :as dashboard-subs]
+    [webchange.routes :refer [redirect-to]]
+    [webchange.ui.theme :refer [with-mui-theme]]))
 
 (def app-bar-height 64)
 (def drawer-width 300)
 
+(defn translate
+  [path]
+  (get-in {:content {:redirect    "Redirect..."
+                     :not-defined "Dashboard content is not defined"}}
+          path))
+
 (defn main-content
   [main-content]
   (case main-content
-    :manage-classes [classes-dashboard]
-    :manage-students [students-dashboard]
-    :student-profile [student-profile]
+    :dashboard (do (redirect-to :dashboard-classes) [content-page {:title (translate [:content :redirect])}])
+    :classes-list [classes-list]
     :class-profile [class-profile]
-    [:div]))
+    :students-list [students-list]
+    :student-profile [student-profile]
+    [:div (translate [:content :not-defined])]))
 
-(defn dashboard-page
+(defn- modal-windows
+  []
+  [:div
+   [class-modal]
+   [student-modal]])
+
+(defn dashboard
   []
   (let [drawer-open (r/atom true)]
     (fn []
-      (let [current-main-content @(re-frame/subscribe [::ds/current-main-content])]
+      (let [is-loading? false
+            current-main-content @(re-frame/subscribe [::dashboard-subs/current-main-content])]
         [with-mui-theme
-         [:div.dashboard
+         [:div
           [app-bar
            {:on-open-menu #(reset! drawer-open true)
             :drawer-open? @drawer-open
@@ -41,6 +53,7 @@
            [side-menu]]
           [:div {:style (merge {:height (str "calc(100vh - " app-bar-height "px)")}
                                (get-shift-styles @drawer-open drawer-width))}
-           [main-content current-main-content]
-           [student-modal]
-           ]]]))))
+           (if is-loading?
+             [progress-bar]
+             [main-content current-main-content])]
+          [modal-windows]]]))))

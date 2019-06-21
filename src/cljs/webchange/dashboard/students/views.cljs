@@ -1,17 +1,11 @@
 (ns webchange.dashboard.students.views
   (:require
-    [webchange.dashboard.students.views-dashboard :as dashboard]
-    [webchange.dashboard.students.views-list-menu :as list-menu]
-    [webchange.dashboard.students.student-profile.views :as profile]))
+    [webchange.dashboard.students.student-modal.views :as student-modal-views]
+    [webchange.dashboard.students.student-profile.views :as student-profile-views]
+    [webchange.dashboard.students.students-list.views :as students-list-views]
+    [webchange.dashboard.students.students-menu.views :as students-menu-views]))
 
-(defn students-dashboard
-  [& args]
-  (apply dashboard/students-dashboard args))
-
-(defn students-list-menu
-  [& args]
-  (apply list-menu/students-list-menu args))
-
-(defn student-profile
-  [& args]
-  (apply profile/student-profile args))
+(def student-modal student-modal-views/student-modal)
+(def student-profile student-profile-views/student-profile-page)
+(def students-list students-list-views/students-list-page)
+(def students-menu students-menu-views/students-menu)
