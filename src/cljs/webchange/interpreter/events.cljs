@@ -49,6 +49,7 @@
                                  (if progress
                                    (re-frame/dispatch [::set-progress-data progress])
                                    (re-frame/dispatch [::init-default-progress]))
+                                 (re-frame/dispatch [::progress-loaded])
                                  (re-frame/dispatch [::check-course-loaded])))))
 
 (re-frame/reg-fx
@@ -336,6 +337,7 @@
                (assoc :scene-started false))
        :dispatch-n (list [::vars.events/execute-clear-vars]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
+                         [::reset-navigation]
                          [::load-scene scene-id])})))
 
 (re-frame/reg-event-fx
@@ -485,3 +487,19 @@
         {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
         {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})
       )))
+
+(re-frame/reg-event-db
+  ::reset-navigation
+  (fn [db _]
+    (let [current-activity (get-in db [:progress-data :current-activity])
+          current-scene (get-in db [:current-scene])
+          scene-list (get-in db [:course-data :scene-list])]
+      (js/console.log "reset-navigation: " current-activity current-scene)
+      (if (= current-activity current-scene)
+        (dissoc db :navigation)
+        (assoc db :navigation (i/find-exit-position current-scene current-activity scene-list))))))
+
+(re-frame/reg-event-fx
+  ::progress-loaded
+  (fn [{:keys [db]} _]
+    {:dispatch [::reset-navigation]}))

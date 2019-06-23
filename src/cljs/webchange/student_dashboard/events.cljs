@@ -7,7 +7,6 @@
 (re-frame/reg-event-fx
   :open-student-dashboard
   (fn [{:keys [db]} _]
-    #_(let [])
     {:dispatch-n (list [::events/redirect :student-dashboard])}))
 
 (re-frame/reg-event-fx

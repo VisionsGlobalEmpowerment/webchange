@@ -135,3 +135,8 @@
   ::active-route
   (fn [db]
     (:active-route db)))
+
+(re-frame/reg-sub
+  ::navigation
+  (fn [db]
+    (:navigation db)))
