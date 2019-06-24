@@ -1,6 +1,6 @@
 (ns webchange.demo-scenes.stadium.stadium)
 
-(def library-scene {:assets [{:url "/raw/img/stadium/main/Stadium_Sketch.jpg", :size 10, :type "image"}
+(def stadium-scene {:assets [{:url "/raw/img/stadium/main/Stadium_Sketch.jpg", :size 10, :type "image"}
                              ],
 
                     :objects {:background {:type "background", :src "/raw/img/stadium/main/Stadium_Sketch.jpg"},

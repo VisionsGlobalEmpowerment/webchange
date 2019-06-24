@@ -145,25 +145,6 @@
                                            {:type "transition" :transition-id "vera-transition" :to {:x 1298, :y 450}}
                                            {:type "transition" :transition-id "vera-transition" :to {:x 1488, :y 399}}]}
 
-                  :move-from-volleyball {:type "sequence-data"
-                                      :data [{:type "start-animation" :target "vera-go"}
-                                             {:type "transition" :transition-id "vera-transition" :to {:x 1298, :y 450}}
-                                             {:type "transition" :transition-id "vera-transition" :to {:x 1169, :y 454}}
-                                             {:type "transition" :transition-id "vera-transition" :to {:x 1054 :y 531}}
-                                             {:type "transition" :transition-id "vera-transition" :to {:x 1149, :y 583}}
-                                             {:type "transition" :transition-id "vera-transition" :to {:x 1070 :y 665}}]}
-
-                  :move-to-volleyball {:type "sequence-data"
-                                    :data [{:type "start-animation" :target "vera-go"}
-                                           {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
-                                           {:type "transition" :transition-id "vera-transition" :to {:x 1149, :y 583}}
-                                           {:type "animation-props" :target "vera-go" :props {:scaleX 1}}
-                                           {:type "transition" :transition-id "vera-transition" :to {:x 1054 :y 531}}
-                                           {:type "animation-props" :target "vera-go" :props {:scaleX -1}}
-                                           {:type "transition" :transition-id "vera-transition" :to {:x 1169, :y 454}}
-                                           {:type "transition" :transition-id "vera-transition" :to {:x 1298, :y 450}}
-                                           {:type "transition" :transition-id "vera-transition" :to {:x 1488, :y 399}}]}
-
                   :init {:type "sequence-data"
                          :data [{:type "set-variable" :var-name "last-location"
                                  :from-progress [{:action-property "var-value" :progress-property "last-location"}]}

@@ -36,6 +36,7 @@
                      {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
                      {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
                      {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
+                     {:url "/raw/img/ui/hand.png", :size 1, :type "image"}
 
                      {:url "/raw/anim/senoravaca/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
@@ -322,3 +323,27 @@
                           {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y -20 :duration 0.01}}
                           {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}]})
                 data)))
+
+(defn find-path
+  [from to scenes]
+  (let [visited (atom #{from})]
+    (loop [[head & tail] [[from]]]
+      (if head
+        (let [node-name (last head)
+              scene (get scenes (keyword node-name))
+              sibling-names (->> scene :outs (map :name) (into #{}))
+              non-visited (clojure.set/difference sibling-names @visited)
+              _ (swap! visited #(clojure.set/union % non-visited))
+              new-paths (map (fn [next-node] (conj head next-node)) non-visited)]
+          (if (= node-name to)
+            head
+            (recur (concat tail new-paths))))))))
+
+
+(defn find-exit-position
+  [from to scenes]
+  (let [scene (get scenes (keyword from))
+        [_ second & _] (find-path from to scenes)]
+    (->> (:outs scene)
+         (filter #(= second (:name %)))
+         first)))

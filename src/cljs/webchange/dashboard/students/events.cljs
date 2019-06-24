@@ -92,7 +92,6 @@
 (re-frame/reg-event-fx
   ::delete-student-success
   (fn [_ [_ class-id]]
-    (println (str "::delete-student-success " class-id))
     {:dispatch-n (list [:complete-request :delete-student]
                        [::load-students class-id])}))
 

@@ -98,7 +98,7 @@
 (re-frame/reg-event-db
   :complete-request                ;; when we complete a request we need to clean up
   (fn-traced [db [_ request-type]] ;; few things so that our ui is nice and tidy
-             (assoc-in db [:loading request-type] false)))
+    (assoc-in db [:loading request-type] false)))
 
 (re-frame/reg-event-fx
   :api-request-error                                                                         ;; triggered when we get request-error from the server

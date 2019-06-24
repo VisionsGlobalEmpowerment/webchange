@@ -6,11 +6,13 @@
             [webchange.demo-scenes.park.swings :refer [swings-scene]]
             [webchange.demo-scenes.park.sandbox :refer [sandbox-scene]]
             [webchange.demo-scenes.park.park :refer [park-scene]]
+            [webchange.demo-scenes.stadium.stadium :refer [stadium-scene]]
             [webchange.demo-scenes.stadium.volleyball :refer [volleyball-scene]]
+            [webchange.demo-scenes.stadium.cycling :refer [cycling-scene]]
             [webchange.demo-scenes.park.hide-n-seek :refer [hide-n-seek-scene]]
             [webchange.demo-scenes.library.library :refer [library-scene]]
             [webchange.demo-scenes.library.book :refer [book-scene]]
-            [webchange.demo-scenes.stadium.cycling :refer [cycling-scene]]
+
             [clojure.tools.logging :as log]))
 
 (def courses {"test" {"home" home-scene
@@ -24,62 +26,74 @@
                       "hide-n-seek" hide-n-seek-scene
                       "library" library-scene
                       "book" book-scene
-                      "cycling" cycling-scene}})
+                      "cycling" cycling-scene
+                      "stadium" stadium-scene}})
 (defn get-course
   [course-id]
   {:initial-scene "map"
    :scene-list {:home {:name "Casa"
                        :preview "/raw/img/ui/dashboard/scene-preview/Casa_Room.jpg"
                        :type "non-scored"
-                       :outs ["map"]}
+                       :outs [{:name "map" :x 1457 :y 630}]}
                 :map {:name "Map"
                        :preview "/raw/img/ui/dashboard/scene-preview/Casa_Room.jpg"
                        :type "non-scored"
-                       :outs ["park" "library"]}
+                       :outs [{:name "park" :x 1447 :y 860}
+                              {:name "library" :x 181 :y 419}
+                              {:name "stadium" :x 1581 :y 269}
+                              {:name "home" :x 881 :y 490}]}
                 :park {:name "Park"
                        :preview "/raw/img/ui/dashboard/scene-preview/Park_Main.jpg"
                        :type "non-scored"
-                       :outs ["map" "see-saw" "swigns" "sandbox" "hide-n-seek"]}
+                       :outs [{:name "map" :x 100 :y 100}
+                              {:name "see-saw" :x 407 :y 860}
+                              {:name "swings" :x 1637 :y 660}
+                              {:name "sandbox" :x 937 :y 810}
+                              {:name "hide-n-seek" :x 987 :y 670}]}
                 :see-saw {:name "Sea-saw"
                           :preview "/raw/img/ui/dashboard/scene-preview/Park_See-Saw.jpg"
                           :type "non-scored"
-                          :outs ["park"]}
+                          :outs [{:name "park" :x 100 :y 100}]}
                 :swings {:name "Swings"
                          :preview "/raw/img/ui/dashboard/scene-preview/Park_Swing.jpg"
                          :type "non-scored"
-                         :outs ["park"]}
+                         :outs [{:name "park" :x 100 :y 100}]}
                 :sandbox {:name "Sandbox"
                          :preview "/raw/img/ui/dashboard/scene-preview/Park_Sandbox.jpg"
                          :type "non-scored"
-                         :outs ["park"]}
+                         :outs [{:name "park" :x 100 :y 100}]}
                 :hide-n-seek {:name "Hide and Seek"
                          :preview "/raw/img/ui/dashboard/scene-preview/Park_Hide-and-seek.jpg"
                          :type "assessment"
-                         :outs ["park"]}
+                         :outs [{:name "park" :x 100 :y 100}]}
                 :stadium {:name "Stadium"
                          :preview "/raw/img/ui/dashboard/scene-preview/Stadium_Main.jpg"
                          :type "non-scored"
-                         :outs ["map" "volleyball" "cycling"]}
+                         :outs [{:name "map" :x 100 :y 100}
+                                {:name "volleyball" :x 857 :y 870}
+                                {:name "cycling" :x 357 :y 870}]}
                 :volleyball {:name "Volleyball"
                          :preview "/raw/img/ui/dashboard/scene-preview/Stadium_Volleyball.jpg"
                          :type "non-scored"
-                         :outs ["stadium"]}
+                         :outs [{:name "stadium" :x 100 :y 100}]}
                 :cycling {:name "Cycling"
                          :preview "/raw/img/ui/dashboard/scene-preview/Stadium_Cycling-Race.jpg"
                          :type "non-scored"
-                         :outs ["stadium"]}
+                         :outs [{:name "stadium" :x 100 :y 100}]}
                 :library {:name "Library"
                          :preview "/raw/img/ui/dashboard/scene-preview/Library_Room.jpg"
                          :type "non-scored"
-                         :outs ["map" "book" "painting-tablet"]}
+                         :outs [{:name "map" :x 100 :y 100}
+                                {:name "book" :x 1357 :y 750}
+                                {:name "painting-tablet" :x 1057 :y 780}]}
                 :book {:name "Book"
                          :preview "/raw/img/ui/dashboard/scene-preview/Library_Book.jpg"
                          :type "non-scored"
-                         :outs ["library"]}
+                         :outs [{:name "library" :x 100 :y 100}]}
                 :painting-tablet {:name "Painting"
                          :preview "/raw/img/ui/dashboard/scene-preview/Library_Drawing-Lesson.jpg"
                          :type "non-scored"
-                         :outs ["library"]}}
+                         :outs [{:name "library" :x 100 :y 100}]}}
 
    :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "painting-tablet" "cycling"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"

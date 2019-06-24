@@ -298,6 +298,12 @@
   [:> Group (prepare-group-params object)
    [carousel object]])
 
+(defn navigation-helper []
+  (let [position @(re-frame/subscribe [::subs/navigation])]
+    (when position
+      [:> Group (select-keys position [:x :y])
+       [kimage (get-data-as-url "/raw/img/ui/hand.png")]])))
+
 (defn triggers
   [scene-id]
   (let [status (re-frame/subscribe [::vars.subs/variable scene-id "status"])]
@@ -315,6 +321,7 @@
         ^{:key (str scene-id name)} [draw-object scene-id name])
      [score]
      [menu]
+     [navigation-helper]
      [triggers scene-id]
      ]))
 
