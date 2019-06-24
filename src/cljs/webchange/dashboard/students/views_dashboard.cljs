@@ -8,54 +8,61 @@
     [webchange.dashboard.classes.subs :as classes-subs]
     [webchange.dashboard.students.events :as students-events]
     [webchange.dashboard.students.subs :as students-subs]
-    [webchange.dashboard.students.utils :refer [flatten-student]]
+    [webchange.dashboard.students.students-list.utils :refer [map-students-list filter-students-list]]
+    [webchange.dashboard.students.students-list.views :refer [students-list]]
+    [webchange.dashboard.students.students-list-filter.views :refer [students-list-filter]]
     [webchange.dashboard.students.views-common :refer [student-modal]]))
 
-(defn- add-new-student-dashboard-item []
-  [:div.students-dashboard-item.add-new
-   {:on-click #(re-frame/dispatch [::students-events/show-add-student-form])}
-   [:div.students-dashboard-item_body "+ New"]])
+(def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 
-(defn- students-dashboard-item
-  [{{:keys [first-name last-name email]} :user :as student}]
-  (let [menu-anchor (r/atom nil)
-        menu-open? (r/atom false)]
-    (fn []
-      [:div.students-dashboard-item
-       [ui/card
-        [ui/card-header {:title    (str first-name " " last-name)
-                         :subtitle email
-                         :avatar   (r/as-element [ui/avatar (get first-name 0)])}]
-        [ui/card-actions {:style {:float "right"}}
-         [ui/icon-button
-          {:on-click #(do (reset! menu-open? true)
-                          (reset! menu-anchor (.-currentTarget %)))}
-          [ic/more-horiz]]
-         [ui/menu
-          {:open @menu-open?
-           :on-close #(reset! menu-open? false)
-           :anchor-El @menu-anchor}
-          [ui/menu-item
-           {:on-click #(do (re-frame/dispatch [::students-events/show-edit-student-form (:id student)])
-                           (reset! menu-open? false))}
-           "Edit"]
-          [ui/menu-item
-           {:on-click #(do (re-frame/dispatch [::students-events/delete-student (:class-id student) (:id student)])
-                           (reset! menu-open? false))}
-           "Remove"]]]]])))
+(defn translate
+  [path]
+  (get-in {:title "Students"
+           :add-student {:text "Add Student"}}
+          path))
 
 (defn students-dashboard
   []
-  (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
-        _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))
-        students @(re-frame/subscribe [::students-subs/class-students class-id])]
-    [ui/card
-     [ui/card-header {:title "Students"}]
-     [ui/card-content
-      [:div.students-dashboard
-       (for [student students]
-         ^{:key (:id student)}
-         [students-dashboard-item student])
-       [add-new-student-dashboard-item]]
-      [student-modal]
-      ]]))
+  (r/with-let [filter (r/atom {:class-id nil})]
+              (fn []
+                (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
+                      classes @(re-frame/subscribe [::classes-subs/classes-list])
+                      students (->> @(re-frame/subscribe [::students-subs/class-students class-id])
+                                    (map-students-list)
+                                    (filter-students-list @filter))
+                      _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))]
+                  [ui/card {:style {:display        "flex"
+                                    :flex-direction "column"
+                                    :height         "100%"}}
+                   [ui/card-header {:title (translate [:title])
+                                    :style {:flex "0 0 auto"}}]
+                   [ui/card-content {:style {:display        "flex"
+                                             :flex           "1 1 auto"
+                                             :flex-direction "column"}}
+                    [students-list-filter
+                     {:classes classes
+                      :style   {:flex "0 0 auto"}}
+                     filter]
+                    [students-list
+                     {:on-edit-click   (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
+                      :on-remove-click (fn [{:keys [id class-id]}] (re-frame/dispatch [::students-events/delete-student class-id id]))
+                      :style           {:flex       "1 1 auto"
+                                        :height     "100%"
+                                        :overflow-y "auto"
+                                        :padding-bottom 60}}
+                     students]
+
+                    [fab
+                     {:on-click #(re-frame/dispatch [::students-events/show-add-student-form])
+                      :color      "primary"
+                      :variant    "extended"
+                      :style      {:margin   16
+                                   :width    150
+                                   :height   40
+                                   :position "fixed"
+                                   :bottom   20
+                                   :right    20}
+                      :aria-label (translate [:add-student :text])}
+                     [ic/add]
+                     (translate [:add-student :text])]
+                    [student-modal]]]))))

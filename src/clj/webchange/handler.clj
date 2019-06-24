@@ -102,6 +102,8 @@
            (GET "/courses/:id/editor" request (teachers-route request))
 
            (GET "/dashboard" request (teachers-route request))
+           (GET "/dashboard/classes" request (teachers-route request))
+           (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
            (GET "/student-dashboard" request (authenticated-route request))
            (resources "/"))
 

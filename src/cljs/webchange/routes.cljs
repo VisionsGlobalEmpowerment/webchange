@@ -11,9 +11,11 @@
                   "register"          :register-user
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor}
-                  "student-dashboard" {"" :student-dashboard
+                  "student-dashboard" {""          :student-dashboard
                                        "/finished" :finished-activities}
-                  "dashboard"         :dashboard}])
+                  "dashboard"         {[""]                                :dashboard
+                                       ["/classes"]                        :dashboard-classes
+                                       ["/classes/" :class-id "/students"] :dashboard-students}}])
 
 
 (defn- parse-url [url]
@@ -37,7 +39,7 @@
 (defn redirect-to [& args]
   (let [key (first args)
         path (if (= (type key) Keyword)
-               (apply url-for args)
+               (apply url-for (vec args))
                key)]
     (pushy/set-token! history path)))
 
