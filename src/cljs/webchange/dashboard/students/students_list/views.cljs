@@ -22,14 +22,14 @@
 (def avatar-female-color "#ff7070")
 (def avatar-unknown-color no-defined-color)
 (def styles
-  {:content {:title      {:display     "inline-block"
-                          :font-weight "bold"
-                          :overflow    "hidden"}
-             :text       {:display       "inline-block"
-                          :overflow      "hidden"
-                          :text-overflow "ellipsis"
-                          :white-space   "nowrap"}}
-   :table-cell {:padding "4px 12px 4px 12px"
+  {:content    {:title {:display     "inline-block"
+                        :font-weight "bold"
+                        :overflow    "hidden"}
+                :text  {:display       "inline-block"
+                        :overflow      "hidden"
+                        :text-overflow "ellipsis"
+                        :white-space   "nowrap"}}
+   :table-cell {:padding     "4px 12px 4px 12px"
                 :white-space "nowrap"}})
 
 (defn translate
@@ -129,31 +129,35 @@
         _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))]
     (fn []
       (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
-            students @(re-frame/subscribe [::students-subs/class-students class-id])]
-        [content-page
-         {:title (translate [:title])}
-         [:div
-          [students-list-filter
-           {:classes classes
-            :style   {:flex "0 0 auto"}}
-           filter]
-          [students-list
-           {:on-profile-click (fn [{:keys [id class-id]}] (redirect-to :dashboard-student-profile :class-id class-id :student-id id))
-            :on-edit-click    (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
-            :on-remove-click  (fn [{:keys [id class-id]}] (re-frame/dispatch [::students-events/delete-student class-id id]))}
-           (->> students
-                (map-students-list)
-                (filter-students-list @filter))]
-          [fab
-           {:on-click   #(re-frame/dispatch [::students-events/show-add-student-form])
-            :color      "primary"
-            :variant    "extended"
-            :style      {:margin   16
-                         :width    150
-                         :height   40
-                         :position "fixed"
-                         :bottom   20
-                         :right    20}
-            :aria-label (translate [:add-student :text])}
-           [ic/add]
-           (translate [:add-student :text])]]]))))
+            students @(re-frame/subscribe [::students-subs/class-students class-id])
+            is-loading? (or @(re-frame/subscribe [::students-subs/students-loading class-id])
+                            @(re-frame/subscribe [::classes-subs/classes-loading]))]
+        (if is-loading?
+          [ui/linear-progress]
+          [content-page
+           {:title (translate [:title])}
+           [:div
+            [students-list-filter
+             {:classes classes
+              :style   {:flex "0 0 auto"}}
+             filter]
+            [students-list
+             {:on-profile-click (fn [{:keys [id class-id]}] (redirect-to :dashboard-student-profile :class-id class-id :student-id id))
+              :on-edit-click    (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
+              :on-remove-click  (fn [{:keys [id class-id]}] (re-frame/dispatch [::students-events/delete-student class-id id]))}
+             (->> students
+                  (map-students-list)
+                  (filter-students-list @filter))]
+            [fab
+             {:on-click   #(re-frame/dispatch [::students-events/show-add-student-form])
+              :color      "primary"
+              :variant    "extended"
+              :style      {:margin   16
+                           :width    150
+                           :height   40
+                           :position "fixed"
+                           :bottom   20
+                           :right    20}
+              :aria-label (translate [:add-student :text])}
+             [ic/add]
+             (translate [:add-student :text])]]])))))

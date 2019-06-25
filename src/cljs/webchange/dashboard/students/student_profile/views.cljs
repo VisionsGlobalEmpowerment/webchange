@@ -1,5 +1,6 @@
 (ns webchange.dashboard.students.student-profile.views
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.dashboard.common.views :refer [content-page score-table]]
     [webchange.dashboard.students.subs :as dss]
@@ -11,15 +12,15 @@
 
 (defn translate
   [path]
-  (get-in {:header "Student Profile"
-           :cumulative-scores {:title "Cumulative Activity Score"
+  (get-in {:header            "Student Profile"
+           :cumulative-scores {:title  "Cumulative Activity Score"
                                :legend {:green  "Student completed the activity & scored 95%+"
                                         :yellow "Completed the activity & scored 80-95%"
                                         :red    "Completed the activity & scored 79% or below"}}
-           :activity-scores {:title "Activity Time Chart"
-                             :legend {:green  "Completed within + or - 15% expected time of completion"
-                                      :yellow "Completed 15% later than expected time of completion"
-                                      :red    "Completed over 15% later than expected time of completion"}}}
+           :activity-scores   {:title  "Activity Time Chart"
+                               :legend {:green  "Completed within + or - 15% expected time of completion"
+                                        :yellow "Completed 15% later than expected time of completion"
+                                        :red    "Completed over 15% later than expected time of completion"}}}
           path))
 
 (defn student-profile
@@ -39,6 +40,9 @@
   []
   (let [student-id @(re-frame/subscribe [::dss/current-student-id])
         student @(re-frame/subscribe [::dss/current-student])
-        _ (when student-id (re-frame/dispatch [::students-events/load-student student-id]))]
-    [student-profile
-     {:student student}]))
+        _ (when student-id (re-frame/dispatch [::students-events/load-student student-id]))
+        is-loading? @(re-frame/subscribe [::dss/student-loading])]
+    (if is-loading?
+      [ui/linear-progress]
+      [student-profile
+       {:student student}])))
