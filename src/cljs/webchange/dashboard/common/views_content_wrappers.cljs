@@ -9,10 +9,12 @@
   [ui/grid
    {:container true
     :spacing   24
-    :style     {:padding padding}}
+    :style     {:padding padding
+                :margin  0
+                :width   "100%"}}
    [ui/grid
     {:item true
-     :xs 12}
+     :xs   12}
     [ui/typography
      {:variant "h4"}
      title]]
@@ -20,7 +22,7 @@
      ^{:key child}
      [ui/grid
       {:item true
-       :xs 12}
+       :xs   12}
       [ui/paper
        {:style {:padding padding}}
        child]])])
@@ -29,11 +31,11 @@
   [{:keys [title]} & children]
   [ui/grid
    {:container true
-    :spacing 16}
+    :spacing   16}
    (when title
      [ui/grid
       {:item true
-       :xs 12}
+       :xs   12}
       [ui/typography
        {:variant "h6"}
        title]])
@@ -41,5 +43,5 @@
      ^{:key child}
      [ui/grid
       {:item true
-       :xs 12}
+       :xs   12}
       child])])

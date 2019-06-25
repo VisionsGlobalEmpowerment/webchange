@@ -24,7 +24,7 @@
     :on-click #(apply redirect-to route)
     :style    {:color     (get-in-theme [:palette :text :primary])
                :min-width "30px"}}
-   text])
+   (or text " ")])
 
 (defn- breadcrumb-item-connector
   []

@@ -22,13 +22,15 @@
 (def avatar-female-color "#ff7070")
 (def avatar-unknown-color no-defined-color)
 (def styles
-  {:content {:title {:display     "inline-block"
-                     :font-weight "bold"
-                     :overflow    "hidden"}
-             :text  {:display       "inline-block"
-                     :overflow      "hidden"
-                     :text-overflow "ellipsis"
-                     :white-space   "nowrap"}}})
+  {:content {:title      {:display     "inline-block"
+                          :font-weight "bold"
+                          :overflow    "hidden"}
+             :text       {:display       "inline-block"
+                          :overflow      "hidden"
+                          :text-overflow "ellipsis"
+                          :white-space   "nowrap"}}
+   :table-cell {:padding "4px 12px 4px 12px"
+                :white-space "nowrap"}})
 
 (defn translate
   [path]
@@ -61,32 +63,32 @@
   [{:keys [on-edit-click on-profile-click on-remove-click]}
    {:keys [first-name last-name age gender class course tablet?] :as student}]
   [ui/table-row {:hover true}
-   [ui/table-cell
+   [ui/table-cell {:style (get-in styles [:table-cell])}
     [list-item-avatar
      {:first-name first-name
       :last-name  last-name
       :gender     gender}]]
-   [ui/table-cell
+   [ui/table-cell {:style (get-in styles [:table-cell])}
     [:span
      {:style (get-in styles [:content :text])}
      (str first-name " " last-name)]]
-   [ui/table-cell
+   [ui/table-cell {:style (get-in styles [:table-cell])}
     [:span
      {:style (merge (get-in styles [:content :text])
                     (if-not age {:color no-defined-color} {}))}
      (or age (translate [:items :age :not-defined]))]]
-   [ui/table-cell
+   [ui/table-cell {:style (get-in styles [:table-cell])}
     [:span
      {:style (get-in styles [:content :text])}
      class]]
-   [ui/table-cell
+   [ui/table-cell {:style (get-in styles [:table-cell])}
     [:span
      {:style (merge (get-in styles [:content :text])
                     (if-not course {:color no-defined-color} {}))}
      (or course (translate [:items :course :not-defined]))]]
-   [ui/table-cell [check-icon {:value tablet?}]]
+   [ui/table-cell {:style (get-in styles [:table-cell])} [check-icon {:value tablet?}]]
    [ui/table-cell {:align "right"
-                   :style {:white-space "nowrap"}}
+                   :style (get-in styles [:table-cell])}
     [ui/tooltip
      {:title (translate [:actions :profile])}
      [ui/icon-button {:on-click #(on-profile-click student)} [ic/data-usage]]]
@@ -102,18 +104,18 @@
   [ui/table
    [ui/table-head
     [ui/table-row
-     [ui/table-cell]
-     [ui/table-cell
+     [ui/table-cell {:style (get-in styles [:table-cell])}]
+     [ui/table-cell {:style (get-in styles [:table-cell])}
       (translate [:items :name :title])]
-     [ui/table-cell
+     [ui/table-cell {:style (get-in styles [:table-cell])}
       (translate [:items :age :title])]
-     [ui/table-cell
+     [ui/table-cell {:style (get-in styles [:table-cell])}
       (translate [:items :class :title])]
-     [ui/table-cell
+     [ui/table-cell {:style (get-in styles [:table-cell])}
       (translate [:items :course :title])]
-     [ui/table-cell
+     [ui/table-cell {:style (get-in styles [:table-cell])}
       (translate [:items :tablet :title])]
-     [ui/table-cell]]]
+     [ui/table-cell {:style (get-in styles [:table-cell])}]]]
    [ui/table-body
     (for [student students]
       ^{:key (:id student)}
