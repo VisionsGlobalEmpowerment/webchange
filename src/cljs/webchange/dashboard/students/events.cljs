@@ -97,7 +97,7 @@
 (re-frame/reg-event-fx
   ::show-add-student-form
   (fn [{:keys [db]} _]
-    {:db (assoc-in db [:dashboard :current-student-id] nil)
+    {:db (assoc-in db [:dashboard :current-student] nil)
      :dispatch-n (list [::generate-access-code]
                        [::open-student-modal :add])}))
 
