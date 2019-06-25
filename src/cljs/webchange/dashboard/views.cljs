@@ -51,7 +51,9 @@
           [drawer {:open     @drawer-open
                    :on-close #(reset! drawer-open false)}
            [side-menu]]
-          [:div {:style (merge {:height (str "calc(100vh - " app-bar-height "px)")}
+          [:div {:style (merge {:height     (str "calc(100vh - " app-bar-height "px)")
+                                :overflow-x "hidden"
+                                :overflow-y "auto"}
                                (get-shift-styles @drawer-open drawer-width))}
            (if is-loading?
              [progress-bar]
