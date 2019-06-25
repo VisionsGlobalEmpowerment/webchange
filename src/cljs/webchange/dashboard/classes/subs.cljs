@@ -27,8 +27,12 @@
            (filter #(= current-class-id (:id %)))
            first))))
 
-
 (re-frame/reg-sub
   ::class-modal-state
   (fn [db]
     (get-in db [:dashboard :class-modal-state])))
+
+(re-frame/reg-sub
+  ::classes-loading
+  (fn [db]
+    (get-in db [:loading :classes])))

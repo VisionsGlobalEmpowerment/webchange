@@ -26,3 +26,13 @@
   ::student-modal-state
   (fn [db]
     (get-in db [:dashboard :student-modal-state])))
+
+(re-frame/reg-sub
+  ::students-loading
+  (fn [db]
+    (get-in db [:loading :students])))
+
+(re-frame/reg-sub
+  ::student-loading
+  (fn [db]
+    (get-in db [:loading :student])))
