@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
-    [ajax.core :refer [json-request-format json-response-format]]))
+    [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.dashboard.events :as dashboard-events]))
 
 (re-frame/reg-event-fx
   ::load-students
@@ -142,3 +143,10 @@
   ::open-student-modal
   (fn [{:keys [db]} [_ state]]
     {:db (assoc-in db [:dashboard :student-modal-state] state)}))
+
+(re-frame/reg-event-fx
+  ::show-student-profile
+  (fn [{:keys [db]} [_ id]]
+    {:db (assoc-in db [:dashboard :current-student-id] id)
+     :dispatch-n (list [::load-student id]
+                       [::dashboard-events/set-main-content :student-profile])}))

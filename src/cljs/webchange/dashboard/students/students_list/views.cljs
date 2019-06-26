@@ -3,7 +3,9 @@
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
-    [reagent.core :as r]))
+    [reagent.core :as r]
+    [webchange.dashboard.students.common.actions-menu :refer [actions-menu]]
+    [webchange.dashboard.students.common.check-icon :refer [check-icon]]))
 
 (defn translate
   [path]
@@ -21,37 +23,27 @@
 (def avatar-male-color "#70adff")
 (def avatar-female-color "#ff7070")
 (def avatar-unknown-color no-defined-color)
-(def completed-mark-color "#3d9a00")
-(def failed-mark-color "#fd4142")
-(def not-defined-mark-color no-defined-color)
 
 (def styles
-  {:content     {:container {:display     "flex"
-                             :flex-grow   1
-                             :flex-shrink 1
-                             :height      "48px"
-                             :line-height "24px"
-                             :margin      "0 12px"
-                             :padding     "12px"}
-                 :title     {:display      "inline-block"
-                             :flex-grow    0
-                             :flex-shrink  0
-                             :font-weight  "bold"
-                             :margin-right "5px"
-                             :overflow     "hidden"}
-                 :text      {:display       "inline-block"
-                             :flex-grow     1
-                             :flex-shrink   1
-                             :overflow      "hidden"
-                             :text-overflow "ellipsis"
-                             :white-space   "nowrap"}}
-   :tablet-icon {:main        {:display  "inline-block"
-                               :height   17
-                               :position "relative"
-                               :top      3}
-                 :completed   {:color completed-mark-color}
-                 :failed      {:color failed-mark-color}
-                 :not-defined {:color not-defined-mark-color}}})
+  {:content {:container {:display     "flex"
+                         :flex-grow   1
+                         :flex-shrink 1
+                         :height      "48px"
+                         :line-height "24px"
+                         :margin      "0 12px"
+                         :padding     "12px"}
+             :title     {:display      "inline-block"
+                         :flex-grow    0
+                         :flex-shrink  0
+                         :font-weight  "bold"
+                         :margin-right "5px"
+                         :overflow     "hidden"}
+             :text      {:display       "inline-block"
+                         :flex-grow     1
+                         :flex-shrink   1
+                         :overflow      "hidden"
+                         :text-overflow "ellipsis"
+                         :white-space   "nowrap"}}})
 
 (defn list-item-avatar
   [{:keys [first-name last-name gender]}]
@@ -99,46 +91,36 @@
      (translate [:actions :remove])]]])
 
 (defn list-item
-  [{:keys [on-edit-click on-remove-click]}
+  [{:keys [on-click on-edit-click on-remove-click]}
    {:keys [first-name last-name age gender class course tablet?] :as student}]
-  (let [menu-anchor (r/atom nil)
-        menu-open? (r/atom false)]
-    (fn []
-      [ui/list-item
-       {:align-items "flex-start"
-        :button      true}
-       [list-item-avatar {:first-name first-name
-                          :last-name  last-name
-                          :gender     gender}]
-       [list-item-content {:text  (str first-name " " last-name)
-                           :style {:width 200}}]
-       [list-item-content {:title      (translate [:items :age :title])
-                           :text       (or age (translate [:items :age :not-defined]))
-                           :style      {:width 60}
-                           :text-style (if-not age {:color no-defined-color} {})}]
-       [list-item-content {:title (translate [:items :class :title])
-                           :text  class
-                           :style {:width 100}}]
-       [list-item-content {:title      (translate [:items :course :title])
-                           :text       (or course (translate [:items :course :not-defined]))
-                           :style      {:width 200}
-                           :text-style (if-not course {:color no-defined-color} {})}]
-       [list-item-content {:title   (translate [:items :tablet :title
-                                                ])
-                           :content tablet?
-                           :style   {:width 100}}
-        (case tablet?
-          true [ic/check-circle {:style (merge (get-in styles [:tablet-icon :main])
-                                               (get-in styles [:tablet-icon :completed]))}]
-          false [ic/remove-circle {:style (merge (get-in styles [:tablet-icon :main])
-                                                 (get-in styles [:tablet-icon :failed]))}]
-          [ic/remove-circle-outline {:style (merge (get-in styles [:tablet-icon :main])
-                                                   (get-in styles [:tablet-icon :not-defined]))}])]
-       [list-item-actions
-        {:menu-open?      menu-open?
-         :menu-anchor     menu-anchor
-         :on-edit-click   #(on-edit-click student)
-         :on-remove-click #(on-remove-click student)}]]))
+  [ui/list-item
+   {:align-items "flex-start"
+    :button      true
+    :on-click    #(on-click student)}
+   [list-item-avatar {:first-name first-name
+                      :last-name  last-name
+                      :gender     gender}]
+   [list-item-content {:text  (str first-name " " last-name)
+                       :style {:width 200}}]
+   [list-item-content {:title      (translate [:items :age :title])
+                       :text       (or age (translate [:items :age :not-defined]))
+                       :style      {:width 60}
+                       :text-style (if-not age {:color no-defined-color} {})}]
+   [list-item-content {:title (translate [:items :class :title])
+                       :text  class
+                       :style {:width 100}}]
+   [list-item-content {:title      (translate [:items :course :title])
+                       :text       (or course (translate [:items :course :not-defined]))
+                       :style      {:width 200}
+                       :text-style (if-not course {:color no-defined-color} {})}]
+   [list-item-content {:title   (translate [:items :tablet :title
+                                            ])
+                       :content tablet?
+                       :style   {:width 100}}
+    [check-icon {:value tablet?}]]
+   [actions-menu
+    {:on-edit-click   #(on-edit-click student)
+     :on-remove-click #(on-remove-click student)}]]
   )
 
 (defn students-list

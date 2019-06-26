@@ -5,11 +5,13 @@
     [webchange.dashboard.subs :as ds]
     [webchange.dashboard.side-menu.views :refer [side-menu]]
     [webchange.dashboard.classes.views :refer [classes-dashboard]]
-    [webchange.dashboard.students.views :refer [students-dashboard]]
+    [webchange.dashboard.classes.class-profile.views :refer [class-profile]]
+    [webchange.dashboard.students.views :refer [students-dashboard student-profile]]
     [webchange.dashboard.views-app-bar :refer [app-bar]]
     [webchange.dashboard.views-common :refer [get-shift-styles]]
     [webchange.dashboard.views-drawer :refer [drawer]]
-    [webchange.ui.theme :refer [with-mui-theme]]))
+    [webchange.ui.theme :refer [with-mui-theme]]
+    [webchange.dashboard.students.views-common :refer [student-modal]]))
 
 (def app-bar-height 64)
 (def drawer-width 300)
@@ -19,10 +21,12 @@
   (case main-content
     :manage-classes [classes-dashboard]
     :manage-students [students-dashboard]
+    :student-profile [student-profile]
+    :class-profile [class-profile]
     [:div]))
 
 (defn dashboard-page
-  [route-params]
+  []
   (let [drawer-open (r/atom true)]
     (fn []
       (let [current-main-content @(re-frame/subscribe [::ds/current-main-content])]
@@ -37,4 +41,6 @@
            [side-menu]]
           [:div {:style (merge {:height (str "calc(100vh - " app-bar-height "px)")}
                                (get-shift-styles @drawer-open drawer-width))}
-           [main-content current-main-content]]]]))))
+           [main-content current-main-content]
+           [student-modal]
+           ]]]))))
