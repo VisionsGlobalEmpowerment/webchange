@@ -1,8 +1,8 @@
-(ns webchange.dashboard.score-table.views-legend
+(ns webchange.dashboard.common.score-table.views-legend
   (:require
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.dashboard.score-table.views-theme :refer [score-colors]]))
+    [webchange.dashboard.common.score-table.views-theme :refer [score-colors]]))
 
 (def legend-list-style
   {:list-style "none"

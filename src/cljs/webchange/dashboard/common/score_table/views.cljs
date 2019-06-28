@@ -1,8 +1,8 @@
 (ns webchange.dashboard.common.score-table.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.dashboard.score-table.views-legend :refer [score-table-legend]]
-    [webchange.dashboard.score-table.views-theme :refer [score-colors]]))
+    [webchange.dashboard.common.score-table.views-legend :refer [score-table-legend]]
+    [webchange.dashboard.common.score-table.views-theme :refer [score-colors]]))
 
 (def border-width 3)
 (defn get-score-style
