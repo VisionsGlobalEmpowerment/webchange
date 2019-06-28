@@ -24,9 +24,7 @@
   [:div {:style content-block-styles}
    [:h1 {:style content-header-styles} title]
    [:div {:style content-body-styles}
-    (for [item items]
-      (do
-        (js/console.log "item-id " (:id item) item)
-
-      ^{:key (:id item)}
-      [scene-list-item item {:on-click on-click}]))]])
+    (for [{:keys [id] :as item} items]
+      (when id
+        ^{:key id}
+        [scene-list-item item {:on-click on-click}]))]])

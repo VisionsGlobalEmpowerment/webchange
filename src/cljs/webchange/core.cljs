@@ -1,13 +1,13 @@
 (ns webchange.core
   (:require
     [cljsjs.material-ui]
-   [reagent.core :as reagent]
-   [re-frame.core :as re-frame]
-   [webchange.events :as events]
-   [webchange.views :as views]
-   [webchange.config :as config]
-   [webchange.routes :as routes]
-   ))
+    [reagent.core :as reagent]
+    [re-frame.core :as re-frame]
+    [webchange.events :as events]
+    [webchange.views :as views]
+    [webchange.config :as config]
+    [webchange.routes :as routes]
+    [webchange.service-worker-register :as sw]))
 
 
 (defn dev-setup []
@@ -32,6 +32,7 @@
   (reset-viewport))
 
 (defn ^:export init []
+  (sw/register "/service-worker.js")
   (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (re-frame/dispatch [::events/init-current-school])

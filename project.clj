@@ -126,7 +126,13 @@
                     :install-deps true
                     :optimizations   :none
                     }}
-
+    {:id           "dev-sw"
+     :source-paths ["src/sw"]
+     :compiler {:main webchange.service-worker
+                :output-to "resources/public/js/compiled/service-worker.js"
+                :output-dir           "resources/public/js/compiled/out-sw"
+                :optimizations :advanced
+                :pretty-print true}}
     {:id           "min"
      :source-paths ["src/cljs"]
      :jar true

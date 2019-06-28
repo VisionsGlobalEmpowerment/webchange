@@ -123,9 +123,11 @@
            (POST "/api/course-versions/:version-id/restore" [version-id :as request]
              (handle-restore-course-version version-id request))
            (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-             (handle-restore-scene-version version-id request))
+             (handle-restore-scene-version version-id request)))
 
-           )
+(defroutes service-worker-route
+           (GET "/service-worker.js" [] (-> (resource-response "js/compiled/service-worker.js" {:root "public"})
+                                            (assoc-in [:headers "Content-Type"] "text/javascript"))))
 
 (defroutes app
            pages-routes
@@ -134,6 +136,7 @@
            class-routes
            dataset-routes
            progress-routes
+           service-worker-route
            (-> asset-routes
                wrap-multipart-params)
            (not-found "Not Found"))
