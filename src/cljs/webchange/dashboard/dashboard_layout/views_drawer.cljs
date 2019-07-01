@@ -1,6 +1,5 @@
-(ns webchange.dashboard.views-drawer
+(ns webchange.dashboard.dashboard-layout.views-drawer
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [webchange.ui.theme :refer [get-in-theme w-colors]]
@@ -18,7 +17,7 @@
 
 ;; ToDo: resolve problem with props camel-casing ({:on-click onClose})
 
-(defn drawer-styled
+(defn- drawer-styled
   [{:keys [open classes children onClose]}]
   [ui/drawer {:anchor     "left"
               :variant    "persistent"

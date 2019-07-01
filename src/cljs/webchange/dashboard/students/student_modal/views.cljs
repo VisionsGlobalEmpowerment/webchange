@@ -1,13 +1,13 @@
-(ns webchange.dashboard.students.views-common
+(ns webchange.dashboard.students.student-modal.views
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
-    [reagent.core :as r]
+    [cljs-react-material-ui.icons :as ic]
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.dashboard.classes.subs :as dcs]
-    [webchange.dashboard.students.subs :as dss]
     [webchange.dashboard.students.events :as dse]
-    [cljs-react-material-ui.icons :as ic]))
+    [webchange.dashboard.students.subs :as dss]))
 
 (def not-nil? (complement nil?))
 (def not-equal (complement =))
@@ -53,7 +53,9 @@
       (let [generated-code @(re-frame/subscribe [::dss/generated-code])
             access-code (or generated-code (:access-code @props))
             _ (swap! props assoc :access-code access-code)
-            date-of-birth (if (clojure.string/blank? (:date-of-birth @props)) (format-date (js/Date.)) (js/Date. (:date-of-birth @props)))]
+            date-of-birth (let [date (:date-of-birth @props)
+                                date-obj (if (s/blank? date) (js/Date.) (js/Date. date))]
+                            (format-date date-obj))]
         [:form
          [ui/grid {:container true}
           [ui/grid {:item true :xs 12}
@@ -74,14 +76,16 @@
                (gender->menu-item gender))]]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
-            [ui/text-field {:label         "First Name"
-                            :default-value (:first-name @props)
-                            :on-change     #(swap! props assoc :first-name (->> % .-target .-value))}]]]
+            [ui/text-field
+             {:label         "First Name"
+              :default-value (:first-name @props)
+              :on-change     #(swap! props assoc :first-name (->> % .-target .-value))}]]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
-            [ui/text-field {:label         "Last Name"
-                            :default-value (:last-name @props)
-                            :on-change     #(swap! props assoc :last-name (->> % .-target .-value))}]]]
+            [ui/text-field
+             {:label         "Last Name"
+              :default-value (:last-name @props)
+              :on-change     #(swap! props assoc :last-name (->> % .-target .-value))}]]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
             [ui/text-field
@@ -89,25 +93,31 @@
               :type          "date"
               :default-value date-of-birth
               :on-change     #(swap! props assoc :date-of-birth (->> % .-target .-value))}]]]
-          [ui/grid {:item true :xs 8}
+          [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
-            [ui/text-field {:label "Access-code"
-                            :type  (if @show-code "text" "password")
-                            :value (or (:access-code @props) "")}]]]
-          [ui/grid {:item true :xs 1}
-           [ui/form-control {:margin "normal"}
-            [ui/icon-button {:on-click #(swap! show-code not)}
-             (if @show-code [ic/visibility-off] [ic/visibility])]]]
-          [ui/grid {:item true :xs 1}
-           [ui/form-control {:margin "normal"}
-            [ui/icon-button {:on-click #(re-frame/dispatch [::dse/generate-access-code])}
-             [ic/update]]]]]]))))
+            [ui/text-field
+             {:label "Access-code"
+              :type  (if @show-code "text" "password")
+              :value (or (:access-code @props) "")
+              :InputProps {:end-adornment (r/as-element [ui/input-adornment
+                                                         {:position "end"}
+                                                         [ui/icon-button
+                                                          {:on-click #(swap! show-code not)}
+                                                          (if @show-code [ic/visibility-off] [ic/visibility])]
+                                                         [ui/icon-button
+                                                          {:on-click #(re-frame/dispatch [::dse/generate-access-code])}
+                                                          [ic/update]]])}}]]]]]))))
 
 (defn student-modal
   []
-  (let [{{first-name :first-name last-name :last-name} :user :as student} @(re-frame/subscribe [::dss/current-student])
-        student-data (r/atom (assoc student :first-name first-name :last-name last-name))
+  (let [class-id @(re-frame/subscribe [::dcs/current-class-id])
+        {{first-name :first-name last-name :last-name} :user :as student} @(re-frame/subscribe [::dss/current-student])
         student-modal-state @(re-frame/subscribe [::dss/student-modal-state])
+        student-data (r/atom (assoc student :first-name first-name
+                                            :last-name last-name
+                                            :class-id (if (= :add student-modal-state)
+                                                        class-id
+                                                        (:class-id student))))
         handle-save (if (= :edit student-modal-state)
                       (fn [student-data] (re-frame/dispatch [::dse/edit-student (:class-id student-data) (:id student-data) student-data]))
                       (fn [student-data] (re-frame/dispatch [::dse/add-student (:class-id student-data) student-data])))

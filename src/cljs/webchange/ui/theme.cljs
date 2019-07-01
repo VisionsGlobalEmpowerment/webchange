@@ -24,7 +24,7 @@
 (defn get-in-theme
   [path]
   (get-in (js->clj mui-theme) (->> path
-                                   (map name)
+                                   (map #(if (= (type %) Keyword) (name %) %))
                                    (vec))))
 
 (defn with-mui-theme

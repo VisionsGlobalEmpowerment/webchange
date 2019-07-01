@@ -1,4 +1,4 @@
-(ns webchange.dashboard.views-common)
+(ns webchange.dashboard.dashboard-layout.utils)
 
 (defn get-shift-styles
   [drawer-open? drawer-width]

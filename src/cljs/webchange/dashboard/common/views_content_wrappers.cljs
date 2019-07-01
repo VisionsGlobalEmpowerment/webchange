@@ -1,19 +1,20 @@
-(ns webchange.dashboard.common.dashboard-page
+(ns webchange.dashboard.common.views-content-wrappers
   (:require
-    [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]))
 
 (def padding 20)
 
-(defn dashboard-page
+(defn content-page
   [{:keys [title]} & children]
   [ui/grid
    {:container true
     :spacing   24
-    :style     {:padding padding}}
+    :style     {:padding padding
+                :margin  0
+                :width   "100%"}}
    [ui/grid
     {:item true
-     :xs 12}
+     :xs   12}
     [ui/typography
      {:variant "h4"}
      title]]
@@ -21,20 +22,20 @@
      ^{:key child}
      [ui/grid
       {:item true
-       :xs 12}
+       :xs   12}
       [ui/paper
        {:style {:padding padding}}
        child]])])
 
-(defn dashboard-page-block
+(defn content-page-section
   [{:keys [title]} & children]
   [ui/grid
    {:container true
-    :spacing 16}
+    :spacing   16}
    (when title
      [ui/grid
       {:item true
-       :xs 12}
+       :xs   12}
       [ui/typography
        {:variant "h6"}
        title]])
@@ -42,5 +43,5 @@
      ^{:key child}
      [ui/grid
       {:item true
-       :xs 12}
+       :xs   12}
       child])])

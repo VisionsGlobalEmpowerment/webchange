@@ -5,8 +5,7 @@
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [webchange.dashboard.students.events :as students-events]
-    [webchange.dashboard.students.common.check-icon :refer [check-icon]]
-    [webchange.dashboard.students.common.actions-menu :refer [actions-menu]]))
+    [webchange.dashboard.students.common.check-icon :refer [check-icon]]))
 
 (defn translate
   [path]
@@ -54,7 +53,7 @@
        child])]])
 
 (defn personal-data
-  [{:keys [id class-id first-name last-name age class course tablet?]}]
+  [{:keys [first-name last-name age class course tablet?]}]
   [ui/grid {:container true}
    [ui/grid {:item true :xs 2}
     [ui/avatar {:style avatar-style}
@@ -67,7 +66,4 @@
     [student-data-item {:text (translate [:course]) :value course}]]
    [data-column
     [tablet-info tablet?]]
-   [ui/grid {:item true :xs 1}
-    [actions-menu
-     {:on-edit-click   #(re-frame/dispatch [::students-events/show-edit-student-form id])
-      :on-remove-click #(re-frame/dispatch [::students-events/delete-student class-id id])}]]])
+   [ui/grid {:item true :xs 1}]])
