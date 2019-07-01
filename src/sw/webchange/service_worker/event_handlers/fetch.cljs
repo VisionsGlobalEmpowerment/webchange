@@ -2,19 +2,32 @@
   (:require
     [clojure.string :refer [starts-with?]]
     [webchange.service-worker.config :refer [cache-names]]
-    [webchange.service-worker.utils :refer [log]]
+    [webchange.service-worker.utils :refer [log warn]]
     [webchange.wrappers.cache :as cache]
     [webchange.wrappers.fetch :as fetch]
-    [webchange.wrappers.response :as response]))
+    [webchange.wrappers.request :as request]))
 
-(def static-images-path "/raw/")
+(def pages-paths ["/dashboard"
+                  "/student-dashboard"])
 
-(defn static-image?
-  [request-url]
-  (let [pathname (.-pathname request-url)]
-    (starts-with? pathname static-images-path)))
+(def static-assets-paths ["/css/"
+                          "/js/compiled/"])
 
-(defn serve-static-image
+(defn belong-paths?
+  [request paths]
+  (let [pathname (request/pathname request)]
+    (some #(starts-with? pathname %) paths)))
+
+(defn serve-page-skeleton
+  []
+  (cache/open
+    :cache-name (:static cache-names)
+    :then (fn [cache]
+            (cache/match
+              :cache cache
+              :request "./page-skeleton"))))
+
+(defn serve-static-asset
   [request]
   (cache/open
     :cache-name (:static cache-names)
@@ -25,20 +38,13 @@
               :then (fn [response]
                       (if response
                         response
-                        (fetch/fetch
-                          :request request
-                          :then (fn [network-response]
-                                  (cache/put
-                                    :cache cache
-                                    :request request
-                                    :response (response/clone
-                                                :response network-response))
-                                  network-response))))))))
+                        (do (warn (str "Not matched static: " (request/pathname request)))
+                            (fetch/fetch :request request))))))))
 
 (defn fetch-event-handler
   [event]
-  (let [request (.-request event)
-        request-url (js/URL. (.-url request))]
+  (let [request (.-request event)]
     (cond
-      (static-image? request-url) (.respondWith event (serve-static-image request))
+      (belong-paths? request pages-paths) (.respondWith event (serve-page-skeleton))
+      (belong-paths? request static-assets-paths) (.respondWith event (serve-static-asset request))
       :else nil)))

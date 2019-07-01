@@ -25,7 +25,8 @@
   [cache-names]
   (->> cache-names
        (filter-caches)
-       (map #(cache/delete :cache-name %))
+       (map #(do (log (str "remove cache: " %))
+                 (cache/delete :cache-name %)))
        (wrap-to-promise)))
 
 (defn activate-event-handler

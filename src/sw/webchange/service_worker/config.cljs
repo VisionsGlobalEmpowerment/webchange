@@ -2,6 +2,6 @@
   (:require
     [clojure.string :refer [join]]))
 
-(def release-number 2)
+(def release-number 1)
 (def cache-names-prefix "webchange")
 (def cache-names {:static (join "-" [cache-names-prefix "static" release-number])})

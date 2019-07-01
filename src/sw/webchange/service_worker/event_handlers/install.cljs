@@ -1,20 +1,30 @@
 (ns webchange.service-worker.event-handlers.install
   (:require
     [webchange.service-worker.config :as config]
-    [webchange.service-worker.utils :refer [log]]
-    [webchange.wrappers.cache :as cache]))
+    [webchange.service-worker.utils :refer [log log-folded]]
+    [webchange.wrappers.cache :as cache]
+    [webchange.wrappers.fetch :as fetch]))
 
-(def static-assets
-  ["/raw/img/ui/dashboard/scene-preview/Casa_Room.jpg"])
+(defn get-app-assets
+  [& {:keys [then]}]
+  (fetch/fetch
+    :request "/api/resources/app"
+    :then (fn [response]
+            (-> (.json response)
+                (.then #(then (.-data %)))))))
 
 (defn- install
   []
-  (cache/open
-    :cache-name (:static config/cache-names)
-    :then (fn [cache]
-            (cache/add-all
-              :cache cache
-              :requests (clj->js static-assets)))))
+  (get-app-assets
+    :then (fn [app-assets]
+            (log-folded "App assets" app-assets)
+            (cache/open
+              :cache-name (:static config/cache-names)
+              :then (fn [cache]
+                      (cache/add-all
+                        :cache cache
+                        :requests app-assets)))))
+  )
 
 (defn install-event-handler
   [event]

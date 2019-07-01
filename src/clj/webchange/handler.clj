@@ -12,6 +12,7 @@
             [webchange.progress.handler :refer [progress-routes]]
             [webchange.dataset.handler :refer [dataset-routes]]
             [webchange.assets.handler :refer [asset-routes]]
+            [webchange.resources.handler :refer [resources-routes]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
@@ -126,6 +127,7 @@
              (handle-restore-scene-version version-id request)))
 
 (defroutes service-worker-route
+           (GET "/page-skeleton" [] (public-route))
            (GET "/service-worker.js" [] (-> (resource-response "js/compiled/service-worker.js" {:root "public"})
                                             (assoc-in [:headers "Content-Type"] "text/javascript"))))
 
@@ -136,6 +138,7 @@
            class-routes
            dataset-routes
            progress-routes
+           resources-routes
            service-worker-route
            (-> asset-routes
                wrap-multipart-params)
