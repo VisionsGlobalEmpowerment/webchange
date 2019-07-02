@@ -2,6 +2,10 @@
 
 (def prefix "[ServiceWorker]")
 
+(defn debug
+  [& args]
+  (apply js/console.info (into [prefix] args)))
+
 (defn log
   [& args]
   (apply js/console.log (into [prefix] args)))

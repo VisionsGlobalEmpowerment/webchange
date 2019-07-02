@@ -3,6 +3,7 @@
 (def public-fold "./resources/public/")
 (def js-fold (str public-fold "js/compiled/"))
 (def css-fold (str public-fold "css/"))
+(def img-fold (str public-fold "raw/img/ui/"))
 
 (defn get-files-list
   [dir]
@@ -17,4 +18,5 @@
   [true {:data (flatten ["./page-skeleton"
                          (get-files-list (str js-fold "app.js"))
                          (get-files-list (str js-fold "out/"))
-                         (get-files-list css-fold)])}])
+                         (get-files-list css-fold)
+                         (get-files-list img-fold)])}])

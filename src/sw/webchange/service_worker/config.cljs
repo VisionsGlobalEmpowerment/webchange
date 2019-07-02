@@ -2,6 +2,12 @@
   (:require
     [clojure.string :refer [join]]))
 
-(def release-number 1)
+(def release-number 2)
 (def cache-names-prefix "webchange")
-(def cache-names {:static (join "-" [cache-names-prefix "static" release-number])})
+
+(defn storage-name
+  [name]
+  (join "-" [cache-names-prefix name release-number]))
+
+(def cache-names {:api    (storage-name "api")
+                  :static (storage-name "static")})

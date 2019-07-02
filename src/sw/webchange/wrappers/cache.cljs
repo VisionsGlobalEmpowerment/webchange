@@ -39,5 +39,5 @@
 (defn put
   "The put() method of the Cache interface allows key/value pairs to be added to the current Cache object."
   [& {:keys [cache request response then]}]
-  (-> (.put cache request response)
+  (-> (.put cache request (.clone response))
       (.then then)))

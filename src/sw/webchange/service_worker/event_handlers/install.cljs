@@ -1,7 +1,7 @@
 (ns webchange.service-worker.event-handlers.install
   (:require
     [webchange.service-worker.config :as config]
-    [webchange.service-worker.utils :refer [log log-folded]]
+    [webchange.service-worker.utils :refer [log log-folded warn]]
     [webchange.wrappers.cache :as cache]
     [webchange.wrappers.fetch :as fetch]))
 
@@ -21,6 +21,7 @@
             (cache/open
               :cache-name (:static config/cache-names)
               :then (fn [cache]
+                      (log "Caching...")
                       (cache/add-all
                         :cache cache
                         :requests app-assets)))))
@@ -28,5 +29,7 @@
 
 (defn install-event-handler
   [event]
-  (log "Install..")
-  (.waitUntil event (install)))
+  (log "Install...")
+  (.waitUntil event (-> (install)
+                        (.then #(log "Installation done."))
+                        (.catch #(warn "Installation failed." %)))))

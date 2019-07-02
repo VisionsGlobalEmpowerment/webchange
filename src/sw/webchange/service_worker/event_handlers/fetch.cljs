@@ -2,10 +2,12 @@
   (:require
     [clojure.string :refer [starts-with?]]
     [webchange.service-worker.config :refer [cache-names]]
-    [webchange.service-worker.utils :refer [log warn]]
+    [webchange.service-worker.utils :refer [debug log warn]]
     [webchange.wrappers.cache :as cache]
     [webchange.wrappers.fetch :as fetch]
     [webchange.wrappers.request :as request]))
+
+(def api-paths ["/api/"])
 
 (def pages-paths ["/dashboard"
                   "/student-dashboard"])
@@ -17,6 +19,29 @@
   [request paths]
   (let [pathname (request/pathname request)]
     (some #(starts-with? pathname %) paths)))
+
+(defn serve-api-request
+  [request]
+  (cache/open
+    :cache-name (:api cache-names)
+    :then (fn [cache]
+            (fetch/fetch
+              :request request
+              :then (fn [response]
+                      (cache/put
+                        :cache cache
+                        :request request
+                        :response response
+                        :then (fn []
+                                (debug "API response cached.")
+                                ))
+                      response)
+              :catch (fn [error]
+                       (debug "API request FAILED:" error)
+                       (debug "Serving response from cache..")
+                       (cache/match
+                         :cache cache
+                         :request request))))))
 
 (defn serve-page-skeleton
   []
@@ -45,6 +70,7 @@
   [event]
   (let [request (.-request event)]
     (cond
+      (belong-paths? request api-paths) (.respondWith event (serve-api-request request))
       (belong-paths? request pages-paths) (.respondWith event (serve-page-skeleton))
       (belong-paths? request static-assets-paths) (.respondWith event (serve-static-asset request))
       :else nil)))
