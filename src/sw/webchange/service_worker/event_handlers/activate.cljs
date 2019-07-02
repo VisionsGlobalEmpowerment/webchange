@@ -34,4 +34,4 @@
   (log "Activate...")
   (.waitUntil event (-> (cache/keys :then remove-extra-caches)
                         (.then #(log "Activation done."))
-                        (.catch #(warn "Activation failed." %)))))
+                        (.catch #(warn "Activation failed." (.-message %))))))

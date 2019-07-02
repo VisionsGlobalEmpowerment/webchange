@@ -52,19 +52,43 @@
               :cache cache
               :request "./page-skeleton"))))
 
-(defn serve-static-asset
-  [request]
+;(defn serve-static-asset
+;  [request]
+;  (cache/open
+;    :cache-name (:static cache-names)
+;    :then (fn [cache]
+;            (cache/match
+;              :cache cache
+;              :request request
+;              :then (fn [response]
+;                      (if response
+;                        response
+;                        (do (warn (str "Not matched static: " (request/pathname request)))
+;                            (fetch/fetch :request request))))))))
+
+(defn serve-cache-asset
+  [request cache-name]
   (cache/open
-    :cache-name (:static cache-names)
+    :cache-name cache-name
     :then (fn [cache]
             (cache/match
               :cache cache
-              :request request
-              :then (fn [response]
-                      (if response
-                        response
-                        (do (warn (str "Not matched static: " (request/pathname request)))
-                            (fetch/fetch :request request))))))))
+              :request request))))
+
+(defn serve-rest-content
+  [request]
+  (let [cache-names [(:static cache-names)
+                     (:game cache-names)]
+        match-promises (map #(serve-cache-asset request %) cache-names)]
+    (-> match-promises
+         (clj->js)
+         (js/Promise.all)
+        (.then (fn [responses]
+                 (let [response (some identity responses)]
+                   (if response
+                     response
+                     (do (warn (str "Not matched: " (request/pathname request)))
+                         (fetch/fetch :request request)))))))))
 
 (defn fetch-event-handler
   [event]
@@ -72,5 +96,4 @@
     (cond
       (belong-paths? request api-paths) (.respondWith event (serve-api-request request))
       (belong-paths? request pages-paths) (.respondWith event (serve-page-skeleton))
-      (belong-paths? request static-assets-paths) (.respondWith event (serve-static-asset request))
-      :else nil)))
+      :else (.respondWith event (serve-rest-content request)))))

@@ -1,9 +1,14 @@
 (ns webchange.wrappers.request)
 
-(defn pathname
+(defn url
   [request]
   (->> request
        (.-url)
-       (js/URL. )
+       (js/URL.)))
+
+(defn pathname
+  [request]
+  (->> request
+       (url)
        (.-pathname)))
 

@@ -33,7 +33,7 @@
 (def image-play-styles
   {:width               list-item-width
    :height              image-play-height
-   :background-image    "url(/raw/img/student_dashboard/play.png)"
+   :background-image    "url(/images/student_dashboard/play.png)"
    :background-position "center"
    :background-repeat   "no-repeat"
    :background-size     "contain"

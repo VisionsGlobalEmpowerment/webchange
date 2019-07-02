@@ -5,31 +5,38 @@
     [webchange.wrappers.cache :as cache]
     [webchange.wrappers.fetch :as fetch]))
 
-(defn get-app-assets
-  [& {:keys [then]}]
+(defn get-resources-from-api
+  [& {:keys [url then]}]
   (fetch/fetch
-    :request "/api/resources/app"
+    :request url
     :then (fn [response]
             (-> (.json response)
                 (.then #(then (.-data %)))))))
 
-(defn- install
-  []
-  (get-app-assets
-    :then (fn [app-assets]
-            (log-folded "App assets" app-assets)
+(defn load-and-cache-resources
+  [url cache-name]
+  (get-resources-from-api
+    :url url
+    :then (fn [resources]
+            (log-folded (str "Resources to cache into " cache-name) resources)
             (cache/open
-              :cache-name (:static config/cache-names)
+              :cache-name cache-name
               :then (fn [cache]
-                      (log "Caching...")
+                      (log "Caching" cache-name)
                       (cache/add-all
                         :cache cache
-                        :requests app-assets)))))
-  )
+                        :requests resources))))))
+
+(defn- install
+  []
+  (->> [(load-and-cache-resources "/api/resources/app" (:static config/cache-names))
+        (load-and-cache-resources "/api/resources/level/1" (:game config/cache-names))]
+       (clj->js)
+       (js/Promise.all)))
 
 (defn install-event-handler
   [event]
   (log "Install...")
   (.waitUntil event (-> (install)
                         (.then #(log "Installation done."))
-                        (.catch #(warn "Installation failed." %)))))
+                        (.catch #(warn "Installation failed." (.-message %))))))
