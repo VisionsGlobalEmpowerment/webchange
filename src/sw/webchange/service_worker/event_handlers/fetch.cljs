@@ -12,9 +12,6 @@
 (def pages-paths ["/dashboard"
                   "/student-dashboard"])
 
-(def static-assets-paths ["/css/"
-                          "/js/compiled/"])
-
 (defn belong-paths?
   [request paths]
   (let [pathname (request/pathname request)]
@@ -51,20 +48,6 @@
             (cache/match
               :cache cache
               :request "./page-skeleton"))))
-
-;(defn serve-static-asset
-;  [request]
-;  (cache/open
-;    :cache-name (:static cache-names)
-;    :then (fn [cache]
-;            (cache/match
-;              :cache cache
-;              :request request
-;              :then (fn [response]
-;                      (if response
-;                        response
-;                        (do (warn (str "Not matched static: " (request/pathname request)))
-;                            (fetch/fetch :request request))))))))
 
 (defn serve-cache-asset
   [request cache-name]

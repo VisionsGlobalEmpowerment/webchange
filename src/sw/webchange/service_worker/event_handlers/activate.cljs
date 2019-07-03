@@ -25,7 +25,7 @@
   [cache-names]
   (->> cache-names
        (filter-caches)
-       (map #(do (log (str "remove cache: " %))
+       (map #(do (log (str "Remove cache: " %))
                  (cache/delete :cache-name %)))
        (wrap-to-promise)))
 

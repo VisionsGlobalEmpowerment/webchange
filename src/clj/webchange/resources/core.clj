@@ -28,8 +28,8 @@
                          (get-files-list img-fold)
                          (->> defaults/default-assets (map #(str "." (:url %))))
                          "https://fonts.googleapis.com/css?family=Luckiest+Guy"
-                         "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin "
-                         "//fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh6UVSwiPGQ.woff2"
+                         "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
+                         "https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh6UVSwiPGQ.woff2"
                          "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
                          ])}])
 
@@ -48,16 +48,24 @@
 (defn get-level-resources
   []
   (let [course-name "test"
-        scenes-resources (->> course-name
-                              course/get-course-data
-                              :scenes
+        scenes (->> course-name
+                    course/get-course-data
+                    :scenes)
+        scenes-resources (->> scenes
                               (map #(->> %
                                          (course/get-scene-data course-name)
                                          (find-resources))))
+        api-data (->> scenes
+                      (map #(str "/api/courses/" course-name "/scenes/" %))
+                      (into [(str "/api/courses/" course-name)
+                             (str "/api/courses/" course-name "/current-progress")
+                             (str "/api/courses/" course-name "/lesson-sets")
+                             "/api/schools/current"]))
         lessons-resources (->> course-name
                                dataset/get-course-lessons
                                find-resources)]
-    [true {:data (->> [scenes-resources
-                       lessons-resources]
-                      flatten
-                      distinct)}]))
+    [true {:resources   (->> [scenes-resources
+                              lessons-resources]
+                             flatten
+                             distinct)
+           :scenes-data api-data}]))
