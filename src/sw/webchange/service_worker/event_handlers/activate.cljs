@@ -2,7 +2,8 @@
   (:require
     [clojure.string :refer [starts-with?]]
     [webchange.service-worker.config :as config]
-    [webchange.service-worker.utils :refer [log warn]]
+    [webchange.service-worker.logger :as logger]
+    [webchange.service-worker.utils :refer [group-promises]]
     [webchange.wrappers.cache :as cache]))
 
 (defn- filter-caches
@@ -15,23 +16,17 @@
     (filter #(and (webchange-cache? %)
                   (cache-not-used? %)) cache-names)))
 
-(defn- wrap-to-promise
-  [results]
-  (->> results
-       (clj->js)
-       (js/Promise.all)))
-
 (defn- remove-extra-caches
   [cache-names]
   (->> cache-names
        (filter-caches)
-       (map #(do (log (str "Remove cache: " %))
+       (map #(do (logger/debug (str "Remove cache: " %))
                  (cache/delete :cache-name %)))
-       (wrap-to-promise)))
+       (group-promises)))
 
 (defn activate-event-handler
   [event]
-  (log "Activate...")
+  (logger/debug "Activate...")
   (.waitUntil event (-> (cache/keys :then remove-extra-caches)
-                        (.then #(log "Activation done."))
-                        (.catch #(warn "Activation failed." (.-message %))))))
+                        (.then #(logger/log "Activation done."))
+                        (.catch #(logger/warn "Activation failed." (.-message %))))))

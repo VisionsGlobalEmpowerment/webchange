@@ -2,7 +2,8 @@
   (:require
     [clojure.string :refer [starts-with?]]
     [webchange.service-worker.config :refer [cache-names]]
-    [webchange.service-worker.utils :refer [debug log warn]]
+    [webchange.service-worker.logger :as logger]
+    [webchange.service-worker.utils :refer [group-promises]]
     [webchange.wrappers.cache :as cache]
     [webchange.wrappers.fetch :as fetch]
     [webchange.wrappers.request :as request]))
@@ -30,12 +31,12 @@
                         :request request
                         :response response
                         :then (fn []
-                                (debug "API response cached.")
+                                (logger/debug "API response cached.")
                                 ))
                       response)
               :catch (fn [error]
-                       (debug "API request FAILED:" error)
-                       (debug "Serving response from cache..")
+                       (logger/debug "API request FAILED:" error)
+                       (logger/debug "Serving response from cache..")
                        (cache/match
                          :cache cache
                          :request request))))))
@@ -64,13 +65,13 @@
                      (:game cache-names)]
         match-promises (map #(serve-cache-asset request %) cache-names)]
     (-> match-promises
-         (clj->js)
-         (js/Promise.all)
+        (clj->js)
+        (js/Promise.all)
         (.then (fn [responses]
                  (let [response (some identity responses)]
                    (if response
                      response
-                     (do (warn (str "Not matched: " (request/pathname request)))
+                     (do (logger/debug (str "Not matched: " (request/pathname request)))
                          (fetch/fetch :request request)))))))))
 
 (defn fetch-event-handler
