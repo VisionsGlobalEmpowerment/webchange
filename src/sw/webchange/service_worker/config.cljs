@@ -2,9 +2,9 @@
   (:require
     [clojure.string :refer [join]]))
 
-(def release-number 17)
+(def release-number 1)
 (def cache-names-prefix "webchange")
-(def log-level :log)
+(def log-level :debug)
 
 (defn storage-name
   [name]

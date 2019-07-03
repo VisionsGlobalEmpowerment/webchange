@@ -30,9 +30,7 @@
                         :cache cache
                         :request request
                         :response response
-                        :then (fn []
-                                (logger/debug "API response cached.")
-                                ))
+                        :then #(logger/debug "API response cached."))
                       response)
               :catch (fn [error]
                        (logger/debug "API request FAILED:" error)
@@ -74,10 +72,18 @@
                      (do (logger/debug (str "Not matched: " (request/pathname request)))
                          (fetch/fetch :request request)))))))))
 
+(defn method-filter
+  [method event handler]
+  (let [request (.-request event)
+        current-method (.-method request)
+        respond (.bind (.-respondWith event) event)]
+    (when (= method current-method) (handler request respond))))
+
 (defn fetch-event-handler
   [event]
-  (let [request (.-request event)]
-    (cond
-      (belong-paths? request api-paths) (.respondWith event (serve-api-request request))
-      (belong-paths? request pages-paths) (.respondWith event (serve-page-skeleton))
-      :else (.respondWith event (serve-rest-content request)))))
+  (let [GET #(method-filter "GET" event %)]
+    (GET (fn [request respond]
+           (cond
+             (belong-paths? request api-paths) (respond (serve-api-request request))
+             (belong-paths? request pages-paths) (respond (serve-page-skeleton))
+             :else (respond (serve-rest-content request)))))))
