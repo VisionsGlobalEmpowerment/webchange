@@ -36,6 +36,7 @@
                  [kibu/pushy "0.3.8"]
                  [net.mikera/imagez "0.12.0"]
                  [cljsjs/enzyme "3.8.0"]
+                 [cljs-idxdb "0.1.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]

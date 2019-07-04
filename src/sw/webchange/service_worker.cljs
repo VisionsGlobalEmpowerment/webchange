@@ -1,9 +1,9 @@
 (ns webchange.service-worker
   (:require
-    [webchange.service-worker.event-handlers.activate :refer [activate-event-handler]]
-    [webchange.service-worker.event-handlers.fetch :refer [fetch-event-handler]]
-    [webchange.service-worker.event-handlers.install :refer [install-event-handler]]))
+    [webchange.service-worker.event-handlers.activate :as activate]
+    [webchange.service-worker.event-handlers.fetch :as fetch]
+    [webchange.service-worker.event-handlers.install :as install]))
 
-(.addEventListener js/self "install" install-event-handler)
-(.addEventListener js/self "activate" activate-event-handler)
-(.addEventListener js/self "fetch" fetch-event-handler)
+(.addEventListener js/self "install" install/handle)
+(.addEventListener js/self "activate" activate/handle)
+(.addEventListener js/self "fetch" fetch/handle)

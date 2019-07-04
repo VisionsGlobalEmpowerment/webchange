@@ -1,4 +1,4 @@
-(ns webchange.wrappers.request)
+(ns webchange.service-worker.wrappers.request)
 
 (defn url
   [request]

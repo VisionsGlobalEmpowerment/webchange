@@ -2,11 +2,12 @@
   (:require
     [webchange.service-worker.config :as config]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.utils :refer [group-promises]]
-    [webchange.wrappers.cache :as cache]
-    [webchange.wrappers.fetch :as fetch]))
+    [webchange.service-worker.virtual-server.core :as vs]
+    [webchange.service-worker.wrappers.cache :as cache]
+    [webchange.service-worker.wrappers.fetch :as fetch]
+    [webchange.service-worker.wrappers.promise :as promise]))
 
-(defn get-resources-from-api
+(defn- get-resources-from-api
   [& {:keys [url then]}]
   (fetch/fetch
     :request url
@@ -14,7 +15,7 @@
             (-> (.json response)
                 (.then then)))))
 
-(defn cache-resources
+(defn- cache-resources
   [cache-name resources]
   (logger/debug-folded (str "Resources to cache into " cache-name) resources)
   (cache/open
@@ -25,29 +26,31 @@
               :cache cache
               :requests resources))))
 
-(defn load-app-resources
+(defn- load-app-resources
   []
   (get-resources-from-api
     :url "/api/resources/app"
     :then (fn [resources]
             (cache-resources (:static config/cache-names) (aget resources "data")))))
 
-(defn load-level-resources
+(defn- load-level-resources
   [level]
   (get-resources-from-api
     :url (str "/api/resources/level/" level)
     :then (fn [resources]
-            (group-promises [(cache-resources (:game config/cache-names) (aget resources "resources"))
-                             (cache-resources (:api config/cache-names) (aget resources "scenes-data"))]))))
+            (promise/all [(cache-resources (:game config/cache-names) (aget resources "resources"))
+                          (vs/install (aget resources "scenes-data"))]))))
 
 (defn- install
   [level]
-  (group-promises [(load-app-resources)
-                   (load-level-resources level)]))
+  (promise/all [(load-app-resources)
+                (load-level-resources level)]))
 
-(defn install-event-handler
+(defn handle
   [event]
   (logger/debug "Install...")
-  (.waitUntil event (-> (install 1)
-                        (.then #(logger/log "Installation done."))
-                        (.catch #(logger/warn "Installation failed." (.-message %))))))
+  (let [current-level 1]
+    (.waitUntil event (-> (install current-level)
+                          (.then #(do (logger/log "Installation done.")
+                                      (.skipWaiting js/self)))
+                          (.catch #(logger/warn "Installation failed." (.-message %)))))))

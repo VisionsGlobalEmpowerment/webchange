@@ -1,4 +1,4 @@
-(ns webchange.wrappers.fetch)
+(ns webchange.service-worker.wrappers.fetch)
 
 (defn fetch
   "The fetch() method takes one mandatory argument, the path to the resource you want to fetch.

@@ -1,4 +1,4 @@
-(ns webchange.wrappers.cache)
+(ns webchange.service-worker.wrappers.cache)
 
 (defn add-all
   "The addAll() method of the Cache interface takes an array of URLs,
