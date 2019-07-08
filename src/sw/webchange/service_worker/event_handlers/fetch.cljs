@@ -3,11 +3,9 @@
     [clojure.string :refer [starts-with?]]
     [webchange.service-worker.config :refer [cache-names]]
     [webchange.service-worker.logger :as logger]
+    [webchange.service-worker.strategies :as strategy]
     [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers.cache :as cache]
-    [webchange.service-worker.wrappers.fetch :as fetch]
-    [webchange.service-worker.wrappers.promise :as promise]
-    [webchange.service-worker.wrappers.request :as request]))
+    [webchange.service-worker.wrappers :refer [js-fetch promise-all request-pathname then]]))
 
 (def pages-paths ["/courses"
                   "/dashboard"
@@ -15,26 +13,18 @@
 
 (defn- belong-paths?
   [request paths]
-  (let [pathname (request/pathname request)]
+  (let [pathname (request-pathname request)]
     (some #(starts-with? pathname %) paths)))
 
 (defn- serve-page-skeleton
   []
-  (cache/open
-    :cache-name (:static cache-names)
-    :then (fn [cache]
-            (cache/match
-              :cache cache
-              :request "./page-skeleton"))))
+  (strategy/cache-only {:request    "./page-skeleton"
+                        :cache-name (:static cache-names)}))
 
 (defn- serve-cache-asset
   [request cache-name]
-  (cache/open
-    :cache-name cache-name
-    :then (fn [cache]
-            (cache/match
-              :cache cache
-              :request request))))
+  (strategy/cache-only {:request    request
+                        :cache-name cache-name}))
 
 (defn- serve-rest-content
   [request]
@@ -42,20 +32,13 @@
                      (:game cache-names)]
         match-promises (map #(serve-cache-asset request %) cache-names)]
     (-> match-promises
-        (promise/all)
-        (.then (fn [responses]
+        (promise-all)
+        (then (fn [responses]
                  (let [response (some identity responses)]
                    (if response
                      response
-                     (do (logger/debug (str "Not matched: " (request/pathname request)))
-                         (fetch/fetch :request request)))))))))
-
-(defn- method-filter
-  [method event handler]
-  (let [request (.-request event)
-        current-method (.-method request)
-        respond (.bind (.-respondWith event) event)]
-    (when (= method current-method) (handler request respond))))
+                     (do (logger/debug (str "Not matched: " (request-pathname request)))
+                         (js-fetch request)))))))))
 
 (defn handle
   [event]

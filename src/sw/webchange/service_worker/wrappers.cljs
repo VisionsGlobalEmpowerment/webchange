@@ -18,6 +18,14 @@
   [cache request response]
   (.put cache request response))
 
+(defn cache-delete
+  [cache-name]
+  (.delete js/caches cache-name))
+
+(defn cache-keys
+  []
+  (.keys js/caches))
+
 ;; --- Fetch ---
 
 (defn js-fetch

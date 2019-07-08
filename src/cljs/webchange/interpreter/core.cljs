@@ -155,7 +155,7 @@
 (defn load-progress
   [course-id cb]
   (go (let [response (<! (get-progress course-id))
-            result (-> response :body :progress :data)]
+            result (-> response :body :progress)]
         (cb result))))
 
 (defn load-lessons

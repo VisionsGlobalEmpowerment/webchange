@@ -1,10 +1,9 @@
 (ns webchange.service-worker.virtual-server.handlers.utils.serializer
   (:require
-    [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [promise-resolve response-new
                                                response-headers response-json response-url request-new
                                                request-headers request-json request-url request-method
-                                               then]]))
+                                               then json-stringify]]))
 
 (defn serialize-headers
   [headers]
@@ -31,7 +30,7 @@
       (then (fn [body]
               {:url     (request-url request)
                :method  (request-method request)
-               :body    (.stringify js/JSON body)
+               :body    body
                :headers (->> request request-headers serialize-headers)}))))
 
 (defn deserialize-response
@@ -40,4 +39,4 @@
 
 (defn deserialize-request
   [{:keys [url] :as data}]
-  (promise-resolve (request-new url (clj->js data))))
+  (promise-resolve (request-new url (clj->js (assoc data :body (->> (:body data) clj->js json-stringify))))))

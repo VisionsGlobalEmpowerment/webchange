@@ -3,8 +3,7 @@
     [clojure.string :refer [starts-with?]]
     [webchange.service-worker.config :as config]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.wrappers.cache :as cache]
-    [webchange.service-worker.wrappers.promise :as promise]))
+    [webchange.service-worker.wrappers :refer [cache-delete cache-keys catch promise-all then]]))
 
 (defn- filter-caches
   [cache-names]
@@ -21,12 +20,13 @@
   (->> cache-names
        (filter-caches)
        (map #(do (logger/debug (str "Remove cache: " %))
-                 (cache/delete :cache-name %)))
-       (promise/all)))
+                 (cache-delete %)))
+       (promise-all)))
 
 (defn handle
   [event]
   (logger/debug "Activate...")
-  (.waitUntil event (-> (cache/keys :then remove-extra-caches)
-                        (.then #(logger/log "Activation done."))
-                        (.catch #(logger/warn "Activation failed." (.-message %))))))
+  (.waitUntil event (-> (cache-keys)
+                        (then remove-extra-caches)
+                        (then #(logger/log "Activation done."))
+                        (catch #(logger/warn "Activation failed." (.-message %))))))

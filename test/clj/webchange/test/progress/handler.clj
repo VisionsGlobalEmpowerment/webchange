@@ -14,7 +14,7 @@
 (deftest current-progress-can-be-retrieved
   (let [{user-id :user-id course-name :course-name data :data} (fp/progress-created)
         retrieved (-> (fp/get-current-progress user-id course-name) :body (json/read-str :key-fn keyword) :progress)]
-    (is (= data (:data retrieved)))))
+    (is (= data retrieved))))
 
 (deftest progress-can-be-created
   (let [{user-id :id} (f/teacher-user-created)
@@ -22,14 +22,14 @@
         data {:actions [] :progress {:test "test"}}
         _ (fp/save-current-progress! user-id course-name data)
         retrieved (-> (fp/get-current-progress user-id course-name) :body (json/read-str :key-fn keyword) :progress)]
-    (is (= (:progress data) (:data retrieved)))))
+    (is (= (:progress data) retrieved))))
 
 (deftest progress-can-be-updated
   (let [{user-id :user-id course-name :course-name} (fp/progress-created)
         updated-data {:actions [] :progress {:test "updated-test"}}
         _ (fp/save-current-progress! user-id course-name updated-data)
         retrieved (-> (fp/get-current-progress user-id course-name) :body (json/read-str :key-fn keyword) :progress)]
-    (is (= (:progress updated-data) (:data retrieved)))))
+    (is (= (:progress updated-data) retrieved))))
 
 (deftest class-profile-can-be-retrieved
   (let [{class-id :class-id course-id :course-id} (fp/course-stat-created)
