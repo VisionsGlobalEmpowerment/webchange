@@ -16,6 +16,7 @@
 (e/reg-simple-executor :case ::execute-case)
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
+(e/reg-simple-executor :inc-variable ::execute-inc-variable)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
 
@@ -53,14 +54,23 @@
     (->> items
          (filter #(->> % :id (contains? processed) not)))))
 
+;; ToDo: Write unit test
+(defn- filter-property-values
+  [exclude-property-values items]
+  (let [filter-map exclude-property-values
+        key (-> filter-map keys first)
+        filter-map-value (get filter-map key)
+        filter-values (if (sequential? filter-map-value) filter-map-value [filter-map-value])]
+    (filter (fn [item]
+              (not (some (fn [filter-value] (= filter-value (get item key))) filter-values))) items)))
+
 (defn provide
   ([db items variables provider-id]
    (provide db items variables provider-id {}))
   ([db items variables provider-id params]
    (let [new-items (cond->> (unprocessed db items provider-id)
                             (:exclude-values params) (remove (into #{} (:exclude-values params)))
-                            (:exclude-property-values params) (filter #(let [filter-map (:exclude-property-values params)
-                                                                             key (-> filter-map keys first)] (not (= (key filter-map) (key %)))))
+                            (:exclude-property-values params) (filter-property-values (:exclude-property-values params))
                             (:limit params) (take (:limit params))
                             (:repeat params) (#(apply concat (repeat (:repeat params) %)))
                             (:shuffled params) shuffle
@@ -72,17 +82,27 @@
              :always (set-variables vars)))))
 
 (defn has-next
-  [db items provider-id]
-  (let [unprocessed (unprocessed db items provider-id)]
-    (->> unprocessed
-         count
-         (< 0))))
+  ([db items provider-id]
+   (has-next db items provider-id {}))
+  ([db items provider-id params]
+   (let [unprocessed (cond->> (unprocessed db items provider-id)
+                              (:exclude-values params) (remove (into #{} (:exclude-values params)))
+                              (:exclude-property-values params) (filter-property-values (:exclude-property-values params)))]
+     (->> unprocessed count (< 0)))))
 
 (re-frame/reg-event-fx
   ::execute-set-variable
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
     {:db (set-variable db var-name var-value)
      :dispatch (e/success-event action)}))
+
+(re-frame/reg-event-fx
+  ::execute-inc-variable
+  (fn [{:keys [db]} [_ {:keys [var-name inc-value] :as action}]]
+    (let [current-var-value (get-variable db var-name)
+          new-var-value (+ current-var-value inc-value)]
+      {:db (set-variable db var-name new-var-value)
+       :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-set-progress
@@ -133,7 +153,7 @@
 
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
-  (fn [{:keys [db]} [_ {:keys [from variables provider-id] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
     (let [current-lesson-id (get-in db [:progress-data :current-lesson])
           course-lessons (get-in db [:course-data :lessons])
           lesson-set-name (-> (filter #(= current-lesson-id (:id %)) course-lessons)
@@ -143,9 +163,17 @@
           lesson (get-in db [:lessons lesson-set-name])
           items (->> (:item-ids lesson)
                      (map #(get-in db [:dataset-items %]))
-                     (map #(merge (:data %) {:id (:name %)})))]
-      {:db (provide db items variables provider-id action)
-       :dispatch (e/success-event action)})))
+                     (map #(merge (:data %) {:id (:name %)})))
+          has-next (has-next db items provider-id action)
+          scene-id (:current-scene db)
+          on-end-action (->> on-end
+                             keyword
+                             (vector :scenes scene-id :actions)
+                             (get-in db))]
+      (if has-next
+        {:db       (provide db items variables provider-id action)
+         :dispatch (e/success-event action)}
+        {:dispatch [::e/execute-action on-end-action]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-var
