@@ -92,6 +92,7 @@
              :aot          [webchange.server]
              :uberjar-name "webchange.jar"
              :prep-tasks   ["compile" ["sass" "once"]
+                            "compile" ["cljsbuild" "once" "sw"]
                             "compile" ["cljsbuild" "once" "min"]]}
    }
 
@@ -127,7 +128,7 @@
                     :install-deps true
                     :optimizations   :none
                     }}
-    {:id           "dev-sw"
+    {:id           "sw"
      :source-paths ["src/sw"]
      :compiler {:main webchange.service-worker
                 :output-to "resources/public/js/compiled/service-worker.js"

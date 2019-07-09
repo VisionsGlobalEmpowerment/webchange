@@ -18,7 +18,7 @@ $ lein run
 
 ```
 $ lein clean
-$ lein cljsbuild once dev-sw
+$ lein cljsbuild once sw
 $ lein dev
 ```
 

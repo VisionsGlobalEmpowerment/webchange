@@ -5,9 +5,6 @@
     [webchange.service-worker.virtual-server.handlers.utils.requests_queue :as queue]
     [webchange.service-worker.wrappers :refer [js-fetch promise-resolve response-clone request-clone then]]))
 
-(def store-body-key "current-progress-body")
-(def store-headers-key "current-progress-headers")
-
 (defn get-online
   [request]
   (logger/debug "[current-progress] [GET] [online]")

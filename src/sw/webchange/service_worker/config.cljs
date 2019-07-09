@@ -2,8 +2,18 @@
   (:require
     [clojure.string :refer [join]]))
 
+(defn- time-stamp
+  []
+  (let [date (js/Date.)]
+    (join "-" [(.getFullYear date)
+               (+ 1 (.getMonth date))
+               (.getDate date)
+               (.getHours date)
+               (.getMinutes date)
+               (.getSeconds date)])))
+
 (def app-name "webchange")
-(def release-number 1)
+(def release-number (time-stamp))
 
 (def cache-names-prefix app-name)
 (def database-name app-name)
