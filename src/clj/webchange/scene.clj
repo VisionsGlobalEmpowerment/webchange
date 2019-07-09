@@ -1,5 +1,6 @@
 (ns webchange.scene
-  (:require [webchange.demo-scenes.home :refer [home-scene]]
+  (:require [webchange.demo-scenes.cinema.cinema :refer [cinema-scene]]
+            [webchange.demo-scenes.home :refer [home-scene]]
             [webchange.demo-scenes.library.painting-tablet :refer [painting-tablet-scene]]
             [webchange.demo-scenes.map :refer [map-scene]]
             [webchange.demo-scenes.park.see-saw :refer [see-saw-scene]]
@@ -15,19 +16,20 @@
 
             [clojure.tools.logging :as log]))
 
-(def courses {"test" {"home" home-scene
-                      "map" map-scene
-                      "see-saw" see-saw-scene
-                      "swings" swings-scene
-                      "sandbox" sandbox-scene
+(def courses {"test" {"home"            home-scene
+                      "map"             map-scene
+                      "see-saw"         see-saw-scene
+                      "swings"          swings-scene
+                      "sandbox"         sandbox-scene
                       "painting-tablet" painting-tablet-scene
-                      "park" park-scene
-                      "volleyball" volleyball-scene
-                      "hide-n-seek" hide-n-seek-scene
-                      "library" library-scene
-                      "book" book-scene
-                      "cycling" cycling-scene
-                      "stadium" stadium-scene}})
+                      "park"            park-scene
+                      "volleyball"      volleyball-scene
+                      "hide-n-seek"     hide-n-seek-scene
+                      "library"         library-scene
+                      "book"            book-scene
+                      "cinema"          cinema-scene
+                      "cycling"         cycling-scene
+                      "stadium"         stadium-scene}})
 (defn get-course
   [course-id]
   {:initial-scene "map"
@@ -76,6 +78,10 @@
                          :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"
                          :type "non-scored"
                          :outs [{:name "stadium" :x 100 :y 100}]}
+                :cinema {:name "Cinema"
+                         :preview "/images/dashboard/scene-preview/Cinema-Room.jpg"
+                         :type "non-scored"
+                         :outs [{:name "map" :x 100 :y 100}]}
                 :cycling {:name "Cycling"
                          :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"
                          :type "non-scored"
@@ -95,7 +101,7 @@
                          :type "non-scored"
                          :outs [{:name "library" :x 100 :y 100}]}}
 
-   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "painting-tablet" "cycling"]
+   :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "painting-tablet" "cinema" "cycling"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"
                                   :assessment-1 "assessment1"}}]
    :workflow-actions [{:id 10 :type "init-progress"}
@@ -109,6 +115,7 @@
                       {:id 8 :type "set-activity" :activity "painting-tablet" :activity-number 8 :lesson 1 :level 1 :time-expected 300}
                       {:id 9 :type "set-activity" :activity "hide-n-seek" :activity-number 9 :lesson 1 :level 1 :time-expected 300
                        :scored true :expected-score-percentage 90}
+                      {:id 11 :type "set-activity" :activity "cinema" :activity-number 10 :lesson 1 :level 2}
                       ]
    :default-progress {:current-scene "home"
                       :current-activity "home"

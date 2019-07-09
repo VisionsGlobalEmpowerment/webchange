@@ -3,8 +3,7 @@
     [clojure.set :refer [union]]
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [webchange.common.events :as e]
-    ))
+    [webchange.common.events :as e]))
 
 (e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider)
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
@@ -53,14 +52,22 @@
     (->> items
          (filter #(->> % :id (contains? processed) not)))))
 
+(defn filter-property-values
+  [exclude-property-values items]
+  (let [filter-map exclude-property-values
+        key (-> filter-map keys first)
+        filter-map-value (get filter-map key)
+        filter-values (if (sequential? filter-map-value) filter-map-value [filter-map-value])]
+    (filter (fn [item]
+              (not (some (fn [filter-value] (= filter-value (get item key))) filter-values))) items)))
+
 (defn provide
   ([db items variables provider-id]
    (provide db items variables provider-id {}))
   ([db items variables provider-id params]
    (let [new-items (cond->> (unprocessed db items provider-id)
                             (:exclude-values params) (remove (into #{} (:exclude-values params)))
-                            (:exclude-property-values params) (filter #(let [filter-map (:exclude-property-values params)
-                                                                             key (-> filter-map keys first)] (not (= (key filter-map) (key %)))))
+                            (:exclude-property-values params) (filter-property-values (:exclude-property-values params))
                             (:limit params) (take (:limit params))
                             (:repeat params) (#(apply concat (repeat (:repeat params) %)))
                             (:shuffled params) shuffle
@@ -72,11 +79,13 @@
              :always (set-variables vars)))))
 
 (defn has-next
-  [db items provider-id]
-  (let [unprocessed (unprocessed db items provider-id)]
-    (->> unprocessed
-         count
-         (< 0))))
+  ([db items provider-id]
+   (has-next db items provider-id {}))
+  ([db items provider-id params]
+   (let [unprocessed (cond->> (unprocessed db items provider-id)
+                              (:exclude-values params) (remove (into #{} (:exclude-values params)))
+                              (:exclude-property-values params) (filter-property-values (:exclude-property-values params)))]
+     (->> unprocessed count (< 0)))))
 
 (re-frame/reg-event-fx
   ::execute-set-variable
@@ -133,7 +142,7 @@
 
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
-  (fn [{:keys [db]} [_ {:keys [from variables provider-id] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
     (let [current-lesson-id (get-in db [:progress-data :current-lesson])
           course-lessons (get-in db [:course-data :lessons])
           lesson-set-name (-> (filter #(= current-lesson-id (:id %)) course-lessons)
@@ -143,9 +152,17 @@
           lesson (get-in db [:lessons lesson-set-name])
           items (->> (:item-ids lesson)
                      (map #(get-in db [:dataset-items %]))
-                     (map #(merge (:data %) {:id (:name %)})))]
-      {:db (provide db items variables provider-id action)
-       :dispatch (e/success-event action)})))
+                     (map #(merge (:data %) {:id (:name %)})))
+          has-next (has-next db items provider-id action)
+          scene-id (:current-scene db)
+          on-end-action (->> on-end
+                             keyword
+                             (vector :scenes scene-id :actions)
+                             (get-in db))]
+      (if has-next
+        {:db       (provide db items variables provider-id action)
+         :dispatch (e/success-event action)}
+        {:dispatch [::e/execute-action on-end-action]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-var
