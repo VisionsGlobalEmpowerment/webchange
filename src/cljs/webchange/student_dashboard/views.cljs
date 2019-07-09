@@ -40,7 +40,7 @@
   (let [show-more {:id :show-more}
         finished @(re-frame/subscribe [::sds/finished-activities])
         next-activity @(re-frame/subscribe [::sds/next-activity])
-        list (into [] (concat [show-more] (take 3 finished) [next-activity]))]
+        list (into [] (concat [show-more] (take-last 3 finished) [next-activity]))]
     [scene-list list {:title (translate [:story :title])
                       :on-click (fn [{id :id}]
                                   (if (= id :show-more)

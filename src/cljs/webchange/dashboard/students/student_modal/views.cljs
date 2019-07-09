@@ -5,6 +5,7 @@
     [clojure.string :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.common.core :as common]
     [webchange.dashboard.classes.subs :as dcs]
     [webchange.dashboard.students.events :as dse]
     [webchange.dashboard.students.subs :as dss]))
@@ -38,13 +39,6 @@
    {:key id :value id}
    name])
 
-(defn format-date [date]
-  (let [pad (fn [number] (if (< number 10) (str "0" number) (str number)))
-        year (.getUTCFullYear date)
-        month (inc (.getUTCMonth date))
-        day (.getUTCDate date)]
-    (str year "-" (pad month) "-" (pad day))))
-
 (defn- student-form
   []
   (let [classes @(re-frame/subscribe [::dcs/classes-list])
@@ -53,9 +47,7 @@
       (let [generated-code @(re-frame/subscribe [::dss/generated-code])
             access-code (or generated-code (:access-code @props))
             _ (swap! props assoc :access-code access-code)
-            date-of-birth (let [date (:date-of-birth @props)
-                                date-obj (if (s/blank? date) (js/Date.) (js/Date. date))]
-                            (format-date date-obj))]
+            date-of-birth (or (common/format-date-string (:date-of-birth @props)) (common/format-date (js/Date.)))]
         [:form
          [ui/grid {:container true}
           [ui/grid {:item true :xs 12}

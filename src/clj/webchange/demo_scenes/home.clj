@@ -94,14 +94,17 @@
                    :wait-for-box-animations {:type "empty" :duration 500}
 
                    :intro {:type "sequence",
-                               :data ["clear-instruction"
+                               :data ["start-activity"
+                                      "clear-instruction"
                                       "renew-words"
-                                      "senora-vaca-audio-1"
-                                      "set-current-box1"
-                                      "show-boxes"
-                                      "wait-for-box-animations"
-                                      "switch-box-animations-idle"
-                                      "senora-vaca-audio-2"]},
+                                      "finish-activity"
+                                      ;"senora-vaca-audio-1"
+                                      ;"set-current-box1"
+                                      ;"show-boxes"
+                                      ;"wait-for-box-animations"
+                                      ;"switch-box-animations-idle"
+                                      ;"senora-vaca-audio-2"
+                                      ]},
 
                    :set-current-box1 {:type "set-variable" :var-name "current-box" :var-value "box1"}
                    :set-current-box2 {:type "set-variable" :var-name "current-box" :var-value "box2"}
@@ -387,7 +390,9 @@
                    :empty-big {:type "empty" :duration 1000}
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
                    :start-background-music {:type "audio" :id "background" :loop true}
-                   :finish-activity {:type "finish-activity" :id "home"}}
+                   :start-activity {:type "start-activity" :id "home"}
+                   :finish-activity {:type "finish-activity" :id "home"}
+                   :stop-activity {:type "stop-activity" :id "home"}}
    :audio
                   {:casa-welcome "/raw/audio/scripts/intro/intro-welcome.mp3"
                    :casa-finish "/raw/audio/scripts/intro/intro-finish.mp3"
@@ -399,6 +404,7 @@
                    :vera-1 "/raw/audio/l1/a1/L1_A1_Vera_Ardilla.m4a"
                    :vera-2 "/raw/audio/l1/a1/L1_A1_Vera_Oso.m4a"
                    :vera-3 "/raw/audio/l1/a1/L1_A1_Vera_Iman.m4a"},
-   :triggers      {:music {:on "start" :action "start-background-music"}}
+   :triggers      {:music {:on "start" :action "start-background-music"}
+                   :back {:on "back" :action "stop-activity"}}
    :metadata      {:autostart true
                    :prev "map"}})

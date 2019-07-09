@@ -44,6 +44,10 @@
 (defn visible-user [user]
   (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id]))
 
+(defn visible-student [student]
+  (-> (select-keys student [:id :user-id :class-id :school-id :gender :date-of-birth])
+      (update :date-of-birth str)))
+
 (defn user->teacher [{user-id :id :as user}]
   (let [{teacher-id :id school-id :school-id} (db/get-teacher-by-user {:user_id user-id})]
     (assoc user :teacher-id teacher-id :school-id school-id)))

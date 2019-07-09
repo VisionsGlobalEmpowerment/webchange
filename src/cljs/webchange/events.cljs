@@ -33,13 +33,6 @@
     (assoc-in db [:scene-loading-complete scene-id] value)))
 
 (re-frame/reg-event-db
-  ::start-playing
-  (fn [db _]
-    (-> db
-        (assoc :playing true)
-        (assoc :scene-started true))))
-
-(re-frame/reg-event-db
   ::set-object-state
   (fn [db [_ [target state-id]]]
     (let [scene-id (:current-scene db)

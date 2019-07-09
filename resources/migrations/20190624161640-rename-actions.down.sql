@@ -1,0 +1,1 @@
+ALTER TABLE course_events RENAME TO course_actions;

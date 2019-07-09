@@ -248,19 +248,21 @@
                    :box-4-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-4-action"}]}
 
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
-                   :start-activity {:type "sequence"
-                                    :data ["clear-instruction"
+                   :start {:type "sequence"
+                                    :data ["start-activity"
+                                           "clear-instruction"
                                            "renew-words"
                                            "mari-welcome-audio"
                                            "renew-current-concept-workflow"
                                            ]}
 
+                   :start-activity {:type "start-activity" :id "sandbox"}
                    :finish-activity {:type "finish-activity" :id "sandbox"}}
    :audio
                   {:mari "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a"
                    :voice-1 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a"
                    :voice-2 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a"
                    :voice-3 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a"},
-   :triggers      {:start {:on "start" :action "start-activity"}}
+   :triggers      {:start {:on "start" :action "start"}}
    :metadata      {:autostart true
                    :prev "park"}})

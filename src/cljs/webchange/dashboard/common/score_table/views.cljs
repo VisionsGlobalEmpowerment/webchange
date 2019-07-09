@@ -63,13 +63,13 @@
     [score-table-legend legend]]])
 
 (defn value-item
-  [{:keys [value value-levels]}]
+  [{{:keys [id label value]} :value levels :value-levels}]
   [ui/tooltip
-   {:title                  (or value "")
+   {:title                  (if value (str label " : " value) "")
     :placement              "top-end"
     :disable-hover-listener (not value)}
    [ui/table-cell
-    {:style (get-score-style value-levels value)}]])
+    {:style (get-score-style levels value)}]])
 
 (defn score-table
   [{:keys [legend levels title items-title]} data]

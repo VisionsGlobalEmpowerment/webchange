@@ -24,7 +24,6 @@
   [:div {:style content-block-styles}
    [:h1 {:style content-header-styles} title]
    [:div {:style content-body-styles}
-    (for [{:keys [id] :as item} items]
-      (when id
-        ^{:key id}
-        [scene-list-item item {:on-click on-click}]))]])
+    (for [item items]
+      ^{:key (:id item)}
+      [scene-list-item item {:on-click on-click}])]])

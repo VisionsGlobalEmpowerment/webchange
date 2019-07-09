@@ -16,9 +16,9 @@ WHERE id = :id
 SELECT * FROM course_progresses
 WHERE user_id = :user_id and course_id = :course_id
 
--- :name create-action! :<!
--- :doc creates a new course action record
-INSERT INTO course_actions
+-- :name create-event! :<!
+-- :doc creates a new course event record
+INSERT INTO course_events
 (user_id, course_id, created_at, type, data)
 VALUES (:user_id, :course_id, :created_at, :type, :data)
 RETURNING id
@@ -40,14 +40,31 @@ WHERE class_id = :class_id and course_id = :course_id
 SELECT * FROM course_stats
 WHERE user_id = :user_id and course_id = :course_id
 
+-- :name save-course-stat! :! :n
+-- :doc updates an existing course stat record
+UPDATE course_stats
+SET data = :data
+WHERE id = :id
+
 -- :name create-activity-stat! :<!
 -- :doc creates a new activity stat record
 INSERT INTO activity_stats
-(user_id, course_id, level_number, activity_number, data)
-VALUES (:user_id, :course_id, :level_number, :activity_number, :data)
+(user_id, course_id, activity_id, data)
+VALUES (:user_id, :course_id, :activity_id, :data)
 RETURNING id
 
--- :name get-activity-stats :? :*
+-- :name get-user-activity-stats :? :*
 -- :doc retrieves activity stats records for given user id and course id
 SELECT * FROM activity_stats
 WHERE user_id = :user_id and course_id = :course_id
+
+-- :name get-activity-stat :? :1
+-- :doc retrieves activity stat record for given user id, course id and activity id
+SELECT * FROM activity_stats
+WHERE user_id = :user_id and course_id = :course_id and activity_id = :activity_id
+
+-- :name save-activity-stat! :! :n
+-- :doc updates an existing activity stat record
+UPDATE activity_stats
+SET data = :data
+WHERE id = :id

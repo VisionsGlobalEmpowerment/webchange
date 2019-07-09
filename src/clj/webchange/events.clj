@@ -4,7 +4,7 @@
 
 (defn dispatch
   [{type :type :as data}]
-  (let [event-handlers (get @handlers type)]
+  (let [event-handlers (get @handlers (keyword type))]
     (doseq [handler (vals event-handlers)]
       (handler data))))
 

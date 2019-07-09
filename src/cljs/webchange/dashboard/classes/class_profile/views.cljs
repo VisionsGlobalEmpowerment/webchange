@@ -25,8 +25,7 @@
 
 (defn- class-profile
   [{:keys [students]}]
-  (let [profile-data (profile-stub students)
-        assessment-data (scores-stub students)
+  (let [assessment-data (scores-stub students)
         assessment-levels [80 95]
         course-name "Vera La Vaquita"]
     [content-page
@@ -36,10 +35,8 @@
       course-name]
      [content-page-section
       {:title (translate [:class :header])}
-      [profile-table
-       {:columns (:columns profile-data)}
-       (:data profile-data)]]
-     [content-page-section
+      [profile-table]]
+     #_[content-page-section
       {:title (translate [:assessment :header])}
       [score-table
        {:title       (translate [:assessment :table-title])

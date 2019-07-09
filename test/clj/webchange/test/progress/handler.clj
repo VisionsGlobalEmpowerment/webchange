@@ -32,11 +32,11 @@
     (is (= (:progress updated-data) retrieved))))
 
 (deftest class-profile-can-be-retrieved
-  (let [{class-id :class-id course-id :course-id} (fp/course-stat-created)
-        retrieved (-> (fp/get-class-profile class-id course-id) :body (json/read-str :key-fn keyword) :stats)]
+  (let [{class-id :class-id course-name :course-name} (fp/course-stat-created)
+        retrieved (-> (fp/get-class-profile class-id course-name) :body (json/read-str :key-fn keyword) :stats)]
     (is (= 1 (count retrieved)))))
 
 (deftest individual-profile-can-be-retrieved
-  (let [{user-id :user-id course-id :course-id} (fp/activity-stat-created)
-        retrieved (-> (fp/get-individual-profile user-id course-id) :body (json/read-str :key-fn keyword) :stats)]
-    (is (= 1 (count retrieved)))))
+  (let [{student-id :student-id course-name :course-name data :data} (fp/activity-stat-created)
+        retrieved (-> (fp/get-individual-profile student-id course-name) :body (json/read-str :key-fn keyword) :stats)]
+    (is (= data (-> retrieved first second :data)))))

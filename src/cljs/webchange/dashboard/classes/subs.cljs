@@ -36,3 +36,14 @@
   ::classes-loading
   (fn [db]
     (get-in db [:loading :classes])))
+
+(re-frame/reg-sub
+  ::class-profile-loading
+  (fn [db]
+    (get-in db [:loading :class-profile])))
+
+(re-frame/reg-sub
+  ::class-profile
+  (fn [db]
+    (get-in db [:dashboard :class-profile])))
+

@@ -20,6 +20,12 @@
                  auth/visible-user)]
     (assoc item :user user)))
 
+(defn with-student-by-user
+  [{user-id :user-id :as item}]
+  (let [student (-> (db/get-student-by-user {:user_id user-id})
+                    auth/visible-student)]
+    (assoc item :student student)))
+
 (defn with-class
   [{class-id :class-id :as item}]
   (let [class (db/get-class {:id class-id})]
@@ -27,10 +33,9 @@
 
 (defn get-students-by-class [class-id]
   (let [students (->> (db/get-students-by-class {:class_id class-id})
-                      (map #(with-user %))
-                      (map #(with-class %))
-                      (map #(assoc % :date-of-birth (-> % :date-of-birth str)))
-                      (map #(dissoc % :access-code)))]
+                      (map with-user)
+                      (map with-class)
+                      (map auth/visible-student))]
     {:class-id class-id
      :students students}))
 

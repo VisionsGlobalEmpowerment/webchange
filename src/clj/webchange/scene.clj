@@ -98,15 +98,17 @@
    :scenes ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library" "book" "painting-tablet" "cycling"]
    :lessons [{:id 1 :lesson-sets {:concepts "ls1"
                                   :assessment-1 "assessment1"}}]
-   :workflow-actions [{:id 1 :type "set-activity" :activity "home" :order 1}
-                      {:id 2 :type "set-activity" :activity "see-saw" :order 2}
-                      {:id 3 :type "set-activity" :activity "swings" :order 3}
-                      {:id 4 :type "set-activity" :activity "sandbox" :order 4}
-                      {:id 5 :type "set-activity" :activity "volleyball" :order 5}
-                      {:id 6 :type "set-activity" :activity "book" :order 6}
-                      {:id 7 :type "set-activity" :activity "cycling" :order 7}
-                      {:id 8 :type "set-activity" :activity "painting-tablet" :order 8}
-                      {:id 9 :type "set-activity" :activity "hide-n-seek" :order 9}
+   :workflow-actions [{:id 10 :type "init-progress"}
+                      {:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1 :time-expected 300}
+                      {:id 2 :type "set-activity" :activity "see-saw" :activity-number 2 :lesson 1 :level 1 :time-expected 300}
+                      {:id 3 :type "set-activity" :activity "swings" :activity-number 3 :lesson 1 :level 1 :time-expected 300}
+                      {:id 4 :type "set-activity" :activity "sandbox" :activity-number 4 :lesson 1 :level 1 :time-expected 300}
+                      {:id 5 :type "set-activity" :activity "volleyball" :activity-number 5 :lesson 1 :level 1 :time-expected 300 :scored true}
+                      {:id 6 :type "set-activity" :activity "book" :activity-number 6 :lesson 1 :level 1 :time-expected 300}
+                      {:id 7 :type "set-activity" :activity "cycling" :activity-number 7 :lesson 1 :level 1 :time-expected 300}
+                      {:id 8 :type "set-activity" :activity "painting-tablet" :activity-number 8 :lesson 1 :level 1 :time-expected 300}
+                      {:id 9 :type "set-activity" :activity "hide-n-seek" :activity-number 9 :lesson 1 :level 1 :time-expected 300
+                       :scored true :expected-score-percentage 90}
                       ]
    :default-progress {:current-scene "home"
                       :current-activity "home"
@@ -115,7 +117,15 @@
                       :sets {:concepts "ls1"
                              :assessment-1 "assessment1"}
                       :workflow-action "finish-activity"
-                      :finished-workflow-actions {}}})
+                      :finished-workflow-actions #{}
+                      :scene-activities {:home 1
+                                         :see-saw 2
+                                         :swings 3
+                                         :sandbox 4
+                                         :volleyball 5
+                                         :book 6
+                                         :cycling 7
+                                         :painting-tablet 8}}})
 
 (defn get-scene
   [course-id scene-id]
