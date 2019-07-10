@@ -18,12 +18,13 @@ $ lein run
 
 ```
 $ lein clean
+$ lein cljsbuild once sw
 $ lein dev
 ```
 
 Figwheel will automatically push cljs changes to the browser.
 
-- Wait a bit, then browse to [`0.0.0.0:3000`](0.0.0.0:3000).
+- Wait a bit, then browse to [`localhost:3000`](localhost:3000).
 
 ---
 

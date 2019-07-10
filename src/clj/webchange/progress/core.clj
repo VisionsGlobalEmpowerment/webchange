@@ -10,7 +10,7 @@
 (defn get-current-progress [course-name student-id]
   (let [{course-id :id} (db/get-course {:name course-name})
         progress (db/get-progress {:user_id student-id :course_id course-id})]
-    [true {:progress progress}]))
+    [true {:progress (:data progress)}]))
 
 (defn get-class-profile [course-id class-id]
   (let [stats (db/get-course-stats {:class_id class-id :course_id course-id})]

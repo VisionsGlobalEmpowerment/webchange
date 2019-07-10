@@ -36,6 +36,7 @@
                  [kibu/pushy "0.3.8"]
                  [net.mikera/imagez "0.12.0"]
                  [cljsjs/enzyme "3.8.0"]
+                 [cljs-idxdb "0.1.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -91,6 +92,7 @@
              :aot          [webchange.server]
              :uberjar-name "webchange.jar"
              :prep-tasks   ["compile" ["sass" "once"]
+                            "compile" ["cljsbuild" "once" "sw"]
                             "compile" ["cljsbuild" "once" "min"]]}
    }
 
@@ -126,7 +128,13 @@
                     :install-deps true
                     :optimizations   :none
                     }}
-
+    {:id           "sw"
+     :source-paths ["src/sw"]
+     :compiler {:main webchange.service-worker
+                :output-to "resources/public/js/compiled/service-worker.js"
+                :output-dir           "resources/public/js/compiled/out-sw"
+                :optimizations :advanced
+                :pretty-print true}}
     {:id           "min"
      :source-paths ["src/cljs"]
      :jar true
