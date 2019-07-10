@@ -5,10 +5,10 @@
 
                     :objects {:background {:type "background", :src "/raw/img/stadium/main/Stadium_Sketch.jpg"},
 
-                              :volleyball {:type "transparent" :x 692 :y 681 :width 163 :height 106
+                              :volleyball {:type "transparent" :x 683 :y 539 :width 350 :height 500
                                            :actions {:click {:type "scene", :scene-id "volleyball", :on "click"}}}
 
-                              :cycling {:type "transparent" :x 1292 :y 681 :width 163 :height 106
+                              :cycling {:type "transparent" :x 125 :y 539 :width 450 :height 500
                                            :actions {:click {:type "scene", :scene-id "cycling", :on "click"}}}
 
                               },

@@ -349,7 +349,7 @@
                    :stop-activity {:type "stop-activity" :id "volleyball"}
                    :finish-activity {:type "sequence-data"
                                      :data [{:type "finish-activity" :id "volleyball"}
-                                            {:type "scene" :scene-id "map"}]}}
+                                            {:type "scene" :scene-id "stadium"}]}}
    :audio
                   {:mari-welcome "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a"
                    :vera-ardilla "/raw/audio/l1/a3/vera/ardilla.m4a"

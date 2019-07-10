@@ -45,7 +45,7 @@
   (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id]))
 
 (defn visible-student [student]
-  (-> (select-keys student [:id :user-id :class-id :school-id :gender :date-of-birth])
+  (-> (select-keys student [:id :user-id :class-id :school-id :gender :date-of-birth :user :class])
       (update :date-of-birth str)))
 
 (defn user->teacher [{user-id :id :as user}]

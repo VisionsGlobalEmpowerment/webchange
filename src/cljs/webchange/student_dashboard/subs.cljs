@@ -48,3 +48,10 @@
            (map #(if (is-finished? %) (assoc % :completed true) %))
            (map :scene)
            (filter is-assessment?)))))
+
+(re-frame/reg-sub
+  ::progress-loading
+  (fn [db]
+    (or
+      (get-in db [:loading :load-course])
+      (get-in db [:loading :load-progress]))))

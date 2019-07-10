@@ -7,7 +7,8 @@
     [webchange.student-dashboard.stubs :refer [related-content life-skills]]
     [webchange.ui.theme :refer [with-mui-theme]]
     [webchange.student-dashboard.events :as sde]
-    [webchange.student-dashboard.subs :as sds]))
+    [webchange.student-dashboard.subs :as sds]
+    [cljs-react-material-ui.reagent :as ui]))
 
 (defn translate
   [path]
@@ -37,20 +38,26 @@
    :width            500})
 
 (defn- continue-the-story []
-  (let [show-more {:id :show-more}
+  (let [loading? @(re-frame/subscribe [::sds/progress-loading])
+        show-more {:id :show-more}
         finished @(re-frame/subscribe [::sds/finished-activities])
         next-activity @(re-frame/subscribe [::sds/next-activity])
         list (into [] (concat [show-more] (take-last 3 finished) [next-activity]))]
-    [scene-list list {:title (translate [:story :title])
-                      :on-click (fn [{id :id}]
-                                  (if (= id :show-more)
-                                    (re-frame/dispatch [::sde/show-more])
-                                    (re-frame/dispatch [::sde/open-activity id])))}]))
+    (if loading?
+      [ui/linear-progress]
+      [scene-list list {:title (translate [:story :title])
+                        :on-click (fn [{id :id}]
+                                    (if (= id :show-more)
+                                      (re-frame/dispatch [::sde/show-more])
+                                      (re-frame/dispatch [::sde/open-activity id])))}])))
 
 (defn- assessments []
-  (let [assessments @(re-frame/subscribe [::sds/assessments])]
-    [scene-list assessments {:title (translate [:assessment :title])
-                             :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}]))
+  (let [loading? @(re-frame/subscribe [::sds/progress-loading])
+        assessments @(re-frame/subscribe [::sds/assessments])]
+    (if loading?
+      [ui/linear-progress]
+      [scene-list assessments {:title (translate [:assessment :title])
+                               :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}])))
 
 (defn- main-content
   []

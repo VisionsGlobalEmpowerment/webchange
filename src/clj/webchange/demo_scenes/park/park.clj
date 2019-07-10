@@ -21,7 +21,8 @@
 
                           :slide {:type "image" :x 36 :y 252 :width 661 :height 551 :src "/raw/img/park/main/Slide_Enabled.png"}
                           :pinata {:type "image" :x 562 :y 0 :width 338 :height 477 :src "/raw/img/park/main/Pinata_Enabled.png"}
-                          :hide-n-seek {:type "image" :x 908 :y 422 :width 207 :height 288 :src "/raw/img/park/main/HideAndSeek_Enabled.png"}
+                          :hide-n-seek {:type "image" :x 908 :y 422 :width 207 :height 288 :src "/raw/img/park/main/HideAndSeek_Enabled.png"
+                                        :actions {:click {:type "scene", :scene-id "hide-n-seek", :on "click"}}}
                           },
 
                 :scene-objects [["background" "see-saw" "swings" "sandbox" "slide" "pinata" "hide-n-seek"] ["vera"]],

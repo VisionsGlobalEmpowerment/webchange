@@ -57,9 +57,10 @@
                               },
 
                     :scene-objects [["background"] ["box1" "box2" "box3"] ["vera" "mari"]],
-                    :actions {:start-activity
+                    :actions {:start
                               {:type "sequence"
-                               :data ["clear-instruction"
+                               :data ["start-activity"
+                                      "clear-instruction"
                                       "init-slots"
                                       "init-vera-position"
                                       "init-audio-correct"
@@ -367,9 +368,15 @@
 
                               :voice-high-var {:type "action" :from-var [{:var-name "current-concept" :var-property "game-voice-action"}]}
 
+                              :start-activity {:type "start-activity" :id "cycling"}
+                              :stop-activity {:type "stop-activity" :id "cycling"}
+                              :finish-activity {:type "sequence-data"
+                                                :data [{:type "finish-activity" :id "cycling"}
+                                                       {:type "scene" :scene-id "stadium"}]}
                               :start-background-music
                               {:type "audio" :id "background" :loop true}},
                     :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"}
-                    :triggers      {:start {:on "start" :action "start-activity"}}
+                    :triggers      {:start {:on "start" :action "start"}
+                                    :stop {:on "back" :action "stop-activity"}}
                     :metadata      {:autostart true
                                     :prev "stadium"}})

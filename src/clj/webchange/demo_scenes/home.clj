@@ -97,13 +97,12 @@
                                :data ["start-activity"
                                       "clear-instruction"
                                       "renew-words"
-                                      "finish-activity"
-                                      ;"senora-vaca-audio-1"
-                                      ;"set-current-box1"
-                                      ;"show-boxes"
-                                      ;"wait-for-box-animations"
-                                      ;"switch-box-animations-idle"
-                                      ;"senora-vaca-audio-2"
+                                      "senora-vaca-audio-1"
+                                      "set-current-box1"
+                                      "show-boxes"
+                                      "wait-for-box-animations"
+                                      "switch-box-animations-idle"
+                                      "senora-vaca-audio-2"
                                       ]},
 
                    :set-current-box1 {:type "set-variable" :var-name "current-box" :var-value "box1"}
