@@ -158,7 +158,7 @@
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-student! data)]
-     (->> (assoc data :id id :user-id user-id)
+     (->> (assoc data :id id :user-id user-id :class-id class-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn student-logged-in

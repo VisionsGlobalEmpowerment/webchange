@@ -23,28 +23,28 @@
 (defn progress-with-event [event] {:events [event] :progress progress})
 
 (deftest activity-stat-created-on-finish-activity
-  (let [{:keys [course-name user-id]} (fp/course-stat-created)
+  (let [{:keys [course-name user-id student-id]} (fp/course-stat-created)
         data (progress-with-event activity-finished)
         _ (fp/save-current-progress! user-id course-name data)
-        retrieved (-> (fp/get-individual-profile user-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-finished :activity-id str keyword)))]
+        retrieved (-> (fp/get-individual-profile student-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-finished :activity-id str keyword)))]
     (is (= (:score activity-finished) (-> retrieved :data :score)))))
 
 (deftest activity-stat-updated-on-finish-activity
-  (let [{:keys [course-name user-id]} (fp/course-stat-created)
+  (let [{:keys [course-name user-id student-id]} (fp/course-stat-created)
         _ (fp/save-current-progress! user-id course-name (progress-with-event activity-finished))
         updated-score {:correct 10 :incorrect 0 :mistake 0}
         _ (fp/save-current-progress! user-id course-name (-> activity-finished (assoc :score updated-score) progress-with-event))
-        retrieved (-> (fp/get-individual-profile user-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-finished :activity-id str keyword)))]
+        retrieved (-> (fp/get-individual-profile student-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-finished :activity-id str keyword)))]
     (is (= updated-score (-> retrieved :data :score)))))
 
 (deftest time-spent-increased-on-activity-stopped
-  (let [{:keys [user-id course-name]} (fp/activity-stat-created {:activity-id (:activity-id activity-stopped)})
+  (let [{:keys [user-id student-id course-name]} (fp/activity-stat-created {:activity-id (:activity-id activity-stopped)})
         _ (fp/save-current-progress! user-id course-name (progress-with-event activity-stopped))
-        retrieved (-> (fp/get-individual-profile user-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-stopped :activity-id str keyword)))]
+        retrieved (-> (fp/get-individual-profile student-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-finished :activity-id str keyword)))]
     (is (= (:time-spent activity-stopped) (-> retrieved :data :time-spent)))))
 
 (deftest time-spent-increased-on-activity-finished
-  (let [{:keys [user-id course-name]} (fp/activity-stat-created {:activity-id (:activity-id activity-finished)})
+  (let [{:keys [user-id student-id course-name]} (fp/activity-stat-created {:activity-id (:activity-id activity-finished)})
         _ (fp/save-current-progress! user-id course-name (progress-with-event activity-finished))
-        retrieved (-> (fp/get-individual-profile user-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-finished :activity-id str keyword)))]
+        retrieved (-> (fp/get-individual-profile student-id course-name) :body (json/read-str :key-fn keyword) :stats (get (-> activity-finished :activity-id str keyword)))]
     (is (= (:time-spent activity-finished) (-> retrieved :data :time-spent)))))

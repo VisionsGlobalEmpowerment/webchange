@@ -33,15 +33,14 @@
 (defn course-stat-created
   ([] (course-stat-created {}))
   ([options]
-   (let [{user-id :id} (f/student-user-created)
-         {class-id :id} (f/class-created)
+   (let [{student-id :id user-id :user-id class-id :class-id} (f/student-created)
          {course-id :id course-name :name} (f/course-created)
          defaults {:user-id user-id :class-id class-id :course-id course-id :data {:test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-course-stat! data)]
-     (->> (assoc data :id id :course-name course-name)
+     (->> (assoc data :id id :course-name course-name :student-id student-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn activity-stat-created
