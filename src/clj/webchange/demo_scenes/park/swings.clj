@@ -389,8 +389,9 @@
                    :mari-box-3 {:type "transition" :transition-id "mari" :to {:x 1600 :y 400 :duration 2 :loop false}}
 
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
-                   :start-activity {:type "sequence"
-                                    :data ["clear-instruction"
+                   :start {:type "sequence"
+                                    :data ["start-activity"
+                                           "clear-instruction"
                                            "renew-words"
                                            "set-current-box1"
                                            "show-boxes"
@@ -410,6 +411,7 @@
                                            "mari-move-to-start"
                                            ]}
 
+                   :start-activity {:type "start-activity" :id "swings"}
                    :finish-activity {:type "finish-activity" :id "swings"}}
    :audio
                   {:mari-welcome "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a"
@@ -420,6 +422,6 @@
                    :rock-oso "/raw/audio/l1/a3/rock/Oso.m4a"
                    :rock-iman "/raw/audio/l1/a3/rock/Iman.m4a"}
 
-   :triggers      {:start {:on "start" :action "start-activity"}}
+   :triggers      {:start {:on "start" :action "start"}}
    :metadata      {:autostart true
                    :prev "park"}})

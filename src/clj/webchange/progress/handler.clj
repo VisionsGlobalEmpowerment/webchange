@@ -7,7 +7,8 @@
             [clojure.tools.logging :as log]
             [webchange.common.handler :refer [handle current-user]]
             [webchange.auth.core :as auth]
-            [webchange.progress.class-profile :as class-profile]))
+            [webchange.progress.class-profile :as class-profile]
+            [webchange.progress.student-profile :as student-profile]))
 
 (defn handle-get-current-progress
   [course-name request]
@@ -23,22 +24,22 @@
         handle)))
 
 (defn handle-get-class-profile
-  [class-id course-id request]
+  [class-id course-name request]
   (let [user-id (current-user request)]
-    (-> (core/get-class-profile (Integer/parseInt course-id) (Integer/parseInt class-id))
+    (-> (core/get-class-profile course-name (Integer/parseInt class-id))
         handle)))
 
 (defn handle-get-individual-progress
-  [student-id course-id request]
+  [student-id course-name request]
   (let [user-id (current-user request)]
-    (-> (core/get-individual-progress (Integer/parseInt course-id) (Integer/parseInt student-id))
+    (-> (core/get-individual-progress course-name (Integer/parseInt student-id))
         handle)))
 
 (defroutes progress-routes
-           (GET "/api/class-profile/:class-id/course/:course-id" [class-id course-id :as request]
-             (handle-get-class-profile class-id course-id request))
-           (GET "/api/individual-profile/:student-id/course/:course-id" [student-id course-id :as request]
-             (handle-get-individual-progress student-id course-id request))
+           (GET "/api/class-profile/:class-id/course/:course-name" [class-id course-name :as request]
+             (handle-get-class-profile class-id course-name request))
+           (GET "/api/individual-profile/:student-id/course/:course-name" [student-id course-name :as request]
+             (handle-get-individual-progress student-id course-name request))
            (GET "/api/courses/:id/current-progress" [id :as request]
              (handle-get-current-progress id request))
            (POST "/api/courses/:id/current-progress" [id :as request]

@@ -13,7 +13,10 @@
   ::finished-activities
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          is-finished? #(get-in db [:progress-data :finished-workflow-actions (:id %)])
+          is-finished? #(-> db
+                            (get-in [:progress-data :finished-workflow-actions])
+                            set
+                            (contains? (:id %)))
           is-activity? #(= "set-activity" (:type %))]
       (->> (get-in db [:course-data :workflow-actions])
            (filter is-finished?)
@@ -33,7 +36,10 @@
   ::assessments
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          is-finished? #(get-in db [:progress-data :finished-workflow-actions (:id %)])
+          is-finished? #(-> db
+                            (get-in [:progress-data :finished-workflow-actions])
+                            set
+                            (contains? (:id %)))
           is-activity? #(= "set-activity" (:type %))
           is-assessment? #(= "assessment" (:type %))]
       (->> (get-in db [:course-data :workflow-actions])
@@ -42,3 +48,10 @@
            (map #(if (is-finished? %) (assoc % :completed true) %))
            (map :scene)
            (filter is-assessment?)))))
+
+(re-frame/reg-sub
+  ::progress-loading
+  (fn [db]
+    (or
+      (get-in db [:loading :load-course])
+      (get-in db [:loading :load-progress]))))

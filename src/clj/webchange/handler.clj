@@ -100,7 +100,7 @@
            (GET "/register" [] (public-route))
 
            (GET "/courses/:id" request (authenticated-route request))
-           (GET "/courses/:id/editor" request (teachers-route request))
+           (GET "/courses/:id/editor" request (authenticated-route request))
 
            (GET "/dashboard" request (teachers-route request))
            (GET "/dashboard/classes" request (teachers-route request))

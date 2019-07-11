@@ -17,32 +17,40 @@
                                :legend {:green  "Student completed the activity & scored 95%+"
                                         :yellow "Completed the activity & scored 80-95%"
                                         :red    "Completed the activity & scored 79% or below"}}
-           :activity-scores   {:title  "Activity Time Chart"
+           :activity-times    {:title  "Activity Time Chart"
                                :legend {:green  "Completed within + or - 15% expected time of completion"
                                         :yellow "Completed 15% later than expected time of completion"
                                         :red    "Completed over 15% later than expected time of completion"}}}
           path))
 
+(defn- ->data [levels]
+  {:title       "Activity"
+   :items-title "Lesson"
+   :marks       [80 95]
+   :levels      levels})
+
 (defn student-profile
-  [{:keys [student]}]
+  [{:keys [student profile]}]
   (let [student (map-student student)]
     [content-page
      {:title (translate [:header])}
      [personal-data student]
      [student-scores [{:title  (translate [:cumulative-scores :title])
-                       :data   (scores-stub)
+                       :data   (-> profile :scores ->data)
                        :legend (translate [:cumulative-scores :legend])}
-                      {:title  (translate [:activity-scores :title])
-                       :data   (scores-stub)
-                       :legend (translate [:activity-scores :legend])}]]]))
+                      {:title  (translate [:activity-times :title])
+                       :data   (-> profile :times ->data)
+                       :legend (translate [:activity-times :legend])}]]]))
 
 (defn student-profile-page
   []
-  (let [student-id @(re-frame/subscribe [::dss/current-student-id])
-        student @(re-frame/subscribe [::dss/current-student])
-        _ (when student-id (re-frame/dispatch [::students-events/load-student student-id]))
-        is-loading? @(re-frame/subscribe [::dss/student-loading])]
+  (let [student @(re-frame/subscribe [::dss/current-student])
+        profile @(re-frame/subscribe [::dss/student-profile])
+        is-loading? (or
+                      @(re-frame/subscribe [::dss/student-loading])
+                      @(re-frame/subscribe [::dss/student-profile-loading]))]
     (if is-loading?
       [ui/linear-progress]
       [student-profile
-       {:student student}])))
+       {:student student
+        :profile profile}])))

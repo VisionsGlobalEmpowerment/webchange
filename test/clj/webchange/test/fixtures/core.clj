@@ -17,7 +17,7 @@
 (defn clear-db []
   (db/clear-table :activity_stats)
   (db/clear-table :course_stats)
-  (db/clear-table :course_actions)
+  (db/clear-table :course_events)
   (db/clear-table :course_progresses)
   (db/clear-table :students)
   (db/clear-table :classes)
@@ -66,7 +66,7 @@
 (defn course-created []
   (let [course-name "test-course"
         [{course-id :id}] (db/create-course! {:name course-name})
-        data {:initial-scene "test-scene"}
+        data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}]}
         [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id course-id
      :name course-name
@@ -158,7 +158,7 @@
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-student! data)]
-     (->> (assoc data :id id)
+     (->> (assoc data :id id :user-id user-id :class-id class-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn student-logged-in

@@ -79,10 +79,11 @@
                 :scene-objects [["background"] ["book"] ["title-text" "content" "next-page-arrow"]],
 
                 :actions
-                 {:start-activity
+                 {:start
                   {:type "sequence"
                    :data ["clear-instruction"
                           "renew-words"
+                          "start-activity"
                           "init-next-page"
                           "read-title"
                           ]}
@@ -277,13 +278,13 @@
                   :finish-activity {:type "sequence-data"
                                     :data [{:type "finish-activity" :id "book"}
                                            {:type "scene" :scene-id "library"}]}
-
+                  :start-activity {:type "start-activity" :id "book"}
                   :start-background-music
                   {:type "audio" :id "background" :loop true}},
                  :audio
                  {:background "/raw/audio/background/POL-daily-special-short.mp3"}
                  :triggers
-                 {:start {:on "start" :action "start-activity"}}
+                 {:start {:on "start" :action "start"}}
                  :metadata
                  {:autostart true
                   :prev "map"}})

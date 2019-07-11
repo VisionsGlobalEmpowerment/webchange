@@ -5,6 +5,8 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword]]
             [webchange.auth.core :as auth]
             [webchange.events :as events]
+            [webchange.class.core :as class]
+            [webchange.course.core :as course]
             [java-time :as jt]))
 
 (defn get-current-progress [course-name student-id]
@@ -12,18 +14,81 @@
         progress (db/get-progress {:user_id student-id :course_id course-id})]
     [true {:progress (:data progress)}]))
 
-(defn get-class-profile [course-id class-id]
-  (let [stats (db/get-course-stats {:class_id class-id :course_id course-id})]
-    [true {:stats stats}]))
+(defn get-class-profile [course-name class-id]
+  (let [{course-id :id} (db/get-course {:name course-name})
+        stats (->> (db/get-course-stats {:class_id class-id :course_id course-id})
+                   (map class/with-user)
+                   (map class/with-student-by-user))]
+    [true {:stats stats
+           :class-id class-id
+           :course-name course-name}]))
 
-(defn get-individual-progress [course-id student-id]
-  (let [stats (db/get-activity-stats {:user_id student-id :course_id course-id})]
-    [true {:stats stats}]))
+(defn level->grid
+  [actions f]
+  (->> actions
+       (group-by :lesson)
+       (map (fn [[l a]] {:name (str "L" l)
+                         :values (map f a)}))))
 
-(defn save-actions! [owner-id course-id actions]
-  (doseq [{created-at-string :created-at type :type :as data} actions]
-    (let [created-at (jt/local-date-time created-at-string)]
-      (db/create-action! {:user_id owner-id :course_id course-id :created_at created-at :type type :data data})
+(defn with-stat
+  [{id :id :as action} stats-map]
+  (assoc action :stat (get stats-map id)))
+
+(defn workflow->grid
+  [actions stats-map f]
+  (->> actions
+       (remove #(not= "set-activity" (:type %)))
+       (map #(with-stat % stats-map))
+       (group-by :level)
+       (map (fn [[l a]] [l (level->grid a f)]))
+       (into {})))
+
+(defn ->percentage [value] (-> value (* 100) float Math/round))
+
+(defn score->value [score is-scored]
+  (cond
+    (and score is-scored) (-> (:correct score)
+                              (- (:incorrect score))
+                              (/ (:correct score))
+                              ->percentage)
+    (and score) 100
+    :else nil))
+
+(defn activity->score
+  [activity]
+  {:id (:id activity)
+   :label (:activity activity)
+   :value (score->value (-> activity :stat :data :score) (-> activity :scored))})
+
+(defn time->value
+  [time expected]
+  (if (and time expected)
+    (let [elapsed (-> time (/ 1000) float Math/round)]
+      (if (> elapsed expected)
+        (-> (/ expected elapsed) ->percentage)
+        100))))
+
+(defn activity->time
+  [activity]
+  {:id (:id activity)
+   :label (:activity activity)
+   :value (time->value (-> activity :stat :data :time-spent) (-> activity :time-expected))})
+
+(defn get-individual-progress [course-name student-id]
+  (let [{user-id :user-id} (db/get-student {:id student-id})
+        {course-id :id} (db/get-course {:name course-name})
+        course-data (course/get-course-data course-name)
+        stats (->> (db/get-user-activity-stats {:user_id user-id :course_id course-id})
+                   (map (fn [stat] [(:activity-id stat) stat]))
+                   (into {}))]
+    [true {:stats stats
+           :scores (workflow->grid (:workflow-actions course-data) stats activity->score)
+           :times (workflow->grid (:workflow-actions course-data) stats activity->time)}]))
+
+(defn save-events! [owner-id course-id events]
+  (doseq [{created-at-string :created-at type :type :as data} events]
+    (let [created-at (jt/offset-date-time created-at-string)]
+      (db/create-event! {:user_id owner-id :course_id course-id :created_at created-at :type type :data data})
       (events/dispatch (-> data
                            (assoc :user-id owner-id)
                            (assoc :course-id course-id))))))
@@ -37,9 +102,9 @@
   [true {:id id}])
 
 (defn save-progress!
-  [owner-id course-name {:keys [progress actions]}]
+  [owner-id course-name {:keys [progress events]}]
   (let [{course-id :id} (db/get-course {:name course-name})]
-    (save-actions! owner-id course-id actions)
+    (save-events! owner-id course-id events)
     (if-let [{id :id} (db/get-progress {:user_id owner-id :course_id course-id})]
       (update-progress! id progress)
       (create-progress! owner-id course-id progress))))

@@ -3,7 +3,9 @@
             [pushy.core :as pushy]
             [re-frame.core :as re-frame]
             [webchange.events :as events]
-            [webchange.interpreter.events :as ie]))
+            [webchange.interpreter.events :as ie]
+            [webchange.dashboard.classes.events :as classes-events]
+            [webchange.dashboard.students.events :as students-events]))
 
 (def routes ["/" {""                  :home
                   "login"             :login
@@ -23,11 +25,15 @@
 (defn- parse-url [url]
   (bidi/match-route routes url))
 
+(def default-course-name "test")
+
 (defn- dispatch-route [{:keys [handler route-params] :as params}]
   (re-frame/dispatch [::events/set-active-route params])
   (case handler
     :course (re-frame/dispatch [::ie/start-course (:id route-params)])
-    :student-dashboard (re-frame/dispatch [::ie/start-course "test"])
+    :student-dashboard (re-frame/dispatch [::ie/start-course default-course-name])
+    :dashboard-class-profile (re-frame/dispatch [::classes-events/load-class-profile (:class-id route-params) default-course-name])
+    :dashboard-student-profile (re-frame/dispatch [::students-events/open-student-profile (:student-id route-params) default-course-name])
     nil))
 
 (def history

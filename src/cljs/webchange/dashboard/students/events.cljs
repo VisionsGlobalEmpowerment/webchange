@@ -147,3 +147,28 @@
   ::open-student-modal
   (fn [{:keys [db]} [_ state]]
     {:db (assoc-in db [:dashboard :student-modal-state] state)}))
+
+(re-frame/reg-event-fx
+  ::load-student-profile
+  (fn [{:keys [db]} [_ student-id course-name]]
+    {:db (-> db
+             (assoc-in [:loading :student-profile] true))
+     :http-xhrio {:method          :get
+                  :uri             (str "/api/individual-profile/" student-id "/course/" course-name)
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::load-student-profile-success]
+                  :on-failure      [:api-request-error :student-profile]}}))
+
+(re-frame/reg-event-fx
+  ::load-student-profile-success
+  (fn [{:keys [db]} [_ result]]
+    {:db (assoc-in db [:dashboard :student-profile] result)
+     :dispatch-n (list [:complete-request :student-profile])}))
+
+(re-frame/reg-event-fx
+  ::open-student-profile
+  (fn [{:keys [db]} [_ student-id course-name]]
+    {:dispatch-n (list
+                   [::load-student student-id]
+                   [::load-student-profile student-id course-name])}))

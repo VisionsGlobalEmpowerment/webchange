@@ -33,28 +33,27 @@
 (defn course-stat-created
   ([] (course-stat-created {}))
   ([options]
-   (let [{user-id :id} (f/student-user-created)
-         {class-id :id} (f/class-created)
-         {course-id :id} (f/course-created)
+   (let [{student-id :id user-id :user-id class-id :class-id} (f/student-created)
+         {course-id :id course-name :name} (f/course-created)
          defaults {:user-id user-id :class-id class-id :course-id course-id :data {:test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-course-stat! data)]
-     (->> (assoc data :id id)
+     (->> (assoc data :id id :course-name course-name :student-id student-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn activity-stat-created
   ([] (activity-stat-created {}))
   ([options]
-   (let [{user-id :id} (f/student-user-created)
-         {course-id :id} (f/course-created)
-         defaults {:user-id user-id :course-id course-id :level-number 1 :activity-number 1 :data {:test "test"}}
+   (let [{student-id :id user-id :user-id} (f/student-created)
+         {course-id :id course-name :name} (f/course-created)
+         defaults {:user-id user-id :course-id course-id :activity-id 1 :data {:test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-activity-stat! data)]
-     (->> (assoc data :id id)
+     (->> (assoc data :id id :course-name course-name :student-id student-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn get-current-progress
@@ -75,15 +74,15 @@
         (json/read-str :key-fn keyword))))
 
 (defn get-class-profile
-  [class-id course-id]
-  (let [url (str "/api/class-profile/" class-id "/course/" course-id)
+  [class-id course-name]
+  (let [url (str "/api/class-profile/" class-id "/course/" course-name)
         request (-> (mock/request :get url)
                     f/teacher-logged-in)]
     (handler/dev-handler request)))
 
 (defn get-individual-profile
-  [user-id course-id]
-  (let [url (str "/api/individual-profile/" user-id "/course/" course-id)
+  [user-id course-name]
+  (let [url (str "/api/individual-profile/" user-id "/course/" course-name)
         request (-> (mock/request :get url)
                     f/teacher-logged-in)]
     (handler/dev-handler request)))

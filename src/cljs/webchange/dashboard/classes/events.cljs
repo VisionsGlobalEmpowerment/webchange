@@ -105,3 +105,21 @@
   ::open-class-modal
   (fn [{:keys [db]} [_ state]]
     {:db (assoc-in db [:dashboard :class-modal-state] state)}))
+
+(re-frame/reg-event-fx
+  ::load-class-profile
+  (fn [{:keys [db]} [_ class-id course-name]]
+    {:db (-> db
+             (assoc-in [:loading :class-profile] true))
+     :http-xhrio {:method          :get
+                  :uri             (str "/api/class-profile/" class-id "/course/" course-name)
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::load-class-profile-success]
+                  :on-failure      [:api-request-error :class-profile]}}))
+
+(re-frame/reg-event-fx
+  ::load-class-profile-success
+  (fn [{:keys [db]} [_ result]]
+    {:db (assoc-in db [:dashboard :class-profile] result)
+     :dispatch-n (list [:complete-request :class-profile])}))

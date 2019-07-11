@@ -158,7 +158,12 @@
                                         :variables ["current-audio-try-again"]
                                         :from ["audio-try-again1" "audio-try-again2"]
                                         :shuffled true}
-                                       {:type "action" :from-var [{:var-name "current-audio-try-again" :action-property "id"}]}]}
+                                       {:type "action" :from-var [{:var-name "current-audio-try-again" :action-property "id"}]}
+                                       {:type "copy-variable" :var-name "picked"
+                                        :from-params [{:action-property "from" :param-property "player"}]}
+                                       {:type "pick-wrong" :activity "volleyball"
+                                        :from-var [{:var-name "current-concept" :action-property "concept-name" :var-property "concept-name"}
+                                                   {:var-name "picked" :action-property "option"}]}]}
 
                    :renew-words  {:type "lesson-var-provider"
                                   :provider-id "words-set"
@@ -197,8 +202,10 @@
                                                            :shuffled true
                                                            :from-var [{:var-name "current-player" :action-property "exclude-values" :to-vector true}]}
                                                           {:type "set-variable"
-                                                           :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "concept-skin"}
-                                                                      {:var-name "current-target" :action-property "var-name"}]}]}
+                                                           :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "skin"}
+                                                                      {:var-name "current-target" :action-property "var-name"}]}
+                                                          {:type "set-current-concept"
+                                                           :from-var [{:var-name "current-concept" :action-property "value" :var-property "skin"}]}]}
                                                   {:type "parallel"
                                                    :data [{:type "set-skin" :target "box1"
                                                            :from-var [{:var-name "player1" :action-property "skin"}]}
@@ -216,22 +223,6 @@
                                        {:type "set-variable" :var-name "slot3" :var-value "player3"}
                                        {:type "set-variable" :var-name "slot4" :var-value "player4"}]}
 
-                   :init-boxes {:type "sequence-data"
-                                :data [{:type "parallel"
-                                        :data [{:type "set-variable" :var-name "player1"
-                                                :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "sandbox-state-word-1"}]}
-                                               {:type "set-variable" :var-name "player2"
-                                                :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "sandbox-state-word-2"}]}
-                                               {:type "set-variable" :var-name "player3"
-                                                :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "sandbox-state-word-3"}]}
-                                               {:type "set-variable" :var-name "player4"
-                                                :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "sandbox-state-word-4"}]}]}
-                                       {:type "vars-var-provider"
-                                        :variables ["player1" "player2" "player3" "player4"]
-                                        :from ["player1" "player2" "player3" "player4"]
-                                        :shuffled true}
-                                       ]}
-
                    :init-first-player {:type "set-variable" :var-name "current-player" :var-value "player1"}
 
                    :init-audio-correct {:type "parallel"
@@ -246,8 +237,9 @@
                                                {:type "set-variable" :var-name "audio-try-again2" :var-value "mari-audio-try-again-2"}]}
 
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
-                   :start-activity {:type "sequence"
-                                    :data ["clear-instruction"
+                   :start {:type "sequence"
+                                    :data ["start-activity"
+                                           "clear-instruction"
                                            "init-slots"
                                            "init-first-player"
                                            "init-audio-correct"
@@ -271,6 +263,8 @@
                                                   :from ["audio-correct1" "audio-correct2" "audio-correct3" "audio-correct4" "audio-correct5"]
                                                   :shuffled true}
                                                  {:type "action" :from-var [{:var-name "current-audio-correct" :action-property "id"}]}]}
+                                         {:type "pick-correct" :activity "volleyball"
+                                          :from-var [{:var-name "current-concept" :action-property "concept-name" :var-property "concept-name"}]}
                                          {:type "action" :id "throw"}]}
 
                    :throw {:type "sequence-data"
@@ -351,9 +345,11 @@
 
                    :voice-high-var {:type "action" :from-var [{:var-name "current-concept" :action-property "id" :var-property "seesaw-voice-high"}]}
 
+                   :start-activity {:type "start-activity" :id "volleyball"}
+                   :stop-activity {:type "stop-activity" :id "volleyball"}
                    :finish-activity {:type "sequence-data"
                                      :data [{:type "finish-activity" :id "volleyball"}
-                                            {:type "scene" :scene-id "map"}]}}
+                                            {:type "scene" :scene-id "stadium"}]}}
    :audio
                   {:mari-welcome "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a"
                    :vera-ardilla "/raw/audio/l1/a3/vera/ardilla.m4a"
@@ -363,6 +359,7 @@
                    :rock-oso "/raw/audio/l1/a3/rock/Oso.m4a"
                    :rock-iman "/raw/audio/l1/a3/rock/Iman.m4a"}
 
-   :triggers      {:start {:on "start" :action "start-activity"}}
+   :triggers      {:start {:on "start" :action "start"}
+                   :back {:on "back" :action "stop-activity"}}
    :metadata      {:autostart true
                    :prev "stadium"}})

@@ -59,7 +59,7 @@
 (defn do-start
   []
   (e/init)
-  (re-frame/dispatch [::events/start-playing]))
+  (re-frame/dispatch [::ie/start-playing]))
 
 (defn top-right
   []

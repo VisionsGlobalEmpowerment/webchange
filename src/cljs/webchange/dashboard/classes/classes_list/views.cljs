@@ -34,7 +34,7 @@
   [{:keys [on-edit-click on-profile-click on-remove-click on-students-click]}
    {:keys [name] :as class}]
   [ui/table-row {:hover true}
-   [ui/table-cell name]
+   [ui/table-cell {:on-click #(on-profile-click class)} name]
    [ui/table-cell {:align "right"
                    :style {:white-space "nowrap"}}
     [ui/tooltip

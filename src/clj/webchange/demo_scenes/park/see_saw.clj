@@ -264,8 +264,9 @@
                    :mari-box-3 {:type "transition" :transition-id "mari" :to {:x 1600 :y 400 :duration 2 :loop false}}
 
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
-                   :start-activity {:type "sequence"
-                                    :data ["clear-instruction"
+                   :start {:type "sequence"
+                                    :data ["start-activity"
+                                           "clear-instruction"
                                            "renew-words"
                                            "mari-welcome-audio"
                                            "set-current-box1"
@@ -275,12 +276,13 @@
                                            "mari-box-1"
                                            "mari-move-to-start"]}
 
+                   :start-activity {:type "start-activity" :id "see-saw"}
                    :finish-activity {:type "finish-activity" :id "see-saw"}}
    :audio
                   {:voice-1 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a"
                    :voice-2 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a"
                    :voice-3 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a"
                    :mari "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a"},
-   :triggers      {:start {:on "start" :action "start-activity"}}
+   :triggers      {:start {:on "start" :action "start"}}
    :metadata      {:autostart true
                    :prev "park"}})

@@ -116,9 +116,10 @@
    :actions       {:clear-instruction {:type        "remove-flows"
                                        :description "Remove flows"
                                        :flow-tag    "instruction"}
-                   :start-activity    {:type        "sequence"
+                   :start             {:type        "sequence"
                                        :description "Initial action"
-                                       :data        ["clear-instruction"
+                                       :data        ["start-activity"
+                                                     "clear-instruction"
                                                      "reset-tools"
                                                      "init-current-tool"]}
                    :finish-activity   {:type        "sequence-data"
@@ -146,7 +147,10 @@
                                                :from-params [{:action-property "var-value" :param-property "tool"}]}]}
                    :set-current-color {:type        "state"
                                        :target      "painting-area"
-                                       :from-params [{:action-property "value" :param-property "color"}]}}
-   :triggers      {:start {:on "start" :action "start-activity"}}
+                                       :from-params [{:action-property "value" :param-property "color"}]}
+                   :start-activity {:type "start-activity" :id "painting-tablet"}
+                   }
+   :triggers      {:start {:on "start" :action "start"}
+                   :finish {:on "back" :action "finish-activity"}}
    :metadata      {:autostart true
                    :prev      "map"}})

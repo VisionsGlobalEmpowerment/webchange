@@ -10,8 +10,8 @@
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (deftest course-can-be-retrieved
-    (let [{course-name :name} (f/course-created)]
-      (is (= {:initial-scene "test-scene"} (course/get-course-data course-name)))))
+    (let [{course-name :name data :data} (f/course-created)]
+      (is (= data (course/get-course-data course-name)))))
 
 (deftest scene-can-be-retrieved
   (let [{course-name :course-name scene-name :name} (f/scene-created)]

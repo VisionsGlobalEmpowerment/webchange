@@ -36,3 +36,13 @@
   ::student-loading
   (fn [db]
     (get-in db [:loading :student])))
+
+(re-frame/reg-sub
+  ::student-profile-loading
+  (fn [db]
+    (get-in db [:loading :student-profile])))
+
+(re-frame/reg-sub
+  ::student-profile
+  (fn [db]
+    (get-in db [:dashboard :student-profile])))

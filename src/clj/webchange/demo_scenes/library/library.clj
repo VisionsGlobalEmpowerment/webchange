@@ -23,7 +23,8 @@
 
                            :easel {:type "image" :x 791 :y 319 :width 287 :height 430 :src "/raw/img/library/main/Easel_Enabled.png"}
                            :hat {:type "image" :x 1635 :y 535 :width 227 :height 228 :src "/raw/img/library/main/Hat_Enabled.png"}
-                           :tablet {:type "image" :x 926 :y 657 :width 224 :height 155 :src "/raw/img/library/main/Tablet_Enabled.png"}
+                           :tablet {:type "image" :x 926 :y 657 :width 224 :height 155 :src "/raw/img/library/main/Tablet_Enabled.png"
+                                    :actions {:click {:type "scene", :scene-id "painting-tablet", :on "click"}}}
                            },
 
                  :scene-objects [["background" "books" "easel" "hat" "tablet"] ["librarian" "vera"]],
