@@ -885,7 +885,7 @@
                                    :finish-activity
                                    {:type "sequence-data"
                                     :data [{:type "finish-activity" :id "cinema"}
-                                           {:type "scene" :scene-id "map"}]}
+                                           {:type "scene" :scene-id "cinema-video"}]}
 
                                    :renew-current-letter
                                    {:type "sequence-data"

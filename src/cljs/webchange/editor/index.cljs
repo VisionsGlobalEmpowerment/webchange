@@ -44,6 +44,7 @@
 (declare painting-area)
 (declare colors-palette)
 (declare carousel-object)
+(declare video)
 
 (defn object
   [type]
@@ -58,15 +59,16 @@
     :carousel carousel-object
     :painting-area painting-area
     :colors-palette colors-palette
+    :video video
     (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))))
 
 (defn to-props
   [konva-node]
-  {:x (.x konva-node)
-   :y (.y konva-node)
+  {:x        (.x konva-node)
+   :y        (.y konva-node)
    :rotation (.rotation konva-node)
-   :scale-x (.scaleX konva-node)
-   :scale-y (.scaleY konva-node)})
+   :scale-x  (.scaleX konva-node)
+   :scale-y  (.scaleY konva-node)})
 
 (defn reset-transform
   []
@@ -97,11 +99,11 @@
 
 (defn rect-params
   [scene-id name object]
-  {:width (:width object)
-   :height (:height object)
-   :stroke "green"
+  {:width        (:width object)
+   :height       (:height object)
+   :stroke       "green"
    :stroke-width 4
-   :on-click (fn [e] (transform scene-id name (-> e .-target .getParent)))})
+   :on-click     (fn [e] (transform scene-id name (-> e .-target .getParent)))})
 
 (defn object-params
   [object]
@@ -148,7 +150,7 @@
       [:> Group (merge (object-params object) {:ref #(when % (update-group-rect % g))})
        [:> Rect (merge (rect-params scene-id name object) @g)]
        (for [child (:children object)]
-        ^{:key (str scene-id child)} [draw-object scene-id child])])))
+         ^{:key (str scene-id child)} [draw-object scene-id child])])))
 
 (defn placeholder
   [scene-id name object]
@@ -199,6 +201,16 @@
   [:> Group (object-params object)
    [:> Rect (rect-params scene-id name object)]])
 
+(defn video
+  [scene-id name object]
+  [:> Group (object-params object)
+   [:> Rect (rect-params scene-id name object)]
+   [:> Text {:x         15
+             :y         15
+             :font-size 24
+             :fill      "green"
+             :text      (str "video: " (:src object))}]])
+
 (defn scene
   []
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
@@ -247,43 +259,43 @@
   (let [offset-x (+ x base-offset)
         offset-y (+ y base-offset)]
     [:> Group {:x offset-x :y offset-y :on-click #(re-frame/dispatch [::events/select-scene-action action-id scene-id])}
-      (case (-> action :type keyword)
-        :parallel [:> Group {}
-                   [:> Rect {:width (action-width action actions) :height (action-height action actions)
-                             :fill "#c5cae9" :stroke "#bdbdbd" :stroke-width 2}]
-                   (let [current-y (atom 0)]
-                     (for [data-action (:data action)]
-                       ^{:key (str @current-y)}
-                       [:> Group {:x 0 :y @current-y}
-                        (do
-                          (swap! current-y + (action-height data-action actions) base-offset)
-                          [draw-action data-action actions scene-id action-id 0 0])]))]
-        :sequence [:> Group {}
-                   [:> Rect {:width (action-width action actions) :height (action-height action actions)
-                             :fill "#303f9f" :stroke "#bdbdbd" :stroke-width 2}]
-                   (let [current-x (atom 0)]
-                     (for [data-action-id (:data action)]
-                       ^{:key (str @current-x)}
-                       [:> Group {:x @current-x}
-                        (do
-                          (swap! current-x + (action-width (get actions (keyword data-action-id)) actions) base-offset)
-                          [draw-action (get actions (keyword data-action-id)) actions scene-id data-action-id 0 0])]))]
-        :sequence-data [:> Group {}
-                   [:> Rect {:width (action-width action actions) :height (action-height action actions)
-                             :fill "#303f9f" :stroke "#bdbdbd" :stroke-width 2}]
-                   (let [current-x (atom 0)]
-                     (for [data-action (:data action)]
-                       ^{:key (str @current-x)}
-                       [:> Group {:x @current-x}
-                        (do
-                          (swap! current-x + (action-width data-action actions) base-offset)
-                          [draw-action data-action actions scene-id action-id 0 0])]))]
-        [:> Group {}
-         [:> Rect {:width (action-width action actions) :height (action-height action actions)
-                   :fill "#3f51b5" :stroke "#bdbdbd" :stroke-width 2}]
-         [:> Text {:x 10 :y 10 :fill "white" :text (:type action)}]]
-        )
-  ]))
+     (case (-> action :type keyword)
+       :parallel [:> Group {}
+                  [:> Rect {:width (action-width action actions) :height (action-height action actions)
+                            :fill  "#c5cae9" :stroke "#bdbdbd" :stroke-width 2}]
+                  (let [current-y (atom 0)]
+                    (for [data-action (:data action)]
+                      ^{:key (str @current-y)}
+                      [:> Group {:x 0 :y @current-y}
+                       (do
+                         (swap! current-y + (action-height data-action actions) base-offset)
+                         [draw-action data-action actions scene-id action-id 0 0])]))]
+       :sequence [:> Group {}
+                  [:> Rect {:width (action-width action actions) :height (action-height action actions)
+                            :fill  "#303f9f" :stroke "#bdbdbd" :stroke-width 2}]
+                  (let [current-x (atom 0)]
+                    (for [data-action-id (:data action)]
+                      ^{:key (str @current-x)}
+                      [:> Group {:x @current-x}
+                       (do
+                         (swap! current-x + (action-width (get actions (keyword data-action-id)) actions) base-offset)
+                         [draw-action (get actions (keyword data-action-id)) actions scene-id data-action-id 0 0])]))]
+       :sequence-data [:> Group {}
+                       [:> Rect {:width (action-width action actions) :height (action-height action actions)
+                                 :fill  "#303f9f" :stroke "#bdbdbd" :stroke-width 2}]
+                       (let [current-x (atom 0)]
+                         (for [data-action (:data action)]
+                           ^{:key (str @current-x)}
+                           [:> Group {:x @current-x}
+                            (do
+                              (swap! current-x + (action-width data-action actions) base-offset)
+                              [draw-action data-action actions scene-id action-id 0 0])]))]
+       [:> Group {}
+        [:> Rect {:width (action-width action actions) :height (action-height action actions)
+                  :fill  "#3f51b5" :stroke "#bdbdbd" :stroke-width 2}]
+        [:> Text {:x 10 :y 10 :fill "white" :text (:type action)}]]
+       )
+     ]))
 
 (defn draw-actions
   []
@@ -306,18 +318,18 @@
                scene-id @(re-frame/subscribe [::subs/current-scene])
                triggers @(re-frame/subscribe [::subs/scene-triggers scene-id])
                actions @(re-frame/subscribe [::subs/scene-actions scene-id])]
-    [:> Group {:x 50 :y 300 :scale {:x @scale :y @scale} :on-wheel (fn [e]
-                                                                     (let [delta (-> e .-evt .-deltaY (/ 1000))]
-                                                                       (-> e .-evt .preventDefault)
-                                                                       (swap! scale + delta)))}
-     (let [current-y (atom 0)]
-       (for [[key trigger] triggers]
-         ^{:key (str key)}
-         [:> Group {:x 0 :y @current-y}
-           (let [action-id (-> trigger :action keyword)
-                 action (get actions action-id)
-                 _ (swap! current-y + (action-height action actions))]
-             [draw-action action actions scene-id action-id 0 0])]))]))
+              [:> Group {:x 50 :y 300 :scale {:x @scale :y @scale} :on-wheel (fn [e]
+                                                                               (let [delta (-> e .-evt .-deltaY (/ 1000))]
+                                                                                 (-> e .-evt .preventDefault)
+                                                                                 (swap! scale + delta)))}
+               (let [current-y (atom 0)]
+                 (for [[key trigger] triggers]
+                   ^{:key (str key)}
+                   [:> Group {:x 0 :y @current-y}
+                    (let [action-id (-> trigger :action keyword)
+                          action (get actions action-id)
+                          _ (swap! current-y + (action-height action actions))]
+                      [draw-action action actions scene-id action-id 0 0])]))]))
 
 (defn dataset-lessons-panel
   []
@@ -326,7 +338,7 @@
      [na/header {:as "h4"}
       "Lessons"
       [:div {:style {:float "right"}}
-       [na/icon {:name "add" :link? true
+       [na/icon {:name     "add" :link? true
                  :on-click #(re-frame/dispatch [::events/show-add-dataset-lesson-form])}]]]
      [na/divider {:clearing? true}]
      [sa/ItemGroup {}
@@ -336,9 +348,9 @@
          [sa/ItemContent {}
           [:div {:style {:float "left"}} [:p name]]
           [:div {:style {:float "right"}}
-           [na/icon {:name "edit" :link? true
+           [na/icon {:name     "edit" :link? true
                      :on-click #(re-frame/dispatch [::events/show-edit-dataset-lesson-form id])}]
-           [na/icon {:name "remove" :link? true
+           [na/icon {:name     "remove" :link? true
                      :on-click #(re-frame/dispatch [::events/delete-dataset-lesson id])}]]
           ]])]]))
 
@@ -349,7 +361,7 @@
      [na/header {:as "h4"}
       "Items"
       [:div {:style {:float "right"}}
-       [na/icon {:name "add" :link? true
+       [na/icon {:name     "add" :link? true
                  :on-click #(re-frame/dispatch [::events/show-add-dataset-item-form])}]]]
      [na/divider {:clearing? true}]
      [sa/ItemGroup {}
@@ -359,9 +371,9 @@
          [sa/ItemContent {}
           [:div {:style {:float "left"}} [:p name]]
           [:div {:style {:float "right"}}
-           [na/icon {:name "edit" :link? true
+           [na/icon {:name     "edit" :link? true
                      :on-click #(re-frame/dispatch [::events/show-edit-dataset-item-form item-id])}]
-           [na/icon {:name "remove" :link? true
+           [na/icon {:name     "remove" :link? true
                      :on-click #(re-frame/dispatch [::events/delete-dataset-item item-id])}]]
 
           ]])]]))
@@ -396,7 +408,7 @@
             ^{:key name}
             [sa/Item {}
              [sa/ItemContent {}
-              [na/checkbox {:label name
+              [na/checkbox {:label     name
                             :on-change #(swap! data update-in [:data :items] toggle-item-in-lesson (.-checked %2) id)}]
               ]])
           [na/divider {}]
@@ -427,27 +439,27 @@
           [na/divider {:vertical? true} "add"]
           [na/grid-row {}
            [na/grid-column {}
-            [:div {:style {:min-height 300}
+            [:div {:style        {:min-height 300}
                    :on-drag-over #(.preventDefault %)
-                   :on-drop (fn [e]
-                              (swap! data update-in [:data :items] toggle-item-in-lesson false (-> e
-                                                                                                   (.-dataTransfer)
-                                                                                                   (.getData "text/plain")
-                                                                                                   (js/parseInt))))}
-              (for [{name :name id :id} items
-                    :when (not-any? #(= id (:id %)) lesson-items)]
-                ^{:key name}
-                [:div {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" id))}
-                 [sa/Item {:content name}]])]]
+                   :on-drop      (fn [e]
+                                   (swap! data update-in [:data :items] toggle-item-in-lesson false (-> e
+                                                                                                        (.-dataTransfer)
+                                                                                                        (.getData "text/plain")
+                                                                                                        (js/parseInt))))}
+             (for [{name :name id :id} items
+                   :when (not-any? #(= id (:id %)) lesson-items)]
+               ^{:key name}
+               [:div {:draggable true :on-drag-start #(-> (.-dataTransfer %) (.setData "text/plain" id))}
+                [sa/Item {:content name}]])]]
            [na/grid-column {}
             [na/segment {:dropzone "true"}
-             [:div {:style {:min-height 300}
+             [:div {:style        {:min-height 300}
                     :on-drag-over #(.preventDefault %)
-                    :on-drop (fn [e]
-                               (swap! data update-in [:data :items] toggle-item-in-lesson true (-> e
-                                                                                                   (.-dataTransfer)
-                                                                                                   (.getData "text/plain")
-                                                                                                   (js/parseInt))))}
+                    :on-drop      (fn [e]
+                                    (swap! data update-in [:data :items] toggle-item-in-lesson true (-> e
+                                                                                                        (.-dataTransfer)
+                                                                                                        (.getData "text/plain")
+                                                                                                        (js/parseInt))))}
               (for [{id :id} lesson-items
                     :let [name (-> (filter #(= id (:id %)) items) first :name)]]
                 ^{:key name}
@@ -456,9 +468,9 @@
               ]]]
            ]]
 
-          [na/divider {}]
-          [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-dataset-lesson lesson-set-id @data])}]
-          ]))))
+         [na/divider {}]
+         [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-dataset-lesson lesson-set-id @data])}]
+         ]))))
 
 (defn scene-source
   [scene-id]
@@ -466,21 +478,21 @@
                value-json (r/atom (-> scene-data (dissoc :animations) clj->js (js/JSON.stringify nil 2)))
                value-map (r/atom (-> scene-data (dissoc :animations) p/pprint with-out-str))
                text-area-style {:font-family "monospace"
-                                :font-size 12
-                                :min-height 750}]
-            [na/form {}
-             [Grid {:columns 2
-                    :divided true}
-              [GridRow {}
-               [GridColumn {}
-                [na/text-area {:style text-area-style :default-value @value-json :on-change #(reset! value-json (-> %2 .-value))}]]
-               [GridColumn {}
-                [na/text-area {:style text-area-style :default-value @value-map :on-change #(reset! value-map (-> %2 .-value))}]]
-               ]
-              [GridRow {}
-               [GridColumn {}
-                [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-scene scene-id (-> @value-json js/JSON.parse (js->clj :keywordize-keys true))])}]
-                ]]]]))
+                                :font-size   12
+                                :min-height  750}]
+              [na/form {}
+               [Grid {:columns 2
+                      :divided true}
+                [GridRow {}
+                 [GridColumn {}
+                  [na/text-area {:style text-area-style :default-value @value-json :on-change #(reset! value-json (-> %2 .-value))}]]
+                 [GridColumn {}
+                  [na/text-area {:style text-area-style :default-value @value-map :on-change #(reset! value-map (-> %2 .-value))}]]
+                 ]
+                [GridRow {}
+                 [GridColumn {}
+                  [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/save-scene scene-id (-> @value-json js/JSON.parse (js->clj :keywordize-keys true))])}]
+                  ]]]]))
 
 (defn course-source
   []
@@ -539,10 +551,10 @@
 
 (defn is-file-drop? [event]
   (->> event
-      .-dataTransfer
-      .-types
-      js->clj
-      (some #{"Files"})))
+       .-dataTransfer
+       .-types
+       js->clj
+       (some #{"Files"})))
 
 (defn is-asset-drop? [event]
   (->> event
@@ -563,12 +575,12 @@
     (fn []
       (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
         [:div {:on-drag-over #(do (.stopPropagation %) (.preventDefault %))
-               :on-drop (fn [e]
-                          (when (is-file-drop? e)
-                            (.stopPropagation e)
-                            (.preventDefault e)
-                            (re-frame/dispatch [::events/upload-asset scene-id (get-first-file e) (:alias @props)]))
-                          )}
+               :on-drop      (fn [e]
+                               (when (is-file-drop? e)
+                                 (.stopPropagation e)
+                                 (.preventDefault e)
+                                 (re-frame/dispatch [::events/upload-asset scene-id (get-first-file e) (:alias @props)]))
+                               )}
 
          [sa/Segment {:placeholder true :style {:width "100%" :height "500px"}}
           [sa/Header {:icon true}
@@ -600,47 +612,47 @@
   ([component scene-id]
    (with-stage component {} scene-id))
   ([component props scene-id]
-    [:div {:on-drag-over (fn [e]
-                           (.stopPropagation e)
-                           (.preventDefault e))
-           :on-drop (fn [e]
-                      (cond
-                        (is-asset-drop? e) (re-frame/dispatch [::events/add-object-to-scene (stage-drop-params e) scene-id])
-                        (is-file-drop? e) (re-frame/dispatch [::events/upload-and-add-asset (get-drop-event-params e) (get-first-file e) scene-id]))
-                      (.stopPropagation e)
-                      (.preventDefault e)
-                      )}
-     [:> Stage (merge {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6} props)
-      [:> Layer component]]]))
+   [:div {:on-drag-over (fn [e]
+                          (.stopPropagation e)
+                          (.preventDefault e))
+          :on-drop      (fn [e]
+                          (cond
+                            (is-asset-drop? e) (re-frame/dispatch [::events/add-object-to-scene (stage-drop-params e) scene-id])
+                            (is-file-drop? e) (re-frame/dispatch [::events/upload-and-add-asset (get-drop-event-params e) (get-first-file e) scene-id]))
+                          (.stopPropagation e)
+                          (.preventDefault e)
+                          )}
+    [:> Stage (merge {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6} props)
+     [:> Layer component]]]))
 
 (defn main-content
   []
-    (let [scene-id (re-frame/subscribe [::subs/current-scene])
-          loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])
-          ui-screen (re-frame/subscribe [::es/current-main-content])]
-      ^{:key (str @ui-screen)}
-      (if @loaded
-        (case @ui-screen
-          :play-scene [with-stage [play-scene @scene-id] scene-id]
-          :actions (with-stage [draw-actions] {:draggable true} scene-id)
-          :triggers (with-stage [draw-triggers] {:draggable true} scene-id)
-          :scene-source [scene-source @scene-id]
-          :course-source [course-source]
-          :scene-versions [scene-versions]
-          :course-versions [course-versions]
-          :add-scene-form [add-scene-form]
-          :add-dataset-form [add-dataset-form]
-          :edit-dataset-form [edit-dataset-form]
-          :dataset-info [dataset-info]
-          :add-dataset-item-form [add-dataset-item-form]
-          :edit-dataset-item-form [edit-dataset-item-form]
-          :add-dataset-lesson-form [add-dataset-lesson-form]
-          :edit-dataset-lesson-form [edit-dataset-lesson-form]
-          :upload-asset-form [upload-asset-form]
-          [with-stage [scene] scene-id]
-          )
-        (with-stage [preloader] scene-id))
-      ))
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])
+        loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])
+        ui-screen (re-frame/subscribe [::es/current-main-content])]
+    ^{:key (str @ui-screen)}
+    (if @loaded
+      (case @ui-screen
+        :play-scene [with-stage [play-scene @scene-id] scene-id]
+        :actions (with-stage [draw-actions] {:draggable true} scene-id)
+        :triggers (with-stage [draw-triggers] {:draggable true} scene-id)
+        :scene-source [scene-source @scene-id]
+        :course-source [course-source]
+        :scene-versions [scene-versions]
+        :course-versions [course-versions]
+        :add-scene-form [add-scene-form]
+        :add-dataset-form [add-dataset-form]
+        :edit-dataset-form [edit-dataset-form]
+        :dataset-info [dataset-info]
+        :add-dataset-item-form [add-dataset-item-form]
+        :edit-dataset-item-form [edit-dataset-item-form]
+        :add-dataset-lesson-form [add-dataset-lesson-form]
+        :edit-dataset-lesson-form [edit-dataset-lesson-form]
+        :upload-asset-form [upload-asset-form]
+        [with-stage [scene] scene-id]
+        )
+      (with-stage [preloader] scene-id))
+    ))
 
 (defn animation-asset? [asset]
   (let [type (:type asset)]
@@ -654,7 +666,7 @@
        [na/header {:as "h4"}
         "Scenes"
         [:div {:style {:float "right"}}
-         [na/icon {:name "add" :link? true
+         [na/icon {:name     "add" :link? true
                    :on-click #(re-frame/dispatch [::events/set-main-content :add-scene-form])}]]]
        [na/divider {:clearing? true}]
        [sa/ItemGroup {}
@@ -673,7 +685,7 @@
        [na/header {:as "h4"}
         "Datasets"
         [:div {:style {:float "right"}}
-         [na/icon {:name "add" :link? true
+         [na/icon {:name     "add" :link? true
                    :on-click #(re-frame/dispatch [::events/set-main-content :add-dataset-form])}]]]
        [na/divider {:clearing? true}]
        [sa/ItemGroup {}
@@ -694,27 +706,27 @@
     [:div#editor-container
      [:link {:rel "stylesheet" :href "http://esotericsoftware.com/files/spine-player/3.7/spine-player.css"}]
 
-      [sa/SidebarPushable {}
-       [sa/Sidebar {:visible true}
-        [na/segment {}
-         [na/header {}
-          [:div {} @course-id
-           [:div {:style {:float "right"}}
-            [na/icon {:name "code" :link? true
-                      :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
-            [na/icon {:name "history" :link? true
-                      :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
-         [na/divider {:clearing? true}]
-         [list-scenes-panel]
-         [list-datasets-panel]]]
+     [sa/SidebarPushable {}
+      [sa/Sidebar {:visible true}
+       [na/segment {}
+        [na/header {}
+         [:div {} @course-id
+          [:div {:style {:float "right"}}
+           [na/icon {:name     "code" :link? true
+                     :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
+           [na/icon {:name     "history" :link? true
+                     :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
+        [na/divider {:clearing? true}]
+        [list-scenes-panel]
+        [list-datasets-panel]]]
       [sa/SidebarPusher {}
        [:div {:class-name "ui segment"}
         [na/header {:dividing? true} "Editor"]
         [na/grid {}
          [na/grid-column {:width 10}
-           [main-content]
-           [na/divider {:clearing? true}]
-           [main-content-navigation @scene-id]]
+          [main-content]
+          [na/divider {:clearing? true}]
+          [main-content-navigation @scene-id]]
          [na/grid-column {:width 4} [scene-items]]
          ]
-      ]]]]))
+        ]]]]))
