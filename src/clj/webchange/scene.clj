@@ -32,7 +32,7 @@
                       "stadium"         stadium-scene}})
 (defn get-course
   [course-id]
-  {:initial-scene "cinema"
+  {:initial-scene "map"
    :scene-list {:home {:name "Casa"
                        :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
                        :type "non-scored"
