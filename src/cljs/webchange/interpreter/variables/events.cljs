@@ -3,8 +3,7 @@
     [clojure.set :refer [union]]
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [webchange.common.events :as e]
-    ))
+    [webchange.common.events :as e]))
 
 (e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider)
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
@@ -54,8 +53,7 @@
     (->> items
          (filter #(->> % :id (contains? processed) not)))))
 
-;; ToDo: Write unit test
-(defn- filter-property-values
+(defn filter-property-values
   [exclude-property-values items]
   (let [filter-map exclude-property-values
         key (-> filter-map keys first)
