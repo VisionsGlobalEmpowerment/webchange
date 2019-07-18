@@ -15,7 +15,6 @@
 (e/reg-simple-executor :case ::execute-case)
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
-(e/reg-simple-executor :inc-variable ::execute-inc-variable)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
 
@@ -93,14 +92,6 @@
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
     {:db (set-variable db var-name var-value)
      :dispatch (e/success-event action)}))
-
-(re-frame/reg-event-fx
-  ::execute-inc-variable
-  (fn [{:keys [db]} [_ {:keys [var-name inc-value] :as action}]]
-    (let [current-var-value (get-variable db var-name)
-          new-var-value (+ current-var-value inc-value)]
-      {:db (set-variable db var-name new-var-value)
-       :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-set-progress

@@ -870,7 +870,7 @@
                                    :init-vars
                                    {:type "parallel"
                                     :data [{:type "set-variable" :var-name "current-round" :var-value 1}
-                                           {:type "set-variable" :var-name "rounds-number" :var-value 1}
+                                           {:type "set-variable" :var-name "rounds-number" :var-value 2}
                                            {:type "set-variable" :var-name "exclude-concepts" :var-value {:concept-name ["ardilla" "oso"]}}]}
 
                                    :start-activity
@@ -911,7 +911,7 @@
 
                                    :go-next-round
                                    {:type "sequence-data"
-                                    :data [{:type "inc-variable" :var-name "current-round" :inc-value 1}
+                                    :data [{:type "counter" :counter-action "increase" :counter-id "current-round"}
                                            {:type "set-variable" :var-name "exclude-concepts" :var-value {:concept-name []}}
                                            {:type "action" :id "vaca-voice-one-more-round"}
                                            {:type "action" :id "renew-current-letter"}]}
