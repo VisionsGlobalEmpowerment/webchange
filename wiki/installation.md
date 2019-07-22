@@ -12,6 +12,13 @@ $ sudo apt-get update
 $ sudo apt install git
 ```
 
+- Install git-lfs:
+
+```aidl
+$ curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+$ git lfs install
+```
+
 - Get sources:
   - Set up ssh key according to [github instructions](https://help.github.com/en/articles/connecting-to-github-with-ssh)
   - Clone project locally:
