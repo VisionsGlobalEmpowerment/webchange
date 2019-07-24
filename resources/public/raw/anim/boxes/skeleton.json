@@ -1,7 +1,7 @@
 {
   "skeleton": {
-    "hash": "8KEpp9comt2MGC0SWJwyQnZMwLU",
-    "spine": "3.7.91",
+    "hash": "F9mUpWCh85dYdhVoiHVI6ekj6QA",
+    "spine": "3.7.94",
     "width": 771.8,
     "height": 1033.43,
     "images": "",
@@ -285,6 +285,58 @@
         }
       }
     },
+    "apple": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/apple",
+          "x": 37.82,
+          "y": 8.27,
+          "scaleX": 4.792,
+          "scaleY": 4.792,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "arrow": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/arrow",
+          "x": 36.19,
+          "y": -12.26,
+          "scaleX": 4.199,
+          "scaleY": 4.199,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "baby": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/baby",
+          "x": 47.93,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "ball": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/ball",
+          "x": 50.28,
+          "y": -19.31,
+          "scaleX": 3.917,
+          "scaleY": 3.917,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "bear": {
       "box1": {
         "boxes": {
@@ -298,13 +350,287 @@
         }
       }
     },
+    "bed": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/bed",
+          "x": 33.15,
+          "y": -12.26,
+          "scaleX": 4.121,
+          "scaleY": 4.121,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "bee": {
       "box1": {
         "boxes": {
           "name": "Elements/bee",
-          "x": 39.11,
-          "scaleX": 4.377,
-          "scaleY": 4.377,
+          "x": 35.32,
+          "y": -18.94,
+          "scaleX": 3.908,
+          "scaleY": 3.908,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "bicycle": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/bicycle",
+          "x": 48.3,
+          "y": -12.26,
+          "scaleX": 4.297,
+          "scaleY": 4.297,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "black": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/black",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "boat": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/boat",
+          "x": 52.09,
+          "y": -46.36,
+          "scaleX": 4.297,
+          "scaleY": 4.297,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "boots": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/boots",
+          "x": 55.88,
+          "y": -23.63,
+          "scaleX": 4.121,
+          "scaleY": 4.121,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "boy": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/boy",
+          "x": 48.3,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "building": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/building",
+          "x": 33.15,
+          "y": -19.84,
+          "scaleX": 3.971,
+          "scaleY": 3.971,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "candle": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/candle",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "car": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/car",
+          "x": 52.09,
+          "y": -16.05,
+          "scaleX": 4.092,
+          "scaleY": 4.092,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "carrot": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/carrot",
+          "x": 48.3,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "cat": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/cat",
+          "x": 52.09,
+          "y": -12.26,
+          "scaleX": 4.297,
+          "scaleY": 4.297,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "chair": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/chair",
+          "x": 52.09,
+          "y": -12.26,
+          "scaleX": 4.297,
+          "scaleY": 4.297,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "chalk": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/chalk",
+          "x": 44.51,
+          "y": -16.05,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "cheese": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/cheese",
+          "x": 40.72,
+          "y": -12.26,
+          "scaleX": 3.592,
+          "scaleY": 3.592,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "chicken": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/chicken",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.297,
+          "scaleY": 4.297,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "chocolate": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/chocolate",
+          "x": 48.3,
+          "y": -12.26,
+          "scaleX": 3.923,
+          "scaleY": 3.923,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "cloud": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/cloud",
+          "x": 44.51,
+          "y": 14.26,
+          "scaleX": 3.535,
+          "scaleY": 3.535,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "cow": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/cow",
+          "x": 40.73,
+          "y": -16.05,
+          "scaleX": 4.297,
+          "scaleY": 4.297,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "cry": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/cry",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "deer": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/deer",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "diamond": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/diamond",
+          "x": 49.14,
+          "y": -29.82,
+          "scaleX": 3.867,
+          "scaleY": 3.867,
           "width": 100,
           "height": 100
         }
@@ -322,6 +648,32 @@
         }
       }
     },
+    "dragon": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/dragon",
+          "x": 38.6,
+          "y": -19.28,
+          "scaleX": 4.323,
+          "scaleY": 4.323,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "duck": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/duck",
+          "x": 31.58,
+          "y": -5.24,
+          "scaleX": 3.976,
+          "scaleY": 3.976,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "ear": {
       "box1": {
         "boxes": {
@@ -330,6 +682,45 @@
           "y": -10.43,
           "scaleX": 4.645,
           "scaleY": 4.645,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "earth": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/earth",
+          "x": 49.14,
+          "y": -12.26,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "egg": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/egg",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "elephant": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/elephant",
+          "x": 49.14,
+          "y": -1.73,
+          "scaleX": 4.237,
+          "scaleY": 4.237,
           "width": 100,
           "height": 100
         }
@@ -346,13 +737,65 @@
         }
       }
     },
+    "eyebrow": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/eyebrow",
+          "x": 49.14,
+          "y": -12.26,
+          "scaleX": 4.186,
+          "scaleY": 4.186,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "eyes": {
       "box1": {
         "boxes": {
           "name": "Elements/eyes",
           "x": 44.32,
-          "scaleX": 4.508,
-          "scaleY": 4.508,
+          "scaleX": 4.033,
+          "scaleY": 4.033,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "factory": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/factory",
+          "x": 56.16,
+          "y": -1.73,
+          "scaleX": 4.019,
+          "scaleY": 4.019,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "fifteen": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/fifteen",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 3.976,
+          "scaleY": 3.976,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "finger": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/finger",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
           "width": 100,
           "height": 100
         }
@@ -371,11 +814,245 @@
         }
       }
     },
+    "fish": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/fish",
+          "x": 45.63,
+          "y": -15.77,
+          "scaleX": 4.323,
+          "scaleY": 4.323,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "five": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/five",
+          "x": 45.63,
+          "y": 1.78,
+          "scaleX": 3.919,
+          "scaleY": 3.919,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "flute": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/flute",
+          "x": 49.14,
+          "y": -12.26,
+          "scaleX": 3.976,
+          "scaleY": 3.976,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "fox": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/fox",
+          "x": 42.11,
+          "y": -12.26,
+          "scaleX": 4.323,
+          "scaleY": 4.323,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "frog": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/frog",
+          "x": 49.14,
+          "y": -12.26,
+          "scaleX": 4.019,
+          "scaleY": 4.019,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "fruits": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/fruits",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 4.323,
+          "scaleY": 4.323,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "garden": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/garden",
+          "x": 52.65,
+          "y": -15.77,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "gemstone": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/gemstone",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 3.867,
+          "scaleY": 3.867,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "giant": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/giant",
+          "x": 52.65,
+          "y": -12.26,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "giraffe": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/giraffe",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "girl": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/girl",
+          "x": 45.63,
+          "y": -1.73,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "glove": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/glove",
+          "x": 42.11,
+          "y": -22.79,
+          "scaleX": 3.817,
+          "scaleY": 3.817,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "grapes": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/grapes",
+          "x": 42.11,
+          "y": -22.79,
+          "scaleX": 4.417,
+          "scaleY": 4.417,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "grass": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/grass",
+          "x": 52.65,
+          "y": -12.26,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "guitar": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/guitar",
+          "x": 49.14,
+          "y": -12.26,
+          "scaleX": 4.486,
+          "scaleY": 4.486,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "hand": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/hand",
+          "x": 49.14,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "home": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/home",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "ice cream": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/ice cream",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "iguana": {
       "box1": {
         "boxes": {
           "name": "Elements/iguana",
-          "x": 46.93,
+          "x": 43.42,
           "y": -13.03,
           "scaleX": 3.608,
           "scaleY": 3.608,
@@ -410,6 +1087,162 @@
         }
       }
     },
+    "jamon": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/jamon",
+          "x": 49.14,
+          "y": -19.28,
+          "scaleX": 3.976,
+          "scaleY": 3.976,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "juice": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/juice",
+          "x": 38.6,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "kayak": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/kayak",
+          "x": 38.6,
+          "y": -15.77,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "ketchup": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/ketchup",
+          "x": 49.14,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "kimono": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/kimono",
+          "x": 45.63,
+          "y": -15.77,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "kiwi": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/kiwi",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "knot": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/knot",
+          "x": 52.65,
+          "y": -29.82,
+          "scaleX": 4.188,
+          "scaleY": 4.188,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "koala": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/koala",
+          "x": 35.09,
+          "y": -15.77,
+          "scaleX": 4.452,
+          "scaleY": 4.452,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "leaf": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/leaf",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "lemon": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/lemon",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "lion": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/lion",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.323,
+          "scaleY": 4.323,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "loupe": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/loupe",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "magnet": {
       "box1": {
         "boxes": {
@@ -418,6 +1251,240 @@
           "y": 5.03,
           "scaleX": 3.974,
           "scaleY": 3.974,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "mama": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/mama",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "mexico": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/mexico",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "monkey": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/monkey",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.284,
+          "scaleY": 4.284,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "moon": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/moon",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "mouse": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/mouse",
+          "x": 42.11,
+          "y": -29.82,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "mouth": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/mouth",
+          "x": 52.65,
+          "y": -36.84,
+          "scaleX": 4.368,
+          "scaleY": 4.368,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "nail": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/nail",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "nest": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/nest",
+          "x": 45.63,
+          "y": -22.8,
+          "scaleX": 4.323,
+          "scaleY": 4.323,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "nurse": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/nurse",
+          "x": 45.63,
+          "y": -15.77,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "one": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/one",
+          "x": 42.11,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "onion": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/onion",
+          "x": 52.65,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "ostrich": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/ostrich",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "pencil": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/pencil",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "phone": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/phone",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "pig": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/pig",
+          "x": 42.11,
+          "y": -26.31,
+          "scaleX": 4.133,
+          "scaleY": 4.133,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "potatoes": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/potatoes",
+          "x": 45.63,
+          "y": -22.8,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "queen": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/queen",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "quesadilla": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/quesadilla",
+          "x": 52.65,
+          "y": -26.31,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
           "width": 100,
           "height": 100
         }
@@ -434,6 +1501,58 @@
         }
       }
     },
+    "rose": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/rose",
+          "x": 42.12,
+          "y": -15.77,
+          "scaleX": 4.323,
+          "scaleY": 4.323,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "salad": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/salad",
+          "x": 59.67,
+          "y": -54.38,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "sausage": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/sausage",
+          "x": 49.14,
+          "y": -15.77,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "saxophone": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/saxophone",
+          "x": 38.6,
+          "y": -19.28,
+          "scaleX": 4.16,
+          "scaleY": 4.16,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "sheep": {
       "box1": {
         "boxes": {
@@ -442,6 +1561,32 @@
           "y": -15.09,
           "scaleX": 3.48,
           "scaleY": 3.48,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "skunk": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/skunk",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "soup": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/soup",
+          "x": 49.14,
+          "y": -26.31,
+          "scaleX": 3.996,
+          "scaleY": 3.996,
           "width": 100,
           "height": 100
         }
@@ -466,8 +1611,151 @@
           "name": "Elements/squirrel",
           "x": 50.3,
           "y": -15.09,
-          "scaleX": 4.166,
-          "scaleY": 4.166,
+          "scaleX": 3.874,
+          "scaleY": 3.874,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "star": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/star",
+          "x": 45.63,
+          "y": -12.26,
+          "scaleX": 4.133,
+          "scaleY": 4.133,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "summer": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/summer",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.271,
+          "scaleY": 4.271,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "sun": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/sun",
+          "x": 51.54,
+          "y": -16.33,
+          "scaleX": 4.271,
+          "scaleY": 4.271,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "sunflower": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/sunflower",
+          "x": 39.34,
+          "y": -24.46,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "taxi": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/taxi",
+          "x": 47.47,
+          "y": -20.4,
+          "scaleX": 4.082,
+          "scaleY": 4.082,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "teeth": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/teeth",
+          "x": 43.4,
+          "y": -40.73,
+          "scaleX": 3.893,
+          "scaleY": 3.893,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "text": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/text",
+          "x": 51.54,
+          "y": -12.26,
+          "scaleX": 4.082,
+          "scaleY": 4.082,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "tomato": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/tomato",
+          "x": 39.34,
+          "y": -8.19,
+          "scaleX": 4.271,
+          "scaleY": 4.271,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "toothbrush": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/toothbrush",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "toys": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/toys",
+          "x": 51.54,
+          "y": -12.26,
+          "scaleX": 4.082,
+          "scaleY": 4.082,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "train": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/train",
+          "x": 47.47,
+          "y": -16.33,
+          "scaleX": 3.893,
+          "scaleY": 3.893,
           "width": 100,
           "height": 100
         }
@@ -486,6 +1774,97 @@
         }
       }
     },
+    "turtle": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/turtle",
+          "x": 43.4,
+          "y": -16.33,
+          "scaleX": 4.082,
+          "scaleY": 4.082,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "unicorn": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/unicorn",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "uniform": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/uniform",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "waffles": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/waffles",
+          "x": 55.6,
+          "y": -12.26,
+          "scaleX": 3.893,
+          "scaleY": 3.893,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "watermelon": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/watermelon",
+          "x": 39.33,
+          "y": -0.06,
+          "scaleX": 4.46,
+          "scaleY": 4.46,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "web site": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/web site",
+          "x": 31.2,
+          "y": -20.4,
+          "scaleX": 3.893,
+          "scaleY": 3.893,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "window": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/window",
+          "x": 43.4,
+          "y": -12.26,
+          "scaleX": 3.893,
+          "scaleY": 3.893,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
     "wood": {
       "box1": {
         "boxes": {
@@ -494,6 +1873,97 @@
           "y": -2.04,
           "width": 671,
           "height": 634
+        }
+      }
+    },
+    "wrench": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/wrench",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "xylophone": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/xylophone",
+          "x": 47.47,
+          "y": -16.33,
+          "scaleX": 4.082,
+          "scaleY": 4.082,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "yacht": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/yacht",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "yak": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/yak",
+          "x": 39.33,
+          "y": -16.33,
+          "scaleX": 4.082,
+          "scaleY": 4.082,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "yo_yo": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/yo_yo",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "yogurt": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/yogurt",
+          "x": 59.67,
+          "y": -12.26,
+          "scaleX": 4.649,
+          "scaleY": 4.649,
+          "width": 100,
+          "height": 100
+        }
+      }
+    },
+    "zebra": {
+      "box1": {
+        "boxes": {
+          "name": "Elements/zebra",
+          "x": 51.54,
+          "y": -12.26,
+          "scaleX": 4.097,
+          "scaleY": 4.097,
+          "width": 100,
+          "height": 100
         }
       }
     }

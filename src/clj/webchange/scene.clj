@@ -110,7 +110,11 @@
    :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
                       "book" "painting-tablet" "cinema" "cinema-video" "cycling"]
    :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
-                                           :assessment-1 "assessment1"}}]
+                                           :assessment-1 "assessment1"}}
+                       {:id 2 :lesson-sets {:concepts "ls2"
+                                            :assessment-1 "assessment1"}}
+                       {:id 3 :lesson-sets {:concepts "ls1"
+                                            :assessment-1 "assessment1"}}]
    :workflow-actions [{:id 10 :type "init-progress"}
                       {:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1 :time-expected 300}
                       {:id 2 :type "set-activity" :activity "see-saw" :activity-number 2 :lesson 1 :level 1 :time-expected 300}
@@ -120,18 +124,55 @@
                       {:id 6 :type "set-activity" :activity "book" :activity-number 6 :lesson 1 :level 1 :time-expected 300}
                       {:id 7 :type "set-activity" :activity "cycling" :activity-number 7 :lesson 1 :level 1 :time-expected 300}
                       {:id 8 :type "set-activity" :activity "painting-tablet" :activity-number 8 :lesson 1 :level 1 :time-expected 300}
-                      {:id     9 :type "set-activity" :activity "hide-n-seek" :activity-number 9 :lesson 1 :level 1 :time-expected 300
+
+                      {:id 19 :type "set-scene-activities" :scene-activities {:home 11
+                                                                              :see-saw 12
+                                                                              :swings 13
+                                                                              :sandbox 14
+                                                                              :volleyball 15
+                                                                              :book 16
+                                                                              :cycling 17
+                                                                              :painting-tablet 18
+                                                                              :hide-n-seek 9}}
+
+                      {:id 11 :type "set-activity" :activity "home" :activity-number 9 :lesson 2 :level 1 :time-expected 300}
+                      {:id 12 :type "set-activity" :activity "see-saw" :activity-number 10 :lesson 2 :level 1 :time-expected 300}
+                      {:id 13 :type "set-activity" :activity "swings" :activity-number 11 :lesson 2 :level 1 :time-expected 300}
+                      {:id 14 :type "set-activity" :activity "sandbox" :activity-number 12 :lesson 2 :level 1 :time-expected 300}
+                      {:id 15 :type "set-activity" :activity "volleyball" :activity-number 13 :lesson 2 :level 1 :time-expected 300 :scored true}
+                      {:id 16 :type "set-activity" :activity "book" :activity-number 14 :lesson 2 :level 1 :time-expected 300}
+                      {:id 17 :type "set-activity" :activity "cycling" :activity-number 15 :lesson 2 :level 1 :time-expected 300}
+                      {:id 18 :type "set-activity" :activity "painting-tablet" :activity-number 16 :lesson 2 :level 1 :time-expected 300}
+
+                      {:id 9 :type "set-activity" :activity "hide-n-seek" :activity-number 17 :lesson 1 :level 1 :time-expected 300
                        :scored true :expected-score-percentage 90}
-                      {:id 11 :type "set-activity" :activity "cinema" :activity-number 10 :lesson 1 :level 2}
-                      {:id 12 :type "set-activity" :activity "cinema-video" :activity-number 11 :lesson 2 :level 2}
+
+                      {:id 20 :type "set-scene-activities" :scene-activities {:home 21
+                                                                              :see-saw 22
+                                                                              :swings 23
+                                                                              :sandbox 24
+                                                                              :volleyball 25
+                                                                              :book 26
+                                                                              :cycling 27
+                                                                              :painting-tablet 28
+                                                                              :hide-n-seek 29}}
+
+                      {:id 21 :type "set-activity" :activity "home" :activity-number 18 :lesson 3 :level 1 :time-expected 300}
+                      {:id 22 :type "set-activity" :activity "see-saw" :activity-number 19 :lesson 3 :level 1 :time-expected 300}
+                      {:id 23 :type "set-activity" :activity "swings" :activity-number 20 :lesson 3 :level 1 :time-expected 300}
+                      {:id 24 :type "set-activity" :activity "sandbox" :activity-number 21 :lesson 3 :level 1 :time-expected 300}
+                      {:id 25 :type "set-activity" :activity "volleyball" :activity-number 22 :lesson 3 :level 1 :time-expected 300 :scored true}
+                      {:id 26 :type "set-activity" :activity "book" :activity-number 23 :lesson 3 :level 1 :time-expected 300}
+                      {:id 27 :type "set-activity" :activity "cycling" :activity-number 24 :lesson 3 :level 1 :time-expected 300}
+                      {:id 28 :type "set-activity" :activity "painting-tablet" :activity-number 25 :lesson 3 :level 1 :time-expected 300}
+
+                      {:id 29 :type "set-activity" :activity "hide-n-seek" :activity-number 26 :lesson 3 :level 1 :time-expected 300
+                       :scored true :expected-score-percentage 90}
+                      {:id 11 :type "set-activity" :activity "cinema" :activity-number 100 :lesson 1 :level 2}
+                      {:id 12 :type "set-activity" :activity "cinema-video" :activity-number 101 :lesson 2 :level 2}
                       ]
-   :default-progress {:current-scene             "home"
-                      :current-activity          "home"
-                      :variables                 {:last-location "home"}
-                      :current-lesson            1
-                      :sets                      {:concepts     "ls1"
-                                                  :assessment-1 "assessment1"}
-                      :workflow-action           "finish-activity"
+   :default-progress {:current-activity "home"
+                      :variables {:last-location "home"}
                       :finished-workflow-actions #{}
                       :scene-activities          {:home            1
                                                   :see-saw         2
@@ -140,7 +181,8 @@
                                                   :volleyball      5
                                                   :book            6
                                                   :cycling         7
-                                                  :painting-tablet 8}}})
+                                                  :painting-tablet 8
+                                                  :hide-n-seek 9}}})
 
 (defn get-scene
   [course-id scene-id]

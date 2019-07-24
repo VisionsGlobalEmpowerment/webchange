@@ -141,5 +141,9 @@
                          :speed 0.3
                          :scale-x 0.3
                          :scale-y 0.3
-                         :skins ["default" "8" "airplane" "bear" "bee" "dino" "ear" "empty" "eyes" "fire" "iguana" "insect" "island" "magnet" "qwestion" "sheep" "spider" "squirrel" "tree" "wood"]
+                         :skins ["default"
+                                 "8" "airplane" "bear" "bee" "dino" "ear" "empty" "eyes" "fire" "iguana" "insect" "island" "magnet" "qwestion" "sheep" "spider" "squirrel" "tree" "wood"
+                                 "grapes" "one" "fingernail" "unicorn" "uniform"
+                                 "elephant" "salad" "building" "star" "nurse"
+                                 "hand" "mama" "monkey" "apple" "mountain"]
                          :animations ["idle1" "idle2" "idle3" "idle_fly1" "idle_fly2" "idle_fly3" "jump" "jump2" "come" "come2" "leave" "leave2" "wood" "wood2"]}})

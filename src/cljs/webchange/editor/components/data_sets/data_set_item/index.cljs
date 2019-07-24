@@ -53,13 +53,16 @@
   []
   (let [item-id @(re-frame/subscribe [::es/current-dataset-item-id])
         item @(re-frame/subscribe [::es/dataset-item item-id])
-        data (r/atom {:data (:data item)})]
+        data (r/atom {:data (:data item)
+                      :name (:name item)})]
     (fn []
       (let [loading @(re-frame/subscribe [:loading])]
         [na/segment {:loading? (when (:edit-dataset-item loading))}
          [na/header {:as "h4" :content "Edit dataset item"}]
          [na/divider {:clearing? true}]
          [na/form {}
+          [na/form-input {:label "name" :default-value (:name @data) :on-change #(swap! data assoc :name (-> %2 .-value)) :inline? true}]
+          [na/divider {}]
           [dataset-item-fields-panel data]
           [na/divider {}]
           [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-dataset-item item-id @data])}]

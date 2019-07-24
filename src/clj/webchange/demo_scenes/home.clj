@@ -7,12 +7,18 @@
                    {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
                    {:url "/raw/img/casa_door.png", :size 1, :type "image"}
 
-                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio"}
-                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio"}
-                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio"}
-                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Ardilla.m4a", :size 2, :type "audio"}
-                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Iman.m4a", :size 2, :type "audio"}
-                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Oso.m4a", :size 2, :type "audio"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio" :alias "vaca voice 1"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio" :alias "vaca voice 2"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio" :alias "vaca voice 3"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Ardilla.m4a", :size 2, :type "audio" :alias "vera voice 1"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Oso.m4a", :size 2, :type "audio" :alias "vera voice 2"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Iman.m4a", :size 2, :type "audio" :alias "vera voice 3"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 1"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 2"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 3"}
                    ],
    :objects
                   {:background {:type "background", :src "/raw/img/casa/background.jpg"},
@@ -162,22 +168,22 @@
                    :show-third-box-word {:type "parallel"
                                          :data [{:type "animation" :target "box3" :id "wood" :loop false}
                                                 {:type "set-skin" :target "box3"
-                                                 :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                                                 :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
                                                 {:type "copy-variable" :var-name "current-word" :from "item-3"}
                                                 {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 
-                   :vaca-this-is-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "home-vaca-this-is"}]}
+                   :vaca-this-is-var {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
 
                    :vaca-can-you-say {:type "parallel"
                                       :data [{:type "audio", :id "vaca-3", :start 11.75, :duration 0.935}
                                              {:type "animation-sequence" :target "senoravaca" :track 1 :offset 11.75
                                               :data [{:start 11.75 :end 12.62 :anim "talk"}]}]}
 
-                   :vaca-question-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "home-vaca-question"}]}
+                   :vaca-question-var {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-question-action"}]}
 
-                   :vaca-word-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "home-vaca-word"}]}
+                   :vaca-word-var {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-word-action"}]}
 
-                   :group-word-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "home-group-word"}]}
+                   :group-word-var {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-word-action"}]}
 
                    :vaca-say-3-times {:type "parallel"
                                       :data [{:type "audio", :id "vaca-1", :start 25.079, :duration 2.381}
@@ -185,16 +191,16 @@
                                               :data [{:start 25.152 :end 25.513 :anim "talk"}
                                                      {:start 25.853 :end 27.2 :anim "talk"}]}]}
 
-                   :vaca-3-times-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "home-vaca-3-times"}]}
+                   :vaca-3-times-var {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-3-times-action"}]}
 
-                   :group-3-times-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "home-group-3-times"}]}
+                   :group-3-times-var {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
 
                    :vaca-once-more {:type "parallel"
                                       :data [{:type "audio", :id "vaca-1", :start 37.751, :duration 1.187}
                                              {:type "animation-sequence" :target "senoravaca" :track 1 :offset 37.751
                                               :data [{:start 37.751 :end 38.792 :anim "talk"}]}]}
 
-                   :vaca-goodbye-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "home-vaca-goodbye"}]}
+                   :vaca-goodbye-var {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]}
 
                    :introduce-word {:type "sequence"
                                     :data ["empty-big"
@@ -218,154 +224,6 @@
                                            "empty-small"
                                            "vaca-goodbye-var"
                                            "empty-big"]}
-
-                   :this-is-ardilla {:type "parallel"
-                                     :data [{:type "audio", :id "vaca-1", :start 15.621, :duration 2.313}
-                                            {:type "animation-sequence" :target "senoravaca" :track 1 :offset 15.621
-                                             :data [{:start 15.621 :end 17.88 :anim "talk"}]}]}
-
-                   :this-is-oso {:type "parallel"
-                                     :data [{:type "audio", :id "vaca-2", :start 10.267, :duration 2.417}
-                                            {:type "animation-sequence" :target "senoravaca" :track 1 :offset 10.267
-                                             :data [{:start 10.33 :end 10.91 :anim "talk"}
-                                                    {:start 11.175 :end 12.586 :anim "talk"}]}]}
-
-                   :this-is-incendio {:type "parallel"
-                                     :data [{:type "audio", :id "vaca-3", :start 9.062, :duration 1.922}
-                                            {:type "animation-sequence" :target "senoravaca" :track 1 :offset 9.062
-                                             :data [{:start 9.127 :end 10.88 :anim "talk"}]}]}
-
-
-                   :question-ardilla {:type "parallel"
-                                     :data [{:type "audio", :id "vaca-1", :start 20.935, :duration 1.49}
-                                            {:type "animation-sequence" :target "senoravaca" :track 1 :offset 20.935
-                                             :data [{:start 20.935 :end 22.357 :anim "talk"}]}]}
-
-                   :question-oso {:type "parallel"
-                                 :data [{:type "audio", :id "vaca-2", :start 14.577, :duration 0.936}
-                                        {:type "animation-sequence" :target "senoravaca" :track 1 :offset 14.577
-                                         :data [{:start 14.632 :end 15.394 :anim "talk"}]}]}
-
-                   :question-incendio {:type "parallel"
-                                      :data [{:type "audio", :id "vaca-3", :start 12.782, :duration 0.649}
-                                             {:type "animation-sequence" :target "senoravaca" :track 1 :offset 12.782
-                                              :data [{:start 12.815 :end 13.347 :anim "talk"}]}]}
-
-
-                   :word-ardilla {:type "parallel"
-                                  :data [{:type "audio", :id "vaca-1", :start 20.935, :duration 1.49}
-                                         {:type "animation-sequence" :target "senoravaca" :track 1 :offset 20.935
-                                          :data [{:start 20.935 :end 22.357 :anim "talk"}]}]}
-
-                   :word-oso {:type "parallel"
-                                  :data [{:type "audio", :id "vaca-2", :start 16.567, :duration 1.104}
-                                         {:type "animation-sequence" :target "senoravaca" :track 1 :offset 16.567
-                                          :data [{:start 16.762 :end 17.531 :anim "talk"}]}]}
-
-                   :word-incendio {:type "parallel"
-                                       :data [{:type "audio", :id "vaca-3", :start 14.684, :duration 0.831}
-                                              {:type "animation-sequence" :target "senoravaca" :track 1 :offset 14.684
-                                               :data [{:start 14.795 :end 15.437 :anim "talk"}]}]}
-
-
-                   :group-word-ardilla {:type "parallel"
-                                  :data [{:type "audio", :id "vaca-1", :start 20.935, :duration 1.49}
-                                         {:type "animation-sequence" :target "senoravaca" :track 1 :offset 20.935
-                                          :data [{:start 20.935 :end 22.357 :anim "talk"}]}
-                                         {:type "audio", :id "vera-1", :start 1.25, :duration 0.854}
-                                         {:type "animation-sequence" :target "vera" :track 1 :offset 1.25
-                                          :data [{:start 1.25 :end 2.05 :anim "talk"}]}]}
-
-                   :group-word-oso {:type "parallel"
-                              :data [{:type "audio", :id "vaca-2", :start 16.567, :duration 1.104}
-                                     {:type "animation-sequence" :target "senoravaca" :track 1 :offset 16.567
-                                      :data [{:start 16.762 :end 17.531 :anim "talk"}]}
-                                     {:type "audio", :id "vera-2", :start 0.812, :duration 0.754}
-                                     {:type "animation-sequence" :target "vera" :track 1 :offset 0.812
-                                      :data [{:start 0.812 :end 1.487 :anim "talk"}]}]}
-
-                   :group-word-incendio {:type "parallel"
-                                   :data [{:type "audio", :id "vaca-3", :start 14.684, :duration 0.831}
-                                          {:type "animation-sequence" :target "senoravaca" :track 1 :offset 14.684
-                                           :data [{:start 14.795 :end 15.437 :anim "talk"}]}
-                                          {:type "audio", :id "vera-3", :start 0.715, :duration 0.914}
-                                          {:type "animation-sequence" :target "vera" :track 1 :offset 0.715
-                                           :data [{:start 0.852 :end 1.479 :anim "talk"}]}]}
-
-                   :vaca-3-times-ardilla {:type "parallel"
-                                      :data [{:type "audio", :id "vaca-1", :start 28.006, :duration 3.904}
-                                             {:type "animation-sequence" :target "senoravaca" :track 1 :offset 28.006
-                                              :data [{:start 28.018 :end 28.892 :anim "talk"}
-                                                     {:start 29.127 :end 29.978 :anim "talk"}
-                                                     {:start 30.365 :end 31.849 :anim "talk"}]}]}
-
-                   :vaca-3-times-oso {:type "parallel"
-                                  :data [{:type "audio", :id "vaca-2", :start 32.631, :duration 3.946}
-                                         {:type "animation-sequence" :target "senoravaca" :track 1 :offset 32.631
-                                          :data [{:start 32.715 :end 33.456 :anim "talk"}
-                                                 {:start 34.035 :end 34.664 :anim "talk"}
-                                                 {:start 35.418 :end 36.445 :anim "talk"}]}]}
-
-                   :vaca-3-times-incendio {:type "parallel"
-                                       :data [{:type "audio", :id "vaca-3", :start 32.127, :duration 3.538}
-                                              {:type "animation-sequence" :target "senoravaca" :track 1 :offset 32.127
-                                               :data [{:start 32.205 :end 32.809 :anim "talk"}
-                                                      {:start 33.296 :end 33.919 :anim "talk"}
-                                                      {:start 34.412 :end 35.49 :anim "talk"}]}]}
-
-                   :group-3-times-ardilla {:type "parallel"
-                                          :data [{:type "audio", :id "vaca-1", :start 28.006, :duration 3.904}
-                                                 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 28.006
-                                                  :data [{:start 28.018 :end 28.892 :anim "talk"}
-                                                         {:start 29.127 :end 29.978 :anim "talk"}
-                                                         {:start 30.365 :end 31.849 :anim "talk"}]}
-                                                 {:type "audio", :id "vera-1", :start 3.788, :duration 3.407}
-                                                 {:type "animation-sequence" :target "vera" :track 1 :offset 3.788
-                                                  :data [{:start 3.849 :end 4.52 :anim "talk"}
-                                                         {:start 4.939 :end 5.678 :anim "talk"}
-                                                         {:start 6.021 :end 7.134 :anim "talk"}]}]}
-
-                   :group-3-times-oso {:type "parallel"
-                                      :data [{:type "audio", :id "vaca-2", :start 32.631, :duration 3.946}
-                                             {:type "animation-sequence" :target "senoravaca" :track 1 :offset 32.631
-                                              :data [{:start 32.715 :end 33.456 :anim "talk"}
-                                                     {:start 34.035 :end 34.664 :anim "talk"}
-                                                     {:start 35.418 :end 36.445 :anim "talk"}]}
-                                             {:type "audio", :id "vera-2", :start 2.887, :duration 3.678}
-                                             {:type "animation-sequence" :target "vera" :track 1 :offset 2.887
-                                              :data [{:start 2.960 :end 3.54 :anim "talk"}
-                                                     {:start 4.2 :end 4.853 :anim "talk"}
-                                                     {:start 5.339 :end 6.391 :anim "talk"}]}]}
-
-                   :group-3-times-incendio {:type "parallel"
-                                           :data [{:type "audio", :id "vaca-3", :start 32.127, :duration 3.538}
-                                                  {:type "animation-sequence" :target "senoravaca" :track 1 :offset 32.127
-                                                   :data [{:start 32.205 :end 32.809 :anim "talk"}
-                                                          {:start 33.296 :end 33.919 :anim "talk"}
-                                                          {:start 34.412 :end 35.49 :anim "talk"}]}
-                                                  {:type "audio", :id "vera-3", :start 5.874, :duration 3.823}
-                                                  {:type "animation-sequence" :target "vera" :track 1 :offset 5.874
-                                                   :data [{:start 6.042 :end 6.639 :anim "talk"}
-                                                          {:start 7.061 :end 7.627 :anim "talk"}
-                                                          {:start 8.261 :end 9.455 :anim "talk"}]}]}
-
-                   :goodbye-ardilla {:type "parallel"
-                                           :data [{:type "audio", :id "vaca-1", :start 44.817, :duration 2.492}
-                                                  {:type "animation-sequence" :target "senoravaca" :track 1 :offset 44.817
-                                                   :data [{:start 44.817 :end 46.167 :anim "talk"}
-                                                          {:start 46.555 :end 47.198 :anim "talk"}]}]}
-
-                   :goodbye-oso {:type "parallel"
-                                       :data [{:type "audio", :id "vaca-2", :start 46.125, :duration 2.528}
-                                              {:type "animation-sequence" :target "senoravaca" :track 1 :offset 46.125
-                                               :data [{:start 46.223 :end 47.425 :anim "talk"}
-                                                      {:start 47.914 :end 48.493 :anim "talk"}]}]}
-
-                   :goodbye-incendio {:type "parallel"
-                                            :data [{:type "audio", :id "vaca-3", :start 42.754, :duration 2.506}
-                                                   {:type "animation-sequence" :target "senoravaca" :track 1 :offset 42.754
-                                                    :data [{:start 42.819 :end 44.046 :anim "talk"}
-                                                           {:start 44.449 :end 45.111 :anim "talk"}]}]}
 
                    :senora-vaca-anim-idle {:type "animation" :target "senoravaca" :id "idle"}
                    :senora-vaca-anim-clapping-start {:type "animation" :target "senoravaca" :id "clapping_start" :loop false}

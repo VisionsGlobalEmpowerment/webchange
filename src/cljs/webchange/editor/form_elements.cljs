@@ -20,9 +20,8 @@
                                                       (filter #(= "audio" (:type %)))) :url #(or (:alias %) (:url %)))
                       :on-change #(swap! props assoc field-name (.-value %2))}]))
 
-(defn object-dropdown [props field-name label]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene @(re-frame/subscribe [::subs/scene scene-id])]
+(defn object-dropdown [props field-name scene-id label]
+  (let [scene @(re-frame/subscribe [::subs/scene scene-id])]
     [sa/FormDropdown {:label (or label "Target") :inline true :clearable true :search true :selection true
                       :default-value (get @props field-name)
                       :options (na/dropdown-list (->> scene :objects (map first) (map name)) identity identity)
@@ -54,9 +53,8 @@
                       :options (na/dropdown-list transitions identity identity)
                       :on-change #(swap! props assoc field-name (.-value %2))}]))
 
-(defn object-states-dropdown [props field-name object-name]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        object @(re-frame/subscribe [::subs/scene-object scene-id object-name])]
+(defn object-states-dropdown [props field-name object-name scene-id]
+  (let [object @(re-frame/subscribe [::subs/scene-object scene-id object-name])]
     [sa/FormDropdown {:label "State" :inline true :clearable true :search true :selection true
                       :default-value (get @props field-name)
                       :options (na/dropdown-list (->> object :states (map first) (map name)) identity identity)

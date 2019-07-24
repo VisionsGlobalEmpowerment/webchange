@@ -73,3 +73,15 @@
   (if-let [user (db/find-user-by-email {:email (:email user-data)})]
     [true (visible-user user)]
     [false {:errors {:form "Invalid registration data"}}]))
+
+(defn prepare-student-data
+  [{:keys [first-name last-name]}]
+  {:first_name first-name
+   :last_name last-name})
+
+(defn update-student-user!
+  [user-id options]
+  (-> options
+      prepare-student-data
+      (assoc :id user-id)
+      db/update-student-user!))

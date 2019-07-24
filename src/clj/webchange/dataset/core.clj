@@ -55,6 +55,12 @@
         [{id :id}] (db/create-dataset-item! prepared-data)]
     [true {:id id}]))
 
+(defn create-dataset-item-with-id!
+  [data]
+  (let [prepared-data (transform-keys ->snake_case_keyword data)]
+    (db/create-dataset-item-with-id! prepared-data)
+    [true data]))
+
 (defn update-dataset-item!
   [id data]
   (let [prepared-data (assoc data :id id)]

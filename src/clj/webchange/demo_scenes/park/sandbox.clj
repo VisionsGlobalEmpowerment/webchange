@@ -7,6 +7,10 @@
                    {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a", :size 5, :type "audio" :alias "game voice 2"}
                    {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a", :size 5, :type "audio" :alias "game voice 3"}
 
+                   {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio" :alias "letter 1"}
+                   {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio" :alias "letter 2"}
+                   {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio" :alias "letter 3"}
+
                    {:url "/raw/img/park/sandbox/background.jpg", :size 10 :type "image"}
 
                    ],
@@ -90,7 +94,50 @@
                                                     {:type "empty" :duration 1069}
                                                     {:type "animation" :target "mari" :id "empty" :track 1}]}]}
 
-                   :mari-this-is-letter-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-this-is-letter-action"}]}
+                   :mari-letter-1
+                   {:type "animation-sequence",
+                    :target "mari",
+                    :track 1,
+                    :offset 14.48,
+                    :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                    :start 14.48,
+                    :duration 1.746,
+                    :data [{:start 14.552, :end 16.159, :duration 1.607, :anim "talk"}]}
+
+                   :mari-letter-2
+                   {:type "animation-sequence",
+                    :target "mari",
+                    :track 1,
+                    :offset 17.239,
+                    :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                    :start 17.239,
+                    :duration 1.347,
+                    :data [{:start 17.333, :end 18.506, :duration 1.173, :anim "talk"}]}
+
+                   :mari-letter-3
+                   {:type "animation-sequence",
+                    :target "mari",
+                    :track 1,
+                    :offset 19.293,
+                    :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                    :start 19.293,
+                    :duration 1.32,
+                    :data [{:start 19.413, :end 20.413, :duration 1, :anim "talk"}]}
+
+                   :mari-letter-4
+                   {:type "animation-sequence",
+                    :target "mari",
+                    :track 1,
+                    :offset 23.053,
+                    :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                    :start 23.053,
+                    :duration 6.173,
+                    :data
+                    [{:start 23.133, :end 27.426, :duration 4.293, :anim "talk"}
+                     {:start 27.932, :end 29.066, :duration 1.134, :anim "talk"}]}
+
+                   :mari-short-letter-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-short-letter-action"}]}
+                   :mari-long-letter-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-long-letter-action"}]}
 
                    :complete-word-1  {:type "set-variable" :var-name "word-1" :var-value true}
                    :complete-word-2  {:type "set-variable" :var-name "word-2" :var-value true}
@@ -231,21 +278,27 @@
 
                    :renew-current-concept-workflow {:type "sequence"
                                                     :data ["renew-current-concept"
-                                                           "box-1-change-skin-var"
-                                                           "box-2-change-skin-var"
-                                                           "box-3-change-skin-var"
-                                                           "box-4-change-skin-var"
-                                                           "mari-this-is-letter-var"
-                                                           "mari-touch-audio"]}
+                                                           "box-1-change-skin"
+                                                           "box-2-change-skin"
+                                                           "box-3-change-skin"
+                                                           "box-4-change-skin"
+                                                           "mari-letter-1"
+                                                           "mari-short-letter-var"
+                                                           "mari-letter-2"
+                                                           "mari-short-letter-var"
+                                                           "mari-letter-3"
+                                                           "mari-long-letter-var"
+                                                           "mari-letter-4"
+                                                           "mari-long-letter-var"]}
 
                    :next-concept-workflow {:type "sequence"
                                            :data ["mari-more-audio"
                                                   "renew-current-concept-workflow"]}
 
-                   :box-1-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-1-action"}]}
-                   :box-2-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-2-action"}]}
-                   :box-3-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-3-action"}]}
-                   :box-4-change-skin-var {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-change-skin-4-action"}]}
+                   :box-1-change-skin {:type "set-skin" :target "box1" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-1-skin"}]}
+                   :box-2-change-skin {:type "set-skin" :target "box2" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-2-skin"}]}
+                   :box-3-change-skin {:type "set-skin" :target "box3" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-3-skin"}]}
+                   :box-4-change-skin {:type "set-skin" :target "box4" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-4-skin"}]}
 
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
                    :start {:type "sequence"

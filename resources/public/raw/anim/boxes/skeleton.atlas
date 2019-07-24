@@ -1,265 +1,1062 @@
 
 skeleton.png
-size: 2048,2048
+size: 2866,1019
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-Elements/8
-  rotate: false
-  xy: 1894, 1917
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/airplane
-  rotate: false
-  xy: 1348, 1399
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/bear
-  rotate: false
-  xy: 1845, 1399
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/bee
-  rotate: false
-  xy: 780, 644
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/dino
-  rotate: false
-  xy: 346, 180
-  size: 87, 100
-  orig: 87, 100
-  offset: 0, 0
-  index: -1
-Elements/ear
-  rotate: false
-  xy: 436, 364
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/eyes
-  rotate: false
-  xy: 1894, 1815
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/fire
-  rotate: false
-  xy: 1845, 1297
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/iguana
-  rotate: false
-  xy: 882, 644
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/insect
-  rotate: false
-  xy: 780, 542
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/island
-  rotate: false
-  xy: 538, 364
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/magnet
-  rotate: false
-  xy: 1845, 1195
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/qwestion
-  rotate: false
-  xy: 984, 644
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/sheep
-  rotate: false
-  xy: 882, 542
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/spider
-  rotate: false
-  xy: 640, 364
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/squirrel
-  rotate: false
-  xy: 1845, 1093
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
-Elements/tree
-  rotate: false
-  xy: 1086, 644
-  size: 100, 100
-  orig: 100, 100
-  offset: 0, 0
-  index: -1
 b1
-  rotate: false
-  xy: 675, 1264
+  rotate: true
+  xy: 1910, 473
   size: 544, 117
   orig: 544, 117
   offset: 0, 0
   index: -1
 b2
   rotate: false
-  xy: 1348, 1900
+  xy: 1910, 354
   size: 544, 117
   orig: 544, 117
   offset: 0, 0
   index: -1
 b3
-  rotate: false
-  xy: 675, 1145
+  rotate: true
+  xy: 2029, 473
   size: 544, 117
   orig: 544, 117
   offset: 0, 0
   index: -1
 b4
-  rotate: false
-  xy: 1348, 1781
+  rotate: true
+  xy: 2148, 473
   size: 544, 117
   orig: 544, 117
   offset: 0, 0
   index: -1
 b5
-  rotate: false
-  xy: 675, 1026
+  rotate: true
+  xy: 2267, 473
   size: 544, 117
   orig: 544, 117
   offset: 0, 0
   index: -1
 box1
-  rotate: false
-  xy: 2, 1383
+  rotate: true
+  xy: 2, 346
   size: 671, 634
   orig: 671, 634
   offset: 0, 0
   index: -1
 box4
-  rotate: false
-  xy: 2, 747
+  rotate: true
+  xy: 638, 346
   size: 671, 634
   orig: 671, 634
   offset: 0, 0
   index: -1
 box5
-  rotate: false
-  xy: 675, 1383
+  rotate: true
+  xy: 1274, 346
   size: 671, 634
   orig: 671, 634
   offset: 0, 0
   index: -1
 boxwing
-  rotate: false
-  xy: 2, 282
+  rotate: true
+  xy: 2386, 585
   size: 432, 463
   orig: 432, 463
   offset: 0, 0
   index: -1
 fx01
-  rotate: false
+  rotate: true
   xy: 2, 2
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx02
-  rotate: false
-  xy: 1348, 1501
+  rotate: true
+  xy: 282, 2
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx03
-  rotate: false
-  xy: 675, 746
+  rotate: true
+  xy: 562, 2
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx04
-  rotate: false
-  xy: 1692, 1501
+  rotate: true
+  xy: 842, 2
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx05
-  rotate: false
-  xy: 1019, 746
+  rotate: true
+  xy: 1122, 2
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx06
   rotate: true
-  xy: 1221, 1039
+  xy: 1402, 2
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx07
-  rotate: false
-  xy: 1501, 1221
+  rotate: true
+  xy: 1682, 2
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx08
-  rotate: false
-  xy: 1501, 941
+  rotate: true
+  xy: 1962, 10
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx09
-  rotate: false
-  xy: 1363, 661
+  rotate: true
+  xy: 2242, 10
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx10
-  rotate: true
-  xy: 1707, 597
+  rotate: false
+  xy: 2522, 305
   size: 342, 278
   orig: 342, 278
   offset: 0, 0
   index: -1
 fx11
   rotate: false
-  xy: 436, 466
+  xy: 2522, 25
   size: 342, 278
   orig: 342, 278
+  offset: 0, 0
+  index: -1
+
+skeleton2.png
+size: 2654,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Elements/8
+  rotate: false
+  xy: 2, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/airplane
+  rotate: false
+  xy: 2, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/apple
+  rotate: false
+  xy: 104, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/arrow
+  rotate: false
+  xy: 2, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/baby
+  rotate: false
+  xy: 104, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/ball
+  rotate: false
+  xy: 206, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/bear
+  rotate: false
+  xy: 2, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/bed
+  rotate: false
+  xy: 104, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/bee
+  rotate: false
+  xy: 206, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/bicycle
+  rotate: false
+  xy: 308, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/black
+  rotate: false
+  xy: 2, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/boat
+  rotate: false
+  xy: 104, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/boots
+  rotate: false
+  xy: 206, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/boy
+  rotate: false
+  xy: 308, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/building
+  rotate: false
+  xy: 410, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/candle
+  rotate: false
+  xy: 104, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/car
+  rotate: false
+  xy: 206, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/carrot
+  rotate: false
+  xy: 308, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/cat
+  rotate: false
+  xy: 410, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/chair
+  rotate: false
+  xy: 512, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/chalk
+  rotate: false
+  xy: 206, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/cheese
+  rotate: false
+  xy: 308, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/chicken
+  rotate: false
+  xy: 410, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/chocolate
+  rotate: false
+  xy: 512, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/cloud
+  rotate: false
+  xy: 614, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/cow
+  rotate: false
+  xy: 308, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/cry
+  rotate: false
+  xy: 410, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/deer
+  rotate: false
+  xy: 512, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/diamond
+  rotate: false
+  xy: 614, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/dino
+  rotate: false
+  xy: 2552, 2
+  size: 87, 100
+  orig: 87, 100
+  offset: 0, 0
+  index: -1
+Elements/dragon
+  rotate: false
+  xy: 716, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/duck
+  rotate: false
+  xy: 410, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/ear
+  rotate: false
+  xy: 512, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/earth
+  rotate: false
+  xy: 614, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/egg
+  rotate: false
+  xy: 716, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/elephant
+  rotate: false
+  xy: 818, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/eyebrow
+  rotate: false
+  xy: 512, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/eyes
+  rotate: false
+  xy: 614, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/factory
+  rotate: false
+  xy: 716, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/fifteen
+  rotate: false
+  xy: 818, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/finger
+  rotate: false
+  xy: 920, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/fire
+  rotate: false
+  xy: 614, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/fish
+  rotate: false
+  xy: 716, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/five
+  rotate: false
+  xy: 818, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/flute
+  rotate: false
+  xy: 920, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/fox
+  rotate: false
+  xy: 1022, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/frog
+  rotate: false
+  xy: 716, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/fruits
+  rotate: false
+  xy: 818, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/garden
+  rotate: false
+  xy: 920, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/gemstone
+  rotate: false
+  xy: 1022, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/giant
+  rotate: false
+  xy: 1124, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/giraffe
+  rotate: false
+  xy: 818, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/girl
+  rotate: false
+  xy: 920, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/glove
+  rotate: false
+  xy: 1022, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/grapes
+  rotate: false
+  xy: 1124, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/grass
+  rotate: false
+  xy: 1226, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/guitar
+  rotate: false
+  xy: 920, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/hand
+  rotate: false
+  xy: 1022, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/home
+  rotate: false
+  xy: 1124, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/ice cream
+  rotate: false
+  xy: 1226, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/iguana
+  rotate: false
+  xy: 1328, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/insect
+  rotate: false
+  xy: 1022, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/island
+  rotate: false
+  xy: 1124, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/jamon
+  rotate: false
+  xy: 1226, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/juice
+  rotate: false
+  xy: 1328, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/kayak
+  rotate: false
+  xy: 1430, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/ketchup
+  rotate: false
+  xy: 1124, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/kimono
+  rotate: false
+  xy: 1226, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/kiwi
+  rotate: false
+  xy: 1328, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/knot
+  rotate: false
+  xy: 1430, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/koala
+  rotate: false
+  xy: 1532, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/leaf
+  rotate: false
+  xy: 1226, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/lemon
+  rotate: false
+  xy: 1328, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/lion
+  rotate: false
+  xy: 1430, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/loupe
+  rotate: false
+  xy: 1532, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/magnet
+  rotate: false
+  xy: 1634, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/mama
+  rotate: false
+  xy: 1328, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/mexico
+  rotate: false
+  xy: 1430, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/monkey
+  rotate: false
+  xy: 1532, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/moon
+  rotate: false
+  xy: 1634, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/mouse
+  rotate: false
+  xy: 1736, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/mouth
+  rotate: false
+  xy: 1430, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/nail
+  rotate: false
+  xy: 1532, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/nest
+  rotate: false
+  xy: 1634, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/nurse
+  rotate: false
+  xy: 1736, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/one
+  rotate: false
+  xy: 1838, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/onion
+  rotate: false
+  xy: 1532, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/ostrich
+  rotate: false
+  xy: 1634, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/pencil
+  rotate: false
+  xy: 1736, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/phone
+  rotate: false
+  xy: 1838, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/pig
+  rotate: false
+  xy: 1940, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/potatoes
+  rotate: false
+  xy: 1634, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/queen
+  rotate: false
+  xy: 1736, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/quesadilla
+  rotate: false
+  xy: 1838, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/qwestion
+  rotate: false
+  xy: 1940, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/rose
+  rotate: false
+  xy: 2042, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/salad
+  rotate: false
+  xy: 1736, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/sausage
+  rotate: false
+  xy: 1838, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/saxophone
+  rotate: false
+  xy: 1940, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/sheep
+  rotate: false
+  xy: 2042, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/skunk
+  rotate: false
+  xy: 2144, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/soup
+  rotate: false
+  xy: 1838, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/spider
+  rotate: false
+  xy: 1940, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/squirrel
+  rotate: false
+  xy: 2042, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/star
+  rotate: false
+  xy: 2144, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/summer
+  rotate: false
+  xy: 2246, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/sun
+  rotate: false
+  xy: 1940, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/sunflower
+  rotate: false
+  xy: 2042, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/taxi
+  rotate: false
+  xy: 2144, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/teeth
+  rotate: false
+  xy: 2246, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/text
+  rotate: false
+  xy: 2348, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/tomato
+  rotate: false
+  xy: 2042, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/toothbrush
+  rotate: false
+  xy: 2144, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/toys
+  rotate: false
+  xy: 2246, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/train
+  rotate: false
+  xy: 2348, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/tree
+  rotate: false
+  xy: 2450, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/turtle
+  rotate: false
+  xy: 2144, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/unicorn
+  rotate: false
+  xy: 2246, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/uniform
+  rotate: false
+  xy: 2348, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/waffles
+  rotate: false
+  xy: 2450, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/watermelon
+  rotate: false
+  xy: 2552, 410
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/web site
+  rotate: false
+  xy: 2246, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/window
+  rotate: false
+  xy: 2348, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/wrench
+  rotate: false
+  xy: 2450, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/xylophone
+  rotate: false
+  xy: 2552, 308
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/yacht
+  rotate: false
+  xy: 2348, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/yak
+  rotate: false
+  xy: 2450, 104
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/yo_yo
+  rotate: false
+  xy: 2552, 206
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/yogurt
+  rotate: false
+  xy: 2450, 2
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+Elements/zebra
+  rotate: false
+  xy: 2552, 104
+  size: 100, 100
+  orig: 100, 100
   offset: 0, 0
   index: -1

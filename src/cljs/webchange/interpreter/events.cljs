@@ -114,6 +114,28 @@
   [db id]
   (get-in db [:scenes (:current-scene db) :audio (keyword id)]))
 
+(defn workflow-action
+  [db id]
+  (let [actions (get-in db [:course-data :workflow-actions])]
+    (->> actions
+         (filter #(= id (:id %)))
+         first)))
+
+(defn first-nonfinished-action [db]
+  (let [workflow-actions (get-in db [:course-data :workflow-actions])
+        finished-actions (set (get-in db [:progress-data :finished-workflow-actions]))]
+    (->> workflow-actions
+         (remove #(contains? finished-actions (:id %)))
+         first)))
+
+(defn first-nonfinished-action-by-name [db name]
+  (let [workflow-actions (get-in db [:course-data :workflow-actions])
+        finished-actions (set (get-in db [:progress-data :finished-workflow-actions]))]
+    (->> workflow-actions
+         (remove #(contains? finished-actions (:id %)))
+         (filter #(= name (:activity %)))
+         first)))
+
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :play-video ::play-video)
 (ce/reg-simple-executor :state ::execute-state)
@@ -280,24 +302,25 @@
   [db scene-name]
   (-> db
       (get-in [:progress-data :scene-activities])
-      (get (keyword scene-name))))
+      (get (keyword scene-name))
+      (or (-> (first-nonfinished-action-by-name db scene-name) :id))))
 
 (re-frame/reg-event-fx
   ::execute-start-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
-    (let [current-lesson (get-in db [:progress-data :current-lesson])
-          activity-action-id (name->activity-action-id db activity-name)]
-      {:db (assoc db :activity-started true :activity-start-time (js/Date.))
+    (let [activity-action-id (name->activity-action-id db activity-name)
+          lesson (-> (workflow-action db activity-action-id) :lesson)]
+      {:db (assoc db :activity-started true :activity-start-time (js/Date.) :activity-lesson lesson)
        :dispatch-n (list
                      [::add-pending-event :activity-started {:activity-id activity-action-id
                                                              :activity-name activity-name
-                                                             :lesson current-lesson}]
+                                                             :lesson lesson}]
                      (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-stop-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
-    (let [current-lesson (get-in db [:progress-data :current-lesson])
+    (let [current-lesson (:activity-lesson db)
           activity-action-id (name->activity-action-id db activity-name)
           start-time (get db :activity-start-time)
           time-spent (if start-time
@@ -338,7 +361,7 @@
       100)))
 
 (defn activity-finished-event [db {activity-name :id}]
-  (let [current-lesson (get-in db [:progress-data :current-lesson])
+  (let [current-lesson (:activity-lesson db)
         activity-action-id (name->activity-action-id db activity-name)
         activity-number (action-id->activity-number activity-action-id db)
         score (activity-score db)
@@ -353,13 +376,6 @@
                                              :activity-number activity-number
                                              :time-spent time-spent}]))
 
-(defn workflow-action
-  [db id]
-  (let [actions (get-in db [:course-data :workflow-actions])]
-    (->> actions
-         (filter #(= id (:id %)))
-         first)))
-
 (defn workflow-action-finished?
   [db {activity-name :id}]
   (let [workflow-action-id (get-in db [:progress-data :current-workflow-action])
@@ -368,7 +384,7 @@
 
         score-percentage (-> (workflow-action db activity-action-id) :expected-score-percentage)
         score-passed? (if score-percentage
-                        (> score-percentage (activity-score-percentage db))
+                        (> (activity-score-percentage db) score-percentage)
                         true)]
     (and current-activity? score-passed?)))
 
@@ -384,17 +400,17 @@
          :dispatch-n events}
         {:dispatch (ce/success-event action)}))))
 
-(defn first-nonfinished-action [db]
-  (let [workflow-actions (get-in db [:course-data :workflow-actions])
-        finished-actions (set (get-in db [:progress-data :finished-workflow-actions]))]
-    (->> workflow-actions
-         (remove #(contains? finished-actions (:id %)))
-         first)))
+(re-frame/reg-event-fx
+  ::set-scene-activities
+  (fn [{:keys [db]} [_ {scene-activities :scene-activities}]]
+    {:db (assoc-in db [:progress-data :scene-activities] scene-activities)
+     :dispatch [::finish-workflow-action]}))
 
 (defn next-action->event [action]
   (case (:type action)
     "set-activity" [::set-activity action]
     "init-progress" [::init-default-progress]
+    "set-scene-activities" [::set-scene-activities action]
     nil))
 
 (re-frame/reg-event-fx
@@ -563,7 +579,12 @@
           prev (get-in scene [:metadata :prev] nil)]
       (if prev
         {:dispatch-n (list [::trigger :back] [::set-current-scene prev])}
-        (set! (.-location js/window) "/")))))
+        (set! (.-location js/window) "/student-dashboard")))))
+
+(re-frame/reg-event-fx
+  ::open-student-dashboard
+  (fn [{:keys [db]} [_ _]]
+    (set! (.-location js/window) "/student-dashboard")))
 
 (re-frame/reg-event-fx
   ::load-progress
@@ -676,7 +697,7 @@
 (re-frame/reg-event-fx
   ::execute-pick-correct
   (fn [{:keys [db]} [_ {:keys [activity concept-name] :as action}]]
-    (let [current-lesson (get-in db [:progress-data :current-lesson])
+    (let [current-lesson (:activity-lesson db)
           counter-value (or (vars.events/get-variable db :score-correct) 0)]
       {:db (-> db
                (vars.events/set-variable :score-correct (inc counter-value))
@@ -688,7 +709,7 @@
 (re-frame/reg-event-fx
   ::execute-pick-wrong
   (fn [{:keys [db]} [_ {:keys [activity concept-name option] :as action}]]
-    (let [current-lesson (get-in db [:progress-data :current-lesson])
+    (let [current-lesson (:activity-lesson db)
           counter-incorrect (or (vars.events/get-variable db :score-incorrect) 0)
           counter-mistake (or (vars.events/get-variable db :score-mistake) 0)
           first-attempt? (vars.events/get-variable db :score-first-attempt)]

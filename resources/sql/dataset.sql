@@ -22,6 +22,10 @@ WHERE course_id = :course_id;
 -- :doc creates a new dataset item record
 INSERT INTO dataset_items (dataset_id, name, data) VALUES (:dataset_id, :name, :data) RETURNING id
 
+-- :name create-dataset-item-with-id! :! :n
+-- :doc creates a new dataset item record
+INSERT INTO dataset_items (id, dataset_id, name, data) VALUES (:id, :dataset_id, :name, :data)
+
 -- :name get-dataset-item :? :1
 -- :doc retrieve item given id
 SELECT * from dataset_items
@@ -30,12 +34,13 @@ WHERE id = :id;
 -- :name get-dataset-items :? :*
 -- :doc retrieve items given dataset id
 SELECT * from dataset_items
-WHERE dataset_id = :dataset_id;
+WHERE dataset_id = :dataset_id
+ORDER BY name;
 
 -- :name update-dataset-item! :! :n
 -- :doc updates an existing dataset item record
 UPDATE dataset_items
-SET data = :data
+SET data = :data, name = :name
 WHERE id = :id
 
 -- :name delete-dataset-item! :! :n

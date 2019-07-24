@@ -5,10 +5,10 @@ INSERT INTO users
 VALUES (:first_name, :last_name, :email, :password, :active, :created_at, :last_login)
 RETURNING id
 
--- :name update-user! :! :n
+-- :name update-student-user! :! :n
 -- :doc updates an existing user record
 UPDATE users
-SET first_name = :first_name, last_name = :last_name, email = :email
+SET first_name = :first_name, last_name = :last_name
 WHERE id = :id
 
 -- :name activate-user! :! :n

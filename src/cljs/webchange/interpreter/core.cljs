@@ -218,7 +218,7 @@
              (> r2y (+ r1y r1height))
              (< (+ r2y r2height) r1y)))))
 
-(defn animation-sequence->actions [{:keys [target track offset data] :as action}]
+(defn animation-sequence->actions [{:keys [target track offset data] :or {track 1} :as action}]
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type "sequence-data"
                    :data [{:type "empty" :duration (* (- start offset) 1000)}

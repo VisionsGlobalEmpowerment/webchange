@@ -13,6 +13,17 @@
                           {:url "/raw/img/elements/iguana.png" :size 1 :type "image"}
                           {:url "/raw/img/elements/fire.png" :size 1 :type "image"}
 
+                          {:url "/raw/img/elements/grapes.png" :size 1 :type "image"}
+                          {:url "/raw/img/elements/one.png" :size 1 :type "image"}
+                          {:url "/raw/img/elements/nail.png" :size 1 :type "image"}
+
+                          {:url "/raw/img/elements/elephant.png" :size 1 :type "image"}
+                          {:url "/raw/img/elements/salad.png" :size 1 :type "image"}
+                          {:url "/raw/img/elements/building.png" :size 1 :type "image"}
+
+                          {:url "/raw/img/elements/hand.png" :size 1 :type "image"}
+                          {:url "/raw/img/elements/mama.png" :size 1 :type "image"}
+                          {:url "/raw/img/elements/monkey.png" :size 1 :type "image"}
 
                           {:url "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
                           {:url "/raw/audio/l1/a6/L1_A6_Lion_words.m4a", :size 2, :type "audio" :alias "librarian books words"}
@@ -81,9 +92,9 @@
                 :actions
                  {:start
                   {:type "sequence"
-                   :data ["clear-instruction"
+                   :data ["start-activity"
+                          "clear-instruction"
                           "renew-words"
-                          "start-activity"
                           "init-next-page"
                           "read-title"
                           ]}
@@ -106,10 +117,7 @@
                            :from ["item-1" "item-2" "item-3"]
                            :shuffled false
                            :on-end "finish-activity"}
-                          {:type "action" :id "set-content-var"}]}
-
-                  :set-content-var
-                  {:type "action" :from-var [{:template "set-content-%" :var-name "current-word" :action-property "id" :var-property "concept-name"}]}
+                          {:type "action" :from-var [{:var-name "current-word" :var-property "book-content-action"}]}]}
 
                   :set-content-ardilla
                   {:type "parallel"
@@ -170,7 +178,15 @@
                           {:type "action" :id "read-page"}]}
 
                   :read-page
-                  {:type "action" :from-var [{:template "read-page-%" :var-name "current-word" :action-property "id" :var-property "concept-name"}]}
+                  {:type "parallel"
+                   :data [{:type "sequence-data"
+                           :data [{:type "empty" :duration 2000}
+                                  {:type "state" :target "image" :id "default" :params {:filter ""}}
+                                  {:type "empty" :duration 2000}
+                                  {:type "state" :target "image2" :id "default" :params {:filter ""}}
+                                  {:type "empty" :duration 2000}
+                                  {:type "state" :target "image3" :id "default" :params {:filter ""}}]}
+                          {:type "action" :from-var [{:var-name "current-word" :var-property "book-read-action"}]}]}
 
                   :read-page-ardilla
                   {:type "parallel"
