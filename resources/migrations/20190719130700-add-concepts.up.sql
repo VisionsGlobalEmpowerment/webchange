@@ -1,3 +1,6 @@
+SELECT setval('dataset_items_id_seq', 16, true);
+
+--;;
 INSERT INTO dataset_items(name, data, dataset_id)
 VALUES ('tomate', '{"letter": "t", "chanting_video_src": "/raw/video/l2a1/letter-t.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 4.681, "duration": 3.098}, {"data": [{"end": 5.518, "anim": "talk", "start": 4.794}, {"end": 6.332, "anim": "talk", "start": 5.608}, {"end": 7.689, "anim": "talk", "start": 6.671}], "type": "animation-sequence", "track": 1, "offset": 4.681, "target": "senoravaca"}], "type": "parallel", "description": "Tomate, tomate, t-t-t!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 5.529, "duration": 0.916}, {"data": [{"end": 6.343, "anim": "talk", "start": 5.62}], "type": "animation-sequence", "track": 1, "offset": 5.529, "target": "senoravaca"}], "type": "parallel", "description": "Tomate"}}',
 (SELECT id
