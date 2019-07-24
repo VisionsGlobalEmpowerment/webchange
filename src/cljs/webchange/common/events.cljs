@@ -110,6 +110,23 @@
     (reduce (with-progress-property db) action from-progress)
     action))
 
+(defn with-var-object-property
+  [db]
+  (fn [action {:keys [var-name object-name-template object-property action-property offset]}]
+    (let [var (get-in db [:scenes (:current-scene db) :variables var-name])
+          object (get-in db [:scenes (:current-scene db) :objects (keyword (from-template object-name-template var))])
+          object-property-path (map keyword (clojure.string/split object-property "."))
+          object-property-value (let [val (get-in object object-property-path)]
+                                  (if offset (+ val offset) val))
+          action-property-path (map keyword (clojure.string/split action-property "."))]
+      (assoc-in action action-property-path object-property-value))))
+
+(defn with-var-object-properties
+  [action db]
+  (if-let [from-var-object (:from-var-object action)]
+    (reduce (with-var-object-property db) action from-var-object)
+    action))
+
 (def with-vars
   (re-frame/->interceptor
     :before  (fn [context]
@@ -117,7 +134,8 @@
                      action (-> event
                                 (with-param-properties)
                                 (with-var-properties db)
-                                (with-progress-properties db))]
+                                (with-progress-properties db)
+                                (with-var-object-properties db))]
                  (assoc-in context [:coeffects :event] action)))))
 
 (defn get-action

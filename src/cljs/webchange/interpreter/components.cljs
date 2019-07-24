@@ -12,6 +12,7 @@
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
     [webchange.common.slider :refer [slider]]
+    [webchange.interpreter.components.video :refer [video]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
@@ -238,6 +239,7 @@
       :carousel [carousel-object scene-id name o]
       :painting-area (get-painting-area scene-id name o)
       :colors-palette (get-colors-palette scene-id name o)
+      :video [video o]
       (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined"))))))
 
 (defn placeholder

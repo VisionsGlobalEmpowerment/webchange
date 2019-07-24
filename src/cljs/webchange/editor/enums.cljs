@@ -20,4 +20,5 @@
    {:key :animation :value :animation :text "Animation"}
    {:key :text :value :text :text "Text"}
    {:key :background :value :background :text "Background"}
-   {:key :painting-area :value :painting-area :text "Painting Area"}])
+   {:key :painting-area :value :painting-area :text "Painting Area"}
+   {:key :video :value :video :text "Video"}])
