@@ -55,9 +55,11 @@
 (deftest item-can-be-updated
   (let [{item-id :id} (f/dataset-item-created)
         updated-data {:src "test-edited-value"}
-        _ (f/update-dataset-item! item-id {:data updated-data})
+        updated-name "edited-name"
+        _ (f/update-dataset-item! item-id {:data updated-data :name updated-name})
         retrieved-item (-> item-id f/get-dataset-item :body (json/read-str :key-fn keyword) :item)]
-    (is (= updated-data (:data retrieved-item)))))
+    (is (= updated-data (:data retrieved-item)))
+    (is (= updated-name (:name retrieved-item)))))
 
 (deftest item-can-be-deleted
   (let [{item-id :id} (f/dataset-item-created)
