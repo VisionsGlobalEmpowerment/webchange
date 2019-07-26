@@ -10,12 +10,14 @@
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio" :alias "vaca voice 1"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio" :alias "vaca voice 2"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio" :alias "vaca voice 3"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a", :size 2, :type "audio" :alias "vaca voice diamante"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vera_Ardilla.m4a", :size 2, :type "audio" :alias "vera voice 1"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vera_Oso.m4a", :size 2, :type "audio" :alias "vera voice 2"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vera_Iman.m4a", :size 2, :type "audio" :alias "vera voice 3"}
+                   {:url "/raw/audio/l1/a1/L1_A1_Vera_Diamante.m4a", :size 2, :type "audio" :alias "vera voice diamante"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 1"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 2"}
                    {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 3"}

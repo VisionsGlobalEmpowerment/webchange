@@ -31,7 +31,6 @@
 
 (defn migrate-down [config]
   (mount/start)
-  (spit)
   (let [dataset (-> (core/get-dataset-by-name "test" "concepts")
                     (update-in [:scheme :fields] #(remove (fn [field] (= "word-1-skin" (:name field))) %))
                     (update-in [:scheme :fields] #(remove (fn [field] (= "word-2-skin" (:name field))) %))

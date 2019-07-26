@@ -34,7 +34,9 @@
 
 (defn update-dataset!
   [dataset-id data]
-  (let [prepared-data (assoc data :id dataset-id)]
+  (let [prepared-data (-> data
+                          (assoc :id dataset-id)
+                          (update-in [:scheme :fields] #(sort-by :name %)))]
     (db/update-dataset! prepared-data)
     [true {:id dataset-id}]))
 
@@ -42,7 +44,6 @@
   [dataset-id]
   (let [items (db/get-dataset-items {:dataset_id dataset-id})]
     {:items items}))
-
 
 (defn get-item
   [item-id]

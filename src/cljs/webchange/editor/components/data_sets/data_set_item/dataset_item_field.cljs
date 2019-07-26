@@ -86,7 +86,7 @@
     [action-properties-panel scene-id]))
 
 (defmethod dataset-item-control "action"
-  [{:keys [on-change value]}]
+  [{:keys [on-change value template]}]
   (r/with-let [modal-open (r/atom false)]
     (let [description (:description value)
           data @(re-frame/subscribe [::actions.subs/form-data-original])]
@@ -99,7 +99,7 @@
                 :trigger (r/as-element [:div
                                         [Button {:basic    true
                                                  :on-click #(do
-                                                              (re-frame/dispatch [::actions.events/set-form-data value])
+                                                              (re-frame/dispatch [::actions.events/set-form-data (or value template)])
                                                               (reset! modal-open true))}
                                          (if value "Edit Action" "Set Action")]
                                         (and description [Label {:tag true} description])])}

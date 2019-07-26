@@ -24,13 +24,14 @@
        [TableHeaderCell {} "Value"]]
       ]
      [TableBody {}
-      (doall (for [{name :name type :type} (get-in dataset [:scheme :fields])]
+      (doall (for [{:keys [name type template]} (get-in dataset [:scheme :fields])]
                ^{:key (str name)}
                [TableRow {}
                 [TableCell {} name]
                 [TableCell {}
                  [dataset-item-control {:type      type
                                         :value     (get-in @data-atom [:data (keyword name)])
+                                        :template template
                                         :on-change #(swap! data-atom assoc-in [:data (keyword name)] %)}]]]))]]))
 
 (defn add-dataset-item-form

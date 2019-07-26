@@ -1,27 +1,118 @@
 {:fields
- [{:name "book-content-action", :type "action"}
-  {:name "book-read-action", :type "action"}
+ [{:name "book-content-action",
+   :type "action",
+   :template
+   {:data
+    [{:id "default",
+      :type "state",
+      :params {:text "a"},
+      :target "letter"}
+     {:id "default",
+      :type "state",
+      :params
+      {:src "/raw/img/elements/squirrel.png", :filter "grayscale"},
+      :target "image"}
+     {:id "default",
+      :type "state",
+      :params {:src "/raw/img/elements/bee.png", :filter "grayscale"},
+      :target "image2"}
+     {:id "default",
+      :type "state",
+      :params {:src "/raw/img/elements/tree.png", :filter "grayscale"},
+      :target "image3"}],
+    :type "parallel",
+    :scene-id "book"}}
+  {:name "book-read-action",
+   :type "action",
+   :template {:type "audio", :scene-id "book"}}
   {:name "chanting-video-src", :type "string"}
   {:name "concept-name", :type "string"}
-  {:name "game-voice-action", :type "action"}
-  {:name "game-voice-action-low", :type "action"}
+  {:name "game-voice-action",
+   :type "action",
+   :template
+   {:type "audio",
+    :scene-id "cycling",
+    :description "Game Voice High"}}
+  {:name "game-voice-action-low",
+   :type "action",
+   :template {:type "audio", :scene-id "see-saw"}}
   {:name "hide-n-seek-current-concept-audio", :type "action"}
-  {:name "home-group-3-times-action", :type "action"}
-  {:name "home-group-word-action", :type "action"}
-  {:name "home-vaca-3-times-action", :type "action"}
-  {:name "home-vaca-goodbye-action", :type "action"}
-  {:name "home-vaca-question-action", :type "action"}
-  {:name "home-vaca-this-is-action", :type "action"}
-  {:name "home-vaca-word-action", :type "action"}
+  {:name "home-group-3-times-action",
+   :type "action",
+   :template
+   {:data
+    [{:type "animation-sequence", :target "vera"}
+     {:type "animation-sequence", :target "senoravaca"}],
+    :type "parallel",
+    :scene-id "home"}}
+  {:name "home-group-word-action",
+   :type "action",
+   :template
+   {:data
+    [{:type "animation-sequence", :target "vera"}
+     {:type "animation-sequence", :target "senoravaca"}],
+    :type "parallel",
+    :scene-id "home"}}
+  {:name "home-vaca-3-times-action",
+   :type "action",
+   :template
+   {:type "animation-sequence",
+    :target "senoravaca",
+    :scene-id "home"}}
+  {:name "home-vaca-goodbye-action",
+   :type "action",
+   :template
+   {:type "animation-sequence",
+    :target "senoravaca",
+    :scene-id "home"}}
+  {:name "home-vaca-question-action",
+   :type "action",
+   :template
+   {:type "animation-sequence",
+    :target "senoravaca",
+    :scene-id "home"}}
+  {:name "home-vaca-this-is-action",
+   :type "action",
+   :template
+   {:type "animation-sequence",
+    :target "senoravaca",
+    :scene-id "home"}}
+  {:name "home-vaca-word-action",
+   :type "action",
+   :template
+   {:type "animation-sequence",
+    :target "senoravaca",
+    :scene-id "home"}}
   {:name "letter", :type "string"}
-  {:name "sandbox-long-letter-action", :type "action"}
-  {:name "sandbox-short-letter-action", :type "action"}
-  {:name "sandbox-state-word-1-action", :type "action"}
-  {:name "sandbox-state-word-2-action", :type "action"}
-  {:name "sandbox-state-word-3-action", :type "action"}
-  {:name "sandbox-state-word-4-action", :type "action"}
+  {:name "sandbox-long-letter-action",
+   :type "action",
+   :template
+   {:type "animation-sequence", :target "mari", :scene-id "sandbox"}}
+  {:name "sandbox-short-letter-action",
+   :type "action",
+   :template
+   {:type "animation-sequence", :target "mari", :scene-id "sandbox"}}
+  {:name "sandbox-state-word-1-action",
+   :type "action",
+   :template {:type "audio", :scene-id "sandbox"}}
+  {:name "sandbox-state-word-2-action",
+   :type "action",
+   :template {:type "audio", :scene-id "sandbox"}}
+  {:name "sandbox-state-word-3-action",
+   :type "action",
+   :template {:type "audio", :scene-id "sandbox"}}
+  {:name "sandbox-state-word-4-action",
+   :type "action",
+   :template {:type "audio", :scene-id "sandbox"}}
   {:name "skin", :type "string"}
-  {:name "swings-dialog-action", :type "action"}
+  {:name "swings-dialog-action",
+   :type "action",
+   :template
+   {:data
+    [{:type "animation-sequence", :target "rock"}
+     {:type "animation-sequence", :target "vera"}],
+    :type "sequence-data",
+    :scene-id "swings"}}
   {:name "vaca-chanting-song", :type "action"}
   {:name "vaca-chanting-word", :type "action"}
   {:name "word-1-skin", :type "string"}
@@ -1160,9 +1251,48 @@
    :name "serpiente",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-s.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "s"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/squirrel.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params {:src "/raw/img/elements/sun.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/watermelon.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 29.28,
+     :duration 7.24,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-s.mp4",
     :concept-name "serpiente",
-    :game-voice-action {},
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 32.226,
+     :duration 3.693,
+     :scene-id "see-saw"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 27.373,
+     :duration 3.479,
+     :scene-id "see-saw"},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 15.122,
@@ -1174,8 +1304,191 @@
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 8.84, :anim "talk", :start 8.227, :duration 0.613}
+        {:end 9.774, :anim "talk", :start 9.16, :duration 0.614}
+        {:end 11.134, :anim "talk", :start 10.134, :duration 1}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 8.08,
+       :offset 8.08,
+       :target "vera",
+       :duration 3.414}
+      {:data
+       [{:end 19.719, :anim "talk", :start 18.906, :duration 0.813}
+        {:end 20.759, :anim "talk", :start 19.932, :duration 0.827}
+        {:end 22.279, :anim "talk", :start 21.105, :duration 1.174}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 18.772,
+       :offset 18.772,
+       :target "senoravaca",
+       :duration 3.813}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 7.32, :anim "talk", :start 6.747, :duration 0.573}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 6.68,
+       :offset 6.68,
+       :target "vera",
+       :duration 0.707}
+      {:data
+       [{:end 19.679, :anim "talk", :start 18.946, :duration 0.733}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 18.839,
+       :offset 18.839,
+       :target "senoravaca",
+       :duration 0.947}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 19.706, :anim "talk", :start 18.932, :duration 0.774}
+      {:end 20.745, :anim "talk", :start 19.932, :duration 0.813}
+      {:end 22.319, :anim "talk", :start 21.132, :duration 1.187}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 18.799,
+     :offset 18.799,
+     :target "senoravaca",
+     :duration 3.813,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 24.865, :anim "talk", :start 23.505, :duration 1.36}
+      {:end 25.825, :anim "talk", :start 25.319, :duration 0.506}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 23.412,
+     :offset 23.412,
+     :target "senoravaca",
+     :duration 2.68,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 17.919, :anim "talk", :start 17.012, :duration 0.907}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 16.932,
+     :offset 16.932,
+     :target "senoravaca",
+     :duration 1.08,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 14.399, :anim "talk", :start 13.893, :duration 0.506}
+      {:end 16.066, :anim "talk", :start 14.839, :duration 1.227}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 13.786,
+     :offset 13.786,
+     :target "senoravaca",
+     :duration 2.506,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 19.706, :anim "talk", :start 18.932, :duration 0.774}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 18.812,
+     :offset 18.812,
+     :target "senoravaca",
+     :duration 0.974,
+     :scene-id "home"},
     :letter "s",
-    :skin "iguana",
+    :sandbox-long-letter-action
+    {:data [{:end 11.28, :anim "talk", :start 9.44, :duration 1.84}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 9.346,
+     :offset 9.346,
+     :target "mari",
+     :duration 2.094,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data [{:end 8.093, :anim "talk", :start 7.667, :duration 0.426}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 7.56,
+     :offset 7.56,
+     :target "mari",
+     :duration 0.6,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 20.534,
+     :duration 0.947,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 22.041,
+     :duration 0.8,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 23.627,
+     :duration 0.987,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 25.241,
+     :duration 0.893,
+     :scene-id "sandbox"},
+    :skin "empty",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.746, :anim "talk", :start 0.613, :duration 1.133}
+        {:end 5.852, :anim "talk", :start 2.613, :duration 3.239}
+        {:end 9.065, :anim "talk", :start 7.105, :duration 1.96}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Serpiente.m4a",
+       :start 0.453,
+       :offset 0.453,
+       :target "rock",
+       :duration 8.905}
+      {:data
+       [{:end 2.708, :anim "talk", :start 1.374, :duration 1.334}
+        {:end 6.323, :anim "talk", :start 3.802, :duration 2.521}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/serpiente.m4a",
+       :start 1.187,
+       :offset 1.187,
+       :target "vera",
+       :duration 5.509}
+      {:data
+       [{:end 14.557, :anim "talk", :start 10.092, :duration 4.465}
+        {:end 17.517, :anim "talk", :start 15.237, :duration 2.28}
+        {:end 20.063, :anim "talk", :start 18.143, :duration 1.92}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Serpiente.m4a",
+       :start 9.905,
+       :offset 9.905,
+       :target "rock",
+       :duration 10.451}
+      {:data
+       [{:end 8.817, :anim "talk", :start 8.243, :duration 0.574}
+        {:end 11.311, :anim "talk", :start 9.23, :duration 2.081}
+        {:end 13.926, :anim "talk", :start 11.791, :duration 2.135}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/serpiente.m4a",
+       :start 8.137,
+       :offset 8.137,
+       :target "vera",
+       :duration 5.935}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
@@ -1204,10 +1517,10 @@
        :target "senoravaca"}],
      :type "parallel",
      :description "Serpiente"},
-    :word-1-skin nil,
-    :word-2-skin nil,
-    :word-3-skin nil,
-    :word-4-skin nil}}
+    :word-1-skin "chair",
+    :word-2-skin "sun",
+    :word-3-skin "watermelon",
+    :word-4-skin "soup"}}
   {:id 12,
    :name "elefante",
    :dataset-id 2,
@@ -1521,9 +1834,49 @@
    :name "leon",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-l.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "l"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/lion.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/lemon.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/pencil.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 46.346,
+     :duration 7.787,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-l.mp4",
     :concept-name "leon",
-    :game-voice-action {},
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 31.987,
+     :duration 3.907,
+     :scene-id "see-saw"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 25.854,
+     :duration 4.147,
+     :scene-id "see-saw"},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 18.011,
@@ -1535,8 +1888,214 @@
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 7.799, :anim "talk", :start 7.226, :duration 0.573}
+        {:end 8.893, :anim "talk", :start 8.319, :duration 0.574}
+        {:end 10.213, :anim "talk", :start 9.386, :duration 0.827}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 7.119,
+       :offset 7.119,
+       :target "vera",
+       :duration 3.494}
+      {:data
+       [{:end 20.667, :anim "talk", :start 20.16, :duration 0.507}
+        {:end 21.64, :anim "talk", :start 21.174, :duration 0.466}
+        {:end 23.307, :anim "talk", :start 22.267, :duration 1.04}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 20.054,
+       :offset 20.054,
+       :target "senoravaca",
+       :duration 3.52}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 6.266, :anim "talk", :start 5.76, :duration 0.506}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 5.613,
+       :offset 5.613,
+       :target "vera",
+       :duration 0.813}
+      {:data
+       [{:end 20.654, :anim "talk", :start 20.174, :duration 0.48}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 20.054,
+       :offset 20.054,
+       :target "senoravaca",
+       :duration 0.8}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 20.72, :anim "talk", :start 20.174, :duration 0.546}
+      {:end 21.654, :anim "talk", :start 21.174, :duration 0.48}
+      {:end 23.307, :anim "talk", :start 22.294, :duration 1.013}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 19.987,
+     :offset 19.987,
+     :target "senoravaca",
+     :duration 3.613,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 25.214, :anim "talk", :start 24.067, :duration 1.147}
+      {:end 26.294, :anim "talk", :start 25.801, :duration 0.493}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 23.987,
+     :offset 23.987,
+     :target "senoravaca",
+     :duration 2.547,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data [{:end 18.76, :anim "talk", :start 18.32, :duration 0.44}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 18.174,
+     :offset 18.174,
+     :target "senoravaca",
+     :duration 0.773,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 15.4, :anim "talk", :start 14.947, :duration 0.453}
+      {:end 16.987, :anim "talk", :start 15.84, :duration 1.147}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 14.854,
+     :offset 14.854,
+     :target "senoravaca",
+     :duration 2.426,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 20.72, :anim "talk", :start 20.187, :duration 0.533}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 20.04,
+     :offset 20.04,
+     :target "senoravaca",
+     :duration 0.854,
+     :scene-id "home"},
     :letter "l",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 11.588, :anim "talk", :start 10.614, :duration 0.974}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 10.508,
+     :offset 10.508,
+     :target "mari",
+     :duration 1.24,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data [{:end 9.494, :anim "talk", :start 9.201, :duration 0.293}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 9.014,
+     :offset 9.014,
+     :target "mari",
+     :duration 0.734,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 21.134,
+     :duration 0.987,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 23.174,
+     :duration 0.853,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 24.907,
+     :duration 1.014,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 26.641,
+     :duration 0.786,
+     :scene-id "sandbox"},
     :skin "lion",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.133, :anim "talk", :start 0.52, :duration 0.613}
+        {:end 2.84, :anim "talk", :start 2.013, :duration 0.827}
+        {:end 5.587, :anim "talk", :start 3.56, :duration 2.027}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Leon.m4a",
+       :start 0.347,
+       :offset 0.347,
+       :target "rock",
+       :duration 5.6}
+      {:data
+       [{:end 0.853, :anim "talk", :start 0.467, :duration 0.386}
+        {:end 2.627, :anim "talk", :start 1.307, :duration 1.32}
+        {:end 5.521, :anim "talk", :start 2.934, :duration 2.587}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/leon.m4a",
+       :start 0.307,
+       :offset 0.307,
+       :target "vera",
+       :duration 5.44}
+      {:data
+       [{:end 7.441, :anim "talk", :start 6.494, :duration 0.947}
+        {:end 8.841, :anim "talk", :start 7.854, :duration 0.987}
+        {:end 11.934, :anim "talk", :start 9.587, :duration 2.347}
+        {:end 15.308, :anim "talk", :start 12.734, :duration 2.574}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Leon.m4a",
+       :start 6.32,
+       :offset 6.32,
+       :target "rock",
+       :duration 9.254}
+      {:data
+       [{:end 8.294, :anim "talk", :start 7.121, :duration 1.173}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/leon.m4a",
+       :start 6.948,
+       :offset 6.948,
+       :target "vera",
+       :duration 1.626}
+      {:data
+       [{:end 16.695, :anim "talk", :start 16.361, :duration 0.334}
+        {:end 19.108, :anim "talk", :start 17.081, :duration 2.027}
+        {:end 21.855, :anim "talk", :start 19.775, :duration 2.08}
+        {:end 24.042, :anim "talk", :start 22.388, :duration 1.654}
+        {:end 26.495, :anim "talk", :start 24.508, :duration 1.987}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Leon.m4a",
+       :start 16.135,
+       :offset 16.135,
+       :target "rock",
+       :duration 10.6}
+      {:data
+       [{:end 10.988, :anim "talk", :start 9.735, :duration 1.253}
+        {:end 12.348, :anim "talk", :start 11.575, :duration 0.773}
+        {:end 13.068, :anim "talk", :start 12.788, :duration 0.28}
+        {:end 14.335, :anim "talk", :start 13.522, :duration 0.813}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/leon.m4a",
+       :start 9.588,
+       :offset 9.588,
+       :target "vera",
+       :duration 5.081}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
@@ -1566,17 +2125,57 @@
        :target "senoravaca"}],
      :type "parallel",
      :description "León"},
-    :word-1-skin nil,
-    :word-2-skin nil,
-    :word-3-skin nil,
-    :word-4-skin nil}}
+    :word-1-skin "lemon",
+    :word-2-skin "moon",
+    :word-3-skin "pencil",
+    :word-4-skin "empty"}}
   {:id 14,
    :name "pelota",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-p.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "p"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/ball.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/duck.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/fish.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 37.533,
+     :duration 7.546,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-p.mp4",
     :concept-name "pelota",
-    :game-voice-action {},
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 33.506,
+     :duration 3.706,
+     :scene-id "see-saw"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 27.933,
+     :duration 3.92,
+     :scene-id "see-saw"},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 16.756,
@@ -1588,8 +2187,223 @@
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 9.254, :anim "talk", :start 8.948, :duration 0.306}
+        {:end 10.281, :anim "talk", :start 9.774, :duration 0.507}
+        {:end 11.561, :anim "talk", :start 10.774, :duration 0.787}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a",
+       :start 8.774,
+       :offset 8.774,
+       :target "vera",
+       :duration 3.08}
+      {:data
+       [{:end 20.586, :anim "talk", :start 20.213, :duration 0.373}
+        {:end 21.773, :anim "talk", :start 21.32, :duration 0.453}
+        {:end 23.64, :anim "talk", :start 22.6, :duration 1.04}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :start 20.066,
+       :offset 20.066,
+       :target "senoravaca",
+       :duration 3.854}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 8.027, :anim "talk", :start 7.707, :duration 0.32}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a",
+       :start 7.561,
+       :offset 7.561,
+       :target "vera",
+       :duration 0.653}
+      {:data
+       [{:end 20.613, :anim "talk", :start 20.173, :duration 0.44}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :start 20.066,
+       :offset 20.066,
+       :target "senoravaca",
+       :duration 0.68}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 20.613, :anim "talk", :start 20.226, :duration 0.387}
+      {:end 21.853, :anim "talk", :start 21.373, :duration 0.48}
+      {:end 23.546, :anim "talk", :start 22.546, :duration 1}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 20.013,
+     :offset 20.013,
+     :target "senoravaca",
+     :duration 3.973,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 24.88, :anim "talk", :start 24.546, :duration 0.334}
+      {:end 25.506, :anim "talk", :start 25.04, :duration 0.466}
+      {:end 26.68, :anim "talk", :start 26.253, :duration 0.427}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 24.386,
+     :offset 24.386,
+     :target "senoravaca",
+     :duration 2.68,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 18.68, :anim "talk", :start 18.226, :duration 0.454}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 18.093,
+     :offset 18.093,
+     :target "senoravaca",
+     :duration 0.773,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 15.427, :anim "talk", :start 15.04, :duration 0.387}
+      {:end 17.08, :anim "talk", :start 16, :duration 1.08}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 14.907,
+     :offset 14.907,
+     :target "senoravaca",
+     :duration 2.319,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data [{:end 20.6, :anim "talk", :start 20.24, :duration 0.36}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 20.053,
+     :offset 20.053,
+     :target "senoravaca",
+     :duration 0.733,
+     :scene-id "home"},
     :letter "p",
+    :sandbox-long-letter-action
+    {:data [{:end 9.946, :anim "talk", :start 8.96, :duration 0.986}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 8.866,
+     :offset 8.866,
+     :target "mari",
+     :duration 1.214,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data [{:end 7.866, :anim "talk", :start 7.613, :duration 0.253}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 7.493,
+     :offset 7.493,
+     :target "mari",
+     :duration 0.52,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 17.361,
+     :duration 1,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 18.761,
+     :duration 0.921,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 20.108,
+     :duration 0.894,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 21.495,
+     :duration 0.707,
+     :scene-id "sandbox"},
     :skin "ball",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 5.573, :anim "talk", :start 0.72, :duration 4.853}
+        {:end 7.706, :anim "talk", :start 6.293, :duration 1.413}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Pelota.m4a",
+       :start 0.6,
+       :offset 0.6,
+       :target "rock",
+       :duration 7.399}
+      {:data
+       [{:end 1.333, :anim "talk", :start 0.907, :duration 0.426}
+        {:end 2.867, :anim "talk", :start 1.76, :duration 1.107}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/pelota.m4a",
+       :start 0.6,
+       :offset 0.6,
+       :target "vera",
+       :duration 2.64}
+      {:data
+       [{:end 10.452, :anim "talk", :start 8.572, :duration 1.88}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Pelota.m4a",
+       :start 8.306,
+       :offset 8.306,
+       :target "rock",
+       :duration 2.399}
+      {:data [{:end 5.84, :anim "talk", :start 4.28, :duration 1.56}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/pelota.m4a",
+       :start 4.12,
+       :offset 4.12,
+       :target "vera",
+       :duration 2.094}
+      {:data
+       [{:end 13.478, :anim "talk", :start 11.385, :duration 2.093}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Pelota.m4a",
+       :start 11.252,
+       :offset 11.252,
+       :target "rock",
+       :duration 2.399}
+      {:data
+       [{:end 9.001, :anim "talk", :start 7.254, :duration 1.747}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/pelota.m4a",
+       :start 7.16,
+       :offset 7.16,
+       :target "vera",
+       :duration 2.094}
+      {:data
+       [{:end 16.665, :anim "talk", :start 14.452, :duration 2.213}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Pelota.m4a",
+       :start 14.238,
+       :offset 14.238,
+       :target "rock",
+       :duration 2.639}
+      {:data
+       [{:end 12.654, :anim "talk", :start 10.521, :duration 2.133}
+        {:end 14.134, :anim "talk", :start 13.521, :duration 0.613}
+        {:end 15.561, :anim "talk", :start 14.561, :duration 1}
+        {:end 17.521, :anim "talk", :start 15.948, :duration 1.573}
+        {:end 19.828, :anim "talk", :start 18.268, :duration 1.56}
+        {:end 20.815, :anim "talk", :start 20.495, :duration 0.32}
+        {:end 23.362, :anim "talk", :start 21.361, :duration 2.001}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/pelota.m4a",
+       :start 10.427,
+       :offset 10.427,
+       :target "vera",
+       :duration 13.121}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
@@ -1619,10 +2433,10 @@
        :target "senoravaca"}],
      :type "parallel",
      :description "Pelota"},
-    :word-1-skin nil,
-    :word-2-skin nil,
-    :word-3-skin nil,
-    :word-4-skin nil}}
+    :word-1-skin "factory",
+    :word-2-skin "duck",
+    :word-3-skin "potatoes",
+    :word-4-skin "fish"}}
   {:id 15,
    :name "mano",
    :dataset-id 2,
@@ -2214,8 +3028,272 @@
    :name "tomate",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-t.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "t"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/tomato.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/train.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/shark.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 55.146,
+     :duration 8.333,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-t.mp4",
+    :concept-name "tomate",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 41.785,
+     :duration 3.32,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 37.612,
+     :duration 3.053,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 44.079,
+     :duration 0.986,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 14.414, :anim "talk", :start 13.854, :duration 0.56}
+        {:end 15.2, :anim "talk", :start 14.6, :duration 0.6}
+        {:end 16.72, :anim "talk", :start 15.52, :duration 1.2}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 13.734,
+       :offset 13.734,
+       :target "vera",
+       :duration 3.226}
+      {:data
+       [{:end 32.252, :anim "talk", :start 31.612, :duration 0.64}
+        {:end 33.371, :anim "talk", :start 32.678, :duration 0.693}
+        {:end 34.891, :anim "talk", :start 33.838, :duration 1.053}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 31.532,
+       :offset 31.532,
+       :target "senoravaca",
+       :duration 3.533}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 12.814, :anim "talk", :start 12.4, :duration 0.414}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 12.24,
+       :offset 12.24,
+       :target "vera",
+       :duration 0.774}
+      {:data
+       [{:end 29.265, :anim "talk", :start 28.878, :duration 0.387}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 28.758,
+       :offset 28.758,
+       :target "senoravaca",
+       :duration 0.654}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 32.185, :anim "talk", :start 31.612, :duration 0.573}
+      {:end 33.385, :anim "talk", :start 32.625, :duration 0.76}
+      {:end 34.825, :anim "talk", :start 33.838, :duration 0.987}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 31.492,
+     :offset 31.492,
+     :target "senoravaca",
+     :duration 3.613,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 37.185, :anim "talk", :start 35.785, :duration 1.4}
+      {:end 38.011, :anim "talk", :start 37.558, :duration 0.453}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 35.651,
+     :offset 35.651,
+     :target "senoravaca",
+     :duration 2.574,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 30.705, :anim "talk", :start 30.172, :duration 0.533}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 30.038,
+     :offset 30.038,
+     :target "senoravaca",
+     :duration 0.84,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 27.812, :anim "talk", :start 27.265, :duration 0.547}
+      {:end 28.705, :anim "talk", :start 28.025, :duration 0.68}
+      {:end 29.252, :anim "talk", :start 28.918, :duration 0.334}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 27.118,
+     :offset 27.118,
+     :target "senoravaca",
+     :duration 2.294,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 29.318, :anim "talk", :start 28.838, :duration 0.48}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 28.785,
+     :offset 28.785,
+     :target "senoravaca",
+     :duration 0.627,
+     :scene-id "home"},
     :letter "t",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 16.12, :anim "talk", :start 14.653, :duration 1.467}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 14.56,
+     :offset 14.56,
+     :target "mari",
+     :duration 1.773,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data [{:end 13.613, :anim "talk", :start 13.4, :duration 0.213}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 13.253,
+     :offset 13.253,
+     :target "mari",
+     :duration 0.547,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 27.348,
+     :duration 1.24,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 29.188,
+     :duration 1.066,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 31.201,
+     :duration 0.653,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 32.721,
+     :duration 0.96,
+     :scene-id "sandbox"},
+    :skin "tomato",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 2.706, :anim "talk", :start 0.933, :duration 1.773}
+        {:end 5.412, :anim "talk", :start 3.413, :duration 1.999}
+        {:end 6.719, :anim "talk", :start 6.052, :duration 0.667}
+        {:end 8.651, :anim "talk", :start 7.225, :duration 1.426}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Tomate.m4a",
+       :start 0.627,
+       :offset 0.627,
+       :target "rock",
+       :duration 8.371}
+      {:data
+       [{:end 2.2, :anim "talk", :start 1.28, :duration 0.92}
+        {:end 4.88, :anim "talk", :start 2.76, :duration 2.12}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/tomate.m4a",
+       :start 1.08,
+       :offset 1.08,
+       :target "vera",
+       :duration 4.134}
+      {:data
+       [{:end 12.611, :anim "talk", :start 9.878, :duration 2.733}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Tomate.m4a",
+       :start 9.665,
+       :offset 9.665,
+       :target "rock",
+       :duration 3.385}
+      {:data
+       [{:end 7.747, :anim "talk", :start 6, :duration 1.747}
+        {:end 9.374, :anim "talk", :start 8.347, :duration 1.027}
+        {:end 10.734, :anim "talk", :start 9.774, :duration 0.96}
+        {:end 12.014, :anim "talk", :start 11.387, :duration 0.627}
+        {:end 13.401, :anim "talk", :start 12.481, :duration 0.92}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/tomate.m4a",
+       :start 5.867,
+       :offset 5.867,
+       :target "vera",
+       :duration 7.854}
+      {:data
+       [{:end 14.89, :anim "talk", :start 13.797, :duration 1.093}
+        {:end 16.29, :anim "talk", :start 15.437, :duration 0.853}
+        {:end 18.289, :anim "talk", :start 16.65, :duration 1.639}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Tomate.m4a",
+       :start 13.517,
+       :offset 13.517,
+       :target "rock",
+       :duration 5.132}
+      {:data
+       [{:end 18.494, :anim "talk", :start 15.121, :duration 3.373}
+        {:end 20.201, :anim "talk", :start 19.334, :duration 0.867}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/tomate.m4a",
+       :start 14.908,
+       :offset 14.908,
+       :target "vera",
+       :duration 5.68}
+      {:data
+       [{:end 20.515, :anim "talk", :start 20.049, :duration 0.466}
+        {:end 21.715, :anim "talk", :start 20.955, :duration 0.76}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Tomate.m4a",
+       :start 19.782,
+       :offset 19.782,
+       :target "rock",
+       :duration 2.386}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -2244,13 +3322,251 @@
        :offset 5.529,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Tomate"}}}
+     :description "Tomate"},
+    :word-1-skin "phone",
+    :word-2-skin "turtle",
+    :word-3-skin "train",
+    :word-4-skin "empty"}}
   {:id 18,
    :name "diamante",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-d.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "d"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/finger.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/dragon.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/teeth.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 64.506,
+     :duration 7.36,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-d.mp4",
+    :concept-name "diamante",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 45.146,
+     :duration 4.493,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 39.479,
+     :duration 4.36,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 48.172,
+     :duration 1.44,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 3.011, :anim "talk", :start 2.309, :duration 0.702}
+        {:end 4.179, :anim "talk", :start 3.442, :duration 0.737}
+        {:end 5.786, :anim "talk", :start 4.604, :duration 1.182}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Diamante.m4a",
+       :start 2.253,
+       :offset 2.253,
+       :target "vera",
+       :duration 3.686}
+      {:data
+       [{:end 6.242, :anim "talk", :start 5.709, :duration 0.533}
+        {:end 7.282, :anim "talk", :start 6.802, :duration 0.48}
+        {:end 8.616, :anim "talk", :start 7.683, :duration 0.933}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
+       :start 5.589,
+       :offset 5.589,
+       :target "senoravaca",
+       :duration 3.401}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 1.314, :anim "talk", :start 0.619, :duration 0.695}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Diamante.m4a",
+       :start 0.529,
+       :offset 0.529,
+       :target "vera",
+       :duration 0.904}
+      {:data
+       [{:end 6.242, :anim "talk", :start 5.762, :duration 0.48}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
+       :start 5.589,
+       :offset 5.589,
+       :target "senoravaca",
+       :duration 0.826}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 6.242, :anim "talk", :start 5.655, :duration 0.587}
+      {:end 7.269, :anim "talk", :start 6.709, :duration 0.56}
+      {:end 8.71, :anim "talk", :start 7.749, :duration 0.961}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
+     :start 5.615,
+     :offset 5.615,
+     :target "senoravaca",
+     :duration 3.295,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 11.337, :anim "talk", :start 10.03, :duration 1.307}
+      {:end 12.244, :anim "talk", :start 11.804, :duration 0.44}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
+     :start 9.883,
+     :offset 9.883,
+     :target "senoravaca",
+     :duration 2.614,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data [{:end 4.842, :anim "talk", :start 4.028, :duration 0.814}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
+     :start 3.988,
+     :offset 3.988,
+     :target "senoravaca",
+     :duration 1.187,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data [{:end 2.814, :anim "talk", :start 1.187, :duration 1.627}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
+     :start 1.147,
+     :offset 1.147,
+     :target "senoravaca",
+     :duration 1.907,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data [{:end 6.295, :anim "talk", :start 5.722, :duration 0.573}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
+     :start 5.615,
+     :offset 5.615,
+     :target "senoravaca",
+     :duration 0.827,
+     :scene-id "home"},
     :letter "d",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 17.212, :anim "talk", :start 17.052, :duration 0.16}
+      {:end 17.706, :anim "talk", :start 17.546, :duration 0.16}
+      {:end 18.146, :anim "talk", :start 17.946, :duration 0.2}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 16.959,
+     :offset 16.959,
+     :target "mari",
+     :duration 1.373,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 14.053, :anim "talk", :start 13.733, :duration 0.32}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 13.533,
+     :offset 13.533,
+     :target "mari",
+     :duration 0.853,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 23.242,
+     :duration 0.92,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 24.589,
+     :duration 1.053,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 26.202,
+     :duration 1.173,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 27.482,
+     :duration 1.28,
+     :scene-id "sandbox"},
+    :skin "diamond",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.627, :anim "talk", :start 1.08, :duration 0.547}
+        {:end 2.881, :anim "talk", :start 2.254, :duration 0.627}
+        {:end 6.628, :anim "talk", :start 3.748, :duration 2.88}
+        {:end 8.456, :anim "talk", :start 7.162, :duration 1.294}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Diamante.m4a",
+       :start 0.787,
+       :offset 0.787,
+       :target "rock",
+       :duration 7.975}
+      {:data
+       [{:end 1.546, :anim "talk", :start 1.079, :duration 0.467}
+        {:end 4.318, :anim "talk", :start 1.972, :duration 2.346}
+        {:end 7.955, :anim "talk", :start 5.81, :duration 2.145}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/diamante.m4a",
+       :start 0.773,
+       :offset 0.773,
+       :target "vera",
+       :duration 7.556}
+      {:data
+       [{:end 10.003, :anim "talk", :start 9.576, :duration 0.427}
+        {:end 14.551, :anim "talk", :start 10.723, :duration 3.828}
+        {:end 19.085, :anim "talk", :start 15.364, :duration 3.721}
+        {:end 21.699, :anim "talk", :start 19.952, :duration 1.747}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Diamante.m4a",
+       :start 9.376,
+       :offset 9.376,
+       :target "rock",
+       :duration 12.937}
+      {:data
+       [{:end 11.154, :anim "talk", :start 9.741, :duration 1.413}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/diamante.m4a",
+       :start 9.528,
+       :offset 9.528,
+       :target "vera",
+       :duration 1.999}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -2279,13 +3595,277 @@
        :offset 9.532,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Diamante"}}}
+     :description "Diamante"},
+    :word-1-skin "finger",
+    :word-2-skin "dragon",
+    :word-3-skin "teeth",
+    :word-4-skin "dino"}}
   {:id 19,
    :name "rana",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-r.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "r"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/frog.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/rock.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/rose.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 72.652,
+     :duration 7.374,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-r.mp4",
+    :concept-name "rana",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 42.774,
+     :duration 3.52,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 38.081,
+     :duration 3.4,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 45.321,
+     :duration 1.067,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 32.961, :anim "talk", :start 32.534, :duration 0.427}
+        {:end 34.214, :anim "talk", :start 33.654, :duration 0.56}
+        {:end 35.921, :anim "talk", :start 34.921, :duration 1}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 32.401,
+       :offset 32.401,
+       :target "senoravaca",
+       :duration 3.946}
+      {:data
+       [{:end 13.466, :anim "talk", :start 13.132, :duration 0.334}
+        {:end 14.519, :anim "talk", :start 14.052, :duration 0.467}
+        {:end 15.972, :anim "talk", :start 14.959, :duration 1.013}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 12.879,
+       :offset 12.879,
+       :target "vera",
+       :duration 3.373}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 12.279, :anim "talk", :start 11.972, :duration 0.307}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 11.839,
+       :offset 11.839,
+       :target "vera",
+       :duration 0.627}
+      {:data
+       [{:end 32.921, :anim "talk", :start 32.494, :duration 0.427}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 32.387,
+       :offset 32.387,
+       :target "senoravaca",
+       :duration 0.694}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 32.921, :anim "talk", :start 32.614, :duration 0.307}
+      {:end 34.147, :anim "talk", :start 33.734, :duration 0.413}
+      {:end 36.027, :anim "talk", :start 34.921, :duration 1.106}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 32.387,
+     :offset 32.387,
+     :target "senoravaca",
+     :duration 3.854,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 37.214, :anim "talk", :start 36.734, :duration 0.48}
+      {:end 38.027, :anim "talk", :start 37.414, :duration 0.613}
+      {:end 38.881, :anim "talk", :start 38.467, :duration 0.414}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 36.561,
+     :offset 36.561,
+     :target "senoravaca",
+     :duration 2.733,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 31.254, :anim "talk", :start 30.841, :duration 0.413}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 30.721,
+     :offset 30.721,
+     :target "senoravaca",
+     :duration 0.773,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 28.414, :anim "talk", :start 27.934, :duration 0.48}
+      {:end 29.747, :anim "talk", :start 28.787, :duration 0.96}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 27.814,
+     :offset 27.814,
+     :target "senoravaca",
+     :duration 2.227,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 32.961, :anim "talk", :start 32.521, :duration 0.44}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 32.361,
+     :offset 32.361,
+     :target "senoravaca",
+     :duration 0.76,
+     :scene-id "home"},
     :letter "r",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 19.362, :anim "talk", :start 18.588, :duration 0.774}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 18.428,
+     :offset 18.428,
+     :target "mari",
+     :duration 1.174,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 17.322, :anim "talk", :start 16.988, :duration 0.334}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 16.828,
+     :offset 16.828,
+     :target "mari",
+     :duration 0.654,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 29.361,
+     :duration 0.853,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 30.961,
+     :duration 0.88,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 32.627,
+     :duration 0.854,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 34.534,
+     :duration 0.814,
+     :scene-id "sandbox"},
+    :skin "frog",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.813, :anim "talk", :start 0.653, :duration 1.16}
+        {:end 4.452, :anim "talk", :start 2.839, :duration 1.613}
+        {:end 7.732, :anim "talk", :start 4.906, :duration 2.826}
+        {:end 10.225, :anim "talk", :start 8.478, :duration 1.747}
+        {:end 12.091, :anim "talk", :start 10.651, :duration 1.44}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Rana.m4a",
+       :start 0.427,
+       :offset 0.427,
+       :target "rock",
+       :duration 11.997}
+      {:data
+       [{:end 1.08, :anim "talk", :start 0.733, :duration 0.347}
+        {:end 5.187, :anim "talk", :start 2, :duration 3.187}
+        {:end 6.627, :anim "talk", :start 6.241, :duration 0.386}
+        {:end 8.107, :anim "talk", :start 7.494, :duration 0.613}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/rana.m4a",
+       :start 0.653,
+       :offset 0.653,
+       :target "vera",
+       :duration 7.748}
+      {:data
+       [{:end 13.757, :anim "talk", :start 13.237, :duration 0.52}
+        {:end 14.69, :anim "talk", :start 14.264, :duration 0.426}
+        {:end 17.863, :anim "talk", :start 15.397, :duration 2.466}
+        {:end 20.329, :anim "talk", :start 18.596, :duration 1.733}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Rana.m4a",
+       :start 13.024,
+       :offset 13.024,
+       :target "rock",
+       :duration 7.598}
+      {:data
+       [{:end 11.001, :anim "talk", :start 10.188, :duration 0.813}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/rana.m4a",
+       :start 9.974,
+       :offset 9.974,
+       :target "vera",
+       :duration 1.427}
+      {:data
+       [{:end 21.715, :anim "talk", :start 21.422, :duration 0.293}
+        {:end 22.289, :anim "talk", :start 22.102, :duration 0.187}
+        {:end 23.408, :anim "talk", :start 22.835, :duration 0.573}
+        {:end 25.448, :anim "talk", :start 24.288, :duration 1.16}
+        {:end 26.368, :anim "talk", :start 25.821, :duration 0.547}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Rana.m4a",
+       :start 21.102,
+       :offset 21.102,
+       :target "rock",
+       :duration 5.626}
+      {:data
+       [{:end 14.535, :anim "talk", :start 12.534, :duration 2.001}
+        {:end 16.575, :anim "talk", :start 14.908, :duration 1.667}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/rana.m4a",
+       :start 12.241,
+       :offset 12.241,
+       :target "vera",
+       :duration 4.814}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -2314,13 +3894,272 @@
        :offset 13.535,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Rana"}}}
+     :description "Rana"},
+    :word-1-skin "empty",
+    :word-2-skin "rose",
+    :word-3-skin "mouse",
+    :word-4-skin "queen"}}
   {:id 20,
    :name "casa",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-c.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "c"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/home.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params {:src "/raw/img/elements/bed.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params {:src "/raw/img/elements/car.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 81.199,
+     :duration 7.44,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-c.mp4",
+    :concept-name "casa",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 51.278,
+     :duration 3.24,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 46.359,
+     :duration 3.573,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 53.412,
+     :duration 1.026,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 19.947, :anim "talk", :start 19.467, :duration 0.48}
+        {:end 20.787, :anim "talk", :start 20.321, :duration 0.466}
+        {:end 21.721, :anim "talk", :start 21.094, :duration 0.627}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 19.374,
+       :offset 19.374,
+       :target "vera",
+       :duration 2.893}
+      {:data
+       [{:end 44.891, :anim "talk", :start 44.424, :duration 0.467}
+        {:end 46.077, :anim "talk", :start 45.571, :duration 0.506}
+        {:end 47.784, :anim "talk", :start 46.797, :duration 0.987}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 44.251,
+       :offset 44.251,
+       :target "senoravaca",
+       :duration 3.933}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 18.414, :anim "talk", :start 18.187, :duration 0.227}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 18.121,
+       :offset 18.121,
+       :target "vera",
+       :duration 0.52}
+      {:data
+       [{:end 44.944, :anim "talk", :start 44.424, :duration 0.52}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 44.291,
+       :offset 44.291,
+       :target "senoravaca",
+       :duration 0.826}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 44.851, :anim "talk", :start 44.384, :duration 0.467}
+      {:end 46.077, :anim "talk", :start 45.544, :duration 0.533}
+      {:end 47.677, :anim "talk", :start 46.851, :duration 0.826}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 44.291,
+     :offset 44.291,
+     :target "senoravaca",
+     :duration 3.853,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 50.557, :anim "talk", :start 49.504, :duration 1.053}
+      {:end 51.81, :anim "talk", :start 51.33, :duration 0.48}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 49.371,
+     :offset 49.371,
+     :target "senoravaca",
+     :duration 2.773,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 43.318, :anim "talk", :start 42.771, :duration 0.547}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 42.704,
+     :offset 42.704,
+     :target "senoravaca",
+     :duration 0.8,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 39.998, :anim "talk", :start 39.571, :duration 0.427}
+      {:end 41.531, :anim "talk", :start 40.451, :duration 1.08}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 39.451,
+     :offset 39.451,
+     :target "senoravaca",
+     :duration 2.267,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 41.558, :anim "talk", :start 41.238, :duration 0.32}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 41.171,
+     :offset 41.171,
+     :target "senoravaca",
+     :duration 0.507,
+     :scene-id "home"},
     :letter "c",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 27.359, :anim "talk", :start 27.173, :duration 0.186}
+      {:end 27.839, :anim "talk", :start 27.626, :duration 0.213}
+      {:end 28.239, :anim "talk", :start 28.079, :duration 0.16}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 27.133,
+     :offset 27.133,
+     :target "mari",
+     :duration 1.266,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 19.493, :anim "talk", :start 19.226, :duration 0.267}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 19,
+     :offset 19,
+     :target "mari",
+     :duration 0.733,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 35.361,
+     :duration 0.64,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 36.788,
+     :duration 0.786,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 38.068,
+     :duration 1.053,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 39.681,
+     :duration 1.08,
+     :scene-id "sandbox"},
+    :skin "home",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.306, :anim "talk", :start 1.133, :duration 0.173}
+        {:end 4.292, :anim "talk", :start 1.866, :duration 2.426}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Casa.m4a",
+       :start 0.88,
+       :offset 0.88,
+       :target "rock",
+       :duration 3.652}
+      {:data
+       [{:end 2.8, :anim "talk", :start 1.413, :duration 1.387}
+        {:end 6.401, :anim "talk", :start 4.294, :duration 2.107}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/casa.m4a",
+       :start 1.213,
+       :offset 1.213,
+       :target "vera",
+       :duration 5.561}
+      {:data
+       [{:end 6.012, :anim "talk", :start 5.412, :duration 0.6}
+        {:end 8.851, :anim "talk", :start 6.745, :duration 2.106}
+        {:end 10.557, :anim "talk", :start 9.664, :duration 0.893}
+        {:end 15.622, :anim "talk", :start 11.13, :duration 4.492}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Casa.m4a",
+       :start 5.265,
+       :offset 5.265,
+       :target "rock",
+       :duration 10.744}
+      {:data
+       [{:end 9.774, :anim "talk", :start 8.868, :duration 0.906}
+        {:end 13.375, :anim "talk", :start 11.548, :duration 1.827}
+        {:end 16.068, :anim "talk", :start 14.975, :duration 1.093}
+        {:end 18.709, :anim "talk", :start 16.935, :duration 1.774}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/casa.m4a",
+       :start 8.588,
+       :offset 8.588,
+       :target "vera",
+       :duration 10.614}
+      {:data
+       [{:end 16.995, :anim "talk", :start 16.809, :duration 0.186}
+        {:end 18.915, :anim "talk", :start 17.622, :duration 1.293}
+        {:end 21.127, :anim "talk", :start 19.728, :duration 1.399}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Casa.m4a",
+       :start 16.569,
+       :offset 16.569,
+       :target "rock",
+       :duration 4.772}
+      {:data
+       [{:end 22.242, :anim "talk", :start 21.149, :duration 1.093}
+        {:end 24.443, :anim "talk", :start 23.189, :duration 1.254}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/casa.m4a",
+       :start 21.042,
+       :offset 21.042,
+       :target "vera",
+       :duration 3.881}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -2349,13 +4188,281 @@
        :offset 18.204,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Casa"}}}
+     :description "Casa"},
+    :word-1-skin "bed",
+    :word-2-skin "car",
+    :word-3-skin "candle",
+    :word-4-skin "empty"}}
   {:id 21,
    :name "niño",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-n.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "n"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/baby.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/nest.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/orange.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 98.879,
+     :duration 7.786,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-n.mp4",
+    :concept-name "niño",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 53.161,
+     :duration 3.44,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 48.401,
+     :duration 3.507,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 55.654,
+     :duration 1.094,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 19.625, :anim "talk", :start 18.252, :duration 1.373}
+        {:end 21.092, :anim "talk", :start 20.145, :duration 0.947}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 18.025,
+       :offset 18.025,
+       :target "vera",
+       :duration 3.36}
+      {:data
+       [{:end 46.494, :anim "talk", :start 46.014, :duration 0.48}
+        {:end 47.534, :anim "talk", :start 47.028, :duration 0.506}
+        {:end 48.868, :anim "talk", :start 48.121, :duration 0.747}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 45.894,
+       :offset 45.894,
+       :target "senoravaca",
+       :duration 3.534}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 17.452, :anim "talk", :start 17.052, :duration 0.4}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 16.932,
+       :offset 16.932,
+       :target "vera",
+       :duration 0.72}
+      {:data
+       [{:end 46.374, :anim "talk", :start 46.041, :duration 0.333}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 45.894,
+       :offset 45.894,
+       :target "senoravaca",
+       :duration 0.68}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 46.414, :anim "talk", :start 45.961, :duration 0.453}
+      {:end 47.481, :anim "talk", :start 47.001, :duration 0.48}
+      {:end 49.174, :anim "talk", :start 48.068, :duration 1.106}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 45.868,
+     :offset 45.868,
+     :target "senoravaca",
+     :duration 3.493,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 50.961, :anim "talk", :start 49.921, :duration 1.04}
+      {:end 51.801, :anim "talk", :start 51.401, :duration 0.4}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 49.788,
+     :offset 49.788,
+     :target "senoravaca",
+     :duration 2.333,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 44.574, :anim "talk", :start 44.014, :duration 0.56}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 43.908,
+     :offset 43.908,
+     :target "senoravaca",
+     :duration 0.853,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 41.134, :anim "talk", :start 40.561, :duration 0.573}
+      {:end 42.761, :anim "talk", :start 41.667, :duration 1.094}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 40.494,
+     :offset 40.494,
+     :target "senoravaca",
+     :duration 2.467,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 46.481, :anim "talk", :start 46.001, :duration 0.48}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 45.881,
+     :offset 45.881,
+     :target "senoravaca",
+     :duration 0.707,
+     :scene-id "home"},
     :letter "n",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 25.949, :anim "talk", :start 25.669, :duration 0.28}
+      {:end 26.376, :anim "talk", :start 26.149, :duration 0.227}
+      {:end 26.722, :anim "talk", :start 26.496, :duration 0.226}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 25.602,
+     :offset 25.602,
+     :target "mari",
+     :duration 1.334,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 24.736, :anim "talk", :start 24.402, :duration 0.334}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 24.282,
+     :offset 24.282,
+     :target "mari",
+     :duration 0.774,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 37.014,
+     :duration 0.934,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 39.001,
+     :duration 0.853,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 40.988,
+     :duration 1.12,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 42.854,
+     :duration 1.187,
+     :scene-id "sandbox"},
+    :skin "baby",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.267, :anim "talk", :start 0.453, :duration 0.814}
+        {:end 2.52, :anim "talk", :start 1.84, :duration 0.68}
+        {:end 4.614, :anim "talk", :start 2.881, :duration 1.733}
+        {:end 7.495, :anim "talk", :start 5.268, :duration 2.227}
+        {:end 8.615, :anim "talk", :start 7.935, :duration 0.68}
+        {:end 10.575, :anim "talk", :start 9.295, :duration 1.28}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Nino.m4a",
+       :start 0.333,
+       :offset 0.333,
+       :target "rock",
+       :duration 10.616}
+      {:data
+       [{:end 2.84, :anim "talk", :start 1.493, :duration 1.347}
+        {:end 6.867, :anim "talk", :start 3.48, :duration 3.387}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/nino.m4a",
+       :start 1.347,
+       :offset 1.347,
+       :target "vera",
+       :duration 5.826}
+      {:data
+       [{:end 12.869, :anim "talk", :start 11.615, :duration 1.254}
+        {:end 16.416, :anim "talk", :start 13.189, :duration 3.227}
+        {:end 19.404, :anim "talk", :start 16.91, :duration 2.494}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Nino.m4a",
+       :start 11.442,
+       :offset 11.442,
+       :target "rock",
+       :duration 8.255}
+      {:data
+       [{:end 10.72, :anim "talk", :start 8.413, :duration 2.307}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/nino.m4a",
+       :start 8.293,
+       :offset 8.293,
+       :target "vera",
+       :duration 2.72}
+      {:data
+       [{:end 22.431, :anim "talk", :start 20.63, :duration 1.801}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Nino.m4a",
+       :start 20.47,
+       :offset 20.47,
+       :target "rock",
+       :duration 2.147}
+      {:data
+       [{:end 14.16, :anim "talk", :start 12.24, :duration 1.92}
+        {:end 16.827, :anim "talk", :start 15.053, :duration 1.774}
+        {:end 20.173, :anim "talk", :start 17.907, :duration 2.266}
+        {:end 23.04, :anim "talk", :start 21.52, :duration 1.52}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/nino.m4a",
+       :start 12.12,
+       :offset 12.12,
+       :target "vera",
+       :duration 11.147}
+      {:data
+       [{:end 24.138, :anim "talk", :start 23.631, :duration 0.507}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Nino.m4a",
+       :start 23.404,
+       :offset 23.404,
+       :target "rock",
+       :duration 1}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -2384,7 +4491,11 @@
        :offset 26.764,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Niño"}}}
+     :description "Niño"},
+    :word-1-skin "cloud",
+    :word-2-skin "nest",
+    :word-3-skin "black",
+    :word-4-skin "empty"}}
   {:id 22,
    :name "flor",
    :dataset-id 2,
@@ -2908,4 +5019,245 @@
        :offset 2.727,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Web"}}}]}
+     :description "Web"}}}
+  {:id 37,
+   :name "cepillo",
+   :dataset-id 2,
+   :data
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "c"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/toothbrush.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params {:src "/raw/img/elements/pig.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/eyebrow.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 90.612,
+     :duration 7.293,
+     :scene-id "book"},
+    :concept-name "cepillo",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 56.505,
+     :duration 3.92,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low {:type "audio", :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 59.199,
+     :duration 1.28,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 20.149, :anim "talk", :start 19.469, :duration 0.68}
+        {:end 21.282, :anim "talk", :start 20.549, :duration 0.733}
+        {:end 23.136, :anim "talk", :start 21.989, :duration 1.147}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a",
+       :start 19.322,
+       :offset 19.322,
+       :target "vera",
+       :duration 4.16}
+      {:data
+       [{:end 45.266, :anim "talk", :start 44.946, :duration 0.32}
+        {:end 46.44, :anim "talk", :start 46.026, :duration 0.414}
+        {:end 48.106, :anim "talk", :start 47.266, :duration 0.84}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :start 44.746,
+       :offset 44.746,
+       :target "senoravaca",
+       :duration 3.747}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 18.415, :anim "talk", :start 18.042, :duration 0.373}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a",
+       :start 17.948,
+       :offset 17.948,
+       :target "vera",
+       :duration 0.64}
+      {:data
+       [{:end 45.28, :anim "talk", :start 44.92, :duration 0.36}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :start 44.773,
+       :offset 44.773,
+       :target "senoravaca",
+       :duration 0.733}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 45.253, :anim "talk", :start 44.946, :duration 0.307}
+      {:end 46.426, :anim "talk", :start 46.026, :duration 0.4}
+      {:end 48.026, :anim "talk", :start 47.226, :duration 0.8}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 44.72,
+     :offset 44.72,
+     :target "senoravaca",
+     :duration 3.746,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 50.146, :anim "talk", :start 49.08, :duration 1.066}
+      {:end 51.266, :anim "talk", :start 50.893, :duration 0.373}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 48.973,
+     :offset 48.973,
+     :target "senoravaca",
+     :duration 2.6,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data [{:end 44, :anim "talk", :start 43.533, :duration 0.467}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 43.413,
+     :offset 43.413,
+     :target "senoravaca",
+     :duration 0.72,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 41.24, :anim "talk", :start 40.773, :duration 0.467}
+      {:end 42.573, :anim "talk", :start 41.626, :duration 0.947}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 40.666,
+     :offset 40.666,
+     :target "senoravaca",
+     :duration 2.054,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data [{:end 45.36, :anim "talk", :start 44.96, :duration 0.4}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 44.786,
+     :offset 44.786,
+     :target "senoravaca",
+     :duration 0.734,
+     :scene-id "home"},
+    :letter "c",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 26.239, :anim "talk", :start 25.985, :duration 0.254}
+      {:end 26.719, :anim "talk", :start 26.452, :duration 0.267}
+      {:end 27.092, :anim "talk", :start 26.905, :duration 0.187}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 25.772,
+     :offset 25.772,
+     :target "mari",
+     :duration 1.48,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 24.772, :anim "talk", :start 24.279, :duration 0.493}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 24.239,
+     :offset 24.239,
+     :target "mari",
+     :duration 0.653,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 29.882,
+     :duration 1.04,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 31.136,
+     :duration 1,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 32.322,
+     :duration 1.187,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 33.869,
+     :duration 0.987,
+     :scene-id "sandbox"},
+    :skin "toothbrush",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.12, :anim "talk", :start 0.827, :duration 0.293}
+        {:end 2.694, :anim "talk", :start 1.694, :duration 1}
+        {:end 6.162, :anim "talk", :start 3.241, :duration 2.921}
+        {:end 8.136, :anim "talk", :start 6.775, :duration 1.361}
+        {:end 9.456, :anim "talk", :start 8.496, :duration 0.96}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Cepillo.m4a",
+       :start 0.48,
+       :offset 0.48,
+       :target "rock",
+       :duration 9.403}
+      {:data
+       [{:end 1.493, :anim "talk", :start 0.813, :duration 0.68}
+        {:end 5.254, :anim "talk", :start 2.907, :duration 2.347}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/cepillo.m4a",
+       :start 0.707,
+       :offset 0.707,
+       :target "vera",
+       :duration 4.827}
+      {:data
+       [{:end 10.643, :anim "talk", :start 10.31, :duration 0.333}
+        {:end 13.631, :anim "talk", :start 11.417, :duration 2.214}
+        {:end 16.699, :anim "talk", :start 14.311, :duration 2.388}
+        {:end 19.139, :anim "talk", :start 17.072, :duration 2.067}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Cepillo.m4a",
+       :start 10.243,
+       :offset 10.243,
+       :target "rock",
+       :duration 9.15}
+      {:data
+       [{:end 7.094, :anim "talk", :start 6.747, :duration 0.347}
+        {:end 9.988, :anim "talk", :start 7.707, :duration 2.281}
+        {:end 12.814, :anim "talk", :start 10.974, :duration 1.84}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/cepillo.m4a",
+       :start 6.628,
+       :offset 6.628,
+       :target "vera",
+       :duration 6.44}],
+     :type "sequence-data",
+     :scene-id "swings"},
+    :word-1-skin "pig",
+    :word-2-skin "eyebrow",
+    :word-3-skin "onion",
+    :word-4-skin "five"}}]}
