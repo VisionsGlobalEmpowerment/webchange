@@ -139,6 +139,7 @@
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :play-video ::play-video)
 (ce/reg-simple-executor :state ::execute-state)
+(ce/reg-simple-executor :set-attribute ::execute-set-attribute)
 (ce/reg-simple-executor :add-alias ::execute-add-alias)
 (ce/reg-simple-executor :empty ::execute-empty)
 (ce/reg-simple-executor :animation ::execute-animation)
@@ -233,6 +234,14 @@
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
           state (get states-with-aliases (keyword id))]
       {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state params)
+       :dispatch (ce/success-event action)})))
+
+(re-frame/reg-event-fx
+  ::execute-set-attribute
+  (fn [{:keys [db]} [_ {:keys [target attr-name attr-value params] :as action}]]
+    (let [scene-id (:current-scene db)
+          patch (into {} [[(keyword attr-name) attr-value]])]
+      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge patch params)
        :dispatch (ce/success-event action)})))
 
 (re-frame/reg-event-fx
