@@ -4500,8 +4500,265 @@
    :name "flor",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-f.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "f"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/flower.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/flute.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/strawberry.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 107.985,
+     :duration 7.173,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-f.mp4",
+    :concept-name "flor",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 60.305,
+     :duration 3.186,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 55.772,
+     :duration 3.16,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+     :type "audio",
+     :start 62.598,
+     :duration 0.973,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 25.774, :anim "talk", :start 25.347, :duration 0.427}
+        {:end 26.427, :anim "talk", :start 26.067, :duration 0.36}
+        {:end 27.494, :anim "talk", :start 26.761, :duration 0.733}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 25.187,
+       :offset 25.187,
+       :target "vera",
+       :duration 2.574}
+      {:data
+       [{:end 57.917, :anim "talk", :start 57.543, :duration 0.374}
+        {:end 59.05, :anim "talk", :start 58.557, :duration 0.493}
+        {:end 60.33, :anim "talk", :start 59.623, :duration 0.707}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 57.463,
+       :offset 57.463,
+       :target "senoravaca",
+       :duration 3.374}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 24.174, :anim "talk", :start 23.867, :duration 0.307}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a",
+       :start 23.734,
+       :offset 23.734,
+       :target "vera",
+       :duration 0.573}
+      {:data
+       [{:end 55.064, :anim "talk", :start 54.837, :duration 0.227}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+       :start 54.744,
+       :offset 54.744,
+       :target "senoravaca",
+       :duration 0.52}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 57.89, :anim "talk", :start 57.57, :duration 0.32}
+      {:end 58.997, :anim "talk", :start 58.677, :duration 0.32}
+      {:end 60.397, :anim "talk", :start 59.65, :duration 0.747}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 57.463,
+     :offset 57.463,
+     :target "senoravaca",
+     :duration 3.347,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 62.783, :anim "talk", :start 61.837, :duration 0.946}
+      {:end 64.076, :anim "talk", :start 63.476, :duration 0.6}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 61.717,
+     :offset 61.717,
+     :target "senoravaca",
+     :duration 2.613,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 56.503, :anim "talk", :start 56.09, :duration 0.413}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 55.944,
+     :offset 55.944,
+     :target "senoravaca",
+     :duration 0.666,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 53.384, :anim "talk", :start 53.197, :duration 0.187}
+      {:end 55.05, :anim "talk", :start 53.61, :duration 1.44}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 53.104,
+     :offset 53.104,
+     :target "senoravaca",
+     :duration 2.226,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data [{:end 55.05, :anim "talk", :start 54.81, :duration 0.24}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
+     :start 54.744,
+     :offset 54.744,
+     :target "senoravaca",
+     :duration 0.48,
+     :scene-id "home"},
     :letter "f",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 33.919, :anim "talk", :start 33.706, :duration 0.213}
+      {:end 34.226, :anim "talk", :start 34.053, :duration 0.173}
+      {:end 34.666, :anim "talk", :start 34.479, :duration 0.187}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 33.653,
+     :offset 33.653,
+     :target "mari",
+     :duration 1.2,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 32.479, :anim "talk", :start 32.159, :duration 0.32}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a",
+     :start 32.066,
+     :offset 32.066,
+     :target "mari",
+     :duration 0.48,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 42.255,
+     :duration 0.906,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 43.881,
+     :duration 0.854,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 45.561,
+     :duration 0.76,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a",
+     :type "audio",
+     :start 47.161,
+     :duration 0.827,
+     :scene-id "sandbox"},
+    :skin "flower",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.614, :anim "talk", :start 1.307, :duration 0.307}
+        {:end 4.534, :anim "talk", :start 2.28, :duration 2.254}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Flor.m4a",
+       :start 1.027,
+       :offset 1.027,
+       :target "rock",
+       :duration 3.801}
+      {:data
+       [{:end 3.506, :anim "talk", :start 1.213, :duration 2.293}
+        {:end 5.706, :anim "talk", :start 4.386, :duration 1.32}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/flor.m4a",
+       :start 1,
+       :offset 1,
+       :target "vera",
+       :duration 5.132}
+      {:data
+       [{:end 6.801, :anim "talk", :start 5.414, :duration 1.387}
+        {:end 10.602, :anim "talk", :start 7.508, :duration 3.094}
+        {:end 13.096, :anim "talk", :start 11.469, :duration 1.627}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Flor.m4a",
+       :start 5.294,
+       :offset 5.294,
+       :target "rock",
+       :duration 8.122}
+      {:data
+       [{:end 8.478, :anim "talk", :start 7.252, :duration 1.226}
+        {:end 9.865, :anim "talk", :start 8.892, :duration 0.973}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/flor.m4a",
+       :start 7.119,
+       :offset 7.119,
+       :target "vera",
+       :duration 3.012}
+      {:data
+       [{:end 14.63, :anim "talk", :start 14.136, :duration 0.494}
+        {:end 17.284, :anim "talk", :start 15.003, :duration 2.281}
+        {:end 18.897, :anim "talk", :start 17.577, :duration 1.32}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Flor.m4a",
+       :start 13.95,
+       :offset 13.95,
+       :target "rock",
+       :duration 5.334}
+      {:data
+       [{:end 13.104, :anim "talk", :start 11.624, :duration 1.48}
+        {:end 14.53, :anim "talk", :start 13.957, :duration 0.573}
+        {:end 16.197, :anim "talk", :start 15.304, :duration 0.893}
+        {:end 17.89, :anim "talk", :start 16.877, :duration 1.013}
+        {:end 21.142, :anim "talk", :start 18.33, :duration 2.812}
+        {:end 22.355, :anim "talk", :start 21.676, :duration 0.679}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/flor.m4a",
+       :start 11.478,
+       :offset 11.478,
+       :target "vera",
+       :duration 11.237}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -4530,13 +4787,323 @@
        :offset 30.936,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Flor"}}}
+     :description "Flor"},
+    :word-1-skin "flute",
+    :word-2-skin "strawberry",
+    :word-3-skin "fruits",
+    :word-4-skin "arrow"}}
   {:id 23,
    :name "bebe",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-b.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "b"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/baby.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/boat.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/whale.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 116.105,
+     :duration 7,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-b.mp4",
+    :concept-name "bebé",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 67.305,
+     :duration 3.787,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 62.305,
+     :duration 3.413,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+     :type "audio",
+     :start 70.065,
+     :duration 0.92,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 26.389, :anim "talk", :start 25.869, :duration 0.52}
+        {:end 27.309, :anim "talk", :start 26.816, :duration 0.493}
+        {:end 28.589, :anim "talk", :start 27.749, :duration 0.84}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a",
+       :start 25.749,
+       :offset 25.749,
+       :target "vera",
+       :duration 3.467}
+      {:data
+       [{:end 57.546, :anim "talk", :start 57.159, :duration 0.387}
+        {:end 58.693, :anim "talk", :start 58.199, :duration 0.494}
+        {:end 60.133, :anim "talk", :start 59.519, :duration 0.614}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :start 57.066,
+       :offset 57.066,
+       :target "senoravaca",
+       :duration 3.36}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 24.856, :anim "talk", :start 24.416, :duration 0.44}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a",
+       :start 24.336,
+       :offset 24.336,
+       :target "vera",
+       :duration 0.666}
+      {:data
+       [{:end 57.506, :anim "talk", :start 57.186, :duration 0.32}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :start 57.053,
+       :offset 57.053,
+       :target "senoravaca",
+       :duration 0.68}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 57.586, :anim "talk", :start 57.119, :duration 0.467}
+      {:end 58.653, :anim "talk", :start 58.226, :duration 0.427}
+      {:end 60.226, :anim "talk", :start 59.546, :duration 0.68}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 57.039,
+     :offset 57.039,
+     :target "senoravaca",
+     :duration 3.347,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 61.986, :anim "talk", :start 61.093, :duration 0.893}
+      {:end 63.146, :anim "talk", :start 62.653, :duration 0.493}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 60.986,
+     :offset 60.986,
+     :target "senoravaca",
+     :duration 2.333,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 56.053, :anim "talk", :start 55.479, :duration 0.574}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 55.399,
+     :offset 55.399,
+     :target "senoravaca",
+     :duration 0.787,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 52.933, :anim "talk", :start 52.493, :duration 0.44}
+      {:end 54.386, :anim "talk", :start 53.519, :duration 0.867}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 52.399,
+     :offset 52.399,
+     :target "senoravaca",
+     :duration 2.134,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 57.599, :anim "talk", :start 57.159, :duration 0.44}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+     :start 57.039,
+     :offset 57.039,
+     :target "senoravaca",
+     :duration 0.694,
+     :scene-id "home"},
     :letter "b",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 35.625, :anim "talk", :start 35.505, :duration 0.12}
+      {:end 36.091, :anim "talk", :start 35.971, :duration 0.12}
+      {:end 36.491, :anim "talk", :start 36.251, :duration 0.24}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 35.411,
+     :offset 35.411,
+     :target "mari",
+     :duration 1.187,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 34.238, :anim "talk", :start 33.998, :duration 0.24}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 33.905,
+     :offset 33.905,
+     :target "mari",
+     :duration 0.533,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 35.696,
+     :duration 1.133,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 37.256,
+     :duration 0.947,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 38.51,
+     :duration 1.106,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a",
+     :type "audio",
+     :start 40.043,
+     :duration 0.747,
+     :scene-id "sandbox"},
+    :skin "baby",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 3.306, :anim "talk", :start 0.6, :duration 2.706}
+        {:end 6.666, :anim "talk", :start 3.973, :duration 2.693}
+        {:end 8.746, :anim "talk", :start 7.44, :duration 1.306}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Bebe.m4a",
+       :start 0.413,
+       :offset 0.413,
+       :target "rock",
+       :duration 8.68}
+      {:data [{:end 1.8, :anim "talk", :start 0.587, :duration 1.213}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/bebe.m4a",
+       :start 0.467,
+       :offset 0.467,
+       :target "vera",
+       :duration 1.56}
+      {:data
+       [{:end 13.506, :anim "talk", :start 10.306, :duration 3.2}
+        {:end 15.866, :anim "talk", :start 14.159, :duration 1.707}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Bebe.m4a",
+       :start 10.133,
+       :offset 10.133,
+       :target "rock",
+       :duration 5.853}
+      {:data
+       [{:end 3.307, :anim "talk", :start 2.787, :duration 0.52}
+        {:end 6.093, :anim "talk", :start 3.8, :duration 2.293}
+        {:end 8.253, :anim "talk", :start 7.107, :duration 1.146}
+        {:end 10.347, :anim "talk", :start 9.6, :duration 0.747}
+        {:end 13.08, :anim "talk", :start 10.8, :duration 2.28}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/bebe.m4a",
+       :start 2.693,
+       :offset 2.693,
+       :target "vera",
+       :duration 10.654}
+      {:data
+       [{:end 18.492, :anim "talk", :start 17.186, :duration 1.306}
+        {:end 20.945, :anim "talk", :start 19.012, :duration 1.933}
+        {:end 24.319, :anim "talk", :start 21.399, :duration 2.92}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Bebe.m4a",
+       :start 17.066,
+       :offset 17.066,
+       :target "rock",
+       :duration 7.519}
+      {:data
+       [{:end 14.92, :anim "talk", :start 14.56, :duration 0.36}
+        {:end 16.987, :anim "talk", :start 15.84, :duration 1.147}
+        {:end 19.387, :anim "talk", :start 18.24, :duration 1.147}
+        {:end 21.614, :anim "talk", :start 20, :duration 1.614}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/bebe.m4a",
+       :start 14.387,
+       :offset 14.387,
+       :target "vera",
+       :duration 7.427}
+      {:data
+       [{:end 1.187, :anim "talk", :start 0.493, :duration 0.694}
+        {:end 2.347, :anim "talk", :start 1.573, :duration 0.774}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Bebe_ending.m4a",
+       :start 0.4,
+       :offset 0.4,
+       :target "rock",
+       :duration 2.147}
+      {:data
+       [{:end 25.2, :anim "talk", :start 23.294, :duration 1.906}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/bebe.m4a",
+       :start 23.16,
+       :offset 23.16,
+       :target "vera",
+       :duration 2.214}
+      {:data
+       [{:end 5.96, :anim "talk", :start 2.92, :duration 3.04}
+        {:end 13.081, :anim "talk", :start 6.28, :duration 6.801}
+        {:end 16.548, :anim "talk", :start 13.534, :duration 3.014}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Bebe_ending.m4a",
+       :start 2.798,
+       :offset 2.798,
+       :target "rock",
+       :duration 13.95}
+      {:data
+       [{:end 28.16, :anim "talk", :start 27.507, :duration 0.653}
+        {:end 29.827, :anim "talk", :start 28.947, :duration 0.88}
+        {:end 32.667, :anim "talk", :start 30.414, :duration 2.253}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/bebe.m4a",
+       :start 27.374,
+       :offset 27.374,
+       :target "vera",
+       :duration 5.506}
+      {:data
+       [{:end 18.201, :anim "talk", :start 17.534, :duration 0.667}
+        {:end 19.561, :anim "talk", :start 18.601, :duration 0.96}
+        {:end 20.735, :anim "talk", :start 19.975, :duration 0.76}
+        {:end 24.082, :anim "talk", :start 21.175, :duration 2.907}
+        {:end 27.308, :anim "talk", :start 24.468, :duration 2.84}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Bebe_ending.m4a",
+       :start 17.454,
+       :offset 17.454,
+       :target "rock",
+       :duration 10.081}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -4565,7 +5132,11 @@
        :offset 33.593,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Bebe"}}}
+     :description "Bebe"},
+    :word-1-skin "bicycle",
+    :word-2-skin "boat",
+    :word-3-skin "whale",
+    :word-4-skin "mouth"}}
   {:id 24,
    :name "gato",
    :dataset-id 2,
@@ -4605,8 +5176,267 @@
    :name "jardín",
    :dataset-id 2,
    :data
-   {:chanting-video-src "/raw/video/l2a1/letter-j.mp4",
+   {:book-content-action
+    {:data
+     [{:id "default",
+       :type "state",
+       :params {:text "j"},
+       :target "letter"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/garden.png", :filter "grayscale"},
+       :target "image"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/juice.png", :filter "grayscale"},
+       :target "image2"}
+      {:id "default",
+       :type "state",
+       :params
+       {:src "/raw/img/elements/jamon.png", :filter "grayscale"},
+       :target "image3"}],
+     :type "parallel",
+     :scene-id "book"},
+    :book-read-action
+    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+     :type "audio",
+     :start 124.212,
+     :duration 6.613,
+     :scene-id "book"},
+    :chanting-video-src "/raw/video/l2a1/letter-j.mp4",
+    :concept-name "jardín",
+    :game-voice-action
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 63.161,
+     :duration 3.814,
+     :scene-id "cycling",
+     :description "Game Voice High"},
+    :game-voice-action-low
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 58.241,
+     :duration 3.587,
+     :scene-id "see-saw"},
+    :hide-n-seek-current-concept-audio
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+     :type "audio",
+     :start 65.775,
+     :duration 1.146,
+     :scene-id "see-saw"},
+    :home-group-3-times-action
+    {:data
+     [{:data
+       [{:end 23.918, :anim "talk", :start 23.532, :duration 0.386}
+        {:end 25.025, :anim "talk", :start 24.585, :duration 0.44}
+        {:end 26.758, :anim "talk", :start 25.918, :duration 0.84}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 23.385,
+       :offset 23.385,
+       :target "vera",
+       :duration 4.013}
+      {:data
+       [{:end 59.188, :anim "talk", :start 58.681, :duration 0.507}
+        {:end 60.068, :anim "talk", :start 59.628, :duration 0.44}
+        {:end 61.841, :anim "talk", :start 60.775, :duration 1.066}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 58.561,
+       :offset 58.561,
+       :target "senoravaca",
+       :duration 3.574}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-group-word-action
+    {:data
+     [{:data
+       [{:end 22.718, :anim "talk", :start 22.145, :duration 0.573}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a",
+       :start 22.078,
+       :offset 22.078,
+       :target "vera",
+       :duration 0.747}
+      {:data
+       [{:end 59.188, :anim "talk", :start 58.668, :duration 0.52}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :start 58.588,
+       :offset 58.588,
+       :target "senoravaca",
+       :duration 0.746}],
+     :type "parallel",
+     :scene-id "home"},
+    :home-vaca-3-times-action
+    {:data
+     [{:end 59.201, :anim "talk", :start 58.628, :duration 0.573}
+      {:end 60.081, :anim "talk", :start 59.628, :duration 0.453}
+      {:end 61.695, :anim "talk", :start 60.708, :duration 0.987}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 58.548,
+     :offset 58.548,
+     :target "senoravaca",
+     :duration 3.587,
+     :scene-id "home"},
+    :home-vaca-goodbye-action
+    {:data
+     [{:end 63.895, :anim "talk", :start 62.748, :duration 1.147}
+      {:end 65.041, :anim "talk", :start 64.521, :duration 0.52}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 62.695,
+     :offset 62.695,
+     :target "senoravaca",
+     :duration 2.533,
+     :scene-id "home"},
+    :home-vaca-question-action
+    {:data
+     [{:end 57.174, :anim "talk", :start 56.721, :duration 0.453}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 56.588,
+     :offset 56.588,
+     :target "senoravaca",
+     :duration 0.773,
+     :scene-id "home"},
+    :home-vaca-this-is-action
+    {:data
+     [{:end 53.921, :anim "talk", :start 53.361, :duration 0.56}
+      {:end 55.401, :anim "talk", :start 54.254, :duration 1.147}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 53.268,
+     :offset 53.268,
+     :target "senoravaca",
+     :duration 2.28,
+     :scene-id "home"},
+    :home-vaca-word-action
+    {:data
+     [{:end 59.108, :anim "talk", :start 58.654, :duration 0.454}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+     :start 58.601,
+     :offset 58.601,
+     :target "senoravaca",
+     :duration 0.707,
+     :scene-id "home"},
     :letter "j",
+    :sandbox-long-letter-action
+    {:data
+     [{:end 35.07, :anim "talk", :start 34.99, :duration 0.08}
+      {:end 35.457, :anim "talk", :start 35.323, :duration 0.134}
+      {:end 35.83, :anim "talk", :start 35.697, :duration 0.133}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 34.883,
+     :offset 34.883,
+     :target "mari",
+     :duration 1.134,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data [{:end 32.95, :anim "talk", :start 32.51, :duration 0.44}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a",
+     :start 32.43,
+     :offset 32.43,
+     :target "mari",
+     :duration 0.6,
+     :scene-id "sandbox"},
+    :sandbox-state-word-1-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 46.374,
+     :duration 0.96,
+     :scene-id "sandbox"},
+    :sandbox-state-word-2-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 48.521,
+     :duration 1.294,
+     :scene-id "sandbox"},
+    :sandbox-state-word-3-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 50.828,
+     :duration 0.92,
+     :scene-id "sandbox"},
+    :sandbox-state-word-4-action
+    {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
+     :type "audio",
+     :start 52.708,
+     :duration 1.053,
+     :scene-id "sandbox"},
+    :skin "garden",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 2.24, :anim "talk", :start 0.693, :duration 1.547}
+        {:end 5.414, :anim "talk", :start 3.107, :duration 2.307}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Jardin.m4a",
+       :start 0.587,
+       :offset 0.587,
+       :target "rock",
+       :duration 5.013}
+      {:data
+       [{:end 1.533, :anim "talk", :start 1.12, :duration 0.413}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/jardin.m4a",
+       :start 0.893,
+       :offset 0.893,
+       :target "vera",
+       :duration 0.88}
+      {:data
+       [{:end 6.627, :anim "talk", :start 6.24, :duration 0.387}
+        {:end 9.374, :anim "talk", :start 7.307, :duration 2.067}
+        {:end 12.814, :anim "talk", :start 9.761, :duration 3.053}
+        {:end 13.801, :anim "talk", :start 13.254, :duration 0.547}
+        {:end 14.721, :anim "talk", :start 14.188, :duration 0.533}
+        {:end 15.481, :anim "talk", :start 14.988, :duration 0.493}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Jardin.m4a",
+       :start 6.147,
+       :offset 6.147,
+       :target "rock",
+       :duration 9.641}
+      {:data
+       [{:end 6.213, :anim "talk", :start 3.44, :duration 2.773}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/jardin.m4a",
+       :start 3.333,
+       :offset 3.333,
+       :target "vera",
+       :duration 3.16}
+      {:data
+       [{:end 19.388, :anim "talk", :start 16.761, :duration 2.627}
+        {:end 20.802, :anim "talk", :start 19.788, :duration 1.014}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Jardin.m4a",
+       :start 16.628,
+       :offset 16.628,
+       :target "rock",
+       :duration 4.36}
+      {:data
+       [{:end 9.653, :anim "talk", :start 8.293, :duration 1.36}
+        {:end 11.32, :anim "talk", :start 10.16, :duration 1.16}
+        {:end 12.787, :anim "talk", :start 11.734, :duration 1.053}
+        {:end 15.44, :anim "talk", :start 13.454, :duration 1.986}
+        {:end 17.574, :anim "talk", :start 16.667, :duration 0.907}
+        {:end 18.787, :anim "talk", :start 18.427, :duration 0.36}
+        {:end 20.76, :anim "talk", :start 19.24, :duration 1.52}
+        {:end 23.16, :anim "talk", :start 21.974, :duration 1.186}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/jardin.m4a",
+       :start 8.173,
+       :offset 8.173,
+       :target "vera",
+       :duration 15.334}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
@@ -4635,7 +5465,11 @@
        :offset 37.37,
        :target "senoravaca"}],
      :type "parallel",
-     :description "Jardín"}}}
+     :description "Jardín"},
+    :word-1-skin "juice",
+    :word-2-skin "toys",
+    :word-3-skin "jamon",
+    :word-4-skin "giraffe"}}
   {:id 26,
    :name "chocolate",
    :dataset-id 2,

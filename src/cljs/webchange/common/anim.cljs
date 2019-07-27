@@ -154,5 +154,8 @@
                                  "frog" "rock" "rose" "mouse" "queen"
                                  "home" "bed" "car" "candle" "crocodile"
                                  "toothbrush" "pig" "eyebrow" "onion" "five"
-                                 "baby" "cloud" "nest" "black" "orange"]
+                                 "baby" "cloud" "nest" "black" "orange"
+                                 "flower" "flute" "strawberry" "fruits" "arrow"
+                                 "bicycle" "boat" "whale" "mouth"
+                                 "garden" "juice" "toys" "jamon" "giraffe"]
                          :animations ["idle1" "idle2" "idle3" "idle_fly1" "idle_fly2" "idle_fly3" "jump" "jump2" "come" "come2" "leave" "leave2" "wood" "wood2"]}})
