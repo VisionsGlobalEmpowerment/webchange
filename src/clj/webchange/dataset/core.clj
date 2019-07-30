@@ -50,6 +50,11 @@
   (let [item (db/get-dataset-item {:id item-id})]
     item))
 
+(defn get-item-by-name
+  [dataset-id name]
+  (let [item (db/get-dataset-item-by-name {:dataset_id dataset-id :name name})]
+    item))
+
 (defn create-dataset-item!
   [data]
   (let [prepared-data (transform-keys ->snake_case_keyword data)
@@ -79,8 +84,8 @@
     {:lesson-sets items}))
 
 (defn get-lesson-set-by-name
-  [name]
-  (let [item (db/get-lesson-set-by-name {:name name})]
+  [dataset-id name]
+  (let [item (db/get-lesson-set-by-name {:dataset_id dataset-id :name name})]
     item))
 
 (defn create-lesson-set!

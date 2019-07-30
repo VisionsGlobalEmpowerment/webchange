@@ -31,6 +31,11 @@ INSERT INTO dataset_items (id, dataset_id, name, data) VALUES (:id, :dataset_id,
 SELECT * from dataset_items
 WHERE id = :id;
 
+-- :name get-dataset-item-by-name :? :1
+-- :doc retrieve item given id
+SELECT * from dataset_items
+WHERE dataset_id = :dataset_id AND name = :name;
+
 -- :name get-dataset-items :? :*
 -- :doc retrieve items given dataset id
 SELECT * from dataset_items
@@ -62,7 +67,8 @@ WHERE name = :name;
 -- :name get-dataset-lessons :? :*
 -- :doc retrieve lesson sets given dataset id
 SELECT * from lesson_sets
-WHERE dataset_id = :dataset_id;
+WHERE dataset_id = :dataset_id
+ORDER BY name;
 
 -- :name update-lesson-set! :! :n
 -- :doc updates an existing lesson set record
