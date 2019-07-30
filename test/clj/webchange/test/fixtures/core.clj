@@ -318,8 +318,8 @@
     (handler/dev-handler request)))
 
 (defn get-lesson-set
-  [name]
-  (let [url (str "/api/lesson-sets/" name)
+  [dataset-id name]
+  (let [url (str "/api/datasets/" dataset-id "/lesson-sets/" name)
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))

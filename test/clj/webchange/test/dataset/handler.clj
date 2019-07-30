@@ -68,29 +68,29 @@
     (is (= 404 status))))
 
 (deftest lesson-set-can-be-retrieved
-  (let [lesson-set (f/lesson-set-created)
-        retrieved (-> lesson-set :name f/get-lesson-set :body (json/read-str :key-fn keyword) :lesson-set)]
-    (is (= (:name lesson-set) (:name retrieved)))))
+  (let [{dataset-id :dataset-id name :name} (f/lesson-set-created)
+        retrieved (-> (f/get-lesson-set dataset-id name) :body (json/read-str :key-fn keyword) :lesson-set)]
+    (is (= name (:name retrieved)))))
 
 (deftest lesson-set-can-be-created
   (let [{item-id :id dataset-id :dataset-id} (f/dataset-item-created)
         lesson-name "test-lesson"
         data {:dataset-id dataset-id :name lesson-name :data {:items [{:id item-id}]}}
         _ (f/create-lesson-set! data)
-        retrieved (-> lesson-name f/get-lesson-set :body (json/read-str :key-fn keyword) :lesson-set)]
+        retrieved (-> (f/get-lesson-set dataset-id lesson-name) :body (json/read-str :key-fn keyword) :lesson-set)]
     (is (= item-id (-> retrieved :data :items first :id)))))
 
 (deftest lesson-set-can-be-updated
-  (let [{lesson-set-id :id name :name} (f/lesson-set-created)
+  (let [{lesson-set-id :id name :name dataset-id :dataset-id} (f/lesson-set-created)
         updated-data {:items [{:id 1} {:id 2}]}
         _ (f/update-lesson-set! lesson-set-id {:data updated-data})
-        retrieved (-> name f/get-lesson-set :body (json/read-str :key-fn keyword) :lesson-set)]
+        retrieved (-> (f/get-lesson-set dataset-id name) :body (json/read-str :key-fn keyword) :lesson-set)]
     (is (= updated-data (:data retrieved)))))
 
 (deftest leson-set-can-be-deleted
-  (let [{id :id name :name} (f/lesson-set-created)
+  (let [{id :id name :name dataset-id :dataset-id} (f/lesson-set-created)
         _ (f/delete-lesson-set! id)
-        status (-> name f/get-lesson-set :status)]
+        status (-> (f/get-lesson-set dataset-id name) :status)]
     (is (= 404 status))))
 
 (deftest course-lesson-sets-can-be-retrieved
