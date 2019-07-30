@@ -43,3 +43,22 @@ Fix: open to edit file `/usr/bin/lein` and update the next piece of code:
 # See https://salsa.debian.org/clojure-team/leiningen-clojure/issues/1
 JAVA_CMD=${JAVA_CMD:-"/usr/lib/jvm/___YOUR_JAVA_VERSION__/bin/java"}
 ```
+
+### Manage dataset items:
+
+lein save-dataset <course> <dataset> - saves dataset to *.edn file
+
+```
+$ lein save-dataset test concepts
+```
+
+lein load-dataset-force <course> <dataset> - loads dataset from edn to db. overrides dataset fields and items
+
+```
+$ lein load-dataset-force test concepts
+```
+
+lein load-dataset-merge <course> <dataset> [field1] [field2] [...] - loads dataset from edn to db. merges dataset fields and items data
+```
+$ lein load-dataset-merge test concepts word-1-skin word-2-skin
+```
