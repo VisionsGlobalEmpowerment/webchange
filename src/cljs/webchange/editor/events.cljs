@@ -5,7 +5,8 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
-    [webchange.common.anim :refer [animations]]))
+    [webchange.common.anim :refer [animations]]
+    [webchange.editor.common.actions.events :as actions.events]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -134,157 +135,17 @@
   (fn [{:keys [db]} [_ action scene-id]]
     (when-not action (throw (js/Error. "Action is not defined")))
     (when-not scene-id (throw (js/Error. "Scene id is not defined")))
-    {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action :path [] :breadcrumb []})}))
-
-(re-frame/reg-event-fx
-  ::select-scene-action-data-path
-  (fn [{:keys [db]} [_ step]]
-    (let [path (get-in db [:editor :selected-scene-action :path])]
-      {:db (-> db
-               (update-in [:editor :selected-scene-action :breadcrumb] conj path)
-               (assoc-in [:editor :selected-scene-action :path] (-> path (concat [:data step]) vec)))})))
-
-(re-frame/reg-event-fx
-  ::select-scene-action-options-path
-  (fn [{:keys [db]} [_ step]]
-    (let [path (get-in db [:editor :selected-scene-action :path])]
-      {:db (-> db
-               (update-in [:editor :selected-scene-action :breadcrumb] conj path)
-               (assoc-in [:editor :selected-scene-action :path] (-> path (concat [:options step]) vec)))})))
-
-(re-frame/reg-event-fx
-  ::select-scene-action-path-prev
-  (fn [{:keys [db]} _]
-    (let [breadcrumb (get-in db [:editor :selected-scene-action :breadcrumb])]
-      (if (peek breadcrumb)
-        {:db (-> db
-                 (assoc-in [:editor :selected-scene-action :path] (peek breadcrumb))
-                 (assoc-in [:editor :selected-scene-action :breadcrumb] (pop breadcrumb)))}))))
-
+    (let [action-data (get-in db [:scenes scene-id :actions (keyword action)])]
+      {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action})
+       :dispatch [::actions.events/set-form-data action-data]})))
 
 (re-frame/reg-event-fx
   ::edit-selected-scene-action
-  (fn [{:keys [db]} [_ state]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-path (vec (concat action-path path))]
-      {:db (assoc-in db data-path state)
-       :dispatch [::select-scene-action-path-prev]})))
-
-(re-frame/reg-event-fx
-  ::selected-action-order-down
-  (fn [{:keys [db]} [_ index]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-path (vec (concat action-path path [:data]))
-          original-data (get-in db data-path)]
-      (if (< (inc index) (count original-data))
-        (let [head (subvec original-data 0 index)
-              tail (subvec original-data (inc (inc index)))
-              v1 (subvec original-data index (inc index))
-              v2 (subvec original-data (inc index) (inc (inc index)))
-              data (vec (concat head v2 v1 tail))]
-          {:db (assoc-in db data-path data)})))))
-
-(re-frame/reg-event-fx
-  ::selected-action-order-up
-  (fn [{:keys [db]} [_ index]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (vec (concat action-path path [:data]))
-          original-data (get-in db data-vec-path)]
-      (if (> index 0)
-        (let [head (subvec original-data 0 (dec index))
-              tail (subvec original-data (inc index))
-              v1 (subvec original-data (dec index) index)
-              v2 (subvec original-data index (inc index))
-              data (vec (concat head v2 v1 tail))]
-          {:db (assoc-in db data-vec-path data)})))))
-
-(defn insert-into [data position]
-  (cond
-    (= position 0) (vec (concat [{}] data))
-    (= position (count data)) (vec (concat data [{}]))
-    :else (let [head (subvec data 0 position)
-                tail (subvec data position)]
-            (vec (concat head [{}] tail)))))
-
-(defn remove-from [data position]
-  (let [head (subvec data 0 position)
-        tail (subvec data (inc position))]
-    (vec (concat head tail))))
-
-(re-frame/reg-event-fx
-  ::selected-action-add-above
-  (fn [{:keys [db]} [_ index]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (vec (concat action-path path [:data]))
-          original-data (get-in db data-vec-path)
-          data (insert-into original-data index)]
-      {:db (assoc-in db data-vec-path data)})))
-
-(re-frame/reg-event-fx
-  ::selected-action-add-option
-  (fn [{:keys [db]} [_ key]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (vec (concat action-path path [:options key]))]
-      {:db (assoc-in db data-vec-path {})
-       :dispatch [::select-scene-action-options-path key]})))
-
-(re-frame/reg-event-fx
-  ::selected-action-add-above-action
-  (fn [{:keys [db]} [_ index]]
-    {:dispatch-n (list [::selected-action-add-above index]
-                       [::select-scene-action-data-path index])}))
-
-(re-frame/reg-event-fx
-  ::selected-action-add-below
-  (fn [{:keys [db]} [_ index]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (vec (concat action-path path [:data]))
-          original-data (get-in db data-vec-path)
-          data (insert-into original-data (inc index))]
-      {:db (assoc-in db data-vec-path data)})))
-
-(re-frame/reg-event-fx
-  ::selected-action-add-below-action
-  (fn [{:keys [db]} [_ index]]
-    {:dispatch-n (list [::selected-action-add-below index]
-                       [::select-scene-action-data-path (inc index)])}))
-
-(re-frame/reg-event-fx
-  ::selected-action-remove-data
-  (fn [{:keys [db]} [_ index]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (vec (concat action-path path [:data]))
-          original-data (get-in db data-vec-path)
-          data (remove-from original-data index)]
-      {:db (assoc-in db data-vec-path data)})))
-
-(re-frame/reg-event-fx
-  ::selected-action-remove-option
-  (fn [{:keys [db]} [_ key]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          data-vec-path (vec (concat action-path path [:options]))]
-      {:db (update-in db data-vec-path dissoc key)})))
-
-(re-frame/reg-event-fx
-  ::rename-selected-scene-action-option
-  (fn [{:keys [db]} [_ old-key new-key]]
-    (let [{:keys [scene-id action path]} (get-in db [:editor :selected-scene-action])
-          action-path [:scenes scene-id :actions (keyword action)]
-          options-vec-path (vec (concat action-path path [:options]))
-          option (-> db
-                     (get-in options-vec-path)
-                     old-key)]
-      {:db (-> db
-               (update-in options-vec-path dissoc key)
-               (update-in options-vec-path assoc new-key option))})))
+  (fn [{:keys [db]} _]
+    (let [state (get-in db [:editor :action-form :data])
+          {:keys [scene-id action]} (get-in db [:editor :selected-scene-action])
+          action-path [:scenes scene-id :actions (keyword action)]]
+      {:db (assoc-in db action-path state)})))
 
 (re-frame/reg-event-fx
   ::show-scene-action
@@ -668,11 +529,11 @@
 
 (re-frame/reg-event-fx
   ::edit-dataset-item
-  (fn [{:keys [db]} [_ item-id {:keys [data]}]]
+  (fn [{:keys [db]} [_ item-id {:keys [data name]}]]
     {:db (assoc-in db [:loading :edit-dataset-item] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/dataset-items/" item-id)
-                  :params          {:data data}
+                  :params          {:data data :name name}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::edit-dataset-item-success]

@@ -46,13 +46,15 @@
 (defn ->percentage [value] (-> value (* 100) float Math/round))
 
 (defn score->value [score is-scored]
-  (cond
-    (and score is-scored) (-> (:correct score)
-                              (- (:incorrect score))
-                              (/ (:correct score))
-                              ->percentage)
-    (and score) 100
-    :else nil))
+  (let [correct (-> (:correct score) (or 0))
+        incorrect (-> (:incorrect score) (or 0))]
+    (cond
+      (and score is-scored) (-> correct
+                                (- incorrect)
+                                (/ correct)
+                                ->percentage)
+      (and score) 100
+      :else nil)))
 
 (defn activity->score
   [activity]

@@ -141,5 +141,25 @@
                          :speed 0.3
                          :scale-x 0.3
                          :scale-y 0.3
-                         :skins ["default" "8" "airplane" "bear" "bee" "dino" "ear" "empty" "eyes" "fire" "iguana" "insect" "island" "magnet" "qwestion" "sheep" "spider" "squirrel" "tree" "wood"]
+                         :skins ["default"
+                                 "8" "airplane" "bear" "bee" "dino" "ear" "empty" "eyes" "fire" "iguana" "insect" "island" "magnet" "qwestion" "sheep" "spider" "squirrel" "tree" "wood"
+                                 "grapes" "one" "fingernail" "unicorn" "uniform"
+                                 "elephant" "salad" "building" "star" "nurse"
+                                 "hand" "mama" "monkey" "apple" "mountain"
+                                 "snake" "chair" "sun" "watermelon" "soup"
+                                 "ball" "factory" "duck" "potatoes" "fish"
+                                 "lion" "lemon" "moon" "pencil" "milk"
+                                 "tomato" "phone" "turtle" "train" "shark"
+                                 "diamond" "finger" "dragon" "teeth"
+                                 "frog" "rock" "rose" "mouse" "queen"
+                                 "home" "bed" "car" "candle" "crocodile"
+                                 "toothbrush" "pig" "eyebrow" "onion" "five"
+                                 "baby" "cloud" "nest" "black" "orange"
+                                 "flower" "flute" "strawberry" "fruits" "arrow"
+                                 "bicycle" "boat" "whale" "mouth"
+                                 "garden" "juice" "toys" "jamon" "giraffe"
+                                 "cat" "guitar" "earth" "chicken" "glove"
+                                 "twins" "giant" "sunflower" "gemstone" "chalk"
+                                 "violin" "cow" "baby_cow" "window" "green"
+                                 "wrench" "call" "rain" "lama" "cry"]
                          :animations ["idle1" "idle2" "idle3" "idle_fly1" "idle_fly2" "idle_fly3" "jump" "jump2" "come" "come2" "leave" "leave2" "wood" "wood2"]}})

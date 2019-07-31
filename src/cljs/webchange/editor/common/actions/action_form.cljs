@@ -10,6 +10,8 @@
     [webchange.editor.common.actions.action-types :refer [action-types]]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
+    [webchange.editor.common.actions.events :as actions.events]
+    [webchange.editor.common.actions.subs :as actions.subs]
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer :as ws]
     [webchange.subs :as subs]
@@ -121,10 +123,10 @@
                  :default-checked? (:return-immediately @props)
                  :on-change #(swap! props assoc :return-immediately (.-checked %2))}]])
 
-(defn- state-panel [props]
+(defn- state-panel [props {:keys [scene-id]}]
   [:div
-   [f/object-dropdown props :target]
-   [f/object-states-dropdown props :id (:target @props)]])
+   [f/object-dropdown props :target scene-id]
+   [f/object-states-dropdown props :id (:target @props) scene-id]])
 
 (defn- animation-panel [props]
   [:div
@@ -215,30 +217,32 @@
        ])))
 
 (defn- data-panel [props]
-  (let [data @(re-frame/subscribe [::es/selected-scene-action-data])]
+  (let [{data :data} @(re-frame/subscribe [::actions.subs/form-data])]
     (swap! props assoc :data data)
     [sa/ItemGroup {}
      [sa/Item {}
       [sa/ItemContent {}
        [na/header {:as "h4" :floated "left" :content "Elements"}]
        [:div {:style {:float "right"}}
-        [na/icon {:name "add" :link? true :on-click #(re-frame/dispatch [::events/selected-action-add-above-action 0])}]]]]
-     (for [[index action-name] (map-indexed (fn [idx itm] [idx itm]) data)]
-       ^{:key (str index action-name)}
+        [na/icon {:name "add" :link? true :on-click #(re-frame/dispatch [::actions.events/selected-action-add-above-action 0])}]]]]
+     (for [[index action] (map-indexed (fn [idx itm] [idx itm]) data)]
+       ^{:key (str index action)}
        [sa/Item {}
         [sa/ItemContent {}
-         [:a {:on-click #(re-frame/dispatch [::events/select-scene-action-data-path index])} (str (:type action-name))]
+         [:a {:on-click #(re-frame/dispatch [::actions.events/select-action-data-path index])} (str (:type action) " - " (:target action))]
          [:div {:style {:float "right"}}
+          [na/icon {:name "copy outline" :link? true
+                    :on-click #(re-frame/dispatch [::actions.events/selected-action-copy-data index])}]
           [na/icon {:name "arrow up" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-order-up index])}]
+                    :on-click #(re-frame/dispatch [::actions.events/selected-action-order-up index])}]
           [na/icon {:name "arrow down" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-order-down index])}]
+                    :on-click #(re-frame/dispatch [::actions.events/selected-action-order-down index])}]
           [na/icon {:name "level up" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-add-above-action index])}]
+                    :on-click #(re-frame/dispatch [::actions.events/selected-action-add-above-action index])}]
           [na/icon {:name "level down" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-add-below-action index])}]
+                    :on-click #(re-frame/dispatch [::actions.events/selected-action-add-below-action index])}]
           [na/icon {:name "remove" :link? true
-                    :on-click #(re-frame/dispatch [::events/selected-action-remove-data index])}]]
+                    :on-click #(re-frame/dispatch [::actions.events/selected-action-remove-data index])}]]
          ]])]))
 
 (defn- parallel-panel [props]
@@ -266,11 +270,11 @@
                              :on-change     #(swap! props assoc :description (-> %2 .-value))
                              :inline        true}]]])
 
-(defn- add-alias-panel [props]
+(defn- add-alias-panel [props {:keys [scene-id]}]
   [:div
-   [f/object-dropdown props :target]
+   [f/object-dropdown props :target scene-id]
    [na/form-input {:label "Alias" :default-value (:alias @props) :on-change #(swap! props assoc :alias (-> %2 .-value)) :inline? true}]
-   [f/object-states-dropdown props :state (:target @props)]])
+   [f/object-states-dropdown props :state (:target @props) scene-id]])
 
 (defn- transition-panel [props]
   [:div
@@ -344,23 +348,23 @@
        [sa/ItemContent {}
         (if @edit
           [:div {:style {:float "left"}} [na/form-input {:label "New key" :size "mini" :default-value (name key) :on-change #(reset! edit (-> %2 .-value keyword)) :inline? true}]]
-          [:a {:on-click #(re-frame/dispatch [::events/select-scene-action-options-path key])} (str (name key) " : " (:type action))])
+          [:a {:on-click #(re-frame/dispatch [::actions.events/select-action-options-path key])} (str (name key) " : " (:type action))])
 
         [:div {:style {:float "right"}}
          (if @edit
            [na/icon {:name "checkmark" :link? true :on-click #(do
-                                                                (re-frame/dispatch [::events/rename-selected-scene-action-option key @edit])
+                                                                (re-frame/dispatch [::actions.events/rename-selected-action-option key @edit])
                                                                 (reset! edit nil))}]
            [na/icon {:name "pencil" :link? true
                      :on-click #(reset! edit key)}])
          [na/icon {:name "remove" :link? true
-                   :on-click #(re-frame/dispatch [::events/selected-action-remove-option key])}]]
+                   :on-click #(re-frame/dispatch [::actions.events/selected-action-remove-option key])}]]
         ]])))
 
 (defn- case-options-panel [props]
   (let [new-name (r/atom nil)]
     (fn [props]
-      (let [{{options :options} :data} @(re-frame/subscribe [::es/selected-scene-action])]
+      (let [{options :options} @(re-frame/subscribe [::actions.subs/form-data])]
         (swap! props assoc :options options)
         [sa/ItemGroup {}
          [sa/Item {}
@@ -374,7 +378,7 @@
             [na/grid-column {}
              [:div {:style {:float "right"}}
               [na/icon {:name "add" :link? true :on-click #(do
-                                                             (re-frame/dispatch [::events/selected-action-add-option @new-name])
+                                                             (re-frame/dispatch [::actions.events/selected-action-add-option @new-name])
                                                              (reset! new-name nil))}]]]]]]
          (for [[key action] options]
            ^{:key (str key)}
@@ -445,9 +449,9 @@
    ])
 
 (defn text-animation-panel
-  [props]
+  [props {:keys [scene-id]}]
   [:div
-   [f/object-dropdown props :target]
+   [f/object-dropdown props :target scene-id]
    [na/form-input {:label "animation" :default-value (:animation @props) :on-change #(swap! props assoc :animation (-> %2 .-value)) :inline? true}]
    [na/divider {}]
    [sa/FormGroup {}
@@ -475,8 +479,8 @@
    (case (-> @props :type keyword)
      :action [action-panel props]
      :audio [audio-panel props params]
-     :state [state-panel props]
-     :add-alias [add-alias-panel props]
+     :state [state-panel props params]
+     :add-alias [add-alias-panel props params]
      :empty [empty-panel props]
      :animation [animation-panel props]
      :add-animation [add-animation-panel props]
@@ -506,7 +510,7 @@
      :set-progress [set-progress-panel props]
      :copy-variable [copy-variable-panel props]
 
-     :text-animation [text-animation-panel props]
+     :text-animation [text-animation-panel props params]
      nil)])
 
 (defn main-action-form

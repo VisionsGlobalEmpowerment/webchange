@@ -32,35 +32,36 @@
                    :see-saw-3    {:type "image" :width 195 :height 179 :x -10 :y 48
                                 :src  "/raw/img/park/see-saw/saw_03.png" :origin {:type "center-center"}},
 
-                   :box1 {:type "transparent" :x 500 :y 300 :width 206 :height 210 :origin {:type "center-center"}
+                   :box1 {:type "transparent" :x 350 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
+                          :scale {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                           :scene-name "box1" :draggable {:var-name "drag-box-1"} :transition "box1"
-                          :states {:default {:type "transparent"}
-                                   :come {:type "animation" :name "boxes" :anim "come"
-                                             :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}
-                                   :initial-position {:x 600 :y 400}}
+                          :states {:default {:type "transparent" :x 350 :y 300}
+                                   :come {:type "animation" :name "boxes" :anim "come" :x 500 :y 550
+                                          :speed 0.3 :loop false :start true}}
                           :actions {:drag-end {:type "action" :id "drag-box1" :on "drag-end"}}}
 
-                   :box2 {:type "transparent" :x 900 :y 300 :width 206 :height 210 :origin {:type "center-center"}
+                   :box2 {:type "transparent" :x 850 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
+                          :scale {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                           :scene-name "box2" :draggable {:var-name "drag-box-2"} :transition "box2"
-                          :states {:default {:type "transparent"}
-                                   :come {:type "animation" :name "boxes" :anim "come"
-                                             :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}
-                                   :initial-position {:x 1000 :y 400}}
+                          :states {:default {:type "transparent" :x 850 :y 300}
+                                   :come {:type "animation" :name "boxes" :anim "come" :x 1000 :y 550
+                                          :speed 0.3 :loop false :start true}}
                           :actions {:drag-end {:type "action" :id "drag-box2" :on "drag-end"}}}
 
-                   :box3 {:type "transparent" :x 1300 :y 300 :width 206 :height 210 :origin {:type "center-center"}
+                   :box3 {:type "transparent" :x 1350 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
+                          :scale {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                           :scene-name "box3" :draggable {:var-name "drag-box-3"} :transition "box3"
-                          :states {:default {:type "transparent"}
-                                   :come {:type "animation" :name "boxes" :anim "come"
-                                             :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}
-                                   :initial-position {:x 1400 :y 400}}
+                          :states {:default {:type "transparent" :x 1350 :y 300}
+                                   :come {:type "animation" :name "boxes" :anim "come" :x 1500 :y 550
+                                          :speed 0.3 :loop false :start true}}
                           :actions {:drag-end {:type "action" :id "drag-box3" :on "drag-end"}}}
 
-                   :box-ph {:type "transparent" :width 300 :height 300 :x 430 :y -30 :origin {:type "center-center"}
+                   :box-ph {:type "transparent" :width 771 :height 1033 :x 360 :y -30 :origin {:type "center-center"}
+                            :scale {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                             :scene-name "box-ph" :transition "box-ph"
-                            :states {:default {:type "transparent"}
-                                     :visible {:type "animation" :name "boxes" :anim "idle1" :skin "empty"
-                                               :scale {:x 0.3 :y 0.3} :speed 0.3 :loop true :start false}}}
+                            :states {:default {:type "transparent" :x 360 :y -30}
+                                     :visible {:type "animation" :name "boxes" :anim "idle1" :skin "empty" :x 495 :y 175
+                                               :speed 0.3 :loop true :start false}}}
 
                    },
    :scene-objects [["background"] ["see-saw"] ["mari"] ["box1" "box2" "box3"]],
@@ -134,7 +135,7 @@
                                :success "check-box3"
                                :fail "box-3-revert"}
 
-                   :box-1-revert {:type "transition" :transition-id "box1" :to {:x 500 :y 300 :duration 2}}
+                   :box-1-revert {:type "transition" :transition-id "box1" :to {:x 500 :y 550 :duration 2}}
 
                    :box-1-start {:type "sequence"
                                  :data ["show-box-1-ph"
@@ -162,7 +163,7 @@
                                            :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
                                           {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}]}
 
-                   :box-2-revert {:type "transition" :transition-id "box2" :to {:x 900 :y 300 :duration 2}}
+                   :box-2-revert {:type "transition" :transition-id "box2" :to {:x 1000 :y 550 :duration 2}}
 
                    :box-2-start {:type "sequence"
                                  :data ["show-box-2-ph"
@@ -190,7 +191,7 @@
                                            :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
                                           {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}]}
 
-                   :box-3-revert {:type "transition" :transition-id "box3" :to {:x 1300 :y 400 :duration 2}}
+                   :box-3-revert {:type "transition" :transition-id "box3" :to {:x 1500 :y 550 :duration 2}}
 
                    :box-3-start {:type "sequence"
                                  :data ["show-box-3-ph"
@@ -215,17 +216,6 @@
                                            :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
                                           {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 
-                   :voice-low-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "seesaw-voice-low"}]}
-                   :voice-high-var {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "seesaw-voice-high"}]}
-
-                   :word-ardilla-low {:type "audio", :id "voice-1", :start 7.795, :duration 3.911}
-                   :word-oso-low {:type "audio", :id "voice-2", :start 5.918, :duration 3.943}
-                   :word-incendio-low {:type "audio", :id "voice-3", :start 5.795, :duration 3.903}
-
-                   :word-ardilla-high {:type "audio", :id "voice-1", :start 12.987, :duration 3.196}
-                   :word-oso-high {:type "audio", :id "voice-2", :start 11.361, :duration 3.663}
-                   :word-incendio-high {:type "audio", :id "voice-3", :start 10.781, :duration 3.301}
-
                    :introduce-concept {:type "sequence"
                                        :data ["go-down"
                                               "go-up"
@@ -235,12 +225,12 @@
                    :go-down {:type "parallel"
                              :data [{:type "empty" :duration 5000}
                                     {:type "transition" :transition-id "see-saw-plank" :to {:rotation 13 :duration 5 :loop false}}
-                                    {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "seesaw-voice-low"}]}]}
+                                    {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action-low"}]}]}
 
                    :go-up {:type "parallel"
                            :data [{:type "empty" :duration 5000}
                                   {:type "transition" :transition-id "see-saw-plank" :to {:rotation -13 :duration 5 :loop false}}
-                                  {:type "action" :from-var [{:var-name "current-word" :action-property "id" :var-property "seesaw-voice-high"}]}]}
+                                  {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action"}]}]}
 
                    :try-another
                    {:type "animation-sequence" :target "mari" :track 1 :offset 21.162
@@ -259,9 +249,9 @@
                                   :variables ["item-1" "item-2" "item-3"]
                                   :from      "concepts"}
 
-                   :mari-box-1 {:type "transition" :transition-id "mari" :to {:x 800 :y 400 :duration 2 :loop false}}
+                   :mari-box-1 {:type "transition" :transition-id "mari" :to {:x 700 :y 400 :duration 2 :loop false}}
                    :mari-box-2 {:type "transition" :transition-id "mari" :to {:x 1200 :y 400 :duration 2 :loop false}}
-                   :mari-box-3 {:type "transition" :transition-id "mari" :to {:x 1600 :y 400 :duration 2 :loop false}}
+                   :mari-box-3 {:type "transition" :transition-id "mari" :to {:x 1700 :y 400 :duration 2 :loop false}}
 
                    :clear-instruction {:type "remove-flows" :flow-tag "instruction"}
                    :start {:type "sequence"

@@ -57,6 +57,7 @@
     (when (:access-code data)
       (core/update-student-access-code! (Integer/parseInt id) (select-keys data [:access-code])))
     (core/update-student! (Integer/parseInt id) (select-keys data [:class-id :gender :date-of-birth]))
+    (auth/update-student-user! (:user-id data) (select-keys data [:first-name :last-name]))
     (handle [true {:id id}])))
 
 (defn handle-delete-student

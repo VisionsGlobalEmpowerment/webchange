@@ -143,7 +143,7 @@
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
-    (let [current-lesson-id (get-in db [:progress-data :current-lesson])
+    (let [current-lesson-id (:activity-lesson db)
           course-lessons (get-in db [:course-data :lessons])
           lesson-set-name (-> (filter #(= current-lesson-id (:id %)) course-lessons)
                               first

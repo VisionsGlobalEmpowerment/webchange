@@ -426,9 +426,10 @@
                                             :start    18.915,
                                             :duration 1.493,
                                             :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]}
-                   :start-activity         {:type        "sequence",
+                   :start                  {:type        "sequence",
                                             :description "Initial action",
-                                            :data        ["clear-instruction"
+                                            :data        ["start-activity"
+                                                          "clear-instruction"
                                                           "mari-welcome-audio"
                                                           "init-boxes"
                                                           "renew-words"
@@ -487,6 +488,8 @@
                                                            {:type     "set-skin"
                                                             :from-var [{:var-name "pair-concept-3" :action-property "skin" :var-property "skin"}
                                                                        {:var-name "pair-target-3" :action-property "target"}]}]}
+                                                   {:type "set-current-concept"
+                                                    :from-var [{:var-name "current-concept" :action-property "value" :var-property "skin"}]}
                                                    {:type "action" :from-var [{:var-name "current-concept" :var-property "hide-n-seek-current-concept-audio"}]}]}
 
                    :show-targets           {:type "sequence-data"
@@ -520,20 +523,30 @@
                                             :from-params [{:action-property "value" :param-property "box"}]}
 
                    :pick-correct           {:type "sequence"
-                                            :data ["set-target-animation"
+                                            :data ["inc-correct"
+                                                   "set-target-animation"
                                                    "mari-audio-correct"
                                                    "reset-target-animation"
                                                    "hide-targets"
                                                    "renew-current-concept"]}
 
-                   :pick-wrong             {:type "sequence"
-                                            :data ["mari-audio-try-again"]}
+                   :inc-correct {:type "pick-correct" :activity "hide-n-seek"
+                                 :from-var [{:var-name "current-concept" :action-property "concept-name" :var-property "concept-name"}]}
 
+                   :pick-wrong             {:type "sequence"
+                                            :data ["inc-wrong"
+                                                   "mari-audio-try-again"]}
+
+                   :inc-wrong {:type "pick-wrong" :activity "hide-n-seek"
+                               :from-var [{:var-name "current-concept" :action-property "concept-name" :var-property "concept-name"}]
+                               :from-params [{:action-property "option" :param-property "box"}]}
+
+                   :start-activity {:type "start-activity" :id "hide-n-seek"}
                    :finish-activity        {:type        "sequence-data"
                                             :description "Finishing action",
                                             :data        [{:type "finish-activity" :id "hide-n-seek"}
                                                           {:type "scene" :scene-id "map"}]}},
-   :triggers      {:start {:on "start" :action "start-activity"}}
+   :triggers      {:start {:on "start" :action "start"}}
    :metadata      {:autostart true
                    :prev      "park"}
    })

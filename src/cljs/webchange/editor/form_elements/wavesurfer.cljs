@@ -72,7 +72,8 @@
                      :end (:end @region-atom)
                      :drag edit
                      :resize edit}]
-    (.on wavesurfer "ready" #(.addRegion wavesurfer (clj->js region-data)))))
+    (.on wavesurfer "ready" #(do (.addRegion wavesurfer (clj->js region-data))
+                                 (.seekAndCenter wavesurfer (/ (+ (:start region-data) 5) (.getDuration wavesurfer)))))))
 
 
 (defn audio-waveform-modal [{:keys [key start end]} on-save]

@@ -83,8 +83,8 @@
              (handle-delete-dataset-item id request))
 
            (GET "/api/datasets/:id/lesson-sets" [id] (-> id Integer/parseInt core/get-dataset-lessons response))
-           (GET "/api/lesson-sets/:name" [name]
-             (if-let [item (-> name core/get-lesson-set-by-name)]
+           (GET "/api/datasets/:dataset-id/lesson-sets/:name" [dataset-id name]
+             (if-let [item (core/get-lesson-set-by-name dataset-id name)]
                (response {:lesson-set item})
                (not-found "not found")))
            (POST "/api/lesson-sets" request

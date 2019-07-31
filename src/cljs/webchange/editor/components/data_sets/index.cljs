@@ -7,10 +7,16 @@
                                   TableCell
                                   TableHeader
                                   TableHeaderCell
-                                  TableRow]]
+                                  TableRow
+                                  Modal
+                                  ModalActions
+                                  ModalContent
+                                  ModalHeader
+                                  Button]]
     [sodium.core :as na]
     [webchange.editor.events :as events]
-    [webchange.editor.subs :as es]))
+    [webchange.editor.subs :as es]
+    [webchange.editor.common.insert-json-modal :refer [insert-json-modal]]))
 
 (def item-field-types [
                        {:key   :number
@@ -42,6 +48,8 @@
                              :selection   true
                              :options     item-field-types
                              :on-change   #(swap! field-data assoc :type (.-value %2))}]
+               [insert-json-modal {:text "Template (JSON)"
+                                   :on-change #(swap! field-data assoc :template (js->clj %))}]
                [na/form-button {:content  "Add field"
                                 :on-click #(swap! data-atom update-in [:fields] conj @field-data)}]]))
 
@@ -49,6 +57,44 @@
   [dataset field-name]
   (assoc dataset :fields (->> (:fields dataset)
                               (filter #(not= (:name %) field-name)))))
+
+(defn update-field
+  [dataset field-name value]
+  (-> dataset
+      (remove-field field-name)
+      (update-in [:fields] conj value)))
+
+(defn edit-field-modal
+  [{:keys [value on-change]}]
+  (r/with-let [modal-open (r/atom false)
+               props (r/atom value)]
+    [Modal {:open    @modal-open
+            :trigger (r/as-element [:div
+                                    [Button {:basic    true
+                                             :on-click #(reset! modal-open true)}
+                                     "Edit"]])}
+     [ModalHeader {} "Edit"]
+     [ModalContent {:scrolling true}
+      [na/form-group {}
+       [na/form-input {:label     "Name"
+                       :value (:name @props)
+                       :on-change #(swap! props assoc :name (-> %2 .-value))
+                       :inline?   true}]
+       [sa/Dropdown {:placeholder "Type"
+                     :search      true
+                     :selection   true
+                     :options     item-field-types
+                     :value (:type @props)
+                     :on-change   #(swap! props assoc :type (.-value %2))}]
+       [insert-json-modal {:text "Template (JSON)"
+                           :value (-> @props :template clj->js)
+                           :on-change #(swap! props assoc :template (js->clj %))}]]]
+     [ModalActions {}
+      [Button {:basic    true
+               :on-click #(reset! modal-open false)} "Cancel"]
+      [Button {:primary  true
+               :on-click #(do (on-change @props)
+                              (reset! modal-open false))} "Save"]]]))
 
 (defn- dataset-fields-panel
   [data-atom]
@@ -60,15 +106,19 @@
      [TableHeaderCell]]
     ]
    [TableBody {}
-    (for [{:keys [name type]} (:fields @data-atom)]
+    (for [{:keys [name type] :as field-data} (:fields @data-atom)]
       ^{:key name}
       [TableRow {}
        [TableCell {} name]
        [TableCell {} type]
-       [TableCell {} [na/button {:floated  "right"
-                                 :basic?   true
-                                 :content  "Delete"
-                                 :on-click #(swap! data-atom remove-field name)}]]])]])
+       [TableCell {}
+        [na/button {:floated  "right"
+                    :basic?   true
+                    :content  "Delete"
+                    :on-click #(swap! data-atom remove-field name)}]
+        [:div {:style {:float "right"}}
+         [edit-field-modal {:value field-data :on-change #(swap! data-atom update-field name %)}]]
+        ]])]])
 
 (defn add-dataset-form
   []

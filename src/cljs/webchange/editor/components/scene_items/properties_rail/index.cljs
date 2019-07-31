@@ -10,7 +10,9 @@
     [webchange.editor.enums :refer [object-types]]
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
-    [webchange.subs :as subs]))
+    [webchange.subs :as subs]
+    [webchange.editor.common.actions.subs :as actions.subs]
+    [webchange.editor.common.actions.events :as actions.events]))
 
 ;; Todo: Duplicated from webchange.editor.index. Remove
 (defn reset-transform
@@ -53,22 +55,28 @@
 
 (defn- scene-action-properties-panel
   []
-  (let [{:keys [data]} @(re-frame/subscribe [::es/selected-scene-action])
-        scene-id @(re-frame/subscribe [::subs/current-scene])
-        props (r/atom data)
-        params {:scene-id scene-id}]
-    (fn []
-      [na/form {}
-       [action-form props params]
-       [na/divider {}]
-       [na/form-button {:content "Save" :on-click #(re-frame/dispatch [::events/edit-selected-scene-action @props])}]]
-      )))
+  (r/with-let [scene-id @(re-frame/subscribe [::subs/current-scene])
+               form-data @(re-frame/subscribe [::actions.subs/form-data])
+               props (r/atom form-data)
+               params {:scene-id scene-id}]
+    [na/form {}
+     [action-form props params]
+     [na/divider {}]
+     [na/form-button {:content "Save" :on-click #(do
+                                                   (re-frame/dispatch [::actions.events/edit-selected-action @props])
+                                                   (re-frame/dispatch [::events/edit-selected-scene-action])
+                                                   )}]]))
+
+(defn- scene-action-properties-panel-with-key []
+  (let [hash @(re-frame/subscribe [::actions.subs/form-data-hash])]
+    ^{:key hash}
+    [scene-action-properties-panel]))
 
 (defn- scene-action-panel
   []
   (let [edit (r/atom nil)]
     (fn []
-      (if-let [{:keys [scene-id action path]} @(re-frame/subscribe [::es/selected-scene-action])]
+      (if-let [{:keys [scene-id action]} @(re-frame/subscribe [::es/selected-scene-action])]
         [na/segment {}
          (if @edit
            [na/header {:as "h4" :floated "left"}
@@ -83,8 +91,7 @@
           [na/icon {:name "close" :link? true :on-click #(re-frame/dispatch [::events/reset-scene-action])}]]
          [na/divider {:clearing? true}]
 
-         ^{:key (str scene-id action path)}
-         [scene-action-properties-panel]]))))
+         [scene-action-properties-panel-with-key]]))))
 
 (defn properties-rail
   []

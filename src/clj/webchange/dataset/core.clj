@@ -34,7 +34,9 @@
 
 (defn update-dataset!
   [dataset-id data]
-  (let [prepared-data (assoc data :id dataset-id)]
+  (let [prepared-data (-> data
+                          (assoc :id dataset-id)
+                          (update-in [:scheme :fields] #(sort-by :name %)))]
     (db/update-dataset! prepared-data)
     [true {:id dataset-id}]))
 
@@ -43,10 +45,14 @@
   (let [items (db/get-dataset-items {:dataset_id dataset-id})]
     {:items items}))
 
-
 (defn get-item
   [item-id]
   (let [item (db/get-dataset-item {:id item-id})]
+    item))
+
+(defn get-item-by-name
+  [dataset-id name]
+  (let [item (db/get-dataset-item-by-name {:dataset_id dataset-id :name name})]
     item))
 
 (defn create-dataset-item!
@@ -54,6 +60,12 @@
   (let [prepared-data (transform-keys ->snake_case_keyword data)
         [{id :id}] (db/create-dataset-item! prepared-data)]
     [true {:id id}]))
+
+(defn create-dataset-item-with-id!
+  [data]
+  (let [prepared-data (transform-keys ->snake_case_keyword data)]
+    (db/create-dataset-item-with-id! prepared-data)
+    [true data]))
 
 (defn update-dataset-item!
   [id data]
@@ -72,8 +84,8 @@
     {:lesson-sets items}))
 
 (defn get-lesson-set-by-name
-  [name]
-  (let [item (db/get-lesson-set-by-name {:name name})]
+  [dataset-id name]
+  (let [item (db/get-lesson-set-by-name {:dataset_id dataset-id :name name})]
     item))
 
 (defn create-lesson-set!

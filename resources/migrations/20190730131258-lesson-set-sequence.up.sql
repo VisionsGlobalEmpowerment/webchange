@@ -1,0 +1,1 @@
+SELECT setval('lesson_sets_id_seq', 5, true);

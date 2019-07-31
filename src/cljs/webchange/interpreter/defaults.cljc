@@ -78,6 +78,7 @@
                      {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/boxes/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/boxes/skeleton2.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/book/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/book/skeleton.json", :size 1, :type "anim-text"}

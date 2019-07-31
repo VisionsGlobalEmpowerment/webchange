@@ -62,6 +62,15 @@
   (e/init)
   (re-frame/dispatch [::ie/start-playing]))
 
+(defn top-left
+  []
+  (let [viewport (re-frame/subscribe [::subs/viewport])
+        viewbox (get-viewbox @viewport)
+        scale (/ (:width viewbox) (:width @viewport))
+        x (Math/round (* (compute-x viewbox) scale))
+        y (Math/round (* (compute-y viewbox) scale))]
+    {:x x :y y}))
+
 (defn top-right
   []
   (let [viewport (re-frame/subscribe [::subs/viewport])
@@ -183,21 +192,36 @@
 (defn close-button
   [x y]
   [:> Group {:x x :y y
+             :on-click #(re-frame/dispatch [::ie/open-student-dashboard])
+             :on-tap #(re-frame/dispatch [::ie/open-student-dashboard])}
+   [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
+
+(defn back-button
+  [x y]
+  [:> Group {:x x :y y
              :on-click #(re-frame/dispatch [::ie/close-scene])
-             :on-tap #(re-frame/dispatch [::ie/close-scene])} [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
+             :on-tap #(re-frame/dispatch [::ie/close-scene])}
+   [kimage (get-data-as-url "/raw/img/ui/back_button_01.png")]])
 
 (defn settings-button
   [x y]
   [:> Group {:x x :y y
              :on-click #(re-frame/dispatch [::events/open-settings])
-             :on-tap #(re-frame/dispatch [::events/open-settings])} [kimage (get-data-as-url "/raw/img/ui/settings_button_01.png")]])
+             :on-tap #(re-frame/dispatch [::events/open-settings])}
+   [kimage (get-data-as-url "/raw/img/ui/settings_button_01.png")]])
 
 (defn menu
   []
-  (let [top-right (top-right)]
-    [:> Group top-right
-     [settings-button (- 216) 20]
-     [close-button (- 108) 20]]
+  (let [top-right (top-right)
+        top-left (top-left)]
+    [:> Group {}
+     [:> Group top-left
+      [back-button 20 20]]
+     [:> Group top-right
+      [settings-button (- 216) 20]
+      [close-button (- 108) 20]]
+     ]
+
     ))
 
 (defn scene-started
