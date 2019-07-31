@@ -15,20 +15,21 @@
   (set! (.-value (.-gain @effects-gain)) volume))
 
 (defn init
-  []
-  (when-not @audio-ctx
-    (do
-      (reset! audio-ctx (if js/window.AudioContext.
-                          (js/window.AudioContext.)
-                          (js/window.webkitAudioContext.)))
-      (reset! music-gain (.createGain @audio-ctx))
-      (music-volume 0.1)
-      (.connect @music-gain (.-destination @audio-ctx))
-
-      (reset! effects-gain (.createGain @audio-ctx))
-      (effects-volume 0.3)
-      (.connect @effects-gain (.-destination @audio-ctx))
-      )))
+  ([]
+   (init {}))
+  ([{:keys [volume]}]
+   (when-not @audio-ctx
+     (do (reset! audio-ctx (if js/window.AudioContext.
+                             (js/window.AudioContext.)
+                             (js/window.webkitAudioContext.)))
+         (reset! music-gain (.createGain @audio-ctx))
+         (.connect @music-gain (.-destination @audio-ctx))
+         (reset! effects-gain (.createGain @audio-ctx))
+         (.connect @effects-gain (.-destination @audio-ctx))))
+   (let [music-vol (or volume 0.1)
+         effects-vol (or volume 0.3)]
+     (music-volume music-vol)
+     (effects-volume effects-vol))))
 
 (defn create-buffered-source
   [data]
@@ -82,16 +83,16 @@
      audio)))
 
 (defn execute-audio-fx
-  [{:keys [key start duration offset on-ended]}]
-  (init)
+  [{:keys [key start duration offset on-ended] :as params}]
+  (init params)
   (let [audio (get-audio key @effects-gain)]
     (-> audio
         (.then (with-on-ended on-ended))
         (.then (start-audio offset start duration)))))
 
 (defn execute-audio-music
-  [{:keys [key start offset on-ended]}]
-  (init)
+  [{:keys [key start offset on-ended] :as params}]
+  (init params)
   (let [audio (get-audio key @music-gain)]
     (-> audio
         (.then (with-on-ended on-ended))

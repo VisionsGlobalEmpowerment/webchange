@@ -1,7 +1,8 @@
 (ns webchange.scene
   (:require [webchange.demo-scenes.cinema.cinema :refer [cinema-scene]]
             [webchange.demo-scenes.cinema.cinema_video :refer [cinema-video-scene]]
-            [webchange.demo-scenes.home :refer [home-scene]]
+            [webchange.demo-scenes.home.home :refer [home-scene]]
+            [webchange.demo-scenes.home.letter-intro :refer [letter-intro-scene]]
             [webchange.demo-scenes.library.painting-tablet :refer [painting-tablet-scene]]
             [webchange.demo-scenes.map :refer [map-scene]]
             [webchange.demo-scenes.park.see-saw :refer [see-saw-scene]]
@@ -18,6 +19,7 @@
             [clojure.tools.logging :as log]))
 
 (def courses {"test" {"home"            home-scene
+                      "letter-intro"    letter-intro-scene
                       "map"             map-scene
                       "see-saw"         see-saw-scene
                       "swings"          swings-scene
@@ -39,6 +41,10 @@
                                         :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
                                         :type    "non-scored"
                                         :outs    [{:name "map" :x 1457 :y 630}]}
+                      :letter-intro    {:name    "Letter Introduction"
+                                        :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
+                                        :type    "non-scored"
+                                        :outs    [{:name "map" :x 1457 :y 330}]}
                       :map             {:name    "Map"
                                         :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
                                         :type    "non-scored"
@@ -108,7 +114,7 @@
                                         :outs    [{:name "library" :x 100 :y 100}]}}
 
    :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
-                      "book" "painting-tablet" "cinema" "cinema-video" "cycling"]
+                      "book" "painting-tablet" "cinema" "cinema-video" "cycling" "letter-intro"]
    :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
                                            :assessment-1 "assessment1"}}
                        {:id 2 :lesson-sets {:concepts "ls2"

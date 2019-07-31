@@ -1,4 +1,4 @@
-(ns webchange.demo-scenes.home)
+(ns webchange.demo-scenes.home.home)
 
 (def home-scene
   {:assets
