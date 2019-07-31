@@ -27,6 +27,7 @@
   [actions f]
   (->> actions
        (group-by :lesson)
+       (#(into (sorted-map) %))
        (map (fn [[l a]] {:name (str "L" l)
                          :values (map f a)}))))
 
@@ -41,12 +42,12 @@
        (map #(with-stat % stats-map))
        (group-by :level)
        (map (fn [[l a]] [l (level->grid a f)]))
-       (into {})))
+       (#(into (sorted-map) %))))
 
 (defn ->percentage [value] (-> value (* 100) float Math/round))
 
 (defn score->value [score is-scored]
-  (let [correct (-> (:correct score) (or 0))
+  (let [correct (-> (:correct score) (or 1))
         incorrect (-> (:incorrect score) (or 0))]
     (cond
       (and score is-scored) (-> correct
