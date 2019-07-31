@@ -60,25 +60,24 @@
 
 (defn classes-list-page
   []
-  (r/with-let [_ (re-frame/dispatch [::classes-events/load-classes])]
-              (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
-                    is-loading? @(re-frame/subscribe [::classes-subs/classes-loading])]
-                (if is-loading?
-                  [ui/linear-progress]
-                  [content-page
-                   {:title (translate [:title])}
-                   [:div
-                    [classes-list
-                     {:on-edit-click     (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/show-edit-class-form id]))
-                      :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/delete-class id]))
-                      :on-profile-click  #(redirect-to :dashboard-class-profile :class-id (:id %))
-                      :on-students-click #(redirect-to :dashboard-students :class-id (:id %))}
-                     classes]
-                    [fab
-                     {:on-click   #(re-frame/dispatch [::classes-events/show-add-class-form])
-                      :color      "primary"
-                      :variant    "extended"
-                      :style      (:add-button styles)
-                      :aria-label (translate [:add-class :text])}
-                     [ic/add]
-                     (translate [:add-class :text])]]]))))
+  (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
+        is-loading? @(re-frame/subscribe [::classes-subs/classes-loading])]
+    (if is-loading?
+      [ui/linear-progress]
+      [content-page
+       {:title (translate [:title])}
+       [:div
+        [classes-list
+         {:on-edit-click     (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/show-edit-class-form id]))
+          :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/delete-class id]))
+          :on-profile-click  #(redirect-to :dashboard-class-profile :class-id (:id %))
+          :on-students-click #(redirect-to :dashboard-students :class-id (:id %))}
+         classes]
+        [fab
+         {:on-click   #(re-frame/dispatch [::classes-events/show-add-class-form])
+          :color      "primary"
+          :variant    "extended"
+          :style      (:add-button styles)
+          :aria-label (translate [:add-class :text])}
+         [ic/add]
+         (translate [:add-class :text])]]])))

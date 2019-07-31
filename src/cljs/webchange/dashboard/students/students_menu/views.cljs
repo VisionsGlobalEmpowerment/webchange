@@ -26,8 +26,7 @@
   []
   (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
         students (->> @(re-frame/subscribe [::students-subs/class-students class-id])
-                      map-students-list)
-        _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))]
+                      map-students-list)]
     [ui/expansion-panel
      {:disabled (->> class-id boolean not)}
      [ui/expansion-panel-summary
