@@ -5,7 +5,8 @@
             [webchange.events :as events]
             [webchange.interpreter.events :as ie]
             [webchange.dashboard.classes.events :as classes-events]
-            [webchange.dashboard.students.events :as students-events]))
+            [webchange.dashboard.students.events :as students-events]
+            [webchange.dashboard.events :as dashboard-events]))
 
 (def routes ["/" {""                  :home
                   "login"             :login
@@ -32,8 +33,10 @@
   (case handler
     :course (re-frame/dispatch [::ie/start-course (:id route-params)])
     :student-dashboard (re-frame/dispatch [::ie/start-course default-course-name])
-    :dashboard-class-profile (re-frame/dispatch [::classes-events/load-class-profile (:class-id route-params) default-course-name])
-    :dashboard-student-profile (re-frame/dispatch [::students-events/open-student-profile (:student-id route-params) default-course-name])
+    :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) default-course-name])
+    :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) default-course-name])
+    :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
+    :dashboard-students (re-frame/dispatch [::dashboard-events/open-students (:class-id route-params)])
     nil))
 
 (def history

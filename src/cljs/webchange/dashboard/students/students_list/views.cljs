@@ -124,9 +124,7 @@
 (defn students-list-page
   []
   (let [filter (r/atom {:class-id nil})
-        class-id @(re-frame/subscribe [::classes-subs/current-class-id])
-        _ (re-frame/dispatch [::classes-events/load-classes])
-        _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))]
+        class-id @(re-frame/subscribe [::classes-subs/current-class-id])]
     (fn []
       (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
             students @(re-frame/subscribe [::students-subs/class-students class-id])

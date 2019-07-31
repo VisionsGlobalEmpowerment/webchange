@@ -165,10 +165,3 @@
   (fn [{:keys [db]} [_ result]]
     {:db (assoc-in db [:dashboard :student-profile] result)
      :dispatch-n (list [:complete-request :student-profile])}))
-
-(re-frame/reg-event-fx
-  ::open-student-profile
-  (fn [{:keys [db]} [_ student-id course-name]]
-    {:dispatch-n (list
-                   [::load-student student-id]
-                   [::load-student-profile student-id course-name])}))

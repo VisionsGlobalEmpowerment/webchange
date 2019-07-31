@@ -12,3 +12,32 @@
       (when student-id (swap! events conj [::students-events/set-current-student student-id]))
       {:db (assoc-in db [:dashboard :current-main-content] screen)
        :dispatch-n @events})))
+
+(re-frame/reg-event-fx
+  ::open-class-profile
+  (fn [{:keys [db]} [_ class-id course-name]]
+    {:dispatch-n (list
+                   [::classes-events/load-classes]
+                   [::students-events/load-students class-id]
+                   [::classes-events/load-class-profile class-id course-name])}))
+
+(re-frame/reg-event-fx
+  ::open-student-profile
+  (fn [{:keys [db]} [_ student-id course-name]]
+    {:dispatch-n (list
+                   [::classes-events/load-classes]
+                   [::students-events/load-student student-id]
+                   [::students-events/load-student-profile student-id course-name])}))
+
+(re-frame/reg-event-fx
+  ::open-students
+  (fn [{:keys [db]} [_ class-id]]
+    {:dispatch-n (list
+                   [::classes-events/load-classes]
+                   [::students-events/load-students class-id])}))
+
+(re-frame/reg-event-fx
+  ::open-classes
+  (fn [{:keys [db]} _]
+    {:dispatch-n (list
+                   [::classes-events/load-classes])}))

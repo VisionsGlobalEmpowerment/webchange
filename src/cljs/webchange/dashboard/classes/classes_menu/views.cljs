@@ -22,8 +22,7 @@
 
 (defn classes-menu
   []
-  (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
-        _ (re-frame/dispatch [::classes-events/load-classes])]
+  (let [classes @(re-frame/subscribe [::classes-subs/classes-list])]
     [ui/expansion-panel
      [ui/expansion-panel-summary
       [ui/typography {:variant "h6"}

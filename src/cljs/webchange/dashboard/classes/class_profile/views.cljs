@@ -50,7 +50,6 @@
   []
   (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
         students @(re-frame/subscribe [::students-subs/class-students class-id])
-        _ (when class-id (re-frame/dispatch [::students-events/load-students class-id]))
         is-loading? @(re-frame/subscribe [::students-subs/students-loading class-id])]
     (if is-loading?
       [ui/linear-progress]
