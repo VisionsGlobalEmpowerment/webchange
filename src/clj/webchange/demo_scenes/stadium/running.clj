@@ -369,7 +369,7 @@
 
                    :current-concept-chant   {:type     "action"
                                              :from-var [{:var-name     "current-concept"
-                                                         :var-property "gamevoice-chanting"}]}
+                                                         :var-property "game-voice-chanting"}]}
 
                    :mari-voice-welcome      {:type        "parallel"
                                              :description "Hola amigo! Es hora de ponernos activos!
