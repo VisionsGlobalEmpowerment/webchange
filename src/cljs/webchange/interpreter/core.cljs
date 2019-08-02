@@ -193,11 +193,12 @@
             clj->js
             Tween.
             .play)
-      (:bezier to)
-        (TweenMax.to @component (:duration to) (-> to
-                                                   (assoc :ease (SlowMo.ease.config 0.1 0.4 false))
-                                                   (assoc :onComplete on-ended)
-                                                   clj->js))
+      (:bezier to)                                          ;Linear.easeNone
+        (let [ease-params (or (:ease to) [0.1 0.4])]
+          (TweenMax.to @component (:duration to) (-> to
+                                                     (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
+                                                     (assoc :onComplete on-ended)
+                                                     clj->js)))
       :else (.to @component (clj->js params)))
     ))
 
