@@ -105,7 +105,7 @@
     (doseq [item (:items data)]
       (if-let [db-item (core/get-item-by-name (:id dataset) (:name item))]
         (core/update-dataset-item! (:id db-item) item)
-        (core/create-dataset-item! item)))
+        (core/create-dataset-item! (-> item (assoc :dataset-id (:id dataset))))))
 
     (load-lessons (:id dataset) (:lessons data))))
 
@@ -123,7 +123,7 @@
       (if-let [db-item (core/get-item-by-name (:id dataset) (:name item))]
         (let [data (merge (:data db-item) (-> item :data (select-keys (map keyword field-names))))]
           (core/update-dataset-item! (:id db-item) {:name (:name item) :data data}))
-        (core/create-dataset-item! item)))
+        (core/create-dataset-item! (-> item (assoc :dataset-id (:id dataset))))))
 
     (load-lessons (:id dataset) (:lessons data))))
 
