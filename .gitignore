@@ -17,3 +17,4 @@ Procfile
 .lein-failures
 .nrepl-port
 profiles.clj
+package-lock.json
