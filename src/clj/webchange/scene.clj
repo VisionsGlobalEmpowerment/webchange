@@ -9,6 +9,7 @@
             [webchange.demo-scenes.park.swings :refer [swings-scene]]
             [webchange.demo-scenes.park.sandbox :refer [sandbox-scene]]
             [webchange.demo-scenes.park.park :refer [park-scene]]
+            [webchange.demo-scenes.park.park-poem :refer [park-poem-scene]]
             [webchange.demo-scenes.stadium.stadium :refer [stadium-scene]]
             [webchange.demo-scenes.stadium.volleyball :refer [volleyball-scene]]
             [webchange.demo-scenes.stadium.cycling :refer [cycling-scene]]
@@ -26,6 +27,7 @@
                       "sandbox"         sandbox-scene
                       "painting-tablet" painting-tablet-scene
                       "park"            park-scene
+                      "park-poem"       park-poem-scene
                       "volleyball"      volleyball-scene
                       "hide-n-seek"     hide-n-seek-scene
                       "library"         library-scene
@@ -62,6 +64,10 @@
                                                   {:name "hide-n-seek" :x 987 :y 670}]}
                       :see-saw         {:name    "Sea-saw"
                                         :preview "/images/dashboard/scene-preview/Park_See-Saw.jpg"
+                                        :type    "non-scored"
+                                        :outs    [{:name "park" :x 100 :y 100}]}
+                      :park-poem       {:name    "Poem"
+                                        :preview "/images/dashboard/scene-preview/Park_Main.jpg"
                                         :type    "non-scored"
                                         :outs    [{:name "park" :x 100 :y 100}]}
                       :swings          {:name    "Swings"
@@ -114,7 +120,7 @@
                                         :outs    [{:name "library" :x 100 :y 100}]}}
 
    :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
-                      "book" "painting-tablet" "cinema" "cinema-video" "cycling" "letter-intro"]
+                      "book" "painting-tablet" "cinema" "cinema-video" "cycling" "letter-intro" "park-poem"]
    :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
                                            :assessment-1 "assessment1"}}
                        {:id 2 :lesson-sets {:concepts "ls2"
