@@ -6,11 +6,13 @@
             [clojure.pprint :as p]
             [mount.core :as mount]
             [clojure.edn :as edn]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :refer [join]]))
 
 (defn items-path
-  [course-name dataset-name]
-  (str "resources/datasets/" course-name "-" dataset-name ".edn"))
+  [config course-name dataset-name]
+  (let [dir (or (:dataset-dir config) "resources/datasets/")]
+    (str dir course-name "-" dataset-name ".edn")))
 
 (defn prepare-item
   [item]
@@ -55,8 +57,8 @@
          (sort-by :name)
          (into []))))
 
-(defn save [course-name dataset-name]
-  (mount/start)
+(defn save
+  [config course-name dataset-name]
   (let [dataset (core/get-dataset-by-name course-name dataset-name)
         fields (->> (get-in dataset [:scheme :fields])
                     (sort-by :name)
@@ -72,7 +74,7 @@
                      (map prepare-lesson)
                      (sort-by :name)
                      (into []))
-        path (items-path course-name dataset-name)]
+        path (items-path config course-name dataset-name)]
     (p/pprint
       {:fields fields
        :items items
@@ -92,9 +94,9 @@
                                   :name name
                                   :data {:items items}})))))
 
-(defn load-force [course-name dataset-name]
-  (mount/start)
-  (let [path (items-path course-name dataset-name)
+(defn load-force
+  [config course-name dataset-name]
+  (let [path (items-path config course-name dataset-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
         dataset (core/get-dataset-by-name course-name dataset-name)]
 
@@ -103,13 +105,13 @@
     (doseq [item (:items data)]
       (if-let [db-item (core/get-item-by-name (:id dataset) (:name item))]
         (core/update-dataset-item! (:id db-item) item)
-        (core/create-dataset-item! item)))
+        (core/create-dataset-item! (-> item (assoc :dataset-id (:id dataset))))))
 
     (load-lessons (:id dataset) (:lessons data))))
 
-(defn load-merge [course-name dataset-name & field-names]
-  (mount/start)
-  (let [path (items-path course-name dataset-name)
+(defn load-merge
+  [config course-name dataset-name & field-names]
+  (let [path (items-path config course-name dataset-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
         field-names (or field-names (->> (:fields data) (map :name)))
         fields (->> (:fields data)
@@ -121,6 +123,32 @@
       (if-let [db-item (core/get-item-by-name (:id dataset) (:name item))]
         (let [data (merge (:data db-item) (-> item :data (select-keys (map keyword field-names))))]
           (core/update-dataset-item! (:id db-item) {:name (:name item) :data data}))
-        (core/create-dataset-item! item)))
+        (core/create-dataset-item! (-> item (assoc :dataset-id (:id dataset))))))
 
     (load-lessons (:id dataset) (:lessons data))))
+
+(def commands
+  {"save-dataset"
+   (fn [config args]
+     (apply save config args))
+
+   "load-dataset-force"
+   (fn [config args]
+     (apply load-force config args))
+
+   "load-dataset-merge"
+   (fn [config args]
+     (apply load-merge config args))})
+
+(defn command? [[arg]]
+  (contains? (set (keys commands)) arg))
+
+(defn execute
+  "args - vector of arguments, e.g: [\"save-dataset\" \"test\" \"course\"]"
+  [args opts]
+  (when-not (command? args)
+    (throw
+      (IllegalArgumentException.
+        (str "unrecognized option: " (first args)
+             ", valid options are:" (join ", " (keys commands))))))
+  ((get commands (first args)) opts (rest args)))

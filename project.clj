@@ -72,10 +72,7 @@
   :cooper {"styles" ["lein" "sass" "auto"]
            "cljs"   ["lein" "figwheel" "dev"]}
 
-  :aliases {"dev" ["cooper"]
-            "save-dataset" ["run" "-m" "webchange.dataset.loader/save"]
-            "load-dataset-force" ["run" "-m" "webchange.dataset.loader/load-force"]
-            "load-dataset-merge" ["run" "-m" "webchange.dataset.loader/load-merge"]}
+  :aliases {"dev" ["cooper"]}
 
   :profiles
   {:dev
