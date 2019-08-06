@@ -47,7 +47,7 @@
       (let [generated-code @(re-frame/subscribe [::dss/generated-code])
             access-code (or generated-code (:access-code @props))
             _ (swap! props assoc :access-code access-code)
-            date-of-birth (or (common/format-date-string (:date-of-birth @props)) (common/format-date (js/Date.)))]
+            date-of-birth (common/format-date-string (:date-of-birth @props))]
         [:form
          [ui/grid {:container true}
           [ui/grid {:item true :xs 12}
@@ -60,7 +60,7 @@
                (class->menu-item class))]]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
-            [ui/input-label "Gender"]
+            [ui/input-label {:required true} "Gender"]
             [ui/select
              {:value     (or (:gender @props) "")
               :on-change #(swap! props assoc :gender (->> % .-target .-value))}
@@ -69,26 +69,31 @@
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
             [ui/text-field
-             {:label         "First Name"
+             {:required true
+              :label         "First Name"
               :default-value (:first-name @props)
               :on-change     #(swap! props assoc :first-name (->> % .-target .-value))}]]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
             [ui/text-field
-             {:label         "Last Name"
+             {:required true
+              :label         "Last Name"
               :default-value (:last-name @props)
               :on-change     #(swap! props assoc :last-name (->> % .-target .-value))}]]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
             [ui/text-field
-             {:label         "Date of Birth"
+             {:required true
+              :label         "Date of Birth"
               :type          "date"
               :default-value date-of-birth
-              :on-change     #(swap! props assoc :date-of-birth (->> % .-target .-value))}]]]
+              :on-change     #(swap! props assoc :date-of-birth (->> % .-target .-value))
+              :InputLabelProps {:shrink true}}]]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
             [ui/text-field
              {:label "Access-code"
+              :auto-complete "new-password"
               :type  (if @show-code "text" "password")
               :value (or (:access-code @props) "")
               :InputProps {:end-adornment (r/as-element [ui/input-adornment
