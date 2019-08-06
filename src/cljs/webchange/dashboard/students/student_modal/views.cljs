@@ -41,10 +41,10 @@
 
 (defn- student-form
   []
-  (let [classes @(re-frame/subscribe [::dcs/classes-list])
-        show-code (r/atom false)]
+  (let [show-code (r/atom false)]
     (fn [props]
-      (let [generated-code @(re-frame/subscribe [::dss/generated-code])
+      (let [classes @(re-frame/subscribe [::dcs/classes-list])
+            generated-code @(re-frame/subscribe [::dss/generated-code])
             access-code (or generated-code (:access-code @props))
             _ (swap! props assoc :access-code access-code)
             date-of-birth (or (common/format-date-string (:date-of-birth @props)) (common/format-date (js/Date.)))]

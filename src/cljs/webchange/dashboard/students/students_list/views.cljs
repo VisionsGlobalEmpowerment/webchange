@@ -123,10 +123,10 @@
 
 (defn students-list-page
   []
-  (let [filter (r/atom {:class-id nil})
-        class-id @(re-frame/subscribe [::classes-subs/current-class-id])]
+  (let [filter (r/atom {:class-id nil})]
     (fn []
-      (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
+      (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
+            classes @(re-frame/subscribe [::classes-subs/classes-list])
             students @(re-frame/subscribe [::students-subs/class-students class-id])
             is-loading? (or @(re-frame/subscribe [::students-subs/students-loading class-id])
                             @(re-frame/subscribe [::classes-subs/classes-loading]))]
