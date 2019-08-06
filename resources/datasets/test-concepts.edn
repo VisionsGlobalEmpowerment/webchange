@@ -124,6 +124,7 @@
   {:name "poem-image-3", :type "string"}
   {:name "poem-image-3", :type "string"}
   {:name "poem-story", :type "action"}],
+  {:name "riddle", :type "action"}
  :items
  [{:name "ardilla",
    :data
@@ -295,6 +296,15 @@
      :data
      [{:end 22.304, :anim "talk", :start 20.957, :duration 1.347}]},
     :letter "a",
+    :riddle
+    {:data
+           [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+             :type "audio",
+             :start 5.463,
+             :duration 9.438}],
+     :type "parallel",
+     :description
+           "Me gusta escalar árboles. Tengo dos dientes grandes que uso para comer nueces.\n                                                          Soy una"},
     :sandbox-change-skin-1-action
     {:skin "bee",
      :type "set-skin",
@@ -3639,6 +3649,15 @@
      :target "senoravaca",
      :duration 0.827,
      :scene-id "home"},
+    :riddle
+    {:data
+           [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+             :type "audio",
+             :start 44.966,
+             :duration 12.845}],
+     :type "parallel",
+     :description
+           "Siempre estoy atrayendo metales hacia mí.\n                                                          Me suelen usar en computadoras y brújulas y también en otras cosas.\n                                                          Soy un"},
     :sandbox-change-skin-1-action
     {:skin "iguana",
      :type "set-skin",
@@ -5687,6 +5706,15 @@
      :duration 1.134,
      :scene-id "home"},
     :letter "o",
+    :riddle
+    {:data
+           [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+             :type "audio",
+             :start 7.307,
+             :duration 15.425}],
+     :type "parallel",
+     :description
+           "Soy grande y camino en cuatro patas. Puedes encontrarme en lugares como montañas y el árctico.\n                                                          Me gusta hibernar cuando hace frio.\n                                                          Soy un"},
     :sandbox-change-skin-1-action
     {:skin "8",
      :type "set-skin",
