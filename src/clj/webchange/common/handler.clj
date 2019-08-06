@@ -12,6 +12,12 @@
        (on-success data response)
        response))))
 
+(defn validation-error
+  [body]
+  {:status  422
+   :headers {}
+   :body    {:errors body}})
+
 (defn current-user
   [request]
   (if-not (authenticated? request)

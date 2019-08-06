@@ -5,8 +5,10 @@
             [webchange.class.core :as core]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
-            [webchange.common.handler :refer [handle current-user current-school]]
-            [webchange.auth.core :as auth]))
+            [webchange.common.handler :refer [handle current-user current-school validation-error]]
+            [webchange.auth.core :as auth]
+            [webchange.validation.validate :refer [validate]]
+            [webchange.validation.specs.student :as student-specs]))
 
 (defn handle-list-classes [request]
   (let [school-id (current-school request)]
@@ -35,6 +37,10 @@
   (let [owner-id (current-user request)]
     (-> (core/delete-class! (Integer/parseInt id))
         handle)))
+
+(defn validate-student
+  [student-data]
+  (validate ::student-specs/student student-data))
 
 (defn handle-create-student
   [request]
@@ -92,7 +98,9 @@
            (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
            (GET "/api/students/:id" [id] (-> id Integer/parseInt core/get-student response))
            (POST "/api/students" request
-             (handle-create-student request))
+             (if-let [errors (validate-student (:body request))]
+               (validation-error errors)
+               (handle-create-student request)))
            (PUT "/api/students/:id" [id :as request]
              (handle-update-student id request))
            (DELETE "/api/students/:id" [id :as request]

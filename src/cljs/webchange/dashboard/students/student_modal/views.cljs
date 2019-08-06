@@ -2,13 +2,16 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
-    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.common.core :as common]
+    [webchange.dashboard.common.form-controls :as wui]
     [webchange.dashboard.classes.subs :as dcs]
     [webchange.dashboard.students.events :as dse]
-    [webchange.dashboard.students.subs :as dss]))
+    [webchange.dashboard.students.subs :as dss]
+    [webchange.subs :as ws]
+    [webchange.ui.theme :refer [w-colors]]
+    [webchange.validation.specs.student :as spec]))
 
 (def not-nil? (complement nil?))
 (def not-equal (complement =))
@@ -45,65 +48,74 @@
     (fn [props]
       (let [classes @(re-frame/subscribe [::dcs/classes-list])
             generated-code @(re-frame/subscribe [::dss/generated-code])
+            form-errors @(re-frame/subscribe [::ws/entity-errors :student])
             access-code (or generated-code (:access-code @props))
             _ (swap! props assoc :access-code access-code)
             date-of-birth (common/format-date-string (:date-of-birth @props))]
         [:form
          [ui/grid {:container true}
           [ui/grid {:item true :xs 12}
-           [ui/form-control {:margin "normal" :full-width true}
-            [ui/input-label "Class"]
-            [ui/select
-             {:value     (or (:class-id @props) "")
-              :on-change #(swap! props assoc :class-id (->> % .-target .-value))}
-             (for [class classes]
-               (class->menu-item class))]]]
+           [wui/select-validated
+            {:label        "Class"
+             :value        (or (:class-id @props) "")
+             :on-change    #(swap! props assoc :class-id (->> % .-target .-value))
+             :spec         ::spec/class-id
+             :custom-error (:class-id form-errors)}
+            (for [class classes]
+              (class->menu-item class))]]
           [ui/grid {:item true :xs 12}
-           [ui/form-control {:margin "normal" :full-width true}
-            [ui/input-label {:required true} "Gender"]
-            [ui/select
-             {:value     (or (:gender @props) "")
-              :on-change #(swap! props assoc :gender (->> % .-target .-value))}
-             (for [gender genders]
-               (gender->menu-item gender))]]]
+           [wui/select-validated
+            {:label        "Gender"
+             :value        (or (:gender @props) "")
+             :on-change    #(swap! props assoc :gender (->> % .-target .-value))
+             :spec         ::spec/gender
+             :custom-error (:gender form-errors)}
+            (for [gender genders]
+              (gender->menu-item gender))]]
+          [ui/grid {:item true :xs 12}
+           [wui/text-field-validated {:label         "First Name"
+                                      :default-value (:first-name @props)
+                                      :required      true
+                                      :spec          ::spec/first-name
+                                      :custom-error  (:first-name form-errors)
+                                      :on-change     #(swap! props assoc :first-name (->> % .-target .-value))}]]
+          [ui/grid {:item true :xs 12}
+           [wui/text-field-validated {:label         "Last Name"
+                                      :default-value (:last-name @props)
+                                      :required      true
+                                      :spec          ::spec/last-name
+                                      :custom-error  (:last-name form-errors)
+                                      :on-change     #(swap! props assoc :last-name (->> % .-target .-value))}]]
+          [ui/grid {:item true :xs 12}
+           [wui/text-field-validated
+            {:required        true
+             :label           "Date of Birth"
+             :type            "date"
+             :default-value   date-of-birth
+             :on-change       #(swap! props assoc :date-of-birth (->> % .-target .-value))
+             :InputLabelProps {:shrink true}
+             :spec            ::spec/date-of-birth
+             :custom-error    (:date-of-birth form-errors)}]]
           [ui/grid {:item true :xs 12}
            [ui/form-control {:margin "normal" :full-width true}
             [ui/text-field
-             {:required true
-              :label         "First Name"
-              :default-value (:first-name @props)
-              :on-change     #(swap! props assoc :first-name (->> % .-target .-value))}]]]
-          [ui/grid {:item true :xs 12}
-           [ui/form-control {:margin "normal" :full-width true}
-            [ui/text-field
-             {:required true
-              :label         "Last Name"
-              :default-value (:last-name @props)
-              :on-change     #(swap! props assoc :last-name (->> % .-target .-value))}]]]
-          [ui/grid {:item true :xs 12}
-           [ui/form-control {:margin "normal" :full-width true}
-            [ui/text-field
-             {:required true
-              :label         "Date of Birth"
-              :type          "date"
-              :default-value date-of-birth
-              :on-change     #(swap! props assoc :date-of-birth (->> % .-target .-value))
-              :InputLabelProps {:shrink true}}]]]
-          [ui/grid {:item true :xs 12}
-           [ui/form-control {:margin "normal" :full-width true}
-            [ui/text-field
-             {:label "Access-code"
+             {:label         "Access-code"
               :auto-complete "new-password"
-              :type  (if @show-code "text" "password")
-              :value (or (:access-code @props) "")
-              :InputProps {:end-adornment (r/as-element [ui/input-adornment
-                                                         {:position "end"}
-                                                         [ui/icon-button
-                                                          {:on-click #(swap! show-code not)}
-                                                          (if @show-code [ic/visibility-off] [ic/visibility])]
-                                                         [ui/icon-button
-                                                          {:on-click #(re-frame/dispatch [::dse/generate-access-code])}
-                                                          [ic/update]]])}}]]]]]))))
+              :type          (if @show-code "text" "password")
+              :value         (or (:access-code @props) "")
+              :InputProps    {:end-adornment (r/as-element [ui/input-adornment
+                                                            {:position "end"}
+                                                            [ui/icon-button
+                                                             {:on-click #(swap! show-code not)}
+                                                             (if @show-code [ic/visibility-off] [ic/visibility])]
+                                                            [ui/icon-button
+                                                             {:on-click #(re-frame/dispatch [::dse/generate-access-code])}
+                                                             [ic/update]]])}}]]]
+          (if-let [other-errors (:other form-errors)]
+            [ui/grid {:item true :xs 12}
+             [:ul {:style {:color (:secondary w-colors)}}
+              (map (fn [error] ^{:key error} [:li error]) other-errors)]
+             ])]]))))
 
 (defn student-modal
   []
@@ -141,6 +153,5 @@
       [ui/button
        {:variant  "contained"
         :color    "primary"
-        :on-click #(do (handle-save @student-data)
-                       (handle-close))}
+        :on-click #(handle-save @student-data)}
        "Save"]]]))

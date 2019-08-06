@@ -132,6 +132,11 @@
     (:errors db)))
 
 (re-frame/reg-sub
+  ::entity-errors
+  (fn [db [_ entity]]
+    (get-in db (conj [:errors] entity))))
+
+(re-frame/reg-sub
   ::active-route
   (fn [db]
     (:active-route db)))

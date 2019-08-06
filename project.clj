@@ -37,6 +37,7 @@
                  [net.mikera/imagez "0.12.0"]
                  [cljsjs/enzyme "3.8.0"]
                  [cljs-idxdb "0.1.0"]
+                 [phrase "0.3-alpha4"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -49,7 +50,7 @@
 
   :min-lein-version "2.5.3"
 
-  :source-paths ["src/clj" "src/cljs"]
+  :source-paths ["src/clj" "src/cljc" "src/cljs"]
   :test-paths ["test/clj"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
@@ -99,7 +100,7 @@
   :cljsbuild
   {:builds
    [{:id           "dev"
-     :source-paths ["src/cljs"]
+     :source-paths ["src/cljs" "src/cljc"]
      :figwheel     {:websocket-host :js-client-host
                     :on-jsload "webchange.core/mount-root"}
      :compiler     {:main                 webchange.core
