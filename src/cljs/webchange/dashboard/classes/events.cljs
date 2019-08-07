@@ -123,3 +123,19 @@
   (fn [{:keys [db]} [_ result]]
     {:db (assoc-in db [:dashboard :class-profile] result)
      :dispatch-n (list [:complete-request :class-profile])}))
+
+(re-frame/reg-event-fx
+  ::open-delete-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :delete-class-modal-state] true)}))
+
+(re-frame/reg-event-fx
+  ::close-delete-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :delete-class-modal-state] nil)}))
+
+(re-frame/reg-event-fx
+  ::confirm-delete
+  (fn [{:keys [db]} [_ class-id]]
+    {:db (assoc-in db [:dashboard :delete-class-modal-state] nil)
+     :dispatch [::delete-class class-id]}))

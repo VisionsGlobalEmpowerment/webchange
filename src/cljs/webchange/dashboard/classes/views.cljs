@@ -6,6 +6,7 @@
     [webchange.dashboard.classes.classes-menu.views :as classes-menu-views]))
 
 (def class-modal class-modal-views/class-modal)
+(def class-delete-modal class-modal-views/class-delete-modal)
 (def class-profile class-profile-views/class-profile-page)
 (def classes-list classes-list-views/classes-list-page)
 (def classes-menu classes-menu-views/classes-menu)

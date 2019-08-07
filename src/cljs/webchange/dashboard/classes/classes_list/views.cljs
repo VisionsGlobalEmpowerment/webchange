@@ -6,6 +6,7 @@
     [reagent.core :as r]
     [webchange.dashboard.classes.events :as classes-events]
     [webchange.dashboard.classes.subs :as classes-subs]
+    [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.common.views :refer [content-page]]
     [webchange.routes :refer [redirect-to]]))
 
@@ -69,7 +70,7 @@
        [:div
         [classes-list
          {:on-edit-click     (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/show-edit-class-form id]))
-          :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::classes-events/delete-class id]))
+          :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::dashboard-events/show-delete-class-form id]))
           :on-profile-click  #(redirect-to :dashboard-class-profile :class-id (:id %))
           :on-students-click #(redirect-to :dashboard-students :class-id (:id %))}
          classes]

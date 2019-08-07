@@ -43,8 +43,8 @@
    name])
 
 (defn- student-form
-  []
-  (let [show-code (r/atom false)]
+  [props]
+  (let [show-code (r/atom (-> @props :access-code boolean))]
     (fn [props]
       (let [classes @(re-frame/subscribe [::dcs/classes-list])
             generated-code @(re-frame/subscribe [::dss/generated-code])
