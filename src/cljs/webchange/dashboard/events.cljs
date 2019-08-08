@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.dashboard.classes.events :as classes-events]
-    [webchange.dashboard.students.events :as students-events]))
+    [webchange.dashboard.students.events :as students-events]
+    [webchange.validation.validate :refer [validate]]))
 
 (re-frame/reg-event-fx
   ::set-main-content
@@ -41,3 +42,9 @@
   (fn [{:keys [db]} _]
     {:dispatch-n (list
                    [::classes-events/load-classes])}))
+
+(re-frame/reg-cofx
+  :validate
+  (fn [co-effects entity-type]
+    (let [[_ _ entity-data] (:event co-effects)]
+      (assoc co-effects :validation-errors (validate entity-type entity-data)))))

@@ -2,7 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
-    [ajax.core :refer [json-request-format json-response-format]]))
+    [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.dashboard.events-utils :refer [when-valid]]
+    [webchange.validation.specs.student :as spec]))
 
 (re-frame/reg-event-fx
   ::load-students
@@ -42,40 +44,45 @@
 
 (re-frame/reg-event-fx
   ::add-student
-  (fn [{:keys [db]} [_ class-id data]]
-    (let [prepared-data (assoc data :class-id class-id)]
-      {:db (assoc-in db [:loading :add-student] true)
-       :http-xhrio {:method          :post
-                    :uri             (str "/api/students")
-                    :params          prepared-data
-                    :format          (json-request-format)
-                    :response-format (json-response-format {:keywords? true})
-                    :on-success      [::add-student-success class-id]
-                    :on-failure      [:api-request-error :add-student]}})))
+  [(re-frame/inject-cofx :validate ::spec/student)]
+  (fn [{:keys [db] :as co-effects} [_ class-id data]]
+    (when-valid :student co-effects
+                {:db         (assoc-in db [:loading :add-student] true)
+                 :http-xhrio {:method          :post
+                              :uri             (str "/api/students")
+                              :params          data
+                              :format          (json-request-format)
+                              :response-format (json-response-format {:keywords? true})
+                              :on-success      [::add-student-success class-id]
+                              :on-failure      [:api-request-error :student]}})))
 
 (re-frame/reg-event-fx
   ::add-student-success
   (fn [{:keys [db]} [_ class-id]]
     {:dispatch-n (list [:complete-request :add-student]
-                       [::load-students class-id])}))
+                       [::load-students class-id]
+                       [::close-student-modal])}))
 
 (re-frame/reg-event-fx
   ::edit-student
-  (fn [{:keys [db]} [_ class-id student-id data]]
-    {:db (assoc-in db [:loading :edit-student] true)
-     :http-xhrio {:method          :put
-                  :uri             (str "/api/students/" student-id)
-                  :params          data
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::edit-student-success class-id]
-                  :on-failure      [:api-request-error :edit-student]}}))
+  [(re-frame/inject-cofx :validate ::spec/student)]
+  (fn [{:keys [db] :as co-effects} [_ class-id student-id data]]
+    (when-valid :student co-effects
+                {:db (assoc-in db [:loading :edit-student] true)
+                 :http-xhrio {:method          :put
+                              :uri             (str "/api/students/" student-id)
+                              :params          data
+                              :format          (json-request-format)
+                              :response-format (json-response-format {:keywords? true})
+                              :on-success      [::edit-student-success class-id]
+                              :on-failure      [:api-request-error :student]}})))
 
 (re-frame/reg-event-fx
   ::edit-student-success
   (fn [_ [_ class-id]]
     {:dispatch-n (list [:complete-request :edit-student]
-                       [::load-students class-id])}))
+                       [::load-students class-id]
+                       [::close-student-modal])}))
 
 (re-frame/reg-event-fx
   ::delete-student
