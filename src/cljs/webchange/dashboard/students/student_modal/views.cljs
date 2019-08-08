@@ -6,12 +6,12 @@
     [reagent.core :as r]
     [webchange.common.core :as common]
     [webchange.dashboard.common.form-controls :as wui]
-    [webchange.dashboard.classes.subs :as dcs]
-    [webchange.dashboard.students.events :as dse]
-    [webchange.dashboard.students.subs :as dss]
     [webchange.subs :as ws]
     [webchange.ui.theme :refer [w-colors]]
-    [webchange.validation.specs.student :as spec]))
+    [webchange.validation.specs.student :as spec]
+    [webchange.dashboard.classes.subs :as classes-subs]
+    [webchange.dashboard.students.events :as students-events]
+    [webchange.dashboard.students.subs :as students-subs]))
 
 (def not-nil? (complement nil?))
 (def not-equal (complement =))
@@ -46,8 +46,8 @@
   [props]
   (let [show-code (r/atom (-> @props :access-code boolean))]
     (fn [props]
-      (let [classes @(re-frame/subscribe [::dcs/classes-list])
-            generated-code @(re-frame/subscribe [::dss/generated-code])
+      (let [classes @(re-frame/subscribe [::classes-subs/classes-list])
+            generated-code @(re-frame/subscribe [::students-subs/generated-code])
             form-errors @(re-frame/subscribe [::ws/entity-errors :student])
             access-code (or generated-code (:access-code @props))
             _ (swap! props assoc :access-code access-code)
@@ -109,7 +109,7 @@
                                                              {:on-click #(swap! show-code not)}
                                                              (if @show-code [ic/visibility-off] [ic/visibility])]
                                                             [ui/icon-button
-                                                             {:on-click #(re-frame/dispatch [::dse/generate-access-code])}
+                                                             {:on-click #(re-frame/dispatch [::students-events/generate-access-code])}
                                                              [ic/update]]])}}]]]
           (if-let [other-errors (:other form-errors)]
             [ui/grid {:item true :xs 12}
@@ -119,19 +119,19 @@
 
 (defn student-modal
   []
-  (let [class-id @(re-frame/subscribe [::dcs/current-class-id])
-        {{first-name :first-name last-name :last-name} :user :as student} @(re-frame/subscribe [::dss/current-student])
-        student-modal-state @(re-frame/subscribe [::dss/student-modal-state])
+  (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
+        {{first-name :first-name last-name :last-name} :user :as student} @(re-frame/subscribe [::students-subs/current-student])
+        student-modal-state @(re-frame/subscribe [::students-subs/student-modal-state])
         student-data (r/atom (assoc student :first-name first-name
                                             :last-name last-name
                                             :class-id (if (= :add student-modal-state)
                                                         class-id
                                                         (:class-id student))))
         handle-save (if (= :edit student-modal-state)
-                      (fn [student-data] (re-frame/dispatch [::dse/edit-student (:class-id student-data) (:id student-data) student-data]))
-                      (fn [student-data] (re-frame/dispatch [::dse/add-student (:class-id student-data) student-data])))
-        handle-close #(re-frame/dispatch [::dse/close-student-modal])
-        loading @(re-frame/subscribe [::dss/student-loading])]
+                      (fn [student-data] (re-frame/dispatch [::students-events/edit-student (:class-id student-data) (:id student-data) student-data]))
+                      (fn [student-data] (re-frame/dispatch [::students-events/add-student (:class-id student-data) student-data])))
+        handle-close #(re-frame/dispatch [::students-events/close-student-modal])
+        loading @(re-frame/subscribe [::students-subs/student-loading])]
     [ui/dialog
      {:open     (boolean student-modal-state)
       :on-close handle-close}
@@ -155,3 +155,25 @@
         :color    "primary"
         :on-click #(handle-save @student-data)}
        "Save"]]]))
+
+(defn student-delete-modal
+  []
+  (let [modal-state @(re-frame/subscribe [::students-subs/delete-modal-state])
+        is-loading? @(re-frame/subscribe [::students-subs/student-loading])
+        {{first-name :first-name last-name :last-name} :user student-id :id class-id :class-id} @(re-frame/subscribe [::students-subs/current-student])]
+    (when modal-state
+      [ui/dialog {:open true}
+       (if is-loading?
+         [ui/linear-progress]
+         [:div
+          [ui/dialog-title "Are you sure?"]
+          [ui/dialog-content
+           [ui/dialog-content-text (str "You are about to delete " first-name " " last-name)]]
+          [ui/dialog-actions
+           [ui/button {:on-click #(re-frame/dispatch [::students-events/close-delete-modal])} "Cancel"]
+           [ui/button
+            {:variant  "contained"
+             :color    "primary"
+             :on-click #(re-frame/dispatch [::students-events/confirm-delete class-id student-id])}
+            "Confirm"]]])
+       ])))
