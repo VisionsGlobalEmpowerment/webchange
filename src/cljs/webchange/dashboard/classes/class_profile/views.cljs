@@ -24,12 +24,13 @@
           path))
 
 (defn- class-profile
-  [{:keys [students]}]
+  [{:keys [class students]}]
   (let [assessment-data (scores-stub students)
         assessment-levels [80 95]
         course-name "Vera La Vaquita"]
     [content-page
-     {:title (translate [:header])}
+     {:title         (translate [:header])
+      :current-title (:name class)}
      [content-page-section
       {:title (translate [:course :header])}
       course-name]
@@ -37,21 +38,23 @@
       {:title (translate [:class :header])}
       [profile-table]]
      #_[content-page-section
-      {:title (translate [:assessment :header])}
-      [score-table
-       {:title       (translate [:assessment :table-title])
-        :items-title (translate [:assessment :table-items-title])
-        :levels      assessment-levels
-        :legend      (translate [:assessment :legend])}
-       assessment-data]
-      ]]))
+        {:title (translate [:assessment :header])}
+        [score-table
+         {:title       (translate [:assessment :table-title])
+          :items-title (translate [:assessment :table-items-title])
+          :levels      assessment-levels
+          :legend      (translate [:assessment :legend])}
+         assessment-data]
+        ]]))
 
 (defn class-profile-page
   []
   (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
+        class @(re-frame/subscribe [::classes-subs/current-class])
         students @(re-frame/subscribe [::students-subs/class-students class-id])
         is-loading? @(re-frame/subscribe [::students-subs/students-loading class-id])]
     (if is-loading?
       [ui/linear-progress]
       [class-profile
-       {:students (map-students-list students)}])))
+       {:class    class
+        :students (map-students-list students)}])))

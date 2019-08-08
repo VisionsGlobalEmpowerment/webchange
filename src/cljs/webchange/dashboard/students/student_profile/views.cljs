@@ -33,7 +33,8 @@
   [{:keys [student profile]}]
   (let [student (map-student student)]
     [content-page
-     {:title (translate [:header])}
+     {:title (translate [:header])
+      :current-title (:name student)}
      [personal-data student]
      [student-scores [{:title  (translate [:cumulative-scores :title])
                        :data   (-> profile :scores ->data)

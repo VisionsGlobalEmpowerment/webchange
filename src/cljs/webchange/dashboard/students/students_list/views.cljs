@@ -126,6 +126,7 @@
   (let [filter (r/atom {:class-id nil})]
     (fn []
       (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
+            class @(re-frame/subscribe [::classes-subs/current-class])
             classes @(re-frame/subscribe [::classes-subs/classes-list])
             students @(re-frame/subscribe [::students-subs/class-students class-id])
             is-loading? (or @(re-frame/subscribe [::students-subs/students-loading class-id])
@@ -133,7 +134,8 @@
         (if is-loading?
           [ui/linear-progress]
           [content-page
-           {:title (translate [:title])}
+           {:title (translate [:title])
+            :current-title (:name class)}
            [:div
             [students-list-filter
              {:classes classes
