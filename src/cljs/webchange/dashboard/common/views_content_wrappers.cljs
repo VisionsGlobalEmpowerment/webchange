@@ -5,7 +5,7 @@
 (def padding 20)
 
 (defn content-page
-  [{:keys [title]} & children]
+  [{:keys [title current-title]} & children]
   [ui/grid
    {:container true
     :spacing   24
@@ -17,6 +17,8 @@
      :xs   12}
     [ui/typography
      {:variant "h4"}
+     (when current-title
+       (str "\"" current-title "\" "))
      title]]
    (for [child children]
      ^{:key child}
