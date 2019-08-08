@@ -119,7 +119,7 @@
                       (fn [student-data] (re-frame/dispatch [::dse/edit-student (:class-id student-data) (:id student-data) student-data]))
                       (fn [student-data] (re-frame/dispatch [::dse/add-student (:class-id student-data) student-data])))
         handle-close #(re-frame/dispatch [::dse/close-student-modal])
-        loading @(re-frame/subscribe [:loading])]
+        loading @(re-frame/subscribe [::dss/student-loading])]
     [ui/dialog
      {:open     (boolean student-modal-state)
       :on-close handle-close}
@@ -129,7 +129,7 @@
         :edit "Edit Student"
         "")]
      [ui/dialog-content
-      (if (:student loading)
+      (if loading
         [ui/circular-progress
          {:size  80
           :color "secondary"}]
