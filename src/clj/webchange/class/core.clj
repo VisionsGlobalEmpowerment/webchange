@@ -97,7 +97,7 @@
 
 (defn get-current-school [] (db/get-first-school))
 
-(defn generate-code [] (str (int (rand 9999))))
+(defn generate-code [] (apply str (take 4 (repeatedly #(rand-int 10)))))
 
 (defn code-unique? [school-id code]
   (-> (db/access-code-exists? {:school_id school-id :access_code code}) :result not))
