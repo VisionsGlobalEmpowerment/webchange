@@ -47,7 +47,8 @@
         {:type     "submit"
          :variant  "contained"
          :color    "primary"
-         :on-click #(do (handle-save @class-data)
+         :on-click #(do (.preventDefault %)
+                        (handle-save @class-data)
                         (handle-close))}
         "Save"]]]]))
 
