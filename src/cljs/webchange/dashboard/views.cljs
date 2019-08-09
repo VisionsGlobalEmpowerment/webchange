@@ -5,8 +5,8 @@
     [webchange.dashboard.common.views :refer [content-page]]
     [webchange.dashboard.dashboard-layout.views :refer [app-bar drawer progress-bar side-menu]]
     [webchange.dashboard.dashboard-layout.utils :refer [get-shift-styles]]
-    [webchange.dashboard.classes.views :refer [classes-list class-modal class-profile]]
-    [webchange.dashboard.students.views :refer [students-list student-modal student-profile]]
+    [webchange.dashboard.classes.views :refer [classes-list class-modal class-delete-modal class-profile]]
+    [webchange.dashboard.students.views :refer [students-list student-modal student-delete-modal student-profile]]
     [webchange.dashboard.subs :as dashboard-subs]
     [webchange.routes :refer [redirect-to]]
     [webchange.ui.theme :refer [with-mui-theme]]))
@@ -34,7 +34,10 @@
   []
   [:div
    [class-modal]
-   [student-modal]])
+   [class-delete-modal]
+   [student-modal]
+   [student-delete-modal]
+   ])
 
 (defn dashboard
   []

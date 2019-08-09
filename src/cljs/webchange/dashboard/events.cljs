@@ -48,3 +48,11 @@
   (fn [co-effects entity-type]
     (let [[_ _ entity-data] (:event co-effects)]
       (assoc co-effects :validation-errors (validate entity-type entity-data)))))
+
+(re-frame/reg-event-fx
+  ::show-delete-class-form
+  (fn [{:keys [db]} [_ class-id]]
+    {:db (assoc-in db [:dashboard :current-class-id] class-id)
+     :dispatch-n (list
+                 [::classes-events/open-delete-modal]
+                 [::students-events/load-students class-id])}))

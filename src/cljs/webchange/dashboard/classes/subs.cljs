@@ -47,3 +47,7 @@
   (fn [db]
     (get-in db [:dashboard :class-profile])))
 
+(re-frame/reg-sub
+  ::delete-modal-state
+  (fn [db]
+    (get-in db [:dashboard :delete-class-modal-state])))

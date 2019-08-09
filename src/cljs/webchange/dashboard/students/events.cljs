@@ -172,3 +172,27 @@
   (fn [{:keys [db]} [_ result]]
     {:db (assoc-in db [:dashboard :student-profile] result)
      :dispatch-n (list [:complete-request :student-profile])}))
+
+(re-frame/reg-event-fx
+  ::show-delete-student-form
+  (fn [{:keys [db]} [_ student-id]]
+    {:db (assoc-in db [:dashboard :current-student-id] student-id)
+     :dispatch-n (list
+                   [::load-student student-id]
+                   [::open-delete-modal])}))
+
+(re-frame/reg-event-fx
+  ::open-delete-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :delete-student-modal-state] true)}))
+
+(re-frame/reg-event-fx
+  ::close-delete-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :delete-student-modal-state] nil)}))
+
+(re-frame/reg-event-fx
+  ::confirm-delete
+  (fn [{:keys [db]} [_ class-id student-id]]
+    {:db (assoc-in db [:dashboard :delete-student-modal-state] nil)
+     :dispatch [::delete-student class-id student-id]}))
