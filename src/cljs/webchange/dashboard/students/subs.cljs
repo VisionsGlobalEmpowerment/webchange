@@ -8,6 +8,11 @@
     (get-in db [:dashboard :students id])))
 
 (re-frame/reg-sub
+  ::unassigned-students
+  (fn [db [_ id]]
+    (get-in db [:dashboard :unassigned-students])))
+
+(re-frame/reg-sub
   ::current-student-id
   (fn [db]
     (get-in db [:dashboard :current-student-id])))

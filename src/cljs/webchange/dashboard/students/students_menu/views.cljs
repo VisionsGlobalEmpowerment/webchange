@@ -26,9 +26,12 @@
   []
   (let [class-id @(re-frame/subscribe [::classes-subs/current-class-id])
         students (->> @(re-frame/subscribe [::students-subs/class-students class-id])
-                      map-students-list)]
+                      map-students-list)
+        unassigned (->> @(re-frame/subscribe [::students-subs/unassigned-students])
+                        map-students-list)]
     [ui/expansion-panel
-     {:disabled (->> class-id boolean not)}
+     {:disabled (->> class-id boolean not)
+      :default-expanded true}
      [ui/expansion-panel-summary
       [ui/typography {:variant "h6"}
        (translate [:title])]]
@@ -40,6 +43,13 @@
          ^{:key (:id student)}
          [students-menu-item
           {:on-click #(redirect-to :dashboard-student-profile :class-id class-id :student-id (:id %))}
+          student])
+       [ui/divider]
+       [ui/list-subheader "Unassigned"]
+       (for [student unassigned]
+         ^{:key (:id student)}
+         [students-menu-item
+          {:on-click #(re-frame/dispatch [::students-events/show-edit-student-form (:id %)])}
           student])
        ]]
      [ui/expansion-panel-actions

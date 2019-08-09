@@ -39,9 +39,10 @@ UPDATE students
 SET access_code = :access_code
 WHERE id = :id
 
--- :name delete-student! :! :n
--- :doc deletes student
-DELETE from students
+-- :name unassign-student! :! :n
+-- :doc unassigns student
+UPDATE students
+SET class_id = null
 WHERE id = :id
 
 -- :name get-classes :? :*
@@ -58,6 +59,11 @@ WHERE id = :id
 -- :doc retrieve students given class id
 SELECT * from students
 WHERE class_id = :class_id
+
+-- :name get-students-unassigned :? :*
+-- :doc retrieve students without a class
+SELECT * from students
+WHERE class_id is null
 
 -- :name get-student :? :1
 -- :doc retrieve students by id

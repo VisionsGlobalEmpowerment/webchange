@@ -44,6 +44,11 @@
         students (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)]
     (is (= 1 (count students)))))
 
+(deftest unassigned-students-can-be-retrieved
+  (let [_ (f/student-created {:class-id nil})
+        students (-> (f/get-unassigned-students) :body (json/read-str :key-fn keyword) :students)]
+    (is (= 1 (count students)))))
+
 (deftest student-can-be-created
   (let [{class-id :id} (f/class-created)
         first-name "Test"
@@ -76,11 +81,17 @@
         updated-student (-> student-id f/get-student :body (json/read-str :key-fn keyword) :student)]
     (is (= access-code-value (:access-code updated-student)))))
 
-(deftest student-can-be-deleted
+(deftest student-can-be-removed-from-class
   (let [{id :id class-id :class-id} (f/student-created)
-        _ (f/delete-student! id)
+        _ (f/unassigned-student! id)
         students (-> class-id f/get-students :body (json/read-str :key-fn keyword) :students)]
     (is (= 0 (count students)))))
+
+(deftest student-become-unassigned-when-removed-from-class
+  (let [{id :id} (f/student-created)
+        _ (f/unassigned-student! id)
+        students (-> (f/get-unassigned-students) :body (json/read-str :key-fn keyword) :students)]
+    (is (= 1 (count students)))))
 
 (deftest current-school-can-be-retrieved
   (let [school (-> (f/get-current-school) :body (json/read-str :key-fn keyword))]

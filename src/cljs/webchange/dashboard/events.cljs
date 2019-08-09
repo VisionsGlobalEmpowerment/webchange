@@ -19,6 +19,7 @@
   (fn [{:keys [db]} [_ class-id course-name]]
     {:dispatch-n (list
                    [::classes-events/load-classes]
+                   [::students-events/load-unassigned-students]
                    [::students-events/load-students class-id]
                    [::classes-events/load-class-profile class-id course-name])}))
 
@@ -27,6 +28,7 @@
   (fn [{:keys [db]} [_ student-id course-name]]
     {:dispatch-n (list
                    [::classes-events/load-classes]
+                   [::students-events/load-unassigned-students]
                    [::students-events/load-student student-id]
                    [::students-events/load-student-profile student-id course-name])}))
 
@@ -35,18 +37,20 @@
   (fn [{:keys [db]} [_ class-id]]
     {:dispatch-n (list
                    [::classes-events/load-classes]
+                   [::students-events/load-unassigned-students]
                    [::students-events/load-students class-id])}))
 
 (re-frame/reg-event-fx
   ::open-classes
   (fn [{:keys [db]} _]
     {:dispatch-n (list
-                   [::classes-events/load-classes])}))
+                   [::classes-events/load-classes]
+                   [::students-events/load-unassigned-students])}))
 
 (re-frame/reg-cofx
   :validate
-  (fn [co-effects entity-type]
-    (let [[_ _ entity-data] (:event co-effects)]
+  (fn [co-effects {:keys [entity-type data-pos]}]
+    (let [entity-data (-> co-effects :event (get data-pos))]
       (assoc co-effects :validation-errors (validate entity-type entity-data)))))
 
 (re-frame/reg-event-fx
