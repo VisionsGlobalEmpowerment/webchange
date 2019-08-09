@@ -7,7 +7,6 @@
     [webchange.dashboard.common.views :refer [content-page]]
     [webchange.dashboard.students.common.check-icon :refer [check-icon]]
     [webchange.dashboard.classes.subs :as classes-subs]
-    [webchange.dashboard.classes.events :as classes-events]
     [webchange.dashboard.students.events :as students-events]
     [webchange.dashboard.students.subs :as students-subs]
     [webchange.dashboard.students.common.map-students :refer [map-students-list]]
@@ -45,7 +44,8 @@
                          :tablet {:title "Tablet"}}
            :actions     {:edit    "Edit"
                          :profile "Profile"
-                         :remove  "Remove"}}
+                         :remove  "Remove"
+                         :class   "Class"}}
           path))
 
 (defn list-item-avatar
@@ -121,6 +121,13 @@
       ^{:key (:id student)}
       [list-item props student])]])
 
+(defn- actions
+  [{:keys [student on-class-click]}]
+  [:div
+   [ui/tooltip
+    {:title (translate [:actions :class])}
+    [ui/icon-button {:on-click #(on-class-click student)} [ic/assignment]]]])
+
 (defn students-list-page
   []
   (let [filter (r/atom {:class-id nil})]
@@ -134,8 +141,9 @@
         (if is-loading?
           [ui/linear-progress]
           [content-page
-           {:title (translate [:title])
-            :current-title (:name class)}
+           {:title         (translate [:title])
+            :current-title (:name class)
+            :actions (actions {:on-class-click  (fn [] (redirect-to :dashboard-class-profile :class-id class-id))})}
            [:div
             [students-list-filter
              {:classes classes

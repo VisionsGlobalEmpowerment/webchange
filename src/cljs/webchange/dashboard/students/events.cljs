@@ -62,7 +62,7 @@
 
 (re-frame/reg-event-fx
   ::add-student
-  [(re-frame/inject-cofx :validate {:entity-type ::spec/student :data-pos 2})]
+  [(re-frame/inject-cofx :validate ::spec/student)]
   (fn [{:keys [db] :as co-effects} [_ class-id data]]
     (when-valid :student co-effects
                 {:db         (assoc-in db [:loading :add-student] true)
@@ -83,7 +83,7 @@
 
 (re-frame/reg-event-fx
   ::edit-student
-  [(re-frame/inject-cofx :validate {:entity-type ::spec/student :data-pos 3})]
+  [(re-frame/inject-cofx :validate ::spec/student)]
   (fn [{:keys [db] :as co-effects} [_ class-id student-id data]]
     (when-valid :student co-effects
                 {:db (assoc-in db [:loading :edit-student] true)

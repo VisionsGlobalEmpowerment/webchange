@@ -49,8 +49,8 @@
 
 (re-frame/reg-cofx
   :validate
-  (fn [co-effects {:keys [entity-type data-pos]}]
-    (let [entity-data (-> co-effects :event (get data-pos))]
+  (fn [co-effects entity-type]
+    (let [entity-data (->> co-effects :event last)]
       (assoc co-effects :validation-errors (validate entity-type entity-data)))))
 
 (re-frame/reg-event-fx
