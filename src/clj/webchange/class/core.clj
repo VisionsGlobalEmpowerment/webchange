@@ -31,13 +31,23 @@
   (let [class (db/get-class {:id class-id})]
     (assoc item :class class)))
 
+(defn prepare-students
+  [students]
+  (->> students
+       (map with-user)
+       (map with-class)
+       (map auth/visible-student)))
+
 (defn get-students-by-class [class-id]
-  (let [students (->> (db/get-students-by-class {:class_id class-id})
-                      (map with-user)
-                      (map with-class)
-                      (map auth/visible-student))]
+  (let [students (-> (db/get-students-by-class {:class_id class-id})
+                     prepare-students)]
     {:class-id class-id
      :students students}))
+
+(defn get-students-unassigned []
+  (let [students (-> (db/get-students-unassigned)
+                     prepare-students)]
+    {:students students}))
 
 (defn get-student [id]
   (let [student (-> (db/get-student {:id id})
@@ -90,9 +100,9 @@
     (db/update-student-access-code! prepared-data)))
 
 
-(defn delete-student!
+(defn unassign-student!
   [id]
-  (db/delete-student! {:id id})
+  (db/unassign-student! {:id id})
   [true {:id id}])
 
 (defn get-current-school [] (db/get-first-school))

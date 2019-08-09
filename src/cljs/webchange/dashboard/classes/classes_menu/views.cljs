@@ -23,7 +23,7 @@
 (defn classes-menu
   []
   (let [classes @(re-frame/subscribe [::classes-subs/classes-list])]
-    [ui/expansion-panel
+    [ui/expansion-panel {:default-expanded true}
      [ui/expansion-panel-summary
       [ui/typography {:variant "h6"}
        (translate [:title])]]

@@ -66,10 +66,10 @@
     (auth/update-student-user! (:user-id data) (select-keys data [:first-name :last-name]))
     (handle [true {:id id}])))
 
-(defn handle-delete-student
+(defn handle-unassign-student
   [id request]
   (let [owner-id (current-user request)]
-    (-> (core/delete-student! (Integer/parseInt id))
+    (-> (core/unassign-student! (Integer/parseInt id))
         handle)))
 
 (defn handle-current-school [request]
@@ -96,6 +96,7 @@
              (handle-delete-class id request))
 
            (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
+           (GET "/api/unassigned-students" [] (-> (core/get-students-unassigned) response))
            (GET "/api/students/:id" [id] (-> id Integer/parseInt core/get-student response))
            (POST "/api/students" request
              (if-let [errors (validate-student (:body request))]
@@ -104,7 +105,7 @@
            (PUT "/api/students/:id" [id :as request]
              (handle-update-student id request))
            (DELETE "/api/students/:id" [id :as request]
-             (handle-delete-student id request))
+             (handle-unassign-student id request))
 
            (POST "/api/next-access-code" request (handle-next-access-code request))
            )

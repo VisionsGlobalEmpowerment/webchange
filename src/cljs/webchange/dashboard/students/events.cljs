@@ -25,6 +25,24 @@
      :dispatch-n (list [:complete-request :students])}))
 
 (re-frame/reg-event-fx
+  ::load-unassigned-students
+  (fn [{:keys [db]} _]
+    {:db (-> db
+             (assoc-in [:loading :unassigned-students] true))
+     :http-xhrio {:method          :get
+                  :uri             (str "/api/unassigned-students")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::load-unassigned-students-success]
+                  :on-failure      [:api-request-error :unassigned-students]}}))
+
+(re-frame/reg-event-fx
+  ::load-unassigned-students-success
+  (fn [{:keys [db]} [_ result]]
+    {:db (assoc-in db [:dashboard :unassigned-students] (:students result))
+     :dispatch-n (list [:complete-request :unassigned-students])}))
+
+(re-frame/reg-event-fx
   ::load-student
   (fn [{:keys [db]} [_ id]]
     {:db (-> db
@@ -44,7 +62,7 @@
 
 (re-frame/reg-event-fx
   ::add-student
-  [(re-frame/inject-cofx :validate ::spec/student)]
+  [(re-frame/inject-cofx :validate {:entity-type ::spec/student :data-pos 2})]
   (fn [{:keys [db] :as co-effects} [_ class-id data]]
     (when-valid :student co-effects
                 {:db         (assoc-in db [:loading :add-student] true)
@@ -65,7 +83,7 @@
 
 (re-frame/reg-event-fx
   ::edit-student
-  [(re-frame/inject-cofx :validate ::spec/student)]
+  [(re-frame/inject-cofx :validate {:entity-type ::spec/student :data-pos 3})]
   (fn [{:keys [db] :as co-effects} [_ class-id student-id data]]
     (when-valid :student co-effects
                 {:db (assoc-in db [:loading :edit-student] true)
@@ -81,6 +99,7 @@
   ::edit-student-success
   (fn [_ [_ class-id]]
     {:dispatch-n (list [:complete-request :edit-student]
+                       [::load-unassigned-students]
                        [::load-students class-id]
                        [::close-student-modal])}))
 
@@ -99,6 +118,7 @@
   ::delete-student-success
   (fn [_ [_ class-id]]
     {:dispatch-n (list [:complete-request :delete-student]
+                       [::load-unassigned-students]
                        [::load-students class-id])}))
 
 (re-frame/reg-event-fx
