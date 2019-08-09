@@ -92,23 +92,24 @@
                               :params          data
                               :format          (json-request-format)
                               :response-format (json-response-format {:keywords? true})
-                              :on-success      [::edit-student-success class-id]
+                              :on-success      [::edit-student-success class-id student-id]
                               :on-failure      [:api-request-error :student]}})))
 
 (re-frame/reg-event-fx
   ::edit-student-success
-  (fn [_ [_ class-id]]
+  (fn [_ [_ class-id student-id]]
     {:dispatch-n (list [:complete-request :edit-student]
                        [::load-unassigned-students]
+                       [::load-student student-id]
                        [::load-students class-id]
                        [::close-student-modal])}))
 
 (re-frame/reg-event-fx
   ::delete-student
-  (fn [{:keys [db]} [_ class-id id]]
+  (fn [{:keys [db]} [_ class-id student-id]]
     {:db (assoc-in db [:loading :delete-student] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/students/" id)
+                  :uri             (str "/api/students/" student-id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::delete-student-success class-id]
@@ -116,8 +117,9 @@
 
 (re-frame/reg-event-fx
   ::delete-student-success
-  (fn [_ [_ class-id]]
-    {:dispatch-n (list [:complete-request :delete-student]
+  (fn [{:keys [db]} [_ class-id]]
+    {:db (assoc-in db [:dashboard :current-student] nil)
+     :dispatch-n (list [:complete-request :delete-student]
                        [::load-unassigned-students]
                        [::load-students class-id])}))
 

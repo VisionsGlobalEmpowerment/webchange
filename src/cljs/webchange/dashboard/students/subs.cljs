@@ -20,11 +20,7 @@
 (re-frame/reg-sub
   ::current-student
   (fn [db]
-    (let [current-class-id (get-in db [:dashboard :current-class-id])
-          current-student-id (get-in db [:dashboard :current-student-id])]
-      (->> (get-in db (conj [:dashboard :students] current-class-id))
-           (filter #(= current-student-id (:id %)))
-           first))))
+    (get-in db [:dashboard :current-student])))
 
 (re-frame/reg-sub
   ::generated-code
