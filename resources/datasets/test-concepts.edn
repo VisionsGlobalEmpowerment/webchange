@@ -36,6 +36,7 @@
   {:name "game-voice-action-low",
    :type "action",
    :template {:type "audio", :scene-id "see-saw"}}
+  {:name "game-voice-chanting", :type "action"}
   {:name "hide-n-seek-current-concept-audio", :type "action"}
   {:name "home-group-3-times-action",
    :type "action",
@@ -169,6 +170,11 @@
      :start 7.986,
      :duration 3.667,
      :scene-id "see-saw"},
+    :game-voice-chanting
+    {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
+     :type "audio",
+     :start 6.913,
+     :duration 3.786},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 6.821,
@@ -3515,6 +3521,11 @@
      :start 5.973,
      :duration 3.694,
      :scene-id "see-saw"},
+    :game-voice-chanting
+    {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
+     :type "audio",
+     :start 15.741,
+     :duration 4.403},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 9.515,
@@ -5552,6 +5563,11 @@
      :start 5.973,
      :duration 3.853,
      :scene-id "see-saw"},
+    :game-voice-chanting
+    {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
+     :type "audio",
+     :start 11.146,
+     :duration 4.105},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 8.288,
