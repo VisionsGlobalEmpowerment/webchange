@@ -151,11 +151,15 @@
   (some #(contains? (:tags %) tag) (vals flows)))
 
 (defn can-execute?
-  [db {:keys [options]}]
-  (let [unique-tag (:unique-tag options)]
-    (if (flow-registered? (:flows db) unique-tag)
-      false
-      true)))
+  [db {:keys [description unique-tag]}]
+  (let [flow-registered? (flow-registered? (:flows db) unique-tag)]
+    (not flow-registered?)))
+
+(defn get-action-tags
+  [{:keys [tags unique-tag]}]
+  (if-not (nil? unique-tag)
+    (conj tags unique-tag)
+    tags))
 
 (reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action
                                                                       :id
@@ -242,7 +246,7 @@
           action-id (random-uuid)
           [current & rest] (:data action)
           next [::execute-sequence (-> action (assoc :data rest))]
-          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (:tags action)}]]
+          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (get-action-tags action)}]]
       (if current
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
@@ -260,7 +264,7 @@
           action-id (random-uuid)
           [current & rest] (:data action)
           next [::execute-sequence-data (-> action (assoc :data rest))]
-          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (:tags action)}]]
+          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (get-action-tags action)}]]
       (if current
         {:dispatch-n (list flow-event
                            [::execute-action (-> current
@@ -278,6 +282,6 @@
                       (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))))
                       (map (fn [v] (with-prev v action))))
           action-ids (map #(get % :action-id) actions)
-          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tags (:tags action)}]
+          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tags (get-action-tags action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
       {:dispatch-n (cons flow-event action-events)})))

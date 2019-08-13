@@ -28,7 +28,7 @@
                                 :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
                    :senora-vaca {:type "animation" :x 655 :y 960 :name "senoravaca" :anim "idle" :speed 0.3
                                  :width 351 :height 717 :scale {:x 1 :y 1} :start true
-                                 :actions {:click {:type "action" :id "intro" :on "click" :options {:unique-tag "intro"}}}}
+                                 :actions {:click {:type "action" :id "intro" :on "click" :unique-tag "intro"}}}
 
                    :door-trigger {:type "transparent" :x 1146 :y 42 :width 732 :height 810
                                   :actions {:click {:type "scene", :scene-id "map", :on "click"}}}
