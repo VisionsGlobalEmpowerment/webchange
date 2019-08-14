@@ -125,17 +125,19 @@
    :actions       {:clear-instruction     {:type        "remove-flows"
                                            :description "Remove flows"
                                            :flow-tag    "instruction"}
-                   :start-activity        {:type        "sequence"
+                   :start                 {:type        "sequence"
                                            :description "Initial action"
-                                           :data        ["clear-instruction"
+                                           :data        ["start-activity"
+                                                         "clear-instruction"
                                                          "init-state"
                                                          "init-concepts"
                                                          "mari-voice-welcome"
                                                          "enable-story-1"]}
 
+                   :start-activity        {:type "start-activity" :id "park-poem"}
                    :finish-activity       {:type "sequence-data"
-                                           :data [{:type "finish-activity" :id "cinema"}
-                                                  {:type "scene" :scene-id "map"}]}
+                                           :data [{:type "finish-activity" :id "park-poem"}
+                                                  {:type "scene" :scene-id "park"}]}
 
                    :init-state            {:type "sequence-data"
                                            :data [{:type "set-variable" :var-name "poem-paused" :var-value false}
@@ -322,6 +324,6 @@
                                                                  {:start 31.792 :end 34.928 :anim "talk"}
                                                                  {:start 35.988 :end 38.572 :anim "talk"}
                                                                  {:start 39.016 :end 42.930 :anim "talk"}]}]}}
-   :triggers      {:music {:on "start" :action "start-activity"}}
+   :triggers      {:music {:on "start" :action "start"}}
    :metadata      {:autostart true
                    :prev      "map"}})

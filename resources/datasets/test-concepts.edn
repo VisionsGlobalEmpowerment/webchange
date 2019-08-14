@@ -123,8 +123,8 @@
   {:name "poem-image-1", :type "string"}
   {:name "poem-image-3", :type "string"}
   {:name "poem-image-3", :type "string"}
-  {:name "poem-story", :type "action"}],
-  {:name "riddle", :type "action"}
+  {:name "poem-story", :type "action"}
+  {:name "riddle", :type "action"}]
  :items
  [{:name "ardilla",
    :data
@@ -296,6 +296,66 @@
      :data
      [{:end 22.304, :anim "talk", :start 20.957, :duration 1.347}]},
     :letter "a",
+    :poem-image-1 "/raw/img/park/poem/i1.png",
+    :poem-image-2 "/raw/img/park/poem/i2.png",
+    :poem-image-3 "/raw/img/park/poem/i3.png",
+    :poem-story {:type        "sequence-data"
+                 :description "Poem I"
+                 :data        [{:type "parallel"
+                                :data [{:type        "parallel"
+                                        :description "Un día encontré un imán"
+                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 1.173 :duration 2.283}
+                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 1.173
+                                                       :data [{:start 1.173 :end 3.456 :anim "talk"}]}]}
+                                       {:type "action" :id "run-bubble-1"}]}
+                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
+                                :success {:type "sequence-data"
+                                          :data [{:type "action" :id "mari-listening-user"}
+                                                 {:type "empty" :duration 4375}]}
+                                :fail    {:type "empty" :duration 951}}
+                               {:type "action" :id "mari-listening-eva"}
+                               {:type "parallel"
+                                :data [{:type        "parallel"
+                                        :description "Y se lo enseñé a mi tío Germán"
+                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 4.391 :duration 2.743}
+                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 4.391
+                                                       :data [{:start 4.391 :end 5.533 :anim "talk"}
+                                                              {:start 5.945 :end 7.102 :anim "talk"}]}]}
+                                       {:type "action" :id "run-bubble-2"}]}
+                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
+                                :success {:type "sequence-data"
+                                          :data [{:type "action" :id "mari-listening-user"}
+                                                 {:type "empty" :duration 5050}]}
+                                :fail    {:type "empty" :duration 935}}
+                               {:type "action" :id "mari-listening-eva"}
+                               {:type        "parallel"
+                                :description "Le pregunté, ¿te gusta mi imán?"
+                                :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 8.006 :duration 3.202}
+                                              {:type "animation-sequence" :target "rock" :track 1 :offset 8.006
+                                               :data [{:start 8.006 :end 8.894 :anim "talk"}
+                                                      {:start 9.559 :end 11.192 :anim "talk"}]}]}
+                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
+                                :success {:type "sequence-data"
+                                          :data [{:type "action" :id "mari-listening-user"}
+                                                 {:type "empty" :duration 5690}]}
+                                :fail    {:type "empty" :duration 888}}
+                               {:type "action" :id "mari-listening-eva"}
+                               {:type "parallel"
+                                :data [{:type        "parallel"
+                                        :description "Y me contestó  sí. I I I, Imán."
+                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 12.048 :duration 4.819}
+                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 12.048
+                                                       :data [{:start 12.064 :end 13.158 :anim "talk"}
+                                                              {:start 13.840 :end 14.299 :anim "talk"}
+                                                              {:start 14.632 :end 15.679 :anim "talk"}
+                                                              {:start 16.138 :end 16.836 :anim "talk"}]}]}
+                                       {:type "action" :id "run-bubble-3"}]}
+                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
+                                :success {:type "sequence-data"
+                                          :data [{:type "action" :id "mari-listening-user"}
+                                                 {:type "empty" :duration 7799}]}
+                                :fail    {:type "empty" :duration 571}}
+                               {:type "action" :id "mari-listening-eva"}]}
     :riddle
     {:data
            [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",

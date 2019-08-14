@@ -86,9 +86,10 @@
                                                                     :description "Remove flows"
                                                                     :flow-tag    "instruction"}
 
-                                         :start-activity           {:type        "sequence"
+                                         :start                    {:type        "sequence"
                                                                     :description "Initial action"
-                                                                    :data        ["clear-instruction"
+                                                                    :data        ["start-activity"
+                                                                                  "clear-instruction"
                                                                                   "renew-concept"
                                                                                   "vaca-voice-wonderful"
                                                                                   "vaca-voice-lets-watch"
@@ -138,8 +139,9 @@
                                                                     :data [{:type "state" :target "video-controls" :id "hidden"}
                                                                            {:type "transition" :transition-id "mari" :to {:x 1613 :y 785 :duration 1.5 :loop false}}]}
 
+                                         :start-activity           {:type "start-activity" :id "cinema-video"}
                                          :finish-activity          {:type "sequence-data"
-                                                                    :data [{:type "finish-activity" :id "cinema"}
+                                                                    :data [{:type "finish-activity" :id "cinema-video"}
                                                                            {:type "scene" :scene-id "map"}]}
 
                                          :vaca-clapping            {:type "sequence-data"
@@ -189,6 +191,6 @@
                                                                     :data        [{:type "audio" :id "mari" :start 22.360 :duration 4.025}
                                                                                   {:type "animation-sequence" :target "mari" :track 1 :offset 22.360
                                                                                    :data [{:start 22.475 :end 26.257 :anim "talk"}]}]}}
-                         :triggers      {:start {:on "start" :action "start-activity"}}
+                         :triggers      {:start {:on "start" :action "start"}}
                          :metadata      {:autostart true
                                          :prev      "park"}})

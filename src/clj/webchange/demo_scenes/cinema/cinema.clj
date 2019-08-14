@@ -873,15 +873,17 @@
                                            {:type "set-variable" :var-name "rounds-number" :var-value 2}
                                            {:type "set-variable" :var-name "exclude-concepts" :var-value {:concept-name ["ardilla" "oso"]}}]}
 
-                                   :start-activity
+                                   :start
                                    {:type        "sequence"
                                     :description "Initial action"
-                                    :data        ["clear-instruction"
+                                    :data        ["start-activity"
+                                                  "clear-instruction"
                                                   "init-vaca-voice-next"
                                                   "init-vars"
                                                   "intro"
                                                   "renew-current-letter"]}
 
+                                   :start-activity {:type "start-activity" :id "cinema"}
                                    :finish-activity
                                    {:type "sequence-data"
                                     :data [{:type "finish-activity" :id "cinema"}
@@ -1147,6 +1149,6 @@
                                     :data        [{:type "audio" :id "vaca-3" :start 0.907 :duration 1.360}
                                                   {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.907
                                                    :data [{:start 0.970 :end 2.189 :anim "talk"}]}]}}
-                   :triggers      {:start {:on "start" :action "start-activity"}}
+                   :triggers      {:start {:on "start" :action "start"}}
                    :metadata      {:autostart true
                                    :prev      "park"}})
