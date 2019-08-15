@@ -365,9 +365,11 @@
                       {:id     109 :type "set-activity" :activity "hide-n-seek" :activity-number 91 :lesson 11 :level 1 :time-expected 300
                        :scored true :expected-score-percentage 90}
 
-                      {:id 11 :type "set-activity" :activity "cinema" :activity-number 100 :lesson 1 :level 2}
-                      {:id 12 :type "set-activity" :activity "cinema-video" :activity-number 101 :lesson 2 :level 2}
-                      {:id 12 :type "set-activity" :activity "slide" :activity-number 102 :lesson 1 :level 1}
+                      {:id 110 :type "set-activity" :activity "cinema" :activity-number 100 :lesson 1 :level 2}
+                      {:id 111 :type "set-activity" :activity "cinema-video" :activity-number 101 :lesson 2 :level 2}
+                      {:id 112 :type "set-activity" :activity "park-poem" :activity-number 101 :lesson 1 :level 2}
+                      {:id 112 :type "set-activity" :activity "running" :activity-number 101 :lesson 1 :level 2}
+                      {:id 113 :type "set-activity" :activity "slide" :activity-number 102 :lesson 1 :level 2}
                       ]
    :default-progress {:current-activity          "home"
                       :variables                 {:last-location "home"}
