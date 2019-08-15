@@ -1,18 +1,23 @@
 (ns webchange.student-dashboard.views
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
+    [webchange.auth.subs :as as]
+    [webchange.routes :refer [redirect-to]]
     [webchange.student-dashboard.scene-items.views-scene-list :refer [scene-list]]
     [webchange.student-dashboard.life-skills.views-life-skill-list :refer [life-skill-list]]
     [webchange.student-dashboard.related-content.views-related-content-list :refer [related-content-list]]
     [webchange.student-dashboard.stubs :refer [related-content life-skills]]
-    [webchange.ui.theme :refer [with-mui-theme]]
     [webchange.student-dashboard.events :as sde]
     [webchange.student-dashboard.subs :as sds]
-    [cljs-react-material-ui.reagent :as ui]))
+    [webchange.ui.theme :refer [with-mui-theme]]))
 
 (defn translate
   [path]
-  (get-in {:story           {:title "Continue the story"}
+  (get-in {:header          {:pre-user    "Hello,"
+                             :pre-sign-in "Please,"
+                             :sign-in     "Sign In"}
+           :story           {:title "Continue the story"}
            :assessment      {:title "Assessments"}
            :related-content {:title "Related / Additional content"}
            :life-skills     {:title "Life skills / Extra credit"}
@@ -20,7 +25,12 @@
           path))
 
 (def dashboard-container-styles
-  {:display "flex"})
+  {:display        "flex"
+   :flex-direction "column"})
+
+(def dashboard-content-styles
+  {:display    "flex"
+   :overflow-y "auto"})
 
 (def main-content-styles
   {:background-color "#ededed"
@@ -37,6 +47,28 @@
    :padding          "50px"
    :width            500})
 
+(def header-styles
+  {:flex-grow  1
+   :text-align "right"})
+
+(defn app-bar
+  [{:keys [user]}]
+  [ui/app-bar
+   {:color    "default"
+    :position "static"
+    :style    {}}
+   (let [logged-in (boolean user)]
+     [ui/toolbar
+      [ui/typography
+       {:variant "button"
+        :style   header-styles}
+       (if logged-in
+         (translate [:header :pre-user])
+         (translate [:header :pre-sign-in]))]
+      (if logged-in
+        [ui/button (str (:first-name user) " " (:last-name user))]
+        [ui/button {:on-click #(redirect-to :student-login)} (translate [:header :sign-in])])])])
+
 (defn- continue-the-story []
   (let [loading? @(re-frame/subscribe [::sds/progress-loading])
         show-more {:id :show-more}
@@ -45,7 +77,7 @@
         list (into [] (concat [show-more] (take-last 3 finished) [next-activity]))]
     (if loading?
       [ui/linear-progress]
-      [scene-list list {:title (translate [:story :title])
+      [scene-list list {:title    (translate [:story :title])
                         :on-click (fn [{id :id}]
                                     (if (= id :show-more)
                                       (re-frame/dispatch [::sde/show-more])
@@ -56,7 +88,7 @@
         assessments @(re-frame/subscribe [::sds/assessments])]
     (if loading?
       [ui/linear-progress]
-      [scene-list assessments {:title (translate [:assessment :title])
+      [scene-list assessments {:title    (translate [:assessment :title])
                                :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}])))
 
 (defn- main-content
@@ -76,15 +108,18 @@
 
 (defn student-dashboard-page
   []
-  (let [handle-related-content-click #(println (str "Related content clicked: " %))
+  (let [user @(re-frame/subscribe [::as/user])
+        handle-related-content-click #(println (str "Related content clicked: " %))
         handle-life-skill-click #(println (str "Life skill clicked: " %))]
     [with-mui-theme
      [:div {:style dashboard-container-styles}
-      [main-content]
-      [additional-content {:related-content          related-content
-                           :life-skills              life-skills
-                           :on-related-content-click handle-related-content-click
-                           :on-life-skill-click      handle-life-skill-click}]]]))
+      [app-bar {:user user}]
+      [:div {:style dashboard-content-styles}
+       [main-content]
+       [additional-content {:related-content          related-content
+                            :life-skills              life-skills
+                            :on-related-content-click handle-related-content-click
+                            :on-life-skill-click      handle-life-skill-click}]]]]))
 
 (defn student-dashboard-finished-page
   []
@@ -92,5 +127,5 @@
     [with-mui-theme
      [:div {:style dashboard-container-styles}
       [:div {:style main-content-styles}
-        [scene-list finished {:title (translate [:history :title])
-                              :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}]]]]))
+       [scene-list finished {:title    (translate [:history :title])
+                             :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}]]]]))

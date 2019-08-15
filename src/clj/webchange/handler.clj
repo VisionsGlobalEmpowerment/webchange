@@ -109,6 +109,7 @@
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
 
            (GET "/student-dashboard" request (authenticated-route request))
+           (GET "/student-dashboard/finished" request (authenticated-route request))
            (resources "/"))
 
 (defroutes api-routes

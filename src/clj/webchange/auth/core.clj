@@ -63,9 +63,13 @@
 (defn student-login!
   [{:keys [school-id access-code]}]
   (if-let [student (db/find-student-by-code {:school_id school-id :access_code access-code})]
-    [true {:id (:user-id student)
-           :school-id (:school-id student)}]
+    (let [user (-> (db/get-user {:id (:user-id student)}) visible-user)]
+      [true {:id         (:user-id student)
+             :school-id  (:school-id student)
+             :first-name (:first-name user)
+             :last-name  (:last-name user)}])
     [false error-invalid-credentials]))
+
 
 (defn register-user!
   [user-data]
