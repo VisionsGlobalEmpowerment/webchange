@@ -138,6 +138,7 @@
 
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :play-video ::play-video)
+(ce/reg-simple-executor :path-animation ::execute-path-animation)
 (ce/reg-simple-executor :state ::execute-state)
 (ce/reg-simple-executor :set-attribute ::execute-set-attribute)
 (ce/reg-simple-executor :add-alias ::execute-add-alias)
@@ -216,6 +217,26 @@
     (let [scene-id (:current-scene db)
           video-state {:act "pause"}]
       {:db (update-in db [:scenes scene-id :objects (keyword target)] merge video-state params)})))
+
+(re-frame/reg-event-fx
+  ::execute-path-animation
+  [ce/event-as-action ce/with-flow]
+  (fn [{:keys [db]} {:keys [target params state flow-id] :as action}]
+    (let [scene-id (:current-scene db)
+          on-end (ce/dispatch-success-fn action)
+          path-state {:animation state
+                      :on-end    on-end}]
+      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)
+       :dispatch [::ce/register-flow-remove-handler {:flow-id flow-id
+                                                     :handler (fn [] (re-frame/dispatch [::stop-path-animation {:target target}]))}]})))
+
+(re-frame/reg-event-fx
+  ::stop-path-animation
+  [ce/event-as-action]
+  (fn [{:keys [db]} {:keys [target params]}]
+    (let [scene-id (:current-scene db)
+          path-state {:animation "stop"}]
+      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)})))
 
 (re-frame/reg-event-fx
   ::execute-add-alias

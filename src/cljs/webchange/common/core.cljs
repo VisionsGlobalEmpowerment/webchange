@@ -89,3 +89,9 @@
   [object]
   (-> object
       prepare-actions))
+
+(defn prepare-animated-svg-path-params
+  [object]
+  (-> object
+      (merge {:data (:path object)})
+      (dissoc :path)))

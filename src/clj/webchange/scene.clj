@@ -18,6 +18,7 @@
             [webchange.demo-scenes.park.hide-n-seek :refer [hide-n-seek-scene]]
             [webchange.demo-scenes.library.library :refer [library-scene]]
             [webchange.demo-scenes.library.book :refer [book-scene]]
+            [webchange.demo-scenes.library.writing-lesson :refer [writing-lesson-scene]]
 
             [clojure.tools.logging :as log]))
 
@@ -39,10 +40,11 @@
                       "cinema-video"    cinema-video-scene
                       "cycling"         cycling-scene
                       "running"         running-scene
-                      "stadium"         stadium-scene}})
+                      "stadium"         stadium-scene
+                      "writing-lesson"         writing-lesson-scene}})
 (defn get-course
   [course-id]
-  {:initial-scene    "map"
+  {:initial-scene    "writing-lesson"
    :scene-list       {:home            {:name    "Casa"
                                         :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
                                         :type    "non-scored"
@@ -133,7 +135,7 @@
 
    :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
                       "book" "painting-tablet" "cinema" "cinema-video" "cycling" "running" "letter-intro" "park-poem"
-                      "slide"]
+                      "slide" "writing-lesson"]
    :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
                                            :assessment-1 "assessment1"}}
                       {:id 2 :lesson-sets {:concepts     "ls2"

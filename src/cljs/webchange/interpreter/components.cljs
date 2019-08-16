@@ -8,6 +8,7 @@
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.painting-area :refer [painting-area]]
     [webchange.common.colors-palette :refer [colors-palette]]
+    [webchange.common.animated-svg-path :refer [animated-svg-path]]
     [webchange.common.anim :refer [anim]]
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
@@ -22,6 +23,7 @@
     [webchange.common.core :refer [prepare-colors-palette-params
                                    prepare-group-params
                                    prepare-painting-area-params
+                                   prepare-animated-svg-path-params
                                    with-origin-offset]]
 
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
@@ -266,6 +268,7 @@
       :painting-area (get-painting-area scene-id name o)
       :colors-palette (get-colors-palette scene-id name o)
       :video [video o]
+      :animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
       (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined"))))))
 
 (defn placeholder
