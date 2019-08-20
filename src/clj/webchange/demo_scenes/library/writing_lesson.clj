@@ -60,9 +60,9 @@
                                               :visible {:type "animation"}}}
                    :letter-path {:type         "transparent"
                                  :scene-name   "letter-path"
-                                 :duration     3000
+                                 :duration     5000
                                  :animation    "stop"
-                                 :path         "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90"
+                                 :path         "M 0 0"
                                  :stroke       "white"
                                  :stroke-width 15
                                  :line-cap     "round"
@@ -79,6 +79,7 @@
    :actions       {:start                          {:type "sequence"
                                                     :data ["start-activity"
                                                            "clear-instruction"
+                                                           "init-vars"
                                                            "welcome"
                                                            "find-bear"
                                                            "introduce-picture"
@@ -99,6 +100,11 @@
                                                     :attr-name  "animation"
                                                     :attr-value "play"}
 
+                   :init-vars {:type "parallel"
+                               :data [{:type "set-variable" :var-name "path" :var-value "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90"}
+                                      {:type "set-variable" :var-name "path-color-1" :var-value "#eec166"}
+                                      {:type "set-variable" :var-name "path-color-2" :var-value "#6cd38a"}]}
+
                    :welcome                        {:type "sequence" :data ["vaca-voice-welcome"]}
 
                    :find-bear                      {:type "sequence" :data ["vaca-voice-find-bear"
@@ -115,6 +121,7 @@
                                                                             "vaca-picture-pointing"]}
 
                    :introduce-letter               {:type "sequence" :data ["vaca-voice-sound-look"
+                                                                            "init-letter"
                                                                             "show-letter"
                                                                             "pronounce-letter"]}
 
@@ -135,14 +142,33 @@
                                                            {:type "action" :id "bear-chuckles"}
                                                            {:type "action" :id "vaca-voice-well-done"}
                                                            {:type "empty" :duration 100}
+                                                           {:type "path-animation" :state "reset" :target "letter-path"}
+                                                           {:type "set-attribute" :target "letter-path" :attr-name "stroke"
+                                                            :from-var [{:var-name "path-color-2" :action-property "attr-value"}]}
                                                            {:type "action" :id "letter-drawing-animation"}
                                                            {:type "action" :id "bear-chuckles"}]}
 
                    :letter-drawing-animation       {:type "sequence-data"
-                                                    :data [{:type "path-animation" :state "reset" :target "letter-path"}
-                                                           {:type "path-animation" :state "play" :target "letter-path"}]}
+                                                    :data [{:type          "transition"
+                                                            :transition-id "mari"
+                                                            :to            {:x 1005 :y 585 :loop false :duration 1.5}}
+                                                           {:type "parallel"
+                                                            :data [{:type "path-animation" :state "play" :target "letter-path"}
+                                                                   {:type          "transition"
+                                                                    :transition-id "mari"
+                                                                    :to            {:path     ""
+                                                                                    :origin   {:x 1005 :y 585}
+                                                                                    :scale    {:x 2 :y 2}
+                                                                                    :duration 5}
+                                                                    :from-var [{:var-name "path" :action-property "to.path"}]}]}]}
 
                    :bear-chuckles                  {:type "empty" :duration 100}
+
+                   :init-letter                    {:type "parallel"
+                                                    :data [{:type "set-attribute" :target "letter-path" :attr-name "path"
+                                                            :from-var [{:var-name "path" :action-property "attr-value"}]}
+                                                           {:type "set-attribute" :target "letter-path" :attr-name "stroke"
+                                                            :from-var [{:var-name "path-color-1" :action-property "attr-value"}]}]}
 
                    :show-letter                    {:type "state" :target "letter-path" :id "visible"}
 

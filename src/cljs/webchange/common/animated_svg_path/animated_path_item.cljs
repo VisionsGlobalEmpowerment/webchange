@@ -1,7 +1,7 @@
 (ns webchange.common.animated-svg-path.animated-path-item
   (:require
     [react-konva :refer [Path]]
-    [webchange.common.animated-svg-path.utils :refer [path-length]]))
+    [webchange.common.svg-path.path-length :refer [path-length]]))
 
 (defn animated-path-item
   [{:keys [data progress] :as props}]

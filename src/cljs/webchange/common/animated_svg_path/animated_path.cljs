@@ -3,7 +3,10 @@
     [konva :refer [Animation]]
     [react-konva :refer [Group]]
     [webchange.common.animated-svg-path.animated-path-item :refer [animated-path-item]]
-    [webchange.common.animated-svg-path.utils :refer [get-params path-length split-path]]))
+    [webchange.common.animated-svg-path.utils :refer [get-params run-funcs-consistently]]
+    [webchange.common.svg-path.path-length :refer [path-length]]
+    [webchange.common.svg-path.path-splitter :refer [split-path]]
+    [webchange.common.svg-path.path-to-transitions :refer [get-moves-lengths]]))
 
 (def default-group-params
   {:x        0
@@ -25,29 +28,19 @@
 (def paths (atom {}))
 
 (defn animate-path
-  [{:keys [ref set-progress duration cb]}]
+  [{:keys [ref set-progress duration delay cb]}]
   (set-progress 0)
   (when ref
     (let [animation (atom nil)]
       (reset! animation (Animation. (fn [frame]
-                                      (let [time (.-time frame)
-                                            progress (/ time duration)]
+                                      (let [time (- (.-time frame) delay)
+                                            progress (max (/ time duration) 0)]
                                         (set-progress progress)
                                         (when (>= progress 1)
                                           (.stop @animation)
                                           (cb))))
                                     (.getLayer ref)))
       (.start @animation))))
-
-(defn run-tasks-sequence
-  [tasks]
-  (reduce (fn [prev cur] (.then prev cur)) (.resolve js/Promise) tasks))
-
-(defn func->task
-  [func params]
-  (fn []
-    (js/Promise. (fn [resolve]
-                   (func (merge params {:cb resolve}))))))
 
 (defn refs-done?
   []
@@ -62,21 +55,29 @@
 (defn start-animation
   [cb]
   (reset-progress 0)
-  (let [anim-params (map #(merge (:ref %) {:duration (:duration %)}) (vals @paths))
-        anim-tasks (map #(func->task animate-path %) anim-params)]
-    (.then (run-tasks-sequence anim-tasks) cb)))
+  (let [anim-params (map #(merge (:ref %) {:duration (:duration %)
+                                           :delay (:delay %)}) (vals @paths))]
+    (run-funcs-consistently animate-path anim-params cb)))
 
 (defn constructor
-  [{:keys [data duration]}]
-  (reset! paths (->> (split-path data)
-                     (map-indexed vector)
-                     (reduce (fn [result [index current-data]]
-                               (assoc result index {:ref      nil
-                                                    :data     current-data
-                                                    :duration (-> duration
-                                                                  (* (path-length current-data))
-                                                                  (/ (path-length data)))}))
-                             {}))))
+  [{:keys [data duration use-delay?]}]
+  (reset! paths (let [moves-lengths (get-moves-lengths data)
+                      visible-length (path-length data)
+                      total-length (+ visible-length (reduce + 0 moves-lengths))
+                      use-delay? (if (nil? use-delay?) true use-delay?)]
+                  (->> (split-path data)
+                       (map #(vec [%1 %2]) moves-lengths)
+                       (map-indexed vector)
+                       (reduce (fn [result [index [delay current-data]]]
+                                 (assoc result index {:ref      nil
+                                                      :data     current-data
+                                                      :delay    (if use-delay? (-> duration
+                                                                                   (* delay)
+                                                                                   (/ total-length)) 0)
+                                                      :duration (-> duration
+                                                                    (* (path-length current-data))
+                                                                    (/ (if use-delay? total-length visible-length)))}))
+                               {})))))
 
 (defn render
   [{:keys [animation on-end] :as props}]
@@ -96,7 +97,7 @@
                          (case animation
                            "play" (start-animation callback)
                            "reset" (do
-                                     (reset-progress 0.3)
+                                     (reset-progress 0)
                                      (callback))
                            "stop" (do
                                     (reset-progress 1)

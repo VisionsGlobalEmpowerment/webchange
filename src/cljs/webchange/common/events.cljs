@@ -1,5 +1,6 @@
 (ns webchange.common.events
   (:require
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
@@ -79,7 +80,7 @@
           should-merge-to-root (and var-name (not action-property))]
       (if should-merge-to-root
         (merge (dissoc action :from-var) value)
-        (assoc action (keyword action-property) value)))))
+        (assoc-in action (map keyword (s/split action-property #"\.")) value)))))
 
 (defn with-var-properties
   [action db]
