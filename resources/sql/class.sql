@@ -43,7 +43,7 @@ WHERE id = :id
 -- :doc unassigns student
 UPDATE students
 SET class_id = null
-WHERE id = :id
+WHERE user_id = :user_id
 
 -- :name get-classes :? :*
 -- :doc retrieve all classes by school

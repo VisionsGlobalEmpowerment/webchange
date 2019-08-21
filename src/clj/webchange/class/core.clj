@@ -84,14 +84,16 @@
     [true {:id id}]))
 
 (defn update-student!
-  [id data]
-  (let [date-of-birth (jt/local-date "yyyy-MM-dd" (:date-of-birth data))
+  [id {class-id :class-id :as data}]
+  (let [{user-id :user-id} (db/get-student {:id id})
+        date-of-birth (jt/local-date "yyyy-MM-dd" (:date-of-birth data))
         transform #(transform-keys ->snake_case_keyword %)
         prepared-data (-> data
                           (assoc :date-of-birth date-of-birth)
                           (assoc :id id)
                           transform)]
-    (db/update-student! prepared-data)))
+    (db/update-student! prepared-data)
+    (db/update-course-stat-class! {:user_id user-id :class_id class-id})))
 
 (defn update-student-access-code!
   [id data]
@@ -102,7 +104,9 @@
 
 (defn unassign-student!
   [id]
-  (db/unassign-student! {:id id})
+  (let [{user-id :user-id} (db/get-student {:id id})]
+    (db/unassign-student! {:user_id user-id})
+    (db/unassign-course-stat! {:user_id user-id}))
   [true {:id id}])
 
 (defn get-current-school [] (db/get-first-school))
