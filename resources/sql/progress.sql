@@ -46,6 +46,18 @@ UPDATE course_stats
 SET data = :data
 WHERE id = :id
 
+-- :name update-course-stat-class! :! :n
+-- :doc updates a course stat class by user
+UPDATE course_stats
+SET class_id = :class_id
+WHERE user_id = :user_id
+
+-- :name unassign-course-stat! :! :n
+-- :doc unassigns course stat from class
+UPDATE course_stats
+SET class_id = null
+WHERE user_id = :user_id
+
 -- :name create-activity-stat! :<!
 -- :doc creates a new activity stat record
 INSERT INTO activity_stats
