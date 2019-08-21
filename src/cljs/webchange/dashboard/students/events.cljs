@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.dashboard.events-utils :refer [when-valid]]
+    [webchange.dashboard.events-utils :refer [when-valid clear-errors]]
     [webchange.validation.specs.student :as spec]))
 
 (re-frame/reg-event-fx
@@ -126,14 +126,18 @@
 (re-frame/reg-event-fx
   ::show-add-student-form
   (fn [{:keys [db]} _]
-    {:db (assoc-in db [:dashboard :current-student] nil)
+    {:db (-> db
+             (clear-errors :student)
+             (assoc-in [:dashboard :current-student] nil))
      :dispatch-n (list [::generate-access-code]
                        [::open-student-modal :add])}))
 
 (re-frame/reg-event-fx
   ::show-edit-student-form
   (fn [{:keys [db]} [_ id]]
-    {:db (assoc-in db [:dashboard :current-student-id] id)
+    {:db (-> db
+             (clear-errors :student)
+             (assoc-in [:dashboard :current-student-id] id))
      :dispatch-n (list [::load-student id]
                        [::reset-access-code]
                        [::open-student-modal :edit])}))

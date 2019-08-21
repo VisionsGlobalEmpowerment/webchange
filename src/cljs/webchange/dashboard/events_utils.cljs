@@ -8,3 +8,7 @@
       {:db (assoc-in db
                      (conj [:errors] entity-type)
                      validation-errors)})))
+
+(defn clear-errors
+  [db entity-type]
+  (update-in db [:errors] dissoc entity-type))
