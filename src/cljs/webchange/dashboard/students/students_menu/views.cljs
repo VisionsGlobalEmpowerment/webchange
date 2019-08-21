@@ -17,10 +17,19 @@
 
 (defn- students-menu-item
   [{:keys [on-click]}
-   {:keys [name] :as class}]
+   {:keys [name] :as student}]
   [ui/menu-item
-   {:on-click #(on-click class)}
+   {:on-click #(on-click student)}
    name])
+
+(defn- unassigned-students-menu-item
+  [{:keys [on-click]}
+   {:keys [id name] :as student}]
+  [ui/menu-item
+   {:on-click #(on-click student)}
+   name
+   [ui/list-item-secondary-action
+    [ui/icon-button {:on-click #(re-frame/dispatch [::students-events/show-delete-form id])} [ic/delete-forever]]]])
 
 (defn students-menu
   []
@@ -48,7 +57,7 @@
        [ui/list-subheader "Unassigned"]
        (for [student unassigned]
          ^{:key (:id student)}
-         [students-menu-item
+         [unassigned-students-menu-item
           {:on-click #(re-frame/dispatch [::students-events/show-edit-student-form (:id %)])}
           student])
        ]]

@@ -105,23 +105,41 @@
                        [::close-student-modal])}))
 
 (re-frame/reg-event-fx
-  ::delete-student
+  ::remove-student-from-class
   (fn [{:keys [db]} [_ class-id student-id]]
+    {:db (assoc-in db [:loading :remove-student-from-class] true)
+     :http-xhrio {:method          :delete
+                  :uri             (str "/api/students/" student-id "/class")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::remove-student-from-class-success class-id]
+                  :on-failure      [:api-request-error :remove-student-from-class]}}))
+
+(re-frame/reg-event-fx
+  ::remove-student-from-class-success
+  (fn [{:keys [db]} [_ class-id]]
+    {:db (assoc-in db [:dashboard :current-student] nil)
+     :dispatch-n (list [:complete-request :remove-student-from-class]
+                       [::load-unassigned-students]
+                       [::load-students class-id])}))
+
+(re-frame/reg-event-fx
+  ::delete-student
+  (fn [{:keys [db]} [_ student-id]]
     {:db (assoc-in db [:loading :delete-student] true)
      :http-xhrio {:method          :delete
                   :uri             (str "/api/students/" student-id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::delete-student-success class-id]
+                  :on-success      [::delete-student-success]
                   :on-failure      [:api-request-error :delete-student]}}))
 
 (re-frame/reg-event-fx
   ::delete-student-success
-  (fn [{:keys [db]} [_ class-id]]
+  (fn [{:keys [db]} _]
     {:db (assoc-in db [:dashboard :current-student] nil)
      :dispatch-n (list [:complete-request :delete-student]
-                       [::load-unassigned-students]
-                       [::load-students class-id])}))
+                       [::load-unassigned-students])}))
 
 (re-frame/reg-event-fx
   ::show-add-student-form
@@ -200,7 +218,31 @@
      :dispatch-n (list [:complete-request :student-profile])}))
 
 (re-frame/reg-event-fx
-  ::show-delete-student-form
+  ::show-remove-from-class-form
+  (fn [{:keys [db]} [_ student-id]]
+    {:db (assoc-in db [:dashboard :current-student-id] student-id)
+     :dispatch-n (list
+                   [::load-student student-id]
+                   [::open-remove-from-class-modal])}))
+
+(re-frame/reg-event-fx
+  ::open-remove-from-class-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :remove-student-from-class-modal-state] true)}))
+
+(re-frame/reg-event-fx
+  ::close-remove-from-class-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :remove-student-from-class-modal-state] nil)}))
+
+(re-frame/reg-event-fx
+  ::confirm-remove
+  (fn [{:keys [db]} [_ class-id student-id]]
+    {:db (assoc-in db [:dashboard :remove-student-from-class-modal-state] nil)
+     :dispatch [::remove-student-from-class class-id student-id]}))
+
+(re-frame/reg-event-fx
+  ::show-delete-form
   (fn [{:keys [db]} [_ student-id]]
     {:db (assoc-in db [:dashboard :current-student-id] student-id)
      :dispatch-n (list
@@ -219,6 +261,6 @@
 
 (re-frame/reg-event-fx
   ::confirm-delete
-  (fn [{:keys [db]} [_ class-id student-id]]
+  (fn [{:keys [db]} [_ student-id]]
     {:db (assoc-in db [:dashboard :delete-student-modal-state] nil)
-     :dispatch [::delete-student class-id student-id]}))
+     :dispatch [::delete-student student-id]}))

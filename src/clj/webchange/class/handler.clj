@@ -72,6 +72,12 @@
     (-> (core/unassign-student! (Integer/parseInt id))
         handle)))
 
+(defn handle-delete-student
+  [id request]
+  (let [owner-id (current-user request)]
+    (-> (core/delete-student! (Integer/parseInt id))
+        handle)))
+
 (defn handle-current-school [request]
   (-> (core/get-current-school)
       response))
@@ -97,15 +103,20 @@
 
            (GET "/api/classes/:id/students" [id] (-> id Integer/parseInt core/get-students-by-class response))
            (GET "/api/unassigned-students" [] (-> (core/get-students-unassigned) response))
-           (GET "/api/students/:id" [id] (-> id Integer/parseInt core/get-student response))
+           (GET "/api/students/:id" [id]
+             (if-let [item (-> id Integer/parseInt core/get-student)]
+               (response {:student item})
+               (not-found "not found")))
            (POST "/api/students" request
              (if-let [errors (validate-student (:body request))]
                (validation-error errors)
                (handle-create-student request)))
            (PUT "/api/students/:id" [id :as request]
              (handle-update-student id request))
-           (DELETE "/api/students/:id" [id :as request]
+           (DELETE "/api/students/:id/class" [id :as request]
              (handle-unassign-student id request))
+           (DELETE "/api/students/:id" [id :as request]
+             (handle-delete-student id request))
 
            (POST "/api/next-access-code" request (handle-next-access-code request))
            )

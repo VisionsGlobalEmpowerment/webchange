@@ -152,7 +152,7 @@
             [students-list
              {:on-profile-click (fn [{:keys [id class-id]}] (redirect-to :dashboard-student-profile :class-id class-id :student-id id))
               :on-edit-click    (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
-              :on-remove-click  (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-delete-student-form id]))}
+              :on-remove-click  (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-remove-from-class-form id]))}
              (->> students
                   (map-students-list)
                   (filter-students-list @filter))]

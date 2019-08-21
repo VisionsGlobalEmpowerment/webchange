@@ -156,9 +156,9 @@
         :on-click #(handle-save @student-data)}
        "Save"]]]))
 
-(defn student-delete-modal
+(defn student-remove-from-class-modal
   []
-  (let [modal-state @(re-frame/subscribe [::students-subs/delete-modal-state])
+  (let [modal-state @(re-frame/subscribe [::students-subs/remove-from-class-modal-state])
         is-loading? @(re-frame/subscribe [::students-subs/student-loading])
         {{first-name :first-name last-name :last-name} :user student-id :id class-id :class-id} @(re-frame/subscribe [::students-subs/current-student])]
     (when modal-state
@@ -168,12 +168,34 @@
          [:div
           [ui/dialog-title "Are you sure?"]
           [ui/dialog-content
-           [ui/dialog-content-text (str "You are about to delete " first-name " " last-name)]]
+           [ui/dialog-content-text (str "You are about to remove " first-name " " last-name " from its class")]]
           [ui/dialog-actions
-           [ui/button {:on-click #(re-frame/dispatch [::students-events/close-delete-modal])} "Cancel"]
+           [ui/button {:on-click #(re-frame/dispatch [::students-events/close-remove-from-class-modal])} "Cancel"]
            [ui/button
             {:variant  "contained"
              :color    "primary"
-             :on-click #(re-frame/dispatch [::students-events/confirm-delete class-id student-id])}
+             :on-click #(re-frame/dispatch [::students-events/confirm-remove class-id student-id])}
+            "Confirm"]]])
+       ])))
+
+(defn student-delete-modal
+  []
+  (let [modal-state @(re-frame/subscribe [::students-subs/delete-modal-state])
+        is-loading? @(re-frame/subscribe [::students-subs/student-loading])
+        {{first-name :first-name last-name :last-name} :user student-id :id} @(re-frame/subscribe [::students-subs/current-student])]
+    (when modal-state
+      [ui/dialog {:open true}
+       (if is-loading?
+         [ui/linear-progress]
+         [:div
+          [ui/dialog-title "Are you sure?"]
+          [ui/dialog-content
+           [ui/dialog-content-text (str "You are about to delete " first-name " " last-name)]]
+          [ui/dialog-actions
+           [ui/button {:on-click #(re-frame/dispatch [::students-events/close-remove-from-class-modal])} "Cancel"]
+           [ui/button
+            {:variant  "contained"
+             :color    "primary"
+             :on-click #(re-frame/dispatch [::students-events/confirm-delete student-id])}
             "Confirm"]]])
        ])))

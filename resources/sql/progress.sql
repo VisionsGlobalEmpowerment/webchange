@@ -58,6 +58,11 @@ UPDATE course_stats
 SET class_id = null
 WHERE user_id = :user_id
 
+-- :name delete-course-stat! :! :n
+-- :doc deletes course stat
+DELETE from course_stats
+WHERE user_id = :user_id
+
 -- :name create-activity-stat! :<!
 -- :doc creates a new activity stat record
 INSERT INTO activity_stats
