@@ -93,6 +93,12 @@
         students (-> (f/get-unassigned-students) :body (json/read-str :key-fn keyword) :students)]
     (is (= 1 (count students)))))
 
+(deftest student-can-be-deleted
+  (let [{id :id} (f/student-created)
+        _ (f/delete-student! id)
+        status (-> id f/get-student :status)]
+    (is (= 404 status))))
+
 (deftest current-school-can-be-retrieved
   (let [school (-> (f/get-current-school) :body (json/read-str :key-fn keyword))]
     (is (= f/default-school-id (:id school)))))

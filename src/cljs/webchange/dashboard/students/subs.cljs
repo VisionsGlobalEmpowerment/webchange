@@ -53,6 +53,11 @@
     (get-in db [:dashboard :student-profile])))
 
 (re-frame/reg-sub
+  ::remove-from-class-modal-state
+  (fn [db]
+    (get-in db [:dashboard :remove-student-from-class-modal-state])))
+
+(re-frame/reg-sub
   ::delete-modal-state
   (fn [db]
     (get-in db [:dashboard :delete-student-modal-state])))

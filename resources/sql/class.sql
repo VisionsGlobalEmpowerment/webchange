@@ -45,6 +45,11 @@ UPDATE students
 SET class_id = null
 WHERE user_id = :user_id
 
+-- :name delete-student! :! :n
+-- :doc deletes student
+DELETE from students
+WHERE user_id = :user_id
+
 -- :name get-classes :? :*
 -- :doc retrieve all classes by school
 SELECT * from classes

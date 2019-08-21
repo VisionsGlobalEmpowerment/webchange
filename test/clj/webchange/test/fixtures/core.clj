@@ -430,6 +430,13 @@
 
 (defn unassigned-student!
   [id]
+  (let [url (str "/api/students/" id "/class")
+        request (-> (mock/request :delete url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn delete-student!
+  [id]
   (let [url (str "/api/students/" id)
         request (-> (mock/request :delete url)
                     teacher-logged-in)]

@@ -50,11 +50,11 @@
     {:students students}))
 
 (defn get-student [id]
-  (let [student (-> (db/get-student {:id id})
-                    (with-class)
-                    (#(assoc % :date-of-birth (-> % :date-of-birth str)))
-                    with-user)]
-    {:student student}))
+  (if-let [student (db/get-student {:id id})]
+    (-> student
+        (with-class)
+        (#(assoc % :date-of-birth (-> % :date-of-birth str)))
+        with-user)))
 
 (defn create-class!
   [data]
@@ -107,6 +107,13 @@
   (let [{user-id :user-id} (db/get-student {:id id})]
     (db/unassign-student! {:user_id user-id})
     (db/unassign-course-stat! {:user_id user-id}))
+  [true {:id id}])
+
+(defn delete-student!
+  [id]
+  (let [{user-id :user-id} (db/get-student {:id id})]
+    (db/delete-student! {:user_id user-id})
+    (db/delete-course-stat! {:user_id user-id}))
   [true {:id id}])
 
 (defn get-current-school [] (db/get-first-school))

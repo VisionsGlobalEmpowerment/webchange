@@ -56,7 +56,7 @@
       :current-title (:name student)
       :actions       (actions {:student         student
                                :on-edit-click   (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
-                               :on-remove-click (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-delete-student-form id]))
+                               :on-remove-click (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-remove-from-class-form id]))
                                :on-class-click  (fn [] (redirect-to :dashboard-class-profile :class-id class-id))})}
      [personal-data student]
      [student-scores [{:title  (translate [:cumulative-scores :title])
