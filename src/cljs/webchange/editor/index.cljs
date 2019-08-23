@@ -5,6 +5,9 @@
     [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.common.kimage :refer [kimage]]
+    [webchange.common.copybook :refer [copybook]]
+    [webchange.common.svg-path :refer [svg-path]]
+    [webchange.common.matrix :refer [matrix-objects-list]]
     [webchange.common.anim :refer [anim animations init-spine-player]]
     [webchange.common.events :as ce]
     [webchange.common.core :refer [with-origin-offset]]
@@ -42,10 +45,13 @@
 (declare animation)
 (declare text)
 (declare painting-area)
+(declare copybook-object)
 (declare colors-palette)
 (declare carousel-object)
 (declare video)
 (declare animated-svg-path)
+(declare svg-path-object)
+(declare matrix-group)
 
 (defn object
   [type]
@@ -60,8 +66,11 @@
     :carousel carousel-object
     :painting-area painting-area
     :animated-svg-path animated-svg-path
+    :svg-path svg-path-object
+    :copybook copybook-object
     :colors-palette colors-palette
     :video video
+    :matrix matrix-group
     (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))))
 
 (defn to-props
@@ -121,10 +130,12 @@
   (-> object with-origin-offset))
 
 (defn draw-object
-  [scene-id name]
-  (let [o (re-frame/subscribe [::subs/current-scene-object name])
-        type (keyword (:type @o))]
-    [(object type) scene-id name @o]))
+  ([scene-id name]
+   (draw-object scene-id name {}))
+  ([scene-id name props]
+    (let [o (re-frame/subscribe [::subs/current-scene-object name])
+          type (keyword (:type @o))]
+      [(object type) scene-id name (merge @o props) draw-object])))
 
 (defn background
   [scene-id name object]
@@ -162,6 +173,12 @@
        [:> Rect (merge (rect-params scene-id name object) @g)]
        (for [child (:children object)]
          ^{:key (str scene-id child)} [draw-object scene-id child])])))
+
+(defn matrix-group
+  [scene-id name object d]
+  [:> Group (object-params object)
+   (matrix-objects-list object scene-id d)
+   [:> Rect (rect-params scene-id name object)]])
 
 (defn placeholder
   [scene-id name object]
@@ -205,6 +222,18 @@
 (defn painting-area
   [scene-id name object]
   [:> Group (object-params object)
+   [:> Rect (rect-params scene-id name object)]])
+
+(defn copybook-object
+  [scene-id name object]
+  [:> Group (object-params object)
+   [copybook (merge object {:x 0 :y 0})]
+   [:> Rect (rect-params scene-id name object)]])
+
+(defn svg-path-object
+  [scene-id name object]
+  [:> Group (merge (object-params object) {:scale-x 1 :scale-y 1})
+   [svg-path (merge object {:x 0 :y 0})]
    [:> Rect (rect-params scene-id name object)]])
 
 (defn animated-svg-path

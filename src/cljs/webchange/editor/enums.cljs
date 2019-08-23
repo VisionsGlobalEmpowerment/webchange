@@ -21,5 +21,8 @@
    {:key :text :value :text :text "Text"}
    {:key :background :value :background :text "Background"}
    {:key :painting-area :value :painting-area :text "Painting Area"}
+   {:key :svg-path :value :svg-path :text "SVG Path"}
    {:key :animated-svg-path :value :animated-svg-path :text "Animated SVG Path"}
-   {:key :video :value :video :text "Video"}])
+   {:key :copybook :value :copybook :text "Copybook"}
+   {:key :video :value :video :text "Video"}
+   {:key :matrix :value :matrix :text "Matrix"}])
