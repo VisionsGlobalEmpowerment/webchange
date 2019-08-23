@@ -82,7 +82,8 @@
 (defn prepare-painting-area-params
   [object]
   (-> object
-      (merge {:on-change #(re-frame/dispatch [::vars.events/execute-set-progress {:var-name  (:var-name object)
+      (merge {:key (:var-name object)
+              :on-change #(re-frame/dispatch [::vars.events/execute-set-progress {:var-name  (:var-name object)
                                                                                   :var-value %}])})))
 
 (defn prepare-colors-palette-params

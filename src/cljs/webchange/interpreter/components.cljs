@@ -7,8 +7,11 @@
     [webchange.events :as events]
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.painting-area :refer [painting-area]]
+    [webchange.common.copybook :refer [copybook]]
+    [webchange.common.svg-path :refer [svg-path]]
     [webchange.common.colors-palette :refer [colors-palette]]
     [webchange.common.animated-svg-path :refer [animated-svg-path]]
+    [webchange.common.matrix :refer [matrix-objects-list]]
     [webchange.common.anim :refer [anim]]
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
@@ -243,6 +246,7 @@
     (and @loaded @course-started (scene-started @scene-data))))
 
 (declare group)
+(declare matrix-object)
 (declare placeholder)
 (declare image)
 (declare animation)
@@ -252,24 +256,29 @@
 (declare get-colors-palette)
 
 (defn draw-object
-  [scene-id name]
-  (let [o @(re-frame/subscribe [::subs/scene-object-with-var scene-id name])
-        type (keyword (:type o))]
-    (case type
-      :background [kimage (get-data-as-url (:src o))]
-      :image [image scene-id name o]
-      :transparent [:> Group (prepare-group-params o)
-                                 [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
-      :group [group scene-id name o]
-      :placeholder [placeholder scene-id name o]
-      :animation [animation scene-id name o]
-      :text [text scene-id name o]
-      :carousel [carousel-object scene-id name o]
-      :painting-area (get-painting-area scene-id name o)
-      :colors-palette (get-colors-palette scene-id name o)
-      :video [video o]
-      :animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
-      (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined"))))))
+  ([scene-id name]
+   (draw-object scene-id name {}))
+  ([scene-id name props]
+   (let [o (merge @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]) props)
+         type (keyword (:type o))]
+     (case type
+       :background [kimage (get-data-as-url (:src o))]
+       :image [image scene-id name o]
+       :transparent [:> Group (prepare-group-params o)
+                     [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
+       :group [group scene-id name o]
+       :placeholder [placeholder scene-id name o]
+       :animation [animation scene-id name o]
+       :text [text scene-id name o]
+       :carousel [carousel-object scene-id name o]
+       :painting-area (get-painting-area scene-id name o)
+       :copybook [copybook o]
+       :colors-palette (get-colors-palette scene-id name o)
+       :video [video o]
+       :animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
+       :svg-path [svg-path o]
+       :matrix [matrix-object scene-id name o draw-object]
+       (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))))))
 
 (defn placeholder
   [scene-id name {item :var :as object}]
@@ -300,6 +309,11 @@
   [:> Group (prepare-group-params object)
    (for [child (:children object)]
      ^{:key (str scene-id child)} [draw-object scene-id child])])
+
+(defn matrix-object
+  [scene-id name object d]
+  [:> Group (prepare-group-params object)
+   (matrix-objects-list object scene-id d)])
 
 (defn filter-param [{:keys [filter]}]
   (case filter

@@ -19,29 +19,31 @@
             [webchange.demo-scenes.library.library :refer [library-scene]]
             [webchange.demo-scenes.library.book :refer [book-scene]]
             [webchange.demo-scenes.library.writing-lesson :refer [writing-lesson-scene]]
+            [webchange.demo-scenes.library.writing-practice :refer [writing-practice-scene]]
 
             [clojure.tools.logging :as log]))
 
-(def courses {"test" {"home"            home-scene
-                      "letter-intro"    letter-intro-scene
-                      "map"             map-scene
-                      "see-saw"         see-saw-scene
-                      "swings"          swings-scene
-                      "sandbox"         sandbox-scene
-                      "painting-tablet" painting-tablet-scene
-                      "park"            park-scene
-                      "park-poem"       park-poem-scene
-                      "slide"           slide-scene
-                      "volleyball"      volleyball-scene
-                      "hide-n-seek"     hide-n-seek-scene
-                      "library"         library-scene
-                      "book"            book-scene
-                      "cinema"          cinema-scene
-                      "cinema-video"    cinema-video-scene
-                      "cycling"         cycling-scene
-                      "running"         running-scene
-                      "stadium"         stadium-scene
-                      "writing-lesson"         writing-lesson-scene}})
+(def courses {"test" {"home"             home-scene
+                      "letter-intro"     letter-intro-scene
+                      "map"              map-scene
+                      "see-saw"          see-saw-scene
+                      "swings"           swings-scene
+                      "sandbox"          sandbox-scene
+                      "painting-tablet"  painting-tablet-scene
+                      "park"             park-scene
+                      "park-poem"        park-poem-scene
+                      "slide"            slide-scene
+                      "volleyball"       volleyball-scene
+                      "hide-n-seek"      hide-n-seek-scene
+                      "library"          library-scene
+                      "book"             book-scene
+                      "cinema"           cinema-scene
+                      "cinema-video"     cinema-video-scene
+                      "cycling"          cycling-scene
+                      "running"          running-scene
+                      "stadium"          stadium-scene
+                      "writing-lesson"   writing-lesson-scene
+                      "writing-practice" writing-practice-scene}})
 (defn get-course
   [course-id]
   {:initial-scene    "map"
@@ -135,7 +137,7 @@
 
    :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
                       "book" "painting-tablet" "cinema" "cinema-video" "cycling" "running" "letter-intro" "park-poem"
-                      "slide" "writing-lesson"]
+                      "slide" "writing-lesson" "writing-practice"]
    :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
                                            :assessment-1 "assessment1"}}
                       {:id 2 :lesson-sets {:concepts     "ls2"
