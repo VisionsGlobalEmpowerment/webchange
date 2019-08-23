@@ -6,6 +6,9 @@
 (defonce music-gain (atom nil))
 (defonce effects-gain (atom nil))
 
+(def default-music-vol 0.08)
+(def default-fx-vol 0.25)
+
 (defn music-volume
   [volume]
   (set! (.-value (.-gain @music-gain)) volume))
@@ -23,13 +26,14 @@
                              (js/window.AudioContext.)
                              (js/window.webkitAudioContext.)))
          (reset! music-gain (.createGain @audio-ctx))
+         (music-volume default-music-vol)
          (.connect @music-gain (.-destination @audio-ctx))
          (reset! effects-gain (.createGain @audio-ctx))
+         (effects-volume default-fx-vol)
          (.connect @effects-gain (.-destination @audio-ctx))))
-   (let [music-vol (or volume 0.1)
-         effects-vol (or volume 0.3)]
-     (music-volume music-vol)
-     (effects-volume effects-vol))))
+   (when volume
+     (music-volume volume)
+     (effects-volume volume))))
 
 (defn create-buffered-source
   [data]

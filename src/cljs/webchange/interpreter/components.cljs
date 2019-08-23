@@ -82,26 +82,28 @@
 
 (defn settings
   []
-  (let [top-right (top-right)]
-    [:> Group
-     [kimage "/raw/img/bg.jpg"]
+  (let [top-right (top-right)
+        ui-screen @(re-frame/subscribe [::subs/ui-screen])]
+    (when (= ui-screen :settings)
+      [:> Group
+       [kimage "/raw/img/bg.jpg"]
 
-     [:> Group top-right
-      [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
-       {:x (- 108) :y 20
-        :on-click #(re-frame/dispatch [::events/close-settings])
-        :on-tap #(re-frame/dispatch [::events/close-settings])}]]
+       [:> Group top-right
+        [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
+         {:x (- 108) :y 20
+          :on-click #(re-frame/dispatch [::ie/close-settings])
+          :on-tap #(re-frame/dispatch [::ie/close-settings])}]]
 
-     [kimage (get-data-as-url "/raw/img/ui/settings/settings.png") {:x 779 :y 345}]
-     [kimage (get-data-as-url "/raw/img/ui/settings/music_icon.png") {:x 675 :y 516}]
-     [kimage (get-data-as-url "/raw/img/ui/settings/music.png") {:x 763 :y 528}]
-     [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx_icon.png") {:x 581 :y 647}]
-     [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx.png") {:x 669 :y 645}]
+       [kimage (get-data-as-url "/raw/img/ui/settings/settings.png") {:x 779 :y 345}]
+       [kimage (get-data-as-url "/raw/img/ui/settings/music_icon.png") {:x 675 :y 516}]
+       [kimage (get-data-as-url "/raw/img/ui/settings/music.png") {:x 763 :y 528}]
+       [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx_icon.png") {:x 581 :y 647}]
+       [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx.png") {:x 669 :y 645}]
 
-     [slider {:x 979 :y 556 :width 352 :height 24 :event ::ie/set-music-volume :sub ::subs/get-music-volume}]
-     [slider {:x 979 :y 672 :width 352 :height 24 :event ::ie/set-effects-volume :sub ::subs/get-effects-volume}]
+       [slider {:x 979 :y 556 :width 352 :height 24 :event ::ie/set-music-volume :sub ::subs/get-music-volume}]
+       [slider {:x 979 :y 672 :width 352 :height 24 :event ::ie/set-effects-volume :sub ::subs/get-effects-volume}]
 
-     ]
+       ])
     )
   )
 
@@ -206,8 +208,8 @@
 (defn settings-button
   [x y]
   [:> Group {:x x :y y
-             :on-click #(re-frame/dispatch [::events/open-settings])
-             :on-tap #(re-frame/dispatch [::events/open-settings])}
+             :on-click #(re-frame/dispatch [::ie/open-settings])
+             :on-tap #(re-frame/dispatch [::ie/open-settings])}
    [kimage (get-data-as-url "/raw/img/ui/settings_button_01.png")]])
 
 (defn menu
@@ -372,7 +374,7 @@
                   :scale-x (compute-scale @viewport) :scale-y (compute-scale @viewport)}
         [:> Layer
          (case ui-screen
-           :settings [settings]
            :course-loading [course-loading-screen]
            [current-scene]
-           )]]])))
+           )
+         [settings]]]])))

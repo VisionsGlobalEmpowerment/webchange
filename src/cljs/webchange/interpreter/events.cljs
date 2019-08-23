@@ -477,13 +477,13 @@
 (re-frame/reg-event-fx
   ::set-music-volume
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc db :music-volume value)
+    {:db (assoc-in db [:settings :music-volume] value)
      :music-volume value}))
 
 (re-frame/reg-event-fx
   ::set-effects-volume
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc db :effects-volume value)
+    {:db (assoc-in db [:settings :effects-volume] value)
      :effects-volume value}))
 
 (re-frame/reg-event-fx
@@ -683,7 +683,7 @@
 (re-frame/reg-event-fx
   ::progress-loaded
   (fn [{:keys [db]} _]
-    {:dispatch-n (list [::reset-navigation] [::reset-activity-action])}))
+    {:dispatch-n (list [::reset-navigation] [::reset-activity-action] [::load-settings])}))
 
 (re-frame/reg-event-fx
   ::add-pending-event
@@ -743,3 +743,29 @@
           current-scene (get-in db [:current-scene])
           activity-action (get scene-activities (keyword current-scene))]
       (assoc db :activity-action activity-action))))
+
+(re-frame/reg-event-db
+  ::open-settings
+  (fn [db _]
+    (assoc db :ui-screen :settings)))
+
+(re-frame/reg-event-fx
+  ::close-settings
+  (fn [{:keys [db]} _]
+    {:db (assoc db :ui-screen :default)
+     :dispatch [::save-settings]}))
+
+(re-frame/reg-event-fx
+  ::save-settings
+  (fn [{:keys [db]} _]
+    (let [settings (:settings db)]
+      {:db (assoc-in db [:progress-data :settings] settings)
+       :dispatch [:progress-data-changed]})))
+
+(re-frame/reg-event-fx
+  ::load-settings
+  (fn [{:keys [db]} _]
+    (let [{:keys [music-volume effects-volume] :as settings} (get-in db [:progress-data :settings])]
+      {:db (assoc db :settings settings)
+       :dispatch-n (list [::set-music-volume music-volume]
+                         [::set-effects-volume effects-volume])})))

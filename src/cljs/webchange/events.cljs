@@ -41,16 +41,6 @@
           state (get-in object [:states (keyword state-id)])]
       (update-in db [:scenes scene-id :objects (keyword target)] merge state))))
 
-(re-frame/reg-event-db
-  ::open-settings
-  (fn [db _]
-    (assoc db :ui-screen :settings)))
-
-(re-frame/reg-event-db
-  ::close-settings
-  (fn [db _]
-    (assoc db :ui-screen :default)))
-
 (re-frame/reg-event-fx
   ::login
   (fn [{:keys [db]} [_ credentials]] ;; credentials = {:email ... :password ...}

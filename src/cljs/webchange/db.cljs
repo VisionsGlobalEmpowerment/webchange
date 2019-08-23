@@ -13,7 +13,7 @@
    :scene-loading-complete {}
    :scenes {}
    :ui-screen :default
-   :music-volume 10
-   :effects-volume 30
+   :settings {:music-volume 10
+              :effects-volume 30}
    :dashboard {:access-codes {}}
    })

@@ -114,12 +114,12 @@
 (re-frame/reg-sub
   ::get-music-volume
   (fn [db]
-    (:music-volume db)))
+    (get-in db [:settings :music-volume])))
 
 (re-frame/reg-sub
   ::get-effects-volume
   (fn [db]
-    (:effects-volume db)))
+    (get-in db [:settings :effects-volume])))
 
 (re-frame/reg-sub
   :loading
