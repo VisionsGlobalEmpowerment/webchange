@@ -122,6 +122,7 @@
                                            :react-konva "16.6.0"
                                            :gsap "2.1.2"
                                            :wavesurfer.js "2.2.1"
+                                           :svg-arc-to-cubic-bezier "3.2.0"
                                            }
                     :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]
@@ -153,6 +154,7 @@
                                       :react-konva "16.6.0"
                                       :gsap "2.1.2"
                                       :wavesurfer.js "2.2.1"
+                                      :svg-arc-to-cubic-bezier "3.2.0"
                                       }
                     :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]
@@ -173,6 +175,7 @@
                                     :react-konva "16.6.0"
                                     :gsap "2.1.2"
                                     :wavesurfer.js "2.2.1"
+                                    :svg-arc-to-cubic-bezier "3.2.0"
                                     }
                     :foreign-libs [{:file "src/libs/spine-all.js"
                                     :provides ["spine"]

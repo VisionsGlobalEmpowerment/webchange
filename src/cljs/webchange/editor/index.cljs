@@ -27,7 +27,7 @@
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer :as ws]
     [konva :refer [Transformer]]
-    [react-konva :refer [Stage Layer Group Rect Text Custom]]
+    [react-konva :refer [Custom Group Layer Path Rect Stage Text ]]
     [sodium.core :as na]
     [sodium.extensions :as nax]
     [soda-ash.core :as sa :refer [Grid
@@ -45,6 +45,7 @@
 (declare colors-palette)
 (declare carousel-object)
 (declare video)
+(declare animated-svg-path)
 
 (defn object
   [type]
@@ -58,6 +59,7 @@
     :text text
     :carousel carousel-object
     :painting-area painting-area
+    :animated-svg-path animated-svg-path
     :colors-palette colors-palette
     :video video
     (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))))
@@ -104,6 +106,15 @@
    :stroke       "green"
    :stroke-width 4
    :on-click     (fn [e] (transform scene-id name (-> e .-target .getParent)))})
+
+(defn path-params
+  [object]
+  {:data         (:path object)
+   :stroke       (:stroke object)
+   :animation    (:animation object)
+   :fill         (:fill object)
+   :stroke-width (:stroke-width object)
+   :line-cap     (:line-cap object)})
 
 (defn object-params
   [object]
@@ -196,9 +207,15 @@
   [:> Group (object-params object)
    [:> Rect (rect-params scene-id name object)]])
 
-(defn colors-palette
+(defn animated-svg-path
   [scene-id name object]
   [:> Group (object-params object)
+   [:> Rect (rect-params scene-id name object)]
+   [:> Path (path-params object)]])
+
+(defn colors-palette
+  [scene-id name object]
+  [:> Group (object-params object)`
    [:> Rect (rect-params scene-id name object)]])
 
 (defn video

@@ -10,8 +10,9 @@
   [service-worker]
   (-> (.getRegistrations service-worker)
       (.then (fn [registrations]
-               (->> (.shift registrations)
-                    (.unregister))))))
+               (when (> (count registrations) 0)
+                 (->> (.shift registrations)
+                      (.unregister)))))))
 
 (defn setup
   [use-cache path]

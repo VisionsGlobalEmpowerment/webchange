@@ -30,7 +30,7 @@
                                    {:url "/raw/img/elements/xylophone.png", :size 10, :type "image"}
                                    {:url "/raw/img/elements/yoyo.png", :size 10, :type "image"}
 
-                                   {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio" :alias "vaca voice 1"}
+                                   {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio" :alias "mari voice 1"}
                                    {:url "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a", :size 5, :type "audio" :alias "vaca voice 1"}
                                    {:url "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", :size 5, :type "audio" :alias "vaca voice 2"}
                                    {:url "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", :size 5, :type "audio" :alias "vaca voice 3"}
