@@ -7,7 +7,7 @@
    :scene-started false
    :viewport {:width 1920
               :height 1080}
-   :current-course nil
+   :current-course "test"
    :current-scene nil
    :scene-loading-progress {}
    :scene-loading-complete {}

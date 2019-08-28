@@ -48,7 +48,7 @@ JAVA_CMD=${JAVA_CMD:-"/usr/lib/jvm/___YOUR_JAVA_VERSION__/bin/java"}
 In order to configure dataset edn files dir set `:dataset-dir` in profiles `env`
 default value is `resources/datasets/`
 ```
-$ export DATASET_DIR="/tmp/
+$ export DATASET_DIR="/tmp/"
 ```
 
 lein run save-dataset <course> <dataset> - saves dataset to *.edn file

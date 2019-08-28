@@ -2,7 +2,12 @@
   (:require
     [re-frame.core :as re-frame]
     [soda-ash.core :as sa]
-    [webchange.events :as events]))
+    [webchange.events :as events]
+    [webchange.interpreter.events :as ie]))
+
+(def courses
+  [{:key :test :value "test" :text "Español"}
+   {:key :english :value "english" :text "English"}])
 
 (defn login-switch
   []
@@ -33,4 +38,8 @@
            [sa/GridColumn {}
             [sa/Button {:basic    true
                         :on-click #(re-frame/dispatch [::events/redirect :student-login])}
-             "Student"]]]]]]]]]]])
+             "Student"]]]]]]
+       [sa/GridRow {}
+        [sa/GridColumn {:text-align "center"}
+           [sa/FormDropdown {:label "Course " :options courses :inline true :default-value "test"
+                             :on-change #(re-frame/dispatch [::ie/set-current-course (.-value %2)])}]]]]]]]])

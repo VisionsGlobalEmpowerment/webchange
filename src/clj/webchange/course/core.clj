@@ -5,7 +5,8 @@
             [clojure.data.json :as json]
             [webchange.scene :as scene]))
 
-(def hardcoded {"test" true})
+(def hardcoded {"test" true
+                "english" true})
 
 (defn get-course-data
   [course-name]
