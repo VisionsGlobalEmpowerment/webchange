@@ -135,6 +135,14 @@
                         :scale-y 1
                         :skins ["default"]
                         :animations ["close_idle" "idle" "open_book" "page"]}
+                 :hat {:name       "hat"
+                       :width      1800
+                       :height     2558
+                       :speed      0.3
+                       :scale-x    0.3
+                       :scale-y    0.3
+                       :skins      ["default"]
+                       :animations ["catch" "idle" "talk"]}
                  :boxes {:name "boxes"
                          :width 771
                          :height 1033
