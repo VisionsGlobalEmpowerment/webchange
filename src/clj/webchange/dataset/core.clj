@@ -86,7 +86,6 @@
 (defn get-lesson-set-by-name
   [dataset-id name]
   (let [item (db/get-lesson-set-by-name {:dataset_id dataset-id :name name})]
-    (log/info "get-lesson" dataset-id name item)
     item))
 
 (defn create-lesson-set!

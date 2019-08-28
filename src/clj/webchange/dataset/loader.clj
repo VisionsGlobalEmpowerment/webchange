@@ -88,7 +88,6 @@
                      :data
                      :items
                      (map #(item-name->item-id dataset-id %)))]
-      (log/info "load-lessons?..." dataset-id name)
       (if-let [db-lesson (core/get-lesson-set-by-name dataset-id name)]
         (core/update-lesson-set! (:id db-lesson) {:data {:items items}})
         (core/create-lesson-set! {:dataset-id dataset-id
