@@ -1587,16 +1587,16 @@
     :chanting-video-src "/raw/video/l2a1/letter-e.mp4",
     :concept-name "elefant",
     :game-voice-action
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+    {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
-     :start 22.026,
-     :duration 4.36,
+     :start 16.185,
+     :duration 3.547,
      :scene-id "see-saw"},
     :game-voice-action-low
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
+    {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
-     :start 16.306,
-     :duration 4.494,
+     :start 11.08,
+     :duration 3.854,
      :scene-id "see-saw"},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
@@ -1752,81 +1752,85 @@
     :swings-dialog-action
     {:data
      [{:data
-       [{:end 8.227, :anim "talk", :start 7.574, :duration 0.653}
-        {:end 13.881, :anim "talk", :start 10.881, :duration 3}
-        {:end 23.335, :anim "talk", :start 17.588, :duration 5.747}
-        {:end 3.414, :anim "talk", :start 1.427, :duration 1.987}
-        {:end 10.094, :anim "talk", :start 9.014, :duration 1.08}
-        {:end 42.843, :anim "talk", :start 37.042, :duration 5.801}
-        {:end 49.376, :anim "talk", :start 43.509, :duration 5.867}
-        {:end 6.814, :anim "talk", :start 4.267, :duration 2.547}
-        {:end 16.868, :anim "talk", :start 14.268, :duration 2.6}
-        {:end 29.868, :anim "talk", :start 24.028, :duration 5.84}
-        {:end 36.336, :anim "talk", :start 30.615, :duration 5.721}
-        {:end 0.92, :anim "talk", :start 0.453, :duration 0.467}],
+       [{:end 52.573, :anim "talk", :start 52.053, :duration 0.52}
+        {:end 53.893, :anim "talk", :start 52.946, :duration 0.947}
+        {:end 61.066, :anim "talk", :start 55.239, :duration 5.827}
+        {:end 64.026, :anim "talk", :start 61.639, :duration 2.387}
+        {:end 66.986, :anim "talk", :start 65.253, :duration 1.733}
+        {:end 69.186, :anim "talk", :start 67.453, :duration 1.733}
+        {:end 73.999, :anim "talk", :start 69.866, :duration 4.133}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Elefante.m4a",
-       :start 0.347,
-       :offset 0.347,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 51.826,
+       :offset 51.826,
        :target "rock",
-       :duration 49.216}
+       :duration 22.933}
       {:data
-       [{:end 53.91, :anim "talk", :start 50.136, :duration 3.774}],
+       [{:end 1.666, :anim "talk", :start 0.747, :duration 0.919}
+        {:end 48.453, :anim "talk", :start 47.6, :duration 0.853}
+        {:end 50.32, :anim "talk", :start 49.107, :duration 1.213}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Elefante.m4a",
-       :start 49.99,
-       :offset 49.99,
-       :target "rock",
-       :duration 4.187}
-      {:data
-       [{:end 1.666, :anim "talk", :start 0.747, :duration 0.919}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/elefante.m4a",
-       :start 0.56,
-       :offset 0.56,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 47.32,
+       :offset 47.32,
        :target "vera",
-       :duration 1.293}
+       :duration 3.24}
       {:data
-       [{:end 56.15, :anim "talk", :start 55.123, :duration 1.027}
-        {:end 58.123, :anim "talk", :start 56.657, :duration 1.466}
-        {:end 61.99, :anim "talk", :start 58.777, :duration 3.213}],
+       [{:end 79.599, :anim "talk", :start 76.613, :duration 2.986}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Elefante.m4a",
-       :start 55.004,
-       :offset 55.004,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 76.213,
+       :offset 76.213,
        :target "rock",
-       :duration 7.427}
+       :duration 3.8}
       {:data
-       [{:end 4.493, :anim "talk", :start 3.266, :duration 1.227}
-        {:end 8.692, :anim "talk", :start 6.106, :duration 2.586}],
+       [{:end 52.28, :anim "talk", :start 51.853, :duration 0.427}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/elefante.m4a",
-       :start 3.213,
-       :offset 3.213,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 51.72,
+       :offset 51.72,
        :target "vera",
-       :duration 5.799}
+       :duration 0.747}
       {:data
-       [{:end 63.337, :anim "talk", :start 63.057, :duration 0.28}
-        {:end 65.751, :anim "talk", :start 63.91, :duration 1.841}
-        {:end 67.311, :anim "talk", :start 66.364, :duration 0.947}
-        {:end 70.244, :anim "talk", :start 68.177, :duration 2.067}],
+       [{:end 82.453, :anim "talk", :start 81.799, :duration 0.654}
+        {:end 84.106, :anim "talk", :start 82.706, :duration 1.4}
+        {:end 85.839, :anim "talk", :start 84.599, :duration 1.24}
+        {:end 88.039, :anim "talk", :start 86.786, :duration 1.253}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Elefante.m4a",
-       :start 63.018,
-       :offset 63.018,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 81.639,
+       :offset 81.639,
        :target "rock",
-       :duration 7.64}
+       :duration 6.667}
       {:data
-       [{:end 12.759, :anim "talk", :start 10.772, :duration 1.987}
-        {:end 15.212, :anim "talk", :start 13.225, :duration 1.987}
-        {:end 16.905, :anim "talk", :start 16.118, :duration 0.787}
-        {:end 18.518, :anim "talk", :start 17.478, :duration 1.04}],
+       [{:end 56.533, :anim "talk", :start 53.693, :duration 2.84}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/elefante.m4a",
-       :start 10.639,
-       :offset 10.639,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 53.52,
+       :offset 53.52,
        :target "vera",
-       :duration 8.159}],
+       :duration 3.36}
+      {:data
+       [{:end 90.319, :anim "talk", :start 89.999, :duration 0.32}
+        {:end 92.052, :anim "talk", :start 90.746, :duration 1.306}
+        {:end 93.412, :anim "talk", :start 92.399, :duration 1.013}
+        {:end 95.012, :anim "talk", :start 93.986, :duration 1.026}
+        {:end 98.506, :anim "talk", :start 96.346, :duration 2.16}],
+       :type "animation-sequence",
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 89.853,
+       :offset 89.853,
+       :target "rock",
+       :duration 9.106}
+      {:data
+       [{:end 62.24, :anim "talk", :start 58.733, :duration 3.507}
+        {:end 64.96, :anim "talk", :start 63.52, :duration 1.44}],
+       :type "animation-sequence",
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 58.52,
+       :offset 58.52,
+       :target "vera",
+       :duration 6.76}],
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
@@ -4141,16 +4145,16 @@
      :scene-id "book"},
     :concept-name "magnet",
     :game-voice-action
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+    {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
-     :start 10.787,
-     :duration 3.44,
-     :scene-id "cycling"},
+     :start 26.705,
+     :duration 3.559,
+     :scene-id "see-saw"},
     :game-voice-action-low
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+    {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
-     :start 5.973,
-     :duration 3.694,
+     :start 21.798,
+     :duration 3.747,
      :scene-id "see-saw"},
     :game-voice-chanting
     {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
@@ -4508,64 +4512,56 @@
     :swings-dialog-action
     {:data
      [{:data
-       [{:end 1.4, :anim "talk", :start 0.747, :duration 0.653}
-        {:end 2.6, :anim "talk", :start 2.213, :duration 0.387}
-        {:end 4.56, :anim "talk", :start 2.96, :duration 1.6}],
+       [{:end 102.639, :anim "talk", :start 101.866, :duration 0.773}
+        {:end 105.812, :anim "talk", :start 103.946, :duration 1.866}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Iman.m4a",
-       :start 0.587,
-       :offset 0.587,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 101.652,
+       :offset 101.652,
        :target "rock",
-       :duration 4.159}
+       :duration 4.547}
       {:data
-       [{:end 1.053, :anim "talk", :start 0.68, :duration 0.373}
-        {:end 2.547, :anim "talk", :start 1.613, :duration 0.934}
-        {:end 4.534, :anim "talk", :start 3.534, :duration 1}],
+       [{:end 67.853, :anim "talk", :start 67.467, :duration 0.386}
+        {:end 69.533, :anim "talk", :start 68.72, :duration 0.813}
+        {:end 71.56, :anim "talk", :start 70.48, :duration 1.08}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/iman.m4a",
-       :start 0.48,
-       :offset 0.48,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 67.16,
+       :offset 67.16,
        :target "vera",
-       :duration 4.294}
+       :duration 4.853}
       {:data
-       [{:end 5.746, :anim "talk", :start 5.333, :duration 0.413}
-        {:end 10.292, :anim "talk", :start 6.306, :duration 3.986}
-        {:end 11.972, :anim "talk", :start 10.932, :duration 1.04}
-        {:end 15.972, :anim "talk", :start 12.679, :duration 3.293}],
+       [{:end 109.359, :anim "talk", :start 108.852, :duration 0.507}
+        {:end 114.866, :anim "talk", :start 110.319, :duration 4.547}
+        {:end 116.612, :anim "talk", :start 115.492, :duration 1.12}
+        {:end 118.666, :anim "talk", :start 117.479, :duration 1.187}
+        {:end 121.092, :anim "talk", :start 119.226, :duration 1.866}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Iman.m4a",
-       :start 5.2,
-       :offset 5.2,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 108.759,
+       :offset 108.759,
        :target "rock",
-       :duration 11.052}
-      {:data [{:end 8.827, :anim "talk", :start 6.427, :duration 2.4}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/iman.m4a",
-       :start 6.294,
-       :offset 6.294,
-       :target "vera",
-       :duration 2.733}
+       :duration 12.773}
       {:data
-       [{:end 18.892, :anim "talk", :start 16.878, :duration 2.014}
-        {:end 22.318, :anim "talk", :start 19.545, :duration 2.773}
-        {:end 26.664, :anim "talk", :start 23.025, :duration 3.639}
-        {:end 27.584, :anim "talk", :start 27.184, :duration 0.4}],
+       [{:end 75.987, :anim "talk", :start 73.093, :duration 2.894}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Iman.m4a",
-       :start 16.665,
-       :offset 16.665,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 72.88,
+       :offset 72.88,
+       :target "vera",
+       :duration 3.267}
+      {:data
+       [{:end 125.159, :anim "talk", :start 123.066, :duration 2.093}
+        {:end 126.572, :anim "talk", :start 125.892, :duration 0.68}
+        {:end 128.679, :anim "talk", :start 126.839, :duration 1.84}
+        {:end 132.105, :anim "talk", :start 130.039, :duration 2.066}
+        {:end 135.039, :anim "talk", :start 132.705, :duration 2.334}],
+       :type "animation-sequence",
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 122.812,
+       :offset 122.812,
        :target "rock",
-       :duration 11.452}
-      {:data
-       [{:end 10.974, :anim "talk", :start 10.334, :duration 0.64}
-        {:end 12.094, :anim "talk", :start 11.387, :duration 0.707}
-        {:end 13.828, :anim "talk", :start 12.574, :duration 1.254}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/iman.m4a",
-       :start 10.187,
-       :offset 10.187,
-       :target "vera",
-       :duration 3.961}],
+       :duration 12.533}],
      :type "sequence-data",
      :scene-id "swings"},
     :word-1-skin "iguana",
@@ -6920,17 +6916,16 @@
     :chanting-video-src "/raw/video/l2a1/letter-a.mp4",
     :concept-name "squirrel",
     :game-voice-action
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+    {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
-     :start 12.746,
-     :duration 3.68,
-     :scene-id "cycling",
-     :description "Game Voice High"},
+     :start 5.693,
+     :duration 3.426,
+     :scene-id "see-saw"},
     :game-voice-action-low
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
+    {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
-     :start 7.986,
-     :duration 3.667,
+     :start 1,
+     :duration 3.427,
      :scene-id "see-saw"},
     :game-voice-chanting
     {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
@@ -7294,96 +7289,91 @@
     :swings-dialog-action
     {:data
      [{:data
-       [{:end 1.547, :anim "talk", :start 1.16, :duration 0.387}
-        {:end 3.586, :anim "talk", :start 2.16, :duration 1.426}
-        {:end 6.573, :anim "talk", :start 4.066, :duration 2.507}],
+       [{:end 21.787, :anim "talk", :start 20.56, :duration 1.227}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Ardilla.m4a",
-       :start 1,
-       :offset 1,
-       :target "rock",
-       :duration 5.853}
-      {:data
-       [{:end 2.027, :anim "talk", :start 0.48, :duration 1.547}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/ardilla.m4a",
-       :start 0.4,
-       :offset 0.4,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 20.347,
+       :offset 20.347,
        :target "vera",
-       :duration 1.8,
+       :duration 1.68,
        :description ""}
       {:data
-       [{:end 11.212, :anim "talk", :start 10.732, :duration 0.48}
-        {:end 16.212, :anim "talk", :start 11.772, :duration 4.44}],
+       [{:end 18.027, :anim "talk", :start 17.653, :duration 0.374}
+        {:end 23.36, :anim "talk", :start 18.84, :duration 4.52}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Ardilla.m4a",
-       :start 10.572,
-       :offset 10.572,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 17.507,
+       :offset 17.507,
        :target "rock",
-       :duration 5.92}
+       :duration 6.079}
       {:data
-       [{:end 4.24, :anim "talk", :start 3.853, :duration 0.387}
-        {:end 6.36, :anim "talk", :start 5.12, :duration 1.24}],
+       [{:end 22.787, :anim "talk", :start 22.493, :duration 0.294}
+        {:end 24.48, :anim "talk", :start 23.68, :duration 0.8}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/ardilla.m4a",
-       :start 3.707,
-       :offset 3.707,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 22.427,
+       :offset 22.427,
        :target "vera",
-       :duration 2.866}
+       :duration 2.266,
+       :description ""}
       {:data
-       [{:end 18.892, :anim "talk", :start 17.985, :duration 0.907}
-        {:end 20.145, :anim "talk", :start 19.492, :duration 0.653}
-        {:end 22.918, :anim "talk", :start 20.851, :duration 2.067}],
+       [{:end 26.44, :anim "talk", :start 25.293, :duration 1.147}
+        {:end 27.84, :anim "talk", :start 26.906, :duration 0.934}
+        {:end 30.48, :anim "talk", :start 28.68, :duration 1.8}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Ardilla.m4a",
-       :start 17.852,
-       :offset 17.852,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 25.12,
+       :offset 25.12,
        :target "rock",
-       :duration 5.319}
+       :duration 5.693}
       {:data
-       [{:end 8.453, :anim "talk", :start 7.973, :duration 0.48}
-        {:end 9.96, :anim "talk", :start 9.44, :duration 0.52}
-        {:end 12.426, :anim "talk", :start 11.066, :duration 1.36}
-        {:end 16.573, :anim "talk", :start 13.319, :duration 3.254}],
+       [{:end 26.56, :anim "talk", :start 25.973, :duration 0.587}
+        {:end 27.533, :anim "talk", :start 27.187, :duration 0.346}
+        {:end 29.627, :anim "talk", :start 28.2, :duration 1.427}
+        {:end 33.733, :anim "talk", :start 31.16, :duration 2.573}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/ardilla.m4a",
-       :start 7.813,
-       :offset 7.813,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 25.813,
+       :offset 25.813,
        :target "vera",
-       :duration 8.973}
+       :duration 8.254,
+       :description ""}
       {:data
-       [{:end 24.771, :anim "talk", :start 24.344, :duration 0.427}
-        {:end 28.291, :anim "talk", :start 25.384, :duration 2.907}
-        {:end 33.05, :anim "talk", :start 28.944, :duration 4.106}],
+       [{:end 32.96, :anim "talk", :start 32.52, :duration 0.44}
+        {:end 35.613, :anim "talk", :start 33.6, :duration 2.013}
+        {:end 38.346, :anim "talk", :start 36.466, :duration 1.88}
+        {:end 40.2, :anim "talk", :start 38.906, :duration 1.294}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Ardilla.m4a",
-       :start 24.144,
-       :offset 24.144,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 32.373,
+       :offset 32.373,
        :target "rock",
-       :duration 9.2}
+       :duration 8.133}
       {:data
-       [{:end 18.746, :anim "talk", :start 18.279, :duration 0.467}
-        {:end 21.372, :anim "talk", :start 19.412, :duration 1.96}
-        {:end 24.639, :anim "talk", :start 22.199, :duration 2.44}
-        {:end 27.599, :anim "talk", :start 25.652, :duration 1.947}],
+       [{:end 35.707, :anim "talk", :start 35.453, :duration 0.254}
+        {:end 38.813, :anim "talk", :start 36.76, :duration 2.053}
+        {:end 41.253, :anim "talk", :start 39.987, :duration 1.266}
+        {:end 44.987, :anim "talk", :start 42.453, :duration 2.534}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/vera/ardilla.m4a",
-       :start 18.039,
-       :offset 18.039,
+       :audio "/raw/audio/english/l1/a3/vera.m4a",
+       :start 35.253,
+       :offset 35.253,
        :target "vera",
-       :duration 9.866}
+       :duration 10.014,
+       :description ""}
       {:data
-       [{:end 35.743, :anim "talk", :start 34.397, :duration 1.346}
-        {:end 38.263, :anim "talk", :start 36.237, :duration 2.026}
-        {:end 38.783, :anim "talk", :start 38.623, :duration 0.16}
-        {:end 39.436, :anim "talk", :start 39.276, :duration 0.16}
-        {:end 40.183, :anim "talk", :start 39.81, :duration 0.373}],
+       [{:end 42.333, :anim "talk", :start 41.813, :duration 0.52}
+        {:end 44.946, :anim "talk", :start 43.24, :duration 1.706}
+        {:end 48.506, :anim "talk", :start 47.52, :duration 0.986}
+        {:end 45.693, :anim "talk", :start 45.546, :duration 0.147}
+        {:end 46.413, :anim "talk", :start 46.266, :duration 0.147}
+        {:end 47.026, :anim "talk", :start 46.933, :duration 0.093}],
        :type "animation-sequence",
-       :audio "/raw/audio/l1/a3/rock/Ardilla.m4a",
-       :start 34.01,
-       :offset 34.01,
+       :audio "/raw/audio/english/l1/a3/rock.m4a",
+       :start 41.666,
+       :offset 41.666,
        :target "rock",
-       :duration 6.653}],
+       :duration 7.267}],
      :type "sequence-data",
      :scene-id "swings"},
     :test-new
