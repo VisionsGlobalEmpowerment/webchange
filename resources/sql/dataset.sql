@@ -62,7 +62,7 @@ VALUES (:name, :dataset_id, :data) RETURNING id
 -- :name get-lesson-set-by-name :? :1
 -- :doc retrieve lesson set given name
 SELECT * from lesson_sets
-WHERE name = :name;
+WHERE dataset_id = :dataset_id AND name = :name;
 
 -- :name get-dataset-lessons :? :*
 -- :doc retrieve lesson sets given dataset id

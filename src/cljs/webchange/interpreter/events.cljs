@@ -1,6 +1,7 @@
 (ns webchange.interpreter.events
   (:require
     [re-frame.core :as re-frame]
+    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
     [webchange.interpreter.core :as i]
     [webchange.interpreter.executor :as e]
     [webchange.common.events :as ce]
@@ -523,13 +524,19 @@
 
 (re-frame/reg-event-fx
   ::start-course
-  (fn [{:keys [db]} [_ course-id]]
-    (if (not= course-id (:current-course db))
+  (fn-traced [{:keys [db]} [_ course-id]]
+    (if (not= course-id (:loaded-course db))
       {:db          (-> db
+                        (assoc :loaded-course course-id)
                         (assoc :current-course course-id)
                         (assoc :ui-screen :course-loading)
                         (assoc-in [:loading :load-course] true))
        :load-course course-id})))
+
+(re-frame/reg-event-fx
+  ::set-current-course
+  (fn [{:keys [db]} [_ course-name]]
+    {:db (assoc db :current-course course-name)}))
 
 (re-frame/reg-event-fx
   ::load-scene
@@ -623,12 +630,14 @@
           prev (get-in scene [:metadata :prev] nil)]
       (if prev
         {:dispatch-n (list [::trigger :back] [::set-current-scene prev])}
-        (set! (.-location js/window) "/student-dashboard")))))
+        {:dispatch [:open-student-dashboard]}))))
 
 (re-frame/reg-event-fx
   ::open-student-dashboard
   (fn [{:keys [db]} [_ _]]
-    (set! (.-location js/window) "/student-dashboard")))
+    (let [current-scene (:current-scene db)]
+      {:dispatch-n (list [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
+                         [:open-student-dashboard])})))
 
 (re-frame/reg-event-fx
   ::load-progress

@@ -15,7 +15,7 @@
 
 (defn effects-volume
   [volume]
-  (set! (.-value (.-gain @effects-gain)) volume))
+  (set! (.-value (.-gain @effects-gain)) (* volume 5)))
 
 (defn init
   ([]

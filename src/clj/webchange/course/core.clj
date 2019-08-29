@@ -5,7 +5,8 @@
             [clojure.data.json :as json]
             [webchange.scene :as scene]))
 
-(def hardcoded {"test" true})
+(def hardcoded {"test" true
+                "english" true})
 
 (defn get-course-data
   [course-name]
@@ -18,8 +19,8 @@
 
 (defn get-scene-data
   [course-name scene-name]
-  (if-let [hardcoded-scene (scene/get-scene course-name scene-name)]
-    hardcoded-scene
+  (if (contains? hardcoded course-name)
+    (scene/get-scene course-name scene-name)
     (let [{course-id :id} (db/get-course {:name course-name})
           {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
           latest-version (db/get-latest-scene-version {:scene_id scene-id})]

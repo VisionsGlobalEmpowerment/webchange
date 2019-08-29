@@ -3,9 +3,8 @@
             [pushy.core :as pushy]
             [re-frame.core :as re-frame]
             [webchange.events :as events]
+            [webchange.subs :as subs]
             [webchange.interpreter.events :as ie]
-            [webchange.dashboard.classes.events :as classes-events]
-            [webchange.dashboard.students.events :as students-events]
             [webchange.dashboard.events :as dashboard-events]))
 
 (def routes ["/" {""                  :home
@@ -26,18 +25,18 @@
 (defn- parse-url [url]
   (bidi/match-route routes url))
 
-(def default-course-name "test")
-
 (defn- dispatch-route [{:keys [handler route-params] :as params}]
-  (re-frame/dispatch [::events/set-active-route params])
-  (case handler
-    :course (re-frame/dispatch [::ie/start-course (:id route-params)])
-    :student-dashboard (re-frame/dispatch [::ie/start-course default-course-name])
-    :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) default-course-name])
-    :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) default-course-name])
-    :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
-    :dashboard-students (re-frame/dispatch [::dashboard-events/open-students (:class-id route-params)])
-    nil))
+  (let [current-course @(re-frame/subscribe [::subs/current-course])]
+    (js/console.log "dispatch-route" current-course)
+    (re-frame/dispatch [::events/set-active-route params])
+    (case handler
+      :course (re-frame/dispatch [::ie/start-course (:id route-params)])
+      :student-dashboard (re-frame/dispatch [::ie/start-course current-course])
+      :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
+      :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])
+      :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
+      :dashboard-students (re-frame/dispatch [::dashboard-events/open-students (:class-id route-params)])
+      nil)))
 
 (def history
   (pushy/pushy dispatch-route parse-url))
