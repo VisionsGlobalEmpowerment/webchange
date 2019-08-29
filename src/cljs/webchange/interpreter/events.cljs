@@ -513,14 +513,16 @@
 (re-frame/reg-event-fx
   ::set-music-volume
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db [:settings :music-volume] value)
-     :music-volume value}))
+    (when value
+      {:db (assoc-in db [:settings :music-volume] value)
+       :music-volume value})))
 
 (re-frame/reg-event-fx
   ::set-effects-volume
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db [:settings :effects-volume] value)
-     :effects-volume value}))
+    (when value
+      {:db (assoc-in db [:settings :effects-volume] value)
+       :effects-volume value})))
 
 (re-frame/reg-event-fx
   ::start-course
@@ -810,6 +812,6 @@
   ::load-settings
   (fn [{:keys [db]} _]
     (let [{:keys [music-volume effects-volume] :as settings} (get-in db [:progress-data :settings])]
-      {:db (assoc db :settings settings)
+      {:db (update db :settings merge settings)
        :dispatch-n (list [::set-music-volume music-volume]
                          [::set-effects-volume effects-volume])})))
