@@ -801,6 +801,7 @@
   ::load-settings
   (fn [{:keys [db]} _]
     (let [{:keys [music-volume effects-volume] :as settings} (get-in db [:progress-data :settings])]
-      {:db (assoc db :settings settings)
-       :dispatch-n (list [::set-music-volume music-volume]
-                         [::set-effects-volume effects-volume])})))
+      (when-not (nil? settings)
+        {:db (assoc db :settings settings)
+         :dispatch-n (list [::set-music-volume music-volume]
+                           [::set-effects-volume effects-volume])}))))
