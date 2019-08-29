@@ -143,19 +143,22 @@
                                                     :data ["show-first-box-word"
                                                            "introduce-word"
                                                            "set-current-box2"
-                                                           "senora-vaca-audio-touch-second-box"]}
+                                                           "senora-vaca-audio-touch-second-box"]
+                                                    :unique-tag "box"}
 
                  :second-word                      {:type "sequence"
                                                     :data ["show-second-box-word"
                                                            "introduce-word"
                                                            "set-current-box3"
-                                                           "senora-vaca-audio-touch-third-box"]}
+                                                           "senora-vaca-audio-touch-third-box"]
+                                                    :unique-tag "box"}
 
                  :third-word                       {:type "sequence"
                                                     :data ["show-third-box-word"
                                                            "introduce-word"
                                                            "finish-activity"
-                                                           "mari-finish"]}
+                                                           "mari-finish"]
+                                                    :unique-tag "box"}
 
                  :show-first-box-word              {:type "parallel"
                                                     :data [{:type "animation" :target "box1" :id "wood" :loop false}
