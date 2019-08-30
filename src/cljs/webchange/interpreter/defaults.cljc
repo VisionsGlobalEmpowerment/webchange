@@ -87,4 +87,8 @@
 
                      {:url "/raw/anim/hat/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/hat/skeleton.json", :size 1, :type "anim-text"}
-                     {:url "/raw/anim/hat/skeleton.png", :size 1, :type "anim-texture"}])
+                     {:url "/raw/anim/hat/skeleton.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/anim/pinata/skeleton.atlas", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/pinata/skeleton.json", :size 1, :type "anim-text"}
+                     {:url "/raw/anim/pinata/skeleton.png", :size 1, :type "anim-texture"}])

@@ -21,6 +21,7 @@
             [webchange.demo-scenes.library.writing-lesson :refer [writing-lesson-scene]]
             [webchange.demo-scenes.library.writing-practice :refer [writing-practice-scene]]
             [webchange.demo-scenes.library.magic-hat :refer [magic-hat-scene]]
+            [webchange.demo-scenes.park.pinata :refer [pinata-scene]]
 
             [clojure.tools.logging :as log]))
 
@@ -45,10 +46,11 @@
                       "stadium"          stadium-scene
                       "writing-lesson"   writing-lesson-scene
                       "writing-practice" writing-practice-scene
-                      "magic-hat"        magic-hat-scene}})
+                      "magic-hat"        magic-hat-scene
+                      "pinata"           pinata-scene}})
 (defn get-course
   [course-id]
-  {:initial-scene    "map"
+  {:initial-scene    "pinata"
    :scene-list       {:home            {:name    "Casa"
                                         :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
                                         :type    "non-scored"
@@ -139,7 +141,7 @@
 
    :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
                       "book" "painting-tablet" "cinema" "cinema-video" "cycling" "running" "letter-intro" "park-poem"
-                      "slide" "writing-lesson" "writing-practice" "magic-hat"]
+                      "slide" "writing-lesson" "writing-practice" "magic-hat" "pinata"]
    :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
                                            :assessment-1 "assessment1"}}
                       {:id 2 :lesson-sets {:concepts     "ls2"
@@ -376,6 +378,7 @@
                       {:id 112 :type "set-activity" :activity "park-poem" :activity-number 101 :lesson 1 :level 2}
                       {:id 112 :type "set-activity" :activity "running" :activity-number 101 :lesson 1 :level 2}
                       {:id 113 :type "set-activity" :activity "slide" :activity-number 102 :lesson 1 :level 2}
+                      {:id 113 :type "set-activity" :activity "pinata" :activity-number 103 :lesson 1 :level 2}
                       ]
    :default-progress {:current-activity          "home"
                       :variables                 {:last-location "home"}
