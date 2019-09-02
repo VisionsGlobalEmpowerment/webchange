@@ -179,12 +179,15 @@
                           (assoc :on-ended (ce/dispatch-success-fn action)))})))
 
 (defn execute-transition
-  [db {:keys [transition-id to] :as action}]
+  [db {:keys [transition-id transition-tag to] :as action}]
   (let [scene-id (:current-scene db)
-        transition (get-in db [:transitions scene-id transition-id])]
-    {:transition {:component transition
-                  :to        to
-                  :on-ended  (ce/dispatch-success-fn action)}}))
+        transition (get-in db [:transitions scene-id transition-id])
+        id (or transition-tag transition-id)]
+    (when transition
+      {:transition {:id id
+                    :component transition
+                    :to        to
+                    :on-ended  (ce/dispatch-success-fn action)}})))
 
 (defn execute-transitions-sequence
   [transitions {:keys [transition-id] :as action}]
@@ -556,7 +559,6 @@
                        (assoc :scene-started false))
        :dispatch-n (list [::vars.events/execute-clear-vars]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
-                         [::reset-navigation]
                          [::reset-activity-action]
                          [::load-scene scene-id])})))
 
@@ -596,6 +598,8 @@
     (let [scene-id (:current-scene db)]
       (assoc-in db [:scenes scene-id :animations name] animation))))
 
+(def default-triggers
+  {:start [[::reset-navigation]]})
 
 (re-frame/reg-event-fx
   ::trigger
@@ -607,8 +611,9 @@
                        (map second)
                        (map #(-> % :action keyword))
                        (map #(get-in scene [:actions %]))
-                       (map (fn [action] [::ce/execute-action action])))]
-      {:dispatch-n actions})))
+                       (map (fn [action] [::ce/execute-action action])))
+          default-actions (get default-triggers trigger)]
+      {:dispatch-n (concat actions default-actions)})))
 
 (re-frame/reg-event-fx
   ::next-scene
@@ -716,20 +721,21 @@
         {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})
       )))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
   ::reset-navigation
-  (fn [db _]
+  (fn [{:keys [db]} _]
     (let [current-activity (get-in db [:progress-data :current-activity])
           current-scene (get-in db [:current-scene])
-          scene-list (get-in db [:course-data :scene-list])]
-      (if (= current-activity current-scene)
-        (dissoc db :navigation)
-        (assoc db :navigation (i/find-exit-position current-scene current-activity scene-list))))))
+          scene-list (get-in db [:course-data :scene-list])
+          exit (i/find-exit-position current-scene current-activity scene-list)]
+      (i/kill-transition! :navigation)
+      (if (not= current-activity current-scene)
+        {:dispatch [::execute-transition {:transition-id (:transition exit) :transition-tag :navigation :to {:brightness 0.25 :duration 1 :yoyo true :easing "strong-ease-in"}}]}))))
 
 (re-frame/reg-event-fx
   ::progress-loaded
   (fn [{:keys [db]} _]
-    {:dispatch-n (list [::reset-navigation] [::reset-activity-action] [::load-settings])}))
+    {:dispatch-n (list [::reset-activity-action] [::load-settings])}))
 
 (re-frame/reg-event-fx
   ::add-pending-event

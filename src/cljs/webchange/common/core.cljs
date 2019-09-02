@@ -65,6 +65,13 @@
       (assoc object :ref (fn [ref] (reset! component ref))))
     object))
 
+(defn with-filter-transition
+  [{:keys [transition] :as object}]
+  (if transition
+    (let [filter-transition (str transition "-filter")]
+      (with-transition (assoc object :transition filter-transition)))
+    object))
+
 (defn with-draggable
   [{:keys [draggable] :as object}]
   (if draggable

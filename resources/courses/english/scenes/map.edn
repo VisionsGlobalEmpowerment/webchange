@@ -10,7 +10,7 @@
                  {:url "/raw/img/map/Estadio_Enabled.png", :size 1, :type "image"}
                  {:url "/raw/img/map/Parque_Enabled.png", :size 1, :type "image"}],
 
- :objects       {:background {:type "background", :src "/raw/img/map/background.jpg"},
+ :objects       {:background {:type "background", :src "/raw/img/map/background.jpg" :filter "brighten" :brightness -0.15},
                  :vera       {:type       "animation" :scene-name "vera-go" :name "vera-45" :anim "go_front" :speed 0.5 :start false
                               :x          1070, :y 665 :width 758 :height 1130 :scale {:x 0.15 :y 0.15} :skin "vera"
                               :transition "vera-transition"
@@ -27,15 +27,20 @@
                               :actions {:click {:type "action", :id "move-to" :params {:scene-id "home"}, :on "click"}}}
 
                  :park       {:type    "image" :x 1337 :y 756 :width 346 :height 246 :src "/raw/img/map/Parque_Enabled.png"
+                              :filter "brighten" :transition "park"
                               :actions {:click {:type "action", :id "move-to" :params {:scene-id "park"}, :on "click"}}}
                  :library    {:type    "image" :x 91 :y 250 :width 293 :height 373 :src "/raw/img/map/Biblioteca_Enabled.png"
+                              :filter "brighten" :transition "library"
                               :actions {:click {:type "action", :id "move-to" :params {:scene-id "library"}, :on "click"}}}
                  :stadium    {:type    "image" :x 1481 :y 169 :width 234 :height 228 :src "/raw/img/map/Estadio_Enabled.png"
+                              :filter "brighten" :transition "stadium"
                               :actions {:click {:type "action", :id "move-to" :params {:scene-id "stadium"}, :on "click"}}}
                  :feria      {:type  "image" :width 531 :height 455 :x 216 :y 671
+                              :filter "brighten" :transition "feria"
                               :scale {:x 0.68 :y 0.68}
                               :src   "/raw/img/map/feria_locked.png"}
                  :cinema     {:type    "image" :width 230 :height 210 :x 1585 :y 469
+                              :filter "brighten" :transition "cinema"
                               :scale   {:x 1 :y 1}
                               :src     "/raw/img/map/Cine_Enabled.png"
                               :actions {:click {:type "action", :id "move-to" :params {:scene-id "cinema"}, :on "click"}}}},
