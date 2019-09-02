@@ -441,7 +441,8 @@
   (fn [{:keys [db]} [_ action]]
     (let [events (cond-> (list (ce/success-event action))
                          (workflow-action-finished? db action) (conj [::finish-workflow-action])
-                         :always (conj (activity-finished-event db action)))
+                         :always (conj (activity-finished-event db action))
+                         :always (conj [::reset-navigation]))
           activity-started? (:activity-started db)]
       (if activity-started?
         {:db         (assoc db :activity-started false)
