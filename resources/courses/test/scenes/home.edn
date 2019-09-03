@@ -99,9 +99,7 @@
                  :wait-for-box-animations          {:type "empty" :duration 500}
 
                  :intro                            {:type "sequence",
-                                                    :data ["start-activity"
-                                                           "clear-instruction"
-                                                           "renew-words"
+                                                    :data ["renew-words"
                                                            "senora-vaca-audio-1"
                                                            "set-current-box1"
                                                            "show-boxes"
@@ -242,6 +240,13 @@
                                                     :variables   ["item-1" "item-2" "item-3"]
                                                     :from        "concepts"}
 
+                 :start                            {:type "sequence"
+                                                    :data ["start-activity"
+                                                           "clear-instruction"
+                                                           "start-background-music"]}
+
+                 :stop                             {:type "sequence" :data ["stop-activity"]}
+
                  :empty-small                      {:type "empty" :duration 500}
                  :empty-big                        {:type "empty" :duration 1000}
                  :clear-instruction                {:type "remove-flows" :flow-tag "instruction"}
@@ -260,7 +265,7 @@
                  :vera-1       "/raw/audio/l1/a1/L1_A1_Vera_Ardilla.m4a"
                  :vera-2       "/raw/audio/l1/a1/L1_A1_Vera_Oso.m4a"
                  :vera-3       "/raw/audio/l1/a1/L1_A1_Vera_Iman.m4a"},
- :triggers      {:music {:on "start" :action "start-background-music"}
-                 :back  {:on "back" :action "stop-activity"}}
+ :triggers      {:music {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop"}}
  :metadata      {:autostart true
                  :prev      "map"}}

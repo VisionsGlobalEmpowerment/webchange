@@ -41,7 +41,9 @@
 (re-frame/reg-fx
   :load-scene
   (fn [[course-id scene-id]]
-    (i/load-scene course-id scene-id (fn [scene] (re-frame/dispatch [::set-scene scene-id scene])))))
+    (i/load-scene course-id scene-id (fn [scene]
+                                       (re-frame/dispatch [::set-scene scene-id scene])
+                                       (re-frame/dispatch [::store-scene scene-id scene])))))
 
 (re-frame/reg-fx
   :load-progress
@@ -514,26 +516,26 @@
   ::set-music-volume
   (fn [{:keys [db]} [_ value]]
     (when value
-      {:db (assoc-in db [:settings :music-volume] value)
+      {:db           (assoc-in db [:settings :music-volume] value)
        :music-volume value})))
 
 (re-frame/reg-event-fx
   ::set-effects-volume
   (fn [{:keys [db]} [_ value]]
     (when value
-      {:db (assoc-in db [:settings :effects-volume] value)
+      {:db             (assoc-in db [:settings :effects-volume] value)
        :effects-volume value})))
 
 (re-frame/reg-event-fx
   ::start-course
   (fn-traced [{:keys [db]} [_ course-id]]
-    (if (not= course-id (:loaded-course db))
-      {:db          (-> db
-                        (assoc :loaded-course course-id)
-                        (assoc :current-course course-id)
-                        (assoc :ui-screen :course-loading)
-                        (assoc-in [:loading :load-course] true))
-       :load-course course-id})))
+             (if (not= course-id (:loaded-course db))
+               {:db          (-> db
+                                 (assoc :loaded-course course-id)
+                                 (assoc :current-course course-id)
+                                 (assoc :ui-screen :course-loading)
+                                 (assoc-in [:loading :load-course] true))
+                :load-course course-id})))
 
 (re-frame/reg-event-fx
   ::set-current-course
@@ -552,6 +554,7 @@
     (let [current-scene (:current-scene db)]
       {:db         (-> db
                        (assoc :current-scene scene-id)
+                       (assoc-in [:scenes scene-id] (get-in db [:store-scenes scene-id]))
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false))
        :dispatch-n (list [::vars.events/execute-clear-vars]
@@ -571,6 +574,11 @@
     (let [current-scene (:current-scene db)]
       {:db (cond-> (assoc-in db [:scenes scene-id] scene)
                    (= current-scene scene-id) (assoc :current-scene-data scene))})))
+
+(re-frame/reg-event-fx
+  ::store-scene
+  (fn [{:keys [db]} [_ scene-id scene]]
+    {:db (assoc-in db [:store-scenes scene-id] scene)}))
 
 (re-frame/reg-event-fx
   ::set-progress-data
@@ -798,20 +806,20 @@
 (re-frame/reg-event-fx
   ::close-settings
   (fn [{:keys [db]} _]
-    {:db (assoc db :ui-screen :default)
+    {:db       (assoc db :ui-screen :default)
      :dispatch [::save-settings]}))
 
 (re-frame/reg-event-fx
   ::save-settings
   (fn [{:keys [db]} _]
     (let [settings (:settings db)]
-      {:db (assoc-in db [:progress-data :settings] settings)
+      {:db       (assoc-in db [:progress-data :settings] settings)
        :dispatch [:progress-data-changed]})))
 
 (re-frame/reg-event-fx
   ::load-settings
   (fn [{:keys [db]} _]
     (let [{:keys [music-volume effects-volume] :as settings} (get-in db [:progress-data :settings])]
-      {:db (update db :settings merge settings)
+      {:db         (update db :settings merge settings)
        :dispatch-n (list [::set-music-volume music-volume]
                          [::set-effects-volume effects-volume])})))
