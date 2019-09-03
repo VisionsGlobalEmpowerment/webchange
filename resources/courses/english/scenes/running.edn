@@ -235,6 +235,7 @@
                                                    :from      ["item-1" "item-2" "item-3" "item-4"
                                                                "item-5" "item-6" "item-7" "item-8"]
                                                    :shuffled  true
+                                                   :unique    true
                                                    :from-var  [{:var-name "current-concept" :var-property "concept-name"
                                                                 :var-key  "concept-name" :action-property "exclude-property-values"}]}
                                                   {:type      "vars-var-provider"
