@@ -24,7 +24,8 @@
                                    prepare-group-params
                                    prepare-painting-area-params
                                    prepare-animated-svg-path-params
-                                   with-origin-offset]]
+                                   with-origin-offset
+                                   with-filter-transition]]
 
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [konva :as k]))
@@ -81,6 +82,25 @@
         x (+ (Math/round (* (* (compute-x viewbox) scale) 4)) (:width viewbox))
         y (Math/round (* (compute-y viewbox) scale))]
     {:x x :y y}))
+
+
+(defn empty-filter [] {:filter nil})
+
+(defn grayscale-filter
+  []
+  {:filters [k/Filters.Grayscale]})
+
+(defn brighten-filter
+  [{:keys [brightness transition]}]
+  (->
+    {:filters [k/Filters.Brighten] :brightness brightness :transition transition}
+    with-filter-transition))
+
+(defn filter-params [{:keys [filter] :as params}]
+  (case filter
+    "grayscale" (grayscale-filter)
+    "brighten" (brighten-filter params)
+    (empty-filter)))
 
 (defn settings
   []
@@ -205,7 +225,7 @@
   [:> Group {:x x :y y
              :on-click #(re-frame/dispatch [::ie/close-scene])
              :on-tap #(re-frame/dispatch [::ie/close-scene])}
-   [kimage (get-data-as-url "/raw/img/ui/back_button_01.png")]])
+   [kimage (get-data-as-url "/raw/img/ui/back_button_01.png") (filter-params {:filter "brighten" :transition "back"})]])
 
 (defn settings-button
   [x y]
@@ -250,13 +270,14 @@
 (declare carousel-object)
 (declare get-painting-area)
 (declare get-colors-palette)
+(declare background)
 
 (defn draw-object
   [scene-id name]
   (let [o @(re-frame/subscribe [::subs/scene-object-with-var scene-id name])
         type (keyword (:type o))]
     (case type
-      :background [kimage (get-data-as-url (:src o))]
+      :background [background scene-id name o]
       :image [image scene-id name o]
       :transparent [:> Group (prepare-group-params o)
                                  [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
@@ -301,15 +322,14 @@
    (for [child (:children object)]
      ^{:key (str scene-id child)} [draw-object scene-id child])])
 
-(defn filter-param [{:keys [filter]}]
-  (case filter
-    "grayscale" {:filters [k/Filters.Grayscale]}
-    {:filters nil}))
-
 (defn image
   [scene-id name object]
   [:> Group (prepare-group-params object)
-   [kimage (get-data-as-url (:src object)) (filter-param object)]])
+   [kimage (get-data-as-url (:src object)) (filter-params object)]])
+
+(defn background
+  [scene-id name object]
+  [kimage (get-data-as-url (:src object)) (filter-params object)])
 
 (defn animation
   [scene-id name object]
@@ -352,7 +372,7 @@
         ^{:key (str scene-id name)} [draw-object scene-id name])
      [score]
      [menu]
-     [navigation-helper]
+     #_[navigation-helper]
      [triggers scene-id]
      ]))
 

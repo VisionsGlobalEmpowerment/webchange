@@ -14,6 +14,7 @@
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     [webchange.interpreter.defaults :as defaults]
+    [konva :as k]
     ))
 
 (def default-assets defaults/default-assets)
@@ -179,28 +180,60 @@
       (> speed 0) (/ (length cx cy x y) speed)
       :else (/ (length cx cy x y) 100))))
 
-(defn interpolate
-  [{:keys [component to on-ended]}]
+(defn ->easing
+  [easing]
+  (case easing
+    "ease-in" k/Easings.EaseIn
+    "ease-in-out" k/Easings.EaseInOut
+    "ease-out" k/Easings.EaseOut
+    "strong-ease-in" k/Easings.EaseIn
+    "strong-ease-in-out" k/Easings.EaseInOut
+    "strong-ease-out" k/Easings.EaseOut
+    "linear" k/Easings.Linear
+    k/Easings.Linear))
+
+(defonce transitions (atom {}))
+
+(defn register-transition!
+  [id on-kill]
+  (swap! transitions assoc id on-kill))
+
+(defn kill-transition!
+  [id]
+  (let [on-kill (get @transitions id)]
+    (when on-kill
+      (on-kill))))
+
+(defn gsap-tween
+  [{:keys [id component to on-ended]}]
+  (let [duration (transition-duration @component to)
+        ease-params (or (:ease to) [0.1 0.4])
+        vars (-> to
+                 (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
+                 (assoc :onComplete on-ended)
+                 clj->js)
+        tween (TweenMax.to @component duration vars)]
+    (register-transition! id #(.kill tween))))
+
+(defn konva-tween
+  [{:keys [id component to on-ended]}]
   (let [duration (transition-duration @component to)
         params (-> to
+                   (assoc :node @component)
                    (assoc :duration duration)
-                   (assoc :onFinish on-ended))]
-    (cond
-      (:loop to)
-        (-> params
-            (assoc :node @component)
-            (assoc :onFinish (fn [] (this-as t (.reset t) (.play t))))
-            clj->js
-            Tween.
-            .play)
-      (:bezier to)                                          ;Linear.easeNone
-        (let [ease-params (or (:ease to) [0.1 0.4])]
-          (TweenMax.to @component (:duration to) (-> to
-                                                     (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
-                                                     (assoc :onComplete on-ended)
-                                                     clj->js)))
-      :else (.to @component (clj->js params)))
-    ))
+                   (assoc :onFinish (if (:loop to)
+                                      (fn [] (this-as t (.reset t) (.play t)))
+                                      (fn [] (on-ended) (this-as t (.destroy t)))))
+                   (assoc :easing (-> to :easing ->easing)))
+        tween (-> params clj->js Tween.)]
+    (register-transition! id #(.destroy tween))
+    (.play tween)))
+
+(defn interpolate
+  [{:keys [to] :as p}]
+  (cond
+    (:bezier to) (gsap-tween p)
+    :else (konva-tween p)))
 
 (defn collide?
   [shape1 shape2]
