@@ -71,6 +71,7 @@
                             (:limit params) (take (:limit params))
                             (:repeat params) (#(apply concat (repeat (:repeat params) %)))
                             (:shuffled params) shuffle
+                            (:unique params) distinct
                             :always (take (count variables)))
          processed (->> new-items (map :id) (into #{}))
          vars (zipmap variables new-items)]

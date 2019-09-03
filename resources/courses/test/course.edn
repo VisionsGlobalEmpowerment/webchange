@@ -88,7 +88,7 @@
                                       :outs    [{:name "library" :x 100 :y 100}]}}
 
  :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
-                    "book" "painting-tablet" "cinema" "cinema-video" "cycling" "running" "letter-intro" "park-poem"
+                    "book" "painting-tablet" "cinema" "cinema-video" "cycling" "cycling-letters" "running" "letter-intro" "park-poem"
                     "slide" "writing-lesson"]
  :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
                                          :assessment-1 "assessment1"}}
