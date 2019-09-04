@@ -19,6 +19,7 @@
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
 (e/reg-simple-executor :clear-vars ::execute-clear-vars)
+(e/reg-simple-executor :map-value ::execute-map-value)
 
 (defn get-variable
   [db var-name]
@@ -106,6 +107,13 @@
   ::execute-copy-variable
   (fn [{:keys [db]} [_ {:keys [var-name from] :as action}]]
     (let [var-value (get-variable db from)]
+      {:db (set-variable db var-name var-value)
+       :dispatch (e/success-event action)})))
+
+(re-frame/reg-event-fx
+  ::execute-map-value
+  (fn [{:keys [db]} [_ {:keys [var-name value from to] :as action}]]
+    (let [var-value (get to (.indexOf from value))]
       {:db (set-variable db var-name var-value)
        :dispatch (e/success-event action)})))
 

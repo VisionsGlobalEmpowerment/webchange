@@ -87,7 +87,7 @@
                                       :type    "non-scored"
                                       :outs    [{:name "library" :x 100 :y 100}]}}
 
- :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
+ :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "volleyball-letters" "hide-n-seek" "library"
                     "book" "painting-tablet" "cinema" "cinema-video" "cycling" "cycling-letters" "running" "letter-intro" "park-poem"
                     "slide" "writing-lesson" "writing-practice" "magic-hat" "pinata"]
  :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
@@ -330,6 +330,7 @@
                     {:id 112 :type "set-activity" :activity "park-poem" :activity-number 101 :lesson 1 :level 2}
                     {:id 112 :type "set-activity" :activity "running" :activity-number 101 :lesson 1 :level 2}
                     {:id 113 :type "set-activity" :activity "slide" :activity-number 102 :lesson 1 :level 2}
+                    {:id 113 :type "set-activity" :activity "volleyball-letters" :activity-number 102 :lesson 1 :level 1}
                     ]
  :default-progress {:current-activity          "home"
                     :variables                 {:last-location "home"}
