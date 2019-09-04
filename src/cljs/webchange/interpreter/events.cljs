@@ -487,7 +487,7 @@
   ::set-activity
   (fn [{:keys [db]} [_ action]]
     {:db       (assoc-in db [:progress-data :current-activity] (:activity action))
-     :dispatch [:progress-data-changed]}))
+     :dispatch-n (list [:progress-data-changed] [::reset-navigation])}))
 
 (re-frame/reg-event-fx
   :progress-data-changed
