@@ -1612,16 +1612,6 @@
     :home-group-3-times-action
     {:data
      [{:data
-       [{:end 74.867, :anim "talk", :start 74.4, :duration 0.467}
-        {:end 76.36, :anim "talk", :start 75.8, :duration 0.56}
-        {:end 77.96, :anim "talk", :start 77.24, :duration 0.72}],
-       :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vaca.m4a",
-       :start 74.2,
-       :offset 74.2,
-       :target "senoravaca",
-       :duration 4.12}
-      {:data
        [{:end 15.037, :anim "talk", :start 14.491, :duration 0.546}
         {:end 15.917, :anim "talk", :start 15.45, :duration 0.467}
         {:end 17.023, :anim "talk", :start 16.397, :duration 0.626}],
@@ -4184,17 +4174,7 @@
        :start 24.062,
        :offset 24.062,
        :target "vera",
-       :duration 3.133}
-      {:data
-       [{:end 123.24, :anim "talk", :start 122.774, :duration 0.466}
-        {:end 124.667, :anim "talk", :start 124.027, :duration 0.64}
-        {:end 126.147, :anim "talk", :start 125.494, :duration 0.653}],
-       :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vaca.m4a",
-       :start 122.6,
-       :offset 122.6,
-       :target "senoravaca",
-       :duration 3.987}],
+       :duration 3.133}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word "group-word-incendio",
@@ -6955,17 +6935,7 @@
        :start 3.76,
        :offset 3.76,
        :target "vera",
-       :duration 3.106}
-      {:data
-       [{:end 31.863, :anim "talk", :start 31.183, :duration 0.68}
-        {:end 33.129, :anim "talk", :start 32.503, :duration 0.626}
-        {:end 34.716, :anim "talk", :start 33.756, :duration 0.96}],
-       :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vaca.m4a",
-       :start 31.05,
-       :offset 31.05,
-       :target "senoravaca",
-       :duration 3.759}],
+       :duration 3.106}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word "group-word-ardilla",

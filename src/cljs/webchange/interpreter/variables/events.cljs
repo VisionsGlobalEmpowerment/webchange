@@ -17,6 +17,7 @@
 (e/reg-simple-executor :set-variable ::execute-set-variable)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
+(e/reg-simple-executor :clear-vars ::execute-clear-vars)
 
 (defn get-variable
   [db var-name]
@@ -108,11 +109,12 @@
 
 (re-frame/reg-event-fx
   ::execute-clear-vars
-  (fn [{:keys [db]} [_ _]]
+  (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
       {:db (-> db
                (update-in [:scenes scene-id] dissoc :variables)
-               (update-in [:scenes scene-id] dissoc :providers))})))
+               (update-in [:scenes scene-id] dissoc :providers))
+       :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
@@ -195,8 +197,11 @@
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [value1 value2 success fail] :as action}]
     (if (= value1 value2)
-      {:dispatch [::e/execute-action (cond-action db action success)]}
-      {:dispatch [::e/execute-action (cond-action db action fail)]})))
+      {:dispatch-n (list [::e/execute-action (cond-action db action success)])}
+      (if fail
+        {:dispatch-n (list [::e/execute-action (cond-action db action fail)] (e/success-event action))}
+        {:dispatch-n (list (e/success-event action))}
+        ))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-list

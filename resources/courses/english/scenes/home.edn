@@ -1,8 +1,6 @@
 {:assets
-                [{:url "/raw/audio/ferris-wheel/fw-try-again.mp3", :size 2, :type "audio"}
-
-                 {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
-                 {:url "/raw/img/casa_door.png", :size 1, :type "image"}
+                [{:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
+                 {:url "/raw/img/casa/door.png", :size 1, :type "image"}
 
                  {:url "/raw/audio/english/l1/a1/vaca.m4a", :size 2, :type "audio" :alias "vaca voice"}
                  {:url "/raw/audio/english/l1/a1/vera.m4a", :size 2, :type "audio" :alias "vera voice"}
@@ -13,7 +11,16 @@
                  :vera         {:type  "animation" :x 1128 :y 960 :name "vera" :anim "idle" :speed 0.3
                                 :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
                  :senora-vaca  {:type  "animation" :x 655 :y 960 :name "senoravaca" :anim "idle" :speed 0.3
-                                :width 351 :height 717 :scale {:x 1 :y 1} :start true}
+                                :width 351 :height 717 :scale {:x 1 :y 1} :start true
+                                :actions {:click {:type "action" :id "restart" :on "click"}}}
+
+                 :mari {:type    "animation" :scene-name "mari" :name "mari" :anim "idle"
+                        :start   true :speed 0.35 :transition "mari"
+                        :x       2200 :y 311 :width 473 :height 511 :anim-offset {:x 0 :y -150}
+                        :scale-y 0.5 :scale-x 0.5}
+
+                 :door  {:type    "image" :x 1146 :y 42 :width 732 :height 810 :src "/raw/img/casa/door.png"
+                         :filter "brighten" :transition "door"}
 
                  :door-trigger {:type    "transparent" :x 1146 :y 42 :width 732 :height 810
                                 :actions {:click {:type "scene", :scene-id "map", :on "click"}}}
@@ -40,7 +47,7 @@
                                 :actions    {:click {:type "action" :id "click-on-box3" :on "click"}}}
 
                  },
- :scene-objects [["background"] ["vera" "senora-vaca"] ["door-trigger"] ["box1" "box2" "box3"]],
+ :scene-objects [["background" "door"] ["vera" "senora-vaca" "mari"] ["door-trigger"] ["box1" "box2" "box3"]],
  :actions
                 {:senora-vaca-audio-1              {:type     "animation-sequence",
                                                     :target   "senoravaca",
@@ -80,16 +87,16 @@
 
 
                  :senora-vaca-audio-touch-third-box
-                                                   {:type "animation-sequence",
-                                                    :target "senoravaca",
-                                                    :track 1,
-                                                    :offset 94.107,
-                                                    :audio "/raw/audio/english/l1/a1/vaca.m4a",
+                                                   {:type     "animation-sequence",
+                                                    :target   "senoravaca",
+                                                    :track    1,
+                                                    :offset   94.107,
+                                                    :audio    "/raw/audio/english/l1/a1/vaca.m4a",
                                                     :data
-                                                    [{:start 94.227, :end 94.814, :duration 0.587, :anim "talk"}
-                                                     {:start 95.68, :end 97.587, :duration 1.907, :anim "talk"}
-                                                     {:start 98.64, :end 100.96, :duration 2.32, :anim "talk"}],
-                                                    :start 94.107,
+                                                              [{:start 94.227, :end 94.814, :duration 0.587, :anim "talk"}
+                                                               {:start 95.68, :end 97.587, :duration 1.907, :anim "talk"}
+                                                               {:start 98.64, :end 100.96, :duration 2.32, :anim "talk"}],
+                                                    :start    94.107,
                                                     :duration 7.053}
 
 
@@ -110,11 +117,11 @@
                                                            "clear-instruction"
                                                            "renew-words"
                                                            "senora-vaca-audio-1"
-                                                           "set-current-box1"
                                                            "show-boxes"
                                                            "wait-for-box-animations"
                                                            "switch-box-animations-idle"
                                                            "senora-vaca-audio-2"
+                                                           "set-current-box1"
                                                            ]},
 
                  :set-current-box1                 {:type "set-variable" :var-name "current-box" :var-value "box1"}
@@ -139,25 +146,25 @@
                                                     :success  "third-word"
                                                     :fail     "pick-wrong"}
 
-                 :first-word                       {:type "sequence"
-                                                    :data ["show-first-box-word"
-                                                           "introduce-word"
-                                                           "set-current-box2"
-                                                           "senora-vaca-audio-touch-second-box"]
+                 :first-word                       {:type       "sequence"
+                                                    :data       ["show-first-box-word"
+                                                                 "introduce-word"
+                                                                 "set-current-box2"
+                                                                 "senora-vaca-audio-touch-second-box"]
                                                     :unique-tag "box"}
 
-                 :second-word                      {:type "sequence"
-                                                    :data ["show-second-box-word"
-                                                           "introduce-word"
-                                                           "set-current-box3"
-                                                           "senora-vaca-audio-touch-third-box"]
+                 :second-word                      {:type       "sequence"
+                                                    :data       ["show-second-box-word"
+                                                                 "introduce-word"
+                                                                 "set-current-box3"
+                                                                 "senora-vaca-audio-touch-third-box"]
                                                     :unique-tag "box"}
 
-                 :third-word                       {:type "sequence"
-                                                    :data ["show-third-box-word"
-                                                           "introduce-word"
-                                                           "finish-activity"
-                                                           "mari-finish"]
+                 :third-word                       {:type       "sequence"
+                                                    :data       ["show-third-box-word"
+                                                                 "introduce-word"
+                                                                 "finish-activity"
+                                                                 "mari-finish"]
                                                     :unique-tag "box"}
 
                  :show-first-box-word              {:type "parallel"
@@ -183,13 +190,13 @@
 
                  :vaca-this-is-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
 
-                 :vaca-can-you-say                 {:type "animation-sequence",
-                                                    :target "senoravaca",
-                                                    :track 1,
-                                                    :offset 20.28,
-                                                    :audio "/raw/audio/english/l1/a1/vaca.m4a",
-                                                    :data [{:start 20.363, :end 20.98, :duration 0.617, :anim "talk"}],
-                                                    :start 20.28,
+                 :vaca-can-you-say                 {:type     "animation-sequence",
+                                                    :target   "senoravaca",
+                                                    :track    1,
+                                                    :offset   20.28,
+                                                    :audio    "/raw/audio/english/l1/a1/vaca.m4a",
+                                                    :data     [{:start 20.363, :end 20.98, :duration 0.617, :anim "talk"}],
+                                                    :start    20.28,
                                                     :duration 0.813}
 
 
@@ -199,28 +206,28 @@
 
                  :group-word-var                   {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-word-action"}]}
 
-                 :vaca-say-3-times                 {:type "animation-sequence",
-                                                    :target "senoravaca",
-                                                    :track 1,
-                                                    :offset 27.493,
-                                                    :audio "/raw/audio/english/l1/a1/vaca.m4a",
+                 :vaca-say-3-times                 {:type     "animation-sequence",
+                                                    :target   "senoravaca",
+                                                    :track    1,
+                                                    :offset   27.493,
+                                                    :audio    "/raw/audio/english/l1/a1/vaca.m4a",
                                                     :data
-                                                    [{:start 27.605, :end 27.966, :duration 0.361, :anim "talk"}
-                                                     {:start 28.24, :end 30.507, :duration 2.267, :anim "talk"}],
-                                                    :start 27.493,
+                                                              [{:start 27.605, :end 27.966, :duration 0.361, :anim "talk"}
+                                                               {:start 28.24, :end 30.507, :duration 2.267, :anim "talk"}],
+                                                    :start    27.493,
                                                     :duration 3.24}
 
                  :vaca-3-times-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-3-times-action"}]}
 
                  :group-3-times-var                {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
 
-                 :vaca-once-more                   {:type "animation-sequence",
-                                                    :target "senoravaca",
-                                                    :track 1,
-                                                    :offset 41.747,
-                                                    :audio "/raw/audio/english/l1/a1/vaca.m4a",
-                                                    :data [{:start 41.893, :end 42.573, :duration 0.68, :anim "talk"}],
-                                                    :start 41.747,
+                 :vaca-once-more                   {:type     "animation-sequence",
+                                                    :target   "senoravaca",
+                                                    :track    1,
+                                                    :offset   41.747,
+                                                    :audio    "/raw/audio/english/l1/a1/vaca.m4a",
+                                                    :data     [{:start 41.893, :end 42.573, :duration 0.68, :anim "talk"}],
+                                                    :start    41.747,
                                                     :duration 0.973}
 
                  :vaca-goodbye-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]}
@@ -266,10 +273,44 @@
                                                     :variables   ["item-1" "item-2" "item-3"]
                                                     :from        "concepts"}
 
+                 :mari-finish {:type "sequence-data",
+                               :data
+                                     [{:type "transition",
+                                       :transition-id "mari",
+                                       :to {:x 1403, :y 657, :duration 1.3}}
+                                      {:type "animation-sequence",
+                                       :target "mari",
+                                       :track 1,
+                                       :offset 0.892,
+                                       :audio "/raw/audio/english/l1/a1/mari.m4a",
+                                       :data
+                                       [{:start 1, :end 2.62, :duration 1.62, :anim "talk"}
+                                        {:start 3.213, :end 5.733, :duration 2.52, :anim "talk"}
+                                        {:start 6.586, :end 9.226, :duration 2.64, :anim "talk"}
+                                        {:start 9.812, :end 14.012, :duration 4.2, :anim "talk"}],
+                                       :start 0.892,
+                                       :duration 13.239}
+                                      {:type "set-variable" :var-name "restart" :var-value true}]}
+
+                 :restart {:type     "test-value"
+                           :value1   true
+                           :from-var [{:var-name "restart" :action-property "value2"}]
+                           :success  {:type "sequence-data"
+                                      :data [{:type "set-variable" :var-name "restart" :var-value false}
+                                             {:type "transition",
+                                              :transition-id "mari",
+                                              :to {:x 2200 :y 311, :duration 1.3}}
+                                             {:type "clear-vars"}
+                                             {:type "parallel"
+                                              :data [{:type "state" :target "box1" :id "default"}
+                                                     {:type "state" :target "box2" :id "default"}
+                                                     {:type "state" :target "box3" :id "default"}]}
+                                             {:type "action" :id "intro"}]}}
+
                  :empty-small                      {:type "empty" :duration 500}
                  :empty-big                        {:type "empty" :duration 1000}
                  :clear-instruction                {:type "remove-flows" :flow-tag "instruction"}
-                 :start-background-music           {:type "audio" :id "background" :loop true}
+                 :start-background-music           {:type "audio" :id "background" :loop true :unique-tag "music"}
                  :start-activity                   {:type "start-activity" :id "home"}
                  :finish-activity                  {:type "finish-activity" :id "home"}
                  :stop-activity                    {:type "stop-activity" :id "home"}}

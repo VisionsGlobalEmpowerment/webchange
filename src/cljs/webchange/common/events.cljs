@@ -33,6 +33,12 @@
   [action]
   #(re-frame/dispatch (success-event action)))
 
+(defn get-action-tags
+  [{:keys [tags unique-tag]}]
+  (if-not (nil? unique-tag)
+    (conj tags unique-tag)
+    tags))
+
 (def event-as-action
   (re-frame/->interceptor
     :before  (fn [context]
@@ -52,7 +58,7 @@
                    register-flow (:register-flow action)]
                (if register-flow
                  (-> context
-                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action) :tags (:tags action)}])))
+                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action) :tags (get-action-tags action)}])))
                  context))
              )))
 
@@ -156,12 +162,6 @@
   (let [flow-registered? (flow-registered? (:flows db) unique-tag)]
     (not flow-registered?)))
 
-(defn get-action-tags
-  [{:keys [tags unique-tag]}]
-  (if-not (nil? unique-tag)
-    (conj tags unique-tag)
-    tags))
-
 (reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action
                                                                       :id
                                                                       (get-action db action)
@@ -219,9 +219,10 @@
 (re-frame/reg-event-fx
   ::flow-success
   (fn [{:keys [db]} [_ flow-id action-id]]
-    (let [succeeded (get-in db [:flows flow-id :succeeded] #{})]
-      {:db (assoc-in db [:flows flow-id :succeeded] (conj succeeded action-id))
-       :dispatch [::check-flow flow-id]})))
+    (when flow-id
+      (let [succeeded (get-in db [:flows flow-id :succeeded] #{})]
+        {:db (assoc-in db [:flows flow-id :succeeded] (conj succeeded action-id))
+         :dispatch [::check-flow flow-id]}))))
 
 (defn flow-finished?
   [{:keys [type actions succeeded] :as flow}]

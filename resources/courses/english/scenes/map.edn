@@ -20,8 +20,8 @@
                                            :init-park    {:x 1325 :y 960}
                                            :init-library {:x 299 :y 576}
                                            :init-stadium {:x 1488 :y 399}}}
-                 :home       {:type    "image" :x 731 :y 340 :width 433 :height 380
-                              :src     "/raw/img/map/casa_01.png",
+                 :home       {:type    "image" :x 731 :y 340 :width 433 :height 380 :src "/raw/img/map/casa_01.png",
+                              :filter "brighten" :transition "home"
                               :states  {:default {:type "image", :src "/raw/img/map/casa_01.png"},
                                         :hover   {:type "image", :src "/raw/img/map/casa_02.png"}},
                               :actions {:click {:type "action", :id "move-to" :params {:scene-id "home"}, :on "click"}}}

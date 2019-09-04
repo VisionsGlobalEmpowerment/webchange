@@ -216,7 +216,7 @@
     (register-transition! id #(.kill tween))))
 
 (defn konva-tween
-  [{:keys [id component to on-ended]}]
+  [{:keys [id component to from on-ended]}]
   (let [duration (transition-duration @component to)
         params (-> to
                    (assoc :node @component)
@@ -226,6 +226,8 @@
                                       (fn [] (on-ended) (this-as t (.destroy t)))))
                    (assoc :easing (-> to :easing ->easing)))
         tween (-> params clj->js Tween.)]
+    (when from
+      (.setAttrs @component (clj->js from)))
     (register-transition! id #(.destroy tween))
     (.play tween)))
 

@@ -14,7 +14,7 @@
 
                  :mari          {:type    "animation" :scene-name "mari" :name "mari" :anim "idle"
                                  :start   true :speed 0.35 :transition "mari"
-                                 :x       1535 :y 615 :width 473 :height 511
+                                 :x       1535 :y 615 :width 473 :height 511 :anim-offset {:x 0 :y -150}
                                  :scale-y 0.5 :scale-x 0.5}
 
                  :see-saw       {:type "group" :x 694 :y 716 :children ["see-saw-3" "see-saw-plank" "see-saw-2"]}
@@ -104,25 +104,25 @@
 
                  :wait-for-box-animations    {:type "empty" :duration 500}
 
-                 :set-current-box1           {:type "set-variable" :var-name "current-box" :var-value "box1"}
-                 :set-current-box2           {:type "set-variable" :var-name "current-box" :var-value "box2"}
-                 :set-current-box3           {:type "set-variable" :var-name "current-box" :var-value "box3"}
+                 :set-current-box1           {:type "set-variable" :var-name "box1" :var-value true}
+                 :set-current-box2           {:type "set-variable" :var-name "box2" :var-value true}
+                 :set-current-box3           {:type "set-variable" :var-name "box3" :var-value true}
 
                  :check-box1                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box1"
+                                              :var-name "box1"
+                                              :value    true
                                               :success  "box-1-start"
                                               :fail     "box-1-revert"}
 
                  :check-box2                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box2"
+                                              :var-name "box2"
+                                              :value    true
                                               :success  "box-2-start"
                                               :fail     "box-2-revert"}
 
                  :check-box3                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box3"
+                                              :var-name "box3"
+                                              :value    true
                                               :success  "box-3-start"
                                               :fail     "box-3-revert"}
 
@@ -206,7 +206,8 @@
                                               :data ["show-box-3-ph"
                                                      "introduce-concept"
                                                      "hide-box-3-ph"
-                                                     "finish-activity"]}
+                                                     "finish-activity"
+                                                     "mari-finish"]}
 
                  :show-box-3-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box3" :id "default"}
@@ -265,9 +266,9 @@
                                               :variables   ["item-1" "item-2" "item-3"]
                                               :from        "concepts"}
 
-                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 700 :y 400 :duration 2 :loop false}}
-                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1200 :y 400 :duration 2 :loop false}}
-                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1700 :y 400 :duration 2 :loop false}}
+                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 591 :y 440 :duration 2 :loop false}}
+                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1101 :y 440 :duration 2 :loop false}}
+                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1578 :y 440 :duration 2 :loop false}}
 
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
                  :start                      {:type "sequence"
@@ -282,10 +283,28 @@
                                                      "mari-box-1"
                                                      "mari-move-to-start"]}
 
+                 :mari-finish {:type "sequence-data",
+                               :data
+                                     [{:type "transition",
+                                       :transition-id "mari",
+                                       :to {:x 244, :y 300, :duration 1.3}}
+                                      {:type "animation-sequence",
+                                       :target "mari",
+                                       :track 1,
+                                       :offset 35.736,
+                                       :audio "/raw/audio/english/l1/a2/mari.m4a",
+                                       :data
+                                       [{:start 35.87, :end 37.07, :duration 1.2, :anim "talk"}
+                                        {:start 37.59, :end 41.35, :duration 3.76, :anim "talk"}
+                                        {:start 41.87, :end 43.977, :duration 2.107, :anim "talk"}
+                                        {:start 44.297, :end 45.95, :duration 1.653, :anim "talk"}
+                                        {:start 46.644, :end 48.137, :duration 1.493, :anim "talk"}],
+                                       :start 35.736,
+                                       :duration 12.668}]}
+
+
                  :start-activity             {:type "start-activity" :id "see-saw"}
-                 :finish-activity            {:type "sequence-data"
-                                              :data [{:type "finish-activity" :id "see-saw"}
-                                                     {:type "scene" :scene-id "park"}]}}
+                 :finish-activity            {:type "finish-activity" :id "see-saw"}}
  :audio
                 {:voice-1 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a"
                  :voice-2 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a"
