@@ -62,7 +62,7 @@
   (if transition
     (let [component (r/atom nil)]
       (re-frame/dispatch [::ie/register-transition transition component])
-      (assoc object :ref (fn [ref] (reset! component ref))))
+      (assoc object :ref (fn [ref] (when ref (reset! component ref)))))
     object))
 
 (defn with-filter-transition

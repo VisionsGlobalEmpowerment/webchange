@@ -27,7 +27,6 @@
 
 (defn- dispatch-route [{:keys [handler route-params] :as params}]
   (let [current-course @(re-frame/subscribe [::subs/current-course])]
-    (js/console.log "dispatch-route" current-course)
     (re-frame/dispatch [::events/set-active-route params])
     (case handler
       :course (re-frame/dispatch [::ie/start-course (:id route-params)])

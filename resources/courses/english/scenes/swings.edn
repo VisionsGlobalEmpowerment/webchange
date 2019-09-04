@@ -210,25 +210,25 @@
 
                  :wait-for-box-animations    {:type "empty" :duration 500}
 
-                 :set-current-box1           {:type "set-variable" :var-name "current-box" :var-value "box1"}
-                 :set-current-box2           {:type "set-variable" :var-name "current-box" :var-value "box2"}
-                 :set-current-box3           {:type "set-variable" :var-name "current-box" :var-value "box3"}
+                 :set-current-box1           {:type "set-variable" :var-name "box1" :var-value true}
+                 :set-current-box2           {:type "set-variable" :var-name "box2" :var-value true}
+                 :set-current-box3           {:type "set-variable" :var-name "box3" :var-value true}
 
                  :check-box1                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box1"
+                                              :var-name "box1"
+                                              :value    true
                                               :success  "box-1-start"
                                               :fail     "box-1-revert"}
 
                  :check-box2                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box2"
+                                              :var-name "box2"
+                                              :value    true
                                               :success  "box-2-start"
                                               :fail     "box-2-revert"}
 
                  :check-box3                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box3"
+                                              :var-name "box3"
+                                              :value    true
                                               :success  "box-3-start"
                                               :fail     "box-3-revert"}
 
@@ -261,7 +261,8 @@
                                                      "hide-box-1-ph"
                                                      "set-current-box2"
                                                      "mari-box-2"
-                                                     "try-another"]}
+                                                     "try-another"]
+                                              :unique-tag "box"}
 
                  :show-box-1-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box1" :id "default"}
@@ -291,7 +292,8 @@
                                                      "hide-box-2-ph"
                                                      "set-current-box3"
                                                      "mari-box-3"
-                                                     "try-another"]}
+                                                     "try-another"]
+                                              :unique-tag "box"}
 
                  :show-box-2-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box2" :id "default"}
@@ -319,7 +321,9 @@
                                                      "dialog-var"
                                                      "stop-swings"
                                                      "hide-box-3-ph"
-                                                     "finish-activity"]}
+                                                     "finish-activity"
+                                                     "mari-finish"]
+                                              :unique-tag "box"}
 
                  :show-box-3-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box3" :id "default"}
@@ -386,16 +390,15 @@
                                               :variables   ["item-1" "item-2" "item-3"]
                                               :from        "concepts"}
 
-                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 800 :y 400 :duration 2 :loop false}}
-                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1200 :y 400 :duration 2 :loop false}}
-                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1600 :y 400 :duration 2 :loop false}}
+                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 591 :y 440 :duration 2 :loop false}}
+                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1101 :y 440 :duration 2 :loop false}}
+                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1578 :y 440 :duration 2 :loop false}}
 
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
                  :start                      {:type "sequence"
                                               :data ["start-activity"
                                                      "clear-instruction"
                                                      "renew-words"
-                                                     "set-current-box1"
                                                      "show-boxes"
                                                      "wait-for-box-animations"
                                                      "switch-box-animations-idle"
@@ -411,7 +414,28 @@
                                                      "mari-welcome-audio-10"
                                                      "mari-box-1"
                                                      "mari-move-to-start"
+                                                     "set-current-box1"
                                                      ]}
+
+                 :mari-finish {:type "sequence-data",
+                               :data
+                                     [{:type "transition",
+                                       :transition-id "mari",
+                                       :to {:x 244, :y 300, :duration 1.3}}
+                                      {:type "animation-sequence",
+                                       :target "mari",
+                                       :track 1,
+                                       :offset 49.103,
+                                       :audio "/raw/audio/english/l1/a3/mari.m4a",
+                                       :data
+                                       [{:start 49.357, :end 52.717, :duration 3.36, :anim "talk"}
+                                        {:start 52.983, :end 54.49, :duration 1.507, :anim "talk"}
+                                        {:start 55.13, :end 57.09, :duration 1.96, :anim "talk"}
+                                        {:start 57.33, :end 59.036, :duration 1.706, :anim "talk"}
+                                        {:start 59.676, :end 61.223, :duration 1.547, :anim "talk"}],
+                                       :start 49.103,
+                                       :duration 12.36}]}
+
 
                  :start-activity             {:type "start-activity" :id "swings"}
                  :finish-activity            {:type "finish-activity" :id "swings"}}

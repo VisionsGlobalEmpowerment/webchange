@@ -181,7 +181,7 @@
                           (assoc :on-ended (ce/dispatch-success-fn action)))})))
 
 (defn execute-transition
-  [db {:keys [transition-id transition-tag to] :as action}]
+  [db {:keys [transition-id transition-tag to from] :as action}]
   (let [scene-id (:current-scene db)
         transition (get-in db [:transitions scene-id transition-id])
         id (or transition-tag transition-id)]
@@ -189,6 +189,7 @@
       {:transition {:id id
                     :component transition
                     :to        to
+                    :from      from
                     :on-ended  (ce/dispatch-success-fn action)}})))
 
 (defn execute-transitions-sequence
@@ -362,6 +363,7 @@
           lesson (-> (workflow-action db activity-action-id) :lesson)]
       {:db         (assoc db :activity-started true :activity-start-time (js/Date.) :activity-lesson lesson)
        :dispatch-n (list
+                     [::disable-navigation]
                      [::add-pending-event :activity-started {:activity-id   activity-action-id
                                                              :activity-name activity-name
                                                              :lesson        lesson}]
@@ -736,10 +738,17 @@
     (let [current-activity (get-in db [:progress-data :current-activity])
           current-scene (get-in db [:current-scene])
           scene-list (get-in db [:course-data :scene-list])
-          exit (i/find-exit-position current-scene current-activity scene-list)]
+          exit (i/find-exit-position current-scene current-activity scene-list)
+          activity-started? (:activity-started db)
+          show-navigation? (and (not activity-started?) (not= current-activity current-scene))]
       (i/kill-transition! :navigation)
-      (if (not= current-activity current-scene)
-        {:dispatch [::execute-transition {:transition-id (:transition exit) :transition-tag :navigation :to {:brightness 0.25 :duration 1 :yoyo true :easing "strong-ease-in"}}]}))))
+      (if show-navigation?
+        {:dispatch [::execute-transition {:transition-id (:transition exit) :transition-tag :navigation :to {:brightness 0.25 :duration 1 :yoyo true :easing "strong-ease-in"} :from {:brightness 0}}]}))))
+
+(re-frame/reg-event-fx
+  ::disable-navigation
+  (fn [_ _]
+    (i/kill-transition! :navigation)))
 
 (re-frame/reg-event-fx
   ::progress-loaded
