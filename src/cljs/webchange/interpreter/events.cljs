@@ -140,6 +140,12 @@
          (filter #(= name (:activity %)))
          first)))
 
+(defn current-level
+  [db]
+  (let [current-workflow-action (get-in db [:progress-data :current-workflow-action])
+        current-action (workflow-action db current-workflow-action)]
+    (:level current-action)))
+
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :play-video ::play-video)
 (ce/reg-simple-executor :path-animation ::execute-path-animation)
@@ -155,6 +161,7 @@
 (ce/reg-simple-executor :animation-props ::execute-set-animation-props)
 (ce/reg-simple-executor :animation-sequence ::execute-animation-sequence)
 (ce/reg-simple-executor :scene ::execute-scene)
+(ce/reg-simple-executor :location ::execute-location)
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
 (ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
@@ -205,6 +212,27 @@
     (if (:path to)
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
+
+(defn resolve-scene-id
+  [location-data {:keys [level]}]
+  (->> location-data
+       (reduce
+         (fn [result item]
+           (if (<= (:level item) level)
+             item
+             result))
+         (first location-data))
+       (:scene )))
+
+(re-frame/reg-event-fx
+  ::execute-location
+  (fn [{:keys [db]} [_ {:keys [location-id] :as action}]]
+    (let [location-key (keyword location-id)
+          locations (get-in db [:course-data :locations])
+          scene-id (if (contains? locations location-key)
+                     (resolve-scene-id (get locations location-key) {:level (current-level db)})
+                     location-id)]
+      {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-scene

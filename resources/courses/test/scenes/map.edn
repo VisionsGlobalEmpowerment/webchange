@@ -47,8 +47,8 @@
                                           :success     "open-scene"
                                           :fail        "navigate-to-scene"}
 
-                 :open-scene             {:type        "scene"
-                                          :from-params [{:action-property "scene-id" :param-property "scene-id"}]}
+                 :open-scene             {:type        "location"
+                                          :from-params [{:action-property "location-id" :param-property "scene-id"}]}
 
                  :navigate-to-scene      {:type "sequence-data"
                                           :data [{:type     "action"
