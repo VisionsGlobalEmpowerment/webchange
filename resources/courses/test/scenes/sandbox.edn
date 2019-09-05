@@ -9,6 +9,7 @@
                  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio" :alias "letter 3"}
 
                  {:url "/raw/img/park/sandbox/background.jpg", :size 10 :type "image"}
+                 {:url "/raw/img/casa/painting_canvas.png" :type "image"}
 
                  ],
  :objects
@@ -19,6 +20,15 @@
                               :x       1535 :y 715 :width 473 :height 511
                               :scale-y 0.5 :scale-x 0.5}
 
+                 :canvas     {:type    "image"
+                              :src     "/raw/img/casa/painting_canvas.png"
+                              :x       1120
+                              :y       500
+                              :width   287
+                              :height  430
+                              :scale-x 1
+                              :scale-y 1}
+
                  :word       {:type   "transparent" :x 313 :y 91 :width 1200 :height 400
                               :states {:default {:type "transparent"}
                                        :show    {:type         "text" :width 1200 :height 400
@@ -26,6 +36,18 @@
                                                  :font-family  "Luckiest Guy" :font-size 160
                                                  :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5
                                                  :fill         "white"}}}
+
+                 :letter     {:type           "text"
+                              :text           ""
+                              :x              1170
+                              :y              540
+                              :width          200
+                              :height         200
+                              :align          "center"
+                              :vertical-align "middle"
+                              :font-family    "Lexend Deca"
+                              :font-size      140
+                              :fill           "#ff8c41"}
 
                  :box1       {:type       "animation" :x 304 :y 826 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
                               :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
@@ -48,7 +70,7 @@
                               :actions    {:click {:type "action" :id "box-4-start" :on "click"}}}
 
                  },
- :scene-objects [["background"] ["box3" "box4" "box2" "box1" "word"] ["mari"]],
+ :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]],
  :actions
                 {:mari-welcome-audio
                                                  {:type  "animation-sequence" :target "mari" :track 1 :offset 0.702
@@ -273,12 +295,18 @@
                                                           :shuffled    false
                                                           :on-end      "finish-activity"}]}
 
+                 :show-letter                    {:type     "set-attribute" :target "letter" :attr-name "text"
+                                                  :from-var [{:var-name        "current-word"
+                                                              :var-property    "letter"
+                                                              :action-property "attr-value"}]}
+
                  :renew-current-concept-workflow {:type "sequence"
                                                   :data ["renew-current-concept"
                                                          "box-1-change-skin"
                                                          "box-2-change-skin"
                                                          "box-3-change-skin"
                                                          "box-4-change-skin"
+                                                         "show-letter"
                                                          "mari-letter-1"
                                                          "mari-short-letter-var"
                                                          "mari-letter-2"
