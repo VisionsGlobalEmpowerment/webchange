@@ -111,7 +111,7 @@
         ui-screen @(re-frame/subscribe [::subs/ui-screen])]
     (when (= ui-screen :settings)
       [:> Group
-       [kimage "/raw/img/bg.jpg"]
+       [kimage (get-data-as-url "/raw/img/bg.jpg")]
 
        [:> Group top-right
         [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
@@ -149,7 +149,7 @@
         fails (re-frame/subscribe [::vars.subs/variable @scene-id "fails"])
         result (* (/ @successes (+ @successes @fails)) 10)]
     [:> Group
-     [kimage "/raw/img/bg.jpg"]
+     [kimage (get-data-as-url "/raw/img/bg.jpg")]
 
      [:> Group top-right
       [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
@@ -193,24 +193,23 @@
         progress (re-frame/subscribe [::subs/scene-loading-progress @scene-id])
         loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])]
     [:> Group
-     [kimage "/raw/img/bg.jpg"]
-
+     [kimage (get-data-as-url "/raw/img/bg.jpg")]
 
      [:> Group {:x 628 :y 294}
       [kimage "/raw/img/ui/logo.png"]]
-     [:> Group {:x 729 :y 750}
-      [:> Rect {:x 1 :width 460 :height 24 :fill "#ffffff" :corner-radius 25}]
-      [:> Group {:clip-x 0 :clip-y 0 :clip-width (+ 0.1 (* @progress 4.62)) :clip-height 24}
-        [:> Rect {:width 462 :height 24 :fill "#2c9600" :corner-radius 25}]]
-      ]
      (if @loaded
-       [:> Group {:x 779 :y 863 :on-click do-start :on-tap do-start}
-        [kimage "/raw/img/ui/play_button_01.png"]])
+       [:> Group {:x 779 :y 750 :on-click do-start :on-tap do-start}
+        [kimage "/raw/img/ui/play_button_01.png"]]
+       [:> Group {:x 719 :y 780}
+        [:> Rect {:x 1 :width 460 :height 24 :fill "#ffffff" :corner-radius 25}]
+        [:> Group {:clip-x 0 :clip-y 0 :clip-width (+ 0.1 (* @progress 4.62)) :clip-height 24}
+         [:> Rect {:width 462 :height 24 :fill "#2c9600" :corner-radius 25}]]
+        ])
      ]))
 
 (defn course-loading-screen []
   [:> Group
-   [kimage "/raw/img/bg.jpg"]
+   [kimage (get-data-as-url "/raw/img/bg.jpg")]
 
    [:> Group {:x 628 :y 294}
     [kimage "/raw/img/ui/logo.png"]]
@@ -248,7 +247,6 @@
       [settings-button (- 216) 20]
       [close-button (- 108) 20]]
      ]
-
     ))
 
 (defn scene-started

@@ -46,16 +46,6 @@
       get-data
       new-blob))
 
-(defn get-data-as-url
-  [key]
-  (let [object-url-key (create-tagged-key "object-url" key)]
-    (when-not (has-data object-url-key)
-      (-> key
-          get-data-as-blob
-          js/URL.createObjectURL
-          (put-data object-url-key)))
-    (get-data object-url-key)))
-
 (def host "/api")
 (def resources "")
 (def http-cache (atom {}))
@@ -109,10 +99,13 @@
        (reduce +)))
 
 (defn load-base-asset
-  [asset progress]
-  (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
-        (put-data (:body response) (:url asset))
-        (swap! progress + (:size asset)))))
+  ([asset]
+    (load-base-asset asset nil))
+  ([asset progress]
+    (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
+          (put-data (:body response) (:url asset))
+          (when-not (nil? progress)
+            (swap! progress + (:size asset)))))))
 
 (defn load-asset
   ([asset]
@@ -165,6 +158,18 @@
             result (-> response :body)]
         (load-assets (:assets result) on-asset-progress on-asset-complete)
         (cb result))))
+
+(defn get-data-as-url
+  [key]
+  (if-not (has-data key)
+    (do (load-base-asset {:url key}) key)
+    (let [object-url-key (create-tagged-key "object-url" key)]
+      (when-not (has-data object-url-key)
+        (-> key
+            get-data-as-blob
+            js/URL.createObjectURL
+            (put-data object-url-key)))
+      (get-data object-url-key))))
 
 (defn length
   [cx cy x y]
