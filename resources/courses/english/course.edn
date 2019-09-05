@@ -89,7 +89,7 @@
 
  :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "hide-n-seek" "library"
                     "book" "painting-tablet" "cinema" "cinema-video" "cycling" "running" "letter-intro" "park-poem"
-                    "slide" "writing-lesson"]
+                    "slide" "writing-lesson" "writing-practice" "magic-hat" "pinata"]
  :lessons          [{:id 1 :lesson-sets {:concepts     "ls1"
                                          :assessment-1 "assessment1"}}
                     {:id 2 :lesson-sets {:concepts     "ls2"

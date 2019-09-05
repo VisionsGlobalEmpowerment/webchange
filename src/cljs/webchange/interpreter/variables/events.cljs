@@ -14,6 +14,7 @@
 (e/reg-simple-executor :test-value ::execute-test-value)
 (e/reg-simple-executor :case ::execute-case)
 (e/reg-simple-executor :counter ::execute-counter)
+(e/reg-simple-executor :calc ::execute-calc)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
@@ -227,12 +228,22 @@
 
 (re-frame/reg-event-fx
   ::execute-counter
-  (fn [{:keys [db]} [_ {:keys [counter-action counter-id] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [counter-action counter-value counter-id] :as action}]]
     (let [fn (case (keyword counter-action)
                :increase inc
-               :decrease dec)]
+               :decrease dec
+               :reset (constantly counter-value))]
       {:db (->> counter-id
                (get-variable db)
                fn
                (set-variable db counter-id))
+       :dispatch (e/success-event action)})))
+
+(re-frame/reg-event-fx
+  ::execute-calc
+  (fn [{:keys [db]} [_ {:keys [var-name operation value-1 value-2] :as action}]]
+    (let [fn (case (keyword operation)
+               :div-floor (comp Math/floor /)
+               :div-ceil (comp Math/ceil /))]
+      {:db (set-variable db var-name (fn value-1 value-2))
        :dispatch (e/success-event action)})))

@@ -1,14 +1,15 @@
 (ns webchange.common.painting-area
   (:require
+    [reagent.core :as r]
     [react-konva :refer [Image]]))
 
-(def tools {:pencil   {:lineCap    "butt"
+(def tools {:pencil   {:lineCap    "round"
                        :lineJoin   "miter"
                        :lineWidth  1
                        :shadowBlur 0
                        :globalCompositeOperation "source-over"}
-            :felt-tip {:lineCap    "butt"
-                       :lineJoin   "miter"
+            :felt-tip {:lineCap    "round"
+                       :lineJoin   "round"
                        :lineWidth  8
                        :shadowBlur 1
                        :globalCompositeOperation "source-over"}
