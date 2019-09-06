@@ -152,6 +152,12 @@
       {:db (provide db items variables provider-id {:shuffled true})
        :dispatch (e/success-event action)})))
 
+(defn get-lesson
+  [db lesson-set-name]
+  (let [lesson (get-in db [:lessons lesson-set-name])]
+    (when (nil? lesson) (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined"))))
+    lesson))
+
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
@@ -161,7 +167,7 @@
                               first
                               :lesson-sets
                               (get (keyword from)))
-          lesson (get-in db [:lessons lesson-set-name])
+          lesson (get-lesson db lesson-set-name)
           items (->> (:item-ids lesson)
                      (map #(get-in db [:dataset-items %]))
                      (map #(merge (:data %) {:id (:name %)})))
