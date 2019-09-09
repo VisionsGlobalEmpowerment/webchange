@@ -25,25 +25,25 @@
                  :door-trigger {:type    "transparent" :x 1146 :y 42 :width 732 :height 810
                                 :actions {:click {:type "scene", :scene-id "map", :on "click"}}}
 
-                 :box1         {:type       "transparent" :x 400 :y 300 :width 206 :height 210 :origin {:type "center-center"}
-                                :scene-name "box1"
+                 :box1         {:type       "transparent" :x 400 :y 255 :width 206 :height 210 :origin {:type "center-center"}
+                                :scene-name "box1" :transition "box1"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :scale {:x 0.25 :y 0.25} :speed 0.3 :loop false :start true}}
+                                                       :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}}
                                 :actions    {:click {:type "action" :id "click-on-box1" :on "click"}}}
 
-                 :box2         {:type       "transparent" :x 850 :y 300 :width 206 :height 210 :origin {:type "center-center"}
-                                :scene-name "box2"
+                 :box2         {:type       "transparent" :x 850 :y 255 :width 206 :height 210 :origin {:type "center-center"}
+                                :scene-name "box2" :transition "box2"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :scale {:x 0.25 :y 0.25} :speed 0.3 :loop false :start true}}
+                                                       :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}}
                                 :actions    {:click {:type "action" :id "click-on-box2" :on "click"}}}
 
-                 :box3         {:type       "transparent" :x 1300 :y 300 :width 206 :height 210 :origin {:type "center-center"}
-                                :scene-name "box3"
+                 :box3         {:type       "transparent" :x 1300 :y 255 :width 206 :height 210 :origin {:type "center-center"}
+                                :scene-name "box3" :transition "box3"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :scale {:x 0.25 :y 0.25} :speed 0.3 :loop false :start true}}
+                                                       :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}}
                                 :actions    {:click {:type "action" :id "click-on-box3" :on "click"}}}
 
                  },
@@ -124,9 +124,15 @@
                                                            "set-current-box1"
                                                            ]},
 
-                 :set-current-box1                 {:type "set-variable" :var-name "current-box" :var-value "box1"}
-                 :set-current-box2                 {:type "set-variable" :var-name "current-box" :var-value "box2"}
-                 :set-current-box3                 {:type "set-variable" :var-name "current-box" :var-value "box3"}
+                 :set-current-box1                 {:type "parallel"
+                                                    :data [{:type "set-variable" :var-name "current-box" :var-value "box1"}
+                                                           {:type "set-variable" :var-name "current-position-x" :var-value 400}]}
+                 :set-current-box2                 {:type "parallel"
+                                                    :data [{:type "set-variable" :var-name "current-box" :var-value "box2"}
+                                                           {:type "set-variable" :var-name "current-position-x" :var-value 850}]}
+                 :set-current-box3                 {:type "parallel"
+                                                    :data [{:type "set-variable" :var-name "current-box" :var-value "box3"}
+                                                           {:type "set-variable" :var-name "current-position-x" :var-value 1300}]}
 
                  :click-on-box1                    {:type     "test-var-scalar"
                                                     :var-name "current-box"
@@ -149,6 +155,7 @@
                  :first-word                       {:type       "sequence"
                                                     :data       ["show-first-box-word"
                                                                  "introduce-word"
+                                                                 "bye-current-box"
                                                                  "set-current-box2"
                                                                  "senora-vaca-audio-touch-second-box"]
                                                     :unique-tag "box"}
@@ -156,6 +163,7 @@
                  :second-word                      {:type       "sequence"
                                                     :data       ["show-second-box-word"
                                                                  "introduce-word"
+                                                                 "bye-current-box"
                                                                  "set-current-box3"
                                                                  "senora-vaca-audio-touch-third-box"]
                                                     :unique-tag "box"}
@@ -163,6 +171,7 @@
                  :third-word                       {:type       "sequence"
                                                     :data       ["show-third-box-word"
                                                                  "introduce-word"
+                                                                 "bye-current-box"
                                                                  "finish-activity"
                                                                  "mari-finish"]
                                                     :unique-tag "box"}
@@ -187,6 +196,16 @@
                                                             :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
                                                            {:type "copy-variable" :var-name "current-word" :from "item-3"}
                                                            {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
+
+                 :bye-current-box                  {:type "sequence-data"
+                                                    :data [{:type "parallel"
+                                                            :data [{:type     "animation" :id "jump"
+                                                                    :from-var [{:var-name "current-box" :action-property "target"}]}
+                                                                   {:type     "transition" :to {:y -100 :duration 2}
+                                                                    :from-var [{:var-name "current-box" :action-property "transition-id"}
+                                                                               {:var-name "current-position-x" :action-property "to.x"}]}]}
+                                                           {:type     "state" :id "default"
+                                                            :from-var [{:var-name "current-box" :action-property "target"}]}]}
 
                  :vaca-this-is-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
 

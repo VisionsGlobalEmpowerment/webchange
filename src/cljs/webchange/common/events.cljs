@@ -178,6 +178,7 @@
   (fn-traced [{:keys [db]} {:keys [type return-immediately] :as action}]
     (if (can-execute? db action)
       (let [handler (get @executors (keyword type))]
+        (when (nil? handler) (throw (js/Error. "Action is not defined")))
         (if return-immediately
           {:dispatch-n (list (handler {:db db :action action})
                              (success-event action))}
