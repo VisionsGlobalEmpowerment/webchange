@@ -4535,13 +4535,13 @@
         {:end 126.572, :anim "talk", :start 125.892, :duration 0.68}
         {:end 128.679, :anim "talk", :start 126.839, :duration 1.84}
         {:end 132.105, :anim "talk", :start 130.039, :duration 2.066}
-        {:end 135.039, :anim "talk", :start 132.705, :duration 2.334}],
+        {:end 133.786, :anim "talk", :start 132.705, :duration 1.081}],
        :type "animation-sequence",
        :audio "/raw/audio/english/l1/a3/rock.m4a",
        :start 122.812,
        :offset 122.812,
        :target "rock",
-       :duration 12.533}],
+       :duration 11.093}],
      :type "sequence-data",
      :scene-id "swings"},
     :word-1-skin "iguana",
@@ -7259,6 +7259,15 @@
     :swings-dialog-action
     {:data
      [{:data
+       [{:end 2.194, :anim "talk", :start 0.907, :duration 1.287}
+        {:end 5.442, :anim "talk", :start 3.15, :duration 2.292}],
+       :type "animation-sequence",
+       :audio "/raw/audio/english/l1/a3/rock2.m4a",
+       :start 0.773,
+       :offset 0.773,
+       :target "rock",
+       :duration 4.943}
+      {:data
        [{:end 21.787, :anim "talk", :start 20.56, :duration 1.227}],
        :type "animation-sequence",
        :audio "/raw/audio/english/l1/a3/vera.m4a",
