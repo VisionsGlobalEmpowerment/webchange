@@ -12,7 +12,7 @@
                  :vera       {:type  "animation" :x 725 :y 1000 :name "vera" :anim "idle" :speed 0.3
                               :width 1800 :height 2558 :scale {:x 0.17 :y 0.17} :start true}
 
-                 :librarian  {:type       "animation" :x 451 :y 883 :name "senoravaca" :anim "idle" :speed 0.3
+                 :librarian  {:type       "animation" :x 451 :y 883 :name "senoravaca" :anim "idle" :speed 0.3 :skin "lion"
                               :scene-name "librarian"
                               :width      351 :height 717 :scale {:x 1 :y 1} :start true}
 

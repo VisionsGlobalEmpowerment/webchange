@@ -16,6 +16,7 @@
 
                  :senora-vaca  {:type    "animation"
                                 :name    "senoravaca"
+                                :skin "vaca"
                                 :anim    "idle"
                                 :x       380
                                 :y       1000

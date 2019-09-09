@@ -4,6 +4,7 @@
     [react-konva :refer [Shape]]
     [konva :refer [Animation]]
     [spine :as s]
+    [spine-player :as sp]
     ))
 
 (def spine-manager (s/canvas.AssetManager.))
@@ -69,7 +70,7 @@
   (let [params {"jsonUrl"      (str "/raw/anim/" animation "/skeleton.json")
                 "atlasUrl"     (str "/raw/anim/" animation "/skeleton.atlas")
                 "showControls" false}]
-    (s/SpinePlayer. element (clj->js params))))
+    (sp/player. element (clj->js params))))
 
 (def animations {:vera       {:name       "vera"
                               :width      1800
@@ -79,14 +80,6 @@
                               :scale-y    0.2
                               :skins      ["default"]
                               :animations ["idle" "clapping_1clap" "clapping_finish" "clapping_start" "jump" "jump+clapping" "talk" "talk_eeeee"]}
-                 :vera-go    {:name       "vera-go"
-                              :width      752
-                              :height     1175
-                              :speed      0.5
-                              :scale-x    0.2
-                              :scale-y    0.2
-                              :skins      ["default"]
-                              :animations ["go_back" "go_front" "go_prew"]}
                  :vera-45    {:name       "vera-45"
                               :width      758
                               :height     1130

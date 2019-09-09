@@ -124,8 +124,11 @@
                                            :wavesurfer.js "2.2.1"
                                            :svg-arc-to-cubic-bezier "3.2.0"
                                            }
-                    :foreign-libs [{:file "src/libs/spine-all.js"
+                    :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/spine-player.js"
+                                    :provides ["spine-player"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
@@ -156,8 +159,11 @@
                                       :wavesurfer.js "2.2.1"
                                       :svg-arc-to-cubic-bezier "3.2.0"
                                       }
-                    :foreign-libs [{:file "src/libs/spine-all.js"
+                    :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/spine-player.js"
+                                    :provides ["spine-player"]
                                     :module-type :commonjs}]
                     :install-deps true}}
 
@@ -177,8 +183,11 @@
                                     :wavesurfer.js "2.2.1"
                                     :svg-arc-to-cubic-bezier "3.2.0"
                                     }
-                    :foreign-libs [{:file "src/libs/spine-all.js"
+                    :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/spine-player.js"
+                                    :provides ["spine-player"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations :none}}

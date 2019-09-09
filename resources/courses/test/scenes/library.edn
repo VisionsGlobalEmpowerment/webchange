@@ -13,7 +13,7 @@
                               :width 1800 :height 2558 :scale {:x 0.17 :y 0.17} :start true}
 
                  :librarian  {:type       "animation" :x 451 :y 883 :name "senoravaca" :anim "idle" :speed 0.3
-                              :scene-name "librarian"
+                              :scene-name "librarian" :skin "lion"
                               :width      351 :height 717 :scale {:x 1 :y 1} :start true}
 
                  :books      {:type    "image" :x 1292 :y 681 :width 163 :height 106 :src "/raw/img/library/main/Books_Enabled.png"
