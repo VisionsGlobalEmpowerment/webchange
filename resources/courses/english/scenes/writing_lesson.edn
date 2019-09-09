@@ -22,6 +22,7 @@
                  :senora-vaca {:type       "animation"
                                :scene-name "senoravaca"
                                :name       "senoravaca"
+                               :skin "vaca"
                                :anim       "idle"
                                :start      true
                                :speed      0.3

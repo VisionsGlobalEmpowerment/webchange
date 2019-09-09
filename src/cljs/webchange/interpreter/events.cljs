@@ -104,7 +104,9 @@
 (re-frame/reg-fx
   :set-skin
   (fn [{:keys [state skin]}]
-    (.setSkinByName (:skeleton state) skin)))
+    (let [skeleton (:skeleton state)]
+      (.setSkinByName skeleton skin)
+      (.setSlotsToSetupPose skeleton))))
 
 (re-frame/reg-fx
   :animation-props

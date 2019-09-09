@@ -66,6 +66,7 @@
                                   :scale-x    0.3}
                  :senora-vaca    {:type    "animation"
                                   :name    "senoravaca"
+                                  :skin "vaca"
                                   :anim    "idle"
                                   :start   true
                                   :speed   0.3
