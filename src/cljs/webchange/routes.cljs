@@ -30,7 +30,7 @@
     (re-frame/dispatch [::events/set-active-route params])
     (case handler
       :course (re-frame/dispatch [::ie/start-course (:id route-params)])
-      :student-dashboard (re-frame/dispatch [::ie/start-course current-course])
+      :student-dashboard (do (re-frame/dispatch [::ie/start-course current-course]) (re-frame/dispatch [::ie/clear-current-scene]))
       :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
       :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])
       :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])

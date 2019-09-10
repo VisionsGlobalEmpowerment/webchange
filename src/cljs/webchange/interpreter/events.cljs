@@ -585,6 +585,13 @@
       (when (not loaded) {:load-scene [(:current-course db) scene-id]}))))
 
 (re-frame/reg-event-fx
+  ::clear-current-scene
+  (fn [{:keys [db]} _]
+    (let [current-scene (:current-scene db)]
+      {:dispatch-n (list [::vars.events/execute-clear-vars]
+                         [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])})))
+
+(re-frame/reg-event-fx
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id]]
     (let [current-scene (:current-scene db)]
@@ -678,14 +685,13 @@
           prev (get-in scene [:metadata :prev] nil)]
       (if prev
         {:dispatch-n (list [::trigger :back] [::set-current-scene prev])}
-        {:dispatch [:open-student-dashboard]}))))
+        {:dispatch [::open-student-dashboard]}))))
 
 (re-frame/reg-event-fx
   ::open-student-dashboard
   (fn [{:keys [db]} [_ _]]
-    (let [current-scene (:current-scene db)]
-      {:dispatch-n (list [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
-                         [:open-student-dashboard])})))
+    {:dispatch-n (list [::clear-current-scene]
+                       [:open-student-dashboard])}))
 
 (re-frame/reg-event-fx
   ::load-progress
