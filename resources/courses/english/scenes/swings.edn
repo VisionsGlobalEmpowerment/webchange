@@ -4,9 +4,14 @@
                  {:url "/raw/img/park/swings/tree.png", :size 1, :type "image"}
 
                  {:url "/raw/audio/english/l1/a3/mari.m4a", :size 2, :type "audio" :alias "mari"}
-                 {:url "/raw/audio/english/l1/a3/vera.m4a", :size 2, :type "audio" :alias "vera"}
-                 {:url "/raw/audio/english/l1/a3/rock.m4a", :size 2, :type "audio" :alias "rock"}
-                 {:url "/raw/audio/english/l1/a3/rock2.m4a", :size 2, :type "audio" :alias "rock 2"}
+                 {:url "/raw/audio/english/l1/a3/vera.mp3", :size 2, :type "audio" :alias "vera"}
+                 {:url "/raw/audio/english/l1/a3/vera-squirrel.mp3", :size 2, :type "audio" :alias "vera squirrel"}
+                 {:url "/raw/audio/english/l1/a3/vera-elephant.mp3", :size 2, :type "audio" :alias "vera elephant"}
+                 {:url "/raw/audio/english/l1/a3/vera-magnet.mp3", :size 2, :type "audio" :alias "vera magnet"}
+                 {:url "/raw/audio/english/l1/a3/rock.mp3", :size 2, :type "audio" :alias "rock"}
+                 {:url "/raw/audio/english/l1/a3/rock-squirrel.mp3", :size 2, :type "audio" :alias "rock squirrel"}
+                 {:url "/raw/audio/english/l1/a3/rock-elephant.mp3", :size 2, :type "audio" :alias "rock elephant"}
+                 {:url "/raw/audio/english/l1/a3/rock-magnet.mp3", :size 2, :type "audio" :alias "rock magnet"}
                  ],
  :objects
                 {:background   {:type "background", :src "/raw/img/park/swings/background.jpg"},
@@ -72,17 +77,17 @@
  :scene-objects [["background"] ["swings"] ["tree-image"] ["vera" "mari" "rock"] ["box1" "box2" "box3"]],
  :actions
                 {:vera-welcome-audio-1
-                                             {:type     "animation-sequence",
-                                              :target   "vera",
-                                              :track    1,
+                                             {:type "animation-sequence",
+                                              :target "vera",
+                                              :track 1,
                                               :data
-                                                        [{:start 1.707, :end 2.627, :duration 0.92, :anim "talk"}
-                                                         {:start 4.24, :end 6.36, :duration 2.12, :anim "talk"}
-                                                         {:start 7.48, :end 8.787, :duration 1.307, :anim "talk"}],
-                                              :audio    "/raw/audio/english/l1/a3/vera.m4a",
-                                              :offset   1.573,
-                                              :start    1.573,
-                                              :duration 7.454}
+                                              [{:start 0.614, :end 1.534, :duration 0.92, :anim "talk"}
+                                               {:start 1.921, :end 3.801, :duration 1.88, :anim "talk"}
+                                               {:start 4.494, :end 5.801, :duration 1.307, :anim "talk"}],
+                                              :audio "/raw/audio/english/l1/a3/vera.mp3",
+                                              :offset 0.48,
+                                              :start 0.48,
+                                              :duration 5.668}
                  :mari-welcome-audio-2
                                              {:type     "animation-sequence",
                                               :target   "mari",
@@ -98,15 +103,15 @@
                                               :start    0.587,
                                               :duration 11.559}
                  :vera-welcome-audio-3
-                                             {:type     "animation-sequence",
-                                              :target   "vera",
-                                              :track    1,
+                                             {:type "animation-sequence",
+                                              :target "vera",
+                                              :track 1,
                                               :data
-                                                        [{:start 10.493, :end 10.907, :duration 0.414, :anim "talk"}
-                                                         {:start 11.333, :end 13.627, :duration 2.294, :anim "talk"}],
-                                              :audio    "/raw/audio/english/l1/a3/vera.m4a",
-                                              :offset   10.413,
-                                              :start    10.413,
+                                              [{:start 7.147, :end 7.561, :duration 0.414, :anim "talk"}
+                                               {:start 8.054, :end 10.108, :duration 2.054, :anim "talk"}],
+                                              :audio "/raw/audio/english/l1/a3/vera.mp3",
+                                              :offset 6.921,
+                                              :start 6.921,
                                               :duration 3.4}
                  :mari-welcome-audio-4
                                              {:type     "animation-sequence",
@@ -118,13 +123,13 @@
                                               :start    14.026,
                                               :duration 1.04}
                  :rock-welcome-audio-5
-                                             {:type     "animation-sequence",
-                                              :target   "rock",
-                                              :track    1,
-                                              :data     [{:start 1.427, :end 3.56, :duration 2.133, :anim "talk"}],
-                                              :audio    "/raw/audio/english/l1/a3/rock.m4a",
-                                              :offset   1.333,
-                                              :start    1.333,
+                                             {:type "animation-sequence",
+                                              :target "rock",
+                                              :track 1,
+                                              :data [{:start 0.534, :end 2.36, :duration 1.826, :anim "talk"}],
+                                              :audio "/raw/audio/english/l1/a3/rock.mp3",
+                                              :offset 0.306,
+                                              :start 0.306,
                                               :duration 2.307}
 
                  :mari-welcome-audio-6
@@ -139,39 +144,39 @@
                                               :start    16.852,
                                               :duration 3.587}
                  :rock-welcome-audio-7
-                                             {:type     "animation-sequence",
-                                              :target   "rock",
-                                              :track    1,
+                                             {:type "animation-sequence",
+                                              :target "rock",
+                                              :track 1,
                                               :data
-                                                        [{:start 4.747, :end 5.707, :duration 0.96, :anim "talk"}
-                                                         {:start 6.56, :end 8.627, :duration 2.067, :anim "talk"}],
-                                              :audio    "/raw/audio/english/l1/a3/rock.m4a",
-                                              :offset   4.587,
-                                              :start    4.587,
-                                              :duration 4.213}
+                                              [{:start 3.719, :end 4.559, :duration 0.84, :anim "talk"}
+                                               {:start 5.159, :end 6.986, :duration 1.827, :anim "talk"}],
+                                              :audio "/raw/audio/english/l1/a3/rock.mp3",
+                                              :offset 3.547,
+                                              :start 3.547,
+                                              :duration 3.747}
                  :vera-welcome-audio-8
-                                             {:type     "animation-sequence",
-                                              :target   "vera",
-                                              :track    1,
+                                             {:type "animation-sequence",
+                                              :target "vera",
+                                              :track 1,
                                               :data
-                                                        [{:start 15.053, :end 15.92, :duration 0.867, :anim "talk"}
-                                                         {:start 16.8, :end 17.533, :duration 0.733, :anim "talk"}],
-                                              :audio    "/raw/audio/english/l1/a3/vera.m4a",
-                                              :offset   14.947,
-                                              :start    14.947,
-                                              :duration 2.706}
+                                              [{:start 10.944, :end 11.837, :duration 0.893, :anim "talk"}
+                                               {:start 12.423, :end 13.21, :duration 0.787, :anim "talk"}],
+                                              :audio "/raw/audio/english/l1/a3/vera.mp3",
+                                              :offset 10.69,
+                                              :start 10.69,
+                                              :duration 2.786}
                  :rock-welcome-audio-9
-                                             {:type     "animation-sequence",
-                                              :target   "rock",
-                                              :track    1,
+                                             {:type "animation-sequence",
+                                              :target "rock",
+                                              :track 1,
                                               :data
-                                                        [{:start 10.24, :end 11.333, :duration 1.093, :anim "talk"}
-                                                         {:start 11.96, :end 13.027, :duration 1.067, :anim "talk"}
-                                                         {:start 13.387, :end 13.8, :duration 0.413, :anim "talk"}],
-                                              :audio    "/raw/audio/english/l1/a3/rock.m4a",
-                                              :offset   10.173,
-                                              :start    10.173,
-                                              :duration 3.934}
+                                              [{:start 8.199, :end 9.225, :duration 1.026, :anim "talk"}
+                                               {:start 9.959, :end 10.958, :duration 0.999, :anim "talk"}
+                                               {:start 11.465, :end 12.025, :duration 0.56, :anim "talk"}],
+                                              :audio "/raw/audio/english/l1/a3/rock.mp3",
+                                              :offset 8.093,
+                                              :start 8.093,
+                                              :duration 4.241}
 
                  :mari-welcome-audio-10
                                              {:type     "animation-sequence",

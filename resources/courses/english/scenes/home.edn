@@ -3,7 +3,7 @@
                  {:url "/raw/img/casa/door.png", :size 1, :type "image"}
 
                  {:url "/raw/audio/english/l1/a1/vaca.m4a", :size 2, :type "audio" :alias "vaca voice"}
-                 {:url "/raw/audio/english/l1/a1/vera.m4a", :size 2, :type "audio" :alias "vera voice"}
+                 {:url "/raw/audio/english/l1/a1/vera.mp3", :size 2, :type "audio" :alias "vera voice"}
                  {:url "/raw/audio/english/l1/a1/mari_ending.m4a", :size 2, :type "audio" :alias "mari ending"}
                  ],
  :objects

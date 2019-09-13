@@ -1612,25 +1612,25 @@
     :home-group-3-times-action
     {:data
      [{:data
-       [{:end 15.037, :anim "talk", :start 14.491, :duration 0.546}
-        {:end 15.917, :anim "talk", :start 15.45, :duration 0.467}
-        {:end 17.023, :anim "talk", :start 16.397, :duration 0.626}],
+       [{:end 12.921, :anim "talk", :start 12.161, :duration 0.76}
+        {:end 14.041, :anim "talk", :start 13.414, :duration 0.627}
+        {:end 15.294, :anim "talk", :start 14.534, :duration 0.76}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vera.m4a",
-       :start 14.344,
-       :offset 14.344,
+       :audio "/raw/audio/english/l1/a1/vera.mp3",
+       :start 12.001,
+       :offset 12.001,
        :target "vera",
-       :duration 2.799}],
+       :duration 3.6}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word-action
     {:data
      [{:data
-       [{:end 12.664, :anim "talk", :start 12.131, :duration 0.533}],
+       [{:end 11.211, :anim "talk", :start 10.678, :duration 0.533}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vera.m4a",
-       :start 11.944,
-       :offset 11.944,
+       :audio "/raw/audio/english/l1/a1/vera.mp3",
+       :start 10.544,
+       :offset 10.544,
        :target "vera",
        :duration 1.027}
       {:data [{:end 75, :anim "talk", :start 74.4, :duration 0.6}],
@@ -1742,85 +1742,79 @@
     :swings-dialog-action
     {:data
      [{:data
-       [{:end 52.573, :anim "talk", :start 52.053, :duration 0.52}
-        {:end 53.893, :anim "talk", :start 52.946, :duration 0.947}
-        {:end 61.066, :anim "talk", :start 55.239, :duration 5.827}
-        {:end 64.026, :anim "talk", :start 61.639, :duration 2.387}
-        {:end 66.986, :anim "talk", :start 65.253, :duration 1.733}
-        {:end 69.186, :anim "talk", :start 67.453, :duration 1.733}
-        {:end 73.999, :anim "talk", :start 69.866, :duration 4.133}],
+       [{:end 2.347, :anim "talk", :start 0.4, :duration 1.947}
+        {:end 9.066, :anim "talk", :start 3.147, :duration 5.919}
+        {:end 19.279, :anim "talk", :start 9.693, :duration 9.586}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 51.826,
-       :offset 51.826,
+       :audio "/raw/audio/english/l1/a3/rock-elephant.mp3",
+       :start 0.253,
+       :offset 0.253,
        :target "rock",
-       :duration 22.933}
+       :duration 19.266}
       {:data
-       [{:end 1.666, :anim "talk", :start 0.747, :duration 0.919}
-        {:end 48.453, :anim "talk", :start 47.6, :duration 0.853}
-        {:end 50.32, :anim "talk", :start 49.107, :duration 1.213}],
+       [{:end 1.373, :anim "talk", :start 0.413, :duration 0.96}
+        {:end 3.48, :anim "talk", :start 2, :duration 1.48}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 47.32,
-       :offset 47.32,
+       :audio "/raw/audio/english/l1/a3/vera-elephant.mp3",
+       :start 0.36,
+       :offset 0.36,
        :target "vera",
-       :duration 3.24}
+       :duration 3.387}
       {:data
-       [{:end 79.599, :anim "talk", :start 76.613, :duration 2.986}],
+       [{:end 24.239, :anim "talk", :start 20.706, :duration 3.533}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 76.213,
-       :offset 76.213,
+       :audio "/raw/audio/english/l1/a3/rock-elephant.mp3",
+       :start 20.573,
+       :offset 20.573,
        :target "rock",
-       :duration 3.8}
+       :duration 3.906}
       {:data
-       [{:end 52.28, :anim "talk", :start 51.853, :duration 0.427}],
+       [{:end 4.774, :anim "talk", :start 4.094, :duration 0.68}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 51.72,
-       :offset 51.72,
+       :audio "/raw/audio/english/l1/a3/vera-elephant.mp3",
+       :start 3.987,
+       :offset 3.987,
        :target "vera",
-       :duration 0.747}
+       :duration 0.907}
       {:data
-       [{:end 82.453, :anim "talk", :start 81.799, :duration 0.654}
-        {:end 84.106, :anim "talk", :start 82.706, :duration 1.4}
-        {:end 85.839, :anim "talk", :start 84.599, :duration 1.24}
-        {:end 88.039, :anim "talk", :start 86.786, :duration 1.253}],
+       [{:end 29.586, :anim "talk", :start 25.586, :duration 4}
+        {:end 31.586, :anim "talk", :start 30.146, :duration 1.44}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 81.639,
-       :offset 81.639,
+       :audio "/raw/audio/english/l1/a3/rock-elephant.mp3",
+       :start 25.426,
+       :offset 25.426,
        :target "rock",
-       :duration 6.667}
+       :duration 6.386}
       {:data
-       [{:end 56.533, :anim "talk", :start 53.693, :duration 2.84}],
+       [{:end 7.094, :anim "talk", :start 5.44, :duration 1.654}
+        {:end 8.107, :anim "talk", :start 7.454, :duration 0.653}
+        {:end 9.227, :anim "talk", :start 8.307, :duration 0.92}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 53.52,
-       :offset 53.52,
+       :audio "/raw/audio/english/l1/a3/vera-elephant.mp3",
+       :start 5.227,
+       :offset 5.227,
        :target "vera",
-       :duration 3.36}
+       :duration 4.173}
       {:data
-       [{:end 90.319, :anim "talk", :start 89.999, :duration 0.32}
-        {:end 92.052, :anim "talk", :start 90.746, :duration 1.306}
-        {:end 93.412, :anim "talk", :start 92.399, :duration 1.013}
-        {:end 95.012, :anim "talk", :start 93.986, :duration 1.026}
-        {:end 98.506, :anim "talk", :start 96.346, :duration 2.16}],
+       [{:end 35.666, :anim "talk", :start 32.692, :duration 2.974}
+        {:end 37.492, :anim "talk", :start 36.079, :duration 1.413}
+        {:end 40.652, :anim "talk", :start 38.212, :duration 2.44}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 89.853,
-       :offset 89.853,
+       :audio "/raw/audio/english/l1/a3/rock-elephant.mp3",
+       :start 32.439,
+       :offset 32.439,
        :target "rock",
-       :duration 9.106}
+       :duration 8.506}
       {:data
-       [{:end 62.24, :anim "talk", :start 58.733, :duration 3.507}
-        {:end 64.96, :anim "talk", :start 63.52, :duration 1.44}],
+       [{:end 15.014, :anim "talk", :start 10.427, :duration 4.587}
+        {:end 16.281, :anim "talk", :start 15.641, :duration 0.64}
+        {:end 17.921, :anim "talk", :start 16.761, :duration 1.16}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 58.52,
-       :offset 58.52,
+       :audio "/raw/audio/english/l1/a3/vera-elephant.mp3",
+       :start 10.187,
+       :offset 10.187,
        :target "vera",
-       :duration 6.76}],
+       :duration 8.027}],
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
@@ -4166,26 +4160,26 @@
     :home-group-3-times-action
     {:data
      [{:data
-       [{:end 24.782, :anim "talk", :start 24.302, :duration 0.48}
-        {:end 25.875, :anim "talk", :start 25.329, :duration 0.546}
-        {:end 26.835, :anim "talk", :start 26.262, :duration 0.573}],
+       [{:end 22.868, :anim "talk", :start 22.121, :duration 0.747}
+        {:end 23.961, :anim "talk", :start 23.241, :duration 0.72}
+        {:end 25.175, :anim "talk", :start 24.321, :duration 0.854}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vera.m4a",
-       :start 24.062,
-       :offset 24.062,
+       :audio "/raw/audio/english/l1/a1/vera.mp3",
+       :start 21.982,
+       :offset 21.982,
        :target "vera",
-       :duration 3.133}],
+       :duration 3.386}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word "group-word-incendio",
     :home-group-word-action
     {:data
      [{:data
-       [{:end 23.049, :anim "talk", :start 22.289, :duration 0.76}],
+       [{:end 21.455, :anim "talk", :start 20.628, :duration 0.827}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vera.m4a",
-       :start 22.142,
-       :offset 22.142,
+       :audio "/raw/audio/english/l1/a1/vera.mp3",
+       :start 20.529,
+       :offset 20.529,
        :target "vera",
        :duration 1.107}
       {:data
@@ -4492,56 +4486,61 @@
     :swings-dialog-action
     {:data
      [{:data
-       [{:end 102.639, :anim "talk", :start 101.866, :duration 0.773}
-        {:end 105.812, :anim "talk", :start 103.946, :duration 1.866}],
+       [{:end 1.306, :anim "talk", :start 0.44, :duration 0.866}
+        {:end 4.013, :anim "talk", :start 1.786, :duration 2.227}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 101.652,
-       :offset 101.652,
+       :audio "/raw/audio/english/l1/a3/rock-magnet.mp3",
+       :start 0.307,
+       :offset 0.307,
        :target "rock",
-       :duration 4.547}
+       :duration 4.026}
       {:data
-       [{:end 67.853, :anim "talk", :start 67.467, :duration 0.386}
-        {:end 69.533, :anim "talk", :start 68.72, :duration 0.813}
-        {:end 71.56, :anim "talk", :start 70.48, :duration 1.08}],
+       [{:end 0.88, :anim "talk", :start 0.227, :duration 0.653}
+        {:end 2.493, :anim "talk", :start 1.413, :duration 1.08}
+        {:end 4.505, :anim "talk", :start 3.266, :duration 1.239}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 67.16,
-       :offset 67.16,
+       :audio "/raw/audio/english/l1/a3/vera-magnet.mp3",
+       :start 0.093,
+       :offset 0.093,
        :target "vera",
-       :duration 4.853}
+       :duration 4.652}
       {:data
-       [{:end 109.359, :anim "talk", :start 108.852, :duration 0.507}
-        {:end 114.866, :anim "talk", :start 110.319, :duration 4.547}
-        {:end 116.612, :anim "talk", :start 115.492, :duration 1.12}
-        {:end 118.666, :anim "talk", :start 117.479, :duration 1.187}
-        {:end 121.092, :anim "talk", :start 119.226, :duration 1.866}],
+       [{:end 5.693, :anim "talk", :start 5.173, :duration 0.52}
+        {:end 10.385, :anim "talk", :start 6.026, :duration 4.359}
+        {:end 12.118, :anim "talk", :start 10.892, :duration 1.226}
+        {:end 15.744, :anim "talk", :start 12.798, :duration 2.946}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 108.759,
-       :offset 108.759,
+       :audio "/raw/audio/english/l1/a3/rock-magnet.mp3",
+       :start 4.973,
+       :offset 4.973,
        :target "rock",
-       :duration 12.773}
+       :duration 11.145}
       {:data
-       [{:end 75.987, :anim "talk", :start 73.093, :duration 2.894}],
+       [{:end 9.584, :anim "talk", :start 5.518, :duration 4.066}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 72.88,
-       :offset 72.88,
+       :audio "/raw/audio/english/l1/a3/vera-magnet.mp3",
+       :start 5.292,
+       :offset 5.292,
        :target "vera",
-       :duration 3.267}
+       :duration 4.599}
       {:data
-       [{:end 125.159, :anim "talk", :start 123.066, :duration 2.093}
-        {:end 126.572, :anim "talk", :start 125.892, :duration 0.68}
-        {:end 128.679, :anim "talk", :start 126.839, :duration 1.84}
-        {:end 132.105, :anim "talk", :start 130.039, :duration 2.066}
-        {:end 133.786, :anim "talk", :start 132.705, :duration 1.081}],
+       [{:end 19.491, :anim "talk", :start 16.958, :duration 2.533}
+        {:end 22.757, :anim "talk", :start 20.077, :duration 2.68}
+        {:end 28.649, :anim "talk", :start 23.49, :duration 5.159}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 122.812,
-       :offset 122.812,
+       :audio "/raw/audio/english/l1/a3/rock-magnet.mp3",
+       :start 16.704,
+       :offset 16.704,
        :target "rock",
-       :duration 11.093}],
+       :duration 12.172}
+      {:data
+       [{:end 13.356, :anim "talk", :start 11.45, :duration 1.906}],
+       :type "animation-sequence",
+       :audio "/raw/audio/english/l1/a3/vera-magnet.mp3",
+       :start 11.21,
+       :offset 11.21,
+       :target "vera",
+       :duration 2.6}],
      :type "sequence-data",
      :scene-id "swings"},
     :word-1-skin "iguana",
@@ -6927,13 +6926,13 @@
     :home-group-3-times-action
     {:data
      [{:data
-       [{:end 4.466, :anim "talk", :start 3.946, :duration 0.52}
-        {:end 5.546, :anim "talk", :start 4.986, :duration 0.56}
-        {:end 6.572, :anim "talk", :start 5.986, :duration 0.586}],
+       [{:end 2.919, :anim "talk", :start 2.306, :duration 0.613}
+        {:end 3.959, :anim "talk", :start 3.399, :duration 0.56}
+        {:end 5.012, :anim "talk", :start 4.426, :duration 0.586}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vera.m4a",
-       :start 3.76,
-       :offset 3.76,
+       :audio "/raw/audio/english/l1/a1/vera.mp3",
+       :start 2.173,
+       :offset 2.173,
        :target "vera",
        :duration 3.106}],
      :type "parallel",
@@ -6941,11 +6940,11 @@
     :home-group-word "group-word-ardilla",
     :home-group-word-action
     {:data
-     [{:data [{:end 2.44, :anim "talk", :start 1.64, :duration 0.8}],
+     [{:data [{:end 1.467, :anim "talk", :start 0.667, :duration 0.8}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a1/vera.m4a",
-       :start 1.373,
-       :offset 1.373,
+       :audio "/raw/audio/english/l1/a1/vera.mp3",
+       :start 0.546,
+       :offset 0.546,
        :target "vera",
        :duration 1.12}
       {:data
@@ -7259,100 +7258,101 @@
     :swings-dialog-action
     {:data
      [{:data
-       [{:end 2.194, :anim "talk", :start 0.907, :duration 1.287}
-        {:end 5.442, :anim "talk", :start 3.15, :duration 2.292}],
+       [{:end 1.994, :anim "talk", :start 0.707, :duration 1.287}
+        {:end 4.335, :anim "talk", :start 2.51, :duration 1.825}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock2.m4a",
-       :start 0.773,
-       :offset 0.773,
+       :audio "/raw/audio/english/l1/a3/rock-squirrel.mp3",
+       :start 0.546,
+       :offset 0.546,
        :target "rock",
-       :duration 4.943}
+       :duration 3.957}
       {:data
-       [{:end 21.787, :anim "talk", :start 20.56, :duration 1.227}],
+       [{:end 1.843, :anim "talk", :start 0.616, :duration 1.227}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 20.347,
-       :offset 20.347,
+       :audio "/raw/audio/english/l1/a3/vera-squirrel.mp3",
+       :start 0.403,
+       :offset 0.403,
        :target "vera",
        :duration 1.68,
        :description ""}
       {:data
-       [{:end 18.027, :anim "talk", :start 17.653, :duration 0.374}
-        {:end 23.36, :anim "talk", :start 18.84, :duration 4.52}],
+       [{:end 6.212, :anim "talk", :start 5.599, :duration 0.613}
+        {:end 8.559, :anim "talk", :start 6.506, :duration 2.053}
+        {:end 11.052, :anim "talk", :start 8.799, :duration 2.253}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 17.507,
-       :offset 17.507,
+       :audio "/raw/audio/english/l1/a3/rock-squirrel.mp3",
+       :start 5.375,
+       :offset 5.375,
        :target "rock",
        :duration 6.079}
       {:data
-       [{:end 22.787, :anim "talk", :start 22.493, :duration 0.294}
-        {:end 24.48, :anim "talk", :start 23.68, :duration 0.8}],
+       [{:end 2.946, :anim "talk", :start 2.453, :duration 0.493}
+        {:end 4.253, :anim "talk", :start 3.186, :duration 1.067}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 22.427,
-       :offset 22.427,
+       :audio "/raw/audio/english/l1/a3/vera-squirrel.mp3",
+       :start 2.277,
+       :offset 2.277,
        :target "vera",
-       :duration 2.266,
+       :duration 2.229,
        :description ""}
       {:data
-       [{:end 26.44, :anim "talk", :start 25.293, :duration 1.147}
-        {:end 27.84, :anim "talk", :start 26.906, :duration 0.934}
-        {:end 30.48, :anim "talk", :start 28.68, :duration 1.8}],
+       [{:end 13.171, :anim "talk", :start 12.385, :duration 0.786}
+        {:end 14.905, :anim "talk", :start 13.678, :duration 1.227}
+        {:end 17.344, :anim "talk", :start 15.558, :duration 1.786}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 25.12,
-       :offset 25.12,
+       :audio "/raw/audio/english/l1/a3/rock-squirrel.mp3",
+       :start 12.225,
+       :offset 12.225,
        :target "rock",
-       :duration 5.693}
+       :duration 5.439}
       {:data
-       [{:end 26.56, :anim "talk", :start 25.973, :duration 0.587}
-        {:end 27.533, :anim "talk", :start 27.187, :duration 0.346}
-        {:end 29.627, :anim "talk", :start 28.2, :duration 1.427}
-        {:end 33.733, :anim "talk", :start 31.16, :duration 2.573}],
+       [{:end 5.333, :anim "talk", :start 4.919, :duration 0.414}
+        {:end 6.452, :anim "talk", :start 5.799, :duration 0.653}
+        {:end 8.385, :anim "talk", :start 6.986, :duration 1.399}
+        {:end 12.051, :anim "talk", :start 8.985, :duration 3.066}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 25.813,
-       :offset 25.813,
+       :audio "/raw/audio/english/l1/a3/vera-squirrel.mp3",
+       :start 4.719,
+       :offset 4.719,
        :target "vera",
-       :duration 8.254,
+       :duration 7.599,
        :description ""}
       {:data
-       [{:end 32.96, :anim "talk", :start 32.52, :duration 0.44}
-        {:end 35.613, :anim "talk", :start 33.6, :duration 2.013}
-        {:end 38.346, :anim "talk", :start 36.466, :duration 1.88}
-        {:end 40.2, :anim "talk", :start 38.906, :duration 1.294}],
+       [{:end 22.237, :anim "talk", :start 18.864, :duration 3.373}
+        {:end 24.516, :anim "talk", :start 22.823, :duration 1.693}
+        {:end 25.41, :anim "talk", :start 25.01, :duration 0.4}
+        {:end 26.663, :anim "talk", :start 25.65, :duration 1.013}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 32.373,
-       :offset 32.373,
+       :audio "/raw/audio/english/l1/a3/rock-squirrel.mp3",
+       :start 18.624,
+       :offset 18.624,
        :target "rock",
-       :duration 8.133}
+       :duration 8.305}
       {:data
-       [{:end 35.707, :anim "talk", :start 35.453, :duration 0.254}
-        {:end 38.813, :anim "talk", :start 36.76, :duration 2.053}
-        {:end 41.253, :anim "talk", :start 39.987, :duration 1.266}
-        {:end 44.987, :anim "talk", :start 42.453, :duration 2.534}],
+       [{:end 13.398, :anim "talk", :start 12.905, :duration 0.493}
+        {:end 15.211, :anim "talk", :start 13.958, :duration 1.253}
+        {:end 16.917, :anim "talk", :start 15.718, :duration 1.199}
+        {:end 19.024, :anim "talk", :start 17.317, :duration 1.707}
+        {:end 22.903, :anim "talk", :start 19.784, :duration 3.119}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/vera.m4a",
-       :start 35.253,
-       :offset 35.253,
+       :audio "/raw/audio/english/l1/a3/vera-squirrel.mp3",
+       :start 12.665,
+       :offset 12.665,
        :target "vera",
-       :duration 10.014,
+       :duration 10.611,
        :description ""}
       {:data
-       [{:end 42.333, :anim "talk", :start 41.813, :duration 0.52}
-        {:end 44.946, :anim "talk", :start 43.24, :duration 1.706}
-        {:end 48.506, :anim "talk", :start 47.52, :duration 0.986}
-        {:end 45.693, :anim "talk", :start 45.546, :duration 0.147}
-        {:end 46.413, :anim "talk", :start 46.266, :duration 0.147}
-        {:end 47.026, :anim "talk", :start 46.933, :duration 0.093}],
+       [{:end 28.596, :anim "talk", :start 27.916, :duration 0.68}
+        {:end 31.275, :anim "talk", :start 29.196, :duration 2.079}
+        {:end 31.755, :anim "talk", :start 31.515, :duration 0.24}
+        {:end 32.275, :anim "talk", :start 31.995, :duration 0.28}
+        {:end 33.528, :anim "talk", :start 32.515, :duration 1.013}],
        :type "animation-sequence",
-       :audio "/raw/audio/english/l1/a3/rock.m4a",
-       :start 41.666,
-       :offset 41.666,
+       :audio "/raw/audio/english/l1/a3/rock-squirrel.mp3",
+       :start 27.623,
+       :offset 27.623,
        :target "rock",
-       :duration 7.267}],
+       :duration 6.212}],
      :type "sequence-data",
      :scene-id "swings"},
     :test-new
