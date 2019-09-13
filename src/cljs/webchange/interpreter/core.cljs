@@ -304,3 +304,22 @@
     (->> (:outs scene)
          (filter #(= second (:name %)))
          first)))
+
+(defn find-nav-path
+  [from to graph]
+  (let [visited (atom #{from})]
+    (loop [[head & tail] [[from]]]
+      (if head
+        (let [node-name (last head)
+              node (get graph (keyword node-name))
+              sibling-names (->> node :links (into #{}))
+              non-visited (clojure.set/difference sibling-names @visited)
+              _ (swap! visited #(clojure.set/union % non-visited))
+              new-paths (map (fn [next-node] (conj head next-node)) non-visited)]
+          (if (= node-name to)
+            head
+            (recur (concat tail new-paths))))))))
+
+(defn nav-node-exists?
+  [graph node-name]
+  (contains? graph (keyword node-name)))

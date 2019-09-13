@@ -165,6 +165,7 @@
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :location ::execute-location)
 (ce/reg-simple-executor :transition ::execute-transition)
+(ce/reg-simple-executor :move ::execute-move)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
 (ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
 (ce/reg-simple-executor :start-activity ::execute-start-activity)
@@ -201,11 +202,15 @@
                     :from      from
                     :on-ended  (ce/dispatch-success-fn action)}})))
 
+(defn point->transition
+  [to transition-id]
+  {:type          "transition"
+   :transition-id transition-id
+   :to            to})
+
 (defn execute-transitions-sequence
   [transitions {:keys [transition-id] :as action}]
-  (let [data (map (fn [transition] {:type          "transition"
-                                    :transition-id transition-id
-                                    :to            transition}) transitions)]
+  (let [data (map #(point->transition % transition-id) transitions)]
     {:dispatch [::ce/execute-sequence-data (merge action {:data data})]}))
 
 (re-frame/reg-event-fx
@@ -214,6 +219,27 @@
     (if (:path to)
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
+
+(defn insert-move-rotations
+  [[head & tail] {:keys [animation-target transition-id]}]
+  (reduce (fn [tx tr]
+            (let [last-x (-> tx last :to :x)]
+              (if (< last-x (:x tr))
+                (concat tx [{:type "animation-props" :target animation-target :props {:scaleX -1}} (point->transition tr transition-id)])
+                (concat tx [{:type "animation-props" :target animation-target :props {:scaleX 1}} (point->transition tr transition-id)]))))
+          [(point->transition head transition-id)] tail))
+
+(re-frame/reg-event-fx
+  ::execute-move
+  (fn [{:keys [db]} [_ {:keys [from to graph animation-target animation-on-start animation-on-stop default-position] :as action}]]
+    (let [from (if (i/nav-node-exists? graph from) from default-position)
+          path-names (i/find-nav-path from to graph)
+          path (map #(-> (get graph (keyword %)) (select-keys [:x :y])) path-names)
+          data (concat
+                 [{:type "animation" :target animation-target :id animation-on-start}]
+                 (insert-move-rotations path action)
+                 [{:type "animation" :target animation-target :id animation-on-stop}])]
+      {:dispatch [::ce/execute-sequence-data (merge action {:data data})]})))
 
 (defn resolve-scene-id
   [location-data {:keys [level]}]
@@ -599,7 +625,8 @@
                        (assoc :current-scene scene-id)
                        (assoc-in [:scenes scene-id] (get-in db [:store-scenes scene-id]))
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
-                       (assoc :scene-started false))
+                       (assoc :scene-started false)
+                       (assoc-in [:progress-data :variables :last-location] current-scene))
        :dispatch-n (list [::vars.events/execute-clear-vars]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
                          [::reset-activity-action]
