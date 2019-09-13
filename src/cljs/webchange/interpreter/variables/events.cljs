@@ -118,13 +118,18 @@
        :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
-  ::execute-clear-vars
-  (fn [{:keys [db]} [_ action]]
+  ::clear-vars
+  (fn [{:keys [db]} [_ {:keys [keep-running]}]]
     (let [scene-id (:current-scene db)]
       {:db (-> db
                (update-in [:scenes scene-id] dissoc :variables)
-               (update-in [:scenes scene-id] dissoc :providers))
-       :dispatch (e/success-event action)})))
+               (update-in [:scenes scene-id] dissoc :providers)
+               (assoc-in [:scenes scene-id :variables "status"] (if keep-running :running nil)))})))
+
+(re-frame/reg-event-fx
+  ::execute-clear-vars
+  (fn [{:keys [db]} [_ action]]
+    {:dispatch-n (list [::clear-vars {:keep-running true}] (e/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
