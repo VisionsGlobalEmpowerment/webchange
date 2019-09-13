@@ -614,7 +614,7 @@
   ::clear-current-scene
   (fn [{:keys [db]} _]
     (let [current-scene (:current-scene db)]
-      {:dispatch-n (list [::vars.events/execute-clear-vars]
+      {:dispatch-n (list [::vars.events/clear-vars {:keep-running true}]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])})))
 
 (re-frame/reg-event-fx
@@ -627,7 +627,7 @@
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
-       :dispatch-n (list [::vars.events/execute-clear-vars]
+       :dispatch-n (list [::vars.events/clear-vars]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
                          [::reset-activity-action]
                          [::load-scene scene-id])})))
