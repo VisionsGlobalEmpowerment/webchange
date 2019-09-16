@@ -175,6 +175,8 @@
 (ce/reg-simple-executor :pick-correct ::execute-pick-correct)
 (ce/reg-simple-executor :pick-wrong ::execute-pick-wrong)
 (ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
+(ce/reg-simple-executor :set-interval ::execute-set-interval)
+(ce/reg-simple-executor :remove-interval ::execute-remove-interval)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -615,7 +617,8 @@
   (fn [{:keys [db]} _]
     (let [current-scene (:current-scene db)]
       {:dispatch-n (list [::vars.events/clear-vars {:keep-running true}]
-                         [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])})))
+                         [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
+                         [::ce/execute-remove-timers])})))
 
 (re-frame/reg-event-fx
   ::set-current-scene
@@ -629,6 +632,7 @@
                        (assoc-in [:progress-data :variables :last-location] current-scene))
        :dispatch-n (list [::vars.events/clear-vars]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
+                         [::ce/execute-remove-timers]
                          [::reset-activity-action]
                          [::load-scene scene-id])})))
 
@@ -868,6 +872,19 @@
   (fn [{:keys [db]} [_ {:keys [value] :as action}]]
     {:db         (vars.events/set-variable db :score-first-attempt true)
      :dispatch-n (list (ce/success-event action))}))
+
+(re-frame/reg-event-fx
+  ::execute-set-interval
+  (fn [{:keys [db]} [_ {:keys [id interval action]}]]
+    (let [interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action (ce/get-action action db)])) interval)]
+      {:dispatch [::ce/execute-register-timer {:name id
+                                               :id   interval-id
+                                               :type "interval"}]})))
+
+(re-frame/reg-event-fx
+  ::execute-remove-interval
+  (fn [{:keys [db]} [_ {:keys [id]}]]
+    {:dispatch [::ce/execute-remove-timer {:name id}]}))
 
 (re-frame/reg-event-db
   ::reset-activity-action

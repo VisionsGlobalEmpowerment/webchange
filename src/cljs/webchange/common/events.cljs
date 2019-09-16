@@ -199,6 +199,34 @@
       {:db       (assoc db :flows flows)
        :dispatch (success-event action)})))
 
+(defn destroy-timer
+  [timer]
+  (case (:type timer)
+    "interval" (.clearInterval js/window (:id timer))
+    (throw (js/Error. (str "Timer type '" (:type timer) "' is not supported")))))
+
+(re-frame/reg-event-fx
+  ::execute-register-timer
+  (fn [{:keys [db]} [_ {:keys [name] :as timer}]]
+    {:db (assoc-in db [:timers name] timer)}))
+
+(re-frame/reg-event-fx
+  ::execute-remove-timer
+  (fn [{:keys [db]} [_ {:keys [name]}]]
+    (let [timer (get-in db [:timers name])]
+      (when-not (nil? timer)
+        (destroy-timer timer))
+      {:db (update db :timers dissoc name)})))
+
+(re-frame/reg-event-fx
+  ::execute-remove-timers
+  (fn [{:keys [db]} [_]]
+    (let [timers-to-remove (->> (get-in db [:timers])
+                               (map second))]
+      (doseq [timer timers-to-remove]
+        (destroy-timer timer))
+      {:db       (assoc db :timers {})})))
+
 (re-frame/reg-event-fx
   ::register-flow
   (fn [{:keys [db]} [_ flow]]
