@@ -10,7 +10,8 @@
     [webchange.common.matrix :refer [matrix-objects-list]]
     [webchange.common.anim :refer [anim animations init-spine-player]]
     [webchange.common.events :as ce]
-    [webchange.common.core :refer [with-origin-offset]]
+    [webchange.common.core :refer [with-parent-origin
+                                   with-origin-offset]]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]
@@ -152,7 +153,9 @@
 (defn transparent
   [scene-id name object]
   [:> Group (object-params object)
-   [:> Rect (rect-params scene-id name object)]])
+   [:> Rect (-> (rect-params scene-id name object)
+                (with-parent-origin object "left-top")
+                with-origin-offset)]])
 
 (defn update-group-rect
   [group rect]
@@ -203,7 +206,7 @@
                (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %]))
                (assoc :start false))]
      [:> Rect (-> (rect-params scene-id name object)
-                  (assoc :origin {:type "center-bottom"})
+                  (with-parent-origin object "center-bottom")
                   with-origin-offset)]]))
 
 (defn text

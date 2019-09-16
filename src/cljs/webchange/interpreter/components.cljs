@@ -23,7 +23,8 @@
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
-    [webchange.common.core :refer [prepare-colors-palette-params
+    [webchange.common.core :refer [prepare-anim-rect-params
+                                   prepare-colors-palette-params
                                    prepare-group-params
                                    prepare-painting-area-params
                                    prepare-animated-svg-path-params
@@ -348,16 +349,12 @@
 (defn animation
   [scene-id name object]
   (let [params (prepare-group-params object)
+        rect-params (prepare-anim-rect-params object)
         animation-name (or (:scene-name object) (:name object))]
     [:> Group params
      [anim (-> object
                (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %])))]
-     [:> Rect (-> {:width (:width params)
-                   :height (:height params)
-                   :opacity 0
-                   :origin {:type "center-top"}
-                   :scale-y -1}
-                  with-origin-offset)]]))
+     [:> Rect rect-params]]))
 
 (defn carousel-object [scene-id name object]
   [:> Group (prepare-group-params object)
