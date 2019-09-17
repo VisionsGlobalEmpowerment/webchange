@@ -1,0 +1,29 @@
+{:assets        [{:url "/raw/img/ui/hand.png" :size 1 :type "image"}
+                 {:url "/raw/audio/english/l1/a1/vaca.m4a" :size 2 :type "audio" :alias "vaca voice"}]
+ :objects       {:common-pointer {:type   "transparent"
+                                  :x      100 :y 100
+                                  :width  117 :height 135
+                                  :src    "/raw/img/ui/hand.png"
+                                  :origin {:type "center-top"}
+                                  :states {:hidden  {:type "transparent"}
+                                           :visible {:type "image"}}}}
+ :scene-objects [["common-pointer"]]
+ :actions       {:common-click-reminder {:type "sequence-data"
+                                         :data [{:type   "state"
+                                                 :target "common-pointer"
+                                                 :id     "visible"}
+                                                {:type "empty"
+                                                 :duration 1000}
+                                                {:type     "animation-sequence"
+                                                 :target   "senoravaca"
+                                                 :track    1
+                                                 :offset   20.28
+                                                 :audio    "/raw/audio/english/l1/a1/vaca.m4a"
+                                                 :data     [{:start 20.363 :end 20.98 :duration 0.617 :anim "talk"}]
+                                                 :start    20.28
+                                                 :duration 0.813}
+                                                {:type "empty"
+                                                 :duration 1000}
+                                                {:type   "state"
+                                                 :target "common-pointer"
+                                                 :id     "hidden"}]}}}

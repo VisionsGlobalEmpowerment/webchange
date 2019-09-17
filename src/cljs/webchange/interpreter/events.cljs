@@ -1,14 +1,15 @@
 (ns webchange.interpreter.events
   (:require
-    [re-frame.core :as re-frame]
+    [ajax.core :refer [json-request-format json-response-format]]
     [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
-    [webchange.interpreter.core :as i]
-    [webchange.interpreter.executor :as e]
+    [re-frame.core :as re-frame]
+    [webchange.common.anim :refer [start-animation]]
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
+    [webchange.interpreter.core :as i]
+    [webchange.interpreter.executor :as e]
+    [webchange.interpreter.utils :refer [merge-scene-data]]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.common.anim :refer [start-animation]]
-    [ajax.core :refer [json-request-format json-response-format]]
     ))
 
 (re-frame/reg-fx
@@ -641,12 +642,23 @@
   (fn [{:keys [db]} [_ course]]
     {:db (assoc db :course-data course)}))
 
+(defn merge-with-templates
+  [db scene]
+  (let [scene-templates-names (:templates scene)
+        scene-has-templates? (> (count scene-templates-names) 0)]
+    (if scene-has-templates?
+      (let [course-templates (get-in db [:course-data :templates])
+            templates (map #(->> % keyword (get course-templates)) scene-templates-names)]
+        (merge-scene-data scene templates))
+      scene)))
+
 (re-frame/reg-event-fx
   ::set-scene
   (fn [{:keys [db]} [_ scene-id scene]]
-    (let [current-scene (:current-scene db)]
-      {:db (cond-> (assoc-in db [:scenes scene-id] scene)
-                   (= current-scene scene-id) (assoc :current-scene-data scene))})))
+    (let [current-scene (:current-scene db)
+          merged-scene (merge-with-templates db scene)]
+      {:db (cond-> (assoc-in db [:scenes scene-id] merged-scene)
+                   (= current-scene scene-id) (assoc :current-scene-data merged-scene))})))
 
 (re-frame/reg-event-fx
   ::store-scene
@@ -810,7 +822,13 @@
           show-navigation? (and (not activity-started?) (not= current-activity current-scene))]
       (i/kill-transition! :navigation)
       (if show-navigation?
-        {:dispatch [::execute-transition {:transition-id (:transition exit) :transition-tag :navigation :to {:brightness 0.25 :duration 1 :yoyo true :easing "strong-ease-in"} :from {:brightness 0}}]}))))
+        {:dispatch [::execute-transition {:transition-id  (:transition exit)
+                                          :transition-tag :navigation
+                                          :to             {:brightness 0.25
+                                                           :duration   1
+                                                           :yoyo       true
+                                                           :easing     "strong-ease-in"}
+                                          :from           {:brightness 0}}]}))))
 
 (re-frame/reg-event-fx
   ::disable-navigation

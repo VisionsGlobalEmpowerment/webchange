@@ -150,8 +150,10 @@
     (get-action id db {}))
   ([id db prev]
    (let [action (get-in db [:scenes (:current-scene db) :actions (keyword id)])]
-     (-> action
-         (with-prev prev)))))
+     (if-not (nil? action)
+       (-> action
+           (with-prev prev))
+       (-> (str "Action '" id "' was not found") js/Error. throw)))))
 
 (defn flow-registered?
   [flows tag]
@@ -178,7 +180,7 @@
   (fn-traced [{:keys [db]} {:keys [type return-immediately] :as action}]
     (if (can-execute? db action)
       (let [handler (get @executors (keyword type))]
-        (when (nil? handler) (throw (js/Error. "Action is not defined")))
+        (when (nil? handler) (throw (js/Error. "Action handler is not defined")))
         (if return-immediately
           {:dispatch-n (list (handler {:db db :action action})
                              (success-event action))}
