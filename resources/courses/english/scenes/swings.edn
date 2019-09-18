@@ -452,8 +452,10 @@
 
 
                  :start-activity             {:type "start-activity" :id "swings"}
-                 :finish-activity            {:type "finish-activity" :id "swings"}}
+                 :finish-activity            {:type "finish-activity" :id "swings"}
+                 :stop-activity              {:type "stop-activity" :id "swings"}}
 
- :triggers      {:start {:on "start" :action "start"}}
+ :triggers      {:start {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}
