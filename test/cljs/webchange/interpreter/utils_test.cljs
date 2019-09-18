@@ -1,7 +1,8 @@
 (ns webchange.interpreter.utils-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.interpreter.utils :refer [merge-scene-data]]))
+    [webchange.interpreter.utils :refer [add-scene-tag
+                                         merge-scene-data]]))
 
 (deftest merge-scene-actions
   (let [main-scene {:actions {:action-1 {:type        "action"
@@ -96,3 +97,21 @@
         scene-1 {:scene-objects [["object-3"]]}
         scene-2 {:scene-objects [["object-4"]]}]
     (is (= (merge-scene-data main-scene [scene-1 scene-2]) {:scene-objects [["background"] ["object-1" "object-2"] ["object-3"] ["object-4"]]}))))
+
+(deftest add-scene-tag
+  (let [scene {:assets        [{:url "/raw/img/img1.png" :size 1 :type "image"}
+                               {:url "/raw/audio/audio1.m4a" :size 2 :type "audio" :alias "vaca voice"}]
+               :objects       {:object-1 {:type  "image"}
+                               :object-2 {:type  "text"}}
+               :scene-objects [["object-1" "object-2"]]
+               :actions       {:action-1 {:type "action"}
+                               :action-2 {:type "action"}}}
+
+        tag "tagged"]
+    (is (= (add-scene-tag scene tag) {:assets        [{:url "/raw/img/img1.png" :size 1 :type "image" :tagged? true}
+                                                      {:url "/raw/audio/audio1.m4a" :size 2 :type "audio" :alias "vaca voice" :tagged? true}]
+                                      :objects       {:object-1 {:type  "image" :tagged? true}
+                                                      :object-2 {:type  "text" :tagged? true}}
+                                      :scene-objects [["object-1" "object-2"]]
+                                      :actions       {:action-1 {:type "action" :tagged? true}
+                                                      :action-2 {:type "action" :tagged? true}}}))))

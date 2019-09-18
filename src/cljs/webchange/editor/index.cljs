@@ -110,11 +110,12 @@
 
 (defn rect-params
   [scene-id name object]
-  {:width        (:width object)
-   :height       (:height object)
-   :stroke       "green"
-   :stroke-width 4
-   :on-click     (fn [e] (transform scene-id name (-> e .-target .getParent)))})
+  (let [template? (:template? object)]
+    {:width        (:width object)
+     :height       (:height object)
+     :stroke       (if template? "orange" "green")
+     :stroke-width 4
+     :on-click     (if template? #() (fn [e] (transform scene-id name (-> e .-target .getParent))))}))
 
 (defn path-params
   [object]

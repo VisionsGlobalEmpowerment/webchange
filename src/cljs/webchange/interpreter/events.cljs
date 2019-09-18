@@ -8,7 +8,8 @@
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
     [webchange.interpreter.executor :as e]
-    [webchange.interpreter.utils :refer [merge-scene-data]]
+    [webchange.interpreter.utils :refer [add-scene-tag
+                                         merge-scene-data]]
     [webchange.interpreter.variables.events :as vars.events]
     ))
 
@@ -649,7 +650,7 @@
     (if scene-has-templates?
       (let [course-templates (get-in db [:course-data :templates])
             templates (map #(->> % keyword (get course-templates)) scene-templates-names)]
-        (merge-scene-data scene templates))
+        (merge-scene-data scene (map #(add-scene-tag % "template") templates)))
       scene)))
 
 (re-frame/reg-event-fx
