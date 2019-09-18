@@ -12,9 +12,8 @@
   [course-name]
   (if (contains? hardcoded course-name)
     (scene/get-templates course-name)
-    (throw
-      (UnsupportedOperationException.
-        "Getting templates for not-hardcoded courses is not implemented"))))
+    {} ;; "Getting templates for not-hardcoded courses is not implemented"
+    ))
 
 (defn get-course-data
   [course-name]

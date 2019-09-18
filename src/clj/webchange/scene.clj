@@ -9,8 +9,14 @@
 
 (defn get-dir-files
   [path]
-  (->> path io/resource io/file file-seq (filter #(.isFile %)) (mapv (fn [file] {:filename (.getName file)
-                                                                                 :path     (str file)}))))
+  (let [dir-content (->> path io/resource io/file)]
+    (if-not (nil? dir-content)
+      (->> dir-content
+           file-seq
+           (filter #(.isFile %))
+           (mapv (fn [file] {:filename (.getName file)
+                             :path     (str file)})))
+      [])))
 
 (defn course-path
   [course-name]
