@@ -42,4 +42,7 @@
        [sa/GridRow {}
         [sa/GridColumn {:text-align "center"}
            [sa/FormDropdown {:label "Course " :options courses :inline true :default-value "test"
-                             :on-change #(re-frame/dispatch [::ie/set-current-course (.-value %2)])}]]]]]]]])
+                             :on-change #(re-frame/dispatch [::ie/set-current-course (.-value %2)])}]]]
+       [sa/GridRow {}
+        [sa/GridColumn {:text-align "center"}
+         [:a {:href "/courses/english/editor"} "Editor Demo"]]]]]]]])
