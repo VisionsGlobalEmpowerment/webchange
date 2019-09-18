@@ -10,17 +10,17 @@
                 {:background   {:type "background", :src "/raw/img/casa/background.jpg"},
                  :vera         {:type  "animation" :x 1128 :y 960 :name "vera" :anim "idle" :speed 0.3
                                 :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
-                 :senora-vaca  {:type  "animation" :x 655 :y 960 :name "senoravaca" :anim "idle" :speed 0.3 :skin "vaca"
-                                :width 351 :height 717 :scale {:x 1 :y 1} :start true
+                 :senora-vaca  {:type    "animation" :x 655 :y 960 :name "senoravaca" :anim "idle" :speed 0.3 :skin "vaca"
+                                :width   351 :height 717 :scale {:x 1 :y 1} :start true
                                 :actions {:click {:type "action" :id "restart" :on "click"}}}
 
-                 :mari {:type    "animation" :scene-name "mari" :name "mari" :anim "idle"
-                        :start   true :speed 0.35 :transition "mari"
-                        :x       2200 :y 311 :width 473 :height 511 :anim-offset {:x 0 :y -150}
-                        :scale-y 0.5 :scale-x 0.5}
+                 :mari         {:type    "animation" :scene-name "mari" :name "mari" :anim "idle"
+                                :start   true :speed 0.35 :transition "mari"
+                                :x       2200 :y 311 :width 473 :height 511 :anim-offset {:x 0 :y -150}
+                                :scale-y 0.5 :scale-x 0.5}
 
-                 :door  {:type    "image" :x 1146 :y 42 :width 732 :height 810 :src "/raw/img/casa/door.png"
-                         :filter "brighten" :transition "door"}
+                 :door         {:type   "image" :x 1146 :y 42 :width 732 :height 810 :src "/raw/img/casa/door.png"
+                                :filter "brighten" :transition "door"}
 
                  :door-trigger {:type    "transparent" :x 1146 :y 42 :width 732 :height 810
                                 :actions {:click {:type "scene", :scene-id "map", :on "click"}}}
@@ -47,6 +47,7 @@
                                 :actions    {:click {:type "action" :id "click-on-box3" :on "click"}}}
 
                  },
+ :templates     ["click-pointer"],
  :scene-objects [["background" "door"] ["vera" "senora-vaca" "mari"] ["door-trigger"] ["box1" "box2" "box3"]],
  :actions
                 {:senora-vaca-audio-1              {:type     "animation-sequence",
@@ -122,7 +123,8 @@
                                                            "switch-box-animations-idle"
                                                            "senora-vaca-audio-2"
                                                            "set-current-box1"
-                                                           ]},
+                                                           "set-reminder-position-1"
+                                                           "set-reminder-on"]},
 
                  :set-current-box1                 {:type "parallel"
                                                     :data [{:type "set-variable" :var-name "current-box" :var-value "box1"}
@@ -154,27 +156,46 @@
 
                  :first-word                       {:type       "sequence"
                                                     :data       ["show-first-box-word"
+                                                                 "set-reminder-off"
                                                                  "introduce-word"
                                                                  "bye-current-box"
                                                                  "set-current-box2"
-                                                                 "senora-vaca-audio-touch-second-box"]
+                                                                 "senora-vaca-audio-touch-second-box"
+                                                                 "set-reminder-position-2"
+                                                                 "set-reminder-on"]
                                                     :unique-tag "box"}
 
                  :second-word                      {:type       "sequence"
-                                                    :data       ["show-second-box-word"
+                                                    :data       ["set-reminder-off"
+                                                                 "show-second-box-word"
                                                                  "introduce-word"
                                                                  "bye-current-box"
                                                                  "set-current-box3"
-                                                                 "senora-vaca-audio-touch-third-box"]
+                                                                 "senora-vaca-audio-touch-third-box"
+                                                                 "set-reminder-position-3"
+                                                                 "set-reminder-on"]
                                                     :unique-tag "box"}
 
                  :third-word                       {:type       "sequence"
-                                                    :data       ["show-third-box-word"
+                                                    :data       ["set-reminder-off"
+                                                                 "show-third-box-word"
                                                                  "introduce-word"
                                                                  "bye-current-box"
                                                                  "finish-activity"
                                                                  "mari-finish"]
                                                     :unique-tag "box"}
+
+                 :set-reminder-position-1          {:type "sequence-data"
+                                                    :data [{:type "set-variable" :var-name "reminder-position-x" :var-value 400}
+                                                           {:type "set-variable" :var-name "reminder-position-y" :var-value 190}]}
+
+                 :set-reminder-position-2          {:type "sequence-data"
+                                                    :data [{:type "set-variable" :var-name "reminder-position-x" :var-value 850}
+                                                           {:type "set-variable" :var-name "reminder-position-y" :var-value 190}]}
+
+                 :set-reminder-position-3          {:type "sequence-data"
+                                                    :data [{:type "set-variable" :var-name "reminder-position-x" :var-value 1300}
+                                                           {:type "set-variable" :var-name "reminder-position-y" :var-value 190}]}
 
                  :show-first-box-word              {:type "parallel"
                                                     :data [{:type "animation" :target "box1" :id "wood" :loop false}
@@ -292,41 +313,41 @@
                                                     :variables   ["item-1" "item-2" "item-3"]
                                                     :from        "concepts"}
 
-                 :mari-finish {:type "sequence-data",
-                               :data
-                                     [{:type "transition",
-                                       :transition-id "mari",
-                                       :to {:x 1403, :y 657, :duration 1.3}}
-                                      {:type "animation-sequence",
-                                       :target "mari",
-                                       :track 1,
-                                       :offset 0.825,
-                                       :audio "/raw/audio/english/l1/a1/mari_ending.m4a",
-                                       :data
-                                       [{:start 0.986, :end 2.586, :duration 1.6, :anim "talk"}
-                                        {:start 3.226, :end 6.039, :duration 2.813, :anim "talk"}
-                                        {:start 6.825, :end 9.412, :duration 2.587, :anim "talk"}
-                                        {:start 9.985, :end 15.117, :duration 5.132, :anim "talk"}
-                                        {:start 15.877, :end 16.77, :duration 0.893, :anim "talk"}
-                                        {:start 17.117, :end 20.356, :duration 3.239, :anim "talk"}],
-                                       :start 0.825,
-                                       :duration 19.811}
-                                      {:type "set-variable", :var-name "restart", :var-value true}]}
+                 :mari-finish                      {:type "sequence-data",
+                                                    :data
+                                                          [{:type          "transition",
+                                                            :transition-id "mari",
+                                                            :to            {:x 1403, :y 657, :duration 1.3}}
+                                                           {:type     "animation-sequence",
+                                                            :target   "mari",
+                                                            :track    1,
+                                                            :offset   0.825,
+                                                            :audio    "/raw/audio/english/l1/a1/mari_ending.m4a",
+                                                            :data
+                                                                      [{:start 0.986, :end 2.586, :duration 1.6, :anim "talk"}
+                                                                       {:start 3.226, :end 6.039, :duration 2.813, :anim "talk"}
+                                                                       {:start 6.825, :end 9.412, :duration 2.587, :anim "talk"}
+                                                                       {:start 9.985, :end 15.117, :duration 5.132, :anim "talk"}
+                                                                       {:start 15.877, :end 16.77, :duration 0.893, :anim "talk"}
+                                                                       {:start 17.117, :end 20.356, :duration 3.239, :anim "talk"}],
+                                                            :start    0.825,
+                                                            :duration 19.811}
+                                                           {:type "set-variable", :var-name "restart", :var-value true}]}
 
-                 :restart {:type     "test-value"
-                           :value1   true
-                           :from-var [{:var-name "restart" :action-property "value2"}]
-                           :success  {:type "sequence-data"
-                                      :data [{:type "set-variable" :var-name "restart" :var-value false}
-                                             {:type "transition",
-                                              :transition-id "mari",
-                                              :to {:x 2200 :y 311, :duration 1.3}}
-                                             {:type "clear-vars"}
-                                             {:type "parallel"
-                                              :data [{:type "state" :target "box1" :id "default"}
-                                                     {:type "state" :target "box2" :id "default"}
-                                                     {:type "state" :target "box3" :id "default"}]}
-                                             {:type "action" :id "intro"}]}}
+                 :restart                          {:type     "test-value"
+                                                    :value1   true
+                                                    :from-var [{:var-name "restart" :action-property "value2"}]
+                                                    :success  {:type "sequence-data"
+                                                               :data [{:type "set-variable" :var-name "restart" :var-value false}
+                                                                      {:type          "transition",
+                                                                       :transition-id "mari",
+                                                                       :to            {:x 2200 :y 311, :duration 1.3}}
+                                                                      {:type "clear-vars"}
+                                                                      {:type "parallel"
+                                                                       :data [{:type "state" :target "box1" :id "default"}
+                                                                              {:type "state" :target "box2" :id "default"}
+                                                                              {:type "state" :target "box3" :id "default"}]}
+                                                                      {:type "action" :id "intro"}]}}
 
                  :empty-small                      {:type "empty" :duration 500}
                  :empty-big                        {:type "empty" :duration 1000}

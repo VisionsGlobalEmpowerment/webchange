@@ -1,29 +1,39 @@
-{:assets        [{:url "/raw/img/ui/hand.png" :size 1 :type "image"}
-                 {:url "/raw/audio/english/l1/a1/vaca.m4a" :size 2 :type "audio" :alias "vaca voice"}]
+{:assets        [{:url "/raw/img/ui/hand.png" :size 1 :type "image"}]
  :objects       {:common-pointer {:type   "transparent"
-                                  :x      100 :y 100
+                                  :x      300 :y 300
                                   :width  117 :height 135
                                   :src    "/raw/img/ui/hand.png"
-                                  :origin {:type "center-top"}
                                   :states {:hidden  {:type "transparent"}
                                            :visible {:type "image"}}}}
  :scene-objects [["common-pointer"]]
- :actions       {:common-click-reminder {:type "sequence-data"
-                                         :data [{:type   "state"
-                                                 :target "common-pointer"
-                                                 :id     "visible"}
-                                                {:type "empty"
-                                                 :duration 1000}
-                                                {:type     "animation-sequence"
-                                                 :target   "senoravaca"
-                                                 :track    1
-                                                 :offset   20.28
-                                                 :audio    "/raw/audio/english/l1/a1/vaca.m4a"
-                                                 :data     [{:start 20.363 :end 20.98 :duration 0.617 :anim "talk"}]
-                                                 :start    20.28
-                                                 :duration 0.813}
-                                                {:type "empty"
-                                                 :duration 1000}
-                                                {:type   "state"
-                                                 :target "common-pointer"
-                                                 :id     "hidden"}]}}}
+ :actions       {:set-reminder-on     {:type     "set-interval"
+                                       :id       "reminder"
+                                       :interval 7000
+                                       :action   "show-click-reminder"}
+                 :set-reminder-off    {:type "remove-interval"
+                                       :id   "reminder"}
+                 :show-click-reminder {:type "sequence-data"
+                                       :data [{:type      "set-attribute"
+                                               :target    "common-pointer"
+                                               :attr-name "x"
+                                               :from-var  [{:var-name "reminder-position-x" :action-property "attr-value"}]}
+                                              {:type      "set-attribute"
+                                               :target    "common-pointer"
+                                               :attr-name "y"
+                                               :from-var  [{:var-name "reminder-position-y" :action-property "attr-value"}]}
+                                              {:type   "state"
+                                               :target "common-pointer"
+                                               :id     "visible"}
+                                              {:type     "empty"
+                                               :duration 3000}
+                                              {:type   "state"
+                                               :target "common-pointer"
+                                               :id     "hidden"}
+                                              {:type       "set-attribute"
+                                               :target     "common-pointer"
+                                               :attr-name  "x"
+                                               :attr-value 0}
+                                              {:type       "set-attribute"
+                                               :target     "common-pointer"
+                                               :attr-name  "y"
+                                               :attr-value 0}]}}}

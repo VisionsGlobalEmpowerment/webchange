@@ -894,16 +894,18 @@
 
 (re-frame/reg-event-fx
   ::execute-set-interval
-  (fn [{:keys [db]} [_ {:keys [id interval action]}]]
+  (fn [{:keys [db]} [_ {:keys [id interval action] :as main-action}]]
     (let [interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action (ce/get-action action db)])) interval)]
-      {:dispatch [::ce/execute-register-timer {:name id
-                                               :id   interval-id
-                                               :type "interval"}]})))
+      {:dispatch-n (list [::ce/execute-register-timer {:name id
+                                                       :id   interval-id
+                                                       :type "interval"}]
+                         (ce/success-event main-action))})))
 
 (re-frame/reg-event-fx
   ::execute-remove-interval
-  (fn [{:keys [db]} [_ {:keys [id]}]]
-    {:dispatch [::ce/execute-remove-timer {:name id}]}))
+  (fn [{:keys [db]} [_ {:keys [id] :as action}]]
+    {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
+                       (ce/success-event action))}))
 
 (re-frame/reg-event-db
   ::reset-activity-action
