@@ -38,12 +38,15 @@
 
 (defn prepare-actions
   [{:keys [actions] :as object}]
-  (->> actions
-       (map second)
-       (map #(assoc % :var (:var object)))
-       (map prepare-action)
-       (into {})
-       (merge object)))
+  (let [has-actions? (->> actions keys nil? not)]
+    (if has-actions?
+      (->> actions
+           (map second)
+           (map #(assoc % :var (:var object)))
+           (map prepare-action)
+           (into {})
+           (merge object))
+      (assoc object :listening false))))
 
 (defn with-origin-offset
   [{:keys [width height origin] :as object}]

@@ -60,10 +60,11 @@
                                (let [skeleton-renderer (get-renderer context)]
                                  (set! (.-triangleRendering skeleton-renderer) meshes)
                                  (.draw skeleton-renderer skeleton)))
-                 :ref        (fn [ref] (if ref
-                                         (do
-                                           (when start (start-animation ref))
-                                           (on-mount {:animation-state animation-state :skeleton skeleton :shape ref}))
+                 :ref        (fn [ref] (when ref
+                                         (.setStrokeHitEnabled ref false)
+                                         (.shadowForStrokeEnabled ref false)
+                                         (when start (start-animation ref))
+                                         (on-mount {:animation-state animation-state :skeleton skeleton :shape ref})
                                          ))}])))
 
 (defn init-spine-player [element animation]
