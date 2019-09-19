@@ -16,6 +16,8 @@
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
     [webchange.common.slider :refer [slider]]
+    [webchange.interpreter.components-store :as cs]
+    [webchange.interpreter.components.react-wrapper :refer [component-react-wrapper]]
     [webchange.interpreter.components.video :refer [video]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
@@ -270,7 +272,6 @@
 (declare placeholder)
 (declare image)
 (declare animation)
-(declare text)
 (declare carousel-object)
 (declare get-painting-area)
 (declare get-colors-palette)
@@ -281,7 +282,11 @@
    (draw-object scene-id name {}))
   ([scene-id name props]
    (let [o (merge @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]) props)
-         type (keyword (:type o))]
+         type (keyword (:type o))
+         component-api {:get-component cs/get-component
+                        :create-component cs/create-component
+                        :update-component cs/update-component
+                        :remove-component cs/remove-component}]
      (case type
        :background [background scene-id name o]
        :image [image scene-id name o]
@@ -290,7 +295,7 @@
        :group [group scene-id name o]
        :placeholder [placeholder scene-id name o]
        :animation [animation scene-id name o]
-       :text [text scene-id name o]
+       :text [component-react-wrapper scene-id name o component-api]
        :carousel [carousel-object scene-id name o]
        :painting-area (get-painting-area scene-id name o)
        :copybook [copybook o]
@@ -308,14 +313,6 @@
                                (contains? object :image-src) (assoc :src (get item (-> object :image-src keyword)))
                                (contains? object :image-width) (assoc :width (get item (-> object :image-width keyword)))
                                (contains? object :image-height) (assoc :height (get item (-> object :image-height keyword))))])
-
-(defn text
-  [scene-id name object]
-  [:> Group (prepare-group-params object)
-    (if (:chunks object)
-      (let [on-mount #(re-frame/dispatch [::ie/register-text %])]
-        [chunked-text scene-id name (assoc object :on-mount on-mount)])
-      [:> Text (dissoc object :x :y)])])
 
 (defn get-painting-area
   [_ _ params]
