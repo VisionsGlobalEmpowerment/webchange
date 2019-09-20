@@ -891,7 +891,7 @@
                  :renew-current-letter
                                  {:type "sequence-data"
                                   :data [{:type      "lesson-var-provider"
-                                          :from      "concepts"
+                                          :from      "concepts-single"
                                           :from-var  [{:template "concept-round-%" :action-property "provider-id" :var-name "current-round"}
                                                       {:action-property "exclude-property-values" :var-name "exclude-concepts"}]
                                           :variables ["current-concept"]

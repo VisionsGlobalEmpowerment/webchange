@@ -112,7 +112,8 @@
                                           :assessment-1 "assessment3"}}
                     {:id 11 :lesson-sets {:concepts     "ls11"
                                           :assessment-1 "assessment3"}}
-                    {:id 12 :lesson-sets {:concepts     "ls12"
+                    {:id 12 :lesson-sets {:concepts-single "l2-ls1-1"
+                                          :concepts-group "l2-ls1-3"
                                           :assessment-1 "assessment4"}}]
 
  :locations        {:home [{:level 1 :scene :home}

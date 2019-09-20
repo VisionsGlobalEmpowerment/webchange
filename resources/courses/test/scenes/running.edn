@@ -199,7 +199,7 @@
                                                    :shuffled    false
                                                    :limit       3
                                                    :repeat      4
-                                                   :from        "concepts"}
+                                                   :from        "concepts-group"}
                                                   {:type "copy-variable" :var-name "item-1-1" :from "item-1"}
                                                   {:type "copy-variable" :var-name "item-1-2" :from "item-1"}
                                                   {:type "copy-variable" :var-name "item-1-3" :from "item-1"}]}
