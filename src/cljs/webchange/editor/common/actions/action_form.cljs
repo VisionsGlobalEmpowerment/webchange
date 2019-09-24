@@ -182,6 +182,10 @@
                   (swap! input-values assoc :duration duration)
                   (swap! props assoc :duration duration))]
 
+               [na/button {:content  "Convert to talk animation"
+                           :on-click #(do (re-frame/dispatch [::actions.events/edit-selected-action @props])
+                                          (re-frame/dispatch [::events/edit-selected-scene-action])
+                                          (re-frame/dispatch [::events/convert-to-talk-animation @props]))}]
                ]))
 
 (defn- scene-panel

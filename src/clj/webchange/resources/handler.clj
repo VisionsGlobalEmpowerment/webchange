@@ -1,5 +1,7 @@
 (ns webchange.resources.handler
-  (:require [compojure.core :refer [GET defroutes]]
+  (:require [clojure.edn :as edn]
+            [compojure.core :refer [GET defroutes]]
+            [ring.middleware.params :refer [wrap-params]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
             [webchange.resources.core :as core]
             [webchange.common.handler :refer [handle]]))
@@ -15,12 +17,15 @@
       handle))
 
 (defn handle-parse-audio-animation
-  []
-  (-> [true (get-talking-animation "/raw/audio/english/l1/a3/vera.wav" 1.5 3.0)]
-      handle))
+  [request]
+  (let [{:strs [file start duration]} (:query-params request)]
+    (-> [true (get-talking-animation file
+                                     (edn/read-string start)
+                                     (edn/read-string duration))]
+        handle)))
 
 (defroutes resources-routes
            (GET "/api/resources/app" _ (handle-app-resources))
            (GET "/api/resources/level/:level-id" [level-id] (handle-level-resources level-id))
-           (GET "/api/resources/parse-audio-animation" _ (handle-parse-audio-animation)))
+           (GET "/api/resources/talking-animation" _ (wrap-params handle-parse-audio-animation)))
 

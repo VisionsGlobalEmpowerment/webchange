@@ -802,3 +802,43 @@
   ::show-current-scene-triggers
   (fn [{:keys [db]} _]
     {:dispatch [::set-main-content :triggers]}))
+
+(defn audio-action->talk-animation
+  [audio-action animations]
+  (let [description (:description audio-action)
+        animation-action {:type "animation-sequence"
+                          :track 1
+                          :offset (:start audio-action)
+                          :data animations}]
+    {:type "parallel"
+     :description description
+     :data [audio-action
+            animation-action]}))
+
+(re-frame/reg-event-fx
+  ::convert-to-talk-animation
+  (fn [{:keys [db]} [_ audio-action]]
+    {:db (assoc-in db [:loading :get-talk-animation] true)
+     :http-xhrio {:method          :get
+                  :uri             (str "/api/resources/talking-animation")
+                  :params          {:file     (:id audio-action)
+                                    :start    (:start audio-action)
+                                    :duration (:duration audio-action)}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::convert-to-talk-animation-success]
+                  :on-failure      [::convert-to-talk-animation-failure]}}))
+
+(re-frame/reg-event-fx
+  ::convert-to-talk-animation-success
+  (fn [{:keys [db]} [_ animations]]
+    (let [action-data (get-in db [:editor :action-form :data])
+          new-action (audio-action->talk-animation action-data animations)]
+      {:dispatch-n (list [:complete-request :get-talk-animation]
+                         [::actions.events/edit-selected-action new-action]
+                         [::edit-selected-scene-action])})))
+
+(re-frame/reg-event-fx
+  ::convert-to-talk-animation-failure
+  (fn [{:keys [db]} [_ _]]
+    {:dispatch-n (list [:complete-request :get-talk-animation])}))
