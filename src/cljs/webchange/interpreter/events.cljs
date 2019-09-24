@@ -84,6 +84,7 @@
 (re-frame/reg-fx
   :switch-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
+    (js/console.log "switch animation" action)
     (let [loop (if (contains? action :loop) (:loop action) true)]
       (.setAnimation (:animation-state state) track id loop))))
 

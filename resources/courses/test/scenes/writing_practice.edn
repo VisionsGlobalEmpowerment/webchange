@@ -52,7 +52,7 @@
                                          :scale-x    1
                                          :scale-y    1
                                          :rotation   0
-                                         :tool       "felt-tip"
+                                         :tool       "brush"
                                          :color      "#323232"
                                          :states     {:hidden  {:type "transparent"}
                                                       :visible {:type "painting-area"}}}
@@ -147,7 +147,6 @@
                                          :height   300
                                          :children ["concept-image" "concept-word"]}
                  :concept-image         {:type     "image"
-                                         :src      "/raw/img/elements/squirrel.png"
                                          :x        100
                                          :y        0
                                          :width    100
@@ -156,7 +155,7 @@
                                          :scale-y  2
                                          :rotation 0}
                  :concept-word          {:type           "text"
-                                         :text           "ardilla"
+                                         :text           ""
                                          :x              0
                                          :y              190
                                          :width          400
@@ -174,7 +173,8 @@
                  ["practice-canvas" "next-button" "mari"]]
  :actions       {:start                       {:type "sequence"
                                                :data ["start-activity"
-                                                      "clear-instruction"
+                                                      "renew-concept"
+                                                      "init-state"
                                                       "init-vars"
                                                       "init-stage-1"
                                                       "mari-voice-intro"
@@ -182,20 +182,39 @@
                                                       "mari-voice-go-next-practice"
                                                       "mari-go-wait"]}
 
-                 :stop                        {:type "sequence" :data ["stop-activity"]}
+                 :renew-concept            {:type        "lesson-var-provider"
+                                            :from        "concepts-single"
+                                            :provider-id "concepts"
+                                            :variables   ["current-concept"]}
 
                  :start-activity              {:type "start-activity" :id "writing-practice"}
-
                  :stop-activity               {:type "stop-activity" :id "writing-practice"}
+                 :finish-activity             {:type "sequence-data"
+                                               :dat [{:type "finish-activity" :id "writing-practice"}
+                                                     {:type "scene" :scene-id "library"}]}
 
-                 :clear-instruction           {:type "remove-flows" :flow-tag "instruction"}
+                 :init-state {:type "parallel"
+                              :data [{:type "set-attribute" :target "concept-image" :attr-name "src"
+                                      :from-var [{:var-name        "current-concept"
+                                                  :var-property    "image-src"
+                                                  :action-property "attr-value"}]}
+                                     {:type "set-attribute" :target "concept-word" :attr-name "text"
+                                      :from-var [{:var-name        "current-concept"
+                                                  :var-property    "concept-name"
+                                                  :action-property "attr-value"}]}]}
 
                  :init-vars                   {:type "parallel"
                                                :data [{:type "set-variable" :var-name "current-stage" :var-value 1}
                                                       {:type "set-variable" :var-name "current-page" :var-value 1}
                                                       {:type "calc" :var-name "pages-number" :operation "div-ceil" :value-1 30 :value-2 13}
-                                                      {:type "set-variable" :var-name "letter-path" :var-value "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90"}
-                                                      {:type "set-variable" :var-name "letter-tutorial-path" :var-value "M 105 50 A 40,40 0 1,0 105,100 M 105 35 L 105 115 M 70 15 A 60,60 0 0,0 10,75 l 5 0 l -5 10 l -5 -10 l 5 0 M 130 35 L 130 100 l 5 0 l -5 10 l -5 -10 l 5 0 M 85 2 l 0 20 M 125 5 a 5 5 0 1 1 10 5 l -10 13 l 10 0"}]}
+                                                      {:type "set-variable" :var-name "letter-path"
+                                                       :from-var [{:var-name        "current-concept"
+                                                                   :var-property    "letter-path"
+                                                                   :action-property "var-value"}]}
+                                                      {:type "set-variable" :var-name "letter-tutorial-path"
+                                                       :from-var [{:var-name        "current-concept"
+                                                                   :var-property    "letter-tutorial-path"
+                                                                   :action-property "var-value"}]}]}
 
                  :init-stage-1                {:type "parallel"
                                                :data [{:type     "set-attribute" :target "letter-trace" :attr-name "data"
@@ -227,7 +246,7 @@
                  :check-stage                 {:type     "test-var-scalar"
                                                :var-name "current-stage"
                                                :value    2
-                                               :success  "stop"
+                                               :success  "finish-activity"
                                                :fail     "go-next-stage"}
 
                  :go-next-page                {:type "sequence-data"
@@ -315,6 +334,6 @@
 
                  }
  :triggers      {:start {:on "start" :action "start"}
-                 :stop  {:on "back" :action "stop"}}
+                 :stop  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
-                 :prev      ""}}
+                 :prev      "library"}}

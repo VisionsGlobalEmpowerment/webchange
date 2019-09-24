@@ -6,6 +6,7 @@
                  {:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}
                  {:url "/raw/audio/l1/a8/Mari_L1_A8.m4a", :size 2, :type "audio" :alias "mari"}
                  {:url "/raw/audio/l1/a8/GameVoice.m4a", :size 2, :type "audio" :alias "game voice"}
+                 {:url "/raw/audio/l2/a8/L2_A8_Mari.m4a" :type "audio"}
 
                  {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
                  {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
@@ -137,7 +138,6 @@
  :scene-objects [["background"] ["group1" "group2" "group3"] ["vera" "mari"]],
  :actions       {:start                   {:type "sequence"
                                            :data ["start-activity"
-                                                  "clear-instruction"
                                                   "init-slots"
                                                   "init-vera-position"
                                                   "init-audio-correct"
@@ -145,20 +145,25 @@
                                                   "renew-words"
                                                   "mari-welcome-audio"
                                                   "renew-current-concept"
-                                                  "voice-high-var"
+                                                  "current-concept-sound-x3"
                                                   ]}
 
-                 :start-activity          {:type "start-activity" :id "cycling"}
-
-                 :stop-activity           {:type "stop-activity" :id "cycling"}
-
+                 :start-activity          {:type "start-activity" :id "cycling-letters"}
+                 :stop-activity           {:type "stop-activity" :id "cycling-letters"}
                  :finish-activity         {:type "sequence-data"
-                                           :data [{:type "finish-activity" :id "cycling"}
+                                           :data [{:type "finish-activity" :id "cycling-letters"}
                                                   {:type "scene" :scene-id "stadium"}]}
 
-                 :clear-instruction       {:type "remove-flows" :flow-tag "instruction"}
-
-                 :voice-high-var          {:type "action" :from-var [{:var-name "current-concept" :var-property "game-voice-action"}]}
+                 :current-concept-sound-x3 {:type        "sequence-data"
+                                            :data        [{:type "action",
+                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
+                                                          {:type "empty" :duration 500}
+                                                          {:type "action",
+                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
+                                                          {:type "empty" :duration 500}
+                                                          {:type "action",
+                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
+                                                          ]}
 
                  :start-background-music  {:type "audio" :id "background" :loop true}
 
@@ -174,7 +179,7 @@
                                            :shuffled    true
                                            :limit       3
                                            :repeat      4
-                                           :from        "concepts"}
+                                           :from        "concepts-group"}
 
                  :renew-current-concept   {:type "sequence-data"
                                            :data [{:type "parallel"
@@ -332,7 +337,7 @@
                                                                   {:type     "transition" :transition-id "vera"
                                                                    :from-var [{:var-name "current-line-pos" :action-property "to"}]}]}]}
                                                   {:type "action" :id "renew-current-concept"}
-                                                  {:type "action" :id "voice-high-var"}]}
+                                                  {:type "action" :id "current-concept-sound-x3"}]}
 
                  :init-audio-correct      {:type "parallel"
                                            :data [{:type "set-variable" :var-name "audio-correct1" :var-value "mari-audio-correct-1"}

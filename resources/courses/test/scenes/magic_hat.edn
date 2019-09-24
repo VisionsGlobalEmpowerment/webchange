@@ -120,23 +120,46 @@
  :scene-objects [["background"] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3"] ["mari"]]
  :actions       {:start                    {:type "sequence"
                                             :data ["start-activity"
-                                                   "clear-instruction"
+                                                   "renew-words"
                                                    "init-vars"
                                                    "intro"
                                                    "play"]}
 
-                 :stop                     {:type "sequence" :data ["stop-activity"]}
-
                  :start-activity           {:type "start-activity" :id "magic-hat"}
-
                  :stop-activity            {:type "stop-activity" :id "magic-hat"}
-
-                 :clear-instruction        {:type "remove-flows" :flow-tag "instruction"}
+                 :finish-activity         {:type "sequence-data"
+                                           :data [{:type "finish-activity" :id "magic-hat"}
+                                                  {:type "scene" :scene-id "library"}]}
 
                  :intro                    {:type "sequence"
                                             :data ["mari-voice-welcome"
                                                    "mari-flies-to-hat"
+                                                   "mari-init-wand"
                                                    "mari-voice-intro"]}
+
+                 :mari-init-wand {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
+
+                 :renew-words             {:type "sequence-data"
+                                           :data [{:type        "lesson-var-provider"
+                                                   :provider-id "words-set"
+                                                   :variables   ["item-1" "item-2" "item-3"]
+                                                   :limit       1
+                                                   :repeat      3
+                                                   :from        "concepts-single"}
+                                                  {:type        "lesson-var-provider"
+                                                   :provider-id "words-set"
+                                                   :variables   ["item-4" "item-5" "item-6" "item-7"
+                                                                 "item-8" "item-9" "item-10"]
+                                                   :shuffled    true
+                                                   :from        "concepts-all"}
+                                                  {:type      "vars-var-provider"
+                                                   :variables ["item-1" "item-2" "item-3"
+                                                               "item-4" "item-5" "item-6" "item-7"
+                                                               "item-8" "item-9" "item-10"]
+                                                   :from      ["item-1" "item-2" "item-3"
+                                                               "item-4" "item-5" "item-6" "item-7"
+                                                               "item-8" "item-9" "item-10"]
+                                                   :shuffled  true}]}
 
                  :play                     {:type "sequence"
                                             :data ["renew-current-concept"
@@ -156,10 +179,23 @@
                  ;; ---
 
                  :renew-current-concept    {:type "sequence-data"
-                                            :data [{:type "set-variable" :var-name "current-concept" :var-value {:letter "a" :skin "squirrel"}}
-                                                   {:type "set-variable" :var-name "pair-concept-1" :var-value {:letter "i" :skin "magnet"}}
-                                                   {:type "set-variable" :var-name "pair-concept-2" :var-value {:letter "o" :skin "bear"}}
-                                                   ;; ---
+                                            :data [{:type        "vars-var-provider"
+                                                    :provider-id "current-concept"
+                                                    :variables   ["current-concept"]
+                                                    :from        ["item-1" "item-2" "item-3"
+                                                                  "item-4" "item-5" "item-6" "item-7"
+                                                                  "item-8" "item-9" "item-10"]
+                                                    :shuffled    true
+                                                    :on-end      "finish-activity"}
+                                                   {:type      "vars-var-provider"
+                                                    :variables ["pair-concept-1" "pair-concept-2"]
+                                                    :from      ["item-1" "item-2" "item-3"
+                                                                "item-4" "item-5" "item-6" "item-7"
+                                                                "item-8" "item-9" "item-10"]
+                                                    :shuffled  true
+                                                    :unique    true
+                                                    :from-var  [{:var-name "current-concept" :var-property "concept-name"
+                                                                 :var-key  "concept-name" :action-property "exclude-property-values"}]}
                                                    {:type      "vars-var-provider"
                                                     :variables ["box1" "box2" "box3"]
                                                     :from      ["current-concept" "pair-concept-1" "pair-concept-2"]
@@ -190,8 +226,8 @@
                                                     :fail     {:type "empty" :duration 100}}]}
 
                  :mari-tap-hat             {:type "sequence-data"
-                                            :data [{:type "transition" :transition-id "mari" :to {:x 1005 :y 453 :loop false :duration 0.5}}
-                                                   {:type "transition" :transition-id "mari" :to {:x 1075 :y 445 :loop false :duration 0.5}}]}
+                                            :data [{:type "animation" :target "mari" :id "wand_hit" :track 2}
+                                                   {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}]}
 
                  :set-concept-data         {:type "sequence-data"
                                             :data [{:type "action" :id "set-letters-text"}
@@ -225,6 +261,7 @@
                                                     :value    false
                                                     :success  "count-correct-answer"
                                                     :fail     {:type "empty" :duration 100}}
+                                                   {:type "action" :id "box-jump-in"}
                                                    {:type "action" :id "reset-and-repeat"}]}
 
                  :pick-wrong               {:type "sequence-data"
@@ -316,6 +353,17 @@
                                                    {:type "transition" :transition-id "box3"
                                                     :to   {:bezier [{:x 1195 :y 100} {:x 1660 :y 790}] :duration 2.0}}]}
 
+                 :box-jump-in                    {:type "parallel"
+                                                  :data [{:type "animation" :id "jump2"
+                                                          :from-params [{:action-property "target" :param-property "target"}]}
+                                                         {:type "sequence-data"
+                                                          :data [{:type "empty" :duration 500}
+                                                                 {:type "transition"
+                                                                  :from-params [{:action-property "transition-id" :param-property "target"}]
+                                                                  :to {:bezier [{:x 960 :y 100} {:x 610 :y 435}] :duration 1.0}}]}
+                                                         {:type "add-animation" :id "idle2" :loop true
+                                                          :from-params [{:action-property "target" :param-property "target"}]}]}
+
                  :boxes-disappear          {:type "parallel"
                                             :data [{:type "set-skin" :target "box1" :skin "qwestion"}
                                                    {:type "set-skin" :target "box2" :skin "qwestion"}
@@ -330,58 +378,42 @@
                                             :data [{:type "action" :id "current-concept-sound-x3"}]}
 
                  :mari-says-correct-answer {:type "sequence-data"
-                                            :data [{:type "action" :id "current-concept-word"}]}
+                                            :data [{:type "action",
+                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}]}
 
                  :mari-says-wrong-answer   {:type "sequence-data"
-                                            :data [{:type "action" :id "current-concept-word-2"}
+                                            :data [{:type "action",
+                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}
                                                    {:type "empty" :duration 500}
                                                    {:type "action" :id "mari-voice-wrong-1"}
-                                                   {:type "action" :id "current-concept-word-2"}
+                                                   {:type "action",
+                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}
                                                    {:type "empty" :duration 500}
-                                                   {:type "action" :id "current-concept-word-2"}
+                                                   {:type "action",
+                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}
                                                    {:type "action" :id "mari-voice-wrong-2"}
-                                                   {:type "action" :id "current-concept-sound"}
+                                                   {:type "action",
+                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
                                                    {:type "empty" :duration 500}
                                                    {:type "action" :id "mari-voice-wrong-3"}
-                                                   {:type "action" :id "current-concept-sound"}]}
+                                                   {:type "action",
+                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}]}
 
                  ;; ---
 
-                 :current-concept-word     {:type        "parallel"
-                                            :description "Ardilla!"
-                                            :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 22.977 :duration 1.116 :volume 0.2}
-                                                          {:type "animation-sequence" :target "mari" :track 1 :offset 22.977
-                                                           :data [{:start 22.977 :end 24.013 :anim "talk"}]}]}
+                 :current-concept-sound-x3 {:type        "sequence-data"
+                                            :data        [{:type "action",
+                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
+                                                          {:type "empty" :duration 500}
+                                                          {:type "action",
+                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
+                                                          {:type "empty" :duration 500}
+                                                          {:type "action",
+                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
+                                                          ]}
 
-                 :current-concept-word-2   {:type        "parallel"
-                                            :description "Ardilla."
-                                            :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 26.951 :duration 0.747 :volume 0.2}
-                                                          {:type "animation-sequence" :target "mari" :track 1 :offset 26.951
-                                                           :data [{:start 26.951 :end 27.698 :anim "talk"}]}]}
-
-                 :current-concept-sound    {:type        "parallel"
-                                            :description "aaaa"
-                                            :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 33.746 :duration 1.240 :volume 0.2}
-                                                          {:type "animation-sequence" :target "mari" :track 1 :offset 33.746
-                                                           :data [{:start 33.746 :end 34.986 :anim "talk"}]}]}
-
-                 :current-concept-sound-x3 {:type        "parallel"
-                                            :description "Aaa, aaa, aaa"
-                                            :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 19.542 :duration 3.460 :volume 0.2}
-                                                          {:type "animation-sequence" :target "mari" :track 1 :offset 19.542
-                                                           :data [{:start 19.728 :end 20.584 :anim "talk"}
-                                                                  {:start 20.943 :end 21.824 :anim "talk"}
-                                                                  {:start 22.121 :end 22.853 :anim "talk"}]}]}
-
-                 :current-concept-chant    {:type        "parallel"
-                                            :description "Ardilla, ardilla, a, a, a"
-                                            :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 45.526 :duration 5.289 :volume 0.2}
-                                                          {:type "animation-sequence" :target "mari" :track 1 :offset 45.526
-                                                           :data [{:start 45.656 :end 46.481 :anim "talk"}
-                                                                  {:start 46.840 :end 47.984 :anim "talk"}
-                                                                  {:start 48.180 :end 48.855 :anim "talk"}
-                                                                  {:start 49.196 :end 49.854 :anim "talk"}
-                                                                  {:start 50.170 :end 50.709 :anim "talk"}]}]}
+                 :current-concept-chant    {:type "action",
+                                            :from-var [{:var-name "current-concept", :var-property "magic-hat-chant"}]}
 
                  ;; ---
 
@@ -427,6 +459,6 @@
 
                  }
  :triggers      {:start {:on "start" :action "start"}
-                 :stop  {:on "back" :action "stop"}}
+                 :stop  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "library"}}
