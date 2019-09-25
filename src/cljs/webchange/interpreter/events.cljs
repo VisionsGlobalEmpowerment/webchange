@@ -1,14 +1,16 @@
 (ns webchange.interpreter.events
   (:require
-    [re-frame.core :as re-frame]
+    [ajax.core :refer [json-request-format json-response-format]]
     [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
-    [webchange.interpreter.core :as i]
-    [webchange.interpreter.executor :as e]
+    [re-frame.core :as re-frame]
+    [webchange.common.anim :refer [start-animation]]
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
+    [webchange.interpreter.core :as i]
+    [webchange.interpreter.executor :as e]
+    [webchange.interpreter.utils :refer [add-scene-tag
+                                         merge-scene-data]]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.common.anim :refer [start-animation]]
-    [ajax.core :refer [json-request-format json-response-format]]
     ))
 
 (re-frame/reg-fx
@@ -175,6 +177,8 @@
 (ce/reg-simple-executor :pick-correct ::execute-pick-correct)
 (ce/reg-simple-executor :pick-wrong ::execute-pick-wrong)
 (ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
+(ce/reg-simple-executor :set-interval ::execute-set-interval)
+(ce/reg-simple-executor :remove-interval ::execute-remove-interval)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -615,7 +619,8 @@
   (fn [{:keys [db]} _]
     (let [current-scene (:current-scene db)]
       {:dispatch-n (list [::vars.events/clear-vars {:keep-running true}]
-                         [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}])})))
+                         [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
+                         [::ce/execute-remove-timers])})))
 
 (re-frame/reg-event-fx
   ::set-current-scene
@@ -629,6 +634,7 @@
                        (assoc-in [:progress-data :variables :last-location] current-scene))
        :dispatch-n (list [::vars.events/clear-vars]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
+                         [::ce/execute-remove-timers]
                          [::reset-activity-action]
                          [::load-scene scene-id])})))
 
@@ -637,12 +643,23 @@
   (fn [{:keys [db]} [_ course]]
     {:db (assoc db :course-data course)}))
 
+(defn merge-with-templates
+  [db scene]
+  (let [scene-templates-names (:templates scene)
+        scene-has-templates? (> (count scene-templates-names) 0)]
+    (if scene-has-templates?
+      (let [course-templates (get-in db [:course-data :templates])
+            templates (map #(->> % keyword (get course-templates)) scene-templates-names)]
+        (merge-scene-data scene (map #(add-scene-tag % "template") templates)))
+      scene)))
+
 (re-frame/reg-event-fx
   ::set-scene
   (fn [{:keys [db]} [_ scene-id scene]]
-    (let [current-scene (:current-scene db)]
-      {:db (cond-> (assoc-in db [:scenes scene-id] scene)
-                   (= current-scene scene-id) (assoc :current-scene-data scene))})))
+    (let [current-scene (:current-scene db)
+          merged-scene (merge-with-templates db scene)]
+      {:db (cond-> (assoc-in db [:scenes scene-id] merged-scene)
+                   (= current-scene scene-id) (assoc :current-scene-data merged-scene))})))
 
 (re-frame/reg-event-fx
   ::store-scene
@@ -806,7 +823,13 @@
           show-navigation? (and (not activity-started?) (not= current-activity current-scene))]
       (i/kill-transition! :navigation)
       (if show-navigation?
-        {:dispatch [::execute-transition {:transition-id (:transition exit) :transition-tag :navigation :to {:brightness 0.25 :duration 1 :yoyo true :easing "strong-ease-in"} :from {:brightness 0}}]}))))
+        {:dispatch [::execute-transition {:transition-id  (:transition exit)
+                                          :transition-tag :navigation
+                                          :to             {:brightness 0.25
+                                                           :duration   1
+                                                           :yoyo       true
+                                                           :easing     "strong-ease-in"}
+                                          :from           {:brightness 0}}]}))))
 
 (re-frame/reg-event-fx
   ::disable-navigation
@@ -868,6 +891,21 @@
   (fn [{:keys [db]} [_ {:keys [value] :as action}]]
     {:db         (vars.events/set-variable db :score-first-attempt true)
      :dispatch-n (list (ce/success-event action))}))
+
+(re-frame/reg-event-fx
+  ::execute-set-interval
+  (fn [{:keys [db]} [_ {:keys [id interval action] :as main-action}]]
+    (let [interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action (ce/get-action action db)])) interval)]
+      {:dispatch-n (list [::ce/execute-register-timer {:name id
+                                                       :id   interval-id
+                                                       :type "interval"}]
+                         (ce/success-event main-action))})))
+
+(re-frame/reg-event-fx
+  ::execute-remove-interval
+  (fn [{:keys [db]} [_ {:keys [id] :as action}]]
+    {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
+                       (ce/success-event action))}))
 
 (re-frame/reg-event-db
   ::reset-activity-action

@@ -8,14 +8,22 @@
 (def hardcoded {"test" true
                 "english" true})
 
-(defn get-course-data
+(defn get-course-templates
   [course-name]
   (if (contains? hardcoded course-name)
-    (scene/get-course course-name)
-    (let [{course-id :id} (db/get-course {:name course-name})
-          latest-version (db/get-latest-course-version {:course_id course-id})]
-      (:data latest-version))))
+    (scene/get-templates course-name)
+    {} ;; "Getting templates for not-hardcoded courses is not implemented"
+    ))
 
+(defn get-course-data
+  [course-name]
+  (let [course (if (contains? hardcoded course-name)
+                 (scene/get-course course-name)
+                 (let [{course-id :id} (db/get-course {:name course-name})
+                       latest-version (db/get-latest-course-version {:course_id course-id})]
+                   (:data latest-version)))
+        templates (get-course-templates course-name)]
+    (merge course {:templates templates})))
 
 (defn get-scene-data
   [course-name scene-name]

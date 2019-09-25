@@ -118,23 +118,26 @@
     (load-base-asset asset progress))))
 
 (defn load-assets
-  [assets on-asset-progress on-asset-complete]
-  (let [total (get-total-size assets)
-        current-progress (atom 0)]
-    (add-watch current-progress :inc
-               (fn [_ _ _ n]
-                 (on-asset-progress (Math/round (* n (/ 100 total))))
-                 (if (>= n total)
-                   (on-asset-complete))))
-    (if (> total 0)
-      (doseq [asset assets]
-        (load-asset asset current-progress))
-      (on-asset-complete))))
+  ([assets]
+    (load-assets assets #() #()))
+  ([assets on-asset-progress on-asset-complete]
+    (let [total (get-total-size assets)
+          current-progress (atom 0)]
+      (add-watch current-progress :inc
+                 (fn [_ _ _ n]
+                   (on-asset-progress (Math/round (* n (/ 100 total))))
+                   (if (>= n total)
+                     (on-asset-complete))))
+      (if (> total 0)
+        (doseq [asset assets]
+          (load-asset asset current-progress))
+        (on-asset-complete)))))
 
 (defn load-course
   [course-id cb]
   (go (let [course-response (<! (get-course course-id))
             course (:body course-response)]
+        (load-assets (->> course :templates vals (map :assets) (apply concat)))
         (cb course))))
 
 (defn load-scene

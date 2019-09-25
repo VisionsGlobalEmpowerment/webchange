@@ -74,16 +74,20 @@
         (for [[id object] (:objects @scene)]
           ^{:key (str scene-id id)}
           [sa/Item {}
-           [sa/ItemContent {:vertical-align "middle"
-                            :on-click #(re-frame/dispatch [::events/select-object scene-id id])}
-            [:div {:style {:float "left"}} (-> id str)]
-            [:div {:style {:float "right"}}
-             [na/icon {:name "hide" :link? true
-                       :on-click #(remove-from-scene scene-id id)}]
-             [na/icon {:name "remove" :link? true
-                       :on-click #(remove-object scene-id id)}]]
-            ]]
-          )]
-
+           (if (:template? object)
+             [sa/ItemContent {:vertical-align "middle"}
+              [:div {:style {:float "left"}} (-> id str)]
+              [:div {:style {:float "right" :margin-right 5}}
+               "(template)"]]
+             [sa/ItemContent {:vertical-align "middle"
+                              :on-click       #(re-frame/dispatch [::events/select-object scene-id id])}
+              [:div {:style {:float "left"}} (-> id str)]
+              [:div {:style {:float "right"}}
+               [na/icon {:name     "hide" :link? true
+                         :on-click #(remove-from-scene scene-id id)}]
+               [na/icon {:name     "remove" :link? true
+                         :on-click #(remove-object scene-id id)}]]
+              ])
+           ])]
        [na/divider {}]
        [na/button {:basic? true :content "Add object" :on-click #(re-frame/dispatch [::events/show-form :add-object])}]])))

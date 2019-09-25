@@ -8,6 +8,7 @@
             [webchange.editor.form-elements.number-test]
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
+            [webchange.interpreter.utils-test]
             [webchange.common.svg-path.path-to-transitions-test]
             ))
 
@@ -19,5 +20,6 @@
            'webchange.editor.form-elements.number-test
            'webchange.interpreter.events-test
            'webchange.interpreter.variables.events-test
+           'webchange.interpreter.utils-test
            'webchange.common.svg-path.path-to-transitions-test
            )

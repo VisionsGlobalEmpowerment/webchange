@@ -53,9 +53,12 @@
   [key destination]
   (let [buffer-key (create-tagged-key "audioBuffer" key)]
     (when-not (has-data buffer-key)
-      (let [data (-> key get-data .slice)
-            promise (.decodeAudioData @audio-ctx data)]
-        (put-data promise buffer-key)))
+      (let [key-data (get-data key)]
+        (if-not (nil? key-data)
+          (let [data (-> key-data .slice)
+                promise (.decodeAudioData @audio-ctx data)]
+            (put-data promise buffer-key))
+          (-> (str "Audio '" key "' was not found") js/Error. throw))))
     (let [buffer-data (get-data buffer-key)]
       (-> buffer-data
           (.then create-buffered-source)
