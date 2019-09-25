@@ -25,25 +25,38 @@
                  :door-trigger {:type    "transparent" :x 1146 :y 42 :width 732 :height 810
                                 :actions {:click {:type "scene", :scene-id "map", :on "click"}}}
 
-                 :box1         {:type       "transparent" :x 400 :y 255 :width 206 :height 210 :origin {:type "center-center"}
-                                :scene-name "box1" :transition "box1"
+                 :box1         {:type       "transparent"
+                                :x 505 :y 375
+                                :width 772 :height 1032
+                                :scale {:x 0.3 :y 0.3}
+                                :origin {:type "center-center"}
+                                :scene-name "box1"
+                                :transition "box1"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}}
+                                                       :speed 0.3 :loop false :start true}}
                                 :actions    {:click {:type "action" :id "click-on-box1" :on "click"}}}
 
-                 :box2         {:type       "transparent" :x 850 :y 255 :width 206 :height 210 :origin {:type "center-center"}
+                 :box2         {:type       "transparent"
+                                :x 955 :y 375
+                                :width 772 :height 1032
+                                :scale {:x 0.3 :y 0.3}
+                                :origin {:type "center-center"}
                                 :scene-name "box2" :transition "box2"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}}
+                                                       :speed 0.3 :loop false :start true}}
                                 :actions    {:click {:type "action" :id "click-on-box2" :on "click"}}}
 
-                 :box3         {:type       "transparent" :x 1300 :y 255 :width 206 :height 210 :origin {:type "center-center"}
+                 :box3         {:type       "transparent"
+                                :x 1405 :y 375
+                                :width 772 :height 1032
+                                :scale {:x 0.3 :y 0.3}
+                                :origin {:type "center-center"}
                                 :scene-name "box3" :transition "box3"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :scale {:x 0.3 :y 0.3} :speed 0.3 :loop false :start true}}
+                                                       :speed 0.3 :loop false :start true}}
                                 :actions    {:click {:type "action" :id "click-on-box3" :on "click"}}}
 
                  },

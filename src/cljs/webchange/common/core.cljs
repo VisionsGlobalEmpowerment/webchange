@@ -103,3 +103,20 @@
   (-> object
       (merge {:data (:path object)})
       (dissoc :path)))
+
+(defn with-parent-origin
+  ([object parent-params]
+   (with-parent-origin object parent-params "center-center"))
+  ([object parent-params default-origin]
+   (assoc object :origin (if (contains? parent-params :origin)
+                           (:origin parent-params)
+                           {:type default-origin}))))
+
+(defn prepare-anim-rect-params
+  [params]
+  (-> {:width   (:width params)
+       :height  (:height params)
+       :opacity 0
+       :scale-y -1}
+      (with-parent-origin params)
+      (with-origin-offset)))
