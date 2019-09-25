@@ -1,9 +1,6 @@
-;; ToDo:
-;; - set correct task sound
-
 {:assets        [{:url "/raw/img/park/pinata/background.jpg" :type "image"}
                  {:url "/raw/audio/l2/a11/L2_A11_Mari.m4a" :type "audio"}
-                 {:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a" :type "audio"} ; <<-- REMOVE when `current-concept-letter` is defined for concepts
+                 {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio" :alias "mari chants"}
                  ]
  :objects       {:background {:type "background"
                               :src  "/raw/img/park/pinata/background.jpg"}
@@ -168,18 +165,12 @@
                  ["box1" "box2" "box3"]]
  :actions       {:start                     {:type "sequence"
                                              :data ["start-activity"
-                                                    "clear-instruction"
                                                     "init-vars"
                                                     "mari-voice-welcome"
                                                     "next-round"]}
 
-                 :stop                      {:type "sequence" :data ["stop-activity"]}
-
                  :start-activity            {:type "start-activity" :id "pinata"}
-
                  :stop-activity             {:type "stop-activity" :id "pinata"}
-
-                 :clear-instruction         {:type "remove-flows" :flow-tag "instruction"}
 
                  :init-vars                 {:type "parallel"
                                              :data [{:type "set-variable" :var-name "current-slot-number" :var-value 0}]}
@@ -219,7 +210,7 @@
                                                      :provider-id "words-set"
                                                      :variables   ["concept-1" "concept-2" "concept-3"]
                                                      :shuffled    false
-                                                     :from        "concepts"
+                                                     :from        "assessment"
                                                      :on-end      "finish-activity"}
                                                     {:type      "vars-var-provider"
                                                      :variables ["box1" "box2" "box3"]
@@ -249,32 +240,29 @@
                                                      :from-var [{:var-name "letter3" :action-property "attr-value" :var-property "letter"}]}]}
 
                  :finish-activity           {:type "sequence-data"
-                                             :data [{:type "action" :id "mari-hits-pinata-toward"}
-                                                    {:type "parallel"
-                                                     :data [{:type "action" :id "mari-hits-pinata-backward"}
-                                                            {:type "action" :id "pinata-fall-down"}
-                                                            {:type "empty" :duration 2000}
-                                                            {:type "action" :id "stop"}]}]}
+                                             :data [{:type "finish-activity" :id "pinata"}
+                                                    {:type "action" :id "mari-hits-pinata-toward"}
+                                                    {:type "action" :id "mari-hits-pinata-backward"}
+                                                    {:type "action" :id "pinata-fall-down"}
+                                                    {:type "empty" :duration 2000}
+                                                    {:type "scene" :scene-id "park"}]}
 
                  ;; ---
 
                  :mari-says-task            {:type "sequence-data"
-                                             :data [{:type     "action"
-                                                     :from-var [{:var-name     "current-slot"
-                                                                 :var-property "sandbox-this-is-letter-action"}]}  ; <<-- REMOVE when `current-concept-letter` is defined for concepts
-                                                    ;{:type "action" :id "mari-voice-act-1"}
-                                                    ;{:type "action" :id "current-concept-letter"}
-                                                    ;{:type "empty" :duration 700}
-                                                    ;{:type "action" :id "mari-voice-act-2"}
-                                                    ;{:type "action" :id "current-concept-letter"}
-                                                    ;{:type "action" :id "mari-voice-act-3"}
+                                             :data [{:type "action" :id "mari-voice-act-1"}
+                                                    {:type "action",
+                                                     :from-var
+                                                           [{:var-name "current-slot",
+                                                             :var-property "mari-letter"}]}
+                                                    {:type "empty" :duration 700}
+                                                    {:type "action" :id "mari-voice-act-2"}
+                                                    {:type "action",
+                                                     :from-var
+                                                           [{:var-name "current-slot",
+                                                             :var-property "mari-letter"}]}
+                                                    {:type "action" :id "mari-voice-act-3"}
                                                     ]}
-
-                 :current-concept-letter    {:type        "parallel"
-                                             :description "a"
-                                             :data        [{:type "audio" :id "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 20.516 :duration 0.592}
-                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 20.516
-                                                            :data [{:start 20.516 :end 21.108 :anim "talk"}]}]}
 
                  ;; ---
 
@@ -427,6 +415,6 @@
                                                             :data [{:start 25.313 :end 26.509 :anim "talk"}]}]}}
 
  :triggers      {:start {:on "start" :action "start"}
-                 :stop  {:on "back" :action "stop"}}
+                 :stop  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}

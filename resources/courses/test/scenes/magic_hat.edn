@@ -1,5 +1,6 @@
 {:assets        [{:url "/raw/img/library/magic-hat/background.jpg" :type "image"}
-                 {:url "/raw/audio/l2/a8/L2_A8_Mari.m4a" :type "audio"}]
+                 {:url "/raw/audio/l2/a8/L2_A8_Mari.m4a" :type "audio"}
+                 {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio" :alias "mari chants"}]
  :objects       {:background {:type "background"
                               :src  "/raw/img/library/magic-hat/background.jpg"}
                  :hat        {:type       "animation"
@@ -374,9 +375,6 @@
 
                  :mari-flies-to-hat        {:type "transition" :transition-id "mari" :to {:x 1075 :y 445 :loop false :duration 1.5}}
 
-                 :mari-says-sounds         {:type "sequence-data"
-                                            :data [{:type "action" :id "current-concept-sound-x3"}]}
-
                  :mari-says-correct-answer {:type "sequence-data"
                                             :data [{:type "action",
                                                     :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}]}
@@ -401,19 +399,11 @@
 
                  ;; ---
 
-                 :current-concept-sound-x3 {:type        "sequence-data"
-                                            :data        [{:type "action",
-                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
-                                                          {:type "empty" :duration 500}
-                                                          {:type "action",
-                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
-                                                          {:type "empty" :duration 500}
-                                                          {:type "action",
-                                                           :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
-                                                          ]}
+                 :current-concept-sound-x3 {:type "action",
+                                            :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]}
 
                  :current-concept-chant    {:type "action",
-                                            :from-var [{:var-name "current-concept", :var-property "magic-hat-chant"}]}
+                                            :from-var [{:var-name "current-concept", :var-property "mari-chant"}]}
 
                  ;; ---
 

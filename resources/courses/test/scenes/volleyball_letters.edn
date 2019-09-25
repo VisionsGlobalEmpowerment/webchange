@@ -1,23 +1,10 @@
 {:assets        [{:url "/raw/audio/l2/a10/L2_A10_Mari.m4a" :type "audio"}
-                 {:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari"}
                  {:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}
-
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio" :alias "game voice 3"}
 
                  {:url "/raw/img/stadium/volleyball/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/stadium/volleyball/ball.png", :size 1 :type "image"}
-
-                 ;; ToDo: remove when current concept chanting way changed
-                 {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio" :alias "mari voice 1"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a", :size 5, :type "audio" :alias "vaca voice 1"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", :size 5, :type "audio" :alias "vaca voice 2"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", :size 5, :type "audio" :alias "vaca voice 3"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", :size 5, :type "audio" :alias "vaca voice 4"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", :size 5, :type "audio" :alias "vaca voice 5"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", :size 5, :type "audio" :alias "vaca voice 6"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio" :alias "vaca voice 7"}],
+                 {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio" :alias "mari chants"}
+],
  :objects       {:background {:type "background", :src "/raw/img/stadium/volleyball/background.jpg"},
                  :vera       {:type       "animation" :x 1182 :y 1010 :name "vera-45" :anim "volley_idle" :speed 0.3
                               :width      758 :height 1130 :scale {:x 0.25 :y 0.25} :start true
@@ -151,15 +138,14 @@
                  ["vera" "boy1" "girl2" "girl3"]
                  ["box1" "letter1" "box2" "letter2" "box3" "letter3" "box4" "letter4"]
                  ["display" "mari" "ball"]],
- :actions       {:start-activity          {:type "start-activity" :id "volleyball"}
-                 :stop-activity           {:type "stop-activity" :id "volleyball"}
+ :actions       {:start-activity          {:type "start-activity" :id "volleyball-letters"}
+                 :stop-activity           {:type "stop-activity" :id "volleyball-letters"}
                  :finish-activity         {:type "sequence-data"
-                                           :data [{:type "finish-activity" :id "volleyball"}
+                                           :data [{:type "finish-activity" :id "volleyball-letters"}
                                                   {:type "scene" :scene-id "stadium"}]}
-                 :clear-instruction       {:type "remove-flows" :flow-tag "instruction"}
+
                  :start                   {:type "sequence"
                                            :data ["start-activity"
-                                                  "clear-instruction"
                                                   "init-slots"
                                                   "init-first-player"
                                                   "init-audio-correct"
@@ -182,9 +168,16 @@
                                            :variables   ["item-1" "item-2" "item-3" "item-4" "item-5"
                                                          "item-6" "item-7" "item-8" "item-9" "item-10"]
                                            :shuffled    true
-                                           :limit       4
+                                           :limit       3
                                            :repeat      4
-                                           :from        "concepts"}
+                                           :from        "concepts-group"}
+
+                 :renew-pairs             {:type        "lesson-var-provider"
+                                           :provider-id "pairs-set"
+                                           :variables   ["pair-1" "pair-2" "pair-3" "pair-4" "pair-5"
+                                                         "pair-6" "pair-7" "pair-8" "pair-9" "pair-10"]
+                                           :shuffled    true
+                                           :from        "concepts-all"}
 
                  :renew-current-concept   {:type "sequence-data"
                                            :data [{:type        "vars-var-provider"
@@ -196,8 +189,8 @@
                                                    :on-end      "finish-activity"}
                                                   {:type      "vars-var-provider"
                                                    :variables ["pair-concept-1" "pair-concept-2" "pair-concept-3"]
-                                                   :from      ["item-1" "item-2" "item-3" "item-4" "item-5"
-                                                               "item-6" "item-7" "item-8" "item-9" "item-10"]
+                                                   :from      ["pair-1" "pair-2" "pair-3" "pair-4" "pair-5"
+                                                               "pair-6" "pair-7" "pair-8" "pair-9" "pair-10"]
                                                    :shuffled  true
                                                    :unique    true
                                                    :from-var  [{:var-name "current-concept" :var-property "concept-name"
@@ -365,10 +358,9 @@
 
                  :empty-before-dialog     {:type "empty" :duration 3000}
 
-                 ;; ToDo: change current concept chanting way
                  :voice-high-var          {:type     "action"
                                            :from-var [{:var-name     "current-concept"
-                                                       :var-property "vaca-chanting-song"}]}
+                                                       :var-property "mari-sound-3"}]}
 
                  :init-audio-correct      {:type "parallel"
                                            :data [{:type "set-variable" :var-name "audio-correct1" :var-value "mari-audio-correct-1"}
