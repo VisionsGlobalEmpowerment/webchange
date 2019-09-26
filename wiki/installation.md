@@ -35,6 +35,13 @@ $ curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 $ sudo apt install nodejs
 ```
 
+
+- Install ffmpeg for audio files convert:
+
+```
+$ sudo apt-get install ffmpeg
+```
+
 - Install Karma
 
 ```
