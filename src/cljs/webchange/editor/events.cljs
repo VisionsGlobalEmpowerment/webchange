@@ -820,7 +820,7 @@
   (fn [{:keys [db]} [_ audio-action]]
     {:db (assoc-in db [:loading :get-talk-animation] true)
      :http-xhrio {:method          :get
-                  :uri             (str "/api/resources/talking-animation")
+                  :uri             (str "/api/actions/get-talk-animations")
                   :params          {:file     (:id audio-action)
                                     :start    (:start audio-action)
                                     :duration (:duration audio-action)}

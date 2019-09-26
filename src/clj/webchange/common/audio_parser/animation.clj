@@ -32,9 +32,23 @@
   [animations]
   (filter #(not (nil? (:anim %))) animations))
 
+(defn join-same-animations
+  [animations]
+  (->> animations
+       (reduce
+         (fn [[first-r & rest-r] item]
+           (if (nil? first-r)
+             [item]
+             (if (= (:end first-r) (:start item))
+               (concat [(assoc first-r :end (:end item))] rest-r)
+               (concat [item first-r] rest-r))))
+         [])
+       (reverse)))
+
 (defn phonemes->animations
   [phonemes start duration]
   (-> phonemes
       (cut-extra-data start duration)
       (map-animations phonetic-animation-map)
-      (filter-empty-animations)))
+      (filter-empty-animations)
+      (join-same-animations)))

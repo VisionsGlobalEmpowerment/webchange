@@ -7,6 +7,7 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.handler :refer [auth-routes]]
+            [webchange.common.audio-parser :refer [get-talking-animation]]
             [webchange.course.core :as course]
             [webchange.class.handler :refer [class-routes]]
             [webchange.progress.handler :refer [progress-routes]]
@@ -17,6 +18,7 @@
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [clojure.edn :as edn]
             [clojure.tools.logging :as log]
             [ring.middleware.session.memory :as mem]
             [webchange.common.handler :refer [handle current-user]]))
@@ -79,6 +81,14 @@
     (-> (course/restore-scene-version! (Integer/parseInt version-id) owner-id)
         handle)))
 
+(defn handle-parse-audio-animation
+  [request]
+  (let [{:strs [file start duration]} (:query-params request)]
+    (-> [true (get-talking-animation file
+                                     (edn/read-string start)
+                                     (edn/read-string duration))]
+        handle)))
+
 (defn public-route [] (resource-response "index.html" {:root "public"}))
 (defn authenticated-route [request] (if-not (authenticated? request)
                          (throw-unauthorized)
@@ -125,7 +135,9 @@
            (POST "/api/course-versions/:version-id/restore" [version-id :as request]
              (handle-restore-course-version version-id request))
            (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-             (handle-restore-scene-version version-id request)))
+             (handle-restore-scene-version version-id request))
+
+           (GET "/api/actions/get-talk-animations" _ (->> handle-parse-audio-animation wrap-params)))
 
 (defroutes service-worker-route
            (GET "/page-skeleton" [] (public-route))
