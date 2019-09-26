@@ -23,7 +23,7 @@
                                 :filter "brighten" :transition "door"}
 
                  :door-trigger {:type    "transparent" :x 1146 :y 42 :width 732 :height 810
-                                :actions {:click {:type "scene", :scene-id "map", :on "click"}}}
+                                :actions {:click {:type "action", :id "exit", :on "click"}}}
 
                  :box1         {:type       "transparent"
                                 :x 505 :y 375
@@ -368,7 +368,10 @@
                  :start-background-music           {:type "audio" :id "background" :loop true :unique-tag "music"}
                  :start-activity                   {:type "start-activity" :id "home"}
                  :finish-activity                  {:type "finish-activity" :id "home"}
-                 :stop-activity                    {:type "stop-activity" :id "home"}}
+                 :stop-activity                    {:type "stop-activity" :id "home"}
+                 :exit {:type "sequence-data"
+                        :data [{:type "action" :id "stop-activity"}
+                               {:type "scene" :scene-id "map"}]}}
  :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"},
  :triggers      {:music {:on "start" :action "start-background-music"}
                  :start {:on "start" :action "intro"}

@@ -84,7 +84,6 @@
 (re-frame/reg-fx
   :switch-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
-    (js/console.log "switch animation" action)
     (let [loop (if (contains? action :loop) (:loop action) true)]
       (.setAnimation (:animation-state state) track id loop))))
 
@@ -623,13 +622,25 @@
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
                          [::ce/execute-remove-timers])})))
 
+(defn merge-with-templates
+  [db scene]
+  (let [scene-templates-names (:templates scene)
+        scene-has-templates? (> (count scene-templates-names) 0)]
+    (if scene-has-templates?
+      (let [course-templates (get-in db [:course-data :templates])
+            templates (map #(->> % keyword (get course-templates)) scene-templates-names)]
+        (merge-scene-data scene (map #(add-scene-tag % "template") templates)))
+      scene)))
+
 (re-frame/reg-event-fx
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id]]
-    (let [current-scene (:current-scene db)]
+    (let [current-scene (:current-scene db)
+          stored-scene (get-in db [:store-scenes scene-id])
+          merged-scene (merge-with-templates db stored-scene)]
       {:db         (-> db
                        (assoc :current-scene scene-id)
-                       (assoc-in [:scenes scene-id] (get-in db [:store-scenes scene-id]))
+                       (assoc-in [:scenes scene-id] merged-scene)
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
@@ -643,16 +654,6 @@
   ::set-course-data
   (fn [{:keys [db]} [_ course]]
     {:db (assoc db :course-data course)}))
-
-(defn merge-with-templates
-  [db scene]
-  (let [scene-templates-names (:templates scene)
-        scene-has-templates? (> (count scene-templates-names) 0)]
-    (if scene-has-templates?
-      (let [course-templates (get-in db [:course-data :templates])
-            templates (map #(->> % keyword (get course-templates)) scene-templates-names)]
-        (merge-scene-data scene (map #(add-scene-tag % "template") templates)))
-      scene)))
 
 (re-frame/reg-event-fx
   ::set-scene

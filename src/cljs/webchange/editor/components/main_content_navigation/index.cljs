@@ -9,6 +9,9 @@
             :play-scene     {:label   "Play"
                              :handler #(re-frame/dispatch [::events/set-main-content :play-scene])}
             :editor         {:label   "Editor"
+                             :handler #(do (re-frame/dispatch [::ie/clear-current-scene])
+                                           (re-frame/dispatch [::events/set-main-content :editor]))}
+            :reset          {:label   "Reset"
                              :handler #(do (re-frame/dispatch [::ie/set-current-scene (:scene-id %)])
                                            (re-frame/dispatch [::events/set-main-content :editor]))}
             :actions        {:label   "Actions"

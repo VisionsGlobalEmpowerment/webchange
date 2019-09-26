@@ -103,8 +103,8 @@
                               :speed      0.3
                               :scale-x    1
                               :scale-y    1
-                              :skins      ["default"]
-                              :animations ["idle" "clapping_1clap" "clapping_finish" "clapping_start" "hand" "talk"]}
+                              :skins      ["vaca" "lion"]
+                              :animations ["idle" "idle2" "clapping_1clap" "clapping_finish" "clapping_start" "hand" "talk"]}
                  :mari       {:name       "mari"
                               :width      737
                               :height     511
@@ -119,7 +119,7 @@
                               :speed      0.35
                               :scale-x    0.6
                               :scale-y    0.6
-                              :skins      ["default"]
+                              :skins      ["female" "male" "default"]
                               :animations ["idle" "talk"]}
                  :book       {:name       "book"
                               :width      1439

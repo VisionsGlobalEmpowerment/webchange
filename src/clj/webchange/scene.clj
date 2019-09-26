@@ -1,7 +1,8 @@
 (ns webchange.scene
   (:require [clojure.edn :as edn]
             [clojure.java.io :as io]
-            [camel-snake-kebab.core :refer [->snake_case ->kebab-case]]))
+            [camel-snake-kebab.core :refer [->snake_case ->kebab-case]]
+            [clojure.tools.logging :as log]))
 
 (defn str-without-last
   [str number]
@@ -13,9 +14,7 @@
     (if-not (nil? dir-content)
       (->> dir-content
            file-seq
-           (filter #(.isFile %))
-           (mapv (fn [file] {:filename (.getName file)
-                             :path     (str file)})))
+           (filter #(.isFile %)))
       [])))
 
 (defn course-path
@@ -47,10 +46,10 @@
   (let [path (templates-path course-name)
         files (get-dir-files path)]
     (reduce
-      (fn [result {:keys [filename path]}]
+      (fn [result file]
         (assoc
           result
-          (-> filename (str-without-last 4) (->kebab-case))
-          (-> path io/reader java.io.PushbackReader. edn/read)))
+          (-> file .getName (str-without-last 4) (->kebab-case))
+          (-> file io/reader java.io.PushbackReader. edn/read)))
       {}
       files)))
