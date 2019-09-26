@@ -24,6 +24,12 @@
 
 (def secondary-color (:secondary w-colors))
 
+(def key-code {:enter 13})
+
+(defn- enter-pressed?
+  [event]
+  (= (.-which event) (:enter key-code)))
+
 (defn sign-in-form
   []
   (let [data (r/atom (if config/debug? test-credentials {}))]
@@ -32,12 +38,14 @@
         [:div
          [ui/text-field
           {:label     (translate [:form :username])
-           :on-change #(swap! data assoc :email (->> % .-target .-value))}]
+           :on-change #(swap! data assoc :email (->> % .-target .-value))
+           :on-key-down #(when (enter-pressed? %) (re-frame/dispatch [::auth.events/login @data]))}]
 
          [ui/text-field
           {:type      "password"
            :label     (translate [:form :password])
-           :on-change #(swap! data assoc :password (->> % .-target .-value))}]
+           :on-change #(swap! data assoc :password (->> % .-target .-value))
+           :on-key-down #(when (enter-pressed? %) (re-frame/dispatch [::auth.events/login @data]))}]
 
          [ui/form-control-label
           {:label   (translate [:remember-me])
@@ -51,7 +59,8 @@
            :variant  "contained"
            :style    {:width        100
                       :margin-right 10
-                      :margin-top   "20px"}}
+                      :margin-top   "20px"}
+           :button-ref (fn [event] (.setTimeout js/window #(when % (.focus %)) 1000 event))}
           (translate [:buttons :sign-in])]
 
          [ui/button
