@@ -4,6 +4,9 @@
             [camel-snake-kebab.core :refer [->snake_case ->kebab-case]]
             [clojure.tools.logging :as log]))
 
+(def template-names
+  ["click-pointer"])
+
 (defn str-without-last
   [str number]
   (.substring (java.lang.String. str) 0 (- (count str) number)))
@@ -26,9 +29,9 @@
   (-> (str "courses/" course-name "/scenes/" scene-name ".edn")
       ->snake_case))
 
-(defn templates-path
-  [course-name]
-  (-> (str "courses/" course-name "/templates/")
+(defn template-path
+  [course-name template-name]
+  (-> (str "courses/" course-name "/templates/" template-name ".edn")
       ->snake_case))
 
 (defn get-course
@@ -43,13 +46,11 @@
 
 (defn get-templates
   [course-name]
-  (let [path (templates-path course-name)
-        files (get-dir-files path)]
-    (reduce
-      (fn [result file]
-        (assoc
-          result
-          (-> file .getName (str-without-last 4) (->kebab-case))
-          (-> file io/reader java.io.PushbackReader. edn/read)))
-      {}
-      files)))
+  (reduce
+    (fn [result name]
+      (let [template-url (-> (template-path course-name name) io/resource)]
+        (if template-url
+          (assoc result name (-> template-url io/reader java.io.PushbackReader. edn/read))
+          result)))
+    {}
+    template-names))
