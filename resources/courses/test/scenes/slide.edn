@@ -89,11 +89,11 @@
                                                  "mari-voice-welcome"
                                                  "init-state"]}
 
-                 :stop                   {:type "sequence" :data ["stop-activity"]}
-
                  :start-activity         {:type "start-activity" :id "slide"}
-
                  :stop-activity          {:type "stop-activity" :id "slide"}
+                 :finish-activity       {:type "sequence-data"
+                                         :data [{:type "finish-activity" :id "slide"}
+                                                {:type "scene" :scene-id "park"}]}
 
                  :clear-instruction      {:type "remove-flows" :flow-tag "instruction"}
 
@@ -105,7 +105,7 @@
                                           :provider-id "words-set"
                                           :variables   ["item-1" "item-2" "item-3"]
                                           :shuffled    true
-                                          :from        "concepts"}
+                                          :from        "concepts-group"}
 
                  :renew-current-concept  {:type "sequence-data"
                                           :data [{:type        "vars-var-provider"
@@ -113,7 +113,7 @@
                                                   :variables   ["current-concept"]
                                                   :from        ["item-1" "item-2" "item-3"]
                                                   :shuffled    true
-                                                  :on-end      "stop"}
+                                                  :on-end      "finish-activity"}
                                                  {:type      "vars-var-provider"
                                                   :variables ["pair-concept-1" "pair-concept-2"]
                                                   :from      ["item-1" "item-2" "item-3"]
@@ -269,6 +269,6 @@
                                                          :data [{:start 43.409 :end 46.506 :anim "talk"}
                                                                 {:start 47.037 :end 48.653 :anim "talk"}]}]}}
  :triggers      {:start {:on "start" :action "start"}
-                 :stop  {:on "back" :action "stop"}}
+                 :stop  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}

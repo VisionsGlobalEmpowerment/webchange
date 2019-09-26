@@ -27,6 +27,7 @@
    :template {:type "audio", :scene-id "book"}}
   {:name "chanting-video-src", :type "string"}
   {:name "concept-name", :type "string"}
+  {:name "concept-rest", :type "string"}
   {:name "game-voice-action",
    :type "action",
    :template
@@ -84,7 +85,25 @@
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
+  {:name "image-src", :type "string"}
   {:name "letter", :type "string"}
+  {:name "letter-big", :type "string"}
+  {:name "letter-intro-letter", :type "action"}
+  {:name "letter-intro-letter-mari", :type "action"}
+  {:name "letter-intro-song", :type "action"}
+  {:name "letter-intro-sound", :type "action"}
+  {:name "letter-intro-word", :type "action"}
+  {:name "letter-intro-word-repeat", :type "action"}
+  {:name "letter-path", :type "string"}
+  {:name "letter-tutorial-path", :type "string"}
+  {:name "mari-chant", :type "action"}
+  {:name "mari-letter", :type "action"}
+  {:name "mari-sound-3", :type "action"}
+  {:name "poem-image-1", :type "string"}
+  {:name "poem-image-3", :type "string"}
+  {:name "poem-image-3", :type "string"}
+  {:name "poem-story", :type "action"}
+  {:name "riddle", :type "action"}
   {:name "sandbox-long-letter-action",
    :type "action",
    :template
@@ -119,12 +138,7 @@
   {:name "word-1-skin", :type "string"}
   {:name "word-2-skin", :type "string"}
   {:name "word-3-skin", :type "string"}
-  {:name "word-4-skin", :type "string"}
-  {:name "poem-image-1", :type "string"}
-  {:name "poem-image-3", :type "string"}
-  {:name "poem-image-3", :type "string"}
-  {:name "poem-story", :type "action"}
-  {:name "riddle", :type "action"}]
+  {:name "word-4-skin", :type "string"}],
  :items
  [{:name "ardilla",
    :data
@@ -158,6 +172,7 @@
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-a.mp4",
     :concept-name "ardilla",
+    :concept-rest "rdilla",
     :game-voice-action
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a",
      :type "audio",
@@ -295,76 +310,231 @@
      :target "senoravaca",
      :data
      [{:end 22.304, :anim "talk", :start 20.957, :duration 1.347}]},
+    :image-src "/raw/img/elements/squirrel.png",
     :letter "a",
+    :letter-big "A",
+    :letter-intro-letter
+    {:data [{:end 1.147, :anim "talk", :start 0.853, :duration 0.294}],
+     :type "animation-sequence",
+     :audio
+     "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
+     :start 0.813,
+     :offset 0.813,
+     :target "senoravaca",
+     :duration 0.414,
+     :scene-id "letter-intro"},
+    :letter-intro-letter-mari
+    {:data [{:end 2.654, :anim "talk", :start 2.374, :duration 0.28}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/a2/L2_A2_Mari.m4a",
+     :start 2.307,
+     :offset 2.307,
+     :target "mari",
+     :duration 0.387,
+     :scene-id "letter-intro"},
+    :letter-intro-song
+    {:data
+     [{:end 8.054, :anim "talk", :start 7.36, :duration 0.694}
+      {:end 9.094, :anim "talk", :start 8.334, :duration 0.76}
+      {:end 9.814, :anim "talk", :start 9.734, :duration 0.08}
+      {:end 10.267, :anim "talk", :start 10.107, :duration 0.16}
+      {:end 10.96, :anim "talk", :start 10.694, :duration 0.266}],
+     :type "animation-sequence",
+     :audio
+     "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
+     :start 7.2,
+     :offset 7.2,
+     :target "senoravaca",
+     :duration 3.974,
+     :scene-id "letter-intro"},
+    :letter-intro-sound
+    {:data [{:end 4.24, :anim "talk", :start 3.92, :duration 0.32}],
+     :type "animation-sequence",
+     :audio
+     "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
+     :start 3.827,
+     :offset 3.827,
+     :target "senoravaca",
+     :duration 0.64,
+     :scene-id "letter-intro"},
+    :letter-intro-word
+    {:data [{:end 2.92, :anim "talk", :start 2.347, :duration 0.573}],
+     :type "animation-sequence",
+     :audio
+     "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
+     :start 2.24,
+     :offset 2.24,
+     :target "senoravaca",
+     :duration 0.84,
+     :scene-id "letter-intro"},
+    :letter-intro-word-repeat
+    {:data
+     [{:end 8.12, :anim "talk", :start 7.32, :duration 0.8}
+      {:end 9.187, :anim "talk", :start 8.387, :duration 0.8}],
+     :type "animation-sequence",
+     :audio
+     "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
+     :start 7.254,
+     :offset 7.254,
+     :target "senoravaca",
+     :duration 2.053,
+     :scene-id "letter-intro"},
+    :letter-path "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90",
+    :letter-tutorial-path
+    "M 105 50 A 40,40 0 1,0 105,100 M 105 35 L 105 115 M 70 15 A 60,60 0 0,0 10,75 l 5 0 l -5 10 l -5 -10 l 5 0 M 130 35 L 130 100 l 5 0 l -5 10 l -5 -10 l 5 0 M 85 2 l 0 20 M 125 5 a 5 5 0 1 1 10 5 l -10 13 l 10 0",
+    :mari-chant
+    {:data
+     [{:end 1.627, :anim "talk", :start 0.653, :duration 0.974}
+      {:end 2.733, :anim "talk", :start 1.827, :duration 0.906}
+      {:end 3.293, :anim "talk", :start 3.16, :duration 0.133}
+      {:end 3.84, :anim "talk", :start 3.706, :duration 0.134}
+      {:end 4.36, :anim "talk", :start 4.2, :duration 0.16}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 0.573,
+     :offset 0.573,
+     :target "mari",
+     :duration 3.96,
+     :scene-id "magic-hat"},
+    :mari-letter
+    {:data [{:end 3.32, :anim "talk", :start 3.16, :duration 0.16}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 3.053,
+     :offset 3.053,
+     :target "mari",
+     :duration 0.32,
+     :scene-id "magic-hat"},
+    :mari-sound-3
+    {:data [{:end 4.426, :anim "talk", :start 3.067, :duration 1.359}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 2.987,
+     :offset 2.987,
+     :target "mari",
+     :duration 1.533,
+     :scene-id "cycling-letters"},
     :poem-image-1 "/raw/img/park/poem/i1.png",
     :poem-image-2 "/raw/img/park/poem/i2.png",
     :poem-image-3 "/raw/img/park/poem/i3.png",
-    :poem-story {:type        "sequence-data"
-                 :description "Poem I"
-                 :data        [{:type "parallel"
-                                :data [{:type        "parallel"
-                                        :description "Un día encontré un imán"
-                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 1.173 :duration 2.283}
-                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 1.173
-                                                       :data [{:start 1.173 :end 3.456 :anim "talk"}]}]}
-                                       {:type "action" :id "run-bubble-1"}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 4375}]}
-                                :fail    {:type "empty" :duration 951}}
-                               {:type "action" :id "mari-listening-eva"}
-                               {:type "parallel"
-                                :data [{:type        "parallel"
-                                        :description "Y se lo enseñé a mi tío Germán"
-                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 4.391 :duration 2.743}
-                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 4.391
-                                                       :data [{:start 4.391 :end 5.533 :anim "talk"}
-                                                              {:start 5.945 :end 7.102 :anim "talk"}]}]}
-                                       {:type "action" :id "run-bubble-2"}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 5050}]}
-                                :fail    {:type "empty" :duration 935}}
-                               {:type "action" :id "mari-listening-eva"}
-                               {:type        "parallel"
-                                :description "Le pregunté, ¿te gusta mi imán?"
-                                :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 8.006 :duration 3.202}
-                                              {:type "animation-sequence" :target "rock" :track 1 :offset 8.006
-                                               :data [{:start 8.006 :end 8.894 :anim "talk"}
-                                                      {:start 9.559 :end 11.192 :anim "talk"}]}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 5690}]}
-                                :fail    {:type "empty" :duration 888}}
-                               {:type "action" :id "mari-listening-eva"}
-                               {:type "parallel"
-                                :data [{:type        "parallel"
-                                        :description "Y me contestó  sí. I I I, Imán."
-                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 12.048 :duration 4.819}
-                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 12.048
-                                                       :data [{:start 12.064 :end 13.158 :anim "talk"}
-                                                              {:start 13.840 :end 14.299 :anim "talk"}
-                                                              {:start 14.632 :end 15.679 :anim "talk"}
-                                                              {:start 16.138 :end 16.836 :anim "talk"}]}]}
-                                       {:type "action" :id "run-bubble-3"}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 7799}]}
-                                :fail    {:type "empty" :duration 571}}
-                               {:type "action" :id "mari-listening-eva"}]}
+    :poem-story
+    {:data
+     [{:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+           :type "audio",
+           :start 1.173,
+           :duration 2.283}
+          {:data [{:end 3.456, :anim "talk", :start 1.173}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 1.173,
+           :target "rock"}],
+         :type "parallel",
+         :description "Un día encontré un imán"}
+        {:id "run-bubble-1", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 951},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 4375}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+           :type "audio",
+           :start 4.391,
+           :duration 2.743}
+          {:data
+           [{:end 5.533, :anim "talk", :start 4.391}
+            {:end 7.102, :anim "talk", :start 5.945}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 4.391,
+           :target "rock"}],
+         :type "parallel",
+         :description "Y se lo enseñé a mi tío Germán"}
+        {:id "run-bubble-2", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 935},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 5050}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+         :type "audio",
+         :start 8.006,
+         :duration 3.202}
+        {:data
+         [{:end 8.894, :anim "talk", :start 8.006}
+          {:end 11.192, :anim "talk", :start 9.559}],
+         :type "animation-sequence",
+         :track 1,
+         :offset 8.006,
+         :target "rock"}],
+       :type "parallel",
+       :description "Le pregunté, ¿te gusta mi imán?"}
+      {:fail {:type "empty", :duration 888},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 5690}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+           :type "audio",
+           :start 12.048,
+           :duration 4.819}
+          {:data
+           [{:end 13.158, :anim "talk", :start 12.064}
+            {:end 14.299, :anim "talk", :start 13.84}
+            {:end 15.679, :anim "talk", :start 14.632}
+            {:end 16.836, :anim "talk", :start 16.138}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 12.048,
+           :target "rock"}],
+         :type "parallel",
+         :description "Y me contestó  sí. I I I, Imán."}
+        {:id "run-bubble-3", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 571},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 7799}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}],
+     :type "sequence-data",
+     :description "Poem I"},
     :riddle
     {:data
-           [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
-             :type "audio",
-             :start 5.463,
-             :duration 9.438}],
+     [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+       :type "audio",
+       :start 5.463,
+       :duration 9.438}],
      :type "parallel",
      :description
-           "Me gusta escalar árboles. Tengo dos dientes grandes que uso para comer nueces.\n                                                          Soy una"},
+     "Me gusta escalar árboles. Tengo dos dientes grandes que uso para comer nueces.\n                                                          Soy una"},
     :sandbox-change-skin-1-action
     {:skin "bee",
      :type "set-skin",
@@ -3579,6 +3749,7 @@
      :duration 8.294,
      :scene-id "book"},
     :concept-name "iman",
+    :concept-rest "man",
     :game-voice-action
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
      :type "audio",
@@ -3709,15 +3880,166 @@
      :target "senoravaca",
      :duration 0.827,
      :scene-id "home"},
+    :image-src "/raw/img/elements/magnet.png",
+    :letter "i",
+    :letter-big "I",
+    :mari-chant
+    {:data
+     [{:end 10.999, :anim "talk", :start 10.173, :duration 0.826}
+      {:end 12.346, :anim "talk", :start 11.493, :duration 0.853}
+      {:end 13.306, :anim "talk", :start 13.066, :duration 0.24}
+      {:end 13.893, :anim "talk", :start 13.759, :duration 0.134}
+      {:end 14.413, :anim "talk", :start 14.239, :duration 0.174}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 9.999,
+     :offset 9.999,
+     :target "mari",
+     :duration 4.654,
+     :scene-id "magic-hat"},
+    :mari-letter
+    {:data
+     [{:end 13.319, :anim "talk", :start 13.079, :duration 0.24}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 12.933,
+     :offset 12.933,
+     :target "mari",
+     :duration 0.506,
+     :scene-id "magic-hat"},
+    :mari-sound-3
+    {:data
+     [{:end 13.293, :anim "talk", :start 13.066, :duration 0.227}
+      {:end 13.906, :anim "talk", :start 13.666, :duration 0.24}
+      {:end 14.439, :anim "talk", :start 14.239, :duration 0.2}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 12.906,
+     :offset 12.906,
+     :target "mari",
+     :duration 1.72,
+     :scene-id "cycling-letters"},
+    :poem-image-1 "/raw/img/park/poem/i1.png",
+    :poem-image-2 "/raw/img/park/poem/i2.png",
+    :poem-image-3 "/raw/img/park/poem/i3.png",
+    :poem-story
+    {:data
+     [{:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+           :type "audio",
+           :start 1.173,
+           :duration 2.283}
+          {:data [{:end 3.456, :anim "talk", :start 1.173}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 1.173,
+           :target "rock"}],
+         :type "parallel",
+         :description "Un día encontré un imán"}
+        {:id "run-bubble-1", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 951},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 4375}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+           :type "audio",
+           :start 4.391,
+           :duration 2.743}
+          {:data
+           [{:end 5.533, :anim "talk", :start 4.391}
+            {:end 7.102, :anim "talk", :start 5.945}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 4.391,
+           :target "rock"}],
+         :type "parallel",
+         :description "Y se lo enseñé a mi tío Germán"}
+        {:id "run-bubble-2", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 935},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 5050}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+         :type "audio",
+         :start 8.006,
+         :duration 3.202}
+        {:data
+         [{:end 8.894, :anim "talk", :start 8.006}
+          {:end 11.192, :anim "talk", :start 9.559}],
+         :type "animation-sequence",
+         :track 1,
+         :offset 8.006,
+         :target "rock"}],
+       :type "parallel",
+       :description "Le pregunté, ¿te gusta mi imán?"}
+      {:fail {:type "empty", :duration 888},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 5690}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
+           :type "audio",
+           :start 12.048,
+           :duration 4.819}
+          {:data
+           [{:end 13.158, :anim "talk", :start 12.064}
+            {:end 14.299, :anim "talk", :start 13.84}
+            {:end 15.679, :anim "talk", :start 14.632}
+            {:end 16.836, :anim "talk", :start 16.138}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 12.048,
+           :target "rock"}],
+         :type "parallel",
+         :description "Y me contestó  sí. I I I, Imán."}
+        {:id "run-bubble-3", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 571},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 7799}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}],
+     :type "sequence-data",
+     :description "Poem I"},
     :riddle
     {:data
-           [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
-             :type "audio",
-             :start 44.966,
-             :duration 12.845}],
+     [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+       :type "audio",
+       :start 44.966,
+       :duration 12.845}],
      :type "parallel",
      :description
-           "Siempre estoy atrayendo metales hacia mí.\n                                                          Me suelen usar en computadoras y brújulas y también en otras cosas.\n                                                          Soy un"},
+     "Siempre estoy atrayendo metales hacia mí.\n                                                          Me suelen usar en computadoras y brújulas y también en otras cosas.\n                                                          Soy un"},
     :sandbox-change-skin-1-action
     {:skin "iguana",
      :type "set-skin",
@@ -3895,67 +4217,7 @@
     :word-1-skin "iguana",
     :word-2-skin "fire",
     :word-3-skin "insect",
-    :word-4-skin "island",
-    :poem-image-1 "/raw/img/park/poem/i1.png",
-    :poem-image-2 "/raw/img/park/poem/i2.png",
-    :poem-image-3 "/raw/img/park/poem/i3.png",
-    :poem-story {:type        "sequence-data"
-                 :description "Poem I"
-                 :data        [{:type "parallel"
-                                :data [{:type        "parallel"
-                                        :description "Un día encontré un imán"
-                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 1.173 :duration 2.283}
-                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 1.173
-                                                       :data [{:start 1.173 :end 3.456 :anim "talk"}]}]}
-                                       {:type "action" :id "run-bubble-1"}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 4375}]}
-                                :fail    {:type "empty" :duration 951}}
-                               {:type "action" :id "mari-listening-eva"}
-                               {:type "parallel"
-                                :data [{:type        "parallel"
-                                        :description "Y se lo enseñé a mi tío Germán"
-                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 4.391 :duration 2.743}
-                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 4.391
-                                                       :data [{:start 4.391 :end 5.533 :anim "talk"}
-                                                              {:start 5.945 :end 7.102 :anim "talk"}]}]}
-                                       {:type "action" :id "run-bubble-2"}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 5050}]}
-                                :fail    {:type "empty" :duration 935}}
-                               {:type "action" :id "mari-listening-eva"}
-                               {:type        "parallel"
-                                :description "Le pregunté, ¿te gusta mi imán?"
-                                :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 8.006 :duration 3.202}
-                                              {:type "animation-sequence" :target "rock" :track 1 :offset 8.006
-                                               :data [{:start 8.006 :end 8.894 :anim "talk"}
-                                                      {:start 9.559 :end 11.192 :anim "talk"}]}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 5690}]}
-                                :fail    {:type "empty" :duration 888}}
-                               {:type "action" :id "mari-listening-eva"}
-                               {:type "parallel"
-                                :data [{:type        "parallel"
-                                        :description "Y me contestó  sí. I I I, Imán."
-                                        :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/iman.m4a" :start 12.048 :duration 4.819}
-                                                      {:type "animation-sequence" :target "rock" :track 1 :offset 12.048
-                                                       :data [{:start 12.064 :end 13.158 :anim "talk"}
-                                                              {:start 13.840 :end 14.299 :anim "talk"}
-                                                              {:start 14.632 :end 15.679 :anim "talk"}
-                                                              {:start 16.138 :end 16.836 :anim "talk"}]}]}
-                                       {:type "action" :id "run-bubble-3"}]}
-                               {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                                :success {:type "sequence-data"
-                                          :data [{:type "action" :id "mari-listening-user"}
-                                                 {:type "empty" :duration 7799}]}
-                                :fail    {:type "empty" :duration 571}}
-                               {:type "action" :id "mari-listening-eva"}]}}}
+    :word-4-skin "island"}}
   {:name "jardín",
    :data
    {:book-content-action
@@ -5630,6 +5892,7 @@
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-o.mp4",
     :concept-name "oso",
+    :concept-rest "so",
     :game-voice-action
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a",
      :type "audio",
@@ -5765,16 +6028,224 @@
      :target "senoravaca",
      :duration 1.134,
      :scene-id "home"},
+    :image-src "/raw/img/elements/bear.png",
     :letter "o",
+    :letter-big "O",
+    :mari-chant
+    {:data
+     [{:end 6.093, :anim "talk", :start 5.293, :duration 0.8}
+      {:end 7.36, :anim "talk", :start 6.506, :duration 0.854}
+      {:end 7.88, :anim "talk", :start 7.746, :duration 0.134}
+      {:end 8.453, :anim "talk", :start 8.346, :duration 0.107}
+      {:end 9.066, :anim "talk", :start 8.88, :duration 0.186}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 5.16,
+     :offset 5.16,
+     :target "mari",
+     :duration 4.12,
+     :scene-id "magic-hat"},
+    :mari-letter
+    {:data [{:end 7.92, :anim "talk", :start 7.706, :duration 0.214}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 7.653,
+     :offset 7.653,
+     :target "mari",
+     :duration 0.4,
+     :scene-id "magic-hat"},
+    :mari-sound-3
+    {:data [{:end 9.053, :anim "talk", :start 7.733, :duration 1.32}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/mari-chants.m4a",
+     :start 7.64,
+     :offset 7.64,
+     :target "mari",
+     :duration 1.533,
+     :scene-id "cycling-letters"},
+    :poem-image-1 "/raw/img/park/poem/o1.png",
+    :poem-image-2 "/raw/img/park/poem/o2.png",
+    :poem-image-3 "/raw/img/park/poem/o3.png",
+    :poem-story
+    {:data
+     [{:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/oso.m4a",
+           :type "audio",
+           :start 1.465,
+           :duration 1.76}
+          {:data [{:end 3.226, :anim "talk", :start 1.465}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 1.465,
+           :target "rock"}],
+         :type "parallel",
+         :description "Había una vez un oso"}
+        {:id "run-bubble-1", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 503},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 3143}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
+         :type "audio",
+         :start 3.763,
+         :duration 1.604}
+        {:data [{:end 5.359, :anim "talk", :start 3.772}],
+         :type "animation-sequence",
+         :track 1,
+         :offset 3.763,
+         :target "rock"}],
+       :type "parallel",
+       :description "Que era muy cariñoso"}
+      {:fail {:type "empty", :duration 884},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 3290}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/oso.m4a",
+           :type "audio",
+           :start 6.261,
+           :duration 2.445}
+          {:data
+           [{:end 6.859, :anim "talk", :start 6.261}
+            {:end 8.706, :anim "talk", :start 7.206}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 6.261,
+           :target "rock"}],
+         :type "parallel",
+         :description "Un día se cayó a un pozo"}
+        {:id "run-bubble-2", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 754},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 4422}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
+         :type "audio",
+         :start 9.461,
+         :duration 2.064}
+        {:data [{:end 11.525, :anim "talk", :start 9.461}],
+         :type "animation-sequence",
+         :track 1,
+         :offset 9.461,
+         :target "rock"}],
+       :type "parallel",
+       :description "Y eso fue muy doloroso"}
+      {:fail {:type "empty", :duration 850},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 3946}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
+         :type "audio",
+         :start 12.374,
+         :duration 2.419}
+        {:data [{:end 14.794, :anim "talk", :start 12.374}],
+         :type "animation-sequence",
+         :track 1,
+         :offset 12.374,
+         :target "rock"}],
+       :type "parallel",
+       :description "Seguramente ese oso"}
+      {:fail {:type "empty", :duration 564},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 4193}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:data
+         [{:id "/raw/audio/l2/a3/poems/oso.m4a",
+           :type "audio",
+           :start 15.357,
+           :duration 1.821}
+          {:data
+           [{:end 16.086, :anim "talk", :start 15.357}
+            {:end 17.187, :anim "talk", :start 16.346}],
+           :type "animation-sequence",
+           :track 1,
+           :offset 15.357,
+           :target "rock"}],
+         :type "parallel",
+         :description "Era muy perezoso"}
+        {:id "run-bubble-3", :type "action"}],
+       :type "parallel"}
+      {:fail {:type "empty", :duration 538},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 3270}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}
+      {:data
+       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
+         :type "audio",
+         :start 17.725,
+         :duration 1.058}
+        {:data [{:end 18.783, :anim "talk", :start 17.725}],
+         :type "animation-sequence",
+         :track 1,
+         :offset 17.725,
+         :target "rock"}],
+       :type "parallel",
+       :description "O O O"}
+      {:fail {:type "empty", :duration 277},
+       :type "test-var-scalar",
+       :value true,
+       :success
+       {:data
+        [{:id "mari-listening-user", :type "action"}
+         {:type "empty", :duration 1864}],
+        :type "sequence-data"},
+       :var-name "poem-paused"}
+      {:id "mari-listening-eva", :type "action"}],
+     :type "sequence-data",
+     :description "Poem O"},
     :riddle
     {:data
-           [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
-             :type "audio",
-             :start 7.307,
-             :duration 15.425}],
+     [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+       :type "audio",
+       :start 7.307,
+       :duration 15.425}],
      :type "parallel",
      :description
-           "Soy grande y camino en cuatro patas. Puedes encontrarme en lugares como montañas y el árctico.\n                                                          Me gusta hibernar cuando hace frio.\n                                                          Soy un"},
+     "Soy grande y camino en cuatro patas. Puedes encontrarme en lugares como montañas y el árctico.\n                                                          Me gusta hibernar cuando hace frio.\n                                                          Soy un"},
     :sandbox-change-skin-1-action
     {:skin "8",
      :type "set-skin",
@@ -5985,98 +6456,7 @@
     :word-1-skin "8",
     :word-2-skin "ear",
     :word-3-skin "sheep",
-    :word-4-skin "eyes",
-    :poem-image-1 "/raw/img/park/poem/o1.png",
-    :poem-image-2 "/raw/img/park/poem/o2.png",
-    :poem-image-3 "/raw/img/park/poem/o3.png",
-    :poem-story
-    {:type        "sequence-data"
-     :description "Poem O"
-     :data        [{:type "parallel"
-                    :data [{:type        "parallel"
-                            :description "Había una vez un oso"
-                            :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/oso.m4a" :start 1.465 :duration 1.760}
-                                          {:type "animation-sequence" :target "rock" :track 1 :offset 1.465
-                                           :data [{:start 1.465 :end 3.226 :anim "talk"}]}]}
-                           {:type "action" :id "run-bubble-1"}]}
-                   {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                    :success {:type "sequence-data"
-                              :data [{:type "action" :id "mari-listening-user"}
-                                     {:type "empty" :duration 3143}]}
-                    :fail    {:type "empty" :duration 503}}
-                   {:type "action" :id "mari-listening-eva"}
-                   {:type        "parallel"
-                    :description "Que era muy cariñoso"
-                    :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/oso.m4a" :start 3.763 :duration 1.604}
-                                  {:type "animation-sequence" :target "rock" :track 1 :offset 3.763
-                                   :data [{:start 3.772 :end 5.359 :anim "talk"}]}]}
-                   {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                    :success {:type "sequence-data"
-                              :data [{:type "action" :id "mari-listening-user"}
-                                     {:type "empty" :duration 3290}]}
-                    :fail    {:type "empty" :duration 884}}
-                   {:type "action" :id "mari-listening-eva"}
-                   {:type "parallel"
-                    :data [{:type        "parallel"
-                            :description "Un día se cayó a un pozo"
-                            :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/oso.m4a" :start 6.261 :duration 2.445}
-                                          {:type "animation-sequence" :target "rock" :track 1 :offset 6.261
-                                           :data [{:start 6.261 :end 6.859 :anim "talk"}
-                                                  {:start 7.206 :end 8.706 :anim "talk"}]}]}
-                           {:type "action" :id "run-bubble-2"}]}
-                   {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                    :success {:type "sequence-data"
-                              :data [{:type "action" :id "mari-listening-user"}
-                                     {:type "empty" :duration 4422}]}
-                    :fail    {:type "empty" :duration 754}}
-                   {:type "action" :id "mari-listening-eva"}
-                   {:type        "parallel"
-                    :description "Y eso fue muy doloroso"
-                    :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/oso.m4a" :start 9.461 :duration 2.064}
-                                  {:type "animation-sequence" :target "rock" :track 1 :offset 9.461
-                                   :data [{:start 9.461 :end 11.525 :anim "talk"}]}]}
-                   {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                    :success {:type "sequence-data"
-                              :data [{:type "action" :id "mari-listening-user"}
-                                     {:type "empty" :duration 3946}]}
-                    :fail    {:type "empty" :duration 850}}
-                   {:type "action" :id "mari-listening-eva"}
-                   {:type        "parallel"
-                    :description "Seguramente ese oso"
-                    :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/oso.m4a" :start 12.374 :duration 2.419}
-                                  {:type "animation-sequence" :target "rock" :track 1 :offset 12.374
-                                   :data [{:start 12.374 :end 14.794 :anim "talk"}]}]}
-                   {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                    :success {:type "sequence-data"
-                              :data [{:type "action" :id "mari-listening-user"}
-                                     {:type "empty" :duration 4193}]}
-                    :fail    {:type "empty" :duration 564}}
-                   {:type "action" :id "mari-listening-eva"}
-                   {:type "parallel"
-                    :data [{:type        "parallel"
-                            :description "Era muy perezoso"
-                            :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/oso.m4a" :start 15.357 :duration 1.821}
-                                          {:type "animation-sequence" :target "rock" :track 1 :offset 15.357
-                                           :data [{:start 15.357 :end 16.086 :anim "talk"}
-                                                  {:start 16.346 :end 17.187 :anim "talk"}]}]}
-                           {:type "action" :id "run-bubble-3"}]}
-                   {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                    :success {:type "sequence-data"
-                              :data [{:type "action" :id "mari-listening-user"}
-                                     {:type "empty" :duration 3270}]}
-                    :fail    {:type "empty" :duration 538}}
-                   {:type "action" :id "mari-listening-eva"}
-                   {:type        "parallel"
-                    :description "O O O"
-                    :data        [{:type "audio" :id "/raw/audio/l2/a3/poems/oso.m4a" :start 17.725 :duration 1.058}
-                                  {:type "animation-sequence" :target "rock" :track 1 :offset 17.725
-                                   :data [{:start 17.725 :end 18.783 :anim "talk"}]}]}
-                   {:type    "test-var-scalar" :var-name "poem-paused" :value true
-                    :success {:type "sequence-data"
-                              :data [{:type "action" :id "mari-listening-user"}
-                                     {:type "empty" :duration 1864}]}
-                    :fail    {:type "empty" :duration 277}}
-                   {:type "action" :id "mari-listening-eva"}]}}}
+    :word-4-skin "eyes"}}
   {:name "pelota",
    :data
    {:book-content-action
@@ -9621,6 +10001,11 @@
      {:name "web"}
      {:name "yoyo"}
      {:name "xilofono"}]}}
+  {:name "assessment4",
+   :data {:items [{:name "ardilla"} {:name "iman"} {:name "oso"}]}}
+  {:name "l2-ls1-1", :data {:items [{:name "ardilla"}]}}
+  {:name "l2-ls1-3",
+   :data {:items [{:name "ardilla"} {:name "oso"} {:name "iman"}]}}
   {:name "ls1",
    :data {:items [{:name "ardilla"} {:name "oso"} {:name "iman"}]}}
   {:name "ls10",

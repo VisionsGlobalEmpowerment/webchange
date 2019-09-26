@@ -112,11 +112,21 @@
                                           :assessment-1 "assessment3"}}
                     {:id 11 :lesson-sets {:concepts     "ls11"
                                           :assessment-1 "assessment3"}}
-                    {:id 12 :lesson-sets {:concepts     "ls12"
-                                          :assessment-1 "assessment4"}}]
+                    {:id 12 :lesson-sets {:concepts-single "l2-ls1-1"
+                                          :concepts-group "l2-ls1-3"
+                                          :concepts-all "concepts-all"
+                                          :assessment "assessment4"}}]
 
  :locations        {:home [{:level 1 :scene :home}
-                           {:level 2 :scene :letter-intro}]}
+                           {:level 2 :scene :letter-intro}]
+                    :sandbox [{:level 1 :scene :sandbox}
+                              {:level 2 :scene :park-poem}]
+                    :volleyball [{:level 1 :scene :volleyball}
+                                 {:level 2 :scene :volleyball-letters}]
+                    :cycling [{:level 1 :scene :cycling}
+                              {:level 2 :scene :cycling-letters}]
+                    :painting-tablet [{:level 1 :scene :painting-tablet}
+                                      {:level 2 :scene :writing-practice}]}
 
  :workflow-actions [{:id 10 :type "init-progress"}
                     {:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1 :time-expected 300}

@@ -95,7 +95,7 @@
                                                           "show-play-form"]}
 
                  :renew-concept            {:type        "lesson-var-provider"
-                                            :from        "concepts"
+                                            :from        "concepts-single"
                                             :provider-id "concepts"
                                             :variables   ["current-concept"]}
 

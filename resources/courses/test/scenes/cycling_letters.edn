@@ -2,14 +2,38 @@
                  {:url "/raw/img/stadium/cycling/cycle_race_bg_02.jpg", :size 10, :type "image"}
                  {:url "/raw/img/stadium/cycling/cycle_race_bg_03.jpg", :size 10, :type "image"}
 
+                 {:url "/raw/img/elements/baby.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/ball.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/bear.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/boots.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/boy.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/cat.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/cheese.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/chocolate.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/diamond.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/elephant.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/frog.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/garden.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/grapes.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/home.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/hand.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/kimono.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/leaf.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/lion.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/magnet.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/ostrich.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/squirrel.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/sunflower.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/tomato.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/website.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/wrench.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/xylophone.png", :size 10, :type "image"}
+                 {:url "/raw/img/elements/yoyo.png", :size 10, :type "image"}
+
                  {:url "/raw/audio/l2/a9/L2_A9_Mari.m4a" :type "audio"}
                  {:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}
-                 {:url "/raw/audio/l1/a8/Mari_L1_A8.m4a", :size 2, :type "audio" :alias "mari"}
-                 {:url "/raw/audio/l1/a8/GameVoice.m4a", :size 2, :type "audio" :alias "game voice"}
 
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                 {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio" :alias "mari chants"}
                  ],
 
  :objects       {:background
@@ -35,9 +59,16 @@
                         :transition "group1"
                         :x          2000
                         :y          683
-                        :children   ["box1" "letter1"]
+                        :children   ["box1" "letter1" "image1"]
                         :states     {:init  {:type "transparent"}
                                      :reset {:type "group"}}}
+
+                 :image1   {:type   "image"
+                                  :x      0
+                                  :y      -280
+                                  :width  100
+                                  :height 100
+                                  :origin {:type "center-top"}}
 
                  :letter1
                        {:type           "text"
@@ -70,9 +101,16 @@
                         :transition "group2"
                         :x          2200
                         :y          789
-                        :children   ["box2" "letter2"]
+                        :children   ["box2" "letter2" "image2"]
                         :states     {:init  {:type "transparent"}
                                      :reset {:type "group"}}}
+
+                 :image2   {:type   "image"
+                            :x      0
+                            :y      -280
+                            :width  100
+                            :height 100
+                            :origin {:type "center-top"}}
 
                  :letter2
                        {:type           "text"
@@ -104,9 +142,16 @@
                         :transition "group3"
                         :x          2400
                         :y          932
-                        :children   ["box3" "letter3"]
+                        :children   ["box3" "letter3" "image3"]
                         :states     {:init  {:type "transparent"}
                                      :reset {:type "group"}}}
+
+                 :image3   {:type   "image"
+                            :x      0
+                            :y      -280
+                            :width  100
+                            :height 100
+                            :origin {:type "center-top"}}
 
                  :letter3
                        {:type           "text"
@@ -137,7 +182,6 @@
  :scene-objects [["background"] ["group1" "group2" "group3"] ["vera" "mari"]],
  :actions       {:start                   {:type "sequence"
                                            :data ["start-activity"
-                                                  "clear-instruction"
                                                   "init-slots"
                                                   "init-vera-position"
                                                   "init-audio-correct"
@@ -145,20 +189,17 @@
                                                   "renew-words"
                                                   "mari-welcome-audio"
                                                   "renew-current-concept"
-                                                  "voice-high-var"
+                                                  "current-concept-sound-x3"
                                                   ]}
 
-                 :start-activity          {:type "start-activity" :id "cycling"}
-
-                 :stop-activity           {:type "stop-activity" :id "cycling"}
-
+                 :start-activity          {:type "start-activity" :id "cycling-letters"}
+                 :stop-activity           {:type "stop-activity" :id "cycling-letters"}
                  :finish-activity         {:type "sequence-data"
-                                           :data [{:type "finish-activity" :id "cycling"}
+                                           :data [{:type "finish-activity" :id "cycling-letters"}
                                                   {:type "scene" :scene-id "stadium"}]}
 
-                 :clear-instruction       {:type "remove-flows" :flow-tag "instruction"}
-
-                 :voice-high-var          {:type "action" :from-var [{:var-name "current-concept" :var-property "game-voice-action"}]}
+                 :current-concept-sound-x3 {:type "action",
+                                            :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]}
 
                  :start-background-music  {:type "audio" :id "background" :loop true}
 
@@ -174,7 +215,7 @@
                                            :shuffled    true
                                            :limit       3
                                            :repeat      4
-                                           :from        "concepts"}
+                                           :from        "concepts-group"}
 
                  :renew-current-concept   {:type "sequence-data"
                                            :data [{:type "parallel"
@@ -213,10 +254,16 @@
                                                   {:type "parallel"
                                                    :data [{:type     "set-attribute" :target "letter1" :attr-name "text"
                                                            :from-var [{:var-name "slot1" :var-property "letter" :action-property "attr-value"}]}
+                                                          {:type     "set-attribute" :target "image1" :attr-name "src"
+                                                           :from-var [{:var-name "slot1" :var-property "image-src" :action-property "attr-value"}]}
                                                           {:type     "set-attribute" :target "letter2" :attr-name "text"
                                                            :from-var [{:var-name "slot2" :var-property "letter" :action-property "attr-value"}]}
+                                                          {:type     "set-attribute" :target "image2" :attr-name "src"
+                                                           :from-var [{:var-name "slot2" :var-property "image-src" :action-property "attr-value"}]}
                                                           {:type     "set-attribute" :target "letter3" :attr-name "text"
-                                                           :from-var [{:var-name "slot3" :var-property "letter" :action-property "attr-value"}]}]}
+                                                           :from-var [{:var-name "slot3" :var-property "letter" :action-property "attr-value"}]}
+                                                          {:type     "set-attribute" :target "image3" :attr-name "src"
+                                                           :from-var [{:var-name "slot3" :var-property "image-src" :action-property "attr-value"}]}]}
                                                   {:type "parallel"
                                                    :data [{:type "transition" :transition-id "group1" :to {:x 1300 :duration 2}}
                                                           {:type "transition" :transition-id "group2" :to {:x 1500 :duration 2}}
@@ -332,7 +379,7 @@
                                                                   {:type     "transition" :transition-id "vera"
                                                                    :from-var [{:var-name "current-line-pos" :action-property "to"}]}]}]}
                                                   {:type "action" :id "renew-current-concept"}
-                                                  {:type "action" :id "voice-high-var"}]}
+                                                  {:type "action" :id "current-concept-sound-x3"}]}
 
                  :init-audio-correct      {:type "parallel"
                                            :data [{:type "set-variable" :var-name "audio-correct1" :var-value "mari-audio-correct-1"}
