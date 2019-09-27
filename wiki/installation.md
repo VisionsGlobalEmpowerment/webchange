@@ -35,6 +35,25 @@ $ curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
 $ sudo apt install nodejs
 ```
 
+
+- Install ffmpeg for audio files convert:
+
+```
+$ sudo apt-get install ffmpeg
+```
+
+- Install Rhubarb Lip Sync for audio phonetic recognition
+
+    - Download [the latest release](https://github.com/DanielSWolf/rhubarb-lip-sync/releases) and unzip the file anywhere on your computer.
+    - Edit `~/.profile` in your home directory and add the following line: 
+    
+      ```
+      if [ -d "$HOME/path/to/rhubarb" ] ; then
+        PATH="$PATH:$HOME/path/to/rhubarb"
+      fi
+      ```
+
+
 - Install Karma
 
 ```

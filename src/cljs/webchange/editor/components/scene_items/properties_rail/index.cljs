@@ -59,13 +59,12 @@
                form-data @(re-frame/subscribe [::actions.subs/form-data])
                props (r/atom form-data)
                params {:scene-id scene-id}]
-    [na/form {}
-     [action-form props params]
-     [na/divider {}]
-     [na/form-button {:content "Save" :on-click #(do
-                                                   (re-frame/dispatch [::actions.events/edit-selected-action @props])
-                                                   (re-frame/dispatch [::events/edit-selected-scene-action])
-                                                   )}]]))
+              [na/form {}
+               [action-form props params]
+               [na/divider {}]
+               [na/form-button {:content  "Save"
+                                :on-click #(do (re-frame/dispatch [::actions.events/edit-selected-action @props])
+                                               (re-frame/dispatch [::events/edit-selected-scene-action]))}]]))
 
 (defn- scene-action-properties-panel-with-key []
   (let [hash @(re-frame/subscribe [::actions.subs/form-data-hash])]

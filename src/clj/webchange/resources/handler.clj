@@ -1,5 +1,6 @@
 (ns webchange.resources.handler
   (:require [compojure.core :refer [GET defroutes]]
+            [ring.middleware.params :refer [wrap-params]]
             [webchange.resources.core :as core]
             [webchange.common.handler :refer [handle]]))
 
@@ -16,3 +17,4 @@
 (defroutes resources-routes
            (GET "/api/resources/app" _ (handle-app-resources))
            (GET "/api/resources/level/:level-id" [level-id] (handle-level-resources level-id)))
+
