@@ -7,7 +7,7 @@
 
 (def items {
             :play-scene     {:label   "Play"
-                             :handler #(re-frame/dispatch [::events/set-main-content :play-scene])}
+                             :handler #(re-frame/dispatch [::events/play-current-scene])}
             :editor         {:label   "Editor"
                              :handler #(do (re-frame/dispatch [::ie/clear-current-scene])
                                            (re-frame/dispatch [::events/set-main-content :editor]))}

@@ -6,7 +6,8 @@
     [webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
     [webchange.common.anim :refer [animations]]
-    [webchange.editor.common.actions.events :as actions.events]))
+    [webchange.editor.common.actions.events :as actions.events]
+    [webchange.interpreter.variables.events :as vars.events]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -831,3 +832,12 @@
   ::detect-lip-sync-failure
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [:complete-request :get-talk-animation])}))
+
+(re-frame/reg-event-fx
+  ::play-current-scene
+  (fn [{:keys [db]} [_ _]]
+    (let [current-scene (:current-scene db)]
+      {:db (-> db
+               (assoc-in [:scenes current-scene :objects] (get-in db [:current-scene-data :objects])))
+       :dispatch-n (list [::set-main-content :play-scene]
+                         [::vars.events/clear-vars])})))
