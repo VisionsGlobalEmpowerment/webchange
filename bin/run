@@ -1,3 +1,5 @@
 #!/bin/bash
 export DATABASE_URL="jdbc:postgresql://localhost/webchange?user=webchange&password=webchange"
+export PUBLIC_DIR="/srv/www/webchange/public"
+export UPLOAD_DIR="/srv/www/webchange/public/upload"
 java -jar /srv/www/webchange/current.jar

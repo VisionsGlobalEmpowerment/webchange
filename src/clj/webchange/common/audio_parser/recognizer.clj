@@ -6,8 +6,6 @@
     [clojure.java.shell :refer [sh]]
     [config.core :refer [env]]))
 
-(def parser-directory "src/clj/webchange/common/audio_parser/rhubarb/")
-
 (defn relative->absolute-path
   [relative-path]
   (str (env :public-dir) relative-path))
@@ -23,10 +21,6 @@
 (defn get-file-name
   [file-path]
   (->> file-path io/file .getName))
-
-(defn get-file-extension
-  [file-name]
-  (subs file-name (inc (s/last-index-of file-name "."))))
 
 (defn get-changed-extension
   [audio-file-path extension]

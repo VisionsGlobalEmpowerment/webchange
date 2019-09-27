@@ -35,10 +35,11 @@ default value is `resources/datasets/`
 $ export DATASET_DIR="/tmp/"
 ```
 
-Set public folder path in profiles `env`:
+Set public and upload folders path in profiles `env`:
 
 ```
-:database-url "resources/public"
+:public-dir "resources/public"
+:upload-dir "resources/public/upload"
 ```
 
 lein run save-dataset <course> <dataset> - saves dataset to *.edn file

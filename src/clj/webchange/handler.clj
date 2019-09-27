@@ -1,6 +1,6 @@
 (ns webchange.handler
   (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
-            [compojure.route :refer [resources not-found]]
+            [compojure.route :refer [resources files not-found]]
             [ring.util.response :refer [resource-response response redirect]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
@@ -21,7 +21,8 @@
             [clojure.edn :as edn]
             [clojure.tools.logging :as log]
             [ring.middleware.session.memory :as mem]
-            [webchange.common.handler :refer [handle current-user]]))
+            [webchange.common.handler :refer [handle current-user]]
+            [config.core :refer [env]]))
 
 (defn api-request? [request] (= "application/json" (:accept request)))
 
@@ -120,6 +121,7 @@
 
            (GET "/student-dashboard" request (authenticated-route request))
            (GET "/student-dashboard/finished" request (authenticated-route request))
+           (files "/upload/" {:root (env :upload-dir)})
            (resources "/"))
 
 (defroutes api-routes
