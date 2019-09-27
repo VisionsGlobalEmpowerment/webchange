@@ -61,9 +61,12 @@
   [activity]
   {:id (:id activity)
    :label (:activity activity)
+   :started (-> activity :stat :data boolean)
+   :finished (-> activity :stat :data :score boolean)
+   :percentage (score->value (-> activity :stat :data :score) (-> activity :scored))
    :value (score->value (-> activity :stat :data :score) (-> activity :scored))})
 
-(defn time->value
+(defn time->percentage
   [time expected]
   (if (and time expected)
     (let [elapsed (-> time (/ 1000) float Math/round)]
@@ -71,11 +74,21 @@
         (-> (/ expected elapsed) ->percentage)
         100))))
 
+(defn time->value
+  [time]
+  (let [elapsed (-> time (/ 1000) float Math/round)
+        minutes (int (/ elapsed 60))
+        seconds (int (- elapsed (* minutes 60)))]
+    (str minutes "m " seconds "s")))
+
 (defn activity->time
   [activity]
   {:id (:id activity)
    :label (:activity activity)
-   :value (time->value (-> activity :stat :data :time-spent) (-> activity :time-expected))})
+   :started (-> activity :stat :data boolean)
+   :finished (-> activity :stat :data :score boolean)
+   :percentage (time->percentage (-> activity :stat :data :time-spent) (-> activity :time-expected))
+   :value (time->value (-> activity :stat :data (:time-spent 0)))})
 
 (defn get-individual-progress [course-name student-id]
   (let [{user-id :user-id} (db/get-student {:id student-id})

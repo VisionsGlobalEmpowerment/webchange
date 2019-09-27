@@ -6,15 +6,16 @@
 
 (def border-width 3)
 (defn get-score-style
-  [levels score]
+  [levels score-percentage started? finished?]
   (let [low (get levels 0)
         high (get levels 1)]
     {:border-color     "#fff"
      :border-style     "solid"
      :border-width     border-width
-     :background-color (cond (>= score high) (:green score-colors)
-                             (>= score low) (:yellow score-colors)
-                             (> score 0) (:red score-colors)
+     :background-color (cond (and started? (not finished?)) (:gray score-colors)
+                             (>= score-percentage high) (:green score-colors)
+                             (>= score-percentage low) (:yellow score-colors)
+                             (> score-percentage 0) (:red score-colors)
                              :else "rgba(0,0,0,0)")}))
 
 (defn align-values-list
@@ -63,13 +64,13 @@
     [score-table-legend legend]]])
 
 (defn value-item
-  [{{:keys [id label value]} :value levels :value-levels}]
+  [{{:keys [id label value percentage started finished]} :value levels :value-levels}]
   [ui/tooltip
-   {:title                  (if value (str label " : " value) "")
+   {:title                  (if value (str label " : " value) label)
     :placement              "top-end"
-    :disable-hover-listener (not value)}
+    :disable-hover-listener (not started)}
    [ui/table-cell
-    {:style (get-score-style levels value)}]])
+    {:style (get-score-style levels percentage started finished)}]])
 
 (defn score-table
   [{:keys [legend levels title items-title]} data]

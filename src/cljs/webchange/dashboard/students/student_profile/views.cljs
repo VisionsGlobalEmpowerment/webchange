@@ -20,11 +20,13 @@
                                :remove "Remove"
                                :class  "Class"}
            :cumulative-scores {:title  "Cumulative Activity Score"
-                               :legend {:green  "Student completed the activity & scored 95%+"
+                               :legend {:gray   "Activity is not completed"
+                                        :green  "Student completed the activity & scored 95%+"
                                         :yellow "Completed the activity & scored 80-95%"
                                         :red    "Completed the activity & scored 79% or below"}}
            :activity-times    {:title  "Activity Time Chart"
-                               :legend {:green  "Completed within + or - 15% expected time of completion"
+                               :legend {:gray   "Activity is not completed"
+                                        :green  "Completed within + or - 15% expected time of completion"
                                         :yellow "Completed 15% later than expected time of completion"
                                         :red    "Completed over 15% later than expected time of completion"}}}
           path))

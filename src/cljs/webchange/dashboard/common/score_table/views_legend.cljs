@@ -25,10 +25,12 @@
    [ui/typography {:variant "body1"} legend]])
 
 (defn score-table-legend
-  [{green-legend  :green
+  [{gray-legend   :gray
+    green-legend  :green
     yellow-legend :yellow
     red-legend    :red}]
   [:ul {:style legend-list-style}
+   [score-table-legend-item {:legend gray-legend :color (:gray score-colors)}]
    [score-table-legend-item {:legend green-legend :color (:green score-colors)}]
    [score-table-legend-item {:legend yellow-legend :color (:yellow score-colors)}]
    [score-table-legend-item {:legend red-legend :color (:red score-colors)}]])
