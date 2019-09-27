@@ -3,13 +3,14 @@
     [clojure.data.json :as json]
     [clojure.string :as s]
     [clojure.java.io :as io]
-    [clojure.java.shell :refer [sh]]))
+    [clojure.java.shell :refer [sh]]
+    [config.core :refer [env]]))
 
 (def parser-directory "src/clj/webchange/common/audio_parser/rhubarb/")
 
 (defn relative->absolute-path
   [relative-path]
-  (str "resources/public" relative-path))
+  (str (env :public-dir) relative-path))
 
 (defn file-exist?
   [file-path]
@@ -44,13 +45,12 @@
     converted-file-path))
 
 (defn recognize-audio
-  [file-path parser-directory]
+  [file-path]
   (let [result-file (get-changed-extension file-path "json")]
     (when-not (file-exist? result-file)
       (let [converted-file-path (convert-file file-path)
-            parser (str parser-directory "rhubarb")
             recognizer (get ["pocketSphinx" "phonetic"] 0)
-            result (sh parser
+            result (sh "rhubarb"
                        "-o" result-file
                        "-r" recognizer
                        "--quiet"
@@ -72,6 +72,6 @@
   [file-path]
   (-> file-path
       (relative->absolute-path)
-      (recognize-audio parser-directory)
+      (recognize-audio)
       (read-results)
       (:mouthCues)))
