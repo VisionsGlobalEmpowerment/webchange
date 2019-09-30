@@ -6,6 +6,7 @@
                  {:url "/raw/audio/l2/a2/L2_A2_Vaca_3.m4a", :size 2, :type "audio" :alias "vaca 3"}
                  {:url "/raw/audio/l2/a2/L2_A2_Mari.m4a", :size 2, :type "audio" :alias "mari"}
                  {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio" :alias "vaca insertions"}
+                 {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio" :alias "mari chants"}
                  ]
  :audio         {:vaca-1 "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a"
                  :vaca-2 "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a"

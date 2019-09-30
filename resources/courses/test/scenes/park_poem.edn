@@ -119,13 +119,9 @@
                                  :scale-x    0.6}}
 
  :scene-objects [["background"] ["image-story-1" "image-story-2" "image-story-3"] ["bubble-1" "bubble-2" "bubble-3"] ["mari" "rock"]]
- :actions       {:clear-instruction     {:type        "remove-flows"
-                                         :description "Remove flows"
-                                         :flow-tag    "instruction"}
-                 :start                 {:type        "sequence"
+ :actions       {:start                 {:type        "sequence"
                                          :description "Initial action"
                                          :data        ["start-activity"
-                                                       "clear-instruction"
                                                        "init-state"
                                                        "init-concepts"
                                                        "mari-voice-welcome"
@@ -291,6 +287,16 @@
                  :mari-listening-eva    {:type "state" :target "mari" :id "listening-eva"}
 
                  :mari-listening-user   {:type "state" :target "mari" :id "listening-user"}
+
+                 :poem-pause {:type "sequence-data"
+                              :data [{:type     "test-value"
+                                      :value1   true
+                                      :from-var [{:var-name "poem-paused" :action-property "value2"}]
+                                      :success  {:type "sequence-data"
+                                                 :data [{:type "action" :id "mari-listening-user"}
+                                                        {:type "empty" :duration 6000}]}
+                                      :fail     {:type "empty" :duration 1000}}
+                                     {:type "action" :id "mari-listening-eva"}]}
 
                  :mari-voice-welcome    {:type        "parallel"
                                          :description "Bienvendio al parque pequeno genio! Te gustaria escuchar una corta historia?"

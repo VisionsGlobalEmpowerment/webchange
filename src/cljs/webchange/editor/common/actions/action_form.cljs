@@ -116,9 +116,9 @@
      ]))
 
 (defn- action-panel
-  [props]
+  [props {:keys [scene-id]}]
   [:div
-   [f/action-dropdown props :id]
+   [f/action-dropdown props :id "id" scene-id]
    [na/checkbox {:label "Return immediately"
                  :default-checked? (:return-immediately @props)
                  :on-change #(swap! props assoc :return-immediately (.-checked %2))}]])
@@ -215,6 +215,13 @@
           [na/form-button {:content "Edit" :on-click #(reset! edit-mode true)}]])
        ])))
 
+(defn- action-data-description
+  [action]
+  (case (:type action)
+    "animation-sequence" (str (:type action) " - " (:target action))
+    "action" (str (:type action) " - " (:id action))
+    (str (:type action))))
+
 (defn- data-panel [props]
   (let [{data :data} @(re-frame/subscribe [::actions.subs/form-data])]
     (swap! props assoc :data data)
@@ -228,7 +235,7 @@
        ^{:key (str index action)}
        [sa/Item {}
         [sa/ItemContent {}
-         [:a {:on-click #(re-frame/dispatch [::actions.events/select-action-data-path index])} (str (:type action) " - " (:target action))]
+         [:a {:on-click #(re-frame/dispatch [::actions.events/select-action-data-path index])} (action-data-description action)]
          [:div {:style {:float "right"}}
           [na/icon {:name "copy outline" :link? true
                     :on-click #(re-frame/dispatch [::actions.events/selected-action-copy-data index])}]
@@ -280,12 +287,12 @@
    [f/transition-dropdown props :transition-id]
    [key-value-params props :to]])
 
-(defn- test-transitions-collide-panel [props]
+(defn- test-transitions-collide-panel [props {:keys [scene-id]}]
   [:div
    [f/transition-dropdown props :transition-1 "Transition 1"]
    [f/transition-dropdown props :transition-2 "Transition 2"]
-   [f/action-dropdown props :success "success"]
-   [f/action-dropdown props :fail "fail"]])
+   [f/action-dropdown props :success "success" scene-id]
+   [f/action-dropdown props :fail "fail" scene-id]])
 
 (defn- remove-flows-panel [props]
   [:div
@@ -323,22 +330,22 @@
    [na/form-input {:label "repeat" :default-value (:repeat @props) :on-change #(swap! props assoc :repeat (-> %2 .-value)) :inline? true}]
    [na/checkbox {:label "shuffled" :default-checked? (:shuffled @props) :on-change #(swap! props assoc :shuffled (.-checked %2))}]])
 
-(defn- test-var-scalar-panel [props]
+(defn- test-var-scalar-panel [props {:keys [scene-id]}]
   [:div
    [na/form-input {:label "value1" :default-value (:value1 @props) :on-change #(swap! props assoc :value1 (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "value2" :default-value (:value2 @props) :on-change #(swap! props assoc :value2 (-> %2 .-value)) :inline? true}]
-   [f/action-dropdown props :success "success"]
-   [f/action-dropdown props :fail "fail"]])
+   [f/action-dropdown props :success "success" scene-id]
+   [f/action-dropdown props :fail "fail" scene-id]])
 
-(defn- test-var-list-panel [props]
+(defn- test-var-list-panel [props {:keys [scene-id]}]
   [:div
    [na/divider {}]
    [vector-params props :var-names "var names"]
    [na/divider {}]
    [vector-params props :values "values"]
    [na/divider {}]
-   [f/action-dropdown props :success "success"]
-   [f/action-dropdown props :fail "fail"]])
+   [f/action-dropdown props :success "success" scene-id]
+   [f/action-dropdown props :fail "fail" scene-id]])
 
 (defn- case-option-item-panel [key action]
   (let [edit (r/atom nil)]
@@ -476,7 +483,7 @@
    [common props]
    [Divider]
    (case (-> @props :type keyword)
-     :action [action-panel props]
+     :action [action-panel props params]
      :audio [audio-panel props params]
      :state [state-panel props params]
      :add-alias [add-alias-panel props params]
@@ -490,7 +497,7 @@
      :animation-sequence [animation-sequence-panel props params]
      :scene [scene-panel props]
      :transition [transition-panel props]
-     :test-transitions-collide [test-transitions-collide-panel props]
+     :test-transitions-collide [test-transitions-collide-panel props params]
 
      :sequence [sequence-panel props params]
      :parallel [parallel-panel props]
@@ -500,9 +507,9 @@
      :dataset-var-provider [dataset-var-provider-panel props]
      :lesson-var-provider [lesson-var-provider-panel props]
      :vars-var-provider [vars-var-provider-panel props]
-     :test-var-scalar [test-var-scalar-panel props]
-     :test-var-list [test-var-list-panel props]
-     :test-value [test-var-scalar-panel props]
+     :test-var-scalar [test-var-scalar-panel props params]
+     :test-var-list [test-var-list-panel props params]
+     :test-value [test-var-scalar-panel props params]
      :case [case-panel props]
      :counter [counter-panel props]
      :set-variable [set-variable-panel props]
