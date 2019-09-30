@@ -7,19 +7,6 @@
 (def template-names
   ["click-pointer"])
 
-(defn str-without-last
-  [str number]
-  (.substring (java.lang.String. str) 0 (- (count str) number)))
-
-(defn get-dir-files
-  [path]
-  (let [dir-content (->> path io/resource io/file)]
-    (if-not (nil? dir-content)
-      (->> dir-content
-           file-seq
-           (filter #(.isFile %)))
-      [])))
-
 (defn course-path
   [course-name]
   (str "courses/" course-name "/course.edn"))

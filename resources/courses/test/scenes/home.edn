@@ -54,20 +54,16 @@
                  },
  :scene-objects [["background"] ["vera" "senora-vaca"] ["door-trigger"] ["box1" "box2" "box3"]],
  :actions
-                {:senora-vaca-audio-1
-                                                   {:type "parallel"
-                                                    :data [{:type "audio", :id "vaca-1", :start 1.089, :duration 2.749}
-                                                           {:type "animation-sequence" :target "senoravaca" :track 1 :offset 1.089
-                                                            :data [{:start 1.089 :end 3.596 :anim "talk"}]}]}
+                {:senora-vaca-audio-1 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 1.089
+                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 1.089, :duration 2.749
+                                       :data [{:start 1.089 :end 3.596 :anim "talk"}]}
 
-                 :senora-vaca-audio-2
-                                                   {:type "parallel"
-                                                    :data [{:type "audio", :id "vaca-1", :start 4.395, :duration 10.042}
-                                                           {:type "animation-sequence" :target "senoravaca" :track 1 :offset 4.395
-                                                            :data [{:start 4.395 :end 5.484 :anim "talk"}
-                                                                   {:start 6.423 :end 8.745 :anim "talk"}
-                                                                   {:start 9.607 :end 10.342 :anim "talk"}
-                                                                   {:start 11.226 :end 14.302 :anim "talk"}]}]}
+                 :senora-vaca-audio-2 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 4.395
+                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 4.395, :duration 10.042
+                                       :data [{:start 4.395 :end 5.484 :anim "talk"}
+                                              {:start 6.423 :end 8.745 :anim "talk"}
+                                              {:start 9.607 :end 10.342 :anim "talk"}
+                                              {:start 11.226 :end 14.302 :anim "talk"}]}
 
                  :senora-vaca-audio-touch-second-box
                                                    {:type "parallel"

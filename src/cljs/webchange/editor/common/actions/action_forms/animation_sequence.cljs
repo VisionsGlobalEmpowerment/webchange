@@ -1,6 +1,7 @@
 (ns webchange.editor.common.actions.action-forms.animation-sequence
   (:require
     [reagent.core :as r]
+    [re-frame.core :as re-frame]
     [soda-ash.core
      :refer [FormDropdown FormGroup Item ItemContent ItemGroup]
      :rename {FormDropdown form-dropdown
@@ -12,6 +13,7 @@
      :refer [button divider dropdown-list form-input header icon]
      :rename {dropdown-list get-options-list}]
     [webchange.editor.events :as events]
+    [webchange.editor.common.actions.events :as actions.events]
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer :as ws]))
 
@@ -82,7 +84,8 @@
   [props {:keys [scene-id
                  scene-objects
                  show-upload-asset-form]}]
-  (let [target-options (get-options-list (animation-object-names scene-objects) identity identity)
+  (let [loading (re-frame/subscribe [:loading])
+        target-options (get-options-list (animation-object-names scene-objects) identity identity)
         audio (:audio @props)
         data (:data @props)
         duration (:duration @props)
@@ -133,6 +136,11 @@
         (swap! props assoc :data (->> regions
                                       (map #(assoc % :anim "talk"))
                                       vec)))]
+
+     [na/button {:content  "LipSync"
+                 :loading? (:get-talk-animation @loading)
+                 :on-click #(do (re-frame/dispatch [::actions.events/store-selected-action @props])
+                                (re-frame/dispatch [::events/detect-lip-sync @props]))}]
      [divider {}]
      [animation-sequence-items props]
      [divider {}]]))

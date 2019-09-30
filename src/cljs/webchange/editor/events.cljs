@@ -6,7 +6,8 @@
     [webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
     [webchange.common.anim :refer [animations]]
-    [webchange.editor.common.actions.events :as actions.events]))
+    [webchange.editor.common.actions.events :as actions.events]
+    [webchange.interpreter.variables.events :as vars.events]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -803,42 +804,40 @@
   (fn [{:keys [db]} _]
     {:dispatch [::set-main-content :triggers]}))
 
-(defn audio-action->talk-animation
-  [audio-action animations]
-  (let [description (:description audio-action)
-        animation-action {:type "animation-sequence"
-                          :track 1
-                          :offset (:start audio-action)
-                          :data animations}]
-    {:type "parallel"
-     :description description
-     :data [audio-action
-            animation-action]}))
-
 (re-frame/reg-event-fx
-  ::convert-to-talk-animation
+  ::detect-lip-sync
   (fn [{:keys [db]} [_ audio-action]]
     {:db (assoc-in db [:loading :get-talk-animation] true)
      :http-xhrio {:method          :get
                   :uri             (str "/api/actions/get-talk-animations")
-                  :params          {:file     (:id audio-action)
+                  :params          {:file     (:audio audio-action)
                                     :start    (:start audio-action)
                                     :duration (:duration audio-action)}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::convert-to-talk-animation-success]
-                  :on-failure      [::convert-to-talk-animation-failure]}}))
+                  :on-success      [::detect-lip-sync-success]
+                  :on-failure      [::detect-lip-sync-failure]}}))
 
 (re-frame/reg-event-fx
-  ::convert-to-talk-animation-success
+  ::detect-lip-sync-success
   (fn [{:keys [db]} [_ animations]]
     (let [action-data (get-in db [:editor :action-form :data])
-          new-action (audio-action->talk-animation action-data animations)]
+          path (get-in db [:editor :action-form :path])
+          form-data (get-in action-data path {})
+          new-action (assoc form-data :data animations)]
       {:dispatch-n (list [:complete-request :get-talk-animation]
-                         [::actions.events/edit-selected-action new-action]
-                         [::edit-selected-scene-action])})))
+                         [::actions.events/edit-selected-action new-action])})))
 
 (re-frame/reg-event-fx
-  ::convert-to-talk-animation-failure
+  ::detect-lip-sync-failure
   (fn [{:keys [db]} [_ _]]
     {:dispatch-n (list [:complete-request :get-talk-animation])}))
+
+(re-frame/reg-event-fx
+  ::play-current-scene
+  (fn [{:keys [db]} [_ _]]
+    (let [current-scene (:current-scene db)]
+      {:db (-> db
+               (assoc-in [:scenes current-scene :objects] (get-in db [:current-scene-data :objects])))
+       :dispatch-n (list [::set-main-content :play-scene]
+                         [::vars.events/clear-vars])})))

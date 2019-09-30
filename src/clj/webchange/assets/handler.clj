@@ -7,7 +7,8 @@
             [webchange.common.handler :refer [handle current-user]]
             [webchange.auth.core :as auth]
             [clojure.java.io :as io]
-            [mikera.image.core :as imagez]))
+            [mikera.image.core :as imagez]
+            [config.core :refer [env]]))
 
 (defn get-extension [filename]
   (-> filename
@@ -43,7 +44,7 @@
 (defn upload-asset [{:keys [tempfile size filename] :as file}]
   (let [extension (get-extension filename)
         new-name (gen-filename extension)
-        path (str "resources/public/upload/" new-name)
+        path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") new-name)
         type (get-type extension)
         params (get-additional-params type tempfile)]
     (try

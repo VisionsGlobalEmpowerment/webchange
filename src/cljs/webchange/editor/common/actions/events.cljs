@@ -51,6 +51,13 @@
       {:db (assoc-in db data-path state)
        :dispatch [::select-action-path-prev]})))
 
+(re-frame/reg-event-fx
+  ::store-selected-action
+  (fn [{:keys [db]} [_ state]]
+    (let [path (get-in db [:editor :action-form :path])
+          data-path (vec (concat [:editor :action-form :data] path))]
+      {:db (assoc-in db data-path state)})))
+
 (defn inner-data-path [db]
   (let [path (get-in db [:editor :action-form :path])]
     (vec (concat [:editor :action-form :data] path [:data]))))
