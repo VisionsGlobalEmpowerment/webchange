@@ -4,11 +4,11 @@
 
 (defn- translate
   [path]
-  (get-in {:name            {:first "Popup"
+  (get-in {:name            {:first "Tab"
                              :last  "School"}
            :forgot-password "Forgot Password?"
            :welcome         {:first "Welcome to"
-                             :last  "Popup School"}}
+                             :last  "TabSchool"}}
           path))
 
 (def default-color (:default w-colors))
