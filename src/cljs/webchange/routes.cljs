@@ -12,7 +12,8 @@
                   "student-login"     :student-login
                   "register"          :register-user
                   "courses"           {["/" :id]           :course
-                                       ["/" :id "/editor"] :course-editor}
+                                       ["/" :id "/editor"] :course-editor
+                                       ["/" :id "/editor-v2"] :course-editor-v2}
                   "student-dashboard" {""          :student-dashboard
                                        "/finished" :finished-activities}
                   "dashboard"         {[""]                                             :dashboard

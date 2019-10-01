@@ -5,6 +5,7 @@
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
+    [webchange.editor-v2.views :refer [main-view]]
     [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
@@ -40,6 +41,7 @@
     :course [course (:id route-params)]
     ;; editor
     :course-editor [editor-panel (:id route-params)]
+    :course-editor-v2 [main-view (:id route-params)]
     ;; teacher dashboard
     :dashboard [dashboard-panel :dashboard route-params]
     :dashboard-classes [dashboard-panel :classes-list route-params]

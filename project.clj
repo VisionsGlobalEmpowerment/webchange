@@ -123,6 +123,7 @@
                                            :gsap "2.1.2"
                                            :wavesurfer.js "2.2.1"
                                            :svg-arc-to-cubic-bezier "3.2.0"
+                                           "@projectstorm/react-diagrams" "^5.3.2"
                                            }
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
@@ -158,6 +159,7 @@
                                       :gsap "2.1.2"
                                       :wavesurfer.js "2.2.1"
                                       :svg-arc-to-cubic-bezier "3.2.0"
+                                      "@projectstorm/react-diagrams" "^5.3.2"
                                       }
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
@@ -182,6 +184,7 @@
                                     :gsap "2.1.2"
                                     :wavesurfer.js "2.2.1"
                                     :svg-arc-to-cubic-bezier "3.2.0"
+                                    "@projectstorm/react-diagrams" "^5.3.2"
                                     }
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
