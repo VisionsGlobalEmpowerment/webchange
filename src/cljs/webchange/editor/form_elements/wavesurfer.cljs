@@ -23,6 +23,8 @@
 (def audio-color "rgba(0, 0, 0, 0.1)")
 (def additional-color "rgba(0, 0, 100, 0.3)")
 
+(defonce last-positions (atom {}))
+
 (defn create-wavesurfer [element key]
   (while (.-firstChild element) (-> element .-firstChild .remove))
   (let [ws-div (.insertBefore element (js/document.createElement "div") nil)
@@ -36,6 +38,7 @@
                                                                                             :color "hsla(400, 100%, 30%, 0.5)"}))
                                                            (.create TimelinePlugin (clj->js {:container timeline-div}))]}))]
     (.loadBlob wavesurfer (get-data-as-blob key))
+    (.on wavesurfer "ready" #(.seekAndCenter wavesurfer (/ (get @last-positions key 0) (.getDuration wavesurfer))))
     wavesurfer))
 
 (defn round [f]
@@ -48,12 +51,14 @@
      :end end
      :duration (round (- end start))}))
 
-(defn handle-audio-region! [wavesurfer region-atom]
+(defn handle-audio-region! [wavesurfer region-atom key]
   (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
   (.on wavesurfer "region-created" (fn [e]
                                      (when (:region @region-atom) (-> @region-atom :region .remove))
+                                     (swap! last-positions assoc key (-> e region->data :start))
                                      (reset! region-atom (-> (region->data e) (assoc :region e)))))
   (.on wavesurfer "region-update-end" (fn [e]
+                                        (swap! last-positions assoc key (-> e region->data :start))
                                         (reset! region-atom (-> (region->data e) (assoc :region e))))))
 
 (defn handle-additional-regions! [wavesurfer regions-atom]
@@ -72,8 +77,9 @@
                      :end (:end @region-atom)
                      :drag edit
                      :resize edit}]
-    (.on wavesurfer "ready" #(do (.addRegion wavesurfer (clj->js region-data))
-                                 (.seekAndCenter wavesurfer (/ (+ (:start region-data) 5) (.getDuration wavesurfer)))))))
+    (.on wavesurfer "ready" #(when (and (> (:start region-data) 0) (> (:end region-data) 0))
+                               (.addRegion wavesurfer (clj->js region-data))
+                               (.seekAndCenter wavesurfer (/ (+ (:start region-data) 5) (.getDuration wavesurfer)))))))
 
 
 (defn audio-waveform-modal [{:keys [key start end]} on-save]
@@ -86,7 +92,7 @@
                 [sa/ModalDescription
                  [:div {:ref #(when %
                                 (let [wavesurfer (create-wavesurfer % key)]
-                                  (handle-audio-region! wavesurfer region)
+                                  (handle-audio-region! wavesurfer region key)
                                   (init-audio-region! wavesurfer region true)
                                   (reset! ws wavesurfer)))}]
                  [:div
@@ -130,7 +136,7 @@
                                                                                                   (reset! mode :audio))}]
          [:div {:ref #(when %
                         (let [wavesurfer (create-wavesurfer % key)]
-                          (when (= :audio @mode) (handle-audio-region! wavesurfer region))
+                          (when (= :audio @mode) (handle-audio-region! wavesurfer region key))
                           (init-audio-region! wavesurfer region (= :audio @mode))
 
                           (when (= :animations @mode)
@@ -168,7 +174,7 @@
                                                                                                   (reset! mode :audio))}]
          [:div {:ref #(when %
                         (let [wavesurfer (create-wavesurfer % key)]
-                          (when (= :audio @mode) (handle-audio-region! wavesurfer region))
+                          (when (= :audio @mode) (handle-audio-region! wavesurfer region key))
                           (init-audio-region! wavesurfer region (= :audio @mode))
 
                           (when (= :chunks @mode)

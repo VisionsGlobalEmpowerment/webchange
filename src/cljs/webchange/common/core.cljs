@@ -38,8 +38,10 @@
 
 (defn prepare-actions
   [{:keys [actions] :as object}]
-  (let [has-actions? (->> actions keys nil? not)]
-    (if has-actions?
+  (let [has-actions? (->> actions keys nil? not)
+        group? (-> object :type keyword (= :group))
+        prepare-actions? (or has-actions? group?)]
+    (if prepare-actions?
       (->> actions
            (map second)
            (map #(assoc % :var (:var object)))

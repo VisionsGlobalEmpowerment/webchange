@@ -5,9 +5,34 @@
                  {:url "/raw/img/park/poem/o1.png" :type "image"}
                  {:url "/raw/img/park/poem/o2.png" :type "image"}
                  {:url "/raw/img/park/poem/o3.png" :type "image"}
-                 {:url "/raw/audio/l2/a3/poems/ardilla.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a3/poems/oso.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a3/poems/iman.m4a" :type "audio"}
+                 {:url "/raw/audio/l2/a3/poems/ardilla.m4a" :type "audio" :alias "ardilla"}
+                 {:url "/raw/audio/l2/a3/poems/bebe.m4a" :type "audio" :alias "bebe"}
+                 {:url "/raw/audio/l2/a3/poems/casa.m4a" :type "audio" :alias "casa"}
+                 {:url "/raw/audio/l2/a3/poems/cepillo.m4a" :type "audio" :alias "cepillo"}
+                 {:url "/raw/audio/l2/a3/poems/chocolate.m4a" :type "audio" :alias "chocolate"}
+                 {:url "/raw/audio/l2/a3/poems/diamante.m4a" :type "audio" :alias "diamante"}
+                 {:url "/raw/audio/l2/a3/poems/elefante.m4a" :type "audio" :alias "elefante"}
+                 {:url "/raw/audio/l2/a3/poems/flor.m4a" :type "audio" :alias "flor"}
+                 {:url "/raw/audio/l2/a3/poems/gato.m4a" :type "audio" :alias "gato"}
+                 {:url "/raw/audio/l2/a3/poems/gemelo.m4a" :type "audio" :alias "gemelo"}
+                 {:url "/raw/audio/l2/a3/poems/hoja.m4a" :type "audio" :alias "hoja"}
+                 {:url "/raw/audio/l2/a3/poems/iman.m4a" :type "audio" :alias "iman"}
+                 {:url "/raw/audio/l2/a3/poems/jardin.m4a" :type "audio" :alias "jardin"}
+                 {:url "/raw/audio/l2/a3/poems/kimono.m4a" :type "audio" :alias "kimono"}
+                 {:url "/raw/audio/l2/a3/poems/leon.m4a" :type "audio" :alias "leon"}
+                 {:url "/raw/audio/l2/a3/poems/mano.m4a" :type "audio" :alias "mano"}
+                 {:url "/raw/audio/l2/a3/poems/nandu.m4a" :type "audio" :alias "nandu"}
+                 {:url "/raw/audio/l2/a3/poems/nino.m4a" :type "audio" :alias "nino"}
+                 {:url "/raw/audio/l2/a3/poems/oso.m4a" :type "audio" :alias "oso"}
+                 {:url "/raw/audio/l2/a3/poems/pelota.m4a" :type "audio" :alias "pelota"}
+                 {:url "/raw/audio/l2/a3/poems/queso.m4a" :type "audio" :alias "queso"}
+                 {:url "/raw/audio/l2/a3/poems/rana.m4a" :type "audio" :alias "rana"}
+                 {:url "/raw/audio/l2/a3/poems/sitio_web.m4a" :type "audio" :alias "sitio web"}
+                 {:url "/raw/audio/l2/a3/poems/tomate.m4a" :type "audio" :alias "tomate"}
+                 {:url "/raw/audio/l2/a3/poems/uvas.m4a" :type "audio" :alias "uvas"}
+                 {:url "/raw/audio/l2/a3/poems/violin.m4a" :type "audio" :alias "violin"}
+                 {:url "/raw/audio/l2/a3/poems/xilofono.m4a" :type "audio" :alias "xilofono"}
+                 {:url "/raw/audio/l2/a3/poems/yoyo.m4a" :type "audio" :alias "yoyo"}
                  {:url "/raw/audio/l2/a3/L2_A3_Mari.m4a" :size 5 :type "audio" :alias "mari voice"}]
  :audio         {:mari "/raw/audio/l2/a3/L2_A3_Mari.m4a"}
  :objects       {:background    {:type "background"
@@ -109,6 +134,7 @@
                                  :name       "rock"
                                  :scene-name "rock"
                                  :anim       "idle"
+                                 :skin       "female"
                                  :start      true
                                  :speed      0.35
                                  :x          1570
