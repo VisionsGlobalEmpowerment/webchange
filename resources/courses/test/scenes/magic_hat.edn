@@ -377,25 +377,25 @@
 
                  :mari-says-correct-answer {:type "sequence-data"
                                             :data [{:type "action",
-                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}]}
+                                                    :from-var [{:var-name "current-concept", :var-property "mari-word"}]}]}
 
                  :mari-says-wrong-answer   {:type "sequence-data"
                                             :data [{:type "action",
-                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}
+                                                    :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
                                                    {:type "empty" :duration 500}
                                                    {:type "action" :id "mari-voice-wrong-1"}
                                                    {:type "action",
-                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}
+                                                    :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
                                                    {:type "empty" :duration 500}
                                                    {:type "action",
-                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-word"}]}
+                                                    :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
                                                    {:type "action" :id "mari-voice-wrong-2"}
                                                    {:type "action",
-                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}
+                                                    :from-var [{:var-name "current-concept", :var-property "mari-sound"}]}
                                                    {:type "empty" :duration 500}
                                                    {:type "action" :id "mari-voice-wrong-3"}
                                                    {:type "action",
-                                                    :from-var [{:var-name "current-concept", :var-property "magic-hat-sound"}]}]}
+                                                    :from-var [{:var-name "current-concept", :var-property "mari-sound"}]}]}
 
                  ;; ---
 

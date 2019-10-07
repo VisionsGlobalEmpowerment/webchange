@@ -1,8 +1,8 @@
 {:assets        [{:url "/raw/img/park/slide/background.jpg" :type "image"}
                  {:url "/raw/audio/l2/a5/L2_A5_Mari.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a" :type "audio"}]
+                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a" :type "audio" :alias "riddle a-g"}
+                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a" :type "audio" :alias "riddle g-n"}
+                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a" :type "audio" :alias "riddle o-end"}]
  :audio         {:mari "/raw/audio/l2/a5/L2_A5_Mari.m4a"}
  :objects       {:background    {:type "background"
                                  :src  "/raw/img/park/slide/background.jpg"}

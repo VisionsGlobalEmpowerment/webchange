@@ -115,6 +115,18 @@
                     {:id 12 :lesson-sets {:concepts-single "l2-ls1-1"
                                           :concepts-group "l2-ls1-3"
                                           :concepts-all "concepts-all"
+                                          :assessment "assessment4"}}
+                    {:id 13 :lesson-sets {:concepts-single "l2-ls2-1"
+                                          :concepts-group "l2-ls2-3"
+                                          :concepts-all "concepts-all"
+                                          :assessment "assessment4"}}
+                    {:id 14 :lesson-sets {:concepts-single "l2-ls3-1"
+                                          :concepts-group "l2-ls3-3"
+                                          :concepts-all "concepts-all"
+                                          :assessment "assessment4"}}
+                    {:id 15 :lesson-sets {:concepts-single "l2-ls4-1"
+                                          :concepts-group "l2-ls4-3"
+                                          :concepts-all "concepts-all"
                                           :assessment "assessment4"}}]
 
  :locations        {:home [{:level 1 :scene :home}
@@ -345,11 +357,8 @@
                                                                              :slide              116
                                                                              :writing-lesson     117
                                                                              :writing-practice   118
-                                                                             :magic-hat          119
-                                                                             :cycling-letters    120
-                                                                             :volleyball-letters 121
-                                                                             :pinata             122}}
-
+                                                                             :magic-hat          119}}
+;a
                     {:id 111 :type "set-activity" :activity "cinema" :activity-number 92 :lesson 12 :level 2}
                     {:id 112 :type "set-activity" :activity "cinema-video" :activity-number 93 :lesson 12 :level 2}
                     {:id 113 :type "set-activity" :activity "letter-intro" :activity-number 94 :lesson 12 :level 2}
@@ -359,9 +368,97 @@
                     {:id 117 :type "set-activity" :activity "writing-lesson" :activity-number 98 :lesson 12 :level 2}
                     {:id 118 :type "set-activity" :activity "writing-practice" :activity-number 99 :lesson 12 :level 2}
                     {:id 119 :type "set-activity" :activity "magic-hat" :activity-number 100 :lesson 12 :level 2}
-                    {:id 120 :type "set-activity" :activity "cycling-letters" :activity-number 101 :lesson 12 :level 2}
-                    {:id 121 :type "set-activity" :activity "volleyball-letters" :activity-number 102 :lesson 12 :level 2}
-                    {:id 122 :type "set-activity" :activity "pinata" :activity-number 102 :lesson 12 :level 2}
+
+                    {:id 122 :type "set-scene-activities" :scene-activities {:cinema             123
+                                                                             :cinema-video       124
+                                                                             :letter-intro       125
+                                                                             :park-poem          126
+                                                                             :running            127
+                                                                             :slide              128
+                                                                             :writing-lesson     129
+                                                                             :writing-practice   130
+                                                                             :magic-hat          131
+                                                                             :cycling-letters    132}}
+;o
+                    {:id 123 :type "set-activity" :activity "cinema" :activity-number 92 :lesson 12 :level 2}
+                    {:id 124 :type "set-activity" :activity "cinema-video" :activity-number 93 :lesson 12 :level 2}
+                    {:id 125 :type "set-activity" :activity "letter-intro" :activity-number 94 :lesson 12 :level 2}
+                    {:id 126 :type "set-activity" :activity "park-poem" :activity-number 95 :lesson 12 :level 2}
+                    {:id 127 :type "set-activity" :activity "running" :activity-number 96 :lesson 12 :level 2}
+                    {:id 128 :type "set-activity" :activity "slide" :activity-number 97 :lesson 12 :level 2}
+                    {:id 129 :type "set-activity" :activity "writing-lesson" :activity-number 98 :lesson 12 :level 2}
+                    {:id 130 :type "set-activity" :activity "writing-practice" :activity-number 99 :lesson 12 :level 2}
+                    {:id 131 :type "set-activity" :activity "magic-hat" :activity-number 100 :lesson 12 :level 2}
+                    {:id 132 :type "set-activity" :activity "cycling-letters" :activity-number 101 :lesson 12 :level 2}
+
+                    {:id 133 :type "set-scene-activities" :scene-activities {:cinema             134
+                                                                             :cinema-video       135
+                                                                             :letter-intro       136
+                                                                             :park-poem          137
+                                                                             :running            138
+                                                                             :slide              139
+                                                                             :writing-lesson     140
+                                                                             :writing-practice   141
+                                                                             :magic-hat          142
+                                                                             :volleyball-letters 143}}
+;i
+                    {:id 134 :type "set-activity" :activity "cinema" :activity-number 92 :lesson 12 :level 2}
+                    {:id 135 :type "set-activity" :activity "cinema-video" :activity-number 93 :lesson 12 :level 2}
+                    {:id 136 :type "set-activity" :activity "letter-intro" :activity-number 94 :lesson 12 :level 2}
+                    {:id 137 :type "set-activity" :activity "park-poem" :activity-number 95 :lesson 12 :level 2}
+                    {:id 138 :type "set-activity" :activity "running" :activity-number 96 :lesson 12 :level 2}
+                    {:id 139 :type "set-activity" :activity "slide" :activity-number 97 :lesson 12 :level 2}
+                    {:id 140 :type "set-activity" :activity "writing-lesson" :activity-number 98 :lesson 12 :level 2}
+                    {:id 141 :type "set-activity" :activity "writing-practice" :activity-number 99 :lesson 12 :level 2}
+                    {:id 142 :type "set-activity" :activity "magic-hat" :activity-number 100 :lesson 12 :level 2}
+                    {:id 143 :type "set-activity" :activity "volleyball-letters" :activity-number 102 :lesson 12 :level 2}
+
+                    {:id 144 :type "set-scene-activities" :scene-activities {:cinema             145
+                                                                             :cinema-video       146
+                                                                             :letter-intro       147
+                                                                             :park-poem          148
+                                                                             :running            149
+                                                                             :slide              150
+                                                                             :writing-lesson     151
+                                                                             :writing-practice   152
+                                                                             :magic-hat          153}}
+;u
+                    {:id 145 :type "set-activity" :activity "cinema" :activity-number 92 :lesson 12 :level 2}
+                    {:id 146 :type "set-activity" :activity "cinema-video" :activity-number 93 :lesson 12 :level 2}
+                    {:id 147 :type "set-activity" :activity "letter-intro" :activity-number 94 :lesson 12 :level 2}
+                    {:id 148 :type "set-activity" :activity "park-poem" :activity-number 95 :lesson 12 :level 2}
+                    {:id 149 :type "set-activity" :activity "running" :activity-number 96 :lesson 12 :level 2}
+                    {:id 150 :type "set-activity" :activity "slide" :activity-number 97 :lesson 12 :level 2}
+                    {:id 151 :type "set-activity" :activity "writing-lesson" :activity-number 98 :lesson 12 :level 2}
+                    {:id 152 :type "set-activity" :activity "writing-practice" :activity-number 99 :lesson 12 :level 2}
+                    {:id 153 :type "set-activity" :activity "magic-hat" :activity-number 100 :lesson 12 :level 2}
+
+                    {:id 154 :type "set-scene-activities" :scene-activities {:cinema             111
+                                                                             :cinema-video       112
+                                                                             :letter-intro       113
+                                                                             :park-poem          114
+                                                                             :running            115
+                                                                             :slide              116
+                                                                             :writing-lesson     117
+                                                                             :writing-practice   118
+                                                                             :magic-hat          119
+                                                                             :cycling-letters    120
+                                                                             :volleyball-letters 121
+                                                                             :pinata             122}}
+;e
+                    {:id 123 :type "set-activity" :activity "cinema" :activity-number 92 :lesson 12 :level 2}
+                    {:id 124 :type "set-activity" :activity "cinema-video" :activity-number 93 :lesson 12 :level 2}
+                    {:id 125 :type "set-activity" :activity "letter-intro" :activity-number 94 :lesson 12 :level 2}
+                    {:id 126 :type "set-activity" :activity "park-poem" :activity-number 95 :lesson 12 :level 2}
+                    {:id 127 :type "set-activity" :activity "running" :activity-number 96 :lesson 12 :level 2}
+                    {:id 128 :type "set-activity" :activity "slide" :activity-number 97 :lesson 12 :level 2}
+                    {:id 129 :type "set-activity" :activity "writing-lesson" :activity-number 98 :lesson 12 :level 2}
+                    {:id 130 :type "set-activity" :activity "writing-practice" :activity-number 99 :lesson 12 :level 2}
+                    {:id 131 :type "set-activity" :activity "magic-hat" :activity-number 100 :lesson 12 :level 2}
+                    {:id 132 :type "set-activity" :activity "cycling-letters" :activity-number 101 :lesson 12 :level 2}
+                    {:id 133 :type "set-activity" :activity "volleyball-letters" :activity-number 102 :lesson 12 :level 2}
+
+                    {:id 134 :type "set-activity" :activity "pinata" :activity-number 102 :lesson 12 :level 2}
                     ]
  :default-progress {:current-activity          "home"
                     :variables                 {:last-location "home"}

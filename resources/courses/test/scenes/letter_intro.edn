@@ -5,7 +5,18 @@
                  {:url "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a", :size 2, :type "audio" :alias "vaca 2"}
                  {:url "/raw/audio/l2/a2/L2_A2_Vaca_3.m4a", :size 2, :type "audio" :alias "vaca 3"}
                  {:url "/raw/audio/l2/a2/L2_A2_Mari.m4a", :size 2, :type "audio" :alias "mari"}
-                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio" :alias "vaca insertions"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_2.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_3.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_4.m4a", :size 2, :type "audio" :alias "vaca insertions 4"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_5.m4a", :size 2, :type "audio" :alias "vaca insertions 5"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_6.m4a", :size 2, :type "audio" :alias "vaca insertions 6"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_7.m4a", :size 2, :type "audio" :alias "vaca insertions 7"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_8.m4a", :size 2, :type "audio" :alias "vaca insertions 8"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_9.m4a", :size 2, :type "audio" :alias "vaca insertions 9"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_10.m4a", :size 2, :type "audio" :alias "vaca insertions 10"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_11.m4a", :size 2, :type "audio" :alias "vaca insertions 11"}
+                 {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio" :alias "mari chants"}
                  ]
  :audio         {:vaca-1 "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a"
                  :vaca-2 "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a"

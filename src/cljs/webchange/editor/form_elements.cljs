@@ -27,9 +27,8 @@
                       :options (na/dropdown-list (->> scene :objects (map first) (map name)) identity identity)
                       :on-change #(swap! props assoc field-name (.-value %2))}]))
 
-(defn action-dropdown [props field-name label]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene @(re-frame/subscribe [::subs/scene scene-id])]
+(defn action-dropdown [props field-name label scene-id]
+  (let [scene @(re-frame/subscribe [::subs/scene scene-id])]
     [sa/FormDropdown {:label (or label "Target") :inline true :clearable true :search true :selection true
                       :default-value (get @props field-name)
                       :options (na/dropdown-list (->> scene :actions (map first) (map name)) identity identity)
