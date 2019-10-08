@@ -112,6 +112,7 @@
            (GET "/courses/:id" request (authenticated-route request))
            (GET "/courses/:id/editor" request (authenticated-route request))
            (GET "/courses/:id/editor-v2" request (authenticated-route request))
+           (GET "/courses/:id/editor-v2/:scene-id" request (authenticated-route request))
 
            (GET "/dashboard" request (teachers-route request))
            (GET "/dashboard/classes" request (teachers-route request))

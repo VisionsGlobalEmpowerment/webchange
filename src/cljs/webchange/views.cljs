@@ -24,6 +24,10 @@
   (re-frame/dispatch [::ee/init-editor course-id])
   [editor])
 
+(defn- editor-panel-v2 [course-id scene-id]
+  (re-frame/dispatch [::ee/init-editor course-id scene-id])
+  [main-view scene-id])
+
 (defn- dashboard-panel
   [content route-params]
   (re-frame/dispatch
@@ -41,7 +45,8 @@
     :course [course (:id route-params)]
     ;; editor
     :course-editor [editor-panel (:id route-params)]
-    :course-editor-v2 [main-view (:id route-params)]
+    :course-editor-v2 [editor-panel-v2 (:id route-params) nil]
+    :course-editor-v2-scene [editor-panel-v2 (:id route-params) (:scene-id route-params)]
     ;; teacher dashboard
     :dashboard [dashboard-panel :dashboard route-params]
     :dashboard-classes [dashboard-panel :classes-list route-params]

@@ -33,12 +33,12 @@
 
 (re-frame/reg-fx
   :load-course
-  (fn [course-id]
+  (fn [{:keys [course-id scene-id]}]
     (i/load-course course-id (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
                                               (re-frame/dispatch [::set-course-data course])
                                               (re-frame/dispatch [::load-progress course-id])
                                               (re-frame/dispatch [::load-lessons course-id])
-                                              (re-frame/dispatch [::set-current-scene (:initial-scene course)]))))))
+                                              (re-frame/dispatch [::set-current-scene (or scene-id (:initial-scene course))]))))))
 
 (re-frame/reg-fx
   :load-scene
@@ -200,7 +200,7 @@
         transition (get-in db [:transitions scene-id transition-id])
         id (or transition-tag transition-id)]
     (when transition
-      {:transition {:id id
+      {:transition {:id        id
                     :component transition
                     :to        to
                     :from      from
@@ -254,7 +254,7 @@
              item
              result))
          (first location-data))
-       (:scene )))
+       (:scene)))
 
 (re-frame/reg-event-fx
   ::execute-location
@@ -546,7 +546,7 @@
 (re-frame/reg-event-fx
   ::set-activity
   (fn [{:keys [db]} [_ action]]
-    {:db       (assoc-in db [:progress-data :current-activity] (:activity action))
+    {:db         (assoc-in db [:progress-data :current-activity] (:activity action))
      :dispatch-n (list [:progress-data-changed] [::reset-navigation])}))
 
 (re-frame/reg-event-fx
@@ -594,14 +594,15 @@
 
 (re-frame/reg-event-fx
   ::start-course
-  (fn-traced [{:keys [db]} [_ course-id]]
+  (fn-traced [{:keys [db]} [_ course-id scene-id]]
              (if (not= course-id (:loaded-course db))
                {:db          (-> db
                                  (assoc :loaded-course course-id)
                                  (assoc :current-course course-id)
                                  (assoc :ui-screen :course-loading)
                                  (assoc-in [:loading :load-course] true))
-                :load-course course-id})))
+                :load-course {:course-id course-id
+                              :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
   ::set-current-course

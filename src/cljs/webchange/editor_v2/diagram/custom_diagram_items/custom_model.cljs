@@ -1,7 +1,6 @@
-(ns webchange.editor-v2.diagram-builder.custom-nodes.object-node.object-model
+(ns webchange.editor-v2.diagram.custom-diagram-items.custom-model
   (:require
-    ["@projectstorm/react-diagrams" :refer [Toolkit NodeModel DefaultPortModel]]
-    [webchange.editor-v2.diagram-builder.colors :refer [get-object-color]]))
+    ["@projectstorm/react-diagrams" :refer [Toolkit NodeModel DefaultPortModel]]))
 
 ;; Custom version of of "DefaultNodeModel" from
 ;; https://github.com/projectstorm/react-diagrams/blob/v5.3.2/src/defaults/models/DefaultNodeModel.ts
@@ -11,49 +10,48 @@
   (.UID Toolkit))
 
 (defn init
-  [entity {:keys [name color]}]
+  [entity {:keys [name] :as props}]
   (set! (.-name entity) name)
-  (set! (.-color entity) color))
+  (set! (.-props entity) (clj->js props)))
 
-(defn object-model []
-  (js/Reflect.construct NodeModel #js ["object"] object-model))
+(defn custom-model []
+  (js/Reflect.construct NodeModel #js ["custom"] custom-model))
 
-(set! (.. object-model -prototype)
+(set! (.. custom-model -prototype)
       (js/Object.create (.-prototype NodeModel)))
 
-(set! (.. object-model -prototype -constructor)
-      object-model)
+(set! (.. custom-model -prototype -constructor)
+      custom-model)
 
-(set! (.. object-model -prototype -addInPort)
+(set! (.. custom-model -prototype -addInPort)
       (fn [label]
         (this-as this
           (let [port (DefaultPortModel. true (uid) label)]
             (.addPort this port)))))
 
-(set! (.. object-model -prototype -addOutPort)
+(set! (.. custom-model -prototype -addOutPort)
       (fn [label]
         (this-as this
           (let [port (DefaultPortModel. false (uid) label)]
             (.addPort this port)))))
 
-(set! (.. object-model -prototype -getInPorts)
+(set! (.. custom-model -prototype -getInPorts)
       (fn []
         (this-as this
           (let [ports (->> this .-ports js->clj vals)]
             (filter #(= (.-in %) true) ports)))))
 
-(set! (.. object-model -prototype -getOutPorts)
+(set! (.. custom-model -prototype -getOutPorts)
       (fn []
         (this-as this
           (let [ports (->> this .-ports js->clj vals)]
             (filter #(not (.-in %)) ports)))))
 
 
-(defn get-object-model
+(defn get-custom-model
   ([]
-    (get-object-model {:name "Untitled"
-                       :color (get-object-color)}))
+   (get-custom-model {:name "Untitled"}))
   ([props]
-   (let [entity (object-model.)]
+   (let [entity (custom-model.)]
      (init entity props)
      entity)))
