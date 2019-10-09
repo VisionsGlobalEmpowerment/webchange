@@ -89,23 +89,27 @@
    [info-block {:name      name
                 :completed completed}]])
 
-(defn- show-more-item
-  []
-  [:div {:style show-more-styles}
-   [:span "+ More"]])
+(defn show-more-item
+  [{:keys [on-click]}]
+  (let [hovered? (r/atom false)]
+    (fn []
+      [ui/paper {:on-click      on-click
+                 :on-mouse-over #(reset! hovered? true)
+                 :on-mouse-out  #(reset! hovered? false)
+                 :style         list-item-styles
+                 :elevation     (if @hovered? 2 1)}
+       [:div {:style show-more-styles}
+        [:span "+ More"]]]
+      )))
 
 (defn scene-list-item
-  [{:keys [id] :as item}
-   {:keys [on-click]}]
-  (let [show-more (= id :show-more)
-        hovered? (r/atom false)]
+  [item {:keys [on-click]}]
+  (let [hovered? (r/atom false)]
     (fn []
       [ui/paper {:on-click      #(on-click item)
                  :on-mouse-over #(reset! hovered? true)
                  :on-mouse-out  #(reset! hovered? false)
                  :style         list-item-styles
                  :elevation     (if @hovered? 2 1)}
-       (if show-more
-         [show-more-item]
-         [list-item item {:hovered? @hovered?}])]
+       [list-item item {:hovered? @hovered?}]]
       )))

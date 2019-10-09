@@ -3,7 +3,7 @@
                                       :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
                                       :type    "non-scored"
                                       :outs    [{:name "map" :x 1457 :y 630}]}
-                    :letter-intro    {:name    "Letter Introduction"
+                    :letter-intro    {:name    "Letter Intro"
                                       :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
                                       :type    "non-scored"
                                       :outs    [{:name "map" :x 1457 :y 330}]}
@@ -57,11 +57,11 @@
                                       :type    "non-scored"
                                       :outs    [{:name "stadium" :x 100 :y 100}]}
                     :cinema          {:name    "Cinema"
-                                      :preview "/images/dashboard/scene-preview/Cinema-Room.jpg"
+                                      :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"
                                       :type    "non-scored"
                                       :outs    [{:name "map" :x 100 :y 100}]}
                     :cinema-video    {:name    "Cinema Video"
-                                      :preview "/images/dashboard/scene-preview/Cinema-Room.jpg"
+                                      :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"
                                       :type    "non-scored"
                                       :outs    [{:name "map" :x 100 :y 100}]}
                     :cycling         {:name    "Cycling"
@@ -85,7 +85,31 @@
                     :painting-tablet {:name    "Painting"
                                       :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"
                                       :type    "non-scored"
-                                      :outs    [{:name "library" :x 100 :y 100}]}}
+                                      :outs    [{:name "library" :x 100 :y 100}]}
+                    :writing-lesson  {:name    "Writing Lesson"
+                                      :preview "/images/dashboard/scene-preview/Library_Room.jpg"
+                                      :type    "non-scored"
+                                      :outs    [{:name "library" :x 100 :y 100}]}
+                    :writing-practice {:name    "Painting"
+                                      :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"
+                                      :type    "non-scored"
+                                      :outs    [{:name "library" :x 100 :y 100}]}
+                    :magic-hat        {:name    "Magic Hat"
+                                      :preview "/images/dashboard/scene-preview/Library_Magic-Hat.jpg"
+                                      :type    "non-scored"
+                                      :outs    [{:name "library" :x 100 :y 100}]}
+                    :cycling-letters  {:name    "Cycling"
+                                      :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"
+                                      :type    "non-scored"
+                                      :outs    [{:name "stadium" :x 100 :y 100}]}
+                    :volleyball-letters      {:name    "Volleyball"
+                                      :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"
+                                      :type    "non-scored"
+                                      :outs    [{:name "stadium" :x 100 :y 100}]}
+                    :pinata      {:name    "Pinata"
+                                      :preview "/images/dashboard/scene-preview/Park_Pinata.jpg"
+                                      :type    "non-scored"
+                                      :outs    [{:name "park" :x 100 :y 100}]}}
 
  :scenes           ["home" "map" "see-saw" "swings" "sandbox" "park" "stadium" "volleyball" "volleyball-letters" "hide-n-seek" "library"
                     "book" "painting-tablet" "cinema" "cinema-video" "cycling" "cycling-letters" "running" "letter-intro" "park-poem"

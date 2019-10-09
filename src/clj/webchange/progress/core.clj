@@ -124,3 +124,17 @@
     (if-let [{id :id} (db/get-progress {:user_id owner-id :course_id course-id})]
       (update-progress! id progress)
       (create-progress! owner-id course-id progress))))
+
+(defn complete-individual-progress! [course-name student-id]
+  (let [{user-id :user-id} (db/get-student {:id student-id})
+        {course-id :id} (db/get-course {:name course-name})
+        actions (->>
+                  (course/get-course-data course-name)
+                  :workflow-actions
+                  (map :id)
+                  (into []))
+        progress (->
+                   (db/get-progress {:user_id user-id :course_id course-id})
+                   :data
+                   (assoc :finished-workflow-actions actions))]
+    (save-progress! user-id course-name {:progress progress})))

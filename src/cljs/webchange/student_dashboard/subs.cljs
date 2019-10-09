@@ -21,8 +21,11 @@
       (->> (get-in db [:course-data :workflow-actions])
            (filter is-finished?)
            (filter is-activity?)
-           (map :activity)
-           (map #(scene-name->scene % scenes))
+           (map #(assoc % :scene (scene-name->scene (:activity %) scenes)))
+           (map #(assoc-in % [:scene :activity-id] (get % :id)))
+           (map #(assoc-in % [:scene :lesson] (get % :lesson)))
+           (map #(assoc-in % [:scene :level] (get % :level)))
+           (map :scene)
            (map #(assoc % :completed true))))))
 
 (re-frame/reg-sub
@@ -45,7 +48,8 @@
       (->> (get-in db [:course-data :workflow-actions])
            (filter is-activity?)
            (map #(assoc % :scene (scene-name->scene (:activity %) scenes)))
-           (map #(if (is-finished? %) (assoc % :completed true) %))
+           (map #(if (is-finished? %) (assoc-in % [:scene :completed] true) %))
+           (map #(assoc-in % [:scene :activity-id] (get % :id)))
            (map :scene)
            (filter is-assessment?)))))
 

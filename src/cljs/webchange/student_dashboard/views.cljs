@@ -21,7 +21,8 @@
            :assessment      {:title "Assessments"}
            :related-content {:title "Related / Additional content"}
            :life-skills     {:title "Life skills / Extra credit"}
-           :history         {:title "History"}}
+           :history         {:title "History"}
+           :lesson          {:title "Lesson "}}
           path))
 
 (def dashboard-container-styles
@@ -71,17 +72,14 @@
 
 (defn- continue-the-story []
   (let [loading? @(re-frame/subscribe [::sds/progress-loading])
-        show-more {:id :show-more}
         finished @(re-frame/subscribe [::sds/finished-activities])
         next-activity @(re-frame/subscribe [::sds/next-activity])
-        list (into [] (concat [show-more] (take-last 3 finished) [next-activity]))]
+        list (into [] (concat (take-last 3 finished) [next-activity]))]
     (if loading?
       [ui/linear-progress]
       [scene-list list {:title    (translate [:story :title])
-                        :on-click (fn [{id :id}]
-                                    (if (= id :show-more)
-                                      (re-frame/dispatch [::sde/show-more])
-                                      (re-frame/dispatch [::sde/open-activity id])))}])))
+                        :show-more #(re-frame/dispatch [::sde/show-more])
+                        :on-click (fn [{id :id activity-id :activity-id}] (re-frame/dispatch [::sde/open-activity id activity-id]))}])))
 
 (defn- assessments []
   (let [loading? @(re-frame/subscribe [::sds/progress-loading])
@@ -89,7 +87,7 @@
     (if loading?
       [ui/linear-progress]
       [scene-list assessments {:title    (translate [:assessment :title])
-                               :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}])))
+                               :on-click (fn [{id :id activity-id :activity-id}] (re-frame/dispatch [::sde/open-activity id activity-id]))}])))
 
 (defn- main-content
   []
@@ -123,9 +121,12 @@
 
 (defn student-dashboard-finished-page
   []
-  (let [finished @(re-frame/subscribe [::sds/finished-activities])]
+  (let [finished @(re-frame/subscribe [::sds/finished-activities])
+        lessons (group-by :lesson finished)]
     [with-mui-theme
      [:div {:style dashboard-container-styles}
       [:div {:style main-content-styles}
-       [scene-list finished {:title    (translate [:history :title])
-                             :on-click (fn [{id :id}] (re-frame/dispatch [::sde/open-activity id]))}]]]]))
+       (for [[lesson-id lesson-items] lessons]
+         [scene-list lesson-items {:title    (str (translate [:lesson :title]) lesson-id)
+                               :on-click (fn [{id :id activity-id :activity-id}] (re-frame/dispatch [::sde/open-activity id activity-id]))}])
+       ]]]))

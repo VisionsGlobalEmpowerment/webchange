@@ -411,10 +411,10 @@
 
 (defn name->activity-action-id
   [db scene-name]
-  (-> db
-      (get-in [:progress-data :scene-activities])
-      (get (keyword scene-name))
-      (or (-> (first-nonfinished-action-by-name db scene-name) :id))))
+  (let [loaded-activity (get-in db [:loaded-activities (keyword scene-name)])
+        scene-activity (get-in db [:progress-data :scene-activities (keyword scene-name)])
+        default (-> (first-nonfinished-action-by-name db scene-name) :id)]
+    (or loaded-activity scene-activity default)))
 
 (re-frame/reg-event-fx
   ::execute-start-activity
@@ -502,14 +502,16 @@
 
 (re-frame/reg-event-fx
   ::execute-finish-activity
-  (fn [{:keys [db]} [_ action]]
+  (fn [{:keys [db]} [_ {activity-name :id :as action}]]
     (let [events (cond-> (list (ce/success-event action))
                          (workflow-action-finished? db action) (conj [::finish-workflow-action])
                          :always (conj (activity-finished-event db action))
                          :always (conj [::reset-navigation]))
           activity-started? (:activity-started db)]
       (if activity-started?
-        {:db         (assoc db :activity-started false)
+        {:db         (-> db
+                         (update :loaded-activities dissoc (keyword activity-name))
+                         (assoc :activity-started false))
          :dispatch-n events}
         {:dispatch (ce/success-event action)}))))
 
