@@ -1,31 +1,23 @@
-{:assets        [{:url "/raw/img/stadium/main/Stadium_Sketch.jpg", :size 10, :type "image"}]
+{:assets        [{:url "/raw/img/stadium/main/stadium_main_background.jpg", :size 10, :type "image"}
+                 {:url "/raw/img/stadium/main/bicycle_enabled.png", :size 1, :type "image"}
+                 {:url "/raw/img/stadium/main/run_enabled.png", :size 1, :type "image"}
+                 {:url "/raw/img/stadium/main/volleyball_enabled.png", :size 1, :type "image"}]
 
- :objects       {:background {:type "background" :src "/raw/img/stadium/main/Stadium_Sketch.jpg"}
+ :objects       {:background {:type "background" :src "/raw/img/stadium/main/stadium_main_background.jpg" :filter "brighten" :brightness -0.2}
 
-                 :volleyball {:type    "transparent"
-                              :x       683
-                              :y       539
-                              :width   350
-                              :height  500
-                              :actions {:click {:type     "scene"
-                                                :scene-id "volleyball"
-                                                :on       "click"}}}
-                 :cycling    {:type    "transparent"
-                              :x       125
-                              :y       539
-                              :width   450
-                              :height  500
-                              :actions {:click {:type     "scene"
-                                                :scene-id "cycling"
-                                                :on       "click"}}}
-                 :running    {:type    "transparent"
-                              :x       1130
-                              :y       539
-                              :width   300
-                              :height  500
-                              :actions {:click {:type     "scene"
-                                                :scene-id "running"
-                                                :on       "click"}}}}
+                 :volleyball     {:type    "image" :x 669 :y 540 :width 340 :height 480 :src "/raw/img/stadium/main/volleyball_enabled.png"
+                               :filter "brighten" :transition "volleyball"
+                               :actions {:click {:type "location", :location-id "volleyball", :on "click"}}}
+
+                 :cycling     {:type    "image" :x 103 :y 527 :width 498 :height 514 :src "/raw/img/stadium/main/bicycle_enabled.png"
+                                  :filter "brighten" :transition "cycling"
+                                  :actions {:click {:type "location", :location-id "cycling", :on "click"}}}
+
+                 :running     {:type    "image" :x 1128 :y 565 :width 279 :height 456 :src "/raw/img/stadium/main/run_enabled.png"
+                                  :filter "brighten" :transition "running"
+                                  :actions {:click {:type "scene", :scene-id "running", :on "click"}}}
+
+                }
  :scene-objects [["background"] ["volleyball" "cycling" "running"]]
  :actions       {:start-background-music {:type "audio"
                                           :id   "background"
