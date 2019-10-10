@@ -123,6 +123,10 @@
                                            :gsap "2.1.2"
                                            :wavesurfer.js "2.2.1"
                                            :svg-arc-to-cubic-bezier "3.2.0"
+                                           :closest "0.0.1"
+                                           :pathfinding "^0.4.18"
+                                           :paths-js "^0.4.10"
+                                           :lodash "^4.17.15"
                                            "@projectstorm/react-diagrams" "^5.3.2"
                                            }
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
@@ -133,6 +137,7 @@
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
+                    :language-in :ecmascript6
                     }}
     {:id           "sw"
      :source-paths ["src/sw"]
@@ -159,6 +164,10 @@
                                       :gsap "2.1.2"
                                       :wavesurfer.js "2.2.1"
                                       :svg-arc-to-cubic-bezier "3.2.0"
+                                      :closest "0.0.1"
+                                      :pathfinding "^0.4.18"
+                                      :paths-js "^0.4.10"
+                                      :lodash "^4.17.15"
                                       "@projectstorm/react-diagrams" "^5.3.2"
                                       }
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
@@ -167,7 +176,8 @@
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
                                     :module-type :commonjs}]
-                    :install-deps true}}
+                    :install-deps true
+                    :language-in :ecmascript6}}
 
     {:id           "test"
      :source-paths ["src/cljs" "test/cljs"]
@@ -184,6 +194,10 @@
                                     :gsap "2.1.2"
                                     :wavesurfer.js "2.2.1"
                                     :svg-arc-to-cubic-bezier "3.2.0"
+                                    :closest "0.0.1"
+                                    :pathfinding "^0.4.18"
+                                    :paths-js "^0.4.10"
+                                    :lodash "^4.17.15"
                                     "@projectstorm/react-diagrams" "^5.3.2"
                                     }
                     :foreign-libs [{:file "src/libs/spine-canvas.js"
