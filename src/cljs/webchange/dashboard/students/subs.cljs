@@ -61,3 +61,8 @@
   ::delete-modal-state
   (fn [db]
     (get-in db [:dashboard :delete-student-modal-state])))
+
+(re-frame/reg-sub
+  ::complete-modal-state
+  (fn [db]
+    (get-in db [:dashboard :complete-student-modal-state])))

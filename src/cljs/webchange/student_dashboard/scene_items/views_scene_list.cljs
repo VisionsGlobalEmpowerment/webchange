@@ -1,6 +1,6 @@
 (ns webchange.student-dashboard.scene-items.views-scene-list
   (:require
-    [webchange.student-dashboard.scene-items.views-scene-list-item :refer [scene-list-item]]))
+    [webchange.student-dashboard.scene-items.views-scene-list-item :refer [scene-list-item show-more-item]]))
 
 (def content-block-styles
   {:display        "flex"
@@ -20,10 +20,12 @@
    :overflow-y "auto"})
 
 (defn scene-list
-  [items {:keys [title on-click]}]
+  [items {:keys [title on-click show-more]}]
   [:div {:style content-block-styles}
    [:h1 {:style content-header-styles} title]
    [:div {:style content-body-styles}
+    (when show-more
+      [show-more-item {:on-click show-more}])
     (for [item items]
-      ^{:key (:id item)}
+      ^{:key (str (:id item) "-" (:activity-id item))}
       [scene-list-item item {:on-click on-click}])]])

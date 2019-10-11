@@ -15331,7 +15331,45 @@
      {:name "yoyo"}
      {:name "xilofono"}]}}
   {:name "assessment4",
-   :data {:items [{:name "ardilla"} {:name "iman"} {:name "oso"}]}}
+   :data
+   {:items
+    [{:name "ardilla"}
+     {:name "iman"}
+     {:name "oso"}
+     {:name "uvas"}
+     {:name "elefante"}
+     {:name "mano"}
+     {:name "serpiente"}
+     {:name "pelota"}
+     {:name "leon"}]}}
+  {:name "assessment5",
+   :data
+   {:items
+    [{:name "tomate"}
+     {:name "diamante"}
+     {:name "rana"}
+     {:name "casa"}
+     {:name "cepillo"}
+     {:name "niño"}
+     {:name "flor"}
+     {:name "bebe"}
+     {:name "jardín"}
+     {:name "gato"}
+     {:name "gemelo"}
+     {:name "chocolate"}]}}
+  {:name "assessment6",
+   :data
+   {:items
+    [{:name "ñandu"}
+     {:name "violin"}
+     {:name "llave"}
+     {:name "hoja"}
+     {:name "queso"}
+     {:name "zapato"}
+     {:name "kimono"}
+     {:name "web"}
+     {:name "yoyo"}
+     {:name "xilofono"}]}}
   {:name "concepts-all",
    :data
    {:items
@@ -15369,6 +15407,102 @@
   {:name "l2-ls1-1", :data {:items [{:name "ardilla"}]}}
   {:name "l2-ls1-3",
    :data {:items [{:name "ardilla"} {:name "oso"} {:name "iman"}]}}
+  {:name "l2-ls10-1", :data {:items [{:name "tomate"}]}}
+  {:name "l2-ls10-3",
+   :data {:items [{:name "tomate"} {:name "diamante"} {:name "rana"}]}}
+  {:name "l2-ls11-1", :data {:items [{:name "diamante"}]}}
+  {:name "l2-ls11-3",
+   :data {:items [{:name "tomate"} {:name "diamante"} {:name "rana"}]}}
+  {:name "l2-ls12-1", :data {:items [{:name "rana"}]}}
+  {:name "l2-ls12-3",
+   :data {:items [{:name "tomate"} {:name "diamante"} {:name "rana"}]}}
+  {:name "l2-ls13-1", :data {:items [{:name "casa"}]}}
+  {:name "l2-ls13-3",
+   :data {:items [{:name "casa"} {:name "cepillo"} {:name "niño"}]}}
+  {:name "l2-ls14-1", :data {:items [{:name "cepillo"}]}}
+  {:name "l2-ls14-3",
+   :data {:items [{:name "casa"} {:name "cepillo"} {:name "niño"}]}}
+  {:name "l2-ls15-1", :data {:items [{:name "niño"}]}}
+  {:name "l2-ls15-3",
+   :data {:items [{:name "casa"} {:name "cepillo"} {:name "niño"}]}}
+  {:name "l2-ls16-1", :data {:items [{:name "flor"}]}}
+  {:name "l2-ls16-3",
+   :data {:items [{:name "flor"} {:name "bebe"} {:name "jardín"}]}}
+  {:name "l2-ls17-1", :data {:items [{:name "bebe"}]}}
+  {:name "l2-ls17-3",
+   :data {:items [{:name "flor"} {:name "bebe"} {:name "jardín"}]}}
+  {:name "l2-ls18-1", :data {:items [{:name "jardín"}]}}
+  {:name "l2-ls18-3",
+   :data {:items [{:name "flor"} {:name "bebe"} {:name "jardín"}]}}
+  {:name "l2-ls19-1", :data {:items [{:name "gato"}]}}
+  {:name "l2-ls19-3",
+   :data
+   {:items [{:name "gato"} {:name "gemelo"} {:name "chocolate"}]}}
+  {:name "l2-ls2-1", :data {:items [{:name "oso"}]}}
+  {:name "l2-ls2-3",
+   :data {:items [{:name "ardilla"} {:name "oso"} {:name "iman"}]}}
+  {:name "l2-ls20-1", :data {:items [{:name "gemelo"}]}}
+  {:name "l2-ls20-3",
+   :data
+   {:items [{:name "gato"} {:name "gemelo"} {:name "chocolate"}]}}
+  {:name "l2-ls21-1", :data {:items [{:name "chocolate"}]}}
+  {:name "l2-ls21-3",
+   :data
+   {:items [{:name "gato"} {:name "gemelo"} {:name "chocolate"}]}}
+  {:name "l2-ls22-1", :data {:items [{:name "ñandu"}]}}
+  {:name "l2-ls22-3",
+   :data {:items [{:name "ñandu"} {:name "violin"} {:name "llave"}]}}
+  {:name "l2-ls23-1", :data {:items [{:name "violin"}]}}
+  {:name "l2-ls23-3",
+   :data {:items [{:name "ñandu"} {:name "violin"} {:name "llave"}]}}
+  {:name "l2-ls24-1", :data {:items [{:name "llave"}]}}
+  {:name "l2-ls24-3",
+   :data {:items [{:name "ñandu"} {:name "violin"} {:name "llave"}]}}
+  {:name "l2-ls25-1", :data {:items [{:name "hoja"}]}}
+  {:name "l2-ls25-3",
+   :data {:items [{:name "hoja"} {:name "queso"} {:name "zapato"}]}}
+  {:name "l2-ls26-1", :data {:items [{:name "queso"}]}}
+  {:name "l2-ls26-3",
+   :data {:items [{:name "hoja"} {:name "queso"} {:name "zapato"}]}}
+  {:name "l2-ls27-1", :data {:items [{:name "zapato"}]}}
+  {:name "l2-ls27-3",
+   :data {:items [{:name "hoja"} {:name "queso"} {:name "zapato"}]}}
+  {:name "l2-ls28-1", :data {:items [{:name "kimono"}]}}
+  {:name "l2-ls28-3",
+   :data {:items [{:name "kimono"} {:name "zapato"} {:name "violin"}]}}
+  {:name "l2-ls29-1", :data {:items [{:name "web"}]}}
+  {:name "l2-ls29-3",
+   :data {:items [{:name "web"} {:name "kimono"} {:name "llave"}]}}
+  {:name "l2-ls3-1", :data {:items [{:name "iman"}]}}
+  {:name "l2-ls3-3",
+   :data {:items [{:name "ardilla"} {:name "oso"} {:name "iman"}]}}
+  {:name "l2-ls30-1", :data {:items [{:name "yoyo"}]}}
+  {:name "l2-ls30-3",
+   :data {:items [{:name "yoyo"} {:name "web"} {:name "hoja"}]}}
+  {:name "l2-ls31-1", :data {:items [{:name "xilofono"}]}}
+  {:name "l2-ls31-3",
+   :data {:items [{:name "xilofono"} {:name "yoyo"} {:name "queso"}]}}
+  {:name "l2-ls4-1", :data {:items [{:name "uvas"}]}}
+  {:name "l2-ls4-3",
+   :data {:items [{:name "uvas"} {:name "elefante"} {:name "mano"}]}}
+  {:name "l2-ls5-1", :data {:items [{:name "elefante"}]}}
+  {:name "l2-ls5-3",
+   :data {:items [{:name "uvas"} {:name "elefante"} {:name "mano"}]}}
+  {:name "l2-ls6-1", :data {:items [{:name "mano"}]}}
+  {:name "l2-ls6-3",
+   :data {:items [{:name "uvas"} {:name "elefante"} {:name "mano"}]}}
+  {:name "l2-ls7-1", :data {:items [{:name "serpiente"}]}}
+  {:name "l2-ls7-3",
+   :data
+   {:items [{:name "serpiente"} {:name "pelota"} {:name "leon"}]}}
+  {:name "l2-ls8-1", :data {:items [{:name "pelota"}]}}
+  {:name "l2-ls8-3",
+   :data
+   {:items [{:name "serpiente"} {:name "pelota"} {:name "leon"}]}}
+  {:name "l2-ls9-1", :data {:items [{:name "leon"}]}}
+  {:name "l2-ls9-3",
+   :data
+   {:items [{:name "serpiente"} {:name "pelota"} {:name "leon"}]}}
   {:name "ls1",
    :data {:items [{:name "ardilla"} {:name "oso"} {:name "iman"}]}}
   {:name "ls10",

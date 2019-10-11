@@ -11,6 +11,7 @@
     [webchange.dashboard.students.student-profile.stubs :refer [scores-stub]]
     [webchange.dashboard.students.student-profile.views-personal-data :refer [personal-data]]
     [webchange.dashboard.students.student-profile.views-scores :refer [student-scores]]
+    [webchange.dashboard.students.student-modal.views :as student-modal-views]
     [webchange.routes :refer [redirect-to]]))
 
 (defn translate
@@ -18,7 +19,8 @@
   (get-in {:header            "Student Profile"
            :actions           {:edit   "Edit"
                                :remove "Remove"
-                               :class  "Class"}
+                               :class  "Class"
+                               :complete "Complete"}
            :cumulative-scores {:title  "Cumulative Activity Score"
                                :legend {:gray   "Activity was started but not finished"
                                         :green  "Student completed the activity & scored 95%+"
@@ -38,7 +40,7 @@
    :levels      levels})
 
 (defn- actions
-  [{:keys [student on-edit-click on-remove-click on-class-click]}]
+  [{:keys [student on-edit-click on-remove-click on-class-click on-complete-click]}]
   [:div
    [ui/tooltip
     {:title (translate [:actions :class])}
@@ -48,7 +50,10 @@
     [ui/icon-button {:on-click #(on-edit-click student)} [ic/create]]]
    [ui/tooltip
     {:title (translate [:actions :remove])}
-    [ui/icon-button {:on-click #(on-remove-click student)} [ic/delete]]]])
+    [ui/icon-button {:on-click #(on-remove-click student)} [ic/delete]]]
+   [ui/tooltip
+    {:title (translate [:actions :complete])}
+    [ui/icon-button {:on-click #(on-complete-click student)} [ic/check]]]])
 
 (defn student-profile
   [{:keys [student profile class-id]}]
@@ -59,14 +64,16 @@
       :actions       (actions {:student         student
                                :on-edit-click   (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-edit-student-form id]))
                                :on-remove-click (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-remove-from-class-form id]))
-                               :on-class-click  (fn [] (redirect-to :dashboard-class-profile :class-id class-id))})}
+                               :on-class-click  (fn [] (redirect-to :dashboard-class-profile :class-id class-id))
+                               :on-complete-click (fn [{:keys [id]}] (re-frame/dispatch [::students-events/show-complete-form id]))})}
      [personal-data student]
      [student-scores [{:title  (translate [:cumulative-scores :title])
                        :data   (-> profile :scores ->data)
                        :legend (translate [:cumulative-scores :legend])}
                       {:title  (translate [:activity-times :title])
                        :data   (-> profile :times ->data)
-                       :legend (translate [:activity-times :legend])}]]]))
+                       :legend (translate [:activity-times :legend])}]]
+     [student-modal-views/student-complete-modal]]))
 
 (defn student-profile-page
   []

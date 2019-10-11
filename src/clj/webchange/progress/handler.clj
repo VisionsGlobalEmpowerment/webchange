@@ -35,6 +35,12 @@
     (-> (core/get-individual-progress course-name (Integer/parseInt student-id))
         handle)))
 
+(defn handle-complete-progress
+  [student-id course-name request]
+  (let [user-id (current-user request)]
+    (-> (core/complete-individual-progress! course-name (Integer/parseInt student-id))
+        handle)))
+
 (defroutes progress-routes
            (GET "/api/class-profile/:class-id/course/:course-name" [class-id course-name :as request]
              (handle-get-class-profile class-id course-name request))
@@ -43,4 +49,7 @@
            (GET "/api/courses/:id/current-progress" [id :as request]
              (handle-get-current-progress id request))
            (POST "/api/courses/:id/current-progress" [id :as request]
-             (handle-save-course-progress id request)))
+             (handle-save-course-progress id request))
+           (PUT "/api/individual-profile/:student-id/course/:course-name/complete" [student-id course-name :as request]
+             (handle-complete-progress student-id course-name request))
+           )

@@ -16,7 +16,8 @@
 
 (re-frame/reg-event-fx
   ::open-activity
-  (fn [{:keys [db]} [_ scene-name]]
+  (fn [{:keys [db]} [_ scene-name activity-id]]
     (let [course (:current-course db)]
-      {:dispatch-n (list [::events/redirect (str "/courses/" course)]
+      {:db (assoc db :loaded-activities {(keyword scene-name) activity-id})
+       :dispatch-n (list [::events/redirect (str "/courses/" course)]
                          [::ie/set-current-scene scene-name])})))

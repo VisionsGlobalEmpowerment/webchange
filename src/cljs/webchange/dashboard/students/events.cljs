@@ -142,6 +142,22 @@
                        [::load-unassigned-students])}))
 
 (re-frame/reg-event-fx
+  ::complete-student-progress
+  (fn [{:keys [db]} [_ student-id course-name]]
+    {:db (assoc-in db [:loading :complete-student-progress] true)
+     :http-xhrio {:method          :put
+                  :uri             (str "/api/individual-profile/" student-id "/course/" course-name "/complete")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::complete-student-success]
+                  :on-failure      [:api-request-error :complete-student-progress]}}))
+
+(re-frame/reg-event-fx
+  ::complete-student-success
+  (fn [{:keys [db]} _]
+    {:dispatch-n (list [:complete-request :complete-student-progress])}))
+
+(re-frame/reg-event-fx
   ::show-add-student-form
   (fn [{:keys [db]} _]
     {:db (-> db
@@ -226,9 +242,34 @@
                    [::open-remove-from-class-modal])}))
 
 (re-frame/reg-event-fx
+  ::show-complete-form
+  (fn [{:keys [db]} [_ student-id]]
+    {:db (assoc-in db [:dashboard :current-student-id] student-id)
+     :dispatch-n (list
+                   [::load-student student-id]
+                   [::open-complete-modal])}))
+
+(re-frame/reg-event-fx
   ::open-remove-from-class-modal
   (fn [{:keys [db]} _]
     {:db (assoc-in db [:dashboard :remove-student-from-class-modal-state] true)}))
+
+(re-frame/reg-event-fx
+  ::open-complete-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :complete-student-modal-state] true)}))
+
+(re-frame/reg-event-fx
+  ::close-complete-modal
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:dashboard :complete-student-modal-state] nil)}))
+
+(re-frame/reg-event-fx
+  ::confirm-complete
+  (fn [{:keys [db]} [_ student-id]]
+    (let [current-course (:current-course db)]
+      {:db (assoc-in db [:dashboard :complete-student-modal-state] nil)
+       :dispatch [::complete-student-progress student-id current-course]})))
 
 (re-frame/reg-event-fx
   ::close-remove-from-class-modal
