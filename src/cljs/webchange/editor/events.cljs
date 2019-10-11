@@ -11,10 +11,9 @@
 
 (re-frame/reg-event-fx
   ::init-editor
-  (fn [_ [_ course-id]]
-    {:dispatch-n (list [::ie/start-course course-id]
-                       [::load-datasets]
-                       )}))
+  (fn [_ [_ course-id scene-id]]
+    {:dispatch-n (list [::ie/start-course course-id scene-id]
+                       [::load-datasets])}))
 
 (re-frame/reg-event-fx
   ::load-datasets
@@ -792,12 +791,14 @@
 (re-frame/reg-event-fx
   ::select-current-scene
   (fn [{:keys [db]} [_ scene-id]]
-    {:dispatch-n (list [::ie/set-current-scene scene-id]
-                       [::reset-asset]
-                       [::reset-object]
-                       [::reset-scene-action]
-                       [::reset-shown-form]
-                       [::set-main-content :editor])}))
+    (if-not (nil? scene-id)
+      {:dispatch-n (list [::ie/set-current-scene scene-id]
+                         [::reset-asset]
+                         [::reset-object]
+                         [::reset-scene-action]
+                         [::reset-shown-form]
+                         [::set-main-content :editor])}
+      {})))
 
 (re-frame/reg-event-fx
   ::show-current-scene-triggers

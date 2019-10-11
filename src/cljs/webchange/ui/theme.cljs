@@ -11,15 +11,18 @@
    :secondary      "#fd4142"
    :disabled       "#bababa"})
 
-(def mui-theme (create-mui-theme {:border-radius 20
-                                  :palette       {:primary {:main (get-in w-colors [:primary])}
-                                                  :text-color (get-in w-colors [:primary])}
-                                  :checkbox      {:checked-color (get-in w-colors [:primary])}
-                                  :flat-button   {:primary-text-color (get-in w-colors [:primary])}
-                                  :raised-button {:primary-color (get-in w-colors [:primary])}
-                                  :text-field    {:focus-color (get-in w-colors [:primary])}
-                                  :typography    {:use-next-variants true}
-                                  }))
+(defn mui-theme
+  [type]
+  (create-mui-theme {:border-radius 20
+                     :palette       {:type       type
+                                     :primary    {:main (get-in w-colors [:primary])}
+                                     :text-color (get-in w-colors [:primary])}
+                     :checkbox      {:checked-color (get-in w-colors [:primary])}
+                     :flat-button   {:primary-text-color (get-in w-colors [:primary])}
+                     :raised-button {:primary-color (get-in w-colors [:primary])}
+                     :text-field    {:focus-color (get-in w-colors [:primary])}
+                     :typography    {:use-next-variants true}
+                     }))
 
 (defn get-in-theme
   [path]
@@ -29,6 +32,8 @@
 
 (defn with-mui-theme
   ([children]
-   (with-mui-theme children {}))
-  ([children _]
-   [ui/mui-theme-provider {:theme mui-theme} children]))
+   (with-mui-theme "light" children {}))
+  ([type children]
+   (with-mui-theme type children {}))
+  ([type children _]
+   [ui/mui-theme-provider {:theme (mui-theme type)} children]))
