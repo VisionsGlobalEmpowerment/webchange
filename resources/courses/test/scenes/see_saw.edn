@@ -57,7 +57,7 @@
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                                  :scene-name "box-ph" :transition "box-ph"
                                  :states     {:default {:type "transparent" :x 360 :y -30}
-                                              :visible {:type  "animation" :name "boxes" :anim "idle1" :skin "empty" :x 495 :y 175
+                                              :visible {:type  "animation" :name "boxes" :anim "idle1" :skin "default" :x 495 :y 175
                                                         :speed 0.3 :loop true :start false}}}
 
                  },
@@ -246,9 +246,9 @@
                                               :variables   ["item-1" "item-2" "item-3"]
                                               :from        "concepts"}
 
-                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 700 :y 400 :duration 2 :loop false}}
-                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1200 :y 400 :duration 2 :loop false}}
-                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1700 :y 400 :duration 2 :loop false}}
+                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 671 :y 350 :duration 2 :loop false}}
+                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1181 :y 350 :duration 2 :loop false}}
+                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1658 :y 350 :duration 2 :loop false}}
 
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
                  :start                      {:type "sequence"
@@ -264,12 +264,14 @@
                                                      "mari-move-to-start"]}
 
                  :start-activity             {:type "start-activity" :id "see-saw"}
-                 :finish-activity            {:type "finish-activity" :id "see-saw"}}
+                 :finish-activity            {:type "finish-activity" :id "see-saw"}
+                 :stop-activity              {:type "stop-activity" :id "see-saw"}}
  :audio
                 {:voice-1 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a"
                  :voice-2 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a"
                  :voice-3 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a"
                  :mari    "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a"},
- :triggers      {:start {:on "start" :action "start"}}
+ :triggers      {:start {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}
