@@ -1,8 +1,7 @@
 (ns webchange.editor-v2.diagram.diagram-items-creator
   (:require
     [webchange.editor-v2.diagram.diagram-items-utils :refer [connect-nodes
-                                                             get-diagram-node
-                                                             set-node-position]]))
+                                                             get-diagram-node]]))
 
 (defn get-diagram-link
   [diagram-nodes node-1-name node-2-name node-1-out]
@@ -39,5 +38,4 @@
                      (fn [result [node-name node-data]]
                        (concat result (get-node-links nodes node-name node-data)))
                      []))]
-    {:scene-data parsed-scene-data
-     :diagram-items [(vals nodes) links]}))
+    [(vals nodes) links]))

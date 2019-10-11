@@ -46,11 +46,6 @@
                       node-data
                       {:name  (clojure.core/name name)})))
 
-(defn set-node-position
-  [node x y]
-  (.setPosition node x y)
-  node)
-
 (defn connect-nodes
   [node-1 out-port-name node-2 in-port-name]
   (let [out-port (some

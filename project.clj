@@ -129,7 +129,10 @@
                                            :lodash "^4.17.15"
                                            "@projectstorm/react-diagrams" "^5.3.2"
                                            }
-                    :foreign-libs [{:file "src/libs/spine-canvas.js"
+                    :foreign-libs [{:file "src/libs/dagre.js"
+                                    :provides ["dagre"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
@@ -170,7 +173,10 @@
                                       :lodash "^4.17.15"
                                       "@projectstorm/react-diagrams" "^5.3.2"
                                       }
-                    :foreign-libs [{:file "src/libs/spine-canvas.js"
+                    :foreign-libs [{:file "src/libs/dagre.js"
+                                    :provides ["dagre"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
@@ -200,7 +206,10 @@
                                     :lodash "^4.17.15"
                                     "@projectstorm/react-diagrams" "^5.3.2"
                                     }
-                    :foreign-libs [{:file "src/libs/spine-canvas.js"
+                    :foreign-libs [{:file "src/libs/dagre.js"
+                                    :provides ["dagre"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/spine-canvas.js"
                                     :provides ["spine"]
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
