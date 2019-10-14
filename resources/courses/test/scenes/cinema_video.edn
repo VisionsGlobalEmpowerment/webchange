@@ -192,4 +192,4 @@
                                                            :data [{:start 22.475 :end 26.257 :anim "talk"}]}]}}
  :triggers      {:start {:on "start" :action "start"}}
  :metadata      {:autostart true
-                 :prev      "park"}}
+                 :prev      "map"}}

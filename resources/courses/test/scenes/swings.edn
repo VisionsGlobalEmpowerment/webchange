@@ -109,7 +109,7 @@
                                 :scale-y 0.5 :scale-x 0.5}
 
                  :rock         {:type    "animation" :scene-name "rock" :name "rock" :anim "idle"
-                                :start   true :speed 0.35
+                                :start   true :speed 0.35 :skin "female"
                                 :x       1168 :y 748 :width 591 :height 681
                                 :scale-y 0.6 :scale-x 0.6}
 
@@ -361,9 +361,9 @@
                                               :variables   ["item-1" "item-2" "item-3"]
                                               :from        "concepts"}
 
-                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 800 :y 400 :duration 2 :loop false}}
-                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1200 :y 400 :duration 2 :loop false}}
-                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1600 :y 400 :duration 2 :loop false}}
+                 :mari-box-1                 {:type "transition" :transition-id "mari" :to {:x 671 :y 350 :duration 2 :loop false}}
+                 :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1181 :y 350 :duration 2 :loop false}}
+                 :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1658 :y 350 :duration 2 :loop false}}
 
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
                  :start                      {:type "sequence"
@@ -389,7 +389,9 @@
                                                      ]}
 
                  :start-activity             {:type "start-activity" :id "swings"}
-                 :finish-activity            {:type "finish-activity" :id "swings"}}
+                 :finish-activity            {:type "finish-activity" :id "swings"}
+                 :stop-activity              {:type "stop-activity" :id "swings"}
+ }
  :audio
                 {:mari-welcome "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a"
                  :vera-ardilla "/raw/audio/l1/a3/vera/ardilla.m4a"
@@ -399,6 +401,7 @@
                  :rock-oso     "/raw/audio/l1/a3/rock/Oso.m4a"
                  :rock-iman    "/raw/audio/l1/a3/rock/Iman.m4a"}
 
- :triggers      {:start {:on "start" :action "start"}}
+ :triggers      {:start {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}
