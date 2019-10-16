@@ -167,6 +167,7 @@
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :location ::execute-location)
 (ce/reg-simple-executor :transition ::execute-transition)
+(ce/reg-simple-executor :stop-transition ::execute-stop-transition)
 (ce/reg-simple-executor :move ::execute-move)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
 (ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
@@ -223,6 +224,12 @@
     (if (:path to)
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
+
+(re-frame/reg-event-fx
+  ::execute-stop-transition
+  (fn [{:keys [db]} [_ {:keys [id] :as action}]]
+    (i/kill-transition! id)
+    {:dispatch (ce/success-event action)}))
 
 (defn insert-move-rotations
   [[head & tail] {:keys [animation-target transition-id]}]
