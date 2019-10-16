@@ -26,10 +26,10 @@
                                 :actions {:click {:type "action", :id "exit", :on "click"}}}
 
                  :box1         {:type       "transparent"
-                                :x 505 :y 375
-                                :width 772 :height 1032
-                                :scale {:x 0.3 :y 0.3}
-                                :origin {:type "center-center"}
+                                :x          505 :y 375
+                                :width      772 :height 1032
+                                :scale      {:x 0.3 :y 0.3}
+                                :origin     {:type "center-center"}
                                 :scene-name "box1"
                                 :transition "box1"
                                 :states     {:default {:type "transparent"}
@@ -38,10 +38,10 @@
                                 :actions    {:click {:type "action" :id "click-on-box1" :on "click"}}}
 
                  :box2         {:type       "transparent"
-                                :x 955 :y 375
-                                :width 772 :height 1032
-                                :scale {:x 0.3 :y 0.3}
-                                :origin {:type "center-center"}
+                                :x          955 :y 375
+                                :width      772 :height 1032
+                                :scale      {:x 0.3 :y 0.3}
+                                :origin     {:type "center-center"}
                                 :scene-name "box2" :transition "box2"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
@@ -49,10 +49,10 @@
                                 :actions    {:click {:type "action" :id "click-on-box2" :on "click"}}}
 
                  :box3         {:type       "transparent"
-                                :x 1405 :y 375
-                                :width 772 :height 1032
-                                :scale {:x 0.3 :y 0.3}
-                                :origin {:type "center-center"}
+                                :x          1405 :y 375
+                                :width      772 :height 1032
+                                :scale      {:x 0.3 :y 0.3}
+                                :origin     {:type "center-center"}
                                 :scene-name "box3" :transition "box3"
                                 :states     {:default {:type "transparent"}
                                              :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
@@ -273,6 +273,7 @@
                  :vaca-3-times-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-3-times-action"}]}
 
                  :group-3-times-var                {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
+                 :group-3-times-var-copy           {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
 
                  :vaca-once-more                   {:type     "animation-sequence",
                                                     :target   "senoravaca",
@@ -303,7 +304,7 @@
                                                            "empty-small"
                                                            "vaca-once-more"
                                                            "empty-small"
-                                                           "group-3-times-var"
+                                                           "group-3-times-var-copy"
                                                            "empty-small"
                                                            "vaca-goodbye-var"
                                                            "empty-big"]}
@@ -369,9 +370,9 @@
                  :start-activity                   {:type "start-activity" :id "home"}
                  :finish-activity                  {:type "finish-activity" :id "home"}
                  :stop-activity                    {:type "stop-activity" :id "home"}
-                 :exit {:type "sequence-data"
-                        :data [{:type "action" :id "stop-activity"}
-                               {:type "scene" :scene-id "map"}]}}
+                 :exit                             {:type "sequence-data"
+                                                    :data [{:type "action" :id "stop-activity"}
+                                                           {:type "scene" :scene-id "map"}]}}
  :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"},
  :triggers      {:music {:on "start" :action "start-background-music"}
                  :start {:on "start" :action "intro"}

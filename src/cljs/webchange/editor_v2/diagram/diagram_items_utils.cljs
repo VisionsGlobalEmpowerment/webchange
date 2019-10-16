@@ -10,21 +10,11 @@
           (fn [node-data]
             (:entity node-data)))
 
-(defmethod get-diagram-node :action
-  [{:keys [outs] :as node-data}]
-  (-> (create-node node-data)
+(defmethod get-diagram-node :default
+  [node-name node-data]
+  (-> (create-node node-name node-data)
       (add-in-ports! [:in])
-      (add-out-ports! outs)))
-
-(defmethod get-diagram-node :object
-  [{:keys [outs] :as node-data}]
-  (-> (create-node node-data)
-      (add-out-ports! outs)))
-
-(defmethod get-diagram-node :global-object
-  [{:keys [outs] :as node-data}]
-  (-> (create-node node-data)
-      (add-out-ports! outs)))
+      (add-out-ports! [:next])))
 
 ;; ---
 
@@ -36,12 +26,12 @@
 
 (defn add-out-ports!
   [node outs]
-  (doseq [[event _] (seq outs)]
+  (doseq [event outs]
     (.addOutPort node (clojure.core/name event)))
   node)
 
 (defn create-node
-  [{:keys [name] :as node-data}]
+  [name node-data]
   (get-custom-model (merge
                       node-data
                       {:name  (clojure.core/name name)})))
