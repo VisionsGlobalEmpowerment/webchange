@@ -36,8 +36,9 @@
 
 (defn add-out-ports!
   [node outs]
-  (doseq [[event _] (seq outs)]
-    (.addOutPort node (clojure.core/name event)))
+  (.addOutPort node (clojure.core/name "next"))
+  ;(doseq [[event _] (seq outs)]
+  ;  (.addOutPort node (clojure.core/name event)))
   node)
 
 (defn create-node

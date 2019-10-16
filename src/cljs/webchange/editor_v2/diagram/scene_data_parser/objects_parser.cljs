@@ -1,22 +1,13 @@
 (ns webchange.editor-v2.diagram.scene-data-parser.objects-parser)
 
-(defn get-object-outs
+(defn get-object-handlers
   [object-data]
-  (->> object-data
-       (:actions)
+  (->> (:actions object-data)
        (seq)
        (reduce
          (fn [result [_ action-data]]
-           (let [event (keyword (:on action-data))
-                 handler (case (:type action-data)
-                           "action" (->> action-data :id keyword)
-                           nil)]
-             (if-not (nil? handler)
-               (assoc result event [handler])
-               (do (.warn js/console (str "Unhandled object event handler: " (:type action-data)))
-                   result))
-             ))
-         {})))
+           (conj result (->> action-data :id keyword)))
+         [])))
 
 (defn parse-objects
   [scene-data]
@@ -24,7 +15,7 @@
        (seq)
        (reduce
          (fn [result [object-name object-data]]
-           (assoc result object-name {:name   (name object-name)
-                                      :entity :object
-                                      :outs   (get-object-outs object-data)}))
+           (assoc result object-name {:type "object"
+                                      :next (get-object-handlers object-data)}))
          {})))
+

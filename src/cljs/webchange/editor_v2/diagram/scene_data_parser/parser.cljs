@@ -6,11 +6,10 @@
 
 (defn parse-scene-data
   [scene-data]
-  (merge (parse-actions scene-data)
-         (parse-globals scene-data)
-         (parse-objects scene-data)))
 
-;   :box3                   {:name   "box3"
-;                            :entity :object
-;                            :outs   {:click [:click-on-box3]}
-;                            :ins    {:scene "Change scene"}}
+  (merge (parse-actions scene-data)
+         ;(parse-globals scene-data)
+         (parse-objects scene-data))
+
+  )
+
