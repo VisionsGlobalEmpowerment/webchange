@@ -143,10 +143,11 @@
 
 (re-frame/reg-event-fx
   ::complete-student-progress
-  (fn [{:keys [db]} [_ student-id course-name]]
+  (fn [{:keys [db]} [_ student-id course-name lesson]]
     {:db (assoc-in db [:loading :complete-student-progress] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/individual-profile/" student-id "/course/" course-name "/complete")
+                  :params          {:lesson lesson}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::complete-student-success]
@@ -266,10 +267,10 @@
 
 (re-frame/reg-event-fx
   ::confirm-complete
-  (fn [{:keys [db]} [_ student-id]]
+  (fn [{:keys [db]} [_ student-id lesson]]
     (let [current-course (:current-course db)]
       {:db (assoc-in db [:dashboard :complete-student-modal-state] nil)
-       :dispatch [::complete-student-progress student-id current-course]})))
+       :dispatch [::complete-student-progress student-id current-course lesson]})))
 
 (re-frame/reg-event-fx
   ::close-remove-from-class-modal

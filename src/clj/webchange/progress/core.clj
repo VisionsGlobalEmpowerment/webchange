@@ -125,12 +125,25 @@
       (update-progress! id progress)
       (create-progress! owner-id course-id progress))))
 
-(defn complete-individual-progress! [course-name student-id]
+(defn- filter-by-lesson
+  [lesson {action-lesson :lesson}]
+  (let [filter-required? (and (integer? lesson) (integer? action-lesson))]
+    (if filter-required?
+      (> lesson action-lesson)
+      true)))
+
+(defn- filter-by-type
+  [types {action-type :type}]
+  (some #(= action-type %) types))
+
+(defn complete-individual-progress! [course-name student-id {lesson :lesson}]
   (let [{user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:name course-name})
         actions (->>
                   (course/get-course-data course-name)
                   :workflow-actions
+                  (filter #(filter-by-type ["set-activity" "init-progress"] %))
+                  (filter #(filter-by-lesson lesson %))
                   (map :id)
                   (into []))
         progress (->

@@ -202,22 +202,28 @@
 
 (defn student-complete-modal
   []
-  (let [modal-state @(re-frame/subscribe [::students-subs/complete-modal-state])
-        is-loading? @(re-frame/subscribe [::students-subs/student-loading])
-        {{first-name :first-name last-name :last-name} :user student-id :id} @(re-frame/subscribe [::students-subs/current-student])]
-    (when modal-state
-      [ui/dialog {:open true}
-       (if is-loading?
-         [ui/linear-progress]
-         [:div
-          [ui/dialog-title "Are you sure?"]
-          [ui/dialog-content
-           [ui/dialog-content-text (str "You are about to complete progress for " first-name " " last-name)]]
-          [ui/dialog-actions
-           [ui/button {:on-click #(re-frame/dispatch [::students-events/close-complete-modal])} "Cancel"]
-           [ui/button
-            {:variant  "contained"
-             :color    "primary"
-             :on-click #(re-frame/dispatch [::students-events/confirm-complete student-id])}
-            "Confirm"]]])
-       ])))
+  (r/with-let [lesson (r/atom nil)]
+    (let [modal-state @(re-frame/subscribe [::students-subs/complete-modal-state])
+          is-loading? @(re-frame/subscribe [::students-subs/student-loading])
+          {{first-name :first-name last-name :last-name} :user student-id :id} @(re-frame/subscribe [::students-subs/current-student])]
+      (when modal-state
+        [ui/dialog {:open true}
+         (if is-loading?
+           [ui/linear-progress]
+           [:div
+            [ui/dialog-title "Are you sure?"]
+            [ui/dialog-content
+             [ui/dialog-content-text (str "You are about to complete progress for " first-name " " last-name)]
+             [ui/text-field
+              {:label         "Lesson to complete"
+               :type          "text"
+               :helper-text   "Leave blank to complete all lessons"
+               :on-change #(reset! lesson (-> % .-target .-value js/parseInt))}]]
+            [ui/dialog-actions
+             [ui/button {:on-click #(re-frame/dispatch [::students-events/close-complete-modal])} "Cancel"]
+             [ui/button
+              {:variant  "contained"
+               :color    "primary"
+               :on-click #(re-frame/dispatch [::students-events/confirm-complete student-id @lesson])}
+              "Confirm"]]])
+         ]))))
