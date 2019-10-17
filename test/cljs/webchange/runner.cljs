@@ -6,7 +6,7 @@
             ;[webchange.editor.form-elements.controlled-input-test]
             ;[webchange.editor.form-elements.integer-test]
             ;[webchange.editor.form-elements.number-test]
-            ;[webchange.editor-v2.diagram.scene-data-parser.parser-test]
+            [webchange.editor-v2.diagram.scene-data-parser.parser-test]
             [webchange.editor-v2.diagram.scene-data-parser.actions-parser-test]
             ;[webchange.interpreter.events-test]
             ;[webchange.interpreter.variables.events-test]
@@ -21,7 +21,7 @@
            ;'webchange.editor.form-elements.controlled-input-test
            ;'webchange.editor.form-elements.integer-test
            ;'webchange.editor.form-elements.number-test
-           ;'webchange.editor-v2.diagram.scene-data-parser.parser-test
+           'webchange.editor-v2.diagram.scene-data-parser.parser-test
            'webchange.editor-v2.diagram.scene-data-parser.actions-parser-test
            ;'webchange.interpreter.events-test
            ;'webchange.interpreter.variables.events-test

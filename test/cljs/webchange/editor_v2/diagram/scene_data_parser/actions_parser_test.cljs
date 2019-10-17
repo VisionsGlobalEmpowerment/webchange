@@ -1,7 +1,8 @@
 (ns webchange.editor-v2.diagram.scene-data-parser.actions-parser-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.editor-v2.diagram.scene-data-parser.actions-parser :refer [parse-action]]))
+    [webchange.editor-v2.diagram.scene-data-parser.actions-parser :refer [parse-action
+                                                                          parse-actions-chain]]))
 
 (deftest test-parse-action-test-var-scalar
   (testing ":click-on-box1"
@@ -40,7 +41,7 @@
           action-data {:type "sequence"
                        :data ["empty-big"
                               "vaca-this-is-var"
-                              "empty-small" Z
+                              "empty-small"
                               "vaca-can-you-say"
                               "vaca-question-var"
                               "empty-small"
@@ -69,26 +70,41 @@
           parent-action :first-word
           next-action :set-current-box2]
       (is (= (parse-action action-name action-data parent-action next-action)
-             {:bye-current-box                    {:type   "sequence-data"
-                                                   :parent :first-word
-                                                   :next   [:bye-current-box-0]}
+             {:bye-current-box     {:type   "sequence-data"
+                                    :parent :first-word
+                                    :next   [:bye-current-box-0]
+                                    :data   action-data}
 
-              :bye-current-box-0                  {:type   "parallel"
-                                                   :parent :bye-current-box
-                                                   :next   [:bye-current-box-0-0
-                                                            :bye-current-box-0-1]}
+              :bye-current-box-0   {:type   "parallel"
+                                    :parent :bye-current-box
+                                    :next   [:bye-current-box-0-0
+                                             :bye-current-box-0-1]
+                                    :data   {:type "parallel"
+                                             :data [{:type     "animation" :id "jump"
+                                                     :from-var [{:var-name "current-box" :action-property "target"}]}
+                                                    {:type     "transition" :to {:y -100 :duration 2}
+                                                     :from-var [{:var-name "current-box" :action-property "transition-id"}
+                                                                {:var-name "current-position-x" :action-property "to.x"}]}]}
+                                    }
 
-              :bye-current-box-0-0                {:type   "animation"
-                                                   :parent :bye-current-box-0
-                                                   :next   [:bye-current-box-1]}
+              :bye-current-box-0-0 {:type   "animation"
+                                    :parent :bye-current-box-0
+                                    :next   [:bye-current-box-1]
+                                    :data   {:type     "animation" :id "jump"
+                                             :from-var [{:var-name "current-box" :action-property "target"}]}}
 
-              :bye-current-box-0-1                {:type   "transition"
-                                                   :parent :bye-current-box-0
-                                                   :next   [:bye-current-box-1]}
+              :bye-current-box-0-1 {:type   "transition"
+                                    :parent :bye-current-box-0
+                                    :next   [:bye-current-box-1]
+                                    :data   {:type     "transition" :to {:y -100 :duration 2}
+                                             :from-var [{:var-name "current-box" :action-property "transition-id"}
+                                                        {:var-name "current-position-x" :action-property "to.x"}]}}
 
-              :bye-current-box-1                  {:type   "state"
-                                                   :parent :bye-current-box
-                                                   :next   [:set-current-box2]}})))))
+              :bye-current-box-1   {:type   "state"
+                                    :parent :bye-current-box
+                                    :next   [:set-current-box2]
+                                    :data   {:type     "state" :id "default"
+                                             :from-var [{:var-name "current-box" :action-property "target"}]}}})))))
 
 (deftest test-parse-action-parallel
   (testing ":show-first-box-word"
@@ -247,3 +263,95 @@
                                    :parent :introduce-word
                                    :next   [:vaca-question-var]
                                    :data   action-data}}))))))
+
+;; ---
+
+(deftest test-parse-actions-chain-parallel
+  (testing "simple parallel"
+    (let [actions-data {:simple-parallel {:type "parallel"
+                                          :data [{:type "action"}
+                                                 {:type "action"}]}}
+          start-node-name :simple-parallel
+          start-node-data (get actions-data start-node-name)
+          parent-action nil
+          next-action :next-action]
+      (is (= (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action)
+             {:simple-parallel   {:type "parallel"
+                                  :data {:type "parallel"
+                                         :data [{:type "action"}
+                                                {:type "action"}]}
+                                  :next [:simple-parallel-0
+                                         :simple-parallel-1]}
+              :simple-parallel-0 {:type   "action"
+                                  :data   {:type "action"}
+                                  :parent :simple-parallel
+                                  :next   [:next-action]}
+              :simple-parallel-1 {:type   "action"
+                                  :data   {:type "action"}
+                                  :parent :simple-parallel
+                                  :next   [:next-action]}}))
+      )))
+
+(deftest test-parse-actions-chain-sequence
+  (testing "simple sequence"
+    (let [actions-data {:simple-seq   {:type "sequence"
+                                       :data ["sub-action-0"
+                                              "sub-action-1"
+                                              "sub-action-2"]}
+                        :sub-action-0 {:type "action"}
+                        :sub-action-1 {:type "action"}
+                        :sub-action-2 {:type "action"}}
+          start-node-name :simple-seq
+          start-node-data (get actions-data start-node-name)
+          parent-action nil
+          next-action :next-action-0]
+      (is (= (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action)
+             {:simple-seq   {:type "sequence"
+                             :data {:type "sequence"
+                                    :data ["sub-action-0"
+                                           "sub-action-1"
+                                           "sub-action-2"]}
+                             :next [:sub-action-0]}
+              :sub-action-0 {:type   "action"
+                             :data   {:type "action"}
+                             :parent :simple-seq
+                             :next   [:sub-action-1]}
+              :sub-action-1 {:type   "action"
+                             :data   {:type "action"}
+                             :parent :simple-seq
+                             :next   [:sub-action-2]}
+              :sub-action-2 {:type   "action"
+                             :data   {:type "action"}
+                             :parent :simple-seq
+                             :next   [:next-action-0]}}))
+      )))
+
+(deftest test-parse-actions-chain-test-var-scalar
+  (testing "simple test-var-scalar"
+    (let [actions-data {:simple-test    {:type     "test-var-scalar"
+                                         :var-name "var-name"
+                                         :value    "value"
+                                         :success  "success-action"
+                                         :fail     "fail-action"}
+                        :success-action {:type "action"}
+                        :fail-action    {:type "action"}}
+          start-node-name :simple-test
+          start-node-data (get actions-data start-node-name)
+          parent-action nil
+          next-action nil]
+      (is (= (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action)
+             {:simple-test    {:type "test-var-scalar"
+                               :data {:type     "test-var-scalar"
+                                      :var-name "var-name"
+                                      :value    "value"
+                                      :success  "success-action"
+                                      :fail     "fail-action"}
+                               :next [:success-action :fail-action]}
+              :success-action {:type "action"
+                               :data {:type "action"}
+                               :next []}
+              :fail-action    {:type "action"
+                               :data {:type "action"}
+                               :next []}}))
+      )))
+
