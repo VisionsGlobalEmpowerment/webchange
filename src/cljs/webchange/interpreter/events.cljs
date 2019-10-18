@@ -546,7 +546,7 @@
 
 (re-frame/reg-event-fx
   ::next-workflow-action
-  (fn [{:keys [db]} _]
+  (fn-traced [{:keys [db]} _]
     (let [next-action (first-nonfinished-action db)]
       (if next-action
         {:db       (assoc-in db [:progress-data :current-workflow-action] (:id next-action))
@@ -681,7 +681,8 @@
 (re-frame/reg-event-fx
   ::set-progress-data
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :progress-data data)}))
+    {:db (assoc db :progress-data data)
+     :dispatch [::next-workflow-action]}))
 
 (re-frame/reg-event-fx
   ::init-default-progress

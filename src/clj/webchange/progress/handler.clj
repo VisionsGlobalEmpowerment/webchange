@@ -37,8 +37,9 @@
 
 (defn handle-complete-progress
   [student-id course-name request]
-  (let [user-id (current-user request)]
-    (-> (core/complete-individual-progress! course-name (Integer/parseInt student-id))
+  (let [user-id (current-user request)
+        data (-> request :body)]
+    (-> (core/complete-individual-progress! course-name (Integer/parseInt student-id) data)
         handle)))
 
 (defroutes progress-routes
