@@ -2,8 +2,27 @@
   (:require
     ["@projectstorm/react-diagrams" :refer [DiagramWidget]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.diagram.diagram-builder :refer [get-diagram-engine]]
+    [cljs-react-material-ui.reagent :as ui]
+    [webchange.editor-v2.diagram.diagram-builder :refer [get-diagram-engine reorder-diagram zoom-to-fit]]
     [webchange.subs :as subs]))
+
+(defn toolbar
+  []
+  [:div {:style {:position         "absolute"
+                 :top              0
+                 :left             0
+                 :z-index          10
+                 :background-color "rgba(0, 0, 0, 0.2)"
+                 :width            "100%"
+                 :height           48}}
+   [ui/button {:variant "contained"
+               :style   {:margin 8}
+               :on-click #(reorder-diagram)}
+    "Reorder"]
+   [ui/button {:variant "contained"
+               :style   {:margin 8}
+               :on-click #(zoom-to-fit)} "Fit zoom"]
+   ])
 
 (defn diagram
   []
@@ -12,4 +31,5 @@
       (let [scene-data @(re-frame/subscribe [::subs/scene @scene-id])
             engine (get-diagram-engine scene-data)]
         [:div.diagram-container
-         [:> DiagramWidget {"diagramEngine" engine}]]))))
+         [toolbar]
+         [:> DiagramWidget {:diagramEngine engine}]]))))

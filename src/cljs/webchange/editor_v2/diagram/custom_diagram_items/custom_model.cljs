@@ -47,6 +47,13 @@
           (let [ports (->> this .-ports js->clj vals)]
             (filter #(not (.-in %)) ports)))))
 
+(set! (.. custom-model -prototype -serialize)
+      (fn []
+        (this-as this
+          (let [parent-result (js->clj (js/Reflect.apply (.. NodeModel -prototype -serialize) this #js []))
+                size {:width (.-width this)
+                      :height (.-height this)}]
+            (clj->js (merge parent-result size))))))
 
 (defn get-custom-model
   ([]
