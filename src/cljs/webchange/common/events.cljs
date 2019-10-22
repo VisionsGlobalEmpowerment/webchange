@@ -58,7 +58,10 @@
                    register-flow (:register-flow action)]
                (if register-flow
                  (-> context
-                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action) :tags (get-action-tags action)}])))
+                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action)
+                                                                              :actions [(:action-id action)]
+                                                                              :type :all
+                                                                              :tags (get-action-tags action)}])))
                  context))
              )))
 
@@ -159,11 +162,6 @@
   [flows tag]
   (some #(contains? (:tags %) tag) (vals flows)))
 
-(defn can-execute?
-  [db {:keys [description unique-tag]}]
-  (let [flow-registered? (flow-registered? (:flows db) unique-tag)]
-    (not flow-registered?)))
-
 (reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action
                                                                       :id
                                                                       (get-action db action)
@@ -176,15 +174,22 @@
 
 (re-frame/reg-event-fx
   ::execute-action
-  [event-as-action with-vars]
-  (fn-traced [{:keys [db]} {:keys [type return-immediately] :as action}]
-    (if (can-execute? db action)
-      (let [handler (get @executors (keyword type))]
-        (when (nil? handler) (throw (js/Error. "Action handler is not defined")))
-        (if return-immediately
-          {:dispatch-n (list (handler {:db db :action action})
-                             (success-event action))}
-          {:dispatch (handler {:db db :action action})})))))
+  [event-as-action with-vars with-flow]
+  (fn-traced [{:keys [db]} {:keys [type return-immediately unique-tag flow-id] :as action}]
+    (let [handler (get @executors (keyword type))]
+      (cond
+        (flow-registered? (:flows db) unique-tag) {:dispatch [::discard-flow flow-id]}
+        return-immediately {:dispatch-n (list (handler {:db db :action action})
+                                              (success-event action))}
+        :else {:dispatch (handler {:db db :action action})}))))
+
+(re-frame/reg-event-fx
+  ::discard-flow
+  (fn [{:keys [db]} [_ flow-id]]
+    (let [flow  (get-in db [:flows flow-id])
+          handler (:on-remove flow)]
+      (handler)
+      {:db (update db :flows dissoc flow-id)})))
 
 (re-frame/reg-event-fx
   ::execute-remove-flows

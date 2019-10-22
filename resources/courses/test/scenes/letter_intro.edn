@@ -75,93 +75,95 @@
                                 :text           ""
                                 :align          "center"
                                 :vertical-align "middle"
-                                :x              1040
+                                :x              870
                                 :y              240
-                                :width          130
+                                :width          180
                                 :height         130
                                 :font-size      120
                                 :font-family    "Lato"
-                                :fill           "#b23c18"
+                                :fill           "#ef545c"
                                 :states         {:big     {:font-size 160}
                                                  :normal  {:font-size 120}
                                                  :hidden  {:type "transparent"}
                                                  :visible {:type "text"}}
                                 :actions        {:click {:type "action"
                                                          :id   "small-letter-click"
+                                                         :unique-tag "click"
                                                          :on   "click"}}}
 
                  :letter-big   {:type           "transparent"
                                 :text           ""
                                 :align          "center"
                                 :vertical-align "middle"
-                                :x              910
+                                :x              690
                                 :y              240
-                                :width          130
+                                :width          200
                                 :height         130
                                 :font-size      120
                                 :font-family    "Lato"
-                                :fill           "#b23c18"
+                                :fill           "#ef545c"
                                 :states         {:big     {:font-size 160}
                                                  :normal  {:font-size 120}
                                                  :hidden  {:type "transparent"}
                                                  :visible {:type "text"}}
                                 :actions        {:click {:type "action"
                                                          :id   "big-letter-click"
+                                                         :unique-tag "click"
                                                          :on   "click"}}}
 
-                 :word-1-first {:type        "transparent"
-                                :text        ""
-                                :x           740
+                 :word-1-first {:type           "transparent"
+                                :text           ""
+                                :x           725
                                 :y           410
-                                :width       110
+                                :width       130
                                 :height      90
                                 :font-size   100
                                 :font-family "Lato"
                                 :font-weight "bold"
                                 :align       "right"
-                                :fill        "#b23c18"
+                                :fill        "#ef545c"
                                 :states      {:normal  {:y 410 :font-size 100}
                                               :big     {:y 390 :font-size 120}
                                               :hidden  {:type "transparent"}
                                               :visible {:type "text"}}}
-                 :word-1-rest  {:type        "transparent"
-                                :text        ""
+                 :word-1-rest  {:type           "transparent"
+                                :text           ""
                                 :x           855
                                 :y           410
-                                :width       315
+                                :width       390
                                 :height      90
                                 :font-size   100
                                 :font-family "Lato"
-                                :fill        "#b23c18"
+                                :fill        "#fc8e51"
                                 :states      {:normal  {:y 410 :font-size 100}
                                               :big     {:y 390 :font-size 120}
                                               :hidden  {:type "transparent"}
                                               :visible {:type "text"}}}
 
-                 :word-2-first {:type        "transparent"
-                                :text        ""
-                                :x           740
+                 :word-2-first {:type           "transparent"
+                                :text           ""
+                                :x           705
                                 :y           510
-                                :width       110
+                                :width       150
                                 :height      90
                                 :font-size   100
                                 :font-family "Lato"
                                 :align       "right"
-                                :fill        "#b23c18"
+                                :fill        "#ef545c"
                                 :states      {:normal  {:y 510 :font-size 100}
                                               :big     {:y 490 :font-size 120}
                                               :hidden  {:type "transparent"}
                                               :visible {:type "text"}}}
 
-                 :word-2-rest  {:type        "transparent"
-                                :text        ""
+                 :word-2-rest  {:type           "transparent"
+                                :text           ""
                                 :x           855
                                 :y           510
-                                :width       315
+                                :width       390
                                 :height      90
                                 :font-size   100
                                 :font-family "Lato"
-                                :fill        "#b23c18"
+                                :fill        "#fc8e51"
                                 :states      {:normal  {:y 510 :font-size 100}
                                               :big     {:y 490 :font-size 120}
                                               :hidden  {:type "transparent"}
@@ -198,11 +200,12 @@
                                                              {:type "empty" :duration 300}
                                                              {:type "transition" :transition-id "mari" :to {:x 1903 :y 557 :duration 0.7 :loop false}}
                                                              {:type "parallel"
-                                                              :data [{:type "transition" :transition-id "mari" :to {:x 866 :y 295 :duration 2 :loop false}}
-                                                                     {:type "transition" :transition-id "image" :to {:x 740 :y 240 :duration 2 :loop false}}]}
+                                                              :data [{:type "transition" :transition-id "mari" :to {:x 1146 :y 295 :duration 2 :loop false}}
+                                                                     {:type "transition" :transition-id "image" :to {:x 1025 :y 240 :duration 2 :loop false}}]}
                                                              {:type "empty" :duration 1000}
+                                                             {:type "action" :id "mari-init-wand"}
                                                              {:type "parallel"
-                                                              :data [{:type "transition" :transition-id "mari" :to {:x 1600 :y 635 :duration 1.5 :loop false}}
+                                                              :data [{:type "transition" :transition-id "mari" :to {:x 1346 :y 295 :duration 1.5 :loop false}}
                                                                      {:type "action" :id "vaca-voice-listen"}
                                                                      ]}
                                                              {:type "action" :id "vaca-voice-say-with-me"}
@@ -333,6 +336,7 @@
                                                                              {:type "empty", :duration 500}
                                                                              {:type "state", :target "word-1-rest", :id "normal"}]}]}
                                                              {:type "empty", :duration 1000}
+                                                             {:type "action" :id "mari-wand-hit" :return-immediately true}
                                                              {:description "Toca la",
                                                               :offset 1.414,
                                                               :start 1.414,
@@ -441,6 +445,7 @@
                                                                              {:type "empty", :duration 500}
                                                                              {:type "state", :target "word-2-rest", :id "normal"}]}]}
                                                              {:type "empty", :duration 700}
+                                                             {:type "action" :id "mari-wand-hit" :return-immediately true}
                                                              {:description "Toca la",
                                                               :offset 10.645,
                                                               :start 10.645,
@@ -704,6 +709,10 @@
                                                       :audio "/raw/audio/l2/a2/L2_A2_Mari.m4a" :start 22.481 :duration 9.915
                                                       :data [{:start 22.570 :end 32.322 :anim "talk"}]}
 
+                 :mari-init-wand {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
+                 :mari-wand-hit {:type "sequence-data"
+                                 :data [{:type "animation" :target "mari" :id "wand_hit" :track 2}
+                                        {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}]}
 
                  :start-activity           {:type "start-activity" :id "letter-intro"}
                  :finish-activity          {:type "sequence-data"
