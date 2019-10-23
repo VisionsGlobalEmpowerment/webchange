@@ -10,9 +10,8 @@
                                  :back  {:on "back" :action "stop-activity"}}}]
       (let [actual-result (parse-globals scene-data)
             expected-result {:triggers {:type        "trigger"
-                                        :connections {:root {:next [:start-background-music
-                                                                    :intro
-                                                                    :stop-activity]}}
+                                        :connections {:root {:handlers {:start [:start-background-music :intro]
+                                                                        :back  [:stop-activity]}}}
                                         :data        {:music {:on "start" :action "start-background-music"}
                                                       :start {:on "start" :action "intro"}
                                                       :back  {:on "back" :action "stop-activity"}}}}]

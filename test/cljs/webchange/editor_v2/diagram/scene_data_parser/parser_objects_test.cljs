@@ -11,7 +11,7 @@
                        :actions {:click {:type "action" :id "restart" :on "click"}}}]
       (let [actual-result (parse-object object-name object-data)
             expected-result {:senora-vaca {:type        "object"
-                                           :connections {:root {:next [:restart]}}
+                                           :connections {:root {:handlers {:click [:restart]}}}
                                            :data        object-data}}]
         (is (= actual-result expected-result)))))
 
@@ -21,6 +21,6 @@
                        :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}]
       (let [actual-result (parse-object object-name object-data)
             expected-result {:vera {:type        "object"
-                                    :connections {:root {:next []}}
+                                    :connections {:root {:handlers {}}}
                                     :data        object-data}}]
         (is (= actual-result expected-result))))))

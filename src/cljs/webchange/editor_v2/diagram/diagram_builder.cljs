@@ -2,7 +2,7 @@
   (:require
     ["@projectstorm/react-diagrams" :refer [DiagramModel DiagramEngine]]
     [webchange.editor-v2.diagram.diagram-items-arranger :refer [arrange-items]]
-    [webchange.editor-v2.diagram.diagram-items-creator :refer [create-diagram-items]]
+    [webchange.editor-v2.diagram.diagram-items-factory.factory :refer [create-diagram-items]]
     [webchange.editor-v2.diagram.scene-data-parser.parser :refer [parse-scene-data]]
     [webchange.editor-v2.diagram.custom-diagram-items.custom-factory :refer [get-custom-factory]]))
 
