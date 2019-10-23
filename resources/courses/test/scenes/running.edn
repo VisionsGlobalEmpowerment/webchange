@@ -26,7 +26,7 @@
                               :name       "vera-90"
                               :anim       "run"
                               :skin       "default"
-                              :speed      0.3
+                              :speed      1
                               :start      true
                               :meshes     true}
 
@@ -74,7 +74,7 @@
                               :height         150
                               :align          "center"
                               :vertical-align "middle"
-                              :font-family    "Luckiest Guy"
+                              :font-family    "Lexend Deca"
                               :font-size      120
                               :shadow-color   "#1a1a1a"
                               :shadow-offset  {:x 5 :y 5}
@@ -114,7 +114,7 @@
                               :height         150
                               :align          "center"
                               :vertical-align "middle"
-                              :font-family    "Luckiest Guy"
+                              :font-family    "Lexend Deca"
                               :font-size      120
                               :shadow-color   "#1a1a1a"
                               :shadow-offset  {:x 5 :y 5}
@@ -154,7 +154,7 @@
                               :height         150
                               :align          "center"
                               :vertical-align "middle"
-                              :font-family    "Luckiest Guy"
+                              :font-family    "Lexend Deca"
                               :font-size      120
                               :shadow-color   "#1a1a1a"
                               :shadow-offset  {:x 5 :y 5}
@@ -292,7 +292,9 @@
                                                                    :from-var [{:var-name "current-line-pos" :action-property "to"}]}]}]}
                                                   {:type "action" :id "renew-current-concept"}]}
 
-                 :pick-wrong              {:type "action" :id "mari-voice-wrong"}
+                 :pick-wrong              {:type "sequence-data"
+                                           :data [{:type "action" :id "mari-voice-wrong"}
+                                                  {:type "action" :id "current-concept-chant"}]}
 
                  :stay-on-line            {:type "empty" :duration 100}
 
