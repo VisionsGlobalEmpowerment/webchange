@@ -4,9 +4,14 @@
   [object-name object-data]
   (assoc {} object-name {:type        "object"
                          :data        object-data
-                         :connections {:root {:next (->> (:actions object-data)
-                                                         (map #(->> % second :id keyword))
-                                                         (vec))}}}))
+                         :connections {:root {:handlers (reduce
+                                                          (fn [result [_ action-data]]
+                                                            (assoc
+                                                              result
+                                                              (->> action-data :on keyword)
+                                                              [(->> action-data :id keyword)]))
+                                                          {}
+                                                          (:actions object-data))}}}))
 
 (defn parse-objects
   [scene-data]

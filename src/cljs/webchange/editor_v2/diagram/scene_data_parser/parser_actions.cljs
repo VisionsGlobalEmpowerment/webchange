@@ -34,16 +34,17 @@
   (let [index (.indexOf list item)]
     (next-to-index list index)))
 
-
 (defn add-connection-property
-  [prev next parent data]
-  (let [next-data (cond
-                    (sequential? next) (vec next)
-                    (not-nil? next) [next]
-                    :else [])
+  [prev connection-data parent data]
+  (let [default-next-action-event :next
+        next-data (cond
+                    (map? connection-data) connection-data
+                    (sequential? connection-data) (assoc {} default-next-action-event connection-data)
+                    (not-nil? connection-data) (assoc {} default-next-action-event [connection-data])
+                    :else {})
         add-parent-property #(if-not (nil? %1) (assoc %2 :parent %1) %2)]
     (->> next-data
-         (assoc {} :next)
+         (assoc {} :handlers)
          (add-parent-property parent)
          (assoc {} prev)
          (assoc data :connections))))
@@ -78,7 +79,8 @@
         fail (->> action-data :fail keyword)]
     (->> {:type (:type action-data)
           :data action-data}
-         (add-connection-property prev-action [success fail] parent-action)
+         (add-connection-property prev-action {:success [success]
+                                               :fail    [fail]} parent-action)
          (assoc {} action-name))))
 
 (defmethod parse-action "sequence"
@@ -206,9 +208,13 @@
     (fn [result [object-name object-data]]
       (concat result (reduce
                        (fn [result [_ connection-data]]
-                         (concat result (map
-                                          (fn [next-name] [next-name object-name])
-                                          (:next connection-data))))
+                         (concat result (reduce
+                                          (fn [result [_ handlers]]
+                                            (concat result (map
+                                                             (fn [handler] [handler object-name])
+                                                             handlers)))
+                                          []
+                                          (:handlers connection-data))))
                        []
                        (:connections object-data))))
     []

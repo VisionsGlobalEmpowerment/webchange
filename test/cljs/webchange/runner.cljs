@@ -6,6 +6,7 @@
             [webchange.editor.form-elements.controlled-input-test]
             [webchange.editor.form-elements.integer-test]
             [webchange.editor.form-elements.number-test]
+            [webchange.editor-v2.diagram.diagram-items-factory.utils-test]
             [webchange.editor-v2.diagram.scene-data-parser.parser-test]
             [webchange.editor-v2.diagram.scene-data-parser.parser-actions-test]
             [webchange.editor-v2.diagram.scene-data-parser.parser-globals-test]
@@ -23,6 +24,7 @@
   'webchange.editor.form-elements.controlled-input-test
   'webchange.editor.form-elements.integer-test
   'webchange.editor.form-elements.number-test
+  'webchange.editor-v2.diagram.diagram-items-factory.utils-test
   'webchange.editor-v2.diagram.scene-data-parser.parser-test
   'webchange.editor-v2.diagram.scene-data-parser.parser-actions-test
   'webchange.editor-v2.diagram.scene-data-parser.parser-globals-test
