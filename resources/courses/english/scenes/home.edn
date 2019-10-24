@@ -273,7 +273,6 @@
                  :vaca-3-times-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-3-times-action"}]}
 
                  :group-3-times-var                {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
-                 :group-3-times-var-copy           {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
 
                  :vaca-once-more                   {:type     "animation-sequence",
                                                     :target   "senoravaca",
@@ -304,7 +303,7 @@
                                                            "empty-small"
                                                            "vaca-once-more"
                                                            "empty-small"
-                                                           "group-3-times-var-copy"
+                                                           "group-3-times-var"
                                                            "empty-small"
                                                            "vaca-goodbye-var"
                                                            "empty-big"]}

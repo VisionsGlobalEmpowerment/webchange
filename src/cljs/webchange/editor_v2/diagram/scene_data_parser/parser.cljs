@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.diagram.scene-data-parser.parser
   (:require
-    [webchange.editor-v2.diagram.scene-data-parser.duplicates-processor :refer [process-duplicates]]
+    [webchange.editor-v2.diagram.scene-data-parser.duplicates-processor :refer [remove-duplicates]]
     [webchange.editor-v2.diagram.scene-data-parser.parser-actions :refer [parse-actions]]
     [webchange.editor-v2.diagram.scene-data-parser.parser-globals :refer [parse-globals]]
     [webchange.editor-v2.diagram.scene-data-parser.parser-objects :refer [parse-objects]]))
@@ -9,8 +9,9 @@
   [scene-data]
   (let [parsed-objects (parse-objects scene-data)
         parsed-globals (parse-globals scene-data)
-        parsed-actions (parse-actions scene-data (merge parsed-objects parsed-globals))]
+        entries (merge parsed-objects parsed-globals)
+        parsed-actions (parse-actions scene-data entries)]
     (->> (merge parsed-objects
                 parsed-globals
                 parsed-actions)
-         (process-duplicates))))
+         (remove-duplicates entries))))
