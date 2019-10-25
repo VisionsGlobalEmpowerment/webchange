@@ -22,7 +22,7 @@
   []
   (let [model (:model @state)
         engine (:engine @state)]
-    (arrange-items model)
+    (arrange-items model engine)
     (.repaintCanvas engine)))
 
 (defn zoom-to-fit
