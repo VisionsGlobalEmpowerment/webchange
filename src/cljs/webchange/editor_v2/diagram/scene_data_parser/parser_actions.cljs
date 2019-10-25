@@ -4,21 +4,10 @@
 
 (def not-nil? (complement nil?))
 
-(defn last-index?
-  [list index]
-  (and
-    (= index (dec (count list)))
-    (not (= -1 index))))
-
-(defn last?
-  [list item]
-  (let [index (.indexOf list item)]
-    (last-index? list index)))
-
 (defn next-to-index
   [list index]
   (if-not (or (= -1 index)
-              (last-index? list index))
+              (= index (dec (count list))))
     (nth list (inc index))
     nil))
 
@@ -29,10 +18,9 @@
     (nth list (dec index))
     nil))
 
-(defn next-to
-  [list item]
-  (let [index (.indexOf list item)]
-    (next-to-index list index)))
+(defn seq-intersection
+  [seq-1 seq-2]
+  (vec (intersection (set seq-1) (set seq-2))))
 
 (defn add-connection-property
   [prev connection-data parent data]
@@ -49,10 +37,6 @@
          (assoc {} prev)
          (assoc data :connections))))
 
-(defn seq-intersection
-  [seq-1 seq-2]
-  (vec (intersection (set seq-1) (set seq-2))))
-
 (defn merge-actions
   [map-1 map-2]
   (let [actions-to-merge (seq-intersection (keys map-1) (keys map-2))
@@ -63,36 +47,89 @@
                              (assoc result action-name (merge action-1-data
                                                               action-2-data
                                                               {:connections (merge (:connections action-1-data)
-                                                                                   (:connections action-2-data))})))
-                           )
+                                                                                   (:connections action-2-data))}))))
                          {}
                          actions-to-merge)]
     (merge map-1 map-2 actions-merged)))
 
-(defmulti parse-action
-          (fn [_ action-data _ _ _]
+;; ---
+
+(defmulti get-action-data
+          (fn [{:keys [action-data]}]
             (:type action-data)))
 
-(defmethod parse-action "test-var-scalar"
-  [action-name action-data parent-action next-action prev-action]
-  (let [success (->> action-data :success keyword)
-        fail (->> action-data :fail keyword)]
-    (->> {:type (:type action-data)
-          :data action-data}
-         (add-connection-property prev-action {:success [success]
-                                               :fail    [fail]} parent-action)
-         (assoc {} action-name))))
+(defmulti parse-actions-chain
+          (fn [_ {:keys [action-data]}]
+            (:type action-data)))
 
-(defmethod parse-action "sequence"
-  [action-name action-data parent-action next-action prev-action]
+;; parallel
+
+(defmethod get-action-data "parallel"
+  [{:keys [action-name action-data parent-action next-action prev-action]}]
+  (let [child-actions (->> (:data action-data)
+                           (map-indexed
+                             (fn [index child-action-data]
+                               [(keyword (str (name action-name) "-" index))
+                                child-action-data]))
+                           (vec))]
+    (reduce
+      (fn [result [child-action-name child-action-data]]
+        (merge result (get-action-data {:action-name   child-action-name
+                                        :action-data   child-action-data
+                                        :parent-action action-name
+                                        :next-action   next-action
+                                        :prev-action   action-name})))
+      (->> {:type (:type action-data)
+            :data action-data}
+           (add-connection-property prev-action (->> child-actions (map first)) parent-action)
+           (assoc {} action-name))
+      child-actions)))
+
+(defmethod parse-actions-chain "parallel"
+  [actions-data {:keys [action-name next-action] :as params}]
+  (let [parsed-action (get-action-data params)
+        next-actions (->> parsed-action keys (filter #(not (= % action-name))))]
+    (reduce
+      (fn [result next-action-name]
+        (merge-actions result (parse-actions-chain actions-data
+                                                   {:action-name   next-action-name
+                                                    :action-data   (->> next-action-name (get parsed-action) :data)
+                                                    :parent-action action-name
+                                                    :next-action   next-action
+                                                    :prev-action   action-name})))
+      parsed-action
+      next-actions)))
+
+;; sequence
+
+(defmethod get-action-data "sequence"
+  [{:keys [action-name action-data parent-action prev-action]}]
   (let [first-item (->> action-data :data first keyword)]
     (->> {:type (:type action-data)
           :data action-data}
          (add-connection-property prev-action first-item parent-action)
          (assoc {} action-name))))
 
-(defmethod parse-action "sequence-data"
-  [action-name action-data parent-action next-action prev-action]
+(defmethod parse-actions-chain "sequence"
+  [actions-data {:keys [action-name action-data next-action] :as params}]
+  (let [parsed-action (get-action-data params)
+        sequence-data (->> action-data :data (map keyword))]
+    (reduce
+      (fn [result [index next-node-name]]
+        (let [next-node-data (get actions-data next-node-name)]
+          (merge-actions result (parse-actions-chain actions-data
+                                                     {:action-name   next-node-name
+                                                      :action-data   next-node-data
+                                                      :parent-action action-name
+                                                      :next-action   (or (next-to-index sequence-data index) next-action)
+                                                      :prev-action   (or (prev-to-index sequence-data index) action-name)}))))
+      parsed-action
+      (map-indexed (fn [index item] [index item]) sequence-data))))
+
+;; sequence-data
+
+(defmethod get-action-data "sequence-data"
+  [{:keys [action-name action-data parent-action next-action prev-action]}]
   (let [child-actions (->> (:data action-data)
                            (map-indexed
                              (fn [index child-action-data]
@@ -102,103 +139,71 @@
     (reduce
       (fn [result [index child-action]]
         (let [[child-action-name child-action-data] child-action
-              [next-child-action-name _] (next-to child-actions child-action)]
+              [next-child-action-name _] (next-to-index child-actions index)]
           (merge
             result
-            (parse-action child-action-name
-                          child-action-data
-                          action-name
-                          (or next-child-action-name next-action)
-                          (or (first (prev-to-index child-actions index)) action-name)))))
+            (get-action-data {:action-name   child-action-name
+                              :action-data   child-action-data
+                              :parent-action action-name
+                              :next-action   (or next-child-action-name next-action)
+                              :prev-action   (or (first (prev-to-index child-actions index)) action-name)}))))
       (->> {:type (:type action-data)
             :data action-data}
            (add-connection-property prev-action (->> child-actions first first) parent-action)
            (assoc {} action-name))
       (map-indexed (fn [index item] [index item]) child-actions))))
 
-(defmethod parse-action "parallel"
-  [action-name action-data parent-action next-action prev-action]
-  (let [child-actions (->> (:data action-data)
-                           (map-indexed
-                             (fn [index child-action-data]
-                               [(keyword (str (name action-name) "-" index))
-                                child-action-data]))
-                           (vec))]
-    (reduce
-      (fn [result [child-action-name child-action-data]]
-        (merge result (parse-action child-action-name
-                                    child-action-data
-                                    action-name
-                                    next-action
-                                    action-name)))
-      (->> {:type (:type action-data)
-            :data action-data}
-           (add-connection-property prev-action (->> child-actions (map first)) parent-action)
-           (assoc {} action-name))
-      child-actions)))
+;; test-var-scalar
 
-(defmethod parse-action :default
-  [action-name action-data parent-action next-action prev-action]
-  (->> {:type (:type action-data)
-        :data action-data}
-       (add-connection-property prev-action next-action parent-action)
-       (assoc {} action-name)))
-
-;; ---
-
-(defmulti parse-actions-chain
-          (fn [_ _ action-data _ _ _]
-            (:type action-data)))
-
-(defmethod parse-actions-chain "sequence"
-  [actions-data node-name node-data parent-action next-action prev-action]
-  (let [parsed-action (parse-action node-name node-data parent-action next-action prev-action)
-        sequence-data (->> node-data :data (map keyword))]
-    (reduce
-      (fn [result [index next-node-name]]
-        (let [next-node-data (get actions-data next-node-name)]
-          (merge-actions result (parse-actions-chain actions-data
-                                                     next-node-name
-                                                     next-node-data
-                                                     node-name
-                                                     (or (next-to-index sequence-data index) next-action)
-                                                     (or (prev-to-index sequence-data index) node-name))))
-        )
-      parsed-action
-      (map-indexed (fn [index item] [index item]) sequence-data))))
-
-(defmethod parse-actions-chain "parallel"
-  [actions-data node-name node-data parent-action next-action prev-action]
-  (let [parsed-action (parse-action node-name node-data parent-action next-action prev-action)
-        next-actions (->> parsed-action keys (filter #(not (= % node-name))))]
-    (reduce
-      (fn [result next-action-name]
-        (merge-actions result (parse-actions-chain actions-data
-                                                   next-action-name
-                                                   (->> next-action-name (get parsed-action) :data)
-                                                   node-name
-                                                   next-action
-                                                   node-name)))
-      parsed-action
-      next-actions)
-    ))
+(defmethod get-action-data "test-var-scalar"
+  [{:keys [action-name action-data parent-action prev-action]}]
+  (let [success (->> action-data :success keyword)
+        fail (->> action-data :fail keyword)]
+    (->> {:type (:type action-data)
+          :data action-data}
+         (add-connection-property prev-action {:success [success]
+                                               :fail    [fail]} parent-action)
+         (assoc {} action-name))))
 
 (defmethod parse-actions-chain "test-var-scalar"
-  [actions-data node-name node-data parent-action next-action prev-action]
-  (let [next-nodes [(->> node-data :success keyword)
-                    (->> node-data :fail keyword)]]
+  [actions-data {:keys [action-name action-data] :as params}]
+  (let [next-nodes [(->> action-data :success keyword)
+                    (->> action-data :fail keyword)]]
     (reduce
       (fn [result next-node-name]
         (merge-actions result (parse-actions-chain actions-data
-                                                   next-node-name
-                                                   (get actions-data next-node-name)
-                                                   nil nil node-name)))
-      (parse-action node-name node-data parent-action next-action prev-action)
+                                                   {:action-name   next-node-name
+                                                    :action-data   (get actions-data next-node-name)
+                                                    :parent-action nil
+                                                    :next-action   nil
+                                                    :prev-action   action-name})))
+      (get-action-data params)
       next-nodes)))
 
+;; default
+
+(defn verified-type?
+  [action-type]
+  (some #(= action-type %) ["empty"
+                            "parallel"
+                            "sequence"
+                            "sequence-data"
+                            "test-var-scalar"]))
+
+(defmethod get-action-data :default
+  [{:keys [action-name action-data parent-action next-action prev-action]}]
+  (let [action-type (:type action-data)]
+    (->> {:type action-type
+          :data action-data}
+         (add-connection-property prev-action next-action parent-action)
+         (assoc {} action-name))))
+
 (defmethod parse-actions-chain :default
-  [_ node-name node-data parent-action next-action prev-action]
-  (parse-action node-name node-data parent-action next-action prev-action))
+  [_ {:keys [action-data] :as params}]
+  (let [action-type (:type action-data)]
+    (when-not (verified-type? action-type)
+      (.warn js/console (str "Parse action: action type '" action-type "' is not verified")))
+    (get-action-data params)))
 
 ;; ---
 
@@ -229,7 +234,9 @@
            (fn [result [action-name object-name]]
              (merge result (parse-actions-chain
                              actions-data
-                             action-name
-                             (get actions-data action-name)
-                             nil nil object-name)))
+                             {:action-name   action-name
+                              :action-data   (get actions-data action-name)
+                              :parent-action nil
+                              :next-action   nil
+                              :prev-action   object-name})))
            {}))))

@@ -4,11 +4,11 @@
     [utils.compare-maps :refer [compare-maps]]
     [webchange.editor-v2.diagram.scene-data-parser.parser-actions :refer [get-chain-entries
                                                                           merge-actions
-                                                                          parse-action
+                                                                          get-action-data
                                                                           parse-actions-chain
                                                                           seq-intersection]]))
 
-(deftest test-parse-action-test-var-scalar
+(deftest test-get-action-data-test-var-scalar
   (testing ":click-on-box1"
     (let [action-name :click-on-box1
           action-data {:type     "test-var-scalar"
@@ -19,13 +19,17 @@
           parent-action nil
           next-action nil
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:click-on-box1 {:type        "test-var-scalar"
                               :connections {:previous-action {:handlers {:success [:first-word]
                                                                          :fail    [:pick-wrong]}}}
                               :data        action-data}})))))
 
-(deftest test-parse-action-sequence
+(deftest test-get-action-data-sequence
   (testing ":first-word"
     (let [action-name :first-word
           action-data {:type       "sequence"
@@ -38,7 +42,11 @@
           parent-action nil
           next-action nil
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:first-word {:type        "sequence"
                            :connections {:previous-action {:handlers {:next [:show-first-box-word]}}}
                            :data        action-data}}))))
@@ -56,13 +64,17 @@
           parent-action :first-word
           next-action nil
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:introduce-word {:type        "sequence"
                                :connections {:previous-action {:parent   :first-word
                                                                :handlers {:next [:empty-big]}}}
                                :data        action-data}})))))
 
-(deftest test-parse-action-sequence-data
+(deftest test-get-action-data-sequence-data
   (testing ":bye-current-box"
     (let [action-name :bye-current-box
           action-data {:type "sequence-data"
@@ -77,7 +89,11 @@
           parent-action :first-word
           next-action :set-current-box2
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:bye-current-box     {:type        "sequence-data"
                                     :connections {:previous-action {:parent   :first-word
                                                                     :handlers {:next [:bye-current-box-0]}}}
@@ -116,7 +132,7 @@
                                     :data        {:type     "state" :id "default"
                                                   :from-var [{:var-name "current-box" :action-property "target"}]}}})))))
 
-(deftest test-parse-action-parallel
+(deftest test-get-action-data-parallel
   (testing ":show-first-box-word"
     (let [action-name :show-first-box-word
           action-data {:type "parallel"
@@ -128,7 +144,11 @@
           parent-action :first-word
           next-action :introduce-word
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:show-first-box-word   {:type        "parallel"
                                       :connections {:previous-action {:parent   :first-word
                                                                       :handlers {:next [:show-first-box-word-0
@@ -161,7 +181,11 @@
           parent-action :first-word
           next-action :senora-vaca-audio-touch-second-box
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:set-current-box2   {:type        "parallel"
                                    :connections {:previous-action {:parent   :first-word
                                                                    :handlers {:next [:set-current-box2-0
@@ -177,20 +201,24 @@
                                    :data        {:type "set-variable" :var-name "current-position-x" :var-value 850}}
               })))))
 
-(deftest test-parse-action-animation
+(deftest test-get-action-data-animation
   (testing ":show-first-box-word-0"
     (let [action-name :show-first-box-word-0
           action-data {:type "animation" :target "box1" :id "wood" :loop false}
           parent-action :show-first-box-word
           next-action :introduce-word
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:show-first-box-word-0 {:type        "animation"
                                       :connections {:previous-action {:parent   :show-first-box-word
                                                                       :handlers {:next [:introduce-word]}}}
                                       :data        action-data}})))))
 
-(deftest test-parse-action-set-skin
+(deftest test-get-action-data-set-skin
   (testing ":show-first-box-word-1"
     (let [action-name :show-first-box-word-1
           action-data {:type     "set-skin" :target "box1"
@@ -198,52 +226,68 @@
           parent-action :show-first-box-word
           next-action :introduce-word
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:show-first-box-word-1 {:type        "set-skin"
                                       :connections {:previous-action {:parent   :show-first-box-word
                                                                       :handlers {:next [:introduce-word]}}}
                                       :data        action-data}})))))
 
-(deftest test-parse-action-copy-variable
+(deftest test-get-action-data-copy-variable
   (testing ":show-first-box-word-2"
     (let [action-name :show-first-box-word-2
           action-data {:type "copy-variable" :var-name "current-word" :from "item-1"}
           parent-action :show-first-box-word
           next-action :introduce-word
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:show-first-box-word-2 {:type        "copy-variable"
                                       :connections {:previous-action {:parent   :show-first-box-word
                                                                       :handlers {:next [:introduce-word]}}}
                                       :data        action-data}})))))
 
-(deftest test-parse-action-add-animation
+(deftest test-get-action-data-add-animation
   (testing ":show-first-box-word-3"
     (let [action-name :show-first-box-word-3
           action-data {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}
           parent-action :show-first-box-word
           next-action :introduce-word
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:show-first-box-word-3 {:type        "add-animation"
                                       :connections {:previous-action {:parent   :show-first-box-word
                                                                       :handlers {:next [:introduce-word]}}}
                                       :data        action-data}})))))
 
-(deftest test-parse-action-add-action
+(deftest test-get-action-data-add-action
   (testing ":vaca-this-is-var"
     (let [action-name :vaca-this-is-var
           action-data {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
           parent-action :introduce-word
           next-action :empty-small-copy-1
           prev-action :previous-action]
-      (is (= (parse-action action-name action-data parent-action next-action prev-action)
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
              {:vaca-this-is-var {:type        "action"
                                  :connections {:previous-action {:parent   :introduce-word
                                                                  :handlers {:next [:empty-small-copy-1]}}}
                                  :data        action-data}}))))
 
-  (deftest test-parse-action-animation-sequence
+  (deftest test-get-action-data-animation-sequence
     (testing ":senora-vaca-audio-touch-second-box"
       (let [action-name :senora-vaca-audio-touch-second-box
             action-data {:type     "animation-sequence",
@@ -259,7 +303,11 @@
             parent-action :first-word
             next-action nil
             prev-action :previous-action]
-        (is (= (parse-action action-name action-data parent-action next-action prev-action)
+        (is (= (get-action-data {:action-name   action-name
+                                 :action-data   action-data
+                                 :parent-action parent-action
+                                 :next-action   next-action
+                                 :prev-action   prev-action})
                {:senora-vaca-audio-touch-second-box {:type        "animation-sequence"
                                                      :connections {:previous-action {:parent   :first-word
                                                                                      :handlers {}}}
@@ -276,7 +324,11 @@
                          :duration 0.813}
             parent-action :introduce-word
             next-action :vaca-question-var]
-        (is (= (parse-action action-name action-data parent-action next-action)
+        (is (= (get-action-data {:action-name   action-name
+                                 :action-data   action-data
+                                 :parent-action parent-action
+                                 :next-action   next-action
+                                 :prev-action   nil})
                {:vaca-can-you-say {:type     "animation-sequence"
                                    :parent   :introduce-word
                                    :handlers {:next [:vaca-question-var]}
@@ -294,7 +346,11 @@
           parent-action nil
           next-action :next-action
           prev-action :previous-action]
-      (is (= (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action prev-action)
+      (is (= (parse-actions-chain actions-data {:action-name   start-node-name
+                                                :action-data   start-node-data
+                                                :parent-action parent-action
+                                                :next-action   next-action
+                                                :prev-action   prev-action})
              {:simple-parallel   {:type        "parallel"
                                   :data        {:type "parallel"
                                                 :data [{:type "action"}
@@ -324,7 +380,11 @@
           parent-action nil
           next-action :next-action
           prev-action :previous-action]
-      (let [actual-result (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action prev-action)
+      (let [actual-result (parse-actions-chain actions-data {:action-name   start-node-name
+                                                             :action-data   start-node-data
+                                                             :parent-action parent-action
+                                                             :next-action   next-action
+                                                             :prev-action   prev-action})
             expected-result {:introduce-word    {:type        "sequence"
                                                  :connections {:previous-action {:handlers {:next [:empty-small]}}}
                                                  :data        (:introduce-word actions-data)}
@@ -356,7 +416,11 @@
           parent-action nil
           next-action :next-action
           prev-action :previous-action]
-      (is (= (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action prev-action)
+      (is (= (parse-actions-chain actions-data {:action-name   start-node-name
+                                                :action-data   start-node-data
+                                                :parent-action parent-action
+                                                :next-action   next-action
+                                                :prev-action   prev-action})
              {:simple-seq   {:type        "sequence"
                              :data        {:type "sequence"
                                            :data ["sub-action-0"
@@ -394,7 +458,11 @@
           parent-action nil
           next-action :next-action
           prev-action :previous-action]
-      (let [actual-result (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action prev-action)
+      (let [actual-result (parse-actions-chain actions-data {:action-name   start-node-name
+                                                             :action-data   start-node-data
+                                                             :parent-action parent-action
+                                                             :next-action   next-action
+                                                             :prev-action   prev-action})
             expected-result {:action-seq-1   {:type        "sequence"
                                               :connections {:previous-action {:handlers {:next [:action-seq-1-1]}}}
                                               :data        {:type "sequence"
@@ -446,7 +514,11 @@
           parent-action nil
           next-action nil
           prev-action :previous-action]
-      (is (= (parse-actions-chain actions-data start-node-name start-node-data parent-action next-action prev-action)
+      (is (= (parse-actions-chain actions-data {:action-name   start-node-name
+                                                :action-data   start-node-data
+                                                :parent-action parent-action
+                                                :next-action   next-action
+                                                :prev-action   prev-action})
              {:simple-test    {:type        "test-var-scalar"
                                :data        {:type     "test-var-scalar"
                                              :var-name "var-name"
@@ -460,8 +532,7 @@
                                :connections {:simple-test {:handlers {}}}}
               :fail-action    {:type        "action"
                                :data        {:type "action"}
-                               :connections {:simple-test {:handlers {}}}}}))
-      )))
+                               :connections {:simple-test {:handlers {}}}}})))))
 
 (deftest test-merge-actions-map
   (testing "seq-intersection"
