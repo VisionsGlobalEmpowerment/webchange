@@ -36,10 +36,11 @@
         default-node-size {:width  150
                            :height 150}]
     (if-not (or (= 0 node-width) (= 0 node-height))
-      {:width  node-width
-       :height node-height}
+      {:width  node-height                                  ; # have to change X and Y axis for unknown reason
+       :height node-width}
       (do (.warn js/console "Node size is not defined")
-          default-node-size))))
+          default-node-size))
+    ))
 
 (defn get-nodes
   [model]
@@ -84,4 +85,4 @@
     (set-graph-items! graph (get-graph-items model))
     (make-graph-layout! graph)
     (doseq [node (get-graph-nodes graph)]
-      (set-node-position! model (.-id node) (.-y node) (.-x node)))))
+      (set-node-position! model (.-id node) (.-y node) (.-x node))))) ; # have to change X and Y axis for unknown reason

@@ -4,7 +4,7 @@
              :global-object {:default "#156874"}
              :action        {:audio   "#008A66"
                              :default "#CCCCCC"}
-             :default       "#FF0000"})
+             :default       "#CCCCCC"})
 
 (defn get-color
   [entity type]
