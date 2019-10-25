@@ -16,7 +16,8 @@
 
 (defn get-node-outs
   [node-data]
-  (->> node-data
-       (get-node-connections nil)
-       (map (fn [[_ out _]] out))
-       (distinct)))
+  (reduce
+    (fn [result [_ connection-data]]
+      (concat result (keys (:handlers connection-data))))
+    []
+    (:connections node-data)))
