@@ -1,7 +1,7 @@
-(ns webchange.editor-v2.diagram.scene-data-parser.parser-globals-test
+(ns webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-globals-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.editor-v2.diagram.scene-data-parser.parser-globals :refer [parse-globals]]))
+    [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-globals :refer [parse-globals]]))
 
 (deftest test-parse-globals
   (testing "triggers parsing"

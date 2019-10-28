@@ -7,11 +7,13 @@
             [webchange.editor.form-elements.integer-test]
             [webchange.editor.form-elements.number-test]
             [webchange.editor-v2.diagram.diagram-items-factory.utils-test]
-            [webchange.editor-v2.diagram.scene-data-parser.parser-test]
-            [webchange.editor-v2.diagram.scene-data-parser.parser-actions-test]
-            [webchange.editor-v2.diagram.scene-data-parser.parser-globals-test]
-            [webchange.editor-v2.diagram.scene-data-parser.parser-objects-test]
-            [webchange.editor-v2.diagram.scene-data-parser.duplicates-processor-test]
+            [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-test]
+            [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-actions-test]
+            [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-globals-test]
+            [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-objects-test]
+            [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.duplicates-replicator-test]
+            [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.usages-counter-test]
+            [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.utils-test]
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
             [webchange.interpreter.utils-test]
@@ -25,11 +27,13 @@
   'webchange.editor.form-elements.integer-test
   'webchange.editor.form-elements.number-test
   'webchange.editor-v2.diagram.diagram-items-factory.utils-test
-  'webchange.editor-v2.diagram.scene-data-parser.parser-test
-  'webchange.editor-v2.diagram.scene-data-parser.parser-actions-test
-  'webchange.editor-v2.diagram.scene-data-parser.parser-globals-test
-  'webchange.editor-v2.diagram.scene-data-parser.parser-objects-test
-  'webchange.editor-v2.diagram.scene-data-parser.duplicates-processor-test
+  'webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-test
+  'webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-actions-test
+  'webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-globals-test
+  'webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-objects-test
+  'webchange.editor-v2.diagram.scene-parser.duplicates-replicator.duplicates-replicator-test
+  'webchange.editor-v2.diagram.scene-parser.duplicates-replicator.usages-counter-test
+  'webchange.editor-v2.diagram.scene-parser.duplicates-replicator.utils-test
   'webchange.interpreter.events-test
   'webchange.interpreter.variables.events-test
   'webchange.interpreter.utils-test

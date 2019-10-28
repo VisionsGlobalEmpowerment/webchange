@@ -3,7 +3,7 @@
     ["@projectstorm/react-diagrams" :refer [DiagramModel DiagramEngine]]
     [webchange.editor-v2.diagram.diagram-items-arranger :refer [arrange-items]]
     [webchange.editor-v2.diagram.diagram-items-factory.factory :refer [create-diagram-items]]
-    [webchange.editor-v2.diagram.scene-data-parser.parser :refer [parse-scene-data]]
+    [webchange.editor-v2.diagram.scene-parser.parser :refer [parse-scene]]
     [webchange.editor-v2.diagram.custom-diagram-items.custom-factory :refer [get-custom-factory]]))
 
 (defonce state (atom {:model  nil
@@ -34,7 +34,7 @@
   [scene-data]
   (let [[engine model] (init-engine)
         [nodes links] (->> scene-data
-                           (parse-scene-data)
+                           (parse-scene)
                            (create-diagram-items))]
     (doseq [node nodes] (.addNode model node))
     (doseq [link links] (.addLink model link))
