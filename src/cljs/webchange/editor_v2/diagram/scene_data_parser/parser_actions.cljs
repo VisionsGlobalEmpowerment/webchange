@@ -110,19 +110,35 @@
          (add-connection-property prev-action first-item parent-action)
          (assoc {} action-name))))
 
+(defn sequence-name?
+  [data action-name]
+  (= "sequence" (get-in data [action-name :type])))
+
+(defn get-last-sequence-item
+  [data action-name]
+  (->> (get-in data [action-name :data])
+       (last)
+       (keyword)))
+
 (defmethod parse-actions-chain "sequence"
   [actions-data {:keys [action-name action-data next-action] :as params}]
   (let [parsed-action (get-action-data params)
         sequence-data (->> action-data :data (map keyword))]
     (reduce
-      (fn [result [index next-node-name]]
-        (let [next-node-data (get actions-data next-node-name)]
+      (fn [result [index sequence-item-name]]
+        (let [sequence-item-data (get actions-data sequence-item-name)
+              next-item-name (or (next-to-index sequence-data index) next-action)
+              previous-item-name (or (prev-to-index sequence-data index) action-name)
+              prev-action (if (and (sequence-name? actions-data previous-item-name)
+                                   (not (= previous-item-name action-name)))
+                            (get-last-sequence-item actions-data previous-item-name)
+                            previous-item-name)]
           (merge-actions result (parse-actions-chain actions-data
-                                                     {:action-name   next-node-name
-                                                      :action-data   next-node-data
+                                                     {:action-name   sequence-item-name
+                                                      :action-data   sequence-item-data
                                                       :parent-action action-name
-                                                      :next-action   (or (next-to-index sequence-data index) next-action)
-                                                      :prev-action   (or (prev-to-index sequence-data index) action-name)}))))
+                                                      :next-action   next-item-name
+                                                      :prev-action   prev-action}))))
       parsed-action
       (map-indexed (fn [index item] [index item]) sequence-data))))
 

@@ -491,7 +491,9 @@
                                               :connections {:action-seq-2-1 {:handlers {:next [:action-seq-1-2]}
                                                                              :parent   :action-seq-2}}
                                               :data        {:type "empty"}}}]
-        ; (is (= actual-result expected-result))
+        (when-not (= actual-result expected-result)
+          (println (compare-maps actual-result expected-result)))
+        (is (= actual-result expected-result))
 
         ;; should be fixed for :action-seq-1-2
         ;; actual :connections {:action-seq-2
