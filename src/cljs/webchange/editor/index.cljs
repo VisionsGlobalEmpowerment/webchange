@@ -154,9 +154,7 @@
 (defn transparent
   [scene-id name object]
   [:> Group (object-params object)
-   [:> Rect (-> (rect-params scene-id name object)
-                (with-parent-origin object "left-top")
-                with-origin-offset)]])
+   [:> Rect (rect-params scene-id name object)]])
 
 (defn update-group-rect
   [group rect]
