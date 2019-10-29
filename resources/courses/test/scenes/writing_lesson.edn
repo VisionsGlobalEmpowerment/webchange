@@ -1,13 +1,24 @@
-{:assets        [{:url "/raw/img/library/main/background.jpg" :type "image"}
-                 {:url "/raw/img/library/main/Easel_Enabled.png" :type "image"}
+{:assets        [{:url "/raw/img/library/room2/background.jpg" :type "image"}
+                 {:url "/raw/img/library/room2/canvas.png" :type "image"}
                  {:url "/raw/audio/l2/a6/L2_A6_Mari.m4a" :type "audio" :alias "mari voice"}
+                 {:url "/raw/audio/l2/a6/mari.mp4" :type "audio" :alias "mari voice"}
                  {:url "/raw/audio/l2/a6/L2_A6_Vaca_1.m4a" :type "audio" :alias "vaca voice 1"}
                  {:url "/raw/audio/l2/a6/L2_A6_Vaca_2.m4a" :type "audio" :alias "vaca voice 2"}
                  {:url "/raw/audio/l2/a6/L2_A6_Vaca_3.m4a" :type "audio" :alias "vaca voice 3"}
                  {:url "/raw/audio/l2/a6/L2_A6_Vaca_4.m4a" :type "audio" :alias "vaca voice 4"}
-                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio" :alias "vaca insertions"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_2.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_3.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_4.m4a", :size 2, :type "audio" :alias "vaca insertions 4"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_5.m4a", :size 2, :type "audio" :alias "vaca insertions 5"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_6.m4a", :size 2, :type "audio" :alias "vaca insertions 6"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_7.m4a", :size 2, :type "audio" :alias "vaca insertions 7"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_8.m4a", :size 2, :type "audio" :alias "vaca insertions 8"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_9.m4a", :size 2, :type "audio" :alias "vaca insertions 9"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_10.m4a", :size 2, :type "audio" :alias "vaca insertions 10"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_11.m4a", :size 2, :type "audio" :alias "vaca insertions 11"}
                  ]
- :objects       {:background  {:type "background" :src "/raw/img/library/main/background.jpg"}
+ :objects       {:background  {:type "background" :src "/raw/img/library/room2/background.jpg"}
                  :mari        {:type       "animation"
                                :scene-name "mari"
                                :name       "mari"
@@ -28,18 +39,18 @@
                                :anim       "idle"
                                :start      true
                                :speed      0.3
-                               :x          270
-                               :y          1015
+                               :x          486
+                               :y          986
                                :width      351
                                :height     717
                                :scale-x    1
                                :scale-y    1}
                  :canvas      {:type    "image"
-                               :src     "/raw/img/library/main/Easel_Enabled.png"
-                               :x       700
-                               :y       333
-                               :width   287
-                               :height  430
+                               :src     "/raw/img/library/room2/canvas.png"
+                               :x       1033
+                               :y       179
+                               :width   529
+                               :height  810
                                :scale-x 1
                                :scale-y 1}
                  :picture-box {:type       "transparent"
@@ -47,8 +58,8 @@
                                :transition "picture-box"
                                :scene-name "picture-box"
                                :skin       "empty"
-                               :x          595
-                               :y          645
+                               :x          775
+                               :y          125
                                :width      671
                                :height     633
                                :scale      {:x 0.25 :y 0.25}
@@ -67,12 +78,12 @@
                                :stroke-width 15
                                :line-cap     "round"
                                :fill         "transparent"
-                               :x            930
-                               :y            610
+                               :x            1133
+                               :y            298
                                :width        100
                                :height       100
-                               :scale-x      2
-                               :scale-y      2
+                               :scale-x      3
+                               :scale-y      3
                                :states       {:hidden  {:type "transparent"}
                                               :visible {:type "animated-svg-path"}}}}
  :scene-objects [["background"] ["canvas" "picture-box" "letter-path"] ["mari" "senora-vaca"]]
