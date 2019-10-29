@@ -14,11 +14,14 @@
                  :position      "relative"})
 
 (defn custom-widget
-  [props]
-  (let [node (:node props)
-        props (.-props node)]
-    [:div {:style (merge node-style
-                         {:background-color (get-node-color props)})}
-     [header props]
-     [ports {:in-ports  (->> node .getInPorts)
-             :out-ports (->> node .getOutPorts)}]]))
+  [{:keys [node get-node-custom-color on-double-click]}]
+  (let [node-data (.-props node)
+        in-ports (->> node .getInPorts)
+        out-ports (->> node .getOutPorts)]
+    [:div {:on-double-click #(on-double-click node-data)
+           :style           (merge node-style
+                                   {:background-color (or (get-node-custom-color node-data)
+                                                          (get-node-color node-data))})}
+     [header node-data]
+     [ports {:in-ports  in-ports
+             :out-ports out-ports}]]))

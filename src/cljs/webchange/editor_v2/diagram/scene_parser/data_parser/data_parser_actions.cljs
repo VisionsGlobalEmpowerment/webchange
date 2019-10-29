@@ -56,6 +56,38 @@
            {})
          (assoc data :connections))))
 
+(defn merge-handlers
+  [handlers-1 handlers-2]
+  (reduce
+    (fn [result event-name]
+      (let [event-1-handlers (get handlers-1 event-name)
+            event-2-handlers (get handlers-2 event-name)]
+        (assoc result event-name (->> [event-1-handlers
+                                       event-2-handlers]
+                                      (apply concat)
+                                      (distinct)))))
+    {}
+    (->> [(keys handlers-1)
+          (keys handlers-2)]
+         (apply concat)
+         (distinct))))
+
+(defn merge-connections
+  [connections-1 connections-2]
+  (reduce
+    (fn [result connection-name]
+      (let [connections-1-data (get connections-1 connection-name)
+            connections-2-data (get connections-2 connection-name)]
+        (assoc result connection-name (merge connections-1-data
+                                             connections-2-data
+                                             {:handlers (merge-handlers (:handlers connections-1-data)
+                                                                        (:handlers connections-2-data))}))))
+    {}
+    (->> [(keys connections-1)
+          (keys connections-2)]
+         (apply concat)
+         (distinct))))
+
 (defn merge-actions
   [map-1 map-2]
   (let [actions-to-merge (seq-intersection (keys map-1) (keys map-2))
@@ -65,8 +97,8 @@
                                  action-2-data (get map-2 action-name)]
                              (assoc result action-name (merge action-1-data
                                                               action-2-data
-                                                              {:connections (merge (:connections action-1-data)
-                                                                                   (:connections action-2-data))}))))
+                                                              {:connections (merge-connections (:connections action-1-data)
+                                                                                               (:connections action-2-data))}))))
                          {}
                          actions-to-merge)]
     (merge map-1 map-2 actions-merged)))

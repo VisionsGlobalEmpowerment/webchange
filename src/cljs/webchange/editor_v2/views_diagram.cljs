@@ -4,7 +4,8 @@
     [re-frame.core :as re-frame]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.diagram.diagram-builder :refer [get-diagram-engine reorder-diagram zoom-to-fit]]
-    [webchange.subs :as subs]))
+    [webchange.subs :as subs]
+    [webchange.editor-v2.subs :as editor-subs]))
 
 (defn toolbar
   []
@@ -26,10 +27,11 @@
 
 (defn diagram
   []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])]
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])
+        diagram-mode (re-frame/subscribe [::editor-subs/diagram-mode])]
     (fn []
       (let [scene-data @(re-frame/subscribe [::subs/scene @scene-id])
-            engine (get-diagram-engine scene-data)]
+            engine (get-diagram-engine scene-data @diagram-mode)]
         [:div.diagram-container
          [toolbar]
          [:> DiagramWidget {:diagramEngine engine}]]))))

@@ -7,9 +7,9 @@
                  :padding     5
                  :text-align  "center"
                  :white-space "nowrap"}}
-    (.-name props)]
+    (:name props)]
    [:h4 {:style {:margin      0
                  :padding     5
                  :text-align  "center"
                  :white-space "nowrap"}}
-    (.-type props)]])
+    (:type props)]])

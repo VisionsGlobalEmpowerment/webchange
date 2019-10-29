@@ -5,6 +5,7 @@
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
+    [webchange.editor-v2.events :as ee2]
     [webchange.editor-v2.views :refer [main-view]]
     [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
@@ -26,6 +27,7 @@
 
 (defn- editor-panel-v2 [course-id scene-id]
   (re-frame/dispatch [::ee/init-editor course-id scene-id])
+  (re-frame/dispatch [::ee2/init-editor])
   [main-view scene-id])
 
 (defn- dashboard-panel

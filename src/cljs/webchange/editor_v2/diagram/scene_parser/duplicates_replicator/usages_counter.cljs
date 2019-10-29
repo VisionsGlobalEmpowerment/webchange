@@ -1,9 +1,9 @@
 (ns webchange.editor-v2.diagram.scene-parser.duplicates-replicator.usages-counter
   (:require
-    [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.utils :refer [add-to-map
-                                                                                  add-root-node
-                                                                                  remove-root-node
-                                                                                  get-next-children]]))
+    [webchange.editor-v2.diagram.scene-parser.graph-utils.node-children :refer [get-children]]
+    [webchange.editor-v2.diagram.scene-parser.graph-utils.root-nodes :refer [add-root-node
+                                                                             remove-root-node]]
+    [webchange.editor-v2.diagram.scene-parser.utils :refer [add-to-map]]))
 
 (defn count-node
   [graph node-name prev-prev-node-name counter-map]
@@ -12,8 +12,7 @@
                         (nil? (get counter-map node-name)))]
     (if count-node?
       (first (add-to-map counter-map node-name))
-      counter-map))
-  )
+      counter-map)))
 
 (defn count-usages-dfs
   "Depth-first-search"
@@ -25,7 +24,7 @@
        (fn [result next-node-name]
          (count-usages-dfs graph [prev-node-name node-name next-node-name] result))
        (count-node graph node-name prev-prev-node-name result)
-       (get-next-children node-data prev-node-name)))))
+       (get-children node-data prev-node-name)))))
 
 (defn count-node-usages
   [parsed-data start-nodes]
@@ -46,5 +45,9 @@
 
 (defn get-reuse-map
   [parsed-data root-nodes]
-  (-> (count-node-usages parsed-data root-nodes)
-      (get-reused-nodes)))
+  ;(-> (count-node-usages parsed-data root-nodes)
+  ;    (get-reused-nodes))
+  {:empty-small      0
+   :empty-big        0
+   :set-reminder-on  0
+   :set-reminder-off 0})
