@@ -1,11 +1,20 @@
-{:assets        [{:url "/raw/img/park/slide/background.jpg" :type "image"}
+{:assets        [{:url "/raw/img/park/slide/background2.jpg" :type "image"}
+                 {:url "/raw/img/park/slide/slide.png" :type "image"}
+                 {:url "/raw/img/park/slide/side.png" :type "image"}
                  {:url "/raw/audio/l2/a5/L2_A5_Mari.m4a" :type "audio"}
                  {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a" :type "audio" :alias "riddle a-g"}
                  {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a" :type "audio" :alias "riddle g-n"}
                  {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a" :type "audio" :alias "riddle o-end"}]
  :audio         {:mari "/raw/audio/l2/a5/L2_A5_Mari.m4a"}
  :objects       {:background    {:type "background"
-                                 :src  "/raw/img/park/slide/background.jpg"}
+                                 :src  "/raw/img/park/slide/background2.jpg"}
+
+                 :slide {:type "image" :width 997 :height 758 :x 200 :y 190
+                         :src "/raw/img/park/slide/slide.png"}
+
+                 :slide-side {:type "image" :width 234 :height 497 :x 591 :y 450
+                              :src "/raw/img/park/slide/side.png"}
+
                  :mari          {:type       "animation"
                                  :name       "mari"
                                  :transition "mari"
@@ -18,28 +27,23 @@
                                  :height     511
                                  :scale-y    0.5
                                  :scale-x    0.5}
-                 :slide-trigger {:type    "transparent"
-                                 :x       580
-                                 :y       450
-                                 :width   550
-                                 :height  500
-                                 :actions {:click {:type "action" :id "slide-click" :on "click"}}}
+
                  :box1          {:type       "animation"
                                  :name       "boxes"
                                  :skin       "qwestion"
                                  :scene-name "box1"
                                  :transition "box1"
-                                 :x          710
-                                 :y          236
+                                 :x          810
+                                 :y          216
                                  :width      671
                                  :height     633
-                                 :scale      {:x 0.18 :y 0.18}
+                                 :scale      {:x 0.25 :y 0.25}
                                  :anim       "idle2"
                                  :speed      0.3
                                  :start      true
                                  :loop       true
-                                 :states     {:init-position {:x 710
-                                                              :y 236}
+                                 :states     {:init-position {:x 810
+                                                              :y 216}
                                               :hidden        {:type "transparent"}
                                               :visible       {:type "animation"}}
                                  :actions    {:click {:type "action" :id "pick-box-1" :on "click"}}}
@@ -52,7 +56,7 @@
                                  :y          287
                                  :width      671
                                  :height     633
-                                 :scale      {:x 0.18 :y 0.18}
+                                 :scale      {:x 0.25 :y 0.25}
                                  :anim       "idle2"
                                  :speed      0.3
                                  :start      true
@@ -67,27 +71,28 @@
                                  :skin       "qwestion"
                                  :scene-name "box3"
                                  :transition "box3"
-                                 :x          595
-                                 :y          222
+                                 :x          655
+                                 :y          212
                                  :width      671
                                  :height     633
-                                 :scale      {:x 0.18 :y 0.18}
+                                 :scale      {:x 0.25 :y 0.25}
                                  :anim       "idle2"
                                  :speed      0.3
                                  :start      true
                                  :loop       true
-                                 :states     {:init-position {:x 595
-                                                              :y 222}
+                                 :states     {:init-position {:x 655
+                                                              :y 212}
                                               :hidden        {:type "transparent"}
                                               :visible       {:type "animation"}}
                                  :actions    {:click {:type "action" :id "pick-box-3" :on "click"}}}}
- :scene-objects [["background"] ["mari"] ["slide-trigger" "box3" "box1" "box2"]]
+ :scene-objects [["background"] ["slide" "slide-side"] ["mari"] ["box1" "box3" "box2"]]
  :actions       {:start                  {:type "sequence"
                                           :data ["start-activity"
                                                  "clear-instruction"
                                                  "renew-words"
                                                  "mari-voice-welcome"
-                                                 "init-state"]}
+                                                 "init-state"
+                                                 "renew-current-concept"]}
 
                  :start-activity         {:type "start-activity" :id "slide"}
                  :stop-activity          {:type "stop-activity" :id "slide"}
@@ -98,8 +103,7 @@
                  :clear-instruction      {:type "remove-flows" :flow-tag "instruction"}
 
                  :init-state             {:type "parallel"
-                                          :data [{:type "set-variable" :var-name "slide-clickable" :var-value true}
-                                                 {:type "set-variable" :var-name "answer-clickable" :var-value false}]}
+                                          :data [{:type "set-variable" :var-name "answer-clickable" :var-value false}]}
 
                  :renew-words            {:type        "lesson-var-provider"
                                           :provider-id "words-set"
@@ -151,14 +155,6 @@
                                                  {:type "state" :id "visible" :target "box2"}
                                                  {:type "state" :id "visible" :target "box3"}]}
 
-                 :slide-click            {:type     "test-value"
-                                          :from-var [{:var-name "slide-clickable" :action-property "value1"}]
-                                          :value2   true
-                                          :success  {:type "sequence-data"
-                                                     :data [{:type "set-variable" :var-name "slide-clickable" :var-value false}
-                                                            {:type "action" :id "renew-current-concept"}]}
-                                          :fail     {:type "empty" :duration 100}}
-
                  :pick-box-1             {:type     "test-value"
                                           :from-var [{:var-name "answer-clickable" :action-property "value1"}]
                                           :value2   true
@@ -205,7 +201,8 @@
                                                                  {:type "action" :id "slide-current-target"}]}]}
                                                  {:type "action" :id "mari-voice-try-another"}
                                                  {:type "action" :id "reset-boxes"}
-                                                 {:type "set-variable" :var-name "slide-clickable" :var-value true}]}
+                                                 {:type "empty" :duration 1000}
+                                                 {:type "action" :id "renew-current-concept"}]}
 
                  :pick-wrong             {:type "sequence-data"
                                           :data [{:type "set-variable" :var-name "answer-clickable" :var-value false}
@@ -235,18 +232,19 @@
                                                  {:type "empty" :duration 100}
                                                  {:type "state" :id "visible" :from-var [{:var-name "current-target" :action-property "target"}]}]}
 
-                 :mari-voice-welcome     {:type        "parallel"
+                 :mari-voice-welcome     {:type "animation-sequence" :target "mari" :track 1 :offset 0.974
                                           :description "Como estas pequeno genio? Estas listo para seguir con tu proxima actividad?
                                                             Primero, vamos a empezar por escuchar atentamente la adivinanza.
-                                                            Despues, toca la foto para contestarla! Estas listo para empezar? Toca la flecha!"
-                                          :data        [{:type "audio" :id "mari" :start 0.974 :duration 25.399}
-                                                        {:type "animation-sequence" :target "mari" :track 1 :offset 0.974
-                                                         :data [{:start 1.704 :end 3.872 :anim "talk"}
-                                                                {:start 4.735 :end 8.275 :anim "talk"}
-                                                                {:start 9.248 :end 15.620 :anim "talk"}
-                                                                {:start 16.505 :end 20.089 :anim "talk"}
-                                                                {:start 21.151 :end 23.342 :anim "talk"}
-                                                                {:start 24.426 :end 25.643 :anim "talk"}]}]}
+                                                            Despues, toca la foto para contestarla! Estas listo para empezar?"
+                                          :start 0.974,
+                                          :duration 22.612,
+                                          :audio "/raw/audio/l2/a5/L2_A5_Mari.m4a",
+                                          :data
+                                          [{:start 1.704, :end 3.872, :duration 2.168, :anim "talk"}
+                                           {:start 4.735, :end 8.275, :duration 3.54, :anim "talk"}
+                                           {:start 9.248, :end 15.62, :duration 6.372, :anim "talk"}
+                                           {:start 16.505, :end 20.089, :duration 3.584, :anim "talk"}
+                                           {:start 21.151, :end 23.342, :duration 2.191, :anim "talk"}]}
 
                  :mari-voice-correct     {:type        "parallel"
                                           :description "Eso es correcto. Ya lo tienes! Wiiii!"
@@ -262,12 +260,15 @@
                                                          :data [{:start 29.802 :end 30.621 :anim "talk"}
                                                                 {:start 31.019 :end 32.457 :anim "talk"}]}]}
 
-                 :mari-voice-try-another {:type        "parallel"
-                                          :description "Vamos a intentar otra adivinanza. Toca la resbaladilla. "
-                                          :data        [{:type "audio" :id "mari" :start 43.188 :duration 5.642}
-                                                        {:type "animation-sequence" :target "mari" :track 1 :offset 43.188
-                                                         :data [{:start 43.409 :end 46.506 :anim "talk"}
-                                                                {:start 47.037 :end 48.653 :anim "talk"}]}]}}
+                 :mari-voice-try-another {:description "Vamos a intentar otra adivinanza.",
+                                          :offset 43.188,
+                                          :start 43.188,
+                                          :type "animation-sequence",
+                                          :duration 3.589,
+                                          :audio "/raw/audio/l2/a5/L2_A5_Mari.m4a",
+                                          :target "mari",
+                                          :track 1,
+                                          :data [{:start 43.409, :end 46.506, :duration 3.097, :anim "talk"}]}}
  :triggers      {:start {:on "start" :action "start"}
                  :stop  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
