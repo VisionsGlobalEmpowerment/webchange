@@ -56,49 +56,7 @@
                                          :color      "#323232"
                                          :states     {:hidden  {:type "transparent"}
                                                       :visible {:type "painting-area"}}}
-                 :letter-tutorial-1     {:type         "svg-path"
-                                         :scene-name   "letter-tutorial-1"
-                                         :data         ""
-                                         :x            0
-                                         :y            0
-                                         :stroke       "#323232"
-                                         :stroke-width 4
-                                         :line-cap     "round"
-                                         :scale-x      2
-                                         :scale-y      2
-                                         :rotation     0}
-                 :letter-tutorial-2     {:type         "svg-path"
-                                         :scene-name   "letter-tutorial-2"
-                                         :data         ""
-                                         :x            350
-                                         :y            0
-                                         :stroke       "#323232"
-                                         :stroke-width 4
-                                         :line-cap     "round"
-                                         :scale-x      2
-                                         :scale-y      2
-                                         :rotation     0}
-                 :letter-tutorial-3     {:type         "svg-path"
-                                         :scene-name   "letter-tutorial-3"
-                                         :data         ""
-                                         :x            700
-                                         :y            0
-                                         :stroke       "#323232"
-                                         :stroke-width 4
-                                         :line-cap     "round"
-                                         :scale-x      2
-                                         :scale-y      2
-                                         :rotation     0}
-                 :letter-tutorial-group {:type     "transparent"
-                                         :x        1980
-                                         :y        1024
-                                         :width    400
-                                         :height   300
-                                         :children ["letter-tutorial-1" "letter-tutorial-2" "letter-tutorial-3"]
-                                         :states   {:hidden  {:type "transparent"}
-                                                    :visible {:x    450
-                                                              :y    30
-                                                              :type "group"}}}
+
                  :letter-trace          {:type         "svg-path"
                                          :scene-name   "letter-trace"
                                          :data         ""
@@ -106,24 +64,40 @@
                                          :y            115
                                          :stroke       "#898989"
                                          :stroke-width 4
-                                         :dash         [10 15]
+                                         :dash         [7 7]
                                          :line-cap     "round"
-                                         :scale-x      2
-                                         :scale-y      2
+                                         :scale-x      10
+                                         :scale-y      10
                                          :rotation     0
                                          :states       {:hidden  {:type "transparent"}
-                                                        :visible {:type "painting-area"}}}
+                                                        :visible {:type "svg-path"}}}
+
                  :letter-trace-matrix   {:type   "matrix"
                                          :el     "letter-trace"
-                                         :x      170
-                                         :y      80
-                                         :width  1580
-                                         :height 1000
-                                         :dx     340
+                                         :x      250
+                                         :y      450
+                                         :width  1500
+                                         :height 600
+                                         :dx     500
                                          :dy     360
-                                         :skip   [0 0]
-                                         :max    30}
-                 :letter-path           {:type         "transparent"
+                                         :max    3}
+
+                 :letter-tutorial-trace {:type         "svg-path"
+                                         :scene-name   "letter-tutorial-trace"
+                                         :data         ""
+                                         :x            705
+                                         :y            82
+                                         :stroke       "#898989"
+                                         :stroke-width 4
+                                         :dash         [7 7]
+                                         :line-cap     "round"
+                                         :scale-x      4
+                                         :scale-y      4
+                                         :rotation     0
+                                         :states       {:hidden  {:type "transparent"}
+                                                        :visible {:type "svg-path"}}}
+
+                 :letter-tutorial-path  {:type         "transparent"
                                          :scene-name   "letter-path"
                                          :duration     5000
                                          :animation    "stop"
@@ -132,14 +106,22 @@
                                          :stroke-width 10
                                          :line-cap     "round"
                                          :fill         "transparent"
-                                         :x            505
+                                         :x            705
                                          :y            82
-                                         :width        100
-                                         :height       100
-                                         :scale-x      2
-                                         :scale-y      2
+                                         :scale-x      4
+                                         :scale-y      4
                                          :states       {:hidden  {:type "transparent"}
                                                         :visible {:type "animated-svg-path"}}}
+
+                 :letter-tutorial-image {:type     "image"
+                                         :x        100
+                                         :y        0
+                                         :width    100
+                                         :height   100
+                                         :scale-x  2
+                                         :scale-y  2
+                                         :rotation 0}
+
                  :concept-card          {:type     "group"
                                          :x        60
                                          :y        0
@@ -167,9 +149,8 @@
                                          :font-family    "Lexend Deca"
                                          :font-size      80
                                          :fill           "black"}}
- :scene-objects [["background" "copybook" "concept-card"]
-                 ["letter-trace-matrix" "letter-path"]
-                 ["letter-tutorial-group"]
+ :scene-objects [["background" "concept-card"]
+                 ["letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path"]
                  ["practice-canvas" "next-button" "mari"]]
  :actions       {:start                       {:type "sequence"
                                                :data ["start-activity"
@@ -219,12 +200,14 @@
                  :init-stage-1                {:type "parallel"
                                                :data [{:type     "set-attribute" :target "letter-trace" :attr-name "data"
                                                        :from-var [{:var-name "letter-path" :action-property "attr-value"}]}
-                                                      {:type     "set-attribute" :target "letter-path" :attr-name "path"
+                                                      {:type     "set-attribute" :target "letter-tutorial-trace" :attr-name "data"
+                                                       :from-var [{:var-name "letter-path" :action-property "attr-value"}]}
+                                                      {:type     "set-attribute" :target "letter-tutorial-path" :attr-name "path"
                                                        :from-var [{:var-name "letter-path" :action-property "attr-value"}]}]}
 
                  :hide-stage-1                {:type "parallel"
                                                :data [{:type "state" :target "letter-trace" :id "hidden"}
-                                                      {:type "state" :target "letter-path" :id "hidden"}]}
+                                                      {:type "state" :target "letter-tutorial-path" :id "hidden"}]}
 
                  :init-stage-2                {:type "parallel"
                                                :data [{:type     "set-attribute" :target "letter-tutorial-1" :attr-name "data"
@@ -274,15 +257,15 @@
                  :mari-shows-example          {:type "sequence-data"
                                                :data [{:type          "transition"
                                                        :transition-id "mari"
-                                                       :to            {:x 574 :y 62 :loop false :duration 2.5}}
-                                                      {:type "state" :target "letter-path" :id "visible"}
+                                                       :to            {:x 775 :y 82 :loop false :duration 2.5}}
+                                                      {:type "state" :target "letter-tutorial-path" :id "visible"}
                                                       {:type "parallel"
-                                                       :data [{:type "path-animation" :state "play" :target "letter-path"}
+                                                       :data [{:type "path-animation" :state "play" :target "letter-tutorial-path"}
                                                               {:type          "transition"
                                                                :transition-id "mari"
                                                                :to            {:path     ""
-                                                                               :origin   {:x 574 :y 62}
-                                                                               :scale    {:x 2 :y 2}
+                                                                               :origin   {:x 775 :y 82}
+                                                                               :scale    {:x 4 :y 4}
                                                                                :duration 5}
                                                                :from-var      [{:var-name "letter-path" :action-property "to.path"}]}]}
                                                       {:type "set-attribute" :target "mari" :attr-name "scale-x" :attr-value -0.5}

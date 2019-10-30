@@ -13,7 +13,8 @@
 
 (defn- parse-path-str
   [path]
-  (let [[first & other] (filter (fn [el] (not (contains? #{"" " " ","} el))) (s/split path #"(\s|,|[a-zA-Z])"))]
+  (let [[first & other] (filter (fn [el] (not (contains? #{"" " " "," nil} el))) (s/split path #"(\s|,|[a-zA-Z])|(?=-)"))]
+    (js/console.log "parse-path-str" first other)
     (concat [first] (map edn/read-string other))))
 
 (defn- lower-case?
