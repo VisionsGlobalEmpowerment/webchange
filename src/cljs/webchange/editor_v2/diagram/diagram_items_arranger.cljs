@@ -30,27 +30,31 @@
   (.layout dagre graph))
 
 (defn get-node-size
-  [node]
-  (let [node-width (get node "width")
-        node-height (get node "height")
-        default-node-size {:width  150
-                           :height 150}]
+  [node-data engine]
+  (let [diagram-model (.getDiagramModel engine)
+        node-id (get node-data "id")
+        node-model (.getNode diagram-model node-id)
+        node-dimensions (.getNodeDimensions engine node-model)
+        zoom (.getZoomLevel diagram-model)
+        node-width (* (.-width node-dimensions) (/ 100 zoom))
+        node-height (* (.-height node-dimensions) (/ 100 zoom))]
+    (.updateDimensions node-model node-dimensions)
     (if-not (or (= 0 node-width) (= 0 node-height))
       {:width  node-height                                  ; # have to change X and Y axis for unknown reason
        :height node-width}
       (do (.warn js/console "Node size is not defined")
-          default-node-size))
-    ))
+          {:width  150
+           :height 150}))))
 
 (defn get-nodes
-  [model]
+  [model engine]
   (->> (.-nodes model)
        (js->clj)
        (map (fn [node]
               (let [id (get node "id")]
                 {:id       id
                  :metadata (->> {:id id}
-                                (merge (get-node-size node))
+                                (merge (get-node-size node engine))
                                 (clj->js))})))))
 
 (defn set-node-position!
@@ -72,17 +76,16 @@
        ))
 
 (defn get-graph-items
-  [model]
+  [model engine]
   (let [serialized (.serializeDiagram model)
-        nodes (get-nodes serialized)
+        nodes (get-nodes serialized engine)
         edges (get-edges serialized)]
     [nodes edges]))
 
-
 (defn arrange-items
-  [model]
+  [model engine]
   (let [graph (create-graph)]
-    (set-graph-items! graph (get-graph-items model))
+    (set-graph-items! graph (get-graph-items model engine))
     (make-graph-layout! graph)
     (doseq [node (get-graph-nodes graph)]
       (set-node-position! model (.-id node) (.-y node) (.-x node))))) ; # have to change X and Y axis for unknown reason

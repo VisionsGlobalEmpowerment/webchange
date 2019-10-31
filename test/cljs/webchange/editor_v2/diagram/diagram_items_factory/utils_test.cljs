@@ -23,4 +23,11 @@
                                                      :back  [:stop-activity]}}}}]
       (let [actual-result (get-node-outs node-data)
             expected-result [:start :back]]
+        (is (= actual-result expected-result)))))
+  (testing "getting node outs for empty handlers list"
+    (let [node-data {:type        "trigger"
+                     :connections {:root {:handlers {:start [:start-background-music]
+                                                     :back  []}}}}]
+      (let [actual-result (get-node-outs node-data)
+            expected-result [:start :back]]
         (is (= actual-result expected-result))))))
