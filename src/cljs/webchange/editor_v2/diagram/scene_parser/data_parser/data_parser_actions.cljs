@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.scene-data-parser.parser-actions
+(ns webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-actions
   (:require
     [clojure.set :refer [intersection]]))
 
@@ -22,6 +22,20 @@
   [seq-1 seq-2]
   (vec (intersection (set seq-1) (set seq-2))))
 
+(defn sequence-name?
+  [data action-name]
+  (= "sequence" (get-in data [action-name :type])))
+
+(defn parallel-name?
+  [data action-name]
+  (= "parallel" (get-in data [action-name :type])))
+
+(defn get-last-sequence-item
+  [data action-name]
+  (->> (get-in data [action-name :data])
+       (last)
+       (keyword)))
+
 (defn add-connection-property
   [prev connection-data parent data]
   (let [default-next-action-event :next
@@ -30,11 +44,16 @@
                     (sequential? connection-data) (assoc {} default-next-action-event connection-data)
                     (not-nil? connection-data) (assoc {} default-next-action-event [connection-data])
                     :else {})
-        add-parent-property #(if-not (nil? %1) (assoc %2 :parent %1) %2)]
-    (->> next-data
-         (assoc {} :handlers)
-         (add-parent-property parent)
-         (assoc {} prev)
+        add-parent-property #(if-not (nil? %1) (assoc %2 :parent %1) %2)
+        previous-actions (if (sequential? prev) prev [prev])
+        connection-data (->> next-data
+                             (assoc {} :handlers)
+                             (add-parent-property parent))]
+    (->> previous-actions
+         (reduce
+           (fn [result previous-action]
+             (assoc result previous-action connection-data))
+           {})
          (assoc data :connections))))
 
 (defn merge-actions
@@ -102,6 +121,18 @@
 
 ;; sequence
 
+(defn get-parallel-children
+  [actions-data action-name]
+  (-> (get actions-data action-name)
+      (:connections)
+      (seq)
+      (first)
+      (last)
+      (:handlers)
+      (seq)
+      (first)
+      (last)))
+
 (defmethod get-action-data "sequence"
   [{:keys [action-name action-data parent-action prev-action]}]
   (let [first-item (->> action-data :data first keyword)]
@@ -113,18 +144,26 @@
 (defmethod parse-actions-chain "sequence"
   [actions-data {:keys [action-name action-data next-action] :as params}]
   (let [parsed-action (get-action-data params)
-        sequence-data (->> action-data :data (map keyword))]
+        sequence-data (->> action-data :data (map keyword))
+        next-actions (map-indexed (fn [index item] [index item]) sequence-data)]
     (reduce
-      (fn [result [index next-node-name]]
-        (let [next-node-data (get actions-data next-node-name)]
+      (fn [result [index sequence-item-name]]
+        (let [sequence-item-data (get actions-data sequence-item-name)
+              next-item-name (or (next-to-index sequence-data index) next-action)
+              previous-item-name (or (prev-to-index sequence-data index) action-name)
+              prev-action (cond
+                            (and (sequence-name? actions-data previous-item-name)
+                                 (not (= previous-item-name action-name))) (get-last-sequence-item actions-data previous-item-name)
+                            (parallel-name? result previous-item-name) (get-parallel-children result previous-item-name)
+                            :else previous-item-name)]
           (merge-actions result (parse-actions-chain actions-data
-                                                     {:action-name   next-node-name
-                                                      :action-data   next-node-data
+                                                     {:action-name   sequence-item-name
+                                                      :action-data   sequence-item-data
                                                       :parent-action action-name
-                                                      :next-action   (or (next-to-index sequence-data index) next-action)
-                                                      :prev-action   (or (prev-to-index sequence-data index) action-name)}))))
+                                                      :next-action   next-item-name
+                                                      :prev-action   prev-action}))))
       parsed-action
-      (map-indexed (fn [index item] [index item]) sequence-data))))
+      next-actions)))
 
 ;; sequence-data
 
@@ -184,8 +223,14 @@
 
 (defn verified-type?
   [action-type]
-  (some #(= action-type %) ["empty"
+  (some #(= action-type %) ["add-animation"
+                            "animation-sequence"
+                            "audio"
+                            "empty"
                             "parallel"
+                            "remove-interval"
+                            "set-attribute"
+                            "set-variable"
                             "sequence"
                             "sequence-data"
                             "test-var-scalar"]))
@@ -232,11 +277,11 @@
          (get-chain-entries)
          (reduce
            (fn [result [action-name object-name]]
-             (merge result (parse-actions-chain
-                             actions-data
-                             {:action-name   action-name
-                              :action-data   (get actions-data action-name)
-                              :parent-action nil
-                              :next-action   nil
-                              :prev-action   object-name})))
+             (merge-actions result (parse-actions-chain
+                                     actions-data
+                                     {:action-name   action-name
+                                      :action-data   (get actions-data action-name)
+                                      :parent-action nil
+                                      :next-action   nil
+                                      :prev-action   object-name})))
            {}))))

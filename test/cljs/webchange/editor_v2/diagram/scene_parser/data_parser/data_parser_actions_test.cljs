@@ -1,12 +1,12 @@
-(ns webchange.editor-v2.diagram.scene-data-parser.parser-actions-test
+(ns webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-actions-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [utils.compare-maps :refer [compare-maps]]
-    [webchange.editor-v2.diagram.scene-data-parser.parser-actions :refer [get-chain-entries
-                                                                          merge-actions
-                                                                          get-action-data
-                                                                          parse-actions-chain
-                                                                          seq-intersection]]))
+    [utils.compare-maps :refer [print-maps-comparison]]
+    [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-actions :refer [get-chain-entries
+                                                                                      merge-actions
+                                                                                      get-action-data
+                                                                                      parse-actions-chain
+                                                                                      seq-intersection]]))
 
 (deftest test-get-action-data-test-var-scalar
   (testing ":click-on-box1"
@@ -285,56 +285,58 @@
              {:vaca-this-is-var {:type        "action"
                                  :connections {:previous-action {:parent   :introduce-word
                                                                  :handlers {:next [:empty-small-copy-1]}}}
-                                 :data        action-data}}))))
+                                 :data        action-data}})))))
 
-  (deftest test-get-action-data-animation-sequence
-    (testing ":senora-vaca-audio-touch-second-box"
-      (let [action-name :senora-vaca-audio-touch-second-box
-            action-data {:type     "animation-sequence",
-                         :target   "senoravaca",
-                         :track    1,
-                         :offset   52.453,
-                         :audio    "/raw/audio/english/l1/a1/vaca.m4a",
-                         :data     [{:start 52.6, :end 53.467, :duration 0.867, :anim "talk"}
-                                    {:start 54.36, :end 56.307, :duration 1.947, :anim "talk"}
-                                    {:start 56.987, :end 59.173, :duration 2.186, :anim "talk"}],
-                         :start    52.453,
-                         :duration 6.987}
-            parent-action :first-word
-            next-action nil
-            prev-action :previous-action]
-        (is (= (get-action-data {:action-name   action-name
-                                 :action-data   action-data
-                                 :parent-action parent-action
-                                 :next-action   next-action
-                                 :prev-action   prev-action})
-               {:senora-vaca-audio-touch-second-box {:type        "animation-sequence"
-                                                     :connections {:previous-action {:parent   :first-word
-                                                                                     :handlers {}}}
-                                                     :data        action-data}}))))
-    (testing ":vaca-can-you-say"
-      (let [action-name :vaca-can-you-say
-            action-data {:type     "animation-sequence",
-                         :target   "senoravaca",
-                         :track    1,
-                         :offset   20.28,
-                         :audio    "/raw/audio/english/l1/a1/vaca.m4a",
-                         :data     [{:start 20.363, :end 20.98, :duration 0.617, :anim "talk"}],
-                         :start    20.28,
-                         :duration 0.813}
-            parent-action :introduce-word
-            next-action :vaca-question-var]
-        (is (= (get-action-data {:action-name   action-name
-                                 :action-data   action-data
-                                 :parent-action parent-action
-                                 :next-action   next-action
-                                 :prev-action   nil})
-               {:vaca-can-you-say {:type     "animation-sequence"
-                                   :parent   :introduce-word
-                                   :handlers {:next [:vaca-question-var]}
-                                   :data     action-data}}))))))
-
-;; ---
+(deftest test-get-action-data-animation-sequence
+  (testing ":senora-vaca-audio-touch-second-box"
+    (let [action-name :senora-vaca-audio-touch-second-box
+          action-data {:type     "animation-sequence",
+                       :target   "senoravaca",
+                       :track    1,
+                       :offset   52.453,
+                       :audio    "/raw/audio/english/l1/a1/vaca.m4a",
+                       :data     [{:start 52.6, :end 53.467, :duration 0.867, :anim "talk"}
+                                  {:start 54.36, :end 56.307, :duration 1.947, :anim "talk"}
+                                  {:start 56.987, :end 59.173, :duration 2.186, :anim "talk"}],
+                       :start    52.453,
+                       :duration 6.987}
+          parent-action :first-word
+          next-action nil
+          prev-action :previous-action]
+      (is (= (get-action-data {:action-name   action-name
+                               :action-data   action-data
+                               :parent-action parent-action
+                               :next-action   next-action
+                               :prev-action   prev-action})
+             {:senora-vaca-audio-touch-second-box {:type        "animation-sequence"
+                                                   :connections {:previous-action {:parent   :first-word
+                                                                                   :handlers {}}}
+                                                   :data        action-data}}))))
+  (testing ":vaca-can-you-say"
+    (let [action-name :vaca-can-you-say
+          action-data {:type     "animation-sequence",
+                       :target   "senoravaca",
+                       :track    1,
+                       :offset   20.28,
+                       :audio    "/raw/audio/english/l1/a1/vaca.m4a",
+                       :data     [{:start 20.363, :end 20.98, :duration 0.617, :anim "talk"}],
+                       :start    20.28,
+                       :duration 0.813}
+          parent-action :introduce-word
+          prev-action :prev-action
+          next-action :vaca-question-var]
+      (let [actual-result (get-action-data {:action-name   action-name
+                                            :action-data   action-data
+                                            :parent-action parent-action
+                                            :next-action   next-action
+                                            :prev-action   prev-action})
+            expected-result {:vaca-can-you-say {:type        "animation-sequence"
+                                                :connections {:prev-action {:handlers {:next [:vaca-question-var]}
+                                                                            :parent   :introduce-word}}
+                                                :data        action-data}}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result))))))
 
 (deftest test-parse-actions-chain-parallel
   (testing "simple parallel"
@@ -365,8 +367,7 @@
               :simple-parallel-1 {:type        "action"
                                   :data        {:type "action"}
                                   :connections {:simple-parallel {:parent   :simple-parallel
-                                                                  :handlers {:next [:next-action]}}}}}))
-      ))
+                                                                  :handlers {:next [:next-action]}}}}}))))
   (testing "sequence with double duplicates"
     (let [actions-data {:introduce-word    {:type "sequence"
                                             :data ["empty-small"
@@ -400,6 +401,48 @@
                                                  :connections {:empty-small {:handlers {:next [:empty-small]}
                                                                              :parent   :introduce-word}}
                                                  :data        (:group-3-times-var actions-data)}}]
+        (is (= actual-result expected-result)))))
+
+  (testing "children after parallel"
+    (let [actions-data {:a {:type "sequence"
+                            :data ["b" "c"]}
+                        :b {:type "parallel"
+                            :data [{:type "action"}
+                                   {:type "action"}]}
+                        :c {:type "empty"}}
+          start-node-name :a
+          start-node-data (get actions-data start-node-name)
+          parent-action nil
+          next-action :next-action
+          prev-action :prev-action]
+      (let [actual-result (parse-actions-chain actions-data {:action-name   start-node-name
+                                                             :action-data   start-node-data
+                                                             :parent-action parent-action
+                                                             :next-action   next-action
+                                                             :prev-action   prev-action})
+            expected-result {:a   {:type        "sequence"
+                                   :data        (get-in actions-data [:a])
+                                   :connections {:prev-action {:handlers {:next [:b]}}}}
+                             :b   {:type        "parallel"
+                                   :data        (get-in actions-data [:b])
+                                   :connections {:a {:handlers {:next [:b-0 :b-1]}
+                                                     :parent   :a}}}
+                             :b-0 {:type        "action"
+                                   :data        (get-in actions-data [:b :data 0])
+                                   :connections {:b {:handlers {:next [:c]}
+                                                     :parent   :b}}}
+                             :b-1 {:type        "action"
+                                   :data        (get-in actions-data [:b :data 1])
+                                   :connections {:b {:handlers {:next [:c]}
+                                                     :parent   :b}}}
+                             :c   {:type        "empty"
+                                   :data        (get-in actions-data [:c])
+                                   :connections {:b-0 {:handlers {:next [:next-action]}
+                                                       :parent   :a}
+                                                 :b-1 {:handlers {:next [:next-action]}
+                                                       :parent   :a}}}}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))
 
 (deftest test-parse-actions-chain-sequence
@@ -438,8 +481,7 @@
               :sub-action-2 {:type        "action"
                              :data        {:type "action"}
                              :connections {:sub-action-1 {:parent   :simple-seq
-                                                          :handlers {:next [:next-action]}}}}}))
-      ))
+                                                          :handlers {:next [:next-action]}}}}}))))
 
   (testing "sequence in sequence"
     (let [actions-data {:action-seq-1   {:type "sequence"
@@ -491,14 +533,9 @@
                                               :connections {:action-seq-2-1 {:handlers {:next [:action-seq-1-2]}
                                                                              :parent   :action-seq-2}}
                                               :data        {:type "empty"}}}]
-        ; (is (= actual-result expected-result))
-
-        ;; should be fixed for :action-seq-1-2
-        ;; actual :connections {:action-seq-2
-        ;; expected :connections {:action-seq-2-2
-        ;; (:action-seq-2-2 is last item of sub-sequence :action-seq-2)
-        ))))
-
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result))))))
 
 (deftest test-parse-actions-chain-test-var-scalar
   (testing "simple test-var-scalar"
@@ -558,8 +595,7 @@
       (is (= (merge-actions map-1 map-2)
              {:action-1 {:type        "action"
                          :connections {:connect-1 {:handlers {:next [:next-1]}}
-                                       :connect-2 {:handlers {:next [:next-2]}}}}}))))
-  )
+                                       :connect-2 {:handlers {:next [:next-2]}}}}})))))
 
 (deftest test-get-chain-entries
   (testing "getting entries"

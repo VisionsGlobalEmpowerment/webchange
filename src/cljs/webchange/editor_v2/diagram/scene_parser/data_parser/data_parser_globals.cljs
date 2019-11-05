@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.scene-data-parser.parser-globals)
+(ns webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-globals)
 
 (def available-triggers [:start
                          :back])

@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.scene-data-parser.parser-objects)
+(ns webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-objects)
 
 (defn parse-object
   [object-name object-data]

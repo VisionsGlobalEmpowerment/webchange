@@ -1,7 +1,7 @@
-(ns webchange.editor-v2.diagram.scene-data-parser.parser-objects-test
+(ns webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-objects-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.editor-v2.diagram.scene-data-parser.parser-objects :refer [parse-object]]))
+    [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-objects :refer [parse-object]]))
 
 (deftest test-parse-objects
   (testing "object with handler parsing"
