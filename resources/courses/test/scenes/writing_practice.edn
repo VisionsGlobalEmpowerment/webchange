@@ -114,12 +114,12 @@
                                                         :visible {:type "animated-svg-path"}}}
 
                  :letter-tutorial-image {:type     "image"
-                                         :x        100
-                                         :y        0
-                                         :width    100
-                                         :height   100
-                                         :scale-x  2
-                                         :scale-y  2
+                                         :x        1000
+                                         :y        82
+                                         :width    651
+                                         :height   651
+                                         :scale-x  0.35
+                                         :scale-y  0.35
                                          :rotation 0}
 
                  :concept-card          {:type     "group"
@@ -150,7 +150,7 @@
                                          :font-size      80
                                          :fill           "black"}}
  :scene-objects [["background" "concept-card"]
-                 ["letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path"]
+                 ["letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path" "letter-tutorial-image"]
                  ["practice-canvas" "next-button" "mari"]]
  :actions       {:start                       {:type "sequence"
                                                :data ["start-activity"
@@ -182,6 +182,10 @@
                                      {:type "set-attribute" :target "concept-word" :attr-name "text"
                                       :from-var [{:var-name        "current-concept"
                                                   :var-property    "concept-name"
+                                                  :action-property "attr-value"}]}
+                                     {:type "set-attribute" :target "letter-tutorial-image" :attr-name "src"
+                                      :from-var [{:var-name        "current-concept"
+                                                  :var-property    "letter-src"
                                                   :action-property "attr-value"}]}]}
 
                  :init-vars                   {:type "parallel"
