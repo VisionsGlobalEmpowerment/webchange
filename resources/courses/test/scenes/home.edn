@@ -1,5 +1,7 @@
 {:assets
-                [{:url "/raw/audio/ferris-wheel/fw-try-again.mp3", :size 2, :type "audio"}
+                [{:url "/raw/audio/background/Casa.mp3", :size 10, :type "audio"}
+                 {:url "/raw/audio/effects/wrong.wav", :size 1, :type "audio"}
+                 {:url "/raw/audio/effects/correct.mp3", :size 1, :type "audio"}
 
                  {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/casa_door.png", :size 1, :type "image"}
@@ -116,7 +118,8 @@
                  :wait-for-box-animations          {:type "empty" :duration 500}
 
                  :intro                            {:type "sequence",
-                                                    :data ["start-activity"
+                                                    :data ["empty-big"
+                                                           "start-activity"
                                                            "renew-words"
                                                            "senora-vaca-audio-1"
                                                            "show-boxes"
@@ -218,7 +221,8 @@
                  :vaca-goodbye-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]}
 
                  :introduce-word                   {:type "sequence"
-                                                    :data ["empty-big"
+                                                    :data ["audio-correct"
+                                                           "empty-big"
                                                            "vaca-this-is-var"
                                                            "empty-small"
                                                            "vaca-can-you-say"
@@ -248,11 +252,10 @@
                  :vera-anim-clapping-finish        {:type "animation" :target "vera" :id "clapping_finish" :loop false}
 
 
-                 :pick-wrong                       {:type "sequence"
-                                                    :data ["audio-wrong"]}
+                 :pick-wrong                       {:type "sequence-data"
+                                                    :data [{:type "audio" :id "/raw/audio/effects/wrong.wav" :start 0 :duration 0.527}]}
 
-                 :audio-wrong                      {:type "audio" :id "fw-try-again" :start 0.892 :duration 1.869 :offset 0.2}
-
+                 :audio-correct {:type "audio" :id "/raw/audio/effects/correct.mp3" :start 0 :duration 1.71}
                  :renew-words                      {:type        "lesson-var-provider"
                                                     :provider-id "words-set"
                                                     :variables   ["item-1" "item-2" "item-3"]
@@ -261,7 +264,7 @@
                  :empty-small                      {:type "empty" :duration 500}
                  :empty-big                        {:type "empty" :duration 1000}
                  :clear-instruction                {:type "remove-flows" :flow-tag "instruction"}
-                 :start-background-music           {:type "audio" :id "background" :loop true}
+                 :start-background-music           {:type "audio" :id "/raw/audio/background/Casa.mp3" :loop true}
                  :start-activity                   {:type "start-activity" :id "home"}
                  :finish-activity                  {:type "finish-activity" :id "home"}
                  :stop-activity                    {:type "stop-activity" :id "home"}
@@ -286,7 +289,6 @@
  :audio
                 {:casa-welcome "/raw/audio/scripts/intro/intro-welcome.mp3"
                  :casa-finish  "/raw/audio/scripts/intro/intro-finish.mp3"
-                 :background   "/raw/audio/background/POL-daily-special-short.mp3"
                  :fw-try-again "/raw/audio/ferris-wheel/fw-try-again.mp3"
                  :vaca-1       "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a"
                  :vaca-2       "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a"

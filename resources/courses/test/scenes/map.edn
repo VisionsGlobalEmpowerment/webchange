@@ -1,4 +1,5 @@
-{:assets        [{:url "/raw/img/map/background.jpg", :size 10, :type "image"}
+{:assets        [{:url "/raw/audio/background/Map.mp3", :size 10, :type "audio"}
+                 {:url "/raw/img/map/background.jpg", :size 10, :type "image"}
                  {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
                  {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
                  {:url "/raw/img/map/feria_01.png", :size 1, :type "image"}
@@ -101,8 +102,7 @@
                                                              :stadium    {:type "state" :target "vera" :id "init-stadium"}
                                                              :volleyball {:type "state" :target "vera" :id "init-stadium"}}}]}
 
-                 :start-background-music {:type "audio" :id "background" :loop true}},
- :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"}
+                 :start-background-music {:type "audio" :id "/raw/audio/background/Map.mp3" :loop true}},
  :triggers      {:music {:on "start" :action "start-background-music"}
                  :init  {:on "start" :action "init"}}
  :metadata      {:autostart true}}

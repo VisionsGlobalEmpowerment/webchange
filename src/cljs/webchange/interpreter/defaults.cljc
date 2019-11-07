@@ -6,6 +6,8 @@
                      {:url "/raw/audio/effects/NFF-robo-elastic.mp3" :size 1 :type "audio"}
                      {:url "/raw/audio/effects/NFF-rusted-thing.mp3" :size 1 :type "audio"}
                      {:url "/raw/audio/effects/NFF-zing.mp3", :size 1, :type "audio"}
+                     {:url "/raw/audio/effects/wrong.wav", :size 1, :type "audio"}
+                     {:url "/raw/audio/effects/correct.mp3", :size 1, :type "audio"}
                      {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}
                      {:url "/raw/img/ui/back_button_02.png", :size 1, :type "image"}
                      {:url "/raw/img/ui/close_button_01.png", :size 1, :type "image"}
