@@ -24,8 +24,9 @@
             font-size: 24px;
         }
     }
+}
 
-    .diagram-container {
+.diagram-container {
         flex-grow: 1;
         background-color: rgb(60, 60, 60) !important;
         background-size: 50px 50px;
@@ -44,5 +45,12 @@
         .srd-diagram {
             height: 100%;
         }
+    }
+
+.translation-form {
+    .diagram-container {
+        border: solid 1px #6b6b6b;
+        border-radius: 3px;
+        height: 200px;
     }
 }

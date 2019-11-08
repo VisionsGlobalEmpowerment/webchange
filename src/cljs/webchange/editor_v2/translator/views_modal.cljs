@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.translator.views-modal
   (:require
+    ["@projectstorm/react-diagrams" :refer [DiagramWidget]]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.subs :as editor-subs]
@@ -20,6 +21,7 @@
      [ui/dialog-title
       "Phrase Translation"]
      [ui/dialog-content
+      {:class-name "translation-form"}
       [ui/text-field
        {:label           "Phrase Text"
         :placeholder     "Enter phrase text"
@@ -28,8 +30,10 @@
         :value           phrase-text
         :margin          "normal"
         :disabled true
-        :InputLabelProps {:shrink true}
-        }]]
+        :InputLabelProps {:shrink true}}]
+      [:div.diagram-container
+       ;[:> DiagramWidget {:diagramEngine engine}]
+       ]]
      [ui/dialog-actions
       [ui/button
        {:on-click handle-close}
