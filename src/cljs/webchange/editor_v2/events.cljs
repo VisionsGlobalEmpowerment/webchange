@@ -6,7 +6,7 @@
 (re-frame/reg-event-fx
   ::init-editor
   (fn []
-    {:dispatch-n (list [::set-diagram-mode :full-scene])}))
+    {:dispatch-n (list [::set-diagram-mode :translation])}))
 
 (re-frame/reg-event-fx
   ::set-diagram-mode

@@ -1,6 +1,5 @@
 (ns webchange.common.painting-area
   (:require
-    [reagent.core :as r]
     [react-konva :refer [Image]]))
 
 (def tools {:pencil   {:lineCap    "round"
