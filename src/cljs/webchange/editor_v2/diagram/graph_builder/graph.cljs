@@ -4,8 +4,12 @@
     [webchange.editor-v2.diagram.graph-builder.scene-parser.parser :refer [parse-scene]]))
 
 (defn get-diagram-graph
-  [scene-data diagram-mode]
-  (let [scene-graph (parse-scene scene-data)]
-    (cond
-      (= diagram-mode :translation) (get-phrases-graph scene-graph)
-      :default scene-graph)))
+  [scene-data diagram-mode & params]
+  (cond
+    (= diagram-mode :phrases) (-> scene-data
+                                  (parse-scene)
+                                  (get-phrases-graph))
+    (= diagram-mode :translation) (-> scene-data
+                                      (parse-scene (first params)))
+    :default (-> scene-data
+                 (parse-scene))))

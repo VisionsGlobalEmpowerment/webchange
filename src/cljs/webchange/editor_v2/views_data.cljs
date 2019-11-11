@@ -11,7 +11,7 @@
     [webchange.editor-v2.events :as editor-events]))
 
 (def diagram-modes [:full-scene "Full Scene View"
-                    :translation "Translation"])
+                    :phrases "Translation"])
 
 (defn data
   []

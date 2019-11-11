@@ -14,14 +14,18 @@
                  :position      "relative"})
 
 (defn custom-widget
-  [{:keys [node get-node-custom-color on-double-click]}]
+  [{:keys [node get-node-custom-color on-click on-double-click]}]
   (let [node-data (.-props node)
         in-ports (->> node .getInPorts)
-        out-ports (->> node .getOutPorts)]
-    [:div {:on-double-click #(on-double-click node-data)
-           :style           (merge node-style
-                                   {:background-color (or (get-node-custom-color node-data)
-                                                          (get-node-color node-data))})}
+        out-ports (->> node .getOutPorts)
+        click-handler (if-not (nil? on-click)
+                        {:on-click #(on-click node-data)}
+                        {:on-double-click #(on-double-click node-data)})]
+    [:div (merge click-handler
+                 {:style (merge node-style
+                                {:background-color (or (get-node-custom-color node-data)
+                                                       (get-node-color node-data))})})
+
      [header node-data]
      [ports {:in-ports  in-ports
              :out-ports out-ports}]]))

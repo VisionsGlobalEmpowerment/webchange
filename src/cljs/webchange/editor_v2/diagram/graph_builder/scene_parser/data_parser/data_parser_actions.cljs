@@ -284,36 +284,17 @@
 
 ;; ---
 
-(defn get-chain-entries
-  [objects-data]
-  (reduce
-    (fn [result [object-name object-data]]
-      (concat result (reduce
-                       (fn [result [_ connection-data]]
-                         (concat result (reduce
-                                          (fn [result [_ handlers]]
-                                            (concat result (map
-                                                             (fn [handler] [handler object-name])
-                                                             handlers)))
-                                          []
-                                          (:handlers connection-data))))
-                       []
-                       (:connections object-data))))
-    []
-    objects-data))
-
 (defn parse-actions
-  [scene-data objects-data]
+  [scene-data entries]
   (let [actions-data (:actions scene-data)]
-    (->> objects-data
-         (get-chain-entries)
-         (reduce
-           (fn [result [action-name object-name]]
-             (merge-actions result (parse-actions-chain
-                                     actions-data
-                                     {:action-name   action-name
-                                      :action-data   (get actions-data action-name)
-                                      :parent-action nil
-                                      :next-action   nil
-                                      :prev-action   object-name})))
-           {}))))
+    (reduce
+      (fn [result [action-name object-name]]
+        (merge-actions result (parse-actions-chain
+                                actions-data
+                                {:action-name   action-name
+                                 :action-data   (get actions-data action-name)
+                                 :parent-action nil
+                                 :next-action   nil
+                                 :prev-action   object-name})))
+      {}
+      entries)))

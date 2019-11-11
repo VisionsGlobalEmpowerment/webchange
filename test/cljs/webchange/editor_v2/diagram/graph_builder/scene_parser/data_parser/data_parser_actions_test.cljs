@@ -2,11 +2,10 @@
   (:require
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [print-maps-comparison]]
-    [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-actions :refer [get-chain-entries
-                                                                                      merge-actions
-                                                                                      get-action-data
-                                                                                      parse-actions-chain
-                                                                                      seq-intersection]]))
+    [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-actions :refer [merge-actions
+                                                                                                    get-action-data
+                                                                                                    parse-actions-chain
+                                                                                                    seq-intersection]]))
 
 (deftest test-get-action-data-test-var-scalar
   (testing ":click-on-box1"
@@ -605,18 +604,3 @@
       (is (= (merge-actions map-1 map-2)
              {:action-1 {:type        "action"
                          :connections {:connect-1 {:handlers {:next [:next-1 :next-2]}}}}})))))
-
-(deftest test-get-chain-entries
-  (testing "getting entries"
-    (let [objects-data {:door        {:type        "object"
-                                      :connections {:root {:handlers {}}}}
-                        :senora-vaca {:type        "object"
-                                      :connections {:root {:handlers {:next [:restart]}}}}
-                        :box1        {:type        "object"
-                                      :connections {:root {:handlers {:next [:click-on-box1
-                                                                             :click-on-box2]}}}}}]
-      (let [actual-result (get-chain-entries objects-data)
-            expected-result [[:restart :senora-vaca]
-                             [:click-on-box1 :box1]
-                             [:click-on-box2 :box1]]]
-        (is (= actual-result expected-result))))))

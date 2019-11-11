@@ -2,7 +2,23 @@
   (:require
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [compare-maps]]
-    [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser :refer [parse-data]]))
+    [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser :refer [get-chain-entries
+                                                                                            parse-data]]))
+
+(deftest test-get-chain-entries
+  (testing "getting entries"
+    (let [objects-data {:door        {:type        "object"
+                                      :connections {:root {:handlers {}}}}
+                        :senora-vaca {:type        "object"
+                                      :connections {:root {:handlers {:next [:restart]}}}}
+                        :box1        {:type        "object"
+                                      :connections {:root {:handlers {:next [:click-on-box1
+                                                                             :click-on-box2]}}}}}]
+      (let [actual-result (get-chain-entries objects-data)
+            expected-result [[:restart :senora-vaca]
+                             [:click-on-box1 :box1]
+                             [:click-on-box2 :box1]]]
+        (is (= actual-result expected-result))))))
 
 (deftest test-stage-1
   (testing "test-var-scalar"
