@@ -26,8 +26,8 @@
 (defn diagram-did-mount
   [this]
   (let [engine (aget this "engine")]
-    (reorder engine)
-    (.setTimeout js/window #(zoom-to-fit engine) 10)))
+    (.setTimeout js/window #(do (reorder engine)
+                                (zoom-to-fit engine)) 500)))
 
 (defn diagram-render
   [{:keys [graph mode]}]

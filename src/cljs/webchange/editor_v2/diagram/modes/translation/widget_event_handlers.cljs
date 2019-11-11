@@ -1,14 +1,15 @@
 (ns webchange.editor-v2.diagram.modes.translation.widget-event-handlers
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.editor-v2.events :as ee]))
+    [re-frame.core :as re-frame]))
 
 (defn get-node-color
   [node-data]
-  (let [phrase-node? (contains? (:data node-data) :phrase)]
-    (if phrase-node? "#6BC784" nil)))
+  (let [speech-node? (some #{(:type node-data)} ["audio"
+                                                 "animation-sequence"])]
+    (if speech-node? "#6BC784" nil)))
 
 (defn get-widget-event-handlers
   []
   {:get-node-custom-color get-node-color
-   :on-double-click #(re-frame/dispatch [::ee/show-translator-form %])})
+   :on-click #(println "Speech node click")
+   :on-double-click #(println "Speech node double click")})

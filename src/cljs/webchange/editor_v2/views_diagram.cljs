@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.diagram.graph-builder.graph :refer [get-diagram-graph]]
-    [webchange.editor-v2.diagram.widget :refer [diagram-widget diagram-render]]
+    [webchange.editor-v2.diagram.widget :refer [diagram-widget]]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.subs :as subs]))
 
