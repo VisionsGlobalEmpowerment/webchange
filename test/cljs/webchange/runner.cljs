@@ -13,7 +13,10 @@
             [webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-objects-test]
             [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.duplicates-replicator-test]
             [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.usages-counter-test]
-            [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.utils-test]
+            [webchange.editor-v2.diagram.scene-parser.filters.phrases-test]
+            [webchange.editor-v2.diagram.scene-parser.graph-utils.remove-node-test]
+            [webchange.editor-v2.diagram.scene-parser.graph-utils.root-nodes-test]
+            [webchange.editor-v2.diagram.scene-parser.utils-test]
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
             [webchange.interpreter.utils-test]
@@ -33,7 +36,10 @@
   'webchange.editor-v2.diagram.scene-parser.data-parser.data-parser-objects-test
   'webchange.editor-v2.diagram.scene-parser.duplicates-replicator.duplicates-replicator-test
   'webchange.editor-v2.diagram.scene-parser.duplicates-replicator.usages-counter-test
-  'webchange.editor-v2.diagram.scene-parser.duplicates-replicator.utils-test
+  'webchange.editor-v2.diagram.scene-parser.graph-utils.remove-node-test
+  'webchange.editor-v2.diagram.scene-parser.graph-utils.root-nodes-test
+  'webchange.editor-v2.diagram.scene-parser.filters.phrases-test
+  'webchange.editor-v2.diagram.scene-parser.utils-test
   'webchange.interpreter.events-test
   'webchange.interpreter.variables.events-test
   'webchange.interpreter.utils-test

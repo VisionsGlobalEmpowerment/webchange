@@ -1,26 +1,17 @@
 (ns webchange.editor-v2.diagram.scene-parser.duplicates-replicator.duplicates-replicator
   (:require
     [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.usages-counter :refer [get-reuse-map]]
-    [webchange.editor-v2.diagram.scene-parser.duplicates-replicator.utils :refer [add-to-map
-                                                                                  map-has-name?
-                                                                                  add-root-node
-                                                                                  remove-root-node
-                                                                                  get-next-children]]))
+    [webchange.editor-v2.diagram.scene-parser.graph-utils.root-nodes :refer [add-root-node
+                                                                             get-root-nodes
+                                                                             remove-root-node]]
+    [webchange.editor-v2.diagram.scene-parser.graph-utils.node-children :refer [get-children]]
+    [webchange.editor-v2.diagram.scene-parser.utils :refer [add-to-map
+                                                            map-has-name?]]))
 (defn get-copy-name
   [origin-name number]
   (-> origin-name
       (name)
       (str "-copy-" number)))
-
-(defn get-root-nodes
-  [parsed-data]
-  (reduce
-    (fn [result [node-name node-data]]
-      (if (contains? (:connections node-data) :root)
-        (conj result node-name)
-        result))
-    []
-    parsed-data))
 
 (defn change-connection-name
   [graph node-name prev-parent-name new-parent-name]
@@ -115,7 +106,7 @@
        (fn [[graph reused-nodes] next-node-name]
          (replicate-dfs graph [node-name new-node-name next-node-name] reused-nodes))
        [graph reused-nodes]
-       (get-next-children node-data origin-prev-node-name)))))
+       (get-children node-data origin-prev-node-name)))))
 
 (defn remove-reused-nodes
   [graph reused-nodes]

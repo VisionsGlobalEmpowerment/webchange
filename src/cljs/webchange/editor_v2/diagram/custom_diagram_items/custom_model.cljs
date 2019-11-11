@@ -12,7 +12,7 @@
 (defn init
   [entity {:keys [name] :as props}]
   (set! (.-name entity) name)
-  (set! (.-props entity) (clj->js props)))
+  (set! (.-props entity) props))
 
 (defn custom-model []
   (js/Reflect.construct NodeModel #js ["custom"] custom-model))

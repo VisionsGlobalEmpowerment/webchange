@@ -576,7 +576,7 @@
     (is (= (seq-intersection [1 2 3] [2 3 4])
            [2 3])))
 
-  (testing "simple-merge"
+  (testing "simple 2 actions merge"
     (let [map-1 {:action-1 {:type        "action"
                             :connections {:connect-1 {:handlers {:next [:next-1]}}}}}
           map-2 {:action-2 {:type        "action"
@@ -587,7 +587,7 @@
               :action-2 {:type        "action"
                          :connections {:connect-2 {:handlers {:next [:next-2]}}}}}))))
 
-  (testing "simple-merge"
+  (testing "merge different connections of one action"
     (let [map-1 {:action-1 {:type        "action"
                             :connections {:connect-1 {:handlers {:next [:next-1]}}}}}
           map-2 {:action-1 {:type        "action"
@@ -595,7 +595,16 @@
       (is (= (merge-actions map-1 map-2)
              {:action-1 {:type        "action"
                          :connections {:connect-1 {:handlers {:next [:next-1]}}
-                                       :connect-2 {:handlers {:next [:next-2]}}}}})))))
+                                       :connect-2 {:handlers {:next [:next-2]}}}}}))))
+
+  (testing "merge similar connections of one action"
+    (let [map-1 {:action-1 {:type        "action"
+                            :connections {:connect-1 {:handlers {:next [:next-1]}}}}}
+          map-2 {:action-1 {:type        "action"
+                            :connections {:connect-1 {:handlers {:next [:next-2]}}}}}]
+      (is (= (merge-actions map-1 map-2)
+             {:action-1 {:type        "action"
+                         :connections {:connect-1 {:handlers {:next [:next-1 :next-2]}}}}})))))
 
 (deftest test-get-chain-entries
   (testing "getting entries"
