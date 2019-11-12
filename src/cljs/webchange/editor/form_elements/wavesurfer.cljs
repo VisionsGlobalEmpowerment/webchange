@@ -25,21 +25,24 @@
 
 (defonce last-positions (atom {}))
 
-(defn create-wavesurfer [element key]
-  (while (.-firstChild element) (-> element .-firstChild .remove))
-  (let [ws-div (.insertBefore element (js/document.createElement "div") nil)
-        timeline-div (.insertBefore element (js/document.createElement "div") nil)
-        wavesurfer (.create WaveSurfer (clj->js {:container ws-div
-                                                 :height 256
-                                                 :minPxPerSec 75
-                                                 :scrollParent true
-                                                 :plugins [(.create RegionsPlugin (clj->js {:dragSelection false
-                                                                                            :slop 5
-                                                                                            :color "hsla(400, 100%, 30%, 0.5)"}))
-                                                           (.create TimelinePlugin (clj->js {:container timeline-div}))]}))]
-    (.loadBlob wavesurfer (get-data-as-blob key))
-    (.on wavesurfer "ready" #(.seekAndCenter wavesurfer (/ (get @last-positions key 0) (.getDuration wavesurfer))))
-    wavesurfer))
+(defn create-wavesurfer
+  ([element key]
+   (create-wavesurfer element key {:height 256}))
+  ([element key {:keys [height]}]
+   (while (.-firstChild element) (-> element .-firstChild .remove))
+   (let [ws-div (.insertBefore element (js/document.createElement "div") nil)
+         timeline-div (.insertBefore element (js/document.createElement "div") nil)
+         wavesurfer (.create WaveSurfer (clj->js {:container    ws-div
+                                                  :height       (or height 256)
+                                                  :minPxPerSec  75
+                                                  :scrollParent true
+                                                  :plugins      [(.create RegionsPlugin (clj->js {:dragSelection false
+                                                                                                  :slop          5
+                                                                                                  :color         "hsla(400, 100%, 30%, 0.5)"}))
+                                                                 (.create TimelinePlugin (clj->js {:container timeline-div}))]}))]
+     (.loadBlob wavesurfer (get-data-as-blob key))
+     (.on wavesurfer "ready" #(.seekAndCenter wavesurfer (/ (get @last-positions key 0) (.getDuration wavesurfer))))
+     wavesurfer)))
 
 (defn round [f]
   (/ (.round js/Math (* 1000 f)) 1000))
@@ -47,42 +50,58 @@
 (defn region->data [region]
   (let [start (-> region .-start round)
         end (-> region .-end round)]
-    {:start start
-     :end end
+    {:start    start
+     :end      end
      :duration (round (- end start))}))
 
-(defn handle-audio-region! [wavesurfer region-atom key]
-  (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
-  (.on wavesurfer "region-created" (fn [e]
-                                     (when (:region @region-atom) (-> @region-atom :region .remove))
-                                     (swap! last-positions assoc key (-> e region->data :start))
-                                     (reset! region-atom (-> (region->data e) (assoc :region e)))))
-  (.on wavesurfer "region-update-end" (fn [e]
-                                        (swap! last-positions assoc key (-> e region->data :start))
-                                        (reset! region-atom (-> (region->data e) (assoc :region e))))))
+(defn handle-audio-region!
+  ([wavesurfer region-atom key]
+    (handle-audio-region! wavesurfer region-atom key #()))
+  ([wavesurfer region-atom key on-change]
+   (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
+   (.on wavesurfer "region-created" (fn [e]
+                                      (when (:region @region-atom) (-> @region-atom :region .remove))
+                                      (swap! last-positions assoc key (-> e region->data :start))
+                                      (reset! region-atom (-> (region->data e) (assoc :region e)))
+                                      (on-change @region-atom)))
+   (.on wavesurfer "region-update-end" (fn [e]
+                                         (swap! last-positions assoc key (-> e region->data :start))
+                                         (reset! region-atom (-> (region->data e) (assoc :region e)))
+                                         (on-change @region-atom)))))
 
 (defn handle-additional-regions! [wavesurfer regions-atom]
   (.enableDragSelection wavesurfer (clj->js {:color additional-color}))
   (.on wavesurfer "region-created" (fn [e]
                                      (when (not= "audio" (.-id e))
-                                      (swap! regions-atom assoc (.-id e) (region->data e)))))
+                                       (swap! regions-atom assoc (.-id e) (region->data e)))))
   (.on wavesurfer "region-update-end" (fn [e]
                                         (when (not= "audio" (.-id e))
                                           (swap! regions-atom assoc (.-id e) (region->data e))))))
 
 (defn init-audio-region! [wavesurfer region-atom edit]
-  (let [region-data {:id "audio"
-                     :color audio-color
-                     :start (:start @region-atom)
-                     :end (:end @region-atom)
-                     :drag edit
+  (let [region-data {:id     "audio"
+                     :color  audio-color
+                     :start  (:start @region-atom)
+                     :end    (:end @region-atom)
+                     :drag   edit
                      :resize edit}]
     (.on wavesurfer "ready" #(when (and (> (:start region-data) 0) (> (:end region-data) 0))
                                (.addRegion wavesurfer (clj->js region-data))
                                (.seekAndCenter wavesurfer (/ (+ (:start region-data) 5) (.getDuration wavesurfer)))))))
 
+(defn audio-wave-form
+  [{:keys [key start end]} {:keys [on-change] :as options}]
+  (r/with-let [ws (r/atom nil)
+               region (r/atom {:start start :end end})]
+              [:div
+               [:div {:ref #(when %
+                              (let [wave-surfer (create-wavesurfer % key options)]
+                                (handle-audio-region! wave-surfer region key on-change)
+                                (init-audio-region! wave-surfer region true)
+                                (reset! ws wave-surfer)))}]]))
 
-(defn audio-waveform-modal [{:keys [key start end]} on-save]
+(defn audio-waveform-modal
+  [{:keys [key start end]} on-save]
   (r/with-let [ws (r/atom nil)
                region (r/atom {:start start :end end})
                modal-open (r/atom false)]
@@ -170,8 +189,8 @@
        [sa/ModalContent {}
         [sa/ModalDescription
          [sa/Radio {:toggle true :label "Chunks" :checked (= :chunks @mode) :on-change #(if (-> %2 .-checked)
-                                                                                                  (reset! mode :chunks)
-                                                                                                  (reset! mode :audio))}]
+                                                                                          (reset! mode :chunks)
+                                                                                          (reset! mode :audio))}]
          [:div {:ref #(when %
                         (let [wavesurfer (create-wavesurfer % key)]
                           (when (= :audio @mode) (handle-audio-region! wavesurfer region key))

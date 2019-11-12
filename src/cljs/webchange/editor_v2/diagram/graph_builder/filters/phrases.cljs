@@ -23,10 +23,6 @@
 
 (defn should-remove-node?
   [node-name node-data weights]
-  ;(println "> should-remove-node?")
-  ;(println "node-name" node-name)
-  ;(println "weight-changer-node?" (weight-changer-node? node-name weights))
-  ;(println "not-empty-tree-root?" (not-empty-tree-root? node-name node-data weights))
   (and (not (weight-changer-node? node-name weights))
        (not (not-empty-tree-root? node-name node-data weights))))
 
