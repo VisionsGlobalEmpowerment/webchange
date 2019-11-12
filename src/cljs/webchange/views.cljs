@@ -27,7 +27,7 @@
 
 (defn- editor-panel-v2 [course-id scene-id]
   (re-frame/dispatch [::ee/init-editor course-id scene-id])
-  (re-frame/dispatch [::ee2/init-editor])
+  (re-frame/dispatch [::ee2/init-editor course-id scene-id])
   [main-view scene-id])
 
 (defn- dashboard-panel

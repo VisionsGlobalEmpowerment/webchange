@@ -13,7 +13,7 @@
     [webchange.editor.common.actions.events :as actions.events]
     [webchange.editor.common.actions.subs :as actions.subs]
     [webchange.editor.form-elements :as f]
-    [webchange.editor.form-elements.wavesurfer :as ws]
+    [webchange.editor.form-elements.wavesurfer.wavesurfer :as ws]
     [webchange.subs :as subs]
     [konva :refer [Transformer]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]

@@ -12,3 +12,7 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db [:editor-v2 :translator :translator-modal-state] false)}))
 
+(re-frame/reg-event-fx
+  ::set-current-selected-action
+  (fn [{:keys [db]} [_ action]]
+    {:db (assoc-in db [:editor-v2 :translator :selected-action] action)}))

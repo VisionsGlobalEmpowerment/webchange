@@ -140,6 +140,12 @@
        :dispatch [::actions.events/set-form-data action-data]})))
 
 (re-frame/reg-event-fx
+  ::edit-scene-action
+  (fn [{:keys [db]} [_ scene-id action-name action-data]]
+    (let [action-path [:scenes scene-id :actions (keyword action-name)]]
+      {:db (assoc-in db action-path action-data)})))
+
+(re-frame/reg-event-fx
   ::edit-selected-scene-action
   (fn [{:keys [db]} _]
     (let [state (get-in db [:editor :action-form :data])

@@ -45,7 +45,8 @@
                     (not-nil? connection-data) (assoc {} default-next-action-event [connection-data])
                     :else {})
         add-parent-property #(if-not (nil? %1) (assoc %2 :parent %1) %2)
-        previous-actions (if (sequential? prev) prev [prev])
+        previous-action (if (nil? prev) :root prev)
+        previous-actions (if (sequential? previous-action) previous-action [previous-action])
         connection-data (->> next-data
                              (assoc {} :handlers)
                              (add-parent-property parent))]
