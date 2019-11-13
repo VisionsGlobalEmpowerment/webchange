@@ -461,7 +461,7 @@
    [na/form-input {:label "animation" :default-value (:animation @props) :on-change #(swap! props assoc :animation (-> %2 .-value)) :inline? true}]
    [na/divider {}]
    [sa/FormGroup {}
-    [f/audio-asset-dropdown props :audio]
+    [f/audio-asset-dropdown props :audio scene-id]
     [na/button {:basic? true :content "Upload new" :on-click #(re-frame/dispatch [::events/show-upload-asset-form])}]]
    [na/form-input {:label "start" :value (:start @props) :on-change #(swap! props assoc :start (-> %2 .-value)) :inline? true}]
    [na/form-input {:label "duration" :value (:duration @props) :on-change #(swap! props assoc :duration (-> %2 .-value)) :inline? true}]
