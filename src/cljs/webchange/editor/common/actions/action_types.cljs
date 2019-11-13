@@ -34,4 +34,5 @@
    {:key :counter :value :counter :text "Counter"}
    {:key :set-variable :value :set-variable :text "Set variable"}
    {:key :set-progress :value :set-progress :text "Set progress"}
-   {:key :copy-variable :value :copy-variable :text "Copy variable"}])
+   {:key :copy-variable :value :copy-variable :text "Copy variable"}
+   {:key :text-animation :value :text-animation :text "Text animation"}])
