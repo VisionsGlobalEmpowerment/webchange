@@ -7,27 +7,29 @@
                                                                  handle-audio-region!
                                                                  init-audio-region!]]))
 
+(def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
+
 (defn float-control
   [ws region]
-  (let [button-params {:color   "default"
-                       :variant "fab"
-                       :style   {:position "absolute"
-                                 :bottom   -8
-                                 :right    0}}]
+  (let [button-params {:color "default"
+                       :size  "small"
+                       :style {:position "absolute"
+                               :bottom   -8
+                               :right    0}}]
     (r/with-let [state (r/atom "pause")]
                 [:div {:style {:position "relative"
                                :z-index  10}}
                  (when (= @state "pause")
-                   [ui/button (merge button-params
-                                     {:on-click (fn []
-                                                  (when (:region @region) (-> @region :region .play))
-                                                  (reset! state "play"))})
+                   [fab (merge button-params
+                                  {:on-click (fn []
+                                               (when (:region @region) (-> @region :region .play))
+                                               (reset! state "play"))})
                     [ic/play-arrow]])
                  (when (= @state "play")
-                   [ui/button (merge button-params
-                                     {:on-click (fn []
-                                                  (.stop @ws)
-                                                  (reset! state "pause"))})
+                   [fab (merge button-params
+                                  {:on-click (fn []
+                                               (.stop @ws)
+                                               (reset! state "pause"))})
                     [ic/pause]])
                  ])))
 
