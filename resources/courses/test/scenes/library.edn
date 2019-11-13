@@ -4,6 +4,8 @@
                  {:url "/raw/img/library/main/Hat_Enabled.png", :size 1, :type "image"}
                  {:url "/raw/img/library/main/Tablet_Enabled.png", :size 1, :type "image"}
 
+                 {:url "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3", :size 2, :type "audio" :alias "lion - 1"}
+                 {:url "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3", :size 2, :type "audio" :alias "lion - 2"}
                  {:url "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
                  {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio" :alias "vera books intro"}
                  ],
@@ -35,37 +37,39 @@
  :actions       {:start-book-scene
                                          {:type "sequence-data",
                                           :data
-                                                [{:type     "animation-sequence",
-                                                  :target   "librarian",
-                                                  :track    1,
-                                                  :offset   2.249,
-                                                  :audio    "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
-                                                  :start    2.249,
-                                                  :duration 4.367,
+                                                [{:type "animation-sequence",
+                                                  :target "librarian",
+                                                  :track 1,
+                                                  :offset 0.28,
+                                                  :audio
+                                                  "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3",
+                                                  :start 0.28,
+                                                  :duration 5.234,
                                                   :data
-                                                            [{:start 2.348, :end 4.417, :duration 2.069, :anim "talk"}
-                                                             {:start 5.069, :end 6.513, :duration 1.444, :anim "talk"}]}
-                                                 {:type     "animation-sequence",
-                                                  :target   "vera",
-                                                  :track    1,
-                                                  :offset   0.465,
-                                                  :audio    "/raw/audio/l1/a6/L1_A6_Vera.m4a",
-                                                  :start    0.465,
+                                                  [{:start 0.41, :end 2.73, :anim "talk"}
+                                                   {:start 3.89, :end 5.32, :anim "talk"}]}
+                                                 {:type "animation-sequence",
+                                                  :target "vera",
+                                                  :track 1,
+                                                  :offset 0.465,
+                                                  :audio "/raw/audio/l1/a6/L1_A6_Vera.m4a",
+                                                  :start 0.465,
                                                   :duration 4.184,
                                                   :data
-                                                            [{:start 0.504, :end 2.073, :duration 1.569, :anim "talk"}
-                                                             {:start 2.611, :end 4.562, :duration 1.951, :anim "talk"}]}
-                                                 {:type     "animation-sequence",
-                                                  :target   "librarian",
-                                                  :track    1,
-                                                  :offset   9.249,
-                                                  :audio    "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
-                                                  :start    9.249,
-                                                  :duration 5.407,
+                                                  [{:start 0.504, :end 2.073, :duration 1.569, :anim "talk"}
+                                                   {:start 2.611, :end 4.562, :duration 1.951, :anim "talk"}]}
+                                                 {:type "animation-sequence",
+                                                  :target "librarian",
+                                                  :track 1,
+                                                  :offset 0.315,
+                                                  :audio "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3",
+                                                  :start 0.315,
+                                                  :duration 5.737,
                                                   :data
-                                                            [{:start 9.295, :end 10.457, :duration 1.162, :anim "talk"}
-                                                             {:start 11.016, :end 12.647, :duration 1.631, :anim "talk"}
-                                                             {:start 13.467, :end 14.601, :duration 1.134, :anim "talk"}]}
+                                                  [{:start 0.56, :end 1.02, :anim "talk"}
+                                                   {:start 1.03, :end 1.92, :anim "talk"}
+                                                   {:start 2.48, :end 3.78, :anim "talk"}
+                                                   {:start 4.23, :end 5.81, :anim "talk"}]}
                                                  {:type "scene", :scene-id "book"}]}
 
                  :start-background-music {:type "audio" :id "background" :loop true}},
