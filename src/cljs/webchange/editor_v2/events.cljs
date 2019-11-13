@@ -1,12 +1,16 @@
 (ns webchange.editor-v2.events
   (:require
     [re-frame.core :as re-frame]
+    [webchange.interpreter.events :as ie]
+    [webchange.editor.events :as ee]
     [webchange.editor-v2.translator.events :as translator-events]))
 
 (re-frame/reg-event-fx
   ::init-editor
-  (fn []
-    {:dispatch-n (list [::set-diagram-mode :full-scene])}))
+  (fn [_ [_ course-id scene-id]]
+    {:dispatch-n (list [::ie/start-course course-id scene-id]
+                       [::ee/load-datasets]
+                       [::set-diagram-mode :phrases])}))
 
 (re-frame/reg-event-fx
   ::set-diagram-mode

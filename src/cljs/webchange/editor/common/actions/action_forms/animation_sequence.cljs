@@ -15,7 +15,7 @@
     [webchange.editor.events :as events]
     [webchange.editor.common.actions.events :as actions.events]
     [webchange.editor.form-elements :as f]
-    [webchange.editor.form-elements.wavesurfer :as ws]))
+    [webchange.editor.form-elements.wavesurfer.wavesurfer :as ws]))
 
 (defn animation-sequence-item
   [item on-change on-remove]

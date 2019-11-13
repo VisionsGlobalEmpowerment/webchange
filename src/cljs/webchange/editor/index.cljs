@@ -29,7 +29,7 @@
     [webchange.editor.events :as events]
     [webchange.editor.subs :as es]
     [webchange.editor.form-elements :as f]
-    [webchange.editor.form-elements.wavesurfer :as ws]
+    [webchange.editor.form-elements.wavesurfer.wavesurfer :as ws]
     [konva :refer [Transformer]]
     [react-konva :refer [Custom Group Layer Path Rect Stage Text ]]
     [sodium.core :as na]

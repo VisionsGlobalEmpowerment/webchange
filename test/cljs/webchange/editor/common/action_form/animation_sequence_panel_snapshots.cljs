@@ -13,7 +13,7 @@
     "  </a>\n"
     "  <sodium.core.form_input argv={{...}} />\n"
     "  <sodium.core.form_input argv={{...}} />\n"
-    "  <webchange.editor.form_elements.wavesurfer.animation_sequence_waveform_modal argv={{...}} />\n"
+    "  <webchange.editor.form_elements.wavesurfer.wavesurfer.animation_sequence_waveform_modal argv={{...}} />\n"
     "  <sodium.core.button argv={{...}} />\n"
     "  <sodium.core.divider argv={{...}} />\n"
     "  <webchange.editor.common.actions.action_forms.animation_sequence.animation_sequence_items argv={{...}} />\n"
