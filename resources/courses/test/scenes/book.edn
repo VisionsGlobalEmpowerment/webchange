@@ -161,8 +161,6 @@
                  {:url "/raw/audio/l1/a6/L1_A6_Lion_words.m4a", :size 2, :type "audio" :alias "librarian books words"}
                  {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio" :alias "vera books intro"}
 
-                 {:url "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3", :size 2, :type "audio" :alias "lion - 1"}
-                 {:url "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3", :size 2, :type "audio" :alias "lion - 2"}
                  {:url "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3", :size 2, :type "audio" :alias "lion - 3"}
                  {:url "/raw/audio/l1/a6/lion/2Vamos a leerlo juntos.mp3", :size 2, :type "audio" :alias "lion - 4"}
                  {:url "/raw/audio/l1/a6/lion/2Toca la flecha.mp3", :size 2, :type "audio" :alias "lion - 5"}
@@ -323,7 +321,7 @@
                  :read-page
                                   {:type "parallel"
                                    :data [{:type "sequence-data"
-                                           :data [{:type "empty" :duration 2000}
+                                           :data [{:type "empty" :duration 5000}
                                                   {:type "state" :target "image" :id "default" :params {:filter ""}}
                                                   {:type "empty" :duration 2000}
                                                   {:type "state" :target "image2" :id "default" :params {:filter ""}}
