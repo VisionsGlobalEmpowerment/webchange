@@ -6,8 +6,12 @@
 (defn get-node-color
   [node-data]
   (let [speech-node? (some #{(:type node-data)} ["audio"
-                                                 "animation-sequence"])]
-    (if speech-node? "#6BC784" nil)))
+                                                 "animation-sequence"])
+        concept-node? (:concept-action (:data node-data))]
+    (cond
+      (and speech-node? concept-node?) "#FFDF82"
+      speech-node? "#6BC784"
+      :else nil)))
 
 (defn get-widget-event-handlers
   []

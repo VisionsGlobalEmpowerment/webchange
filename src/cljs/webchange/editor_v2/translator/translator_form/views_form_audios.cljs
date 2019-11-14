@@ -1,9 +1,13 @@
-(ns webchange.editor-v2.translator.audios-block.view
+(ns webchange.editor-v2.translator.translator-form.views-form-audios
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
     [webchange.editor.form-elements.wavesurfer.wave-form :refer [audio-wave-form]]
     [webchange.editor-v2.translator.audios-block.utils.scene-audios :refer [get-scene-audios]]))
+
+(def empty-audio-region
+  {:start    0
+   :duration 0})
 
 (defn get-action-audio-data
   [action-data]
@@ -51,6 +55,12 @@
                              :on-click  on-wave-click
                              :on-change on-wave-region-change}])])
 
+(defn get-current-action-track
+  [action-data]
+  (-> action-data
+      (get-action-audio-data)
+      :key))
+
 (defn audios-block
   [{:keys [scene-data action-data on-change]}]
   [:div
@@ -61,9 +71,9 @@
          scene-audios (-> scene-data
                           (get-scene-audios)
                           (update-audios-with-action action-audio-data))]
-     (r/with-let [current-track (r/atom (:key action-audio-data))
-                  change-current-track #(reset! current-track %)]
+     (r/with-let [current-key (r/atom (:key action-audio-data))]
                  [waves-list {:scene-audios          scene-audios
-                              :current-audio-key     @current-track
-                              :on-wave-click         change-current-track
-                              :on-wave-region-change on-change}]))])
+                              :current-audio-key     @current-key
+                              :on-wave-click         #(reset! current-key %)
+                              :on-wave-region-change on-change}])
+     )])

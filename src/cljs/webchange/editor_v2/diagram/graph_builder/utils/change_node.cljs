@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.graph-builder.utils.remove-node)
+(ns webchange.editor-v2.diagram.graph-builder.utils.change-node)
 
 (defn change-parent-node-connections
   [graph parent-node-name removing-connection-name new-connection-names]
@@ -91,3 +91,37 @@
       (update-parents-nodes node-name)
       (update-children-nodes node-name)
       (dissoc node-name)))
+
+(defn rename-parents-connections
+  [graph old-name new-name]
+  (reduce
+    (fn [graph [parent-node-name]]
+      (change-parent-node-connections graph parent-node-name old-name [new-name]))
+    graph
+    (->> old-name
+         (get graph)
+         (get-node-ins))))
+
+(defn rename-children-connections
+  [graph old-name new-name]
+  (reduce
+    (fn [graph [child-node-name]]
+      (change-child-node-connections graph child-node-name old-name [new-name]))
+    graph
+    (->> old-name
+         (get graph)
+         (get-node-outs))))
+
+(defn rename-current-node
+  [graph old-name new-name]
+  (let [data (get graph old-name)]
+    (-> graph
+        (assoc new-name data)
+        (dissoc old-name))))
+
+(defn rename-node
+  [graph old-name new-name]
+  (-> graph
+      (rename-parents-connections old-name new-name)
+      (rename-children-connections old-name new-name)
+      (rename-current-node old-name new-name)))

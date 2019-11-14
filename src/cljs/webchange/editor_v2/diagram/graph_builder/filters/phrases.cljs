@@ -1,10 +1,10 @@
 (ns webchange.editor-v2.diagram.graph-builder.filters.phrases
   (:require
     [webchange.editor-v2.diagram.graph-builder.utils.node-children :refer [get-children]]
-    [webchange.editor-v2.diagram.graph-builder.utils.remove-node :refer [remove-node]]
+    [webchange.editor-v2.diagram.graph-builder.utils.change-node :refer [remove-node]]
     [webchange.editor-v2.diagram.graph-builder.utils.root-nodes :refer [add-root-node
-                                                                             get-root-nodes
-                                                                             remove-root-node]]))
+                                                                        get-root-nodes
+                                                                        remove-root-node]]))
 
 (defn weight-changer-node?
   [node-name weights]
