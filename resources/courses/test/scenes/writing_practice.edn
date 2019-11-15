@@ -66,33 +66,35 @@
                                          :stroke-width 4
                                          :dash         [7 7]
                                          :line-cap     "round"
-                                         :scale-x      10
-                                         :scale-y      10
+                                         :scale-x      3.2
+                                         :scale-y      3.2
                                          :rotation     0
                                          :states       {:hidden  {:type "transparent"}
                                                         :visible {:type "svg-path"}}}
 
                  :letter-trace-matrix   {:type   "matrix"
                                          :el     "letter-trace"
-                                         :x      250
-                                         :y      450
-                                         :width  1500
-                                         :height 600
-                                         :dx     500
+                                         :x      -70
+                                         :y      330
+                                         :width  2025
+                                         :height 675
+                                         :dx     675
                                          :dy     360
                                          :max    3}
 
                  :letter-tutorial-trace {:type         "svg-path"
                                          :scene-name   "letter-tutorial-trace"
                                          :data         ""
-                                         :x            705
-                                         :y            82
+                                         :x            500
+                                         :y            25
                                          :stroke       "#898989"
                                          :stroke-width 4
                                          :dash         [7 7]
                                          :line-cap     "round"
-                                         :scale-x      4
-                                         :scale-y      4
+                                         :width 225
+                                         :height 225
+                                         :scale-x      1.8
+                                         :scale-y      1.8
                                          :rotation     0
                                          :states       {:hidden  {:type "transparent"}
                                                         :visible {:type "svg-path"}}}
@@ -106,25 +108,27 @@
                                          :stroke-width 10
                                          :line-cap     "round"
                                          :fill         "transparent"
-                                         :x            705
-                                         :y            82
-                                         :scale-x      4
-                                         :scale-y      4
+                                         :x            500
+                                         :y            25
+                                         :width 225
+                                         :height 225
+                                         :scale-x      1.8
+                                         :scale-y      1.8
                                          :states       {:hidden  {:type "transparent"}
                                                         :visible {:type "animated-svg-path"}}}
 
                  :letter-tutorial-image {:type     "image"
-                                         :x        1000
-                                         :y        82
+                                         :x        965
+                                         :y        75
                                          :width    651
                                          :height   651
-                                         :scale-x  0.35
-                                         :scale-y  0.35
+                                         :scale-x  0.45
+                                         :scale-y  0.45
                                          :rotation 0}
 
                  :concept-card          {:type     "group"
                                          :x        60
-                                         :y        0
+                                         :y        30
                                          :width    400
                                          :height   300
                                          :children ["concept-image" "concept-word"]}
@@ -159,9 +163,11 @@
                                                       "init-vars"
                                                       "init-stage-1"
                                                       "mari-voice-intro"
+                                                      "mari-init-wand"
                                                       "mari-shows-example"
-                                                      "mari-voice-go-next-practice"
-                                                      "mari-go-wait"]}
+                                                      "mari-voice-go-next-practice"]}
+
+                 :mari-init-wand {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
 
                  :renew-concept            {:type        "lesson-var-provider"
                                             :from        "concepts-single"
@@ -261,25 +267,25 @@
                  :mari-shows-example          {:type "sequence-data"
                                                :data [{:type          "transition"
                                                        :transition-id "mari"
-                                                       :to            {:x 775 :y 82 :loop false :duration 2.5}}
+                                                       :to            {:x 980 :y 360 :loop false :duration 1.5}}
                                                       {:type "state" :target "letter-tutorial-path" :id "visible"}
                                                       {:type "parallel"
                                                        :data [{:type "path-animation" :state "play" :target "letter-tutorial-path"}
                                                               {:type          "transition"
                                                                :transition-id "mari"
                                                                :to            {:path     ""
-                                                                               :origin   {:x 775 :y 82}
-                                                                               :scale    {:x 4 :y 4}
+                                                                               :origin   {:x 680 :y 60}
+                                                                               :scale    {:x 1.7 :y 1.7}
                                                                                :duration 5}
                                                                :from-var      [{:var-name "letter-path" :action-property "to.path"}]}]}
                                                       {:type "set-attribute" :target "mari" :attr-name "scale-x" :attr-value -0.5}
                                                       {:type          "transition"
                                                        :transition-id "mari"
-                                                       :to            {:x 405 :y 435 :loop false :duration 1.5}}]}
+                                                       :to            {:x 1490 :y 180 :loop false :duration 2}}]}
 
                  :mari-go-wait                {:type          "transition"
                                                :transition-id "mari"
-                                               :to            {:x 90 :y 790 :loop false :duration 2}}
+                                               :to            {:x 1490 :y 130 :loop false :duration 2}}
 
                  :mari-voice-intro            {:type        "parallel"
                                                :description "Escoge un lapiz o un color y sigue las flechas para rastrear la letra.

@@ -5,8 +5,9 @@
     [webchange.common.animated-svg-path.animated-path-item :refer [animated-path-item]]
     [webchange.common.animated-svg-path.utils :refer [get-params run-funcs-consistently]]
     [webchange.common.svg-path.path-length :refer [path-length]]
-    [webchange.common.svg-path.path-splitter :refer [split-path]]
-    [webchange.common.svg-path.path-to-transitions :refer [get-moves-lengths]]))
+    [webchange.common.svg-path.path-splitter :refer [split-path-str-with]]
+    [webchange.common.svg-path.path-to-transitions :refer [get-moves-lengths]]
+    [clojure.string :as s]))
 
 (def default-group-params
   {:x        0
@@ -65,7 +66,7 @@
                       visible-length (path-length data)
                       total-length (+ visible-length (reduce + 0 moves-lengths))
                       use-delay? (if (nil? use-delay?) true use-delay?)]
-                  (->> (split-path data)
+                  (->> (split-path-str-with data ["M" "m"])
                        (map #(vec [%1 %2]) moves-lengths)
                        (map-indexed vector)
                        (reduce (fn [result [index [delay current-data]]]

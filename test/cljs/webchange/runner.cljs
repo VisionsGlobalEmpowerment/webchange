@@ -17,7 +17,8 @@
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
             [webchange.interpreter.utils-test]
-            [webchange.common.svg-path.path-to-transitions-test]))
+            [webchange.common.svg-path.path-to-transitions-test]
+            [webchange.common.svg-path.path-splitter-test]))
 
 (doo-tests
   'webchange.core-test
@@ -38,4 +39,5 @@
   'webchange.interpreter.variables.events-test
   'webchange.interpreter.utils-test
   'webchange.common.svg-path.path-to-transitions-test
+  'webchange.common.svg-path.path-splitter-test
   )

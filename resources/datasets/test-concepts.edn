@@ -145,6 +145,7 @@
     :target "senoravaca",
     :scene-id "letter-intro"}}
   {:name "letter-path", :type "string"}
+  {:name "letter-src", :type "string"}
   {:name "letter-tutorial-path", :type "string"}
   {:name "mari-chant",
    :type "action",
@@ -296,10 +297,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+    {:id "/raw/audio/l1/a6/lion/2La a.mp3",
      :type "audio",
-     :start 36.108,
-     :duration 7.414,
+     :start 0.574,
+     :duration 9.814,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-a.mp4",
     :concept-name "ardilla",
@@ -510,9 +511,10 @@
      :target "senoravaca",
      :duration 2.053,
      :scene-id "letter-intro"},
-    :letter-path "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90",
+    :letter-path "M144.76,92.43a37.5,37.5,0,1,0,0,39.28m0-57.21v75",
+    :letter-src "/raw/img/letters/a.png",
     :letter-tutorial-path
-    "M 105 50 A 40,40 0 1,0 105,100 M 105 35 L 105 115 M 70 15 A 60,60 0 0,0 10,75 l 5 0 l -5 10 l -5 -10 l 5 0 M 130 35 L 130 100 l 5 0 l -5 10 l -5 -10 l 5 0 M 85 2 l 0 20 M 125 5 a 5 5 0 1 1 10 5 l -10 13 l 10 0",
+    "M72.5,131.2a37.5,37.5,0,1,1,0-39.3m33.5,0a37.6,37.6,0,0,1,69.5,19.7v37.5M106,0V149",
     :mari-chant
     {:data
      [{:end 1.627, :anim "talk", :start 0.653, :duration 0.974}
@@ -904,10 +906,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/B.mp3",
      :type "audio",
-     :start 116.105,
-     :duration 7,
+     :start 0.322,
+     :duration 7.301,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-b.mp4",
     :concept-name "bebé",
@@ -1108,8 +1110,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 38.33, :anim "talk", :start 36}]},
-    :letter-path
-    "M.5,0V26.67s.25,7.5,7.5,7.5,8.68-5.27,8.68-8.68c0-3.22-.21-6.77-1.94-9.59C11.6,10.78,4.27,11.53.5,15.5",
+    :letter-path "M77.77 0.71v149M77.77,92.64a37.5,37.5,0,1,1,0,39.28",
+    :letter-src "/raw/img/letters/b.png",
     :letter-tutorial-path
     "M.5,0V26.67s.25,7.5,7.5,7.5,8.68-5.27,8.68-8.68c0-3.22-.21-6.77-1.94-9.59C11.6,10.78,4.27,11.53.5,15.5",
     :mari-chant
@@ -1427,10 +1429,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/C.mp3",
      :type "audio",
-     :start 81.199,
-     :duration 7.44,
+     :start 0.347,
+     :duration 7.522,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-c.mp4",
     :concept-name "casa",
@@ -1633,7 +1635,8 @@
      [{:end 21.92, :anim "talk", :start 21.39}
       {:end 23.43, :anim "talk", :start 22.8}]},
     :letter-path
-    "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
+    "M147.23,92.35a37.51,37.51,0,1,0,0,39.27-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
+    :letter-src "/raw/img/letters/c.png",
     :letter-tutorial-path
     "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
     :mari-chant
@@ -1881,7 +1884,7 @@
     :word-1-skin "bed",
     :word-2-skin "car",
     :word-3-skin "candle",
-    :word-4-skin "empty"}}
+    :word-4-skin "crocodile"}}
   {:name "cepillo",
    :data
    {:book-content-action
@@ -1907,10 +1910,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/Tambien C.mp3",
      :type "audio",
-     :start 90.612,
-     :duration 7.293,
+     :start 0.457,
+     :duration 10.492,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-c.mp4",
     :concept-name "cepillo",
@@ -2106,8 +2109,8 @@
      :data
      [{:end 45.28, :anim "talk", :start 44.37}
       {:end 47.17, :anim "talk", :start 45.88}]},
-    :letter-path
-    "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
+    :letter-path "M147.23,92.35a37.51,37.51,0,1,0,0,39.27",
+    :letter-src "/raw/img/letters/c.png",
     :letter-tutorial-path
     "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
     :mari-chant
@@ -2356,10 +2359,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/Ch.mp3",
      :type "audio",
-     :start 148.411,
-     :duration 7.32,
+     :start 0.401,
+     :duration 7.073,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-ch.mp4",
     :concept-name "chocolate",
@@ -2487,7 +2490,7 @@
      :target "senoravaca",
      :duration 0.973,
      :scene-id "home"},
-    :image-src "public/raw/img/elements/chocolate.png",
+    :image-src "/raw/img/elements/chocolate.png",
     :letter "ch",
     :letter-big "Ch",
     :letter-intro-letter
@@ -2561,9 +2564,10 @@
      :track 1,
      :data [{:end 12.46, :anim "talk", :start 10.61}]},
     :letter-path
-    "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
+    "M95.73,92.59a37.5,37.5,0,1,0,0,39.28M129.27 0.66v149M129.27,92.59a37.51,37.51,0,0,1,69.46,19.64v37.5",
+    :letter-src "/raw/img/letters/ch.png",
     :letter-tutorial-path
-    "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
+    "M.5,0V44.5M.5,8S14.6-1,19.9,8s3.4,36.5,3.4,36.5",
     :mari-chant
     {:data
      [{:end 118.61, :anim "talk", :start 117.35}
@@ -2823,10 +2827,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/D.mp3",
      :type "audio",
-     :start 64.506,
-     :duration 7.36,
+     :start 0.303,
+     :duration 7.686,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-d.mp4",
     :concept-name "diamante",
@@ -3021,10 +3025,10 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 24.08, :anim "talk", :start 22.14}]},
-    :letter-path
-    "M16.49,15.19C14,10,6.54,10.78,3.15,14.57c-2.78,3.1-3.21,8-2,11.81,1,3.28,3.5,6.37,7.1,6.68,3.26.28,6.12-2,8.28-4.14",
+    :letter-path "M147.23,91.88a37.5,37.5,0,1,0,0,39.28M147.23,0v14",
+    :letter-src "/raw/img/letters/d.png",
     :letter-tutorial-path
-    "M16.49,15.19C14,10,6.54,10.78,3.15,14.57c-2.78,3.1-3.21,8-2,11.81,1,3.28,3.5,6.37,7.1,6.68,3.26.28,6.12-2,8.28-4.14",
+    "M 49.50,45.46            C 42.02,29.93 19.63,32.26 9.46,43.61              1.11,52.89 -0.18,67.55 3.45,78.95              6.45,88.77 13.96,98.02 24.76,98.95M 49.50,0.00            C 49.50,0.00 49.50,102.00 49.50,102.00",
     :mari-chant
     {:data
      [{:end 61.28, :anim "talk", :start 60.29}
@@ -3266,20 +3270,20 @@
       {:id "default",
        :type "state",
        :params
-       {:src "/raw/img/elements/salad.png", :filter "grayscale"},
+       {:src "/raw/img/elements/star.png", :filter "grayscale"},
        :target "image2"}
       {:id "default",
        :type "state",
        :params
-       {:src "/raw/img/elements/building.png", :filter "grayscale"},
+       {:src "/raw/img/elements/nurse.png", :filter "grayscale"},
        :target "image3"}],
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/E.mp3",
      :type "audio",
-     :start 11.307,
-     :duration 8.666,
+     :start 0.188,
+     :duration 9.238,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-e.mp4",
     :concept-name "elefante",
@@ -3475,8 +3479,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 73.39, :anim "talk", :start 71.19}]},
-    :letter-path
-    "M1.36,8.17H16.53S15.2.5,8.86.5C.61.5-1,11.79,1.74,17.68a8.12,8.12,0,0,0,5.17,4.53,9,9,0,0,0,8.62-2.73,3.17,3.17,0,0,0,1-1.9",
+    :letter-path "M77,112h73a37.5,37.5,0,1,0-11.21,26.74",
+    :letter-src "/raw/img/letters/e.png",
     :letter-tutorial-path
     "M1.36,8.17H16.53S15.2.5,8.86.5C.61.5-1,11.79,1.74,17.68a8.12,8.12,0,0,0,5.17,4.53,9,9,0,0,0,8.62-2.73,3.17,3.17,0,0,0,1-1.9",
     :mari-chant
@@ -3752,10 +3756,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/F.mp3",
      :type "audio",
-     :start 107.985,
-     :duration 7.173,
+     :start 0.451,
+     :duration 7.337,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-f.mp4",
     :concept-name "flor",
@@ -3956,7 +3960,9 @@
      :data
      [{:end 22.69, :anim "talk", :start 22.05}
       {:end 23.5, :anim "talk", :start 22.82}]},
-    :letter-path "M17.42,4.78c0-3.09-11.75-9.5-11.75,3.83V34.86",
+    :letter-path
+    "M156.12,13.21A36.35,36.35,0,0,0,128.36.29h0A36.49,36.49,0,0,0,92,36.68V149M68.88,74.78H116",
+    :letter-src "/raw/img/letters/f.png",
     :letter-tutorial-path
     "M17.42,4.78c0-3.09-11.75-9.5-11.75,3.83V34.86",
     :mari-chant
@@ -4233,10 +4239,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/G.mp3",
      :type "audio",
-     :start 133.438,
-     :duration 6.053,
+     :start 0.195,
+     :duration 9.065,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-g.mp4",
     :concept-name "gato",
@@ -4441,7 +4447,8 @@
      [{:end 38.6, :anim "talk", :start 37.9}
       {:end 39.98, :anim "talk", :start 38.87}]},
     :letter-path
-    "M6,13.85S-1.32,20.6,6,20.6c2.34,0,4.69,0,7,.06a9.25,9.25,0,0,1,4.32.94,4.34,4.34,0,0,1,2.4,3.73c0,2.87-3.15,4.59-5.52,5.4a18.06,18.06,0,0,1-8.79.58c-3.64-.62-6.36-2.75-4.2-6.54",
+    "M147.23,92.62a37.5,37.5,0,1,0,0,39.28M147.23,74.86V181a34.73,34.73,0,0,1-67.65,11.09",
+    :letter-src "/raw/img/letters/g.png",
     :letter-tutorial-path
     "M6,13.85S-1.32,20.6,6,20.6c2.34,0,4.69,0,7,.06a9.25,9.25,0,0,1,4.32.94,4.34,4.34,0,0,1,2.4,3.73c0,2.87-3.15,4.59-5.52,5.4a18.06,18.06,0,0,1-8.79.58c-3.64-.62-6.36-2.75-4.2-6.54",
     :mari-chant
@@ -4736,10 +4743,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/También G.mp3",
      :type "audio",
-     :start 140.398,
-     :duration 6.827,
+     :start 0.958,
+     :duration 10.227,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-g.mp4",
     :concept-name "gemelo",
@@ -4939,7 +4946,8 @@
      :track 1,
      :data [{:end 61.94, :anim "talk", :start 59.7}]},
     :letter-path
-    "M6,13.85S-1.32,20.6,6,20.6c2.34,0,4.69,0,7,.06a9.25,9.25,0,0,1,4.32.94,4.34,4.34,0,0,1,2.4,3.73c0,2.87-3.15,4.59-5.52,5.4a18.06,18.06,0,0,1-8.79.58c-3.64-.62-6.36-2.75-4.2-6.54",
+    "M147.23,92.62a37.5,37.5,0,1,0,0,39.28M147.23,74.86V181a34.73,34.73,0,0,1-67.65,11.09",
+    :letter-src "/raw/img/letters/g.png",
     :letter-tutorial-path
     "M6,13.85S-1.32,20.6,6,20.6c2.34,0,4.69,0,7,.06a9.25,9.25,0,0,1,4.32.94,4.34,4.34,0,0,1,2.4,3.73c0,2.87-3.15,4.59-5.52,5.4a18.06,18.06,0,0,1-8.79.58c-3.64-.62-6.36-2.75-4.2-6.54",
     :mari-chant
@@ -5212,7 +5220,7 @@
       {:id "default",
        :type "state",
        :params
-       {:src "/raw/img/elements/icecream.png", :filter "grayscale"},
+       {:src "/raw/img/elements/ice cream.png", :filter "grayscale"},
        :target "image2"}
       {:id "default",
        :type "state",
@@ -5221,10 +5229,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/H.mp3",
      :type "audio",
-     :start 182.704,
-     :duration 6.453,
+     :start 0.676,
+     :duration 9.148,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-h.mp4",
     :concept-name "hoja",
@@ -5420,7 +5428,9 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 29.26, :anim "talk", :start 27.9}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path
+    "M77.77 0.71v149M77.77,92.64a37.51,37.51,0,0,1,69.46,19.64v37.5",
+    :letter-src "/raw/img/letters/h.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -5684,7 +5694,7 @@
      :type "parallel",
      :description "Hoja"},
     :word-1-skin "grass",
-    :word-2-skin "icecream",
+    :word-2-skin "ice cream",
     :word-3-skin "ant",
     :word-4-skin "egg"}}
   {:name "iman",
@@ -5713,10 +5723,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+    {:id "/raw/audio/l1/a6/lion/2La i.mp3",
      :type "audio",
-     :start 53.682,
-     :duration 8.294,
+     :start 0.439,
+     :duration 9.553,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-i.mp4",
     :concept-name "iman",
@@ -5922,7 +5932,9 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 34.34, :anim "talk", :start 32.48}]},
-    :letter-path "M.79,11.67v22",
+    :letter-path
+    "M101.7,74.26v75M107.7,34.78a6,6,0,1,1-6-6A6,6,0,0,1,107.7,34.78Z",
+    :letter-src "/raw/img/letters/i.png",
     :letter-tutorial-path "M.79,11.67v22",
     :mari-chant
     {:data
@@ -6329,10 +6341,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/J.mp3",
      :type "audio",
-     :start 124.212,
-     :duration 6.613,
+     :start 0.135,
+     :duration 8.824,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-j.mp4",
     :concept-name "jardín",
@@ -6532,7 +6544,9 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 12.14, :anim "talk", :start 9.93}]},
-    :letter-path "6.37,13.88l3.37-2.13V37.88s.13,9.25-9.5,3.87",
+    :letter-path
+    "M106.5,74V180.1a34.73,34.73,0,0,1-67.64,11.09M112.5,34.21a6,6,0,1,1-6-6A6,6,0,0,1,112.5,34.21Z",
+    :letter-src "/raw/img/letters/j.png",
     :letter-tutorial-path
     "6.37,13.88l3.37-2.13V37.88s.13,9.25-9.5,3.87",
     :mari-chant
@@ -6809,10 +6823,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/K.mp3",
      :type "audio",
-     :start 205.957,
-     :duration 6.787,
+     :start 1.44,
+     :duration 11.784,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-k.mp4",
     :concept-name "kimono",
@@ -7007,7 +7021,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 26.37, :anim "talk", :start 24.43}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path "M112.5-.22v150M162.63,74.78l-48,29.06,61.55,45.94",
+    :letter-src "/raw/img/letters/k.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -7215,10 +7230,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/L.mp3",
      :type "audio",
-     :start 46.346,
-     :duration 7.787,
+     :start 0.324,
+     :duration 9.164,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-l.mp4",
     :concept-name "leon",
@@ -7421,8 +7436,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 54.19, :anim "talk", :start 52.26}]},
-    :letter-path
-    "M.5,6.27c1.85-2.07,4-4.45,6.86-5.07,3.1-.69,5.84,1.56,7.2,4.18,2.5,4.85,2.42,12-2.43,15.41C8.47,23.33,4,22.55.5,20.15",
+    :letter-path "M112.5 0.19v150",
+    :letter-src "/raw/img/letters/l.png",
     :letter-tutorial-path
     "M.5,6.27c1.85-2.07,4-4.45,6.86-5.07,3.1-.69,5.84,1.56,7.2,4.18,2.5,4.85,2.42,12-2.43,15.41C8.47,23.33,4,22.55.5,20.15",
     :mari-chant
@@ -7667,7 +7682,7 @@
     :word-1-skin "lemon",
     :word-2-skin "moon",
     :word-3-skin "pencil",
-    :word-4-skin "empty"}}
+    :word-4-skin "milk"}}
   {:name "llave",
    :data
    {:book-content-action
@@ -7678,8 +7693,7 @@
        :target "letter"}
       {:id "default",
        :type "state",
-       :params
-       {:src "/raw/img/elements/wrench.png", :filter "grayscale"},
+       :params {:src "/raw/img/elements/key.png", :filter "grayscale"},
        :target "image"}
       {:id "default",
        :type "state",
@@ -7693,10 +7707,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/LL.mp3",
      :type "audio",
-     :start 175.478,
-     :duration 6.106,
+     :start 0.385,
+     :duration 9.182,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-ll.mp4",
     :concept-name "llave",
@@ -7896,7 +7910,8 @@
      :data
      [{:end 16.59, :anim "talk", :start 15.87}
       {:end 18.23, :anim "talk", :start 17.32}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path "M84.5 0.19v150M140.5 0.19v150",
+    :letter-src "/raw/img/letters/ll.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -8041,20 +8056,20 @@
       {:id "default",
        :type "state",
        :params
-       {:src "/raw/img/elements/mama.png", :filter "grayscale"},
+       {:src "/raw/img/elements/monkey.png", :filter "grayscale"},
        :target "image2"}
       {:id "default",
        :type "state",
        :params
-       {:src "/raw/img/elements/monkey.png", :filter "grayscale"},
+       {:src "/raw/img/elements/apple.png", :filter "grayscale"},
        :target "image3"}],
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/M.mp3",
      :type "audio",
-     :start 20.733,
-     :duration 7.453,
+     :start 0.736,
+     :duration 9.181,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-m.mp4",
     :concept-name "mano",
@@ -8255,7 +8270,8 @@
      :track 1,
      :data [{:end 10, :anim "talk", :start 8.28}]},
     :letter-path
-    "M14.42,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.48-11.89C6.32.29,2.85,3.57.5,5.92\"/><path class=\"cls-1\" d=\"M28.43,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.49-11.89-3.65-.32-7.12,3-9.46,5.31",
+    "M71.86,75v75M71.85,91.79C79.19,80,93.46,76.45,101.17,78.27c11.89,2.8,19.93,12.51,19.93,23.27V150M119.85,91.79c7.34-11.77,21.61-15.34,29.32-13.52,11.89,2.8,19.93,12.51,19.93,23.27V150",
+    :letter-src "/raw/img/letters/m.png",
     :letter-tutorial-path
     "M14.42,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.48-11.89C6.32.29,2.85,3.57.5,5.92\"/><path class=\"cls-1\" d=\"M28.43,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.49-11.89-3.65-.32-7.12,3-9.46,5.31",
     :mari-chant
@@ -8500,7 +8516,7 @@
     :word-1-skin "mama",
     :word-2-skin "monkey",
     :word-3-skin "apple",
-    :word-4-skin "empty"}}
+    :word-4-skin "mountain"}}
   {:name "niño",
    :data
    {:book-content-action
@@ -8512,7 +8528,7 @@
       {:id "default",
        :type "state",
        :params
-       {:src "/raw/img/elements/baby.png", :filter "grayscale"},
+       {:src "/raw/img/elements/nino.png", :filter "grayscale"},
        :target "image"}
       {:id "default",
        :type "state",
@@ -8527,10 +8543,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/N.mp3",
      :type "audio",
-     :start 98.879,
-     :duration 7.786,
+     :start 0.454,
+     :duration 8.972,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-n.mp4",
     :concept-name "niño",
@@ -8725,7 +8741,9 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 11.21, :anim "talk", :start 9.12}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path
+    "M82.05,74.42v75M82.05,91.55A32.35,32.35,0,0,1,143,106.77v42.65",
+    :letter-src "/raw/img/letters/n.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -8871,7 +8889,7 @@
      :start 42.854,
      :duration 1.187,
      :scene-id "sandbox"},
-    :skin "baby",
+    :skin "nino",
     :swings-dialog-action
     {:data
      [{:data
@@ -8975,7 +8993,7 @@
     :word-1-skin "cloud",
     :word-2-skin "nest",
     :word-3-skin "black",
-    :word-4-skin "empty"}}
+    :word-4-skin "orange"}}
   {:name "oso",
    :data
    {:book-content-action
@@ -9001,10 +9019,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+    {:id "/raw/audio/l1/a6/lion/2La o.mp3",
      :type "audio",
-     :start 44.828,
-     :duration 7.694,
+     :start 0.238,
+     :duration 9.885,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-o.mp4",
     :concept-name "oso",
@@ -9213,7 +9231,8 @@
      :track 1,
      :data [{:end 21.41, :anim "talk", :start 19.38, :duration 2.03}]},
     :letter-path
-    "M.5,0V26.67s.25,7.5,7.5,7.5,8.68-5.27,8.68-8.68c0-3.22-.21-6.77-1.94-9.59C11.6,10.78,4.27,11.53.5,15.5",
+    "M110.65,74a37.5,37.5,0,1,0,37.5,37.5A37.5,37.5,0,0,0,110.65,74Z",
+    :letter-src "/raw/img/letters/o.png",
     :letter-tutorial-path
     "M.5,0V26.67s.25,7.5,7.5,7.5,8.68-5.27,8.68-8.68c0-3.22-.21-6.77-1.94-9.59C11.6,10.78,4.27,11.53.5,15.5",
     :mari-chant
@@ -9686,10 +9705,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/P.mp3",
      :type "audio",
-     :start 37.533,
-     :duration 7.546,
+     :start 0.495,
+     :duration 8.835,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-p.mp4",
     :concept-name "pelota",
@@ -9892,8 +9911,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 38.56, :anim "talk", :start 36.87}]},
-    :letter-path
-    "M.5,6.27c1.85-2.07,4-4.45,6.86-5.07,3.1-.69,5.84,1.56,7.2,4.18,2.5,4.85,2.42,12-2.43,15.41C8.47,23.33,4,22.55.5,20.15",
+    :letter-path "M77.77,74.37v149M77.77,93.1a37.5,37.5,0,1,1,0,39.28",
+    :letter-src "/raw/img/letters/p.png",
     :letter-tutorial-path
     "M.5,6.27c1.85-2.07,4-4.45,6.86-5.07,3.1-.69,5.84,1.56,7.2,4.18,2.5,4.85,2.42,12-2.43,15.41C8.47,23.33,4,22.55.5,20.15",
     :mari-chant
@@ -10177,10 +10196,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/Qu.mp3",
      :type "audio",
-     :start 190.171,
-     :duration 6.56,
+     :start 0.295,
+     :duration 9.533,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-q.mp4",
     :concept-name "queso",
@@ -10379,7 +10398,9 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 51.34, :anim "talk", :start 49.82}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path
+    "M148.58,92.61a37.5,37.5,0,1,0,0,39.27M148.58,74.37v149",
+    :letter-src "/raw/img/letters/q.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -10638,10 +10659,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/R.mp3",
      :type "audio",
-     :start 72.652,
-     :duration 7.374,
+     :start 0.187,
+     :duration 6.898,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-r.mp4",
     :concept-name "rana",
@@ -10844,7 +10865,9 @@
      [{:end 35.09, :anim "talk", :start 34.35}
       {:end 35.99, :anim "talk", :start 35.33}
       {:end 37.2, :anim "talk", :start 36.21}]},
-    :letter-path "M10.75,2.81S5.25-.66.5,6.42",
+    :letter-path
+    "M85.86,75.66v75M85.85,92.79a32.37,32.37,0,0,1,53.3-5.63",
+    :letter-src "/raw/img/letters/r.png",
     :letter-tutorial-path "M10.75,2.81S5.25-.66.5,6.42",
     :mari-chant
     {:data
@@ -11086,7 +11109,7 @@
        :target "senoravaca"}],
      :type "parallel",
      :description "Rana"},
-    :word-1-skin "empty",
+    :word-1-skin "rock",
     :word-2-skin "rose",
     :word-3-skin "mouse",
     :word-4-skin "queen"}}
@@ -11101,7 +11124,7 @@
       {:id "default",
        :type "state",
        :params
-       {:src "/raw/img/elements/squirrel.png", :filter "grayscale"},
+       {:src "/raw/img/elements/snake.png", :filter "grayscale"},
        :target "image"}
       {:id "default",
        :type "state",
@@ -11115,10 +11138,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/S.mp3",
      :type "audio",
-     :start 29.28,
-     :duration 7.24,
+     :start 0.343,
+     :duration 8.478,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-s.mp4",
     :concept-name "serpiente",
@@ -11323,7 +11346,8 @@
      :track 1,
      :data [{:end 24.85, :anim "talk", :start 22.61}]},
     :letter-path
-    "M13.51,4.75A10.2,10.2,0,0,0,6.8.52C3.77.23.48,2.84,1.21,6.08A6,6,0,0,0,3.35,9.31c1.8,1.5,4.15,2.2,6.14,3.41C12,14.24,13.83,17.06,12.33,20A5.76,5.76,0,0,1,8,22.89c-3.91.52-5.83-2.35-7.58-5.31",
+    "M131.91,90.75c1.33-9.39-10.49-14.17-18.28-14.39A21.71,21.71,0,0,0,97.69,82.7a16.08,16.08,0,0,0-3.89,16c1.65,5.12,6.13,8.58,10.93,10.57,6.67,2.77,13.9,4,20.26,7.62,7,3.94,10.77,12.34,8,20.14-5.06,14.06-27.62,17.67-37.73,5.77a18.91,18.91,0,0,1-4.11-10.2",
+    :letter-src "/raw/img/letters/s.png",
     :letter-tutorial-path
     "M13.51,4.75A10.2,10.2,0,0,0,6.8.52C3.77.23.48,2.84,1.21,6.08A6,6,0,0,0,3.35,9.31c1.8,1.5,4.15,2.2,6.14,3.41C12,14.24,13.83,17.06,12.33,20A5.76,5.76,0,0,1,8,22.89c-3.91.52-5.83-2.35-7.58-5.31",
     :mari-chant
@@ -11531,10 +11555,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/T.mp3",
      :type "audio",
-     :start 55.146,
-     :duration 8.333,
+     :start 0.439,
+     :duration 9.1,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-t.mp4",
     :concept-name "tomate",
@@ -11735,8 +11759,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 10.36, :anim "talk", :start 8.55}]},
-    :letter-path
-    "M5,0c0,5.79-.18,11.58-.18,17.38,0,2.16-.94,12.39,3.65,11.24,1.53-.38,2.65-2.11,3.41-3.37",
+    :letter-path "M112.5,35.29v115M89.4,75.29h46.2",
+    :letter-src "/raw/img/letters/t.png",
     :letter-tutorial-path
     "M5,0c0,5.79-.18,11.58-.18,17.38,0,2.16-.94,12.39,3.65,11.24,1.53-.38,2.65-2.11,3.41-3.37",
     :mari-chant
@@ -11988,7 +12012,7 @@
     :word-1-skin "phone",
     :word-2-skin "turtle",
     :word-3-skin "train",
-    :word-4-skin "empty"}}
+    :word-4-skin "shark"}}
   {:name "uvas",
    :data
    {:book-content-action
@@ -12014,10 +12038,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/U.mp3",
      :type "audio",
-     :start 2.907,
-     :duration 7.213,
+     :start 0.321,
+     :duration 9.539,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-u.mp4",
     :concept-name "uvas",
@@ -12219,7 +12243,8 @@
      [{:end 46.6, :anim "talk", :start 45.88}
       {:end 48, :anim "talk", :start 46.99}]},
     :letter-path
-    "M.62,0C.62,2.86.54,5.71.5,8.57a33.45,33.45,0,0,0,.91,8.06c.79,3.23,4.49,4.51,7.67,4,2.89-.49,3.79-2.29,6-4.1",
+    "M82.05,75v42.65A32.35,32.35,0,0,0,143,132.87M143,74.38V149.6",
+    :letter-src "/raw/img/letters/u.png",
     :letter-tutorial-path
     "M.62,0C.62,2.86.54,5.71.5,8.57a33.45,33.45,0,0,0,.91,8.06c.79,3.23,4.49,4.51,7.67,4,2.89-.49,3.79-2.29,6-4.1",
     :mari-chant
@@ -12499,10 +12524,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/V.mp3",
      :type "audio",
-     :start 166.464,
-     :duration 6.814,
+     :start 0.222,
+     :duration 7.937,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-v.mp4",
     :concept-name "violin",
@@ -12700,7 +12725,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 24.45, :anim "talk", :start 22.48}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path "M79.56,75l32.88,75M112.56,150l32.88-75",
+    :letter-src "/raw/img/letters/v.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -12965,10 +12991,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/W.mp3",
      :type "audio",
-     :start 215.064,
-     :duration 6.786,
+     :start 0.444,
+     :duration 10.454,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-w.mp4",
     :concept-name "web",
@@ -13172,7 +13198,9 @@
      :data
      [{:end 45.17, :anim "talk", :start 44.3}
       {:end 46.26, :anim "talk", :start 45.37}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path
+    "M73.71,75.66l18.58,75M93.71,150.66l18.58-75M112.71,75.66l18.58,75M132.71,150.66l18.58-75",
+    :letter-src "/raw/img/letters/w.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -13448,10 +13476,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/X.mp3",
      :type "audio",
-     :start 232.09,
-     :duration 6.227,
+     :start 0.413,
+     :duration 11.176,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-x.mp4",
     :concept-name "xilofono",
@@ -13653,7 +13681,8 @@
      :data
      [{:end 43.89, :anim "talk", :start 42.96}
       {:end 45.21, :anim "talk", :start 44.08}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path "M81.53,75.66l61.94,75M143.47,75.66l-61.94,75",
+    :letter-src "/raw/img/letters/x.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -13913,10 +13942,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/Y.mp3",
      :type "audio",
-     :start 223.517,
-     :duration 6.12,
+     :start 0.66,
+     :duration 9.635,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-y.mp4",
     :concept-name "yoyo",
@@ -14116,7 +14145,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 10.91, :anim "talk", :start 9.2}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path "M78.19,74.78l34.84,75M146.81,74.78,96.61,188.91",
+    :letter-src "/raw/img/letters/y.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -14383,10 +14413,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/Z.mp3",
      :type "audio",
-     :start 198.051,
-     :duration 6.746,
+     :start 0.651,
+     :duration 10.411,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-z.mp4",
     :concept-name "zapato",
@@ -14588,7 +14618,8 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 78.75, :anim "talk", :start 77.01}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path "M79.86,75.66h61.29l-57.29,75h61.28",
+    :letter-src "/raw/img/letters/z.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -14830,10 +14861,10 @@
      :type "parallel",
      :scene-id "book"},
     :book-read-action
-    {:id "/raw/audio/l1/a6/L1_A6_Lion_words.m4a",
+    {:id "/raw/audio/l1/a6/lion/Ñ.mp3",
      :type "audio",
-     :start 157.718,
-     :duration 7.2,
+     :start 0.055,
+     :duration 7.761,
      :scene-id "book"},
     :chanting-video-src "/raw/video/l2a1/letter-ñ.mp4",
     :concept-name "ñandu",
@@ -15033,9 +15064,11 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 10.54, :anim "talk", :start 8.68}]},
-    :letter-path "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    :letter-path
+    "M82,74.83v75M82,92a32.36,32.36,0,0,1,60.9,15.23v42.65M86,48.06s4.12-11.83,13.63-7.88c3.71,1.54,7.49,2.94,11.29,4.27,10.27,3.6,22.52,2.17,28-8.67",
+    :letter-src "/raw/img/letters/ñ.png",
     :letter-tutorial-path
-    "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
+    "M116.3,132.5V215.5M183.7,215.5V167.5A33.7,33.7,0,0,0,150,133.8H150A33.7,33.7,0,0,0,116.3,167.5",
     :mari-chant
     {:data
      [{:end 125.32, :anim "talk", :start 122.96}
