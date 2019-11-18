@@ -48,7 +48,7 @@
          (replace-node graph
                        node-name
                        (-> concept-action :name keyword)
-                       (-> concept-action :template (merge {:concept-action :true})))
+                       (-> concept-action :template (merge {:concept-action true})))
          graph)))))
 
 (defn override-concept-actions
