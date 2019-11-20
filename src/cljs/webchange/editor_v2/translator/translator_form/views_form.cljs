@@ -17,26 +17,26 @@
 (defn get-current-action-data
   [action-name selected-node-data current-concept-data data-store]
   (let [concept-action? (get-in selected-node-data [:data :concept-action])
-        [name type data] (if concept-action?
-                           (let [concept-action-name (-> selected-node-data :name keyword)]
-                             [concept-action-name :concept (get-in current-concept-data [:data concept-action-name])])
-                           [action-name :scene (:data selected-node-data)])
+        [id name type data] (if concept-action?
+                              (let [concept-action-name (-> selected-node-data :name keyword)]
+                                [(:id current-concept-data)
+                                 concept-action-name
+                                 :concept
+                                 (get-in current-concept-data [:data concept-action-name])])
+                              [nil action-name :scene (:data selected-node-data)])
         edited-action-data (get-in data-store [action-name :data])]
-    {:name name
+    {:id   id
+     :name name
      :type type
      :data (merge data edited-action-data)}))
 
 (defn update-action-data!
-  [data-store type name data]
-  (println ">>> update-action-data!")
-  (println "type" type)
-  (println "name" name)
-  (println "data" data)
+  [data-store id type name data]
   (swap! data-store assoc name {:changed true
                                 :type    type
+                                :id      id
                                 :data    (merge (get-in @data-store [name :data])
-                                                data)})
-  )
+                                                data)}))
 
 (defn translator-form
   [data-store]
@@ -72,6 +72,7 @@
                                 :action    prepared-current-action-data
                                 :on-change (fn [audio-key region-data]
                                              (update-action-data! data-store
+                                                                  (:id prepared-current-action-data)
                                                                   (:type prepared-current-action-data)
                                                                   (:name prepared-current-action-data)
                                                                   (merge {:audio audio-key}

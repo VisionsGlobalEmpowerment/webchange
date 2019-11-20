@@ -10,25 +10,14 @@
 
 (defn save-actions-data!
   [data-store scene-id]
-  (println ">>> save-actions-data!")
   (let [save-scene-action (fn [action-name action-data scene-id]
-                            (println "> save-scene-action")
-                            (println "scene-id" scene-id)
-                            (println "action-name" action-name)
-                            (println "action-data" action-data)
-                            ;(re-frame/dispatch [::events/edit-scene-action scene-id action-name action-data])
-                            )
-        save-concept-action (fn [concept-id concept-data]
-                              (println "> save-concept-action")
-                              (println "concept-id" concept-id)
-                              (println "concept-data" concept-data)
-                              ;(re-frame/dispatch [::events/edit-sce
-                              ;(re-frame/dispatch [::events/edit-dataset-item concept-id concept-data])
-                              )]
-    (doseq [[name {:keys [type data]}] @data-store]
+                            (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
+        save-concept-action (fn [concept-id field-name field-data]
+                              (re-frame/dispatch [::events/update-dataset-item-field concept-id field-name field-data]))]
+    (doseq [[name {:keys [id type data]}] @data-store]
       (case type
         :scene (save-scene-action name data scene-id)
-        :concept (save-concept-action name data)))))
+        :concept (save-concept-action id name data)))))
 
 (def close-window! #(re-frame/dispatch [::translator-events/close-translator-modal]))
 

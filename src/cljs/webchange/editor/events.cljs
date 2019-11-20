@@ -146,6 +146,12 @@
       {:db (assoc-in db action-path action-data)})))
 
 (re-frame/reg-event-fx
+  ::update-scene-action
+  (fn [{:keys [db]} [_ scene-id action-name action-data]]
+    (let [action-path [:scenes scene-id :actions (keyword action-name)]]
+      {:db (update-in db action-path merge action-data)})))
+
+(re-frame/reg-event-fx
   ::edit-selected-scene-action
   (fn [{:keys [db]} _]
     (let [state (get-in db [:editor :action-form :data])
@@ -494,7 +500,6 @@
                     :on-success      [::load-current-dataset-items-success]
                     :on-failure      [:api-request-error :dataset-items]}})))
 
-
 (re-frame/reg-event-fx
   ::load-current-dataset-items-success
   (fn [{:keys [db]} [_ result]]
@@ -545,13 +550,29 @@
                   :on-success      [::edit-dataset-item-success]
                   :on-failure      [:api-request-error :edit-dataset-item]}}))
 
-
 (re-frame/reg-event-fx
   ::edit-dataset-item-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :edit-dataset-item]
                        [::load-current-dataset-items]
                        [::set-main-content :dataset-info])}))
+
+(re-frame/reg-event-fx
+  ::update-dataset-item-field
+  (fn [{:keys [db]} [_ item-id field-name field-data]]
+    {:db (assoc-in db [:loading :update-dataset-item-field] true)
+     :http-xhrio {:method          :patch
+                  :uri             (str "/api/dataset-items/" item-id)
+                  :params          {:data field-data :name field-name}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::update-dataset-item-field-success item-id]}}))
+
+(re-frame/reg-event-fx
+  ::update-dataset-item-field-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :update-dataset-item-field]
+                       [::load-datasets])}))
 
 (re-frame/reg-event-fx
   ::delete-dataset-item
