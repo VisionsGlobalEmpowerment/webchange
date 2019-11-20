@@ -2,9 +2,38 @@
                  {:url "/raw/img/park/slide/slide.png" :type "image"}
                  {:url "/raw/img/park/slide/side.png" :type "image"}
                  {:url "/raw/audio/l2/a5/L2_A5_Mari.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a" :type "audio" :alias "riddle a-g"}
-                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a" :type "audio" :alias "riddle g-n"}
-                 {:url "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a" :type "audio" :alias "riddle o-end"}]
+
+                 {:url "/raw/audio/l2/a5/riddles/ardilla.mp3" :type "audio" :alias "ardilla"}
+                 {:url "/raw/audio/l2/a5/riddles/bebe.mp3" :type "audio" :alias "bebe"}
+                 {:url "/raw/audio/l2/a5/riddles/casa.mp3" :type "audio" :alias "casa"}
+                 {:url "/raw/audio/l2/a5/riddles/cepillo.mp3" :type "audio" :alias "cepillo"}
+                 {:url "/raw/audio/l2/a5/riddles/chocolate.mp3" :type "audio" :alias "chocolate"}
+                 {:url "/raw/audio/l2/a5/riddles/diamante.mp3" :type "audio" :alias "diamante"}
+                 {:url "/raw/audio/l2/a5/riddles/elefante.mp3" :type "audio" :alias "elefante"}
+                 {:url "/raw/audio/l2/a5/riddles/flor.mp3" :type "audio" :alias "flor"}
+                 {:url "/raw/audio/l2/a5/riddles/gato.mp3" :type "audio" :alias "gato"}
+                 {:url "/raw/audio/l2/a5/riddles/gemelos.mp3" :type "audio" :alias "gemelo"}
+                 {:url "/raw/audio/l2/a5/riddles/hoja.mp3" :type "audio" :alias "hoja"}
+                 {:url "/raw/audio/l2/a5/riddles/iman.mp3" :type "audio" :alias "iman"}
+                 {:url "/raw/audio/l2/a5/riddles/jardin.mp3" :type "audio" :alias "jardin"}
+                 {:url "/raw/audio/l2/a5/riddles/kimono.mp3" :type "audio" :alias "kimono"}
+                 {:url "/raw/audio/l2/a5/riddles/leon.mp3" :type "audio" :alias "leon"}
+                 {:url "/raw/audio/l2/a5/riddles/llave.mp3" :type "audio" :alias "llave"}
+                 {:url "/raw/audio/l2/a5/riddles/mano.mp3" :type "audio" :alias "mano"}
+                 {:url "/raw/audio/l2/a5/riddles/nandu.mp3" :type "audio" :alias "nandu"}
+                 {:url "/raw/audio/l2/a5/riddles/nino.mp3" :type "audio" :alias "nino"}
+                 {:url "/raw/audio/l2/a5/riddles/oso.mp3" :type "audio" :alias "oso"}
+                 {:url "/raw/audio/l2/a5/riddles/pelota.mp3" :type "audio" :alias "pelota"}
+                 {:url "/raw/audio/l2/a5/riddles/queso.mp3" :type "audio" :alias "queso"}
+                 {:url "/raw/audio/l2/a5/riddles/rana.mp3" :type "audio" :alias "rana"}
+                 {:url "/raw/audio/l2/a5/riddles/serpiente.mp3" :type "audio" :alias "serpiente"}
+                 {:url "/raw/audio/l2/a5/riddles/web.mp3" :type "audio" :alias "sitio web"}
+                 {:url "/raw/audio/l2/a5/riddles/tomate.mp3" :type "audio" :alias "tomate"}
+                 {:url "/raw/audio/l2/a5/riddles/uvas.mp3" :type "audio" :alias "uvas"}
+                 {:url "/raw/audio/l2/a5/riddles/violin.mp3" :type "audio" :alias "violin"}
+                 {:url "/raw/audio/l2/a5/riddles/xilofono.mp3" :type "audio" :alias "xilofono"}
+                 {:url "/raw/audio/l2/a5/riddles/yoyo.mp3" :type "audio" :alias "yoyo"}
+                 {:url "/raw/audio/l2/a5/riddles/zapato.mp3" :type "audio" :alias "zapato"}]
  :audio         {:mari "/raw/audio/l2/a5/L2_A5_Mari.m4a"}
  :objects       {:background    {:type "background"
                                  :src  "/raw/img/park/slide/background2.jpg"}
