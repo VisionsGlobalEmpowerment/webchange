@@ -17,7 +17,8 @@
     (doseq [[name {:keys [id type data]}] @data-store]
       (case type
         :scene (save-scene-action name data scene-id)
-        :concept (save-concept-action id name data)))))
+        :concept (save-concept-action id name data)))
+    (re-frame/dispatch [::events/save-current-scene scene-id])))
 
 (def close-window! #(re-frame/dispatch [::translator-events/close-translator-modal]))
 

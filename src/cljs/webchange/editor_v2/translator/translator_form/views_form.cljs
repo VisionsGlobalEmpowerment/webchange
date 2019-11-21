@@ -5,6 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.subs :as translator-subs]
+    [webchange.editor-v2.translator.events :as translator-events]
     [webchange.editor-v2.translator.translator-form.utils :refer [get-audios
                                                                   get-graph
                                                                   get-used-concept-actions]]
@@ -88,4 +89,6 @@
                    [concepts-block {:current-concept @current-concept
                                     :concepts-list   concepts
                                     :on-change       #(reset! current-concept %)}]]]
-                 ])))
+                 ])
+              (finally
+                (re-frame/dispatch [::translator-events/clean-current-selected-action]))))

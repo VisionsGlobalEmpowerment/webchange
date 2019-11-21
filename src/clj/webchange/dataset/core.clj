@@ -71,7 +71,8 @@
   [id data]
   (let [prepared-data (assoc data :id id)]
     (db/update-dataset-item! prepared-data)
-    [true {:id id}]))
+    [true {:id   id
+           :data prepared-data}]))
 
 (defn delete-dataset-item!
   [id]
@@ -124,7 +125,7 @@
         datasets (db/get-datasets-by-course {:course_id course-id})
         items (db/get-course-items {:course_id course-id})
         lesson-sets (db/get-course-lessons {:course_id course-id})]
-    {:datasets datasets
-     :items items
+    {:datasets    datasets
+     :items       items
      :lesson-sets lesson-sets
-     :assets (assets-from-item-list datasets items)}))
+     :assets      (assets-from-item-list datasets items)}))

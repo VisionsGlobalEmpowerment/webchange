@@ -288,22 +288,31 @@
                         assoc :scene-objects (update-in layers [layer-idx] remove-from-layer name))})
       )))
 
+(defn save-scene
+  [db course-id scene-id scene-data]
+  {:db         (-> db
+                   (assoc-in [:loading :save-scene] true)
+                   (update-in [:scenes scene-id] merge scene-data))
+   :http-xhrio {:method          :post
+                :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
+                :params          {:scene scene-data}
+                :format          (json-request-format)
+                :response-format (json-response-format {:keywords? true})
+                :on-success      [::save-scene-success]
+                :on-failure      [:api-request-error :save-scene]}})
 
 (re-frame/reg-event-fx
   ::save-scene
   (fn [{:keys [db]} [_ scene-id scene-data]]
     (let [course-id (:current-course db)]
-      {:db (-> db
-               (assoc-in [:loading :save-scene] true)
-               (update-in [:scenes scene-id] merge scene-data))
-       :http-xhrio {:method          :post
-                    :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
-                    :params          {:scene scene-data}
-                    :format          (json-request-format)
-                    :response-format (json-response-format {:keywords? true})
-                    :on-success      [::save-scene-success]
-                    :on-failure      [:api-request-error :save-scene]}})))
+      (save-scene db course-id scene-id scene-data))))
 
+(re-frame/reg-event-fx
+  ::save-current-scene
+  (fn [{:keys [db]} [_ scene-id]]
+    (let [course-id (:current-course db)
+          scene-data (get-in db [:scenes scene-id])]
+      (save-scene db course-id scene-id scene-data))))
 
 (re-frame/reg-event-fx
   ::save-scene-success
@@ -566,13 +575,13 @@
                   :params          {:data field-data :name field-name}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::update-dataset-item-field-success item-id]}}))
+                  :on-success      [::update-dataset-item-field-success]}}))
 
 (re-frame/reg-event-fx
   ::update-dataset-item-field-success
-  (fn [_ _]
-    {:dispatch-n (list [:complete-request :update-dataset-item-field]
-                       [::load-datasets])}))
+  (fn [{:keys [db]} [_ response]]
+    {:db         (assoc-in db [:dataset-items (:id response)] (:data response))
+     :dispatch-n (list [:complete-request :update-dataset-item-field])}))
 
 (re-frame/reg-event-fx
   ::delete-dataset-item
