@@ -303,7 +303,7 @@
                                                                     "empty-small"
                                                                     "vaca-word-var"]
                                                       :phrase      :this-is-concept
-                                                      :phrase-text "What is this? This is a %concept%! Can you say %concept%? (pause) %concept%."}
+                                                      :phrase-text "This is a %concept%! Can you say %concept%? (pause) %concept%."}
 
                  :concept-chant {:type        "sequence"
                                  :data        ["group-word-var"

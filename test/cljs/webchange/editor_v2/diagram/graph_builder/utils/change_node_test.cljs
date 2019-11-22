@@ -1,10 +1,11 @@
-(ns webchange.editor-v2.diagram.graph-builder.utils.remove-node-test
+(ns webchange.editor-v2.diagram.graph-builder.utils.change-node-test
   (:require
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [print-maps-comparison]]
-    [webchange.editor-v2.diagram.graph-builder.utils.remove-node :refer [change-parent-node-connections
-                                                                              change-child-node-connections
-                                                                              remove-node]]))
+    [webchange.editor-v2.diagram.graph-builder.utils.change-node :refer [change-parent-node-connections
+                                                                         change-child-node-connections
+                                                                         remove-node
+                                                                         rename-node]]))
 
 (deftest test-change-parent-node-connections
   (testing "single connection change"
@@ -151,6 +152,21 @@
                                                :b {:handlers {:next [:e]}}}}
                              :d {:connections {:a {:handlers {:next [:f]}}
                                                :b {:handlers {:next [:f]}}}}}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result))))))
+
+(deftest test-rename-node
+  (testing "rename single node"
+    (let [graph {:a {:connections {:root {:handlers {:next [:x]}}}}
+                 :x {:connections {:a {:handlers {:next [:c]}}}}
+                 :c {:connections {:x {:handlers {:next [:e]}}}}}
+          old-name :x
+          new-name :y]
+      (let [actual-result (rename-node graph old-name new-name)
+            expected-result {:a {:connections {:root {:handlers {:next [:y]}}}}
+                             :y {:connections {:a {:handlers {:next [:c]}}}}
+                             :c {:connections {:y {:handlers {:next [:e]}}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))

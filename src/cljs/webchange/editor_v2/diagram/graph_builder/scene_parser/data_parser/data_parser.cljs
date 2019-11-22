@@ -22,14 +22,24 @@
     []
     objects-data))
 
+(defn parse-whole-scene
+  [scene-data]
+  (let [parsed-objects (parse-objects scene-data)
+        parsed-globals (parse-globals scene-data)
+        entries (get-chain-entries (merge parsed-objects parsed-globals))]
+    (merge parsed-objects
+           parsed-globals
+           (parse-actions scene-data entries))))
+
+(defn parse-sub-graph
+  [scene-data start-node-name]
+  (let [entries [[start-node-name nil]]]
+    (parse-actions scene-data entries)))
+
 (defn parse-data
   ([scene-data]
-   (let [parsed-objects (parse-objects scene-data)
-         parsed-globals (parse-globals scene-data)
-         entries (get-chain-entries (merge parsed-objects parsed-globals))]
-     (merge parsed-objects
-            parsed-globals
-            (parse-actions scene-data entries))))
+   (parse-data scene-data nil))
   ([scene-data start-node-name]
-   (let [entries [[start-node-name nil]]]
-     (parse-actions scene-data entries))))
+   (if-not (nil? start-node-name)
+     (parse-sub-graph scene-data start-node-name)
+     (parse-whole-scene scene-data))))

@@ -11,3 +11,16 @@
   ::current-action
   (fn [db]
     (get-in db [:editor-v2 :current-action])))
+
+(re-frame/reg-sub
+  ::course-concepts
+  (fn [db]
+    (->> (get-in db [:editor :course-datasets])
+         (some (fn [dataset]
+                 (and (= "concepts" (:name dataset))
+                      dataset))))))
+
+(re-frame/reg-sub
+  ::course-dataset-items
+  (fn [db]
+    (get-in db [:dataset-items])))

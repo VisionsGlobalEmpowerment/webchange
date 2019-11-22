@@ -15,7 +15,7 @@
             [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.duplicates-replicator-test]
             [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.usages-counter-test]
             [webchange.editor-v2.diagram.graph-builder.utils.counter-map]
-            [webchange.editor-v2.diagram.graph-builder.utils.remove-node-test]
+            [webchange.editor-v2.diagram.graph-builder.utils.change-node-test]
             [webchange.editor-v2.diagram.graph-builder.utils.root-nodes-test]
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
@@ -39,7 +39,7 @@
   'webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.duplicates-replicator-test
   'webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.usages-counter-test
   'webchange.editor-v2.diagram.graph-builder.utils.counter-map
-  'webchange.editor-v2.diagram.graph-builder.utils.remove-node-test
+  'webchange.editor-v2.diagram.graph-builder.utils.change-node-test
   'webchange.editor-v2.diagram.graph-builder.utils.root-nodes-test
   'webchange.interpreter.events-test
   'webchange.interpreter.variables.events-test

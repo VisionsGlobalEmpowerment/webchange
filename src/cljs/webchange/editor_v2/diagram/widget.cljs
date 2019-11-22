@@ -31,12 +31,14 @@
 
 (defn diagram-render
   [{:keys [graph mode]}]
-  (let [engine (init-diagram-model graph mode)
+  (let [engine (when-not (nil? graph)
+                 (init-diagram-model graph mode))
         this (r/current-component)]
     (aset this "engine" engine)
     [:div.diagram-container
      [toolbar engine]
-     [:> DiagramWidget {:diagramEngine engine}]]))
+     (when-not (nil? engine)
+       [:> DiagramWidget {:diagramEngine engine}])]))
 
 (def diagram-widget
   (with-meta diagram-render

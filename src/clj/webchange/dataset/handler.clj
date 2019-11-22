@@ -1,5 +1,5 @@
 (ns webchange.dataset.handler
-  (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
+  (:require [compojure.core :refer [GET POST PUT PATCH DELETE defroutes routes]]
             [compojure.route :refer [resources not-found]]
             [ring.util.response :refer [resource-response response redirect]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
@@ -35,6 +35,19 @@
         data (-> request :body)]
     (-> (core/update-dataset-item! (Integer/parseInt id) data)
         handle)))
+
+(defn handle-patch-dataset-item
+  [id request]
+  (let [owner-id (current-user request)
+        id (Integer/parseInt id)
+        item (core/get-item id)]
+    (if-not (nil? item)
+      (let [field-name (-> request :body :name keyword)
+            field-patch (-> request :body :data)
+            field-origin-data (get-in item [:data field-name])]
+        (-> (core/update-dataset-item! id (assoc-in item [:data field-name] (merge field-origin-data field-patch)))
+            handle))
+      (not-found "not found"))))
 
 (defn handle-delete-dataset-item
   [id request]
@@ -79,6 +92,8 @@
              (handle-create-dataset-item request))
            (PUT "/api/dataset-items/:id" [id :as request]
              (handle-update-dataset-item id request))
+           (PATCH "/api/dataset-items/:id" [id :as request]
+             (handle-patch-dataset-item id request))
            (DELETE "/api/dataset-items/:id" [id :as request]
              (handle-delete-dataset-item id request))
 
