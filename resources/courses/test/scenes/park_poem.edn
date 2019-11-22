@@ -5,34 +5,39 @@
                  {:url "/raw/img/park/poem/o1.png" :type "image"}
                  {:url "/raw/img/park/poem/o2.png" :type "image"}
                  {:url "/raw/img/park/poem/o3.png" :type "image"}
-                 {:url "/raw/audio/l2/a3/poems/ardilla.m4a" :type "audio" :alias "ardilla"}
-                 {:url "/raw/audio/l2/a3/poems/bebe.m4a" :type "audio" :alias "bebe"}
-                 {:url "/raw/audio/l2/a3/poems/casa.m4a" :type "audio" :alias "casa"}
-                 {:url "/raw/audio/l2/a3/poems/cepillo.m4a" :type "audio" :alias "cepillo"}
-                 {:url "/raw/audio/l2/a3/poems/chocolate.m4a" :type "audio" :alias "chocolate"}
-                 {:url "/raw/audio/l2/a3/poems/diamante.m4a" :type "audio" :alias "diamante"}
-                 {:url "/raw/audio/l2/a3/poems/elefante.m4a" :type "audio" :alias "elefante"}
-                 {:url "/raw/audio/l2/a3/poems/flor.m4a" :type "audio" :alias "flor"}
-                 {:url "/raw/audio/l2/a3/poems/gato.m4a" :type "audio" :alias "gato"}
-                 {:url "/raw/audio/l2/a3/poems/gemelo.m4a" :type "audio" :alias "gemelo"}
-                 {:url "/raw/audio/l2/a3/poems/hoja.m4a" :type "audio" :alias "hoja"}
-                 {:url "/raw/audio/l2/a3/poems/iman.m4a" :type "audio" :alias "iman"}
-                 {:url "/raw/audio/l2/a3/poems/jardin.m4a" :type "audio" :alias "jardin"}
-                 {:url "/raw/audio/l2/a3/poems/kimono.m4a" :type "audio" :alias "kimono"}
-                 {:url "/raw/audio/l2/a3/poems/leon.m4a" :type "audio" :alias "leon"}
-                 {:url "/raw/audio/l2/a3/poems/mano.m4a" :type "audio" :alias "mano"}
-                 {:url "/raw/audio/l2/a3/poems/nandu.m4a" :type "audio" :alias "nandu"}
-                 {:url "/raw/audio/l2/a3/poems/nino.m4a" :type "audio" :alias "nino"}
-                 {:url "/raw/audio/l2/a3/poems/oso.m4a" :type "audio" :alias "oso"}
-                 {:url "/raw/audio/l2/a3/poems/pelota.m4a" :type "audio" :alias "pelota"}
-                 {:url "/raw/audio/l2/a3/poems/queso.m4a" :type "audio" :alias "queso"}
-                 {:url "/raw/audio/l2/a3/poems/rana.m4a" :type "audio" :alias "rana"}
-                 {:url "/raw/audio/l2/a3/poems/sitio_web.m4a" :type "audio" :alias "sitio web"}
-                 {:url "/raw/audio/l2/a3/poems/tomate.m4a" :type "audio" :alias "tomate"}
-                 {:url "/raw/audio/l2/a3/poems/uvas.m4a" :type "audio" :alias "uvas"}
-                 {:url "/raw/audio/l2/a3/poems/violin.m4a" :type "audio" :alias "violin"}
-                 {:url "/raw/audio/l2/a3/poems/xilofono.m4a" :type "audio" :alias "xilofono"}
-                 {:url "/raw/audio/l2/a3/poems/yoyo.m4a" :type "audio" :alias "yoyo"}
+
+                 {:url "/raw/audio/l2/a3/poems-pro/ardilla.mp3" :type "audio" :alias "ardilla"}
+                 {:url "/raw/audio/l2/a3/poems-pro/bebe.mp3" :type "audio" :alias "bebe"}
+                 {:url "/raw/audio/l2/a3/poems-pro/casa.mp3" :type "audio" :alias "casa"}
+                 {:url "/raw/audio/l2/a3/poems-pro/cepillo.mp3" :type "audio" :alias "cepillo"}
+                 {:url "/raw/audio/l2/a3/poems-pro/chocolate.mp3" :type "audio" :alias "chocolate"}
+                 {:url "/raw/audio/l2/a3/poems-pro/diamante.mp3" :type "audio" :alias "diamante"}
+                 {:url "/raw/audio/l2/a3/poems-pro/elefante.mp3" :type "audio" :alias "elefante"}
+                 {:url "/raw/audio/l2/a3/poems-pro/flor 2.mp3" :type "audio" :alias "flor"}
+                 {:url "/raw/audio/l2/a3/poems-pro/gato.mp3" :type "audio" :alias "gato"}
+                 {:url "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3" :type "audio" :alias "gemelo"}
+                 {:url "/raw/audio/l2/a3/poems-pro/hoja.mp3" :type "audio" :alias "hoja"}
+                 {:url "/raw/audio/l2/a3/poems-pro/iman.mp3" :type "audio" :alias "iman"}
+                 {:url "/raw/audio/l2/a3/poems-pro/jardin.mp3" :type "audio" :alias "jardin"}
+                 {:url "/raw/audio/l2/a3/poems-pro/kimono.mp3" :type "audio" :alias "kimono"}
+                 {:url "/raw/audio/l2/a3/poems-pro/leon.mp3" :type "audio" :alias "leon"}
+                 {:url "/raw/audio/l2/a3/poems-pro/llave.mp3" :type "audio" :alias "llave"}
+                 {:url "/raw/audio/l2/a3/poems-pro/mano.mp3" :type "audio" :alias "mano"}
+                 {:url "/raw/audio/l2/a3/poems-pro/nandu.mp3" :type "audio" :alias "nandu"}
+                 {:url "/raw/audio/l2/a3/poems-pro/nino.mp3" :type "audio" :alias "nino"}
+                 {:url "/raw/audio/l2/a3/poems-pro/oso 2.mp3" :type "audio" :alias "oso"}
+                 {:url "/raw/audio/l2/a3/poems-pro/pelota.mp3" :type "audio" :alias "pelota"}
+                 {:url "/raw/audio/l2/a3/poems-pro/queso.mp3" :type "audio" :alias "queso"}
+                 {:url "/raw/audio/l2/a3/poems-pro/rana.mp3" :type "audio" :alias "rana"}
+                 {:url "/raw/audio/l2/a3/poems-pro/serpiente.mp3" :type "audio" :alias "serpiente"}
+                 {:url "/raw/audio/l2/a3/poems-pro/web.mp3" :type "audio" :alias "sitio web"}
+                 {:url "/raw/audio/l2/a3/poems-pro/tomate.mp3" :type "audio" :alias "tomate"}
+                 {:url "/raw/audio/l2/a3/poems-pro/uvas.mp3" :type "audio" :alias "uvas"}
+                 {:url "/raw/audio/l2/a3/poems-pro/violin.mp3" :type "audio" :alias "violin"}
+                 {:url "/raw/audio/l2/a3/poems-pro/xilofono.mp3" :type "audio" :alias "xilofono"}
+                 {:url "/raw/audio/l2/a3/poems-pro/yoyo.mp3" :type "audio" :alias "yoyo"}
+                 {:url "/raw/audio/l2/a3/poems-pro/zapato.mp3" :type "audio" :alias "zapato"}
+
                  {:url "/raw/audio/l2/a3/L2_A3_Mari.m4a" :size 5 :type "audio" :alias "mari voice"}]
  :audio         {:mari "/raw/audio/l2/a3/L2_A3_Mari.m4a"}
  :objects       {:background    {:type "background"
@@ -142,9 +147,26 @@
                                  :width      591
                                  :height     681
                                  :scale-y    0.6
-                                 :scale-x    0.6}}
+                                 :scale-x    0.6}
+                 :letter-image  {:type     "transparent"
+                                 :x        1065
+                                 :y        765
+                                 :width    651
+                                 :height   651
+                                 :scale      {:x 0.3 :y 0.3}
+                                 :origin {:type "center-center"}
+                                 :states     {:hidden  {:type "transparent"}
+                                              :visible {:type "image"}}}
+                 :concept-image  {:type     "transparent"
+                                 :x        1243
+                                 :y        765
+                                 :width    100
+                                 :height   100
+                                 :origin {:type "center-center"}
+                                 :states     {:hidden  {:type "transparent"}
+                                              :visible {:type "image"}}}}
 
- :scene-objects [["background"] ["image-story-1" "image-story-2" "image-story-3"] ["bubble-1" "bubble-2" "bubble-3"] ["mari" "rock"]]
+ :scene-objects [["background"] ["image-story-1" "image-story-2" "image-story-3"] ["letter-image" "concept-image"] ["mari" "rock"] ["bubble-1" "bubble-2" "bubble-3"] ]
  :actions       {:start                 {:type        "sequence"
                                          :description "Initial action"
                                          :data        ["start-activity"
@@ -254,6 +276,12 @@
 
                  :run-story             {:type "sequence-data"
                                          :data [{:type "set-variable" :var-name "poem-paused" :var-value false}
+                                                {:type     "set-attribute" :target "letter-image" :attr-name "src"
+                                                 :from-var [{:var-name "current-concept" :var-property "letter-src" :action-property "attr-value"}]}
+                                                {:type "state" :target "letter-image" :id "visible"}
+                                                {:type     "set-attribute" :target "concept-image" :attr-name "src"
+                                                 :from-var [{:var-name "current-concept" :var-property "image-src" :action-property "attr-value"}]}
+                                                {:type "state" :target "concept-image" :id "visible"}
                                                 {:type "action" :id "prepare-bubbles"}
                                                 {:type     "action"
                                                  :from-var [{:var-name     "current-concept"
@@ -263,7 +291,9 @@
                                                 {:type "action" :id "prepare-bubbles"}
                                                 {:type     "action"
                                                  :from-var [{:var-name     "current-concept"
-                                                             :var-property "poem-story"}]}]}
+                                                             :var-property "poem-story"}]}
+                                                {:type "state" :target "letter-image" :id "hidden"}
+                                                {:type "state" :target "concept-image" :id "hidden"}]}
 
                  :prepare-bubbles       {:type "sequence-data"
                                          :data [{:type "state" :target "bubble-1" :id "hidden"}

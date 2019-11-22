@@ -571,68 +571,63 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.72, :anim "talk", :start 0.773, :duration 1.947}],
+      {:data [{:end 3.47, :anim "talk", :start 0.19}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/ardilla.m4a",
-       :start 0.587,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+       :start 0.054,
        :track 1,
-       :offset 0.587,
+       :offset 0.054,
        :target "rock",
-       :duration 2.28}
+       :duration 3.613}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 5.64, :anim "talk", :start 3.6, :duration 2.04}],
+      {:data [{:end 7.45, :anim "talk", :start 4.27}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/ardilla.m4a",
-       :start 3.453,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+       :start 4.094,
        :track 1,
-       :offset 3.453,
+       :offset 4.094,
        :target "rock",
-       :duration 2.293}
+       :duration 3.493}
       {:id "poem-pause", :type "action"}
-      {:data [{:end 8.2, :anim "talk", :start 6.36, :duration 1.84}],
+      {:data [{:end 10.65, :anim "talk", :start 8.21}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/ardilla.m4a",
-       :start 6.266,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+       :start 8.107,
        :track 1,
-       :offset 6.266,
+       :offset 8.107,
        :target "rock",
-       :duration 2.094}
+       :duration 2.68}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 10.906, :anim "talk", :start 8.826, :duration 2.08}],
+      {:data [{:end 14.13, :anim "talk", :start 11.33}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/ardilla.m4a",
-       :start 8.706,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+       :start 11.214,
        :track 1,
-       :offset 8.706,
+       :offset 11.214,
        :target "rock",
-       :duration 2.373}
+       :duration 2.933}
       {:id "poem-pause", :type "action"}
       {:data
-       [{:end 12.613, :anim "talk", :start 11.493, :duration 1.12}
-        {:end 13.866, :anim "talk", :start 12.959, :duration 0.907}],
+       [{:end 16.16, :anim "talk", :start 14.89}
+        {:end 17.8, :anim "talk", :start 16.57}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/ardilla.m4a",
-       :start 11.453,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+       :start 14.666,
        :track 1,
-       :offset 11.453,
+       :offset 14.666,
        :target "rock",
-       :duration 2.56}
+       :duration 3.486}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:data
-     [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
-       :type "audio",
-       :start 5.463,
-       :duration 9.438}],
-     :type "parallel",
-     :description
-     "Me gusta escalar árboles. Tengo dos dientes grandes que uso para comer nueces.\n                                                          Soy una"},
+    {:id "/raw/audio/l2/a5/riddles/ardilla.mp3",
+     :type "audio",
+     :start 0.021,
+     :duration 9.628,
+     :scene-id "slide"},
     :sandbox-change-skin-1-action
     {:skin "bee",
      :type "set-skin",
@@ -1170,48 +1165,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.61, :anim "talk", :start 1.32}
-        {:end 3.72, :anim "talk", :start 2.83}],
+      {:data [{:end 3.78, :anim "talk", :start 0.61}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/bebe.m4a",
-       :start 0.853,
+       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
+       :start 0.506,
        :track 1,
-       :offset 0.853,
+       :offset 0.506,
        :target "rock",
-       :duration 3.265}
+       :duration 3.399}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 5.98, :anim "talk", :start 4.21}
-        {:end 7.88, :anim "talk", :start 6.43}],
+       [{:end 7.18, :anim "talk", :start 4.23}
+        {:end 10.13, :anim "talk", :start 7.63}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/bebe.m4a",
+       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
        :start 4.158,
        :track 1,
        :offset 4.158,
        :target "rock",
-       :duration 4.199}
+       :duration 6.172}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 10.04, :anim "talk", :start 8.82}
-        {:end 13.14, :anim "talk", :start 10.32}],
+       [{:end 13.35, :anim "talk", :start 11.12}
+        {:end 15.86, :anim "talk", :start 13.5}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/bebe.m4a",
-       :start 8.476,
+       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
+       :start 11.036,
        :track 1,
-       :offset 8.476,
+       :offset 11.036,
        :target "rock",
        :duration 4.945}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/bebe.mp3",
      :type "audio",
-     :start 17.453,
-     :duration 10.413,
+     :start 0.109,
+     :duration 10.802,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -1697,50 +1690,45 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.06, :anim "talk", :start 1.45}
-        {:end 4.21, :anim "talk", :start 2.37}
-        {:end 7.14, :anim "talk", :start 4.92}],
+      {:data [{:end 8.35, :anim "talk", :start 0.65}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/casa.m4a",
-       :start 1.227,
+       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
+       :start 0.454,
        :track 1,
-       :offset 1.227,
+       :offset 0.454,
        :target "rock",
-       :duration 6.106}
+       :duration 8.199}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 8.92, :anim "talk", :start 7.65}
-        {:end 10.4, :anim "talk", :start 9.48}
-        {:end 11.66, :anim "talk", :start 10.84}],
+      {:data [{:end 12.6, :anim "talk", :start 9.29}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/casa.m4a",
-       :start 7.493,
+       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
+       :start 8.986,
        :track 1,
-       :offset 7.493,
+       :offset 8.986,
        :target "rock",
-       :duration 4.334}
+       :duration 3.814}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 13.53, :anim "talk", :start 12.41}
-        {:end 17.7, :anim "talk", :start 14.1}],
+       [{:end 16.57, :anim "talk", :start 13.14}
+        {:end 17.06, :anim "talk", :start 16.87}
+        {:end 18.21, :anim "talk", :start 17.34}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/casa.m4a",
-       :start 12.24,
+       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
+       :start 13.042,
        :track 1,
-       :offset 12.24,
+       :offset 13.042,
        :target "rock",
-       :duration 5.827}
+       :duration 5.454}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/casa.mp3",
      :type "audio",
-     :start 31.745,
-     :duration 9.6,
+     :start 0.041,
+     :duration 9.203,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -2171,47 +2159,48 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 6.61, :anim "talk", :start 1.07}],
+      {:data
+       [{:end 3.98, :anim "talk", :start 0.56}
+        {:end 7.3, :anim "talk", :start 4.65}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/cepillo.m4a",
-       :start 0.826,
+       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
+       :start 0.426,
        :track 1,
-       :offset 0.826,
+       :offset 0.426,
        :target "rock",
-       :duration 6.118}
+       :duration 7.051}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 9.75, :anim "talk", :start 7.35}
-        {:end 12.13, :anim "talk", :start 10.49}],
+       [{:end 11.3, :anim "talk", :start 8.12}
+        {:end 14.07, :anim "talk", :start 11.88}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/cepillo.m4a",
-       :start 6.944,
+       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
+       :start 8.01,
        :track 1,
-       :offset 6.944,
+       :offset 8.01,
        :target "rock",
-       :duration 5.678}
+       :duration 6.238}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 15.3, :anim "talk", :start 13.13}
-        {:end 16.97, :anim "talk", :start 15.61}
-        {:end 18.71, :anim "talk", :start 17.43}],
+       [{:end 17.08, :anim "talk", :start 14.57}
+        {:end 21.12, :anim "talk", :start 17.81}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/cepillo.m4a",
-       :start 12.795,
+       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
+       :start 14.341,
        :track 1,
-       :offset 12.795,
+       :offset 14.341,
        :target "rock",
-       :duration 6.251}
+       :duration 7.037}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/cepillo.mp3",
      :type "audio",
-     :start 45.065,
-     :duration 10.986,
+     :start 0.013,
+     :duration 11.534,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -2626,48 +2615,49 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 3.46, :anim "talk", :start 1.55}
-        {:end 6.37, :anim "talk", :start 4.11}],
+       [{:end 2.26, :anim "talk", :start 0.41}
+        {:end 3.14, :anim "talk", :start 2.39}
+        {:end 5.42, :anim "talk", :start 3.77}
+        {:end 6.58, :anim "talk", :start 5.55}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/chocolate.m4a",
-       :start 1.333,
+       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
+       :start 0.28,
        :track 1,
-       :offset 1.333,
+       :offset 0.28,
        :target "rock",
-       :duration 5.333}
+       :duration 6.546}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 8.19, :anim "talk", :start 7.28}
-        {:end 10.01, :anim "talk", :start 8.46}
-        {:end 13.06, :anim "talk", :start 10.74}],
+       [{:end 10.87, :anim "talk", :start 7.35}
+        {:end 14.29, :anim "talk", :start 11.36}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/chocolate.m4a",
+       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :start 7.039,
        :track 1,
        :offset 7.039,
        :target "rock",
-       :duration 6.253}
+       :duration 7.439}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 15.92, :anim "talk", :start 13.96}
-        {:end 18.56, :anim "talk", :start 16.51}],
+       [{:end 17.72, :anim "talk", :start 15.01}
+        {:end 20.87, :anim "talk", :start 18.2}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/chocolate.m4a",
-       :start 13.692,
+       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
+       :start 14.758,
        :track 1,
-       :offset 13.692,
+       :offset 14.758,
        :target "rock",
-       :duration 5.132}
+       :duration 6.332}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/chocolate.mp3",
      :type "audio",
-     :start 61.878,
-     :duration 10.679,
+     :start 0.036,
+     :duration 10.62,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -3087,48 +3077,45 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.4, :anim "talk", :start 1.6}
-        {:end 4.2, :anim "talk", :start 2.77}
-        {:end 7.47, :anim "talk", :start 5.06}],
+       [{:end 3.74, :anim "talk", :start 0.58}
+        {:end 7.09, :anim "talk", :start 4.39}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/diamante.m4a",
-       :start 1.226,
+       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
+       :start 0.44,
        :track 1,
-       :offset 1.226,
+       :offset 0.44,
        :target "rock",
-       :duration 6.611}
+       :duration 6.89}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 10.26, :anim "talk", :start 8.29}
-        {:end 13.44, :anim "talk", :start 10.87}],
+       [{:end 9.85, :anim "talk", :start 7.9}
+        {:end 13.61, :anim "talk", :start 10.34}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/diamante.m4a",
-       :start 8.104,
+       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
+       :start 7.784,
        :track 1,
-       :offset 8.104,
+       :offset 7.784,
        :target "rock",
-       :duration 5.584}
+       :duration 6.051}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 14.85, :anim "talk", :start 14.06}
-        {:end 16.53, :anim "talk", :start 15.32}],
+      {:data [{:end 17, :anim "talk", :start 14.29}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/diamante.m4a",
-       :start 13.835,
+       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
+       :start 14.168,
        :track 1,
-       :offset 13.835,
+       :offset 14.168,
        :target "rock",
        :duration 2.985}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/diamante.mp3",
      :type "audio",
-     :start 75.864,
-     :duration 11.693,
+     :start 0.224,
+     :duration 11.635,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -3534,45 +3521,47 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 5.43, :anim "talk", :start 1.47}],
+      {:data
+       [{:end 3.06, :anim "talk", :start 0.45}
+        {:end 4.63, :anim "talk", :start 3.59}
+        {:end 6.48, :anim "talk", :start 4.85}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/elefante.m4a",
-       :start 1.186,
+       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
+       :start 0.186,
        :track 1,
-       :offset 1.186,
+       :offset 0.186,
        :target "rock",
-       :duration 4.586}
+       :duration 6.479}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 7.29, :anim "talk", :start 6.13}
-        {:end 8.48, :anim "talk", :start 7.59}
-        {:end 11.6, :anim "talk", :start 9.37}],
+       [{:end 10.31, :anim "talk", :start 7.4}
+        {:end 13.99, :anim "talk", :start 11.05}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/elefante.m4a",
-       :start 6.025,
+       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
+       :start 7.238,
        :track 1,
-       :offset 6.025,
+       :offset 7.238,
        :target "rock",
-       :duration 5.799}
+       :duration 6.919}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 14.57, :anim "talk", :start 12.38}],
+      {:data [{:end 17.69, :anim "talk", :start 14.66}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/elefante.m4a",
-       :start 12.144,
+       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
+       :start 14.517,
        :track 1,
-       :offset 12.144,
+       :offset 14.517,
        :target "rock",
-       :duration 2.706}
+       :duration 3.372}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/elefante.mp3",
      :type "audio",
-     :start 91.556,
-     :duration 11.493,
+     :start 0.101,
+     :duration 10.925,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data [{:end 5.48, :anim "talk", :start 2.987, :duration 2.493}],
@@ -4024,51 +4013,45 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.39, :anim "talk", :start 1.92}
-        {:end 6.23, :anim "talk", :start 3.99}],
+      {:data [{:end 7.57, :anim "talk", :start 0.47}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/flor.m4a",
-       :start 1.587,
+       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
+       :start 0.32,
        :track 1,
-       :offset 1.587,
+       :offset 0.32,
        :target "rock",
-       :duration 5.093}
+       :duration 7.453}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 9.12, :anim "talk", :start 7.35}
-        {:end 11.58, :anim "talk", :start 9.93}],
+       [{:end 9.98, :anim "talk", :start 8.03}
+        {:end 13.63, :anim "talk", :start 10.36}
+        {:end 14.09, :anim "talk", :start 13.76}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/flor.m4a",
-       :start 7.027,
+       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
+       :start 7.867,
        :track 1,
-       :offset 7.027,
+       :offset 7.867,
        :target "rock",
-       :duration 4.934}
+       :duration 5.894}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 15.73, :anim "talk", :start 12.33}
-        {:end 17.91, :anim "talk", :start 16.45}
-        {:end 19, :anim "talk", :start 18.52}
-        {:end 20.85, :anim "talk", :start 19.42}
-        {:end 21.85, :anim "talk", :start 21.3}],
+      {:data [{:end 18.89, :anim "talk", :start 13.76}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/flor.m4a",
-       :start 12.254,
+       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
+       :start 13.665,
        :track 1,
-       :offset 12.254,
+       :offset 13.665,
        :target "rock",
-       :duration 10.001}
+       :duration 5.52}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/flor.mp3",
      :type "audio",
-     :start 106.849,
-     :duration 16.159,
+     :start 0.213,
+     :duration 14.348,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -4507,49 +4490,46 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.62, :anim "talk", :start 1.15}
-        {:end 4.04, :anim "talk", :start 2.99}
-        {:end 4.33, :anim "talk", :start 4.22}],
+       [{:end 0.81, :anim "talk", :start 0.48}
+        {:end 5.96, :anim "talk", :start 0.98}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/gato.m4a",
-       :start 0.88,
+       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
+       :start 0.387,
        :track 1,
-       :offset 0.88,
+       :offset 0.387,
        :target "rock",
-       :duration 3.64}
+       :duration 5.853}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 6.92, :anim "talk", :start 5.02}
-        {:end 9.76, :anim "talk", :start 7.78}],
+       [{:end 9.15, :anim "talk", :start 6.67}
+        {:end 11.88, :anim "talk", :start 9.81}
+        {:end 13.68, :anim "talk", :start 12.23}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/gato.m4a",
-       :start 4.773,
+       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
+       :start 6.48,
        :track 1,
-       :offset 4.773,
+       :offset 6.48,
        :target "rock",
-       :duration 5.266}
+       :duration 6.519}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 12.8, :anim "talk", :start 10.73}
-        {:end 13.78, :anim "talk", :start 13.19}
-        {:end 16.15, :anim "talk", :start 14.29}],
+      {:data [{:end 16.01, :anim "talk", :start 13.68}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/gato.m4a",
-       :start 10.506,
+       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
+       :start 12.973,
        :track 1,
-       :offset 10.506,
+       :offset 12.973,
        :target "rock",
-       :duration 6.053}
+       :duration 3.439}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_A_G.m4a",
+    {:id "/raw/audio/l2/a5/riddles/gato.mp3",
      :type "audio",
-     :start 126.782,
-     :duration 12.226,
+     :start 0.107,
+     :duration 12.49,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -5008,49 +4988,45 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.84, :anim "talk", :start 1.48}
-        {:end 4.14, :anim "talk", :start 3.54}
-        {:end 5.03, :anim "talk", :start 4.34}],
+       [{:end 2.68, :anim "talk", :start 0.5}
+        {:end 5.04, :anim "talk", :start 2.94}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/gemelo.m4a",
-       :start 1.186,
+       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
+       :start 0.226,
        :track 1,
-       :offset 1.186,
+       :offset 0.226,
        :target "rock",
-       :duration 4.411}
+       :duration 4.958}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 8.41, :anim "talk", :start 6.45}
-        {:end 8.95, :anim "talk", :start 8.81}
-        {:end 11.1, :anim "talk", :start 9.47}],
+      {:data [{:end 11.21, :anim "talk", :start 5.23}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/gemelo.m4a",
-       :start 6.224,
+       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
+       :start 5.171,
        :track 1,
-       :offset 6.224,
+       :offset 5.171,
        :target "rock",
-       :duration 5.25}
+       :duration 6.13}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 14.45, :anim "talk", :start 12.02}
-        {:end 16.69, :anim "talk", :start 14.95}],
+       [{:end 13.9, :anim "talk", :start 11.48}
+        {:end 16.58, :anim "talk", :start 14.11}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/gemelo.m4a",
-       :start 11.727,
+       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
+       :start 11.342,
        :track 1,
-       :offset 11.727,
+       :offset 11.342,
        :target "rock",
-       :duration 5.384}
+       :duration 5.344}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/gemelos.mp3",
      :type "audio",
-     :start 7.16,
-     :duration 12.453,
+     :start 0.062,
+     :duration 11.137,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -5488,55 +5464,49 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.36, :anim "talk", :start 1.55}
-        {:end 4.98, :anim "talk", :start 2.98}
-        {:end 6.86, :anim "talk", :start 5.93}
-        {:end 8.98, :anim "talk", :start 7.4}],
+       [{:end 1.29, :anim "talk", :start 0.31}
+        {:end 3.88, :anim "talk", :start 1.46}
+        {:end 7.53, :anim "talk", :start 4.33}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/hoja.m4a",
-       :start 1.306,
+       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
+       :start 0.107,
        :track 1,
-       :offset 1.306,
+       :offset 0.107,
        :target "rock",
-       :duration 7.785}
+       :duration 7.678}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 9.69, :anim "talk", :start 9.57}
-        {:end 10.88, :anim "talk", :start 9.81}
-        {:end 12.24, :anim "talk", :start 11.32}
-        {:end 13.64, :anim "talk", :start 12.41}
-        {:end 16.36, :anim "talk", :start 14.62}],
+       [{:end 11.46, :anim "talk", :start 8.18}
+        {:end 14.53, :anim "talk", :start 11.97}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/hoja.m4a",
-       :start 9.557,
+       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
+       :start 7.997,
        :track 1,
-       :offset 9.557,
+       :offset 7.997,
        :target "rock",
-       :duration 7.305}
+       :duration 6.732}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 18.84, :anim "talk", :start 17.33}
-        {:end 19.9, :anim "talk", :start 19.34}
-        {:end 20.67, :anim "talk", :start 20.04}
-        {:end 23.34, :anim "talk", :start 21.77}
-        {:end 24.82, :anim "talk", :start 23.87}],
+       [{:end 16.34, :anim "talk", :start 14.97}
+        {:end 17.74, :anim "talk", :start 16.5}
+        {:end 21.95, :anim "talk", :start 18.2}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/hoja.m4a",
-       :start 17.115,
+       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
+       :start 14.824,
        :track 1,
-       :offset 17.115,
+       :offset 14.824,
        :target "rock",
-       :duration 8.091}
+       :duration 7.373}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/hoja.mp3",
      :type "audio",
-     :start 23.453,
-     :duration 17.934,
+     :start 0.093,
+     :duration 15.028,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -5995,122 +5965,48 @@
     :poem-image-3 "/raw/img/park/poem/i3.png",
     :poem-story
     {:data
-     [{:data
-       [{:data
-         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
-           :type "audio",
-           :start 1.173,
-           :duration 2.283}
-          {:data [{:end 3.456, :anim "talk", :start 1.173}],
-           :type "animation-sequence",
-           :track 1,
-           :offset 1.173,
-           :target "rock"}],
-         :type "parallel",
-         :description "Un día encontré un imán"}
-        {:id "run-bubble-1", :type "action"}],
-       :type "parallel"}
-      {:fail {:type "empty", :duration 951},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 4375}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
+     [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:data
-         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
-           :type "audio",
-           :start 4.391,
-           :duration 2.743}
-          {:data
-           [{:end 5.533, :anim "talk", :start 4.391}
-            {:end 7.102, :anim "talk", :start 5.945}],
-           :type "animation-sequence",
-           :track 1,
-           :offset 4.391,
-           :target "rock"}],
-         :type "parallel",
-         :description "Y se lo enseñé a mi tío Germán"}
-        {:id "run-bubble-2", :type "action"}],
-       :type "parallel"}
-      {:fail {:type "empty", :duration 935},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 5050}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
+       [{:end 3.02, :anim "talk", :start 0.22}
+        {:end 6.58, :anim "talk", :start 3.59}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
+       :start 0.134,
+       :track 1,
+       :offset 0.134,
+       :target "rock",
+       :duration 6.719}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-2", :type "action"}
+      {:data [{:end 10.06, :anim "talk", :start 7.14}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
+       :start 6.88,
+       :track 1,
+       :offset 6.88,
+       :target "rock",
+       :duration 3.494}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-3", :type "action"}
       {:data
-       [{:id "/raw/audio/l2/a3/poems/iman.m4a",
-         :type "audio",
-         :start 8.006,
-         :duration 3.202}
-        {:data
-         [{:end 8.894, :anim "talk", :start 8.006}
-          {:end 11.192, :anim "talk", :start 9.559}],
-         :type "animation-sequence",
-         :track 1,
-         :offset 8.006,
-         :target "rock"}],
-       :type "parallel",
-       :description "Le pregunté, ¿te gusta mi imán?"}
-      {:fail {:type "empty", :duration 888},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 5690}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
-      {:data
-       [{:data
-         [{:id "/raw/audio/l2/a3/poems/iman.m4a",
-           :type "audio",
-           :start 12.048,
-           :duration 4.819}
-          {:data
-           [{:end 13.158, :anim "talk", :start 12.064}
-            {:end 14.299, :anim "talk", :start 13.84}
-            {:end 15.679, :anim "talk", :start 14.632}
-            {:end 16.836, :anim "talk", :start 16.138}],
-           :type "animation-sequence",
-           :track 1,
-           :offset 12.048,
-           :target "rock"}],
-         :type "parallel",
-         :description "Y me contestó  sí. I I I, Imán."}
-        {:id "run-bubble-3", :type "action"}],
-       :type "parallel"}
-      {:fail {:type "empty", :duration 571},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 7799}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}],
+       [{:end 14.08, :anim "talk", :start 10.64}
+        {:end 14.94, :anim "talk", :start 14.34}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
+       :start 10.394,
+       :track 1,
+       :offset 10.394,
+       :target "rock",
+       :duration 4.831}
+      {:id "poem-pause", :type "action"}],
      :type "sequence-data",
-     :description "Poem I"},
+     :scene-id "park-poem"},
     :riddle
-    {:data
-     [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
-       :type "audio",
-       :start 44.966,
-       :duration 12.845}],
-     :type "parallel",
-     :description
-     "Siempre estoy atrayendo metales hacia mí.\n                                                          Me suelen usar en computadoras y brújulas y también en otras cosas.\n                                                          Soy un"},
+    {:id "/raw/audio/l2/a5/riddles/iman.mp3",
+     :type "audio",
+     :start 0.239,
+     :duration 11.816,
+     :scene-id "slide"},
     :sandbox-change-skin-1-action
     {:skin "iguana",
      :type "set-skin",
@@ -6608,49 +6504,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.09, :anim "talk", :start 1.3}],
+      {:data
+       [{:end 2.96, :anim "talk", :start 0.56}
+        {:end 6.38, :anim "talk", :start 3.8}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/jardin.m4a",
-       :start 1,
+       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
+       :start 0.453,
        :track 1,
-       :offset 1,
+       :offset 0.453,
        :target "rock",
-       :duration 2.493}
+       :duration 6.053}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 5.57, :anim "talk", :start 4.26}
-        {:end 7.14, :anim "talk", :start 5.94}
-        {:end 8.92, :anim "talk", :start 8.11}
-        {:end 10.6, :anim "talk", :start 9.31}],
+      {:data [{:end 9.48, :anim "talk", :start 7.08}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/jardin.m4a",
-       :start 4.08,
+       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
+       :start 6.879,
        :track 1,
-       :offset 4.08,
+       :offset 6.879,
        :target "rock",
-       :duration 6.719}
+       :duration 2.894}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 12.27, :anim "talk", :start 11.73}
-        {:end 13.53, :anim "talk", :start 12.68}
-        {:end 14.48, :anim "talk", :start 13.68}],
+       [{:end 11.65, :anim "talk", :start 10.19}
+        {:end 12.95, :anim "talk", :start 11.8}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/jardin.m4a",
-       :start 11.426,
+       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
+       :start 9.979,
        :track 1,
-       :offset 11.426,
+       :offset 9.979,
        :target "rock",
-       :duration 3.48}
+       :duration 3.445}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/jardin.mp3",
      :type "audio",
-     :start 61.12,
-     :duration 15.133,
+     :start 0.067,
+     :duration 13.004,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -7083,47 +6976,47 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 4.06, :anim "talk", :start 1.28}
-        {:end 7.1, :anim "talk", :start 5.05}],
+       [{:end 3.18, :anim "talk", :start 0.28}
+        {:end 5.99, :anim "talk", :start 3.57}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/kimono.m4a",
-       :start 1.013,
+       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
+       :start 0.187,
        :track 1,
-       :offset 1.013,
+       :offset 0.187,
        :target "rock",
-       :duration 6.226}
+       :duration 5.906}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 10.31, :anim "talk", :start 8.16}],
+      {:data [{:end 8.78, :anim "talk", :start 6.56}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/kimono.m4a",
-       :start 7.825,
+       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
+       :start 6.279,
        :track 1,
-       :offset 7.825,
+       :offset 6.279,
        :target "rock",
        :duration 2.8}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 12.83, :anim "talk", :start 11.39}
-        {:end 14.91, :anim "talk", :start 13.72}
-        {:end 16.58, :anim "talk", :start 15.49}
-        {:end 17.76, :anim "talk", :start 16.92}],
+       [{:end 11.7, :anim "talk", :start 9.67}
+        {:end 14.12, :anim "talk", :start 11.91}
+        {:end 14.63, :anim "talk", :start 14.28}
+        {:end 15.89, :anim "talk", :start 15.12}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/kimono.m4a",
-       :start 11.091,
+       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
+       :start 9.471,
        :track 1,
-       :offset 11.091,
+       :offset 9.471,
        :target "rock",
-       :duration 6.919}
+       :duration 6.56}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/kimono.mp3",
      :type "audio",
-     :start 80.187,
-     :duration 10.746,
+     :start 0.063,
+     :duration 8.067,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -7494,51 +7387,44 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.37, :anim "talk", :start 1.8}
-        {:end 5.06, :anim "talk", :start 4.08}
-        {:end 6.19, :anim "talk", :start 5.29}],
+      {:data [{:end 5.14, :anim "talk", :start 0.57}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/leon.m4a",
-       :start 1.56,
+       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
+       :start 0.4,
        :track 1,
-       :offset 1.56,
+       :offset 0.4,
        :target "rock",
        :duration 4.958}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 8.03, :anim "talk", :start 7.16}
-        {:end 9.32, :anim "talk", :start 8.42}
-        {:end 11.96, :anim "talk", :start 10.18}],
+       [{:end 8.03, :anim "talk", :start 5.69}
+        {:end 10.64, :anim "talk", :start 8.45}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/leon.m4a",
-       :start 7.052,
+       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
+       :start 5.612,
        :track 1,
-       :offset 7.052,
+       :offset 5.612,
        :target "rock",
        :duration 5.159}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 13.11, :anim "talk", :start 12.71}
-        {:end 15.09, :anim "talk", :start 13.89}
-        {:end 16.01, :anim "talk", :start 15.36}],
+      {:data [{:end 14.26, :anim "talk", :start 11.23}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/leon.m4a",
-       :start 12.504,
+       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
+       :start 10.942,
        :track 1,
-       :offset 12.504,
+       :offset 10.942,
        :target "rock",
-       :duration 3.586}
+       :duration 3.528}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/leon.mp3",
      :type "audio",
-     :start 94.12,
-     :duration 11.053,
+     :start 0.23,
+     :duration 8.373,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -7965,6 +7851,51 @@
      :target "mari",
      :duration 1.399,
      :scene-id "magic-hat"},
+    :poem-story
+    {:data
+     [{:id "run-bubble-1", :type "action"}
+      {:data
+       [{:end 2.8, :anim "talk", :start 0.35}
+        {:end 6.21, :anim "talk", :start 3.02}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
+       :start 0.16,
+       :track 1,
+       :offset 0.16,
+       :target "rock",
+       :duration 6.012}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-2", :type "action"}
+      {:data
+       [{:end 7.95, :anim "talk", :start 6.21}
+        {:end 9.27, :anim "talk", :start 8.09}
+        {:end 13.39, :anim "talk", :start 9.82}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
+       :start 6.159,
+       :track 1,
+       :offset 6.159,
+       :target "rock",
+       :duration 7.492}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-3", :type "action"}
+      {:data [{:end 17.38, :anim "talk", :start 14.08}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
+       :start 13.811,
+       :track 1,
+       :offset 13.811,
+       :target "rock",
+       :duration 3.919}
+      {:id "poem-pause", :type "action"}],
+     :type "sequence-data",
+     :scene-id "park-poem"},
+    :riddle
+    {:id "/raw/audio/l2/a5/riddles/llave.mp3",
+     :type "audio",
+     :start 0.107,
+     :duration 14.349,
+     :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
      [{:end 52.551, :anim "talk", :start 52.351, :duration 0.2}
@@ -8328,50 +8259,48 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 3.56, :anim "talk", :start 1.47}
-        {:end 5.46, :anim "talk", :start 4.5}
-        {:end 7.1, :anim "talk", :start 5.88}],
+       [{:end 3.12, :anim "talk", :start 0.74}
+        {:end 6.56, :anim "talk", :start 3.75}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/mano.m4a",
-       :start 1.28,
+       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
+       :start 0.56,
        :track 1,
-       :offset 1.28,
+       :offset 0.56,
        :target "rock",
        :duration 6.134}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 8.65, :anim "talk", :start 8.08}
-        {:end 10.35, :anim "talk", :start 8.94}
-        {:end 13.36, :anim "talk", :start 11.58}],
+       [{:end 9.72, :anim "talk", :start 7.06}
+        {:end 12.4, :anim "talk", :start 10.26}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/mano.m4a",
-       :start 7.788,
+       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
+       :start 6.975,
        :track 1,
-       :offset 7.788,
+       :offset 6.975,
        :target "rock",
-       :duration 5.933}
+       :duration 5.666}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 15.96, :anim "talk", :start 14.35}
-        {:end 16.77, :anim "talk", :start 16.16}
-        {:end 19.98, :anim "talk", :start 17.18}],
+       [{:end 15, :anim "talk", :start 13.08}
+        {:end 16.53, :anim "talk", :start 15.14}
+        {:end 17.38, :anim "talk", :start 16.71}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/mano.m4a",
-       :start 14.162,
+       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
+       :start 12.783,
        :track 1,
-       :offset 14.162,
+       :offset 12.783,
        :target "rock",
-       :duration 6.054}
+       :duration 5.147}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/mano.mp3",
      :type "audio",
-     :start 108.96,
-     :duration 13.653,
+     :start 0.13,
+     :duration 11.508,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data [{:end 7.694, :anim "talk", :start 5.814, :duration 1.88}],
@@ -8800,48 +8729,43 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.75, :anim "talk", :start 1.43}
-        {:end 4.87, :anim "talk", :start 3.11}
-        {:end 6.96, :anim "talk", :start 5.75}
-        {:end 8.04, :anim "talk", :start 7.09}],
+       [{:end 5.68, :anim "talk", :start 2.05}
+        {:end 8.9, :anim "talk", :start 6.05}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/nino.m4a",
-       :start 1.173,
+       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
+       :start 1.96,
        :track 1,
-       :offset 1.173,
+       :offset 1.96,
        :target "rock",
        :duration 7.104}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 11.51, :anim "talk", :start 9.01}],
+      {:data [{:end 12.49, :anim "talk", :start 9.45}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/nino.m4a",
-       :start 8.544,
+       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
+       :start 9.211,
        :track 1,
-       :offset 8.544,
+       :offset 9.211,
        :target "rock",
        :duration 3.505}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 14.3, :anim "talk", :start 12.36}
-        {:end 15.98, :anim "talk", :start 15.07}
-        {:end 17.25, :anim "talk", :start 16.27}],
+      {:data [{:end 16.98, :anim "talk", :start 13.06}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/nino.m4a",
-       :start 12.249,
+       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
+       :start 12.833,
        :track 1,
-       :offset 12.249,
+       :offset 12.833,
        :target "rock",
-       :duration 5.305}
+       :duration 4.385}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/nino.mp3",
      :type "audio",
-     :start 126.453,
-     :duration 12.293,
+     :start 0.112,
+     :duration 9.84,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -9290,184 +9214,46 @@
     :poem-image-3 "/raw/img/park/poem/o3.png",
     :poem-story
     {:data
-     [{:data
-       [{:data
-         [{:id "/raw/audio/l2/a3/poems/oso.m4a",
-           :type "audio",
-           :start 1.465,
-           :duration 1.76}
-          {:data [{:end 3.226, :anim "talk", :start 1.465}],
-           :type "animation-sequence",
-           :track 1,
-           :offset 1.465,
-           :target "rock"}],
-         :type "parallel",
-         :description "Había una vez un oso"}
-        {:id "run-bubble-1", :type "action"}],
-       :type "parallel"}
-      {:fail {:type "empty", :duration 503},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 3143}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
+     [{:id "run-bubble-1", :type "action"}
+      {:data [{:end 5.41, :anim "talk", :start 0.44}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
+       :start 0.227,
+       :track 1,
+       :offset 0.227,
+       :target "rock",
+       :duration 5.067}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-2", :type "action"}
       {:data
-       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
-         :type "audio",
-         :start 3.763,
-         :duration 1.604}
-        {:data [{:end 5.359, :anim "talk", :start 3.772}],
-         :type "animation-sequence",
-         :track 1,
-         :offset 3.763,
-         :target "rock"}],
-       :type "parallel",
-       :description "Que era muy cariñoso"}
-      {:fail {:type "empty", :duration 884},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 3290}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
-      {:data
-       [{:data
-         [{:id "/raw/audio/l2/a3/poems/oso.m4a",
-           :type "audio",
-           :start 6.261,
-           :duration 2.445}
-          {:data
-           [{:end 6.859, :anim "talk", :start 6.261}
-            {:end 8.706, :anim "talk", :start 7.206}],
-           :type "animation-sequence",
-           :track 1,
-           :offset 6.261,
-           :target "rock"}],
-         :type "parallel",
-         :description "Un día se cayó a un pozo"}
-        {:id "run-bubble-2", :type "action"}],
-       :type "parallel"}
-      {:fail {:type "empty", :duration 754},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 4422}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
-      {:data
-       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
-         :type "audio",
-         :start 9.461,
-         :duration 2.064}
-        {:data [{:end 11.525, :anim "talk", :start 9.461}],
-         :type "animation-sequence",
-         :track 1,
-         :offset 9.461,
-         :target "rock"}],
-       :type "parallel",
-       :description "Y eso fue muy doloroso"}
-      {:fail {:type "empty", :duration 850},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 3946}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
-      {:data
-       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
-         :type "audio",
-         :start 12.374,
-         :duration 2.419}
-        {:data [{:end 14.794, :anim "talk", :start 12.374}],
-         :type "animation-sequence",
-         :track 1,
-         :offset 12.374,
-         :target "rock"}],
-       :type "parallel",
-       :description "Seguramente ese oso"}
-      {:fail {:type "empty", :duration 564},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 4193}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
-      {:data
-       [{:data
-         [{:id "/raw/audio/l2/a3/poems/oso.m4a",
-           :type "audio",
-           :start 15.357,
-           :duration 1.821}
-          {:data
-           [{:end 16.086, :anim "talk", :start 15.357}
-            {:end 17.187, :anim "talk", :start 16.346}],
-           :type "animation-sequence",
-           :track 1,
-           :offset 15.357,
-           :target "rock"}],
-         :type "parallel",
-         :description "Era muy perezoso"}
-        {:id "run-bubble-3", :type "action"}],
-       :type "parallel"}
-      {:fail {:type "empty", :duration 538},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 3270}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}
-      {:data
-       [{:id "/raw/audio/l2/a3/poems/oso.m4a",
-         :type "audio",
-         :start 17.725,
-         :duration 1.058}
-        {:data [{:end 18.783, :anim "talk", :start 17.725}],
-         :type "animation-sequence",
-         :track 1,
-         :offset 17.725,
-         :target "rock"}],
-       :type "parallel",
-       :description "O O O"}
-      {:fail {:type "empty", :duration 277},
-       :type "test-var-scalar",
-       :value true,
-       :success
-       {:data
-        [{:id "mari-listening-user", :type "action"}
-         {:type "empty", :duration 1864}],
-        :type "sequence-data"},
-       :var-name "poem-paused"}
-      {:id "mari-listening-eva", :type "action"}],
+       [{:end 8.2, :anim "talk", :start 5.41}
+        {:end 11.11, :anim "talk", :start 8.49}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
+       :start 5.266,
+       :track 1,
+       :offset 5.266,
+       :target "rock",
+       :duration 6.079}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-3", :type "action"}
+      {:data [{:end 17.74, :anim "talk", :start 11.52}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
+       :start 11.298,
+       :track 1,
+       :offset 11.298,
+       :target "rock",
+       :duration 6.579}
+      {:id "poem-pause", :type "action"}],
      :type "sequence-data",
-     :description "Poem O"},
+     :scene-id "park-poem"},
     :riddle
-    {:data
-     [{:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
-       :type "audio",
-       :start 7.307,
-       :duration 15.425}],
-     :type "parallel",
-     :description
-     "Soy grande y camino en cuatro patas. Puedes encontrarme en lugares como montañas y el árctico.\n                                                          Me gusta hibernar cuando hace frio.\n                                                          Soy un"},
+    {:id "/raw/audio/l2/a5/riddles/oso.mp3",
+     :type "audio",
+     :start 0.267,
+     :duration 12.202,
+     :scene-id "slide"},
     :sandbox-change-skin-1-action
     {:skin "8",
      :type "set-skin",
@@ -9976,48 +9762,48 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.74, :anim "talk", :start 1.18}
-        {:end 6.34, :anim "talk", :start 3.77}],
+       [{:end 2.97, :anim "talk", :start 0.86}
+        {:end 5.8, :anim "talk", :start 3.32}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/pelota.m4a",
-       :start 0.853,
+       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
+       :start 0.786,
        :track 1,
-       :offset 0.853,
+       :offset 0.786,
        :target "rock",
-       :duration 5.786}
+       :duration 5.173}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 9.15, :anim "talk", :start 7.3}
-        {:end 11.03, :anim "talk", :start 9.87}
-        {:end 12.59, :anim "talk", :start 11.49}],
+       [{:end 8.21, :anim "talk", :start 6.15}
+        {:end 10.89, :anim "talk", :start 8.71}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/pelota.m4a",
-       :start 7.106,
+       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
+       :start 6.04,
        :track 1,
-       :offset 7.106,
+       :offset 6.04,
        :target "rock",
-       :duration 5.386}
+       :duration 5.039}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 15.61, :anim "talk", :start 12.59}
-        {:end 16.76, :anim "talk", :start 16.01}],
+       [{:end 13.61, :anim "talk", :start 11.53}
+        {:end 14.15, :anim "talk", :start 13.99}
+        {:end 15.9, :anim "talk", :start 14.49}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/pelota.m4a",
-       :start 12.492,
+       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
+       :start 11.359,
        :track 1,
-       :offset 12.492,
+       :offset 11.359,
        :target "rock",
-       :duration 4.386}
+       :duration 4.786}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/pelota.mp3",
      :type "audio",
-     :start 26.453,
-     :duration 13.293,
+     :start 0.102,
+     :duration 11.241,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data [{:end 9.946, :anim "talk", :start 8.96, :duration 0.986}],
@@ -10462,46 +10248,44 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.2, :anim "talk", :start 1.48}],
+      {:data [{:end 2.58, :anim "talk", :start 0.36}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/queso.m4a",
-       :start 1.214,
+       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
+       :start 0.309,
        :track 1,
-       :offset 1.214,
+       :offset 0.309,
        :target "rock",
        :duration 2.333}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 4.69, :anim "talk", :start 4.12}
-        {:end 6.27, :anim "talk", :start 4.89}
-        {:end 7.93, :anim "talk", :start 7.11}
-        {:end 9.2, :anim "talk", :start 8.09}],
+       [{:end 4.96, :anim "talk", :start 2.91}
+        {:end 7.49, :anim "talk", :start 5.35}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/queso.m4a",
-       :start 3.894,
+       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
+       :start 2.836,
        :track 1,
-       :offset 3.894,
+       :offset 2.836,
        :target "rock",
-       :duration 5.654}
+       :duration 4.839}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 12.72, :anim "talk", :start 10.26}],
+      {:data [{:end 10.69, :anim "talk", :start 8.15}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/queso.m4a",
-       :start 9.895,
+       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
+       :start 7.995,
        :track 1,
-       :offset 9.895,
+       :offset 7.995,
        :target "rock",
-       :duration 3.174}
+       :duration 2.864}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/queso.mp3",
      :type "audio",
-     :start 44.066,
-     :duration 13.747,
+     :start 0.39,
+     :duration 11.105,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -10926,47 +10710,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.28, :anim "talk", :start 1.38}
-        {:end 5.7, :anim "talk", :start 3.71}],
+      {:data [{:end 4.63, :anim "talk", :start 0.78}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/rana.m4a",
-       :start 1.133,
+       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
+       :start 0.533,
        :track 1,
-       :offset 1.133,
+       :offset 0.533,
        :target "rock",
-       :duration 4.84}
+       :duration 4.36}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 8.3, :anim "talk", :start 6.18}],
+      {:data [{:end 7.65, :anim "talk", :start 5.08}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/rana.m4a",
-       :start 5.973,
+       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
+       :start 4.959,
        :track 1,
-       :offset 5.973,
+       :offset 4.959,
        :target "rock",
-       :duration 3.012}
+       :duration 2.879}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 10.66, :anim "talk", :start 9.7}
-        {:end 13.06, :anim "talk", :start 11.07}
-        {:end 14.64, :anim "talk", :start 13.47}],
+       [{:end 9.63, :anim "talk", :start 8.49}
+        {:end 10.09, :anim "talk", :start 9.77}
+        {:end 11.24, :anim "talk", :start 10.33}
+        {:end 13.03, :anim "talk", :start 11.56}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/rana.m4a",
-       :start 9.345,
+       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
+       :start 8.148,
        :track 1,
-       :offset 9.345,
+       :offset 8.148,
        :target "rock",
-       :duration 5.893}
+       :duration 4.988}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/rana.mp3",
      :type "audio",
-     :start 61.986,
-     :duration 12.946,
+     :start 0.05,
+     :duration 11.112,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -11405,11 +11188,54 @@
     :poem-image-1 "/raw/img/park/poem/serpent_01.png",
     :poem-image-2 "/raw/img/park/poem/serpent_02.png",
     :poem-image-3 "/raw/img/park/poem/serpent_03.png",
+    :poem-story
+    {:data
+     [{:id "run-bubble-1", :type "action"}
+      {:data
+       [{:end 2.53, :anim "talk", :start 0.61}
+        {:end 5.53, :anim "talk", :start 3.28}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
+       :start 0.36,
+       :track 1,
+       :offset 0.36,
+       :target "rock",
+       :duration 5.385}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-2", :type "action"}
+      {:data
+       [{:end 7.95, :anim "talk", :start 6.09}
+        {:end 10.96, :anim "talk", :start 8.48}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
+       :start 5.919,
+       :track 1,
+       :offset 5.919,
+       :target "rock",
+       :duration 5.265}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-3", :type "action"}
+      {:data
+       [{:end 13.93, :anim "talk", :start 11.58}
+        {:end 16.97, :anim "talk", :start 14.43}
+        {:end 17.51, :anim "talk", :start 17.2}
+        {:end 18.01, :anim "talk", :start 17.69}
+        {:end 19.27, :anim "talk", :start 18.25}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
+       :start 11.317,
+       :track 1,
+       :offset 11.317,
+       :target "rock",
+       :duration 8.092}
+      {:id "poem-pause", :type "action"}],
+     :type "sequence-data",
+     :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/serpiente.mp3",
      :type "audio",
-     :start 78.679,
-     :duration 17.813,
+     :start 0.12,
+     :duration 13.109,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data [{:end 11.28, :anim "talk", :start 9.44, :duration 1.84}],
@@ -11823,23 +11649,22 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.34, :anim "talk", :start 1.19}
-        {:end 3.63, :anim "talk", :start 2.72}
-        {:end 6.39, :anim "talk", :start 4.07}],
+       [{:end 2.66, :anim "talk", :start 0.16}
+        {:end 5.12, :anim "talk", :start 3.27}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/tomate.m4a",
-       :start 0.986,
+       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
+       :start 0.026,
        :track 1,
-       :offset 0.986,
+       :offset 0.026,
        :target "rock",
-       :duration 5.652}
+       :duration 5.225}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 8.05, :anim "talk", :start 6.98}
-        {:end 9.77, :anim "talk", :start 8.52}],
+       [{:end 8.33, :anim "talk", :start 6.95}
+        {:end 10.38, :anim "talk", :start 9.19}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/tomate.m4a",
+       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
        :start 6.678,
        :track 1,
        :offset 6.678,
@@ -11847,22 +11672,25 @@
        :duration 3.293}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 15.22, :anim "talk", :start 10.58}],
+      {:data
+       [{:end 12.19, :anim "talk", :start 9.19}
+        {:end 12.76, :anim "talk", :start 12.57}
+        {:end 14.04, :anim "talk", :start 13.2}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/tomate.m4a",
-       :start 10.411,
+       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
+       :start 9.069,
        :track 1,
-       :offset 10.411,
+       :offset 9.069,
        :target "rock",
-       :duration 4.945}
+       :duration 5.185}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/tomate.mp3",
      :type "audio",
-     :start 99.732,
-     :duration 19.693,
+     :start 0.093,
+     :duration 15.015,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -12302,66 +12130,64 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.16, :anim "talk", :start 1.32}
-        {:end 4.32, :anim "talk", :start 2.56}],
+      {:data [{:end 3.45, :anim "talk", :start 0.84}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/uvas.m4a",
-       :start 1.2,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+       :start 0.507,
        :track 1,
-       :offset 1.2,
+       :offset 0.507,
        :target "rock",
        :duration 3.333}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 8.9, :anim "talk", :start 5.08}],
+      {:data [{:end 7.06, :anim "talk", :start 4.02}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/uvas.m4a",
-       :start 4.88,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+       :start 3.893,
        :track 1,
-       :offset 4.88,
+       :offset 3.893,
        :target "rock",
-       :duration 4.239}
+       :duration 3.399}
       {:id "poem-pause", :type "action"}
-      {:data [{:end 11.87, :anim "talk", :start 9.8}],
+      {:data [{:end 10.3, :anim "talk", :start 7.96}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/uvas.m4a",
-       :start 9.559,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+       :start 7.932,
        :track 1,
-       :offset 9.559,
+       :offset 7.932,
        :target "rock",
        :duration 2.48}
       {:id "poem-pause", :type "action"}
-      {:data [{:end 15.89, :anim "talk", :start 12.81}],
+      {:data
+       [{:end 12.27, :anim "talk", :start 10.94}
+        {:end 13.8, :anim "talk", :start 12.41}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/uvas.m4a",
-       :start 12.519,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+       :start 10.692,
        :track 1,
-       :offset 12.519,
+       :offset 10.692,
        :target "rock",
-       :duration 3.653}
+       :duration 3.213}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 17.38, :anim "talk", :start 16.74}
-        {:end 18.51, :anim "talk", :start 17.64}
-        {:end 19.48, :anim "talk", :start 18.91}
-        {:end 22.12, :anim "talk", :start 19.98}],
+       [{:end 17.04, :anim "talk", :start 14.33}
+        {:end 20.17, :anim "talk", :start 17.35}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/uvas.m4a",
-       :start 16.612,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+       :start 14.147,
        :track 1,
-       :offset 16.612,
+       :offset 14.147,
        :target "rock",
-       :duration 5.666}
+       :duration 6.161}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/uvas.mp3",
      :type "audio",
-     :start 123.265,
-     :duration 19.133,
+     :start 0.16,
+     :duration 16.45,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data [{:end 4.48, :anim "talk", :start 2.467, :duration 2.013}],
@@ -12788,48 +12614,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.71, :anim "talk", :start 1.34}],
+      {:data [{:end 3.02, :anim "talk", :start 0.87}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/violin.m4a",
-       :start 1.133,
+       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
+       :start 0.68,
        :track 1,
-       :offset 1.133,
+       :offset 0.68,
        :target "rock",
-       :duration 2.854}
+       :duration 2.507}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 6.84, :anim "talk", :start 4.49}
-        {:end 7.65, :anim "talk", :start 7.51}
-        {:end 9.89, :anim "talk", :start 8.1}],
+       [{:end 5.67, :anim "talk", :start 3.48}
+        {:end 8.85, :anim "talk", :start 6.46}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/violin.m4a",
-       :start 4.307,
+       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
+       :start 3.361,
        :track 1,
-       :offset 4.307,
+       :offset 3.361,
        :target "rock",
-       :duration 5.853}
+       :duration 5.68}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 12.61, :anim "talk", :start 10.95}
-        {:end 14.86, :anim "talk", :start 13.1}
-        {:end 18.46, :anim "talk", :start 15.88}],
+       [{:end 12.61, :anim "talk", :start 9.5}
+        {:end 15.95, :anim "talk", :start 13.11}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/violin.m4a",
-       :start 10.627,
+       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
+       :start 9.366,
        :track 1,
-       :offset 10.627,
+       :offset 9.366,
        :target "rock",
-       :duration 8.054}
+       :duration 6.826}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/violin.mp3",
      :type "audio",
-     :start 146.611,
-     :duration 11.16,
+     :start 0.14,
+     :duration 8.805,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -13258,45 +13082,45 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 2.81, :anim "talk", :start 1.38}
-        {:end 6.3, :anim "talk", :start 3.21}],
+       [{:end 3.61, :anim "talk", :start 0.71}
+        {:end 6.44, :anim "talk", :start 4.35}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/sitio_web.m4a",
-       :start 1.213,
+       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
+       :start 0.613,
        :track 1,
-       :offset 1.213,
+       :offset 0.613,
        :target "rock",
-       :duration 5.369}
+       :duration 5.956}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 9.43, :anim "talk", :start 7.25}],
+      {:data [{:end 9.3, :anim "talk", :start 7.06}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/sitio_web.m4a",
-       :start 7.075,
+       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
+       :start 6.902,
        :track 1,
-       :offset 7.075,
+       :offset 6.902,
        :target "rock",
-       :duration 2.559}
+       :duration 2.266}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 11.64, :anim "talk", :start 10.36}
-        {:end 13.36, :anim "talk", :start 12.06}],
+       [{:end 10.76, :anim "talk", :start 9.3}
+        {:end 12.61, :anim "talk", :start 11.23}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/sitio_web.m4a",
-       :start 10.127,
+       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
+       :start 9.271,
        :track 1,
-       :offset 10.127,
+       :offset 9.271,
        :target "rock",
-       :duration 3.424}
+       :duration 3.564}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/web.mp3",
      :type "audio",
-     :start 161.891,
-     :duration 13.573,
+     :start 0.133,
+     :duration 12.688,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -13743,48 +13567,44 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 4.02, :anim "talk", :start 1.24}],
+      {:data [{:end 3.78, :anim "talk", :start 0.96}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/xilofono.m4a",
-       :start 0.96,
+       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
+       :start 0.76,
        :track 1,
-       :offset 0.96,
+       :offset 0.76,
        :target "rock",
-       :duration 3.333}
+       :duration 3.12}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 6.86, :anim "talk", :start 4.93}
-        {:end 8.46, :anim "talk", :start 7.36}],
+      {:data [{:end 7.09, :anim "talk", :start 4.14}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/xilofono.m4a",
-       :start 4.773,
+       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
+       :start 4.027,
        :track 1,
-       :offset 4.773,
+       :offset 4.027,
        :target "rock",
-       :duration 4.306}
+       :duration 3.253}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 11.17, :anim "talk", :start 9.44}
-        {:end 13.28, :anim "talk", :start 11.31}
-        {:end 15.05, :anim "talk", :start 14.09}
-        {:end 16.93, :anim "talk", :start 15.41}],
+       [{:end 10.9, :anim "talk", :start 7.53}
+        {:end 14.33, :anim "talk", :start 11.35}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/xilofono.m4a",
-       :start 9.319,
+       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
+       :start 7.33,
        :track 1,
-       :offset 9.319,
+       :offset 7.33,
        :target "rock",
-       :duration 7.945}
+       :duration 7.076}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/xilofono.mp3",
      :type "audio",
-     :start 179.518,
-     :duration 13.853,
+     :start 0.234,
+     :duration 11.404,
      :scene-id "slide"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a",
@@ -14202,53 +14022,49 @@
      :duration 1.28,
      :scene-id "magic-hat"},
     :poem-image-1 "/raw/img/park/poem/yoyo_01.png",
-    :poem-image-2 "/raw/img/park/poem/yoyo_01.png",
-    :poem-image-3 "/raw/img/park/poem/yoyo_01.png",
+    :poem-image-2 "/raw/img/park/poem/yoyo_02.png",
+    :poem-image-3 "/raw/img/park/poem/yoyo_03.png",
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:data
-       [{:end 3.08, :anim "talk", :start 1.85}
-        {:end 3.98, :anim "talk", :start 3.22}
-        {:end 5.63, :anim "talk", :start 4.78}
-        {:end 7.72, :anim "talk", :start 6.03}],
+       [{:end 2.69, :anim "talk", :start 0.77}
+        {:end 6.51, :anim "talk", :start 3.36}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/yoyo.m4a",
-       :start 1.654,
+       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
+       :start 0.601,
        :track 1,
-       :offset 1.654,
+       :offset 0.601,
        :target "rock",
-       :duration 6.268}
+       :duration 6.055}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 11.01, :anim "talk", :start 8.74}],
+      {:data [{:end 9.03, :anim "talk", :start 7.07}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/yoyo.m4a",
-       :start 8.482,
+       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
+       :start 7.003,
        :track 1,
-       :offset 8.482,
+       :offset 7.003,
        :target "rock",
-       :duration 2.84}
+       :duration 2.214}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 12.56, :anim "talk", :start 11.53}
-        {:end 14.77, :anim "talk", :start 13.43}],
+      {:data [{:end 12.59, :anim "talk", :start 9.71}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/yoyo.m4a",
-       :start 11.376,
+       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
+       :start 9.584,
        :track 1,
-       :offset 11.376,
+       :offset 9.584,
        :target "rock",
-       :duration 3.64}
+       :duration 3.208}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/yoyo.mp3",
      :type "audio",
-     :start 196.717,
-     :duration 17.36,
+     :start 0.08,
+     :duration 14.232,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -14678,11 +14494,52 @@
     :poem-image-1 "/raw/img/park/poem/shoe_01.png",
     :poem-image-2 "/raw/img/park/poem/shoe_02.png",
     :poem-image-3 "/raw/img/park/poem/shoe_03.png",
+    :poem-story
+    {:data
+     [{:id "run-bubble-1", :type "action"}
+      {:data
+       [{:end 3.39, :anim "talk", :start 0.7}
+        {:end 6.61, :anim "talk", :start 3.87}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
+       :start 0.533,
+       :track 1,
+       :offset 0.533,
+       :target "rock",
+       :duration 6.415}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-2", :type "action"}
+      {:data
+       [{:end 9.62, :anim "talk", :start 7.22}
+        {:end 12.8, :anim "talk", :start 10.07}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
+       :start 7.081,
+       :track 1,
+       :offset 7.081,
+       :target "rock",
+       :duration 5.868}
+      {:id "poem-pause", :type "action"}
+      {:id "run-bubble-3", :type "action"}
+      {:data
+       [{:end 15.54, :anim "talk", :start 13.51}
+        {:end 17.03, :anim "talk", :start 15.76}
+        {:end 18.25, :anim "talk", :start 17.2}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
+       :start 13.375,
+       :track 1,
+       :offset 13.375,
+       :target "rock",
+       :duration 5.054}
+      {:id "poem-pause", :type "action"}],
+     :type "sequence-data",
+     :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_O_end.m4a",
+    {:id "/raw/audio/l2/a5/riddles/zapato.mp3",
      :type "audio",
-     :start 217.41,
-     :duration 10.987,
+     :start 0.17,
+     :duration 8.725,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
@@ -15129,49 +14986,48 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.8, :anim "talk", :start 1.39}
-        {:end 5, :anim "talk", :start 3.22}],
+      {:data [{:end 4.22, :anim "talk", :start 0.89}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/nandu.m4a",
-       :start 1.08,
+       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
+       :start 0.72,
        :track 1,
-       :offset 1.08,
+       :offset 0.72,
        :target "rock",
-       :duration 4.2}
+       :duration 3.654}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:data
-       [{:end 9.56, :anim "talk", :start 6.07}
-        {:end 11.37, :anim "talk", :start 10.48}
-        {:end 13.06, :anim "talk", :start 11.76}],
+       [{:end 8.14, :anim "talk", :start 4.71}
+        {:end 11.32, :anim "talk", :start 8.77}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/nandu.m4a",
-       :start 5.88,
+       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
+       :start 4.64,
        :track 1,
-       :offset 5.88,
+       :offset 4.64,
        :target "rock",
-       :duration 7.454}
+       :duration 6.774}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:data
-       [{:end 17.29, :anim "talk", :start 14.06}
-        {:end 21.1, :anim "talk", :start 18.41}],
+       [{:end 13.29, :anim "talk", :start 11.82}
+        {:end 15.49, :anim "talk", :start 13.52}
+        {:end 18.23, :anim "talk", :start 16.16}
+        {:end 19.53, :anim "talk", :start 18.41}],
        :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems/nandu.m4a",
-       :start 13.814,
+       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
+       :start 11.7,
        :track 1,
-       :offset 13.814,
+       :offset 11.7,
        :target "rock",
-       :duration 7.547}
+       :duration 7.962}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
     :riddle
-    {:id "/raw/audio/l2/a5/L2_A5_Adivinanzas_G_N.m4a",
+    {:id "/raw/audio/l2/a5/riddles/nandu.mp3",
      :type "audio",
-     :start 142.813,
-     :duration 18.853,
+     :start 0.133,
+     :duration 14.323,
      :scene-id "slide"},
     :sandbox-long-letter-action
     {:data
