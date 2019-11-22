@@ -12,7 +12,7 @@
                   :height 1080,
                   :alias  nil}
                  {:url "/raw/audio/l1/assessment1/Mari_Level1_Assessment1.m4a", :size 5, :type "audio" :alias "mari voice"}
-                 {:url "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", :size 5, :type "audio" :alias "words"}
+                 {:url "/raw/audio/l1/assessment1/game-voice-set-main.mp3", :size 5, :type "audio" :alias "words"}
                  {:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}],
  :objects       {:background       {:type        "background",
                                     :scene-name  "background",

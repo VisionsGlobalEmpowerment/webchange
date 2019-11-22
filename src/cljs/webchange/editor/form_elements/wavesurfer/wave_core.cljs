@@ -10,6 +10,10 @@
 
 (defonce last-positions (atom {}))
 
+(defn last-position
+  [key default]
+  (get @last-positions key default))
+
 (defn round [f]
   (/ (.round js/Math (* 1000 f)) 1000))
 
@@ -36,11 +40,10 @@
                                                                                                   :color         "hsla(400, 100%, 30%, 0.5)"}))
                                                                  (.create TimelinePlugin (clj->js {:container timeline-div}))]}))]
      (.loadBlob wavesurfer (get-data-as-blob key))
-     (.on wavesurfer "ready" #(.seekAndCenter wavesurfer (/ (get @last-positions key 0) (.getDuration wavesurfer))))
      wavesurfer)))
 
 (defn init-audio-region!
-  [wavesurfer region-atom edit]
+  [wavesurfer region-atom edit key]
   (let [region-data {:id     "audio"
                      :color  audio-color
                      :start  (:start @region-atom)
@@ -49,7 +52,7 @@
                      :resize edit}]
     (.on wavesurfer "ready" #(when (and (> (:start region-data) 0) (> (:end region-data) 0))
                                (.addRegion wavesurfer (clj->js region-data))
-                               (.seekAndCenter wavesurfer (/ (+ (:start region-data) 5) (.getDuration wavesurfer)))))))
+                               (.seekAndCenter wavesurfer (/ (last-position key (+ (:start region-data) 5)) (.getDuration wavesurfer)))))))
 
 (defn init-additional-regions!
   [wavesurfer regions-atom sequence-data]

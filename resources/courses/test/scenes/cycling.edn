@@ -4,11 +4,11 @@
 
                  {:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}
                  {:url "/raw/audio/l1/a8/Mari_L1_A8.m4a", :size 2, :type "audio" :alias "mari"}
-                 {:url "/raw/audio/l1/a8/GameVoice.m4a", :size 2, :type "audio" :alias "game voice"}
 
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                 {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio" :alias "game voice 1"}
+                 {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio" :alias "game voice 1 redo"}
+                 {:url "/raw/audio/l1/a2/game-voice-2.mp3", :size 5, :type "audio" :alias "game voice 2"}
+                 {:url "/raw/audio/l1/a2/game-voice-3.mp3", :size 5, :type "audio" :alias "game voice 3"}
                  ],
 
  :objects       {:background

@@ -2,9 +2,10 @@
                 [{:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}
                  {:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari"}
 
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                 {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio" :alias "game voice 1"}
+                 {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio" :alias "game voice 1 redo"}
+                 {:url "/raw/audio/l1/a2/game-voice-2.mp3", :size 5, :type "audio" :alias "game voice 2"}
+                 {:url "/raw/audio/l1/a2/game-voice-3.mp3", :size 5, :type "audio" :alias "game voice 3"}
 
                  {:url "/raw/img/stadium/volleyball/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/stadium/volleyball/ball.png", :size 1 :type "image"}
@@ -268,14 +269,14 @@
                                            :data [{:type     "action"
                                                    :from-var [{:template "animate-throw-%" :action-property "id" :var-name "current-player"}]}
                                                   {:type "state" :target "ball-image" :id "visible"}
-                                                  {:type "empty" :duration 200}
+                                                  {:type "empty" :duration 500}
                                                   {:type "parallel"
                                                    :data [{:type "sequence-data"
                                                            :data [{:type     "action"
                                                                    :from-var [{:template "throw-from-%" :action-property "id" :var-name "current-player"}]}
                                                                   {:type "state" :target "ball-image" :id "hidden"}]}
                                                           {:type "sequence-data"
-                                                           :data [{:type "empty" :duration 700}
+                                                           :data [{:type "empty" :duration 500}
                                                                   {:type "action" :from-params [{:template "animate-catch-%" :action-property "id" :param-property "player"}]}]}]}
                                                   {:type        "set-variable" :var-name "current-player"
                                                    :from-params [{:action-property "var-value" :param-property "player"}]}
@@ -336,11 +337,7 @@
                  :throw-from-player3      {:type "action" :from-params [{:template "throw-player3-%" :action-property "id" :param-property "player"}]}
                  :throw-from-player4      {:type "action" :from-params [{:template "throw-player4-%" :action-property "id" :param-property "player"}]}
 
-                 :word-ardilla-high       {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :start 12.987, :duration 3.196}
-                 :word-oso-high           {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :start 11.361, :duration 3.663}
-                 :word-incendio-high      {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :start 10.781, :duration 3.301}
-
-                 :voice-high-var          {:type "action" :from-var [{:var-name "current-concept" :action-property "id" :var-property "seesaw-voice-high"}]}
+                 :voice-high-var          {:type "action" :from-var [{:var-name "current-concept" :var-property "game-voice-action"}]}
 
                  :start-activity          {:type "start-activity" :id "volleyball"}
                  :stop-activity           {:type "stop-activity" :id "volleyball"}

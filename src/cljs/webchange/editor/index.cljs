@@ -754,27 +754,25 @@
     [:div#editor-container
      [:link {:rel "stylesheet" :href "http://esotericsoftware.com/files/spine-player/3.7/spine-player.css"}]
 
-     [sa/SidebarPushable {}
-      [sa/Sidebar {:visible true}
-       [na/segment {}
-        [na/header {}
-         [:div {} @course-id
-          [:div {:style {:float "right"}}
-           [na/icon {:name     "code" :link? true
-                     :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
-           [na/icon {:name     "history" :link? true
-                     :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
-        [na/divider {:clearing? true}]
-        [list-scenes-panel]
-        [list-datasets-panel]]]
-      [sa/SidebarPusher {}
+      [sa/Grid {}
+       [sa/GridColumn {:width 2}
+        [na/segment {}
+         [na/header {}
+          [:div {} @course-id
+           [:div {:style {:float "right"}}
+            [na/icon {:name     "code" :link? true
+                      :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
+            [na/icon {:name     "history" :link? true
+                      :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
+         [na/divider {:clearing? true}]
+         [list-scenes-panel]
+         [list-datasets-panel]]]
+      [sa/GridColumn {:width 10}
        [:div {:class-name "ui segment"}
         [na/header {:dividing? true} "Editor"]
-        [na/grid {}
-         [na/grid-column {:width 10}
-          [main-content]
-          [na/divider {:clearing? true}]
-          [main-content-navigation @scene-id]]
-         [na/grid-column {:width 4} [scene-items]]
-         ]
-        ]]]]))
+        [main-content]
+        [na/divider {:clearing? true}]
+        [main-content-navigation @scene-id]]]
+       [sa/GridColumn {:width 4}
+        [scene-items]
+        ]]]))
