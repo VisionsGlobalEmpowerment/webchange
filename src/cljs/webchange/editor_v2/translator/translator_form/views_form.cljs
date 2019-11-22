@@ -68,7 +68,8 @@
                                     :concepts-list   concepts
                                     :on-change       #(reset! current-concept %)}]]]
                  [diagram-block {:graph graph}]
-                 [audios-block {:audios    audios-list
+                 [audios-block {:scene-id  scene-id
+                                :audios    audios-list
                                 :action    prepared-current-action-data
                                 :on-change (fn [audio-key region-data]
                                              (update-action-data! data-store
