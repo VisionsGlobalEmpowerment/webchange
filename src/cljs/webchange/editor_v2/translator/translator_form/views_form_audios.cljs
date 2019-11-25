@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [webchange.interpreter.core :refer [load-assets]]
     [webchange.editor.form-elements.wavesurfer.wave-form :refer [audio-wave-form]]
+    [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
     [webchange.editor-v2.translator.translator-form.views-form-audio-upload :refer [upload-audio-form]]))
 
 (defn get-action-audio-data
@@ -39,13 +40,6 @@
      ^{:key (:key audio-data)}
      [audio-wave audio-data {:on-click  on-wave-click
                              :on-change on-wave-region-change}])])
-
-
-(defn audios->assets
-  [audios]
-  (map (fn [url] {:type "audio"
-                  :size 1
-                  :url  url}) audios))
 
 (defn audio-key->audio-data
   [audios]

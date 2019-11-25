@@ -26,6 +26,14 @@
                                (:connections node-data))]
     (assoc-in graph [node-name :connections] new-node-connections)))
 
+(defn change-children-connection-name
+  [graph children node-name new-node-name]
+  (reduce
+    (fn [graph child]
+      (change-connection-name graph child node-name new-node-name))
+    graph
+    children))
+
 (defn change-handlers-name
   [graph node-name prev-child-name new-child-name]
   (let [node-data (get graph node-name)
@@ -90,7 +98,8 @@
                                                      (filter-node-connections origin-prev-node-name)
                                                      (rename-node-connection origin-prev-node-name prev-node-name)
                                                      (add-origin node-name)))
-                            (change-handlers-name prev-node-name node-name new-node-name))})
+                            (change-handlers-name prev-node-name node-name new-node-name)
+                            (change-children-connection-name (get-children node-data origin-prev-node-name) node-name new-node-name))})
       {:new-node-name node-name
        :reused-nodes  reused-nodes
        :graph         graph})))
@@ -106,7 +115,7 @@
        (fn [[graph reused-nodes] next-node-name]
          (replicate-dfs graph [node-name new-node-name next-node-name] reused-nodes))
        [graph reused-nodes]
-       (get-children node-data origin-prev-node-name)))))
+       (get-children node-data prev-node-name)))))
 
 (defn remove-reused-nodes
   [graph reused-nodes]

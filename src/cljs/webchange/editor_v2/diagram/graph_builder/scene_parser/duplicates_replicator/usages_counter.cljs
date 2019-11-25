@@ -45,9 +45,15 @@
 
 (defn get-reuse-map
   [parsed-data root-nodes]
+
+  ;; Calling `count-node-usages` leads to infinite dfs cycle
+  ;; for `:concept-chant` action in `english:home` scene
+
   ;(-> (count-node-usages parsed-data root-nodes)
   ;    (get-reused-nodes))
-  {:empty-small      0
-   :empty-big        0
-   :set-reminder-on  0
-   :set-reminder-off 0})
+
+  {:empty-small       0
+   :empty-big         0
+   :set-reminder-on   0
+   :set-reminder-off  0
+   :group-3-times-var 0})

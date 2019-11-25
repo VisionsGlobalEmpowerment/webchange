@@ -3,7 +3,7 @@
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [print-maps-comparison]]
     [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.usages-counter :refer [count-node-usages
-                                                                                           get-reused-nodes]]))
+                                                                                                         get-reused-nodes]]))
 
 (deftest test-get-reused-nodes
   (testing "converting usages to duplicates map"
@@ -101,6 +101,29 @@
                              :b-1 1
                              :b-2 1
                              :c   1}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result)))))
+  (testing "case 'concept-chant' in 'home' scene"
+    (let [parsed-data {:box1              {:connections {:root {:handlers {:click [:concept-chant]}}}}
+                       :concept-chant     {:connections {:box1 {:handlers {:next [:group-3-times-var]}}}}
+                       :group-3-times-var {:connections {:concept-chant {:handlers {:next [:empty-small]}
+                                                                         :parent   :concept-chant}
+                                                         :empty-small   {:handlers {}
+                                                                         :parent   :concept-chant}}}
+                       :empty-small       {:connections {:group-3-times-var {:handlers {:next [:vaca-once-more]}
+                                                                             :parent   :concept-chant}
+                                                         :vaca-once-more    {:handlers {:next [:group-3-times-var]}
+                                                                             :parent   :concept-chant}}}
+                       :vaca-once-more    {:connections {:empty-small {:handlers {:next [:empty-small]}
+                                                                       :parent   :concept-chant}}}}
+          start-nodes [:box1]]
+      (let [actual-result (count-node-usages parsed-data start-nodes)
+            expected-result {:box1              1
+                             :concept-chant     1
+                             :group-3-times-var 2
+                             :empty-small       2
+                             :vaca-once-more    1}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))

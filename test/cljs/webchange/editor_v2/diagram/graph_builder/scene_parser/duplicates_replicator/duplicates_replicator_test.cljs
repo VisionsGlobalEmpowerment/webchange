@@ -3,13 +3,13 @@
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [print-maps-comparison]]
     [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.duplicates-replicator :refer [get-copy-name
-                                                                                                  change-handlers-name
-                                                                                                  change-connection-name
-                                                                                                  filter-node-connections
-                                                                                                  rename-node-connection
-                                                                                                  change-node-connection-parent
-                                                                                                  remove-reused-nodes
-                                                                                                  replicate-reused-nodes]]))
+                                                                                                                change-handlers-name
+                                                                                                                change-connection-name
+                                                                                                                filter-node-connections
+                                                                                                                rename-node-connection
+                                                                                                                change-node-connection-parent
+                                                                                                                remove-reused-nodes
+                                                                                                                replicate-reused-nodes]]))
 
 (deftest test-get-copy-name
   (testing "getting copy name"
@@ -307,6 +307,7 @@
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
+
   (testing "sequence"
     (let [parsed-data {:box1          {:type        "object"
                                        :data        {:actions {:click {:type "action"
@@ -444,6 +445,140 @@
                                                                 :duration 500}
                                                   :connections {:audio-wrong-copy-2 {:handlers {}
                                                                                      :parent   :pick-wrong}}}}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result)))))
+
+  (testing "case with phrase 'this-is-concept' in home scene"
+    (let [parsed-data {:concept-intro             {:type        "sequence"
+                                                   :data        {:type        "sequence"
+                                                                 :data        ["vaca-this-is-var"
+                                                                               "empty-small"
+                                                                               "vaca-can-you-say"
+                                                                               "vaca-question-var"
+                                                                               "empty-small"
+                                                                               "vaca-word-var"]
+                                                                 :phrase      :this-is-concept
+                                                                 :phrase-text "This is a %concept%! Can you say %concept%? (pause) %concept%."}
+                                                   :connections {:root {:handlers {:next [:home-vaca-this-is-action]}}}}
+                       :empty-small               {:type        "empty"
+                                                   :data        {:type     "empty"
+                                                                 :duration 500}
+                                                   :connections {:home-vaca-question-action {:handlers {:next [:home-vaca-word-action]}
+                                                                                             :parent   :concept-intro}
+                                                                 :home-vaca-this-is-action  {:handlers {:next [:vaca-can-you-say]}
+                                                                                             :parent   :concept-intro}}}
+                       :vaca-can-you-say          {:type        "animation-sequence"
+                                                   :data        {:type     "animation-sequence"
+                                                                 :target   "senoravaca"
+                                                                 :track    1
+                                                                 :offset   20.28
+                                                                 :audio    "/raw/audio/english/l1/a1/vaca.m4a"
+                                                                 :data     [{:start    20.363
+                                                                             :end      20.98
+                                                                             :duration 0.617
+                                                                             :anim     "talk"}]
+                                                                 :start    20.28
+                                                                 :duration 0.813}
+                                                   :connections {:empty-small {:handlers {:next [:home-vaca-question-action]}
+                                                                               :parent   :concept-intro}}}
+                       :home-vaca-word-action     {:type        "animation-sequence"
+                                                   :data        {:type           "animation-sequence"
+                                                                 :from-var       [{:var-name     "current-word"
+                                                                                   :var-property "home-vaca-word-action"}]
+                                                                 :target         "senoravaca"
+                                                                 :scene-id       "home"
+                                                                 :concept-action true}
+                                                   :connections {:empty-small {:handlers {}
+                                                                               :parent   :concept-intro}}}
+                       :home-vaca-question-action {:type        "animation-sequence"
+                                                   :data        {:type           "animation-sequence"
+                                                                 :from-var       [{:var-name     "current-word"
+                                                                                   :var-property "home-vaca-question-action"}]
+                                                                 :target         "senoravaca"
+                                                                 :scene-id       "home"
+                                                                 :concept-action true}
+                                                   :connections {:vaca-can-you-say {:handlers {:next [:empty-small]}
+                                                                                    :parent   :concept-intro}}}
+                       :home-vaca-this-is-action  {:type        "animation-sequence"
+                                                   :data        {:type           "animation-sequence"
+                                                                 :from-var       [{:var-name     "current-word"
+                                                                                   :var-property "home-vaca-this-is-action"}]
+                                                                 :target         "senoravaca"
+                                                                 :scene-id       "home"
+                                                                 :concept-action true}
+                                                   :connections {:concept-intro {:handlers {:next [:empty-small]}
+                                                                                 :parent   :concept-intro}}}}
+          start-nodes [:concept-intro]
+          reused-nodes {:empty-small      0
+                        :empty-big        0
+                        :set-reminder-on  0
+                        :set-reminder-off 0}]
+      (let [actual-result (replicate-reused-nodes parsed-data start-nodes reused-nodes)
+            expected-result {:concept-intro             {:type        "sequence"
+                                                         :data        {:type        "sequence"
+                                                                       :data        ["vaca-this-is-var"
+                                                                                     "empty-small"
+                                                                                     "vaca-can-you-say"
+                                                                                     "vaca-question-var"
+                                                                                     "empty-small"
+                                                                                     "vaca-word-var"]
+                                                                       :phrase      :this-is-concept
+                                                                       :phrase-text "This is a %concept%! Can you say %concept%? (pause) %concept%."}
+                                                         :connections {:root {:handlers {:next [:home-vaca-this-is-action]}}}}
+                             :empty-small-copy-1        {:type        "empty"
+                                                         :data        {:type     "empty"
+                                                                       :duration 500}
+                                                         :origin      :empty-small
+                                                         :connections {:home-vaca-this-is-action {:handlers {:next [:vaca-can-you-say]}
+                                                                                                  :parent   :concept-intro}}}
+                             :empty-small-copy-2        {:type        "empty"
+                                                         :data        {:type     "empty"
+                                                                       :duration 500}
+                                                         :origin      :empty-small
+                                                         :connections {:home-vaca-question-action {:handlers {:next [:home-vaca-word-action]}
+                                                                                                   :parent   :concept-intro}}}
+                             :vaca-can-you-say          {:type        "animation-sequence"
+                                                         :data        {:type     "animation-sequence"
+                                                                       :target   "senoravaca"
+                                                                       :track    1
+                                                                       :offset   20.28
+                                                                       :audio    "/raw/audio/english/l1/a1/vaca.m4a"
+                                                                       :data     [{:start    20.363
+                                                                                   :end      20.98
+                                                                                   :duration 0.617
+                                                                                   :anim     "talk"}]
+                                                                       :start    20.28
+                                                                       :duration 0.813}
+                                                         :connections {:empty-small-copy-1 {:handlers {:next [:home-vaca-question-action]}
+                                                                                            :parent   :concept-intro}}}
+                             :home-vaca-word-action     {:type        "animation-sequence"
+                                                         :data        {:type           "animation-sequence"
+                                                                       :from-var       [{:var-name     "current-word"
+                                                                                         :var-property "home-vaca-word-action"}]
+                                                                       :target         "senoravaca"
+                                                                       :scene-id       "home"
+                                                                       :concept-action true}
+                                                         :connections {:empty-small-copy-2 {:handlers {}
+                                                                                            :parent   :concept-intro}}}
+                             :home-vaca-question-action {:type        "animation-sequence"
+                                                         :data        {:type           "animation-sequence"
+                                                                       :from-var       [{:var-name     "current-word"
+                                                                                         :var-property "home-vaca-question-action"}]
+                                                                       :target         "senoravaca"
+                                                                       :scene-id       "home"
+                                                                       :concept-action true}
+                                                         :connections {:vaca-can-you-say {:handlers {:next [:empty-small-copy-2]}
+                                                                                          :parent   :concept-intro}}}
+                             :home-vaca-this-is-action  {:type        "animation-sequence"
+                                                         :data        {:type           "animation-sequence"
+                                                                       :from-var       [{:var-name     "current-word"
+                                                                                         :var-property "home-vaca-this-is-action"}]
+                                                                       :target         "senoravaca"
+                                                                       :scene-id       "home"
+                                                                       :concept-action true}
+                                                         :connections {:concept-intro {:handlers {:next [:empty-small-copy-1]}
+                                                                                       :parent   :concept-intro}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))

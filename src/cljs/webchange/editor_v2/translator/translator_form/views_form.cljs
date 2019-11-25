@@ -8,28 +8,14 @@
     [webchange.editor-v2.translator.events :as translator-events]
     [webchange.editor-v2.translator.translator-form.utils :refer [get-audios
                                                                   get-graph
-                                                                  get-used-concept-actions]]
+                                                                  get-used-concept-actions
+                                                                  get-current-action-data]]
     [webchange.editor-v2.translator.translator-form.views-form-audios :refer [audios-block]]
     [webchange.editor-v2.translator.translator-form.views-form-concepts :refer [concepts-block]]
     [webchange.editor-v2.translator.translator-form.views-form-diagram :refer [diagram-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
+    [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.subs :as subs]))
-
-(defn get-current-action-data
-  [action-name selected-node-data current-concept-data data-store]
-  (let [concept-action? (get-in selected-node-data [:data :concept-action])
-        [id name type data] (if concept-action?
-                              (let [concept-action-name (-> selected-node-data :name keyword)]
-                                [(:id current-concept-data)
-                                 concept-action-name
-                                 :concept
-                                 (get-in current-concept-data [:data concept-action-name])])
-                              [nil action-name :scene (:data selected-node-data)])
-        edited-action-data (get-in data-store [action-name :data])]
-    {:id   id
-     :name name
-     :type type
-     :data (merge data edited-action-data)}))
 
 (defn update-action-data!
   [data-store id type name data]
@@ -53,10 +39,11 @@
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
 
                     graph (get-graph scene-data phrase-action-name concepts-scheme)
+
                     used-concept-actions (get-used-concept-actions graph)
                     audios-list (get-audios scene-data concepts used-concept-actions)
 
-                    prepared-current-action-data (get-current-action-data (-> @selected-action-node :name keyword) @selected-action-node @current-concept @data-store)]
+                    prepared-current-action-data (get-current-action-data @selected-action-node @current-concept @data-store)]
                 [:div
                  [ui/grid {:container true
                            :spacing   16
@@ -69,6 +56,9 @@
                                     :concepts-list   concepts
                                     :on-change       #(reset! current-concept %)}]]]
                  [diagram-block {:graph graph}]
+                 [play-phrase-block {:graph graph
+                                     :current-concept current-concept
+                                     :edited-data data-store}]
                  [audios-block {:scene-id  scene-id
                                 :audios    audios-list
                                 :action    prepared-current-action-data

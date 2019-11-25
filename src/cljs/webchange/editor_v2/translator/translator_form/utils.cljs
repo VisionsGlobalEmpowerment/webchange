@@ -37,3 +37,26 @@
   (->> (concat (get-scene-audios scene-data)
                (get-concepts-audios concepts used-concept-actions))
        (distinct)))
+
+(defn audios->assets
+  [audios]
+  (map (fn [url] {:type "audio"
+                  :size 1
+                  :url  url}) audios))
+
+(defn get-current-action-data
+  [selected-node-data current-concept-data data-store]
+  (let [action-name (-> selected-node-data :name keyword)
+        concept-action? (get-in selected-node-data [:data :concept-action])
+        [id name type data] (if concept-action?
+                              (let [concept-action-name (-> selected-node-data :name keyword)]
+                                [(:id current-concept-data)
+                                 concept-action-name
+                                 :concept
+                                 (get-in current-concept-data [:data concept-action-name])])
+                              [nil action-name :scene (:data selected-node-data)])
+        edited-action-data (get-in data-store [action-name :data])]
+    {:id   id
+     :name name
+     :type type
+     :data (merge data edited-action-data)}))

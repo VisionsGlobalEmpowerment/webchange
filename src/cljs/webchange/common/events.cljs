@@ -171,6 +171,7 @@
 (reg-simple-executor :sequence-data ::execute-sequence-data)
 (reg-simple-executor :parallel ::execute-parallel)
 (reg-simple-executor :remove-flows ::execute-remove-flows)
+(reg-simple-executor :callback ::execute-callback)
 
 (re-frame/reg-event-fx
   ::execute-action
@@ -323,3 +324,11 @@
           flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tags (get-action-tags action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
       {:dispatch-n (cons flow-event action-events)})))
+
+(re-frame/reg-event-fx
+  ::execute-callback
+  [event-as-action with-flow]
+  (fn [_ {:keys [callback] :as action}]
+    (when-not (nil? callback)
+      (callback))
+    {:dispatch (success-event action)}))
