@@ -1,6 +1,6 @@
 {:assets
-                [{:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}
-                 {:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari"}
+                [{:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari old"}
+                 {:url "/raw/audio/l1/a5/mari.mp4", :size 2, :type "audio" :alias "mari"}
 
                  {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio" :alias "game voice 1"}
                  {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio" :alias "game voice 1 redo"}
@@ -11,6 +11,7 @@
                  {:url "/raw/img/stadium/volleyball/ball.png", :size 1 :type "image"}
 
                  ],
+ :templates ["coaching"]
  :objects
                 {:background {:type "background", :src "/raw/img/stadium/volleyball/background.jpg"},
                  :vera       {:type       "animation" :x 1182 :y 1010 :name "vera-45" :anim "volley_idle" :speed 0.3
@@ -62,101 +63,25 @@
  :scene-objects [["background"] ["vera" "boy1" "girl2" "girl3"] ["ball"] ["box1" "box2" "box3" "box4"] ["mari"]],
  :actions
                 {:mari-welcome-audio-1
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   0.511,
-                                           :audio    "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a",
-                                           :start    0.511,
-                                           :duration 9.076,
+                                          {:type "animation-sequence",
+                                           :target "mari",
+                                           :track 1,
+                                           :offset 1.274,
+                                           :audio "/raw/audio/l1/a5/mari.mp4",
+                                           :start 1.274,
+                                           :duration 8.325,
                                            :data
-                                                     [{:start 0.572, :end 1.612, :duration 1.04, :anim "talk"}
-                                                      {:start 2.188, :end 4.97, :duration 2.782, :anim "talk"}
-                                                      {:start 5.84, :end 9.418, :duration 3.578, :anim "talk"}]}
-
-                 :mari-audio-correct-1
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   0.858,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                           :start    0.858,
-                                           :duration 1.837,
-                                           :data     [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]}
-
-                 :mari-audio-correct-2
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   4.697,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                           :start    4.697,
-                                           :duration 1.358,
-                                           :data     [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}]}
-
-                 :mari-audio-correct-3
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   7.949,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                           :start    7.949,
-                                           :duration 1.345,
-                                           :data     [{:start 8.066, :end 9.098, :duration 1.032, :anim "talk"}]}
-
-                 :mari-audio-correct-4
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   10.997,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                           :start    10.997,
-                                           :duration 1.147,
-                                           :data     [{:start 11.119, :end 11.964, :duration 0.845, :anim "talk"}]}
-
-                 :mari-audio-correct-5
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   14.463,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                           :start    14.463,
-                                           :duration 2.333,
-                                           :data
-                                                     [{:start 14.611, :end 15.11, :duration 0.499, :anim "talk"}
-                                                      {:start 15.529, :end 16.676, :duration 1.147, :anim "talk"}]}
-
-                 :mari-audio-try-again-1
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   18.915,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                           :start    18.915,
-                                           :duration 1.493,
-                                           :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]}
-
-                 :mari-audio-try-again-2
-                                          {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   22.155,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                           :start    22.155,
-                                           :duration 3.025,
-                                           :data     [{:start 23.743, :end 25.055, :duration 1.312, :anim "talk"}]}
-
+                                           [{:start 1.41, :end 2.25, :anim "talk"}
+                                            {:start 3.14, :end 5.8, :anim "talk"}
+                                            {:start 6.07, :end 6.39, :anim "talk"}
+                                            {:start 6.58, :end 9.47, :anim "talk"}]}
 
                  :wait-for-box-animations {:type "empty" :duration 500}
 
                  :empty-before-dialog     {:type "empty" :duration 3000}
 
                  :pick-wrong              {:type "sequence-data"
-                                           :data [{:type      "vars-var-provider"
-                                                   :variables ["current-audio-try-again"]
-                                                   :from      ["audio-try-again1" "audio-try-again2"]
-                                                   :shuffled  true}
-                                                  {:type "action" :from-var [{:var-name "current-audio-try-again" :action-property "id"}]}
+                                           :data [{:type "action" :id "mari-wrong"}
                                                   {:type        "copy-variable" :var-name "picked"
                                                    :from-params [{:action-property "from" :param-property "player"}]}
                                                   {:type     "pick-wrong" :activity "volleyball"
@@ -223,16 +148,6 @@
 
                  :init-first-player       {:type "set-variable" :var-name "current-player" :var-value "player1"}
 
-                 :init-audio-correct      {:type "parallel"
-                                           :data [{:type "set-variable" :var-name "audio-correct1" :var-value "mari-audio-correct-1"}
-                                                  {:type "set-variable" :var-name "audio-correct2" :var-value "mari-audio-correct-2"}
-                                                  {:type "set-variable" :var-name "audio-correct3" :var-value "mari-audio-correct-3"}
-                                                  {:type "set-variable" :var-name "audio-correct4" :var-value "mari-audio-correct-4"}
-                                                  {:type "set-variable" :var-name "audio-correct5" :var-value "mari-audio-correct-5"}]}
-
-                 :init-audio-try-again    {:type "parallel"
-                                           :data [{:type "set-variable" :var-name "audio-try-again1" :var-value "mari-audio-try-again-1"}
-                                                  {:type "set-variable" :var-name "audio-try-again2" :var-value "mari-audio-try-again-2"}]}
 
                  :clear-instruction       {:type "remove-flows" :flow-tag "instruction"}
                  :start                   {:type "sequence"
@@ -240,8 +155,6 @@
                                                   "clear-instruction"
                                                   "init-slots"
                                                   "init-first-player"
-                                                  "init-audio-correct"
-                                                  "init-audio-try-again"
                                                   "renew-words"
                                                   "renew-current-concept"
                                                   "mari-welcome-audio-1"
@@ -255,12 +168,7 @@
                                            :from-params [{:action-property "value" :param-property "player"}]}
 
                  :pick-correct            {:type "parallel"
-                                           :data [{:type "sequence-data"
-                                                   :data [{:type      "vars-var-provider"
-                                                           :variables ["current-audio-correct"]
-                                                           :from      ["audio-correct1" "audio-correct2" "audio-correct3" "audio-correct4" "audio-correct5"]
-                                                           :shuffled  true}
-                                                          {:type "action" :from-var [{:var-name "current-audio-correct" :action-property "id"}]}]}
+                                           :data [{:type "action" :id "mari-correct"}
                                                   {:type     "pick-correct" :activity "volleyball"
                                                    :from-var [{:var-name "current-concept" :action-property "concept-name" :var-property "concept-name"}]}
                                                   {:type "action" :id "throw"}]}

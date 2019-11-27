@@ -5,7 +5,7 @@
             [clojure.tools.logging :as log]))
 
 (def template-names
-  ["click-pointer"])
+  ["click-pointer" "coaching"])
 
 (defn course-path
   [course-name]

@@ -51,8 +51,9 @@
                      :drag   edit
                      :resize edit}]
     (.on wavesurfer "ready" #(when (and (> (:start region-data) 0) (> (:end region-data) 0))
+                               (.seekAndCenter wavesurfer (/ (last-position key (+ (:start region-data) 5)) (.getDuration wavesurfer)))
                                (.addRegion wavesurfer (clj->js region-data))
-                               (.seekAndCenter wavesurfer (/ (last-position key (+ (:start region-data) 5)) (.getDuration wavesurfer)))))))
+                               ))))
 
 (defn init-additional-regions!
   [wavesurfer regions-atom sequence-data]

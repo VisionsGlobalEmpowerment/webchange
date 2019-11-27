@@ -5,97 +5,99 @@
 
                  {:url "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :size 2, :type "audio" :alias "mari-welcome"}
 
-                 {:url "/raw/audio/l1/a3/vera/ardilla.m4a", :size 2, :type "audio" :alias "vera-ardilla"}
+                 {:url "/raw/audio/l1/a3/vera/ardilla.mp3", :size 2, :type "audio" :alias "vera-ardilla"}
                  {:url "/raw/audio/l1/a3/rock/Ardilla.m4a", :size 2, :type "audio" :alias "rock-ardilla"}
 
-                 {:url "/raw/audio/l1/a3/vera/bebe.m4a", :size 2, :type "audio" :alias "vera-bebe"}
+                 {:url "/raw/audio/l1/a3/vera/bebe.mp3", :size 2, :type "audio" :alias "vera-bebe"}
                  {:url "/raw/audio/l1/a3/rock/Bebe.m4a", :size 2, :type "audio" :alias "rock-bebe"}
                  {:url "/raw/audio/l1/a3/rock/Bebe_ending.m4a", :size 2, :type "audio" :alias "rock-bebe-ending"}
 
-                 {:url "/raw/audio/l1/a3/vera/casa.m4a", :size 2, :type "audio" :alias "vera-casa"}
+                 {:url "/raw/audio/l1/a3/vera/casa.mp3", :size 2, :type "audio" :alias "vera-casa"}
                  {:url "/raw/audio/l1/a3/rock/Casa.m4a", :size 2, :type "audio" :alias "rock-casa"}
 
-                 {:url "/raw/audio/l1/a3/vera/cepillo.m4a", :size 2, :type "audio" :alias "vera-cepillo"}
+                 {:url "/raw/audio/l1/a3/vera/cepillo.mp3", :size 2, :type "audio" :alias "vera-cepillo"}
                  {:url "/raw/audio/l1/a3/rock/Cepillo.m4a", :size 2, :type "audio" :alias "rock-cepillo"}
 
-                 {:url "/raw/audio/l1/a3/vera/chocolate.m4a", :size 2, :type "audio" :alias "vera-chocolate"}
+                 {:url "/raw/audio/l1/a3/vera/chocolate.mp3", :size 2, :type "audio" :alias "vera-chocolate"}
                  {:url "/raw/audio/l1/a3/rock/Chocolate.m4a", :size 2, :type "audio" :alias "rock-chocolate"}
 
-                 {:url "/raw/audio/l1/a3/vera/diamante.m4a", :size 2, :type "audio" :alias "vera-diamante"}
+                 {:url "/raw/audio/l1/a3/vera/diamante.mp3", :size 2, :type "audio" :alias "vera-diamante"}
                  {:url "/raw/audio/l1/a3/rock/Diamante.m4a", :size 2, :type "audio" :alias "rock-diamante"}
 
-                 {:url "/raw/audio/l1/a3/vera/elefante.m4a", :size 2, :type "audio" :alias "vera-elefante"}
+                 {:url "/raw/audio/l1/a3/vera/elefante.mp3", :size 2, :type "audio" :alias "vera-elefante"}
                  {:url "/raw/audio/l1/a3/rock/Elefante.m4a", :size 2, :type "audio" :alias "rock-elefante"}
 
-                 {:url "/raw/audio/l1/a3/vera/flor.m4a", :size 2, :type "audio" :alias "vera-flor"}
+                 {:url "/raw/audio/l1/a3/vera/flor.mp3", :size 2, :type "audio" :alias "vera-flor"}
                  {:url "/raw/audio/l1/a3/rock/Flor.m4a", :size 2, :type "audio" :alias "rock-flor"}
 
-                 {:url "/raw/audio/l1/a3/vera/gato.m4a", :size 2, :type "audio" :alias "vera-gato"}
+                 {:url "/raw/audio/l1/a3/vera/gato.mp3", :size 2, :type "audio" :alias "vera-gato"}
                  {:url "/raw/audio/l1/a3/rock/Gato.m4a", :size 2, :type "audio" :alias "rock-gato"}
 
-                 {:url "/raw/audio/l1/a3/vera/gemelo.m4a", :size 2, :type "audio" :alias "vera-gemelos"}
+                 {:url "/raw/audio/l1/a3/vera/gemelo.mp3", :size 2, :type "audio" :alias "vera-gemelos"}
                  {:url "/raw/audio/l1/a3/rock/Gemelos.m4a", :size 2, :type "audio" :alias "rock-gemelos"}
 
-                 {:url "/raw/audio/l1/a3/vera/hoja.m4a", :size 2, :type "audio" :alias "vera-hoja"}
+                 {:url "/raw/audio/l1/a3/vera/hoja.mp3", :size 2, :type "audio" :alias "vera-hoja"}
                  {:url "/raw/audio/l1/a3/rock/Hoja.m4a", :size 2, :type "audio" :alias "rock-hoja"}
 
-                 {:url "/raw/audio/l1/a3/vera/iman.m4a", :size 2, :type "audio" :alias "vera-iman"}
+                 {:url "/raw/audio/l1/a3/vera/iman.mp3", :size 2, :type "audio" :alias "vera-iman"}
                  {:url "/raw/audio/l1/a3/rock/Iman.m4a", :size 2, :type "audio" :alias "rock-iman"}
 
-                 {:url "/raw/audio/l1/a3/vera/jardin.m4a", :size 2, :type "audio" :alias "vera-jardin"}
+                 {:url "/raw/audio/l1/a3/vera/jardin.mp3", :size 2, :type "audio" :alias "vera-jardin"}
                  {:url "/raw/audio/l1/a3/rock/Jardin.m4a", :size 2, :type "audio" :alias "rock-jardin"}
 
-                 {:url "/raw/audio/l1/a3/vera/kimono.m4a", :size 2, :type "audio" :alias "vera-kimono"}
+                 {:url "/raw/audio/l1/a3/vera/kimono.mp3", :size 2, :type "audio" :alias "vera-kimono"}
                  {:url "/raw/audio/l1/a3/rock/Kimono.m4a", :size 2, :type "audio" :alias "rock-kimono"}
 
-                 {:url "/raw/audio/l1/a3/vera/leon.m4a", :size 2, :type "audio" :alias "vera-leon"}
+                 {:url "/raw/audio/l1/a3/vera/leon.mp3", :size 2, :type "audio" :alias "vera-leon"}
                  {:url "/raw/audio/l1/a3/rock/Leon.m4a", :size 2, :type "audio" :alias "rock-leon"}
                  {:url "/raw/audio/l1/a3/rock/Leon_roar.m4a", :size 2, :type "audio" :alias "rock-leon-roar"}
 
-                 {:url "/raw/audio/l1/a3/vera/mano.m4a", :size 2, :type "audio" :alias "vera-mano"}
+                 {:url "/raw/audio/l1/a3/vera/llaves.mp3", :size 2, :type "audio" :alias "vera-llave"}
+
+                 {:url "/raw/audio/l1/a3/vera/mano.mp3", :size 2, :type "audio" :alias "vera-mano"}
                  {:url "/raw/audio/l1/a3/rock/Manos.m4a", :size 2, :type "audio" :alias "rock-mano"}
 
-                 {:url "/raw/audio/l1/a3/vera/nandu.m4a", :size 2, :type "audio" :alias "vera-nandu"}
+                 {:url "/raw/audio/l1/a3/vera/nandu.mp3", :size 2, :type "audio" :alias "vera-nandu"}
                  {:url "/raw/audio/l1/a3/rock/Nandu.m4a", :size 2, :type "audio" :alias "rock-nandu"}
 
-                 {:url "/raw/audio/l1/a3/vera/nino.m4a", :size 2, :type "audio" :alias "vera-nino"}
+                 {:url "/raw/audio/l1/a3/vera/nino.mp3", :size 2, :type "audio" :alias "vera-nino"}
                  {:url "/raw/audio/l1/a3/rock/Nino.m4a", :size 2, :type "audio" :alias "rock-nino"}
 
-                 {:url "/raw/audio/l1/a3/vera/oso.m4a", :size 2, :type "audio" :alias "vera-oso"}
+                 {:url "/raw/audio/l1/a3/vera/oso.mp3", :size 2, :type "audio" :alias "vera-oso"}
                  {:url "/raw/audio/l1/a3/rock/Oso.m4a", :size 2, :type "audio" :alias "rock-oso"}
 
-                 {:url "/raw/audio/l1/a3/vera/pelota.m4a", :size 2, :type "audio" :alias "vera-pelota"}
+                 {:url "/raw/audio/l1/a3/vera/pelota.mp3", :size 2, :type "audio" :alias "vera-pelota"}
                  {:url "/raw/audio/l1/a3/rock/Pelota.m4a", :size 2, :type "audio" :alias "rock-pelota"}
 
-                 {:url "/raw/audio/l1/a3/vera/queso.m4a", :size 2, :type "audio" :alias "vera-queso"}
+                 {:url "/raw/audio/l1/a3/vera/queso.mp3", :size 2, :type "audio" :alias "vera-queso"}
                  {:url "/raw/audio/l1/a3/rock/Queso.m4a", :size 2, :type "audio" :alias "rock-queso"}
 
-                 {:url "/raw/audio/l1/a3/vera/rana.m4a", :size 2, :type "audio" :alias "vera-rana"}
+                 {:url "/raw/audio/l1/a3/vera/rana.mp3", :size 2, :type "audio" :alias "vera-rana"}
                  {:url "/raw/audio/l1/a3/rock/Rana.m4a", :size 2, :type "audio" :alias "rock-rana"}
 
-                 {:url "/raw/audio/l1/a3/vera/serpiente.m4a", :size 2, :type "audio" :alias "vera-serpiente"}
+                 {:url "/raw/audio/l1/a3/vera/serpiente.mp3", :size 2, :type "audio" :alias "vera-serpiente"}
                  {:url "/raw/audio/l1/a3/rock/Serpiente.m4a", :size 2, :type "audio" :alias "rock-serpiente"}
 
-                 {:url "/raw/audio/l1/a3/vera/tomate.m4a", :size 2, :type "audio" :alias "vera-tomate"}
+                 {:url "/raw/audio/l1/a3/vera/tomate.mp3", :size 2, :type "audio" :alias "vera-tomate"}
                  {:url "/raw/audio/l1/a3/rock/Tomate.m4a", :size 2, :type "audio" :alias "rock-tomate"}
 
-                 {:url "/raw/audio/l1/a3/vera/uvas.m4a", :size 2, :type "audio" :alias "vera-uvas"}
+                 {:url "/raw/audio/l1/a3/vera/uvas.mp3", :size 2, :type "audio" :alias "vera-uvas"}
                  {:url "/raw/audio/l1/a3/rock/Uvas.m4a", :size 2, :type "audio" :alias "rock-uvas"}
 
-                 {:url "/raw/audio/l1/a3/vera/violin.m4a", :size 2, :type "audio" :alias "vera-violin"}
+                 {:url "/raw/audio/l1/a3/vera/violin.mp3", :size 2, :type "audio" :alias "vera-violin"}
                  {:url "/raw/audio/l1/a3/rock/Violin.m4a", :size 2, :type "audio" :alias "rock-violin"}
 
-                 {:url "/raw/audio/l1/a3/vera/web.m4a", :size 2, :type "audio" :alias "vera-web"}
+                 {:url "/raw/audio/l1/a3/vera/web.mp3", :size 2, :type "audio" :alias "vera-web"}
                  {:url "/raw/audio/l1/a3/rock/Web.m4a", :size 2, :type "audio" :alias "rock-web"}
 
-                 {:url "/raw/audio/l1/a3/vera/xilofono.m4a", :size 2, :type "audio" :alias "vera-xylofono"}
+                 {:url "/raw/audio/l1/a3/vera/xilofono.mp3", :size 2, :type "audio" :alias "vera-xylofono"}
                  {:url "/raw/audio/l1/a3/rock/Xylofono.m4a", :size 2, :type "audio" :alias "rock-xylofono"}
                  {:url "/raw/audio/l1/a3/rock/Xylofono_song.m4a", :size 2, :type "audio" :alias "rock-xylofono-song"}
 
-                 {:url "/raw/audio/l1/a3/vera/yoyo.m4a", :size 2, :type "audio" :alias "vera-yoyo"}
+                 {:url "/raw/audio/l1/a3/vera/yoyo.mp3", :size 2, :type "audio" :alias "vera-yoyo"}
                  {:url "/raw/audio/l1/a3/rock/Yoyo.m4a", :size 2, :type "audio" :alias "rock-yoyo"}
 
-                 {:url "/raw/audio/l1/a3/vera/zapatos.m4a", :size 2, :type "audio" :alias "vera-zapatos"}
+                 {:url "/raw/audio/l1/a3/vera/zapatos.mp3", :size 2, :type "audio" :alias "vera-zapatos"}
                  {:url "/raw/audio/l1/a3/rock/Zapatos.m4a", :size 2, :type "audio" :alias "rock-zapatos"}
                  ],
  :objects
