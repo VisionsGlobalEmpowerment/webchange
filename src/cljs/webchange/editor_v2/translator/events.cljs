@@ -16,3 +16,8 @@
   ::set-current-selected-action
   (fn [{:keys [db]} [_ action]]
     {:db (assoc-in db [:editor-v2 :translator :selected-action] action)}))
+
+(re-frame/reg-event-fx
+  ::clean-current-selected-action
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db [:editor-v2 :translator :selected-action] nil)}))
