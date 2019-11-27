@@ -3,7 +3,8 @@
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
     [webchange.interpreter.core :refer [load-assets]]
-    [webchange.editor.form-elements.wavesurfer.wave-form :refer [audio-wave-form]]))
+    [webchange.editor.form-elements.wavesurfer.wave-form :refer [audio-wave-form]]
+    [webchange.editor-v2.translator.translator-form.views-form-audio-upload :refer [upload-audio-form]]))
 
 (defn get-action-audio-data
   [action-data]
@@ -92,22 +93,24 @@
 (def current-key (r/atom nil))
 
 (defn audios-list-block-render
-  [{:keys [audios action on-change]}]
+  [{:keys [scene-id audios action on-change]}]
   (let [action-data (:data action)
         action-audio-data (get-action-audio-data action-data)
         audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
     (r/with-let [assets-loaded (r/atom false)
                  assets-loading-progress (r/atom 0)]
-                (if @assets-loaded
-                  [waves-list {:audios-data           audios-data
-                               :on-wave-click         (fn [key]
-                                                        (reset! current-key key)
-                                                        (on-change key))
-                               :on-wave-region-change (fn [region]
-                                                        (on-change @current-key region))}]
-                  [audios-loading-block {:audios-list      audios
-                                         :loading-progress assets-loading-progress
-                                         :loaded           assets-loaded}]))))
+                [:div
+                 (if @assets-loaded
+                   [waves-list {:audios-data           audios-data
+                                :on-wave-click         (fn [key]
+                                                         (reset! current-key key)
+                                                         (on-change key))
+                                :on-wave-region-change (fn [region]
+                                                         (on-change @current-key region))}]
+                   [audios-loading-block {:audios-list      audios
+                                          :loading-progress assets-loading-progress
+                                          :loaded           assets-loaded}])
+                 [upload-audio-form {:scene-id scene-id}]])))
 
 (defn audios-list-block-did-mount
   [this]
