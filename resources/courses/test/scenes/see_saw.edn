@@ -1,7 +1,8 @@
 {:assets
-                [{:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                [{:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio" :alias "game voice 1"}
+                 {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio" :alias "game voice 1 redo"}
+                 {:url "/raw/audio/l1/a2/game-voice-2.mp3", :size 5, :type "audio" :alias "game voice 2"}
+                 {:url "/raw/audio/l1/a2/game-voice-3.mp3", :size 5, :type "audio" :alias "game voice 3"}
                  {:url "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a", :size 2, :type "audio" :alias "mari"}
 
                  {:url "/raw/img/park/see-saw/background.jpg", :size 10 :type "image"}
@@ -267,10 +268,7 @@
                  :finish-activity            {:type "finish-activity" :id "see-saw"}
                  :stop-activity              {:type "stop-activity" :id "see-saw"}}
  :audio
-                {:voice-1 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a"
-                 :voice-2 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a"
-                 :voice-3 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a"
-                 :mari    "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a"},
+                {:mari    "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a"},
  :triggers      {:start {:on "start" :action "start"}
                  :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true

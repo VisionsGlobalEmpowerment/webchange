@@ -41,7 +41,7 @@
                  [:div {:ref #(when %
                                 (let [wave-surfer (create-wavesurfer % key options)]
                                   (handle-audio-region! wave-surfer region key on-change)
-                                  (init-audio-region! wave-surfer region true)
+                                  (init-audio-region! wave-surfer region true key)
                                   (reset! ws wave-surfer)))}]
                  (when show-controls?
                    [float-control ws region])])))

@@ -1,8 +1,10 @@
 {:assets
-                [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio" :alias "mari voice"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio" :alias "mari voice old"}
+                 {:url "/raw/audio/l1/a4/mari.mp4", :size 5, :type "audio" :alias "mari voice"}
+
+                 {:url "/raw/audio/l1/a4/game-voice-set-1.mp3", :size 5, :type "audio" :alias "game voice 1"}
+                 {:url "/raw/audio/l1/a4/game-voice-set-2.mp3", :size 5, :type "audio" :alias "game voice 2"}
+                 {:url "/raw/audio/l1/a4/game-voice-set-3.mp3", :size 5, :type "audio" :alias "game voice 3"}
 
                  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio" :alias "letter 1"}
                  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio" :alias "letter 2"}
@@ -73,87 +75,74 @@
  :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]],
  :actions
                 {:mari-welcome-audio
-                                                 {:type  "animation-sequence" :target "mari" :track 1 :offset 0.702
-                                                  :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a" :start 0.702, :duration 5.914
-                                                  :data  [{:start 0.775 :end 2.67 :anim "talk"}
-                                                          {:start 3.189 :end 6.433 :anim "talk"}]}
+                                                 {:type "animation-sequence",
+                                                  :target "mari",
+                                                  :track 1,
+                                                  :offset 1.195,
+                                                  :audio "/raw/audio/l1/a4/mari.mp4",
+                                                  :start 1.195,
+                                                  :duration 5.381,
+                                                  :data
+                                                  [{:start 1.29, :end 3.19, :anim "talk"}
+                                                   {:start 3.75, :end 6.4, :anim "talk"}]}
 
                  :mari-touch-audio
-                                                 {:type  "animation-sequence" :target "mari" :track 1 :offset 35.155
-                                                  :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 35.155, :duration 3.973
-                                                  :data  [{:start 35.31 :end 38.992 :anim "talk"}]}
-
+                                                 {:type "animation-sequence",
+                                                  :target "mari",
+                                                  :track 1,
+                                                  :offset 26.774,
+                                                  :audio "/raw/audio/l1/a4/mari.mp4",
+                                                  :start 26.774,
+                                                  :duration 3.933,
+                                                  :data [{:start 26.94, :end 30.57, :anim "talk"}]}
                  :mari-more-audio
-                                                 {:type  "animation-sequence" :target "mari" :track 1 :offset 44.997
-                                                  :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 44.997, :duration 4.337
-                                                  :data  [{:start 45.352 :end 46.655 :anim "talk"}
-                                                          {:start 47.101 :end 49.088 :anim "talk"}]}
-
-                 :mari-one-more-audio            {:type "parallel"
-                                                  :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 225}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1307}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}
-                                                                 {:type "empty" :duration 550}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1069}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}]}]}
-
-                 :mari-good-job                  {:type "parallel"
-                                                  :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 225}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1307}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}
-                                                                 {:type "empty" :duration 550}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1069}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}]}]}
+                                                 {:type "animation-sequence",
+                                                  :target "mari",
+                                                  :track 1,
+                                                  :offset 33.04,
+                                                  :audio "/raw/audio/l1/a4/mari.mp4",
+                                                  :start 33.04,
+                                                  :duration 3.734,
+                                                  :data
+                                                  [{:start 33.53, :end 34.59, :anim "talk"}
+                                                   {:start 34.76, :end 36.73, :anim "talk"}]}
 
                  :mari-letter-1
-                                                 {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   14.48,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    14.48,
-                                                  :duration 1.746,
-                                                  :data     [{:start 14.552, :end 16.159, :duration 1.607, :anim "talk"}]}
-
+                                                 {:type "animation-sequence",
+                                                  :target "mari",
+                                                  :track 1,
+                                                  :offset 7.773,
+                                                  :audio "/raw/audio/l1/a4/mari.mp4",
+                                                  :start 7.773,
+                                                  :duration 1.56,
+                                                  :data [{:start 8.07, :end 9.4, :anim "talk"}]}
                  :mari-letter-2
-                                                 {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   17.239,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    17.239,
-                                                  :duration 1.347,
-                                                  :data     [{:start 17.333, :end 18.506, :duration 1.173, :anim "talk"}]}
-
+                                                 {:type "animation-sequence",
+                                                  :target "mari",
+                                                  :track 1,
+                                                  :offset 10.32,
+                                                  :audio "/raw/audio/l1/a4/mari.mp4",
+                                                  :start 10.32,
+                                                  :duration 1.72,
+                                                  :data [{:start 10.46, :end 12.99, :anim "talk"}]}
                  :mari-letter-3
-                                                 {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   19.293,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    19.293,
-                                                  :duration 1.32,
-                                                  :data     [{:start 19.413, :end 20.413, :duration 1, :anim "talk"}]}
-
+                                                 {:type "animation-sequence",
+                                                  :target "mari",
+                                                  :track 1,
+                                                  :offset 16.374,
+                                                  :audio "/raw/audio/l1/a4/mari.mp4",
+                                                  :start 16.374,
+                                                  :duration 6.386,
+                                                  :data [{:start 16.54, :end 22.62, :anim "talk"}]}
                  :mari-letter-4
-                                                 {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   23.053,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    23.053,
-                                                  :duration 6.173,
-                                                  :data
-                                                            [{:start 23.133, :end 27.426, :duration 4.293, :anim "talk"}
-                                                             {:start 27.932, :end 29.066, :duration 1.134, :anim "talk"}]}
+                                                 {:type "animation-sequence",
+                                                  :target "mari",
+                                                  :track 1,
+                                                  :offset 16.374,
+                                                  :audio "/raw/audio/l1/a4/mari.mp4",
+                                                  :start 16.374,
+                                                  :duration 6.386,
+                                                  :data [{:start 16.54, :end 22.62, :anim "talk"}]}
 
                  :mari-short-letter-var          {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-short-letter-action"}]}
                  :mari-long-letter-var           {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-long-letter-action"}]}
@@ -336,11 +325,6 @@
 
                  :start-activity                 {:type "start-activity" :id "sandbox"}
                  :finish-activity                {:type "finish-activity" :id "sandbox"}}
- :audio
-                {:mari    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a"
-                 :voice-1 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a"
-                 :voice-2 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a"
-                 :voice-3 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a"},
  :triggers      {:start {:on "start" :action "start"}}
  :metadata      {:autostart true
                  :prev      "park"}}

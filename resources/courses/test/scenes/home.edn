@@ -1,5 +1,9 @@
 {:assets
                 [{:url "/raw/audio/background/Casa.mp3", :size 10, :type "audio"}
+                 {:url "/raw/audio/l1/a1/mari.mp4", :size 1, :type "audio" :alias "mari"}
+                 {:url "/raw/audio/l1/a1/vera-casa-1.mp3", :size 2, :type "audio" :alias "vera 1"}
+                 {:url "/raw/audio/l1/a1/vera-casa-2.mp3", :size 2, :type "audio" :alias "vera 2"}
+                 {:url "/raw/audio/l1/a1/vera-casa-3.mp3", :size 2, :type "audio" :alias "vera 3"}
                  {:url "/raw/audio/effects/wrong.wav", :size 1, :type "audio"}
                  {:url "/raw/audio/effects/correct.mp3", :size 1, :type "audio"}
 
@@ -13,13 +17,6 @@
                  {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
                  {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
                  {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vera_Ardilla.m4a", :size 2, :type "audio" :alias "vera voice 1"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vera_Oso.m4a", :size 2, :type "audio" :alias "vera voice 2"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vera_Iman.m4a", :size 2, :type "audio" :alias "vera voice 3"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vera_Diamante.m4a", :size 2, :type "audio" :alias "vera voice diamante"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 1"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 2"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vera_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vera insertions 3"}
                  ],
  :objects
                 {:background   {:type "background", :src "/raw/img/casa/background.jpg"},
@@ -271,6 +268,32 @@
                  :exit {:type "sequence-data"
                         :data [{:type "action" :id "stop-activity"}
                                {:type "scene" :scene-id "map"}]}
+
+                 :mari-finish                        {:type "sequence-data",
+                                                      :data
+                                                            [{:type "transition",
+                                                              :transition-id "mari",
+                                                              :to {:x 1403, :y 657, :duration 1.3}}
+                                                             {:type "animation-sequence",
+                                                              :target "mari",
+                                                              :track 1,
+                                                              :offset 0.745,
+                                                              :audio "/raw/audio/l1/a1/mari.mp4",
+                                                              :data
+                                                              [{:start 0.85, :end 3.11, :anim "talk"}
+                                                               {:start 3.6, :end 6.59, :anim "talk"}
+                                                               {:start 7.51, :end 10.22, :anim "talk"}
+                                                               {:start 10.7, :end 16.01, :anim "talk"}
+                                                               {:start 16.19, :end 16.51, :anim "talk"}
+                                                               {:start 17.23, :end 18.61, :anim "talk"}
+                                                               {:start 19.04, :end 22.56, :anim "talk"}],
+                                                              :start 0.745,
+                                                              :duration 22.05}
+                                                             {:type "set-variable", :var-name "restart", :var-value true}],
+                                                      :phrase "finish-activity",
+                                                      :phrase-text
+                                                      "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad."}
+
                  :restart                          {:type     "test-value"
                                                     :value1   true
                                                     :from-var [{:var-name "restart" :action-property "value2"}]

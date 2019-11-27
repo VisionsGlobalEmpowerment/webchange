@@ -11,9 +11,9 @@
                   :width  1920,
                   :height 1080,
                   :alias  nil}
-                 {:url "/raw/audio/l1/assessment1/Mari_Level1_Assessment1.m4a", :size 5, :type "audio" :alias "mari voice"}
-                 {:url "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", :size 5, :type "audio" :alias "words"}
-                 {:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}],
+                 {:url "/raw/audio/l1/assessment1/mari.mp4", :size 5, :type "audio" :alias "mari voice"}
+                 {:url "/raw/audio/l1/assessment1/game-voice-set-main.mp3", :size 5, :type "audio" :alias "words"}],
+ :templates ["coaching"]
  :objects       {:background       {:type        "background",
                                     :scene-name  "background",
                                     :scene-layer 0,
@@ -397,32 +397,18 @@
                                           :description "Remove flows",
                                           :flow-tag    "instruction"}
                  :mari-welcome-audio     {:description "Welcome audio",
-                                          :offset      0.098
-                                          :start       0.098,
-                                          :type        "animation-sequence",
-                                          :duration    11.504,
-                                          :audio       "/raw/audio/l1/assessment1/Mari_Level1_Assessment1.m4a",
-                                          :target      "mari",
-                                          :track       1,
-                                          :data        [{:start 1.04 :end 1.944 :anim "talk"}
-                                                        {:start 2.641 :end 6.256 :anim "talk"}
-                                                        {:start 7.238 :end 11.176 :anim "talk"}]}
-                 :mari-audio-correct     {:type     "animation-sequence",
-                                          :target   "mari",
-                                          :track    1,
-                                          :offset   0.858,
-                                          :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                          :start    0.858,
-                                          :duration 1.837,
-                                          :data     [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]}
-                 :mari-audio-try-again   {:type     "animation-sequence",
-                                          :target   "mari",
-                                          :track    1,
-                                          :offset   18.915,
-                                          :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                          :start    18.915,
-                                          :duration 1.493,
-                                          :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]}
+                                          :offset 1.288,
+                                          :start 1.288,
+                                          :type "animation-sequence",
+                                          :duration 8.111,
+                                          :audio "/raw/audio/l1/assessment1/mari.mp4",
+                                          :target "mari",
+                                          :track 1,
+                                          :data
+                                                       [{:start 1.66, :end 5.14, :anim "talk"}
+                                                        {:start 5.83, :end 9.07, :anim "talk"}]}
+                 :mari-audio-correct     {:type "action" :id "mari-correct"}
+                 :mari-audio-try-again   {:type "action" :id "mari-wrong"}
                  :start                  {:type        "sequence",
                                           :description "Initial action",
                                           :data        ["start-activity"

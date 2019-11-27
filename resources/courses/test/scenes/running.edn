@@ -4,10 +4,8 @@
 
                  {:url "/raw/audio/l2/a4/L2_A4_Mari.m4a" :type "audio"}
 
-                 {:url "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a4/L2_A4_Gamevoice_2.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a4/L2_A4_Gamevoice_3.m4a" :type "audio"}
-                 {:url "/raw/audio/l2/a4/L2_A4_Gamevoice_4.m4a" :type "audio"}]
+                 {:url "/raw/audio/l2/game-voice.mp3" :type "audio" :alias "game voice"}
+                 {:url "/raw/audio/l2/game-voice-redo.mp3" :type "audio" :alias "game voice redo"}]
  :audio         {:mari "/raw/audio/l2/a4/L2_A4_Mari.m4a"}
  :objects       {:background {:type  "carousel" :x 0 :y 0 :width 1920 :height 1080
                               :first "/raw/img/stadium/running/bg_01.jpg"

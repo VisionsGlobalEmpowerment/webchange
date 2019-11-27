@@ -22,13 +22,13 @@
                  [:div {:ref #(when %
                                 (let [wavesurfer (create-wavesurfer % key)]
                                   (handle-audio-region! wavesurfer region key)
-                                  (init-audio-region! wavesurfer region true)
+                                  (init-audio-region! wavesurfer region true key)
                                   (reset! ws wavesurfer)))}]
-                 [:div
-                  [na/button {:content "Play" :on-click #(when (:region @region) (-> @region :region .play))}]
-                  [na/button {:content "Stop" :on-click #(.stop @ws)}]
-                  ]
+
                  ]]
+               [sa/ModalActions {}
+                 [na/button {:content "Play" :on-click #(when (:region @region) (-> @region :region .play))}]
+                 [na/button {:content "Stop" :on-click #(.stop @ws)}]]
                [sa/ModalActions {}
                 [na/button {:content "Cancel" :on-click #(reset! modal-open false)}]
                 [na/button {:content "Save" :on-click #(do
@@ -56,17 +56,16 @@
          [:div {:ref #(when %
                         (let [wavesurfer (create-wavesurfer % key)]
                           (when (= :audio @mode) (handle-audio-region! wavesurfer region key))
-                          (init-audio-region! wavesurfer region (= :audio @mode))
+                          (init-audio-region! wavesurfer region (= :audio @mode) key)
 
                           (when (= :animations @mode)
                             (handle-additional-regions! wavesurfer regions)
                             (init-additional-regions! wavesurfer regions sequence-data))
                           (reset! ws wavesurfer)))}]
-         [:div
-          [na/button {:content "Play" :on-click #(when (:region @region) (-> @region :region .play))}]
-          [na/button {:content "Stop" :on-click #(.stop @ws)}]
-          ]
          ]]
+       [sa/ModalActions {}
+        [na/button {:content "Play" :on-click #(when (:region @region) (-> @region :region .play))}]
+        [na/button {:content "Stop" :on-click #(.stop @ws)}]]
        [sa/ModalActions {}
         [na/button {:content "Cancel" :on-click #(reset! modal-open false)}]
         [na/button {:content "Save" :on-click #(do
@@ -94,7 +93,7 @@
          [:div {:ref #(when %
                         (let [wavesurfer (create-wavesurfer % key)]
                           (when (= :audio @mode) (handle-audio-region! wavesurfer region key))
-                          (init-audio-region! wavesurfer region (= :audio @mode))
+                          (init-audio-region! wavesurfer region (= :audio @mode) key)
 
                           (when (= :chunks @mode)
                             (handle-additional-regions! wavesurfer regions)

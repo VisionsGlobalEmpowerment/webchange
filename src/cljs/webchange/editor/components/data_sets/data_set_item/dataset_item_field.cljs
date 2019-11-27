@@ -70,13 +70,14 @@
                      :options       (get-options-from-plain-list @scenes)
                      :on-change     #(do
                                        (reset! selected-scene (.-value %2))
-                                       (re-frame/dispatch [::actions.events/set-form-data {:scene-id @selected-scene}]))}]]
+                                       (re-frame/dispatch [::actions.events/set-form-data (merge @props {:scene-id @selected-scene})]))}]]
        [Divider]
        (if-not @selected-scene
          [action-placeholder]
          [Form {}
           [action-form props params]
-          [Button {:primary  true
+          [Button {:floated "right"
+                   :primary  true
                    :on-click #(do (re-frame/dispatch [::actions.events/edit-selected-action @props]))} "Apply"]])
        ])))
 
