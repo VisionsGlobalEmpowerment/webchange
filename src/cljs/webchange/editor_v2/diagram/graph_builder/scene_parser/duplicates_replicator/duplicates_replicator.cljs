@@ -1,12 +1,14 @@
 (ns webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.duplicates-replicator
   (:require
     [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.usages-counter :refer [get-reuse-map]]
+    [webchange.editor-v2.diagram.graph-builder.utils.change-node :refer [get-node-outs]]
+    [webchange.editor-v2.diagram.graph-builder.utils.counter-map :refer [add-to-map
+                                                                         map-has-name?]]
+    [webchange.editor-v2.diagram.graph-builder.utils.node-children :refer [get-children]]
     [webchange.editor-v2.diagram.graph-builder.utils.root-nodes :refer [add-root-node
                                                                         get-root-nodes
-                                                                        remove-root-node]]
-    [webchange.editor-v2.diagram.graph-builder.utils.node-children :refer [get-children]]
-    [webchange.editor-v2.diagram.graph-builder.utils.counter-map :refer [add-to-map
-                                                                         map-has-name?]]))
+                                                                        remove-root-node]]))
+
 (defn get-copy-name
   [origin-name number]
   (-> origin-name
@@ -90,16 +92,16 @@
   (let [replicate? (map-has-name? reused-nodes node-name)]
     (if replicate?
       (let [[reused-nodes counter] (add-to-map reused-nodes node-name)
-            new-node-name (-> node-name (get-copy-name counter) (keyword))]
+            new-node-name (-> node-name (get-copy-name counter) (keyword))
+            new-node-data (-> node-data
+                              (filter-node-connections origin-prev-node-name)
+                              (rename-node-connection origin-prev-node-name prev-node-name)
+                              (add-origin node-name))]
         {:new-node-name new-node-name
          :reused-nodes  reused-nodes
          :graph         (-> graph
-                            (assoc new-node-name (-> node-data
-                                                     (filter-node-connections origin-prev-node-name)
-                                                     (rename-node-connection origin-prev-node-name prev-node-name)
-                                                     (add-origin node-name)))
-                            (change-handlers-name prev-node-name node-name new-node-name)
-                            (change-children-connection-name (get-children node-data origin-prev-node-name) node-name new-node-name))})
+                            (assoc new-node-name new-node-data)
+                            (change-handlers-name prev-node-name node-name new-node-name))})
       {:new-node-name node-name
        :reused-nodes  reused-nodes
        :graph         graph})))
@@ -115,7 +117,20 @@
        (fn [[graph reused-nodes] next-node-name]
          (replicate-dfs graph [node-name new-node-name next-node-name] reused-nodes))
        [graph reused-nodes]
-       (get-children node-data prev-node-name)))))
+       (get-children node-data origin-prev-node-name)))))
+
+(defn update-replicated-children
+  [graph]
+  (reduce
+    (fn [graph [node-name node-data]]
+      (if (contains? node-data :origin)
+        (change-children-connection-name graph
+                                         (->> node-data get-node-outs keys)
+                                         (:origin node-data)
+                                         node-name)
+        graph))
+    graph
+    graph))
 
 (defn remove-reused-nodes
   [graph reused-nodes]
@@ -131,6 +146,7 @@
       (add-root-node start-nodes)
       (replicate-dfs reused-nodes)
       (first)
+      (update-replicated-children)
       (remove-reused-nodes reused-nodes)
       (remove-root-node)))
 
