@@ -33,7 +33,6 @@
         (assoc new-name merged-data))))
 
 (defn override-concepts-dfs
-  "Counts how much phrase nodes contains current node's subtree and it's children"
   ([graph concepts]
    (override-concepts-dfs graph concepts [:root :root]))
   ([graph concepts [prev-node-name node-name]]
