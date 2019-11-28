@@ -59,10 +59,15 @@
                                           :style {:position "relative"
                                                   :top      "-40px"
                                                   :left     "100%"
-                                                  :margin   "-50px"}}]
+                                                  :margin   "-50px"}}
+                    graph-contains-concept? (->> graph
+                                                 (some (fn [[_ node-data]]
+                                                         (get-in node-data [:data :concept-action])))
+                                                 boolean)]
                 (case @state
                   "pause" [fab (merge common-button-params
-                                      {:disabled (nil? @current-concept)
+                                      {:disabled (and graph-contains-concept?
+                                                      (nil? @current-concept))
                                        :on-click (fn []
                                                    (let [action (get-phrase-actions-sequence graph current-concept edited-data #(reset! state "pause"))
                                                          audios-list (action->audios-list action)]
