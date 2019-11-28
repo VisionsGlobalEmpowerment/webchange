@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.common-colors)
+(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.colors)
 
 (def colors {:object        {:default "#FFC855"}
              :global-object {:default "#156874"}
