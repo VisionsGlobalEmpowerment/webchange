@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.common-ports
+(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-ports
   (:require
     ["@projectstorm/react-diagrams" :refer [PortWidget]]))
 
@@ -7,7 +7,7 @@
   [:div
    [:div {:style {:float        "left"
                   :margin-right 10}}
-    [:div {:style {:margin-bottom 5}} "In"]
+    [:div {:style {:margin-bottom 5}} ""]
     [:div {:style {:float "left"}}
      (for [in-port in-ports]
        ^{:key (.-id in-port)}
@@ -19,7 +19,7 @@
    [:div {:style {:float       "right"
                   :margin-left 10}}
     [:div {:style {:margin-bottom 5
-                   :text-align    "right"}} "Out"]
+                   :text-align    "right"}} ""]
     [:div {:style {:float "right"}}
      (for [out-port out-ports]
        ^{:key (.-id out-port)}
