@@ -8,12 +8,16 @@
     [webchange.editor-v2.translator.translator-form.views-form-audio-upload :refer [upload-audio-form]]))
 
 (defn get-action-audio-data
-  [action-data]
+  [action-data audios]
   (when (some #{(:type action-data)} ["audio"
                                       "animation-sequence"])
-    (merge (select-keys action-data [:start :duration])
-           {:key (or (get action-data :audio)
-                     (get action-data :id))})))
+    (let [action-key (or (get action-data :audio)
+                         (get action-data :id))
+          action-url (some (fn [{:keys [key url]}]
+                             (and (= key action-key) url)) audios)]
+      (merge (select-keys action-data [:start :duration])
+             {:key (or action-url
+                       action-key)}))))
 
 (defn audio-wave
   [{:keys [key start duration selected?]} {:keys [on-click on-change]}]
@@ -44,8 +48,8 @@
 (defn audio-key->audio-data
   [audios]
   (map
-    (fn [key]
-      {:key       key
+    (fn [{:keys [url]}]
+      {:key       url
        :start     nil
        :duration  nil
        :selected? false})
@@ -89,7 +93,7 @@
 (defn audios-list-block-render
   [{:keys [scene-id audios action on-change]}]
   (let [action-data (:data action)
-        action-audio-data (get-action-audio-data action-data)
+        action-audio-data (get-action-audio-data action-data audios)
         audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
     (r/with-let [assets-loaded (r/atom false)
                  assets-loading-progress (r/atom 0)]
@@ -101,25 +105,25 @@
                                                          (on-change key))
                                 :on-wave-region-change (fn [region]
                                                          (on-change @current-key region))}]
-                   [audios-loading-block {:audios-list      audios
+                   [audios-loading-block {:audios-list      (map #(:url %) audios)
                                           :loading-progress assets-loading-progress
                                           :loaded           assets-loaded}])
                  [upload-audio-form {:scene-id scene-id}]])))
 
 (defn audios-list-block-did-mount
   [this]
-  (let [{:keys [action]} (r/props this)
+  (let [{:keys [action audios]} (r/props this)
         action-data (:data action)
-        action-audio-data (get-action-audio-data action-data)]
+        action-audio-data (get-action-audio-data action-data audios)]
     (reset! current-key (:key action-audio-data))))
 
 (defn audios-list-block-did-update
   [this [_ old-props]]
-  (let [{:keys [action]} (r/props this)
+  (let [{:keys [action audios]} (r/props this)
         action-data (:data action)
         action-name (:name action)
         old-action-name (:name (:action old-props))
-        action-audio-data (get-action-audio-data action-data)]
+        action-audio-data (get-action-audio-data action-data audios)]
     (when-not (= action-name old-action-name)
       (reset! current-key (:key action-audio-data)))))
 

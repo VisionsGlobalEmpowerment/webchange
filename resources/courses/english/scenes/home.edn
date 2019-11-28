@@ -391,7 +391,8 @@
                  :exit                               {:type "sequence-data"
                                                       :data [{:type "action" :id "stop-activity"}
                                                              {:type "scene" :scene-id "map"}]}}
- :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"},
+ :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"
+                 :fw-try-again "/raw/audio/ferris-wheel/fw-try-again.mp3"},
  :triggers      {:music {:on "start" :action "start-background-music"}
                  :start {:on "start" :action "intro"}
                  :back  {:on "back" :action "stop-activity"}}

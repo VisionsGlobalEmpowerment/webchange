@@ -21,6 +21,7 @@
                            :start    start
                            :duration duration}]
     (case type
+      "audio" audio-action-data
       "animation-sequence" (merge audio-action-data {:id (:audio action)})
       "empty" action
       nil)))

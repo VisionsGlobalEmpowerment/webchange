@@ -14,29 +14,73 @@
        (filter (fn [[_ action-data]] (get-in action-data [:data :concept-action])))
        (map (fn [[action-name _]] action-name))))
 
-(defn- get-scene-audios
+(defn- get-scene-asset-audios
   [scene-data]
   (->> (:assets scene-data)
        (filter (fn [{:keys [type]}] (= type "audio")))
-       (map (fn [{:keys [url]}] url))))
+       (map (fn [{:keys [alias url]}]
+              {:alias alias
+               :key   url
+               :url   url}))))
+
+(defn- get-scene-external-audios
+  [scene-data]
+  (->> (:audio scene-data)
+       (map (fn [[key url]]
+              {:alias nil
+               :key   (name key)
+               :url   url}))))
 
 (defn- get-concepts-audios
-  [concepts used-concept-actions]
-  (->> concepts
+  ([concepts]
+   (get-concepts-audios concepts nil))
+  ([concepts used-concept-actions]
+   (->> concepts
+        (reduce
+          (fn [result {:keys [data]}]
+            (let [concept-actions (if-not (nil? used-concept-actions)
+                                    (select-keys data used-concept-actions)
+                                    data)
+                  concept-audios (map (fn [[_ {:keys [id audio]}]]
+                                        (let [url (or id audio)]
+                                          {:alias nil
+                                           :key   url
+                                           :url   url})) concept-actions)]
+              (concat result concept-audios)))
+          []))))
+
+(defn update-alias
+  [map url alias]
+  (if-not (nil? alias)
+    (assoc-in map [url :alias] alias)
+    map))
+
+(defn update-key
+  [map url key]
+  (if-not (= key url)
+    (assoc-in map [url :key] key)
+    map))
+
+(defn audios-distinct
+  [audios]
+  (->> audios
        (reduce
-         (fn [result {:keys [data]}]
-           (let [concept-actions (select-keys data used-concept-actions)
-                 concept-audios (map (fn [[_ {:keys [audio]}]] audio) concept-actions)]
-             (concat result concept-audios)))
-         [])
-       (distinct))
-  )
+         (fn [result {:keys [alias key url] :as audio}]
+           (if-not (contains? result url)
+             (assoc result url audio)
+             (-> result
+                 (update-alias url alias)
+                 (update-key url key))))
+         {})
+       (vals)
+       (vec)))
 
 (defn get-audios
   [scene-data concepts used-concept-actions]
-  (->> (concat (get-scene-audios scene-data)
+  (->> (concat (get-scene-asset-audios scene-data)
+               (get-scene-external-audios scene-data)
                (get-concepts-audios concepts used-concept-actions))
-       (distinct)))
+       (audios-distinct)))
 
 (defn audios->assets
   [audios]
