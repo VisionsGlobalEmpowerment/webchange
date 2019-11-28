@@ -2,7 +2,7 @@
   (:require
     ["@projectstorm/react-diagrams" :refer [AbstractNodeFactory]]
     [reagent.core :as r]
-    [webchange.editor-v2.diagram.modes.widget-event-handlers :refer [get-widget-event-handlers]]
+    [webchange.editor-v2.diagram.modes.widget-data :refer [get-widget-data]]
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-model :refer [get-custom-model]]
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget :refer [custom-widget]]))
 
@@ -22,7 +22,7 @@
 (set! (.. custom-factory -prototype -generateReactWidget)
       (fn [_ node]
         (this-as this
-          (r/as-element [custom-widget (merge (get-widget-event-handlers (.-mode this))
+          (r/as-element [custom-widget (merge (get-widget-data (.-mode this))
                                               {:node node}) ]))))
 
 (set! (.. custom-factory -prototype -getNewInstance)
