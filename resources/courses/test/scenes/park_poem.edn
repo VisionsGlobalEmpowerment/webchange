@@ -38,7 +38,8 @@
                  {:url "/raw/audio/l2/a3/poems-pro/yoyo.mp3" :type "audio" :alias "yoyo"}
                  {:url "/raw/audio/l2/a3/poems-pro/zapato.mp3" :type "audio" :alias "zapato"}
 
-                 {:url "/raw/audio/l2/a3/L2_A3_Mari.m4a" :size 5 :type "audio" :alias "mari voice"}]
+                 {:url "/raw/audio/l2/a3/L2_A3_Mari.m4a" :size 5 :type "audio" :alias "mari voice"}
+                 {:url "/raw/audio/l2/a3/mari-instructions.mp4" :size 5 :type "audio" :alias "mari instructions"}]
  :audio         {:mari "/raw/audio/l2/a3/L2_A3_Mari.m4a"}
  :objects       {:background    {:type "background"
                                  :src  "/raw/img/park/sandbox/background.jpg"}
@@ -173,6 +174,7 @@
                                                        "init-state"
                                                        "init-concepts"
                                                        "mari-voice-welcome"
+                                                       "mari-voice-welcome-2"
                                                        "enable-story-1"]}
 
                  :start-activity        {:type "start-activity" :id "park-poem"}
@@ -244,7 +246,8 @@
                                                           {:type "set-variable" :var-name "story-1-passed" :var-value true}
                                                           {:type "set-variable" :var-name "story-2-clickable" :var-value true}
                                                           {:type "state" :target "image-story-2" :id "clickable"}
-                                                          {:type "action" :id "test-stories-complete"}]}
+                                                          {:type "action" :id "test-stories-complete"}
+                                                          {:type "action" :id "mari-voice-next"}]}
                                          :fail    {:type "empty" :duration 1}}
 
                  :image-story-2-clicked {:type    "test-var-scalar" :var-name "story-2-clickable" :value true
@@ -256,7 +259,8 @@
                                                           {:type "set-variable" :var-name "story-2-passed" :var-value true}
                                                           {:type "set-variable" :var-name "story-3-clickable" :var-value true}
                                                           {:type "state" :target "image-story-3" :id "clickable"}
-                                                          {:type "action" :id "test-stories-complete"}]}
+                                                          {:type "action" :id "test-stories-complete"}
+                                                          {:type "action" :id "mari-voice-next"}]}
                                          :fail    {:type "empty" :duration 1}}
 
                  :image-story-3-clicked {:type    "test-var-scalar" :var-name "story-3-clickable" :value true
@@ -361,6 +365,16 @@
                                                         :data [{:start 0.757 :end 3.406 :anim "talk"}
                                                                {:start 3.925 :end 7.083 :anim "talk"}]}]}
 
+                 :mari-voice-welcome-2   {:description "Touch the picture and listen carefully!",
+                                          :offset 1.248,
+                                          :start 1.248,
+                                          :type "animation-sequence",
+                                          :duration 3.86,
+                                          :audio "/raw/audio/l2/a3/mari-instructions.mp4",
+                                          :target "mari",
+                                          :track 1,
+                                          :data [{:start 1.5, :end 4.71, :anim "talk"}]}
+
                  :mari-voice-now-repeat {:type        "parallel"
                                          :description "Te gusto eso? Espero que si. Vamos a escuchar la historia de nuevo,
                                                           pero esta vez, quiero que TU cuentes la historia conmigo.
@@ -373,6 +387,16 @@
                                                                {:start 19.411 :end 21.844 :anim "talk"}
                                                                {:start 22.244 :end 24.212 :anim "talk"}
                                                                {:start 24.666 :end 28.299 :anim "talk"}]}]}
+
+                 :mari-voice-next {:description "Touch the next picture to start the poem",
+                                   :offset 6.251,
+                                   :start 6.251,
+                                   :type "animation-sequence",
+                                   :duration 4.268,
+                                   :audio "/raw/audio/l2/a3/mari-instructions.mp4",
+                                   :target "mari",
+                                   :track 1,
+                                   :data [{:start 6.42, :end 10.34, :anim "talk"}]}
 
                  :mari-voice-finish     {:type        "parallel"
                                          :description "Bravo! Te gustaria escuchar la historia de nuevo?
