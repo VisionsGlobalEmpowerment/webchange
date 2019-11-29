@@ -79,7 +79,10 @@
                   [ui/dialog-content
                    [concepts-block {:current-concept @current-concept
                                     :concepts-list   concepts
-                                    :on-change       #(reset! current-concept %)}]]]
+                                    :on-change       #(reset! current-concept %)}]]
+                  [ui/dialog-actions
+                   [ui/button {:on-click #(re-frame/dispatch [::translator-events/clean-current-selected-action])}
+                    "Cancel"]]]
                  ])
               (finally
                 (re-frame/dispatch [::translator-events/clean-current-selected-action]))))
