@@ -262,48 +262,54 @@
                                                                 :fail     "pick-wrong"}
                                                   :connections {:box2 {:handlers {:success [:empty-small-copy-2]
                                                                                   :fail    [:pick-wrong-copy-2]}}}}
-                             :empty-small-copy-1 {:type        "empty"
-                                                  :origin      :empty-small
-                                                  :data        {:type     "empty"
-                                                                :duration 500}
-                                                  :connections {:click-on-box1 {:handlers {}}}}
-                             :empty-small-copy-2 {:type        "empty"
-                                                  :origin      :empty-small
-                                                  :data        {:type     "empty"
-                                                                :duration 500}
-                                                  :connections {:click-on-box2 {:handlers {}}}}
-                             :pick-wrong-copy-1  {:type        "sequence"
-                                                  :origin      :pick-wrong
-                                                  :data        {:type        "sequence"
-                                                                :data        ["audio-wrong"]
-                                                                :phrase      :wrong-click
-                                                                :phrase-text "Try again"}
-                                                  :connections {:click-on-box1 {:handlers {:next [:audio-wrong-copy-1]}}}}
-                             :pick-wrong-copy-2  {:type        "sequence"
-                                                  :origin      :pick-wrong
-                                                  :data        {:type        "sequence"
-                                                                :data        ["audio-wrong"]
-                                                                :phrase      :wrong-click
-                                                                :phrase-text "Try again"}
-                                                  :connections {:click-on-box2 {:handlers {:next [:audio-wrong-copy-2]}}}}
-                             :audio-wrong-copy-1 {:type        "audio"
-                                                  :origin      :audio-wrong
-                                                  :data        {:type     "audio"
-                                                                :id       "fw-try-again"
-                                                                :start    0.892
-                                                                :duration 1.869
-                                                                :offset   0.2}
-                                                  :connections {:pick-wrong-copy-1 {:handlers {}
-                                                                                    :parent   :pick-wrong}}}
-                             :audio-wrong-copy-2 {:type        "audio"
-                                                  :origin      :audio-wrong
-                                                  :data        {:type     "audio"
-                                                                :id       "fw-try-again"
-                                                                :start    0.892
-                                                                :duration 1.869
-                                                                :offset   0.2}
-                                                  :connections {:pick-wrong-copy-2 {:handlers {}
-                                                                                    :parent   :pick-wrong}}}}]
+                             :empty-small-copy-1 {:type         "empty"
+                                                  :origin       :empty-small
+                                                  :copy-counter 1
+                                                  :data         {:type     "empty"
+                                                                 :duration 500}
+                                                  :connections  {:click-on-box1 {:handlers {}}}}
+                             :empty-small-copy-2 {:type         "empty"
+                                                  :origin       :empty-small
+                                                  :copy-counter 2
+                                                  :data         {:type     "empty"
+                                                                 :duration 500}
+                                                  :connections  {:click-on-box2 {:handlers {}}}}
+                             :pick-wrong-copy-1  {:type         "sequence"
+                                                  :origin       :pick-wrong
+                                                  :copy-counter 1
+                                                  :data         {:type        "sequence"
+                                                                 :data        ["audio-wrong"]
+                                                                 :phrase      :wrong-click
+                                                                 :phrase-text "Try again"}
+                                                  :connections  {:click-on-box1 {:handlers {:next [:audio-wrong-copy-1]}}}}
+                             :pick-wrong-copy-2  {:type         "sequence"
+                                                  :origin       :pick-wrong
+                                                  :copy-counter 2
+                                                  :data         {:type        "sequence"
+                                                                 :data        ["audio-wrong"]
+                                                                 :phrase      :wrong-click
+                                                                 :phrase-text "Try again"}
+                                                  :connections  {:click-on-box2 {:handlers {:next [:audio-wrong-copy-2]}}}}
+                             :audio-wrong-copy-1 {:type         "audio"
+                                                  :origin       :audio-wrong
+                                                  :copy-counter 1
+                                                  :data         {:type     "audio"
+                                                                 :id       "fw-try-again"
+                                                                 :start    0.892
+                                                                 :duration 1.869
+                                                                 :offset   0.2}
+                                                  :connections  {:pick-wrong-copy-1 {:handlers {}
+                                                                                     :parent   :pick-wrong}}}
+                             :audio-wrong-copy-2 {:type         "audio"
+                                                  :origin       :audio-wrong
+                                                  :copy-counter 2
+                                                  :data         {:type     "audio"
+                                                                 :id       "fw-try-again"
+                                                                 :start    0.892
+                                                                 :duration 1.869
+                                                                 :offset   0.2}
+                                                  :connections  {:pick-wrong-copy-2 {:handlers {}
+                                                                                     :parent   :pick-wrong}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
@@ -389,62 +395,70 @@
                                                                 :fail     "pick-wrong"}
                                                   :connections {:box2 {:handlers {:success [:empty-small-copy-3]
                                                                                   :fail    [:pick-wrong-copy-2]}}}}
-                             :empty-small-copy-1 {:type        "empty"
-                                                  :origin      :empty-small
-                                                  :data        {:type     "empty"
-                                                                :duration 500}
-                                                  :connections {:click-on-box1 {:handlers {}}}}
-                             :empty-small-copy-3 {:type        "empty"
-                                                  :origin      :empty-small
-                                                  :data        {:type     "empty"
-                                                                :duration 500}
-                                                  :connections {:click-on-box2 {:handlers {}}}}
-                             :pick-wrong-copy-1  {:type        "sequence"
-                                                  :origin      :pick-wrong
-                                                  :data        {:type        "sequence"
-                                                                :data        ["audio-wrong"
-                                                                              "empty-small"]
-                                                                :phrase      :wrong-click
-                                                                :phrase-text "Try again"}
-                                                  :connections {:click-on-box1 {:handlers {:next [:audio-wrong-copy-1]}}}}
-                             :pick-wrong-copy-2  {:type        "sequence"
-                                                  :origin      :pick-wrong
-                                                  :data        {:type        "sequence"
-                                                                :data        ["audio-wrong"
-                                                                              "empty-small"]
-                                                                :phrase      :wrong-click
-                                                                :phrase-text "Try again"}
-                                                  :connections {:click-on-box2 {:handlers {:next [:audio-wrong-copy-2]}}}}
-                             :audio-wrong-copy-1 {:type        "audio"
-                                                  :origin      :audio-wrong
-                                                  :data        {:type     "audio"
-                                                                :id       "fw-try-again"
-                                                                :start    0.892
-                                                                :duration 1.869
-                                                                :offset   0.2}
-                                                  :connections {:pick-wrong-copy-1 {:handlers {:next [:empty-small-copy-2]}
-                                                                                    :parent   :pick-wrong}}}
-                             :audio-wrong-copy-2 {:type        "audio"
-                                                  :origin      :audio-wrong
-                                                  :data        {:type     "audio"
-                                                                :id       "fw-try-again"
-                                                                :start    0.892
-                                                                :duration 1.869
-                                                                :offset   0.2}
-                                                  :connections {:pick-wrong-copy-2 {:handlers {:next [:empty-small-copy-4]}
-                                                                                    :parent   :pick-wrong}}}
-                             :empty-small-copy-2 {:type        "empty"
-                                                  :origin      :empty-small
-                                                  :data        {:type     "empty"
-                                                                :duration 500}
-                                                  :connections {:audio-wrong-copy-1 {:handlers {}
+                             :empty-small-copy-1 {:type         "empty"
+                                                  :origin       :empty-small
+                                                  :copy-counter 1
+                                                  :data         {:type     "empty"
+                                                                 :duration 500}
+                                                  :connections  {:click-on-box1 {:handlers {}}}}
+                             :empty-small-copy-3 {:type         "empty"
+                                                  :origin       :empty-small
+                                                  :copy-counter 3
+                                                  :data         {:type     "empty"
+                                                                 :duration 500}
+                                                  :connections  {:click-on-box2 {:handlers {}}}}
+                             :pick-wrong-copy-1  {:type         "sequence"
+                                                  :origin       :pick-wrong
+                                                  :copy-counter 1
+                                                  :data         {:type        "sequence"
+                                                                 :data        ["audio-wrong"
+                                                                               "empty-small"]
+                                                                 :phrase      :wrong-click
+                                                                 :phrase-text "Try again"}
+                                                  :connections  {:click-on-box1 {:handlers {:next [:audio-wrong-copy-1]}}}}
+                             :pick-wrong-copy-2  {:type         "sequence"
+                                                  :origin       :pick-wrong
+                                                  :copy-counter 2
+                                                  :data         {:type        "sequence"
+                                                                 :data        ["audio-wrong"
+                                                                               "empty-small"]
+                                                                 :phrase      :wrong-click
+                                                                 :phrase-text "Try again"}
+                                                  :connections  {:click-on-box2 {:handlers {:next [:audio-wrong-copy-2]}}}}
+                             :audio-wrong-copy-1 {:type         "audio"
+                                                  :origin       :audio-wrong
+                                                  :copy-counter 1
+                                                  :data         {:type     "audio"
+                                                                 :id       "fw-try-again"
+                                                                 :start    0.892
+                                                                 :duration 1.869
+                                                                 :offset   0.2}
+                                                  :connections  {:pick-wrong-copy-1 {:handlers {:next [:empty-small-copy-2]}
                                                                                      :parent   :pick-wrong}}}
-                             :empty-small-copy-4 {:type        "empty"
-                                                  :origin      :empty-small
-                                                  :data        {:type     "empty"
-                                                                :duration 500}
-                                                  :connections {:audio-wrong-copy-2 {:handlers {}
-                                                                                     :parent   :pick-wrong}}}}]
+                             :audio-wrong-copy-2 {:type         "audio"
+                                                  :origin       :audio-wrong
+                                                  :copy-counter 2
+                                                  :data         {:type     "audio"
+                                                                 :id       "fw-try-again"
+                                                                 :start    0.892
+                                                                 :duration 1.869
+                                                                 :offset   0.2}
+                                                  :connections  {:pick-wrong-copy-2 {:handlers {:next [:empty-small-copy-4]}
+                                                                                     :parent   :pick-wrong}}}
+                             :empty-small-copy-2 {:type         "empty"
+                                                  :origin       :empty-small
+                                                  :copy-counter 2
+                                                  :data         {:type     "empty"
+                                                                 :duration 500}
+                                                  :connections  {:audio-wrong-copy-1 {:handlers {}
+                                                                                      :parent   :pick-wrong}}}
+                             :empty-small-copy-4 {:type         "empty"
+                                                  :origin       :empty-small
+                                                  :copy-counter 4
+                                                  :data         {:type     "empty"
+                                                                 :duration 500}
+                                                  :connections  {:audio-wrong-copy-2 {:handlers {}
+                                                                                      :parent   :pick-wrong}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
@@ -465,22 +479,30 @@
       (let [actual-result (replicate-reused-nodes parsed-data start-nodes reused-nodes)
             expected-result {:a        {:connections {:root {:handlers {:next [:c-copy-1 :d-copy-1]}}}}
                              :b        {:connections {:root {:handlers {:next [:c-copy-3 :d-copy-2]}}}}
-                             :c-copy-1 {:connections {:a {:handlers {}}}
-                                        :origin      :c}
-                             :c-copy-2 {:connections {:e-copy-1 {:handlers {}}}
-                                        :origin      :c}
-                             :c-copy-3 {:connections {:b {:handlers {}}}
-                                        :origin      :c}
-                             :c-copy-4 {:connections {:e-copy-2 {:handlers {}}}
-                                        :origin      :c}
-                             :d-copy-1 {:connections {:a {:handlers {:next [:e-copy-1]}}}
-                                        :origin      :d}
-                             :d-copy-2 {:connections {:b {:handlers {:next [:e-copy-2]}}}
-                                        :origin      :d}
-                             :e-copy-1 {:connections {:d-copy-1 {:handlers {:next [:c-copy-2]}}}
-                                        :origin      :e}
-                             :e-copy-2 {:connections {:d-copy-2 {:handlers {:next [:c-copy-4]}}}
-                                        :origin      :e}}]
+                             :c-copy-1 {:connections  {:a {:handlers {}}}
+                                        :origin       :c
+                                        :copy-counter 1}
+                             :c-copy-2 {:connections  {:e-copy-1 {:handlers {}}}
+                                        :origin       :c
+                                        :copy-counter 2}
+                             :c-copy-3 {:connections  {:b {:handlers {}}}
+                                        :origin       :c
+                                        :copy-counter 3}
+                             :c-copy-4 {:connections  {:e-copy-2 {:handlers {}}}
+                                        :origin       :c
+                                        :copy-counter 4}
+                             :d-copy-1 {:connections  {:a {:handlers {:next [:e-copy-1]}}}
+                                        :origin       :d
+                                        :copy-counter 1}
+                             :d-copy-2 {:connections  {:b {:handlers {:next [:e-copy-2]}}}
+                                        :origin       :d
+                                        :copy-counter 2}
+                             :e-copy-1 {:connections  {:d-copy-1 {:handlers {:next [:c-copy-2]}}}
+                                        :origin       :e
+                                        :copy-counter 1}
+                             :e-copy-2 {:connections  {:d-copy-2 {:handlers {:next [:c-copy-4]}}}
+                                        :origin       :e
+                                        :copy-counter 2}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
@@ -499,13 +521,15 @@
       (let [actual-result (replicate-reused-nodes parsed-data start-nodes reused-nodes)
             expected-result {:a        {:connections {:root {:handlers {:next [:b]}}}}
                              :b        {:connections {:a {:handlers {:next [:c-copy-1]}}}}
-                             :c-copy-1 {:connections {:b {:handlers {:next [:d]}}}
-                                        :origin      :c}
+                             :c-copy-1 {:connections  {:b {:handlers {:next [:d]}}}
+                                        :origin       :c
+                                        :copy-counter 1}
                              :d        {:connections {:c-copy-1 {:handlers {:next [:e]}}}}
                              :e        {:connections {:d {:handlers {:next [:c-copy-2]}}}}
 
-                             :c-copy-2 {:connections {:e {:handlers {:next [:f]}}}
-                                        :origin      :c}
+                             :c-copy-2 {:connections  {:e {:handlers {:next [:f]}}}
+                                        :origin       :c
+                                        :copy-counter 2}
                              :f        {:connections {:c-copy-2 {:handlers {}}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))

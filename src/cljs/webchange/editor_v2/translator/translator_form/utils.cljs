@@ -3,16 +3,10 @@
     [webchange.editor-v2.diagram.graph-builder.graph :refer [get-diagram-graph]]))
 
 (defn get-graph
-  [scene-data action-name concepts-scheme]
+  [scene-data action-name concept-data]
   (when-not (nil? action-name)
-    (get-diagram-graph scene-data :translation {:start-node action-name
-                                                :concepts   (get-in concepts-scheme [:scheme :fields])})))
-
-(defn get-used-concept-actions
-  [graph]
-  (->> graph
-       (filter (fn [[_ action-data]] (get-in action-data [:data :concept-action])))
-       (map (fn [[action-name _]] action-name))))
+    (get-diagram-graph scene-data :translation {:start-node   action-name
+                                                :concept-data concept-data})))
 
 (defn- get-scene-asset-audios
   [scene-data]
@@ -32,22 +26,25 @@
                :url   url}))))
 
 (defn- get-concepts-audios
-  ([concepts]
-   (get-concepts-audios concepts nil))
-  ([concepts used-concept-actions]
-   (->> concepts
-        (reduce
-          (fn [result {:keys [data]}]
-            (let [concept-actions (if-not (nil? used-concept-actions)
-                                    (select-keys data used-concept-actions)
-                                    data)
-                  concept-audios (map (fn [[_ {:keys [id audio]}]]
-                                        (let [url (or id audio)]
-                                          {:alias nil
-                                           :key   url
-                                           :url   url})) concept-actions)]
-              (concat result concept-audios)))
-          []))))
+  [graph]
+  (reduce
+    (fn [result [_ action-data]]
+      (if (get-in action-data [:data :concept-action])
+        (let [{:keys [id audio]} (:data action-data)
+              url (or id audio)]
+          (conj result {:alias nil
+                        :key   url
+                        :url   url}))
+        result))
+    []
+    graph))
+
+(defn filter-no-url
+  [audios]
+  (filter
+    (fn [{:keys [key]}]
+      (-> key nil? not))
+    audios))
 
 (defn update-alias
   [map url alias]
@@ -76,10 +73,11 @@
        (vec)))
 
 (defn get-audios
-  [scene-data concepts used-concept-actions]
+  [scene-data graph]
   (->> (concat (get-scene-asset-audios scene-data)
                (get-scene-external-audios scene-data)
-               (get-concepts-audios concepts used-concept-actions))
+               (get-concepts-audios graph))
+       (filter-no-url)
        (audios-distinct)))
 
 (defn audios->assets
@@ -88,19 +86,31 @@
                   :size 1
                   :url  url}) audios))
 
+(defn get-scene-action-data
+  [selected-node-data]
+  (let [action-name (-> selected-node-data :name keyword)
+        action-data (:data selected-node-data)]
+    [:scene nil action-name action-data]))
+
+(defn get-concept-action-data
+  [selected-node-data current-concept-data]
+  (let [action-id (:id current-concept-data)
+        action-name (-> selected-node-data :name keyword)
+        action-data (:data selected-node-data)]
+    [:concept action-id action-name action-data]))
+
+(defn update-with-current-data
+  [action-name action-data data-store]
+  (let [edited-action-data (get-in data-store [action-name :data])]
+    (merge action-data edited-action-data)))
+
 (defn get-current-action-data
   [selected-node-data current-concept-data data-store]
-  (let [action-name (-> selected-node-data :name keyword)
-        concept-action? (get-in selected-node-data [:data :concept-action])
-        [id name type data] (if concept-action?
-                              (let [concept-action-name (-> selected-node-data :name keyword)]
-                                [(:id current-concept-data)
-                                 concept-action-name
-                                 :concept
-                                 (get-in current-concept-data [:data concept-action-name])])
-                              [nil action-name :scene (:data selected-node-data)])
-        edited-action-data (get-in data-store [action-name :data])]
+  (let [concept-action? (get-in selected-node-data [:data :concept-action])
+        [type id name data] (if concept-action?
+                              (get-concept-action-data selected-node-data current-concept-data)
+                              (get-scene-action-data selected-node-data))]
     {:id   id
      :name name
      :type type
-     :data (merge data edited-action-data)}))
+     :data (update-with-current-data name data data-store)}))

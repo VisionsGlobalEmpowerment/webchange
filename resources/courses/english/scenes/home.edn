@@ -301,13 +301,14 @@
                                                                     "vaca-can-you-say"
                                                                     "vaca-question-var"
                                                                     "empty-small"
-                                                                    "vaca-word-var"]
+                                                                    "vaca-word-var"
+                                                                    "empty-small"
+                                                                    "group-word-var"]
                                                       :phrase      :this-is-concept
-                                                      :phrase-text "This is a %concept%! Can you say %concept%? (pause) %concept%."}
+                                                      :phrase-text "This is a %concept%! Can you say %concept%? (pause) %concept%. (together) %concept%!"}
 
                  :concept-chant {:type        "sequence"
-                                 :data        ["group-word-var"
-                                               "empty-small"
+                                 :data        ["empty-small"
                                                "vaca-say-3-times"
                                                "vaca-3-times-var"
                                                "empty-big"
@@ -317,7 +318,10 @@
                                                "empty-small"
                                                "group-3-times-var"]
                                  :phrase      :concept-chant
-                                 :phrase-text "Let’s say it 3 times, like this: %concept%, %concept%, %concept%!"}
+                                 :phrase-text "Vaca: Good! Let’s say it 3 times, like this: %concept%, %concept%, %concept%!
+                                               Vera: %concept%, %concept%, %concept%
+                                               Vaca: Once more!
+                                               Vera: %concept%, %concept%, %concept%"}
 
                  :senora-vaca-anim-idle              {:type "animation" :target "senoravaca" :id "idle"}
                  :senora-vaca-anim-clapping-start    {:type "animation" :target "senoravaca" :id "clapping_start" :loop false}
