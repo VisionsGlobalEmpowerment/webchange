@@ -12,6 +12,6 @@
                                    (parse-scene)
                                    (get-phrases-graph))
      (= diagram-mode :translation) (-> scene-data
-                                       (parse-scene (select-keys params [:start-node :concepts])))
+                                       (parse-scene (select-keys params [:start-node :concept-data])))
      :default (-> scene-data
                   (parse-scene)))))

@@ -7,8 +7,8 @@
 (defn parse-scene
   ([scene-data]
    (parse-scene scene-data {}))
-  ([scene-data {:keys [start-node concepts]}]
+  ([scene-data {:keys [start-node concept-data]}]
    (-> scene-data
        (parse-data start-node)
-       (override-concept-actions concepts)
-       (untangle-reuses))))
+       (untangle-reuses)
+       (override-concept-actions concept-data))))

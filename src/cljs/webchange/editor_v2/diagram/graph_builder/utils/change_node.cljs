@@ -125,3 +125,25 @@
       (rename-parents-connections old-name new-name)
       (rename-children-connections old-name new-name)
       (rename-current-node old-name new-name)))
+
+(defn get-nodes-by-prev-node-name
+  [graph prev-node-name]
+  (reduce
+    (fn [result [node-name node-data]]
+      (let [node-ins (-> node-data get-node-ins keys)]
+        (if (some #{prev-node-name} node-ins)
+          (conj result node-name)
+          result)))
+    []
+    graph))
+
+(defn get-nodes-by-next-node-name
+  [graph next-node-name]
+  (reduce
+    (fn [result [node-name node-data]]
+      (let [node-outs (-> node-data get-node-outs keys)]
+        (if (some #{next-node-name} node-outs)
+          (conj result node-name)
+          result)))
+    []
+    graph))

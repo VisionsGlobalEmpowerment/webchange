@@ -13,7 +13,7 @@
     (get-in db [:editor-v2 :current-action])))
 
 (re-frame/reg-sub
-  ::course-concepts
+  ::course-concept
   (fn [db]
     (->> (get-in db [:editor :course-datasets])
          (some (fn [dataset]

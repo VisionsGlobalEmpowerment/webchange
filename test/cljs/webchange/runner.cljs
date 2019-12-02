@@ -8,6 +8,7 @@
             [webchange.editor.form-elements.number-test]
             [webchange.editor-v2.diagram.diagram-model.items-factory.utils-test]
             [webchange.editor-v2.diagram.graph-builder.filters.phrases-test]
+            [webchange.editor-v2.diagram.graph-builder.scene-parser.concepts-replacer.replacer-test]
             [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-test]
             [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-actions-test]
             [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-globals-test]
@@ -33,6 +34,7 @@
   'webchange.editor.form-elements.number-test
   'webchange.editor-v2.diagram.diagram-model.items-factory.utils-test
   'webchange.editor-v2.diagram.graph-builder.filters.phrases-test
+  'webchange.editor-v2.diagram.graph-builder.scene-parser.concepts-replacer.replacer-test
   'webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-test
   'webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-actions-test
   'webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-globals-test
