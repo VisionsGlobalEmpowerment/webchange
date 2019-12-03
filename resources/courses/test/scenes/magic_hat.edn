@@ -33,10 +33,10 @@
                               :scale-x    0.5}
                  :letter1    {:type           "transparent"
                               :text           ""
-                              :x              1200
+                              :x              1175
                               :y              570
-                              :width          150
-                              :height         150
+                              :width          200
+                              :height         130
                               :scale-x        1
                               :scale-y        1
                               :align          "center"
@@ -59,13 +59,13 @@
                               :height     633
                               :scale-x    0.25
                               :scale-y    0.25
-                              :actions    {:click {:type "action" :id "pick-box" :params {:target "box1"} :on "click"}}}
+                              :actions    {:click {:type "action" :id "pick-box" :params {:target "box1"} :on "click" :unique-tag "click"}}}
                  :letter2    {:type           "transparent"
                               :text           ""
-                              :x              1390
+                              :x              1365
                               :y              540
-                              :width          150
-                              :height         150
+                              :width          200
+                              :height         130
                               :scale-x        1
                               :scale-y        1
                               :align          "center"
@@ -88,13 +88,13 @@
                               :height     633
                               :scale-x    0.25
                               :scale-y    0.25
-                              :actions    {:click {:type "action" :id "pick-box" :params {:target "box2"} :on "click"}}}
+                              :actions    {:click {:type "action" :id "pick-box" :params {:target "box2"} :on "click" :unique-tag "click"}}}
                  :letter3    {:type           "transparent"
                               :text           ""
-                              :x              1590
+                              :x              1565
                               :y              560
-                              :width          150
-                              :height         150
+                              :width          200
+                              :height         130
                               :scale-x        1
                               :scale-y        1
                               :align          "center"
@@ -117,7 +117,7 @@
                               :height     633
                               :scale-x    0.25
                               :scale-y    0.25
-                              :actions    {:click {:type "action" :id "pick-box" :params {:target "box3"} :on "click"}}}}
+                              :actions    {:click {:type "action" :id "pick-box" :params {:target "box3"} :on "click" :unique-tag "click"}}}}
  :scene-objects [["background"] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3"] ["mari"]]
  :actions       {:start                    {:type "sequence"
                                             :data ["start-activity"
@@ -172,7 +172,7 @@
                                                    ]}
 
                  :init-vars                {:type "parallel"
-                                            :data [{:type "set-variable" :var-name "current-level" :var-value "mid"}
+                                            :data [{:type "set-variable" :var-name "current-level" :var-value "hard"}
                                                    {:type "set-variable" :var-name "correct-answers-in-row" :var-value 0}
                                                    {:type "set-variable" :var-name "wrong-answers-in-row" :var-value 0}
                                                    {:type "set-variable" :var-name "last-pick-wrong" :var-value false}]}

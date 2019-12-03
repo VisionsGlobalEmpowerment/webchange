@@ -324,7 +324,9 @@
                                                          ]}
 
                  :start-activity                 {:type "start-activity" :id "sandbox"}
-                 :finish-activity                {:type "finish-activity" :id "sandbox"}}
- :triggers      {:start {:on "start" :action "start"}}
+                 :finish-activity                {:type "finish-activity" :id "sandbox"}
+                 :stop-activity              {:type "stop-activity" :id "sandbox"}}
+ :triggers      {:start {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}

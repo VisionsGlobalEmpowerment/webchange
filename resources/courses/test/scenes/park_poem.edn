@@ -406,7 +406,9 @@
                                                         :data [{:start 30.559 :end 31.446 :anim "talk"}
                                                                {:start 31.792 :end 34.928 :anim "talk"}
                                                                {:start 35.988 :end 38.572 :anim "talk"}
-                                                               {:start 39.016 :end 42.930 :anim "talk"}]}]}}
- :triggers      {:music {:on "start" :action "start"}}
+                                                               {:start 39.016 :end 42.930 :anim "talk"}]}]}
+                 :stop-activity              {:type "stop-activity" :id "park-poem"}}
+ :triggers      {:music {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}

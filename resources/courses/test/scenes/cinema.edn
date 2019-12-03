@@ -981,7 +981,8 @@
                  :intro
                                  {:type        "sequence-data"
                                   :description "Initial action",
-                                  :data        [{:type "parallel"
+                                  :data        [{:type "state" :target "screen-overlay" :id "hidden"}
+                                                {:type "parallel"
                                                  :description
                                                        "Buenas Dias! It’s learning time. Look at all these words you already know.
                                                        Let’s start this activity by first reviewing the beginning sounds of words.
@@ -999,7 +1000,6 @@
                                                                {:type "animation-sequence" :target "mari" :track 1 :offset 0.793
                                                                 :data [{:start 0.793 :end 3.173 :anim "talk"}]}]}
                                                 {:type "transition" :transition-id "mari" :to {:x 1290 :y 580 :loop false :duration 1.5}}
-                                                {:type "state" :target "screen-overlay" :id "hidden"}
                                                 {:type "parallel"
                                                  :description
                                                        "Escucha los sonidos al principio de cada palabra.
@@ -1195,7 +1195,9 @@
                  :stop-highlight {:type "stop-transition"
                                   :from-var [{:action-property "id"
                                               :template        "card-%-filter"
-                                              :var-name        "current-letter"}]}}
- :triggers      {:start {:on "start" :action "start"}}
+                                              :var-name        "current-letter"}]}
+                 :stop-activity              {:type "stop-activity" :id "cinema"}}
+ :triggers      {:start {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "map"}}

@@ -3,7 +3,20 @@
                  {:url "/raw/img/ui/play_button_01.png", :size 10, :type "image"}
                  {:url "/raw/img/ui/next_button_01.png", :size 10, :type "image"}
                  {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio" :alias "vaca voice 1"}
-                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio" :alias "vaca voice 7"}]
+                 {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio" :alias "vaca voice 7"}
+
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_2.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_3.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_4.m4a", :size 2, :type "audio" :alias "vaca insertions 4"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_5.m4a", :size 2, :type "audio" :alias "vaca insertions 5"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_6.m4a", :size 2, :type "audio" :alias "vaca insertions 6"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_7.m4a", :size 2, :type "audio" :alias "vaca insertions 7"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_8.m4a", :size 2, :type "audio" :alias "vaca insertions 8"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_9.m4a", :size 2, :type "audio" :alias "vaca insertions 9"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_10.m4a", :size 2, :type "audio" :alias "vaca insertions 10"}
+                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_11.m4a", :size 2, :type "audio" :alias "vaca insertions 11"}
+                 ]
  :audio         {:mari   "/raw/audio/l2/a1/L2_A1_Mari.m4a"
                  :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"}
  :objects       {:background     {:type "background"
@@ -158,14 +171,23 @@
                                                                   {:start 15.695 :end 16.691 :anim "talk"}
                                                                   {:start 17.115 :end 19.979 :anim "talk"}]}]}
 
-                 :vaca-voice-lets-watch    {:type        "parallel"
-                                            :description "Excellent! Now, let’s watch a video about the letter ‘a’"
-                                            :data        [{:type "audio" :id "vaca-7" :start 21.150 :duration 5.356}
-                                                          {:type "animation-sequence" :target "senoravaca" :track 1 :offset 21.150
-                                                           :data [{:start 21.300 :end 22.072 :anim "talk"}
-                                                                  {:start 22.371 :end 24.065 :anim "talk"}
-                                                                  {:start 24.464 :end 25.610 :anim "talk"}
-                                                                  {:start 25.859 :end 26.382 :anim "talk"}]}]}
+                 :vaca-voice-lets-watch    {:type "sequence-data",
+                                            :data
+                                                  [{:description "Excellent! Now, let’s watch a video about the letter",
+                                                    :offset 21.15,
+                                                    :start 21.15,
+                                                    :type "animation-sequence",
+                                                    :duration 4.769,
+                                                    :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+                                                    :target "senoravaca",
+                                                    :track 1,
+                                                    :data
+                                                                 [{:start 21.33, :end 24.15, :anim "talk"}
+                                                                  {:start 24.46, :end 25.53, :anim "talk"}]}
+                                                   {:type "action",
+                                                    :from-var
+                                                          [{:var-name "current-concept",
+                                                            :var-property "letter-intro-letter"}]}]}
 
                  :vaca-voice-very-good     {:type        "parallel"
                                             :description "Very good!"
@@ -189,7 +211,9 @@
                                             :description "..., o toca aqui para ir a tu proxima actividad."
                                             :data        [{:type "audio" :id "mari" :start 22.360 :duration 4.025}
                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 22.360
-                                                           :data [{:start 22.475 :end 26.257 :anim "talk"}]}]}}
- :triggers      {:start {:on "start" :action "start"}}
+                                                           :data [{:start 22.475 :end 26.257 :anim "talk"}]}]}
+                 :stop-activity              {:type "stop-activity" :id "cinema-video"}}
+ :triggers      {:start {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "map"}}
