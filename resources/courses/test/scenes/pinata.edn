@@ -2,6 +2,7 @@
                  {:url "/raw/audio/l2/a11/L2_A11_Mari.m4a" :type "audio"}
                  {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio" :alias "mari chants"}
                  ]
+ :templates ["coaching"]
  :objects       {:background {:type "background"
                               :src  "/raw/img/park/pinata/background.jpg"}
                  :mari       {:type       "animation"
@@ -180,6 +181,10 @@
                                                     {:type "action" :id "set-next-current-slot"}
                                                     {:type "action" :id "mari-says-task"}]}
 
+                 :correct {:type "sequence-data"
+                           :data [{:type "action" :id "mari-correct"}
+                                  {:type "action" :id "next-task"}]}
+
                  :set-next-current-slot     {:type "sequence-data"
                                              :data [
                                                     {:type     "test-var-scalar"
@@ -289,25 +294,25 @@
                                              :from-var [{:action-property "var-name" :var-name "current-box"}
                                                         {:action-property "value" :var-name "letter1"}]
                                              :success  "check-current-slot"
-                                             :fail     "empty"}
+                                             :fail     "mari-wrong"}
 
                  :check-place-2             {:type     "test-var-scalar"
                                              :from-var [{:action-property "var-name" :var-name "current-box"}
                                                         {:action-property "value" :var-name "letter2"}]
                                              :success  "check-current-slot"
-                                             :fail     "empty"}
+                                             :fail     "mari-wrong"}
 
                  :check-place-3             {:type     "test-var-scalar"
                                              :from-var [{:action-property "var-name" :var-name "current-box"}
                                                         {:action-property "value" :var-name "letter3"}]
                                              :success  "check-current-slot"
-                                             :fail     "empty"}
+                                             :fail     "mari-wrong"}
 
                  :check-current-slot        {:type     "test-var-scalar"
                                              :from-var [{:action-property "var-name" :var-name "current-box"}
                                                         {:action-property "value" :var-name "current-slot"}]
-                                             :success  "next-task"
-                                             :fail     "empty"}
+                                             :success  "correct"
+                                             :fail     "mari-wrong"}
 
                  :empty                     {:type "empty" :duration 100}
 

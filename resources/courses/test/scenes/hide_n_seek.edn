@@ -528,8 +528,10 @@
                  :finish-activity        {:type        "sequence-data"
                                           :description "Finishing action",
                                           :data        [{:type "finish-activity" :id "hide-n-seek"}
-                                                        {:type "scene" :scene-id "map"}]}},
- :triggers      {:start {:on "start" :action "start"}}
+                                                        {:type "scene" :scene-id "map"}]}
+                 :stop-activity              {:type "stop-activity" :id "hide-n-seek"}},
+ :triggers      {:start {:on "start" :action "start"}
+                 :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}
  }

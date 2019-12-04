@@ -36,7 +36,7 @@
                                  :states     {:default {:type "transparent" :x 350 :y 300}
                                               :come    {:type  "animation" :name "boxes" :anim "come" :x 500 :y 550
                                                         :speed 0.3 :loop false :start true}}
-                                 :actions    {:drag-end {:type "action" :id "drag-box1" :on "drag-end"}}}
+                                 :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box1" :start "box-1-start" :revert "box-1-revert"}}}}
 
                  :box2          {:type       "transparent" :x 850 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -44,7 +44,7 @@
                                  :states     {:default {:type "transparent" :x 850 :y 300}
                                               :come    {:type  "animation" :name "boxes" :anim "come" :x 1000 :y 550
                                                         :speed 0.3 :loop false :start true}}
-                                 :actions    {:drag-end {:type "action" :id "drag-box2" :on "drag-end"}}}
+                                 :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box2" :start "box-2-start" :revert "box-2-revert"}}}}
 
                  :box3          {:type       "transparent" :x 1350 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -52,7 +52,7 @@
                                  :states     {:default {:type "transparent" :x 1350 :y 300}
                                               :come    {:type  "animation" :name "boxes" :anim "come" :x 1500 :y 550
                                                         :speed 0.3 :loop false :start true}}
-                                 :actions    {:drag-end {:type "action" :id "drag-box3" :on "drag-end"}}}
+                                 :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box3" :start "box-3-start" :revert "box-3-revert"}}}}
 
                  :box-ph        {:type       "transparent" :width 771 :height 1033 :x 360 :y -30 :origin {:type "center-center"}
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -80,6 +80,9 @@
                                                      {:type "state" :target "box2" :id "come"}
                                                      {:type "state" :target "box3" :id "come"}]}
 
+                 :disable-drag  {:type "set-variable" :var-name "draggable" :var-value false}
+                 :enable-drag  {:type "set-variable" :var-name "draggable" :var-value true}
+
                  :switch-box-animations-idle {:type "parallel"
                                               :data [{:type     "set-skin" :target "box1"
                                                       :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
@@ -97,52 +100,36 @@
                  :set-current-box2           {:type "set-variable" :var-name "current-box" :var-value "box2"}
                  :set-current-box3           {:type "set-variable" :var-name "current-box" :var-value "box3"}
 
-                 :check-box1                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box1"
-                                              :success  "box-1-start"
-                                              :fail     "box-1-revert"}
+                 :drag-box {:type     "test-value"
+                            :value1   true
+                            :from-var [{:var-name "draggable" :action-property "value2"}]
+                            :from-params [{:action-property "fail" :param-property "revert"}]
+                            :success  "check-collide"}
 
-                 :check-box2                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box2"
-                                              :success  "box-2-start"
-                                              :fail     "box-2-revert"}
+                 :check-collide {:type         "test-transitions-collide"
+                                 :transition-2 "box-ph"
+                                 :from-params [{:action-property "transition-1" :param-property "target"}
+                                               {:action-property "fail" :param-property "revert"}]
+                                 :success      "check-box"}
 
-                 :check-box3                 {:type     "test-var-scalar"
-                                              :var-name "current-box"
-                                              :value    "box3"
-                                              :success  "box-3-start"
-                                              :fail     "box-3-revert"}
-
-                 :drag-box1                  {:type         "test-transitions-collide"
-                                              :transition-1 "box1"
-                                              :transition-2 "box-ph"
-                                              :success      "check-box1"
-                                              :fail         "box-1-revert"}
-
-                 :drag-box2                  {:type         "test-transitions-collide"
-                                              :transition-1 "box2"
-                                              :transition-2 "box-ph"
-                                              :success      "check-box2"
-                                              :fail         "box-2-revert"}
-
-                 :drag-box3                  {:type         "test-transitions-collide"
-                                              :transition-1 "box3"
-                                              :transition-2 "box-ph"
-                                              :success      "check-box3"
-                                              :fail         "box-3-revert"}
+                 :check-box                 {:type     "test-var-scalar"
+                                             :var-name "current-box"
+                                             :from-params [{:action-property "value" :param-property "target"}
+                                                           {:action-property "success" :param-property "start"}
+                                                           {:action-property "fail" :param-property "revert"}]}
 
                  :box-1-revert               {:type "transition" :transition-id "box1" :to {:x 500 :y 550 :duration 2}}
 
                  :box-1-start                {:type "sequence"
-                                              :data ["show-box-1-ph"
+                                              :data ["disable-drag"
+                                                     "show-box-1-ph"
                                                      "introduce-concept"
                                                      "hide-box-1-ph"
                                                      "set-current-box2"
                                                      "try-another"
                                                      "mari-box-2"
-                                                     "mari-move-to-start"]}
+                                                     "mari-move-to-start"
+                                                     "enable-drag"]}
 
                  :show-box-1-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box1" :id "default"}
@@ -164,13 +151,15 @@
                  :box-2-revert               {:type "transition" :transition-id "box2" :to {:x 1000 :y 550 :duration 2}}
 
                  :box-2-start                {:type "sequence"
-                                              :data ["show-box-2-ph"
+                                              :data ["disable-drag"
+                                                     "show-box-2-ph"
                                                      "introduce-concept"
                                                      "hide-box-2-ph"
                                                      "set-current-box3"
                                                      "try-another"
                                                      "mari-box-3"
-                                                     "mari-move-to-start"]}
+                                                     "mari-move-to-start"
+                                                     "enable-drag"]}
 
                  :show-box-2-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box2" :id "default"}
@@ -192,7 +181,8 @@
                  :box-3-revert               {:type "transition" :transition-id "box3" :to {:x 1500 :y 550 :duration 2}}
 
                  :box-3-start                {:type "sequence"
-                                              :data ["show-box-3-ph"
+                                              :data ["disable-drag"
+                                                     "show-box-3-ph"
                                                      "introduce-concept"
                                                      "hide-box-3-ph"
                                                      "finish-activity"]}
@@ -256,13 +246,15 @@
                                               :data ["start-activity"
                                                      "clear-instruction"
                                                      "renew-words"
+                                                     "disable-drag"
                                                      "mari-welcome-audio"
                                                      "set-current-box1"
                                                      "show-boxes"
                                                      "wait-for-box-animations"
                                                      "switch-box-animations-idle"
                                                      "mari-box-1"
-                                                     "mari-move-to-start"]}
+                                                     "mari-move-to-start"
+                                                     "enable-drag"]}
 
                  :start-activity             {:type "start-activity" :id "see-saw"}
                  :finish-activity            {:type "finish-activity" :id "see-saw"}
