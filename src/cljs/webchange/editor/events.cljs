@@ -697,7 +697,6 @@
     (let [form-data (doto
                       (js/FormData.)
                       (.append "file" js-file-value))]
-      (.log js/console form-data)
       {:db (assoc-in db [:loading :upload-asset] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/assets/")

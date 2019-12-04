@@ -3,13 +3,13 @@
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [print-maps-comparison]]
     [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.duplicates-replicator :refer [get-copy-name
-                                                                                                  change-handlers-name
-                                                                                                  change-connection-name
-                                                                                                  filter-node-connections
-                                                                                                  rename-node-connection
-                                                                                                  change-node-connection-parent
-                                                                                                  remove-reused-nodes
-                                                                                                  replicate-reused-nodes]]))
+                                                                                                                change-handlers-name
+                                                                                                                change-connection-name
+                                                                                                                filter-node-connections
+                                                                                                                rename-node-connection
+                                                                                                                change-node-connection-parent
+                                                                                                                remove-reused-nodes
+                                                                                                                replicate-reused-nodes]]))
 
 (deftest test-get-copy-name
   (testing "getting copy name"
@@ -307,6 +307,7 @@
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
+
   (testing "sequence"
     (let [parsed-data {:box1          {:type        "object"
                                        :data        {:actions {:click {:type "action"
@@ -444,6 +445,68 @@
                                                                 :duration 500}
                                                   :connections {:audio-wrong-copy-2 {:handlers {}
                                                                                      :parent   :pick-wrong}}}}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result)))))
+
+  (testing "sequence"
+    (let [parsed-data {:a {:connections {:root {:handlers {:next [:c :d]}}}}
+                       :b {:connections {:root {:handlers {:next [:c :d]}}}}
+                       :c {:connections {:a {:handlers {}}
+                                         :b {:handlers {}}
+                                         :e {:handlers {}}}}
+                       :d {:connections {:b {:handlers {:next [:e]}}
+                                         :a {:handlers {:next [:e]}}}}
+                       :e {:connections {:d {:handlers {:next [:c]}}}}}
+          start-nodes [:a :b]
+          reused-nodes {:c 0
+                        :d 0
+                        :e 0}]
+      (let [actual-result (replicate-reused-nodes parsed-data start-nodes reused-nodes)
+            expected-result {:a        {:connections {:root {:handlers {:next [:c-copy-1 :d-copy-1]}}}}
+                             :b        {:connections {:root {:handlers {:next [:c-copy-3 :d-copy-2]}}}}
+                             :c-copy-1 {:connections {:a {:handlers {}}}
+                                        :origin      :c}
+                             :c-copy-2 {:connections {:e-copy-1 {:handlers {}}}
+                                        :origin      :c}
+                             :c-copy-3 {:connections {:b {:handlers {}}}
+                                        :origin      :c}
+                             :c-copy-4 {:connections {:e-copy-2 {:handlers {}}}
+                                        :origin      :c}
+                             :d-copy-1 {:connections {:a {:handlers {:next [:e-copy-1]}}}
+                                        :origin      :d}
+                             :d-copy-2 {:connections {:b {:handlers {:next [:e-copy-2]}}}
+                                        :origin      :d}
+                             :e-copy-1 {:connections {:d-copy-1 {:handlers {:next [:c-copy-2]}}}
+                                        :origin      :e}
+                             :e-copy-2 {:connections {:d-copy-2 {:handlers {:next [:c-copy-4]}}}
+                                        :origin      :e}}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result)))))
+
+  (testing "case with phrase 'this-is-concept' in home scene"
+    (let [parsed-data {:a {:connections {:root {:handlers {:next [:b]}}}}
+                       :b {:connections {:a {:handlers {:next [:c]}}}}
+                       :c {:connections {:e {:handlers {:next [:f]}}
+                                         :b {:handlers {:next [:d]}}}}
+                       :d {:connections {:c {:handlers {:next [:e]}}}}
+                       :e {:connections {:d {:handlers {:next [:c]}}}}
+
+                       :f {:connections {:c {:handlers {}}}}}
+          start-nodes [:a]
+          reused-nodes {:c 0}]
+      (let [actual-result (replicate-reused-nodes parsed-data start-nodes reused-nodes)
+            expected-result {:a        {:connections {:root {:handlers {:next [:b]}}}}
+                             :b        {:connections {:a {:handlers {:next [:c-copy-1]}}}}
+                             :c-copy-1 {:connections {:b {:handlers {:next [:d]}}}
+                                        :origin      :c}
+                             :d        {:connections {:c-copy-1 {:handlers {:next [:e]}}}}
+                             :e        {:connections {:d {:handlers {:next [:c-copy-2]}}}}
+
+                             :c-copy-2 {:connections {:e {:handlers {:next [:f]}}}
+                                        :origin      :c}
+                             :f        {:connections {:c-copy-2 {:handlers {}}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))
