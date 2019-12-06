@@ -7816,6 +7816,54 @@
      :duration 1.067,
      :scene-id "sandbox"},
     :skin "wrench",
+    :swings-dialog-action
+    {:data
+     [{:data
+       [{:end 1.95, :anim "talk", :start 0.61}
+        {:end 6.26, :anim "talk", :start 2.7}
+        {:end 7.71, :anim "talk", :start 6.81}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Llaves.mp4",
+       :start 0.467,
+       :offset 0.467,
+       :target "rock",
+       :duration 7.44}
+      {:data
+       [{:end 0.77, :anim "talk", :start 0.51}
+        {:end 3.4, :anim "talk", :start 1.37}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/llaves.mp3",
+       :start 0.395,
+       :offset 0.395,
+       :target "vera",
+       :duration 3.127}
+      {:data [{:end 11.23, :anim "talk", :start 9}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Llaves.mp4",
+       :start 8.894,
+       :offset 8.894,
+       :target "rock",
+       :duration 2.6}
+      {:data
+       [{:end 6.59, :anim "talk", :start 5.82}
+        {:end 10.15, :anim "talk", :start 6.99}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/vera/llaves.mp3",
+       :start 5.66,
+       :offset 5.66,
+       :target "vera",
+       :duration 4.615}
+      {:data
+       [{:end 14.16, :anim "talk", :start 12.45}
+        {:end 17.39, :anim "talk", :start 14.61}],
+       :type "animation-sequence",
+       :audio "/raw/audio/l1/a3/rock/Llaves.mp4",
+       :start 12.294,
+       :offset 12.294,
+       :target "rock",
+       :duration 5.214}],
+     :type "sequence-data",
+     :scene-id "swings"},
     :vaca-chanting-song
     {:data
      [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
@@ -14988,16 +15036,16 @@
    :data {:items [{:name "tomate"} {:name "diamante"} {:name "rana"}]}}
   {:name "l2-ls12-1", :data {:items [{:name "rana"}]}}
   {:name "l2-ls12-3",
-   :data {:items [{:name "tomate"} {:name "diamante"} {:name "rana"}]}}
+   :data {:items [{:name "tomate"} {:name "rana"} {:name "casa"}]}}
   {:name "l2-ls13-1", :data {:items [{:name "casa"}]}}
   {:name "l2-ls13-3",
-   :data {:items [{:name "casa"} {:name "cepillo"} {:name "niño"}]}}
+   :data {:items [{:name "casa"} {:name "niño"} {:name "rana"}]}}
   {:name "l2-ls14-1", :data {:items [{:name "cepillo"}]}}
   {:name "l2-ls14-3",
-   :data {:items [{:name "casa"} {:name "cepillo"} {:name "niño"}]}}
+   :data {:items [{:name "cepillo"} {:name "niño"} {:name "flor"}]}}
   {:name "l2-ls15-1", :data {:items [{:name "niño"}]}}
   {:name "l2-ls15-3",
-   :data {:items [{:name "casa"} {:name "cepillo"} {:name "niño"}]}}
+   :data {:items [{:name "cepillo"} {:name "niño"} {:name "bebe"}]}}
   {:name "l2-ls16-1", :data {:items [{:name "flor"}]}}
   {:name "l2-ls16-3",
    :data {:items [{:name "flor"} {:name "bebe"} {:name "jardín"}]}}
@@ -15006,22 +15054,22 @@
    :data {:items [{:name "flor"} {:name "bebe"} {:name "jardín"}]}}
   {:name "l2-ls18-1", :data {:items [{:name "jardín"}]}}
   {:name "l2-ls18-3",
-   :data {:items [{:name "flor"} {:name "bebe"} {:name "jardín"}]}}
+   :data {:items [{:name "flor"} {:name "jardín"} {:name "gato"}]}}
   {:name "l2-ls19-1", :data {:items [{:name "gato"}]}}
   {:name "l2-ls19-3",
    :data
-   {:items [{:name "gato"} {:name "gemelo"} {:name "chocolate"}]}}
+   {:items [{:name "gato"} {:name "chocolate"} {:name "jardín"}]}}
   {:name "l2-ls2-1", :data {:items [{:name "oso"}]}}
   {:name "l2-ls2-3",
    :data {:items [{:name "ardilla"} {:name "oso"} {:name "iman"}]}}
   {:name "l2-ls20-1", :data {:items [{:name "gemelo"}]}}
   {:name "l2-ls20-3",
    :data
-   {:items [{:name "gato"} {:name "gemelo"} {:name "chocolate"}]}}
+   {:items [{:name "gemelo"} {:name "chocolate"} {:name "ñandu"}]}}
   {:name "l2-ls21-1", :data {:items [{:name "chocolate"}]}}
   {:name "l2-ls21-3",
    :data
-   {:items [{:name "gato"} {:name "gemelo"} {:name "chocolate"}]}}
+   {:items [{:name "gemelo"} {:name "chocolate"} {:name "violin"}]}}
   {:name "l2-ls22-1", :data {:items [{:name "ñandu"}]}}
   {:name "l2-ls22-3",
    :data {:items [{:name "ñandu"} {:name "violin"} {:name "llave"}]}}

@@ -4,6 +4,7 @@
                  {:url "/raw/img/park/swings/tree.png", :size 1, :type "image"}
 
                  {:url "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :size 2, :type "audio" :alias "mari-welcome"}
+                 {:url "/raw/audio/l1/a3/vera-swings.mp3", :size 2, :type "audio" :alias "vera-welcome"}
 
                  {:url "/raw/audio/l1/a3/vera/ardilla.mp3", :size 2, :type "audio" :alias "vera-ardilla"}
                  {:url "/raw/audio/l1/a3/rock/Ardilla.m4a", :size 2, :type "audio" :alias "rock-ardilla"}
@@ -52,6 +53,7 @@
                  {:url "/raw/audio/l1/a3/rock/Leon.m4a", :size 2, :type "audio" :alias "rock-leon"}
                  {:url "/raw/audio/l1/a3/rock/Leon_roar.m4a", :size 2, :type "audio" :alias "rock-leon-roar"}
 
+                 {:url "/raw/audio/l1/a3/rock/Llaves.mp4", :size 2, :type "audio" :alias "rock-llave"}
                  {:url "/raw/audio/l1/a3/vera/llaves.mp3", :size 2, :type "audio" :alias "vera-llave"}
 
                  {:url "/raw/audio/l1/a3/vera/mano.mp3", :size 2, :type "audio" :alias "vera-mano"}
@@ -163,13 +165,57 @@
                  },
  :scene-objects [["background"] ["swings"] ["tree-image"] ["vera" "mari" "rock"] ["box1" "box2" "box3"]],
  :actions
-                {:mari-welcome-audio-1
-                                             {:type  "animation-sequence" :target "mari" :track 1 :offset 1.047
-                                              :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :start 1.047, :duration 11.568
-                                              :data  [{:start 1.285 :end 2.142 :anim "talk"}
-                                                      {:start 2.523 :end 4.713 :anim "talk"}
-                                                      {:start 5.248 :end 9.223 :anim "talk"}
-                                                      {:start 9.723 :end 12.294 :anim "talk"}]}
+                {:vera-welcome-audio-1 {:type "animation-sequence",
+                                        :target "vera",
+                                        :track 1,
+                                        :offset 1.342,
+                                        :audio "/raw/audio/l1/a3/vera-swings.mp3",
+                                        :start 1.342,
+                                        :duration 6.583,
+                                        :data
+                                        [{:start 1.56, :end 2.39, :anim "talk"}
+                                         {:start 3.06, :end 4.98, :anim "talk"}
+                                         {:start 5.75, :end 7.73, :anim "talk"}]}
+                 :mari-welcome-audio-2 {:type "animation-sequence",
+                                        :target "mari",
+                                        :track 1,
+                                        :offset 0.787,
+                                        :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                        :start 0.787,
+                                        :duration 11.679,
+                                        :data
+                                        [{:start 0.79, :end 7.64, :anim "talk"}
+                                         {:start 7.82, :end 9.26, :anim "talk"}
+                                         {:start 9.66, :end 12.21, :anim "talk"}]}
+                 :vera-welcome-audio-3 {:type "animation-sequence",
+                                        :target "vera",
+                                        :track 1,
+                                        :offset 8.572,
+                                        :audio "/raw/audio/l1/a3/vera-swings.mp3",
+                                        :start 8.572,
+                                        :duration 3.852,
+                                        :data
+                                        [{:start 8.76, :end 9.31, :anim "talk"}
+                                         {:start 9.79, :end 11.32, :anim "talk"}
+                                         {:start 11.51, :end 12.26, :anim "talk"}]}
+                 :mari-welcome-audio-4 {:type "animation-sequence",
+                                        :target "mari",
+                                        :track 1,
+                                        :offset 14.999,
+                                        :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                        :start 14.999,
+                                        :duration 2.933,
+                                        :data [{:start 15.05, :end 17.78, :anim "talk"}]}
+                 :mari-welcome-audio-5 {:type "animation-sequence",
+                                        :target "mari",
+                                        :track 1,
+                                        :offset 29.012,
+                                        :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                        :start 29.012,
+                                        :duration 3.786,
+                                        :data
+                                        [{:start 29.25, :end 30.94, :anim "talk"}
+                                         {:start 31.17, :end 32.62, :anim "talk"}]}
 
                  :mari-move-to-start
                                              {:type  "animation-sequence" :target "mari" :track 1 :offset 34.395
@@ -367,16 +413,11 @@
                                                      "show-boxes"
                                                      "wait-for-box-animations"
                                                      "switch-box-animations-idle"
-                                                     "mari-welcome-audio-1"
-                                                     ;"vera-welcome-audio-1"
-                                                     ;"mari-welcome-audio-2"
-                                                     ;"vera-welcome-audio-2"
-                                                     ;"rock-welcome-audio-1"
-                                                     ;"mari-welcome-audio-3"
-                                                     ;"rock-welcome-audio-2"
-                                                     ;"vera-welcome-audio-3"
-                                                     ;"rock-welcome-audio-3"
-                                                     ;"mari-welcome-audio-4"
+                                                     "vera-welcome-audio-1"
+                                                     "mari-welcome-audio-2"
+                                                     "vera-welcome-audio-3"
+                                                     "mari-welcome-audio-4"
+                                                     "mari-welcome-audio-5"
                                                      "mari-box-1"
                                                      "mari-move-to-start"
                                                      "enable-drag"
