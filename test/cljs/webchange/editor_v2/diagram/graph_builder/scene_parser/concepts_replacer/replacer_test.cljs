@@ -62,10 +62,12 @@
           concept-scheme [{:name     "d"
                            :type     "action"
                            :template {:type "animation-sequence"}}]
-          current-concept nil]
-      (let [actual-result (get-concept-action action-name prev-action next-actions concept-scheme current-concept)
+          current-concept nil
+          copy-data {}]
+      (let [actual-result (get-concept-action action-name prev-action next-actions concept-scheme current-concept copy-data)
             expected-result {:d {:type        "animation-sequence"
                                  :data        {:type "animation-sequence"}
+                                 :path        [:d]
                                  :connections {:a {:handlers {:next [:c]}}}}}]
         (is (= actual-result expected-result)))))
 
@@ -78,15 +80,38 @@
                            :template {:type "animation-sequence"}}]
           current-concept {:data {:d {:type   "animation-sequence"
                                       :target "target-1"
-                                      :track  1}}}]
-      (let [actual-result (get-concept-action action-name prev-action next-actions concept-scheme current-concept)
+                                      :track  1}}}
+          copy-data {}]
+      (let [actual-result (get-concept-action action-name prev-action next-actions concept-scheme current-concept copy-data)
             expected-result {:d {:type        "animation-sequence"
                                  :data        {:type   "animation-sequence"
                                                :target "target-1"
                                                :track  1}
+                                 :path        [:d]
                                  :connections {:a {:handlers {:next [:c]}}}}}]
         (is (= actual-result expected-result)))))
-  )
+
+  (testing "getting concept action from current-concept and apply copy name"
+    (let [action-name :d
+          prev-action :a
+          next-actions :c
+          concept-scheme [{:name     "d"
+                           :type     "action"
+                           :template {:type "animation-sequence"}}]
+          current-concept {:data {:d {:type   "animation-sequence"
+                                      :target "target-1"
+                                      :track  1}}}
+          copy-data {:origin  :d
+                     :counter 2}]
+      (let [actual-result (get-concept-action action-name prev-action next-actions concept-scheme current-concept copy-data)
+            expected-result {:d-copy-2 {:type        "animation-sequence"
+                                        :data        {:type   "animation-sequence"
+                                                      :target "target-1"
+                                                      :track  1
+                                                      :origin :d}
+                                        :path        [:d-copy-2]
+                                        :connections {:a {:handlers {:next [:c]}}}}}]
+        (is (= actual-result expected-result))))))
 
 (deftest test-override-concept-actions
   (testing "concept action replacing with scheme template"
@@ -109,13 +134,14 @@
             expected-result {:a {:type        "empty"
                                  :connections {:root {:handlers {:next [:d]}}}
                                  :data        {:type "empty"}}
-                             :d {:type        "animation-sequence"
-                                 :connections {:a {:handlers {:next [:c]}}}
-                                 :data        {:type           "animation-sequence"
-                                               :concept-action true}}
                              :c {:type        "empty"
                                  :connections {:d {:handlers {}}}
-                                 :data        {:type "empty"}}}]
+                                 :data        {:type "empty"}}
+                             :d {:type        "animation-sequence"
+                                 :data        {:type           "animation-sequence"
+                                               :concept-action true}
+                                 :path        [:d]
+                                 :connections {:a {:handlers {:next [:c]}}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
@@ -142,15 +168,16 @@
             expected-result {:a {:type        "empty"
                                  :connections {:root {:handlers {:next [:d]}}}
                                  :data        {:type "empty"}}
+                             :c {:type        "empty"
+                                 :connections {:d {:handlers {}}}
+                                 :data        {:type "empty"}}
                              :d {:type        "animation-sequence"
-                                 :connections {:a {:handlers {:next [:c]}}}
                                  :data        {:type           "animation-sequence"
                                                :target         "target-1"
                                                :track          1
-                                               :concept-action true}}
-                             :c {:type        "empty"
-                                 :connections {:d {:handlers {}}}
-                                 :data        {:type "empty"}}}]
+                                               :concept-action true}
+                                 :path        [:d]
+                                 :connections {:a {:handlers {:next [:c]}}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
@@ -179,30 +206,32 @@
             expected-result {:a   {:type        "empty"
                                    :connections {:root {:handlers {:next [:d]}}}
                                    :data        {:type "empty"}}
-                             :d   {:type        "parallel"
-                                   :connections {:a {:handlers {:next [:d-0 :d-1]}}}
-                                   :data        {:type           "parallel"
-                                                 :data           [{:type   "animation-sequence"
-                                                                   :target "target-1"}
-                                                                  {:type   "animation-sequence"
-                                                                   :target "target-2"}]
-                                                 :concept-action true}}
-                             :d-0 {:type        "animation-sequence"
-                                   :connections {:d {:handlers {:next [:c]}
-                                                     :parent   :d}}
-                                   :data        {:type           "animation-sequence"
-                                                 :target         "target-1"
-                                                 :concept-action true}}
-                             :d-1 {:type        "animation-sequence"
-                                   :connections {:d {:handlers {:next [:c]}
-                                                     :parent   :d}}
-                                   :data        {:type           "animation-sequence"
-                                                 :target         "target-2"
-                                                 :concept-action true}}
                              :c   {:type        "empty"
                                    :connections {:d-0 {:handlers {}}
                                                  :d-1 {:handlers {}}}
-                                   :data        {:type "empty"}}}]
+                                   :data        {:type "empty"}}
+                             :d   {:type        "parallel"
+                                   :data        {:type           "parallel"
+                                                 :data           [{:type   "animation-sequence"
+                                                                   :target "target-1"} {:type   "animation-sequence"
+                                                                                        :target "target-2"}]
+                                                 :concept-action true}
+                                   :path        [:d]
+                                   :connections {:a {:handlers {:next [:d-0 :d-1]}}}}
+                             :d-0 {:type        "animation-sequence"
+                                   :data        {:type           "animation-sequence"
+                                                 :target         "target-1"
+                                                 :concept-action true}
+                                   :path        [:d 0]
+                                   :connections {:d {:handlers {:next [:c]}
+                                                     :parent   :d}}}
+                             :d-1 {:type        "animation-sequence"
+                                   :data        {:type           "animation-sequence"
+                                                 :target         "target-2"
+                                                 :concept-action true}
+                                   :path        [:d 1]
+                                   :connections {:d {:handlers {:next [:c]}
+                                                     :parent   :d}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))

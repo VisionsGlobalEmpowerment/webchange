@@ -57,19 +57,13 @@
                                                            :value    "box1"
                                                            :success  "empty-small"
                                                            :fail     "pick-wrong"}
+                                             :path        [:click-on-box1]
                                              :connections {:box1 {:handlers {:success [:empty-small]
-                                                                             :fail    [:pick-wrong]}}}}
-                             :click-on-box2 {:type        "test-var-scalar"
-                                             :data        {:type     "test-var-scalar"
-                                                           :var-name "current-box"
-                                                           :value    "box2"
-                                                           :success  "empty-small"
-                                                           :fail     "pick-wrong"}
-                                             :connections {:box2 {:handlers {:success [:empty-small]
                                                                              :fail    [:pick-wrong]}}}}
                              :empty-small   {:type        "empty"
                                              :data        {:type     "empty"
                                                            :duration 500}
+                                             :path        [:empty-small]
                                              :connections {:click-on-box1 {:handlers {}}
                                                            :click-on-box2 {:handlers {}}}}
                              :pick-wrong    {:type        "sequence"
@@ -77,6 +71,7 @@
                                                            :data        ["audio-wrong"]
                                                            :phrase      :wrong-click
                                                            :phrase-text "Try again"}
+                                             :path        [:pick-wrong]
                                              :connections {:click-on-box1 {:handlers {:next [:audio-wrong]}}
                                                            :click-on-box2 {:handlers {:next [:audio-wrong]}}}}
                              :audio-wrong   {:type        "audio"
@@ -85,8 +80,18 @@
                                                            :start    0.892
                                                            :duration 1.869
                                                            :offset   0.2}
+                                             :path        [:audio-wrong]
                                              :connections {:pick-wrong {:handlers {}
-                                                                        :parent   :pick-wrong}}}}]
+                                                                        :parent   :pick-wrong}}}
+                             :click-on-box2 {:type        "test-var-scalar"
+                                             :data        {:type     "test-var-scalar"
+                                                           :var-name "current-box"
+                                                           :value    "box2"
+                                                           :success  "empty-small"
+                                                           :fail     "pick-wrong"}
+                                             :path        [:click-on-box2]
+                                             :connections {:box2 {:handlers {:success [:empty-small]
+                                                                             :fail    [:pick-wrong]}}}}}]
         (when-not (= actual-result expected-result)
           (println (compare-maps actual-result expected-result)))
         (is (= actual-result expected-result))))))
