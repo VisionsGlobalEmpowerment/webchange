@@ -237,11 +237,12 @@
 ;; test-var-scalar
 
 (defmethod get-action-data "test-var-scalar"
-  [{:keys [action-name action-data parent-action prev-action]}]
+  [{:keys [action-name action-data parent-action prev-action path]}]
   (let [success (->> action-data :success keyword)
         fail (->> action-data :fail keyword)]
     (->> {:type (:type action-data)
-          :data action-data}
+          :data action-data
+          :path (or path [action-name])}
          (add-connection-property prev-action {:success [success]
                                                :fail    [fail]} parent-action)
          (assoc {} action-name))))
