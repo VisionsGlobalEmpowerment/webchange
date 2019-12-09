@@ -84,4 +84,27 @@
                                   :data        {:phrase true}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result)))))
+  (testing "no-phrases graph"
+    (let [graph {:01 {:connections {:root {:handlers {:next [:03]}}}}
+                 :02 {:connections {:root {:handlers {:next [:04]}}}}
+                 :03 {:connections {:01 {:handlers {:true  [:05]
+                                                    :false [:07]}}}}
+                 :04 {:connections {:02 {:handlers {:true  [:06]
+                                                    :false [:07]}}}}
+                 :05 {:connections {:03 {:handlers {:next [:08]}}}}
+                 :06 {:connections {:04 {:handlers {:next [:08]}}}}
+                 :07 {:connections {:03 {:handlers {:next [:09]}}
+                                    :04 {:handlers {:next [:09]}}}}
+                 :08 {:connections {:05 {:handlers {:next [:10]}}
+                                    :06 {:handlers {:next [:10]}}}}
+                 :09 {:connections {:07 {:handlers {}}}}
+                 :10 {:connections {:08 {:handlers {:next [:11]}}}}
+                 :11 {:connections {:10 {:handlers {:next [:12]}}}}
+                 :12 {:connections {:11 {:handlers {:next [:13]}}}}
+                 :13 {:connections {:12 {:handlers {}}}}}]
+      (let [actual-result (get-phrases-graph graph)
+            expected-result {}]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))

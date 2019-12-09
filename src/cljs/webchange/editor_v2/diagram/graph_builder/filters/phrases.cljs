@@ -2,6 +2,7 @@
   (:require
     [webchange.editor-v2.diagram.graph-builder.utils.node-children :refer [get-children]]
     [webchange.editor-v2.diagram.graph-builder.utils.change-node :refer [remove-node]]
+    [webchange.editor-v2.diagram.graph-builder.utils.remove-sub-graph :refer [remove-sub-graph]]
     [webchange.editor-v2.diagram.graph-builder.utils.root-nodes :refer [add-root-node
                                                                         get-root-nodes
                                                                         remove-root-node]]))
@@ -11,20 +12,20 @@
   (let [[node-weight & children-weights] (get weights node-name)]
     (> node-weight (apply max children-weights))))
 
-(defn root-node-data?
+(defn root-node?
   [node-data]
   (contains? (:connections node-data) :root))
 
-(defn not-empty-tree-root?
+(defn empty-tree-root?
   [node-name node-data weights]
   (let [[node-weight] (get weights node-name)]
-    (and (root-node-data? node-data)
-         (> node-weight 0))))
+    (and (root-node? node-data)
+         (= node-weight 0))))
 
 (defn should-remove-node?
   [node-name node-data weights]
   (and (not (weight-changer-node? node-name weights))
-       (not (not-empty-tree-root? node-name node-data weights))))
+       (not (root-node? node-data))))
 
 (defn remove-extra-nodes-dfs
   ([graph weights]
@@ -65,6 +66,17 @@
            children-sum (or (apply + children-values) 0)]
        (assoc result node-name (concat [(+ current-value children-sum)] children-values))))))
 
+(defn remove-empty-roots
+  [graph subtree-phrase-weights]
+  (reduce
+    (fn [graph [node-name node-data]]
+      (if (and (not (= :root node-name))
+               (empty-tree-root? node-name node-data subtree-phrase-weights))
+        (remove-sub-graph graph node-name)
+        graph))
+    graph
+    graph))
+
 (defn get-phrases-graph
   [scene-graph]
   (let [graph (->> scene-graph
@@ -72,5 +84,6 @@
                    (add-root-node scene-graph))
         subtree-phrase-weights (count-subtree-phrases graph)]
     (-> graph
+        (remove-empty-roots subtree-phrase-weights)
         (remove-extra-nodes subtree-phrase-weights)
         (remove-root-node))))
