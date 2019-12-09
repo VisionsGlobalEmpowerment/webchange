@@ -6,7 +6,8 @@
   ([node-data prev-node]
    (reduce
      (fn [result [connection-name connection-data]]
-       (concat result (if (= connection-name prev-node)
+       (concat result (if (or (nil? prev-node)
+                              (= connection-name prev-node))
                         (reduce
                           (fn [result [_ event-handlers]]
                             (concat result event-handlers))

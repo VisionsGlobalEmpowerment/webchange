@@ -48,16 +48,27 @@
   [this]
   (reorder-nodes this))
 
+(defn empty-graph-placeholder
+  []
+  [:div {:style {:display         "flex"
+                 :height          "100%"
+                 :align-items     "center"
+                 :justify-content "center"}}
+   [:div {:style {:color     "white"
+                  :font-size "20px"}}
+    "Empty"]])
+
 (defn diagram-render
   [{:keys [graph mode]}]
-  (let [engine (when-not (nil? graph)
-                 (init-diagram-model graph mode))
-        this (r/current-component)]
-    (aset this "engine" engine)
+  (if (empty? graph)
     [:div.diagram-container
-     [toolbar engine]
-     (when-not (nil? engine)
-       [:> DiagramWidget {:diagramEngine engine}])]))
+     [empty-graph-placeholder]]
+    (let [engine (init-diagram-model graph mode)
+          this (r/current-component)]
+      (aset this "engine" engine)
+      [:div.diagram-container
+       [toolbar engine]
+       [:> DiagramWidget {:diagramEngine engine}]])))
 
 (def diagram-widget
   (with-meta diagram-render
