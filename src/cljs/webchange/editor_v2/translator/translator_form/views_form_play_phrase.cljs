@@ -5,7 +5,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.common.events :as ce]
-    [webchange.editor-v2.diagram.graph-builder.utils.graph-to-nodes-seq :refer [graph-to-nodes-seq]]
+    [webchange.editor-v2.graph-builder.utils.graph-to-nodes-seq :refer [graph-to-nodes-seq]]
     [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets
                                                                   get-current-action-data]]
     [webchange.interpreter.core :refer [load-assets]]))

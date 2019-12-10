@@ -1,23 +1,17 @@
 (ns webchange.editor-v2.diagram.diagram-model.items-factory.utils)
 
+;; ToDo: move to graph node utils collection
+
 (defn get-node-connections
   [node-name node-data]
-  (reduce
-    (fn [result [_ connection-data]]
-      (concat result (reduce
-                       (fn [result [event handlers]]
-                         (concat result (map
-                                          (fn [handler] [node-name event handler])
-                                          handlers)))
-                       []
-                       (:handlers connection-data))))
-    []
-    (:connections node-data)))
+  (->> (:connections node-data)
+       (map (fn [{:keys [name handler]}]
+              [node-name (keyword name) handler]))
+       (set)))
 
 (defn get-node-outs
   [node-data]
-  (reduce
-    (fn [result [_ connection-data]]
-      (concat result (keys (:handlers connection-data))))
-    []
-    (:connections node-data)))
+  (->> (:connections node-data)
+       (map :name)
+       (map keyword)
+       (set)))
