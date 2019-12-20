@@ -40,15 +40,14 @@
         height 1080
         original-ratio (/ width height)
         window-ratio (/ (:width viewport) (:height viewport))]
-    #_{:width width :height height}
     (if (< original-ratio window-ratio)
       {:width width :height (Math/round (* height (/ original-ratio window-ratio)))}
-      {:width (Math/round (* width (/ original-ratio window-ratio))) :height height})))
+      {:width (Math/round (* width (/ window-ratio original-ratio))) :height height})))
 
 (defn compute-x
   [viewbox]
   (let [width 1920]
-    (/ (- width (:width viewbox)) 4)))
+    (/ (- (:width viewbox) width) 2)))
 
 (defn compute-y
   [viewbox]
@@ -74,19 +73,19 @@
   (let [viewport (re-frame/subscribe [::subs/viewport])
         viewbox (get-viewbox @viewport)
         scale (/ (:width viewbox) (:width @viewport))
-        x (Math/round (* (compute-x viewbox) scale))
+        x (Math/round (* (compute-x viewbox) scale -1))
         y (Math/round (* (compute-y viewbox) scale))]
     {:x x :y y}))
 
 (defn top-right
   []
-  (let [viewport (re-frame/subscribe [::subs/viewport])
+  (let [left (top-left)
+        viewport (re-frame/subscribe [::subs/viewport])
         viewbox (get-viewbox @viewport)
         scale (/ (:width viewbox) (:width @viewport))
-        x (+ (Math/round (* (* (compute-x viewbox) scale) 4)) (:width viewbox))
-        y (Math/round (* (compute-y viewbox) scale))]
+        x (+ (* (:width @viewport) scale) (:x left))
+        y (:y left)]
     {:x x :y y}))
-
 
 (defn empty-filter [] {:filter nil})
 
@@ -381,7 +380,6 @@
         ^{:key (str scene-id name)} [draw-object scene-id name])
      [score]
      [menu]
-     #_[navigation-helper]
      [triggers scene-id]
      ]))
 

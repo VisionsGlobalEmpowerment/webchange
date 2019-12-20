@@ -227,14 +227,12 @@
 (re-frame/reg-event-fx
   ::execute-test-var-list
   (fn-traced [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
-    (let [test (map #(get-variable db %) var-names)
-          success-action (e/get-action success db action)
-          fail-action (e/get-action fail db action)]
+    (let [test (map #(get-variable db %) var-names)]
       (if (= values test)
-        {:dispatch-n (list [::e/execute-action success-action] (e/success-event action))}
+        {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
 
         (if fail
-          {:dispatch-n (list [::e/execute-action fail-action] (e/success-event action))}
+          {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
           {:dispatch-n (list (e/success-event action))}
           )))))
 

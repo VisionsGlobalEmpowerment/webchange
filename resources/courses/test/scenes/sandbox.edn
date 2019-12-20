@@ -54,22 +54,22 @@
                  :box1       {:type       "animation" :x 304 :y 826 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
                               :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
                               :scene-name "box1" :transition "box1" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-1-start" :on "click"}}}
+                              :actions    {:click {:type "action" :id "box-1-start" :on "click" :unique-tag "box"}}}
 
                  :box2       {:type       "animation" :x 401 :y 696 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
                               :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
                               :scene-name "box2" :transition "box2" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-2-start" :on "click"}}}
+                              :actions    {:click {:type "action" :id "box-2-start" :on "click" :unique-tag "box"}}}
 
                  :box3       {:type       "animation" :x 600 :y 674 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
                               :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
                               :scene-name "box3" :transition "box3" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-3-start" :on "click"}}}
+                              :actions    {:click {:type "action" :id "box-3-start" :on "click" :unique-tag "box"}}}
 
                  :box4       {:type       "animation" :x 919 :y 741 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
                               :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
                               :scene-name "box4" :transition "box4" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-4-start" :on "click"}}}
+                              :actions    {:click {:type "action" :id "box-4-start" :on "click" :unique-tag "box"}}}
 
                  },
  :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]],
