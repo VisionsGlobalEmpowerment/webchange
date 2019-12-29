@@ -85,6 +85,7 @@ $ sudo -u postgres -i
 
 postgres@user$ createuser --interactive -P // create user 'webchange'
                createdb --owner=webchange webchange
+               createuser --interactive -P // create user with the same name as your Unix user
                exit
               
 $ psql webchange < dump.sql
@@ -95,6 +96,8 @@ $ psql webchange < dump.sql
 ```
 $ sudo apt-get install oracle-java8-installer
 ```
+
+See [Troubleshooting - Java 8 install error](wiki/troubleshooting.md) in case of problems with Java 8 installation.
 
 - Install Clojure:
 
