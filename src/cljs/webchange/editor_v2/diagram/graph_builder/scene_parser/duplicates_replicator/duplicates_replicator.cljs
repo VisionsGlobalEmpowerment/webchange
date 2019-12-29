@@ -84,8 +84,10 @@
     (assoc node-data :connections new-node-connections)))
 
 (defn add-origin
-  [node-data origin-name]
-  (assoc node-data :origin origin-name))
+  [node-data origin-name counter]
+  (-> node-data
+      (assoc :origin origin-name)
+      (assoc :copy-counter counter)))
 
 (defn process-node
   [node-name node-data prev-node-name origin-prev-node-name reused-nodes graph]
@@ -96,7 +98,7 @@
             new-node-data (-> node-data
                               (filter-node-connections origin-prev-node-name)
                               (rename-node-connection origin-prev-node-name prev-node-name)
-                              (add-origin node-name))]
+                              (add-origin node-name counter))]
         {:new-node-name new-node-name
          :reused-nodes  reused-nodes
          :graph         (-> graph

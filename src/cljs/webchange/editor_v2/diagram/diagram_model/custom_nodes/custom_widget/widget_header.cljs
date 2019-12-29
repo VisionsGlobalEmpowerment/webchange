@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.common-header)
+(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-header)
 
 (defn header
   [props]

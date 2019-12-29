@@ -117,22 +117,26 @@
 ;; parallel
 
 (defmethod get-action-data "parallel"
-  [{:keys [action-name action-data parent-action next-action prev-action]}]
-  (let [child-actions (->> (:data action-data)
+  [{:keys [action-name action-data parent-action next-action prev-action path]}]
+  (let [path (or path [action-name])
+        child-actions (->> (:data action-data)
                            (map-indexed
                              (fn [index child-action-data]
                                [(keyword (str (name action-name) "-" index))
-                                child-action-data]))
+                                child-action-data
+                                index]))
                            (vec))]
     (reduce
-      (fn [result [child-action-name child-action-data]]
+      (fn [result [child-action-name child-action-data index]]
         (merge result (get-action-data {:action-name   child-action-name
                                         :action-data   child-action-data
                                         :parent-action action-name
                                         :next-action   next-action
-                                        :prev-action   action-name})))
+                                        :prev-action   action-name
+                                        :path          (conj path index)})))
       (->> {:type (:type action-data)
-            :data action-data}
+            :data action-data
+            :path path}
            (add-connection-property prev-action (->> child-actions (map first)) parent-action)
            (assoc {} action-name))
       child-actions)))
@@ -148,7 +152,8 @@
                                                     :action-data   (->> next-action-name (get parsed-action) :data)
                                                     :parent-action action-name
                                                     :next-action   next-action
-                                                    :prev-action   action-name})))
+                                                    :prev-action   action-name
+                                                    :path          (->> next-action-name (get parsed-action) :path)})))
       parsed-action
       next-actions)))
 
@@ -167,10 +172,11 @@
       (last)))
 
 (defmethod get-action-data "sequence"
-  [{:keys [action-name action-data parent-action prev-action]}]
+  [{:keys [action-name action-data parent-action prev-action path]}]
   (let [first-item (->> action-data :data first keyword)]
     (->> {:type (:type action-data)
-          :data action-data}
+          :data action-data
+          :path (or path [action-name])}
          (add-connection-property prev-action first-item parent-action)
          (assoc {} action-name))))
 
@@ -201,8 +207,9 @@
 ;; sequence-data
 
 (defmethod get-action-data "sequence-data"
-  [{:keys [action-name action-data parent-action next-action prev-action]}]
-  (let [child-actions (->> (:data action-data)
+  [{:keys [action-name action-data parent-action next-action prev-action path]}]
+  (let [path (or path [action-name])
+        child-actions (->> (:data action-data)
                            (map-indexed
                              (fn [index child-action-data]
                                [(keyword (str (name action-name) "-" index))
@@ -218,9 +225,11 @@
                               :action-data   child-action-data
                               :parent-action action-name
                               :next-action   (or next-child-action-name next-action)
-                              :prev-action   (or (first (prev-to-index child-actions index)) action-name)}))))
+                              :prev-action   (or (first (prev-to-index child-actions index)) action-name)
+                              :path          (conj path index)}))))
       (->> {:type (:type action-data)
-            :data action-data}
+            :data action-data
+            :path path}
            (add-connection-property prev-action (->> child-actions first first) parent-action)
            (assoc {} action-name))
       (map-indexed (fn [index item] [index item]) child-actions))))
@@ -228,11 +237,12 @@
 ;; test-var-scalar
 
 (defmethod get-action-data "test-var-scalar"
-  [{:keys [action-name action-data parent-action prev-action]}]
+  [{:keys [action-name action-data parent-action prev-action path]}]
   (let [success (->> action-data :success keyword)
         fail (->> action-data :fail keyword)]
     (->> {:type (:type action-data)
-          :data action-data}
+          :data action-data
+          :path (or path [action-name])}
          (add-connection-property prev-action {:success [success]
                                                :fail    [fail]} parent-action)
          (assoc {} action-name))))
@@ -269,10 +279,11 @@
                             "test-var-scalar"]))
 
 (defmethod get-action-data :default
-  [{:keys [action-name action-data parent-action next-action prev-action]}]
+  [{:keys [action-name action-data parent-action next-action prev-action path]}]
   (let [action-type (:type action-data)]
     (->> {:type action-type
-          :data action-data}
+          :data action-data
+          :path (or path [action-name])}
          (add-connection-property prev-action next-action parent-action)
          (assoc {} action-name))))
 

@@ -27,12 +27,14 @@
   [graph child-node-name removing-connection-name new-connection-names]
   (let [node-connections (get-in graph [child-node-name :connections])
         removing-connection-data (get node-connections removing-connection-name)
-        next-node-fixed-connections (-> (reduce
-                                          (fn [result connection-name]
-                                            (assoc result connection-name removing-connection-data))
-                                          node-connections
-                                          new-connection-names)
-                                        (dissoc removing-connection-name))]
+        next-node-fixed-connections (if-not (nil? new-connection-names)
+                                      (-> (reduce
+                                            (fn [result connection-name]
+                                              (assoc result connection-name removing-connection-data))
+                                            node-connections
+                                            new-connection-names)
+                                          (dissoc removing-connection-name))
+                                      (dissoc node-connections removing-connection-name)) ]
     (assoc-in graph [child-node-name :connections] next-node-fixed-connections)))
 
 (defn get-connection-handlers
@@ -92,6 +94,14 @@
       (update-children-nodes node-name)
       (dissoc node-name)))
 
+(defn remove-handler
+  [graph node-name removing-connection-name]
+  (change-parent-node-connections graph node-name removing-connection-name []))
+
+(defn remove-connection
+  [graph node-name removing-connection-name]
+  (change-child-node-connections graph node-name removing-connection-name nil))
+
 (defn rename-parents-connections
   [graph old-name new-name]
   (reduce
@@ -117,7 +127,7 @@
   (let [data (get graph old-name)]
     (-> graph
         (assoc new-name data)
-        (dissoc old-name))))
+        (dissoc old-name))))change-parent-node-connections
 
 (defn rename-node
   [graph old-name new-name]
@@ -125,3 +135,25 @@
       (rename-parents-connections old-name new-name)
       (rename-children-connections old-name new-name)
       (rename-current-node old-name new-name)))
+
+(defn get-nodes-by-prev-node-name
+  [graph prev-node-name]
+  (reduce
+    (fn [result [node-name node-data]]
+      (let [node-ins (-> node-data get-node-ins keys)]
+        (if (some #{prev-node-name} node-ins)
+          (conj result node-name)
+          result)))
+    []
+    graph))
+
+(defn get-nodes-by-next-node-name
+  [graph next-node-name]
+  (reduce
+    (fn [result [node-name node-data]]
+      (let [node-outs (-> node-data get-node-outs keys)]
+        (if (some #{next-node-name} node-outs)
+          (conj result node-name)
+          result)))
+    []
+    graph))

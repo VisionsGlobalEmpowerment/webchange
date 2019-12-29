@@ -5,7 +5,8 @@
     [webchange.editor-v2.diagram.graph-builder.utils.change-node :refer [change-parent-node-connections
                                                                          change-child-node-connections
                                                                          remove-node
-                                                                         rename-node]]))
+                                                                         rename-node
+                                                                         remove-handler]]))
 
 (deftest test-change-parent-node-connections
   (testing "single connection change"
@@ -76,6 +77,15 @@
                                                :b {:handlers {:next [:c]}}}}
                              :c {:connections {:a {:handlers {:next [:e]}}
                                                :b {:handlers {:next [:e]}}}}}]
+        (is (= actual-result expected-result)))))
+  (testing "remove connection if new one is nil"
+    (let [graph {:c {:connections {:x {:handlers {:next [:e]}}
+                                   :y {:handlers {:next [:f]}}}}}
+          child-node-name :c
+          removing-connection-name :y
+          new-connection-names nil]
+      (let [actual-result (change-child-node-connections graph child-node-name removing-connection-name new-connection-names)
+            expected-result {:c {:connections {:x {:handlers {:next [:e]}}}}}]
         (is (= actual-result expected-result))))))
 
 (deftest test-remove-node
@@ -169,4 +179,20 @@
                              :c {:connections {:y {:handlers {:next [:e]}}}}}]
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result))))))
+
+(deftest test-remove-handler
+  (testing "remove one of many handlers"
+    (let [graph {:a {:connections {:root {:handlers {:next [:b :e]}}}}}
+          node-name :a
+          removing-connection-name :b]
+      (let [actual-result (remove-handler graph node-name removing-connection-name)
+            expected-result {:a {:connections {:root {:handlers {:next [:e]}}}}}]
+        (is (= actual-result expected-result)))))
+  (testing "remove last handler"
+    (let [graph {:a {:connections {:root {:handlers {:next [:b]}}}}}
+          node-name :a
+          removing-connection-name :b]
+      (let [actual-result (remove-handler graph node-name removing-connection-name)
+            expected-result {:a {:connections {:root {:handlers {}}}}}]
         (is (= actual-result expected-result))))))
