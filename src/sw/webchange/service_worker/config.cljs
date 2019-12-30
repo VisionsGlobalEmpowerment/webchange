@@ -13,7 +13,7 @@
                (.getSeconds date)])))
 
 (def app-name "webchange")
-(def release-number (time-stamp))
+(def release-number (or "1" (time-stamp)))
 
 (def cache-names-prefix app-name)
 (def database-name app-name)
@@ -28,4 +28,4 @@
                   :static (storage-name "static")
                   :game   (storage-name "game")})
 
-(def log-level :log)
+(def log-level :debug)

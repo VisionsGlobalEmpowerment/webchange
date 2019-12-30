@@ -68,6 +68,12 @@
   [promise handler]
   (.catch promise handler))
 
+;; --- Body ---
+
+(defn body-json
+  [response]
+  (.json response))
+
 ;; --- Response ---
 
 (defn response-new

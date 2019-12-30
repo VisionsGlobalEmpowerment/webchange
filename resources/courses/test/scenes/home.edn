@@ -4,8 +4,9 @@
                  {:url "/raw/audio/l1/a1/vera-casa-1.mp3", :size 2, :type "audio" :alias "vera 1"}
                  {:url "/raw/audio/l1/a1/vera-casa-2.mp3", :size 2, :type "audio" :alias "vera 2"}
                  {:url "/raw/audio/l1/a1/vera-casa-3.mp3", :size 2, :type "audio" :alias "vera 3"}
-                 {:url "/raw/audio/effects/wrong.wav", :size 1, :type "audio"}
                  {:url "/raw/audio/effects/correct.mp3", :size 1, :type "audio"}
+                 {:url "/raw/audio/effects/incorrect.mp3", :size 1, :type "audio"}
+                 {:url "/raw/audio/effects/box-appear.mp3", :size 1, :type "audio"}
 
                  {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/casa_door.png", :size 1, :type "image"}
@@ -105,7 +106,8 @@
                  :show-boxes                       {:type "parallel"
                                                     :data [{:type "state" :target "box1" :id "visible"}
                                                            {:type "state" :target "box2" :id "visible"}
-                                                           {:type "state" :target "box3" :id "visible"}]}
+                                                           {:type "state" :target "box3" :id "visible"}
+                                                           {:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}]}
 
                  :switch-box-animations-idle       {:type "parallel"
                                                     :data [{:type "add-animation" :target "box1" :id "idle_fly1" :loop true}
@@ -266,7 +268,7 @@
 
 
                  :pick-wrong                       {:type "sequence-data"
-                                                    :data [{:type "audio" :id "/raw/audio/effects/wrong.wav" :start 0 :duration 0.527}]}
+                                                    :data [{:type "audio" :id "/raw/audio/effects/incorrect.mp3" :start 0 :duration 0.527}]}
 
                  :audio-correct {:type "audio" :id "/raw/audio/effects/correct.mp3" :start 0 :duration 1.71}
                  :renew-words                      {:type        "lesson-var-provider"

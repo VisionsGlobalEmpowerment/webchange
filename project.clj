@@ -82,7 +82,7 @@
                    [day8.re-frame/tracing "0.5.1"]
                    [ring/ring-mock "0.3.2"]]
 
-    :plugins      [[lein-figwheel "0.5.17"]
+    :plugins      [[lein-figwheel "0.5.19"]
                    [lein-doo "0.1.8"]]
     :main         webchange.server}
    :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}

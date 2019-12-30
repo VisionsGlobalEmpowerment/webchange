@@ -50,3 +50,8 @@
   (logger/debug "Take from responses store:" request)
   (-> (take-from-store (request-pathname request))
       (then deserialize-response)))
+
+(defn swap-item!
+  [key f]
+  (-> (take-from-store key)
+      (then #(put-to-store (f %)))))

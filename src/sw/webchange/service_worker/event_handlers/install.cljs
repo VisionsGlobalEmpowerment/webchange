@@ -43,4 +43,5 @@
     (.waitUntil event (-> (install current-level)
                           (.then #(do (logger/log "Installation done.")
                                       (.skipWaiting js/self)))
-                          (.catch #(logger/warn "Installation failed." (.-message %)))))))
+                          (.catch #(do (logger/warn "Installation failed." (.-message %))
+                                       (throw %)))))))
