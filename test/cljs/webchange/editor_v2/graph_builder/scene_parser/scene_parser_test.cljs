@@ -159,6 +159,7 @@
                                          {:type "sequence-data"
                                           :data [{:type "empty"}
                                                  {:type "empty"}]}
+                                         {:type "empty"}
                                          {:type "empty"}]}}}]
     (let [actual-result (parse-data scene-data start-node-name)
           expected-result {:a     {:data        {:type "sequence-data"
@@ -166,6 +167,7 @@
                                                         {:type "sequence-data"
                                                          :data [{:type "empty"}
                                                                 {:type "empty"}]}
+                                                        {:type "empty"}
                                                         {:type "empty"}]}
                                    :path        [:a]
                                    :connections #{{:previous :root
@@ -200,6 +202,12 @@
                                                    :sequence :a}}}
                            :a-2   {:data        {:type "empty"}
                                    :path        [:a 2]
+                                   :connections #{{:previous :a-1-1
+                                                   :handler  :a-3
+                                                   :name     "next"
+                                                   :sequence :a}}}
+                           :a-3   {:data        {:type "empty"}
+                                   :path        [:a 3]
                                    :connections #{}}}]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
@@ -268,16 +276,17 @@
 (deftest test-scene-parser--sequence-in-sequence
   (let [start-node-name :a
         scene-data {:actions {:a {:type "sequence"
-                                  :data ["b" "c" "d"]}
+                                  :data ["b" "c" "d" "g"]}
                               :b {:type "empty"}
                               :c {:type "sequence"
                                   :data ["e" "f"]}
                               :d {:type "empty"}
                               :e {:type "empty"}
-                              :f {:type "empty"}}}]
+                              :f {:type "empty"}
+                              :g {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
           expected-result {:a {:data        {:type "sequence"
-                                             :data ["b" "c" "d"]}
+                                             :data ["b" "c" "d" "g"]}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :handler  :b
@@ -310,6 +319,12 @@
                                                :sequence :a}}}
                            :d {:data        {:type "empty"}
                                :path        [:d]
+                               :connections #{{:previous :f
+                                               :handler  :g
+                                               :name     "next"
+                                               :sequence :a}}}
+                           :g {:data        {:type "empty"}
+                               :path        [:g]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))

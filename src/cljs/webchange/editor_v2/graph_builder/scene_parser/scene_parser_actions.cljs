@@ -1,9 +1,12 @@
 (ns webchange.editor-v2.graph-builder.scene-parser.scene-parser-actions
   (:require
-    [webchange.editor-v2.graph-builder.scene-parser.utils.create-graph-node :refer [create-graph-node]]
+    [webchange.editor-v2.graph-builder.scene-parser.utils.create-graph-node :refer [create-graph-node
+                                                                                    get-sequence-item-name]]
     [webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data :refer [get-parallel-action-children
                                                                                   get-sequence-action-last-child
+                                                                                  get-sequence-data-action-last-child
                                                                                   sequence-action-name?
+                                                                                  sequence-data-action?
                                                                                   parallel-action-name?]]
     [webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions :refer [merge-actions]]))
 
@@ -147,16 +150,19 @@
         next-actions (map-indexed (fn [index item] [index item]) sequence-data)]
     (reduce
       (fn [result [index sequence-item-data]]
-        (let [sequence-item-name (-> (clojure.core/name action-name) (str "-" index) (keyword))
+        (let [sequence-item-name (get-sequence-item-name action-name index)
               next-item-name (if (next-to-index sequence-data index)
-                               (-> (clojure.core/name action-name) (str "-" (inc index)) (keyword))
+                               (get-sequence-item-name action-name (inc index))
                                next-action)
               previous-item-name (if (prev-to-index sequence-data index)
-                                   (-> (clojure.core/name action-name) (str "-" (dec index)) (keyword))
+                                   (get-sequence-item-name action-name (dec index))
                                    action-name)
+              previous-action-data (if (> index 0)
+                                     (second (nth next-actions (dec index)))
+                                     nil)
               prev-action (cond
-                            (and (sequence-action-name? actions-data previous-item-name)
-                                 (not (= previous-item-name action-name))) (get-sequence-action-last-child result previous-item-name)
+                            (and (sequence-data-action? previous-action-data)
+                                 (not (= previous-item-name action-name))) (get-sequence-data-action-last-child previous-action-data previous-item-name)
                             (parallel-action-name? result previous-item-name) (get-parallel-action-children result previous-item-name)
                             :else previous-item-name)
               last-item? (= index (dec (count next-actions)))

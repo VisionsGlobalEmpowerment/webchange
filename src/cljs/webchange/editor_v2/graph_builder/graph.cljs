@@ -3,7 +3,6 @@
     [webchange.editor-v2.graph-builder.filters.phrases :refer [get-phrases-graph]]
     [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer :refer [override-concept-actions]]
     [webchange.editor-v2.graph-builder.scene-parser.scene-parser :refer [parse-data]]
-    [webchange.editor-v2.graph-builder.duplicates-replicator.duplicates-replicator :refer [untangle-reuses]]
     [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer :refer [normalize-graph]]))
 
 (defn parse-scene
@@ -12,10 +11,8 @@
   ([scene-data {:keys [start-node concept-data]}]
    (-> scene-data
        (parse-data start-node)
-       ;(normalize-graph)
-       (untangle-reuses)
-       (override-concept-actions concept-data)
-       )))
+       (normalize-graph)
+       (override-concept-actions concept-data))))
 
 (defn get-diagram-graph
   ([scene-data diagram-mode]
