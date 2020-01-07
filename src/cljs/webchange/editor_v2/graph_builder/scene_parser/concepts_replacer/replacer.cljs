@@ -24,52 +24,34 @@
       (keyword action-name))))
 
 (defn concept-action-ref?
-  [action-data concept-scheme]
+  [action-data concept]
   (if-let [concept-action-name (-> action-data
                                    (get-referenced-concept-action-name))]
-    (->> concept-scheme
+    (->> (:data concept)
          (some
-           (fn [{:keys [name type]}]
-             (and (= name (clojure.core/name concept-action-name))
-                  (= type "action"))))
+           (fn [[name]]
+             (= name concept-action-name)))
          (boolean))
     false))
 
-(defn get-concept-scheme-action
-  [action-name concept-scheme]
-  (let [scheme-action-name (clojure.core/name action-name)]
-    (some
-      (fn [{:keys [name type] :as concept}]
-        (and (and (= name scheme-action-name)
-                  (= type "action"))
-             (:template concept)))
-      concept-scheme)))
-
-(defn get-concept-instance-action
-  [action-name current-concept]
-  (get-in current-concept [:data action-name]))
-
 (defn get-concept-action
-  [action-name prev-action next-actions concept-scheme current-concept copy-data]
-  (let [action-data (if (nil? current-concept)
-                      (get-concept-scheme-action action-name concept-scheme)
-                      (get-concept-instance-action action-name current-concept))
-        use-copy-name? (-> (:origin copy-data) nil? not)]
-    (parse-actions-chain
-      (assoc {} action-name action-data)
-      {:action-name   (if use-copy-name?
-                        (-> action-name
-                            (get-copy-name (:counter copy-data))
-                            (keyword))
-                        action-name)
-       :action-data   (if use-copy-name?
-                        (merge action-data
-                               {:origin action-name})
-                        action-data)
-       :parent-action nil
-       :next-action   next-actions
-       :prev-action   prev-action
-       :sequence-path []})))
+  [action-name current-concept {:keys [copy-counter]}]
+  (let [use-copy-name? (-> copy-counter nil? not)
+        action-parsed-name (if use-copy-name?
+                             (-> action-name (get-copy-name copy-counter) (keyword))
+                             action-name)
+        action-data (get-in current-concept [:data action-name])]
+    [action-parsed-name (parse-actions-chain
+                          (assoc {} action-name action-data)
+                          {:action-name   action-parsed-name
+                           :action-data   (if use-copy-name?
+                                            (merge action-data
+                                                   {:origin-name action-name})
+                                            action-data)
+                           :parent-action nil
+                           :next-action   :end-action
+                           :prev-action   :start-action
+                           :sequence-path []})]))
 
 (defn update-prev-nodes
   [graph replacing-node-name new-nodes-graph]
@@ -110,45 +92,50 @@
     {}
     new-nodes))
 
-(defn replace-node
-  [graph node-name new-nodes prev-node-name]
-  (-> graph
-      (update-prev-nodes node-name new-nodes)
-      (update-next-nodes node-name new-nodes)
-      (dissoc node-name)
-      (merge (update-new-nodes new-nodes prev-node-name))))
+(defn insert-concept-nodes
+  [graph prev-node-name node-name concept-first-node-name concept-nodes-data]
+  (let [node-data (get graph node-name)
+        node-children (get-children node-name node-data prev-node-name)]
+    (println ">> insert-concept-nodes" node-name)
+    (println "concept-first-node-name" concept-first-node-name)
+    (println "node-children" node-children)
+    (println "concept-nodes-data" concept-nodes-data)
+    graph)
 
-;; ToDo probably concept actions should be placed after action referring to them instead of replace it.
+  ;(-> graph
+  ;    (update-prev-nodes node-name new-nodes)
+  ;    (update-next-nodes node-name new-nodes)
+  ;    (dissoc node-name)
+  ;    (merge (update-new-nodes new-nodes prev-node-name)))
+  )
+
 (defn override-concepts-dfs
-  ([graph concept-data]
-   (override-concepts-dfs graph concept-data [:root :root]))
-  ([graph {:keys [concept-scheme current-concept] :as concept-data} [prev-node-name node-name]]
+  ([graph current-concept]
+   (override-concepts-dfs graph current-concept [:root :root]))
+  ([graph current-concept [prev-node-name node-name]]
    (let [node-data (get graph node-name)
          graph (reduce
-                 (fn [graph next-node-name]
-                   (override-concepts-dfs graph concept-data [node-name next-node-name]))
+                 (fn [graph {:keys [handler]}]
+                   (override-concepts-dfs graph current-concept [node-name handler]))
                  graph
-                 (map :handler (get-children node-name node-data prev-node-name)))]
+                 (get-children node-name node-data prev-node-name))]
      (let [action-data (:data node-data)]
-       (if (concept-action-ref? action-data concept-scheme)
-         (let [new-nodes (-> action-data
-                             (get-referenced-concept-action-name)
-                             (get-concept-action nil
-                                                 (map :handler (get-children node-name node-data prev-node-name))
-                                                 concept-scheme
-                                                 current-concept
-                                                 {:origin  (get-in node-data [:origin])
-                                                  :counter (get-in node-data [:copy-counter])}))]
-           (replace-node graph node-name new-nodes prev-node-name))
+       (if (concept-action-ref? action-data current-concept)
+         (let [[concept-first-node-name
+                concept-nodes-data] (-> action-data
+                                        (get-referenced-concept-action-name)
+                                        (get-concept-action current-concept
+                                                            {:copy-counter (get-in node-data [:copy-counter])}))]
+           (insert-concept-nodes graph prev-node-name node-name concept-first-node-name concept-nodes-data))
          graph)))))
 
 (defn override-concept-actions
-  [graph concept-data]
-  (if-not (nil? concept-data)
+  [graph {:keys [current-concept]}]
+  (if-not (nil? current-concept)
     (let [graph (->> graph
                      (get-root-nodes)
                      (add-root-node graph))]
       (-> graph
-          (override-concepts-dfs concept-data)
+          (override-concepts-dfs current-concept)
           (remove-root-node)))
     graph))

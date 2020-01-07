@@ -10,7 +10,7 @@
   (fn [_ [_ course-id scene-id]]
     {:dispatch-n (list [::ie/start-course course-id scene-id]
                        [::ee/load-datasets]
-                       [::set-diagram-mode :full-scene])}))
+                       [::set-diagram-mode :phrases])}))
 
 (re-frame/reg-event-fx
   ::set-diagram-mode

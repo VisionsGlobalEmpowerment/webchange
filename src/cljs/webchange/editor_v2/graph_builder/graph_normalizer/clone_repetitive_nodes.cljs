@@ -61,13 +61,14 @@
                  (set))))
 
 (defn add-new-node
-  [graph old-node-name new-node-name connections]
+  [graph old-node-name new-node-name connections copy-counter]
   (assoc
     graph
     new-node-name
     (merge (get graph old-node-name)
            {:connections connections
-            :origin-name old-node-name})))
+            :origin-name old-node-name
+            :copy-counter copy-counter})))
 
 (defn clone-node
   [graph node-name node-data prev-node-name prev-node-connection clones-counter seq-path]
@@ -76,7 +77,7 @@
         children (get-children node-name node-data prev-node-name seq-path)
         graph (-> graph
                   (update-parent-connection prev-node-name prev-node-connection new-node-name)
-                  (add-new-node node-name new-node-name children)
+                  (add-new-node node-name new-node-name children current-number)
                   (update-children-connections node-name new-node-name children seq-path))]
     [graph new-node-name clones-counter]))
 
