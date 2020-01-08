@@ -57,34 +57,38 @@
                                                       :name     "next"
                                                       :handler  :d-copy-1
                                                       :sequence :b}}}
-                           :d-copy-1 {:data        {:type "empty"}
-                                      :path        [:d]
-                                      :origin-name :d
-                                      :connections #{{:previous :b
-                                                      :name     "next"
-                                                      :handler  :e-copy-1
-                                                      :sequence :b}}}
-                           :d-copy-2 {:data        {:type "empty"}
-                                      :path        [:d]
-                                      :origin-name :d
-                                      :connections #{{:previous :e-copy-1
-                                                      :name     "next"
-                                                      :handler  :e-copy-2
-                                                      :sequence :b}}}
-                           :e-copy-1 {:data        {:type "empty"}
-                                      :path        [:e]
-                                      :origin-name :e
-                                      :connections #{{:previous :d-copy-1
-                                                      :name     "next"
-                                                      :handler  :d-copy-2
-                                                      :sequence :b}}}
-                           :e-copy-2 {:data        {:type "empty"}
-                                      :path        [:e]
-                                      :origin-name :e
-                                      :connections #{{:previous :d-copy-2
-                                                      :name     "next"
-                                                      :handler  :c
-                                                      :sequence :a}}}
+                           :d-copy-1 {:data         {:type "empty"}
+                                      :path         [:d]
+                                      :origin-name  :d
+                                      :copy-counter 1
+                                      :connections  #{{:previous :b
+                                                       :name     "next"
+                                                       :handler  :e-copy-1
+                                                       :sequence :b}}}
+                           :d-copy-2 {:data         {:type "empty"}
+                                      :path         [:d]
+                                      :origin-name  :d
+                                      :copy-counter 2
+                                      :connections  #{{:previous :e-copy-1
+                                                       :name     "next"
+                                                       :handler  :e-copy-2
+                                                       :sequence :b}}}
+                           :e-copy-1 {:data         {:type "empty"}
+                                      :path         [:e]
+                                      :origin-name  :e
+                                      :copy-counter 1
+                                      :connections  #{{:previous :d-copy-1
+                                                       :name     "next"
+                                                       :handler  :d-copy-2
+                                                       :sequence :b}}}
+                           :e-copy-2 {:data         {:type "empty"}
+                                      :path         [:e]
+                                      :origin-name  :e
+                                      :copy-counter 2
+                                      :connections  #{{:previous :d-copy-2
+                                                       :name     "next"
+                                                       :handler  :c
+                                                       :sequence :a}}}
                            :c        {:data        {:type "empty"}
                                       :path        [:c]
                                       :connections #{}}}]
@@ -124,24 +128,27 @@
                                                       :name     "next"
                                                       :handler  :b-copy-1
                                                       :sequence :a}}}
-                           :b-copy-1 {:data        {:type "empty"}
-                                      :path        [:b]
-                                      :origin-name :b
-                                      :connections #{{:previous :a
-                                                      :name     "next"
-                                                      :handler  :b-copy-2
-                                                      :sequence :a}}}
-                           :b-copy-2 {:data        {:type "empty"}
-                                      :path        [:b]
-                                      :origin-name :b
-                                      :connections #{{:previous :b-copy-1
-                                                      :name     "next"
-                                                      :handler  :c
-                                                      :sequence :a}}}
-                           :b-copy-3 {:data        {:type "empty"}
-                                      :path        [:b]
-                                      :origin-name :b
-                                      :connections #{}}
+                           :b-copy-1 {:data         {:type "empty"}
+                                      :path         [:b]
+                                      :origin-name  :b
+                                      :copy-counter 1
+                                      :connections  #{{:previous :a
+                                                       :name     "next"
+                                                       :handler  :b-copy-2
+                                                       :sequence :a}}}
+                           :b-copy-2 {:data         {:type "empty"}
+                                      :path         [:b]
+                                      :origin-name  :b
+                                      :copy-counter 2
+                                      :connections  #{{:previous :b-copy-1
+                                                       :name     "next"
+                                                       :handler  :c
+                                                       :sequence :a}}}
+                           :b-copy-3 {:data         {:type "empty"}
+                                      :path         [:b]
+                                      :origin-name  :b
+                                      :copy-counter 3
+                                      :connections  #{}}
                            :c        {:data        {:type "action"}
                                       :path        [:c]
                                       :connections #{{:previous :b-copy-2
@@ -307,34 +314,38 @@
                                                       :name     "next"
                                                       :handler  :c-copy-2
                                                       :sequence :f}}}
-                           :c-copy-1 {:data        {:type "empty"}
-                                      :path        [:c]
-                                      :origin-name :c
-                                      :connections #{{:previous :b
-                                                      :name     "next"
-                                                      :handler  :d-copy-1
-                                                      :sequence :b}}}
-                           :c-copy-2 {:data        {:type "empty"}
-                                      :path        [:c]
-                                      :origin-name :c
-                                      :connections #{{:previous :f
-                                                      :name     "next"
-                                                      :handler  :d-copy-2
-                                                      :sequence :f}}}
-                           :d-copy-1 {:data        {:type "empty"}
-                                      :path        [:d]
-                                      :origin-name :d
-                                      :connections #{{:previous :c-copy-1
-                                                      :name     "next"
-                                                      :handler  :f
-                                                      :sequence :b}}}
-                           :d-copy-2 {:data        {:type "empty"}
-                                      :path        [:d]
-                                      :origin-name :d
-                                      :connections #{{:previous :c-copy-2
-                                                      :name     "next"
-                                                      :cycle-to :b
-                                                      :sequence :f}}}
+                           :c-copy-1 {:data         {:type "empty"}
+                                      :path         [:c]
+                                      :origin-name  :c
+                                      :copy-counter 1
+                                      :connections  #{{:previous :b
+                                                       :name     "next"
+                                                       :handler  :d-copy-1
+                                                       :sequence :b}}}
+                           :c-copy-2 {:data         {:type "empty"}
+                                      :path         [:c]
+                                      :origin-name  :c
+                                      :copy-counter 2
+                                      :connections  #{{:previous :f
+                                                       :name     "next"
+                                                       :handler  :d-copy-2
+                                                       :sequence :f}}}
+                           :d-copy-1 {:data         {:type "empty"}
+                                      :path         [:d]
+                                      :origin-name  :d
+                                      :copy-counter 1
+                                      :connections  #{{:previous :c-copy-1
+                                                       :name     "next"
+                                                       :handler  :f
+                                                       :sequence :b}}}
+                           :d-copy-2 {:data         {:type "empty"}
+                                      :path         [:d]
+                                      :origin-name  :d
+                                      :copy-counter 2
+                                      :connections  #{{:previous :c-copy-2
+                                                       :name     "next"
+                                                       :cycle-to :b
+                                                       :sequence :f}}}
                            :e        {:data        {:type "empty"}
                                       :path        [:e]
                                       :connections #{}}}]

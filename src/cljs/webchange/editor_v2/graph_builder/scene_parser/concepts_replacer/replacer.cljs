@@ -49,8 +49,8 @@
                                                    {:origin-name action-name})
                                             action-data)
                            :parent-action nil
-                           :next-action   :end-action
-                           :prev-action   :start-action
+                           :next-action   :next-action
+                           :prev-action   :prev-action
                            :sequence-path []})]))
 
 (defn update-prev-nodes
