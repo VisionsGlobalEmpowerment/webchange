@@ -39,7 +39,7 @@
   'webchange.editor-v2.graph-builder.duplicates-replicator.duplicates-replicator-test
   'webchange.editor-v2.graph-builder.filters.phrases-test
   'webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test
-  ;'webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test
+  'webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test
   'webchange.editor-v2.graph-builder.scene-parser.scene-parser-test
   'webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data-test
   'webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions-test

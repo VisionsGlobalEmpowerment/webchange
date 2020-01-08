@@ -5,6 +5,7 @@
     [webchange.editor-v2.graph-builder.utils.change-node :refer [get-nodes-by-next-node-name
                                                                  change-parent-node-connections
                                                                  change-child-node-connections]]
+    [webchange.editor-v2.graph-builder.utils.insert-sub-graph :refer [insert-sub-graph]]
     [webchange.editor-v2.graph-builder.utils.node-siblings :refer [get-node-ins
                                                                    get-node-outs]]
     [webchange.editor-v2.graph-builder.utils.node-children :refer [get-children]]
@@ -41,17 +42,18 @@
                              (-> action-name (get-copy-name copy-counter) (keyword))
                              action-name)
         action-data (get-in current-concept [:data action-name])]
-    [action-parsed-name (parse-actions-chain
-                          (assoc {} action-name action-data)
-                          {:action-name   action-parsed-name
-                           :action-data   (if use-copy-name?
-                                            (merge action-data
-                                                   {:origin-name action-name})
-                                            action-data)
-                           :parent-action nil
-                           :next-action   :next-action
-                           :prev-action   :prev-action
-                           :sequence-path []})]))
+    (parse-actions-chain
+      (assoc {} action-name action-data)
+      {:action-name   action-parsed-name
+       :action-data   (if use-copy-name?
+                        (merge action-data
+                               {:origin-name action-name})
+                        action-data)
+       :parent-action nil
+       :next-action   :next-action
+       :prev-action   :prev-action
+       :path          [action-name]
+       :sequence-path []})))
 
 (defn update-prev-nodes
   [graph replacing-node-name new-nodes-graph]
@@ -93,21 +95,17 @@
     new-nodes))
 
 (defn insert-concept-nodes
-  [graph prev-node-name node-name concept-first-node-name concept-nodes-data]
+  [graph prev-node-name node-name concept-nodes-data]
   (let [node-data (get graph node-name)
-        node-children (get-children node-name node-data prev-node-name)]
-    (println ">> insert-concept-nodes" node-name)
-    (println "concept-first-node-name" concept-first-node-name)
-    (println "node-children" node-children)
-    (println "concept-nodes-data" concept-nodes-data)
-    graph)
-
-  ;(-> graph
-  ;    (update-prev-nodes node-name new-nodes)
-  ;    (update-next-nodes node-name new-nodes)
-  ;    (dissoc node-name)
-  ;    (merge (update-new-nodes new-nodes prev-node-name)))
-  )
+        node-children (get-children node-name node-data prev-node-name)
+        start-node-connections (if (= 0 (count node-children))
+                                 [{:previous prev-node-name}]
+                                 node-children)
+        updated-concept-nodes-data (reduce (fn [graph [node-name]]
+                                             (update-in graph [node-name :data] merge {:concept-action true}))
+                                           concept-nodes-data
+                                           concept-nodes-data)]
+    (insert-sub-graph graph node-name start-node-connections updated-concept-nodes-data)))
 
 (defn override-concepts-dfs
   ([graph current-concept]
@@ -121,12 +119,11 @@
                  (get-children node-name node-data prev-node-name))]
      (let [action-data (:data node-data)]
        (if (concept-action-ref? action-data current-concept)
-         (let [[concept-first-node-name
-                concept-nodes-data] (-> action-data
+         (let [concept-nodes-data (-> action-data
                                         (get-referenced-concept-action-name)
                                         (get-concept-action current-concept
                                                             {:copy-counter (get-in node-data [:copy-counter])}))]
-           (insert-concept-nodes graph prev-node-name node-name concept-first-node-name concept-nodes-data))
+           (insert-concept-nodes graph prev-node-name node-name concept-nodes-data))
          graph)))))
 
 (defn override-concept-actions
