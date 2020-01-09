@@ -9,13 +9,15 @@
                                   :actions {:click {:type "action" :id "b" :on "click"}}}}
                     :actions {:b {:type "empty"}}}]
     (let [actual-result (parse-data scene-data)
-          expected-result {:a {:data        {:type    "animation"
+          expected-result {:a {:entity      :object
+                               :data        {:type    "animation"
                                              :actions {:click {:type "action" :id "b" :on "click"}}}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :name     "click"
                                                :handler  :b}}}
-                           :b {:data        {:type "empty"}
+                           :b {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:b]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -27,13 +29,15 @@
                                   :actions {:drag-end {:type "action" :id "b" :on "drag-end"}}}}
                     :actions {:b {:type "empty"}}}]
     (let [actual-result (parse-data scene-data)
-          expected-result {:a {:data        {:type    "animation"
+          expected-result {:a {:entity      :object
+                               :data        {:type    "animation"
                                              :actions {:drag-end {:type "action" :id "b" :on "drag-end"}}}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :name     "drag-end"
                                                :handler  :b}}}
-                           :b {:data        {:type "empty"}
+                           :b {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:b]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -44,12 +48,14 @@
   (let [scene-data {:triggers {:a {:on "back" :action "b"}}
                     :actions  {:b {:type "empty"}}}]
     (let [actual-result (parse-data scene-data)
-          expected-result {:a {:data        {:on "back" :action "b"}
+          expected-result {:a {:entity      :trigger
+                               :data        {:on "back" :action "b"}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :name     "back"
                                                :handler  :b}}}
-                           :b {:data        {:type "empty"}
+                           :b {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:b]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -62,20 +68,24 @@
                     :actions  {:c {:type "empty"}
                                :d {:type "empty"}}}]
     (let [actual-result (parse-data scene-data)
-          expected-result {:a {:data        {:on "start" :action "c"}
+          expected-result {:a {:entity      :trigger
+                               :data        {:on "start" :action "c"}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :name     "start"
                                                :handler  :c}}}
-                           :b {:data        {:on "start" :action "d"}
+                           :b {:entity      :trigger
+                               :data        {:on "start" :action "d"}
                                :path        [:b]
                                :connections #{{:previous :root
                                                :name     "start"
                                                :handler  :d}}}
-                           :c {:data        {:type "empty"}
+                           :c {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:c]
                                :connections #{}}
-                           :d {:data        {:type "empty"}
+                           :d {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:d]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -88,21 +98,24 @@
                                   :data [{:type "empty"}
                                          {:type "empty"}]}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type "sequence-data"
-                                             :data [{:type "empty"}
-                                                    {:type "empty"}]}
-                               :path        [:a]
-                               :connections #{{:previous :root
-                                               :handler  :a-0
-                                               :name     "next"
-                                               :sequence :a}}}
-                           :a-0 {:data        {:type "empty"}
+          expected-result {:a   {:entity      :action
+                                 :data        {:type "sequence-data"
+                                               :data [{:type "empty"}
+                                                      {:type "empty"}]}
+                                 :path        [:a]
+                                 :connections #{{:previous :root
+                                                 :handler  :a-0
+                                                 :name     "next"
+                                                 :sequence :a}}}
+                           :a-0 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:a 0]
                                  :connections #{{:previous :a
                                                  :handler  :a-1
                                                  :name     "next"
                                                  :sequence :a}}}
-                           :a-1 {:data        {:type "empty"}
+                           :a-1 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:a 1]
                                  :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -118,36 +131,41 @@
                                          {:type "empty"}]}
                               :c {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type "sequence"
-                                             :data ["b" "c"]}
-                               :path        [:a]
-                               :connections #{{:previous :root
-                                               :handler  :b
-                                               :name     "next"
-                                               :sequence :a}}}
-                           :b {:data        {:type "sequence-data"
-                                             :data [{:type "empty"}
-                                                    {:type "empty"}]}
-                               :path        [:b]
-                               :connections #{{:previous :a
-                                               :handler  :b-0
-                                               :name     "next"
-                                               :sequence :b}}}
-                           :b-0 {:data        {:type "empty"}
+          expected-result {:a   {:entity      :action
+                                 :data        {:type "sequence"
+                                               :data ["b" "c"]}
+                                 :path        [:a]
+                                 :connections #{{:previous :root
+                                                 :handler  :b
+                                                 :name     "next"
+                                                 :sequence :a}}}
+                           :b   {:entity      :action
+                                 :data        {:type "sequence-data"
+                                               :data [{:type "empty"}
+                                                      {:type "empty"}]}
+                                 :path        [:b]
+                                 :connections #{{:previous :a
+                                                 :handler  :b-0
+                                                 :name     "next"
+                                                 :sequence :b}}}
+                           :b-0 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:b 0]
                                  :connections #{{:previous :b
                                                  :handler  :b-1
                                                  :name     "next"
                                                  :sequence :b}}}
-                           :b-1 {:data        {:type "empty"}
+                           :b-1 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:b 1]
                                  :connections #{{:previous :b-0
                                                  :handler  :c
                                                  :name     "next"
                                                  :sequence :a}}}
-                           :c {:data        {:type "empty"}
-                               :path        [:c]
-                               :connections #{}}}]
+                           :c   {:entity      :action
+                                 :data        {:type "empty"}
+                                 :path        [:c]
+                                 :connections #{}}}]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
@@ -162,7 +180,8 @@
                                          {:type "empty"}
                                          {:type "empty"}]}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a     {:data        {:type "sequence-data"
+          expected-result {:a     {:entity      :action
+                                   :data        {:type "sequence-data"
                                                  :data [{:type "empty"}
                                                         {:type "sequence-data"
                                                          :data [{:type "empty"}
@@ -174,13 +193,15 @@
                                                    :handler  :a-0
                                                    :name     "next"
                                                    :sequence :a}}}
-                           :a-0   {:data        {:type "empty"}
+                           :a-0   {:entity      :action
+                                   :data        {:type "empty"}
                                    :path        [:a 0]
                                    :connections #{{:previous :a
                                                    :handler  :a-1
                                                    :name     "next"
                                                    :sequence :a}}}
-                           :a-1   {:data        {:type "sequence-data"
+                           :a-1   {:entity      :action
+                                   :data        {:type "sequence-data"
                                                  :data [{:type "empty"}
                                                         {:type "empty"}]}
                                    :path        [:a 1]
@@ -188,25 +209,29 @@
                                                    :handler  :a-1-0
                                                    :name     "next"
                                                    :sequence :a-1}}}
-                           :a-1-0 {:data        {:type "empty"}
+                           :a-1-0 {:entity      :action
+                                   :data        {:type "empty"}
                                    :path        [:a 1 0]
                                    :connections #{{:previous :a-1
                                                    :handler  :a-1-1
                                                    :name     "next"
                                                    :sequence :a-1}}}
-                           :a-1-1 {:data        {:type "empty"}
+                           :a-1-1 {:entity      :action
+                                   :data        {:type "empty"}
                                    :path        [:a 1 1]
                                    :connections #{{:previous :a-1-0
                                                    :handler  :a-2
                                                    :name     "next"
                                                    :sequence :a}}}
-                           :a-2   {:data        {:type "empty"}
+                           :a-2   {:entity      :action
+                                   :data        {:type "empty"}
                                    :path        [:a 2]
                                    :connections #{{:previous :a-1-1
                                                    :handler  :a-3
                                                    :name     "next"
                                                    :sequence :a}}}
-                           :a-3   {:data        {:type "empty"}
+                           :a-3   {:entity      :action
+                                   :data        {:type "empty"}
                                    :path        [:a 3]
                                    :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -285,45 +310,52 @@
                               :f {:type "empty"}
                               :g {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type "sequence"
+          expected-result {:a {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["b" "c" "d" "g"]}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :handler  :b
                                                :name     "next"
                                                :sequence :a}}}
-                           :b {:data        {:type "empty"}
+                           :b {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:b]
                                :connections #{{:previous :a
                                                :handler  :c
                                                :name     "next"
                                                :sequence :a}}}
-                           :c {:data        {:type "sequence"
+                           :c {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["e" "f"]}
                                :path        [:c]
                                :connections #{{:previous :b
                                                :handler  :e
                                                :name     "next"
                                                :sequence :c}}}
-                           :e {:data        {:type "empty"}
+                           :e {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:e]
                                :connections #{{:previous :c
                                                :handler  :f
                                                :name     "next"
                                                :sequence :c}}}
-                           :f {:data        {:type "empty"}
+                           :f {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:f]
                                :connections #{{:previous :e
                                                :handler  :d
                                                :name     "next"
                                                :sequence :a}}}
-                           :d {:data        {:type "empty"}
+                           :d {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:d]
                                :connections #{{:previous :f
                                                :handler  :g
                                                :name     "next"
                                                :sequence :a}}}
-                           :g {:data        {:type "empty"}
+                           :g {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:g]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -340,21 +372,24 @@
                               :d {:type "empty"}
                               :e {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type "sequence"
+          expected-result {:a {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["b" "c"]}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :handler  :b
                                                :name     "next"
                                                :sequence :a}}}
-                           :b {:data        {:type "sequence"
+                           :b {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["d" "e" "d" "e"]}
                                :path        [:b]
                                :connections #{{:previous :a
                                                :handler  :d
                                                :name     "next"
                                                :sequence :b}}}
-                           :d {:data        {:type "empty"}
+                           :d {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:d]
                                :connections #{{:previous :b
                                                :handler  :e
@@ -364,7 +399,8 @@
                                                :handler  :e
                                                :name     "next"
                                                :sequence :b}}}
-                           :e {:data        {:type "empty"}
+                           :e {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:e]
                                :connections #{{:previous :d
                                                :handler  :d
@@ -374,7 +410,8 @@
                                                :handler  :c
                                                :name     "next"
                                                :sequence :a}}}
-                           :c {:data        {:type "empty"}
+                           :c {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:c]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -388,14 +425,16 @@
                               :c {:type "empty"}
                               :b {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type "sequence"
+          expected-result {:a {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["b" "b" "c" "b"]}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :handler  :b
                                                :name     "next"
                                                :sequence :a}}}
-                           :b {:data        {:type "empty"}
+                           :b {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:b]
                                :connections #{{:previous :a
                                                :handler  :b
@@ -405,7 +444,8 @@
                                                :handler  :c
                                                :name     "next"
                                                :sequence :a}}}
-                           :c {:data        {:type "empty"}
+                           :c {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:c]
                                :connections #{{:previous :b
                                                :handler  :b
@@ -426,14 +466,16 @@
                               :d {:type "empty"}
                               :e {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type "sequence"
+          expected-result {:a {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["b" "e"]}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :name     "next"
                                                :handler  :b
                                                :sequence :a}}}
-                           :b {:data        {:type               "sequence"
+                           :b {:entity      :action
+                               :data        {:type               "sequence"
                                              :data               ["c" "d" "b"]
                                              :return-immediately true}
                                :path        [:b]
@@ -449,19 +491,22 @@
                                                :name     "next"
                                                :handler  :c
                                                :sequence :b}}}
-                           :c {:data        {:type "empty"}
+                           :c {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:c]
                                :connections #{{:previous :b
                                                :name     "next"
                                                :handler  :d
                                                :sequence :b}}}
-                           :d {:data        {:type "empty"}
+                           :d {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:d]
                                :connections #{{:previous :c
                                                :name     "next"
                                                :handler  :b
                                                :sequence :b}}}
-                           :e {:data        {:type "empty"}
+                           :e {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:e]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -481,14 +526,16 @@
                               :d {:type "empty"}
                               :e {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type "sequence"
+          expected-result {:a {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["b" "e"]}
                                :path        [:a]
                                :connections #{{:previous :root
                                                :name     "next"
                                                :handler  :b
                                                :sequence :a}}}
-                           :b {:data        {:type               "sequence"
+                           :b {:entity      :action
+                               :data        {:type               "sequence"
                                              :data               ["c" "d" "f"]
                                              :return-immediately true}
                                :path        [:b]
@@ -504,14 +551,16 @@
                                                :name     "next"
                                                :handler  :c
                                                :sequence :b}}}
-                           :f {:data        {:type "sequence"
+                           :f {:entity      :action
+                               :data        {:type "sequence"
                                              :data ["c" "d" "b"]}
                                :path        [:f]
                                :connections #{{:previous :d
                                                :name     "next"
                                                :handler  :c
                                                :sequence :f}}}
-                           :c {:data        {:type "empty"}
+                           :c {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:c]
                                :connections #{{:previous :b
                                                :name     "next"
@@ -521,7 +570,8 @@
                                                :name     "next"
                                                :handler  :d
                                                :sequence :f}}}
-                           :d {:data        {:type "empty"}
+                           :d {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:d]
                                :connections #{{:previous :c
                                                :name     "next"
@@ -531,7 +581,8 @@
                                                :name     "next"
                                                :handler  :b
                                                :sequence :f}}}
-                           :e {:data        {:type "empty"}
+                           :e {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:e]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -544,7 +595,8 @@
                                   :data [{:type "empty"}
                                          {:type "empty"}]}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a   {:data        {:type "sequence-data"
+          expected-result {:a   {:entity      :action
+                                 :data        {:type "sequence-data"
                                                :data [{:type "empty"}
                                                       {:type "empty"}]}
                                  :path        [:a]
@@ -552,13 +604,15 @@
                                                  :name     "next"
                                                  :handler  :a-0
                                                  :sequence :a}}}
-                           :a-0 {:data        {:type "empty"}
+                           :a-0 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:a 0]
                                  :connections #{{:previous :a
                                                  :name     "next"
                                                  :handler  :a-1
                                                  :sequence :a}}}
-                           :a-1 {:data        {:type "empty"}
+                           :a-1 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:a 1]
                                  :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -575,14 +629,16 @@
                               :c {:type "empty"}
                               :d {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a   {:data        {:type "sequence"
+          expected-result {:a   {:entity      :action
+                                 :data        {:type "sequence"
                                                :data ["b" "c" "d"]}
                                  :path        [:a]
                                  :connections #{{:previous :root
                                                  :name     "next"
                                                  :handler  :b
                                                  :sequence :a}}}
-                           :b   {:data        {:type "parallel"
+                           :b   {:entity      :action
+                                 :data        {:type "parallel"
                                                :data [{:type "empty"}
                                                       {:type "empty"}]}
                                  :path        [:b]
@@ -594,19 +650,22 @@
                                                  :name     "next"
                                                  :handler  :b-1
                                                  :sequence :b}}}
-                           :b-0 {:data        {:type "empty"}
+                           :b-0 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:b 0]
                                  :connections #{{:previous :b
                                                  :name     "next"
                                                  :handler  :c
                                                  :sequence :a}}}
-                           :b-1 {:data        {:type "empty"}
+                           :b-1 {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:b 1]
                                  :connections #{{:previous :b
                                                  :name     "next"
                                                  :handler  :c
                                                  :sequence :a}}}
-                           :c   {:data        {:type "empty"}
+                           :c   {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:c]
                                  :connections #{{:previous :b-0
                                                  :name     "next"
@@ -616,7 +675,8 @@
                                                  :name     "next"
                                                  :handler  :d
                                                  :sequence :a}}}
-                           :d   {:data        {:type "empty"}
+                           :d   {:entity      :action
+                                 :data        {:type "empty"}
                                  :path        [:d]
                                  :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -631,7 +691,8 @@
                               :b {:type "empty"}
                               :c {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a {:data        {:type    "test-var-scalar"
+          expected-result {:a {:entity      :action
+                               :data        {:type    "test-var-scalar"
                                              :success "b"
                                              :fail    "c"}
                                :path        [:a]
@@ -641,10 +702,12 @@
                                               {:previous :root
                                                :name     "fail"
                                                :handler  :c}}}
-                           :b {:data        {:type "empty"}
+                           :b {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:b]
                                :connections #{}}
-                           :c {:data        {:type "empty"}
+                           :c {:entity      :action
+                               :data        {:type "empty"}
                                :path        [:c]
                                :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -657,7 +720,8 @@
                                   :success {:type "empty"}
                                   :fail    {:type "empty"}}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a         {:data        {:type    "test-var-scalar"
+          expected-result {:a         {:entity      :action
+                                       :data        {:type    "test-var-scalar"
                                                      :success {:type "empty"}
                                                      :fail    {:type "empty"}}
                                        :path        [:a]
@@ -667,10 +731,12 @@
                                                       {:previous :root
                                                        :name     "fail"
                                                        :handler  :a-fail}}}
-                           :a-success {:data        {:type "empty"}
+                           :a-success {:entity      :action
+                                       :data        {:type "empty"}
                                        :path        [:a :success]
                                        :connections #{}}
-                           :a-fail    {:data        {:type "empty"}
+                           :a-fail    {:entity      :action
+                                       :data        {:type "empty"}
                                        :path        [:a :fail]
                                        :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -686,27 +752,31 @@
                               :b-next-1 {:type "empty"}
                               :c        {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a        {:data        {:type "sequence"
+          expected-result {:a        {:entity      :action
+                                      :data        {:type "sequence"
                                                     :data ["b" "c"]}
                                       :path        [:a]
                                       :connections #{{:previous :root
                                                       :name     "next"
                                                       :handler  :b
                                                       :sequence :a}}}
-                           :b        {:data        {:type "action"
+                           :b        {:entity      :action
+                                      :data        {:type "action"
                                                     :id   "b-next-1"}
                                       :path        [:b]
                                       :connections #{{:previous :a
                                                       :name     "next"
                                                       :handler  :b-next-1
                                                       :sequence :a}}}
-                           :b-next-1 {:data        {:type "empty"}
+                           :b-next-1 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-1]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :c        {:data        {:type "empty"}
+                           :c        {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:c]
                                       :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -727,14 +797,16 @@
                               :b-next-3 {:type "empty"}
                               :c        {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a        {:data        {:type "sequence"
+          expected-result {:a        {:entity      :action
+                                      :data        {:type "sequence"
                                                     :data ["b" "c"]}
                                       :path        [:a]
                                       :connections #{{:previous :root
                                                       :name     "next"
                                                       :handler  :b
                                                       :sequence :a}}}
-                           :b        {:data        {:type     "action"
+                           :b        {:entity      :action
+                                      :data        {:type     "action"
                                                     :from-var [{:var-name        "some-var"
                                                                 :template        "b-next-%"
                                                                 :action-property "id"
@@ -752,25 +824,29 @@
                                                       :name     "next"
                                                       :handler  :b-next-3
                                                       :sequence :a}}}
-                           :b-next-1 {:data        {:type "empty"}
+                           :b-next-1 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-1]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :b-next-2 {:data        {:type "empty"}
+                           :b-next-2 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-2]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :b-next-3 {:data        {:type "empty"}
+                           :b-next-3 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-3]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :c        {:data        {:type "empty"}
+                           :c        {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:c]
                                       :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -790,14 +866,16 @@
                               :b-next-3 {:type "empty"}
                               :c        {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a        {:data        {:type "sequence"
+          expected-result {:a        {:entity      :action
+                                      :data        {:type "sequence"
                                                     :data ["b" "c"]}
                                       :path        [:a]
                                       :connections #{{:previous :root
                                                       :name     "next"
                                                       :handler  :b
                                                       :sequence :a}}}
-                           :b        {:data        {:type        "action"
+                           :b        {:entity      :action
+                                      :data        {:type        "action"
                                                     :from-params [{:template        "b-next-%"
                                                                    :action-property "id"
                                                                    :possible-values [1 "2" :3]}]}
@@ -814,25 +892,29 @@
                                                       :name     "next"
                                                       :handler  :b-next-3
                                                       :sequence :a}}}
-                           :b-next-1 {:data        {:type "empty"}
+                           :b-next-1 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-1]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :b-next-2 {:data        {:type "empty"}
+                           :b-next-2 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-2]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :b-next-3 {:data        {:type "empty"}
+                           :b-next-3 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-3]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :c        {:data        {:type "empty"}
+                           :c        {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:c]
                                       :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -851,14 +933,16 @@
                               :b-next-2 {:type "empty"}
                               :c        {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a        {:data        {:type "sequence"
+          expected-result {:a        {:entity      :action
+                                      :data        {:type "sequence"
                                                     :data ["b" "c"]}
                                       :path        [:a]
                                       :connections #{{:previous :root
                                                       :name     "next"
                                                       :handler  :b
                                                       :sequence :a}}}
-                           :b        {:data        {:type     "action"
+                           :b        {:entity      :action
+                                      :data        {:type     "action"
                                                     :from-var [{:var-name        "some-var"
                                                                 :action-property "id"
                                                                 :possible-values ["b-next-1" :b-next-2]}]}
@@ -871,19 +955,22 @@
                                                       :name     "next"
                                                       :handler  :b-next-2
                                                       :sequence :a}}}
-                           :b-next-1 {:data        {:type "empty"}
+                           :b-next-1 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-1]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :b-next-2 {:data        {:type "empty"}
+                           :b-next-2 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-2]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :c        {:data        {:type "empty"}
+                           :c        {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:c]
                                       :connections #{}}}]
       (when-not (= actual-result expected-result)
@@ -901,14 +988,16 @@
                               :b-next-2 {:type "empty"}
                               :c        {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
-          expected-result {:a        {:data        {:type "sequence"
+          expected-result {:a        {:entity      :action
+                                      :data        {:type "sequence"
                                                     :data ["b" "c"]}
                                       :path        [:a]
                                       :connections #{{:previous :root
                                                       :name     "next"
                                                       :handler  :b
                                                       :sequence :a}}}
-                           :b        {:data        {:type        "action"
+                           :b        {:entity      :action
+                                      :data        {:type        "action"
                                                     :from-params [{:action-property "id"
                                                                    :possible-values ["b-next-1" :b-next-2]}]}
                                       :path        [:b]
@@ -920,19 +1009,22 @@
                                                       :name     "next"
                                                       :handler  :b-next-2
                                                       :sequence :a}}}
-                           :b-next-1 {:data        {:type "empty"}
+                           :b-next-1 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-1]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :b-next-2 {:data        {:type "empty"}
+                           :b-next-2 {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:b-next-2]
                                       :connections #{{:previous :b
                                                       :name     "next"
                                                       :handler  :c
                                                       :sequence :a}}}
-                           :c        {:data        {:type "empty"}
+                           :c        {:entity      :action
+                                      :data        {:type "empty"}
                                       :path        [:c]
                                       :connections #{}}}]
       (when-not (= actual-result expected-result)

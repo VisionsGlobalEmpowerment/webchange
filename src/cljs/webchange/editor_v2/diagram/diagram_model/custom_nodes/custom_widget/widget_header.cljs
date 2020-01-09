@@ -1,4 +1,6 @@
-(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-header)
+(ns webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-header
+  (:require
+    [webchange.editor-v2.utils :refer [str->caption]]))
 
 (defn header
   [props]
@@ -7,9 +9,9 @@
                  :padding     5
                  :text-align  "center"
                  :white-space "nowrap"}}
-    (:name props)]
+    (str->caption (:name props))]
    [:h4 {:style {:margin      0
-                 :padding     5
+                 :padding     "0 5px"
                  :text-align  "center"
                  :white-space "nowrap"}}
-    (:type props)]])
+    (get-in props [:data :type])]])

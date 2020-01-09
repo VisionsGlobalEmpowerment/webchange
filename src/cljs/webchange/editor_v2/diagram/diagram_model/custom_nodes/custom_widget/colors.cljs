@@ -3,6 +3,7 @@
 (def colors {:object        {:default "#FFC855"}
              :global-object {:default "#156874"}
              :action        {:audio   "#008A66"
+                             :phrase  "#6BC784"
                              :default "#CCCCCC"}
              :default       "#CCCCCC"})
 

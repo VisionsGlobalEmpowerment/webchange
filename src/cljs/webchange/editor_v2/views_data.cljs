@@ -1,6 +1,5 @@
 (ns webchange.editor-v2.views-data
   (:require
-    [camel-snake-kebab.core :refer [->Camel_Snake_Case]]
     [cljs-react-material-ui.reagent :as ui]
     [clojure.string :as s]
     [re-frame.core :as re-frame]
@@ -10,7 +9,8 @@
     [webchange.subs :as subs]
     [webchange.interpreter.core :refer [load-course]]
     [webchange.editor-v2.subs :as editor-subs]
-    [webchange.editor-v2.events :as editor-events]))
+    [webchange.editor-v2.events :as editor-events]
+    [webchange.editor-v2.utils :refer [keyword->caption]]))
 
 (def diagram-modes [:full-scene "Full Scene View"
                     :phrases "Translation"])
@@ -18,12 +18,6 @@
 (defn phrase-action-data?
   [action-data]
   (contains? action-data :phrase))
-
-(defn keyword->caption
-  [key-word]
-  (-> key-word
-      (->Camel_Snake_Case)
-      (clojure.string/replace "_" " ")))
 
 (defn scene-data->phrases-list
   [scene-data]

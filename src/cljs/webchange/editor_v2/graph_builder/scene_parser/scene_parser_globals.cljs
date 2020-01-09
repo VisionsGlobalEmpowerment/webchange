@@ -6,7 +6,8 @@
   [triggers-data]
   (reduce
     (fn [result [trigger-name {:keys [on action] :as trigger-data}]]
-      (assoc result trigger-name (create-graph-node {:data        trigger-data
+      (assoc result trigger-name (create-graph-node {:entity      :trigger
+                                                     :data        trigger-data
                                                      :path        [trigger-name]
                                                      :connections [{:name on
                                                                     :handler (keyword action)}]})))

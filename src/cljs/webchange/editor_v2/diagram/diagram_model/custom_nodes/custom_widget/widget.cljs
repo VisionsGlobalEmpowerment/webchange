@@ -7,8 +7,6 @@
 ;; Custom version of of "DefaultNodeWidget" from
 ;; https://github.com/projectstorm/react-diagrams/blob/v5.3.2/src/defaults/widgets/DefaultNodeWidget.tsx
 
-
-
 (defn custom-widget
   [{:keys [node header wrapper]}]
   (let [header (or header custom-header/header)

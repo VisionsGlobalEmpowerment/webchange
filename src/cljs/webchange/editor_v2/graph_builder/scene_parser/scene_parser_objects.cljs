@@ -9,7 +9,8 @@
                          {:name    on
                           :handler id})
                        (:actions object-data))]
-    (assoc {} object-name (create-graph-node {:data        object-data
+    (assoc {} object-name (create-graph-node {:entity      :object
+                                              :data        object-data
                                               :path        [object-name]
                                               :connections actions-data}))))
 

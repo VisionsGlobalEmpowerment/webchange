@@ -16,3 +16,15 @@
   (-> node-data
       (get-in [:data :concept-action])
       (boolean)))
+
+(defn phrase-node?
+  [node-data]
+  (contains? (:data node-data) :phrase))
+
+(defn object-node?
+  [node-data]
+  (= :object (:entity node-data)))
+
+(defn trigger-node?
+  [node-data]
+  (= :trigger (:entity node-data)))

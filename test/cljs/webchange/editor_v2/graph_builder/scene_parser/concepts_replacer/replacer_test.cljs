@@ -29,7 +29,7 @@
 (deftest test-concept-action-ref?
   (let [action-data {:type     "action"
                      :from-var [{:var-name "some-var" :var-property "d"}]}
-        concept {:data {:d {:type   "animation-sequence"}}}]
+        concept {:data {:d {:type "animation-sequence"}}}]
     (let [actual-result (concept-action-ref? action-data concept)
           expected-result true]
       (is (= actual-result expected-result)))))
@@ -41,7 +41,8 @@
                                     :track  1}}}
         copy-data {}]
     (let [actual-result (get-concept-action action-name current-concept copy-data)
-          expected-result {:d {:data        {:type   "animation-sequence"
+          expected-result {:d {:entity      :action
+                               :data        {:type   "animation-sequence"
                                              :target "target-1"
                                              :track  1}
                                :path        [:d]
@@ -59,9 +60,10 @@
                                     :track  1}}}
         copy-data {:copy-counter 2}]
     (let [actual-result (get-concept-action action-name current-concept copy-data)
-          expected-result {:d-copy-2 {:data        {:type   "animation-sequence"
-                                                    :target "target-1"
-                                                    :track  1
+          expected-result {:d-copy-2 {:entity      :action
+                                      :data        {:type        "animation-sequence"
+                                                    :target      "target-1"
+                                                    :track       1
                                                     :origin-name :d}
                                       :path        [:d]
                                       :connections #{{:previous :prev-action
@@ -72,31 +74,37 @@
       (is (= actual-result expected-result)))))
 
 (deftest test-override-concept-actions--with-current-concept
-  (let [graph {:a {:connections #{{:previous :root
+  (let [graph {:a {:entity      :action
+                   :connections #{{:previous :root
                                    :name     "next"
                                    :handler  :x}}
                    :data        {:type "empty"}}
-               :x {:connections #{{:previous :a
+               :x {:entity      :action
+                   :connections #{{:previous :a
                                    :name     "next"
                                    :handler  :c}}
                    :data        {:type     "action"
                                  :from-var [{:var-property "d"}]}}
-               :c {:connections #{}
+               :c {:entity      :action
+                   :connections #{}
                    :data        {:type "empty"}}}
         current-concept {:data {:d {:type   "animation-sequence"
                                     :target "target-1"
                                     :track  1}}}]
     (let [actual-result (override-concept-actions graph {:current-concept current-concept})
-          expected-result {:a {:connections #{{:previous :root
+          expected-result {:a {:entity      :action
+                               :connections #{{:previous :root
                                                :name     "next"
                                                :handler  :x}}
                                :data        {:type "empty"}}
-                           :x {:connections #{{:previous :a
+                           :x {:entity      :action
+                               :connections #{{:previous :a
                                                :name     "next"
                                                :handler  :d}}
                                :data        {:type     "action"
                                              :from-var [{:var-property "d"}]}}
-                           :d {:data        {:type           "animation-sequence"
+                           :d {:entity      :action
+                               :data        {:type           "animation-sequence"
                                              :target         "target-1"
                                              :track          1
                                              :concept-action true}
@@ -104,23 +112,27 @@
                                :connections #{{:previous :x
                                                :name     "next"
                                                :handler  :c}}}
-                           :c {:connections #{}
+                           :c {:entity      :action
+                               :connections #{}
                                :data        {:type "empty"}}}]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
 
 (deftest test-override-concept-actions--with-composite-current-concept
-  (let [graph {:a {:connections #{{:previous :root
+  (let [graph {:a {:entity      :action
+                   :connections #{{:previous :root
                                    :name     "next"
                                    :handler  :x}}
                    :data        {:type "empty"}}
-               :x {:connections #{{:previous :a
+               :x {:entity      :action
+                   :connections #{{:previous :a
                                    :name     "next"
                                    :handler  :c}}
                    :data        {:type     "action"
                                  :from-var [{:var-property "d"}]}}
-               :c {:connections #{}
+               :c {:entity      :action
+                   :connections #{}
                    :data        {:type "empty"}}}
         concept-scheme [{:name     "d"
                          :type     "action"
@@ -132,16 +144,19 @@
                                             :target "target-2"}]}}}]
     (let [actual-result (override-concept-actions graph {:current-concept current-concept
                                                          :concept-scheme  concept-scheme})
-          expected-result {:a   {:connections #{{:previous :root
+          expected-result {:a   {:entity      :action
+                                 :connections #{{:previous :root
                                                  :name     "next"
                                                  :handler  :x}}
                                  :data        {:type "empty"}}
-                           :x {:connections #{{:previous :a
-                                               :name     "next"
-                                               :handler  :d}}
-                               :data        {:type     "action"
-                                             :from-var [{:var-property "d"}]}}
-                           :d   {:data        {:type           "parallel"
+                           :x   {:entity      :action
+                                 :connections #{{:previous :a
+                                                 :name     "next"
+                                                 :handler  :d}}
+                                 :data        {:type     "action"
+                                               :from-var [{:var-property "d"}]}}
+                           :d   {:entity      :action
+                                 :data        {:type           "parallel"
                                                :data           [{:type   "animation-sequence"
                                                                  :target "target-1"} {:type   "animation-sequence"
                                                                                       :target "target-2"}]
@@ -155,21 +170,24 @@
                                                  :name     "next"
                                                  :handler  :d-1
                                                  :sequence :d}}}
-                           :d-0 {:data        {:type           "animation-sequence"
+                           :d-0 {:entity      :action
+                                 :data        {:type           "animation-sequence"
                                                :target         "target-1"
                                                :concept-action true}
                                  :path        [:d 0]
                                  :connections #{{:previous :d
                                                  :name     "next"
                                                  :handler  :c}}}
-                           :d-1 {:data        {:type           "animation-sequence"
+                           :d-1 {:entity      :action
+                                 :data        {:type           "animation-sequence"
                                                :target         "target-2"
                                                :concept-action true}
                                  :path        [:d 1]
                                  :connections #{{:previous :d
                                                  :name     "next"
                                                  :handler  :c}}}
-                           :c   {:connections #{}
+                           :c   {:entity      :action
+                                 :connections #{}
                                  :data        {:type "empty"}}}]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
