@@ -263,7 +263,7 @@
                                                             {:start 14.521, :end 15.682, :duration 1.161, :anim "talk"}
                                                             {:start 16.28, :end 18.159, :duration 1.879, :anim "talk"}]
                                               :phrase      :try-another
-                                              :phrase-text "Yippee! Are you having fun?  Let’s try another picture."}
+                                              :phrase-text "Yippee! Are you having fun? Let’s try another picture."}
 
 
                  :pick-wrong                 {:type        "sequence"

@@ -10,11 +10,30 @@
     [webchange.subs :as subs]
     [webchange.interpreter.core :refer [load-course]]
     [webchange.editor-v2.subs :as editor-subs]
-    [webchange.editor-v2.events :as editor-events]
-    [webchange.editor-v2.graph-builder.scene-parser.scene-parser :refer [parse-data]]))
+    [webchange.editor-v2.events :as editor-events]))
 
 (def diagram-modes [:full-scene "Full Scene View"
                     :phrases "Translation"])
+
+(defn phrase-action-data?
+  [action-data]
+  (contains? action-data :phrase))
+
+(defn keyword->caption
+  [key-word]
+  (-> key-word
+      (->Camel_Snake_Case)
+      (clojure.string/replace "_" " ")))
+
+(defn scene-data->phrases-list
+  [scene-data]
+  (->> (:actions scene-data)
+       (filter (fn [[_ action-data]]
+                 (phrase-action-data? action-data)))
+       (reduce (fn [result [action-name action-data]]
+                 (assoc result action-name {:data   action-data
+                                            :phrase (keyword->caption (:phrase action-data))}))
+               {})))
 
 (defn data
   []
@@ -23,17 +42,7 @@
         scenes (re-frame/subscribe [::subs/course-scenes])
         diagram-mode (re-frame/subscribe [::editor-subs/diagram-mode])
         scene-data (re-frame/subscribe [::subs/scene @scene-id])]
-    (let [graph (parse-data @scene-data)
-          phrases (reduce (fn [result [node-name {:keys [data]}]]
-                            (if (contains? data :phrase)
-                              (assoc result node-name {:data   data
-                                                       :phrase (-> data
-                                                                   (get :phrase)
-                                                                   (->Camel_Snake_Case)
-                                                                   (clojure.string/replace "_" " "))})
-                              result))
-                          {}
-                          graph)]
+    (let [phrases (scene-data->phrases-list @scene-data)]
       [:div.data-selector
        [ui/form-control {:full-width true
                          :margin     "normal"}
