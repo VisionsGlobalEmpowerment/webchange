@@ -28,7 +28,7 @@
   [data-store path selected-action-concept? concept-data scene-data]
   (let [action-name (first path)]
     (when (and (not (nil? action-name))
-               (nil? (get data-store action-name)))
+               (nil? (get @data-store action-name)))
       (let [action-data (if selected-action-concept?
                           (get-in concept-data [:data action-name])
                           (get-in scene-data [:actions action-name]))]
