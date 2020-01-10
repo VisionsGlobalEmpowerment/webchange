@@ -16,6 +16,7 @@
             [webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions-test]
             [webchange.editor-v2.graph-builder.utils.counter-map-test]
             [webchange.editor-v2.graph-builder.utils.change-node-test]
+            [webchange.editor-v2.graph-builder.utils.count-nodes-weights-test]
             [webchange.editor-v2.graph-builder.utils.insert-sub-graph-test]
             [webchange.editor-v2.graph-builder.utils.node-children-test]
             [webchange.editor-v2.graph-builder.utils.node-siblings-test]
@@ -45,6 +46,7 @@
   'webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions-test
   'webchange.editor-v2.graph-builder.utils.counter-map-test
   'webchange.editor-v2.graph-builder.utils.change-node-test
+  'webchange.editor-v2.graph-builder.utils.count-nodes-weights-test
   'webchange.editor-v2.graph-builder.utils.insert-sub-graph-test
   'webchange.editor-v2.graph-builder.utils.node-children-test
   'webchange.editor-v2.graph-builder.utils.node-siblings-test

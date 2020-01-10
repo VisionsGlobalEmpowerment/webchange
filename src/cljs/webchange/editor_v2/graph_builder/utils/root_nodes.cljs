@@ -27,6 +27,12 @@
                                                                               :handler  start-node})))
                                         (set))}))
 
+(defn init-root-node
+  [graph]
+  (->> graph
+       (get-root-nodes)
+       (add-root-node graph)))
+
 (defn remove-root-node
   [graph]
   (dissoc graph :root))
