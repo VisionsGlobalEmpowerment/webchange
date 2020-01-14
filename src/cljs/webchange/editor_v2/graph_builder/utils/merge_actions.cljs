@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions
+(ns webchange.editor-v2.graph-builder.utils.merge-actions
   (:require
     [clojure.set :refer [intersection
                          union]]))
@@ -16,8 +16,8 @@
                                  action-2-data (get map-2 action-name)]
                              (assoc result action-name (merge action-1-data
                                                               action-2-data
-                                                              {:connections (union (:connections action-1-data)
-                                                                                   (:connections action-2-data))}))))
+                                                              {:connections (union (set (:connections action-1-data))
+                                                                                   (set (:connections action-2-data)))}))))
                          {}
                          actions-to-merge)]
     (merge map-1 map-2 actions-merged)))

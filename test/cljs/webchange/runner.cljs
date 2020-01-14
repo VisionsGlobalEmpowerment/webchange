@@ -7,13 +7,12 @@
             [webchange.editor.form-elements.integer-test]
             [webchange.editor.form-elements.number-test]
             [webchange.editor-v2.diagram.diagram-model.items-factory.utils-test]
-            [webchange.editor-v2.graph-builder.duplicates-replicator.duplicates-replicator-test]
             [webchange.editor-v2.graph-builder.filters.phrases-test]
             [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test]
             [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test]
             [webchange.editor-v2.graph-builder.scene-parser.scene-parser-test]
             [webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data-test]
-            [webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions-test]
+            [webchange.editor-v2.graph-builder.utils.merge-actions-test]
             [webchange.editor-v2.graph-builder.utils.counter-map-test]
             [webchange.editor-v2.graph-builder.utils.change-node-test]
             [webchange.editor-v2.graph-builder.utils.count-nodes-weights-test]
@@ -37,13 +36,12 @@
   'webchange.editor.form-elements.integer-test
   'webchange.editor.form-elements.number-test
   'webchange.editor-v2.diagram.diagram-model.items-factory.utils-test
-  'webchange.editor-v2.graph-builder.duplicates-replicator.duplicates-replicator-test
   'webchange.editor-v2.graph-builder.filters.phrases-test
   'webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test
   'webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test
   'webchange.editor-v2.graph-builder.scene-parser.scene-parser-test
   'webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data-test
-  'webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions-test
+  'webchange.editor-v2.graph-builder.utils.merge-actions-test
   'webchange.editor-v2.graph-builder.utils.counter-map-test
   'webchange.editor-v2.graph-builder.utils.change-node-test
   'webchange.editor-v2.graph-builder.utils.count-nodes-weights-test

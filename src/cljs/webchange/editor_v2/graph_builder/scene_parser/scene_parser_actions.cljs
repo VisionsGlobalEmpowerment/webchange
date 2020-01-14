@@ -8,7 +8,7 @@
                                                                                   sequence-action-name?
                                                                                   sequence-data-action?
                                                                                   parallel-action-name?]]
-    [webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions :refer [merge-actions]]))
+    [webchange.editor-v2.graph-builder.utils.merge-actions :refer [merge-actions]]))
 
 (defn next-to-index
   [list index]
