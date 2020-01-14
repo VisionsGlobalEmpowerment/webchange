@@ -15,19 +15,34 @@
     []
     objects-data))
 
+(defn get-scene-entries
+  [scene-data]
+  (let [objects (parse-objects scene-data)
+        globals (parse-globals scene-data)
+        entries (get-chain-entries (merge objects globals))]
+    {:objects objects
+     :globals globals
+     :entries entries}))
+
 (defn parse-whole-scene
   [scene-data]
-  (let [parsed-objects (parse-objects scene-data)
-        parsed-globals (parse-globals scene-data)
-        entries (get-chain-entries (merge parsed-objects parsed-globals))]
-    (merge parsed-objects
-           parsed-globals
+  (let [{:keys [entries objects globals]} (get-scene-entries scene-data)]
+    (merge objects
+           globals
            (parse-actions scene-data entries))))
 
 (defn parse-sub-graph
   [scene-data start-node-name]
-  (let [entries [[start-node-name nil]]]
-    (parse-actions scene-data entries)))
+  (let [{:keys [entries objects globals]} (get-scene-entries scene-data)
+         roots (merge objects globals)]
+    (if (contains? roots start-node-name)
+      (let [entry (some (fn [entry]
+                          (and (= (second entry) start-node-name)
+                               entry))
+                        entries)]
+        (merge (select-keys roots [start-node-name])
+               (parse-actions scene-data [entry])))
+      (parse-actions scene-data [[start-node-name nil]]))))
 
 (defn parse-data
   ([scene-data]

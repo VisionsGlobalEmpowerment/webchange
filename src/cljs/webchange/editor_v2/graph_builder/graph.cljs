@@ -21,10 +21,10 @@
   ([scene-data diagram-mode params]
    (cond
      (= diagram-mode :phrases) (-> scene-data
-                                   (parse-scene)
+                                   (parse-scene (select-keys params [:start-node]))
                                    (get-phrases-graph))
      (= diagram-mode :translation) (-> scene-data
                                        (parse-scene (select-keys params [:start-node :concept-data]))
                                        (get-translation-graph))
      :default (-> scene-data
-                  (parse-scene)))))
+                  (parse-scene (select-keys params [:start-node]))))))
