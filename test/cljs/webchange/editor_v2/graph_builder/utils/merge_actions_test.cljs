@@ -1,8 +1,8 @@
-(ns webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions-test
+(ns webchange.editor-v2.graph-builder.utils.merge-actions-test
   (:require
     [cljs.test :refer [deftest testing is]]
     [utils.compare-maps :refer [print-maps-comparison]]
-    [webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions :refer [merge-actions]]))
+    [webchange.editor-v2.graph-builder.utils.merge-actions :refer [merge-actions]]))
 
 (deftest test-merge-actions--simple-merge
   (let [map-1 {:x {:data        {:type "empty"}

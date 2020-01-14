@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.graph-builder.scene-parser.utils.merge-actions
+(ns webchange.editor-v2.graph-builder.utils.merge-actions
   (:require
     [clojure.set :refer [intersection
                          union]]))
