@@ -7,19 +7,20 @@
             [webchange.editor.form-elements.integer-test]
             [webchange.editor.form-elements.number-test]
             [webchange.editor-v2.diagram.diagram-model.items-factory.utils-test]
-            [webchange.editor-v2.diagram.graph-builder.filters.phrases-test]
-            [webchange.editor-v2.diagram.graph-builder.scene-parser.concepts-replacer.replacer-test]
-            [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-test]
-            [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-actions-test]
-            [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-globals-test]
-            [webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-objects-test]
-            [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.duplicates-replicator-test]
-            [webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.usages-counter-test]
-            [webchange.editor-v2.diagram.graph-builder.utils.counter-map]
-            [webchange.editor-v2.diagram.graph-builder.utils.change-node-test]
-            [webchange.editor-v2.diagram.graph-builder.utils.node-children-test]
-            [webchange.editor-v2.diagram.graph-builder.utils.remove-sub-graph-test]
-            [webchange.editor-v2.diagram.graph-builder.utils.root-nodes-test]
+            [webchange.editor-v2.graph-builder.filters.phrases-test]
+            [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test]
+            [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test]
+            [webchange.editor-v2.graph-builder.scene-parser.scene-parser-test]
+            [webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data-test]
+            [webchange.editor-v2.graph-builder.utils.merge-actions-test]
+            [webchange.editor-v2.graph-builder.utils.counter-map-test]
+            [webchange.editor-v2.graph-builder.utils.change-node-test]
+            [webchange.editor-v2.graph-builder.utils.count-nodes-weights-test]
+            [webchange.editor-v2.graph-builder.utils.insert-sub-graph-test]
+            [webchange.editor-v2.graph-builder.utils.node-children-test]
+            [webchange.editor-v2.graph-builder.utils.node-siblings-test]
+            [webchange.editor-v2.graph-builder.utils.remove-sub-graph-test]
+            [webchange.editor-v2.graph-builder.utils.root-nodes-test]
             [webchange.editor-v2.translator.translator-form.utils-test]
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
@@ -35,19 +36,20 @@
   'webchange.editor.form-elements.integer-test
   'webchange.editor.form-elements.number-test
   'webchange.editor-v2.diagram.diagram-model.items-factory.utils-test
-  'webchange.editor-v2.diagram.graph-builder.filters.phrases-test
-  'webchange.editor-v2.diagram.graph-builder.scene-parser.concepts-replacer.replacer-test
-  'webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-test
-  'webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-actions-test
-  'webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-globals-test
-  'webchange.editor-v2.diagram.graph-builder.scene-parser.data-parser.data-parser-objects-test
-  'webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.duplicates-replicator-test
-  'webchange.editor-v2.diagram.graph-builder.scene-parser.duplicates-replicator.usages-counter-test
-  'webchange.editor-v2.diagram.graph-builder.utils.counter-map
-  'webchange.editor-v2.diagram.graph-builder.utils.change-node-test
-  'webchange.editor-v2.diagram.graph-builder.utils.node-children-test
-  'webchange.editor-v2.diagram.graph-builder.utils.remove-sub-graph-test
-  'webchange.editor-v2.diagram.graph-builder.utils.root-nodes-test
+  'webchange.editor-v2.graph-builder.filters.phrases-test
+  'webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test
+  'webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test
+  'webchange.editor-v2.graph-builder.scene-parser.scene-parser-test
+  'webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data-test
+  'webchange.editor-v2.graph-builder.utils.merge-actions-test
+  'webchange.editor-v2.graph-builder.utils.counter-map-test
+  'webchange.editor-v2.graph-builder.utils.change-node-test
+  'webchange.editor-v2.graph-builder.utils.count-nodes-weights-test
+  'webchange.editor-v2.graph-builder.utils.insert-sub-graph-test
+  'webchange.editor-v2.graph-builder.utils.node-children-test
+  'webchange.editor-v2.graph-builder.utils.node-siblings-test
+  'webchange.editor-v2.graph-builder.utils.remove-sub-graph-test
+  'webchange.editor-v2.graph-builder.utils.root-nodes-test
   'webchange.editor-v2.translator.translator-form.utils-test
   'webchange.interpreter.events-test
   'webchange.interpreter.variables.events-test

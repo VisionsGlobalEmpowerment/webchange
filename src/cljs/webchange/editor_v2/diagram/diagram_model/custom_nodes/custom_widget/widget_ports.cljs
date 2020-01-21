@@ -8,24 +8,21 @@
    [:div {:style {:float        "left"
                   :margin-right 10}}
     [:div {:style {:margin-bottom 5}} ""]
-    [:div {:style {:float "left"}}
+    [:div {:style {:float      "left"
+                   :visibility "hidden"}}
      (for [in-port in-ports]
        ^{:key (.-id in-port)}
        [:div {:style {:display "flex"}}
-        [:> PortWidget {:name (.-name in-port) :node (.-parent in-port)}]
-        [:span {:style {:font-size   10
-                        :line-height "15px"}} (.-label in-port)]])]]
+        [:> PortWidget {:name (.-name in-port) :node (.-parent in-port)}]])]]
 
    [:div {:style {:float       "right"
                   :margin-left 10}}
     [:div {:style {:margin-bottom 5
                    :text-align    "right"}} ""]
-    [:div {:style {:float "right"}}
+    [:div {:style {:float      "right"
+                   :visibility "hidden"}}
      (for [out-port out-ports]
        ^{:key (.-id out-port)}
-       [:div {:style {:display "flex"
+       [:div {:style {:display        "flex"
                       :flex-direction "row-reverse"}}
-        [:> PortWidget {:name (.-name out-port) :node (.-parent out-port)}]
-        [:span {:style {:font-size   10
-                        :line-height "15px"}}
-         (.-label out-port)]])]]])
+        [:> PortWidget {:name (.-name out-port) :node (.-parent out-port)}]])]]])

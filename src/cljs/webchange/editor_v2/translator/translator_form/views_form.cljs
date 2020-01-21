@@ -28,7 +28,7 @@
   [data-store path selected-action-concept? concept-data scene-data]
   (let [action-name (first path)]
     (when (and (not (nil? action-name))
-               (nil? (get data-store action-name)))
+               (nil? (get @data-store action-name)))
       (let [action-data (if selected-action-concept?
                           (get-in concept-data [:data action-name])
                           (get-in scene-data [:actions action-name]))]
@@ -65,15 +65,13 @@
               (let [scene-id @(re-frame/subscribe [::subs/current-scene])
                     scene-data @(re-frame/subscribe [::subs/scene scene-id])
                     concepts (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
-                    course-concepts @(re-frame/subscribe [::editor-subs/course-concept])
 
                     selected-phrase-node (re-frame/subscribe [::editor-subs/current-action])
                     phrase-action-name (keyword (:name @selected-phrase-node))
                     selected-action-node (re-frame/subscribe [::translator-subs/selected-action])
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
 
-                    graph (get-graph scene-data phrase-action-name {:current-concept @current-concept
-                                                                    :concept-scheme  (get-in course-concepts [:scheme :fields])})
+                    graph (get-graph scene-data phrase-action-name {:current-concept @current-concept})
                     selected-action-path (normalize-path (:path @selected-action-node) graph)
                     audios-list (get-audios scene-data graph)
                     prepared-current-action-data (get-current-action-data @selected-action-node @current-concept @data-store)]

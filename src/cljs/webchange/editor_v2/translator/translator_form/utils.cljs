@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.translator.translator-form.utils
   (:require
-    [webchange.editor-v2.diagram.graph-builder.graph :refer [get-diagram-graph]]))
+    [webchange.editor-v2.graph-builder.graph :refer [get-diagram-graph]]))
 
 (defn get-graph
   [scene-data action-name concept-data]

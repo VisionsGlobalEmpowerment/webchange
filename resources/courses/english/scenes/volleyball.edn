@@ -71,7 +71,10 @@
                                            :data
                                                      [{:start 0.572, :end 1.612, :duration 1.04, :anim "talk"}
                                                       {:start 2.188, :end 4.97, :duration 2.782, :anim "talk"}
-                                                      {:start 5.84, :end 9.418, :duration 3.578, :anim "talk"}]}
+                                                      {:start 5.84, :end 9.418, :duration 3.578, :anim "talk"}]
+                                           :phrase :welcome
+                                           :phrase-text "Hello! Do you want to play volleyball with us?
+                                                         Touch the picture that you hear being chanted"}
 
                  :mari-audio-correct-1
                                           {:type     "animation-sequence",
@@ -81,7 +84,9 @@
                                            :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
                                            :start    0.858,
                                            :duration 1.837,
-                                           :data     [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]}
+                                           :data     [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]
+                                           :phrase :correct-1
+                                           :phrase-text "That’s correct!"}
 
                  :mari-audio-correct-2
                                           {:type     "animation-sequence",
@@ -91,7 +96,9 @@
                                            :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
                                            :start    4.697,
                                            :duration 1.358,
-                                           :data     [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}]}
+                                           :data     [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}]
+                                           :phrase :correct-2
+                                           :phrase-text "Good job!"}
 
                  :mari-audio-correct-3
                                           {:type     "animation-sequence",
@@ -101,7 +108,9 @@
                                            :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
                                            :start    7.949,
                                            :duration 1.345,
-                                           :data     [{:start 8.066, :end 9.098, :duration 1.032, :anim "talk"}]}
+                                           :data     [{:start 8.066, :end 9.098, :duration 1.032, :anim "talk"}]
+                                           :phrase :correct-3
+                                           :phrase-text "Well done!"}
 
                  :mari-audio-correct-4
                                           {:type     "animation-sequence",
@@ -111,7 +120,9 @@
                                            :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
                                            :start    10.997,
                                            :duration 1.147,
-                                           :data     [{:start 11.119, :end 11.964, :duration 0.845, :anim "talk"}]}
+                                           :data     [{:start 11.119, :end 11.964, :duration 0.845, :anim "talk"}]
+                                           :phrase :correct-4
+                                           :phrase-text "You got it!"}
 
                  :mari-audio-correct-5
                                           {:type     "animation-sequence",
@@ -123,7 +134,9 @@
                                            :duration 2.333,
                                            :data
                                                      [{:start 14.611, :end 15.11, :duration 0.499, :anim "talk"}
-                                                      {:start 15.529, :end 16.676, :duration 1.147, :anim "talk"}]}
+                                                      {:start 15.529, :end 16.676, :duration 1.147, :anim "talk"}]
+                                           :phrase :correct-5
+                                           :phrase-text "Wow, excelent!"}
 
                  :mari-audio-try-again-1
                                           {:type     "animation-sequence",
@@ -133,7 +146,9 @@
                                            :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
                                            :start    18.915,
                                            :duration 1.493,
-                                           :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]}
+                                           :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]
+                                           :phrase :wrong-1
+                                           :phrase-text "Try again!"}
 
                  :mari-audio-try-again-2
                                           {:type     "animation-sequence",
@@ -143,7 +158,9 @@
                                            :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
                                            :start    22.155,
                                            :duration 3.025,
-                                           :data     [{:start 23.743, :end 25.055, :duration 1.312, :anim "talk"}]}
+                                           :data     [{:start 23.743, :end 25.055, :duration 1.312, :anim "talk"}]
+                                           :phrase :wrong-2
+                                           :phrase-text "Hmmmm. Try again."}
 
 
                  :wait-for-box-animations {:type "empty" :duration 500}
@@ -336,9 +353,15 @@
                  :throw-from-player3      {:type "action" :from-params [{:template "throw-player3-%" :action-property "id" :param-property "player"}]}
                  :throw-from-player4      {:type "action" :from-params [{:template "throw-player4-%" :action-property "id" :param-property "player"}]}
 
-                 :word-ardilla-high       {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :start 12.987, :duration 3.196}
-                 :word-oso-high           {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :start 11.361, :duration 3.663}
-                 :word-incendio-high      {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :start 10.781, :duration 3.301}
+                 :word-ardilla-high       {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :start 12.987, :duration 3.196
+                                           :phrase :concept-squirrel
+                                           :phrase-text "Squirrel, squirrel, squirrel!"}
+                 :word-oso-high           {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :start 11.361, :duration 3.663
+                                           :phrase :concept-bear
+                                           :phrase-text "Bear, bear, bear!"}
+                 :word-incendio-high      {:type "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :start 10.781, :duration 3.301
+                                           :phrase :concept-magnet
+                                           :phrase-text "Magnet, magnet, magnet!"}
 
                  :voice-high-var          {:type "action" :from-var [{:var-name "current-concept" :action-property "id" :var-property "seesaw-voice-high"}]}
 

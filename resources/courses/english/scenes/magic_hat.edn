@@ -343,7 +343,10 @@
                                                    {:type "action" :id "current-concept-sound"}
                                                    {:type "empty" :duration 500}
                                                    {:type "action" :id "mari-voice-wrong-3"}
-                                                   {:type "action" :id "current-concept-sound"}]}
+                                                   {:type "action" :id "current-concept-sound"}]
+                                            :phrase :wrong-answer
+                                            :phrase-text "%Concept%. That is an %concept%. %Concept% starts with the %concept-sound% sound.
+                                                          Touch the picture that makes this sound: %concept-sound%"}
 
                  ;; ---
 
@@ -371,7 +374,10 @@
                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 19.542
                                                            :data [{:start 19.728 :end 20.584 :anim "talk"}
                                                                   {:start 20.943 :end 21.824 :anim "talk"}
-                                                                  {:start 22.121 :end 22.853 :anim "talk"}]}]}
+                                                                  {:start 22.121 :end 22.853 :anim "talk"}]}]
+
+                                            :phrase :task-hard
+                                            :phrase-text "%Concept chant%"}
 
                  :current-concept-chant    {:type        "parallel"
                                             :description "Ardilla, ardilla, a, a, a"
@@ -381,7 +387,9 @@
                                                                   {:start 46.840 :end 47.984 :anim "talk"}
                                                                   {:start 48.180 :end 48.855 :anim "talk"}
                                                                   {:start 49.196 :end 49.854 :anim "talk"}
-                                                                  {:start 50.170 :end 50.709 :anim "talk"}]}]}
+                                                                  {:start 50.170 :end 50.709 :anim "talk"}]}]
+                                            :phrase :task-easy
+                                            :phrase-text "%Concept%, %concept%, %concept chant%"}
 
                  ;; ---
 
@@ -390,7 +398,9 @@
                                             :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 0.533 :duration 4.538 :volume 0.2}
                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 0.533
                                                            :data [{:start 0.918 :end 2.083 :anim "talk"}
-                                                                  {:start 2.629 :end 4.799 :anim "talk"}]}]}
+                                                                  {:start 2.629 :end 4.799 :anim "talk"}]}]
+                                            :phrase :welcome
+                                            :phrase-text "Hello my friend! Did you see the wizard’s hat?"}
 
                  :mari-voice-intro         {:type        "parallel"
                                             :description "Hay muchas fotos por dentro del sombrero de magos.
@@ -398,7 +408,10 @@
                                             :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 6.969 :duration 10.354 :volume 0.2}
                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 6.969
                                                            :data [{:start 7.130 :end 10.850 :anim "talk"}
-                                                                  {:start 11.433 :end 17.050 :anim "talk"}]}]}
+                                                                  {:start 11.433 :end 17.050 :anim "talk"}]}]
+                                            :phrase :intro
+                                            :phrase-text "There are lots of magical pictures in the wizards hat.
+                                                          Listen to the chant, and then touch the picture that completes it."}
 
                  :mari-voice-wrong-1       {:type        "parallel"
                                             :description "Es una"
@@ -423,7 +436,9 @@
                                             :data        [{:type "audio" :id "/raw/audio/l2/a8/L2_A8_Mari.m4a" :start 41.323 :duration 2.926 :volume 0.2}
                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 41.323
                                                            :data [{:start 41.453 :end 42.792 :anim "talk"}
-                                                                  {:start 43.021 :end 44.100 :anim "talk"}]}]}
+                                                                  {:start 43.021 :end 44.100 :anim "talk"}]}]
+                                            :phrase :can-you-find
+                                            :phrase-text "Can you find this picture - %Concept%, %concept%, %concept% chant?"}
 
                  }
  :triggers      {:start {:on "start" :action "start"}
