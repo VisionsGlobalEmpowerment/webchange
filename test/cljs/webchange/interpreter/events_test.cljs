@@ -12,8 +12,8 @@
 
 (use-fixtures :once
               {:before (fn []
-                         (swap! ic/http-cache assoc (ic/course-url "test-course") (fixtures/get-course "test-course"))
-                         (swap! ic/http-cache assoc (ic/scene-url "test-course" "initial-scene") (fixtures/get-scene "test-course" "initial-scene")))})
+                         (swap! ic/http-buffer assoc (ic/course-url "test-course") (fixtures/get-course "test-course"))
+                         (swap! ic/http-buffer assoc (ic/scene-url "test-course" "initial-scene") (fixtures/get-scene "test-course" "initial-scene")))})
 
 (use-fixtures :each {:before (fn [] (re-frame/dispatch-sync [::events/initialize-db]))})
 

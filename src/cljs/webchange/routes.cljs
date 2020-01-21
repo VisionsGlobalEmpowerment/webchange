@@ -14,9 +14,10 @@
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor
                                        ["/" :id "/editor-v2"] :course-editor-v2
-                                       ["/" :id "/editor-v2/" :scene-id] :course-editor-v2-scene}
-                  "student-dashboard" {""          :student-dashboard
-                                       "/finished" :finished-activities}
+                                       ["/" :id "/editor-v2/" :scene-id] :course-editor-v2-scene
+                                       ["/" :id "/dashboard"] :student-course-dashboard
+                                       ["/" :id "/dashboard/finished"] :finished-activities}
+                  "student-dashboard" {""          :student-dashboard}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
                                        ["/classes/" :class-id]                          :dashboard-class-profile
@@ -32,6 +33,8 @@
     (re-frame/dispatch [::events/set-active-route params])
     (case handler
       :course (re-frame/dispatch [::ie/start-course (:id route-params)])
+      :student-course-dashboard (do (re-frame/dispatch [::ie/start-course (:id route-params)]) (re-frame/dispatch [::ie/clear-current-scene]))
+      :finished-activities (do (re-frame/dispatch [::ie/start-course (:id route-params)]) (re-frame/dispatch [::ie/clear-current-scene]))
       :student-dashboard (do (re-frame/dispatch [::ie/start-course current-course]) (re-frame/dispatch [::ie/clear-current-scene]))
       :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
       :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])
@@ -52,6 +55,7 @@
         path (if (= (type key) Keyword)
                (apply url-for (vec args))
                key)]
+    (js/console.log "redirect-to" path)
     (pushy/set-token! history path)))
 
 (re-frame/reg-fx

@@ -38,6 +38,7 @@
                  [cljsjs/enzyme "3.8.0"]
                  [cljs-idxdb "0.1.0"]
                  [phrase "0.3-alpha4"]
+                 [funcool/promesa "5.0.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]

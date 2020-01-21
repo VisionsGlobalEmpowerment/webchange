@@ -10,13 +10,20 @@
     [webchange.student-dashboard.stubs :refer [related-content life-skills]]
     [webchange.student-dashboard.events :as sde]
     [webchange.student-dashboard.subs :as sds]
-    [webchange.ui.theme :refer [with-mui-theme]]))
+    [webchange.ui.theme :refer [with-mui-theme]]
+    [webchange.subs :as subs]
+    [webchange.interpreter.events :as ie]))
+
+(def courses
+  [{:key :test :value "test" :text "Español"}
+   {:key :english :value "english" :text "English"}])
 
 (defn translate
   [path]
   (get-in {:header          {:pre-user    "Hello,"
                              :pre-sign-in "Please,"
-                             :sign-in     "Sign In"}
+                             :sign-in     "Sign In"
+                             :course      "Course"}
            :story           {:title "Continue the story"}
            :assessment      {:title "Assessments"}
            :related-content {:title "Related / Additional content"}
@@ -52,23 +59,29 @@
   {:flex-grow  1
    :text-align "right"})
 
+(defn- menu-item
+  [{:keys [value text]}]
+  [ui/menu-item
+   {:key value :value value}
+   text])
+
 (defn app-bar
-  [{:keys [user]}]
-  [ui/app-bar
-   {:color    "default"
-    :position "static"
-    :style    {}}
-   (let [logged-in (boolean user)]
-     [ui/toolbar
-      [ui/typography
-       {:variant "button"
-        :style   header-styles}
-       (if logged-in
-         (translate [:header :pre-user])
-         (translate [:header :pre-sign-in]))]
-      (if logged-in
+  [{:keys [user course-id]}]
+    [ui/app-bar
+     {:color    "default"
+      :position "static"
+      :style    {}}
+       [ui/toolbar {:style header-styles}
+
+        [ui/typography
+         {:variant "button"
+          :style   header-styles}
+         (translate [:header :pre-user])]
         [ui/button (str (:first-name user) " " (:last-name user))]
-        [ui/button {:on-click #(redirect-to :student-login)} (translate [:header :sign-in])])])])
+        [ui/form-control {}
+         [ui/select {:value course-id :on-change #(re-frame/dispatch [::ie/open-student-course-dashboard (-> % .-target .-value)])}
+          (for [course courses]
+            (menu-item course))]]]])
 
 (defn- continue-the-story []
   (let [loading? @(re-frame/subscribe [::sds/progress-loading])
@@ -107,11 +120,12 @@
 (defn student-dashboard-page
   []
   (let [user @(re-frame/subscribe [::as/user])
+        current-course @(re-frame/subscribe [::subs/current-course])
         handle-related-content-click #(println (str "Related content clicked: " %))
         handle-life-skill-click #(println (str "Life skill clicked: " %))]
     [with-mui-theme
      [:div {:style dashboard-container-styles}
-      [app-bar {:user user}]
+      [app-bar {:user user :course-id current-course}]
       [:div {:style dashboard-content-styles}
        [main-content]
        [additional-content {:related-content          related-content

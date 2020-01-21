@@ -16,4 +16,5 @@
    :settings {:music-volume 10
               :effects-volume 30}
    :dashboard {:access-codes {}}
+   :offline-mode :not-started
    })

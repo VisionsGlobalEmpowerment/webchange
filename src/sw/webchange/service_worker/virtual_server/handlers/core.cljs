@@ -4,14 +4,17 @@
     [webchange.service-worker.virtual-server.cache :as cache]
     [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
     [webchange.service-worker.virtual-server.handlers.login :as login]
+    [webchange.service-worker.virtual-server.handlers.current-user :as current-user]
     [webchange.service-worker.virtual-server.handlers.utils.responses-store :as store]
     [webchange.service-worker.wrappers :refer [js-fetch online? promise-all request-method request-pathname then]]))
 
 (def routes ["/api/" {"courses" {["/" :course-id "/current-progress"] :current-progress}
-                      "students" {"/login" :login}}])
+                      "students" {"/login" :login}
+                      "users" {"/current" :current-user}}])
 
 (def handlers {:current-progress current-progress/handlers
-               :login login/handlers})
+               :login login/handlers
+               :current-user current-user/handlers})
 
 (defn- match-request
   [request-or-route]

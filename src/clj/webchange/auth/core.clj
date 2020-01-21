@@ -70,6 +70,14 @@
              :last-name  (:last-name user)}])
     [false error-invalid-credentials]))
 
+(defn get-current-user
+  [user-id school-id]
+  (if-let [user (-> (db/get-user {:id user-id}) visible-user)]
+    [true {:id         user-id
+           :school-id  school-id
+           :first-name (:first-name user)
+           :last-name  (:last-name user)}]
+    [false error-invalid-credentials]))
 
 (defn register-user!
   [user-data]

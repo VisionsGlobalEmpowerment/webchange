@@ -1,10 +1,25 @@
-(ns webchange.service-worker-register)
+(ns webchange.service-worker-register
+  (:require [re-frame.core :as re-frame]
+            [webchange.events :as events]))
+
+(defn check-registration
+  [registration]
+  (if (.-active registration)
+    (re-frame/dispatch [::events/set-offline-mode :ready])
+    (re-frame/dispatch [::events/set-offline-mode :in-progress])))
+
+(defn check-state
+  [registration]
+  (println (str "[ServiceWorker] Registration done:" registration))
+  (check-registration registration)
+  (when-let [installing (.-installing registration)]
+    (.addEventListener installing "statechange" #(check-registration registration))))
 
 (defn register
   [service-worker path]
   (js/console.log "register?")
   (-> (.register service-worker path)
-      (.then #(println (str "[ServiceWorker] Registration done:" %)))
+      (.then check-state)
       (.catch #(println (str "[ServiceWorker] Registration failed:" %)))))
 
 (defn unregister

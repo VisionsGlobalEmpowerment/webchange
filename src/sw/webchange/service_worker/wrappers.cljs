@@ -152,3 +152,8 @@
   (->> request
        (request-url-object)
        (.-pathname)))
+
+(defn data->response
+  [data]
+  (let [headers {"Content-Type" "application/json"}]
+    (response-new (clj->js data) (clj->js headers))))

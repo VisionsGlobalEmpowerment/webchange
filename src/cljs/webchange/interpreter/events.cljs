@@ -34,6 +34,7 @@
 (re-frame/reg-fx
   :load-course
   (fn [{:keys [course-id scene-id]}]
+    (js/console.log ":load-course" course-id scene-id)
     (i/load-course course-id (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
                                               (re-frame/dispatch [::set-course-data course])
                                               (re-frame/dispatch [::load-progress course-id])
@@ -621,6 +622,7 @@
 (re-frame/reg-event-fx
   ::load-scene
   (fn [{:keys [db]} [_ scene-id]]
+    (js/console.log "::load-scene" scene-id)
     (let [loaded (get-in db [:scene-loading-complete scene-id])]
       (when (not loaded) {:load-scene [(:current-course db) scene-id]}))))
 
@@ -645,6 +647,7 @@
 (re-frame/reg-event-fx
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id]]
+    (js/console.log "::set-current-scene" scene-id)
     (let [current-scene (:current-scene db)
           stored-scene (get-in db [:store-scenes scene-id])
           merged-scene (merge-with-templates db stored-scene)]
@@ -747,8 +750,15 @@
 (re-frame/reg-event-fx
   ::open-student-dashboard
   (fn [{:keys [db]} [_ _]]
+    (let [course-id (:current-course db)]
+      {:dispatch-n (list [::clear-current-scene]
+                         [:open-student-course-dashboard course-id])})))
+
+(re-frame/reg-event-fx
+  ::open-student-course-dashboard
+  (fn [{:keys [db]} [_ course-id]]
     {:dispatch-n (list [::clear-current-scene]
-                       [:open-student-dashboard])}))
+                       [:open-student-course-dashboard course-id])}))
 
 (re-frame/reg-event-fx
   ::load-progress

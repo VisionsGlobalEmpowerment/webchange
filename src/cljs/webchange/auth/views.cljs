@@ -12,13 +12,13 @@
   (apply teacher-login/teacher-login-page args))
 
 (defn animal-form [image on-click]
-  [:div {:on-click on-click :style {:width "101px" :height "101px" :background-image "url(/raw/img/auth/form.png)"}}
-   [:div {:style {:width "101px" :height "101px" :background (str "url(/raw/img/auth/" image ") no-repeat center center")}}]])
+  [:div {:on-click on-click :style {:width "101px" :height "101px" :background-image "url(/images/auth/form.png)"}}
+   [:div {:style {:width "101px" :height "101px" :background (str "url(/images/auth/" image ") no-repeat center center")}}]])
 
 (defn number-form [value on-click]
   [:div {:on-click on-click :style {:padding "38px"
                                     :width "101px" :height "101px"
-                                    :background-image "url(/raw/img/auth/form.png)"
+                                    :background-image "url(/images/auth/form.png)"
                                     :font-size "40pt" :font-family "Roboto"}}
    value])
 
@@ -28,11 +28,11 @@
   (if (is-number-code? c)
     [:div {:style {:margin "14px 30px" :vertical-align "bottom" :padding-bottom "14px" :width "38px" :height "38px" :display "inline-block" :font-size "40pt"}} c]
     [:div {:style {:margin "14px 30px" :width "38px" :height "38px" :display "inline-block"
-                   :background (str "no-repeat center/30px url(/raw/img/auth/animal-" c ".png)")}}]
+                   :background (str "no-repeat center/30px url(/images/auth/animal-" c ".png)")}}]
     ))
 
 (defn show-code-ph []
-  [:div {:style {:margin "14px 30px" :width "38px" :height "38px" :background-image "url(/raw/img/auth/asset-11.png" :display "inline-block"}}])
+  [:div {:style {:margin "14px 30px" :width "38px" :height "38px" :background-image "url(/images/auth/asset-11.png" :display "inline-block"}}])
 
 (defn show-code [c]
   (if c
@@ -42,7 +42,7 @@
 (defn code-form [code]
   (let [[c1 c2 c3 c4] code]
     [:div {:style {:width "490px" :height "78px"  :margin "0 auto" :padding-left "48px" :padding-top "8px"
-                   :background-image "url(/raw/img/auth/asset-12.png"}}
+                   :background-image "url(/images/auth/asset-12.png"}}
      [show-code c1]
      [show-code c2]
      [show-code c3]

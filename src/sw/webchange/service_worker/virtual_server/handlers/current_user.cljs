@@ -1,0 +1,22 @@
+(ns webchange.service-worker.virtual-server.handlers.current-user
+  (:require
+    [webchange.service-worker.logger :as logger]
+    [webchange.service-worker.virtual-server.handlers.utils.activated-users :as activated-users]
+    [webchange.service-worker.wrappers :refer [js-fetch request-clone then catch data->response]]))
+
+(defn get-offline
+  [request]
+  (logger/debug "[current-user] [GET] [offline]")
+  (-> (activated-users/get-current-user)
+      (then data->response)))
+
+(defn get-online
+  [request]
+  (logger/debug "[current-user] [GET] [online]")
+  (let [cloned (request-clone request)
+        response-promise (js-fetch request)]
+    (-> response-promise
+        (catch #(get-offline cloned)))))
+
+(def handlers {"GET" {:online  get-online
+                      :offline get-offline}})

@@ -10,9 +10,15 @@
     {:dispatch-n (list [::events/redirect :student-dashboard])}))
 
 (re-frame/reg-event-fx
+  :open-student-course-dashboard
+  (fn [{:keys [db]} [_ course-id]]
+    {:dispatch-n (list [::events/redirect :student-course-dashboard :id course-id])}))
+
+(re-frame/reg-event-fx
   ::show-more
   (fn [{:keys [db]} _]
-    {:dispatch [::events/redirect :finished-activities]}))
+    (let [course-id (:current-course db)]
+      {:dispatch [::events/redirect :finished-activities :id course-id]})))
 
 (re-frame/reg-event-fx
   ::open-activity

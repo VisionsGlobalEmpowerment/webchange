@@ -48,13 +48,14 @@
 
 (def host "/api")
 (def resources "")
-(def http-cache (atom {}))
+(def http-buffer (atom {}))
 
 (defn get-url [url]
-  (when (not (contains? @http-cache url))
-    (let [response (http/get url {:with-credentials? false})]
-      (swap! http-cache assoc url response)))
-  (get @http-cache url))
+  (if (contains? @http-buffer url)
+    (let [response (get @http-buffer url)]
+      (swap! http-buffer dissoc url)
+      response)
+    (http/get url {:with-credentials? false})))
 
 (defn course-url
   [course-id]
