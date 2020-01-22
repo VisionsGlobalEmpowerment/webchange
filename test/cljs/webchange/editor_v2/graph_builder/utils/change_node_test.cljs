@@ -396,6 +396,44 @@
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
 
+(deftest test-remove-node--remove-parallel
+  (let [graph {:a   {:connections #{{:previous :root
+                                     :name     "next"
+                                     :handler  :x}}}
+               :x   {:connections #{{:previous :a
+                                     :name     "next"
+                                     :handler  :x-0}
+                                    {:previous :a
+                                     :name     "next"
+                                     :handler  :x-1}}}
+               :x-0 {:connections #{{:previous :x
+                                     :name     "next"
+                                     :handler  :c}}}
+               :x-1 {:connections #{{:previous :x
+                                     :name     "next"
+                                     :handler  :c}}}
+               :c   {:connections #{{:previous :x-0
+                                     :name     "next"
+                                     :handler  :d}
+                                    {:previous :x-1
+                                     :name     "next"
+                                     :handler  :d}}}
+               :d   {:connections #{}}}]
+    (let [actual-result (-> graph
+                            (remove-node :x)
+                            (remove-node :x-0)
+                            (remove-node :x-1))
+          expected-result {:a   {:connections #{{:previous :root
+                                                 :name     "next"
+                                                 :handler  :c}}}
+                           :c   {:connections #{{:previous :a
+                                                 :name     "next"
+                                                 :handler  :d}}}
+                           :d   {:connections #{}}}]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
 (deftest test-rename-node
   (testing "rename single node"
     (let [graph {:a {:connections #{{:previous :root

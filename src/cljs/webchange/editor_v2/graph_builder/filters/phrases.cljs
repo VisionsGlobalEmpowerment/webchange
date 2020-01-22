@@ -13,10 +13,24 @@
     [webchange.editor-v2.graph-builder.utils.node-data :refer [phrase-node?]]))
 
 (defn remove-node?
-  [nodes-weights node-name _]
-  (-> (get nodes-weights node-name)
-      (weight-changer?)
-      (not)))
+  [nodes-weights node-name node-data]
+  (let [significant? (-> (get nodes-weights node-name)
+                         (weight-changer?))
+        action? (= :action (:entity node-data))]
+    (and action?
+         (not significant?))))
+
+(defn remove-detached-nodes
+  [graph nodes-weights]
+  (reduce (fn [graph [node-name _]]
+            (let [counted? (contains? nodes-weights node-name)
+                  zero-weight? (= 0 (-> nodes-weights (get node-name) (first)))]
+              (if (or zero-weight?
+                      (not counted?))
+                (dissoc graph node-name)
+                graph)))
+          graph
+          graph))
 
 (defn get-phrases-graph
   [scene-graph]
@@ -26,4 +40,5 @@
         subtree-phrase-weights (count-nodes-weights graph phrase-node?)]
     (-> graph
         (remove-extra-nodes (partial remove-node? subtree-phrase-weights))
+        (remove-detached-nodes subtree-phrase-weights)
         (remove-root-node))))

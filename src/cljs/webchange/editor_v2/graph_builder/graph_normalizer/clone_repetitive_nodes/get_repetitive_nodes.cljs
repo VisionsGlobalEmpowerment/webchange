@@ -93,6 +93,26 @@
            [node-name (concat grouped-parallel-children rest-children)]))
        data))
 
+;; ToDo: remove when clone repetitive nodes is fixed
+(defn filter-extra-nodes
+  [extra-nodes-map]
+  (let [actions-to-clone [; tests
+                          :a
+                          :b
+                          :c
+                          :d
+                          :e
+                          :f
+                          ;; common
+                          :empty-big
+                          :empty-small
+                          :set-reminder-on
+                          :set-reminder-off
+                          ;; home
+                          :group-3-times-var
+                          ]]
+    (select-keys extra-nodes-map actions-to-clone)))
+
 (defn get-repetitive-nodes
   [graph]
   (let [repetitive-nodes (->> graph
@@ -106,5 +126,6 @@
                                       {})
                               (group-parallel-children-connections)
                               (remove-extra-info)
-                              (into (hash-map)))]
+                              (into (hash-map))
+                              (filter-extra-nodes))]
     repetitive-nodes))

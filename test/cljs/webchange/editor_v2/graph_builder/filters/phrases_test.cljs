@@ -5,79 +5,96 @@
     [webchange.editor-v2.graph-builder.filters.phrases :refer [get-phrases-graph]]))
 
 (deftest test-get-phrases-graph--simple
-  (let [graph {:01 {:connections #{{:previous :root
+  (let [graph {:01 {:entity      :object
+                    :connections #{{:previous :root
                                     :name     "next"
                                     :handler  :03}}}
-               :02 {:connections #{{:previous :root
+               :02 {:entity      :object
+                    :connections #{{:previous :root
                                     :name     "next"
                                     :handler  :04}}}
-               :03 {:connections #{{:previous :01
+               :03 {:entity      :action
+                    :connections #{{:previous :01
                                     :name     "true"
                                     :handler  :05}
                                    {:previous :01
                                     :name     "false"
                                     :handler  :07}}}
-               :04 {:connections #{{:previous :02
+               :04 {:entity      :action
+                    :connections #{{:previous :02
                                     :name     "true"
                                     :handler  :06}
                                    {:previous :02
                                     :name     "false"
                                     :handler  :07}}}
-               :05 {:connections #{{:previous :03
+               :05 {:entity      :action
+                    :connections #{{:previous :03
                                     :name     "next"
                                     :handler  :08}}}
-               :06 {:connections #{{:previous :04
+               :06 {:entity      :action
+                    :connections #{{:previous :04
                                     :name     "next"
                                     :handler  :08}}}
-               :07 {:connections #{{:previous :03
+               :07 {:entity      :action
+                    :connections #{{:previous :03
                                     :name     "next"
                                     :handler  :09}
                                    {:previous :04
                                     :name     "next"
                                     :handler  :09}}
                     :data        {:phrase true}}
-               :08 {:connections #{{:previous :05
+               :08 {:entity      :action
+                    :connections #{{:previous :05
                                     :name     "next"
                                     :handler  :10}
                                    {:previous :06
                                     :name     "next"
                                     :handler  :10}}}
-               :09 {:connections #{}}
-               :10 {:connections #{{:previous :08
+               :09 {:entity      :action
+                    :connections #{}}
+               :10 {:entity      :action
+                    :connections #{{:previous :08
                                     :name     "next"
                                     :handler  :11}}
                     :data        {:phrase true}}
-               :11 {:connections #{{:previous :10
+               :11 {:entity      :action
+                    :connections #{{:previous :10
                                     :name     "next"
                                     :handler  :12}}}
-               :12 {:connections #{{:previous :11
+               :12 {:entity      :action
+                    :connections #{{:previous :11
                                     :name     "next"
                                     :handler  :13}}
                     :data        {:phrase true}}
-               :13 {:connections #{}}}]
+               :13 {:entity      :action
+                    :connections #{}}}]
     (let [actual-result (get-phrases-graph graph)
-          expected-result {:03 {:connections #{{:previous :root
-                                                :name     "true"
+          expected-result {:01 {:entity      :object
+                                :connections #{{:previous :root
+                                                :name     "next"
                                                 :handler  :10}
                                                {:previous :root
-                                                :name     "false"
+                                                :name     "next"
                                                 :handler  :07}}}
-                           :04 {:connections #{{:previous :root
-                                                :name     "false"
+                           :02 {:entity      :object
+                                :connections #{{:previous :root
+                                                :name     "next"
                                                 :handler  :07}
                                                {:previous :root
-                                                :name     "true"
+                                                :name     "next"
                                                 :handler  :10}}}
-                           :07 {:connections #{}
+                           :07 {:entity      :action
+                                :connections #{}
                                 :data        {:phrase true}}
-                           :10 {:connections #{{:previous :04
+                           :10 {:entity      :action
+                                :connections #{{:previous :02
                                                 :name     "next"
-                                                :handler  :12}
-                                               {:previous :03
-                                                :name     "next"
-                                                :handler  :12}}
+                                                :handler  :12} {:previous :01
+                                                                :name     "next"
+                                                                :handler  :12}}
                                 :data        {:phrase true}}
-                           :12 {:connections #{}
+                           :12 {:entity      :action
+                                :connections #{}
                                 :data        {:phrase true}}}]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))

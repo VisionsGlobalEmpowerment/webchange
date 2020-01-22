@@ -29,13 +29,13 @@
       (is (= actual-result expected-result)))))
 
 (deftest test-remove-connection--middle-two-children-empty
-  (let [node-weights [2 2 1]]
+  (let [node-weights [3 2 1]]
     (let [actual-result (weight-changer? node-weights)
           expected-result false]
       (is (= actual-result expected-result)))))
 
 (deftest test-remove-connection--middle-two-children-not-empty
-  (let [node-weights [3 2 1]]
+  (let [node-weights [4 2 1]]
     (let [actual-result (weight-changer? node-weights)
           expected-result true]
       (is (= actual-result expected-result)))))

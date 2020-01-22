@@ -71,7 +71,7 @@
                     selected-action-node (re-frame/subscribe [::translator-subs/selected-action])
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
 
-                    graph (get-graph scene-data phrase-action-name {:current-concept @current-concept})
+                    {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept @current-concept})
                     selected-action-path (normalize-path (:path @selected-action-node) graph)
                     audios-list (get-audios scene-data graph)
                     prepared-current-action-data (get-current-action-data @selected-action-node @current-concept @data-store)]
@@ -102,7 +102,8 @@
                                                                   (merge {:audio audio-key}
                                                                          (select-keys region-data [:start :duration]))))}]
                  [ui/dialog
-                  {:open       (and selected-action-concept?
+                  {:open       (and (or has-concepts?
+                                        selected-action-concept?)
                                     (nil? @current-concept))
                    :full-width true
                    :max-width  "xs"}
