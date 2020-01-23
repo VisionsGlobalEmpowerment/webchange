@@ -1,5 +1,4 @@
-{:assets
-                [{:url "/raw/img/park/swings/background.jpg", :size 10 :type "image"}
+{:assets        [{:url "/raw/img/park/swings/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/park/swings/swings.png", :size 1, :type "image"}
                  {:url "/raw/img/park/swings/tree.png", :size 1, :type "image"}
 
@@ -11,10 +10,8 @@
                  {:url "/raw/audio/english/l1/a3/rock.mp3", :size 2, :type "audio" :alias "rock"}
                  {:url "/raw/audio/english/l1/a3/rock-squirrel.mp3", :size 2, :type "audio" :alias "rock squirrel"}
                  {:url "/raw/audio/english/l1/a3/rock-elephant.mp3", :size 2, :type "audio" :alias "rock elephant"}
-                 {:url "/raw/audio/english/l1/a3/rock-magnet.mp3", :size 2, :type "audio" :alias "rock magnet"}
-                 ],
- :objects
-                {:background   {:type "background", :src "/raw/img/park/swings/background.jpg"},
+                 {:url "/raw/audio/english/l1/a3/rock-magnet.mp3", :size 2, :type "audio" :alias "rock magnet"}],
+ :objects       {:background   {:type "background", :src "/raw/img/park/swings/background.jpg"},
                  :vera         {:type  "animation" :x 251 :y 990 :name "vera" :anim "idle" :speed 0.3
                                 :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
 
@@ -71,33 +68,44 @@
                                 :scene-name "box-ph" :transition "box-ph"
                                 :states     {:default {:type "transparent" :x 0 :y 550}
                                              :visible {:type  "animation" :name "boxes" :anim "idle2" :x 177 :y 785
-                                                       :speed 0.3 :loop true :start false}}}
-
-                 },
+                                                       :speed 0.3 :loop true :start false}}}},
  :scene-objects [["background"] ["swings"] ["tree-image"] ["vera" "mari" "rock"] ["box1" "box2" "box3"]],
- :actions
-                {:vera-welcome-audio-1
-                                             {:type "animation-sequence",
-                                              :target "vera",
-                                              :track 1,
-                                              :data
-                                              [{:start 0.614, :end 1.534, :duration 0.92, :anim "talk"}
-                                               {:start 1.921, :end 3.801, :duration 1.88, :anim "talk"}
-                                               {:start 4.494, :end 5.801, :duration 1.307, :anim "talk"}],
-                                              :audio "/raw/audio/english/l1/a3/vera.mp3",
-                                              :offset 0.48,
-                                              :start 0.48,
-                                              :duration 5.668
-                                              :phrase :welcome-vera
-                                              :phrase-text "Hello Mari!
-                                                            Are we going to play on the swings now?
-                                                            I like the swings."}
-                 :mari-welcome-audio-2
-                                             {:type     "animation-sequence",
+ :actions       {:welcome-audio              {:type        "sequence"
+                                              :data        ["vera-welcome-audio-1"
+                                                            "mari-welcome-audio-2"
+                                                            "vera-welcome-audio-3"
+                                                            "mari-welcome-audio-4"
+                                                            "rock-welcome-audio-5"
+                                                            "mari-welcome-audio-6"
+                                                            "rock-welcome-audio-7"
+                                                            "vera-welcome-audio-8"
+                                                            "rock-welcome-audio-9"
+                                                            "mari-welcome-audio-10"]
+                                              :phrase      :welcome
+                                              :phrase-text "Vera: Hello Mari! Are we going to play on the swings now? I like the swings.
+                                                            Mari: Yes! We are going to play on the swings! Our friends [ardilla, oso and imán] want to go on the swings. Let’s give each of them a turn.
+                                                            Vera: Ok. I’m going to give everyone a turn.
+                                                            Mari: Good job!
+                                                            Rock: That’s very kind of you!
+                                                            Mari: Oh, hello Senora Piedra! It’s a pleasure to see you.
+                                                            Rock: Hello Mari. It’s a pleasure to see you too.
+                                                            Vera: Hola Senor Piedra. How are you?
+                                                            Rock: Hello my friend. I’m very well, thank you.
+                                                            Mari: Ok little genius, let’s begin!"}
+                 :vera-welcome-audio-1       {:type     "animation-sequence",
+                                              :target   "vera",
+                                              :track    1,
+                                              :data     [{:start 0.614, :end 1.534, :duration 0.92, :anim "talk"}
+                                                         {:start 1.921, :end 3.801, :duration 1.88, :anim "talk"}
+                                                         {:start 4.494, :end 5.801, :duration 1.307, :anim "talk"}],
+                                              :audio    "/raw/audio/english/l1/a3/vera.mp3",
+                                              :offset   0.48,
+                                              :start    0.48,
+                                              :duration 5.668}
+                 :mari-welcome-audio-2       {:type     "animation-sequence",
                                               :target   "mari",
                                               :track    1,
-                                              :data
-                                                        [{:start 0.72, :end 3.226, :duration 2.506, :anim "talk"}
+                                              :data     [{:start 0.72, :end 3.226, :duration 2.506, :anim "talk"}
                                                          {:start 3.826, :end 4.666, :duration 0.84, :anim "talk"}
                                                          {:start 5.24, :end 7.2, :duration 1.96, :anim "talk"}
                                                          {:start 7.56, :end 9.279, :duration 1.719, :anim "talk"}
@@ -105,128 +113,93 @@
                                               :audio    "/raw/audio/english/l1/a3/mari.m4a",
                                               :offset   0.587,
                                               :start    0.587,
-                                              :duration 11.559
-                                              :phrase :welcome-mari
-                                              :phrase-text "Yes! We are going to play on the swings!
-                                                            Our friends [ardilla, oso and imán] want to go on the swings.
-                                                            Let’s give each of them a turn."}
-                 :vera-welcome-audio-3
-                                             {:type "animation-sequence",
-                                              :target "vera",
-                                              :track 1,
-                                              :data
-                                              [{:start 7.147, :end 7.561, :duration 0.414, :anim "talk"}
-                                               {:start 8.054, :end 10.108, :duration 2.054, :anim "talk"}],
-                                              :audio "/raw/audio/english/l1/a3/vera.mp3",
-                                              :offset 6.921,
-                                              :start 6.921,
-                                              :duration 3.4
-                                              :phrase :welcome-vera-continue
-                                              :phrase-text "Ok. I’m going to give everyone a turn."}
-                 :mari-welcome-audio-4
-                                             {:type     "animation-sequence",
+                                              :duration 11.559}
+                 :vera-welcome-audio-3       {:type     "animation-sequence",
+                                              :target   "vera",
+                                              :track    1,
+                                              :data     [{:start 7.147, :end 7.561, :duration 0.414, :anim "talk"}
+                                                         {:start 8.054, :end 10.108, :duration 2.054, :anim "talk"}],
+                                              :audio    "/raw/audio/english/l1/a3/vera.mp3",
+                                              :offset   6.921,
+                                              :start    6.921,
+                                              :duration 3.4}
+                 :mari-welcome-audio-4       {:type     "animation-sequence",
                                               :target   "mari",
                                               :track    1,
                                               :data     [{:start 14.186, :end 14.946, :duration 0.76, :anim "talk"}],
                                               :audio    "/raw/audio/english/l1/a3/mari.m4a",
                                               :offset   14.026,
                                               :start    14.026,
-                                              :duration 1.04
-                                              :phrase :welcome-mari-continue
-                                              :phrase-text "Good job!"}
-                 :rock-welcome-audio-5
-                                             {:type "animation-sequence",
-                                              :target "rock",
-                                              :track 1,
-                                              :data [{:start 0.534, :end 2.36, :duration 1.826, :anim "talk"}],
-                                              :audio "/raw/audio/english/l1/a3/rock.mp3",
-                                              :offset 0.306,
-                                              :start 0.306,
-                                              :duration 2.307
-                                              :phrase :welcome-rock
-                                              :phrase-text "That’s very kind of you!"}
-
-                 :mari-welcome-audio-6
-                                             {:type     "animation-sequence",
+                                              :duration 1.04}
+                 :rock-welcome-audio-5       {:type     "animation-sequence",
+                                              :target   "rock",
+                                              :track    1,
+                                              :data     [{:start 0.534, :end 2.36, :duration 1.826, :anim "talk"}],
+                                              :audio    "/raw/audio/english/l1/a3/rock.mp3",
+                                              :offset   0.306,
+                                              :start    0.306,
+                                              :duration 2.307}
+                 :mari-welcome-audio-6       {:type     "animation-sequence",
                                               :target   "mari",
                                               :track    1,
-                                              :data
-                                                        [{:start 16.986, :end 18.345, :duration 1.359, :anim "talk"}
+                                              :data     [{:start 16.986, :end 18.345, :duration 1.359, :anim "talk"}
                                                          {:start 18.865, :end 20.212, :duration 1.347, :anim "talk"}],
                                               :audio    "/raw/audio/english/l1/a3/mari.m4a",
                                               :offset   16.852,
                                               :start    16.852,
-                                              :duration 3.587
-                                              :phrase :hello-rock-mari
-                                              :phrase-text "Oh, hello Senora Piedra! It’s a pleasure to see you."}
-                 :rock-welcome-audio-7
-                                             {:type "animation-sequence",
-                                              :target "rock",
-                                              :track 1,
-                                              :data
-                                              [{:start 3.719, :end 4.559, :duration 0.84, :anim "talk"}
-                                               {:start 5.159, :end 6.986, :duration 1.827, :anim "talk"}],
-                                              :audio "/raw/audio/english/l1/a3/rock.mp3",
-                                              :offset 3.547,
-                                              :start 3.547,
-                                              :duration 3.747
-                                              :phrase :hello-mari
-                                              :phrase-text " Hello Mari.  It’s a pleasure to see you too."}
-                 :vera-welcome-audio-8
-                                             {:type "animation-sequence",
-                                              :target "vera",
-                                              :track 1,
-                                              :data
-                                              [{:start 10.944, :end 11.837, :duration 0.893, :anim "talk"}
-                                               {:start 12.423, :end 13.21, :duration 0.787, :anim "talk"}],
-                                              :audio "/raw/audio/english/l1/a3/vera.mp3",
-                                              :offset 10.69,
-                                              :start 10.69,
-                                              :duration 2.786
-                                              :phrase :hello-rock-vera
-                                              :phrase-text "Hola Senor Piedra. How are you?"}
-                 :rock-welcome-audio-9
-                                             {:type "animation-sequence",
-                                              :target "rock",
-                                              :track 1,
-                                              :data
-                                              [{:start 8.199, :end 9.225, :duration 1.026, :anim "talk"}
-                                               {:start 9.959, :end 10.958, :duration 0.999, :anim "talk"}
-                                               {:start 11.465, :end 12.025, :duration 0.56, :anim "talk"}],
-                                              :audio "/raw/audio/english/l1/a3/rock.mp3",
-                                              :offset 8.093,
-                                              :start 8.093,
-                                              :duration 4.241
-                                              :phrase :hello-my-friend
-                                              :phrase-text "Hello my friend. I’m very well, thank you."}
+                                              :duration 3.587}
+                 :rock-welcome-audio-7       {:type     "animation-sequence",
+                                              :target   "rock",
+                                              :track    1,
+                                              :data     [{:start 3.719, :end 4.559, :duration 0.84, :anim "talk"}
+                                                         {:start 5.159, :end 6.986, :duration 1.827, :anim "talk"}],
+                                              :audio    "/raw/audio/english/l1/a3/rock.mp3",
+                                              :offset   3.547,
+                                              :start    3.547,
+                                              :duration 3.747}
+                 :vera-welcome-audio-8       {:type     "animation-sequence",
+                                              :target   "vera",
+                                              :track    1,
+                                              :data     [{:start 10.944, :end 11.837, :duration 0.893, :anim "talk"}
+                                                         {:start 12.423, :end 13.21, :duration 0.787, :anim "talk"}],
+                                              :audio    "/raw/audio/english/l1/a3/vera.mp3",
+                                              :offset   10.69,
+                                              :start    10.69,
+                                              :duration 2.786}
+                 :rock-welcome-audio-9       {:type     "animation-sequence",
+                                              :target   "rock",
+                                              :track    1,
+                                              :data     [{:start 8.199, :end 9.225, :duration 1.026, :anim "talk"}
+                                                         {:start 9.959, :end 10.958, :duration 0.999, :anim "talk"}
+                                                         {:start 11.465, :end 12.025, :duration 0.56, :anim "talk"}],
+                                              :audio    "/raw/audio/english/l1/a3/rock.mp3",
+                                              :offset   8.093,
+                                              :start    8.093,
+                                              :duration 4.241}
 
-                 :mari-welcome-audio-10
-                                             {:type     "animation-sequence",
+                 :mari-welcome-audio-10      {:type     "animation-sequence",
                                               :target   "mari",
                                               :track    1,
                                               :data     [{:start 23.398, :end 26.145, :duration 2.747, :anim "talk"}],
                                               :audio    "/raw/audio/english/l1/a3/mari.m4a",
                                               :offset   23.278,
                                               :start    23.278,
-                                              :duration 3.134
-                                              :phrase :lets-begin
-                                              :phrase-text "Ok little genius, let’s begin!"}
+                                              :duration 3.134}
 
-                 :mari-move-to-start
-                                             {:type "parallel"
-                                              :data [{:type "sequence-data"
-                                                      :data [{:type "animation" :target "mari" :id "wand_hit" :track 2}
-                                                             {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}]}
-                                                     {:type     "animation-sequence",
-                                                      :target   "mari",
-                                                      :track    1,
-                                                      :offset   27.812,
-                                                      :audio    "/raw/audio/english/l1/a3/mari.m4a",
-                                                      :start    27.812,
-                                                      :duration 2.426,
-                                                      :data     [{:start 27.865, :end 30.118, :duration 2.253, :anim "talk"}]}
-                                                     ]
-                                              :phrase :move-picture
+                 :mari-move-to-start         {:type        "parallel"
+                                              :data        [{:type "sequence-data"
+                                                             :data [{:type "animation" :target "mari" :id "wand_hit" :track 2}
+                                                                    {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}]}
+                                                            {:type     "animation-sequence",
+                                                             :target   "mari",
+                                                             :track    1,
+                                                             :offset   27.812,
+                                                             :audio    "/raw/audio/english/l1/a3/mari.m4a",
+                                                             :start    27.812,
+                                                             :duration 2.426,
+                                                             :data     [{:start 27.865, :end 30.118, :duration 2.253, :anim "talk"}]}
+                                                            ]
+                                              :phrase      :move-picture
                                               :phrase-text "Move the picture onto the swing."}
 
                  :show-boxes                 {:type "parallel"
@@ -289,145 +262,169 @@
 
                  :box-1-revert               {:type "transition" :transition-id "box1" :to {:x 500 :y 550 :duration 0.5}}
 
-                 :box-1-start                {:type "sequence"
-                                              :data ["show-box-1-ph"
-                                                     "start-swings"
-                                                     "empty-before-dialog"
-                                                     "dialog-var"
-                                                     "stop-swings"
-                                                     "hide-box-1-ph"
-                                                     "mari-box-2"
-                                                     "try-another"
-                                                     "set-current-box2"]
+                 :box-1-start                {:type       "sequence"
+                                              :data       ["show-box-1-ph"
+                                                           "start-swings"
+                                                           "empty-before-dialog"
+                                                           "dialog-var"
+                                                           "stop-swings"
+                                                           "hide-box-1-ph"
+                                                           "mari-box-2"
+                                                           "try-another"
+                                                           "set-current-box2"]
                                               :unique-tag "box"}
 
-                 :show-box-1-ph              {:type "sequence-data"
-                                              :data [{:type "state" :target "box1" :id "default"}
-                                                     {:type "state" :target "box-ph" :id "visible"}
-                                                     {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "copy-variable" :var-name "current-word" :from "item-1"}
-                                                     ]}
+                 :show-box-1-ph              {:type "sequence"
+                                              :data ["show-box-1-ph-1"
+                                                     "show-box-1-ph-2"
+                                                     "show-box-1-ph-3"
+                                                     "show-box-1-ph-4"
+                                                     "show-box-1-ph-5"]}
+                 :show-box-1-ph-1            {:type "state" :target "box1" :id "default"}
+                 :show-box-1-ph-2            {:type "state" :target "box-ph" :id "visible"}
+                 :show-box-1-ph-3            {:type "empty" :duration 500}
+                 :show-box-1-ph-4            {:type     "set-skin" :target "box-ph"
+                                              :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                 :show-box-1-ph-5            {:type "copy-variable" :var-name "current-word" :from "item-1"}
 
-                 :hide-box-1-ph              {:type "sequence-data"
-                                              :data [{:type "state" :target "box-ph" :id "default"}
-                                                     {:type "state" :target "box1" :id "come"}
-                                                     {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box1"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}]}
+                 :hide-box-1-ph              {:type "sequence"
+                                              :data ["hide-box-1-ph-1"
+                                                     "hide-box-1-ph-2"
+                                                     "hide-box-1-ph-3"
+                                                     "hide-box-1-ph-4"
+                                                     "hide-box-1-ph-5"]}
+                 :hide-box-1-ph-1            {:type "state" :target "box-ph" :id "default"}
+                 :hide-box-1-ph-2            {:type "state" :target "box1" :id "come"}
+                 :hide-box-1-ph-3            {:type "empty" :duration 500}
+                 :hide-box-1-ph-4            {:type     "set-skin" :target "box1"
+                                              :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                 :hide-box-1-ph-5            {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}
+
 
                  :box-2-revert               {:type "transition" :transition-id "box2" :to {:x 1000 :y 550 :duration 0.5}}
 
-                 :box-2-start                {:type "sequence"
-                                              :data ["show-box-2-ph"
-                                                     "start-swings"
-                                                     "empty-before-dialog"
-                                                     "dialog-var"
-                                                     "stop-swings"
-                                                     "hide-box-2-ph"
-                                                     "mari-box-3"
-                                                     "try-another"
-                                                     "set-current-box3"]
+                 :box-2-start                {:type       "sequence"
+                                              :data       ["show-box-2-ph"
+                                                           "start-swings"
+                                                           "empty-before-dialog"
+                                                           "dialog-var"
+                                                           "stop-swings"
+                                                           "hide-box-2-ph"
+                                                           "mari-box-3"
+                                                           "try-another"
+                                                           "set-current-box3"]
                                               :unique-tag "box"}
 
-                 :show-box-2-ph              {:type "sequence-data"
-                                              :data [{:type "state" :target "box2" :id "default"}
-                                                     {:type "state" :target "box-ph" :id "visible"}
-                                                     {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "copy-variable" :var-name "current-word" :from "item-2"}
-                                                     ]}
+                 :show-box-2-ph              {:type "sequence"
+                                              :data ["show-box-2-ph-1"
+                                                     "show-box-2-ph-2"
+                                                     "show-box-2-ph-3"
+                                                     "show-box-2-ph-4"
+                                                     "show-box-2-ph-5"]}
 
-                 :hide-box-2-ph              {:type "sequence-data"
-                                              :data [{:type "state" :target "box-ph" :id "default"}
-                                                     {:type "state" :target "box2" :id "come"}
-                                                     {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box2"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}]}
+                 :show-box-2-ph-1            {:type "state" :target "box2" :id "default"}
+                 :show-box-2-ph-2            {:type "state" :target "box-ph" :id "visible"}
+                 :show-box-2-ph-3            {:type "empty" :duration 500}
+                 :show-box-2-ph-4            {:type     "set-skin" :target "box-ph"
+                                              :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                 :show-box-2-ph-5            {:type "copy-variable" :var-name "current-word" :from "item-2"}
+
+                 :hide-box-2-ph              {:type "sequence"
+                                              :data ["hide-box-2-ph-1"
+                                                     "hide-box-2-ph-2"
+                                                     "hide-box-2-ph-3"
+                                                     "hide-box-2-ph-4"
+                                                     "hide-box-2-ph-5"]}
+                 :hide-box-2-ph-1            {:type "state" :target "box-ph" :id "default"}
+                 :hide-box-2-ph-2            {:type "state" :target "box2" :id "come"}
+                 :hide-box-2-ph-3            {:type "empty" :duration 500}
+                 :hide-box-2-ph-4            {:type     "set-skin" :target "box2"
+                                              :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                 :hide-box-2-ph-5            {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}
 
                  :box-3-revert               {:type "transition" :transition-id "box3" :to {:x 1500 :y 550 :duration 0.5}}
 
-                 :box-3-start                {:type "sequence"
-                                              :data ["show-box-3-ph"
-                                                     "start-swings"
-                                                     "empty-before-dialog"
-                                                     "dialog-var"
-                                                     "stop-swings"
-                                                     "hide-box-3-ph"
-                                                     "finish-activity"
-                                                     "mari-finish"]
+                 :box-3-start                {:type       "sequence"
+                                              :data       ["show-box-3-ph"
+                                                           "start-swings"
+                                                           "empty-before-dialog"
+                                                           "dialog-var"
+                                                           "stop-swings"
+                                                           "hide-box-3-ph"
+                                                           "finish-activity"
+                                                           "mari-finish"]
                                               :unique-tag "box"}
 
-                 :show-box-3-ph              {:type "sequence-data"
-                                              :data [{:type "state" :target "box3" :id "default"}
-                                                     {:type "state" :target "box-ph" :id "visible"}
-                                                     {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "copy-variable" :var-name "current-word" :from "item-3"}
-                                                     ]}
+                 :show-box-3-ph              {:type "sequence"
+                                              :data ["show-box-3-ph-1"
+                                                     "show-box-3-ph-2"
+                                                     "show-box-3-ph-3"
+                                                     "show-box-3-ph-4"
+                                                     "show-box-3-ph-5"]}
 
-                 :hide-box-3-ph              {:type "sequence-data"
-                                              :data [{:type "state" :target "box-ph" :id "default"}
-                                                     {:type "state" :target "box3" :id "come"}
-                                                     {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box3"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
+                 :show-box-3-ph-1            {:type "state" :target "box3" :id "default"}
+                 :show-box-3-ph-2            {:type "state" :target "box-ph" :id "visible"}
+                 :show-box-3-ph-3            {:type "empty" :duration 500}
+                 :show-box-3-ph-4            {:type     "set-skin" :target "box-ph"
+                                              :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                 :show-box-3-ph-5            {:type "copy-variable" :var-name "current-word" :from "item-3"}
 
-                 :dialog-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "swings-dialog-action"}]
-                                              :phrase :dialog
+                 :hide-box-3-ph              {:type "sequence"
+                                              :data ["hide-box-3-ph-1"
+                                                     "hide-box-3-ph-2"
+                                                     "hide-box-3-ph-3"
+                                                     "hide-box-3-ph-4"
+                                                     "hide-box-3-ph-5"]}
+
+                 :hide-box-3-ph-1            {:type "state" :target "box-ph" :id "default"}
+                 :hide-box-3-ph-2            {:type "state" :target "box3" :id "come"}
+                 :hide-box-3-ph-3            {:type "empty" :duration 500}
+                 :hide-box-3-ph-4            {:type     "set-skin" :target "box3"
+                                              :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                 :hide-box-3-ph-5            {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}
+
+                 :dialog-var                 {:type        "action" :from-var [{:var-name "current-word" :var-property "swings-dialog-action"}]
+                                              :phrase      :dialog
                                               :phrase-text "*concept dialog*"}
 
-                 :stop-swings                {:type "sequence-data"
-                                              :data [{:type "remove-flows" :flow-tag "swings"}
-                                                     {:type "transition" :transition-id "swings" :to {:rotation 0 :duration 0.5 :loop false}}]}
+                 :stop-swings                {:type "sequence"
+                                              :data ["stop-swings-1"
+                                                     "stop-swings-2"]}
+                 :stop-swings-1              {:type "remove-flows" :flow-tag "swings"}
+                 :stop-swings-2              {:type "transition" :transition-id "swings" :to {:rotation 0 :duration 0.5 :loop false}}
 
-                 :start-swings               {:type "action" :id "start-swings-do" :return-immediately true}
-
-                 :start-swings-do            {:type "sequence"
+                 :start-swings               {:type "sequence"
                                               :tags ["swings"]
-                                              :data ["prepare-swing" "swing"]}
-
-                 :swing                      {:type "sequence"
-                                              :tags ["swings"]
-                                              :data ["swing-right"
-                                                     "swing-left"
+                                              :data ["prepare-swing"
                                                      "swing"]}
 
-                 :empty-before-dialog        {:type "empty" :duration 3000}
+                 :swing                      {:type               "sequence"
+                                              :tags               ["swings"]
+                                              :data               ["swing-right"
+                                                                   "swing-left"
+                                                                   "swing"]
+                                              :return-immediately true}
 
                  :prepare-swing              {:type "transition" :transition-id "swings" :to {:rotation -15 :duration 1 :loop false}}
                  :swing-right                {:type "transition" :transition-id "swings" :to {:rotation 15 :duration 2 :loop false}}
                  :swing-left                 {:type "transition" :transition-id "swings" :to {:rotation -15 :duration 2 :loop false}}
 
-                 :try-another
-                                             {:type     "animation-sequence",
-                                              :target   "mari",
-                                              :track    1,
-                                              :offset   32.105,
-                                              :audio    "/raw/audio/english/l1/a3/mari.m4a",
-                                              :start    32.105,
-                                              :duration 7.012,
-                                              :data
-                                                        [{:start 32.278, :end 33.678, :duration 1.4, :anim "talk"}
-                                                         {:start 34.104, :end 35.811, :duration 1.707, :anim "talk"}
-                                                         {:start 36.411, :end 38.691, :duration 2.28, :anim "talk"}]
-                                              :phrase :try-another
+                 :empty-before-dialog        {:type "empty" :duration 3000}
+
+                 :try-another                {:type        "animation-sequence",
+                                              :target      "mari",
+                                              :track       1,
+                                              :offset      32.105,
+                                              :audio       "/raw/audio/english/l1/a3/mari.m4a",
+                                              :start       32.105,
+                                              :duration    7.012,
+                                              :data        [{:start 32.278, :end 33.678, :duration 1.4, :anim "talk"}
+                                                            {:start 34.104, :end 35.811, :duration 1.707, :anim "talk"}
+                                                            {:start 36.411, :end 38.691, :duration 2.28, :anim "talk"}]
+                                              :phrase      :try-another
                                               :phrase-text "Good job little genius!
                                                             Let’s try another one.
                                                             Move this picture to the swings."}
-
-                 :pick-wrong                 {:type "sequence"
-                                              :data ["audio-wrong"]
-                                              :phrase :pick-wrong
-                                              :phrase-text "Try again."}
-
-                 :audio-wrong                {:type "audio" :id "fw-try-again" :start 0.892 :duration 1.869 :offset 0.2}
 
                  :renew-words                {:type        "lesson-var-provider"
                                               :provider-id "words-set"
@@ -438,59 +435,49 @@
                  :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1181 :y 350 :duration 2 :loop false}}
                  :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1658 :y 350 :duration 2 :loop false}}
 
-                 :mari-init-wand {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
+                 :mari-init-wand             {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
 
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
-                 :start                      {:type "sequence"
-                                              :data ["start-activity"
+                 :start-scene                {:type "sequence"
+                                              :data [
+                                                     "start-activity"
                                                      "clear-instruction"
                                                      "renew-words"
                                                      "show-boxes"
                                                      "wait-for-box-animations"
                                                      "switch-box-animations-idle"
-                                                     "vera-welcome-audio-1"
-                                                     "mari-welcome-audio-2"
-                                                     "vera-welcome-audio-3"
-                                                     "mari-welcome-audio-4"
-                                                     "rock-welcome-audio-5"
-                                                     "mari-welcome-audio-6"
-                                                     "rock-welcome-audio-7"
-                                                     "vera-welcome-audio-8"
-                                                     "rock-welcome-audio-9"
-                                                     "mari-welcome-audio-10"
+                                                     "welcome-audio"
                                                      "mari-init-wand"
                                                      "mari-box-1"
                                                      "mari-move-to-start"
-                                                     "set-current-box1"
-                                                     ]}
+                                                     "set-current-box1"]}
 
-                 :mari-finish {:type "sequence-data",
-                               :data [{:type "transition",
-                                       :transition-id "mari",
-                                       :to {:x 244, :y 300, :duration 1.3}}
-                                      {:type "animation-sequence",
-                                       :target "mari",
-                                       :track 1,
-                                       :offset 49.103,
-                                       :audio "/raw/audio/english/l1/a3/mari.m4a",
-                                       :data
-                                       [{:start 49.357, :end 52.717, :duration 3.36, :anim "talk"}
-                                        {:start 52.983, :end 54.49, :duration 1.507, :anim "talk"}
-                                        {:start 55.13, :end 57.09, :duration 1.96, :anim "talk"}
-                                        {:start 57.33, :end 59.036, :duration 1.706, :anim "talk"}
-                                        {:start 59.676, :end 61.223, :duration 1.547, :anim "talk"}],
-                                       :start 49.103,
-                                       :duration 12.36}]
-                               :phrase :finish
-                               :phrase-text "It looks like every picture got a turn on the swing.
-                                             Good job little genius!
-                                             You can play this game again, or, hit this arrow to start your next game."}
+                 :mari-finish                {:type        "sequence-data",
+                                              :data        [{:type          "transition",
+                                                             :transition-id "mari",
+                                                             :to            {:x 244, :y 300, :duration 1.3}}
+                                                            {:type     "animation-sequence",
+                                                             :target   "mari",
+                                                             :track    1,
+                                                             :offset   49.103,
+                                                             :audio    "/raw/audio/english/l1/a3/mari.m4a",
+                                                             :data
+                                                                       [{:start 49.357, :end 52.717, :duration 3.36, :anim "talk"}
+                                                                        {:start 52.983, :end 54.49, :duration 1.507, :anim "talk"}
+                                                                        {:start 55.13, :end 57.09, :duration 1.96, :anim "talk"}
+                                                                        {:start 57.33, :end 59.036, :duration 1.706, :anim "talk"}
+                                                                        {:start 59.676, :end 61.223, :duration 1.547, :anim "talk"}],
+                                                             :start    49.103,
+                                                             :duration 12.36}]
+                                              :phrase      :finish
+                                              :phrase-text "It looks like every picture got a turn on the swing.
+                                                            Good job little genius!
+                                                            You can play this game again, or, hit this arrow to start your next game."}
 
                  :start-activity             {:type "start-activity" :id "swings"}
                  :finish-activity            {:type "finish-activity" :id "swings"}
                  :stop-activity              {:type "stop-activity" :id "swings"}}
-
- :triggers      {:start {:on "start" :action "start"}
+ :triggers      {:start {:on "start" :action "start-scene"}
                  :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}
