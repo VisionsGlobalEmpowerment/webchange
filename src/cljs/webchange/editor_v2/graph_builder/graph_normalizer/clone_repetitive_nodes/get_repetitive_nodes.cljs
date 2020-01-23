@@ -110,6 +110,13 @@
                           :set-reminder-off
                           ;; home
                           :group-3-times-var
+                          ;; sandbox
+                          :mari-short-letter-var
+                          :mari-long-letter-var
+                          :word-1-state-var
+                          :word-2-state-var
+                          :word-3-state-var
+                          :word-4-state-var
                           ]]
     (select-keys extra-nodes-map actions-to-clone)))
 

@@ -67,7 +67,8 @@
                     concepts (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
 
                     selected-phrase-node (re-frame/subscribe [::editor-subs/current-action])
-                    phrase-action-name (keyword (:name @selected-phrase-node))
+                    phrase-action-name (or (:origin-name @selected-phrase-node)
+                                           (keyword (:name @selected-phrase-node)))
                     selected-action-node (re-frame/subscribe [::translator-subs/selected-action])
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
 
