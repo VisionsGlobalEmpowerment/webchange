@@ -6,7 +6,7 @@
 (defn get-cycles-dfs
   [graph [prev-node-name node-name] cycles seq-path used-map]
   (let [node-data (get graph node-name)
-        children (get-children node-name node-data prev-node-name (last seq-path))]
+        children (get-children node-name node-data prev-node-name seq-path)]
     (reduce
       (fn [[graph cycles used-map] {:keys [handler sequence] :as connection}]
         (let [new-seq-path (if-not (= sequence (last seq-path)) (conj seq-path sequence) seq-path)
@@ -14,9 +14,8 @@
           (if cycled?
             [graph (conj cycles {:node       node-name
                                  :connection connection})]
-            (when-not (get-in used-map [handler (last new-seq-path)])
-              (get-cycles-dfs graph [node-name handler] cycles new-seq-path used-map)))))
-      [graph cycles (assoc-in used-map [node-name (last seq-path)] true)]
+            (get-cycles-dfs graph [node-name handler] cycles new-seq-path used-map))))
+      [graph cycles (assoc-in used-map [prev-node-name node-name (last seq-path)] true)]
       children)))
 
 (defn get-cycles
