@@ -257,6 +257,16 @@
   [actions-data params]
   (parse-test-action-chain actions-data params))
 
+;; test-var-list
+
+(defmethod get-action-data "test-var-list"
+  [params]
+  (get-test-action-data params))
+
+(defmethod parse-actions-chain "test-var-list"
+  [actions-data params]
+  (parse-test-action-chain actions-data params))
+
 ;; action
 
 (defn get-possible-values
