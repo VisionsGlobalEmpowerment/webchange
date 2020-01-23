@@ -5,8 +5,9 @@
 (defn count-nodes-weights
   ([graph get-weight]
    (count-nodes-weights graph [:root :root] {} get-weight))
-  ([graph [prev-node-name node-name] result get-weight]
+  ([graph [_ node-name] result get-weight]
    (let [node-data (get graph node-name)
+         prev-node-name nil                                 ;; assume that we need all children despite the parent
          children (map :handler (get-children node-name node-data prev-node-name))
          result (reduce
                   (fn [result next-node-name]
@@ -21,5 +22,5 @@
 (defn weight-changer?
   [node-weights]
   (let [[node-weight & children-weights] node-weights
-        max-children-weight (if (< 0 (count children-weights)) (apply max children-weights) 0)]
-    (< max-children-weight node-weight)))
+        children-weights-sum (if (< 0 (count children-weights)) (apply + children-weights) 0)]
+    (< children-weights-sum node-weight)))

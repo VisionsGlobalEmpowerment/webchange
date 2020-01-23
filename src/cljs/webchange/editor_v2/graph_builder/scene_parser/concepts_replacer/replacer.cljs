@@ -28,11 +28,13 @@
   [action-data concept]
   (if-let [concept-action-name (-> action-data
                                    (get-referenced-concept-action-name))]
-    (->> (:data concept)
-         (some
-           (fn [[name]]
-             (= name concept-action-name)))
-         (boolean))
+    (if-not (nil? concept)
+      (->> (:data concept)
+           (some
+             (fn [[name]]
+               (= name concept-action-name)))
+           (boolean))
+      true)
     false))
 
 (defn get-concept-action
@@ -125,6 +127,12 @@
                                                             {:copy-counter (get-in node-data [:copy-counter])}))]
            (insert-concept-nodes graph prev-node-name node-name concept-nodes-data))
          graph)))))
+
+(defn graph-has-concepts?
+  [graph]
+  (->> graph
+       (some (fn [[_ {:keys [data]}]] (concept-action-ref? data nil)))
+       (boolean)))
 
 (defn override-concept-actions
   [graph {:keys [current-concept]}]

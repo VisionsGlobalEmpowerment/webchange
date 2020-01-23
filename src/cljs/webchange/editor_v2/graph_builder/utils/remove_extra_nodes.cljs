@@ -5,14 +5,26 @@
 
 (defn remove-extra-nodes
   ([graph remove-node?]
-   (remove-extra-nodes graph [:root :root] remove-node?))
-  ([graph [prev-node-name node-name] remove-node?]
-   (let [node-data (get graph node-name)
-         remove? (remove-node? node-name node-data)]
-     (reduce
-       (fn [graph next-node-name]
-         (remove-extra-nodes graph [(if remove? prev-node-name node-name) next-node-name] remove-node?))
-       (if remove?
-         (remove-node graph node-name)
-         graph)
-       (map :handler (get-children node-name node-data prev-node-name))))))
+   (first (remove-extra-nodes graph [:root :root] {} remove-node?)))
+  ([graph [_ node-name] used-map remove-node?]
+   (let [[graph used-map] (reduce
+                            (fn [[graph used-map] {:keys [handler]}]
+                              (if-not (contains? used-map handler)
+                                (remove-extra-nodes graph [node-name handler] used-map remove-node?)
+                                [graph used-map]))
+                            [graph (assoc used-map node-name true)]
+                            (get-children node-name (get graph node-name) nil))]
+     (let [node-data (get graph node-name)
+           remove? (remove-node? node-name node-data)]
+       [(if remove?
+          (remove-node graph node-name)
+          graph)
+        used-map]))))
+
+; ToDo: possible variant:
+;(reduce (fn [graph [node-name node-data]]
+;             (if (remove-node? node-name node-data)
+;               (remove-node graph node-name)
+;               graph))
+;           graph
+;           graph)

@@ -2,7 +2,8 @@
                  {:url "/raw/img/casa/door.png", :size 1, :type "image"}
                  {:url "/raw/audio/english/l1/a1/vaca.m4a", :size 2, :type "audio" :alias "vaca voice"}
                  {:url "/raw/audio/english/l1/a1/vera.mp3", :size 2, :type "audio" :alias "vera voice"}
-                 {:url "/raw/audio/english/l1/a1/mari_ending.m4a", :size 2, :type "audio" :alias "mari ending"}],
+                 {:url "/raw/audio/english/l1/a1/mari_ending.m4a", :size 2, :type "audio" :alias "mari ending"}
+                 {:url "/raw/audio/ferris-wheel/fw-try-again.mp3", :size 2, :type "audio" :alias "try again"}],
  :objects       {:background   {:type "background", :src "/raw/img/casa/background.jpg"},
                  :vera         {:type  "animation" :x 1128 :y 960 :name "vera" :anim "idle" :speed 0.3
                                 :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
@@ -80,8 +81,7 @@
                                                       :duration    9.373
                                                       :phrase      :touch-first-box
                                                       :phrase-text "Look at this! What could be inside the boxes?
-                                                                    Let’s look inside them! Touch the first box
-                                                                    to see what’s inside."}
+                                                                    Let’s look inside them! Touch the first box to see what’s inside."}
 
                  :senora-vaca-audio-touch-second-box {:type        "animation-sequence",
                                                       :target      "senoravaca",
@@ -229,15 +229,17 @@
                                                              {:type "copy-variable" :var-name "current-word" :from "item-3"}
                                                              {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 
-                 :bye-current-box                    {:type "sequence-data"
-                                                      :data [{:type "parallel"
-                                                              :data [{:type     "animation" :id "jump"
-                                                                      :from-var [{:var-name "current-box" :action-property "target"}]}
-                                                                     {:type     "transition" :to {:y -100 :duration 2}
-                                                                      :from-var [{:var-name "current-box" :action-property "transition-id"}
-                                                                                 {:var-name "current-position-x" :action-property "to.x"}]}]}
-                                                             {:type     "state" :id "default"
-                                                              :from-var [{:var-name "current-box" :action-property "target"}]}]}
+                 :bye-current-box                    {:type "sequence"
+                                                      :data ["bye-current-box-pt1"
+                                                             "bye-current-box-pt2"
+                                                             "bye-current-box-pt3"]}
+                 :bye-current-box-pt1                {:type     "animation" :id "jump"
+                                                      :from-var [{:var-name "current-box" :action-property "target"}]}
+                 :bye-current-box-pt2                {:type     "transition" :to {:y -100 :duration 2}
+                                                      :from-var [{:var-name "current-box" :action-property "transition-id"}
+                                                                 {:var-name "current-position-x" :action-property "to.x"}]}
+                 :bye-current-box-pt3                {:type     "state" :id "default"
+                                                      :from-var [{:var-name "current-box" :action-property "target"}]}
 
                  :vaca-this-is-var                   {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
 
@@ -281,9 +283,9 @@
                                                       :start    41.747,
                                                       :duration 0.973}
 
-                 :vaca-goodbye-var                   {:type "action"
-                                                      :from-var [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]
-                                                      :phrase :concept-goodbye
+                 :vaca-goodbye-var                   {:type        "action"
+                                                      :from-var    [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]
+                                                      :phrase      :concept-goodbye
                                                       :phrase-text "Goodbye %concept%! Goodbye!"}
 
                  :introduce-word                     {:type "sequence"
@@ -295,30 +297,32 @@
                                                              "vaca-goodbye-var"
                                                              "empty-big"]}
 
-                 :concept-intro                       {:type        "sequence"
+                 :concept-intro                      {:type        "sequence"
                                                       :data        ["vaca-this-is-var"
                                                                     "empty-small"
                                                                     "vaca-can-you-say"
                                                                     "vaca-question-var"
                                                                     "empty-small"
                                                                     "vaca-word-var"
-                                                                    "empty-small"
+                                                                    "empty-small-1"
                                                                     "group-word-var"]
                                                       :phrase      :this-is-concept
                                                       :phrase-text "This is a %concept%! Can you say %concept%? (pause) %concept%. (together) %concept%!"}
 
-                 :concept-chant {:type        "sequence"
-                                 :data        ["empty-small"
-                                               "vaca-say-3-times"
-                                               "vaca-3-times-var"
-                                               "empty-big"
-                                               "group-3-times-var"
-                                               "empty-small"
-                                               "vaca-once-more"
-                                               "empty-small"
-                                               "group-3-times-var"]
-                                 :phrase      :concept-chant
-                                 :phrase-text "Vaca: Good! Let’s say it 3 times, like this: %concept%, %concept%, %concept%!
+                 :concept-chant                      {:type        "sequence"
+                                                      :data        [
+                                                                    "empty-small"
+                                                                    "vaca-say-3-times"
+                                                                    "vaca-3-times-var"
+                                                                    "empty-big"
+                                                                    "group-3-times-var"
+                                                                    "empty-small-2"
+                                                                    "vaca-once-more"
+                                                                    "empty-small"
+                                                                    "group-3-times-var"
+                                                                    ]
+                                                      :phrase      :concept-chant
+                                                      :phrase-text "Vaca: Good! Let’s say it 3 times, like this: %concept%, %concept%, %concept%!
                                                Vera: %concept%, %concept%, %concept%
                                                Vaca: Once more!
                                                Vera: %concept%, %concept%, %concept%"}
@@ -331,9 +335,9 @@
                  :vera-anim-clapping-finish          {:type "animation" :target "vera" :id "clapping_finish" :loop false}
 
 
-                 :pick-wrong                         {:type "sequence"
-                                                      :data ["audio-wrong"]
-                                                      :phrase :wrong-click
+                 :pick-wrong                         {:type        "sequence"
+                                                      :data        ["audio-wrong"]
+                                                      :phrase      :wrong-click
                                                       :phrase-text "Try again"}
 
                  :audio-wrong                        {:type "audio" :id "fw-try-again" :start 0.892 :duration 1.869 :offset 0.2}
@@ -343,32 +347,30 @@
                                                       :variables   ["item-1" "item-2" "item-3"]
                                                       :from        "concepts"}
 
-                 :mari-finish                        {:type "sequence-data",
+                 :mari-finish                        {:type        "sequence-data",
                                                       :data
-                                                            [{:type          "transition",
-                                                              :transition-id "mari",
-                                                              :to            {:x 1403, :y 657, :duration 1.3}}
-                                                             {:type     "animation-sequence",
-                                                              :target   "mari",
-                                                              :track    1,
-                                                              :offset   0.825,
-                                                              :audio    "/raw/audio/english/l1/a1/mari_ending.m4a",
-                                                              :data
-                                                                        [{:start 0.986, :end 2.586, :duration 1.6, :anim "talk"}
-                                                                         {:start 3.226, :end 6.039, :duration 2.813, :anim "talk"}
-                                                                         {:start 6.825, :end 9.412, :duration 2.587, :anim "talk"}
-                                                                         {:start 9.985, :end 15.117, :duration 5.132, :anim "talk"}
-                                                                         {:start 15.877, :end 16.77, :duration 0.893, :anim "talk"}
-                                                                         {:start 17.117, :end 20.356, :duration 3.239, :anim "talk"}],
-                                                              :start    0.825,
-                                                              :duration 19.811}
-                                                             {:type "set-variable", :var-name "restart", :var-value true}]
-                                                      :phrase :finish-activity
-                                                      :phrase-text "Great job little genius!
-                                                                    Do you want to see what’s inside the boxes again?
+                                                                   [{:type          "transition",
+                                                                     :transition-id "mari",
+                                                                     :to            {:x 1403, :y 657, :duration 1.3}}
+                                                                    {:type     "animation-sequence",
+                                                                     :target   "mari",
+                                                                     :track    1,
+                                                                     :offset   0.825,
+                                                                     :audio    "/raw/audio/english/l1/a1/mari_ending.m4a",
+                                                                     :data
+                                                                               [{:start 0.986, :end 2.586, :duration 1.6, :anim "talk"}
+                                                                                {:start 3.226, :end 6.039, :duration 2.813, :anim "talk"}
+                                                                                {:start 6.825, :end 9.412, :duration 2.587, :anim "talk"}
+                                                                                {:start 9.985, :end 15.117, :duration 5.132, :anim "talk"}
+                                                                                {:start 15.877, :end 16.77, :duration 0.893, :anim "talk"}
+                                                                                {:start 17.117, :end 20.356, :duration 3.239, :anim "talk"}],
+                                                                     :start    0.825,
+                                                                     :duration 19.811}
+                                                                    {:type "set-variable", :var-name "restart", :var-value true}]
+                                                      :phrase      :finish-activity
+                                                      :phrase-text "Great job little genius! Do you want to see what’s inside the boxes again?
                                                                     Touch Senora Vaca to look inside again.
-                                                                    Otherwise, touch the door to go to the park
-                                                                    for your next activity."}
+                                                                    Otherwise, touch the door to go to the park for your next activity"}
 
                  :restart                            {:type     "test-value"
                                                       :value1   true
@@ -386,6 +388,10 @@
                                                                         {:type "action" :id "intro"}]}}
 
                  :empty-small                        {:type "empty" :duration 500}
+                 ;; ToDo: eliminate when graph normalizer is fixed
+                 :empty-small-1                      {:type "empty" :duration 500}
+                 :empty-small-2                      {:type "empty" :duration 500}
+
                  :empty-big                          {:type "empty" :duration 1000}
                  :clear-instruction                  {:type "remove-flows" :flow-tag "instruction"}
                  :start-background-music             {:type "audio" :id "background" :loop true :unique-tag "music"}
@@ -394,8 +400,9 @@
                  :stop-activity                      {:type "stop-activity" :id "home"}
                  :exit                               {:type "sequence-data"
                                                       :data [{:type "action" :id "stop-activity"}
-                                                             {:type "scene" :scene-id "map"}]}}
- :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"
+                                                             {:type "scene" :scene-id "map"}]}
+                 }
+ :audio         {:background   "/raw/audio/background/POL-daily-special-short.mp3"
                  :fw-try-again "/raw/audio/ferris-wheel/fw-try-again.mp3"},
  :triggers      {:music {:on "start" :action "start-background-music"}
                  :start {:on "start" :action "intro"}

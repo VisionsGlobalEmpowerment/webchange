@@ -40,19 +40,22 @@
 
 (defn update-parents-nodes
   [graph removing-node-name]
-  (reduce
-    (fn [graph [parent-node-name new-outs]]
-      (change-parent-node-connections graph parent-node-name removing-node-name new-outs))
-    graph
-    (get-node-ins graph removing-node-name)))
+  (let [node-ins (get-node-ins graph removing-node-name)]
+    (reduce
+      (fn [graph [parent-node-name new-outs]]
+        (change-parent-node-connections graph parent-node-name removing-node-name new-outs))
+      graph
+      node-ins)))
 
 (defn update-children-nodes
   [graph removing-node-name]
-  (reduce
-    (fn [graph [child-node-name new-ins]]
-      (change-child-node-connections graph child-node-name removing-node-name new-ins))
-    graph
-    (get-node-outs graph removing-node-name)))
+  (let [node-data (get graph removing-node-name)
+        node-outs (get-node-outs node-data)]
+    (reduce
+      (fn [graph [child-node-name new-ins]]
+        (change-child-node-connections graph child-node-name removing-node-name new-ins))
+      graph
+      node-outs)))
 
 (defn remove-node
   [graph node-name]
