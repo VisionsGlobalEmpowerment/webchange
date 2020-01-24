@@ -2,7 +2,7 @@
   (:require
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.virtual-server.handlers.utils.activated-users :as activated-users]
-    [webchange.service-worker.wrappers :refer [js-fetch promise-all request-clone body-json then catch data->response]]))
+    [webchange.service-worker.wrappers :refer [js-fetch promise-all request-clone body-json then catch data->response require-status-ok!]]))
 
 (defn post-offline
   [request]
@@ -22,6 +22,7 @@
         response-promise (js-fetch request)]
     (-> (promise-all [request-body-promise response-promise])
         (then (fn [[request-body response]]
+                (require-status-ok! response)
                 (activated-users/store-activated-user (-> request-body (js->clj :keywordize-keys true) :access-code) response)
                 response))
         (catch #(post-offline cloned)))))

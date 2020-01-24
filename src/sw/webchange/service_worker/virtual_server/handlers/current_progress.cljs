@@ -6,7 +6,7 @@
     [webchange.service-worker.virtual-server.handlers.utils.requests_queue :as queue]
     [webchange.service-worker.virtual-server.handlers.utils.db :as db]
     [webchange.service-worker.virtual-server.handlers.utils.activated-users :as activated-users]
-    [webchange.service-worker.wrappers :refer [js-fetch promise-resolve body-json response-clone request-clone then catch data->response]]))
+    [webchange.service-worker.wrappers :refer [js-fetch promise-resolve body-json response-clone request-clone then catch data->response require-status-ok!]]))
 
 (defn store-current-progress!
   [{progress :progress offline :offline}]
@@ -59,6 +59,7 @@
       (if offline
         (get-offline request)
         (-> (js-fetch request)
+            (then require-status-ok!)
             (then #(store-body! % false))
             (catch #(get-offline cloned)))
         ))))
@@ -69,6 +70,7 @@
   (let [cloned (request-clone request)]
     (store-body! request false)
     (-> (js-fetch request)
+        (then require-status-ok!)
         (catch #(post-offline cloned)))))
 
 (def handlers {"GET"  {:online  get-online

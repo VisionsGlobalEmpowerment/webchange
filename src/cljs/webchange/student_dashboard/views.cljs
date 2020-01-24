@@ -1,6 +1,7 @@
 (ns webchange.student-dashboard.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
+    [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [webchange.auth.subs :as as]
     [webchange.routes :refer [redirect-to]]
@@ -65,6 +66,14 @@
    {:key value :value value}
    text])
 
+(defn- sync-status
+  []
+  (let [offline-mode @(re-frame/subscribe [::subs/offline-mode])]
+    (case offline-mode
+      :not-started [ic/cloud-off {:color "disabled"}]
+      :in-progress [ic/cloud-download {:color "disabled"}]
+      [ic/cloud-done {:color "disabled"}])))
+
 (defn app-bar
   [{:keys [user course-id]}]
     [ui/app-bar
@@ -81,7 +90,9 @@
         [ui/form-control {}
          [ui/select {:value course-id :on-change #(re-frame/dispatch [::ie/open-student-course-dashboard (-> % .-target .-value)])}
           (for [course courses]
-            (menu-item course))]]]])
+            (menu-item course))]]
+        [sync-status]
+        ]])
 
 (defn- continue-the-story []
   (let [loading? @(re-frame/subscribe [::sds/progress-loading])

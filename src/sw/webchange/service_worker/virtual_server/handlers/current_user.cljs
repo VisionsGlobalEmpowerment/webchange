@@ -2,7 +2,7 @@
   (:require
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.virtual-server.handlers.utils.activated-users :as activated-users]
-    [webchange.service-worker.wrappers :refer [js-fetch request-clone then catch data->response]]))
+    [webchange.service-worker.wrappers :refer [js-fetch request-clone then catch data->response require-status-ok!]]))
 
 (defn get-offline
   [request]
@@ -16,6 +16,7 @@
   (let [cloned (request-clone request)
         response-promise (js-fetch request)]
     (-> response-promise
+        (then require-status-ok!)
         (catch #(get-offline cloned)))))
 
 (def handlers {"GET" {:online  get-online
