@@ -10,8 +10,9 @@
                  [re-frame "0.10.5"]
                  [compojure "1.5.0"]
                  [yogthos/config "0.8"]
-                 [ring "1.4.0"]
-                 [ring/ring-json "0.4.0"]
+                 [ring "1.8.0"]
+                 [ring/ring-core "1.8.0"]
+                 [ring/ring-json "0.5.0"]
                  [cljsjs/react "16.6.0-0"]
                  [cljsjs/react-dom "16.6.0-0"]
                  [org.clojars.melodylane/cljs-react-material-ui "1.4.0-0.1" :exclusions [cljsjs/material-ui]]
@@ -38,6 +39,7 @@
                  [cljsjs/enzyme "3.8.0"]
                  [cljs-idxdb "0.1.0"]
                  [phrase "0.3-alpha4"]
+                 [funcool/promesa "5.0.0"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -82,7 +84,7 @@
                    [day8.re-frame/tracing "0.5.1"]
                    [ring/ring-mock "0.3.2"]]
 
-    :plugins      [[lein-figwheel "0.5.17"]
+    :plugins      [[lein-figwheel "0.5.19"]
                    [lein-doo "0.1.8"]]
     :main         webchange.server}
    :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}

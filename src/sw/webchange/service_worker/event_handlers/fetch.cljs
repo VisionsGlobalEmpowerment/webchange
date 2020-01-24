@@ -7,8 +7,8 @@
     [webchange.service-worker.virtual-server.core :as vs]
     [webchange.service-worker.wrappers :refer [js-fetch promise-all request-pathname then]]))
 
-(def pages-paths ["/courses"
-                  "/dashboard"
+(def pages-paths ["/student-login"
+                  "/courses"
                   "/student-dashboard"])
 
 (defn- belong-paths?

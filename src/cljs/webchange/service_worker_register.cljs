@@ -1,9 +1,26 @@
-(ns webchange.service-worker-register)
+(ns webchange.service-worker-register
+  (:require [re-frame.core :as re-frame]
+            [webchange.events :as events]))
+
+(defn check-registration
+  [registration]
+  (when (.-active registration)
+    (re-frame/dispatch [::events/set-offline-mode :ready]))
+  (when (.-installing registration)
+    (re-frame/dispatch [::events/set-offline-mode :in-progress]))
+  (when (not (or (.-active registration) (.-installing registration)))
+    (re-frame/dispatch [::events/set-offline-mode :not-started])))
+
+(defn check-state
+  [registration]
+  (check-registration registration)
+  (when-let [installing (.-installing registration)]
+    (.addEventListener installing "statechange" #(check-registration registration))))
 
 (defn register
   [service-worker path]
   (-> (.register service-worker path)
-      (.then #(println (str "[ServiceWorker] Registration done:" %)))
+      (.then check-state)
       (.catch #(println (str "[ServiceWorker] Registration failed:" %)))))
 
 (defn unregister

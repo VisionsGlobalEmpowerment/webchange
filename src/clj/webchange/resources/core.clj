@@ -58,7 +58,6 @@
         api-data (->> scenes
                       (map #(str "/api/courses/" course-name "/scenes/" %))
                       (into [(str "/api/courses/" course-name)
-                             (str "/api/courses/" course-name "/current-progress")
                              (str "/api/courses/" course-name "/lesson-sets")
                              "/api/schools/current"]))
         lessons-resources (->> course-name

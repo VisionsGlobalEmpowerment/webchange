@@ -58,6 +58,7 @@
     ;; student dashboard
     :student-login [student-access-form]
     :student-dashboard [student-dashboard-page]
+    :student-course-dashboard [student-dashboard-page]
     :finished-activities [student-dashboard-finished-page]
     [page-404]))
 

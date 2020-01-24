@@ -68,6 +68,12 @@
   [promise handler]
   (.catch promise handler))
 
+;; --- Body ---
+
+(defn body-json
+  [response]
+  (.json response))
+
 ;; --- Response ---
 
 (defn response-new
@@ -146,3 +152,15 @@
   (->> request
        (request-url-object)
        (.-pathname)))
+
+(defn data->response
+  [data]
+  (let [headers {"Content-Type" "application/json"}]
+    (response-new (clj->js data) (clj->js headers))))
+
+(defn require-status-ok!
+  [response]
+  (when-not (.ok response)
+    (let [message (str "Response is required to be OK!" (.url response))]
+      (-> message js/Error. throw)))
+  response)

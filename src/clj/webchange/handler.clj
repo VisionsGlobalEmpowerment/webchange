@@ -122,7 +122,9 @@
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
 
            (GET "/student-dashboard" request (authenticated-route request))
+           (GET "/courses/:id/dashboard" request (authenticated-route request))
            (GET "/student-dashboard/finished" request (authenticated-route request))
+           (GET "/courses/:id/dashboard/finished" request (authenticated-route request))
            (files "/upload/" {:root (env :upload-dir)})
            (resources "/"))
 

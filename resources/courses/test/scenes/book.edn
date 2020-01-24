@@ -67,8 +67,8 @@
                  {:url "/raw/img/elements/car.png" :size 1 :type "image"}
 
                  ;c t
-                 ;{:url "/raw/img/elements/comb.png" :size 1 :type "image"}
-                 {:url "/raw/img/elements/brush.png" :size 1 :type "image"}
+                 {:url "/raw/img/elements/comb.png" :size 1 :type "image"}
+                 ;{:url "/raw/img/elements/brush.png" :size 1 :type "image"}
                  {:url "/raw/img/elements/pig.png" :size 1 :type "image"}
                  {:url "/raw/img/elements/eyebrow.png" :size 1 :type "image"}
 

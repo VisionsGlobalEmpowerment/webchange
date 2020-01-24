@@ -6,7 +6,7 @@
                                                                                deserialize-response]]
     [webchange.service-worker.wrappers :refer [promise promise-all response-pathname request-pathname then]]))
 
-(def store-name db/data-store-name)
+(def store-name db/endpoints-data-store-name)
 
 (defn- put-to-store
   [object]
@@ -50,3 +50,8 @@
   (logger/debug "Take from responses store:" request)
   (-> (take-from-store (request-pathname request))
       (then deserialize-response)))
+
+(defn swap-item!
+  [key f]
+  (-> (take-from-store key)
+      (then #(put-to-store (f %)))))

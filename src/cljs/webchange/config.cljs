@@ -3,4 +3,4 @@
 (def debug?
   ^boolean goog.DEBUG)
 
-(def use-cache (not debug?))
+(def use-cache (or true (not debug?)))

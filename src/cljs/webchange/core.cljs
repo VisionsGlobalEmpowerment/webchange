@@ -36,6 +36,7 @@
   (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (re-frame/dispatch [::events/init-current-school])
+  (re-frame/dispatch [::events/init-current-user])
   (init-viewport)
   (dev-setup)
   (mount-root))

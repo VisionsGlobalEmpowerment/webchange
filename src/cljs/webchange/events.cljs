@@ -76,6 +76,23 @@
     {:db (assoc db :school-id school-id)
      :dispatch-n (list [:complete-request :current-school])}))
 
+(re-frame/reg-event-fx
+  ::init-current-user
+  (fn [{:keys [db]} _]
+    {:db         (assoc-in db [:loading :current-user] true)
+     :http-xhrio {:method          :get
+                  :uri             "/api/users/current"
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::init-current-user-success]
+                  :on-failure      [:api-request-error :current-user]}}))
+
+(re-frame/reg-event-fx
+  ::init-current-user-success
+  (fn [{:keys [db]} [_ user]]
+    {:db (update-in db [:user] merge user)
+     :dispatch-n (list [:complete-request :current-user])}))
+
 ;; -- Request Handlers -----------------------------------------------------------
 ;;
 (re-frame/reg-event-db
@@ -98,3 +115,8 @@
   ::redirect
   (fn-traced [{:keys [db]} [_ & args]]
     {:redirect args}))
+
+(re-frame/reg-event-db
+  ::set-offline-mode
+  (fn [db [_ mode]]
+    (assoc db :offline-mode mode)))

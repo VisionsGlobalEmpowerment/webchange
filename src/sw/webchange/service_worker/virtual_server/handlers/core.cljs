@@ -3,12 +3,18 @@
     [bidi.bidi :as bidi]
     [webchange.service-worker.virtual-server.cache :as cache]
     [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
+    [webchange.service-worker.virtual-server.handlers.login :as login]
+    [webchange.service-worker.virtual-server.handlers.current-user :as current-user]
     [webchange.service-worker.virtual-server.handlers.utils.responses-store :as store]
     [webchange.service-worker.wrappers :refer [js-fetch online? promise-all request-method request-pathname then]]))
 
-(def routes ["/api/" {"courses" {["/" :course-id "/current-progress"] :current-progress}}])
+(def routes ["/api/" {"courses" {["/" :course-id "/current-progress"] :current-progress}
+                      "students" {"/login" :login}
+                      "users" {"/current" :current-user}}])
 
-(def handlers {:current-progress current-progress/handlers})
+(def handlers {:current-progress current-progress/handlers
+               :login login/handlers
+               :current-user current-user/handlers})
 
 (defn- match-request
   [request-or-route]
@@ -33,8 +39,9 @@
 
 (defn handle-request
   [request]
-  (let [match (match-request request)]
-    ((get-handler request (:handler match)) request (:route-params match))))
+  (let [match (match-request request)
+        handler (get-handler request (:handler match))]
+    (handler request (:route-params match))))
 
 (defn prefetch
   [routes]
