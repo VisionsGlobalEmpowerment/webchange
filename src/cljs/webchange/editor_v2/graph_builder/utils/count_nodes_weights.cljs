@@ -5,9 +5,8 @@
 (defn count-nodes-weights
   ([graph get-weight]
    (count-nodes-weights graph [:root :root] {} get-weight))
-  ([graph [_ node-name] result get-weight]
+  ([graph [prev-node-name node-name] result get-weight]
    (let [node-data (get graph node-name)
-         prev-node-name nil                                 ;; assume that we need all children despite the parent
          children (map :handler (get-children node-name node-data prev-node-name))
          result (reduce
                   (fn [result next-node-name]

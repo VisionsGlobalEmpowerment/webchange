@@ -6,14 +6,17 @@
                                                                 remove-root-node]]))
 (defn get-nodes-seq
   ([graph]
-   (get-nodes-seq graph [:root :root] []))
-  ([graph [prev-node-name node-name] result]
+   (first (get-nodes-seq graph [:root :root] {} [])))
+  ([graph [prev-node-name node-name] used-map result]
    (let [node-data (get graph node-name)]
      (reduce
-       (fn [result next-node-name]
-         (get-nodes-seq graph [node-name next-node-name] result))
-       (conj result (assoc {} node-name node-data))
-       (map :handler (get-children node-name node-data prev-node-name))))))
+       (fn [[result used-map] {:keys [handler]}]
+         (if-not (contains? used-map handler)
+           (get-nodes-seq graph [node-name handler] (assoc used-map handler true) result)
+           [result used-map]))
+       [(conj result (assoc {} node-name node-data))
+        used-map]
+       (get-children node-name node-data prev-node-name)))))
 
 (defn graph-to-nodes-seq
   [graph]

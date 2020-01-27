@@ -36,10 +36,11 @@
        (flatten)))
 
 (defn create-graph-node
-  [{:keys [data path connections entity]}]
+  [{:keys [data path connections entity children]}]
   {:data        data
    :path        path
    :entity      (if-not (nil? entity) entity :action)
+   :children    (if-not (nil? children) children [])
    :connections (if (sequential? connections)
                   (->> connections
                        (normalize-connections-data)

@@ -109,24 +109,38 @@
                                            concept-nodes-data)]
     (insert-sub-graph graph node-name start-node-connections updated-concept-nodes-data)))
 
+(defn used-connection?
+  [used-map node-name]
+  (contains? used-map node-name))
+
+(defn add-to-used-map
+  [used-map node-name]
+  (assoc used-map node-name true))
+
 (defn override-concepts-dfs
-  ([graph current-concept]
-   (override-concepts-dfs graph current-concept [:root :root]))
-  ([graph current-concept [prev-node-name node-name]]
+  ([graph current-concept concept-actions-copy-counter]
+   (first (override-concepts-dfs graph current-concept [:root :root] {} concept-actions-copy-counter)))
+  ([graph current-concept [prev-node-name node-name] used-map concept-actions-copy-counter]
    (let [node-data (get graph node-name)
-         graph (reduce
-                 (fn [graph {:keys [handler]}]
-                   (override-concepts-dfs graph current-concept [node-name handler]))
-                 graph
-                 (get-children node-name node-data prev-node-name))]
+         [graph
+          concept-actions-copy-counter
+          used-map] (reduce
+                      (fn [[graph concept-actions-copy-counter used-map] {:keys [handler]}]
+                        (if-not (used-connection? used-map handler)
+                          (override-concepts-dfs graph current-concept [node-name handler] (add-to-used-map used-map handler) concept-actions-copy-counter)
+                          [graph concept-actions-copy-counter used-map]))
+                      [graph concept-actions-copy-counter used-map]
+                      (get-children node-name node-data prev-node-name))]
      (let [action-data (:data node-data)]
        (if (concept-action-ref? action-data current-concept)
-         (let [concept-nodes-data (-> action-data
-                                        (get-referenced-concept-action-name)
-                                        (get-concept-action current-concept
-                                                            {:copy-counter (get-in node-data [:copy-counter])}))]
-           (insert-concept-nodes graph prev-node-name node-name concept-nodes-data))
-         graph)))))
+         (let [referenced-action-name (get-referenced-concept-action-name action-data)
+               concept-nodes-data (get-concept-action referenced-action-name
+                                                      current-concept
+                                                      {:copy-counter (get concept-actions-copy-counter referenced-action-name)})]
+           [(insert-concept-nodes graph prev-node-name node-name concept-nodes-data)
+            (update concept-actions-copy-counter referenced-action-name inc)
+            used-map])
+         [graph concept-actions-copy-counter used-map])))))
 
 (defn graph-has-concepts?
   [graph]
@@ -134,13 +148,29 @@
        (some (fn [[_ {:keys [data]}]] (concept-action-ref? data nil)))
        (boolean)))
 
+(defn get-concept-actions-copy-counter
+  [graph current-concept]
+  (->> graph
+       (reduce (fn [result [_ {:keys [data]}]]
+                 (if (concept-action-ref? data current-concept)
+                   (update result (get-referenced-concept-action-name data) inc)
+                   result))
+               {})
+       (filter (fn [[_ value]]
+                 (<= 2 value)))
+       (map first)
+       (reduce (fn [result name]
+                 (assoc result name 0))
+               {})))
+
 (defn override-concept-actions
   [graph {:keys [current-concept]}]
   (if-not (nil? current-concept)
     (let [graph (->> graph
                      (get-root-nodes)
-                     (add-root-node graph))]
+                     (add-root-node graph))
+          concept-actions-copy-counter (get-concept-actions-copy-counter graph current-concept)]
       (-> graph
-          (override-concepts-dfs current-concept)
+          (override-concepts-dfs current-concept concept-actions-copy-counter)
           (remove-root-node)))
     graph))

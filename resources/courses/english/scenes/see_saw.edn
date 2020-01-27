@@ -25,13 +25,13 @@
                  :see-saw-3     {:type "image" :width 195 :height 179 :x -10 :y 48
                                  :src  "/raw/img/park/see-saw/saw_03.png" :origin {:type "center-center"}},
 
-                 :box1          {:type       "transparent" :x 350 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
-                                 :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
-                                 :scene-name "box1" :draggable {:var-name "drag-box-1"} :transition "box1"
-                                 :states     {:default {:type "transparent" :x 350 :y 300}
-                                              :come    {:type  "animation" :name "boxes" :anim "come" :x 500 :y 550
-                                                        :speed 0.3 :loop false :start true}}
-                                 :actions    {:drag-end {:type "action" :id "drag-box1" :on "drag-end"}}}
+                 :box1 {:type       "transparent" :x 350 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
+                        :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
+                        :scene-name "box1" :draggable {:var-name "drag-box-1"} :transition "box1"
+                        :states     {:default {:type "transparent" :x 350 :y 300}
+                                     :come    {:type  "animation" :name "boxes" :anim "come" :x 500 :y 550
+                                               :speed 0.3 :loop false :start true}}
+                        :actions    {:drag-end {:type "action" :id "drag-box1" :on "drag-end"}}}
 
                  :box2          {:type       "transparent" :x 850 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -69,7 +69,6 @@
                                               :phrase-text "Welcome to the park my friend!
                                                             Let’s review some words while playing on the see saw."}
 
-
                  :mari-move-to-start         {:type        "parallel"
                                               :data        [{:type "sequence-data"
                                                              :data [{:type "animation" :target "mari" :id "wand_hit" :track 2}
@@ -82,8 +81,7 @@
                                                              :start    7.283,
                                                              :duration 4.555,
                                                              :data     [{:start 7.388, :end 8.854, :duration 1.466, :anim "talk"}
-                                                                        {:start 9.134, :end 11.561, :duration 2.427, :anim "talk"}]}
-                                                            ]
+                                                                        {:start 9.134, :end 11.561, :duration 2.427, :anim "talk"}]}]
                                               :phrase      :move-to-start
                                               :phrase-text "Move this picture to the see saw to start the game!"}
 
@@ -163,8 +161,7 @@
                                                      {:type "empty" :duration 500}
                                                      {:type     "set-skin" :target "box-ph"
                                                       :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "copy-variable" :var-name "current-word" :from "item-1"}
-                                                     ]}
+                                                     {:type "copy-variable" :var-name "current-word" :from "item-1"}]}
 
                  :hide-box-1-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box-ph" :id "default"}
@@ -192,8 +189,7 @@
                                                      {:type "empty" :duration 500}
                                                      {:type     "set-skin" :target "box-ph"
                                                       :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "copy-variable" :var-name "current-word" :from "item-2"}
-                                                     ]}
+                                                     {:type "copy-variable" :var-name "current-word" :from "item-2"}]}
 
                  :hide-box-2-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box-ph" :id "default"}
@@ -219,34 +215,48 @@
                                                      {:type "empty" :duration 500}
                                                      {:type     "set-skin" :target "box-ph"
                                                       :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "copy-variable" :var-name "current-word" :from "item-3"}
-                                                     ]}
+                                                     {:type "copy-variable" :var-name "current-word" :from "item-3"}]}
 
-                 :hide-box-3-ph              {:type "sequence-data"
-                                              :data [{:type "state" :target "box-ph" :id "default"}
-                                                     {:type "state" :target "box3" :id "come"}
-                                                     {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box3"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
-                                                     {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
+                 :hide-box-3-ph              {:type "sequence"
+                                              :data ["hide-box-3-ph-1"
+                                                     "hide-box-3-ph-2"
+                                                     "hide-box-3-ph-3"
+                                                     "hide-box-3-ph-4"
+                                                     "hide-box-3-ph-5"]}
+                 :hide-box-3-ph-1            {:type "state" :target "box-ph" :id "default"}
+                 :hide-box-3-ph-2            {:type "state" :target "box3" :id "come"}
+                 :hide-box-3-ph-3            {:type "empty" :duration 500}
+                 :hide-box-3-ph-4            {:type     "set-skin" :target "box3"
+                                              :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                 :hide-box-3-ph-5            {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}
 
                  :introduce-concept          {:type        "sequence"
-                                              :data        ["go-down"
-                                                            "go-up"
-                                                            "go-down"
-                                                            "go-up"]
+                                              :data        ["go-down-1"
+                                                            "go-up-1"
+                                                            "go-down-2"
+                                                            "go-up-2"]
                                               :phrase      :concept-chant
                                               :phrase-text "%Concept%. %Concept%. %CONCEPT%!  (low-pitched tone)
                                                             %Concept%. %Concept%. %CONCEPT%!  (high-pitched tone)
                                                             %Concept%. %Concept%. %CONCEPT%!  (low-pitched tone)
                                                             %Concept%. %Concept%. %CONCEPT%!  (high-pitched tone)"}
 
-                 :go-down                    {:type "parallel"
+                 :go-down-1                  {:type "parallel"
                                               :data [{:type "empty" :duration 5000}
                                                      {:type "transition" :transition-id "see-saw-plank" :to {:rotation 13 :duration 5 :loop false}}
                                                      {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action-low"}]}]}
 
-                 :go-up                      {:type "parallel"
+                 :go-up-1                    {:type "parallel"
+                                              :data [{:type "empty" :duration 5000}
+                                                     {:type "transition" :transition-id "see-saw-plank" :to {:rotation -13 :duration 5 :loop false}}
+                                                     {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action"}]}]}
+
+                 :go-down-2                  {:type "parallel"
+                                              :data [{:type "empty" :duration 5000}
+                                                     {:type "transition" :transition-id "see-saw-plank" :to {:rotation 13 :duration 5 :loop false}}
+                                                     {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action-low"}]}]}
+
+                 :go-up-2                    {:type "parallel"
                                               :data [{:type "empty" :duration 5000}
                                                      {:type "transition" :transition-id "see-saw-plank" :to {:rotation -13 :duration 5 :loop false}}
                                                      {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action"}]}]}
@@ -258,20 +268,11 @@
                                               :audio       "/raw/audio/english/l1/a2/mari.m4a",
                                               :start       12.814,
                                               :duration    5.574,
-                                              :data
-                                                           [{:start 13.021, :end 14.113, :duration 1.092, :anim "talk"}
+                                              :data        [{:start 13.021, :end 14.113, :duration 1.092, :anim "talk"}
                                                             {:start 14.521, :end 15.682, :duration 1.161, :anim "talk"}
                                                             {:start 16.28, :end 18.159, :duration 1.879, :anim "talk"}]
                                               :phrase      :try-another
                                               :phrase-text "Yippee! Are you having fun? Let’s try another picture."}
-
-
-                 :pick-wrong                 {:type        "sequence"
-                                              :data        ["audio-wrong"]
-                                              :phrase      :pick-wrong
-                                              :phrase-text "Try again"}
-
-                 :audio-wrong                {:type "audio" :id "fw-try-again" :start 0.892 :duration 1.869 :offset 0.2}
 
                  :renew-words                {:type        "lesson-var-provider"
                                               :provider-id "words-set"
@@ -285,7 +286,7 @@
                  :mari-init-wand             {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
 
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
-                 :start                      {:type "sequence"
+                 :start-scene                {:type "sequence"
                                               :data ["start-activity"
                                                      "clear-instruction"
                                                      "renew-words"
@@ -307,8 +308,7 @@
                                                              :track    1,
                                                              :offset   0.907,
                                                              :audio    "/raw/audio/english/l1/a2/mari_ending.m4a",
-                                                             :data
-                                                                       [{:start 1.12, :end 2.708, :duration 1.588, :anim "talk"}
+                                                             :data     [{:start 1.12, :end 2.708, :duration 1.588, :anim "talk"}
                                                                         {:start 3.148, :end 6.456, :duration 3.308, :anim "talk"}
                                                                         {:start 7.163, :end 9.457, :duration 2.294, :anim "talk"}
                                                                         {:start 9.884, :end 11.871, :duration 1.987, :anim "talk"}
@@ -319,7 +319,6 @@
                                               :phrase-text "Congratulations! You helped all of the pictures ride on the see-saw!
                                                             You can play this game again, or, hit this arrow to start your next game."}
 
-
                  :start-activity             {:type "start-activity" :id "see-saw"}
                  :finish-activity            {:type "finish-activity" :id "see-saw"}
                  :stop-activity              {:type "stop-activity" :id "see-saw"}}
@@ -327,7 +326,7 @@
                  :voice-2 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a"
                  :voice-3 "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a"
                  :mari    "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a"},
- :triggers      {:start {:on "start" :action "start"}
+ :triggers      {:start {:on "start" :action "start-scene"}
                  :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}
