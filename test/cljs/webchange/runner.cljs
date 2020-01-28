@@ -22,6 +22,7 @@
             [webchange.editor-v2.graph-builder.utils.remove-sub-graph-test]
             [webchange.editor-v2.graph-builder.utils.root-nodes-test]
             [webchange.editor-v2.translator.translator-form.utils-test]
+            [webchange.editor-v2.graph-builder.graph.phrases-graph-test]
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
             [webchange.interpreter.utils-test]
@@ -51,6 +52,7 @@
   'webchange.editor-v2.graph-builder.utils.remove-sub-graph-test
   'webchange.editor-v2.graph-builder.utils.root-nodes-test
   'webchange.editor-v2.translator.translator-form.utils-test
+  'webchange.editor-v2.graph-builder.graph.phrases-graph-test
   'webchange.interpreter.events-test
   'webchange.interpreter.variables.events-test
   'webchange.interpreter.utils-test
