@@ -1,4 +1,5 @@
-(ns webchange.service-worker.wrappers)
+(ns webchange.service-worker.wrappers
+  (:require [webchange.service-worker.logger :as logger]))
 
 ;; --- Cache ---
 
@@ -162,5 +163,6 @@
   [response]
   (when-not (.ok response)
     (let [message (str "Response is required to be OK!" (.url response))]
+      (logger/warn message)
       (-> message js/Error. throw)))
   response)

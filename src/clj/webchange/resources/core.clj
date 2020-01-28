@@ -43,7 +43,8 @@
 (defn find-resources
   [data]
   (filter #(and (string? %)
-                (starts-with? % "/raw/")) (get-values-list data)))
+                (starts-with? % "/raw/")
+                (not (starts-with? % "/raw/video/"))) (get-values-list data)))
 
 (defn get-level-resources
   []
