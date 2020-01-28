@@ -25,7 +25,9 @@
                 (require-status-ok! response)
                 (activated-users/store-activated-user (-> request-body (js->clj :keywordize-keys true) :access-code) response)
                 response))
-        (catch #(post-offline cloned)))))
+        (catch #(do
+                  (logger/warn "[login] [POST] [online] failed with" (-> % .-message))
+                  (post-offline cloned))))))
 
 (def handlers {"POST" {:online  post-online
                        :offline post-offline}})

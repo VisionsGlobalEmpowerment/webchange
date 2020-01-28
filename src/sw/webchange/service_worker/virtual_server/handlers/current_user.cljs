@@ -8,7 +8,8 @@
   [request]
   (logger/debug "[current-user] [GET] [offline]")
   (-> (activated-users/get-current-user)
-      (then data->response)))
+      (then data->response)
+      (catch #(data->response nil))))
 
 (defn get-online
   [request]
