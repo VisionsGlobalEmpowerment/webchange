@@ -12,7 +12,9 @@
     [webchange.editor-v2.graph-builder.graph.phrases-graph--swings-source :as swings-source]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--swings-expected :as swings-expected]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-source :as volleyball-source]
-    [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-expected :as volleyballs-expected]))
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-expected :as volleyball-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--library-source :as library-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--library-expected :as library-expected]))
 
 (defn remove-actions-data
   [graph]
@@ -71,7 +73,18 @@
         params {:start-node nil}]
     (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
                             (remove-actions-data))
-          expected-result volleyballs-expected/data]
+          expected-result volleyball-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--library
+  (let [scene-data library-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result library-expected/data]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
