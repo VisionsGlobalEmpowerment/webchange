@@ -6,7 +6,6 @@
     [webchange.editor-v2.graph-builder.utils.root-nodes :refer [add-root-node
                                                                 get-root-nodes
                                                                 remove-root-node]]
-
     [webchange.editor-v2.graph-builder.utils.count-nodes-weights :refer [count-nodes-weights
                                                                          weight-changer?]]
     [webchange.editor-v2.graph-builder.utils.remove-extra-nodes :refer [remove-extra-nodes]]
