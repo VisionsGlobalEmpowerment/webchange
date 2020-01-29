@@ -352,6 +352,7 @@
         next-actions (or (get-referred-actions action-data) [next-action])]
     (->> (create-graph-node {:data        action-data
                              :path        (or path [action-name])
+                             :children    (get-referred-actions action-data)
                              :connections (reduce
                                             (fn [result prev-action]
                                               (concat result (map
