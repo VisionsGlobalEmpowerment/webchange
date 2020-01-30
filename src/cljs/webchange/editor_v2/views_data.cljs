@@ -36,7 +36,8 @@
                          "see-saw"
                          "swings"
                          "volleyball"
-                         "library"]]
+                         "library"
+                         "book"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id

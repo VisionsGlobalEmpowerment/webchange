@@ -40,7 +40,7 @@
   {:data        data
    :path        path
    :entity      (if-not (nil? entity) entity :action)
-   :children    (if-not (nil? children) children [])
+   :children    (if-not (nil? children) (vec children) [])
    :connections (if (sequential? connections)
                   (->> connections
                        (normalize-connections-data)
