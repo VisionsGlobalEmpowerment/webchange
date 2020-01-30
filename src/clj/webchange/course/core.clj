@@ -3,16 +3,16 @@
             [java-time :as jt]
             [clojure.tools.logging :as log]
             [clojure.data.json :as json]
-            [webchange.scene :as scene]))
+            [webchange.scene :as scene]
+            [config.core :refer [env]]))
 
-(def hardcoded {"test" true
-                "english" true})
+(def hardcoded (env :hardcoded-courses {"test" true}))
 
 (defn get-course-templates
   [course-name]
   (if (contains? hardcoded course-name)
     (scene/get-templates course-name)
-    {} ;; "Getting templates for not-hardcoded courses is not implemented"
+    (scene/get-templates course-name) ;; "Getting templates for not-hardcoded courses is not implemented"
     ))
 
 (defn get-course-data

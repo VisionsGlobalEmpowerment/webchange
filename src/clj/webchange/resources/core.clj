@@ -40,6 +40,7 @@
         (get-files-list img-fold)
         (->> defaults/default-assets (map #(str "." (:url %))))
         "https://fonts.googleapis.com/css?family=Luckiest+Guy"
+        "https://fonts.googleapis.com/css?family=Lexend+Deca"
         "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
         "https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh6UVSwiPGQ.woff2"
         "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
@@ -174,6 +175,7 @@
    "./raw/anim/pinata/skeleton.json"
    "./raw/anim/pinata/skeleton.png"
    "https://fonts.googleapis.com/css?family=Luckiest+Guy"
+   "https://fonts.googleapis.com/css?family=Lexend+Deca"
    "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
    "https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh6UVSwiPGQ.woff2"
    "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"])
