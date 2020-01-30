@@ -1,5 +1,4 @@
-{:assets
-                [{:url    "/raw/img/park/hide-n-seek/background.jpg",
+{:assets        [{:url    "/raw/img/park/hide-n-seek/background.jpg",
                   :type   "image",
                   :size   14,
                   :width  1920,
@@ -406,15 +405,19 @@
                                           :track       1,
                                           :data        [{:start 1.04 :end 1.944 :anim "talk"}
                                                         {:start 2.641 :end 6.256 :anim "talk"}
-                                                        {:start 7.238 :end 11.176 :anim "talk"}]}
-                 :mari-audio-correct     {:type     "animation-sequence",
-                                          :target   "mari",
-                                          :track    1,
-                                          :offset   0.858,
-                                          :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
-                                          :start    0.858,
-                                          :duration 1.837,
-                                          :data     [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]}
+                                                        {:start 7.238 :end 11.176 :anim "talk"}]
+                                          :phrase      :welcome
+                                          :phrase-text "Hola! Let’s play a game of hide and seek! Find the pictures hiding in the park!"}
+                 :mari-audio-correct     {:type        "animation-sequence",
+                                          :target      "mari",
+                                          :track       1,
+                                          :offset      0.858,
+                                          :audio       "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                          :start       0.858,
+                                          :duration    1.837,
+                                          :data        [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]
+                                          :phrase      :correct
+                                          :phrase-text "That’s correct!"}
                  :mari-audio-try-again   {:type     "animation-sequence",
                                           :target   "mari",
                                           :track    1,
@@ -422,16 +425,17 @@
                                           :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
                                           :start    18.915,
                                           :duration 1.493,
-                                          :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]}
-                 :start                  {:type        "sequence",
+                                          :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]
+                                          :phrase      :try-again
+                                          :phrase-text "Try again!"}
+                 :start-scene            {:type        "sequence",
                                           :description "Initial action",
                                           :data        ["start-activity"
                                                         "clear-instruction"
                                                         "mari-welcome-audio"
                                                         "init-boxes"
                                                         "renew-words"
-                                                        "renew-current-concept"
-                                                        ]}
+                                                        "renew-current-concept"]}
                  :init-boxes             {:type "parallel"
                                           :data [{:type "set-variable" :var-name "box1" :var-value "box1"}
                                                  {:type "set-variable" :var-name "box2" :var-value "box2"}
@@ -487,7 +491,11 @@
                                                                      {:var-name "pair-target-3" :action-property "target"}]}]}
                                                  {:type     "set-current-concept"
                                                   :from-var [{:var-name "current-concept" :action-property "value" :var-property "skin"}]}
-                                                 {:type "action" :from-var [{:var-name "current-concept" :var-property "hide-n-seek-current-concept-audio"}]}]}
+                                                 {:type "action" :id "make-riddle"}]}
+
+                 :make-riddle            {:type        "action" :from-var [{:var-name "current-concept" :var-property "hide-n-seek-current-concept-audio"}]
+                                          :phrase      :concept-riddle
+                                          :phrase-text "%concept%"}
 
                  :show-targets           {:type "sequence-data"
                                           :data [{:type "parallel"
@@ -543,8 +551,6 @@
                                           :description "Finishing action",
                                           :data        [{:type "finish-activity" :id "hide-n-seek"}
                                                         {:type "scene" :scene-id "map"}]}},
- :triggers      {:start {:on "start" :action "start"}}
+ :triggers      {:start {:on "start" :action "start-scene"}}
  :metadata      {:autostart true
-                 :prev      "park"}
- }
-
+                 :prev      "park"}}
