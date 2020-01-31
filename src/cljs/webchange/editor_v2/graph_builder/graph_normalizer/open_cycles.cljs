@@ -3,6 +3,14 @@
     [webchange.editor-v2.graph-builder.utils.change-node :refer [remove-connection]]
     [webchange.editor-v2.graph-builder.utils.node-children :refer [get-children]]))
 
+(defn used-connection?
+  [used-map node-name connection]
+  (some #{[node-name connection]} used-map))
+
+(defn add-to-used-map
+  [used-map node-name connection]
+  (conj used-map [node-name connection]))
+
 (defn get-cycles-dfs
   [graph [prev-node-name node-name] cycles seq-path used-map]
   (let [node-data (get graph node-name)
@@ -12,10 +20,14 @@
         (let [new-seq-path (if-not (= sequence (last seq-path)) (conj seq-path sequence) seq-path)
               cycled? (boolean (some #{handler} new-seq-path))]
           (if cycled?
-            [graph (conj cycles {:node       node-name
-                                 :connection connection})]
-            (get-cycles-dfs graph [node-name handler] cycles new-seq-path used-map))))
-      [graph cycles (assoc-in used-map [prev-node-name node-name (last seq-path)] true)]
+            [graph
+             (conj cycles {:node       node-name
+                           :connection connection})
+             used-map]
+            (if-not (used-connection? used-map handler connection)
+              (get-cycles-dfs graph [node-name handler] cycles new-seq-path (add-to-used-map used-map handler connection))
+              [graph cycles used-map]))))
+      [graph cycles used-map]
       children)))
 
 (defn get-cycles

@@ -1359,6 +1359,125 @@
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
 
+(deftest test-scene-parser--case
+  (let [start-node-name :a
+        scene-data {:actions {:a {:type     "case"
+                                  :options  {:case-1 {:type "action" :id "b"}
+                                             :case-2 {:type "empty"}}}
+                              :b {:type "empty"}}}]
+    (let [actual-result (parse-data scene-data start-node-name)
+          expected-result {:a        {:entity      :action
+                                      :data        {:type     "case"
+                                                    :options  {:case-1 {:type "action" :id "b"}
+                                                               :case-2 {:type "empty"}}}
+                                      :path        [:a]
+                                      :children    [:a-case-1 :a-case-2]
+                                      :connections #{{:previous :root
+                                                      :name     "case-1"
+                                                      :handler  :a-case-1}
+                                                     {:previous :root
+                                                      :name     "case-2"
+                                                      :handler  :a-case-2}}}
+                           :a-case-1 {:entity      :action
+                                      :data        {:type "action" :id "b"}
+                                      :path        [:a :options :case-1]
+                                      :children    [:b]
+                                      :connections #{{:previous :a
+                                                      :name     "next"
+                                                      :handler  :b}}}
+                           :b        {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:b]
+                                      :children    []
+                                      :connections #{}}
+                           :a-case-2 {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:a :options :case-2]
+                                      :children    []
+                                      :connections #{}}}]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-scene-parser--case-in-sequence
+  (let [start-node-name :x
+        scene-data {:actions {:x {:type "sequence"
+                                  :data ["a" "c" "d"]}
+                              :a {:type    "case"
+                                  :options {:case-1 {:type "action" :id "b"}
+                                            :case-2 {:type "empty"}}}
+                              :b {:type "empty"}
+                              :c {:type "empty"}
+                              :d {:type "empty"}}}]
+    (let [actual-result (parse-data scene-data start-node-name)
+          expected-result {:x        {:entity      :action
+                                      :data        {:type "sequence"
+                                                    :data ["a" "c" "d"]}
+                                      :path        [:x]
+                                      :children    [:a :c :d]
+                                      :connections #{{:previous :root
+                                                      :name     "next"
+                                                      :handler  :a
+                                                      :sequence :x}}}
+                           :a        {:entity      :action
+                                      :data        {:type    "case"
+                                                    :options {:case-1 {:type "action" :id "b"}
+                                                              :case-2 {:type "empty"}}}
+                                      :path        [:a]
+                                      :children    [:a-case-1 :a-case-2]
+                                      :connections #{{:previous :x
+                                                      :name     "case-1"
+                                                      :handler  :a-case-1}
+                                                     {:previous :x
+                                                      :name     "case-2"
+                                                      :handler  :a-case-2}}}
+
+                           :a-case-1 {:entity      :action
+                                      :data        {:type "action" :id "b"}
+                                      :path        [:a :options :case-1]
+                                      :children    [:b]
+                                      :connections #{{:previous :a
+                                                      :name     "next"
+                                                      :handler  :b
+                                                      :sequence :x}}}
+
+                           :b        {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:b]
+                                      :children    []
+                                      :connections #{{:previous :a-case-1
+                                                      :name     "next"
+                                                      :handler  :c
+                                                      :sequence :x}}}
+                           :a-case-2 {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:a :options :case-2]
+                                      :children    []
+                                      :connections #{{:previous :a
+                                                      :name     "next"
+                                                      :handler  :c
+                                                      :sequence :x}}}
+                           :c        {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:c]
+                                      :children    []
+                                      :connections #{{:previous :b
+                                                      :name     "next"
+                                                      :handler  :d
+                                                      :sequence :x}
+                                                     {:previous :a-case-2
+                                                      :name     "next"
+                                                      :handler  :d
+                                                      :sequence :x}}}
+                           :d        {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:d]
+                                      :children    []
+                                      :connections #{}}}]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
 ;; ToDo: Implement
 ;; {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action-low"}]}
 

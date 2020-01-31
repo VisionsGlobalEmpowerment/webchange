@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer
   (:require
-    [webchange.editor-v2.graph-builder.scene-parser.scene-parser-actions :refer [parse-actions-chain]]
+    [webchange.editor-v2.graph-builder.scene-parser.actions-parser.interface :refer [parse-actions-chain]]
     [webchange.editor-v2.graph-builder.graph-normalizer.utils :refer [get-copy-name]]
     [webchange.editor-v2.graph-builder.utils.change-node :refer [get-nodes-by-next-node-name
                                                                  change-parent-node-connections

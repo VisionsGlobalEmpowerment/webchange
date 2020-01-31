@@ -8,6 +8,10 @@
   [node-data]
   (= "parallel" (get-node-type node-data)))
 
+(defn case-node-data?
+  [node-data]
+  (= "case" (get-node-type node-data)))
+
 (defn speech-node?
   [node-data]
   (let [node-type (get-node-type node-data)]
