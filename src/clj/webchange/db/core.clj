@@ -93,15 +93,19 @@
 (defn clear-table [table]
   (jdbc/delete! *db* table nil))
 
+(defn- transform-key
+  [key]
+  (->kebab-case-keyword key :separator \_))
+
 (defn result-one-snake->kebab
   [this result options]
   (->> (hugsql.adapter/result-one this result options)
-       (transform-keys ->kebab-case-keyword)))
+       (transform-keys transform-key)))
 
 (defn result-many-snake->kebab
   [this result options]
   (->> (hugsql.adapter/result-many this result options)
-       (map #(transform-keys ->kebab-case-keyword %))))
+       (map #(transform-keys transform-key %))))
 
 (defmethod hugsql.core/hugsql-result-fn :1 [sym]
   'webchange.db.core/result-one-snake->kebab)

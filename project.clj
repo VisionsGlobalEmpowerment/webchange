@@ -32,7 +32,7 @@
                  [cheshire "5.8.1"]
                  [conman "0.8.3"]
                  [mount "0.1.15"]
-                 [camel-snake-kebab "0.4.0"]
+                 [camel-snake-kebab "0.4.1"]
                  [bidi "2.1.5"]
                  [kibu/pushy "0.3.8"]
                  [net.mikera/imagez "0.12.0"]
