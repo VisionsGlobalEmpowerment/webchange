@@ -12,6 +12,7 @@ node {
     }
 
     stage('Build') {
+        sh 'lein clean'
         sh 'lein uberjar'
     }
 
