@@ -1067,7 +1067,7 @@
                                       :data        {:type "action"
                                                     :id   "b-next-1"}
                                       :path        [:b]
-                                      :children    []
+                                      :children    [:b-next-1]
                                       :connections #{{:previous :a
                                                       :name     "next"
                                                       :handler  :b-next-1
@@ -1119,7 +1119,7 @@
                                                                 :action-property "id"
                                                                 :possible-values [1 "2" :3]}]}
                                       :path        [:b]
-                                      :children    []
+                                      :children    [:b-next-1 :b-next-2 :b-next-3]
                                       :connections #{{:previous :a
                                                       :name     "next"
                                                       :handler  :b-next-1
@@ -1193,7 +1193,7 @@
                                                                    :action-property "id"
                                                                    :possible-values [1 "2" :3]}]}
                                       :path        [:b]
-                                      :children    []
+                                      :children    [:b-next-1 :b-next-2 :b-next-3]
                                       :connections #{{:previous :a
                                                       :name     "next"
                                                       :handler  :b-next-1
@@ -1266,7 +1266,7 @@
                                                                 :action-property "id"
                                                                 :possible-values ["b-next-1" :b-next-2]}]}
                                       :path        [:b]
-                                      :children    []
+                                      :children    [:b-next-1 :b-next-2]
                                       :connections #{{:previous :a
                                                       :name     "next"
                                                       :handler  :b-next-1
@@ -1325,7 +1325,7 @@
                                                     :from-params [{:action-property "id"
                                                                    :possible-values ["b-next-1" :b-next-2]}]}
                                       :path        [:b]
-                                      :children    []
+                                      :children    [:b-next-1 :b-next-2]
                                       :connections #{{:previous :a
                                                       :name     "next"
                                                       :handler  :b-next-1
