@@ -4,6 +4,10 @@
   [node-data]
   (get-in node-data [:data :type]))
 
+(defn parallel-node-data?
+  [node-data]
+  (= "parallel" (get-node-type node-data)))
+
 (defn speech-node?
   [node-data]
   (let [node-type (get-node-type node-data)]

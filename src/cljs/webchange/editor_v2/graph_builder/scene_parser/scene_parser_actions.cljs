@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.graph-builder.scene-parser.scene-parser-actions
   (:require
+    [webchange.editor-v2.graph-builder.utils.node-data :refer [parallel-node-data?]]
     [webchange.editor-v2.graph-builder.scene-parser.utils.create-graph-node :refer [create-graph-node
                                                                                     get-sequence-item-name]]
     [webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data :refer [get-parallel-action-children
@@ -23,6 +24,21 @@
               (= 0 index))
     (nth list (dec index))
     nil))
+
+(defn get-last-children
+  ([graph node-name]
+   (get-last-children graph node-name []))
+  ([graph node-name path]
+   (if (some #{node-name} path)
+     node-name
+     (let [children (get-in graph [node-name :children])]
+       (if (< 0 (count children))
+         (let [parallel? (parallel-node-data? (get graph node-name))]
+           (if parallel?
+             children
+             (let [last-child (last children)]
+               (get-last-children graph last-child (conj path node-name)))))
+         node-name)))))
 
 ;; ---
 
@@ -48,15 +64,17 @@
 
 (defmethod get-action-data "parallel"
   [{:keys [action-name action-data prev-action path]}]
-  (->> (create-graph-node {:data        action-data
-                           :path        (or path [action-name])
-                           :connections (->> (get-parallel-action-data-children action-name action-data)
-                                             (map first)
-                                             (map (fn [child]
-                                                    {:previous prev-action
-                                                     :handler  child
-                                                     :sequence action-name})))})
-       (assoc {} action-name)))
+  (let [children (->> (get-parallel-action-data-children action-name action-data)
+                      (map first))]
+    (->> (create-graph-node {:data        action-data
+                             :path        (or path [action-name])
+                             :children    children
+                             :connections (map (fn [child]
+                                                 {:previous prev-action
+                                                  :handler  child
+                                                  :sequence action-name})
+                                               children)})
+         (assoc {} action-name))))
 
 (defmethod parse-actions-chain "parallel"
   [actions-data {:keys [action-name action-data next-action sequence-path parent-action path] :as params}]
@@ -93,36 +111,38 @@
                       connections)]
     (->> (create-graph-node {:data        action-data
                              :path        (or path [action-name])
+                             :children    (->> action-data :data (map keyword))
                              :connections connections})
          (assoc {} action-name))))
 
 (defmethod parse-actions-chain "sequence"
-  [actions-data {:keys [action-name action-data next-action parent-action sequence-path] :as params}]
-  (let [parsed-action (get-action-data params)
+  [actions-data {:keys [action-name action-data prev-action next-action parent-action sequence-path] :as params}]
+  (let [parsed-action (get-action-data (assoc params
+                                         :prev-action
+                                         (get-last-children actions-data prev-action)))
         sequence-data (->> action-data :data (map keyword))
         next-actions (map-indexed (fn [index item] [index item]) sequence-data)
         cycled? (some #{action-name} sequence-path)]
     (if-not cycled?
-      (reduce
-        (fn [result [index sequence-item-name]]
-          (let [sequence-item-data (get actions-data sequence-item-name)
-                next-item-name (or (next-to-index sequence-data index) next-action)
-                previous-item-name (or (prev-to-index sequence-data index) action-name)
-                prev-action (cond
-                              (and (sequence-action-name? actions-data previous-item-name)
-                                   (not (= previous-item-name action-name))) (get-sequence-action-last-child result previous-item-name)
-                              (parallel-action-name? result previous-item-name) (get-parallel-action-children result previous-item-name)
-                              :else previous-item-name)
-                last-item? (= index (dec (count next-actions)))]
-            (merge-actions result (parse-actions-chain actions-data
-                                                       {:action-name   sequence-item-name
-                                                        :action-data   sequence-item-data
-                                                        :parent-action (if last-item? parent-action action-name)
-                                                        :next-action   next-item-name
-                                                        :prev-action   prev-action
-                                                        :sequence-path (conj sequence-path action-name)}))))
-        parsed-action
-        next-actions)
+      (->> next-actions
+           (reduce
+             (fn [[result prev-action-name] [index sequence-item-name]]
+               (let [sequence-item-data (get actions-data sequence-item-name)
+                     next-item-name (or (next-to-index sequence-data index) next-action)
+                     last-item? (= index (dec (count next-actions)))
+                     prev-action (if (nil? prev-action-name)
+                                   action-name
+                                   (get-last-children result prev-action-name))]
+                 [(merge-actions result (parse-actions-chain actions-data
+                                                             {:action-name   sequence-item-name
+                                                              :action-data   sequence-item-data
+                                                              :parent-action (if last-item? parent-action action-name)
+                                                              :next-action   next-item-name
+                                                              :prev-action   prev-action
+                                                              :sequence-path (conj sequence-path action-name)}))
+                  sequence-item-name]))
+             [parsed-action nil])
+           (first))
       parsed-action)))
 
 ;; sequence-data
@@ -138,6 +158,7 @@
                            (vec))]
     (->> (create-graph-node {:data        action-data
                              :path        path
+                             :children    (map first child-actions)
                              :connections [{:previous prev-action
                                             :handler  (->> child-actions first first)
                                             :sequence action-name}]})
@@ -148,35 +169,29 @@
   (let [parsed-action (get-action-data params)
         sequence-data (->> action-data :data)
         next-actions (map-indexed (fn [index item] [index item]) sequence-data)]
-    (reduce
-      (fn [result [index sequence-item-data]]
-        (let [sequence-item-name (get-sequence-item-name action-name index)
-              next-item-name (if (next-to-index sequence-data index)
-                               (get-sequence-item-name action-name (inc index))
-                               next-action)
-              previous-item-name (if (prev-to-index sequence-data index)
-                                   (get-sequence-item-name action-name (dec index))
-                                   action-name)
-              previous-action-data (if (> index 0)
-                                     (second (nth next-actions (dec index)))
-                                     nil)
-              prev-action (cond
-                            (and (sequence-data-action? previous-action-data)
-                                 (not (= previous-item-name action-name))) (get-sequence-data-action-last-child previous-action-data previous-item-name)
-                            (parallel-action-name? result previous-item-name) (get-parallel-action-children result previous-item-name)
-                            :else previous-item-name)
-              last-item? (= index (dec (count next-actions)))
-              path (conj (or path [action-name]) index)]
-          (merge-actions result (parse-actions-chain actions-data
-                                                     {:action-name   sequence-item-name
-                                                      :action-data   sequence-item-data
-                                                      :parent-action (if last-item? parent-action action-name)
-                                                      :next-action   next-item-name
-                                                      :prev-action   prev-action
-                                                      :sequence-path (conj sequence-path action-name)
-                                                      :path          path}))))
-      parsed-action
-      next-actions)))
+    (->> next-actions
+         (reduce
+           (fn [[result prev-action-name] [index sequence-item-data]]
+             (let [sequence-item-name (get-sequence-item-name action-name index)
+                   next-item-name (if (next-to-index sequence-data index)
+                                    (get-sequence-item-name action-name (inc index))
+                                    next-action)
+                   prev-action (if (nil? prev-action-name)
+                                 action-name
+                                 (get-last-children result prev-action-name))
+                   last-item? (= index (dec (count next-actions)))
+                   path (conj (or path [action-name]) index)]
+               [(merge-actions result (parse-actions-chain actions-data
+                                                           {:action-name   sequence-item-name
+                                                            :action-data   sequence-item-data
+                                                            :parent-action (if last-item? parent-action action-name)
+                                                            :next-action   next-item-name
+                                                            :prev-action   prev-action
+                                                            :sequence-path (conj sequence-path action-name)
+                                                            :path          path}))
+                sequence-item-name]))
+           [parsed-action nil])
+         (first))))
 
 ;; test
 

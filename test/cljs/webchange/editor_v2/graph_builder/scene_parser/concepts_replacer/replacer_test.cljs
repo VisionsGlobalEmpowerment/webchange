@@ -46,6 +46,7 @@
                                              :target "target-1"
                                              :track  1}
                                :path        [:d]
+                               :children    []
                                :connections #{{:previous :prev-action
                                                :name     "next"
                                                :handler  :next-action}}}}]
@@ -66,6 +67,7 @@
                                                     :track       1
                                                     :origin-name :d}
                                       :path        [:d]
+                                      :children    []
                                       :connections #{{:previous :prev-action
                                                       :name     "next"
                                                       :handler  :next-action}}}}]
@@ -75,17 +77,20 @@
 
 (deftest test-override-concept-actions--with-current-concept
   (let [graph {:a {:entity      :action
+                   :children    []
                    :connections #{{:previous :root
                                    :name     "next"
                                    :handler  :x}}
                    :data        {:type "empty"}}
                :x {:entity      :action
+                   :children    []
                    :connections #{{:previous :a
                                    :name     "next"
                                    :handler  :c}}
                    :data        {:type     "action"
                                  :from-var [{:var-property "d"}]}}
                :c {:entity      :action
+                   :children    []
                    :connections #{}
                    :data        {:type "empty"}}}
         current-concept {:data {:d {:type   "animation-sequence"
@@ -93,11 +98,13 @@
                                     :track  1}}}]
     (let [actual-result (override-concept-actions graph {:current-concept current-concept})
           expected-result {:a {:entity      :action
+                               :children    []
                                :connections #{{:previous :root
                                                :name     "next"
                                                :handler  :x}}
                                :data        {:type "empty"}}
                            :x {:entity      :action
+                               :children    []
                                :connections #{{:previous :a
                                                :name     "next"
                                                :handler  :d}}
@@ -109,10 +116,12 @@
                                              :track          1
                                              :concept-action true}
                                :path        [:d]
+                               :children    []
                                :connections #{{:previous :x
                                                :name     "next"
                                                :handler  :c}}}
                            :c {:entity      :action
+                               :children    []
                                :connections #{}
                                :data        {:type "empty"}}}]
       (when-not (= actual-result expected-result)
@@ -121,17 +130,20 @@
 
 (deftest test-override-concept-actions--with-composite-current-concept
   (let [graph {:a {:entity      :action
+                   :children    []
                    :connections #{{:previous :root
                                    :name     "next"
                                    :handler  :x}}
                    :data        {:type "empty"}}
                :x {:entity      :action
+                   :children    []
                    :connections #{{:previous :a
                                    :name     "next"
                                    :handler  :c}}
                    :data        {:type     "action"
                                  :from-var [{:var-property "d"}]}}
                :c {:entity      :action
+                   :children    []
                    :connections #{}
                    :data        {:type "empty"}}}
         concept-scheme [{:name     "d"
@@ -145,11 +157,13 @@
     (let [actual-result (override-concept-actions graph {:current-concept current-concept
                                                          :concept-scheme  concept-scheme})
           expected-result {:a   {:entity      :action
+                                 :children    []
                                  :connections #{{:previous :root
                                                  :name     "next"
                                                  :handler  :x}}
                                  :data        {:type "empty"}}
                            :x   {:entity      :action
+                                 :children    []
                                  :connections #{{:previous :a
                                                  :name     "next"
                                                  :handler  :d}}
@@ -162,6 +176,7 @@
                                                                                       :target "target-2"}]
                                                :concept-action true}
                                  :path        [:d]
+                                 :children    [:d-0 :d-1]
                                  :connections #{{:previous :x
                                                  :name     "next"
                                                  :handler  :d-0
@@ -175,6 +190,7 @@
                                                :target         "target-1"
                                                :concept-action true}
                                  :path        [:d 0]
+                                 :children    []
                                  :connections #{{:previous :d
                                                  :name     "next"
                                                  :handler  :c}}}
@@ -183,10 +199,12 @@
                                                :target         "target-2"
                                                :concept-action true}
                                  :path        [:d 1]
+                                 :children    []
                                  :connections #{{:previous :d
                                                  :name     "next"
                                                  :handler  :c}}}
                            :c   {:entity      :action
+                                 :children    []
                                  :connections #{}
                                  :data        {:type "empty"}}}]
       (when-not (= actual-result expected-result)
