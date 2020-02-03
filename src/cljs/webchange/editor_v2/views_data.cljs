@@ -29,6 +29,24 @@
                                             :phrase (keyword->caption (:phrase action-data))}))
                {})))
 
+(defn get-scenes-options
+  [scenes-list]
+  (let [prepared-scenes ["home"
+                         "sandbox"
+                         "see-saw"
+                         "swings"
+                         "volleyball"
+                         "library"
+                         "book"]]
+    (->> scenes-list
+         (map (fn [scene-id]
+                {:value    scene-id
+                 :text     (s/replace scene-id #"-" " ")
+                 :disabled (->> prepared-scenes
+                                (some #{scene-id})
+                                (not))}))
+         (sort-by :disabled))))
+
 (defn data
   []
   (let [course-id (re-frame/subscribe [::subs/current-course])
@@ -36,7 +54,8 @@
         scenes (re-frame/subscribe [::subs/course-scenes])
         diagram-mode (re-frame/subscribe [::editor-subs/diagram-mode])
         scene-data (re-frame/subscribe [::subs/scene @scene-id])]
-    (let [phrases (scene-data->phrases-list @scene-data)]
+    (let [phrases (scene-data->phrases-list @scene-data)
+          scenes-options (get-scenes-options @scenes)]
       [:div.data-selector
        [ui/form-control {:full-width true
                          :margin     "normal"}
@@ -45,11 +64,12 @@
                     :on-change #(let [scene-id (.. % -target -value)]
                                   (redirect-to :course-editor-v2-scene :id @course-id :scene-id scene-id)
                                   (re-frame/dispatch [::events/select-current-scene scene-id]))}
-         (for [scene-id @scenes]
-           ^{:key (str scene-id)}
-           [ui/menu-item {:value scene-id
-                          :style {:text-transform "capitalize"}}
-            (s/replace scene-id #"-" " ")])
+         (for [{:keys [value text disabled]} scenes-options]
+           ^{:key (str value)}
+           [ui/menu-item {:value    value
+                          :disabled disabled
+                          :style    {:text-transform "capitalize"}}
+            text])
          ]]
        [ui/form-control {:full-width true
                          :margin     "normal"}
