@@ -38,7 +38,8 @@
                          "volleyball"
                          "library"
                          "book"
-                         "hide-n-seek"]]
+                         "hide-n-seek"
+                         "cycling"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id

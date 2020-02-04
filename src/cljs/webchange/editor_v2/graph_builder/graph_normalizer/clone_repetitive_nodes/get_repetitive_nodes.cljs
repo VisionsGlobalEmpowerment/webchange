@@ -117,6 +117,9 @@
                           :word-2-state-var
                           :word-3-state-var
                           :word-4-state-var
+                          ;; cycling
+                          :wait-for-box-animations
+                          :stay-on-line
                           ]]
     (select-keys extra-nodes-map actions-to-clone)))
 

@@ -18,7 +18,9 @@
     [webchange.editor-v2.graph-builder.graph.phrases-graph--book-source :as book-source]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--book-expected :as book-expected]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--hide-n-seek-source :as hide-n-seek-source]
-    [webchange.editor-v2.graph-builder.graph.phrases-graph--hide-n-seek-expected :as hide-n-seek-expected]))
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--hide-n-seek-expected :as hide-n-seek-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--cycling-source :as cycling-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--cycling-expected :as cycling-expected]))
 
 (defn remove-actions-data
   [graph]
@@ -111,6 +113,17 @@
     (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
                             (remove-actions-data))
           expected-result hide-n-seek-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--cycling
+  (let [scene-data cycling-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result cycling-expected/data]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
