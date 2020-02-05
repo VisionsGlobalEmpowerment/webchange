@@ -11,6 +11,10 @@
   [cache request]
   (.match cache request))
 
+(defn cache-keys
+  [cache]
+  (.keys cache))
+
 (defn cache-open
   [cache-name]
   (.open js/caches cache-name))
@@ -23,7 +27,7 @@
   [cache-name]
   (.delete js/caches cache-name))
 
-(defn cache-keys
+(defn caches-keys
   []
   (.keys js/caches))
 

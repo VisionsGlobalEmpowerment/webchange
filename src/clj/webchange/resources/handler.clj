@@ -1,20 +1,31 @@
 (ns webchange.resources.handler
-  (:require [compojure.core :refer [GET defroutes]]
-            [ring.middleware.params :refer [wrap-params]]
-            [webchange.resources.core :as core]
-            [webchange.common.handler :refer [handle]]))
+  (:require
+    [compojure.core :refer [GET defroutes]]
+    [webchange.common.handler :refer [handle]]
+    [webchange.resources.core :as core]))
 
-(defn handle-app-resources
-  []
-  (-> (core/get-app-resources)
+(defn handle-activities-resources
+  [course-name]
+  (-> (core/get-activities-resources course-name)
       handle))
 
-(defn handle-level-resources
-  [_]
-  (-> (core/get-level-resources)
+(defn handle-start-resources
+  [course-name]
+  (-> (core/get-start-resources course-name)
+      handle))
+
+(defn handle-game-app-resources
+  []
+  (-> (core/get-game-app-resources)
+      handle))
+
+(defn handle-web-app-resources
+  []
+  (-> (core/get-web-app-resources)
       handle))
 
 (defroutes resources-routes
-           (GET "/api/resources/app" _ (handle-app-resources))
-           (GET "/api/resources/level/:level-id" [level-id] (handle-level-resources level-id)))
-
+           (GET "/api/resources/student-dashboard" _ (handle-web-app-resources))
+           (GET "/api/resources/game-app" _ (handle-game-app-resources))
+           (GET "/api/resources/game-app/:course-name/scenes" [course-name] (handle-activities-resources course-name))
+           (GET "/api/resources/game-app/:course-name/start-resources" [course-name] (handle-start-resources course-name)))

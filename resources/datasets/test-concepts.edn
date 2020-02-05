@@ -8415,7 +8415,7 @@
      :duration 4.734,
      :scene-id "running"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 55.654,
      :duration 1.094,

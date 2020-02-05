@@ -145,8 +145,3 @@
   ::navigation
   (fn [db]
     (:navigation db)))
-
-(re-frame/reg-sub
-  ::offline-mode
-  (fn [db]
-    (:offline-mode db)))

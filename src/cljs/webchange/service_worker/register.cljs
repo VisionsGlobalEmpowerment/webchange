@@ -1,6 +1,7 @@
-(ns webchange.service-worker-register
+(ns webchange.service-worker.register
   (:require [re-frame.core :as re-frame]
-            [webchange.events :as events]))
+            [webchange.service-worker.events :as events]
+            [webchange.service-worker.subscribe :refer [subscribe-to-notifications]]))
 
 (defn check-registration
   [registration]
@@ -36,5 +37,6 @@
   (let [service-worker (.-serviceWorker js/navigator)]
     (when service-worker
       (if use-cache
-        (register service-worker path)
+        (do (register service-worker path)
+            (subscribe-to-notifications))
         (unregister service-worker)))))

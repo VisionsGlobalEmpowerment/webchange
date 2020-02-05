@@ -6,7 +6,7 @@
 
                  {:url "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3", :size 2, :type "audio" :alias "lion - 1"}
                  {:url "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3", :size 2, :type "audio" :alias "lion - 2"}
-                 {:url "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
+                 {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
                  {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio" :alias "vera books intro"}
                  ],
 
