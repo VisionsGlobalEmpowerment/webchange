@@ -1,7 +1,6 @@
 (ns webchange.student-dashboard.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [webchange.auth.subs :as as]
     [webchange.routes :refer [redirect-to]]
@@ -11,6 +10,7 @@
     [webchange.student-dashboard.stubs :refer [related-content life-skills]]
     [webchange.student-dashboard.events :as sde]
     [webchange.student-dashboard.subs :as sds]
+    [webchange.student-dashboard.sync.views :refer [sync-control]]
     [webchange.ui.theme :refer [with-mui-theme]]
     [webchange.subs :as subs]
     [webchange.interpreter.events :as ie]))
@@ -66,14 +66,6 @@
    {:key value :value value}
    text])
 
-(defn- sync-status
-  []
-  (let [offline-mode @(re-frame/subscribe [::subs/offline-mode])]
-    (case offline-mode
-      :not-started [ic/cloud-off {:color "disabled"}]
-      :in-progress [ic/cloud-download {:color "disabled"}]
-      [ic/cloud-done {:color "disabled"}])))
-
 (defn app-bar
   [{:keys [user course-id]}]
     [ui/app-bar
@@ -81,7 +73,6 @@
       :position "static"
       :style    {}}
        [ui/toolbar {:style header-styles}
-
         [ui/typography
          {:variant "button"
           :style   header-styles}
@@ -91,8 +82,7 @@
          [ui/select {:value course-id :on-change #(re-frame/dispatch [::ie/open-student-course-dashboard (-> % .-target .-value)])}
           (for [course courses]
             (menu-item course))]]
-        [sync-status]
-        ]])
+        [sync-control]]])
 
 (defn- continue-the-story []
   (let [loading? @(re-frame/subscribe [::sds/progress-loading])

@@ -4,7 +4,7 @@
                  {:url "/raw/img/library/main/Hat_Enabled.png", :size 1, :type "image"}
                  {:url "/raw/img/library/main/Tablet_Enabled.png", :size 1, :type "image"}
 
-                 {:url "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
+                 {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
                  {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio" :alias "vera books intro"}],
  :objects       {:background {:type "background", :src "/raw/img/library/main/background.jpg"},
                  :vera       {:type  "animation" :x 725 :y 1000 :name "vera" :anim "idle" :speed 0.3
@@ -31,7 +31,7 @@
                                           :target      "librarian",
                                           :track       1,
                                           :offset      2.249,
-                                          :audio       "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+                                          :audio       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
                                           :start       2.249,
                                           :duration    4.367,
                                           :data        [{:start 2.348, :end 4.417, :duration 2.069, :anim "talk"}
@@ -53,7 +53,7 @@
                                           :target      "librarian",
                                           :track       1,
                                           :offset      9.249,
-                                          :audio       "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+                                          :audio       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
                                           :start       9.249,
                                           :duration    5.407,
                                           :data        [{:start 9.295, :end 10.457, :duration 1.162, :anim "talk"}

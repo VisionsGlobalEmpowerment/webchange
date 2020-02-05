@@ -1,11 +1,11 @@
 (ns webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-source)
 
-(def data {:assets        [{:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}
+(def data {:assets        [{:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}
                            {:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari"}
 
-                           {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                           {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                           {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                           {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a", :size 5, :type "audio" :alias "game voice 1"}
+                           {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a", :size 5, :type "audio" :alias "game voice 2"}
+                           {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a", :size 5, :type "audio" :alias "game voice 3"}
 
                            {:url "/raw/img/stadium/volleyball/background.jpg", :size 10 :type "image"}
                            {:url "/raw/img/stadium/volleyball/ball.png", :size 1 :type "image"}],
@@ -66,7 +66,7 @@
                                                      :target   "mari",
                                                      :track    1,
                                                      :offset   0.858,
-                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                                      :start    0.858,
                                                      :duration 1.837,
                                                      :data     [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]}
@@ -75,7 +75,7 @@
                                                      :target   "mari",
                                                      :track    1,
                                                      :offset   4.697,
-                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                                      :start    4.697,
                                                      :duration 1.358,
                                                      :data     [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}]}
@@ -84,7 +84,7 @@
                                                      :target   "mari",
                                                      :track    1,
                                                      :offset   7.949,
-                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                                      :start    7.949,
                                                      :duration 1.345,
                                                      :data     [{:start 8.066, :end 9.098, :duration 1.032, :anim "talk"}]}
@@ -93,7 +93,7 @@
                                                      :target   "mari",
                                                      :track    1,
                                                      :offset   10.997,
-                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                                      :start    10.997,
                                                      :duration 1.147,
                                                      :data     [{:start 11.119, :end 11.964, :duration 0.845, :anim "talk"}]}
@@ -102,7 +102,7 @@
                                                      :target   "mari",
                                                      :track    1,
                                                      :offset   14.463,
-                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                                      :start    14.463,
                                                      :duration 2.333,
                                                      :data
@@ -137,7 +137,7 @@
                                                      :target   "mari",
                                                      :track    1,
                                                      :offset   18.915,
-                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                                      :start    18.915,
                                                      :duration 1.493,
                                                      :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]}
@@ -146,7 +146,7 @@
                                                      :target   "mari",
                                                      :track    1,
                                                      :offset   22.155,
-                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                                     :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                                      :start    22.155,
                                                      :duration 3.025,
                                                      :data     [{:start 23.743, :end 25.055, :duration 1.312, :anim "talk"}]}
@@ -369,13 +369,13 @@
                            :throw-from-player3      {:type "action" :from-params [{:template "throw-player3-%" :action-property "id" :param-property "player"}]}
                            :throw-from-player4      {:type "action" :from-params [{:template "throw-player4-%" :action-property "id" :param-property "player"}]}
 
-                           :word-ardilla-high       {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 1 List.m4a", :start 12.987, :duration 3.196
+                           :word-ardilla-high       {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a", :start 12.987, :duration 3.196
                                                      :phrase      :concept-squirrel
                                                      :phrase-text "Squirrel, squirrel, squirrel!"}
-                           :word-oso-high           {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 2 List.m4a", :start 11.361, :duration 3.663
+                           :word-oso-high           {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a", :start 11.361, :duration 3.663
                                                      :phrase      :concept-bear
                                                      :phrase-text "Bear, bear, bear!"}
-                           :word-incendio-high      {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a", :start 10.781, :duration 3.301
+                           :word-incendio-high      {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a", :start 10.781, :duration 3.301
                                                      :phrase      :concept-magnet
                                                      :phrase-text "Magnet, magnet, magnet!"}
 

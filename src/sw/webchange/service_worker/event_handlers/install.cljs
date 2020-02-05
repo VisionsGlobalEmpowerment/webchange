@@ -1,56 +1,37 @@
 (ns webchange.service-worker.event-handlers.install
   (:require
-    [webchange.service-worker.config :as config]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers :refer [cache-open cache-add-all js-fetch promise-all promise-resolve response-json then]]))
+    [webchange.service-worker.wrappers :refer [js-fetch promise-all response-json then catch]]
+    [webchange.service-worker.common.cache :refer [cache-app-resources
+                                                   cache-game-resources
+                                                   cache-endpoints]]
+    [webchange.service-worker.common.fetch :refer [fetch-game-app-resources
+                                                   fetch-web-app-resources]]))
 
-(defn- get-resources-from-api
-  [url]
-  (-> (js-fetch url)
-      (then response-json)))
-
-(defn- cache-resources
-  [cache-name resources]
-  (logger/debug-folded (str "Resources to cache into " cache-name) resources)
-  (-> (cache-open cache-name)
-      (then (fn [cache]
-              (logger/debug "Caching" cache-name "resources count: " (count resources))
-              (loop [left (vec resources)
-                     p (promise-resolve nil)]
-                (let [limit (min 100 (count left))
-                      current (subvec left 0 limit)
-                      next (subvec left limit)
-                      current-p (then p #(cache-add-all cache current))]
-                  (logger/debug "Caching inner count: " (count current))
-                  (if (> (count next) 0)
-                    (recur next current-p)
-                    current-p)))))))
-
-(defn- load-app-resources
+(defn- load-game-app-resources
   []
-  (-> (get-resources-from-api "/api/resources/app")
+  (-> (fetch-game-app-resources)
       (then (fn [resources]
-              (cache-resources (:static config/cache-names) (aget resources "data"))))))
+              (promise-all [(-> resources (aget "resources") (cache-game-resources))
+                            (-> resources (aget "endpoints") (cache-endpoints))])))))
 
-(defn- load-level-resources
-  [level]
-  (-> (get-resources-from-api (str "/api/resources/level/" level))
+(defn- load-web-app-resources
+  []
+  (-> (fetch-web-app-resources)
       (then (fn [resources]
-              (promise-all [(cache-resources (:game config/cache-names) (aget resources "resources"))
-                            (vs/install (aget resources "scenes-data"))])))))
+              (promise-all [(-> resources (aget "resources") (cache-app-resources))
+                            (-> resources (aget "endpoints") (cache-endpoints))])))))
 
 (defn- install
-  [level]
-  (promise-all [(load-app-resources)
-                (load-level-resources level)]))
+  []
+  (promise-all [(load-game-app-resources)
+                (load-web-app-resources)]))
 
 (defn handle
   [event]
   (logger/debug "Install...")
-  (let [current-level 1]
-    (.waitUntil event (-> (install current-level)
-                          (.then #(do (logger/log "Installation done.")
-                                      (.skipWaiting js/self)))
-                          (.catch #(do (logger/warn "Installation failed." (.-message %))
-                                       (throw %)))))))
+  (.waitUntil event (-> (install)
+                        (.then #(do (logger/log "Installation done.")
+                                    (.skipWaiting js/self)))
+                        (.catch #(do (logger/warn "Installation failed." (.-message %))
+                                     (throw %))))))

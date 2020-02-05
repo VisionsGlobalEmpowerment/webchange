@@ -12,7 +12,7 @@
                   :alias  nil}
                  {:url "/raw/audio/l1/assessment1/Mari_Level1_Assessment1.m4a", :size 5, :type "audio" :alias "mari voice"}
                  {:url "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", :size 5, :type "audio" :alias "words"}
-                 {:url "/raw/audio/l1/a5/Mari_Coaching statements.m4a", :size 2, :type "audio" :alias "statements"}],
+                 {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}],
  :objects       {:background       {:type        "background",
                                     :scene-name  "background",
                                     :scene-layer 0,
@@ -412,7 +412,7 @@
                                           :target      "mari",
                                           :track       1,
                                           :offset      0.858,
-                                          :audio       "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                          :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                           :start       0.858,
                                           :duration    1.837,
                                           :data        [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]
@@ -422,7 +422,7 @@
                                           :target   "mari",
                                           :track    1,
                                           :offset   18.915,
-                                          :audio    "/raw/audio/l1/a5/Mari_Coaching statements.m4a",
+                                          :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
                                           :start    18.915,
                                           :duration 1.493,
                                           :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]

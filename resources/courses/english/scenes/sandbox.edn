@@ -1,7 +1,7 @@
 {:assets        [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio" :alias "mari voice"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a", :size 5, :type "audio" :alias "game voice 1"}
+                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a", :size 5, :type "audio" :alias "game voice 2"}
+                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a", :size 5, :type "audio" :alias "game voice 3"}
 
                  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio" :alias "letter 1"}
                  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio" :alias "letter 2"}
@@ -369,9 +369,9 @@
                  :start-activity                 {:type "start-activity" :id "sandbox"}
                  :finish-activity                {:type "finish-activity" :id "sandbox"}}
  :audio         {:mari    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a"
-                 :voice-1 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 1.m4a"
-                 :voice-2 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 2.m4a"
-                 :voice-3 "/raw/audio/l1/a4/L1_A4_GameVoice_Set 3.m4a"},
+                 :voice-1 "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a"
+                 :voice-2 "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a"
+                 :voice-3 "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a"},
  :triggers      {:start {:on "start" :action "start-scene"}}
  :metadata      {:autostart true
                  :prev      "park"}}

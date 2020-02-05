@@ -115,8 +115,3 @@
   ::redirect
   (fn-traced [{:keys [db]} [_ & args]]
     {:redirect args}))
-
-(re-frame/reg-event-db
-  ::set-offline-mode
-  (fn [db [_ mode]]
-    (assoc db :offline-mode mode)))

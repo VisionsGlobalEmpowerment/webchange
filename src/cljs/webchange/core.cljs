@@ -7,8 +7,7 @@
     [webchange.views :as views]
     [webchange.config :as config]
     [webchange.routes :as routes]
-    [webchange.service-worker-register :as sw]))
-
+    [webchange.service-worker.register :as sw]))
 
 (defn dev-setup []
   (when config/debug?

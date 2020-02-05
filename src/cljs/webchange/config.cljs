@@ -3,4 +3,6 @@
 (def debug?
   ^boolean goog.DEBUG)
 
-(def use-cache (not debug?))
+;; ToDo: restore after finish
+(def use-cache true ;(not debug?)
+)
