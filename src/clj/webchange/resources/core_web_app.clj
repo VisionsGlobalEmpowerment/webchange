@@ -5,7 +5,7 @@
 ;  [clojure.java.io :as io]
 ;  [clojure.string :as s]
 ;  [webchange.interpreter.defaults :as defaults])
-
+;
 ;(def prefix "resources/")
 ;(def public-fold "public/")
 ;(def js-fold (str public-fold "js/compiled/"))
@@ -47,8 +47,7 @@
 ;       (remove nil?)))
 
 (def resources
-  [
-   "./manifest.json"
+  ["./manifest.json"
    "./page-skeleton"
    "./js/compiled/app.js"
    "./css/styles.css"

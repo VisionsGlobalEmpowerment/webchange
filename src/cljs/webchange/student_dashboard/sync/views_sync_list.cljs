@@ -115,9 +115,8 @@
                                                           (reset! loaded-endpoints (distinct (concat @loaded-endpoints endpoints))))))
                       handle-save (fn []
                                     (let [resources-to-add (difference (set @loaded-resources) (set @synced-game-resources))]
-                                      (sw/post-message {:type (:cache-scenes sw/message-types)
-                                                        :data {:scenes    {:add    @loaded-endpoints}
-                                                               :resources {:add    resources-to-add}}})
+                                      (sw/set-cached-scenes {:scenes    {:add    @loaded-endpoints}
+                                                             :resources {:add    resources-to-add}})
                                       (re-frame/dispatch [::events/close-sync-list])))
                       handle-close #(re-frame/dispatch [::events/close-sync-list])
                       selected-resources (concat @synced-game-resources @loaded-resources)]

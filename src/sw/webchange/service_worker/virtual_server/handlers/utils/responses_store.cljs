@@ -1,7 +1,7 @@
 (ns webchange.service-worker.virtual-server.handlers.utils.responses-store
   (:require
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.handlers.utils.db :as db]
+    [webchange.service-worker.common.db :as db]
     [webchange.service-worker.virtual-server.handlers.utils.serializer :refer [serialize-response serialize-request
                                                                                deserialize-response]]
     [webchange.service-worker.wrappers :refer [promise promise-all response-pathname request-pathname then]]))

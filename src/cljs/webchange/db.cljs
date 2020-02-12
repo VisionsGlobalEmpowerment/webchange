@@ -17,7 +17,9 @@
                             :effects-volume 30}
    :dashboard              {:access-codes {}}
    :service-worker         {:synced-resources {:game []}
-                            :offline-mode     :not-started}
+                            :offline-mode     :not-started
+                            :last-update      nil
+                            :version          nil}
    :sync-resources         {:list-open false
                             :scenes    {:loading false
                                         :data    {}}}
