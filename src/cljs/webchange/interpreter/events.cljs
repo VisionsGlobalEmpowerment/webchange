@@ -15,10 +15,14 @@
 
 (re-frame/reg-fx
   :execute-audio
-  (fn [{:keys [flow-id] :as params}]
+  (fn [params]
     (e/init)
-    (-> (e/execute-audio params)
-        (.then (fn [audio] (re-frame/dispatch [::ce/register-flow-remove-handler {:flow-id flow-id :handler (fn [] (.stop audio))}]))))))
+    (e/execute-audio params)))
+
+(re-frame/reg-fx
+  :stop-all-audio
+  (fn []
+    (e/stop-all-audio!)))
 
 (re-frame/reg-fx
   :music-volume
@@ -286,6 +290,12 @@
     {:execute-audio (-> action
                         (assoc :key (or (get-audio-key db id) id))
                         (assoc :on-ended (ce/dispatch-success-fn action)))}))
+
+(re-frame/reg-event-fx
+  ::execute-stop-audio
+  [ce/event-as-action]
+  (fn [{:keys [db]} _]
+    {:stop-all-audio nil}))
 
 (re-frame/reg-event-fx
   ::play-video
@@ -631,6 +641,7 @@
   (fn [{:keys [db]} _]
     (let [current-scene (:current-scene db)]
       {:dispatch-n (list [::vars.events/clear-vars {:keep-running true}]
+                         [::execute-stop-audio]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
                          [::ce/execute-remove-timers])})))
 
@@ -658,6 +669,7 @@
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
        :dispatch-n (list [::vars.events/clear-vars]
+                         [::execute-stop-audio]
                          [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
                          [::ce/execute-remove-timers]
                          [::reset-activity-action]
