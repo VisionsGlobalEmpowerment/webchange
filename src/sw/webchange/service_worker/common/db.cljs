@@ -1,11 +1,13 @@
-(ns webchange.service-worker.virtual-server.handlers.utils.db
+(ns webchange.service-worker.common.db
   (:require
     [cljs-idxdb.core :as idx]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.config :refer [database-name]]
+    [webchange.service-worker.config :as config]
     [webchange.service-worker.wrappers :refer [promise]]))
 
-(def db-version 3)
+(def db-version config/release-number)
+(def database-name config/database-name)
+
 (def endpoints-data-store-name (str database-name "-endpoints-data"))
 (def queue-store-name (str database-name "-requests-queue"))
 (def activated-users-store-name (str database-name "-activated-users"))
@@ -67,9 +69,11 @@
     (promise #(idx/get-by-key @db store key %))))
 
 (defn set-value
-  [key value success-fn]
-  (let [data {:key key :value value}]
-    (add-item data-store-name data success-fn)))
+  ([key value]
+   (set-value key value #()))
+  ([key value success-fn]
+   (let [data {:key key :value value}]
+     (add-item data-store-name data success-fn))))
 
 (defn get-value
   [key success-fn]

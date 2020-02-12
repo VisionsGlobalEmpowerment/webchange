@@ -3,20 +3,24 @@
             [webchange.service-worker.events :as events]
             [webchange.service-worker.subscribe :refer [subscribe-to-notifications]]))
 
-(defn check-registration
-  [registration]
-  (when (.-active registration)
-    (re-frame/dispatch [::events/set-offline-mode :ready]))
-  (when (.-installing registration)
-    (re-frame/dispatch [::events/set-offline-mode :in-progress]))
-  (when (not (or (.-active registration) (.-installing registration)))
-    (re-frame/dispatch [::events/set-offline-mode :not-started])))
+(defn worker-ready
+  [_]
+  (re-frame/dispatch [::events/set-offline-mode :ready]))
+
+(defn track-installing
+  [worker]
+  (re-frame/dispatch [::events/set-offline-mode :in-progress])
+  (.addEventListener worker "statechange" (fn []
+                                            (when (= "activated" (.-state worker))
+                                              (worker-ready worker)))))
 
 (defn check-state
   [registration]
-  (check-registration registration)
-  (when-let [installing (.-installing registration)]
-    (.addEventListener installing "statechange" #(check-registration registration))))
+  (if-let [active (.-active registration)]
+    (worker-ready active)
+    (if-let [installing (.-installing registration)]
+      (track-installing installing)
+      (.addEventListener registration "updatefound" #(track-installing (.-installing registration))))))
 
 (defn register
   [service-worker path]

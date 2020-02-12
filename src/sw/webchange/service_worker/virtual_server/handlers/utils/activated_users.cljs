@@ -1,7 +1,7 @@
 (ns webchange.service-worker.virtual-server.handlers.utils.activated-users
   (:require
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.handlers.utils.db :as db]
+    [webchange.service-worker.common.db :as db]
     [webchange.service-worker.wrappers :refer [js-fetch promise promise-all promise-resolve response-new response-clone request-clone body-json then catch]]))
 
 (defn store-current-code!

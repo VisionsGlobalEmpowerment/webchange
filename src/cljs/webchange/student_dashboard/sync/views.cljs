@@ -4,6 +4,7 @@
     [reagent.core :as r]
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
+    [webchange.service-worker.message :as sw]
     [webchange.service-worker.subs :as subs]
     [webchange.student-dashboard.sync.events :as events]
     [webchange.student-dashboard.sync.views-sync-list :refer [sync-list-modal]]))
@@ -16,6 +17,43 @@
       :in-progress [ic/cloud-download {:color "disabled"}]
       [ic/cloud-done])))
 
+(defn current-version-data
+  [{:keys [update-date-str version]}]
+  (let [update (js/Date. update-date-str)
+        update-date (.toLocaleDateString update)
+        update-time (.toLocaleTimeString update)]
+    [:div
+     [:div {:style {:display   "flex"
+                    :font-size 10
+                    :height    15}}
+      [:div {:style {:width 50}} "Version:"]
+      [:div
+       [:span {:style {:height 14}} version]]]
+     [:div {:style {:display   "flex"
+                    :font-size 10}}
+      [:div {:style {:width 50}} "Updated:"]
+      [:div {:style {:display        "flex"
+                     :flex-direction "column"}}
+       [:span {:style {:height 14}} update-time]
+       [:span {:style {:height 14}} update-date]]]]))
+
+(defn current-version
+  []
+  (sw/get-last-update)
+  (let [last-update @(re-frame/subscribe [::subs/last-update])
+        version @(re-frame/subscribe [::subs/version])]
+    [ui/menu-item
+     {:disabled true
+      :style    {:height          50
+                 :justify-content "center"
+                 :padding-top     0
+                 :padding-bottom  0}}
+     (if (nil? last-update)
+       [ui/circular-progress
+        {:size 24}]
+       [current-version-data {:update-date-str last-update
+                              :version         version}])]))
+
 (defn sync-menu
   []
   (r/with-let [menu-anchor (r/atom nil)]
@@ -27,12 +65,17 @@
                   {:on-click #(reset! menu-anchor (.-currentTarget %))}
                   [sync-status]]
                  [ui/menu
-                  {:anchor-el @menu-anchor
-                   :open      (boolean @menu-anchor)
-                   :on-close  #(reset! menu-anchor nil)}
+                  {:anchor-el               @menu-anchor
+                   :open                    (boolean @menu-anchor)
+                   :disable-auto-focus-item true
+                   :on-close                #(reset! menu-anchor nil)}
+
+
                   [ui/menu-item
                    {:on-click handle-select-resources-click}
-                   "Select Resources"]]])))
+                   "Select Resources"]
+                  [ui/divider]
+                  [current-version]]])))
 
 (defn sync-control
   []

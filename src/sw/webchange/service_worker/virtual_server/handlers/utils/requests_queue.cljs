@@ -1,7 +1,7 @@
 (ns webchange.service-worker.virtual-server.handlers.utils.requests_queue
   (:require
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.handlers.utils.db :as db]
+    [webchange.service-worker.common.db :as db]
     [webchange.service-worker.virtual-server.handlers.utils.serializer :refer [serialize-request deserialize-request]]
     [webchange.service-worker.wrappers :refer [js-fetch promise promise-resolve request-url then]]))
 
