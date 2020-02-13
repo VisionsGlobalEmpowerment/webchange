@@ -107,7 +107,7 @@
                                                     :data [{:type "state" :target "box1" :id "visible"}
                                                            {:type "state" :target "box2" :id "visible"}
                                                            {:type "state" :target "box3" :id "visible"}
-                                                           {:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}]}
+                                                           #_{:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}]}
 
                  :switch-box-animations-idle       {:type "parallel"
                                                     :data [{:type "add-animation" :target "box1" :id "idle_fly1" :loop true}

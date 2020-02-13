@@ -6,6 +6,8 @@
 (defonce music-gain (atom nil))
 (defonce effects-gain (atom nil))
 
+(defonce registered-audio (atom []))
+
 (def default-music-vol 0.08)
 (def default-fx-vol 0.25)
 
@@ -79,15 +81,18 @@
       (set! (.-loop audio) true))
     audio))
 
+(defn- register-audio!
+  [audio]
+  (swap! registered-audio conj audio))
+
 (defn start-audio
+  ([offset start]
+   (start-audio offset start js/undefined))
   ([offset start duration]
     (fn [audio]
       (.start audio (+ (.-currentTime @audio-ctx) offset) start duration)
-      audio))
-  ([offset start]
-   (fn [audio]
-     (.start audio (+ (.-currentTime @audio-ctx) offset) start)
-     audio)))
+      (register-audio! audio)
+      audio)))
 
 (defn execute-audio-fx
   [{:keys [key start duration offset on-ended] :as params}]
@@ -111,3 +116,9 @@
   (if loop
     (execute-audio-music audio)
     (execute-audio-fx audio)))
+
+(defn stop-all-audio!
+  []
+  (doseq [audio @registered-audio]
+    (.stop audio))
+  (reset! registered-audio []))
