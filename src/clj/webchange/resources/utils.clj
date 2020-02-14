@@ -13,6 +13,5 @@
   [data]
   (->> (get-values-list data)
        (filter #(and (string? %)
-                     (s/starts-with? % "/raw/")
-                     (not (s/starts-with? % "/raw/video/"))))
+                     (s/starts-with? % "/raw/")))
        (distinct)))

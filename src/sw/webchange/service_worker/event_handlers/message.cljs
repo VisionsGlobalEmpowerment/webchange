@@ -4,7 +4,8 @@
     [webchange.service-worker.config :as config]
     [webchange.service-worker.common.cache :refer [cache-game-resources
                                                    cache-endpoints
-                                                   get-cached-activity-urls]]
+                                                   get-cached-activity-urls
+                                                   remove-game-resources]]
     [webchange.service-worker.common.db :as db]
     [webchange.service-worker.common.fetch :refer [fetch-game-start-resources]]
     [webchange.service-worker.wrappers :refer [then promise-all js-fetch response-json]]))
@@ -18,14 +19,17 @@
   (let [channel (js/BroadcastChannel. broadcast-channel)]
     (.postMessage channel (clj->js message))))
 
-
-;; ToDo: support removing extra caches
 (defn- update-cached-scenes
   [data]
-  (let [resources (-> data (aget "resources") (aget "add"))
+  (let [resources-to-add (-> data (aget "resources") (aget "add"))
+        resources-to-remove (-> data (aget "resources") (aget "remove"))
         scenes (-> data (aget "scenes") (aget "add"))]
-    (logger/debug "Update cached scenes:" scenes resources)
-    (cache-game-resources resources)
+    (logger/debug "Update cached resources")
+    (logger/debug "Add:" resources-to-add)
+    (logger/debug "Remove:" resources-to-remove)
+    (cache-game-resources resources-to-add)
+    (remove-game-resources resources-to-remove)
+    (logger/debug "Update cached scenes" scenes)
     (cache-endpoints scenes)))
 
 (defn- send-get-cached-resources

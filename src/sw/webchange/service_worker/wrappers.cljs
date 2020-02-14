@@ -27,6 +27,10 @@
   [cache-name]
   (.delete js/caches cache-name))
 
+(defn cache-delete-resource
+  [cache request]
+  (.delete cache request))
+
 (defn caches-keys
   []
   (.keys js/caches))

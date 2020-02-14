@@ -22,5 +22,5 @@
                             :version          nil}
    :sync-resources         {:list-open false
                             :scenes    {:loading false
-                                        :data    {}}}
+                                        :data    nil}}
    })
