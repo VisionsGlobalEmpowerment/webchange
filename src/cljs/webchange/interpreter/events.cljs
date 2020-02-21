@@ -11,7 +11,8 @@
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.service-worker.message :as sw]
+    [webchange.sw-utils.events :as swe]
+    [webchange.sw-utils.message :as sw]
     ))
 
 (re-frame/reg-fx
@@ -37,20 +38,21 @@
     (e/effects-volume (/ value 100))))
 
 (re-frame/reg-fx
-  :cache-course-initial-scene
+  :sw-cache-course
   (fn [[course-id]]
-    (sw/cache-start-activities course-id)))
+    (sw/cache-course course-id)))
 
 (re-frame/reg-event-fx
-  ::cache-course-initial-scene
+  ::sw-cache-course
   (fn [_ [_ course-id]]
-    {:cache-course-initial-scene [course-id]}))
+    {:sw-cache-course [course-id]
+     :dispatch [::swe/set-sw-status :syncing]}))
 
 (re-frame/reg-fx
   :load-course
   (fn [{:keys [course-id scene-id]}]
     (i/load-course course-id (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
-                                              (re-frame/dispatch [::cache-course-initial-scene course-id])
+                                              (re-frame/dispatch [::sw-cache-course course-id])
                                               (re-frame/dispatch [::set-course-data course])
                                               (re-frame/dispatch [::load-progress course-id])
                                               (re-frame/dispatch [::load-lessons course-id])
@@ -643,7 +645,6 @@
 (re-frame/reg-event-fx
   ::load-scene
   (fn [{:keys [db]} [_ scene-id]]
-    (js/console.log "::load-scene" scene-id)
     (let [loaded (get-in db [:scene-loading-complete scene-id])]
       (when (not loaded) {:load-scene [(:current-course db) scene-id]}))))
 

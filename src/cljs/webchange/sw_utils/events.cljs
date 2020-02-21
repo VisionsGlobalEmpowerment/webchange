@@ -1,9 +1,9 @@
-(ns webchange.service-worker.events
+(ns webchange.sw-utils.events
   (:require
     [re-frame.core :as re-frame]))
 
 (re-frame/reg-event-db
-  ::set-offline-mode
+  ::set-sw-status
   (fn [db [_ mode]]
     (assoc-in db [:service-worker :offline-mode] mode)))
 

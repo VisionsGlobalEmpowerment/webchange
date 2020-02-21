@@ -1,7 +1,8 @@
 (ns webchange.service-worker.event-handlers.fetch
   (:require
     [clojure.string :refer [starts-with?]]
-    [webchange.service-worker.config :refer [cache-names]]
+    [webchange.service-worker.common.db :refer [get-current-course]]
+    [webchange.service-worker.config :refer [get-cache-name]]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.strategies :as strategy]
     [webchange.service-worker.virtual-server.core :as vs]
@@ -9,7 +10,7 @@
 
 (def pages-paths ["/student-login"
                   "/courses"
-                  "/student-dashboard"])
+                  "/dashboard"])
 
 (defn- belong-paths?
   [request paths]
@@ -17,9 +18,9 @@
     (some #(starts-with? pathname %) paths)))
 
 (defn- serve-page-skeleton
-  []
+  [course-name]
   (strategy/cache-only {:request    "./page-skeleton"
-                        :cache-name (:static cache-names)}))
+                        :cache-name (get-cache-name :static course-name)}))
 
 (defn- serve-cache-asset
   [request cache-name]
@@ -27,9 +28,9 @@
                         :cache-name cache-name}))
 
 (defn- serve-rest-content
-  [request]
-  (let [cache-names [(:static cache-names)
-                     (:game cache-names)]
+  [request course-name]
+  (let [cache-names [(get-cache-name :static course-name)
+                     (get-cache-name :game course-name)]
         match-promises (map #(serve-cache-asset request %) cache-names)]
     (-> match-promises
         (promise-all)
@@ -40,11 +41,17 @@
                      (do (logger/debug (str "Not matched: " (request-pathname request)))
                          (js-fetch request)))))))))
 
+(defn- get-response
+  [request]
+  (-> (get-current-course)
+      (then (fn [course-name]
+              (cond
+                (vs/api-request? request) (vs/handle-request request course-name)
+                (belong-paths? request pages-paths) (serve-page-skeleton course-name)
+                :else (serve-rest-content request course-name))))))
+
 (defn handle
   [event]
   (let [request (.-request event)
         respond (.bind (.-respondWith event) event)]
-    (cond
-      (vs/api-request? request) (respond (vs/handle-request request))
-      (belong-paths? request pages-paths) (respond (serve-page-skeleton))
-      :else (respond (serve-rest-content request)))))
+    (respond (get-response request))))

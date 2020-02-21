@@ -6,7 +6,7 @@
     [webchange.service-worker.virtual-server.handlers.login :as login]
     [webchange.service-worker.virtual-server.handlers.current-user :as current-user]
     [webchange.service-worker.virtual-server.handlers.utils.responses-store :as store]
-    [webchange.service-worker.wrappers :refer [js-fetch online? promise-all request-method request-pathname then]]))
+    [webchange.service-worker.wrappers :refer [js-fetch online? promise-all promise-resolve request-method request-pathname then]]))
 
 (def routes ["/api/" {"courses" {["/" :course-id "/current-progress"] :current-progress}
                       "students" {"/login" :login}
@@ -24,23 +24,23 @@
     (bidi/match-route routes route)))
 
 (defn- get-handler
-  [request handler-name]
+  [request handler-name course-name]
   (let [handlers-map (get handlers handler-name)
         method (request-method request)]
     (if (contains? handlers-map method)
       (if (online?)
         (get-in handlers-map [method :online])
         (get-in handlers-map [method :offline]))
-      (cache/handle-request request))))
+      (cache/handle-request request course-name))))
 
 (defn has-handler?
   [request-or-route]
   (boolean (match-request request-or-route)))
 
 (defn handle-request
-  [request]
+  [request course-name]
   (let [match (match-request request)
-        handler (get-handler request (:handler match))]
+        handler (get-handler request (:handler match) course-name)]
     (handler request (:route-params match))))
 
 (defn prefetch

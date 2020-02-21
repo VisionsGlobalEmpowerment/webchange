@@ -1,6 +1,6 @@
-(ns webchange.service-worker.subscribe
+(ns webchange.sw-utils.subscribe
   (:require [re-frame.core :as re-frame]
-            [webchange.service-worker.events :as events]))
+            [webchange.sw-utils.events :as events]))
 
 (defn- set-cached-resources-list
   [data]
@@ -10,7 +10,8 @@
   [data]
   (let [date (get data "date")
         version (get data "version")]
-    (re-frame/dispatch [::events/set-last-update date version])))
+    (re-frame/dispatch [::events/set-last-update date version])
+    (re-frame/dispatch [::events/set-sw-status :synced])))
 
 (defn subscribe-to-notifications
   []

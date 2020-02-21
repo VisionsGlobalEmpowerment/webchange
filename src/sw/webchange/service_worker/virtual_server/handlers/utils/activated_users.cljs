@@ -26,10 +26,12 @@
 (defn get-activated-user-by-code
   [code]
   (logger/debug "[get-activated-user-by-code]" code)
-  (promise #(db/get-by-key db/activated-users-store-name code %)))
+  (if-not (nil? code)
+    (promise #(db/get-by-key db/activated-users-store-name code %))
+    (do (logger/warn "Can not get user: activation code is not defined")
+        (promise-resolve nil))))
 
 (defn get-current-user
   []
-  (let [code-promise (get-current-code)]
-    (-> code-promise
-        (then get-activated-user-by-code))))
+  (-> (get-current-code)
+      (then get-activated-user-by-code)))

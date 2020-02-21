@@ -8,11 +8,11 @@
     [webchange.service-worker.wrappers :refer [promise-all request-pathname]]))
 
 (defn add-endpoints
-  [endpoints]
+  [endpoints course-name]
   (let [has-not? (fn [vector value] (->> vector (some #(= value %)) not))
         routes-to-prefetch (filter handlers/has-handler? endpoints)
         routes-to-cache (filter #(has-not? routes-to-prefetch %) endpoints)]
-    (promise-all [(cache/cache-all routes-to-cache)
+    (promise-all [(cache/cache-all routes-to-cache course-name)
                   (handlers/prefetch routes-to-prefetch)])))
 
 (defn api-request?
@@ -21,7 +21,7 @@
     (starts-with? pathname api-path)))
 
 (defn handle-request
-  [request]
+  [request course-name]
   (if (handlers/has-handler? request)
-    (handlers/handle-request request)
-    (cache/handle-request request)))
+    (handlers/handle-request request course-name)
+    (cache/handle-request request course-name)))

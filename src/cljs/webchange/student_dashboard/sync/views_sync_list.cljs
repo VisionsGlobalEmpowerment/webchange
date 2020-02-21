@@ -5,9 +5,10 @@
     [clojure.set :refer [difference union]]
     [webchange.student-dashboard.sync.events :as events]
     [webchange.student-dashboard.sync.subs :as subs]
-    [webchange.service-worker.message :as sw]
-    [webchange.service-worker.subs :as sw-subs]
-    [webchange.student-dashboard.sync.views-sync-list-present :refer [sync-list-modal-view]]))
+    [webchange.sw-utils.message :as sw]
+    [webchange.sw-utils.subs :as sw-subs]
+    [webchange.student-dashboard.sync.views-sync-list-present :refer [sync-list-modal-view]]
+    [webchange.subs :as global-subs]))
 
 ;; Get initial state
 
@@ -147,10 +148,10 @@
 
 (defn- component-did-mount
   [this]
-  (let [{:keys [scenes-data synced-game-resources]} (r/props this)]
+  (let [{:keys [scenes-data synced-game-resources course]} (r/props this)]
     (reset! data (get-levels-data scenes-data synced-game-resources))
     (re-frame/dispatch [::events/load-scenes])
-    (sw/get-cached-resources)))
+    (sw/get-cached-resources course)))
 
 (defn- component-did-update
   [this [_ prev-props]]
@@ -160,7 +161,7 @@
       (reset! data (get-levels-data scenes-data synced-game-resources)))))
 
 (defn- sync-list-modal-render
-  [{:keys [scenes-loading synced-game-resources window-opened?]}]
+  [{:keys [course scenes-loading synced-game-resources window-opened?]}]
   (let [handle-list-item-click (fn [action level-id scene-id]
                                  (let [selected-scenes (if (nil? scene-id)
                                                          (get-level-scenes @data level-id)
@@ -170,7 +171,8 @@
                                      :remove (remove-scenes-selection! data level-id selected-scenes))))
         handle-save (fn []
                       (let [selected-resources (get-selected-resources @data)]
-                        (sw/set-cached-scenes {:scenes    {:add (get-selected-endpoints @data)}
+                        (sw/set-cached-scenes {:course    course
+                                               :scenes    {:add (get-selected-endpoints @data)}
                                                :resources {:add    (get-resources-to-add synced-game-resources selected-resources)
                                                            :remove (get-resources-to-remove synced-game-resources selected-resources)}})
                         (re-frame/dispatch [::events/close-sync-list])))
@@ -184,22 +186,18 @@
 
 (def sync-list-modal-wrapper
   (with-meta sync-list-modal-render
-             {:component-did-mount component-did-mount
+             {:component-did-mount  component-did-mount
               :component-did-update component-did-update}))
-
-;(defn chart-component []
-;  (r/create-class
-;    {:component-did-mount data-fn
-;     :display-name "chart-component"
-;     :reagent-render chart-render}))
 
 (defn sync-list-modal
   []
-  (let [scenes-data @(re-frame/subscribe [::subs/scenes-data])
+  (let [current-course @(re-frame/subscribe [::global-subs/current-course])
+        scenes-data @(re-frame/subscribe [::subs/scenes-data])
         scenes-loading @(re-frame/subscribe [::subs/scenes-loading])
         synced-game-resources @(re-frame/subscribe [::sw-subs/get-synced-game-resources])
         window-opened? @(re-frame/subscribe [::subs/list-open])]
-    [sync-list-modal-wrapper {:scenes-data           scenes-data
+    [sync-list-modal-wrapper {:course                current-course
+                              :scenes-data           scenes-data
                               :scenes-loading        scenes-loading
                               :synced-game-resources synced-game-resources
                               :window-opened?        window-opened?}]))
