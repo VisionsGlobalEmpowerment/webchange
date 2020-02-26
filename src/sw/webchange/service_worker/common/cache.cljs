@@ -3,7 +3,8 @@
     [webchange.service-worker.config :as config]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers :refer [cache-open cache-add-all cache-keys promise-resolve response-json then]]))
+    [webchange.service-worker.wrappers :refer [cache-open cache-add-all cache-keys cache-delete-resource
+                                               promise-all promise-resolve response-json then]]))
 
 (defn- cache-resources
   [cache-name resources]
@@ -21,6 +22,15 @@
                   (if (> (count next) 0)
                     (recur next current-p)
                     current-p)))))))
+
+(defn- remove-caches
+  [cache-name resources]
+  (logger/debug-folded (str "Resources to remove from " cache-name) resources)
+  (-> (cache-open cache-name)
+      (then (fn [cache]
+              (promise-all (map (fn [url]
+                                  (cache-delete-resource cache url))
+                                resources))))))
 
 (defn- get-cache-resources
   [cache-name]
@@ -40,6 +50,10 @@
 (defn cache-game-resources
   [resources]
   (cache-resources (:game config/cache-names) resources))
+
+(defn remove-game-resources
+  [resources]
+  (remove-caches (:game config/cache-names) resources))
 
 (defn get-cached-activity-urls
   []

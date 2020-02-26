@@ -49,7 +49,6 @@
 (re-frame/reg-fx
   :load-course
   (fn [{:keys [course-id scene-id]}]
-    (js/console.log ":load-course" course-id scene-id)
     (i/load-course course-id (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
                                               (re-frame/dispatch [::cache-course-initial-scene course-id])
                                               (re-frame/dispatch [::set-course-data course])
@@ -670,7 +669,6 @@
 (re-frame/reg-event-fx
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id]]
-    (js/console.log "::set-current-scene" scene-id)
     (let [current-scene (:current-scene db)
           stored-scene (get-in db [:store-scenes scene-id])
           merged-scene (merge-with-templates db stored-scene)]

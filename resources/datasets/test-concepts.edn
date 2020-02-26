@@ -1,6 +1,7 @@
 {:fields
  [{:name "book-content-action",
    :type "action",
+   :scenes ["book"],
    :template
    {:data
     [{:id "default",
@@ -24,25 +25,42 @@
     :scene-id "book"}}
   {:name "book-read-action",
    :type "action",
+   :scenes ["book"],
    :template {:type "audio", :scene-id "book"}}
-  {:name "chanting-video-src", :type "string"}
-  {:name "concept-name", :type "string"}
-  {:name "concept-rest", :type "string"}
+  {:name "chanting-video-src",
+   :type "string",
+   :scenes ["cinema-video"]}
+  {:name "concept-name",
+   :type "string",
+   :scenes
+   ["cycling-letters"
+    "hide-n-seek"
+    "magic-hat"
+    "running"
+    "slide"
+    "volleyball"
+    "volleyball-letters"
+    "writing-practice"]}
+  {:name "concept-rest", :type "string", :scenes ["letter-intro"]}
   {:name "game-voice-action",
    :type "action",
+   :scenes ["cycling" "see-saw" "volleyball"],
    :template
    {:type "audio",
     :scene-id "cycling",
     :description "Game Voice High"}}
   {:name "game-voice-action-low",
    :type "action",
+   :scenes ["see-saw"],
    :template {:type "audio", :scene-id "see-saw"}}
   {:name "game-voice-chanting",
    :type "action",
+   :scenes ["running"],
    :template {:type "audio", :scene-id "running"}}
   {:name "hide-n-seek-current-concept-audio", :type "action"}
   {:name "home-group-3-times-action",
    :type "action",
+   :scenes ["home"],
    :template
    {:data
     [{:type "animation-sequence", :target "vera"}
@@ -51,6 +69,7 @@
     :scene-id "home"}}
   {:name "home-group-word-action",
    :type "action",
+   :scenes ["home"],
    :template
    {:data
     [{:type "animation-sequence", :target "vera"}
@@ -59,18 +78,21 @@
     :scene-id "home"}}
   {:name "home-vaca-3-times-action",
    :type "action",
+   :scenes ["home"],
    :template
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
   {:name "home-vaca-goodbye-action",
    :type "action",
+   :scenes ["home"],
    :template
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
   {:name "home-vaca-question-action",
    :type "action",
+   :scenes ["home"],
    :template
    {:type "animation-sequence",
     :target "senoravaca",
@@ -83,15 +105,23 @@
     :scene-id "home"}}
   {:name "home-vaca-word-action",
    :type "action",
+   :scenes ["home"],
    :template
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
-  {:name "image-src", :type "string"}
-  {:name "letter", :type "string"}
-  {:name "letter-big", :type "string"}
+  {:name "image-src",
+   :type "string",
+   :scenes
+   ["cycling-letters" "letter-intro" "park-poem" "writing-practice"]}
+  {:name "letter",
+   :type "string",
+   :scenes
+   ["cinema" "cycling-letters" "letter-intro" "magic-hat" "sandbox"]}
+  {:name "letter-big", :type "string", :scenes ["letter-intro"]}
   {:name "letter-intro-letter",
    :type "action",
+   :scenes ["cinema-video" "letter-intro" "writing-lesson"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -101,6 +131,7 @@
     :scene-id "letter-intro"}}
   {:name "letter-intro-letter-mari",
    :type "action",
+   :scenes ["letter-intro"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -110,6 +141,7 @@
     :scene-id "letter-intro"}}
   {:name "letter-intro-song",
    :type "action",
+   :scenes ["letter-intro"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -119,6 +151,7 @@
     :scene-id "letter-intro"}}
   {:name "letter-intro-sound",
    :type "action",
+   :scenes ["letter-intro" "writing-lesson"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -128,6 +161,7 @@
     :scene-id "letter-intro"}}
   {:name "letter-intro-word",
    :type "action",
+   :scenes ["letter-intro" "writing-lesson"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -137,6 +171,7 @@
     :scene-id "letter-intro"}}
   {:name "letter-intro-word-repeat",
    :type "action",
+   :scenes ["letter-intro"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -144,11 +179,18 @@
     :track 1,
     :target "senoravaca",
     :scene-id "letter-intro"}}
-  {:name "letter-path", :type "string"}
-  {:name "letter-src", :type "string"}
-  {:name "letter-tutorial-path", :type "string"}
+  {:name "letter-path",
+   :type "string",
+   :scenes ["writing-lesson" "writing-practice"]}
+  {:name "letter-src",
+   :type "string",
+   :scenes ["park-poem" "writing-lesson" "writing-practice"]}
+  {:name "letter-tutorial-path",
+   :type "string",
+   :scenes ["writing-practice"]}
   {:name "mari-chant",
    :type "action",
+   :scenes ["magic-hat"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -157,6 +199,7 @@
     :scene-id "magic-hat"}}
   {:name "mari-letter",
    :type "action",
+   :scenes ["pinata"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -165,6 +208,7 @@
     :scene-id "magic-hat"}}
   {:name "mari-sound",
    :type "action",
+   :scenes ["magic-hat"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -173,6 +217,7 @@
     :scene-id "magic-hat"}}
   {:name "mari-sound-3",
    :type "action",
+   :scenes ["cycling-letters" "magic-hat" "volleyball-letters"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -181,17 +226,19 @@
     :scene-id "magic-hat"}}
   {:name "mari-word",
    :type "action",
+   :scenes ["magic-hat"],
    :template
    {:data [],
     :type "animation-sequence",
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
     :scene-id "magic-hat"}}
-  {:name "poem-image-1", :type "string"}
-  {:name "poem-image-2", :type "string"}
-  {:name "poem-image-3", :type "string"}
+  {:name "poem-image-1", :type "string", :scenes ["park-poem"]}
+  {:name "poem-image-2", :type "string", :scenes ["park-poem"]}
+  {:name "poem-image-3", :type "string", :scenes ["park-poem"]}
   {:name "poem-story",
    :type "action",
+   :scenes ["park-poem"],
    :template
    {:data
     [{:id "run-bubble-1", :type "action"}
@@ -219,30 +266,53 @@
     :scene-id "park-poem"}}
   {:name "riddle",
    :type "action",
+   :scenes ["slide"],
    :template {:type "audio", :scene-id "slide"}}
   {:name "sandbox-long-letter-action",
    :type "action",
+   :scenes ["sandbox"],
    :template
    {:type "animation-sequence", :target "mari", :scene-id "sandbox"}}
   {:name "sandbox-short-letter-action",
    :type "action",
+   :scenes ["sandbox"],
    :template
    {:type "animation-sequence", :target "mari", :scene-id "sandbox"}}
   {:name "sandbox-state-word-1-action",
    :type "action",
+   :scenes ["sandbox"],
    :template {:type "audio", :scene-id "sandbox"}}
   {:name "sandbox-state-word-2-action",
    :type "action",
+   :scenes ["sandbox"],
    :template {:type "audio", :scene-id "sandbox"}}
   {:name "sandbox-state-word-3-action",
    :type "action",
+   :scenes ["sandbox"],
    :template {:type "audio", :scene-id "sandbox"}}
   {:name "sandbox-state-word-4-action",
    :type "action",
+   :scenes ["sandbox"],
    :template {:type "audio", :scene-id "sandbox"}}
-  {:name "skin", :type "string"}
+  {:name "skin",
+   :type "string",
+   :scenes
+   ["cycling"
+    "hide-n-seek"
+    "home"
+    "magic-hat"
+    "pinata"
+    "running"
+    "sandbox"
+    "see-saw"
+    "slide"
+    "swings"
+    "volleyball"
+    "volleyball-letters"
+    "writing-lesson"]}
   {:name "swings-dialog-action",
    :type "action",
+   :scenes ["swings"],
    :template
    {:data
     [{:type "animation-sequence", :target "rock"}
@@ -251,6 +321,7 @@
     :scene-id "swings"}}
   {:name "vaca-chanting-song",
    :type "action",
+   :scenes ["cinema"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -260,6 +331,7 @@
     :scene-id "cinema"}}
   {:name "vaca-chanting-word",
    :type "action",
+   :scenes ["cinema"],
    :template
    {:data [],
     :type "animation-sequence",
@@ -267,10 +339,18 @@
     :track 1,
     :target "senoravaca",
     :scene-id "cinema"}}
-  {:name "word-1-skin", :type "string"}
-  {:name "word-2-skin", :type "string"}
-  {:name "word-3-skin", :type "string"}
-  {:name "word-4-skin", :type "string"}],
+  {:name "word-1-skin",
+   :type "string",
+   :scenes ["cycling" "volleyball"]}
+  {:name "word-2-skin",
+   :type "string",
+   :scenes ["cycling" "volleyball"]}
+  {:name "word-3-skin",
+   :type "string",
+   :scenes ["cycling" "volleyball"]}
+  {:name "word-4-skin",
+   :type "string",
+   :scenes ["cycling" "volleyball"]}],
  :items
  [{:name "ardilla",
    :data
@@ -6084,6 +6164,159 @@
      :track 1,
      :data
      [{:end 69.614, :anim "talk", :start 69.107, :duration 0.507}]},
+    :word-1-skin "iguana",
+    :word-2-skin "fire",
+    :word-3-skin "insect",
+    :word-4-skin "island"}}
+  {:name "incendio",
+   :data
+   {:chanting-video-src "/raw/video/l2a1/letter-i.mp4",
+    :concept-name "iman",
+    :game-voice-action
+    {:id "/raw/audio/l1/a8/GameVoice.m4a",
+     :type "audio",
+     :start 9.534,
+     :duration 0.853,
+     :scene-id "cycling"},
+    :hide-n-seek-current-concept-audio
+    {:description "Hide and seek question",
+     :offset 9.515,
+     :scene-id "hide-n-seek",
+     :start 9.515,
+     :type "animation-sequence",
+     :duration 1,
+     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :target "mari",
+     :track 1,
+     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+    :home-group-3-times "group-3-times-incendio",
+    :home-group-word "group-word-incendio",
+    :home-vaca-3-times "vaca-3-times-incendio",
+    :home-vaca-goodbye "goodbye-incendio",
+    :home-vaca-question "question-incendio",
+    :home-vaca-this-is "this-is-incendio",
+    :home-vaca-word "word-incendio",
+    :letter "i",
+    :sandbox-change-skin-1-action
+    {:skin "iguana",
+     :type "set-skin",
+     :target "box1",
+     :scene-id "sandbox",
+     :description ":box-1-set-skin-iguana"},
+    :sandbox-change-skin-2-action
+    {:skin "fire",
+     :type "set-skin",
+     :target "box2",
+     :scene-id "sandbox",
+     :description ":box-1-set-skin-incendio"},
+    :sandbox-change-skin-3-action
+    {:skin "insect",
+     :type "set-skin",
+     :target "box3",
+     :scene-id "sandbox",
+     :description ":box-1-set-skin-insecto"},
+    :sandbox-change-skin-4-action
+    {:skin "island",
+     :type "set-skin",
+     :target "box4",
+     :scene-id "sandbox",
+     :description ":box-1-set-skin-isla"},
+    :sandbox-state-word-1 "iguana",
+    :sandbox-state-word-1-action
+    {:data
+     [{:id "show",
+       :type "state",
+       :params {:text "Iguana"},
+       :target "word"}
+      {:id "voice-3", :type "audio", :start 4.828, :duration 1.27}
+      {:id "default", :type "state", :target "word"}],
+     :type "sequence-data",
+     :scene-id "sandbox",
+     :description ":sandbox-state-word-iguana"},
+    :sandbox-state-word-2 "incendio",
+    :sandbox-state-word-2-action
+    {:data
+     [{:id "show",
+       :type "state",
+       :params {:text "Incendio"},
+       :target "word"}
+      {:id "voice-3", :type "audio", :start 6.591, :duration 1.375}
+      {:id "default", :type "state", :target "word"}],
+     :type "sequence-data",
+     :scene-id "sandbox",
+     :description ":sandbox-state-word-incendio"},
+    :sandbox-state-word-3 "insecto",
+    :sandbox-state-word-3-action
+    {:data
+     [{:id "show",
+       :type "state",
+       :params {:text "Insecto"},
+       :target "word"}
+      {:id "voice-3", :type "audio", :start 8.699, :duration 1.465}
+      {:id "default", :type "state", :target "word"}],
+     :type "sequence-data",
+     :scene-id "sandbox",
+     :description ":sandbox-state-word-insecto"},
+    :sandbox-state-word-4 "isla",
+    :sandbox-state-word-4-action
+    {:data
+     [{:id "show",
+       :type "state",
+       :params {:text "Isla"},
+       :target "word"}
+      {:id "voice-3", :type "audio", :start 10.911, :duration 1.151}
+      {:id "default", :type "state", :target "word"}],
+     :type "sequence-data",
+     :scene-id "sandbox",
+     :description ":sandbox-state-word-isla"},
+    :sandbox-this-is-letter "mari-this-is-letter-i",
+    :sandbox-this-is-letter-action
+    {:description ":mari-this-is-letter-i",
+     :offset "83.778",
+     :scene-id "sandbox",
+     :start "83.778",
+     :type "animation-sequence",
+     :duration "16.63",
+     :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+     :target "mari",
+     :track "1",
+     :data
+     [{:end 86.148, :anim "talk", :start 83.942}
+      {:end 92.025, :anim "talk", :start 86.795}
+      {:end 100.281, :anim "talk", :start 93.228}]},
+    :seesaw-voice-high "word-incendio-high",
+    :seesaw-voice-low "word-incendio-low",
+    :skin "magnet",
+    :swings-dialog "dialog-incendio",
+    :vaca-chanting-song
+    {:data
+     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+       :type "audio",
+       :start 69.004,
+       :duration 3.549}
+      {:data
+       [{:end 69.749, :anim "talk", :start 69.063}
+        {:end 70.793, :anim "talk", :start 69.988}
+        {:end 72.523, :anim "talk", :start 71.211}],
+       :type "animation-sequence",
+       :track 1,
+       :offset 69.004,
+       :target "senoravaca"}],
+     :type "parallel",
+     :description "Iman, Iman i-i-I!"},
+    :vaca-chanting-word
+    {:data
+     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+       :type "audio",
+       :start 68.941,
+       :duration 0.847}
+      {:data [{:end 69.749, :anim "talk", :start 69.063}],
+       :type "animation-sequence",
+       :track 1,
+       :offset 68.941,
+       :target "senoravaca"}],
+     :type "parallel",
+     :description "Iman"},
     :word-1-skin "iguana",
     :word-2-skin "fire",
     :word-3-skin "insect",

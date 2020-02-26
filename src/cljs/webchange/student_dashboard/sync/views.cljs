@@ -54,13 +54,12 @@
        [current-version-data {:update-date-str last-update
                               :version         version}])]))
 
-(defn sync-menu
+(defn sync-control
   []
   (r/with-let [menu-anchor (r/atom nil)]
               (let [handle-select-resources-click #(do (reset! menu-anchor nil)
                                                        (re-frame/dispatch [::events/open-sync-list]))]
                 [:div
-                 [sync-list-modal]
                  [ui/icon-button
                   {:on-click #(reset! menu-anchor (.-currentTarget %))}
                   [sync-status]]
@@ -69,14 +68,9 @@
                    :open                    (boolean @menu-anchor)
                    :disable-auto-focus-item true
                    :on-close                #(reset! menu-anchor nil)}
-
-
                   [ui/menu-item
                    {:on-click handle-select-resources-click}
                    "Select Resources"]
                   [ui/divider]
-                  [current-version]]])))
-
-(defn sync-control
-  []
-  [sync-menu])
+                  [current-version]]
+                 [sync-list-modal]])))

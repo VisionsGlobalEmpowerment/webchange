@@ -3,8 +3,8 @@
     [camel-snake-kebab.core :refer [->Camel_Snake_Case]]
     [clojure.string :as s]
     [webchange.course.core :as course]
-    [webchange.dataset.core :as dataset]
-    [webchange.resources.utils :refer [find-resources]]))
+    [webchange.resources.utils :refer [find-resources]]
+    [webchange.resources.get-dataset-resources :refer [get-dataset-resources]]))
 
 (defn- get-course-levels
   [course-data]
@@ -23,7 +23,7 @@
                [])))
 
 (defn- get-scene-resources
-  [scene-name course-name]
+  [course-name scene-name]
   (->> scene-name
        (course/get-scene-data course-name)
        (find-resources)))
@@ -38,7 +38,9 @@
                                                               (->Camel_Snake_Case)
                                                               (s/replace "_" " "))
                                                :endpoint  (str "/api/courses/" course-name "/scenes/" scene-name)
-                                               :resources (get-scene-resources scene-name course-name)})
+                                               :resources (-> (concat (get-scene-resources course-name scene-name)
+                                                                      (get-dataset-resources course-name [scene-name]))
+                                                              (distinct))})
                                             activities))))))
 
 (defn get-activities-resources
@@ -51,12 +53,10 @@
 (defn get-start-resources
   [course-name]
   (let [initial-scene (:initial-scene (course/get-course-data course-name))
-        initial-scene-resources (->> course-name
-                                     (get-scene-resources initial-scene))
-        lessons-resources (->> course-name
-                               (dataset/get-course-lessons)
-                               (find-resources))]
-    {:resources (-> (concat initial-scene-resources lessons-resources)
+        initial-scene-resources (get-scene-resources course-name initial-scene)
+        datasets-resources (get-dataset-resources course-name [initial-scene])]
+    {:resources (-> (concat initial-scene-resources
+                            datasets-resources)
                     (distinct))
      :endpoints [(str "/api/courses/" course-name)
                  (str "/api/courses/" course-name "/lesson-sets")
