@@ -75,7 +75,8 @@
   :cooper {"styles" ["lein" "sass" "auto"]
            "cljs"   ["lein" "figwheel" "dev"]}
 
-  :aliases {"dev" ["cooper"]}
+  :aliases {"dev" ["cooper"]
+            "resources" ["run" "-m" "webchange.resources.generate-resources-list"]}
 
   :profiles
   {:dev

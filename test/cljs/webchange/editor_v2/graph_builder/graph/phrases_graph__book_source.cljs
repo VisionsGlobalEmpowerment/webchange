@@ -25,7 +25,7 @@
                            {:url "/raw/img/elements/mama.png" :size 1 :type "image"}
                            {:url "/raw/img/elements/monkey.png" :size 1 :type "image"}
 
-                           {:url "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
+                           {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
                            {:url "/raw/audio/l1/a6/L1_A6_Lion_words.m4a", :size 2, :type "audio" :alias "librarian books words"}
                            {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio" :alias "vera books intro"}],
            :objects       {:background      {:type   "background", :src "/raw/img/library/book/background2.jpg"
@@ -169,11 +169,11 @@
 
                            :read-title                {:type        "sequence-data"
                                                        :data        [{:type     "audio",
-                                                                      :id       "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+                                                                      :id       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
                                                                       :start    18.121,
                                                                       :duration 1.346}
                                                                      {:type      "text-animation",
-                                                                      :audio     "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+                                                                      :audio     "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
                                                                       :start     20.134,
                                                                       :duration  1.987,
                                                                       :animation "bounce",
@@ -190,11 +190,11 @@
                                                                                   {:start 21.588, :end 21.641, :duration 0.053, :at 21.588, :chunk 9}
                                                                                   {:start 21.681, :end 21.801, :duration 0.12, :at 21.681, :chunk 10}]}
                                                                      {:type     "audio",
-                                                                      :id       "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+                                                                      :id       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
                                                                       :start    22.414,
                                                                       :duration 1.907}
                                                                      {:type      "text-animation",
-                                                                      :audio     "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a",
+                                                                      :audio     "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
                                                                       :start     24.641,
                                                                       :duration  1.813,
                                                                       :animation "bounce",
@@ -211,8 +211,8 @@
                                                                                   {:start 25.921, :end 25.961, :duration 0.04, :at 25.921, :chunk 9}
                                                                                   {:start 26.094, :end 26.281, :duration 0.187, :at 26.094, :chunk 10}]}
                                                                      {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Vera.m4a", :start 5.497, :duration 2.201}
-                                                                     {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a", :start 27.734, :duration 1.92}
-                                                                     {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Lion Intro.m4a", :start 31.028, :duration 2.347}]
+                                                                     {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :start 27.734, :duration 1.92}
+                                                                     {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :start 31.028, :duration 2.347}]
                                                        :phrase      :read-title
                                                        :phrase-text "Lion: Do you see this title? “My first words book”. The title of this book is “My first words book”.
                                                         Vera: My first words book.

@@ -7,7 +7,7 @@
     [webchange.service-worker.virtual-server.handlers.core :as handlers]
     [webchange.service-worker.wrappers :refer [promise-all request-pathname]]))
 
-(defn install
+(defn add-endpoints
   [endpoints]
   (let [has-not? (fn [vector value] (->> vector (some #(= value %)) not))
         routes-to-prefetch (filter handlers/has-handler? endpoints)

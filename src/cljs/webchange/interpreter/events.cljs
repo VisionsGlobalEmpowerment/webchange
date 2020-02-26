@@ -11,6 +11,7 @@
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
     [webchange.interpreter.variables.events :as vars.events]
+    [webchange.service-worker.message :as sw]
     ))
 
 (re-frame/reg-fx
@@ -36,14 +37,25 @@
     (e/effects-volume (/ value 100))))
 
 (re-frame/reg-fx
+  :cache-course-initial-scene
+  (fn [[course-id]]
+    (sw/cache-start-activities course-id)))
+
+(re-frame/reg-event-fx
+  ::cache-course-initial-scene
+  (fn [_ [_ course-id]]
+    {:cache-course-initial-scene [course-id]}))
+
+(re-frame/reg-fx
   :load-course
   (fn [{:keys [course-id scene-id]}]
     (js/console.log ":load-course" course-id scene-id)
     (i/load-course course-id (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
+                                              (re-frame/dispatch [::cache-course-initial-scene course-id])
                                               (re-frame/dispatch [::set-course-data course])
                                               (re-frame/dispatch [::load-progress course-id])
                                               (re-frame/dispatch [::load-lessons course-id])
-                                              (re-frame/dispatch [::set-current-scene (or scene-id (:initial-scene course))]))))))
+                                              (re-frame/dispatch [::set-current-scene (or scene-id (:initial-scene course)) course-id]))))))
 
 (re-frame/reg-fx
   :load-scene
@@ -558,10 +570,10 @@
 (re-frame/reg-event-fx
   ::next-workflow-action
   (fn-traced [{:keys [db]} _]
-    (let [next-action (first-nonfinished-action db)]
-      (if next-action
-        {:db       (assoc-in db [:progress-data :current-workflow-action] (:id next-action))
-         :dispatch (next-action->event next-action)}))))
+             (let [next-action (first-nonfinished-action db)]
+               (if next-action
+                 {:db       (assoc-in db [:progress-data :current-workflow-action] (:id next-action))
+                  :dispatch (next-action->event next-action)}))))
 
 (re-frame/reg-event-fx
   ::set-activity
@@ -696,7 +708,7 @@
 (re-frame/reg-event-fx
   ::set-progress-data
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :progress-data data)
+    {:db       (assoc db :progress-data data)
      :dispatch [::next-workflow-action]}))
 
 (re-frame/reg-event-fx

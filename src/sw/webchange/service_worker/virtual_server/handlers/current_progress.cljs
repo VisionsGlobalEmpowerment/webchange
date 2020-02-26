@@ -4,7 +4,7 @@
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.virtual-server.handlers.utils.responses-store :as store]
     [webchange.service-worker.virtual-server.handlers.utils.requests_queue :as queue]
-    [webchange.service-worker.virtual-server.handlers.utils.db :as db]
+    [webchange.service-worker.common.db :as db]
     [webchange.service-worker.virtual-server.handlers.utils.activated-users :as activated-users]
     [webchange.service-worker.wrappers :refer [js-fetch promise-resolve body-json response-clone request-clone then catch data->response require-status-ok!]]))
 
