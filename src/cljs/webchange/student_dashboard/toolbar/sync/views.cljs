@@ -1,21 +1,23 @@
-(ns webchange.student-dashboard.sync.views
+(ns webchange.student-dashboard.toolbar.sync.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.service-worker.message :as sw]
     [webchange.service-worker.subs :as subs]
-    [webchange.student-dashboard.sync.events :as events]
-    [webchange.student-dashboard.sync.views-sync-list :refer [sync-list-modal]]))
+    [webchange.student-dashboard.toolbar.sync.events :as events]
+    [webchange.student-dashboard.toolbar.sync.views-sync-list :refer [sync-list-modal]]
+    [webchange.student-dashboard.toolbar.sync.icons.icon-ready :as icon-ready]
+    [webchange.student-dashboard.toolbar.sync.icons.icon-syncing :as icon-syncing]
+    [webchange.student-dashboard.toolbar.sync.icons.icon-unavailable :as icon-unavailable]))
 
 (defn sync-status
   []
   (let [offline-mode @(re-frame/subscribe [::subs/offline-mode])]
     (case offline-mode
-      :not-started [ic/cloud-off {:color "disabled"}]
-      :in-progress [ic/cloud-download {:color "disabled"}]
-      [ic/cloud-done])))
+      :not-started [icon-unavailable/get-shape]
+      :in-progress [icon-syncing/get-shape]
+      [icon-ready/get-shape])))
 
 (defn current-version-data
   [{:keys [update-date-str version]}]
@@ -54,7 +56,7 @@
        [current-version-data {:update-date-str last-update
                               :version         version}])]))
 
-(defn sync-control
+(defn sync
   []
   (r/with-let [menu-anchor (r/atom nil)]
               (let [handle-select-resources-click #(do (reset! menu-anchor nil)

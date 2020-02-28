@@ -2,7 +2,10 @@
   (:require
     [cljsjs.material-ui]
     [cljs-react-material-ui.reagent :as ui]
-    [cljs-react-material-ui.core :refer [create-mui-theme]]))
+    [cljs-react-material-ui.core :refer [create-mui-theme]]
+    [webchange.ui.utils :refer [deep-merge]]))
+
+(def current-theme (atom nil))                              ;; "dark" / "light"
 
 (def w-colors
   {:primary        "#222342"
@@ -11,29 +14,79 @@
    :secondary      "#fd4142"
    :disabled       "#bababa"})
 
+(def color-themes
+  {:dark  {:palette {:type        "dark"
+                     :background  {:default "#323232"
+                                   :darken  "#2a2a2a"
+                                   :paper   "#323232"}
+                     :border      {:default "#555555"}
+                     :primary     {:main "#1272e6"}
+                     :text        {:secondary "#555555"}
+                     :flat-button {:background-color "#3c3c3c"}}}
+   :light {:palette {:type        "light"
+                     :background  {:default "#ffffff"
+                                   :darken  "#f5f5f5"
+                                   :paper   "#fff"}
+                     :border      {:default "#cecece"}
+                     :primary     {:main "#1272e6"}
+                     :text        {:secondary "#555555"}
+                     :flat-button {:background-color "#f2f2f7"}}}})
+
 (defn mui-theme
   [type]
-  (create-mui-theme {:border-radius 20
-                     :palette       {:type       type
-                                     :primary    {:main (get-in w-colors [:primary])}
-                                     :text-color (get-in w-colors [:primary])}
-                     :checkbox      {:checked-color (get-in w-colors [:primary])}
-                     :flat-button   {:primary-text-color (get-in w-colors [:primary])}
-                     :raised-button {:primary-color (get-in w-colors [:primary])}
-                     :text-field    {:focus-color (get-in w-colors [:primary])}
-                     :typography    {:use-next-variants true}
-                     }))
+  (reset! current-theme type)
+  (let [theme (keyword type)
+        color-theme (get color-themes theme)
+        common-theme {:typography {:h2                {:fontSize    "1.875rem"
+                                                       :font-weight "900"}
+                                   :use-next-variants true}
+                      :overrides  {:MuiInputBase {:root {:&:before {:display "none"}
+                                                         :&:after  {:display "none"}}}
+                                   :MuiButton    {:root      {:font-size      "0.85rem"
+                                                              :font-weight    "bold"
+                                                              :text-transform "capitalize"}
+                                                  :contained {:border-radius "20px"
+                                                              :padding       "6px 40px"}
+                                                  :flat      {:background-color (get-in color-themes [theme :palette :flat-button :background-color])
+                                                              :color            (get-in color-themes [theme :palette :primary :main])
+                                                              :padding          "3px 26px"
+                                                              :border-radius    "15px"}}
+                                   :MuiList      {:root {:background-color (get-in color-themes [theme :palette :background :default])
+                                                         :padding          "8px"}}
+                                   :MuiMenu      {:paper {:margin-top  "-2px"
+                                                          :margin-left "1px"}}
+                                   :MuiMenuItem  {:root {:padding       "5px 11px"
+                                                         :border-radius "6px"
+                                                         :margin        "5px 0"}}
+                                   :MuiSelect    {:selectMenu {:border-color  (get-in color-themes [theme :palette :border :default])
+                                                               :border-width  "1px"
+                                                               :border-style  "solid"
+                                                               :border-radius "6px"
+                                                               :padding       "10px 19px"
+                                                               :text-align    "start"
+                                                               :&:focus       {:border-radius "6px"}}
+                                                  :icon       {:right "9px"
+                                                               :color (get-in color-themes [theme :palette :border :default])}}}}]
+    (create-mui-theme (deep-merge common-theme color-theme))))
 
 (defn get-in-theme
   [path]
-  (get-in (js->clj mui-theme) (->> path
-                                   (map #(if (= (type %) Keyword) (name %) %))
-                                   (vec))))
+  (get-in (-> @current-theme
+              (mui-theme)
+              (js->clj))
+          (->> path
+               (map #(if (= (type %) Keyword) (name %) %))
+               (vec))))
 
 (defn with-mui-theme
   ([children]
-   (with-mui-theme "light" children {}))
-  ([type children]
-   (with-mui-theme type children {}))
-  ([type children _]
-   [ui/mui-theme-provider {:theme (mui-theme type)} children]))
+   (with-mui-theme {} children))
+  ([{:keys [type theme]} children]
+   (let [current-theme-type (if-not (nil? type)
+                              type
+                              "light")
+         current-theme (if-not (nil? theme)
+                         (create-mui-theme theme)
+                         (mui-theme current-theme-type))]
+     (println "with-mui-theme" current-theme-type)
+     [ui/mui-theme-provider {:theme current-theme} children])))

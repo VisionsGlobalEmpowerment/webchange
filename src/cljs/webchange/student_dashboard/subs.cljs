@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]))
 
-(defn scene-name->scene [scene-name scenes]
+(defn- scene-name->scene [scene-name scenes]
   (let [{:keys [name preview type]} (get scenes (keyword scene-name))]
     {:id scene-name
      :type type
@@ -19,7 +19,7 @@
                             (contains? (:id %)))
           is-activity? #(= "set-activity" (:type %))]
       (->> (get-in db [:course-data :workflow-actions])
-           (filter is-finished?)
+           ;(filter is-finished?)
            (filter is-activity?)
            (map #(assoc % :scene (scene-name->scene (:activity %) scenes)))
            (map #(assoc-in % [:scene :activity-id] (get % :id)))

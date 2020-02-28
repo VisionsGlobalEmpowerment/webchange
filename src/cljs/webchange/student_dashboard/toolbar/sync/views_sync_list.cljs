@@ -1,13 +1,13 @@
-(ns webchange.student-dashboard.sync.views-sync-list
+(ns webchange.student-dashboard.toolbar.sync.views-sync-list
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [clojure.set :refer [difference union]]
-    [webchange.student-dashboard.sync.events :as events]
-    [webchange.student-dashboard.sync.subs :as subs]
+    [webchange.student-dashboard.toolbar.sync.events :as events]
+    [webchange.student-dashboard.toolbar.sync.subs :as subs]
     [webchange.service-worker.message :as sw]
     [webchange.service-worker.subs :as sw-subs]
-    [webchange.student-dashboard.sync.views-sync-list-present :refer [sync-list-modal-view]]))
+    [webchange.student-dashboard.toolbar.sync.views-sync-list-present :refer [sync-list-modal-view]]))
 
 ;; Get initial state
 
@@ -186,12 +186,6 @@
   (with-meta sync-list-modal-render
              {:component-did-mount component-did-mount
               :component-did-update component-did-update}))
-
-;(defn chart-component []
-;  (r/create-class
-;    {:component-did-mount data-fn
-;     :display-name "chart-component"
-;     :reagent-render chart-render}))
 
 (defn sync-list-modal
   []

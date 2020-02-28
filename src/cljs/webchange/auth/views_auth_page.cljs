@@ -1,6 +1,7 @@
 (ns webchange.auth.views-auth-page
   (:require
-    [webchange.ui.theme :refer [w-colors with-mui-theme]]))
+    [webchange.auth.theme :refer [w-colors theme]]
+    [webchange.ui.theme :refer [with-mui-theme]]))
 
 (defn- translate
   [path]
@@ -19,7 +20,7 @@
 
 (def logo-size 44)
 (def window-size {:height 650
-                  :width 1000})
+                  :width  1000})
 (def border-radius 15)
 (def form-padding 40)
 (def welcome-text-size 32)
@@ -28,6 +29,7 @@
                     :background-color primary-darken-color
                     :display          "flex"
                     :flex-direction   "column"
+                    :height           "100%"
                     :justify-content  "center"})
 (def window-style {:display        "flex"
                    :flex           "0 0 auto"
@@ -45,12 +47,12 @@
 (def header-style {:display "flex"
                    :flex    "0 0 auto"
                    :margin  (str "0 0 " form-padding "px 0")})
-(def logo-style {:flex            "0 0 auto"
-                 :height          (str logo-size "px")
-                 :width           (str logo-size "px")
-                 :background-size "100%"
+(def logo-style {:flex                "0 0 auto"
+                 :height              (str logo-size "px")
+                 :width               (str logo-size "px")
+                 :background-size     "100%"
                  :background-position "center"
-                 :background-repeat "no-repeat"})
+                 :background-repeat   "no-repeat"})
 (def company-name-style {:flex           "1 1 auto"
                          :font-family    "monospace"
                          :font-size      "22px"
@@ -103,7 +105,7 @@
 
 (defn auth-page
   [children]
-  [with-mui-theme
+  [with-mui-theme {:theme theme}
    [:div {:style wrapper-style}
     [:div {:style window-style}
      [:div {:style main-content-style}

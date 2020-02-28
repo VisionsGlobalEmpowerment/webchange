@@ -61,8 +61,7 @@
     ]))
 
 (defn- lessons
-  []
-  )
+  [])
 
 (defn add-concept-view
   [course-id]
@@ -90,13 +89,12 @@
 
 (defn scene-view
   []
-  [with-mui-theme "dark"
-   [:div.editor-v2 {}
-    [:div.top-side
-     [data]
-     [scene]]
-    [diagram]
-    [modal-windows]]])
+  [:div.editor-v2
+   [:div.top-side
+    [data]
+    [scene]]
+   [diagram]
+   [modal-windows]])
 
 (defn course-view
   []
@@ -114,5 +112,4 @@
      [ui/grid {:item true :xs 4}
       [scenes]]
      [ui/grid {:item true :xs 4}
-      [lessons]]]
-    ]]])
+      [lessons]]]]]])
