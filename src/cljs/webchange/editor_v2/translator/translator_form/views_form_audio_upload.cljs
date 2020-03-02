@@ -46,7 +46,7 @@
                 [ui/typography {:variant "h5"}
                  (if @drag-over?
                    "Drop file here"
-                   "Upload New Audio")]]]))
+                   "Upload new file")]]]))
 
 (defn upload-file-form
   [{:keys [file on-cancel on-upload]}]

@@ -63,9 +63,7 @@
                          :margin     "normal"}
         [ui/input-label "Scene"]
         [ui/select {:value     (or @scene-id "")
-                    :on-change #(let [scene-id (.. % -target -value)]
-                                  (redirect-to :course-editor-v2-scene :id @course-id :scene-id scene-id)
-                                  (re-frame/dispatch [::events/select-current-scene scene-id]))}
+                    :on-change #(redirect-to :course-editor-v2-scene :id @course-id :scene-id (.. % -target -value))}
          (for [{:keys [value text disabled]} scenes-options]
            ^{:key (str value)}
            [ui/menu-item {:value    value
