@@ -10,6 +10,11 @@
             [mikera.image.core :as imagez]
             [config.core :refer [env]]))
 
+(def types
+  {"image" ["jpg" "jpeg" "png"]
+   "audio" ["mp3" "wav" "m4a"]
+   "video" ["mp4"]})
+
 (defn get-extension [filename]
   (-> filename
       (clojure.string/split #"\.")
@@ -17,11 +22,16 @@
       clojure.string/lower-case))
 
 (defn get-type [extension]
-  (cond
-    (some #(= extension %) ["jpg" "jpeg" "png"]) "image"
-    (some #(= extension %) ["mp3" "wav" "m4a"]) "audio"
-    )
-  )
+  (let [match? (fn [es] (some #(= extension %) es))]
+    (->> types
+         (filter #(match? (second %)))
+         first
+         first)))
+
+(defn validated-type
+  [type]
+  (if (contains? types type)
+    type))
 
 (defn get-additional-image-params [file]
   (let [image (imagez/load-image file)]
@@ -41,11 +51,11 @@
 (defn gen-filename [extension]
   (str (rand-str 16) "." extension))
 
-(defn upload-asset [{:keys [tempfile size filename] :as file}]
+(defn upload-asset [{{:keys [tempfile size filename]} "file" type "type"}]
   (let [extension (get-extension filename)
         new-name (gen-filename extension)
         path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") new-name)
-        type (get-type extension)
+        type (or (validated-type type) (get-type extension))
         params (get-additional-params type tempfile)]
     (try
       (with-open [xin (io/input-stream tempfile)
@@ -59,4 +69,4 @@
 
 (defroutes asset-routes
            (POST "/api/assets/" request
-             (-> request :multipart-params (get "file") upload-asset response)))
+             (-> request :multipart-params upload-asset response)))

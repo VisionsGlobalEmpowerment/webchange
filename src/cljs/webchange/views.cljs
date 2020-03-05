@@ -6,7 +6,7 @@
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
     [webchange.editor-v2.events :as ee2]
-    [webchange.editor-v2.views :refer [main-view]]
+    [webchange.editor-v2.views :refer [course-view scene-view concept-view add-concept-view]]
     [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
@@ -25,10 +25,22 @@
   (re-frame/dispatch [::ee/init-editor course-id])
   [editor])
 
-(defn- editor-panel-v2 [course-id scene-id]
-  (re-frame/dispatch [::ee/init-editor course-id scene-id])
+(defn- editor-panel-v2 [course-id]
+  (re-frame/dispatch [::ee2/init-editor course-id])
+  [course-view])
+
+(defn- editor-panel-v2-scene [course-id scene-id]
   (re-frame/dispatch [::ee2/init-editor course-id scene-id])
-  [main-view scene-id])
+  (re-frame/dispatch [::ee/select-current-scene scene-id])
+  [scene-view])
+
+(defn- editor-panel-v2-concept [course-id concept-id]
+  (re-frame/dispatch [::ee2/init-editor course-id])
+  [concept-view course-id concept-id])
+
+(defn- editor-panel-v2-add-concept [course-id]
+  (re-frame/dispatch [::ee2/init-editor course-id])
+  [add-concept-view course-id])
 
 (defn- dashboard-panel
   [content route-params]
@@ -47,8 +59,11 @@
     :course [course (:id route-params)]
     ;; editor
     :course-editor [editor-panel (:id route-params)]
-    :course-editor-v2 [editor-panel-v2 (:id route-params) nil]
-    :course-editor-v2-scene [editor-panel-v2 (:id route-params) (:scene-id route-params)]
+    :course-editor-v2 [editor-panel-v2 (:id route-params)]
+    :course-editor-v2-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
+    :course-editor-v2-concept [editor-panel-v2-concept (:course-id route-params) (-> route-params :concept-id js/parseInt)]
+    :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
+
     ;; teacher dashboard
     :dashboard [dashboard-panel :dashboard route-params]
     :dashboard-classes [dashboard-panel :classes-list route-params]

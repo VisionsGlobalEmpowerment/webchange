@@ -45,7 +45,7 @@
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]
-            [lein-sass "0.4.0"]
+            [lein-sass "0.5.0"]
             [migratus-lein "0.7.0"]]
 
   :jvm-opts ["-Xmx2g"]
@@ -70,7 +70,8 @@
 
   :sass {:src              "resources/sass"
          :output-directory "resources/public/css"
-         :command          :sass}
+         :command          :sass
+         :source-maps      false}
 
   :cooper {"styles" ["lein" "sass" "auto"]
            "cljs"   ["lein" "figwheel" "dev"]}

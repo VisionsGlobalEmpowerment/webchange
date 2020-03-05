@@ -14,6 +14,8 @@
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor
                                        ["/" :id "/editor-v2"] :course-editor-v2
+                                       ["/" :course-id "/editor-v2/concepts/" :concept-id] :course-editor-v2-concept
+                                       ["/" :course-id "/editor-v2/add-concept"] :course-editor-v2-add-concept
                                        ["/" :id "/editor-v2/" :scene-id] :course-editor-v2-scene
                                        ["/" :id "/dashboard"] :student-course-dashboard
                                        ["/" :id "/dashboard/finished"] :finished-activities}
@@ -55,7 +57,6 @@
         path (if (= (type key) Keyword)
                (apply url-for (vec args))
                key)]
-    (js/console.log "redirect-to" path)
     (pushy/set-token! history path)))
 
 (re-frame/reg-fx
