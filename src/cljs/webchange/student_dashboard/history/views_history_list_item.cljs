@@ -31,10 +31,10 @@
    :text-primary {:font-weight "bold"}})
 
 (defn history-list-item
-  [{:keys [id name date image style on-click]}]
+  [{:keys [name date image style on-click] :as activity}]
   (let [styles (get-styles)]
     [ui/list-item {:button   true
-                   :on-click #(on-click id)
+                   :on-click #(on-click activity)
                    :style    (merge (or style {})
                                     (:block styles))}
      [ui/list-item-avatar
@@ -48,5 +48,5 @@
                          :primaryTypographyProps {:style (:text-primary styles)}
                          :style                  (:text styles)}]
      [ui/list-item-secondary-action
-      [ui/button {:on-click #(on-click id)}
+      [ui/button {:on-click #(on-click activity)}
        "Play"]]]))

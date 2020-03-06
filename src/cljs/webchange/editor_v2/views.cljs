@@ -62,8 +62,37 @@
           [ui/icon-button {:on-click #(redirect-to :course-editor-v2-scene :id course :scene-id (:value scene)) :aria-label "Edit"}
            [ic/edit]]]])]]))
 
+(defn- level-item
+  [level]
+  (r/with-let [in (r/atom true)]
+    [:div
+     [ui/list-item {:button true :on-click #(swap! in not)}
+      [ui/list-item-text {:primary (:name level)}]
+      [ui/list-item-secondary-action
+       [ui/icon-button
+         (if @in
+           [ic/expand-less]
+           [ic/expand-more])]]]
+     [ui/collapse {:in @in}
+      [ui/divider]
+      [ui/list
+       (for [lesson (:lessons level)]
+         [ui/list-item
+          [ui/list-item-text {:primary (:name lesson)}]])]
+      [ui/divider]]
+     ]))
+
 (defn- lessons
-  [])
+  []
+  (let [levels @(re-frame/subscribe [::subs/course-levels])]
+    [ui/paper
+     [ui/typography {:variant "h6"} "Scenes"]
+     [ui/list
+      (for [level levels]
+        ^{:key (:level level)}
+        [level-item level]
+        )]
+     ]))
 
 (defn add-concept-view
   [course-id]

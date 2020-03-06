@@ -36,10 +36,10 @@
                        data)]
     (if (< 0 (count history-list))
       [ui/list
-       (for [{:keys [id activity-id] :as item} history-list]
+       (for [{:keys [level lesson activity] :as item} history-list]
          (let [style (when-not (last? item data)
                        (:list-item styles))]
-           ^{:key (str id "-" activity-id)}
+           ^{:key (str level "-" lesson "-" activity)}
            [history-list-item (merge (prepare-data item)
                                      {:on-click on-click
                                       :style    style})]))]

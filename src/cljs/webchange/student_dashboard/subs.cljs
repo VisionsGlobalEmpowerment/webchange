@@ -1,6 +1,7 @@
 (ns webchange.student-dashboard.subs
   (:require
-    [re-frame.core :as re-frame]))
+    [re-frame.core :as re-frame]
+    [webchange.interpreter.lessons.activity :as lessons-activity]))
 
 (defn- scene-name->scene [scene-name scenes]
   (let [{:keys [name preview type]} (get scenes (keyword scene-name))]
@@ -13,44 +14,28 @@
   ::finished-activities
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          is-finished? #(-> db
-                            (get-in [:progress-data :finished-workflow-actions])
-                            set
-                            (contains? (:id %)))
-          is-activity? #(= "set-activity" (:type %))]
-      (->> (get-in db [:course-data :workflow-actions])
-           (filter is-finished?)
-           (filter is-activity?)
-           (map #(assoc % :scene (scene-name->scene (:activity %) scenes)))
-           (map #(assoc-in % [:scene :activity-id] (get % :id)))
-           (map #(assoc-in % [:scene :lesson] (get % :lesson)))
-           (map #(assoc-in % [:scene :level] (get % :level)))
-           (map :scene)
+          activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
+      (->> activities
+           (filter #(lessons-activity/finished? db %))
+           (map #(merge % (scene-name->scene (:activity %) scenes)))
            (map #(assoc % :completed true))))))
 
 (re-frame/reg-sub
   ::next-activity
   (fn [db]
-    (let [scenes (get-in db [:course-data :scene-list])]
-      (-> (get-in db [:progress-data :current-activity])
-          (scene-name->scene scenes)))))
+    (let [scenes (get-in db [:course-data :scene-list])
+          next (get-in db [:progress-data :next])]
+      (merge next (scene-name->scene (:activity next) scenes)))))
 
 (re-frame/reg-sub
   ::assessments
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          is-finished? #(-> db
-                            (get-in [:progress-data :finished-workflow-actions])
-                            set
-                            (contains? (:id %)))
-          is-activity? #(= "set-activity" (:type %))
+          activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))
           is-assessment? #(= "assessment" (:type %))]
-      (->> (get-in db [:course-data :workflow-actions])
-           (filter is-activity?)
-           (map #(assoc % :scene (scene-name->scene (:activity %) scenes)))
-           (map #(if (is-finished? %) (assoc-in % [:scene :completed] true) %))
-           (map #(assoc-in % [:scene :activity-id] (get % :id)))
-           (map :scene)
+      (->> activities
+           (map #(merge % (scene-name->scene (:activity %) scenes)))
+           (map #(if (lessons-activity/finished? db %) (assoc % :completed true) %))
            (filter is-assessment?)))))
 
 (re-frame/reg-sub
