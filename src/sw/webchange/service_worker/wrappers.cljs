@@ -62,8 +62,10 @@
        (js/Promise.all)))
 
 (defn promise-resolve
-  [data]
-  (js/Promise.resolve data))
+  ([]
+   (promise-resolve nil))
+  ([data]
+   (js/Promise.resolve data)))
 
 (defn promise
   [handler]

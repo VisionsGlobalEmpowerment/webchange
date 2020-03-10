@@ -5,45 +5,55 @@
     [webchange.service-worker.config :as config]
     [webchange.service-worker.wrappers :refer [promise]]))
 
-(def db-version config/release-number)
-(def database-name config/database-name)
-
-(def endpoints-data-store-name (str database-name "-endpoints-data"))
-(def queue-store-name (str database-name "-requests-queue"))
-(def activated-users-store-name (str database-name "-activated-users"))
-(def progress-store-name (str database-name "-progress"))
-(def data-store-name (str database-name "-data"))
-
 (def db (atom nil))
+(def database-version config/release-number)
 
-(defn version-change-event
+(def data-store-name "data-store")
+(def progress-store-name "progress")
+(def activated-users-store-name "activated-users")
+(def queue-store-name "requests-queue")
+(def endpoints-data-store-name "endpoints-data")
+
+(def current-course-db-key "current-course")
+
+(defn- get-database-name
+  [course-name]
+  (str config/app-name "-" course-name))
+
+(defn- version-change-event
   [e]
   {:old-version (.-oldVersion e)
    :new-version (.-newVersion e)
-   :db (-> e .-target .-result)})
+   :db          (-> e .-target .-result)})
 
 (defn base-event [e] {:db (-> e .-target .-result)})
-
-(defn create-db [name version upgrade-fn success-fn]
-  (let [request (.open js/indexedDB name version)]
-    (set! (.-onsuccess request) (comp success-fn base-event))
-    (set! (.-onupgradeneeded request) (comp upgrade-fn version-change-event))
-    (set! (.-onerror request) #(logger/warn "Open indexedDB failed" %))))
 
 (defn upgrade-db
   [{:keys [old-version db]}]
   (when (< old-version 1)
-    (-> (idx/create-store db endpoints-data-store-name {:keyPath "endpoint"}))
+    (-> (idx/create-store db data-store-name {:keyPath "endpoint"}))
     (-> (idx/create-store db queue-store-name {:keyPath "date"})
         (idx/create-index "dateIndex" "date" {:unique true})))
   (when (< old-version 2)
     (-> (idx/create-store db activated-users-store-name {:keyPath "code"}))
     (-> (idx/create-store db progress-store-name {:keyPath "id"})))
   (when (< old-version 3)
-    (-> (idx/create-store db data-store-name {:keyPath "key"})))
-  )
+    (-> (idx/delete-and-create-store db data-store-name {:keyPath "key"})))
+  (when (< old-version 4)
+    (-> (idx/create-store db endpoints-data-store-name {:keyPath "endpoint"}))))
 
-(create-db database-name db-version upgrade-db #(reset! db (:db %)))
+(defn init-db
+  [course-name]
+  (promise (fn [resolve]
+             (let [database-name (get-database-name course-name)
+                   request (.open js/indexedDB database-name database-version)]
+               (set! (.-onsuccess request) (fn [e]
+                                             (reset! db (-> e .-target .-result))
+                                             (resolve)))
+               (set! (.-onupgradeneeded request) (fn [e]
+                                                   (-> (version-change-event e)
+                                                       (upgrade-db))))
+               (set! (.-onerror request) #(logger/warn "Open indexedDB failed" %))))))
 
 (defn add-item
   ([store data success-fn]
@@ -57,16 +67,15 @@
         request (.delete store key)]
     (set! (.-onsuccess request) #(success-fn))))
 
-
 (defn get-by-index
   [store index success-fn]
   (idx/get-by-index @db store index 0 success-fn))
 
 (defn get-by-key
   ([store key success-fn]
-    (idx/get-by-key @db store key success-fn))
+   (idx/get-by-key @db store key success-fn))
   ([store key]
-    (promise #(idx/get-by-key @db store key %))))
+   (promise #(idx/get-by-key @db store key %))))
 
 (defn set-value
   ([key value]
@@ -78,3 +87,10 @@
 (defn get-value
   [key success-fn]
   (get-by-key data-store-name key #(success-fn (:value %))))
+
+(defn get-current-course
+  []
+  (promise (fn [resolve]
+             (get-value current-course-db-key resolve))))
+
+

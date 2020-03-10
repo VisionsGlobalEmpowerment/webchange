@@ -4,8 +4,8 @@
     [reagent.core :as r]
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.service-worker.message :as sw]
-    [webchange.service-worker.subs :as subs]
+    [webchange.sw-utils.message :as sw]
+    [webchange.sw-utils.subs :as subs]
     [webchange.student-dashboard.sync.events :as events]
     [webchange.student-dashboard.sync.views-sync-list :refer [sync-list-modal]]))
 
@@ -13,9 +13,9 @@
   []
   (let [offline-mode @(re-frame/subscribe [::subs/offline-mode])]
     (case offline-mode
-      :not-started [ic/cloud-off {:color "disabled"}]
-      :in-progress [ic/cloud-download {:color "disabled"}]
-      [ic/cloud-done])))
+      :syncing [ic/cloud-download {:color "disabled"}]
+      :synced [ic/cloud-done]
+      [ic/cloud-off {:color "disabled"}])))
 
 (defn current-version-data
   [{:keys [update-date-str version]}]

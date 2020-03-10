@@ -10,10 +10,13 @@
 
 (defn store-current-progress!
   [{progress :progress offline :offline}]
-  (let [current-user (activated-users/get-current-user)]
-    (-> current-user
-        (then #(:id %))
-        (then #(db/add-item db/progress-store-name {:progress progress :offline offline :id %})))))
+  (-> (activated-users/get-current-user)
+      (then (fn [{:keys [id] :as user}]
+              (if-not (nil? user)
+                (db/add-item db/progress-store-name {:progress progress
+                                                     :offline  offline
+                                                     :id       id})
+                (logger/warn "Progress can not be stored: user is not defined."))))))
 
 (defn- with-debug
   [x comment]
@@ -22,12 +25,12 @@
 
 (defn get-current-progress
   []
-  (let [current-user (activated-users/get-current-user)]
-    (-> current-user
-        (then #(:id %))
-        (then #(with-debug % "id"))
-        (then #(db/get-by-key db/progress-store-name %))
-        (then #(with-debug % "progress")))))
+  (-> (activated-users/get-current-user)
+      (then (fn [current-user]
+              (if-not (nil? current-user)
+                (db/get-by-key db/progress-store-name (:id current-user))
+                (do (logger/warn "Can not get current progress: current user is not defined")
+                    (promise-resolve nil)))))))
 
 (defn store-body!
   [body offline]
@@ -56,13 +59,13 @@
   (let [cloned (request-clone request)]
     (p/let [stored-progress (get-current-progress)
             offline (:offline stored-progress)]
-      (if offline
-        (get-offline request)
-        (-> (js-fetch request)
-            (then require-status-ok!)
-            (then #(store-body! % false))
-            (catch #(get-offline cloned)))
-        ))))
+           (if offline
+             (get-offline request)
+             (-> (js-fetch request)
+                 (then require-status-ok!)
+                 (then #(store-body! % false))
+                 (catch #(get-offline cloned)))
+             ))))
 
 (defn post-online
   [request]

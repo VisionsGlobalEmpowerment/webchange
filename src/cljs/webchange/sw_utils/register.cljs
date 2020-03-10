@@ -1,20 +1,20 @@
-(ns webchange.service-worker.register
+(ns webchange.sw-utils.register
   (:require [re-frame.core :as re-frame]
-            [webchange.service-worker.events :as events]
-            [webchange.service-worker.subscribe :refer [subscribe-to-notifications]]))
+            [webchange.sw-utils.events :as events]
+            [webchange.sw-utils.subscribe :refer [subscribe-to-notifications]]))
 
-(defn worker-ready
+(defn- worker-ready
   [_]
-  (re-frame/dispatch [::events/set-offline-mode :ready]))
+  (re-frame/dispatch [::events/set-sw-status :installed]))
 
-(defn track-installing
+(defn- track-installing
   [worker]
-  (re-frame/dispatch [::events/set-offline-mode :in-progress])
+  (re-frame/dispatch [::events/set-sw-status :installing])
   (.addEventListener worker "statechange" (fn []
                                             (when (= "activated" (.-state worker))
                                               (worker-ready worker)))))
 
-(defn check-state
+(defn- check-state
   [registration]
   (if-let [active (.-active registration)]
     (worker-ready active)
@@ -22,13 +22,13 @@
       (track-installing installing)
       (.addEventListener registration "updatefound" #(track-installing (.-installing registration))))))
 
-(defn register
+(defn- register
   [service-worker path]
   (-> (.register service-worker path)
       (.then check-state)
       (.catch #(println (str "[ServiceWorker] Registration failed:" %)))))
 
-(defn unregister
+(defn- unregister
   [service-worker]
   (-> (.getRegistrations service-worker)
       (.then (fn [registrations]

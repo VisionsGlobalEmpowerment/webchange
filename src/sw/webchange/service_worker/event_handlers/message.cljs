@@ -1,64 +1,38 @@
 (ns webchange.service-worker.event-handlers.message
   (:require
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.config :as config]
-    [webchange.service-worker.common.cache :refer [cache-game-resources
-                                                   cache-endpoints
-                                                   get-cached-activity-urls
-                                                   remove-game-resources]]
+    [webchange.service-worker.common.cache :refer [get-cached-activity-urls]]
     [webchange.service-worker.common.db :as db]
-    [webchange.service-worker.common.fetch :refer [fetch-game-start-resources]]
-    [webchange.service-worker.wrappers :refer [then promise-all js-fetch response-json]]))
+    [webchange.service-worker.common.broadcast :refer [send-cached-resources
+                                                       send-last-update]]
+    [webchange.service-worker.wrappers :refer [then]]
+    [webchange.service-worker.cache-controller.controller :as cache-controller]))
 
-(def broadcast-channel "sw-messages")
-(def message-types {:last-update      "last-update"
-                    :cached-resources "get-cached-resources"})
-
-(defn- broadcast-message
-  [message]
-  (let [channel (js/BroadcastChannel. broadcast-channel)]
-    (.postMessage channel (clj->js message))))
-
-(defn- update-cached-scenes
+(defn- handle-cache-course
   [data]
-  (let [resources-to-add (-> data (aget "resources") (aget "add"))
-        resources-to-remove (-> data (aget "resources") (aget "remove"))
-        scenes (-> data (aget "scenes") (aget "add"))]
-    (logger/debug "Update cached resources")
-    (logger/debug "Add:" resources-to-add)
-    (logger/debug "Remove:" resources-to-remove)
-    (cache-game-resources resources-to-add)
-    (remove-game-resources resources-to-remove)
-    (logger/debug "Update cached scenes" scenes)
-    (cache-endpoints scenes)))
+  (let [course-name (aget data "course")]
+    (cache-controller/cache-course course-name)))
 
-(defn- send-get-cached-resources
-  []
-  (logger/debug "Get cached resources")
-  (-> (get-cached-activity-urls)
-      (then (fn [urls]
-              (broadcast-message {:type (:cached-resources message-types)
-                                  :data urls})))))
-
-(defn- load-game-start-resources
-  [course-name]
-  (-> (fetch-game-start-resources course-name)
-      (then (fn [resources]
-              (promise-all [(-> resources (aget "resources") (cache-game-resources))
-                            (-> resources (aget "endpoints") (cache-endpoints))])))))
-
-(defn- cache-start-activities
+(defn- handle-cache-scenes
   [data]
-  (let [course (aget data "course")]
-    (logger/debug "Cache start activities" course)
-    (load-game-start-resources course)))
+  (let [course-name (aget data "course")
+        params {:resources-to-add    (-> data (aget "resources") (aget "add"))
+                :resources-to-remove (-> data (aget "resources") (aget "remove"))
+                :endpoints-to-add    (-> data (aget "scenes") (aget "add"))
+                :endpoints-to-remove (-> data (aget "scenes") (aget "remove"))}]
+    (cache-controller/cache-scenes params course-name)))
 
-(defn send-last-update
+(defn- handle-get-cached-resources
+  [data]
+  (let [course-name (aget data "course")]
+    (-> (get-cached-activity-urls course-name)
+        (then (fn [urls]
+                (send-cached-resources urls))))))
+
+(defn- handle-get-last-update
   []
-  (db/get-value "last-update" (fn [date]
-                                (broadcast-message {:type (:last-update message-types)
-                                                    :data {:date    date
-                                                           :version config/release-number}}))))
+  (db/get-value "last-update" (fn [last-update]
+                                (send-last-update last-update))))
 
 (defn handle
   [event]
@@ -67,8 +41,8 @@
         data (.-data message)]
     (logger/debug "Get message" type data)
     (case type
-      "update-cached-scenes" (update-cached-scenes data)
-      "get-cached-resources" (send-get-cached-resources)
-      "get-last-update" (send-last-update)
-      "cache-start-activities" (cache-start-activities data)
+      "cache-course" (handle-cache-course data)
+      "update-cached-scenes" (handle-cache-scenes data)
+      "get-cached-resources" (handle-get-cached-resources data)
+      "get-last-update" (handle-get-last-update)
       (logger/warn "Unhandled message type:" type))))

@@ -8,7 +8,8 @@
 
 (def log-levels {:debug 1
                  :log   2
-                 :warn  3})
+                 :warn  3
+                 :error 4})
 
 (defn- allowed?
   [level]
@@ -30,6 +31,11 @@
   [& args]
   (when (allowed? :warn)
     (apply js/console.warn (into [prefix "[Warn]"] args))))
+
+(defn error
+  [& args]
+  (when (allowed? :error)
+    (apply js/console.error (into [prefix "[Error]"] args))))
 
 (defn debug-folded
   [title & args]

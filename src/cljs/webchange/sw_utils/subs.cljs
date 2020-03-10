@@ -1,4 +1,4 @@
-(ns webchange.service-worker.subs
+(ns webchange.sw-utils.subs
   (:require
     [re-frame.core :as re-frame]))
 
