@@ -163,6 +163,7 @@
     (when (nil? lesson) (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined"))))
     lesson))
 
+;TODO: level get lessons from levels
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
