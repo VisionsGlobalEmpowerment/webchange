@@ -8,7 +8,7 @@
   (fn [db]
     (get-in db [:editor :course-lesson-sets])))
 
-(defn- get-lesson-set
+(defn get-lesson-set
   [db name]
   (->> (get-in db [:editor :course-lesson-sets])
        (filter #(= name (:name %)))
@@ -54,5 +54,7 @@
     (let [level (get-level db level-id)
           lesson (get-lesson level lesson-id)
           lesson-sets (:lesson-sets lesson)]
-      (assoc lesson :lesson-sets (zipmap (keys lesson-sets) (map #(get-items db %) (vals lesson-sets)))))))
+      (if lesson
+        (assoc lesson :lesson-sets (zipmap (keys lesson-sets) (map (fn [name] {:name name :items (get-items db name)}) (vals lesson-sets))))))))
+
 

@@ -6,17 +6,29 @@
     [cljs-react-material-ui.icons :as ic]
     [webchange.routes :refer [redirect-to]]
     [webchange.editor-v2.lessons.subs :as lessons-subs]
+    [webchange.editor-v2.lessons.events :as lessons-events]
     [webchange.editor-v2.concepts.subs :as concepts-subs]))
+
+(defn- add-concept-to-lesson
+  [items concept]
+  (conj (vec items) concept))
 
 (defn- remove-concept-from-lesson
   [items concept-name]
   (->> items
        (filter #(not= (:name %) concept-name))))
 
+(defn- get-item
+  [items name]
+  (let [item (->> items
+                  (filter #(= (:name %) name))
+                  first)]
+    (select-keys item [:id :name])))
+
 (defn- edit-lesson-set
   [data lesson-key]
   (let [items @(re-frame/subscribe [::concepts-subs/dataset-items])
-        lesson-items (-> @data :lesson-sets lesson-key)]
+        lesson-items (-> @data :lesson-sets lesson-key :items)]
     [ui/list
      [ui/list-subheader (name lesson-key)]
      (for [item lesson-items]
@@ -24,8 +36,12 @@
        [ui/list-item
         [ui/list-item-text {:primary (:name item)}]
         [ui/list-item-secondary-action
-         [ui/icon-button {:on-click #(swap! data update-in [:lesson-sets lesson-key] (fn [list] (remove-concept-from-lesson list (:name item)))) :aria-label "Delete"}
+         [ui/icon-button {:on-click #(swap! data update-in [:lesson-sets lesson-key :items] (fn [list] (remove-concept-from-lesson list (:name item)))) :aria-label "Delete"}
           [ic/delete]]]])
+     [ui/list-item
+      [ui/select {:on-change #(swap! data update-in [:lesson-sets lesson-key :items] (fn [list] (add-concept-to-lesson list (get-item items (-> % .-target .-value)))))}
+       (for [item items]
+         [ui/menu-item {:value (:name item)} (:name item)])]]
      ]
     ))
 
@@ -64,7 +80,7 @@
               [edit-scenes-list data]]]]
 
            [ui/card-actions
-            [ui/button {:on-click #(re-frame/dispatch [:edit-lesson course-id level-id lesson-id @data])} "Edit"]
+            [ui/button {:on-click #(re-frame/dispatch [::lessons-events/edit-lesson course-id level-id lesson-id @data])} "Edit"]
             [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)} "Cancel"]
             (when (:edit-lesson loading)
               [ui/circular-progress])]
