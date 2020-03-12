@@ -64,10 +64,63 @@
       (assoc-in course [:levels level-idx :lessons lesson-idx] lesson)
       course)))
 
+(defn- add-lesson
+  [course level-id lesson]
+  (let [level-idx (level-index course level-id)]
+    (if level-idx
+      (-> course
+          (update-in [:levels level-idx :lessons] vec)
+          (update-in [:levels level-idx :lessons] conj lesson))
+      course)))
+
+(defn- name-for-lesson-set
+  [type level-id lesson-id]
+  (str (name type) "-" level-id "-" lesson-id))
+
+(defn- with-names
+  [lesson-sets level-id lesson-id]
+  (->> lesson-sets
+       (map (fn [[type lesson-set]]
+              (if (nil? (:name lesson-set))
+                [type (assoc lesson-set :name (name-for-lesson-set type level-id lesson-id))]
+                [type lesson-set])))
+       (into {})))
+
+(defn- next-lesson-id
+  [course level-id]
+  (let [level-idx (level-index course level-id)
+        last-lesson-id (->> (get-in course [:levels level-idx :lessons])
+                            (map :lesson)
+                            (reduce max)
+                            int)]
+    (inc last-lesson-id)))
+
+(re-frame/reg-event-fx
+  ::add-lesson
+  (fn [{:keys [db]} [_ course-id level-id {lesson-sets :lesson-sets :as data}]]
+    (let [lesson-id (next-lesson-id (:course-data db) level-id)
+          lesson-sets (with-names lesson-sets level-id lesson-id)
+          lesson (assoc data
+                   :lesson-sets (zipmap (keys lesson-sets) (map :name (vals lesson-sets)))
+                   :lesson lesson-id)
+          course (add-lesson (:course-data db) level-id lesson)]
+      {:db (-> db
+               (assoc-in [:loading :edit-lesson] true)
+               (assoc :course-data course))
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/courses/" course-id)
+                    :params          {:course course}
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::edit-lesson-success course-id]
+                    :on-failure      [:api-request-error :edit-lesson]}
+       :dispatch-n (map #(lesson-set->request db (second %)) lesson-sets)})))
+
 (re-frame/reg-event-fx
   ::edit-lesson
   (fn [{:keys [db]} [_ course-id level-id lesson-id {lesson-sets :lesson-sets :as data}]]
-    (let [lesson (assoc data :lesson-sets (zipmap (keys lesson-sets) (map :name (vals lesson-sets))))
+    (let [lesson-sets (with-names lesson-sets level-id lesson-id)
+          lesson (assoc data :lesson-sets (zipmap (keys lesson-sets) (map :name (vals lesson-sets))))
           course (-> db
                      (get :course-data)
                      (set-lesson level-id lesson-id lesson))]

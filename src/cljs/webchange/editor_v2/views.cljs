@@ -83,7 +83,10 @@
             [ui/list-item-text {:primary (:name lesson)}]
             [ui/list-item-secondary-action
              [ui/icon-button {:on-click #(redirect-to :course-editor-v2-lesson :course-id course :level-id (:level level) :lesson-id (:lesson lesson)) :aria-label "Edit"}
-              [ic/edit]]]])]
+              [ic/edit]]]])
+         [ui/list-item {:button true :on-click #(redirect-to :course-editor-v2-add-lesson :course-id course :level-id (:level level))}
+          [ui/list-item-avatar [ui/avatar [ic/add]]]
+          [ui/list-item-text {:primary "Add new"}]]]
         [ui/divider]]
        ])))
 

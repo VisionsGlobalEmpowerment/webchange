@@ -88,5 +88,37 @@
       [ui/circular-progress])))
 
 (defn add-lesson-form
-  [course-id level]
-  )
+  [course-id level-id]
+  (if-let [scheme @(re-frame/subscribe [::lessons-subs/level-scheme level-id])]
+    (let [data (r/atom {:type (-> scheme keys first name)})]
+      (fn [course-id level-id]
+        (let [lesson-scheme (get scheme (-> @data :type keyword))
+              loading @(re-frame/subscribe [:loading])]
+          [ui/card
+           [ui/card-header {:title "Add lesson"}]
+
+           [ui/card-content
+            [ui/select {:value (:type @data) :on-change #(swap! data assoc :type (-> % .-target .-value))}
+             (for [[lesson-type lesson-type-data] scheme]
+               [ui/menu-item {:value lesson-type} (:name lesson-type-data)])]
+            [ui/text-field {:label "Name" :full-width true :on-change #(swap! data assoc :name (-> % .-target .-value))}]
+
+            [ui/divider]
+
+            [ui/grid {:container true
+                      :justify   "space-between"
+                      :spacing 40}
+             [ui/grid {:item true :xs 6}
+              (for [lesson-set (:lesson-sets lesson-scheme)]
+                ^{:key (str lesson-set)}
+                [edit-lesson-set data (keyword lesson-set)])]
+             [ui/grid {:item true :xs 6}
+              [edit-scenes-list data]]]]
+
+           [ui/card-actions
+            [ui/button {:on-click #(re-frame/dispatch [::lessons-events/add-lesson course-id level-id @data])} "Add"]
+            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)} "Cancel"]
+            (when (:add-lesson loading)
+              [ui/circular-progress])]
+           ])))
+    [ui/circular-progress]))
