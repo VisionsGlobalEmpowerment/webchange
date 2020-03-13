@@ -45,9 +45,80 @@
      ]
     ))
 
+(defn- add-scene
+  [data scene-list]
+  (r/with-let [scene-data (r/atom {})]
+    [ui/table-row
+     [ui/table-cell
+      [ui/select {:value (:activity @scene-data) :on-change #(swap! scene-data assoc :activity (-> % .-target .-value))}
+       (for [[item-key item] scene-list]
+         [ui/menu-item {:value (name item-key)} (:name item)])]]
+     [ui/table-cell
+      [ui/text-field {:on-change #(swap! scene-data assoc :time-expected (-> % .-target .-value js/parseInt))}]]
+     [ui/table-cell
+      [ui/checkbox {:on-change #(swap! scene-data assoc :scored (-> % .-target .-checked))}]]
+     [ui/table-cell
+      [ui/text-field {:on-change #(swap! scene-data assoc :expected-score-percentage (-> % .-target .-value js/parseInt))}]]
+     [ui/table-cell
+      [ui/icon-button {:on-click #(swap! data update :activities (fn [list] (concat list [@scene-data])))
+                       :aria-label "Add"}
+       [ic/add]]]
+     [ui/table-cell]]))
+
+(defn- scene-info
+  [data scene-list scene-idx scene]
+  (r/with-let [edit? (r/atom false)
+               scene-data (r/atom scene)]
+    (if @edit?
+      [ui/table-row
+       [ui/table-cell
+        [ui/select {:value (:activity @scene-data) :on-change #(swap! scene-data assoc :activity (-> % .-target .-value))}
+         (for [[item-key item] scene-list]
+           [ui/menu-item {:value (name item-key)} (:name item)])]]
+       [ui/table-cell
+        [ui/text-field {:default-value (:time-expected @scene-data) :on-change #(swap! scene-data assoc :time-expected (-> % .-target .-value js/parseInt))}]]
+       [ui/table-cell
+        [ui/checkbox {:checked (:scored @scene-data) :on-change #(swap! scene-data assoc :scored (-> % .-target .-checked))}]]
+       [ui/table-cell
+        [ui/text-field {:default-value (:expected-score-percentage @scene-data) :on-change #(swap! scene-data assoc :expected-score-percentage (-> % .-target .-value js/parseInt))}]]
+       [ui/table-cell
+        [ui/icon-button {:on-click #(do
+                                      (swap! data update :activities (fn [list] (map-indexed (fn [idx item] (if (= scene-idx idx) @scene-data item)) list)))
+                                      (reset! edit? false))
+                         :aria-label "Save"}
+         [ic/check]]]
+       [ui/table-cell
+        [ui/icon-button {:on-click #(reset! edit? false) :aria-label "Cancel"}
+         [ic/cancel]]]]
+      [ui/table-row
+       [ui/table-cell (:activity scene)]
+       [ui/table-cell (:time-expected scene)]
+       [ui/table-cell (-> scene :scored boolean str)]
+       [ui/table-cell (:expected-score-percentage scene)]
+       [ui/table-cell
+        [ui/icon-button {:on-click #(reset! edit? true) :aria-label "Edit"}
+         [ic/edit]]]
+       [ui/table-cell
+        [ui/icon-button {:on-click #(swap! data update :activities (fn [list] (keep-indexed (fn [idx item] (if (not= scene-idx idx) item)) list))) :aria-label "Delete"}
+         [ic/delete]]]])))
+
 (defn- edit-scenes-list
   [data]
-  )
+  (let [scene-list @(re-frame/subscribe [::lessons-subs/scene-list])]
+    [ui/table
+     [ui/table-head
+      [ui/table-row
+       [ui/table-cell "Activity"]
+       [ui/table-cell "Time"]
+       [ui/table-cell "Scored"]
+       [ui/table-cell "Score"]
+       [ui/table-cell ""]
+       [ui/table-cell ""]]]
+     [ui/table-body
+      (for [[item-idx item] (keep-indexed vector (:activities @data))]
+        ^{:key item-idx}
+        [scene-info data scene-list item-idx item])
+      [add-scene data scene-list]]]))
 
 (defn edit-lesson-form
   [course-id level-id lesson-id]
@@ -90,7 +161,7 @@
 (defn add-lesson-form
   [course-id level-id]
   (if-let [scheme @(re-frame/subscribe [::lessons-subs/level-scheme level-id])]
-    (let [data (r/atom {:type (-> scheme keys first name)})]
+    (let [data (r/atom {:type (-> scheme keys first name) :activities []})]
       (fn [course-id level-id]
         (let [lesson-scheme (get scheme (-> @data :type keyword))
               loading @(re-frame/subscribe [:loading])]
@@ -113,7 +184,8 @@
                 ^{:key (str lesson-set)}
                 [edit-lesson-set data (keyword lesson-set)])]
              [ui/grid {:item true :xs 6}
-              [edit-scenes-list data]]]]
+              [ui/paper
+               [edit-scenes-list data]]]]]
 
            [ui/card-actions
             [ui/button {:on-click #(re-frame/dispatch [::lessons-events/add-lesson course-id level-id @data])} "Add"]

@@ -57,4 +57,7 @@
       (if lesson
         (assoc lesson :lesson-sets (zipmap (keys lesson-sets) (map (fn [name] {:name name :items (get-items db name)}) (vals lesson-sets))))))))
 
-
+(re-frame/reg-sub
+  ::scene-list
+  (fn [db _]
+    (get-in db [:course-data :scene-list])))
