@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard.sync.events
+(ns webchange.student-dashboard.toolbar.sync.events
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]

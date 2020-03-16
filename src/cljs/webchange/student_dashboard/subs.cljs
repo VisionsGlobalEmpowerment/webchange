@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]))
 
-(defn scene-name->scene [scene-name scenes]
+(defn- scene-name->scene [scene-name scenes]
   (let [{:keys [name preview type]} (get scenes (keyword scene-name))]
     {:id scene-name
      :type type

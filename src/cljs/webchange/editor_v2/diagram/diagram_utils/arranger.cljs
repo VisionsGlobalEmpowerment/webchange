@@ -69,11 +69,7 @@
        (js->clj)
        (map (fn [link]
               {:from (get link "source")
-               :to   (get link "target")}))
-       ;		.filter(
-       ;			item => model.nodes.find(node => node.id === item.from) && model.nodes.find(node => node.id === item.to)
-       ;		);
-       ))
+               :to   (get link "target")}))))
 
 (defn get-graph-items
   [model engine]

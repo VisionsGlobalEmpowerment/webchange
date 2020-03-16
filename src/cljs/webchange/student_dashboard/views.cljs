@@ -2,146 +2,85 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.auth.subs :as as]
-    [webchange.routes :refer [redirect-to]]
-    [webchange.student-dashboard.scene-items.views-scene-list :refer [scene-list]]
-    [webchange.student-dashboard.life-skills.views-life-skill-list :refer [life-skill-list]]
-    [webchange.student-dashboard.related-content.views-related-content-list :refer [related-content-list]]
-    [webchange.student-dashboard.stubs :refer [related-content life-skills]]
     [webchange.student-dashboard.events :as sde]
     [webchange.student-dashboard.subs :as sds]
-    [webchange.student-dashboard.sync.views :refer [sync-control]]
-    [webchange.ui.theme :refer [with-mui-theme]]
-    [webchange.subs :as subs]
-    [webchange.interpreter.events :as ie]))
+    [webchange.student-dashboard.assessments.views :refer [assessments-block]]
+    [webchange.student-dashboard.history.views :refer [history]]
+    [webchange.student-dashboard.next-activity.views :refer [next-activity-block]]
+    [webchange.student-dashboard.toolbar.views :refer [toolbar]]))
 
-(def courses
-  [{:key :test :value "test" :text "Español"}
-   {:key :english :value "english" :text "English"}])
-
-(defn translate
-  [path]
-  (get-in {:header          {:pre-user    "Hello,"
-                             :pre-sign-in "Please,"
-                             :sign-in     "Sign In"
-                             :course      "Course"}
-           :story           {:title "Continue the story"}
-           :assessment      {:title "Assessments"}
-           :related-content {:title "Related / Additional content"}
-           :life-skills     {:title "Life skills / Extra credit"}
-           :history         {:title "History"}
-           :lesson          {:title "Lesson "}}
-          path))
-
-(def dashboard-container-styles
-  {:display        "flex"
-   :flex-direction "column"})
-
-(def dashboard-content-styles
-  {:display    "flex"
-   :overflow-y "auto"})
-
-(def main-content-styles
-  {:background-color "#ededed"
-   :display          "flex"
-   :flex             "1 1 auto"
-   :flex-direction   "column"
-   :padding          "50px"})
-
-(def additional-content-styles
-  {:background-color "#f7f7f7"
-   :display          "flex"
-   :flex-direction   "column"
-   :flex             "0 0 auto"
-   :padding          "50px"
-   :width            500})
-
-(def header-styles
-  {:flex-grow  1
-   :text-align "right"})
-
-(defn- menu-item
-  [{:keys [value text]}]
-  [ui/menu-item
-   {:key value :value value}
-   text])
-
-(defn app-bar
-  [{:keys [user course-id]}]
-    [ui/app-bar
-     {:color    "default"
-      :position "static"
-      :style    {}}
-       [ui/toolbar {:style header-styles}
-        [ui/typography
-         {:variant "button"
-          :style   header-styles}
-         (translate [:header :pre-user])]
-        [ui/button (str (:first-name user) " " (:last-name user))]
-        [ui/form-control {}
-         [ui/select {:value course-id :on-change #(re-frame/dispatch [::ie/open-student-course-dashboard (-> % .-target .-value)])}
-          (for [course courses]
-            (menu-item course))]]
-        [sync-control]]])
-
-(defn- continue-the-story []
-  (let [loading? @(re-frame/subscribe [::sds/progress-loading])
-        finished @(re-frame/subscribe [::sds/finished-activities])
-        next-activity @(re-frame/subscribe [::sds/next-activity])
-        list (into [] (concat (take-last 3 finished) [next-activity]))]
-    (if loading?
-      [ui/linear-progress]
-      [scene-list list {:title    (translate [:story :title])
-                        :show-more #(re-frame/dispatch [::sde/show-more])
-                        :on-click (fn [{id :id activity-id :activity-id}] (re-frame/dispatch [::sde/open-activity id activity-id]))}])))
-
-(defn- assessments []
-  (let [loading? @(re-frame/subscribe [::sds/progress-loading])
-        assessments @(re-frame/subscribe [::sds/assessments])]
-    (if loading?
-      [ui/linear-progress]
-      [scene-list assessments {:title    (translate [:assessment :title])
-                               :on-click (fn [{id :id activity-id :activity-id}] (re-frame/dispatch [::sde/open-activity id activity-id]))}])))
-
-(defn- main-content
+(defn- get-styles
   []
-  [:div {:style main-content-styles}
-   [continue-the-story]
-   [assessments]])
+  {:page-wrapper {:height     "100%"
+                  :text-align "center"}
+   :main-content {:padding "54px 72px"}
+   :left-side    {:padding-right "60px"}
+   :right-side   {:padding-left "60px"}})
 
-(defn- additional-content
-  [{:keys [related-content on-related-content-click
-           life-skills on-life-skill-click]}]
-  [:div {:style additional-content-styles}
-   [related-content-list related-content {:title    (translate [:related-content :title])
-                                          :on-click on-related-content-click}]
-   [life-skill-list life-skills {:title    (translate [:life-skills :title])
-                                 :on-click on-life-skill-click}]])
+(defn- loading-bar
+  []
+  [ui/circular-progress])
+
+(defn- dashboard-view
+  [{:keys [next-activity finished-activities assessments handle-activity-click]}]
+  (let [styles (get-styles)]
+    [ui/grid {:container true
+              :justify   "space-between"
+              :style     (:main-content styles)}
+     [ui/grid {:item  true
+               :xs    8
+               :style (:left-side styles)}
+      [next-activity-block (merge next-activity
+                                  {:on-click handle-activity-click})]
+      [assessments-block {:data      assessments
+                          :max-count 1
+                          :on-click  handle-activity-click}]]
+     [ui/grid {:item  true
+               :xs    4
+               :style (:right-side styles)}
+      [history {:data      finished-activities
+                :max-count 5
+                :on-click  handle-activity-click}]]]))
 
 (defn student-dashboard-page
   []
-  (let [user @(re-frame/subscribe [::as/user])
-        current-course @(re-frame/subscribe [::subs/current-course])
-        handle-related-content-click #(println (str "Related content clicked: " %))
-        handle-life-skill-click #(println (str "Life skill clicked: " %))]
-    [with-mui-theme
-     [:div {:style dashboard-container-styles}
-      [app-bar {:user user :course-id current-course}]
-      [:div {:style dashboard-content-styles}
-       [main-content]
-       [additional-content {:related-content          related-content
-                            :life-skills              life-skills
-                            :on-related-content-click handle-related-content-click
-                            :on-life-skill-click      handle-life-skill-click}]]]]))
+  (let [loading? @(re-frame/subscribe [::sds/progress-loading])
+        next-activity @(re-frame/subscribe [::sds/next-activity])
+        finished-activities @(re-frame/subscribe [::sds/finished-activities])
+        assessments @(re-frame/subscribe [::sds/assessments])
+        handle-activity-click (fn [scene-id activity-id] (re-frame/dispatch [::sde/open-activity scene-id activity-id]))]
+    (let [styles (get-styles)]
+      [ui/grid {:container true
+                :style     (:page-wrapper styles)}
+       [ui/grid {:item true
+                 :xs   12}
+        [toolbar]]
+       [ui/grid {:item true
+                 :xs   12}
+        (if loading?
+          [loading-bar]
+          [dashboard-view {:next-activity         next-activity
+                           :finished-activities   finished-activities
+                           :assessments           assessments
+                           :handle-activity-click handle-activity-click}])]])))
 
 (defn student-dashboard-finished-page
   []
-  (let [finished @(re-frame/subscribe [::sds/finished-activities])
-        lessons (group-by :lesson finished)]
-    [with-mui-theme
-     [:div {:style dashboard-container-styles}
-      [:div {:style main-content-styles}
-       (for [[lesson-id lesson-items] lessons]
-         [scene-list lesson-items {:title    (str (translate [:lesson :title]) lesson-id)
-                               :on-click (fn [{id :id activity-id :activity-id}] (re-frame/dispatch [::sde/open-activity id activity-id]))}])
-       ]]]))
+  (let [loading? @(re-frame/subscribe [::sds/progress-loading])
+        finished-activities @(re-frame/subscribe [::sds/finished-activities])
+        handle-activity-click (fn [scene-id activity-id] (re-frame/dispatch [::sde/open-activity scene-id activity-id]))]
+    (let [styles (get-styles)]
+      [ui/grid {:container true
+                :style     (:page-wrapper styles)}
+       [ui/grid {:item true
+                 :xs   12}
+        [toolbar]]
+       [ui/grid {:item true
+                 :xs   12
+                 :style {:height "100%"}}
+        (if loading?
+          [loading-bar]
+          [history {:data      finished-activities
+                    :max-count 3
+                    :on-click  handle-activity-click
+                    :style     (:main-content styles)}])]])))

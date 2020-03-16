@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard.sync.views-sync-list-present
+(ns webchange.student-dashboard.toolbar.sync.views-sync-list-present
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
@@ -88,7 +88,8 @@
        [ui/circular-progress]])]
    [ui/dialog-actions
     [ui/button
-     {:on-click on-close}
+     {:variant  "contained"
+      :on-click on-close}
      "Cancel"]
     [ui/button
      {:color    "secondary"
