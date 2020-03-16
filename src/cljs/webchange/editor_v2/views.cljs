@@ -16,6 +16,10 @@
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form delete-dataset-item-modal]]
     [webchange.editor-v2.concepts.events :as concepts-events]))
 
+(defn- get-styles
+  []
+  {:main-wrapper {:height "100%"}})
+
 (defn modal-windows
   []
   [:div
@@ -40,8 +44,7 @@
            [ic/delete]]]])
       [ui/list-item {:button true :on-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
        [ui/list-item-avatar [ui/avatar [ic/add]]]
-       [ui/list-item-text "Add new"]]]
-     ]))
+       [ui/list-item-text "Add new"]]]]))
 
 (defn- scenes
   []
@@ -57,62 +60,57 @@
          [ui/list-item-text {:primary (:text scene)}]
          [ui/list-item-secondary-action
           [ui/icon-button {:on-click #(redirect-to :course-editor-v2-scene :id course :scene-id (:value scene)) :aria-label "Edit"}
-           [ic/edit]]]])]
-    ]))
+           [ic/edit]]]])]]))
 
 (defn- lessons
-  []
-  )
+  [])
 
 (defn add-concept-view
   [course-id]
-  [with-mui-theme "dark"
-   [:div.editor-v2 {}
-    [:div.page
-     [ui/app-bar {:position "static"}
-      [ui/toolbar
-       [ui/typography {:variant "h4"} "Concept"]]]
-     [ui/paper
-      [add-dataset-item-form course-id]]
-     ]]])
+  (let [styles (get-styles)]
+    [:div.editor-v2 {:style (:main-wrapper styles)}
+     [:div.page
+      [ui/app-bar {:position "static"}
+       [ui/toolbar
+        [ui/typography {:variant "h4"} "Concept"]]]
+      [ui/paper
+       [add-dataset-item-form course-id]]]]))
 
 (defn concept-view
   [course-id concept-id]
-  [with-mui-theme "dark"
-   [:div.editor-v2 {}
-    [:div.page
-     [ui/app-bar {:position "static"}
-      [ui/toolbar
-       [ui/typography {:variant "h4"} "Concept"]]]
+  (let [styles (get-styles)]
+    [:div.editor-v2 {:style (:main-wrapper styles)}
+     [:div.page
+      [ui/app-bar {:position "static"}
+       [ui/toolbar
+        [ui/typography {:variant "h4"} "Concept"]]]
       [ui/paper
-       [edit-dataset-item-form course-id concept-id]]
-     ]]])
+       [edit-dataset-item-form course-id concept-id]]]]))
 
 (defn scene-view
   []
-  [with-mui-theme "dark"
-   [:div.editor-v2 {}
-    [:div.top-side
-     [data]
-     [scene]]
-    [diagram]
-    [modal-windows]]])
+  (let [styles (get-styles)]
+    [:div.editor-v2 {:style (:main-wrapper styles)}
+     [:div.top-side
+      [data]
+      [scene]]
+     [diagram]
+     [modal-windows]]))
 
 (defn course-view
   []
-  [with-mui-theme "dark"
-   [:div.editor-v2 {}
-    [:div.page
-     [ui/app-bar {:position "static"}
-      [ui/toolbar
-       [ui/typography {:variant "h4"} "Course"]]]
-    [ui/grid {:container true
-              :justify   "space-between"
-              :spacing 40}
-     [ui/grid {:item true :xs 4}
-      [concepts]]
-     [ui/grid {:item true :xs 4}
-      [scenes]]
-     [ui/grid {:item true :xs 4}
-      [lessons]]]
-    ]]])
+  (let [styles (get-styles)]
+    [:div.editor-v2 {:style (:main-wrapper styles)}
+     [:div.page
+      [ui/app-bar {:position "static"}
+       [ui/toolbar
+        [ui/typography {:variant "h4"} "Course"]]]
+      [ui/grid {:container true
+                :justify   "space-between"
+                :spacing 40}
+       [ui/grid {:item true :xs 4}
+        [concepts]]
+       [ui/grid {:item true :xs 4}
+        [scenes]]
+       [ui/grid {:item true :xs 4}
+        [lessons]]]]]))

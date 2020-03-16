@@ -7,7 +7,8 @@
     [webchange.views :as views]
     [webchange.config :as config]
     [webchange.routes :as routes]
-    [webchange.sw-utils.register :as sw]))
+    [webchange.sw-utils.register :as sw]
+    [webchange.ui.theme :refer [with-mui-theme]]))
 
 (defn dev-setup []
   (when config/debug?
@@ -16,8 +17,10 @@
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
-  (reagent/render [views/main-panel]
-                  (.getElementById js/document "app")))
+  (reagent/render
+    [with-mui-theme {:type "dark"}
+     [views/main-panel]]
+    (.getElementById js/document "app")))
 
 (defn reset-viewport
   []

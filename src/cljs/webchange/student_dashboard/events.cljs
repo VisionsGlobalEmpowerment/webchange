@@ -6,12 +6,12 @@
 
 (re-frame/reg-event-fx
   :open-student-dashboard
-  (fn [{:keys [db]} _]
+  (fn [{:keys [_]} _]
     {:dispatch-n (list [::events/redirect :student-dashboard])}))
 
 (re-frame/reg-event-fx
   :open-student-course-dashboard
-  (fn [{:keys [db]} [_ course-id]]
+  (fn [{:keys [_]} [_ course-id]]
     {:dispatch-n (list [::events/redirect :student-course-dashboard :id course-id])}))
 
 (re-frame/reg-event-fx

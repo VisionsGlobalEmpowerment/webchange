@@ -11,8 +11,9 @@
 (defn reorder-nodes
   [this]
   (let [engine (aget this "engine")]
-    (.setTimeout js/window #(do (reorder engine)
-                                (zoom-to-fit engine)) 100)))
+    (when-not (nil? engine)
+      (.setTimeout js/window #(do (reorder engine)
+                                  (zoom-to-fit engine)) 100))))
 
 (defn toolbar
   [engine {:keys [values current-value on-changed]}]
@@ -24,7 +25,7 @@
                              :z-index          10
                              :background-color "rgba(0, 0, 0, 0.2)"
                              :width            "100%"
-                             :height           36
+                             :height           50
                              :display          "flex"
                              :justify-content  "space-between"}}
                (when-not (= 0 (count values))

@@ -1,13 +1,13 @@
-(ns webchange.student-dashboard.sync.views-sync-list
+(ns webchange.student-dashboard.toolbar.sync.views-sync-list
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [clojure.set :refer [difference union]]
-    [webchange.student-dashboard.sync.events :as events]
-    [webchange.student-dashboard.sync.subs :as subs]
+    [webchange.student-dashboard.toolbar.sync.events :as events]
+    [webchange.student-dashboard.toolbar.sync.subs :as subs]
     [webchange.sw-utils.message :as sw]
     [webchange.sw-utils.subs :as sw-subs]
-    [webchange.student-dashboard.sync.views-sync-list-present :refer [sync-list-modal-view]]
+    [webchange.student-dashboard.toolbar.sync.views-sync-list-present :refer [sync-list-modal-view]]
     [webchange.subs :as global-subs]))
 
 ;; Get initial state

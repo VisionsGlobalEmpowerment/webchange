@@ -1,5 +1,6 @@
 (ns webchange.views
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
@@ -79,4 +80,6 @@
 
 (defn main-panel []
   (let [{:keys [handler route-params]} @(re-frame/subscribe [::subs/active-route])]
-    [panels handler route-params]))
+    [:div
+     [ui/css-baseline]
+     [panels handler route-params]]))

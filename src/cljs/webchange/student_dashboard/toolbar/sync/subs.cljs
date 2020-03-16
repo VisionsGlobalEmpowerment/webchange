@@ -1,4 +1,4 @@
-(ns webchange.student-dashboard.sync.subs
+(ns webchange.student-dashboard.toolbar.sync.subs
   (:require
     [re-frame.core :as re-frame]))
 
