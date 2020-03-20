@@ -12,10 +12,11 @@
   [scene-data]
   (->> (:assets scene-data)
        (filter (fn [{:keys [type]}] (= type "audio")))
-       (map (fn [{:keys [alias url]}]
+       (map (fn [{:keys [alias url date]}]
               {:alias alias
                :key   url
-               :url   url}))))
+               :url   url
+               :date  date}))))
 
 (defn- get-scene-external-audios
   [scene-data]
@@ -78,7 +79,9 @@
                (get-scene-external-audios scene-data)
                (get-concepts-audios graph))
        (filter-no-url)
-       (audios-distinct)))
+       (audios-distinct)
+       (sort-by :date >)
+       (into [])))
 
 (defn audios->assets
   [audios]

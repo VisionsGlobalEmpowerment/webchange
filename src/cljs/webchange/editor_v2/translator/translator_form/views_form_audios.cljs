@@ -20,7 +20,7 @@
                        action-key)}))))
 
 (defn audio-wave
-  [{:keys [key start duration selected?]} {:keys [on-click on-change]}]
+  [{:keys [key alias start duration selected?]} {:keys [on-click on-change]}]
   (let [audio-data {:key   key
                     :start (or start 0)
                     :end   (+ start duration)}
@@ -34,7 +34,7 @@
      [ui/card-content
       [ui/typography {:variant "subtitle2"
                       :color   "default"}
-       key]
+       (or alias key)]
       [audio-wave-form audio-data form-params]]]))
 
 (defn waves-list
@@ -48,8 +48,9 @@
 (defn audio-key->audio-data
   [audios]
   (map
-    (fn [{:keys [url]}]
+    (fn [{:keys [url alias]}]
       {:key       url
+       :alias     alias
        :start     nil
        :duration  nil
        :selected? false})
