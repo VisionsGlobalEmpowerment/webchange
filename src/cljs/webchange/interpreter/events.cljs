@@ -463,12 +463,6 @@
                        (ce/success-event action))}
         {:dispatch (ce/success-event action)}))))
 
-(defn action-id->activity-number [action-id db]
-  (->> (get-in db [:course-data :workflow-actions])
-       (filter #(= action-id (:id %)))
-       first
-       :activity-number))
-
 (defn activity-score
   [db]
   {:correct   (vars.events/get-variable db :score-correct)

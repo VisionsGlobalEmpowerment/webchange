@@ -1,4 +1,4 @@
-DROP TABLE activity_stats;
+DROP TABLE IF EXISTS activity_stats;
 --;;
 CREATE TABLE activity_stats
 (id SERIAL,

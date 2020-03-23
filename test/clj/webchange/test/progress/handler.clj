@@ -39,4 +39,4 @@
 (deftest individual-profile-can-be-retrieved
   (let [{student-id :student-id course-name :course-name data :data} (fp/activity-stat-created)
         retrieved (-> (fp/get-individual-profile student-id course-name) :body (json/read-str :key-fn keyword) :stats)]
-    (is (= data (-> retrieved first second :data)))))
+    (is (= data (-> retrieved first :data)))))

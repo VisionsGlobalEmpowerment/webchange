@@ -1,8 +1,11 @@
 DELETE FROM course_progresses;
-DELETE FROM course_actions;
+--;;
+DELETE FROM course_events;
+--;;
 DELETE FROM course_stats;
 
-DROP TABLE activity_stats;
+--;;
+DROP TABLE IF EXISTS activity_stats;
 --;;
 CREATE TABLE activity_stats
 (id SERIAL,

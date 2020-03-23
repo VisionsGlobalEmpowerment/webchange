@@ -21,9 +21,9 @@
 
 (events/reg
   ::latest-activity :activity-started
-  (fn [{:keys [user-id course-id level lesson activity-name]}]
+  (fn [{:keys [user-id course-id level lesson activity]}]
     (if-let [{:keys [id data]} (db/get-user-course-stat {:user_id user-id :course_id course-id})]
-      (db/save-course-stat! {:id id :data (assoc data :latest-activity {:id activity-name :level level :lesson lesson})}))))
+      (db/save-course-stat! {:id id :data (assoc data :latest-activity {:id activity :level level :lesson lesson})}))))
 
 (events/reg
   ::activity-progress :activity-progress

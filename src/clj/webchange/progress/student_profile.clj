@@ -6,7 +6,7 @@
             [webchange.auth.core :as auth]
             [webchange.events :as events]))
 
-(defn- activity->id [level lesson activity]
+(defn activity->id [level lesson activity]
   (str level "-" lesson "-" activity))
 
 (events/reg
