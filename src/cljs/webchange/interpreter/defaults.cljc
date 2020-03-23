@@ -80,4 +80,6 @@
 
                      {:url "/raw/anim/pinata/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/pinata/skeleton.json", :size 1, :type "anim-text"}
-                     {:url "/raw/anim/pinata/skeleton.png", :size 1, :type "anim-texture"}])
+                     {:url "/raw/anim/pinata/skeleton.png", :size 1, :type "anim-texture"}
+
+                     {:url "/raw/img/elements/airplane.png", :size 1, :type "anim-texture"}])

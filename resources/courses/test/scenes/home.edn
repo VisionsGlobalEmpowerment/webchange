@@ -188,6 +188,7 @@
                                                     :data [{:type "animation" :target "box1" :id "wood" :loop false}
                                                            {:type     "set-skin" :target "box1"
                                                             :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                                                           {:type "set-slot" :target "box1" :image "/raw/img/elements/airplane.png" :slot-name "box1"}
                                                            {:type "copy-variable" :var-name "current-word" :from "item-1"}
                                                            {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}]}
 
