@@ -220,10 +220,10 @@
 (re-frame/reg-event-fx
   ::add-asset
   (fn [{:keys [db]} [_ {:keys [scene-id state]}]]
-    (let [id (-> (get-in db [:scenes scene-id :assets]) count)
+    (let [asset (assoc state :date (.getTime (js/Date.)))
           assets (-> db
                      (get-in [:scenes scene-id :assets] [])
-                     (assoc id state))]
+                     (conj asset))]
       {:db (assoc-in db [:scenes scene-id :assets] assets)
        :reload-asset state})))
 

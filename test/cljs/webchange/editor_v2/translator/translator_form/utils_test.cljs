@@ -12,10 +12,31 @@
       (let [actual-result (get-audios scene-data graph)
             expected-result [{:alias "alias_1"
                               :key   "/raw/audio/audio_1.mp3"
-                              :url   "/raw/audio/audio_1.mp3"}
+                              :url   "/raw/audio/audio_1.mp3"
+                              :date  nil}
                              {:alias nil
                               :key   "/raw/audio/audio_2.m4a"
-                              :url   "/raw/audio/audio_2.m4a"}]]
+                              :url   "/raw/audio/audio_2.m4a"
+                              :date  nil}]]
+        (is (= actual-result expected-result)))))
+  (testing "scene audio assets are sorted by date"
+    (let [scene-data {:assets [{:url "/raw/audio/audio_1.mp3" :type "audio" :alias "alias_1"}
+                               {:url "/raw/audio/audio_2.m4a" :type "audio" :date 1584715285776}
+                               {:url "/raw/audio/audio_3.mp3" :type "audio" :alias "alias_3" :date 1584715294636}]}
+          graph {}]
+      (let [actual-result (get-audios scene-data graph)
+            expected-result [{:alias "alias_3"
+                              :key   "/raw/audio/audio_3.mp3"
+                              :url   "/raw/audio/audio_3.mp3"
+                              :date  1584715294636}
+                             {:alias nil
+                              :key   "/raw/audio/audio_2.m4a"
+                              :url   "/raw/audio/audio_2.m4a"
+                              :date  1584715285776}
+                             {:alias "alias_1"
+                              :key   "/raw/audio/audio_1.mp3"
+                              :url   "/raw/audio/audio_1.mp3"
+                              :date  nil}]]
         (is (= actual-result expected-result)))))
   (testing "getting scene external audios"
     (let [scene-data {:audio {:audio-1-key "/raw/audio/audio-1.mp3"
@@ -52,5 +73,6 @@
       (let [actual-result (get-audios scene-data graph)
             expected-result [{:alias "alias-1"
                               :key   "audio-1-key"
-                              :url   "/raw/audio/audio-1.mp3"}]]
+                              :url   "/raw/audio/audio-1.mp3"
+                              :date  nil}]]
         (is (= actual-result expected-result))))))
