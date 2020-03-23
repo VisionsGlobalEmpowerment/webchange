@@ -5,7 +5,9 @@
 (re-frame/reg-sub
   ::translator-modal-state
   (fn [db]
-    (get-in db [:editor-v2 :translator :translator-modal-state])))
+    (-> db
+        (get-in [:editor-v2 :translator :translator-modal-state])
+        boolean)))
 
 (re-frame/reg-sub
   ::selected-action

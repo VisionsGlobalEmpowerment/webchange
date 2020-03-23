@@ -16,14 +16,6 @@
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.subs :as subs]))
 
-(defn normalize-path
-  [path graph]
-  (map
-    (fn [path-item]
-      (let [origin (get-in graph [path-item :data :origin])]
-        (or origin path-item)))
-    path))
-
 (defn init-action-data!
   [data-store path selected-action-concept? concept-data scene-data]
   (let [action-name (first path)]
@@ -71,9 +63,8 @@
                                            (keyword (:name @selected-phrase-node)))
                     selected-action-node (re-frame/subscribe [::translator-subs/selected-action])
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
-
+                    selected-action-path (:path @selected-action-node)
                     {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept @current-concept})
-                    selected-action-path (normalize-path (:path @selected-action-node) graph)
                     audios-list (get-audios scene-data graph)
                     prepared-current-action-data (get-current-action-data @selected-action-node @current-concept @data-store)]
                 (init-action-data! data-store selected-action-path selected-action-concept? @current-concept scene-data)

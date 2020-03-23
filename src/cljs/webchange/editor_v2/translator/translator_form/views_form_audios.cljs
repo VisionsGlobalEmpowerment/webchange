@@ -7,6 +7,8 @@
     [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
     [webchange.editor-v2.translator.translator-form.views-form-audio-upload :refer [upload-audio-form]]))
 
+(def current-key (r/atom nil))
+
 (defn get-action-audio-data
   [action-data audios]
   (when (some #{(:type action-data)} ["audio"
@@ -20,30 +22,34 @@
                        action-key)}))))
 
 (defn audio-wave
-  [{:keys [key alias start duration selected?]} {:keys [on-click on-change]}]
-  (let [audio-data {:key   key
-                    :start (or start 0)
-                    :end   (+ start duration)}
-        form-params {:height         64
-                     :on-change      on-change
-                     :show-controls? selected?}
-        border-style (if selected? {:border "solid 1px #00c0ff"} {})]
-    [ui/card {:style    (merge border-style
-                               {:margin-bottom 8})
-              :on-click #(on-click key)}
-     [ui/card-content
-      [ui/typography {:variant "subtitle2"
-                      :color   "default"}
-       (or alias key)]
-      [audio-wave-form audio-data form-params]]]))
+  [{:keys [key alias start duration selected?]} {:keys [on-change]}]
+  (r/with-let [on-change-region (fn [region]
+                                  (on-change key region))
+               on-select (fn []
+                           (reset! current-key key)
+                           (on-change key))]
+    (let [audio-data {:key   key
+                      :start (or start 0)
+                      :end   (+ start duration)}
+          form-params {:height         64
+                       :on-change      on-change-region
+                       :show-controls? selected?}
+          border-style (if selected? {:border "solid 1px #00c0ff"} {})]
+      [ui/card {:style    (merge border-style
+                                 {:margin-bottom 8})
+                :on-click on-select}
+       [ui/card-content
+        [ui/typography {:variant "subtitle2"
+                        :color   "default"}
+         (or alias key)]
+        [audio-wave-form audio-data form-params]]])))
 
 (defn waves-list
-  [{:keys [audios-data on-wave-click on-wave-region-change]}]
+  [{:keys [audios-data on-change]}]
   [:div
    (for [audio-data audios-data]
      ^{:key (:key audio-data)}
-     [audio-wave audio-data {:on-click  on-wave-click
-                             :on-change on-wave-region-change}])])
+     [audio-wave audio-data {:on-change on-change}])])
 
 (defn audio-key->audio-data
   [audios]
@@ -89,8 +95,6 @@
                          :style   {:margin-left "50%"
                                    :margin-top  18}}])
 
-(def current-key (r/atom nil))
-
 (defn audios-list-block-render
   [{:keys [scene-id audios action on-change]}]
   (let [action-data (:data action)
@@ -101,11 +105,7 @@
                 [:div
                  (if @assets-loaded
                    [waves-list {:audios-data           audios-data
-                                :on-wave-click         (fn [key]
-                                                         (reset! current-key key)
-                                                         (on-change key))
-                                :on-wave-region-change (fn [region]
-                                                         (on-change @current-key region))}]
+                                :on-change on-change}]
                    [audios-loading-block {:audios-list      (map #(:url %) audios)
                                           :loading-progress assets-loading-progress
                                           :loaded           assets-loaded}])
