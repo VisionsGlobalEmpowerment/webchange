@@ -48,7 +48,7 @@
         next-activity @(re-frame/subscribe [::sds/next-activity])
         finished-activities @(re-frame/subscribe [::sds/finished-activities])
         assessments @(re-frame/subscribe [::sds/assessments])
-        handle-activity-click (fn [scene-id activity-id] (re-frame/dispatch [::sde/open-activity scene-id activity-id]))]
+        handle-activity-click (fn [activity] (re-frame/dispatch [::sde/open-activity activity]))]
     (let [styles (get-styles)]
       [ui/grid {:container true
                 :style     (:page-wrapper styles)}
@@ -68,7 +68,7 @@
   []
   (let [loading? @(re-frame/subscribe [::sds/progress-loading])
         finished-activities @(re-frame/subscribe [::sds/finished-activities])
-        handle-activity-click (fn [scene-id activity-id] (re-frame/dispatch [::sde/open-activity scene-id activity-id]))]
+        handle-activity-click (fn [activity] (re-frame/dispatch [::sde/open-activity activity]))]
     (let [styles (get-styles)]
       [ui/grid {:container true
                 :style     (:page-wrapper styles)}

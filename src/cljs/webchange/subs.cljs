@@ -18,6 +18,11 @@
     (-> db :course-data :scenes)))
 
 (re-frame/reg-sub
+  ::course-levels
+  (fn [db]
+    (-> db :course-data :levels)))
+
+(re-frame/reg-sub
   ::current-scene
   (fn [db]
     (:current-scene db)))

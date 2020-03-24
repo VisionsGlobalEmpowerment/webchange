@@ -163,16 +163,20 @@
     (when (nil? lesson) (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined"))))
     lesson))
 
+;TODO: level get lessons from levels
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
-    (let [current-lesson-id (:activity-lesson db)
-          course-lessons (get-in db [:course-data :lessons])
-          lesson-set-name (-> (filter #(= current-lesson-id (:id %)) course-lessons)
+    (let [current-activity (:activity db)
+          lesson-sets (->> (get-in db [:course-data :levels])
+                              (filter #(= (:level current-activity) (:level %)))
                               first
-                              :lesson-sets
-                              (get (keyword from)))
-          lesson (get-lesson db lesson-set-name)
+                              :lessons
+                              (filter #(= (:lesson current-activity) (:lesson %)))
+                              first
+                              :lesson-sets)
+
+          lesson (get-lesson db (get lesson-sets (keyword from)))
           items (->> (:item-ids lesson)
                      (map #(get-in db [:dataset-items %]))
                      (map #(merge (:data %) {:id (:name %)})))

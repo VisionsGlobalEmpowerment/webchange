@@ -14,7 +14,8 @@
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.routes :refer [redirect-to]]
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form delete-dataset-item-modal]]
-    [webchange.editor-v2.concepts.events :as concepts-events]))
+    [webchange.editor-v2.concepts.events :as concepts-events]
+    [webchange.editor-v2.lessons.views :refer [edit-lesson-form add-lesson-form]]))
 
 (defn- get-styles
   []
@@ -62,8 +63,68 @@
           [ui/icon-button {:on-click #(redirect-to :course-editor-v2-scene :id course :scene-id (:value scene)) :aria-label "Edit"}
            [ic/edit]]]])]]))
 
+(defn- level-item
+  [level]
+  (r/with-let [in (r/atom true)]
+    (let [course @(re-frame/subscribe [::subs/current-course])]
+      [:div
+       [ui/list-item {:button true :on-click #(swap! in not)}
+        [ui/list-item-text {:primary (:name level)}]
+        [ui/list-item-secondary-action
+         [ui/icon-button
+          (if @in
+            [ic/expand-less]
+            [ic/expand-more])]]]
+       [ui/collapse {:in @in}
+        [ui/divider]
+        [ui/list
+         (for [lesson (:lessons level)]
+           [ui/list-item
+            [ui/list-item-text {:primary (:name lesson)}]
+            [ui/list-item-secondary-action
+             [ui/icon-button {:on-click #(redirect-to :course-editor-v2-lesson :course-id course :level-id (:level level) :lesson-id (:lesson lesson)) :aria-label "Edit"}
+              [ic/edit]]]])
+         [ui/list-item {:button true :on-click #(redirect-to :course-editor-v2-add-lesson :course-id course :level-id (:level level))}
+          [ui/list-item-avatar [ui/avatar [ic/add]]]
+          [ui/list-item-text {:primary "Add new"}]]]
+        [ui/divider]]
+       ])))
+
 (defn- lessons
-  [])
+  []
+  (let [levels @(re-frame/subscribe [::subs/course-levels])]
+    [ui/paper
+     [ui/typography {:variant "h6"} "Scenes"]
+     [ui/list
+      (for [level levels]
+        ^{:key (:level level)}
+        [level-item level]
+        )]
+     ]))
+
+(defn add-lesson-view
+  [course-id level]
+  [with-mui-theme "dark"
+   [:div.editor-v2 {}
+    [:div.page
+     [ui/app-bar {:position "static"}
+      [ui/toolbar
+       [ui/typography {:variant "h4"} "Lesson"]]]
+     [ui/paper
+      [add-lesson-form course-id level]]
+     ]]])
+
+(defn lesson-view
+  [course-id level lesson]
+  [with-mui-theme "dark"
+   [:div.editor-v2 {}
+    [:div.page
+     [ui/app-bar {:position "static"}
+      [ui/toolbar
+       [ui/typography {:variant "h4"} "Lesson"]]]
+     [ui/paper
+      [edit-lesson-form course-id level lesson]]
+     ]]])
 
 (defn add-concept-view
   [course-id]

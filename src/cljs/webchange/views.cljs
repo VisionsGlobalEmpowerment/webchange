@@ -7,7 +7,7 @@
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
     [webchange.editor-v2.events :as ee2]
-    [webchange.editor-v2.views :refer [course-view scene-view concept-view add-concept-view]]
+    [webchange.editor-v2.views :refer [course-view scene-view concept-view add-concept-view lesson-view add-lesson-view]]
     [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
@@ -43,6 +43,14 @@
   (re-frame/dispatch [::ee2/init-editor course-id])
   [add-concept-view course-id])
 
+(defn- editor-panel-v2-lesson [course-id level lesson]
+  (re-frame/dispatch [::ee2/init-editor course-id])
+  [lesson-view course-id level lesson])
+
+(defn- editor-panel-v2-add-lesson [course-id level]
+  (re-frame/dispatch [::ee2/init-editor course-id])
+  [add-lesson-view course-id level])
+
 (defn- dashboard-panel
   [content route-params]
   (re-frame/dispatch
@@ -64,6 +72,8 @@
     :course-editor-v2-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
     :course-editor-v2-concept [editor-panel-v2-concept (:course-id route-params) (-> route-params :concept-id js/parseInt)]
     :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
+    :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]
+    :course-editor-v2-add-lesson [editor-panel-v2-add-lesson (:course-id route-params) (-> route-params :level-id js/parseInt)]
 
     ;; teacher dashboard
     :dashboard [dashboard-panel :dashboard route-params]

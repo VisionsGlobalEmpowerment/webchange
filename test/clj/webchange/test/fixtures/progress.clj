@@ -48,7 +48,7 @@
   ([options]
    (let [{student-id :id user-id :user-id} (f/student-created)
          {course-id :id course-name :name} (f/course-created)
-         defaults {:user-id user-id :course-id course-id :activity-id 1 :data {:test "test"}}
+         defaults {:user-id user-id :course-id course-id :activity-id "test-1-1" :data {:activity "test" :lesson 1 :level 1 :test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))

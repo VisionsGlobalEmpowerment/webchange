@@ -36,9 +36,9 @@
    :button      {:width "auto"}})
 
 (defn activity-placeholder
-  [{:keys [id activity-id name description image on-click]}]
+  [{:keys [name description image on-click] :as activity}]
   (let [styles (get-styles)
-        handle-click (fn [] (on-click id activity-id))]
+        handle-click (fn [] (on-click activity))]
     [:div {:on-click handle-click
            :style    (merge (:container styles)
                             (get-background-styles image))}

@@ -202,7 +202,7 @@
 
 (defn student-complete-modal
   []
-  (r/with-let [lesson (r/atom nil)]
+  (r/with-let [data (r/atom {})]
     (let [modal-state @(re-frame/subscribe [::students-subs/complete-modal-state])
           is-loading? @(re-frame/subscribe [::students-subs/student-loading])
           {{first-name :first-name last-name :last-name} :user student-id :id} @(re-frame/subscribe [::students-subs/current-student])]
@@ -215,15 +215,20 @@
             [ui/dialog-content
              [ui/dialog-content-text (str "You are about to complete progress for " first-name " " last-name)]
              [ui/text-field
+              {:label         "Level to complete"
+               :type          "text"
+               :helper-text   "Leave blank to complete all levels"
+               :on-change #(swap! data assoc :level (-> % .-target .-value js/parseInt))}]
+             [ui/text-field
               {:label         "Lesson to complete"
                :type          "text"
                :helper-text   "Leave blank to complete all lessons"
-               :on-change #(reset! lesson (-> % .-target .-value js/parseInt))}]]
+               :on-change #(swap! data assoc :lesson (-> % .-target .-value js/parseInt))}]]
             [ui/dialog-actions
              [ui/button {:on-click #(re-frame/dispatch [::students-events/close-complete-modal])} "Cancel"]
              [ui/button
               {:variant  "contained"
                :color    "primary"
-               :on-click #(re-frame/dispatch [::students-events/confirm-complete student-id @lesson])}
+               :on-click #(re-frame/dispatch [::students-events/confirm-complete student-id @data])}
               "Confirm"]]])
          ]))))

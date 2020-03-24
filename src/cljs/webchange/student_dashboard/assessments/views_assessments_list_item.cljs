@@ -17,9 +17,9 @@
    :button  {:margin "0"}})
 
 (defn assessments-list-item
-  [{:keys [id activity-id name image style on-click]}]
+  [{:keys [name image style on-click] :as activity}]
   (let [styles (get-styles)]
-    [ui/card {:on-click #(on-click id activity-id)
+    [ui/card {:on-click #(on-click activity)
               :style    (merge (or style {})
                                (:card styles))}
      [card-action-area
@@ -30,7 +30,7 @@
       [ui/typography {:variant "h6"
                       :style   (:name styles)}
        name]
-      [ui/button {:on-click #(on-click id)
+      [ui/button {:on-click #(on-click activity)
                   :variant  "contained"
                   :color    "primary"
                   :size     "small"

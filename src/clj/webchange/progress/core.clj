@@ -23,26 +23,30 @@
            :class-id class-id
            :course-name course-name}]))
 
-(defn level->grid
-  [actions f]
-  (->> actions
-       (group-by :lesson)
-       (#(into (sorted-map) %))
-       (map (fn [[l a]] {:name (str "L" l)
-                         :values (map f a)}))))
-
-(defn with-stat
-  [{id :id :as action} stats-map]
-  (assoc action :stat (get stats-map id)))
-
 (defn workflow->grid
-  [actions stats-map f]
-  (->> actions
-       (remove #(not= "set-activity" (:type %)))
-       (map #(with-stat % stats-map))
-       (group-by :level)
-       (map (fn [[l a]] [l (level->grid a f)]))
-       (#(into (sorted-map) %))))
+  [levels f]
+  (let [->lesson (fn [lesson level] {:name (str "L" (:lesson lesson))
+                                     :values (map #(f % level (:lesson lesson)) (:activities lesson))})
+        ->level (fn [level] [(:level level) (map #(->lesson % (:level level)) (:lessons level))])]
+    (->> levels
+         (map ->level)
+         (into {}))))
+
+(defn- stats->hash
+  [stats]
+  (let [->activity (fn [activity] [(:activity activity) activity])
+        ->lesson (fn [[lesson-id activities]] [lesson-id (->> activities
+                                                              (map ->activity)
+                                                              (into {}))])
+        ->level (fn [[level-id lessons]] [level-id (->> lessons
+                                                        (group-by :lesson)
+                                                        (map ->lesson)
+                                                        (into {}))])]
+    (->> stats
+         (map :data)
+         (group-by :level)
+         (map ->level)
+         (into {}))))
 
 (defn ->percentage [value] (-> value (* 100) float Math/round))
 
@@ -58,13 +62,19 @@
       :else nil)))
 
 (defn activity->score
-  [activity]
-  {:id (:id activity)
-   :label (:activity activity)
-   :started (-> activity :stat :data boolean)
-   :finished (-> activity :stat :data :score boolean)
-   :percentage (score->value (-> activity :stat :data :score) (-> activity :scored))
-   :value (score->value (-> activity :stat :data :score) (-> activity :scored))})
+  [stats]
+  (let [hash (stats->hash stats)
+        get-stat (fn [level lesson activity] (-> hash
+                                                 (get level)
+                                                 (get lesson)
+                                                 (get activity)))]
+    (fn [{:keys [activity scored]} level lesson]
+      (let [data (get-stat level lesson activity)]
+        {:label activity
+         :started (boolean data)
+         :finished (-> data :score boolean)
+         :percentage (score->value (-> data :score) scored)
+         :value (score->value (-> data :score) scored)}))))
 
 (defn time->percentage
   [time expected]
@@ -82,24 +92,28 @@
     (str minutes "m " seconds "s")))
 
 (defn activity->time
-  [activity]
-  {:id (:id activity)
-   :label (:activity activity)
-   :started (-> activity :stat :data boolean)
-   :finished (-> activity :stat :data :score boolean)
-   :percentage (time->percentage (-> activity :stat :data :time-spent) (-> activity :time-expected))
-   :value (time->value (-> activity :stat :data (:time-spent 0)))})
+  [stats]
+  (let [hash (stats->hash stats)
+        get-stat (fn [level lesson activity] (-> hash
+                                                 (get level)
+                                                 (get lesson)
+                                                 (get activity)))]
+    (fn [{:keys [activity time-expected]} level lesson]
+      (let [data (get-stat level lesson activity)]
+        {:label activity
+         :started (boolean data)
+         :finished (-> data :score boolean)
+         :percentage (time->percentage (-> data :time-spent) time-expected)
+         :value (time->value (-> data (:time-spent 0)))}))))
 
 (defn get-individual-progress [course-name student-id]
   (let [{user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:name course-name})
         course-data (course/get-course-data course-name)
-        stats (->> (db/get-user-activity-stats {:user_id user-id :course_id course-id})
-                   (map (fn [stat] [(:activity-id stat) stat]))
-                   (into {}))]
+        stats (db/get-user-activity-stats {:user_id user-id :course_id course-id})]
     [true {:stats stats
-           :scores (workflow->grid (:workflow-actions course-data) stats activity->score)
-           :times (workflow->grid (:workflow-actions course-data) stats activity->time)}]))
+           :scores (workflow->grid (:levels course-data) (activity->score stats))
+           :times (workflow->grid (:levels course-data) (activity->time stats))}]))
 
 (defn save-events! [owner-id course-id events]
   (doseq [{created-at-string :created-at type :type :as data} events]
@@ -125,29 +139,33 @@
       (update-progress! id progress)
       (create-progress! owner-id course-id progress))))
 
-(defn- filter-by-lesson
-  [lesson {action-lesson :lesson}]
-  (let [filter-required? (and (integer? lesson) (integer? action-lesson))]
-    (if filter-required?
-      (> lesson action-lesson)
-      true)))
+(defn- levels->finished
+  [levels level-id lesson-id]
+  (let [->lesson (fn [lesson] [(:lesson lesson) (->> (:activities lesson) (map :activity) (into #{}))])
+        ->level (fn [level] [(:level level) (->> (:lessons level) (map ->lesson) (into {}))])
+        prepared (->> levels (map ->level) (into {}))]
+    (if level-id
+      (let [filtered-levels (->> prepared
+                                 (keep (fn [[idx item]] (when (>= level-id idx) [idx item])))
+                                 (into {}))]
+        (if lesson-id
+          (let [[last-level last-lessons] (last filtered-levels)
+                filtered-lessons (->> last-lessons
+                                      (keep (fn [[idx item]] (when (>= lesson-id idx) [idx item])))
+                                      (into {}))]
+            (-> filtered-levels
+                (assoc last-level filtered-lessons)))
+          filtered-levels))
+      prepared)))
 
-(defn- filter-by-type
-  [types {action-type :type}]
-  (some #(= action-type %) types))
-
-(defn complete-individual-progress! [course-name student-id {lesson :lesson}]
+(defn complete-individual-progress! [course-name student-id {lesson :lesson level :level}]
   (let [{user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:name course-name})
-        actions (->>
-                  (course/get-course-data course-name)
-                  :workflow-actions
-                  (filter #(filter-by-type ["set-activity" "init-progress"] %))
-                  (filter #(filter-by-lesson lesson %))
-                  (map :id)
-                  (into []))
+        finished (-> (course/get-course-data course-name)
+                     :levels
+                     (levels->finished level lesson))
         progress (->
                    (db/get-progress {:user_id user-id :course_id course-id})
                    :data
-                   (assoc :finished-workflow-actions actions))]
+                   (assoc :finished finished))]
     (save-progress! user-id course-name {:progress progress})))

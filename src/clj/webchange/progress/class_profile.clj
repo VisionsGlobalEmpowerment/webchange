@@ -21,17 +21,17 @@
 
 (events/reg
   ::latest-activity :activity-started
-  (fn [{:keys [user-id course-id lesson activity-name]}]
+  (fn [{:keys [user-id course-id level lesson activity]}]
     (if-let [{:keys [id data]} (db/get-user-course-stat {:user_id user-id :course_id course-id})]
-      (db/save-course-stat! {:id id :data (assoc data :latest-activity {:id activity-name :lesson lesson})}))))
+      (db/save-course-stat! {:id id :data (assoc data :latest-activity {:id activity :level level :lesson lesson})}))))
 
 (events/reg
-  ::activity-progress :activity-finished
-  (fn [{:keys [user-id course-id activity-number]}]
+  ::activity-progress :activity-progress
+  (fn [{:keys [user-id course-id activity-progress]}]
     (if-let [{:keys [id data]} (db/get-user-course-stat {:user_id user-id :course_id course-id})]
       (let [current-progress (or (:activity-progress data) 0)]
-        (if (> activity-number current-progress)
-          (db/save-course-stat! {:id id :data (assoc data :activity-progress activity-number)}))))))
+        (if (> activity-progress current-progress)
+          (db/save-course-stat! {:id id :data (assoc data :activity-progress activity-progress)}))))))
 
 (events/reg
   ::cumulative-score :student-activity-score-changed

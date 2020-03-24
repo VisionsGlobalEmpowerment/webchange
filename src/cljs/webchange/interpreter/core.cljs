@@ -96,6 +96,7 @@
 (defn get-total-size
   [assets]
   (->> assets
+       (filter :url)
        (map :size)
        (reduce +)))
 
@@ -103,10 +104,11 @@
   ([asset]
     (load-base-asset asset nil))
   ([asset progress]
-    (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
-          (put-data (:body response) (:url asset))
-          (when-not (nil? progress)
-            (swap! progress + (:size asset)))))))
+   (when (:url asset)
+     (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
+           (put-data (:body response) (:url asset))
+           (when-not (nil? progress)
+             (swap! progress + (:size asset))))))))
 
 (defn load-asset
   ([asset]

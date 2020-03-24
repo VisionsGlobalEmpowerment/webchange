@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.events :as events]
-    [webchange.interpreter.events :as ie]))
+    [webchange.interpreter.events :as ie]
+    [webchange.interpreter.lessons.activity :as lessons-activity]))
 
 (re-frame/reg-event-fx
   :open-student-dashboard
@@ -22,8 +23,9 @@
 
 (re-frame/reg-event-fx
   ::open-activity
-  (fn [{:keys [db]} [_ scene-name activity-id]]
-    (let [course (:current-course db)]
-      {:db (assoc db :loaded-activities {(keyword scene-name) activity-id})
+  (fn [{:keys [db]} [_ activity]]
+    (let [course (:current-course db)
+          activity (select-keys activity [:level :lesson :activity])]
+      {:db (lessons-activity/add-loaded-activity db activity)
        :dispatch-n (list [::events/redirect (str "/courses/" course)]
-                         [::ie/set-current-scene scene-name])})))
+                         [::ie/set-current-scene (:activity activity)])})))

@@ -15,9 +15,26 @@
          first)))
 
 (re-frame/reg-sub
+  ::dataset-items
+  (fn [db]
+    (get-in db [:editor :course-dataset-items])))
+
+(defn get-item
+  [db id]
+  (->> (get-in db [:editor :course-dataset-items])
+       (filter #(= id (:id %)))
+       first))
+
+(defn get-item-by-name
+  [db name]
+  (->> (get-in db [:editor :course-dataset-items])
+       (filter #(= name (:name %)))
+       first))
+
+(re-frame/reg-sub
   ::dataset-item
   (fn [db [_ id]]
-    (get-in db [:dataset-items id])))
+    (get-item db id)))
 
 (re-frame/reg-sub
   ::delete-dataset-item-modal-state

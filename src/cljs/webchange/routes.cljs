@@ -16,6 +16,8 @@
                                        ["/" :id "/editor-v2"] :course-editor-v2
                                        ["/" :course-id "/editor-v2/concepts/" :concept-id] :course-editor-v2-concept
                                        ["/" :course-id "/editor-v2/add-concept"] :course-editor-v2-add-concept
+                                       ["/" :course-id "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson
+                                       ["/" :course-id "/editor-v2/levels/" :level-id "/add-lesson"] :course-editor-v2-add-lesson
                                        ["/" :id "/editor-v2/" :scene-id] :course-editor-v2-scene
                                        ["/" :id "/dashboard"] :student-course-dashboard
                                        ["/" :id "/dashboard/finished"] :finished-activities}

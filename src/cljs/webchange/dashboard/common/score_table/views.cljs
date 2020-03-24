@@ -64,7 +64,7 @@
     [score-table-legend legend]]])
 
 (defn value-item
-  [{{:keys [id label value percentage started finished]} :value levels :value-levels}]
+  [{{:keys [label value percentage started finished]} :value levels :value-levels}]
   [ui/tooltip
    {:title                  (if value (str label " : " value) label)
     :placement              "top-end"
