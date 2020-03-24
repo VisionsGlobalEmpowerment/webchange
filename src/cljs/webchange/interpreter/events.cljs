@@ -3,7 +3,7 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
     [re-frame.core :as re-frame]
-    [webchange.common.anim :refer [start-animation]]
+    [webchange.common.anim :refer [start-animation set-slot]]
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
@@ -123,11 +123,17 @@
     (start-animation shape)))
 
 (re-frame/reg-fx
+  :set-slot
+  (fn [{:keys [state slot-name image region attachment]}]
+    (let [skeleton (:skeleton state)]
+      (set-slot skeleton slot-name image region attachment))))
+
+(re-frame/reg-fx
   :set-skin
   (fn [{:keys [state skin]}]
     (let [skeleton (:skeleton state)]
       (.setSkinByName skeleton skin)
-      (.setSlotsToSetupPose skeleton))))
+      (.setToSetupPose skeleton))))
 
 (re-frame/reg-fx
   :animation-props
@@ -173,6 +179,7 @@
 (ce/reg-simple-executor :start-animation ::execute-start-animation)
 (ce/reg-simple-executor :remove-animation ::execute-remove-animation)
 (ce/reg-simple-executor :set-skin ::execute-set-skin)
+(ce/reg-simple-executor :set-slot ::execute-set-slot)
 (ce/reg-simple-executor :animation-props ::execute-set-animation-props)
 (ce/reg-simple-executor :animation-sequence ::execute-animation-sequence)
 (ce/reg-simple-executor :scene ::execute-scene)
@@ -422,6 +429,14 @@
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
       {:set-skin   (-> action
+                       (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
+       :dispatch-n (list (ce/success-event action))})))
+
+(re-frame/reg-event-fx
+  ::execute-set-slot
+  (fn [{:keys [db]} [_ action]]
+    (let [scene-id (:current-scene db)]
+      {:set-slot   (-> action
                        (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
        :dispatch-n (list (ce/success-event action))})))
 

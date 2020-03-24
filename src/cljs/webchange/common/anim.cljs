@@ -34,38 +34,65 @@
     (swap! renderers assoc context (s/canvas.SkeletonRenderer. context)))
   (get @renderers context))
 
+(defn set-slot
+  [skeleton slot-name image region-options attachment-options]
+  (let [texture (.get spine-manager image)
+        region (doto (s/TextureAtlasRegion.)
+                 (set! -x (get region-options :x 0))
+                 (set! -y (get region-options :y 0))
+                 (set! -width (get region-options :width 100))
+                 (set! -height (get region-options :height 100))
+                 (set! -originalWidth (get region-options :original-width 100))
+                 (set! -originalHeight (get region-options :original-height 100))
+                 (set! -offsetX (get region-options :offset-x 0))
+                 (set! -offsetY (get region-options :offset-y 0))
+                 (set! -index (get region-options :index -1))
+                 (set! -texture texture))
+        attachment (doto (s/RegionAttachment. (get attachment-options :name "element"))
+                     (.setRegion region)
+                     (set! -x (get attachment-options :x 0))
+                     (set! -y (get attachment-options :y 0))
+                     (set! -scaleX (get attachment-options :scale-x 1))
+                     (set! -scaleY (get attachment-options :scale-y 1))
+                     (set! -width (get attachment-options :width 100))
+                     (set! -height (get attachment-options :height 100))
+                     (.updateOffset))
+        slot (.findSlot skeleton slot-name)]
+    (.setAttachment slot attachment)))
+
 (defn anim
   [{:keys [name anim speed on-mount start mix skin anim-offset meshes]
     :or   {mix 0.2 speed 1 skin "default" anim-offset {:x 0 :y 0} meshes false} :as a}]
-  (let [atlas (texture-atlas name)
-        atlas-loader (s/AtlasAttachmentLoader. atlas)
-        skeleton-json (s/SkeletonJson. atlas-loader)
-        skeleton-data (.readSkeletonData skeleton-json (.get spine-manager (str "/raw/anim/" name "/skeleton.json")))
-        skeleton (s/Skeleton. skeleton-data)
-        animation-state-data (s/AnimationStateData. (.-data skeleton))
-        _ (set! (.-defaultMix animation-state-data) mix)
-        animation-state (s/AnimationState. animation-state-data)]
-    (set! (.-scaleY skeleton) -1)
-    (set! (.-x skeleton) (+ (.-x skeleton) (:x anim-offset)))
-    (set! (.-y skeleton) (+ (.-y skeleton) (:y anim-offset)))
-    (fn [{:keys [name anim speed on-mount start mix skin anim-offset meshes] :or {mix 0.2 speed 1 skin "default" anim-offset {:x 0 :y 0} meshes false} :as a}]
-      (.setAnimation animation-state 0 anim true)
-      (.setSkinByName skeleton skin)
-      (.setToSetupPose skeleton)
+  (r/with-let  [atlas (texture-atlas name)
+                atlas-loader (s/AtlasAttachmentLoader. atlas)
+                skeleton-json (s/SkeletonJson. atlas-loader)
+                skeleton-data (.readSkeletonData skeleton-json (.get spine-manager (str "/raw/anim/" name "/skeleton.json")))
+                skeleton (doto (s/Skeleton. skeleton-data)
+                           (set! -scaleY -1)
+                           (set! -x (:x anim-offset))
+                           (set! -y (:y anim-offset))
+                           (.setSkinByName skin)
+                           (.setToSetupPose))
+                animation-state-data (doto (s/AnimationStateData. (.-data skeleton))
+                                       (set! -defaultMix mix))
+                animation-state (doto (s/AnimationState. animation-state-data)
+                                  (.setAnimation 0 anim true))
+                scene-fn (fn [context shape]
+                             (.update animation-state (* (.getAttr shape "timeDiff") speed))
+                             (.apply animation-state skeleton)
+                             (.updateWorldTransform skeleton)
+                             (let [skeleton-renderer (get-renderer context)]
+                               (set! (.-triangleRendering skeleton-renderer) meshes)
+                               (.draw skeleton-renderer skeleton)))
+                ref-fn (fn [ref] (when ref
+                                   (.setStrokeHitEnabled ref false)
+                                   (.shadowForStrokeEnabled ref false)
+                                   (when start (start-animation ref))
+                                   (on-mount {:animation-state animation-state :skeleton skeleton :shape ref})
+                                   ))]
       [:> Shape {:time-diff  0
-                 :scene-func (fn [context shape]
-                               (.update animation-state (* (.getAttr shape "timeDiff") speed))
-                               (.apply animation-state skeleton)
-                               (.updateWorldTransform skeleton)
-                               (let [skeleton-renderer (get-renderer context)]
-                                 (set! (.-triangleRendering skeleton-renderer) meshes)
-                                 (.draw skeleton-renderer skeleton)))
-                 :ref        (fn [ref] (when ref
-                                         (.setStrokeHitEnabled ref false)
-                                         (.shadowForStrokeEnabled ref false)
-                                         (when start (start-animation ref))
-                                         (on-mount {:animation-state animation-state :skeleton skeleton :shape ref})
-                                         ))}])))
+                 :scene-func scene-fn
+                 :ref        ref-fn}]))
 
 (defn init-spine-player [element animation]
   (let [params {"jsonUrl"      (str "/raw/anim/" animation "/skeleton.json")
