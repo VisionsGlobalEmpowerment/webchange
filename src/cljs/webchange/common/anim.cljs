@@ -35,32 +35,30 @@
   (get @renderers context))
 
 (defn set-slot
-  [skeleton slot-name image region attachment]
-  (let [region-defaults {:x 0 :y 0 :width 100 :height 100 :original-width 100 :original-height 100
-                         :offset-x 0 :offset-y 0 :index -1}
-        attachment-defaults {:width 100 :height 100 :scale-x 4 :scale-y 4}
-        texture (.get spine-manager image)
-        r (doto (s/TextureAtlasRegion.)
-                 #_(set! -name "test-region")
-                 (set! -x (get region :x 0))
-                 (set! -y (get region :y 0))
-                 (set! -width (get region :width 100))
-                 (set! -height (get region :height 100))
-                 (set! -originalWidth (get region :original-width 100))
-                 (set! -originalHeight (get region :original-height 100))
-                 (set! -offsetX (get region :offset-x 0))
-                 (set! -offsetY (get region :offset-y 0))
-                 (set! -index (get region :index -1))
+  [skeleton slot-name image region-options attachment-options]
+  (let [texture (.get spine-manager image)
+        region (doto (s/TextureAtlasRegion.)
+                 (set! -x (get region-options :x 0))
+                 (set! -y (get region-options :y 0))
+                 (set! -width (get region-options :width 100))
+                 (set! -height (get region-options :height 100))
+                 (set! -originalWidth (get region-options :original-width 100))
+                 (set! -originalHeight (get region-options :original-height 100))
+                 (set! -offsetX (get region-options :offset-x 0))
+                 (set! -offsetY (get region-options :offset-y 0))
+                 (set! -index (get region-options :index -1))
                  (set! -texture texture))
-        a (doto (s/RegionAttachment. (get attachment :name "element"))
-                     (.setRegion r)
-                     (set! -scaleX (get attachment :scale-x 4))
-                     (set! -scaleY (get attachment :scale-y 4))
-                     (set! -width (get attachment :width 100))
-                     (set! -height (get attachment :height 100))
+        attachment (doto (s/RegionAttachment. (get attachment-options :name "element"))
+                     (.setRegion region)
+                     (set! -x (get attachment-options :x 0))
+                     (set! -y (get attachment-options :y 0))
+                     (set! -scaleX (get attachment-options :scale-x 1))
+                     (set! -scaleY (get attachment-options :scale-y 1))
+                     (set! -width (get attachment-options :width 100))
+                     (set! -height (get attachment-options :height 100))
                      (.updateOffset))
         slot (.findSlot skeleton slot-name)]
-    (.setAttachment slot a)))
+    (.setAttachment slot attachment)))
 
 (defn anim
   [{:keys [name anim speed on-mount start mix skin anim-offset meshes]
@@ -87,13 +85,11 @@
                                (set! (.-triangleRendering skeleton-renderer) meshes)
                                (.draw skeleton-renderer skeleton)))
                 ref-fn (fn [ref] (when ref
-                                   (js/console.log "inside ref" name)
                                    (.setStrokeHitEnabled ref false)
                                    (.shadowForStrokeEnabled ref false)
                                    (when start (start-animation ref))
                                    (on-mount {:animation-state animation-state :skeleton skeleton :shape ref})
                                    ))]
-    (js/console.log "before shape" name skin)
       [:> Shape {:time-diff  0
                  :scene-func scene-fn
                  :ref        ref-fn}]))

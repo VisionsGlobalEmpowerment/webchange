@@ -186,23 +186,22 @@
 
                  :show-first-box-word              {:type "parallel"
                                                     :data [{:type "animation" :target "box1" :id "wood" :loop false}
-                                                           {:type     "set-skin" :target "box1"
-                                                            :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
-                                                           {:type "set-slot" :target "box1" :image "/raw/img/elements/airplane.png" :slot-name "box1"}
+                                                           {:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                            :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
                                                            {:type "copy-variable" :var-name "current-word" :from "item-1"}
                                                            {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}]}
 
                  :show-second-box-word             {:type "parallel"
                                                     :data [{:type "animation" :target "box2" :id "wood" :loop false}
-                                                           {:type     "set-skin" :target "box2"
-                                                            :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                                                           {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                            :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
                                                            {:type "copy-variable" :var-name "current-word" :from "item-2"}
                                                            {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}]}
 
                  :show-third-box-word              {:type "parallel"
                                                     :data [{:type "animation" :target "box3" :id "wood" :loop false}
-                                                           {:type     "set-skin" :target "box3"
-                                                            :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                                                           {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                            :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
                                                            {:type "copy-variable" :var-name "current-word" :from "item-3"}
                                                            {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 

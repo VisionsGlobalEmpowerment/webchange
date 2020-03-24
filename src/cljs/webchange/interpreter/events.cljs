@@ -3,8 +3,7 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
     [re-frame.core :as re-frame]
-    [webchange.common.anim :refer [spine-manager start-animation set-slot]]
-    [spine :as s]
+    [webchange.common.anim :refer [start-animation set-slot]]
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
@@ -686,7 +685,6 @@
   ::register-animation
   (fn [db [_ name animation]]
     (let [scene-id (:current-scene db)]
-      (js/console.log "register" name)
       (assoc-in db [:scenes scene-id :animations name] animation))))
 
 (def default-triggers
