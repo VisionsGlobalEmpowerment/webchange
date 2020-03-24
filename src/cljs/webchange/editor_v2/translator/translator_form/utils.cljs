@@ -1,6 +1,10 @@
 (ns webchange.editor-v2.translator.translator-form.utils
   (:require
-    [webchange.editor-v2.graph-builder.graph :refer [get-diagram-graph]]))
+    [webchange.editor-v2.graph-builder.graph :refer [get-diagram-graph]]
+    [webchange.editor-v2.graph-builder.utils.node-children :refer [get-children]]
+    [webchange.editor-v2.graph-builder.utils.root-nodes :refer [add-root-node
+                                                                get-root-nodes
+                                                                remove-root-node]]))
 
 (defn get-graph
   [scene-data action-name concept-data]
@@ -117,3 +121,30 @@
      :name name
      :type type
      :data (update-with-current-data name data data-store)}))
+
+(defn- get-dialog-data-dfs
+  ([graph]
+   (first (get-dialog-data-dfs graph [:root :root] {} [])))
+  ([graph [prev-node-name node-name] used-map result]
+   (let [node-data (get graph node-name)]
+     (reduce
+       (fn [[result used-map] {:keys [handler]}]
+         (if-not (contains? used-map handler)
+           (get-dialog-data-dfs graph [node-name handler] (assoc used-map handler true) result)
+           [result used-map]))
+       (let [phrase-data (select-keys (:data node-data) [:phrase-text :target])]
+         [(if-not (= node-name :root)
+            (conj result phrase-data)
+            result)
+          used-map])
+       (get-children node-name node-data prev-node-name)))))
+
+(defn get-dialog-data
+  [phrase-node graph]
+  (let [action-data (:data phrase-node)]
+    (if (contains? action-data :phrase-text)
+      [(select-keys action-data [:phrase-text :target])]
+      (->> graph
+           (get-root-nodes)
+           (add-root-node graph)
+           (get-dialog-data-dfs)))))

@@ -5,7 +5,8 @@
     [webchange.editor-v2.graph-builder.utils.node-data :refer [get-node-type speech-node? concept-action-node?]]
     [webchange.editor-v2.translator.events :as te]
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.colors :refer [colors]]
-    [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]))
+    [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]
+    [webchange.editor-v2.utils :refer [str->caption]]))
 
 (defn get-node-color
   [node-data]
@@ -15,7 +16,23 @@
       "#6BC784")
     (:default colors)))
 
-(defn wrapper
+(defn- header
+  [props]
+  (let [title (str->caption (:name props))
+        phrase-text (get-in props [:data :phrase-text])]
+    [:div
+     [:h3 {:style {:margin      0
+                   :padding     5
+                   :text-align  "center"
+                   :white-space "nowrap"}}
+      title]
+     [:p {:style {:margin     "0"
+                  :padding    "5px"
+                  :text-align "center"
+                  :max-width  "230px"}}
+      phrase-text]]))
+
+(defn- wrapper
   [{:keys [node-data]}]
   (let [this (r/current-component)]
     (into [:div {:on-click #(re-frame/dispatch [::te/set-current-selected-action node-data])
@@ -25,4 +42,5 @@
 
 (defn get-widget-data
   []
-  {:wrapper wrapper})
+  {:header  header
+   :wrapper wrapper})
