@@ -16,11 +16,12 @@
   [scene-data]
   (->> (:assets scene-data)
        (filter (fn [{:keys [type]}] (= type "audio")))
-       (map (fn [{:keys [alias url date]}]
-              {:alias alias
-               :key   url
-               :url   url
-               :date  date}))))
+       (map (fn [{:keys [alias url date target]}]
+              {:alias  alias
+               :key    url
+               :url    url
+               :date   date
+               :target target}))))
 
 (defn- get-scene-external-audios
   [scene-data]
@@ -35,11 +36,12 @@
   (reduce
     (fn [result [_ action-data]]
       (if (get-in action-data [:data :concept-action])
-        (let [{:keys [id audio]} (:data action-data)
+        (let [{:keys [id audio target]} (:data action-data)
               url (or id audio)]
-          (conj result {:alias nil
-                        :key   url
-                        :url   url}))
+          (conj result {:alias  nil
+                        :key    url
+                        :url    url
+                        :target target}))
         result))
     []
     graph))
