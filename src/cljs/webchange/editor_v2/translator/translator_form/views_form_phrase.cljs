@@ -1,8 +1,9 @@
 (ns webchange.editor-v2.translator.translator-form.views-form-phrase
   (:require
+    [clojure.string :refer [capitalize trim-newline]]
     [cljs-react-material-ui.reagent :as ui]))
 
-(defn trim-text
+(defn- trim-text
   [text]
   (when-not (nil? text)
     (-> text
@@ -10,17 +11,29 @@
         (.map (fn [string] (.trim string)))
         (.join "\n"))))
 
+(defn- data->text
+  [data]
+  (->> data
+       (reduce (fn [result {:keys [phrase-text target]}]
+                 (if-not (nil? phrase-text)
+                   (let [text (if-not (nil? target)
+                                (str (capitalize target) ": " phrase-text)
+                                phrase-text)]
+                     (str result text "\n"))
+                   phrase-text))
+               "")
+       trim-newline
+       trim-text))
+
 (defn phrase-block
-  [{:keys [node-data]}]
-  (let [phrase-text (-> node-data
-                        (get-in [:data :phrase-text])
-                        (trim-text))]
+  [{:keys [dialog-data]}]
+  (let [phrase-text (data->text dialog-data)]
     [ui/text-field
      {:label           "Phrase Text"
       :placeholder     "Enter phrase text"
       :variant         "outlined"
       :full-width      true
-      :value           phrase-text
+      :value           (or phrase-text "")
       :margin          "normal"
       :multiline       true
       :disabled        true

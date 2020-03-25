@@ -7,6 +7,7 @@
     [webchange.editor-v2.translator.subs :as translator-subs]
     [webchange.editor-v2.translator.events :as translator-events]
     [webchange.editor-v2.translator.translator-form.utils :refer [get-audios
+                                                                  get-dialog-data
                                                                   get-graph
                                                                   get-current-action-data]]
     [webchange.editor-v2.translator.translator-form.views-form-audios :refer [audios-block]]
@@ -66,6 +67,7 @@
                     selected-action-path (:path @selected-action-node)
                     {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept @current-concept})
                     audios-list (get-audios scene-data graph)
+                    dialog-data (get-dialog-data @selected-phrase-node graph)
                     prepared-current-action-data (get-current-action-data @selected-action-node @current-concept @data-store)]
                 (init-action-data! data-store selected-action-path selected-action-concept? @current-concept scene-data)
                 [:div
@@ -74,7 +76,7 @@
                            :justify   "space-between"}
                   [ui/grid {:item true
                             :xs   8}
-                   [phrase-block {:node-data @selected-phrase-node}]]
+                   [phrase-block {:dialog-data dialog-data}]]
                   [ui/grid {:item true :xs 4}
                    [concepts-block {:current-concept @current-concept
                                     :concepts-list   concepts
