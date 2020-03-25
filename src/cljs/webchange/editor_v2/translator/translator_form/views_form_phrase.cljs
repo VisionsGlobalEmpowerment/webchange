@@ -13,17 +13,20 @@
 
 (defn- data->text
   [data]
-  (->> data
-       (reduce (fn [result {:keys [phrase-text target]}]
-                 (if-not (nil? phrase-text)
-                   (let [text (if-not (nil? target)
-                                (str (capitalize target) ": " phrase-text)
-                                phrase-text)]
-                     (str result text "\n"))
-                   phrase-text))
-               "")
-       trim-newline
-       trim-text))
+  (let [text (reduce (fn [result {:keys [phrase-text target]}]
+                       (if-not (nil? phrase-text)
+                         (let [text (if-not (nil? target)
+                                      (str (capitalize target) ": " phrase-text)
+                                      phrase-text)]
+                           (str result text "\n"))
+                         phrase-text))
+                     ""
+                     data)]
+    (if-not (nil? text)
+      (->> text
+           trim-newline
+           trim-text)
+      nil)))
 
 (defn phrase-block
   [{:keys [dialog-data]}]

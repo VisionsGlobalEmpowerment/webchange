@@ -23,9 +23,10 @@
                  {:url "/raw/img/elements/mama.png" :size 1 :type "image"}
                  {:url "/raw/img/elements/monkey.png" :size 1 :type "image"}
 
-                 {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio" :alias "librarian books intro"}
-                 {:url "/raw/audio/l1/a6/L1_A6_Lion_words.m4a", :size 2, :type "audio" :alias "librarian books words"}
-                 {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio" :alias "vera books intro"}],
+                 {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio" :alias "librarian books intro" :target "lion"}
+                 {:url "/raw/audio/l1/a6/L1_A6_Lion_words.m4a", :size 2, :type "audio" :alias "librarian books words" :target "lion"}
+                 {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio" :alias "vera books intro" :target "vera"}
+                 {:url "/raw/audio/background/POL-daily-special-short.mp3", :size 2, :type "audio" :alias "background" :target "background"}],
  :objects       {:background      {:type   "background", :src "/raw/img/library/book/background2.jpg"
                                    :states {:closed {:src "/raw/img/library/book/background2.jpg"}
                                             :open   {:src "/raw/img/library/book/background.jpg"}}},
@@ -163,58 +164,67 @@
 
                  :read-page-current-concept {:type        "action" :from-var [{:var-name "current-word" :var-property "book-read-action"}]
                                              :phrase      :read-page
-                                             :phrase-text "%concept%"}
+                                             :phrase-description "Read concept words"}
 
-                 :read-title                {:type        "sequence-data"
-                                             :data        [{:type     "audio",
-                                                            :id       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
-                                                            :start    18.121,
-                                                            :duration 1.346}
-                                                           {:type      "text-animation",
-                                                            :audio     "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
-                                                            :start     20.134,
-                                                            :duration  1.987,
-                                                            :animation "bounce",
-                                                            :target    "title-text",
-                                                            :data      [{:start 20.241, :end 20.294, :duration 0.053, :at 20.241, :chunk 0}
-                                                                        {:start 20.427, :end 20.467, :duration 0.04, :at 20.427, :chunk 1}
-                                                                        {:start 20.561, :end 20.587, :duration 0.026, :at 20.561, :chunk 2}
-                                                                        {:start 20.614, :end 20.667, :duration 0.053, :at 20.614, :chunk 3}
-                                                                        {:start 20.734, :end 20.787, :duration 0.053, :at 20.734, :chunk 4}
-                                                                        {:start 21.054, :end 21.121, :duration 0.067, :at 21.054, :chunk 5}
-                                                                        {:start 21.161, :end 21.227, :duration 0.066, :at 21.161, :chunk 6}
-                                                                        {:start 21.267, :end 21.307, :duration 0.04, :at 21.267, :chunk 7}
-                                                                        {:start 21.468, :end 21.548, :duration 0.08, :at 21.468, :chunk 8}
-                                                                        {:start 21.588, :end 21.641, :duration 0.053, :at 21.588, :chunk 9}
-                                                                        {:start 21.681, :end 21.801, :duration 0.12, :at 21.681, :chunk 10}]}
-                                                           {:type     "audio",
-                                                            :id       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
-                                                            :start    22.414,
-                                                            :duration 1.907}
-                                                           {:type      "text-animation",
-                                                            :audio     "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
-                                                            :start     24.641,
-                                                            :duration  1.813,
-                                                            :animation "bounce",
-                                                            :target    "title-text",
-                                                            :data      [{:start 24.694, :end 24.734, :duration 0.04, :at 24.694, :chunk 0}
-                                                                        {:start 24.748, :end 24.774, :duration 0.026, :at 24.748, :chunk 1}
-                                                                        {:start 24.801, :end 24.854, :duration 0.053, :at 24.801, :chunk 2}
-                                                                        {:start 24.868, :end 24.934, :duration 0.066, :at 24.868, :chunk 3}
-                                                                        {:start 24.961, :end 25.041, :duration 0.08, :at 24.961, :chunk 4}
-                                                                        {:start 25.148, :end 25.228, :duration 0.08, :at 25.148, :chunk 5}
-                                                                        {:start 25.534, :end 25.574, :duration 0.04, :at 25.534, :chunk 6}
-                                                                        {:start 25.601, :end 25.668, :duration 0.067, :at 25.601, :chunk 7}
-                                                                        {:start 25.721, :end 25.748, :duration 0.027, :at 25.721, :chunk 8}
-                                                                        {:start 25.921, :end 25.961, :duration 0.04, :at 25.921, :chunk 9}
-                                                                        {:start 26.094, :end 26.281, :duration 0.187, :at 26.094, :chunk 10}]}
-                                                           {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Vera.m4a", :start 5.497, :duration 2.201}
-                                                           {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :start 27.734, :duration 1.92}
-                                                           {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :start 31.028, :duration 2.347}]
-                                             :phrase      :read-title
-                                             :phrase-text "Lion: Do you see this title? “My first words book”. The title of this book is “My first words book”.
-                                                        Vera: My first words book.
-                                                        Lion: Vamos a leerlo juntos! Touch the arrow to turn the page."}
+                 :read-title                {:type               "sequence-data"
+                                             :data               [{:type        "audio",
+                                                                   :id          "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
+                                                                   :start       18.121,
+                                                                   :duration    1.346,
+                                                                   :target      "lion",
+                                                                   :phrase-text "Do you see this title?"}
+                                                                  {:type        "text-animation",
+                                                                   :audio       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
+                                                                   :start       20.134,
+                                                                   :duration    1.987,
+                                                                   :animation   "bounce",
+                                                                   :target      "title-text",
+                                                                   :data        [{:start 20.241, :end 20.294, :duration 0.053, :at 20.241, :chunk 0}
+                                                                                 {:start 20.427, :end 20.467, :duration 0.04, :at 20.427, :chunk 1}
+                                                                                 {:start 20.561, :end 20.587, :duration 0.026, :at 20.561, :chunk 2}
+                                                                                 {:start 20.614, :end 20.667, :duration 0.053, :at 20.614, :chunk 3}
+                                                                                 {:start 20.734, :end 20.787, :duration 0.053, :at 20.734, :chunk 4}
+                                                                                 {:start 21.054, :end 21.121, :duration 0.067, :at 21.054, :chunk 5}
+                                                                                 {:start 21.161, :end 21.227, :duration 0.066, :at 21.161, :chunk 6}
+                                                                                 {:start 21.267, :end 21.307, :duration 0.04, :at 21.267, :chunk 7}
+                                                                                 {:start 21.468, :end 21.548, :duration 0.08, :at 21.468, :chunk 8}
+                                                                                 {:start 21.588, :end 21.641, :duration 0.053, :at 21.588, :chunk 9}
+                                                                                 {:start 21.681, :end 21.801, :duration 0.12, :at 21.681, :chunk 10}],
+                                                                   :phrase-text "“My first words book”"}
+                                                                  {:type        "audio",
+                                                                   :id          "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
+                                                                   :start       22.414,
+                                                                   :duration    1.907,
+                                                                   :target      "lion",
+                                                                   :phrase-text "The title of this book is"}
+                                                                  {:type        "text-animation",
+                                                                   :audio       "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a",
+                                                                   :start       24.641,
+                                                                   :duration    1.813,
+                                                                   :animation   "bounce",
+                                                                   :target      "title-text",
+                                                                   :data        [{:start 24.694, :end 24.734, :duration 0.04, :at 24.694, :chunk 0}
+                                                                                 {:start 24.748, :end 24.774, :duration 0.026, :at 24.748, :chunk 1}
+                                                                                 {:start 24.801, :end 24.854, :duration 0.053, :at 24.801, :chunk 2}
+                                                                                 {:start 24.868, :end 24.934, :duration 0.066, :at 24.868, :chunk 3}
+                                                                                 {:start 24.961, :end 25.041, :duration 0.08, :at 24.961, :chunk 4}
+                                                                                 {:start 25.148, :end 25.228, :duration 0.08, :at 25.148, :chunk 5}
+                                                                                 {:start 25.534, :end 25.574, :duration 0.04, :at 25.534, :chunk 6}
+                                                                                 {:start 25.601, :end 25.668, :duration 0.067, :at 25.601, :chunk 7}
+                                                                                 {:start 25.721, :end 25.748, :duration 0.027, :at 25.721, :chunk 8}
+                                                                                 {:start 25.921, :end 25.961, :duration 0.04, :at 25.921, :chunk 9}
+                                                                                 {:start 26.094, :end 26.281, :duration 0.187, :at 26.094, :chunk 10}],
+                                                                   :phrase-text "“My first words book”"}
+                                                                  {:type        "audio", :id "/raw/audio/l1/a6/L1_A6_Vera.m4a", :start 5.497, :duration 2.201,
+                                                                   :phrase-text "My first words book."}
+                                                                  {:type        "audio", :id "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :start 27.734, :duration 1.92,
+                                                                   :target      "lion",
+                                                                   :phrase-text "Vamos a leerlo juntos!"}
+                                                                  {:type        "audio", :id "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :start 31.028, :duration 2.347,
+                                                                   :target      "lion",
+                                                                   :phrase-text "Touch the arrow to turn the page."}]
+                                             :phrase             :read-title
+                                             :phrase-description "Read title"}
 
                  :next-page                 {:type "action" :from-var [{:var-name        "next-page-action" :action-property "id"
                                                                         :possible-values [:open-book

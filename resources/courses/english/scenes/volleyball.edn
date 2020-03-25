@@ -1,9 +1,18 @@
-{:assets        [{:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}
-                 {:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari"}
+{:assets        [{:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements" :target "mari"}
+                 {:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari" :target "mari"}
+                 {:url "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :size 2, :type "audio" :alias "mari" :target "mari"}
 
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a", :size 5, :type "audio" :alias "game voice 3"}
+                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a", :size 5, :type "audio" :alias "game voice 1" :target "game-voice"}
+                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a", :size 5, :type "audio" :alias "game voice 2" :target "game-voice"}
+                 {:url "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a", :size 5, :type "audio" :alias "game voice 3" :target "game-voice"}
+
+                 {:url "/raw/audio/l1/a3/rock/Ardilla.m4a", :size 5, :type "audio" :alias "rock-ardilla" :target "rock"}
+                 {:url "/raw/audio/l1/a3/rock/Oso.m4a", :size 5, :type "audio" :alias "rock-oso" :target "rock"}
+                 {:url "/raw/audio/l1/a3/rock/Iman.m4a", :size 5, :type "audio" :alias "rock-iman" :target "rock"}
+
+                 {:url "/raw/audio/l1/a3/vera/ardilla.m4a", :size 5, :type "audio" :alias "vera-ardilla" :target "vera"}
+                 {:url "/raw/audio/l1/a3/vera/oso.m4a", :size 5, :type "audio" :alias "vera-oso" :target "vera"}
+                 {:url "/raw/audio/l1/a3/vera/iman.m4a", :size 5, :type "audio" :alias "vera-iman" :target "vera"}
 
                  {:url "/raw/img/stadium/volleyball/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/stadium/volleyball/ball.png", :size 1 :type "image"}],
@@ -46,76 +55,78 @@
                               :states  {:hidden  {:type "transparent"}
                                         :visible {:type "image" :src "/raw/img/stadium/volleyball/ball.png"}}}},
  :scene-objects [["background"] ["vera" "boy1" "girl2" "girl3"] ["ball"] ["box1" "box2" "box3" "box4"] ["mari"]],
- :actions       {:mari-welcome-audio-1    {:type        "animation-sequence",
-                                           :target      "mari",
-                                           :track       1,
-                                           :offset      0.511,
-                                           :audio       "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a",
-                                           :start       0.511,
-                                           :duration    9.076,
-                                           :data        [{:start 0.572, :end 1.612, :duration 1.04, :anim "talk"}
-                                                         {:start 2.188, :end 4.97, :duration 2.782, :anim "talk"}
-                                                         {:start 5.84, :end 9.418, :duration 3.578, :anim "talk"}]
-                                           :phrase      :welcome
-                                           :phrase-text "Hello! Do you want to play volleyball with us?
+ :actions       {:mari-welcome-audio-1    {:type               "animation-sequence",
+                                           :target             "mari",
+                                           :track              1,
+                                           :offset             0.511,
+                                           :audio              "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a",
+                                           :start              0.511,
+                                           :duration           9.076,
+                                           :data               [{:start 0.572, :end 1.612, :duration 1.04, :anim "talk"}
+                                                                {:start 2.188, :end 4.97, :duration 2.782, :anim "talk"}
+                                                                {:start 5.84, :end 9.418, :duration 3.578, :anim "talk"}]
+                                           :phrase             :welcome
+                                           :phrase-description "Welcome speech"
+                                           :phrase-text        "Hello! Do you want to play volleyball with us?
                                                          Touch the picture that you hear being chanted"}
 
-                 :mari-audio-correct-1    {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   0.858,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                           :start    0.858,
-                                           :duration 1.837,
-                                           :data     [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]}
+                 :mari-audio-correct-1    {:type        "animation-sequence",
+                                           :target      "mari",
+                                           :track       1,
+                                           :offset      0.858,
+                                           :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                           :start       0.858,
+                                           :duration    1.837,
+                                           :data        [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}],
+                                           :phrase-text "That’s correct!"}
 
-                 :mari-audio-correct-2    {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   4.697,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                           :start    4.697,
-                                           :duration 1.358,
-                                           :data     [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}]}
+                 :mari-audio-correct-2    {:type        "animation-sequence",
+                                           :target      "mari",
+                                           :track       1,
+                                           :offset      4.697,
+                                           :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                           :start       4.697,
+                                           :duration    1.358,
+                                           :data        [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}],
+                                           :phrase-text "Good job!"}
 
-                 :mari-audio-correct-3    {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   7.949,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                           :start    7.949,
-                                           :duration 1.345,
-                                           :data     [{:start 8.066, :end 9.098, :duration 1.032, :anim "talk"}]}
+                 :mari-audio-correct-3    {:type        "animation-sequence",
+                                           :target      "mari",
+                                           :track       1,
+                                           :offset      7.949,
+                                           :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                           :start       7.949,
+                                           :duration    1.345,
+                                           :data        [{:start 8.066, :end 9.098, :duration 1.032, :anim "talk"}],
+                                           :phrase-text "Well done!"}
 
-                 :mari-audio-correct-4    {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   10.997,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                           :start    10.997,
-                                           :duration 1.147,
-                                           :data     [{:start 11.119, :end 11.964, :duration 0.845, :anim "talk"}]}
+                 :mari-audio-correct-4    {:type        "animation-sequence",
+                                           :target      "mari",
+                                           :track       1,
+                                           :offset      10.997,
+                                           :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                           :start       10.997,
+                                           :duration    1.147,
+                                           :data        [{:start 11.119, :end 11.964, :duration 0.845, :anim "talk"}],
+                                           :phrase-text "You got it!"}
 
-                 :mari-audio-correct-5    {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   14.463,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                           :start    14.463,
-                                           :duration 2.333,
+                 :mari-audio-correct-5    {:type        "animation-sequence",
+                                           :target      "mari",
+                                           :track       1,
+                                           :offset      14.463,
+                                           :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                           :start       14.463,
+                                           :duration    2.333,
                                            :data
-                                                     [{:start 14.611, :end 15.11, :duration 0.499, :anim "talk"}
-                                                      {:start 15.529, :end 16.676, :duration 1.147, :anim "talk"}]}
+                                                        [{:start 14.611, :end 15.11, :duration 0.499, :anim "talk"}
+                                                         {:start 15.529, :end 16.676, :duration 1.147, :anim "talk"}],
+                                           :phrase-text "Wow, excelent!"}
 
-                 :mari-say-correct        {:type        "sequence"
-                                           :data        ["mari-say-correct-1"
-                                                         "mari-say-correct-2"]
-                                           :phrase      :correct
-                                           :phrase-text "That’s correct!
-                                                         Good job!
-                                                         Well done!
-                                                         You got it!
-                                                         Wow, excelent!"}
+                 :mari-say-correct        {:type               "sequence"
+                                           :data               ["mari-say-correct-1"
+                                                                "mari-say-correct-2"]
+                                           :phrase             :correct
+                                           :phrase-description "Correct answer"}
 
                  :mari-say-correct-1      {:type      "vars-var-provider"
                                            :variables ["current-audio-correct"]
@@ -131,35 +142,36 @@
                                                                          :mari-audio-correct-4
                                                                          :mari-audio-correct-5]}]}
 
-                 :mari-audio-try-again-1  {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   18.915,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                           :start    18.915,
-                                           :duration 1.493,
-                                           :data     [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]}
+                 :mari-audio-try-again-1  {:type        "animation-sequence",
+                                           :target      "mari",
+                                           :track       1,
+                                           :offset      18.915,
+                                           :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                           :start       18.915,
+                                           :duration    1.493,
+                                           :data        [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]
+                                           :phrase-text "Try again!"}
 
-                 :mari-audio-try-again-2  {:type     "animation-sequence",
-                                           :target   "mari",
-                                           :track    1,
-                                           :offset   22.155,
-                                           :audio    "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                           :start    22.155,
-                                           :duration 3.025,
-                                           :data     [{:start 23.743, :end 25.055, :duration 1.312, :anim "talk"}]}
+                 :mari-audio-try-again-2  {:type        "animation-sequence",
+                                           :target      "mari",
+                                           :track       1,
+                                           :offset      22.155,
+                                           :audio       "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+                                           :start       22.155,
+                                           :duration    3.025,
+                                           :data        [{:start 23.743, :end 25.055, :duration 1.312, :anim "talk"}]
+                                           :phrase-text "Hmmmm. Try again."}
 
-                 :mari-audio-wrong        {:type        "sequence-data"
-                                           :data        [{:type      "vars-var-provider"
-                                                          :variables ["current-audio-try-again"]
-                                                          :from      ["audio-try-again1" "audio-try-again2"]
-                                                          :shuffled  true}
-                                                         {:type "action" :from-var [{:var-name        "current-audio-try-again" :action-property "id"
-                                                                                     :possible-values [:mari-audio-try-again-1
-                                                                                                       :mari-audio-try-again-2]}]}]
-                                           :phrase      :wrong
-                                           :phrase-text "Try again!
-                                                         Hmmmm. Try again."}
+                 :mari-audio-wrong        {:type               "sequence-data"
+                                           :data               [{:type      "vars-var-provider"
+                                                                 :variables ["current-audio-try-again"]
+                                                                 :from      ["audio-try-again1" "audio-try-again2"]
+                                                                 :shuffled  true}
+                                                                {:type "action" :from-var [{:var-name        "current-audio-try-again" :action-property "id"
+                                                                                            :possible-values [:mari-audio-try-again-1
+                                                                                                              :mari-audio-try-again-2]}]}]
+                                           :phrase             :wrong
+                                           :phrase-description "Wrong answer"}
 
                  :wait-for-box-animations {:type "empty" :duration 500}
 
@@ -365,15 +377,18 @@
                  :throw-from-player3      {:type "action" :from-params [{:template "throw-player3-%" :action-property "id" :param-property "player"}]}
                  :throw-from-player4      {:type "action" :from-params [{:template "throw-player4-%" :action-property "id" :param-property "player"}]}
 
-                 :word-ardilla-high       {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a", :start 12.987, :duration 3.196
-                                           :phrase      :concept-squirrel
-                                           :phrase-text "Squirrel, squirrel, squirrel!"}
-                 :word-oso-high           {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a", :start 11.361, :duration 3.663
-                                           :phrase      :concept-bear
-                                           :phrase-text "Bear, bear, bear!"}
-                 :word-incendio-high      {:type        "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a", :start 10.781, :duration 3.301
-                                           :phrase      :concept-magnet
-                                           :phrase-text "Magnet, magnet, magnet!"}
+                 :word-ardilla-high       {:type               "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a", :start 12.987, :duration 3.196
+                                           :phrase             :concept-squirrel
+                                           :phrase-description "Chant squirrel"
+                                           :phrase-text        "Squirrel, squirrel, squirrel!"}
+                 :word-oso-high           {:type               "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a", :start 11.361, :duration 3.663
+                                           :phrase             :concept-bear
+                                           :phrase-description "Chant bear"
+                                           :phrase-text        "Bear, bear, bear!"}
+                 :word-incendio-high      {:type               "audio", :id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a", :start 10.781, :duration 3.301
+                                           :phrase             :concept-magnet
+                                           :phrase-description "Chant magnet"
+                                           :phrase-text        "Magnet, magnet, magnet!"}
 
                  :voice-high-var          {:type "action" :from-var [{:var-name        "current-concept" :action-property "id" :var-property "seesaw-voice-high"
                                                                       :possible-values [:word-ardilla-high
