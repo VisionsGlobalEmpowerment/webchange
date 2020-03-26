@@ -217,7 +217,8 @@
      :type "audio",
      :start 116.105,
      :duration 7,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘B’ es para Bebe, Barco, Ballena"},
     :chanting-video-src "/raw/video/l2a1/letter-b.mp4",
     :concept-name "bebé",
     :game-voice-action
@@ -226,19 +227,22 @@
      :start 67.305,
      :duration 3.787,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Baby, baby, baby!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 62.305,
      :duration 3.413,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Baby, baby, baby.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 70.065,
      :duration 0.92,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "baby"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -250,7 +254,7 @@
        :start 25.749,
        :offset 25.749,
        :target "vera",
-       :duration 3.467
+       :duration 3.467,
        :phrase-text "Baby, baby, baby!"}
       {:data
        [{:end 57.546, :anim "talk", :start 57.159, :duration 0.387}
@@ -358,7 +362,8 @@
      :offset 35.411,
      :target "mari",
      :duration 1.187,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "bbb"},
     :sandbox-short-letter-action
     {:data
      [{:end 34.238, :anim "talk", :start 33.998, :duration 0.24}],
@@ -368,31 +373,36 @@
      :offset 33.905,
      :target "mari",
      :duration 0.533,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "b"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 35.696,
      :duration 1.133,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "bicycle"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 37.256,
      :duration 0.947,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "boat"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 38.51,
      :duration 1.106,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "whale"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 40.043,
      :duration 0.747,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "mouth"},
     :skin "baby",
     :swings-dialog-action
     {:data
@@ -567,7 +577,8 @@
      :type "audio",
      :start 81.199,
      :duration 7.44,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘C’ es para Casa, Cama, Coche"},
     :chanting-video-src "/raw/video/l2a1/letter-c.mp4",
     :concept-name "casa",
     :game-voice-action
@@ -576,19 +587,22 @@
      :start 51.278,
      :duration 3.24,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Home, home, home!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 46.359,
      :duration 3.573,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Home, home, home.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 53.412,
      :duration 1.026,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "home"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -600,7 +614,7 @@
        :start 19.374,
        :offset 19.374,
        :target "vera",
-       :duration 2.893
+       :duration 2.893,
        :phrase-text "Home, home, home!"}
       {:data
        [{:end 44.891, :anim "talk", :start 44.424, :duration 0.467}
@@ -708,7 +722,8 @@
      :offset 27.133,
      :target "mari",
      :duration 1.266,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ccc"},
     :sandbox-short-letter-action
     {:data
      [{:end 19.493, :anim "talk", :start 19.226, :duration 0.267}],
@@ -718,31 +733,36 @@
      :offset 19,
      :target "mari",
      :duration 0.733,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "c"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 35.361,
      :duration 0.64,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "bed"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 36.788,
      :duration 0.786,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "car"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 38.068,
      :duration 1.053,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "candle"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 39.681,
      :duration 1.08,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "-"},
     :skin "home",
     :swings-dialog-action
     {:data
@@ -869,7 +889,8 @@
      :type "audio",
      :start 90.612,
      :duration 7.293,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘C’ es para tambien Cepillo, Cerdo, ceja"},
     :concept-name "cepillo",
     :game-voice-action
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
@@ -877,14 +898,16 @@
      :start 56.505,
      :duration 3.92,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High"
+     :phrase-text "Toothbrush, toothbrush, toothbrush!"},
     :game-voice-action-low {:type "audio", :scene-id "see-saw"},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 59.199,
      :duration 1.28,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "toothbrush"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -1002,7 +1025,8 @@
      :offset 25.772,
      :target "mari",
      :duration 1.48,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ccc"},
     :sandbox-short-letter-action
     {:data
      [{:end 24.772, :anim "talk", :start 24.279, :duration 0.493}],
@@ -1012,31 +1036,36 @@
      :offset 24.239,
      :target "mari",
      :duration 0.653,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "c"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 29.882,
      :duration 1.04,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "pig"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 31.136,
      :duration 1,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "eyebrow"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 32.322,
      :duration 1.187,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "onion"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 33.869,
      :duration 0.987,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "five"},
     :skin "toothbrush",
     :swings-dialog-action
     {:data
@@ -1117,7 +1146,8 @@
      :type "audio",
      :start 148.411,
      :duration 7.32,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘Ch’ es para chocolate, Chica, chico"},
     :chanting-video-src "/raw/video/l2a1/letter-ch.mp4",
     :concept-name "chocolate",
     :game-voice-action
@@ -1126,19 +1156,22 @@
      :start 73.748,
      :duration 3.974,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Chocolate, chocolate, chocolate!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 68.175,
      :duration 4.253,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Chocolate, chocolate, chocolate.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 35.375,
      :duration 1.173,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "chocolate"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -1150,7 +1183,7 @@
        :start 29.371,
        :offset 29.371,
        :target "vera",
-       :duration 4.253
+       :duration 4.253,
        :phrase-text "Chocolate, chocolate, chocolate!"}
       {:data
        [{:end 73.401, :anim "talk", :start 72.668, :duration 0.733}
@@ -1258,7 +1291,8 @@
      :offset 43.497,
      :target "mari",
      :duration 1.067,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ch ch ch"},
     :sandbox-short-letter-action
     {:data
      [{:end 42.684, :anim "talk", :start 42.551, :duration 0.133}],
@@ -1268,31 +1302,36 @@
      :offset 42.417,
      :target "mari",
      :duration 0.387,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ch"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 56.001,
      :duration 0.694,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "girl"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 57.721,
      :duration 0.76,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "boy"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 59.668,
      :duration 1.04,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "sausage"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 61.935,
      :duration 1.013,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "jacket"},
     :skin "chocolate",
     :swings-dialog-action
     {:data
@@ -1409,7 +1448,8 @@
      :type "audio",
      :start 64.506,
      :duration 7.36,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘D’ es para Dedo, Dragón, Dientes"},
     :chanting-video-src "/raw/video/l2a1/letter-d.mp4",
     :concept-name "diamante",
     :game-voice-action
@@ -1418,19 +1458,22 @@
      :start 45.146,
      :duration 4.493,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Diamond, diamond, diamond!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 39.479,
      :duration 4.36,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Diamond, diamond, diamond.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 48.172,
      :duration 1.44,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "diamond"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -1442,7 +1485,7 @@
        :start 2.253,
        :offset 2.253,
        :target "vera",
-       :duration 3.686
+       :duration 3.686,
        :phrase-text "Diamond, diamond, diamond!"}
       {:data
        [{:end 6.242, :anim "talk", :start 5.709, :duration 0.533}
@@ -1546,7 +1589,8 @@
      :offset 16.959,
      :target "mari",
      :duration 1.373,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ddd"},
     :sandbox-short-letter-action
     {:data
      [{:end 14.053, :anim "talk", :start 13.733, :duration 0.32}],
@@ -1556,31 +1600,36 @@
      :offset 13.533,
      :target "mari",
      :duration 0.853,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "d"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 23.242,
      :duration 0.92,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "finger"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 24.589,
      :duration 1.053,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "dragon"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 26.202,
      :duration 1.173,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "teeth"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 27.482,
      :duration 1.28,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "dino"},
     :skin "diamond",
     :swings-dialog-action
     {:data
@@ -1689,7 +1738,8 @@
      :type "audio",
      :start 11.307,
      :duration 8.666,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘E’ es para Elefante, Estrella, Enfermera"},
     :chanting-video-src "/raw/video/l2a1/letter-e.mp4",
     :concept-name "elefant",
     :game-voice-action
@@ -1697,13 +1747,15 @@
      :type "audio",
      :start 16.185,
      :duration 3.547,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Elephant, elephant, elephant!"},
     :game-voice-action-low
     {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
      :start 11.08,
      :duration 3.854,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Elephant, elephant, elephant.."},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 12.37,
@@ -1714,7 +1766,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "elephant"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -1726,7 +1779,7 @@
        :start 12.001,
        :offset 12.001,
        :target "vera",
-       :duration 3.6
+       :duration 3.6,
        :phrase-text "Elephant, elephant, elephant!"}],
      :type "parallel",
      :scene-id "home"},
@@ -1818,7 +1871,8 @@
      :offset 2.92,
      :target "mari",
      :duration 2.746,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "eee"},
     :sandbox-short-letter-action
     {:data [{:end 1.493, :anim "talk", :start 1.107, :duration 0.386}],
      :type "animation-sequence",
@@ -1827,31 +1881,36 @@
      :offset 1.013,
      :target "mari",
      :duration 0.614,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "e"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 11.294,
      :duration 1.08,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "salad"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 12.601,
      :duration 1.12,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "building"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 13.814,
      :duration 1.147,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "star"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 15.201,
      :duration 1.067,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "nurse"},
     :skin "elephant",
     :swings-dialog-action
     {:data
@@ -1994,7 +2053,8 @@
      :type "audio",
      :start 107.985,
      :duration 7.173,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘F’ es para Flor, Flauta, Fresa"},
     :chanting-video-src "/raw/video/l2a1/letter-f.mp4",
     :concept-name "flor",
     :game-voice-action
@@ -2003,19 +2063,22 @@
      :start 60.305,
      :duration 3.186,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Flower, flower, flower!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 55.772,
      :duration 3.16,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Flower, flower, flower.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 62.598,
      :duration 0.973,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "flower"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -2027,7 +2090,7 @@
        :start 25.187,
        :offset 25.187,
        :target "vera",
-       :duration 2.574
+       :duration 2.574,
        :phrase-text "Flower, flower, flower!"}
       {:data
        [{:end 57.917, :anim "talk", :start 57.543, :duration 0.374}
@@ -2134,7 +2197,8 @@
      :offset 33.653,
      :target "mari",
      :duration 1.2,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "fff"},
     :sandbox-short-letter-action
     {:data
      [{:end 32.479, :anim "talk", :start 32.159, :duration 0.32}],
@@ -2144,31 +2208,36 @@
      :offset 32.066,
      :target "mari",
      :duration 0.48,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "f"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 42.255,
      :duration 0.906,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "flute"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 43.881,
      :duration 0.854,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "strawberry"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 45.561,
      :duration 0.76,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "fruits"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 47.161,
      :duration 0.827,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "arrow"},
     :skin "flower",
     :swings-dialog-action
     {:data
@@ -2296,7 +2365,8 @@
      :type "audio",
      :start 133.438,
      :duration 6.053,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘G’ es para Gato, Guitarra, Gallina"},
     :chanting-video-src "/raw/video/l2a1/letter-g.mp4",
     :concept-name "gato",
     :game-voice-action
@@ -2305,19 +2375,22 @@
      :start 2.187,
      :duration 2.933,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Cat, cat, cat!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 2.093,
      :duration 2.947,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Cat, cat, cat.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 32.322,
      :duration 0.946,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "cat"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -2329,7 +2402,7 @@
        :start 31.508,
        :offset 31.508,
        :target "vera",
-       :duration 2.666
+       :duration 2.666,
        :phrase-text "Cat, cat, cat!"}
       {:data
        [{:end 70.236, :anim "talk", :start 69.983, :duration 0.253}
@@ -2439,7 +2512,8 @@
      :offset 39.866,
      :target "mari",
      :duration 1.587,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ggg"},
     :sandbox-short-letter-action
     {:data
      [{:end 39.066, :anim "talk", :start 38.813, :duration 0.253}],
@@ -2449,31 +2523,36 @@
      :offset 38.626,
      :target "mari",
      :duration 0.587,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "g"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 49.642,
      :duration 0.946,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "guitar"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 51.482,
      :duration 0.866,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "earth"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 53.188,
      :duration 0.96,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "chicken"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 55.228,
      :duration 0.854,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "glove"},
     :skin "cat",
     :swings-dialog-action
     {:data
@@ -2624,7 +2703,8 @@
      :type "audio",
      :start 140.398,
      :duration 6.827,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘G’ es tambien para Gemelo, Gigante, Girasol"},
     :concept-name "gemelo",
     :game-voice-action
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
@@ -2632,19 +2712,22 @@
      :start 78.665,
      :duration 3.813,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Twins, twins, twins!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 73.198,
      :duration 3.88,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Twins, twins, twins.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 33.655,
      :duration 1.213,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "twins"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -2656,7 +2739,7 @@
        :start 31.55,
        :offset 31.55,
        :target "vera",
-       :duration 3.44
+       :duration 3.44,
        :phrase-text "Twins, twins, twins!"}
       {:data
        [{:end 69.813, :anim "talk", :start 69.466, :duration 0.347}
@@ -2764,7 +2847,8 @@
      :offset 41.958,
      :target "mari",
      :duration 1.133,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ggg"},
     :sandbox-short-letter-action
     {:data
      [{:end 40.478, :anim "talk", :start 40.064, :duration 0.414}],
@@ -2774,31 +2858,36 @@
      :offset 39.944,
      :target "mari",
      :duration 0.707,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "g"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 41.75,
      :duration 1.12,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "giant"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 43.11,
      :duration 1.053,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "sunflower"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 44.763,
      :duration 0.88,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "gemstone"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 46.057,
      :duration 0.853,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "chalk"},
     :skin "twins",
     :swings-dialog-action
     {:data
@@ -2912,7 +3001,8 @@
      :type "audio",
      :start 182.704,
      :duration 6.453,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘H’ es para Hoja, Helado, Hormiga"},
     :chanting-video-src "/raw/video/l2a1/letter-h.mp4",
     :concept-name "hoja",
     :game-voice-action
@@ -2921,19 +3011,22 @@
      :start 80.344,
      :duration 3.507,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Leaf, leaf, leaf!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 75.544,
      :duration 3.494,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Leaf, leaf, leaf.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 41.642,
      :duration 0.92,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "leaf"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -2945,7 +3038,7 @@
        :start 44.228,
        :offset 44.228,
        :target "vera",
-       :duration 2.987
+       :duration 2.987,
        :phrase-text "Leaf, leaf, leaf!"}
       {:data
        [{:end 96.275, :anim "talk", :start 95.701, :duration 0.574}
@@ -3053,7 +3146,8 @@
      :offset 57.066,
      :target "mari",
      :duration 2.693,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "hhh"},
     :sandbox-short-letter-action
     {:data
      [{:end 53.692, :anim "talk", :start 53.306, :duration 0.386}],
@@ -3063,31 +3157,36 @@
      :offset 53.239,
      :target "mari",
      :duration 0.6,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "h"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 65.682,
      :duration 0.88,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "grass"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 67.402,
      :duration 1.04,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "icecream"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 69.215,
      :duration 1.001,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ant"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 70.962,
      :duration 0.827,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "egg"},
     :skin "leaf",
     :swings-dialog-action
     {:data
@@ -3231,7 +3330,8 @@
      :type "audio",
      :start 124.212,
      :duration 6.613,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘J’ es para jardin, Jugo, Jamón"},
     :chanting-video-src "/raw/video/l2a1/letter-j.mp4",
     :concept-name "jardín",
     :game-voice-action
@@ -3240,19 +3340,22 @@
      :start 63.161,
      :duration 3.814,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Garden, garden, garden!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 58.241,
      :duration 3.587,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Garden, garden, garden.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 65.775,
      :duration 1.146,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "garden"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -3264,7 +3367,7 @@
        :start 23.385,
        :offset 23.385,
        :target "vera",
-       :duration 4.013
+       :duration 4.013,
        :phrase-text "Garden, garden, garden!"}
       {:data
        [{:end 59.188, :anim "talk", :start 58.681, :duration 0.507}
@@ -3372,7 +3475,8 @@
      :offset 34.883,
      :target "mari",
      :duration 1.134,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "jjj"},
     :sandbox-short-letter-action
     {:data [{:end 32.95, :anim "talk", :start 32.51, :duration 0.44}],
      :type "animation-sequence",
@@ -3381,31 +3485,36 @@
      :offset 32.43,
      :target "mari",
      :duration 0.6,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "j"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 46.374,
      :duration 0.96,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "juice"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 48.521,
      :duration 1.294,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "toys"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 50.828,
      :duration 0.92,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "jamon"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 52.708,
      :duration 1.053,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "giraffe"},
     :skin "garden",
     :swings-dialog-action
     {:data
@@ -3536,25 +3645,29 @@
      :type "audio",
      :start 205.957,
      :duration 6.787,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘K’ es para Kimono, Kayac, Koala"},
     :chanting-video-src "/raw/video/l2a1/letter-k.mp4",
     :concept-name "kimono",
     :game-voice-action
     {:type "audio",
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Kimono, kimono, kimono!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 85.411,
      :duration 3.613,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Kimono, kimono, kimono.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 45.776,
      :duration 0.946,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "kimono"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -3566,7 +3679,7 @@
        :start 51.428,
        :offset 51.428,
        :target "vera",
-       :duration 3.387
+       :duration 3.387,
        :phrase-text "Kimono, kimono, kimono!"}
       {:data
        [{:end 108.861, :anim "talk", :start 108.261, :duration 0.6}
@@ -3674,7 +3787,8 @@
      :offset 65.599,
      :target "mari",
      :duration 1.2,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "kkk"},
     :sandbox-short-letter-action
     {:data [{:end 64.385, :anim "talk", :start 64.185, :duration 0.2}],
      :type "animation-sequence",
@@ -3683,31 +3797,36 @@
      :offset 64.079,
      :target "mari",
      :duration 0.44,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "k"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 73.709,
      :duration 0.68,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "kayak"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 75.429,
      :duration 0.88,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "kiwi"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 77.136,
      :duration 0.786,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ketchup"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 78.696,
      :duration 0.8,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "koala"},
     :skin "kimono",
     :vaca-chanting-song
     {:data
@@ -3772,7 +3891,8 @@
      :type "audio",
      :start 46.346,
      :duration 7.787,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘L’ es para  Leon, Limon, Lapiz"},
     :chanting-video-src "/raw/video/l2a1/letter-l.mp4",
     :concept-name "leon",
     :game-voice-action
@@ -3780,13 +3900,15 @@
      :type "audio",
      :start 31.987,
      :duration 3.907,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Lion, lion, lion!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 25.854,
      :duration 4.147,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Lion, lion, lion.."},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 18.011,
@@ -3797,7 +3919,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "lion"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -3809,7 +3932,7 @@
        :start 7.119,
        :offset 7.119,
        :target "vera",
-       :duration 3.494
+       :duration 3.494,
        :phrase-text "Lion, lion, lion!"}
       {:data
        [{:end 20.667, :anim "talk", :start 20.16, :duration 0.507}
@@ -3914,7 +4037,8 @@
      :offset 10.508,
      :target "mari",
      :duration 1.24,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "lll"},
     :sandbox-short-letter-action
     {:data [{:end 9.494, :anim "talk", :start 9.201, :duration 0.293}],
      :type "animation-sequence",
@@ -3923,31 +4047,36 @@
      :offset 9.014,
      :target "mari",
      :duration 0.734,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "l"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 21.134,
      :duration 0.987,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "lemon"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 23.174,
      :duration 0.853,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "moon"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 24.907,
      :duration 1.014,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "pencil"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 26.641,
      :duration 0.786,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "-"},
     :skin "lion",
     :swings-dialog-action
     {:data
@@ -4077,7 +4206,8 @@
      :type "audio",
      :start 175.478,
      :duration 6.106,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘LL’ es para LLave, LLuvia, Llorar"},
     :chanting-video-src "/raw/video/l2a1/letter-ll.mp4",
     :concept-name "llave",
     :game-voice-action
@@ -4086,19 +4216,22 @@
      :start 84.095,
      :duration 3.533,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Wrench, wrench, wrench!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 78.935,
      :duration 3.827,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Wrench, wrench, wrench.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 40.082,
      :duration 0.853,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "wrench"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -4110,7 +4243,7 @@
        :start 35.451,
        :offset 35.451,
        :target "vera",
-       :duration 3.519
+       :duration 3.519,
        :phrase-text "Wrench, wrench, wrench!"}
       {:data
        [{:end 87.802, :anim "talk", :start 87.442, :duration 0.36}
@@ -4218,7 +4351,8 @@
      :offset 52.258,
      :target "mari",
      :duration 1.187,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ll ll ll"},
     :sandbox-short-letter-action
     {:data
      [{:end 50.231, :anim "talk", :start 49.898, :duration 0.333}],
@@ -4228,26 +4362,33 @@
      :offset 49.845,
      :target "mari",
      :duration 0.52,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ll"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 64.948,
      :duration 1.24,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "call"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 67.375,
      :duration 1.04,
-     :scene-id "sandbox"},
-    :sandbox-state-word-3-action {:type "audio", :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "rain"},
+    :sandbox-state-word-3-action
+    {:type "audio",
+     :scene-id "sandbox",
+     :phrase-text "lama"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 71.388,
      :duration 0.96,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "cry"},
     :skin "wrench",
     :vaca-chanting-song
     {:data
@@ -4312,20 +4453,23 @@
      :type "audio",
      :start 53.682,
      :duration 8.294,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La i es para iman, Iguana, incendio"},
     :concept-name "magnet",
     :game-voice-action
     {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
      :start 26.705,
      :duration 3.559,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Magnet, magnet, magnet!"},
     :game-voice-action-low
     {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
      :start 21.798,
      :duration 3.747,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Magnet, magnet, magnet.."},
     :game-voice-chanting
     {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
      :type "audio",
@@ -4341,7 +4485,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "magnet"},
     :home-group-3-times "group-3-times-incendio",
     :home-group-3-times-action
     {:data
@@ -4354,7 +4499,7 @@
        :start 21.982,
        :offset 21.982,
        :target "vera",
-       :duration 3.386
+       :duration 3.386,
        :phrase-text "Magnet, magnet, magnet!"}],
      :type "parallel",
      :scene-id "home"},
@@ -4599,7 +4744,8 @@
      :offset 90.611,
      :target "mari",
      :duration 1.466,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "iii"},
     :sandbox-short-letter-action
     {:data
      [{:end 86.117, :anim "talk", :start 85.691, :duration 0.426}],
@@ -4609,7 +4755,8 @@
      :offset 85.651,
      :target "mari",
      :duration 0.533,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "i"},
     :sandbox-state-word-1 "iguana",
     :sandbox-state-word-1-action
     {:data
@@ -4617,7 +4764,8 @@
        :type "state",
        :params {:text "Iguana"},
        :target "word"}
-      {:id "voice-3", :type "audio", :start 4.828, :duration 1.27}
+      {:id "voice-3", :type "audio", :start 4.828, :duration 1.27,
+       :phrase-text "iguana"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -4629,7 +4777,8 @@
        :type "state",
        :params {:text "Incendio"},
        :target "word"}
-      {:id "voice-3", :type "audio", :start 6.591, :duration 1.375}
+      {:id "voice-3", :type "audio", :start 6.591, :duration 1.375,
+       :phrase-text "fire"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -4641,7 +4790,8 @@
        :type "state",
        :params {:text "Insecto"},
        :target "word"}
-      {:id "voice-3", :type "audio", :start 8.699, :duration 1.465}
+      {:id "voice-3", :type "audio", :start 8.699, :duration 1.465,
+       :phrase-text "insect"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -4653,7 +4803,8 @@
        :type "state",
        :params {:text "Isla"},
        :target "word"}
-      {:id "voice-3", :type "audio", :start 10.911, :duration 1.151}
+      {:id "voice-3", :type "audio", :start 10.911, :duration 1.151,
+       :phrase-text "island"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -4687,7 +4838,8 @@
        :start 0.307,
        :offset 0.307,
        :target "rock",
-       :duration 4.026}
+       :duration 4.026,
+       :phrase-text "A magnet!  Have you ever played with a magnet?"}
       {:data
        [{:end 0.88, :anim "talk", :start 0.227, :duration 0.653}
         {:end 2.493, :anim "talk", :start 1.413, :duration 1.08}
@@ -4697,7 +4849,8 @@
        :start 0.093,
        :offset 0.093,
        :target "vera",
-       :duration 4.652}
+       :duration 4.652,
+       :phrase-text "Hmm, I’m not sure.  What is a magnet?"}
       {:data
        [{:end 5.693, :anim "talk", :start 5.173, :duration 0.52}
         {:end 10.385, :anim "talk", :start 6.026, :duration 4.359}
@@ -4708,7 +4861,8 @@
        :start 4.973,
        :offset 4.973,
        :target "rock",
-       :duration 11.145}
+       :duration 11.145,
+       :phrase-text "Ahhh. Magnets are objects with a big force that we can’t see, just like the wind.  The force of a magnet pulls things towards it."}
       {:data
        [{:end 9.584, :anim "talk", :start 5.518, :duration 4.066}],
        :type "animation-sequence",
@@ -4716,7 +4870,8 @@
        :start 5.292,
        :offset 5.292,
        :target "vera",
-       :duration 4.599}
+       :duration 4.599,
+       :phrase-text "I don’t know if I’ve ever seen a magnet before."}
       {:data
        [{:end 19.491, :anim "talk", :start 16.958, :duration 2.533}
         {:end 22.757, :anim "talk", :start 20.077, :duration 2.68}
@@ -4726,7 +4881,8 @@
        :start 16.704,
        :offset 16.704,
        :target "rock",
-       :duration 12.172}
+       :duration 12.172,
+       :phrase-text "You might have seen it without knowing!  Magnets are used in many ways in the world. They are used in electric fans and in computers, for example."}
       {:data
        [{:end 13.356, :anim "talk", :start 11.45, :duration 1.906}],
        :type "animation-sequence",
@@ -4734,7 +4890,8 @@
        :start 11.21,
        :offset 11.21,
        :target "vera",
-       :duration 2.6}],
+       :duration 2.6,
+       :phrase-text "Oh, ok, I will try to remember that!"}],
      :type "sequence-data",
      :scene-id "swings"},
     :word-1-skin "iguana",
@@ -4771,7 +4928,8 @@
      :type "audio",
      :start 20.733,
      :duration 7.453,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘M’ es para Mano, Mono, Manzana"},
     :chanting-video-src "/raw/video/l2a1/letter-m.mp4",
     :concept-name "mano",
     :game-voice-action
@@ -4779,13 +4937,15 @@
      :type "audio",
      :start 20.2,
      :duration 3.334,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Hand, hand, hand!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 15.347,
      :duration 3.613,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Hand, hand, hand.."},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 13.814,
@@ -4796,7 +4956,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "hand"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -4808,7 +4969,7 @@
        :start 6.133,
        :offset 6.133,
        :target "senoravaca",
-       :duration 4.094
+       :duration 4.094,
        :phrase-text "Hand, hand, hand!"}
       {:data
        [{:end 2.4, :anim "talk", :start 2.2, :duration 0.2}
@@ -4910,7 +5071,8 @@
      :offset 5.667,
      :target "mari",
      :duration 2.214,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "mmm"},
     :sandbox-short-letter-action
     {:data [{:end 1, :anim "talk", :start 0.52, :duration 0.48}],
      :type "animation-sequence",
@@ -4919,31 +5081,36 @@
      :offset 0.4,
      :target "mari",
      :duration 0.747,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "m"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 13,
      :duration 0.827,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "mama"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 14.707,
      :duration 0.92,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "monkey"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 16.374,
      :duration 1,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "apple"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 18.134,
      :duration 1.24,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "-"},
     :skin "hand",
     :swings-dialog-action
     {:data
@@ -5076,7 +5243,8 @@
      :type "audio",
      :start 98.879,
      :duration 7.786,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘N’ es para Nino, Nido, Naranja"},
     :chanting-video-src "/raw/video/l2a1/letter-n.mp4",
     :concept-name "niño",
     :game-voice-action
@@ -5085,19 +5253,22 @@
      :start 53.161,
      :duration 3.44,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Baby, baby, baby!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 48.401,
      :duration 3.507,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Baby, baby, baby.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 55.654,
      :duration 1.094,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "baby"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -5108,7 +5279,7 @@
        :start 18.025,
        :offset 18.025,
        :target "vera",
-       :duration 3.36
+       :duration 3.36,
        :phrase-text "Baby, baby, baby!"}
       {:data
        [{:end 46.494, :anim "talk", :start 46.014, :duration 0.48}
@@ -5216,7 +5387,8 @@
      :offset 25.602,
      :target "mari",
      :duration 1.334,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "nnn"},
     :sandbox-short-letter-action
     {:data
      [{:end 24.736, :anim "talk", :start 24.402, :duration 0.334}],
@@ -5226,31 +5398,36 @@
      :offset 24.282,
      :target "mari",
      :duration 0.774,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "n"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 37.014,
      :duration 0.934,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "cloud"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 39.001,
      :duration 0.853,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "nest"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 40.988,
      :duration 1.12,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "black"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 42.854,
      :duration 1.187,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "-"},
     :skin "baby",
     :swings-dialog-action
     {:data
@@ -5385,7 +5562,8 @@
      :type "audio",
      :start 44.828,
      :duration 7.694,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La O es para oso, oreja, ojos"},
     :chanting-video-src "/raw/video/l2a1/letter-o.mp4",
     :concept-name "oso",
     :game-voice-action
@@ -5393,13 +5571,15 @@
      :type "audio",
      :start 11.44,
      :duration 3.64,
-     :scene-id "cycling"},
+     :scene-id "cycling",
+     :phrase-text "Bear, bear, bear!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 5.973,
      :duration 3.853,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Bear, bear, bear.."},
     :game-voice-chanting
     {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
      :type "audio",
@@ -5415,7 +5595,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "bear"},
     :home-group-3-times "group-3-times-oso",
     :home-group-3-times-action
     {:data
@@ -5428,7 +5609,7 @@
        :start 2.934,
        :offset 2.934,
        :target "vera",
-       :duration 3.547
+       :duration 3.547,
        :phrase-text "Bear, bear, bear!"}
       {:data
        [{:end 33.376, :anim "talk", :start 32.696, :duration 0.68}
@@ -5749,7 +5930,8 @@
      :offset 59.718,
      :target "mari",
      :duration 1.893,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ooo"},
     :sandbox-short-letter-action
     {:data
      [{:end 55.585, :anim "talk", :start 55.292, :duration 0.293}],
@@ -5759,7 +5941,8 @@
      :offset 55.238,
      :target "mari",
      :duration 0.427,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "o"},
     :sandbox-state-word-1 "ocho",
     :sandbox-state-word-1-action
     {:data
@@ -5767,7 +5950,8 @@
        :type "state",
        :params {:text "Ocho"},
        :target "word"}
-      {:id "voice-2", :type "audio", :start 6.496, :duration 0.864}
+      {:id "voice-2", :type "audio", :start 6.496, :duration 0.864,
+       :phrase-text "8"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -5779,7 +5963,8 @@
        :type "state",
        :params {:text "Oreja"},
        :target "word"}
-      {:id "voice-2", :type "audio", :start 7.532, :duration 1.017}
+      {:id "voice-2", :type "audio", :start 7.532, :duration 1.017,
+       :phrase-text "ear"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -5791,7 +5976,8 @@
        :type "state",
        :params {:text "Oveja"},
        :target "word"}
-      {:id "voice-2", :type "audio", :start 8.511, :duration 1.103}
+      {:id "voice-2", :type "audio", :start 8.511, :duration 1.103,
+       :phrase-text "sheep"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -5803,7 +5989,8 @@
        :type "state",
        :params {:text "Ojos"},
        :target "word"}
-      {:id "voice-2", :type "audio", :start 9.873, :duration 0.835}
+      {:id "voice-2", :type "audio", :start 9.873, :duration 0.835,
+       :phrase-text "eyes"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -5957,7 +6144,8 @@
      :type "audio",
      :start 37.533,
      :duration 7.546,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘P’ es para  Pelota, Pato, pez"},
     :chanting-video-src "/raw/video/l2a1/letter-p.mp4",
     :concept-name "pelota",
     :game-voice-action
@@ -5965,13 +6153,15 @@
      :type "audio",
      :start 33.506,
      :duration 3.706,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Ball, ball, ball!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 27.933,
      :duration 3.92,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Ball, ball, ball.."},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 16.756,
@@ -5982,7 +6172,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "ball"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -5994,7 +6185,7 @@
        :start 8.774,
        :offset 8.774,
        :target "vera",
-       :duration 3.08
+       :duration 3.08,
        :phrase-text "Ball, ball, ball!"}
       {:data
        [{:end 20.586, :anim "talk", :start 20.213, :duration 0.373}
@@ -6099,7 +6290,8 @@
      :offset 8.866,
      :target "mari",
      :duration 1.214,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ppp"},
     :sandbox-short-letter-action
     {:data [{:end 7.866, :anim "talk", :start 7.613, :duration 0.253}],
      :type "animation-sequence",
@@ -6108,31 +6300,36 @@
      :offset 7.493,
      :target "mari",
      :duration 0.52,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "p"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 17.361,
      :duration 1,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "factory"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 18.761,
      :duration 0.921,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "duck"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 20.108,
      :duration 0.894,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "potatoes"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 21.495,
      :duration 0.707,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "fish"},
     :skin "ball",
     :swings-dialog-action
     {:data
@@ -6272,7 +6469,8 @@
      :type "audio",
      :start 190.171,
      :duration 6.56,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘Qu’ es para Queso, Quinto, quince"},
     :chanting-video-src "/raw/video/l2a1/letter-q.mp4",
     :concept-name "queso",
     :game-voice-action
@@ -6281,19 +6479,22 @@
      :start 100.504,
      :duration 3.627,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Cheese, cheese, cheese!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 95.131,
      :duration 3.56,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Cheese, cheese, cheese.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 43.135,
      :duration 0.84,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "cheese"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -6305,7 +6506,7 @@
        :start 42.871,
        :offset 42.871,
        :target "vera",
-       :duration 3.613
+       :duration 3.613,
        :phrase-text "Cheese, cheese, cheese!"}
       {:data
        [{:end 95.759, :anim "talk", :start 95.532, :duration 0.227}
@@ -6413,7 +6614,8 @@
      :offset 57.597,
      :target "mari",
      :duration 1.133,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "qqq"},
     :sandbox-short-letter-action
     {:data
      [{:end 56.397, :anim "talk", :start 56.077, :duration 0.32}],
@@ -6423,31 +6625,36 @@
      :offset 55.944,
      :target "mari",
      :duration 0.666,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "q"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 53.671,
      :duration 1.333,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "quesadilla"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 55.431,
      :duration 0.893,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "five"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 56.911,
      :duration 0.853,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "fifteen"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 58.218,
      :duration 0.907,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "jaw"},
     :skin "cheese",
     :swings-dialog-action
     {:data
@@ -6562,7 +6769,8 @@
      :type "audio",
      :start 72.652,
      :duration 7.374,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘R’ es para Rana, Roca, Rosa"},
     :chanting-video-src "/raw/video/l2a1/letter-r.mp4",
     :concept-name "rana",
     :game-voice-action
@@ -6571,19 +6779,22 @@
      :start 42.774,
      :duration 3.52,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Frog, frog, frog!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 38.081,
      :duration 3.4,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Frog, frog, frog.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 45.321,
      :duration 1.067,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "frog"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -6595,7 +6806,7 @@
        :start 32.401,
        :offset 32.401,
        :target "senoravaca",
-       :duration 3.946
+       :duration 3.946,
        :phrase-text "Frog, frog, frog!"}
       {:data
        [{:end 13.466, :anim "talk", :start 13.132, :duration 0.334}
@@ -6702,7 +6913,8 @@
      :offset 18.428,
      :target "mari",
      :duration 1.174,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "rrr"},
     :sandbox-short-letter-action
     {:data
      [{:end 17.322, :anim "talk", :start 16.988, :duration 0.334}],
@@ -6712,31 +6924,36 @@
      :offset 16.828,
      :target "mari",
      :duration 0.654,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "r"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 29.361,
      :duration 0.853,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "-"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 30.961,
      :duration 0.88,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "rose"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 32.627,
      :duration 0.854,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "mouse"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 34.534,
      :duration 0.814,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "queen"},
     :skin "frog",
     :swings-dialog-action
     {:data
@@ -6867,7 +7084,8 @@
      :type "audio",
      :start 29.28,
      :duration 7.24,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘S’ es para Serpiente, Sol, Sandía"},
     :chanting-video-src "/raw/video/l2a1/letter-s.mp4",
     :concept-name "serpiente",
     :game-voice-action
@@ -6875,13 +7093,15 @@
      :type "audio",
      :start 32.226,
      :duration 3.693,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "-, -, -!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 27.373,
      :duration 3.479,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "-, -, -.."},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 15.122,
@@ -6892,7 +7112,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "-"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -6904,7 +7125,7 @@
        :start 8.08,
        :offset 8.08,
        :target "vera",
-       :duration 3.414
+       :duration 3.414,
        :phrase-text "-, -, -!"}
       {:data
        [{:end 19.719, :anim "talk", :start 18.906, :duration 0.813}
@@ -7009,7 +7230,8 @@
      :offset 9.346,
      :target "mari",
      :duration 2.094,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "sss"},
     :sandbox-short-letter-action
     {:data [{:end 8.093, :anim "talk", :start 7.667, :duration 0.426}],
      :type "animation-sequence",
@@ -7018,31 +7240,36 @@
      :offset 7.56,
      :target "mari",
      :duration 0.6,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "s"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 20.534,
      :duration 0.947,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "chair"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 22.041,
      :duration 0.8,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "sun"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 23.627,
      :duration 0.987,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "watermelon"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 25.241,
      :duration 0.893,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "soup"},
     :skin "empty",
     :swings-dialog-action
     {:data
@@ -7148,7 +7375,8 @@
      :type "audio",
      :start 36.108,
      :duration 7.414,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La a es para ardilla, abeja, Arbol\n"},
     :chanting-video-src "/raw/video/l2a1/letter-a.mp4",
     :concept-name "squirrel",
     :game-voice-action
@@ -7156,13 +7384,15 @@
      :type "audio",
      :start 5.693,
      :duration 3.426,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Squirrel, squirrel, squirrel!"},
     :game-voice-action-low
     {:id "/raw/audio/english/l1/game_voice.m4a",
      :type "audio",
      :start 1,
      :duration 3.427,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Squirrel, squirrel, squirrel.."},
     :game-voice-chanting
     {:id "/raw/audio/l2/a4/L2_A4_Gamevoice_1.m4a",
      :type "audio",
@@ -7178,7 +7408,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "squirrel"},
     :home-group-3-times "group-3-times-ardilla",
     :home-group-3-times-action
     {:data
@@ -7191,7 +7422,7 @@
        :start 2.173,
        :offset 2.173,
        :target "vera",
-       :duration 3.106
+       :duration 3.106,
        :phrase-text "Squirrel, squirrel, squirrel!"}],
      :type "parallel",
      :scene-id "home"},
@@ -7440,7 +7671,8 @@
      :offset 20.799,
      :target "mari",
      :duration 1.254,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "aaa"},
     :sandbox-short-letter-action
     {:data
      [{:end 16.626, :anim "talk", :start 16.253, :duration 0.373}],
@@ -7450,7 +7682,8 @@
      :offset 16.199,
      :target "mari",
      :duration 0.534,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "a"},
     :sandbox-state-word-1 "abeja",
     :sandbox-state-word-1-action
     {:data
@@ -7458,7 +7691,8 @@
        :type "state",
        :params {:text "Abeja"},
        :target "word"}
-      {:id "voice-1", :type "audio", :start 6.218, :duration 0.871}
+      {:id "voice-1", :type "audio", :start 6.218, :duration 0.871,
+       :phrase-text "bee"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -7470,7 +7704,8 @@
        :type "state",
        :params {:text "Arbol"},
        :target "word"}
-      {:id "voice-1", :type "audio", :start 7.873, :duration 0.871}
+      {:id "voice-1", :type "audio", :start 7.873, :duration 0.871,
+       :phrase-text "tree"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -7482,7 +7717,8 @@
        :type "state",
        :params {:text "Avion"},
        :target "word"}
-      {:id "voice-1", :type "audio", :start 9.506, :duration 0.871}
+      {:id "voice-1", :type "audio", :start 9.506, :duration 0.871,
+       :phrase-text "airplane"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -7494,7 +7730,8 @@
        :type "state",
        :params {:text "Arana"},
        :target "word"}
-      {:id "voice-1", :type "audio", :start 11.144, :duration 1.06}
+      {:id "voice-1", :type "audio", :start 11.144, :duration 1.06,
+       :phrase-text "spider"}
       {:id "default", :type "state", :target "word"}],
      :type "sequence-data",
      :scene-id "sandbox",
@@ -7530,7 +7767,8 @@
        :start 0.546,
        :offset 0.546,
        :target "rock",
-       :duration 3.957}
+       :duration 3.957,
+       :phrase-text "Hello! That looks like fun! Who are you pushing on the swing?"}
       {:data
        [{:end 1.843, :anim "talk", :start 0.616, :duration 1.227}],
        :type "animation-sequence",
@@ -7539,7 +7777,8 @@
        :offset 0.403,
        :target "vera",
        :duration 1.68,
-       :description ""}
+       :description "",
+       :phrase-text "Hello Senora Piedra! Who am I pushing?"}
       {:data
        [{:end 6.212, :anim "talk", :start 5.599, :duration 0.613}
         {:end 8.559, :anim "talk", :start 6.506, :duration 2.053}
@@ -7549,7 +7788,8 @@
        :start 5.375,
        :offset 5.375,
        :target "rock",
-       :duration 6.079}
+       :duration 6.079,
+       :phrase-text "Yes! What is the name of that animal with the big eyes and bushy tail?"}
       {:data
        [{:end 2.946, :anim "talk", :start 2.453, :duration 0.493}
         {:end 4.253, :anim "talk", :start 3.186, :duration 1.067}],
@@ -7559,7 +7799,8 @@
        :offset 2.277,
        :target "vera",
        :duration 2.229,
-       :description ""}
+       :description "",
+       :phrase-text "Oh, it’s a squirrel!"}
       {:data
        [{:end 13.171, :anim "talk", :start 12.385, :duration 0.786}
         {:end 14.905, :anim "talk", :start 13.678, :duration 1.227}
@@ -7569,7 +7810,8 @@
        :start 12.225,
        :offset 12.225,
        :target "rock",
-       :duration 5.439}
+       :duration 5.439,
+       :phrase-text "A squirrel! I thought so!  Have you ever seen a squirrel?"}
       {:data
        [{:end 5.333, :anim "talk", :start 4.919, :duration 0.414}
         {:end 6.452, :anim "talk", :start 5.799, :duration 0.653}
@@ -7581,7 +7823,8 @@
        :offset 4.719,
        :target "vera",
        :duration 7.599,
-       :description ""}
+       :description "",
+       :phrase-text "Hmmm, yes! I have seen a squirrel.  Once I saw a squirrel climbing up a tree."}
       {:data
        [{:end 22.237, :anim "talk", :start 18.864, :duration 3.373}
         {:end 24.516, :anim "talk", :start 22.823, :duration 1.693}
@@ -7592,7 +7835,8 @@
        :start 18.624,
        :offset 18.624,
        :target "rock",
-       :duration 8.305}
+       :duration 8.305,
+       :phrase-text "Ahhhh. Squirrels do like climbing trees. They also like eating nuts, fruits and seeds."}
       {:data
        [{:end 13.398, :anim "talk", :start 12.905, :duration 0.493}
         {:end 15.211, :anim "talk", :start 13.958, :duration 1.253}
@@ -7605,7 +7849,8 @@
        :offset 12.665,
        :target "vera",
        :duration 10.611,
-       :description ""}
+       :description "",
+       :phrase-text "Really? Nuts, fruits and seeds?  I like nuts and fruits. Maybe I can taste some seeds soon also."}
       {:data
        [{:end 28.596, :anim "talk", :start 27.916, :duration 0.68}
         {:end 31.275, :anim "talk", :start 29.196, :duration 2.079}
@@ -7617,8 +7862,8 @@
        :start 27.623,
        :offset 27.623,
        :target "rock",
-       :phrase-text "Test 2 rock"
-       :duration 6.212}],
+       :duration 6.212,
+       :phrase-text "hahaha. Have fun swinging the a, a, a, ardilla!"}],
      :type "sequence-data",
      :scene-id "swings"
      :phrase-text "Test"},
@@ -7691,7 +7936,8 @@
      :type "audio",
      :start 55.146,
      :duration 8.333,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘T’ es para Tomate, Tren, Tiburon"},
     :chanting-video-src "/raw/video/l2a1/letter-t.mp4",
     :concept-name "tomate",
     :game-voice-action
@@ -7700,19 +7946,22 @@
      :start 41.785,
      :duration 3.32,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Tomato, tomato, tomato!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 37.612,
      :duration 3.053,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Tomato, tomato, tomato.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 44.079,
      :duration 0.986,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "tomato"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -7724,7 +7973,7 @@
        :start 13.734,
        :offset 13.734,
        :target "vera",
-       :duration 3.226
+       :duration 3.226,
        :phrase-text "Tomato, tomato, tomato!"}
       {:data
        [{:end 32.252, :anim "talk", :start 31.612, :duration 0.64}
@@ -7831,7 +8080,8 @@
      :offset 14.56,
      :target "mari",
      :duration 1.773,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ttt"},
     :sandbox-short-letter-action
     {:data [{:end 13.613, :anim "talk", :start 13.4, :duration 0.213}],
      :type "animation-sequence",
@@ -7840,31 +8090,36 @@
      :offset 13.253,
      :target "mari",
      :duration 0.547,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "t"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 27.348,
      :duration 1.24,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "phone"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 29.188,
      :duration 1.066,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "turtle"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 31.201,
      :duration 0.653,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "train"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 32.721,
      :duration 0.96,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "-"},
     :skin "tomato",
     :swings-dialog-action
     {:data
@@ -8000,7 +8255,8 @@
      :type "audio",
      :start 2.907,
      :duration 7.213,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘U’ es para Uvas, Uno, Uña"},
     :chanting-video-src "/raw/video/l2a1/letter-u.mp4",
     :concept-name "uvas",
     :game-voice-action
@@ -8008,13 +8264,15 @@
      :type "audio",
      :start 22.653,
      :duration 3.066,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Grape, grape, grape!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 17.853,
      :duration 3.506,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Grape, grape, grape.."},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 11.027,
@@ -8025,7 +8283,8 @@
      :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :target "mari",
      :track 1,
-     :data [{:end 2.67, :anim "talk", :start 0.775}]},
+     :data [{:end 2.67, :anim "talk", :start 0.775}],
+     :phrase-text "grape"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -8037,7 +8296,7 @@
        :start 2.707,
        :offset 2.707,
        :target "vera",
-       :duration 2.893
+       :duration 2.893,
        :phrase-text "Grape, grape, grape!"}
       {:data
        [{:end 6.146, :anim "talk", :start 5.666, :duration 0.48}
@@ -8139,7 +8398,8 @@
      :offset 2.373,
      :target "mari",
      :duration 2.32,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "uuu"},
     :sandbox-short-letter-action
     {:data [{:end 1.107, :anim "talk", :start 0.747, :duration 0.36}],
      :type "animation-sequence",
@@ -8148,31 +8408,36 @@
      :offset 0.627,
      :target "mari",
      :duration 0.68,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "u"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 13.187,
      :duration 0.8,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "one"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 14.707,
      :duration 0.933,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "nail"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 16.361,
      :duration 1.2,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "unicorn"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 18.201,
      :duration 1.173,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "uniform"},
     :skin "grapes",
     :swings-dialog-action
     {:data
@@ -8296,7 +8561,8 @@
      :type "audio",
      :start 166.464,
      :duration 6.814,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘V’ es para Violin, Vaca, Ventana"},
     :chanting-video-src "/raw/video/l2a1/letter-v.mp4",
     :concept-name "violin",
     :game-voice-action
@@ -8305,19 +8571,22 @@
      :start 89.451,
      :duration 3.973,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Violin, violin, violin!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 84.198,
      :duration 4.04,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Violin, violin, violin.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 38.402,
      :duration 1.12,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "violin"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -8329,7 +8598,7 @@
        :start 37.337,
        :offset 37.337,
        :target "vera",
-       :duration 3.4
+       :duration 3.4,
        :phrase-text "Violin, violin, violin!"}
       {:data
        [{:end 82.786, :anim "talk", :start 82.399, :duration 0.387}
@@ -8437,7 +8706,8 @@
      :offset 51.397,
      :target "mari",
      :duration 1.4,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "vvv"},
     :sandbox-short-letter-action
     {:data
      [{:end 48.637, :anim "talk", :start 48.371, :duration 0.266}],
@@ -8447,31 +8717,36 @@
      :offset 48.237,
      :target "mari",
      :duration 0.574,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "v"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 48.017,
      :duration 0.787,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "cow"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 49.15,
      :duration 1.121,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "baby cow"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 50.484,
      :duration 1.147,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "window"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 51.871,
      :duration 0.946,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "green"},
     :skin "violin",
     :swings-dialog-action
     {:data
@@ -8590,7 +8865,8 @@
      :type "audio",
      :start 215.064,
      :duration 6.786,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘W’ es para Sitio Web, Wapiti, Wafle "},
     :chanting-video-src "/raw/video/l2a1/letter-w.mp4",
     :concept-name "web",
     :game-voice-action
@@ -8599,19 +8875,22 @@
      :start 111.931,
      :duration 4.346,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Web site, web site, web site!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_2_List.m4a",
      :type "audio",
      :start 105.917,
      :duration 4.654,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Web site, web site, web site.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 46.989,
      :duration 1.56,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "web site"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -8623,7 +8902,7 @@
        :start 48.378,
        :offset 48.378,
        :target "vera",
-       :duration 3.427
+       :duration 3.427,
        :phrase-text "Web site, web site, web site!"}
       {:data
        [{:end 110.226, :anim "talk", :start 109.639, :duration 0.587}
@@ -8731,7 +9010,8 @@
      :offset 66.103,
      :target "mari",
      :duration 1.4,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "www"},
     :sandbox-short-letter-action
     {:data
      [{:end 64.463, :anim "talk", :start 63.783, :duration 0.68}],
@@ -8741,31 +9021,36 @@
      :offset 63.676,
      :target "mari",
      :duration 0.92,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "w"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 60.071,
      :duration 1.147,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "deer"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 61.511,
      :duration 1.014,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "boy"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 62.871,
      :duration 1.121,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "girl"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a",
      :type "audio",
      :start 64.218,
      :duration 0.987,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "waffles"},
     :skin "web site",
     :swings-dialog-action
     {:data
@@ -8902,7 +9187,8 @@
      :type "audio",
      :start 232.09,
      :duration 6.227,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘X’ esta en Xilofono, Saxophone, taxi"},
     :chanting-video-src "/raw/video/l2a1/letter-x.mp4",
     :concept-name "xilofono",
     :game-voice-action
@@ -8911,19 +9197,22 @@
      :start 114.802,
      :duration 3.694,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Xylophone, xylophone, xylophone!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 110.029,
      :duration 3.693,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Xylophone, xylophone, xylophone.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 50.189,
      :duration 1.2,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "xylophone"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -8935,7 +9224,7 @@
        :start 53.596,
        :offset 53.596,
        :target "vera",
-       :duration 4.386
+       :duration 4.386,
        :phrase-text "Xylophone, xylophone, xylophone!"}
       {:data
        [{:end 127.842, :anim "talk", :start 127.122, :duration 0.72}
@@ -9038,25 +9327,29 @@
      :type "audio",
      :start 92.922,
      :duration 1.48,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "saxophone"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 95.509,
      :duration 1.267,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "mexico"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 97.642,
      :duration 0.827,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "taxi"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 99.589,
      :duration 0.773,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "texto"},
     :skin "xylophone",
     :swings-dialog-action
     {:data
@@ -9193,7 +9486,8 @@
      :type "audio",
      :start 223.517,
      :duration 6.12,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘Y’ es para Yoyo, Yogur, yema"},
     :chanting-video-src "/raw/video/l2a1/letter-y.mp4",
     :concept-name "yoyo",
     :game-voice-action
@@ -9202,19 +9496,22 @@
      :start 104.629,
      :duration 3.4,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Yo-yo, yo-yo, yo-yo!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 99.842,
      :duration 3.387,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Yo-yo, yo-yo, yo-yo.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 49.096,
      :duration 0.96,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "yo-yo"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -9226,7 +9523,7 @@
        :start 47.01,
        :offset 47.01,
        :target "vera",
-       :duration 4.186
+       :duration 4.186,
        :phrase-text "Yo-yo, yo-yo, yo-yo!"}
       {:data
        [{:end 114.616, :anim "talk", :start 114.322, :duration 0.294}
@@ -9334,7 +9631,8 @@
      :offset 69.42,
      :target "mari",
      :duration 1.186,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "yyy"},
     :sandbox-short-letter-action
     {:data
      [{:end 67.873, :anim "talk", :start 67.246, :duration 0.627}],
@@ -9344,31 +9642,36 @@
      :offset 67.166,
      :target "mari",
      :duration 0.787,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "y"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 84.215,
      :duration 0.92,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "yogurt"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 86.149,
      :duration 0.666,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "yak"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 88.109,
      :duration 0.92,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "yacht"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 89.962,
      :duration 0.8,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "egg yolk"},
     :skin "yo_yo",
     :swings-dialog-action
     {:data
@@ -9490,7 +9793,8 @@
      :type "audio",
      :start 198.051,
      :duration 6.746,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘Z’ es para Zapato, Zorro, Zanahoria"},
     :chanting-video-src "/raw/video/l2a1/letter-z.mp4",
     :concept-name "zapato",
     :game-voice-action
@@ -9499,19 +9803,22 @@
      :start 94.589,
      :duration 3.64,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Boots, boots, boots!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_3_List.m4a",
      :type "audio",
      :start 89.122,
      :duration 3.773,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Boots, boots, boots.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 44.255,
      :duration 1.161,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "boots"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -9523,7 +9830,7 @@
        :start 40.957,
        :offset 40.957,
        :target "vera",
-       :duration 4.093
+       :duration 4.093,
        :phrase-text "Boots, boots, boots!"}
       {:data
        [{:end 101.749, :anim "talk", :start 101.122, :duration 0.627}
@@ -9629,7 +9936,8 @@
      :offset 60.672,
      :target "mari",
      :duration 1,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "zzz"},
     :sandbox-short-letter-action
     {:data
      [{:end 58.925, :anim "talk", :start 58.619, :duration 0.306}],
@@ -9639,31 +9947,36 @@
      :offset 58.499,
      :target "mari",
      :duration 0.546,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "z"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 74.508,
      :duration 0.867,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "zebra"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 76.602,
      :duration 0.893,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "fox"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 78.269,
      :duration 1.493,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "carrot"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
      :type "audio",
      :start 80.682,
      :duration 1.12,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "skunk"},
     :skin "boots",
     :swings-dialog-action
     {:data
@@ -9801,7 +10114,8 @@
      :type "audio",
      :start 157.718,
      :duration 7.2,
-     :scene-id "book"},
+     :scene-id "book",
+     :phrase-text "La ‘Ñ’ es para Ñandu, Ñame, ñudo  "},
     :chanting-video-src "/raw/video/l2a1/letter-ñ.mp4",
     :concept-name "ñandu",
     :game-voice-action
@@ -9810,19 +10124,22 @@
      :start 70.251,
      :duration 3.707,
      :scene-id "cycling",
-     :description "Game Voice High"},
+     :description "Game Voice High",
+     :phrase-text "Ostrich, ostrich, ostrich!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 64.971,
      :duration 3.88,
-     :scene-id "see-saw"},
+     :scene-id "see-saw",
+     :phrase-text "Ostrich, ostrich, ostrich.."},
     :hide-n-seek-current-concept-audio
     {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
      :type "audio",
      :start 37.042,
      :duration 0.96,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "ostrich"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -9834,7 +10151,7 @@
        :start 37.281,
        :offset 37.281,
        :target "vera",
-       :duration 3.28
+       :duration 3.28,
        :phrase-text "Ostrich, ostrich, ostrich!"}
       {:data
        [{:end 83.342, :anim "talk", :start 82.795, :duration 0.547}
@@ -9942,7 +10259,8 @@
      :offset 46.999,
      :target "mari",
      :duration 2.187,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ñññ"},
     :sandbox-short-letter-action
     {:data
      [{:end 45.932, :anim "talk", :start 45.546, :duration 0.386}],
@@ -9952,31 +10270,36 @@
      :offset 45.359,
      :target "mari",
      :duration 0.72,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "ñ"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 57.588,
      :duration 0.947,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "yam"},
     :sandbox-state-word-2-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 59.388,
      :duration 0.894,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "knot"},
     :sandbox-state-word-3-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 61.269,
      :duration 0.96,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "gnochi"},
     :sandbox-state-word-4-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a",
      :type "audio",
      :start 63.002,
      :duration 0.84,
-     :scene-id "sandbox"},
+     :scene-id "sandbox",
+     :phrase-text "pepper"},
     :skin "ostrich",
     :swings-dialog-action
     {:data

@@ -1,11 +1,11 @@
-{:assets        [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio" :alias "mari voice"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a", :size 5, :type "audio" :alias "game voice 1"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a", :size 5, :type "audio" :alias "game voice 2"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a", :size 5, :type "audio" :alias "game voice 3"}
+{:assets        [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio" :alias "mari voice" :target "mari"}
+                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a", :size 5, :type "audio" :alias "game voice 1" :target "game-voice"}
+                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a", :size 5, :type "audio" :alias "game voice 2" :target "game-voice"}
+                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a", :size 5, :type "audio" :alias "game voice 3" :target "game-voice"}
 
-                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio" :alias "letter 1"}
-                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio" :alias "letter 2"}
-                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio" :alias "letter 3"}
+                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio" :alias "letter 1" :target "mari"}
+                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio" :alias "letter 2" :target "mari"}
+                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio" :alias "letter 3" :target "mari"}
 
                  {:url "/raw/img/park/sandbox/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/casa/painting_canvas.png" :type "image"}],
@@ -67,23 +67,25 @@
 
                  },
  :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]],
- :actions       {:mari-welcome-audio             {:type        "animation-sequence" :target "mari" :track 1 :offset 0.702
-                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a" :start 0.702, :duration 5.914
-                                                  :data        [{:start 0.775 :end 2.67 :anim "talk"}
-                                                                {:start 3.189 :end 6.433 :anim "talk"}]
-                                                  :phrase      :welcome
-                                                  :phrase-text "Welcome to the sandbox! Let’s learn some new words."}
+ :actions       {:mari-welcome-audio             {:type               "animation-sequence" :target "mari" :track 1 :offset 0.702
+                                                  :audio              "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a" :start 0.702, :duration 5.914
+                                                  :data               [{:start 0.775 :end 2.67 :anim "talk"}
+                                                                       {:start 3.189 :end 6.433 :anim "talk"}]
+                                                  :phrase             :welcome
+                                                  :phrase-description "Welcome"
+                                                  :phrase-text        "Welcome to the sandbox! Let’s learn some new words."}
 
                  :mari-touch-audio               {:type  "animation-sequence" :target "mari" :track 1 :offset 35.155
                                                   :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 35.155, :duration 3.973
                                                   :data  [{:start 35.31 :end 38.992 :anim "talk"}]}
 
-                 :mari-more-audio                {:type        "animation-sequence" :target "mari" :track 1 :offset 44.997
-                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 44.997, :duration 4.337
-                                                  :data        [{:start 45.352 :end 46.655 :anim "talk"}
-                                                                {:start 47.101 :end 49.088 :anim "talk"}]
-                                                  :phrase      :more-words
-                                                  :phrase-text "Excellent. Do you want to hear more words?"}
+                 :mari-more-audio                {:type               "animation-sequence" :target "mari" :track 1 :offset 44.997
+                                                  :audio              "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 44.997, :duration 4.337
+                                                  :data               [{:start 45.352 :end 46.655 :anim "talk"}
+                                                                       {:start 47.101 :end 49.088 :anim "talk"}]
+                                                  :phrase             :more-words
+                                                  :phrase-description "More words"
+                                                  :phrase-text        "Excellent. Do you want to hear more words?"}
 
                  :mari-one-more-audio            {:type "parallel"
                                                   :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
@@ -109,42 +111,46 @@
                                                                  {:type "empty" :duration 1069}
                                                                  {:type "animation" :target "mari" :id "empty" :track 1}]}]}
 
-                 :mari-letter-1                  {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   14.48,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    14.48,
-                                                  :duration 1.746,
-                                                  :data     [{:start 14.552, :end 16.159, :duration 1.607, :anim "talk"}]}
+                 :mari-letter-1                  {:type        "animation-sequence",
+                                                  :target      "mari",
+                                                  :track       1,
+                                                  :offset      14.48,
+                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                                                  :start       14.48,
+                                                  :duration    1.746,
+                                                  :data        [{:start 14.552, :end 16.159, :duration 1.607, :anim "talk"}]
+                                                  :phrase-text "This is the letter"}
 
-                 :mari-letter-2                  {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   17.239,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    17.239,
-                                                  :duration 1.347,
-                                                  :data     [{:start 17.333, :end 18.506, :duration 1.173, :anim "talk"}]}
+                 :mari-letter-2                  {:type        "animation-sequence",
+                                                  :target      "mari",
+                                                  :track       1,
+                                                  :offset      17.239,
+                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                                                  :start       17.239,
+                                                  :duration    1.347,
+                                                  :data        [{:start 17.333, :end 18.506, :duration 1.173, :anim "talk"}]
+                                                  :phrase-text "Did you know that the letter"}
 
-                 :mari-letter-3                  {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   19.293,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    19.293,
-                                                  :duration 1.32,
-                                                  :data     [{:start 19.413, :end 20.413, :duration 1, :anim "talk"}]}
+                 :mari-letter-3                  {:type        "animation-sequence",
+                                                  :target      "mari",
+                                                  :track       1,
+                                                  :offset      19.293,
+                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                                                  :start       19.293,
+                                                  :duration    1.32,
+                                                  :data        [{:start 19.413, :end 20.413, :duration 1, :anim "talk"}]
+                                                  :phrase-text "makes the sound"}
 
-                 :mari-letter-4                  {:type     "animation-sequence",
-                                                  :target   "mari",
-                                                  :track    1,
-                                                  :offset   23.053,
-                                                  :audio    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start    23.053,
-                                                  :duration 6.173,
-                                                  :data     [{:start 23.133, :end 27.426, :duration 4.293, :anim "talk"}
-                                                             {:start 27.932, :end 29.066, :duration 1.134, :anim "talk"}]}
+                 :mari-letter-4                  {:type        "animation-sequence",
+                                                  :target      "mari",
+                                                  :track       1,
+                                                  :offset      23.053,
+                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
+                                                  :start       23.053,
+                                                  :duration    6.173,
+                                                  :data        [{:start 23.133, :end 27.426, :duration 4.293, :anim "talk"}
+                                                                {:start 27.932, :end 29.066, :duration 1.134, :anim "talk"}]
+                                                  :phrase-text "Click on the pictures to hear more words that start with the sound"}
 
                  :mari-short-letter-var          {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-short-letter-action"}]}
                  :mari-long-letter-var           {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-long-letter-action"}]}
@@ -169,14 +175,18 @@
                                                          "word-1-state-var"
                                                          "test-concept-complete"]}
 
-                 :word-1-state-var               {:type   "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-1-action"}]
-                                                  :phrase :word-1}
-                 :word-2-state-var               {:type   "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-2-action"}]
-                                                  :phrase :word-2}
-                 :word-3-state-var               {:type   "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-3-action"}]
-                                                  :phrase :word-3}
-                 :word-4-state-var               {:type   "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-4-action"}]
-                                                  :phrase :word-4}
+                 :word-1-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-1-action"}]
+                                                  :phrase             :word-1
+                                                  :phrase-description "Pair word 1"}
+                 :word-2-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-2-action"}]
+                                                  :phrase             :word-2
+                                                  :phrase-description "Pair word 2"}
+                 :word-3-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-3-action"}]
+                                                  :phrase             :word-3
+                                                  :phrase-description "Pair word 3"}
+                 :word-4-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-4-action"}]
+                                                  :phrase             :word-4
+                                                  :phrase-description "Pair word 4"}
 
                  :box-1-jump-in                  {:type "sequence"
                                                   :data ["box-1-jump-in-animation-jump"
@@ -335,19 +345,17 @@
                                                          "show-letter"
                                                          "letter-intro"]}
 
-                 :letter-intro                   {:type        "sequence"
-                                                  :data        ["mari-letter-1"
-                                                                "mari-short-letter-var"
-                                                                "mari-letter-2"
-                                                                "mari-short-letter-var"
-                                                                "mari-letter-3"
-                                                                "mari-long-letter-var"
-                                                                "mari-letter-4"
-                                                                "mari-long-letter-var"]
-                                                  :phrase      :letter-intro
-                                                  :phrase-text "This is the letter a.
-                                                                Did you know that the letter a makes the aaa sound?
-                                                                Click on the pictures to hear more words that start with the sound aaa."}
+                 :letter-intro                   {:type               "sequence"
+                                                  :data               ["mari-letter-1"
+                                                                       "mari-short-letter-var"
+                                                                       "mari-letter-2"
+                                                                       "mari-short-letter-var"
+                                                                       "mari-letter-3"
+                                                                       "mari-long-letter-var"
+                                                                       "mari-letter-4"
+                                                                       "mari-long-letter-var"]
+                                                  :phrase             :letter-intro
+                                                  :phrase-description "Learn concept sound"}
 
                  :next-concept-workflow          {:type "sequence"
                                                   :data ["mari-more-audio"
