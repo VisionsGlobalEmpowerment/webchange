@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.translator.translator-form.views-form-audios
   (:require
+    [clojure.string :refer [capitalize]]
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]
     [webchange.interpreter.core :refer [load-assets]]
@@ -22,7 +23,7 @@
                        action-key)}))))
 
 (defn audio-wave
-  [{:keys [key alias start duration selected?]} {:keys [on-change]}]
+  [{:keys [key alias start duration selected? target]} {:keys [on-change]}]
   (r/with-let [on-change-region (fn [region]
                                   (on-change key region))
                on-select (fn []
@@ -39,24 +40,35 @@
                                  {:margin-bottom 8})
                 :on-click on-select}
        [ui/card-content
+        (when-not (nil? target)
+          [ui/chip {:label target
+                    :style {:margin  "0 10px 0 0"
+                            :padding "0"}}])
         [ui/typography {:variant "subtitle2"
-                        :color   "default"}
+                        :color   "default"
+                        :style   {:display "inline-block"}}
          (or alias key)]
         [audio-wave-form audio-data form-params]]])))
 
 (defn waves-list
-  [{:keys [audios-data on-change]}]
-  [:div
-   (for [audio-data audios-data]
-     ^{:key (:key audio-data)}
-     [audio-wave audio-data {:on-change on-change}])])
+  [{:keys [audios-data on-change audios-filter]}]
+  (let [filtered-audios-data (if-not (nil? audios-filter)
+                               (filter (fn [{:keys [target]}]
+                                         (= target (:target audios-filter)))
+                                       (vec audios-data))
+                               audios-data)]
+    [:div
+     (for [audio-data filtered-audios-data]
+       ^{:key (:key audio-data)}
+       [audio-wave audio-data {:on-change on-change}])]))
 
 (defn audio-key->audio-data
   [audios]
   (map
-    (fn [{:keys [url alias]}]
+    (fn [{:keys [url alias target]}]
       {:key       url
        :alias     alias
+       :target    target
        :start     nil
        :duration  nil
        :selected? false})
@@ -96,7 +108,7 @@
                                    :margin-top  18}}])
 
 (defn audios-list-block-render
-  [{:keys [scene-id audios action on-change]}]
+  [{:keys [scene-id audios action on-change audios-filter]}]
   (let [action-data (:data action)
         action-audio-data (get-action-audio-data action-data audios)
         audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
@@ -105,6 +117,7 @@
                 [:div
                  (if @assets-loaded
                    [waves-list {:audios-data           audios-data
+                                :audios-filter         audios-filter
                                 :on-change on-change}]
                    [audios-loading-block {:audios-list      (map #(:url %) audios)
                                           :loading-progress assets-loading-progress
@@ -134,12 +147,32 @@
               :component-did-update audios-list-block-did-update}))
 
 (defn audios-block
-  [{:keys [action] :as props}]
-  [:div
-   [ui/typography {:variant "h6"
-                   :style   {:margin "5px 0"}}
-    "Audios"]
-   (if-not (nil? (:data action))
-     [audios-list-block props]
-     [ui/typography {:variant "subtitle1"}
-      "Select action on diagram"])])
+  [{:keys [action audios] :as props}]
+  (let [show-audios? (-> (:data action) nil? not)
+        targets (conj (->> audios
+                           (map :target)
+                           (filter #(-> % nil? not))
+                           (distinct)) "any")]
+    (r/with-let [current-target (r/atom "any")]
+                [:div
+                 [:div {:style {:margin-bottom "15px"}}
+                  [ui/typography {:variant "h6"
+                                  :style   {:display "inline-block"
+                                            :margin  "5px 0"}}
+                   "Audios"]
+                  (when show-audios?
+                    [ui/select {:value     @current-target
+                                :on-change #(reset! current-target (->> % .-target .-value))
+                                :style     {:margin "0 10px"
+                                            :width  "150px"}}
+                     (for [target targets]
+                       ^{:key target}
+                       [ui/menu-item {:value target}
+                        (capitalize target)])])]
+                 (if show-audios?
+                   [audios-list-block (merge props
+                                             {:audios-filter (if-not (= @current-target "any")
+                                                               {:target @current-target}
+                                                               nil)})]
+                   [ui/typography {:variant "subtitle1"}
+                    "Select action on diagram"])])))
