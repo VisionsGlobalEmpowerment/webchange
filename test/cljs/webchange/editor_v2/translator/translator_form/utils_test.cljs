@@ -18,6 +18,26 @@
                               :key   "/raw/audio/audio_2.m4a"
                               :url   "/raw/audio/audio_2.m4a"
                               :date  nil}]]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result)))))
+  (testing "getting scene audio assets with target"
+    (let [scene-data {:assets [{:url "/raw/audio/audio_1.mp3" :type "audio" :alias "alias_1" :target "mari"}
+                               {:url "/raw/audio/audio_2.m4a" :type "audio" :target "vera"}]}
+          graph {}]
+      (let [actual-result (get-audios scene-data graph)
+            expected-result [{:alias "alias_1"
+                              :key   "/raw/audio/audio_1.mp3"
+                              :url   "/raw/audio/audio_1.mp3"
+                              :date  nil
+                              :target "mari"}
+                             {:alias nil
+                              :key   "/raw/audio/audio_2.m4a"
+                              :url   "/raw/audio/audio_2.m4a"
+                              :date  nil
+                              :target "vera"}]]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
   (testing "scene audio assets are sorted by date"
     (let [scene-data {:assets [{:url "/raw/audio/audio_1.mp3" :type "audio" :alias "alias_1"}
@@ -37,6 +57,8 @@
                               :key   "/raw/audio/audio_1.mp3"
                               :url   "/raw/audio/audio_1.mp3"
                               :date  nil}]]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
   (testing "getting scene external audios"
     (let [scene-data {:audio {:audio-1-key "/raw/audio/audio-1.mp3"
@@ -49,6 +71,8 @@
                              {:alias nil
                               :key   "audio-2-key"
                               :url   "/raw/audio/audio-2.mp3"}]]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
   (testing "getting concept audios"
     (let [scene-data {}
@@ -65,6 +89,8 @@
                              {:alias nil
                               :key   "/raw/audio/concept-2-audio-1.m4a"
                               :url   "/raw/audio/concept-2-audio-1.m4a"}]]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result)))))
   (testing "removing duplicates"
     (let [scene-data {:assets [{:url "/raw/audio/audio-1.mp3" :type "audio" :alias "alias-1"}]
@@ -75,6 +101,8 @@
                               :key   "audio-1-key"
                               :url   "/raw/audio/audio-1.mp3"
                               :date  nil}]]
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
         (is (= actual-result expected-result))))))
 
 (deftest test-get-dialog-data--text-in-parent-defined-target
