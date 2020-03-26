@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.diagram.modes.translation.widget-data
   (:require
+    [clojure.string :refer [capitalize]]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
@@ -8,6 +9,7 @@
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [get-node-type speech-node? concept-action-node?]]
     [webchange.editor-v2.translator.events :as te]
+    [webchange.editor-v2.translator.translator-form.utils :refer [action-data->phrase-data]]
     [webchange.editor-v2.translator.translator-form.utils-play-audio :refer [play-audios-list]]
     [webchange.editor-v2.utils :refer [str->caption]]))
 
@@ -23,14 +25,16 @@
 
 (defn- get-styles
   []
-  {:title       {:margin      0
-                 :padding     5
-                 :text-align  "center"
-                 :white-space "nowrap"}
+  {:title       {:margin     0
+                 :padding    5
+                 :text-align "center"
+                 :max-width  "230px"
+                 :min-width  "180px"}
    :text        {:margin     "0"
                  :padding    "5px"
                  :text-align "center"
-                 :max-width  "230px"}
+                 :max-width  "230px"
+                 :min-width  "180px"}
    :play-button {:right    "0"
                  :bottom   "0"
                  :position "absolute"
@@ -41,13 +45,20 @@
 (defn- header
   [props]
   (let [title (str->caption (:name props))
-        phrase-text (get-in props [:data :phrase-text])
+        phrase-data (action-data->phrase-data (:data props))
+        target (:target phrase-data)
+        phrase-text (:phrase-text phrase-data)
+        text (if (nil? phrase-text)
+               ""
+               (if (nil? target)
+                 phrase-text
+                 (str (capitalize target) ": " phrase-text)))
         styles (get-styles)]
     [:div
      [:h3 {:style (:title styles)}
       title]
      [:p {:style (:text styles)}
-      phrase-text]]))
+      text]]))
 
 (defn- play-button
   [audio-data]

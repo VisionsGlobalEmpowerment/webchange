@@ -17,11 +17,13 @@
   (->> (:assets scene-data)
        (filter (fn [{:keys [type]}] (= type "audio")))
        (map (fn [{:keys [alias url date target]}]
-              {:alias  alias
-               :key    url
-               :url    url
-               :date   date
-               :target target}))))
+              (let [data {:alias alias
+                          :key   url
+                          :url   url
+                          :date  date}]
+                (if-not (nil? target)
+                  (assoc data :target target)
+                  data))))))
 
 (defn- get-scene-external-audios
   [scene-data]
@@ -38,10 +40,12 @@
       (if (get-in action-data [:data :concept-action])
         (let [{:keys [id audio target]} (:data action-data)
               url (or id audio)]
-          (conj result {:alias  nil
-                        :key    url
-                        :url    url
-                        :target target}))
+          (let [data {:alias  nil
+                      :key    url
+                      :url    url}]
+            (conj result (if-not (nil? target)
+                           (assoc data :target target)
+                           data))))
         result))
     []
     graph))
@@ -124,6 +128,10 @@
      :type type
      :data (update-with-current-data name data data-store)}))
 
+(defn action-data->phrase-data
+  [action-data]
+  (select-keys action-data [:phrase-text :target]))
+
 (defn- get-dialog-data-dfs
   ([graph]
    (first (get-dialog-data-dfs graph [:root :root] {} [])))
@@ -134,7 +142,7 @@
          (if-not (contains? used-map handler)
            (get-dialog-data-dfs graph [node-name handler] (assoc used-map handler true) result)
            [result used-map]))
-       (let [phrase-data (select-keys (:data node-data) [:phrase-text :target])]
+       (let [phrase-data (action-data->phrase-data (:data node-data))]
          [(if-not (= node-name :root)
             (conj result phrase-data)
             result)
