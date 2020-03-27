@@ -29,6 +29,7 @@
          [na/form-input {:label "url" :default-value (:url @asset) :on-change #(swap! props assoc :url (-> %2 .-value)) :inline? true}]
          [na/form-input {:label "size" :default-value (:size @asset) :on-change #(swap! props assoc :size (-> %2 .-value js/parseInt)) :inline? true}]
          [na/form-input {:label "alias" :default-value (:alias @asset) :on-change #(swap! props assoc :alias (-> %2 .-value)) :inline? true}]
+         [na/form-input {:label "target" :default-value (:target @asset) :on-change #(swap! props assoc :target (-> %2 .-value)) :inline? true}]
          [na/divider {}]
          [na/form-button {:content "Save" :on-click #(do (update-asset scene-id id @props)
                                                          (re-frame/dispatch [::events/reset-asset]))}]

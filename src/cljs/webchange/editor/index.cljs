@@ -627,7 +627,7 @@
                                (when (is-file-drop? e)
                                  (.stopPropagation e)
                                  (.preventDefault e)
-                                 (re-frame/dispatch [::events/upload-asset scene-id (get-first-file e) (:alias @props)]))
+                                 (re-frame/dispatch [::events/upload-asset scene-id (get-first-file e) (select-keys @props [:alias :target])]))
                                )}
 
          [sa/Segment {:placeholder true :style {:width "100%" :height "500px"}}
@@ -635,6 +635,7 @@
            [na/icon {:name "file outline"}]
            "Drag & drop your file here..."]
           [na/form-input {:label "Alias: " :on-change #(swap! props assoc :alias (-> %2 .-value)) :inline? true}]
+          [na/form-input {:label "Target: " :on-change #(swap! props assoc :target (-> %2 .-value)) :inline? true}]
           ]]))))
 
 

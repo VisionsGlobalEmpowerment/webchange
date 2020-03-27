@@ -693,7 +693,7 @@
 
 (re-frame/reg-event-fx
   ::upload-asset
-  (fn [{:keys [db]} [_ scene-id js-file-value alias]]
+  (fn [{:keys [db]} [_ scene-id js-file-value props]]
     (let [form-data (doto
                       (js/FormData.)
                       (.append "file" js-file-value))]
@@ -702,14 +702,14 @@
                     :uri             (str "/api/assets/")
                     :body            form-data
                     :response-format (json-response-format {:keywords? true})
-                    :on-success      [::upload-asset-success scene-id alias]
+                    :on-success      [::upload-asset-success scene-id props]
                     :on-failure      [:api-request-error :upload-asset]}})))
 
 (re-frame/reg-event-fx
   ::upload-asset-success
-  (fn [{:keys [db]} [_ scene-id alias result]]
+  (fn [{:keys [db]} [_ scene-id props result]]
       {:dispatch-n (list [:complete-request :upload-asset]
-                         [::add-asset {:scene-id scene-id :state (assoc result :alias alias)}]
+                         [::add-asset {:scene-id scene-id :state (merge result props)}]
                          [::set-main-content :editor])}))
 
 (re-frame/reg-event-fx
