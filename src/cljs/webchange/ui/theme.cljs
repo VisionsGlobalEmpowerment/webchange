@@ -16,7 +16,7 @@
 
 (def color-themes
   {:dark  {:palette {:type        "dark"
-                     :background  {:default "#323232"
+                     :background  {:default "#212121"
                                    :darken  "#2a2a2a"
                                    :paper   "#323232"}
                      :border      {:default "#555555"}
@@ -52,7 +52,7 @@
                                                                :padding          "3px 26px"
                                                                :border-radius    "15px"}}
                                    :MuiInputLabel {:formControl {:transform "translate(20px, 28px)"}}
-                                   :MuiList       {:root {:background-color (get-in color-themes [theme :palette :background :default])
+                                   :MuiList       {:root {:background-color (get-in color-themes [theme :palette :background :paper])
                                                           :padding          "8px"}}
                                    :MuiMenu       {:paper {:margin-top  "-2px"
                                                            :margin-left "1px"}}

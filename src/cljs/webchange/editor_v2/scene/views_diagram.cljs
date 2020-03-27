@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.views-diagram
+(ns webchange.editor-v2.scene.views-diagram
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]

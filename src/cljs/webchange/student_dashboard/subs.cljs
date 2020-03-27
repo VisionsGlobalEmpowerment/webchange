@@ -16,7 +16,7 @@
     (let [scenes (get-in db [:course-data :scene-list])
           activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
       (->> activities
-           (filter #(lessons-activity/finished? db %))
+           ;(filter #(lessons-activity/finished? db %))
            (map #(merge % (scene-name->scene (:activity %) scenes)))
            (map #(assoc % :completed true))))))
 
