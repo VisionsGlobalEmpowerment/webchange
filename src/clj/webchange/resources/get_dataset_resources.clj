@@ -61,8 +61,8 @@
        (distinct)))
 
 (defn get-dataset-resources
-  [course-name scenes-names]
-  (let [{:keys [datasets items lesson-sets]} (dataset/get-course-lessons course-name)
+  [course-slug scenes-names]
+  (let [{:keys [datasets items lesson-sets]} (dataset/get-course-lessons course-slug)
         current-items (get-current-items lesson-sets items)
         dataset-fields-names (get-datasets-fields-names lesson-sets datasets scenes-names)]
     (get-actions-resources current-items dataset-fields-names)))

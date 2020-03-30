@@ -24,3 +24,8 @@
   ::course-dataset-items
   (fn [db]
     (get-in db [:dataset-items])))
+
+(re-frame/reg-sub
+  ::course-info
+  (fn [db]
+    (get-in db [:editor :course-info])))

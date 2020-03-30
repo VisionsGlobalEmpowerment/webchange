@@ -19,7 +19,7 @@
   ([] (progress-created {}))
   ([options]
    (let [{user-id :id} (f/student-user-created)
-         {course-name :name course-id :id} (f/course-created)
+         {course-slug :slug course-id :id} (f/course-created)
          defaults {:user-id user-id :course-id course-id :data {:test "test"}}
          data (->> options
                    (merge defaults)
@@ -27,45 +27,45 @@
          [{id :id}] (db/create-progress! data)
          prepared-data (-> data
                            (assoc :id id)
-                           (assoc :course-name course-name))]
+                           (assoc :course-slug course-slug))]
      (transform-keys ->kebab-case-keyword prepared-data))))
 
 (defn course-stat-created
   ([] (course-stat-created {}))
   ([options]
    (let [{student-id :id user-id :user-id class-id :class-id} (f/student-created)
-         {course-id :id course-name :name} (f/course-created)
+         {course-id :id course-slug :slug} (f/course-created)
          defaults {:user-id user-id :class-id class-id :course-id course-id :data {:test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-course-stat! data)]
-     (->> (assoc data :id id :course-name course-name :student-id student-id)
+     (->> (assoc data :id id :course-slug course-slug :student-id student-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn activity-stat-created
   ([] (activity-stat-created {}))
   ([options]
    (let [{student-id :id user-id :user-id} (f/student-created)
-         {course-id :id course-name :name} (f/course-created)
+         {course-id :id course-slug :slug} (f/course-created)
          defaults {:user-id user-id :course-id course-id :activity-id "test-1-1" :data {:activity "test" :lesson 1 :level 1 :test "test"}}
          data (->> options
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-activity-stat! data)]
-     (->> (assoc data :id id :course-name course-name :student-id student-id)
+     (->> (assoc data :id id :course-slug course-slug :student-id student-id)
           (transform-keys ->kebab-case-keyword)))))
 
 (defn get-current-progress
-  [user-id course-id]
-  (let [url (str "/api/courses/" course-id "/current-progress")
+  [user-id course-slug]
+  (let [url (str "/api/courses/" course-slug "/current-progress")
         request (-> (mock/request :get url)
                     (f/student-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn save-current-progress!
-  [user-id course-id data]
-  (let [url (str "/api/courses/" course-id "/current-progress")
+  [user-id course-slug data]
+  (let [url (str "/api/courses/" course-slug "/current-progress")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     (f/student-logged-in user-id))]
@@ -74,15 +74,15 @@
         (json/read-str :key-fn keyword))))
 
 (defn get-class-profile
-  [class-id course-name]
-  (let [url (str "/api/class-profile/" class-id "/course/" course-name)
+  [class-id course-slug]
+  (let [url (str "/api/class-profile/" class-id "/course/" course-slug)
         request (-> (mock/request :get url)
                     f/teacher-logged-in)]
     (handler/dev-handler request)))
 
 (defn get-individual-profile
-  [user-id course-name]
-  (let [url (str "/api/individual-profile/" user-id "/course/" course-name)
+  [user-id course-slug]
+  (let [url (str "/api/individual-profile/" user-id "/course/" course-slug)
         request (-> (mock/request :get url)
                     f/teacher-logged-in)]
     (handler/dev-handler request)))

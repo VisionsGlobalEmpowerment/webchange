@@ -10,9 +10,9 @@
             [clojure.string :refer [join]]))
 
 (defn items-path
-  [config course-name dataset-name]
+  [config course-slug dataset-name]
   (let [dir (or (:dataset-dir config) "resources/datasets/")]
-    (str dir course-name "-" dataset-name ".edn")))
+    (str dir course-slug "-" dataset-name ".edn")))
 
 (defn prepare-item
   [item]
@@ -58,8 +58,8 @@
          (into []))))
 
 (defn save
-  [config course-name dataset-name]
-  (let [dataset (core/get-dataset-by-name course-name dataset-name)
+  [config course-slug dataset-name]
+  (let [dataset (core/get-dataset-by-name course-slug dataset-name)
         fields (->> (get-in dataset [:scheme :fields])
                     (sort-by :name)
                     (into []))
@@ -74,7 +74,7 @@
                      (map prepare-lesson)
                      (sort-by :name)
                      (into []))
-        path (items-path config course-name dataset-name)]
+        path (items-path config course-slug dataset-name)]
     (p/pprint
       {:fields fields
        :items items
@@ -95,10 +95,10 @@
                                   :data {:items items}})))))
 
 (defn load-force
-  [config course-name dataset-name]
-  (let [path (items-path config course-name dataset-name)
+  [config course-slug dataset-name]
+  (let [path (items-path config course-slug dataset-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
-        dataset (core/get-dataset-by-name course-name dataset-name)]
+        dataset (core/get-dataset-by-name course-slug dataset-name)]
 
     (core/update-dataset! (:id dataset) (assoc-in dataset [:scheme :fields] (:fields data)))
 
@@ -110,13 +110,13 @@
     (load-lessons (:id dataset) (:lessons data))))
 
 (defn load-merge
-  [config course-name dataset-name & field-names]
-  (let [path (items-path config course-name dataset-name)
+  [config course-slug dataset-name & field-names]
+  (let [path (items-path config course-slug dataset-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
         field-names (or field-names (->> (:fields data) (map :name)))
         fields (->> (:fields data)
                     (filter #(name-in-list? % field-names)))
-        dataset (core/get-dataset-by-name course-name dataset-name)]
+        dataset (core/get-dataset-by-name course-slug dataset-name)]
     (core/update-dataset! (:id dataset) (update-in dataset [:scheme :fields] merge-fields fields))
 
     (doseq [item (:items data)]

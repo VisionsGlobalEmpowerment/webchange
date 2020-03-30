@@ -9,27 +9,40 @@
 (def hardcoded (env :hardcoded-courses {"test" true}))
 
 (defn get-course-templates
-  [course-name]
-  (if (contains? hardcoded course-name)
-    (scene/get-templates course-name)
-    (scene/get-templates course-name) ;; "Getting templates for not-hardcoded courses is not implemented"
+  [course-slug]
+  (if (contains? hardcoded course-slug)
+    (scene/get-templates course-slug)
+    (scene/get-templates course-slug) ;; "Getting templates for not-hardcoded courses is not implemented"
     ))
 
+(defn get-course-info
+  [course-slug]
+  (db/get-course {:slug course-slug}))
+
+(defn save-course-info!
+  [id {:keys [name slug lang image-src]}]
+  (db/save-course-info! {:id id
+                         :name name
+                         :slug slug
+                         :lang lang
+                         :image_src image-src})
+  [true {:id id}])
+
 (defn get-course-data
-  [course-name]
-  (let [course (if (contains? hardcoded course-name)
-                 (scene/get-course course-name)
-                 (let [{course-id :id} (db/get-course {:name course-name})
+  [course-slug]
+  (let [course (if (contains? hardcoded course-slug)
+                 (scene/get-course course-slug)
+                 (let [{course-id :id} (db/get-course {:slug course-slug})
                        latest-version (db/get-latest-course-version {:course_id course-id})]
                    (:data latest-version)))
-        templates (get-course-templates course-name)]
+        templates (get-course-templates course-slug)]
     (merge course {:templates templates})))
 
 (defn get-scene-data
-  [course-name scene-name]
-  (if (contains? hardcoded course-name)
-    (scene/get-scene course-name scene-name)
-    (let [{course-id :id} (db/get-course {:name course-name})
+  [course-slug scene-name]
+  (if (contains? hardcoded course-slug)
+    (scene/get-scene course-slug scene-name)
+    (let [{course-id :id} (db/get-course {:slug course-slug})
           {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
           latest-version (db/get-latest-scene-version {:scene_id scene-id})]
       (:data latest-version))))
@@ -41,8 +54,8 @@
       scene-id)))
 
 (defn save-scene!
-  [course-name scene-name scene-data owner-id]
-  (let [{course-id :id} (db/get-course {:name course-name})
+  [course-slug scene-name scene-data owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
         scene-id (get-or-create-scene! course-id scene-name)
         created-at (jt/local-date-time)]
     (db/save-scene! {:scene_id scene-id
@@ -54,8 +67,8 @@
            :created-at (str created-at)}]))
 
 (defn save-course!
-  [course-name data owner-id]
-  (let [{course-id :id} (db/get-course {:name course-name})
+  [course-slug data owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
         created-at (jt/local-date-time)]
     (db/save-course! {:course_id course-id
                      :data data
@@ -84,8 +97,8 @@
     [true {:created-at (str created-at)}]))
 
 (defn get-course-versions
-  [course-name]
-  (let [{course-id :id} (db/get-course {:name course-name})
+  [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
         versions (db/get-course-versions {:course_id course-id})]
     {:versions (->> versions
                     (map #(dissoc % :data))
@@ -93,8 +106,8 @@
                     (map #(assoc % :owner-name "todo")))}))
 
 (defn get-scene-versions
-  [course-name scene-name]
-  (let [{course-id :id} (db/get-course {:name course-name})
+  [course-slug scene-name]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
         versions (db/get-scene-versions {:scene_id scene-id})]
     {:versions (->> versions

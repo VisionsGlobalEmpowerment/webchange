@@ -65,22 +65,27 @@
 
 (defn course-created []
   (let [course-name "test-course"
-        [{course-id :id}] (db/create-course! {:name course-name})
+        course-slug "test-course-slug"
+        [{course-id :id}] (db/create-course! {:name course-name :slug course-slug})
         data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
         [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id course-id
      :name course-name
+     :slug course-slug
+     :lang nil
+     :image-src nil
      :data data
      :version-id version-id}))
 
 (defn scene-created []
-  (let [{course-id :id course-name :name} (course-created)
+  (let [{course-id :id course-name :name course-slug :slug} (course-created)
         scene-name "test-scene"
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
         data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
         [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id scene-id
      :course-name course-name
+     :course-slug course-slug
      :name scene-name
      :data data
      :version-id version-id}))
@@ -195,16 +200,31 @@
      (assoc request :cookies {"ring-session" {:value session-key}}))))
 
 (defn get-course
-  [course-name]
-  (let [course-url (str "/api/courses/" course-name)
+  [course-slug]
+  (let [course-url (str "/api/courses/" course-slug)
         request (-> (mock/request :get course-url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
 (defn save-course!
-  [course-name data]
-  (let [course-url (str "/api/courses/" course-name)
+  [course-slug data]
+  (let [course-url (str "/api/courses/" course-slug)
         request (-> (mock/request :post course-url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-course-info
+  [course-slug]
+  (let [course-url (str "/api/courses/" course-slug "/info")
+        request (-> (mock/request :get course-url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn save-course-info!
+  [course-id data]
+  (let [course-url (str "/api/courses/" course-id "/info")
+        request (-> (mock/request :put course-url (json/write-str data))
                     (mock/header :content-type "application/json")
                     teacher-logged-in)]
     (handler/dev-handler request)))
@@ -232,8 +252,8 @@
     (handler/dev-handler request)))
 
 (defn save-scene!
-  [course-name scene-name data]
-  (let [url (str "/api/courses/" course-name "/scenes/" scene-name)
+  [course-slug scene-name data]
+  (let [url (str "/api/courses/" course-slug "/scenes/" scene-name)
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     teacher-logged-in)]

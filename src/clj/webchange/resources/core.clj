@@ -9,13 +9,13 @@
   [true data])
 
 (defn get-activities-resources
-  [course-name]
-  (-> (ca/get-activities-resources course-name)
+  [course-slug]
+  (-> (ca/get-activities-resources course-slug)
       wrap))
 
 (defn get-start-resources
-  [course-name]
-  (-> (ca/get-start-resources course-name)
+  [course-slug]
+  (-> (ca/get-start-resources course-slug)
       wrap))
 
 (defn get-game-app-resources

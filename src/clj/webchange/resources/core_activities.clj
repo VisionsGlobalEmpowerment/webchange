@@ -23,13 +23,13 @@
                [])))
 
 (defn- get-scene-resources
-  [course-name scene-name]
+  [course-slug scene-name]
   (->> scene-name
-       (course/get-scene-data course-name)
+       (course/get-scene-data course-slug)
        (find-resources)))
 
 (defn- add-scenes-data
-  [levels course-name]
+  [levels course-slug]
   (->> levels
        (map (fn [{:keys [activities] :as level}]
               (assoc level :activities (map (fn [scene-name]
@@ -37,28 +37,28 @@
                                                :name      (-> scene-name
                                                               (->Camel_Snake_Case)
                                                               (s/replace "_" " "))
-                                               :endpoint  (str "/api/courses/" course-name "/scenes/" scene-name)
-                                               :resources (-> (concat (get-scene-resources course-name scene-name)
-                                                                      (get-dataset-resources course-name [scene-name]))
+                                               :endpoint  (str "/api/courses/" course-slug "/scenes/" scene-name)
+                                               :resources (-> (concat (get-scene-resources course-slug scene-name)
+                                                                      (get-dataset-resources course-slug [scene-name]))
                                                               (distinct))})
                                             activities))))))
 
 (defn get-activities-resources
-  [course-name]
-  (-> course-name
+  [course-slug]
+  (-> course-slug
       (course/get-course-data)
       (get-course-levels)
-      (add-scenes-data course-name)))
+      (add-scenes-data course-slug)))
 
 (defn get-start-resources
-  [course-name]
-  (let [initial-scene (:initial-scene (course/get-course-data course-name))
-        initial-scene-resources (get-scene-resources course-name initial-scene)
-        datasets-resources (get-dataset-resources course-name [initial-scene])]
+  [course-slug]
+  (let [initial-scene (:initial-scene (course/get-course-data course-slug))
+        initial-scene-resources (get-scene-resources course-slug initial-scene)
+        datasets-resources (get-dataset-resources course-slug [initial-scene])]
     {:resources (-> (concat initial-scene-resources
                             datasets-resources)
                     (distinct))
-     :endpoints [(str "/api/courses/" course-name)
-                 (str "/api/courses/" course-name "/lesson-sets")
-                 (str "/api/courses/" course-name "/scenes/" initial-scene)
-                 (str "/api/courses/" course-name "/current-progress")]}))
+     :endpoints [(str "/api/courses/" course-slug)
+                 (str "/api/courses/" course-slug "/lesson-sets")
+                 (str "/api/courses/" course-slug "/scenes/" initial-scene)
+                 (str "/api/courses/" course-slug "/current-progress")]}))

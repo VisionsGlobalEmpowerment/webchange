@@ -8,7 +8,7 @@
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.handler :refer [auth-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
-            [webchange.course.core :as course]
+            [webchange.course.handler :refer [course-routes]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.progress.handler :refer [progress-routes]]
             [webchange.dataset.handler :refer [dataset-routes]]
@@ -49,38 +49,6 @@
       (catch Exception e
         (log/error e)
         {:status 400 :body (str "Invalid data" e)}))))
-
-(defn handle-save-scene
-  [course-id scene-id request]
-  (let [owner-id (current-user request)
-        save (fn [data] (course/save-scene! course-id scene-id data owner-id))]
-    (-> request
-        :body
-        :scene
-        save
-        handle)))
-
-(defn handle-save-course
-  [course-id request]
-  (let [owner-id (current-user request)
-        save (fn [data] (course/save-course! course-id data owner-id))]
-    (-> request
-        :body
-        :course
-        save
-        handle)))
-
-(defn handle-restore-course-version
-  [version-id request]
-  (let [owner-id (current-user request)]
-    (-> (course/restore-course-version! (Integer/parseInt version-id) owner-id)
-        handle)))
-
-(defn handle-restore-scene-version
-  [version-id request]
-  (let [owner-id (current-user request)]
-    (-> (course/restore-scene-version! (Integer/parseInt version-id) owner-id)
-        handle)))
 
 (defn handle-parse-audio-animation
   [request]
@@ -133,20 +101,6 @@
            (resources "/"))
 
 (defroutes api-routes
-           (GET "/api/courses/:course-id" [course-id] (-> course-id course/get-course-data response))
-           (GET "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id] (-> (course/get-scene-data course-id scene-id) response))
-           (POST "/api/courses/:course-id/scenes/:scene-id" [course-id scene-id :as request]
-             (handle-save-scene course-id scene-id request))
-           (POST "/api/courses/:course-id" [course-id :as request]
-             (handle-save-course course-id request))
-
-           (GET "/api/courses/:course-id/versions" [course-id] (-> course-id course/get-course-versions response))
-           (GET "/api/courses/:course-id/scenes/:scene-id/versions" [course-id scene-id] (-> (course/get-scene-versions course-id scene-id) response))
-           (POST "/api/course-versions/:version-id/restore" [version-id :as request]
-             (handle-restore-course-version version-id request))
-           (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-             (handle-restore-scene-version version-id request))
-
            (GET "/api/actions/get-talk-animations" _ (->> handle-parse-audio-animation wrap-params)))
 
 (defroutes service-worker-route
@@ -158,6 +112,7 @@
            pages-routes
            api-routes
            auth-routes
+           course-routes
            class-routes
            dataset-routes
            progress-routes

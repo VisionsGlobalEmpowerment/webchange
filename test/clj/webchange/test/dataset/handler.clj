@@ -11,10 +11,10 @@
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (deftest dataset-list-can-be-retrieved
-  (let [{course-id :id course-name :name} (f/course-created)
+  (let [{course-id :id course-slug :slug} (f/course-created)
         _ (f/dataset-created {:name "dataset1" :course-id course-id})
         _ (f/dataset-created {:name "dataset2" :course-id course-id})
-        datasets (-> course-name f/get-course-datasets :body (json/read-str :key-fn keyword) :datasets)]
+        datasets (-> course-slug f/get-course-datasets :body (json/read-str :key-fn keyword) :datasets)]
     (is (= 2 (count datasets)))))
 
 (deftest dataset-can-be-retrieved
@@ -24,10 +24,10 @@
     (is (= (:name dataset) (:name retrieved-dataset)))))
 
 (deftest dataset-can-be-created
-  (let [{course-name :name} (f/course-created)
-        data {:course-id course-name :name "dataset" :scheme {:fields [{:name "src" :type "string"}]}}
+  (let [{course-slug :slug} (f/course-created)
+        data {:course-slug course-slug :name "dataset" :scheme {:fields [{:name "src" :type "string"}]}}
         dataset (f/create-dataset! data)
-        retrieved-dataset (-> course-name f/get-course-datasets :body (json/read-str :key-fn keyword) :datasets first)]
+        retrieved-dataset (-> course-slug f/get-course-datasets :body (json/read-str :key-fn keyword) :datasets first)]
     (is (= (:name data) (:name retrieved-dataset)))
     (is (= (:scheme data) (:scheme retrieved-dataset)))))
 
@@ -94,20 +94,20 @@
     (is (= 404 status))))
 
 (deftest course-lesson-sets-can-be-retrieved
-  (let [{course-id :id course-name :name} (f/course-created)
+  (let [{course-id :id course-slug :slug} (f/course-created)
         {dataset-id :id} (f/dataset-created {:course-id course-id})
         {item-id :id} (f/dataset-item-created {:dataset-id dataset-id})
         _ (f/lesson-set-created {:dataset-id dataset-id :data {:items [{:id item-id}]}})
-        retrieved (-> course-name f/get-course-lessons :body (json/read-str :key-fn keyword))]
+        retrieved (-> course-slug f/get-course-lessons :body (json/read-str :key-fn keyword))]
     (is (= 1 (count (:items retrieved))))
     (is (= 1 (count (:lesson-sets retrieved))))))
 
 (deftest assets-for-items-can-be-retrieved
-  (let [{course-id :id course-name :name} (f/course-created)
+  (let [{course-id :id course-slug :slug} (f/course-created)
         {dataset-id :id} (f/dataset-created {:course-id course-id})
         {item-id :id} (f/dataset-item-created {:dataset-id dataset-id})
         _ (f/lesson-set-created {:dataset-id dataset-id :data {:items [{:id item-id}]}})
-        retrieved (-> course-name f/get-course-lessons :body (json/read-str :key-fn keyword))
+        retrieved (-> course-slug f/get-course-lessons :body (json/read-str :key-fn keyword))
         asset (-> retrieved :assets first)]
     (is (not (nil? (:url asset))))
     (is (not (nil? (:type asset))))))

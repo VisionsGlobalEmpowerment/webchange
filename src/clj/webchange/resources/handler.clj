@@ -5,13 +5,13 @@
     [webchange.resources.core :as core]))
 
 (defn handle-activities-resources
-  [course-name]
-  (-> (core/get-activities-resources course-name)
+  [course-slug]
+  (-> (core/get-activities-resources course-slug)
       handle))
 
 (defn handle-start-resources
-  [course-name]
-  (-> (core/get-start-resources course-name)
+  [course-slug]
+  (-> (core/get-start-resources course-slug)
       handle))
 
 (defn handle-game-app-resources
@@ -27,5 +27,5 @@
 (defroutes resources-routes
            (GET "/api/resources/student-dashboard" _ (handle-web-app-resources))
            (GET "/api/resources/game-app" _ (handle-game-app-resources))
-           (GET "/api/resources/game-app/:course-name/scenes" [course-name] (handle-activities-resources course-name))
-           (GET "/api/resources/game-app/:course-name/start-resources" [course-name] (handle-start-resources course-name)))
+           (GET "/api/resources/game-app/:course-slug/scenes" [course-slug] (handle-activities-resources course-slug))
+           (GET "/api/resources/game-app/:course-slug/start-resources" [course-slug] (handle-start-resources course-slug)))

@@ -12,10 +12,12 @@
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
     [webchange.editor-v2.subs :as editor-subs]
+    [webchange.editor-v2.events :as editor-events]
     [webchange.routes :refer [redirect-to]]
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form delete-dataset-item-modal]]
     [webchange.editor-v2.concepts.events :as concepts-events]
-    [webchange.editor-v2.lessons.views :refer [edit-lesson-form add-lesson-form]]))
+    [webchange.editor-v2.lessons.views :refer [edit-lesson-form add-lesson-form]]
+    [webchange.editor-v2.translator.translator-form.views-form-audio-upload :as upload]))
 
 (defn- get-styles
   []
@@ -102,6 +104,46 @@
         )]
      ]))
 
+(defn- upload-image-form
+  [uploading-atom on-change]
+  (let [on-finish (fn [result]
+                    (on-change (:url result))
+                    (reset! uploading-atom false))
+        start-upload (fn [js-file]
+                    (reset! uploading-atom true)
+                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:type :image :on-finish on-finish}]))]
+    [upload/select-file-form {:on-change start-upload}]))
+
+(defn- course-info
+  []
+  (let [loading @(re-frame/subscribe [:loading])]
+    (if (:course-info loading)
+      [ui/circular-progress]
+      (r/with-let [info @(re-frame/subscribe [::editor-subs/course-info])
+                   data (r/atom info)
+                   uploading (r/atom false)]
+        [ui/card {:style {:width "50%"}}
+         [ui/card-header {:title "Edit course info"}]
+
+         [ui/card-content
+          [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
+          [ui/text-field {:label "Language" :full-width true :default-value (:lang @data) :on-change #(swap! data assoc :lang (-> % .-target .-value))}]
+
+          [ui/grid {:container true :justify "flex-start" :align-items "flex-end"}
+           (if (:image-src @data)
+             [ui/avatar {:style {:width 60 :height 60} :src (:image-src @data)}]
+             [ui/avatar {:style {:width 60 :height 60}} [ic/image]])
+           [ui/text-field {:style {:width "50%"} :value (str (:image-src @data)) :on-change #(swap! data assoc :image-src (-> % .-target .-value))}]
+           [upload-image-form uploading #(swap! data assoc :image-src %)]
+           (when @uploading
+             [ui/circular-progress])]]
+
+         [ui/card-actions
+          [ui/button {:style {:margin-left "auto"} :on-click #(re-frame/dispatch [::editor-events/edit-course-info @data])} "Save"]
+          (when (:edit-course-info loading)
+            [ui/circular-progress])]
+         ]))))
+
 (defn add-lesson-view
   [course-id level]
   [with-mui-theme "dark"
@@ -169,6 +211,8 @@
       [ui/grid {:container true
                 :justify   "space-between"
                 :spacing 40}
+       [ui/grid {:item true :xs 12}
+        [course-info]]
        [ui/grid {:item true :xs 4}
         [concepts]]
        [ui/grid {:item true :xs 4}
