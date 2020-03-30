@@ -34,7 +34,13 @@ WHERE id = :id
 
 -- :name create-course! :<!
 -- :doc creates a new course record
-INSERT INTO courses (name) VALUES (:name) RETURNING id
+INSERT INTO courses (name, slug) VALUES (:name, :slug) RETURNING id
+
+-- :name save-course-info! :! :n
+-- :doc updates an existing course record
+UPDATE courses
+SET name = :name, slug = :slug, lang = :lang, image_src = :image_src
+WHERE id = :id
 
 -- :name save-course! :<!
 -- :doc creates a new course version record
@@ -45,7 +51,7 @@ VALUES (:course_id, :data, :owner_id, :created_at) RETURNING id
 -- :name get-course :? :1
 -- :doc retrieve a course record given the name
 SELECT * from courses
-WHERE name = :name;
+WHERE slug = :slug;
 
 -- :name get-course-version :? :1
 -- :doc retrieve course version by id

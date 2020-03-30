@@ -8,34 +8,34 @@
   ["click-pointer" "coaching"])
 
 (defn course-path
-  [course-name]
-  (str "courses/" course-name "/course.edn"))
+  [course-slug]
+  (str "courses/" course-slug "/course.edn"))
 
 (defn scene-path
-  [course-name scene-name]
-  (-> (str "courses/" course-name "/scenes/" scene-name ".edn")
+  [course-slug scene-name]
+  (-> (str "courses/" course-slug "/scenes/" scene-name ".edn")
       ->snake_case))
 
 (defn template-path
-  [course-name template-name]
-  (-> (str "courses/" course-name "/templates/" template-name ".edn")
+  [course-slug template-name]
+  (-> (str "courses/" course-slug "/templates/" template-name ".edn")
       ->snake_case))
 
 (defn get-course
-  [course-name]
-  (let [path (course-path course-name)]
+  [course-slug]
+  (let [path (course-path course-slug)]
     (-> path io/resource io/reader java.io.PushbackReader. edn/read)))
 
 (defn get-scene
-  [course-name scene-name]
-  (let [path (scene-path course-name scene-name)]
+  [course-slug scene-name]
+  (let [path (scene-path course-slug scene-name)]
     (-> path io/resource io/reader java.io.PushbackReader. edn/read)))
 
 (defn get-templates
-  [course-name]
+  [course-slug]
   (reduce
     (fn [result name]
-      (let [template-url (-> (template-path course-name name) io/resource)]
+      (let [template-url (-> (template-path course-slug name) io/resource)]
         (if template-url
           (assoc result name (-> template-url io/reader java.io.PushbackReader. edn/read))
           result)))

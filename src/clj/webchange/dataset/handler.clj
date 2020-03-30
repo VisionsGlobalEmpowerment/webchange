@@ -77,7 +77,7 @@
 
 (defroutes dataset-routes
            (GET "/api/datasets/:id" [id] (-> id Integer/parseInt core/get-dataset response))
-           (GET "/api/courses/:course-id/datasets" [course-id] (-> course-id core/get-course-datasets response))
+           (GET "/api/courses/:course-slug/datasets" [course-slug] (-> course-slug core/get-course-datasets response))
            (POST "/api/datasets" request
              (handle-create-dataset request))
            (PUT "/api/datasets/:id" [id :as request]
@@ -109,4 +109,4 @@
            (DELETE "/api/lesson-sets/:id" [id :as request]
              (handle-delete-lesson-set id request))
 
-           (GET "/api/courses/:course-id/lesson-sets" [course-id] (-> course-id core/get-course-lessons response)))
+           (GET "/api/courses/:course-slug/lesson-sets" [course-slug] (-> course-slug core/get-course-lessons response)))

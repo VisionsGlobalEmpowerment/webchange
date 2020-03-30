@@ -450,7 +450,7 @@
       {:db (assoc-in db [:loading :add-dataset] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/datasets")
-                    :params          {:course-id course-id :name name :scheme {:fields fields}}
+                    :params          {:course-slug course-id :name name :scheme {:fields fields}}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::add-dataset-success]

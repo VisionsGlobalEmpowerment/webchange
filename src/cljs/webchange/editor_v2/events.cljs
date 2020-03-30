@@ -10,6 +10,7 @@
   (fn [_ [_ course-id scene-id]]
     {:dispatch-n (list [::ie/start-course course-id scene-id]
                        [::load-lesson-sets course-id]
+                       [::load-course-info course-id]
                        [::set-diagram-mode :phrases])})) ;; :full-scene / :phrases
 
 (re-frame/reg-event-fx
@@ -48,3 +49,40 @@
   (fn [{:keys [_]} [_ action]]
     {:dispatch-n (list [::set-current-action action]
                        [::translator-events/open-translator-modal])}))
+
+(re-frame/reg-event-fx
+  ::load-course-info
+  (fn [{:keys [db]} [_ course-slug]]
+    {:db (-> db
+             (assoc-in [:loading :course-info] true))
+     :http-xhrio {:method          :get
+                  :uri             (str "/api/courses/" course-slug "/info")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::load-course-info-success]
+                  :on-failure      [:api-request-error :course-info]}}))
+
+(re-frame/reg-event-fx
+  ::load-course-info-success
+  (fn [{:keys [db]} [_ result]]
+    {:db  (assoc-in db [:editor :course-info] result)
+     :dispatch-n (list [:complete-request :course-info])}))
+
+(re-frame/reg-event-fx
+  ::edit-course-info
+  (fn [{:keys [db]} [_ data]]
+    (let [course-id (get-in db [:editor :course-info :id])]
+      {:db (-> db
+               (assoc-in [:loading :edit-course-info] true))
+       :http-xhrio {:method          :put
+                    :uri             (str "/api/courses/" course-id "/info")
+                    :params            data
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::edit-course-info-success]
+                    :on-failure      [:api-request-error :edit-course-info]}})))
+
+(re-frame/reg-event-fx
+  ::edit-course-info-success
+  (fn [{:keys [db]} _]
+    {:dispatch-n (list [:complete-request :edit-course-info])}))

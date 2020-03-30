@@ -7,8 +7,8 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword]]))
 
 (defn get-course-datasets
-  [course-name]
-  (let [{course-id :id} (db/get-course {:name course-name})
+  [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
         datasets (db/get-datasets-by-course {:course_id course-id})]
     {:datasets datasets}))
 
@@ -17,15 +17,15 @@
   (let [dataset (db/get-dataset {:id dataset-id})]
     {:dataset dataset}))
 
-(defn get-dataset-by-name [course-name dataset-name]
-  (->> (get-course-datasets course-name)
+(defn get-dataset-by-name [course-slug dataset-name]
+  (->> (get-course-datasets course-slug)
        :datasets
        (filter #(= dataset-name (:name %)))
        first))
 
 (defn create-dataset!
   [data]
-  (let [{course-id :id} (db/get-course {:name (:course-id data)})
+  (let [{course-id :id} (db/get-course {:slug (:course-slug data)})
         prepared-data (-> data
                           (assoc :course-id course-id)
                           (#(transform-keys ->snake_case_keyword %)))
@@ -120,8 +120,8 @@
   (let [asset-fields (into {} (map #(identity [(:id %) (asset-fields %)])) datasets)]
     (mapcat #(assets-from-item (get asset-fields (:dataset-id %)) %) items)))
 
-(defn get-course-lessons [course-name]
-  (let [{course-id :id} (db/get-course {:name course-name})
+(defn get-course-lessons [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
         datasets (db/get-datasets-by-course {:course_id course-id})
         items (db/get-course-items {:course_id course-id})
         lesson-sets (db/get-course-lessons {:course_id course-id})]

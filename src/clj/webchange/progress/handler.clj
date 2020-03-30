@@ -11,46 +11,46 @@
             [webchange.progress.student-profile :as student-profile]))
 
 (defn handle-get-current-progress
-  [course-name request]
+  [course-slug request]
   (let [owner-id (current-user request)]
-    (-> (core/get-current-progress course-name owner-id)
+    (-> (core/get-current-progress course-slug owner-id)
         handle)))
 
 (defn handle-save-course-progress
-  [course-name request]
+  [course-slug request]
   (let [owner-id (current-user request)
         data (-> request :body)]
-    (-> (core/save-progress! owner-id course-name data)
+    (-> (core/save-progress! owner-id course-slug data)
         handle)))
 
 (defn handle-get-class-profile
-  [class-id course-name request]
+  [class-id course-slug request]
   (let [user-id (current-user request)]
-    (-> (core/get-class-profile course-name (Integer/parseInt class-id))
+    (-> (core/get-class-profile course-slug (Integer/parseInt class-id))
         handle)))
 
 (defn handle-get-individual-progress
-  [student-id course-name request]
+  [student-id course-slug request]
   (let [user-id (current-user request)]
-    (-> (core/get-individual-progress course-name (Integer/parseInt student-id))
+    (-> (core/get-individual-progress course-slug (Integer/parseInt student-id))
         handle)))
 
 (defn handle-complete-progress
-  [student-id course-name request]
+  [student-id course-slug request]
   (let [user-id (current-user request)
         data (-> request :body)]
-    (-> (core/complete-individual-progress! course-name (Integer/parseInt student-id) data)
+    (-> (core/complete-individual-progress! course-slug (Integer/parseInt student-id) data)
         handle)))
 
 (defroutes progress-routes
-           (GET "/api/class-profile/:class-id/course/:course-name" [class-id course-name :as request]
-             (handle-get-class-profile class-id course-name request))
-           (GET "/api/individual-profile/:student-id/course/:course-name" [student-id course-name :as request]
-             (handle-get-individual-progress student-id course-name request))
-           (GET "/api/courses/:id/current-progress" [id :as request]
-             (handle-get-current-progress id request))
-           (POST "/api/courses/:id/current-progress" [id :as request]
-             (handle-save-course-progress id request))
-           (PUT "/api/individual-profile/:student-id/course/:course-name/complete" [student-id course-name :as request]
-             (handle-complete-progress student-id course-name request))
+           (GET "/api/class-profile/:class-id/course/:course-slug" [class-id course-slug :as request]
+             (handle-get-class-profile class-id course-slug request))
+           (GET "/api/individual-profile/:student-id/course/:course-slug" [student-id course-slug :as request]
+             (handle-get-individual-progress student-id course-slug request))
+           (GET "/api/courses/:course-slug/current-progress" [course-slug :as request]
+             (handle-get-current-progress course-slug request))
+           (POST "/api/courses/:course-slug/current-progress" [course-slug :as request]
+             (handle-save-course-progress course-slug request))
+           (PUT "/api/individual-profile/:student-id/course/:course-slug/complete" [student-id course-slug :as request]
+             (handle-complete-progress student-id course-slug request))
            )
