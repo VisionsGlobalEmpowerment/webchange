@@ -48,9 +48,18 @@
                    "Drop file here"
                    "Upload new file")]]]))
 
+(defn- some-blank?
+  [object fields]
+  (->> fields
+       (some (fn [field]
+               (->> field
+                    (get object)
+                    blank?)))
+       (boolean)))
+
 (defn upload-file-form
   [{:keys [file on-cancel on-upload]}]
-  (r/with-let [alias (r/atom "")
+  (r/with-let [props (r/atom {})
                file-name (.-name file)]
               [:div
                [ui/button {:on-click #(on-cancel)
@@ -65,10 +74,16 @@
                 {:style {:margin "0 16px"}}
                 [ui/text-field
                  {:label     "Alias"
-                  :value     @alias
-                  :on-change #(reset! alias (.. % -target -value))}]]
-               [ui/button {:on-click #(on-upload file @alias)
-                           :disabled (blank? @alias)
+                  :value     (or (:alias @props) "")
+                  :on-change #(swap! props assoc :alias (.. % -target -value))}]]
+               [ui/form-control
+                {:style {:margin "0 16px"}}
+                [ui/text-field
+                 {:label     "Target"
+                  :value     (or (:target @props) "")
+                  :on-change #(swap! props assoc :target (.. % -target -value))}]]
+               [ui/button {:on-click #(on-upload file @props)
+                           :disabled (some-blank? @props [:alias :target])
                            :variant  "contained"
                            :color    "secondary"}
                 "Upload"]]))
