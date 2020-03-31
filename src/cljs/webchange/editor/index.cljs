@@ -660,8 +660,7 @@
   ([component scene-id]
    (with-stage component {} scene-id))
   ([component props scene-id]
-   [:div {
-          :on-drag-over (fn [e]
+   [:div {:on-drag-over (fn [e]
                           (.stopPropagation e)
                           (.preventDefault e))
           :on-drop      (fn [e]

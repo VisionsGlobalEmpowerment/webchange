@@ -36,47 +36,49 @@
   [course-id]
   (let [datasets @(re-frame/subscribe [::concepts-subs/datasets])
         first-dataset-id (-> datasets first :id)
-        data (r/atom {:dataset-id first-dataset-id})
-        loading @(re-frame/subscribe [:loading])
-        dataset-id (:dataset-id @data)]
+        data (r/atom {:dataset-id first-dataset-id})]
     (if datasets
-      [ui/card
-       [ui/card-content
-        [ui/select {:value dataset-id
-                    :on-change #(swap! data assoc :dataset-id (-> % .-target .-value))
-                    :style {:min-width "150px"}}
-         (for [dataset datasets]
-           [ui/menu-item {:value (:id dataset)} (:name dataset)])]
-        [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
-        [ui/divider]
-        [dataset-item-fields-panel dataset-id data]]
-       [ui/card-actions
-        [ui/button {:on-click #(re-frame/dispatch [::concepts-events/add-dataset-item @data])} "Add"]
-        [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)} "Cancel"]
-        (when (:add-dataset-item loading)
-          [ui/circular-progress])]]
+      (fn []
+        (let [loading @(re-frame/subscribe [:loading])
+              dataset-id (:dataset-id @data)]
+          [ui/card
+           [ui/card-content
+            [ui/select {:value     dataset-id
+                        :on-change #(swap! data assoc :dataset-id (-> % .-target .-value))
+                        :style     {:min-width "150px"}}
+             (for [dataset datasets]
+               [ui/menu-item {:value (:id dataset)} (:name dataset)])]
+            [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
+            [ui/divider]
+            [dataset-item-fields-panel dataset-id data]]
+           [ui/card-actions
+            [ui/button {:on-click #(re-frame/dispatch [::concepts-events/add-dataset-item @data])} "Add"]
+            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)} "Cancel"]
+            (when (:add-dataset-item loading)
+              [ui/circular-progress])]]))
       [ui/circular-progress])))
 
 (defn edit-dataset-item-form
   [course-id item-id]
   (let [item @(re-frame/subscribe [::concepts-subs/dataset-item item-id])
-        loading @(re-frame/subscribe [:loading])
         dataset-id (:dataset-id item)
         data (r/atom {:data (:data item)
                       :name (:name item)})]
     (if item
-      [ui/card
-       [ui/card-content
-        [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
-        [ui/divider]
-        [dataset-item-fields-panel dataset-id data]]
-       [ui/card-actions {:style {:align-items "right"}}
-        [ui/button {:on-click #(re-frame/dispatch [::concepts-events/edit-dataset-item item-id @data])}
-         "Save"]
-        [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
-         "Cancel"]
-        (when (:edit-dataset-item loading)
-          [ui/circular-progress])]]
+      (fn []
+        (let [loading @(re-frame/subscribe [:loading])]
+          [ui/card
+           [ui/card-content
+            [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
+            [ui/divider]
+            [dataset-item-fields-panel dataset-id data]]
+           [ui/card-actions {:style {:align-items "right"}}
+            [ui/button {:on-click #(re-frame/dispatch [::concepts-events/edit-dataset-item item-id @data])}
+             "Save"]
+            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
+             "Cancel"]
+            (when (:edit-dataset-item loading)
+              [ui/circular-progress])]]))
       [ui/circular-progress])))
 
 (defn delete-dataset-item-modal
