@@ -33,7 +33,7 @@
   (let [action-data (if selected-action-concept?
                       (get-in concept-data [:data action-name])
                       (get-in scene-data [:actions action-name]))]
-    {:data action-data}))
+    action-data))
 
 (defn get-update-path
   [current-path edited-field action-data]
@@ -45,7 +45,7 @@
                  [edited-field]))))
 
 (defn update-action-data!
-  [data-patch]
+  [original-action-name data-patch]
   (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
         current-concept @(re-frame/subscribe [::translator-subs/current-concept])
         selected-action-node @(re-frame/subscribe [::translator-subs/selected-action])
@@ -64,10 +64,11 @@
                        (assoc-in current-data field-path value)))
                    current-data
                    data-patch)]
-    (re-frame/dispatch [::translator-events/set-phrase-translation-action action-name {:changed true
-                                                                                       :type    type
-                                                                                       :id      id
-                                                                                       :data    new-data}])))
+    (when (= original-action-name action-name)
+      (re-frame/dispatch [::translator-events/set-phrase-translation-action action-name {:changed true
+                                                                                         :type    type
+                                                                                         :id      id
+                                                                                         :data    new-data}]))))
 
 (defn translator-form
   []
@@ -106,7 +107,7 @@
                                 :audios    audios-list
                                 :action    prepared-current-action-data
                                 :on-change (fn [audio-key region-data]
-                                             (update-action-data! (merge {:audio audio-key} (select-keys region-data [:start :duration]))))}]
+                                             (update-action-data! (:name prepared-current-action-data) (merge {:audio audio-key} (select-keys region-data [:start :duration]))))}]
                  [ui/dialog
                   {:open       (and (or has-concepts?
                                         selected-action-concept?)
