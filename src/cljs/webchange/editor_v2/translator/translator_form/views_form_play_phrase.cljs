@@ -34,7 +34,7 @@
                           (graph-to-nodes-seq)
                           (map (fn [node]
                                  (let [[node-name node-data] (->> node seq first)]
-                                   (get-current-action-data (merge node-data {:name node-name}) @current-concept @edited-data))))
+                                   (get-current-action-data (merge node-data {:name node-name}) current-concept edited-data))))
                           (map #(adapt-action (:data %)))
                           (filter #(not (nil? %)))
                           (vec))
@@ -68,7 +68,7 @@
                 (case @state
                   "pause" [fab (merge common-button-params
                                       {:disabled (and graph-contains-concept?
-                                                      (nil? @current-concept))
+                                                      (nil? current-concept))
                                        :on-click (fn []
                                                    (let [action (get-phrase-actions-sequence graph current-concept edited-data #(reset! state "pause"))
                                                          audios-list (action->audios-list action)]

@@ -9,12 +9,14 @@
     [webchange.subs :as subs]))
 
 (defn save-actions-data!
-  [data-store scene-id]
-  (let [save-scene-action (fn [action-name action-data scene-id]
+  []
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+        save-scene-action (fn [action-name action-data scene-id]
                             (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
         save-concept-action (fn [concept-id field-name field-data]
                               (re-frame/dispatch [::events/update-dataset-item-field concept-id field-name field-data]))]
-    (doseq [[name {:keys [id type data]}] @data-store]
+    (doseq [[name {:keys [id type data]}] data-store]
       (case type
         :scene (save-scene-action name data scene-id)
         :concept (save-concept-action id name data)))
@@ -24,10 +26,8 @@
 
 (defn translator-modal
   []
-  (let [actions-data (atom {})
-        scene-id (re-frame/subscribe [::subs/current-scene])
-        open? @(re-frame/subscribe [::translator-subs/translator-modal-state])
-        handle-save #(do (save-actions-data! actions-data @scene-id)
+  (let [open? @(re-frame/subscribe [::translator-subs/translator-modal-state])
+        handle-save #(do (save-actions-data!)
                          (close-window!))
         handle-close #(close-window!)]
     [ui/dialog
@@ -39,7 +39,7 @@
       "Phrase Translation"]
      [ui/dialog-content {:class-name "translation-form"}
       (when open?
-        [translator-form actions-data])]
+        [translator-form])]
      [ui/dialog-actions
       [ui/button {:on-click handle-close}
        "Cancel"]

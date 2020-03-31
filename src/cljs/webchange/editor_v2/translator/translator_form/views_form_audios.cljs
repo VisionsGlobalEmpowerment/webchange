@@ -11,6 +11,11 @@
 (def current-key (r/atom nil))
 
 (defn get-action-audio-data
+  "Return a map of audio data from action.
+   Can be used to render waveform
+   keys:
+  :key - audio url
+  :start, :duration"
   [action-data audios]
   (when (some #{(:type action-data)} ["audio"
                                       "animation-sequence"])
@@ -24,8 +29,7 @@
 
 (defn audio-wave
   [{:keys [key alias start duration selected? target]} {:keys [on-change]}]
-  (r/with-let [on-change-region (fn [region]
-                                  (on-change key region))
+  (r/with-let [on-change-region (fn [region] (on-change key region))
                on-select (fn []
                            (reset! current-key key)
                            (on-change key))]
@@ -109,20 +113,20 @@
 
 (defn audios-list-block-render
   [{:keys [scene-id audios action on-change audios-filter]}]
-  (let [action-data (:data action)
-        action-audio-data (get-action-audio-data action-data audios)
-        audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
-    (r/with-let [assets-loaded (r/atom false)
-                 assets-loading-progress (r/atom 0)]
-                [:div
-                 (if @assets-loaded
-                   [waves-list {:audios-data           audios-data
-                                :audios-filter         audios-filter
-                                :on-change on-change}]
-                   [audios-loading-block {:audios-list      (map #(:url %) audios)
-                                          :loading-progress assets-loading-progress
-                                          :loaded           assets-loaded}])
-                 [upload-audio-form {:scene-id scene-id}]])))
+  (r/with-let [assets-loaded (r/atom false)
+               assets-loading-progress (r/atom 0)]
+    (let [action-data (:data action)
+          action-audio-data (get-action-audio-data action-data audios)
+          audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
+      [:div
+       (if @assets-loaded
+         [waves-list {:audios-data           audios-data
+                      :audios-filter         audios-filter
+                      :on-change on-change}]
+         [audios-loading-block {:audios-list      (map #(:url %) audios)
+                                :loading-progress assets-loading-progress
+                                :loaded           assets-loaded}])
+       [upload-audio-form {:scene-id scene-id}]])))
 
 (defn audios-list-block-did-mount
   [this]

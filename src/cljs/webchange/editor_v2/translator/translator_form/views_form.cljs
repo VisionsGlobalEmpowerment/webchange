@@ -28,6 +28,13 @@
         (when (not (nil? action-data))
           (swap! data-store assoc action-name {:data action-data}))))))
 
+(defn default-action-data
+  [selected-action-concept? action-name concept-data scene-data]
+  (let [action-data (if selected-action-concept?
+                      (get-in concept-data [:data action-name])
+                      (get-in scene-data [:actions action-name]))]
+    {:data action-data}))
+
 (defn get-update-path
   [current-path edited-field action-data]
   (let [single-action? (not (some #{(:type action-data)} ["parallel" "sequence-data"]))
@@ -38,24 +45,35 @@
                  [edited-field]))))
 
 (defn update-action-data!
-  [data-store id type path data-patch]
-  (let [action-name (first path)
-        current-data (get-in @data-store [action-name :data])
+  [data-patch]
+  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+        current-concept @(re-frame/subscribe [::translator-subs/current-concept])
+        selected-action-node @(re-frame/subscribe [::translator-subs/selected-action])
+        {:keys [id type]} (get-current-action-data selected-action-node current-concept data-store)
+        path (:path selected-action-node)
+
+        scene-id @(re-frame/subscribe [::subs/current-scene])
+        scene-data @(re-frame/subscribe [::subs/scene scene-id])
+        selected-action-concept? (-> selected-action-node (get-in [:data :concept-action]) (boolean))
+
+        action-name (first path)
+        current-data (get-in data-store [action-name :data] (default-action-data selected-action-concept? action-name current-concept scene-data))
         new-data (reduce
                    (fn [current-data [field value]]
                      (let [field-path (get-update-path path field current-data)]
                        (assoc-in current-data field-path value)))
                    current-data
                    data-patch)]
-    (swap! data-store assoc action-name {:changed true
-                                         :type    type
-                                         :id      id
-                                         :data    new-data})))
+    (re-frame/dispatch [::translator-events/set-phrase-translation-action action-name {:changed true
+                                                                                       :type    type
+                                                                                       :id      id
+                                                                                       :data    new-data}])))
 
 (defn translator-form
-  [data-store]
-  (r/with-let [current-concept (r/atom nil)]
-              (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+  []
+  (r/with-let []
+              (let [current-concept @(re-frame/subscribe [::translator-subs/current-concept])
+                    scene-id @(re-frame/subscribe [::subs/current-scene])
                     scene-data @(re-frame/subscribe [::subs/scene scene-id])
                     concepts (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
 
@@ -64,12 +82,11 @@
                                            (keyword (:name @selected-phrase-node)))
                     selected-action-node (re-frame/subscribe [::translator-subs/selected-action])
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
-                    selected-action-path (:path @selected-action-node)
-                    {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept @current-concept})
+                    {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept current-concept})
                     audios-list (get-audios scene-data graph)
                     dialog-data (get-dialog-data @selected-phrase-node graph)
-                    prepared-current-action-data (get-current-action-data @selected-action-node @current-concept @data-store)]
-                (init-action-data! data-store selected-action-path selected-action-concept? @current-concept scene-data)
+                    data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+                    prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)]
                 [:div
                  [ui/grid {:container true
                            :spacing   16
@@ -78,9 +95,9 @@
                             :xs   8}
                    [phrase-block {:dialog-data dialog-data}]]
                   [ui/grid {:item true :xs 4}
-                   [concepts-block {:current-concept @current-concept
+                   [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
-                                    :on-change       #(reset! current-concept %)}]]]
+                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}]]]
                  [diagram-block {:graph graph}]
                  [play-phrase-block {:graph           graph
                                      :current-concept current-concept
@@ -89,24 +106,19 @@
                                 :audios    audios-list
                                 :action    prepared-current-action-data
                                 :on-change (fn [audio-key region-data]
-                                             (update-action-data! data-store
-                                                                  (:id prepared-current-action-data)
-                                                                  (:type prepared-current-action-data)
-                                                                  selected-action-path
-                                                                  (merge {:audio audio-key}
-                                                                         (select-keys region-data [:start :duration]))))}]
+                                             (update-action-data! (merge {:audio audio-key} (select-keys region-data [:start :duration]))))}]
                  [ui/dialog
                   {:open       (and (or has-concepts?
                                         selected-action-concept?)
-                                    (nil? @current-concept))
+                                    (nil? current-concept))
                    :full-width true
                    :max-width  "xs"}
                   [ui/dialog-title
                    "Select Concept"]
                   [ui/dialog-content
-                   [concepts-block {:current-concept @current-concept
+                   [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
-                                    :on-change       #(reset! current-concept %)}]]
+                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}]]
                   [ui/dialog-actions
                    [ui/button {:on-click #(do (re-frame/dispatch [::translator-events/clean-current-selected-action])
                                               (re-frame/dispatch [::translator-events/close-translator-modal]))}
