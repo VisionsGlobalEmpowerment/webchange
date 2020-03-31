@@ -70,16 +70,17 @@
   ([wavesurfer region-atom key]
    (handle-audio-region! wavesurfer region-atom key #()))
   ([wavesurfer region-atom key on-change]
-   (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
-   (.on wavesurfer "region-created" (fn [e]
-                                      (when (:region @region-atom) (-> @region-atom :region .remove))
-                                      (swap! last-positions assoc key (-> e region->data :start))
-                                      (reset! region-atom (-> (region->data e) (assoc :region e)))
-                                      (on-change @region-atom)))
-   (.on wavesurfer "region-update-end" (fn [e]
-                                         (swap! last-positions assoc key (-> e region->data :start))
-                                         (reset! region-atom (-> (region->data e) (assoc :region e)))
-                                         (on-change @region-atom)))))
+   (let [handle-event (fn [e]
+                        (let [original (select-keys @region-atom [:start :end])
+                              data (region->data e)]
+                          (when (not= original (select-keys data [:start :end]))
+                            (on-change data))
+                          (swap! last-positions assoc key (:start data))
+                          (reset! region-atom (assoc data :region e))))
+         remove-region #(when (:region @region-atom) (-> @region-atom :region .remove))]
+     (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
+     (.on wavesurfer "region-created" (fn [e] remove-region (handle-event e)))
+     (.on wavesurfer "region-update-end" handle-event))))
 
 (defn handle-additional-regions!
   [wavesurfer regions-atom]
