@@ -4,8 +4,8 @@
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
-    [webchange.editor-v2.concepts.events :as concepts-events]
-    [webchange.editor-v2.translator.translator-form.views-form-audio-upload :as upload]))
+    [webchange.editor-v2.components.file-input.views :as file-input]
+    [webchange.editor-v2.concepts.events :as concepts-events]))
 
 (defmulti dataset-item-control #(:type %))
 
@@ -17,7 +17,6 @@
   [{:keys [on-change value]}]
   [ui/text-field {:full-width true :default-value value :on-change #(on-change (-> % .-target .-value))}])
 
-
 (defn- select-file-form
   [type uploading-atom on-change]
   (let [on-finish (fn [result]
@@ -26,7 +25,8 @@
         on-change (fn [js-file]
                     (reset! uploading-atom true)
                     (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish}]))]
-    [upload/select-file-form {:on-change on-change}]))
+    [file-input/select-file-form {:on-change on-change}]))
+
 ;
 ; Image-typed
 ;
@@ -58,7 +58,7 @@
        [ui/circular-progress])]))
 
 
-  ;
+;
 ; Unknown type
 ;
 

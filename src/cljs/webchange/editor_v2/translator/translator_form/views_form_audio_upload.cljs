@@ -5,48 +5,8 @@
     [clojure.string :refer [blank?]]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor.events :as events]))
-
-(defn drop-event->file
-  [event]
-  (-> event
-      (.-dataTransfer)
-      (.-files)
-      (.item 0)))
-
-(defn change-event->file
-  [event]
-  (-> event
-      (.. -target -files)
-      (.item 0)))
-
-(defn select-file-form
-  [{:keys [on-change]}]
-  (r/with-let [drag-over? (r/atom false)
-               file-input (atom nil)
-               drag-over-style {:border        "solid 1px #fff"
-                                :border-radius "3px"
-                                :border-style  "dashed"}]
-              [:div {:id            "drop-target"
-                     :on-drag-over  #(do (.preventDefault %)
-                                         (reset! drag-over? true))
-                     :on-drag-leave #(do (.preventDefault %)
-                                         (reset! drag-over? false))
-                     :on-drop       #(do (.preventDefault %)
-                                         (-> % drop-event->file on-change))
-                     :style         (if @drag-over? drag-over-style {})}
-               [:input {:type      "file"
-                        :ref       #(reset! file-input %)
-                        :on-change #(-> % change-event->file on-change)
-                        :style     {:display "none"}}]
-               [ui/button {:on-click #(.click @file-input)}
-                [ui/typography {:variant "h3"}
-                 [ic/cloud-upload {:style {:font-size 48
-                                           :margin    16}}]]
-                [ui/typography {:variant "h5"}
-                 (if @drag-over?
-                   "Drop file here"
-                   "Upload new file")]]]))
+    [webchange.editor.events :as events]
+    [webchange.editor-v2.components.file-input.views :refer [select-file-form]]))
 
 (defn- some-blank?
   [object fields]

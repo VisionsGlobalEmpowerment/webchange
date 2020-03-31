@@ -48,5 +48,6 @@
                          :primaryTypographyProps {:style (:text-primary styles)}
                          :style                  (:text styles)}]
      [ui/list-item-secondary-action
-      [ui/button {:on-click #(on-click activity)}
+      [ui/button {:color    "primary"
+                  :on-click #(on-click activity)}
        "Play"]]]))
