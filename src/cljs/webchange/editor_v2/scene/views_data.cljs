@@ -1,9 +1,8 @@
-(ns webchange.editor-v2.views-data
+(ns webchange.editor-v2.scene.views-data
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [clojure.string :as s]
     [re-frame.core :as re-frame]
-    [webchange.editor.events :as events]
     [webchange.editor-v2.events :as ee]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
@@ -94,5 +93,4 @@
                                                                                  :data node-data}]))}
          (for [[node-name {:keys [phrase]}] phrases]
            ^{:key (clojure.core/name node-name)}
-           [ui/menu-item {:value node-name} phrase])
-         ]]])))
+           [ui/menu-item {:value node-name} phrase])]]])))

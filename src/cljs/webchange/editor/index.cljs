@@ -31,7 +31,7 @@
     [webchange.editor.form-elements :as f]
     [webchange.editor.form-elements.wavesurfer.wavesurfer :as ws]
     [konva :refer [Transformer]]
-    [react-konva :refer [Custom Group Layer Path Rect Stage Text ]]
+    [react-konva :refer [Custom Group Layer Path Rect Stage Text]]
     [sodium.core :as na]
     [sodium.extensions :as nax]
     [soda-ash.core :as sa :refer [Grid
@@ -135,9 +135,9 @@
   ([scene-id name]
    (draw-object scene-id name {}))
   ([scene-id name props]
-    (let [o (re-frame/subscribe [::subs/current-scene-object name])
-          type (keyword (:type @o))]
-      [(object type) scene-id name (merge @o props) draw-object])))
+   (let [o (re-frame/subscribe [::subs/current-scene-object name])
+         type (keyword (:type @o))]
+     [(object type) scene-id name (merge @o props) draw-object])))
 
 (defn background
   [scene-id name object]
@@ -246,8 +246,7 @@
 
 (defn colors-palette
   [scene-id name object]
-  [:> Group (object-params object)`
-   [:> Rect (rect-params scene-id name object)]])
+  [:> Group (object-params object) `[:> Rect (rect-params scene-id name object)]])
 
 (defn video
   [scene-id name object]
@@ -670,7 +669,9 @@
                             (is-file-drop? e) (re-frame/dispatch [::events/upload-and-add-asset (get-drop-event-params e) (get-first-file e) scene-id]))
                           (.stopPropagation e)
                           (.preventDefault e)
-                          )}
+                          )
+          :style        {:display         "flex"
+                         :justify-content "center"}}
     [:> Stage (merge {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6} props)
      [:> Layer component]]]))
 
@@ -755,25 +756,25 @@
     [:div#editor-container
      [:link {:rel "stylesheet" :href "http://esotericsoftware.com/files/spine-player/3.7/spine-player.css"}]
 
-      [sa/Grid {}
-       [sa/GridColumn {:width 2}
-        [na/segment {}
-         [na/header {}
-          [:div {} @course-id
-           [:div {:style {:float "right"}}
-            [na/icon {:name     "code" :link? true
-                      :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
-            [na/icon {:name     "history" :link? true
-                      :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
-         [na/divider {:clearing? true}]
-         [list-scenes-panel]
-         [list-datasets-panel]]]
+     [sa/Grid {}
+      [sa/GridColumn {:width 2}
+       [na/segment {}
+        [na/header {}
+         [:div {} @course-id
+          [:div {:style {:float "right"}}
+           [na/icon {:name     "code" :link? true
+                     :on-click #(re-frame/dispatch [::events/set-main-content :course-source])}]
+           [na/icon {:name     "history" :link? true
+                     :on-click #(re-frame/dispatch [::events/open-current-course-versions])}]]]]
+        [na/divider {:clearing? true}]
+        [list-scenes-panel]
+        [list-datasets-panel]]]
       [sa/GridColumn {:width 10}
        [:div {:class-name "ui segment"}
         [na/header {:dividing? true} "Editor"]
         [main-content]
         [na/divider {:clearing? true}]
         [main-content-navigation @scene-id]]]
-       [sa/GridColumn {:width 4}
-        [scene-items]
-        ]]]))
+      [sa/GridColumn {:width 4}
+       [scene-items]
+       ]]]))

@@ -12,9 +12,10 @@
 (defn- get-styles
   []
   {:empty-list-item {:padding "16px 0"}
-   :list-item {:border-bottom-style "solid"
-               :border-bottom-width "1px"
-               :border-bottom-color (get-in-theme [:palette :text :secondary])}})
+   :list            {:background-color (get-in-theme [:palette :background :default])}
+   :list-item       {:border-bottom-style "solid"
+                     :border-bottom-width "1px"
+                     :border-bottom-color (get-in-theme [:palette :text :secondary])}})
 
 (defn- last?
   [item list]
@@ -35,7 +36,7 @@
                        (take-last max-count data)
                        data)]
     (if (< 0 (count history-list))
-      [ui/list
+      [ui/list {:style (:list styles)}
        (for [{:keys [level lesson activity] :as item} history-list]
          (let [style (when-not (last? item data)
                        (:list-item styles))]
