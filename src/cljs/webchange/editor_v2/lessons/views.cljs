@@ -210,6 +210,7 @@
                  (when @in
                    [ui/list
                     (for [lesson (:lessons level)]
+                      ^{:key (:lesson lesson)}
                       [ui/list-item
                        [ui/list-item-text {:primary (:name lesson)}]
                        [ui/list-item-secondary-action

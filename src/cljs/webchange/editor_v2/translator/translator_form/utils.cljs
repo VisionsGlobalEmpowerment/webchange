@@ -112,10 +112,16 @@
         action-data (:data selected-node-data)]
     [:concept action-id action-name action-data]))
 
-(defn update-with-current-data
-  [action-name action-data data-store]
-  (let [edited-action-data (get-in data-store [action-name :data])]
-    (merge action-data edited-action-data)))
+(defn- update-with-current-data
+  [path node-action-data data-store]
+  (let [action-name (first path)
+        edited-action-data (get-in data-store [action-name :data])
+        single-action? (not (some #{(:type edited-action-data)} ["parallel" "sequence-data"]))
+        path-without-action-name (-> path rest vec)
+        path-prefix (if single-action? [] [:data])
+        inner-path (vec (concat path-prefix path-without-action-name))
+        edited-node-action-data (get-in edited-action-data inner-path)]
+    (merge node-action-data edited-node-action-data)))
 
 (defn get-current-action-data
   [selected-node-data current-concept-data data-store]
@@ -126,7 +132,7 @@
     {:id   id
      :name name
      :type type
-     :data (update-with-current-data name data data-store)}))
+     :data (update-with-current-data (-> selected-node-data :path) data data-store)}))
 
 (defn action-data->phrase-data
   [action-data]

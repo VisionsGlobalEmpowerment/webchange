@@ -15,12 +15,13 @@
         save-scene-action (fn [action-name action-data scene-id]
                             (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
         save-concept-action (fn [concept-id field-name field-data]
-                              (re-frame/dispatch [::events/update-dataset-item-field concept-id field-name field-data]))]
+                              (re-frame/dispatch [::translator-events/update-current-concept-field concept-id field-name field-data]))]
     (doseq [[name {:keys [id type data]}] data-store]
       (case type
         :scene (save-scene-action name data scene-id)
         :concept (save-concept-action id name data)))
-    (re-frame/dispatch [::events/save-current-scene scene-id])))
+    (re-frame/dispatch [::events/save-current-scene scene-id])
+    (re-frame/dispatch [::translator-events/save-current-concept])))
 
 (def close-window! #(re-frame/dispatch [::translator-events/close-translator-modal]))
 

@@ -568,23 +568,6 @@
                        [::set-main-content :dataset-info])}))
 
 (re-frame/reg-event-fx
-  ::update-dataset-item-field
-  (fn [{:keys [db]} [_ item-id field-name field-data]]
-    {:db (assoc-in db [:loading :update-dataset-item-field] true)
-     :http-xhrio {:method          :patch
-                  :uri             (str "/api/dataset-items/" item-id)
-                  :params          {:data field-data :name field-name}
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::update-dataset-item-field-success]}}))
-
-(re-frame/reg-event-fx
-  ::update-dataset-item-field-success
-  (fn [{:keys [db]} [_ response]]
-    {:db         (assoc-in db [:dataset-items (:id response)] (:data response))
-     :dispatch-n (list [:complete-request :update-dataset-item-field])}))
-
-(re-frame/reg-event-fx
   ::delete-dataset-item
   (fn [{:keys [db]} [_ item-id]]
     {:db (assoc-in db [:loading :delete-dataset-item] true)
