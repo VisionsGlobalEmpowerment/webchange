@@ -1,12 +1,38 @@
 (ns webchange.editor-v2.concepts.views
   (:require
+    [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.concepts.fields :refer [dataset-item-control]]
     [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.concepts.subs :as concepts-subs]
-    [webchange.routes :refer [redirect-to]]))
+    [webchange.editor-v2.layout.card.views :refer [list-card get-styles]]
+    [webchange.editor-v2.subs :as editor-subs]
+    [webchange.routes :refer [redirect-to]]
+    [webchange.subs :as subs]))
+
+(defn concepts-list
+  []
+  (let [course @(re-frame/subscribe [::subs/current-course])
+        concepts (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
+        styles (get-styles)]
+    [list-card {:title        "Concepts"
+                :full-height  true
+                :on-add-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
+     [ui/list {:style (:list-full-height styles)}
+      (for [concept concepts]
+        ^{:key (:id concept)}
+        [ui/list-item
+         [ui/list-item-text {:primary (:name concept)}]
+         [ui/list-item-secondary-action
+          [ui/icon-button {:aria-label "Edit"
+                           :size       "small"
+                           :on-click   #(redirect-to :course-editor-v2-concept :course-id course :concept-id (:id concept))}
+           [ic/edit {:style (:action-icon styles)}]]
+          [ui/icon-button {:on-click #(re-frame/dispatch [::concepts-events/open-delete-dataset-item-modal concept])
+                           :aria-label "Delete"}
+           [ic/delete {:style (:action-icon styles)}]]]])]]))
 
 (defn- visible?
   [type]
@@ -51,11 +77,15 @@
             [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
             [ui/divider]
             [dataset-item-fields-panel dataset-id data]]
-           [ui/card-actions
-            [ui/button {:on-click #(re-frame/dispatch [::concepts-events/add-dataset-item @data])} "Add"]
-            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)} "Cancel"]
+           [ui/card-actions {:style {:justify-content "flex-end"}}
             (when (:add-dataset-item loading)
-              [ui/circular-progress])]]))
+              [ui/circular-progress])
+            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
+             "Cancel"]
+            [ui/button {:color    "secondary"
+                        :variant  "contained"
+                        :on-click #(re-frame/dispatch [::concepts-events/add-dataset-item @data])}
+             "Add"]]]))
       [ui/circular-progress])))
 
 (defn edit-dataset-item-form
@@ -72,13 +102,15 @@
             [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
             [ui/divider]
             [dataset-item-fields-panel dataset-id data]]
-           [ui/card-actions {:style {:align-items "right"}}
-            [ui/button {:on-click #(re-frame/dispatch [::concepts-events/edit-dataset-item item-id @data])}
-             "Save"]
+           [ui/card-actions {:style {:justify-content "flex-end"}}
+            (when (:edit-dataset-item loading)
+              [ui/circular-progress])
             [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
              "Cancel"]
-            (when (:edit-dataset-item loading)
-              [ui/circular-progress])]]))
+            [ui/button {:color    "secondary"
+                        :variant  "contained"
+                        :on-click #(re-frame/dispatch [::concepts-events/edit-dataset-item item-id @data])}
+             "Save"]]]))
       [ui/circular-progress])))
 
 (defn delete-dataset-item-modal
@@ -86,7 +118,13 @@
   (let [state @(re-frame/subscribe [::concepts-subs/delete-dataset-item-modal-state])]
     [ui/dialog {:open (boolean state) :on-close #(re-frame/dispatch [::concepts-events/close-delete-dataset-item-modal])}
      [ui/dialog-title "Delete concept?"]
-     [ui/dialog-content [ui/dialog-content-text (str "Are you sure you want to delete concept " (:name state) "?")]]
+     [ui/dialog-content
+      [ui/typography {:variant "body1"}
+       (str "Are you sure you want to delete concept " (:name state) "?")]]
      [ui/dialog-actions
-      [ui/button {:on-click #(re-frame/dispatch [::concepts-events/close-delete-dataset-item-modal])} "Cancel"]
-      [ui/button {:on-click #(re-frame/dispatch [::concepts-events/delete-dataset-item (:id state)])} "Confirm"]]]))
+      [ui/button {:on-click #(re-frame/dispatch [::concepts-events/close-delete-dataset-item-modal])}
+       "Cancel"]
+      [ui/button {:color    "secondary"
+                  :variant  "contained"
+                  :on-click #(re-frame/dispatch [::concepts-events/delete-dataset-item (:id state)])}
+       "Confirm"]]]))

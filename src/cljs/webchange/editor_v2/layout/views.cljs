@@ -27,6 +27,7 @@
         styles (get-styles)]
     [:div {:style (:main-container styles)}
      [:div {:style (:toolbar-container styles)}
-      [toolbar (select-keys (r/props this) [:title])]]
-     (into [:div {:style (:content-container styles)}] (r/children this))
+      [toolbar (select-keys (r/props this) [:title :breadcrumbs])]]
+     (into [:div {:style (:content-container styles)}]
+           (r/children this))
      [modal-windows]]))

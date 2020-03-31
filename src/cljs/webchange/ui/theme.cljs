@@ -48,7 +48,7 @@
                                                    :contained {:border-radius "20px"
                                                                :padding       "6px 40px"}
                                                    :flat      {:background-color (get-in color-themes [theme :palette :flat-button :background-color])
-                                                               :padding          "3px 26px"
+                                                               :padding          "6px 40px"
                                                                :border-radius    "15px"}}
                                    :MuiInputLabel {:formControl {:transform "translate(20px, 28px)"}}
                                    :MuiList       {:root {:background-color (get-in color-themes [theme :palette :background :paper])

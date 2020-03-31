@@ -6,7 +6,7 @@
     [cljs-react-material-ui.icons :as ic]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
-    [webchange.editor-v2.layout.card.views :refer [list-card]]
+    [webchange.editor-v2.layout.card.views :refer [list-card] :as list]
     [webchange.editor-v2.lessons.subs :as lessons-subs]
     [webchange.editor-v2.lessons.events :as lessons-events]
     [webchange.editor-v2.concepts.subs :as concepts-subs]))
@@ -151,11 +151,15 @@
                 [edit-lesson-set data (keyword lesson-set)])]
              [ui/grid {:item true :xs 6}
               [edit-scenes-list data]]]]
-           [ui/card-actions
-            [ui/button {:on-click #(re-frame/dispatch [::lessons-events/edit-lesson course-id level-id lesson-id @data])} "Edit"]
-            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)} "Cancel"]
+           [ui/card-actions {:style {:justify-content "flex-end"}}
             (when (:edit-lesson loading)
-              [ui/circular-progress])]]))
+              [ui/circular-progress])
+            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
+             "Cancel"]
+            [ui/button {:color    "secondary"
+                        :variant  "contained"
+                        :on-click #(re-frame/dispatch [::lessons-events/edit-lesson course-id level-id lesson-id @data])}
+             "Edit"]]]))
       [ui/circular-progress])))
 
 (defn add-lesson-form
@@ -187,17 +191,22 @@
              [ui/grid {:item true :xs 6}
               [ui/paper
                [edit-scenes-list data]]]]]
-           [ui/card-actions
-            [ui/button {:on-click #(re-frame/dispatch [::lessons-events/add-lesson course-id level-id @data])} "Add"]
-            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)} "Cancel"]
+           [ui/card-actions {:style {:justify-content "flex-end"}}
             (when (:add-lesson loading)
-              [ui/circular-progress])]])))
+              [ui/circular-progress])
+            [ui/button {:on-click #(redirect-to :course-editor-v2 :id course-id)}
+             "Cancel"]
+            [ui/button {:color    "secondary"
+                        :variant  "contained"
+                        :on-click #(re-frame/dispatch [::lessons-events/add-lesson course-id level-id @data])}
+             "Add"]]])))
     [ui/circular-progress]))
 
 (defn- level-item
   [level]
   (r/with-let [in (r/atom true)]
-              (let [course @(re-frame/subscribe [::subs/current-course])]
+              (let [course @(re-frame/subscribe [::subs/current-course])
+                    list-styles (list/get-styles)]
                 [list-card {:title        (:name level)
                             :title-action (r/as-element [ui/icon-button {:size     "small"
                                                                          :style    {:padding "5px"}
@@ -216,7 +225,7 @@
                        [ui/list-item-secondary-action
                         [ui/icon-button {:on-click   #(redirect-to :course-editor-v2-lesson :course-id course :level-id (:level level) :lesson-id (:lesson lesson))
                                          :aria-label "Edit"}
-                         [ic/edit]]]])])])))
+                         [ic/edit {:style (:action-icon list-styles)}]]]])])])))
 
 (defn lessons
   []
