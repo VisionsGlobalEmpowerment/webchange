@@ -290,16 +290,17 @@
 
 (defn save-scene
   [db course-id scene-id scene-data]
-  {:db         (-> db
-                   (assoc-in [:loading :save-scene] true)
-                   (update-in [:scenes scene-id] merge scene-data))
-   :http-xhrio {:method          :post
-                :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
-                :params          {:scene scene-data}
-                :format          (json-request-format)
-                :response-format (json-response-format {:keywords? true})
-                :on-success      [::save-scene-success]
-                :on-failure      [:api-request-error :save-scene]}})
+  (let [data (dissoc scene-data :animations)]
+    {:db         (-> db
+                     (assoc-in [:loading :save-scene] true)
+                     (update-in [:scenes scene-id] merge data))
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
+                  :params          {:scene data}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::save-scene-success]
+                  :on-failure      [:api-request-error :save-scene]}}))
 
 (re-frame/reg-event-fx
   ::save-scene

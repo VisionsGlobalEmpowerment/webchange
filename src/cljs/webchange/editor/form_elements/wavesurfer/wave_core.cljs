@@ -79,7 +79,7 @@
                           (reset! region-atom (assoc data :region e))))
          remove-region #(when (:region @region-atom) (-> @region-atom :region .remove))]
      (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
-     (.on wavesurfer "region-created" (fn [e] remove-region (handle-event e)))
+     (.on wavesurfer "region-created" (fn [e] (remove-region) (handle-event e)))
      (.on wavesurfer "region-update-end" handle-event))))
 
 (defn handle-additional-regions!

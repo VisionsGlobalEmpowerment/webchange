@@ -32,11 +32,11 @@
   (r/with-let [on-change-region (fn [region] (on-change key region))
                on-select (fn []
                            (reset! current-key key)
-                           (on-change key))]
-    (let [audio-data {:key   key
-                      :start (or start 0)
-                      :end   (+ start duration)}
-          form-params {:height         64
+                           (on-change key))
+               audio-data {:key   key
+                           :start (or start 0)
+                           :end   (+ start duration)}]
+    (let [form-params {:height         64
                        :on-change      on-change-region
                        :show-controls? selected?}
           border-style (if selected? {:border "solid 1px #00c0ff"} {})]
@@ -55,7 +55,7 @@
         [audio-wave-form audio-data form-params]]])))
 
 (defn waves-list
-  [{:keys [audios-data on-change audios-filter]}]
+  [{:keys [audios-data action-name on-change audios-filter]}]
   (let [filtered-audios-data (if-not (nil? audios-filter)
                                (filter (fn [{:keys [target]}]
                                          (= target (:target audios-filter)))
@@ -63,7 +63,7 @@
                                audios-data)]
     [:div
      (for [audio-data filtered-audios-data]
-       ^{:key (:key audio-data)}
+       ^{:key (if (:selected? audio-data) (str (:key audio-data) "-" action-name) (:key audio-data))}
        [audio-wave audio-data {:on-change on-change}])]))
 
 (defn audio-key->audio-data
@@ -122,7 +122,8 @@
        (if @assets-loaded
          [waves-list {:audios-data           audios-data
                       :audios-filter         audios-filter
-                      :on-change on-change}]
+                      :action-name           (:name action)
+                      :on-change             on-change}]
          [audios-loading-block {:audios-list      (map #(:url %) audios)
                                 :loading-progress assets-loading-progress
                                 :loaded           assets-loaded}])
