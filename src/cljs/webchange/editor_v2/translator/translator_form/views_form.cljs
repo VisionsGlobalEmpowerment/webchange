@@ -17,17 +17,6 @@
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.subs :as subs]))
 
-(defn init-action-data!
-  [data-store path selected-action-concept? concept-data scene-data]
-  (let [action-name (first path)]
-    (when (and (not (nil? action-name))
-               (nil? (get @data-store action-name)))
-      (let [action-data (if selected-action-concept?
-                          (get-in concept-data [:data action-name])
-                          (get-in scene-data [:actions action-name]))]
-        (when (not (nil? action-data))
-          (swap! data-store assoc action-name {:data action-data}))))))
-
 (defn default-action-data
   [selected-action-concept? action-name concept-data scene-data]
   (let [action-data (if selected-action-concept?
@@ -107,7 +96,7 @@
                                 :audios    audios-list
                                 :action    prepared-current-action-data
                                 :on-change (fn [audio-key region-data]
-                                             (update-action-data! (:name prepared-current-action-data) (merge {:audio audio-key} (select-keys region-data [:start :duration]))))}]
+                                             (update-action-data! (-> @selected-action-node :path first) (merge {:audio audio-key} (select-keys region-data [:start :duration]))))}]
                  [ui/dialog
                   {:open       (and (or has-concepts?
                                         selected-action-concept?)

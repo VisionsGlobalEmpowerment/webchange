@@ -3,6 +3,8 @@
     [webchange.editor-v2.graph-builder.scene-parser.utils.create-graph-node :refer [create-graph-node-connection]]))
 
 (defn get-root-nodes
+  "Return list of node names where one of connections is a :root
+  node might be :object, :trigger"
   [graph]
   (if (= 1 (-> graph keys count))
     (-> graph keys)
