@@ -1,26 +1,25 @@
 (ns webchange.editor-v2.views
   (:require
-    [reagent.core :as r]
-    [webchange.editor-v2.fix-lodash]
-    [webchange.editor-v2.scene.views-data :refer [get-scenes-options]]
-    [webchange.ui.theme :refer [with-mui-theme]]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
-    [webchange.subs :as subs]
-    [webchange.editor-v2.subs :as editor-subs]
+    [reagent.core :as r]
     [webchange.editor-v2.events :as editor-events]
-    [webchange.routes :refer [redirect-to]]
+    [webchange.editor-v2.fix-lodash]
     [webchange.editor-v2.components.file-input.views :refer [select-file-form]]
-    [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form delete-dataset-item-modal]]
     [webchange.editor-v2.concepts.events :as concepts-events]
+    [webchange.editor-v2.concepts.views :refer [concepts-list
+                                                add-dataset-item-form
+                                                edit-dataset-item-form
+                                                delete-dataset-item-modal]]
     [webchange.editor-v2.lessons.views :refer [lessons edit-lesson-form add-lesson-form]]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.editor-v2.layout.card.views :refer [list-card]]
-    [webchange.editor-v2.scene.views :refer [scene-translate]]))
-
-;; ToDo: change card title and action buttons style
-;; ToDo: extract to separate files concepts, scenes and levels components
+    [webchange.editor-v2.scene.views :refer [scenes-list
+                                             scene-translate]]
+    [webchange.editor-v2.scene.views-data :refer [get-scenes-options]]
+    [webchange.editor-v2.subs :as editor-subs]
+    [webchange.routes :refer [redirect-to]]))
 
 (defn- get-styles
   []
@@ -32,65 +31,39 @@
                       :width    "100%"
                       :height   "100%"}})
 
-(defn- concepts
-  []
-  (let [course @(re-frame/subscribe [::subs/current-course])
-        concepts (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
-        styles (get-styles)]
-    [list-card {:title        "Concepts"
-                :full-height  true
-                :on-add-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
-     [ui/list {:style (:list-full-height styles)}
-      (for [concept concepts]
-        ^{:key (:id concept)}
-        [ui/list-item
-         [ui/list-item-text {:primary (:name concept)}]
-         [ui/list-item-secondary-action
-          [ui/icon-button {:on-click #(redirect-to :course-editor-v2-concept :course-id course :concept-id (:id concept)) :aria-label "Edit"}
-           [ic/edit]]
-          [ui/icon-button {:on-click #(re-frame/dispatch [::concepts-events/open-delete-dataset-item-modal concept]) :aria-label "Delete"}
-           [ic/delete]]]])]]))
-
-(defn- scenes
-  []
-  (let [course @(re-frame/subscribe [::subs/current-course])
-        scenes @(re-frame/subscribe [::subs/course-scenes])
-        scenes-options (get-scenes-options scenes)
-        styles (get-styles)]
-    [list-card {:title       "Scenes"
-                :full-height true}
-     [ui/list {:style (:list-full-height styles)}
-      (for [scene scenes-options]
-        ^{:key (:value scene)}
-        [ui/list-item
-         [ui/list-item-text {:primary (:text scene)}]
-         [ui/list-item-secondary-action
-          [ui/icon-button {:on-click #(redirect-to :course-editor-v2-scene :id course :scene-id (:value scene)) :aria-label "Edit"}
-           [ic/edit]]]])]]))
-
 (defn add-lesson-view
   [course-id level]
-  [layout {:title "Add lesson"}
+  [layout {:breadcrumbs [{:text     "Course"
+                          :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                         {:text "Add lesson"}]}
    [add-lesson-form course-id level]])
 
 (defn lesson-view
   [course-id level lesson]
-  [layout {:title "Edit lesson"}
+  [layout {:breadcrumbs [{:text     "Course"
+                          :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                         {:text "Edit lesson"}]}
    [edit-lesson-form course-id level lesson]])
 
 (defn add-concept-view
   [course-id]
-  [layout {:title "Add dataset item"}
+  [layout {:breadcrumbs [{:text     "Course"
+                          :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                         {:text "Add dataset item"}]}
    [add-dataset-item-form course-id]])
 
 (defn concept-view
   [course-id concept-id]
-  [layout {:title "Edit dataset item"}
+  [layout {:breadcrumbs [{:text     "Course"
+                          :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                         {:text "Edit dataset item"}]}
    [edit-dataset-item-form course-id concept-id]])
 
 (defn scene-view
-  []
-  [layout {:title "Scene"}
+  [course-id _]
+  [layout {:breadcrumbs [{:text     "Course"
+                          :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                         {:text "Scene"}]}
    [scene-translate]])
 
 (defn- upload-image-form
@@ -150,9 +123,7 @@
                                        :on-change #(swap! data assoc :image-src (-> % .-target .-value))}]
                        [upload-image-form uploading #(swap! data assoc :image-src %)]
                        (when @uploading
-                         [ui/circular-progress])]]
-
-                     ]]
+                         [ui/circular-progress])]]]]
                    [ui/card-actions
                     [ui/button {:color    "secondary"
                                 :style    {:margin-left "auto"}
@@ -175,10 +146,10 @@
                 :style     (:main-content styles)}
        [ui/grid {:item true
                  :xs   4}
-        [concepts]]
+        [concepts-list]]
        [ui/grid {:item true
                  :xs   4}
-        [scenes]]
+        [scenes-list]]
        [ui/grid {:item true
                  :xs   4}
         [lessons]]]]]))

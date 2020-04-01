@@ -6,11 +6,16 @@
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 
-(defn- get-styles
+(defn get-styles
   []
   {:card             {:display        "flex"
                       :flex-direction "column"}
-   :card-full-height {:height "100%"}})
+   :card-full-height {:height "100%"}
+   :list-full-height {:overflow "auto"
+                      :position "absolute"
+                      :width    "100%"
+                      :height   "100%"}
+   :action-icon      {:font-size "1.3rem"}})
 
 (defn list-card
   []

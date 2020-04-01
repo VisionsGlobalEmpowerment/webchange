@@ -25,7 +25,7 @@
 (defn- empty-list-placeholder
   []
   (let [styles (get-styles)]
-    [ui/list
+    [ui/list {:style (:list styles)}
      [ui/list-item {:style (:empty-list-item styles)}
       [ui/list-item-text {:primary "No activities in history"}]]]))
 

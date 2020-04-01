@@ -33,7 +33,7 @@
 (defn- editor-panel-v2-scene [course-id scene-id]
   (re-frame/dispatch [::ee2/init-editor course-id scene-id])
   (re-frame/dispatch [::ee/select-current-scene scene-id])
-  [scene-view])
+  [scene-view course-id scene-id])
 
 (defn- editor-panel-v2-concept [course-id concept-id]
   (re-frame/dispatch [::ee2/init-editor course-id])
