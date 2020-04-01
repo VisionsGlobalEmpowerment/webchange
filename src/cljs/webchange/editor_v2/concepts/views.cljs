@@ -30,7 +30,7 @@
                            :size       "small"
                            :on-click   #(redirect-to :course-editor-v2-concept :course-id course :concept-id (:id concept))}
            [ic/edit {:style (:action-icon styles)}]]
-          [ui/icon-button {:on-click #(re-frame/dispatch [::concepts-events/open-delete-dataset-item-modal concept])
+          [ui/icon-button {:on-click   #(re-frame/dispatch [::concepts-events/open-delete-dataset-item-modal concept])
                            :aria-label "Delete"}
            [ic/delete {:style (:action-icon styles)}]]]])]]))
 
@@ -47,16 +47,16 @@
        [ui/table-cell {:align "right" :style {:width "20%"}} "Name"]
        [ui/table-cell "Value"]]]
      [ui/table-body
-      (for [{:keys [name type template]} (get-in dataset [:scheme :fields])]
-        (when (visible? type)
-          ^{:key (str name)}
-          [ui/table-row {:key (str name)}
-           [ui/table-cell {:align "right" :style {:width "20%"}} name]
-           [ui/table-cell
-            [dataset-item-control {:type      type
-                                   :value     (get-in @data-atom [:data (keyword name)])
-                                   :template  template
-                                   :on-change #(swap! data-atom assoc-in [:data (keyword name)] %)}]]]))]]))
+      (doall (for [{:keys [name type template]} (get-in dataset [:scheme :fields])]
+               (when (visible? type)
+                 ^{:key (str name)}
+                 [ui/table-row {:key (str name)}
+                  [ui/table-cell {:align "right" :style {:width "20%"}} name]
+                  [ui/table-cell
+                   [dataset-item-control {:type      type
+                                          :value     (get-in @data-atom [:data (keyword name)])
+                                          :template  template
+                                          :on-change #(swap! data-atom assoc-in [:data (keyword name)] %)}]]])))]]))
 
 (defn add-dataset-item-form
   [course-id]
@@ -73,6 +73,7 @@
                         :on-change #(swap! data assoc :dataset-id (-> % .-target .-value))
                         :style     {:min-width "150px"}}
              (for [dataset datasets]
+               ^{:key (:id dataset)}
                [ui/menu-item {:value (:id dataset)} (:name dataset)])]
             [ui/text-field {:label "Name" :full-width true :default-value (:name @data) :on-change #(swap! data assoc :name (-> % .-target .-value))}]
             [ui/divider]

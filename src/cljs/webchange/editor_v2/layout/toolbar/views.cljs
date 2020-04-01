@@ -22,9 +22,10 @@
   (let [styles (get-styles)]
     [:div {:style (:breadcrumbs-wrapper styles)}
      (for [[index {:keys [text on-click]}] (map-indexed (fn [index data] [index data]) breadcrumbs)]
-       ^{:key text}
+
        (let [clickable? (-> on-click nil? not)
              last-item? (= index (dec (count breadcrumbs)))]
+         ^{:key (str index "-" text)}
          [:span {:style (:breadcrumbs-wrapper styles)}
           [ui/typography {:variant  (if last-item? "h2" "h5")
                           :style    (if clickable? (:breadcrumbs-text-clickable styles) (:breadcrumbs-text styles))
