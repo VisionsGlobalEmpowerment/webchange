@@ -13,6 +13,7 @@
     [webchange.editor-v2.translator.translator-form.views-form-audios :refer [audios-block]]
     [webchange.editor-v2.translator.translator-form.views-form-concepts :refer [concepts-block]]
     [webchange.editor-v2.translator.translator-form.views-form-diagram :refer [diagram-block]]
+    [webchange.editor-v2.translator.translator-form.views-form-dialog :refer [dialog-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.subs :as subs]))
@@ -76,14 +77,15 @@
                     audios-list (get-audios scene-data graph)
                     dialog-data (get-dialog-data @selected-phrase-node graph)
                     data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
-                    prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)]
+                    prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)
+                    phrase-action-selected? (-> @selected-action-node (nil?) (not))]
                 [:div
                  [ui/grid {:container true
                            :spacing   16
                            :justify   "space-between"}
                   [ui/grid {:item true
                             :xs   8}
-                   [phrase-block {:dialog-data dialog-data}]]
+                   [dialog-block {:dialog-data dialog-data}]]
                   [ui/grid {:item true :xs 4}
                    [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
@@ -92,11 +94,22 @@
                  [play-phrase-block {:graph           graph
                                      :current-concept current-concept
                                      :edited-data     data-store}]
-                 [audios-block {:scene-id  scene-id
-                                :audios    audios-list
-                                :action    prepared-current-action-data
-                                :on-change (fn [audio-key region-data]
-                                             (update-action-data! (-> @selected-action-node :path first) (merge {:audio audio-key} (select-keys region-data [:start :duration]))))}]
+                 (if phrase-action-selected?
+                   [:div
+                    [phrase-block {:origin-text     (-> prepared-current-action-data :data :phrase-text)
+                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated)
+                                   :on-change       (fn [new-translated-text]
+                                                      (update-action-data! (-> @selected-action-node :path first)
+                                                                           {:phrase-text-translated new-translated-text}))}]
+                    [audios-block {:scene-id  scene-id
+                                   :audios    audios-list
+                                   :action    prepared-current-action-data
+                                   :on-change (fn [audio-key region-data]
+                                                (update-action-data! (-> @selected-action-node :path first)
+                                                                     (merge {:audio audio-key}
+                                                                            (select-keys region-data [:start :duration]))))}]]
+                   [ui/typography {:variant "subtitle1"}
+                    "Select action on diagram"])
                  [ui/dialog
                   {:open       (and (or has-concepts?
                                         selected-action-concept?)

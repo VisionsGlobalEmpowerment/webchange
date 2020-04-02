@@ -37,7 +37,7 @@
       :full-width true
       :max-width  "xl"}
      [ui/dialog-title
-      "Phrase Translation"]
+      "Dialog Translation"]
      [ui/dialog-content {:class-name "translation-form"}
       (when open?
         [translator-form])]

@@ -152,9 +152,8 @@
               :component-did-update audios-list-block-did-update}))
 
 (defn audios-block
-  [{:keys [action audios] :as props}]
-  (let [show-audios? (-> (:data action) nil? not)
-        targets (conj (->> audios
+  [{:keys [audios] :as props}]
+  (let [targets (conj (->> audios
                            (map :target)
                            (filter #(-> % nil? not))
                            (distinct)) "any")]
@@ -165,19 +164,15 @@
                                   :style   {:display "inline-block"
                                             :margin  "5px 0"}}
                    "Audios"]
-                  (when show-audios?
-                    [ui/select {:value     @current-target
-                                :on-change #(reset! current-target (->> % .-target .-value))
-                                :style     {:margin "0 10px"
-                                            :width  "150px"}}
-                     (for [target targets]
-                       ^{:key target}
-                       [ui/menu-item {:value target}
-                        (capitalize target)])])]
-                 (if show-audios?
-                   [audios-list-block (merge props
-                                             {:audios-filter (if-not (= @current-target "any")
-                                                               {:target @current-target}
-                                                               nil)})]
-                   [ui/typography {:variant "subtitle1"}
-                    "Select action on diagram"])])))
+                  [ui/select {:value     @current-target
+                              :on-change #(reset! current-target (->> % .-target .-value))
+                              :style     {:margin "0 10px"
+                                          :width  "150px"}}
+                   (for [target targets]
+                     ^{:key target}
+                     [ui/menu-item {:value target}
+                      (capitalize target)])]]
+                 [audios-list-block (merge props
+                                           {:audios-filter (if-not (= @current-target "any")
+                                                             {:target @current-target}
+                                                             nil)})]])))
