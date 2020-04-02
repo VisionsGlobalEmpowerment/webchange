@@ -9,8 +9,7 @@
     [webchange.editor-v2.graph-builder.utils.node-data :refer [object-node?
                                                                phrase-node?
                                                                trigger-node?]]
-    [webchange.editor-v2.utils :refer [str->caption
-                                       keyword->caption]]))
+    [webchange.editor-v2.utils :refer [str->caption]]))
 
 (defn get-node-color
   [node-data]
@@ -20,32 +19,32 @@
     (trigger-node? node-data) (get-in colors [:global-object :default])
     :else (:default colors)))
 
+(defn- get-styles
+  []
+  {:header-description {:margin      "0"
+                        :padding     "5px"
+                        :text-align  "center"
+                        :max-width  "200px"}})
+
 (defn- phrase-header
   [node-data]
-  (let [phrase (-> node-data
-                   (get-in [:data :phrase])
-                   (keyword->caption))
-        description (get-in node-data [:data :phrase-description])]
-    [:div
-     [:h3 {:style {:margin      0
-                   :padding     5
-                   :text-align  "center"
-                   :white-space "nowrap"}}
-      phrase]
-     [:p {:style {:margin     0
-                  :padding    "5px"
-                  :text-align "center"
-                  :max-width  "200px"}}
-      description]]))
+  (let [phrase (-> node-data (get-in [:data :phrase]))
+        description (get-in node-data [:data :phrase-description])
+        styles (get-styles)]
+    (if-not (nil? description)
+      [:h3 {:style (:header-description styles)}
+       description]
+      [:div
+       [:p {:style (:header-description styles)}
+        "! NO DESCRIPTION !"]
+       [:p {:style (:header-description styles)}
+        phrase]])))
 
 (defn- not-phrase-header
   [node-data]
-  [:div
-   [:h3 {:style {:margin      0
-                 :padding     5
-                 :text-align  "center"
-                 :white-space "nowrap"}}
-    (str->caption (:name node-data))]])
+  (let [styles (get-styles)]
+    [:h3 {:style (:header-description styles)}
+     (str->caption (:name node-data))]))
 
 (defn- header
   [node-data]
