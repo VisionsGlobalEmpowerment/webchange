@@ -12,6 +12,7 @@
                                                                   get-current-action-data]]
     [webchange.editor-v2.translator.translator-form.views-form-audios :refer [audios-block]]
     [webchange.editor-v2.translator.translator-form.views-form-concepts :refer [concepts-block]]
+    [webchange.editor-v2.translator.translator-form.views-form-description :refer [description-block]]
     [webchange.editor-v2.translator.translator-form.views-form-diagram :refer [diagram-block]]
     [webchange.editor-v2.translator.translator-form.views-form-dialog :refer [dialog-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
@@ -60,6 +61,23 @@
                                                                                          :id      id
                                                                                          :data    new-data}]))))
 
+(defn- update-root-action-data
+  [data-patch]
+  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+        selected-phrase-node @(re-frame/subscribe [::editor-subs/current-action])
+        {:keys [id name type data]} (get-current-action-data selected-phrase-node nil data-store)]
+    (re-frame/dispatch [::translator-events/set-phrase-translation-action name {:changed true
+                                                                                :type    type
+                                                                                :id      id
+                                                                                :data    (merge data data-patch)}])))
+
+(defn- get-current-root-data
+  [selected-phrase-node data-store]
+  (let [name (first (:path selected-phrase-node))
+        origin-data (:data selected-phrase-node)
+        new-data (get-in data-store [name :data])]
+    (merge origin-data new-data)))
+
 (defn translator-form
   []
   (r/with-let []
@@ -78,10 +96,15 @@
                     data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
                     dialog-data (get-dialog-data @selected-phrase-node graph (fn [node-data]
                                                                                (get-current-action-data node-data current-concept data-store)))
+                    prepared-root-action-data (get-current-root-data @selected-phrase-node data-store)
                     prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)
                     phrase-action-selected? (-> @selected-action-node (nil?) (not))
                     concept-required? (or has-concepts? selected-action-concept?)]
                 [:div
+                 [description-block {:origin-text     (:phrase-description prepared-root-action-data)
+                                     :translated-text (:phrase-description-translated prepared-root-action-data)
+                                     :on-change       (fn [new-translated-description]
+                                                        (update-root-action-data {:phrase-description-translated new-translated-description}))}]
                  (when concept-required?
                    [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
