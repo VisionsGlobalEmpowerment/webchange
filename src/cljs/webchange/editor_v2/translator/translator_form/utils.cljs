@@ -136,19 +136,21 @@
 
 (defn action-data->phrase-data
   [action-data]
-  (select-keys action-data [:phrase-text :target]))
+  (select-keys action-data [:phrase-text
+                            :phrase-text-translated
+                            :target]))
 
 (defn- get-dialog-data-dfs
-  ([graph]
-   (first (get-dialog-data-dfs graph [:root :root] {} [])))
-  ([graph [prev-node-name node-name] used-map result]
+  ([get-actual-data graph]
+   (first (get-dialog-data-dfs graph [:root :root] get-actual-data {} [])))
+  ([graph [prev-node-name node-name] get-actual-data used-map result]
    (let [node-data (get graph node-name)]
      (reduce
        (fn [[result used-map] {:keys [handler]}]
          (if-not (contains? used-map handler)
-           (get-dialog-data-dfs graph [node-name handler] (assoc used-map handler true) result)
+           (get-dialog-data-dfs graph [node-name handler] get-actual-data (assoc used-map handler true) result)
            [result used-map]))
-       (let [phrase-data (action-data->phrase-data (:data node-data))]
+       (let [phrase-data (action-data->phrase-data (:data (get-actual-data node-data)))]
          [(if-not (= node-name :root)
             (conj result phrase-data)
             result)
@@ -156,11 +158,11 @@
        (get-children node-name node-data prev-node-name)))))
 
 (defn get-dialog-data
-  [phrase-node graph]
+  [phrase-node graph get-actual-data]
   (let [action-data (:data phrase-node)]
     (if (contains? action-data :phrase-text)
       [(select-keys action-data [:phrase-text :target])]
       (->> graph
            (get-root-nodes)
            (add-root-node graph)
-           (get-dialog-data-dfs)))))
+           (get-dialog-data-dfs get-actual-data)))))

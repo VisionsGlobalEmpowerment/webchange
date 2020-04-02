@@ -75,21 +75,19 @@
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
                     {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept current-concept})
                     audios-list (get-audios scene-data graph)
-                    dialog-data (get-dialog-data @selected-phrase-node graph)
                     data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+                    dialog-data (get-dialog-data @selected-phrase-node graph (fn [node-data]
+                                                                               (get-current-action-data node-data current-concept data-store)))
                     prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)
-                    phrase-action-selected? (-> @selected-action-node (nil?) (not))]
+                    phrase-action-selected? (-> @selected-action-node (nil?) (not))
+                    concept-required? (or has-concepts? selected-action-concept?)]
                 [:div
-                 [ui/grid {:container true
-                           :spacing   16
-                           :justify   "space-between"}
-                  [ui/grid {:item true
-                            :xs   8}
-                   [dialog-block {:dialog-data dialog-data}]]
-                  [ui/grid {:item true :xs 4}
+                 (when concept-required?
                    [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
-                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}]]]
+                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}])
+
+                 [dialog-block {:dialog-data dialog-data}]
                  [diagram-block {:graph graph}]
                  [play-phrase-block {:graph           graph
                                      :current-concept current-concept
@@ -111,8 +109,7 @@
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
                  [ui/dialog
-                  {:open       (and (or has-concepts?
-                                        selected-action-concept?)
+                  {:open       (and concept-required?
                                     (nil? current-concept))
                    :full-width true
                    :max-width  "xs"}
