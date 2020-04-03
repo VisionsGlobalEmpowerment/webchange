@@ -118,8 +118,9 @@
                                      :edited-data     data-store}]
                  (if phrase-action-selected?
                    [:div
+                    ^{:key (:name prepared-current-action-data)}
                     [phrase-block {:origin-text     (-> prepared-current-action-data :data :phrase-text trim-text)
-                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated trim-text)
+                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated)
                                    :on-change       (fn [new-translated-text]
                                                       (update-action-data! (-> @selected-action-node :path first)
                                                                            {:phrase-text-translated new-translated-text}))}]

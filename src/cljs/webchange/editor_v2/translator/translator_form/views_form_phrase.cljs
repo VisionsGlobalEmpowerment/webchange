@@ -21,7 +21,7 @@
      [ui/grid {:item true :xs 6}
       [ui/text-field (merge text-input-params
                             {:label           "Translated Text"
-                             :value           (or translated-text "")
+                             :default-value           (or translated-text "")
                              :on-change (fn [event] (let [new-value (.. event -target -value)]
                                                       (on-change new-value)))
                              :InputLabelProps {:shrink  true
