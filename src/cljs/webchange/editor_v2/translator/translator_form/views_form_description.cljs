@@ -16,12 +16,12 @@
      [ui/grid {:item true :xs 6}
       [ui/text-field (merge text-input-params
                             {:label    "Origin Description"
-                             :value    origin-text
+                             :value    (or origin-text "")
                              :disabled true})]]
      [ui/grid {:item true :xs 6}
       [ui/text-field (merge text-input-params
                             {:label           "Translated Description"
-                             :value           (or translated-text "")
+                             :default-value           (or translated-text "")
                              :on-change       (fn [event] (let [new-value (.. event -target -value)]
                                                             (on-change new-value)))
                              :InputLabelProps {:shrink  true
