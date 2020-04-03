@@ -44,7 +44,8 @@
 (defn- header
   [{:keys [name] :as node}]
   (let [phrase-data (node-data->phrase-data node)
-        phrase-target (-> (:target phrase-data) (or "") (capitalize) (str ":"))
+        phrase-target (when-not (nil? (:target phrase-data))
+                        (-> (:target phrase-data) (capitalize) (str ":")))
         phrase-text (:phrase-text phrase-data)
         styles (get-styles)]
     (if-not (nil? phrase-text)
