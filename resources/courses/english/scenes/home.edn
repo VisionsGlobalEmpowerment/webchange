@@ -258,15 +258,16 @@
 
                  :vaca-this-is-var                   {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
 
-                 :vaca-can-you-say                   {:type        "animation-sequence",
-                                                      :target      "senoravaca",
-                                                      :track       1,
-                                                      :offset      20.28,
-                                                      :audio       "/raw/audio/english/l1/a1/vaca.m4a",
-                                                      :data        [{:start 20.363, :end 20.98, :duration 0.617, :anim "talk"}],
-                                                      :start       20.28,
-                                                      :duration    0.813
-                                                      :phrase-text "Can you say"}
+                 :vaca-can-you-say                   {:type                   "animation-sequence",
+                                                      :target                 "senoravaca",
+                                                      :track                  1,
+                                                      :offset                 20.28,
+                                                      :audio                  "/raw/audio/english/l1/a1/vaca.m4a",
+                                                      :data                   [{:start 20.363, :end 20.98, :duration 0.617, :anim "talk"}],
+                                                      :start                  20.28,
+                                                      :duration               0.813
+                                                      :phrase-text            "Puedes deciry"
+                                                      :phrase-text-translated "Can you say"}
 
 
                  :vaca-question-var                  {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-question-action"}]}
@@ -275,31 +276,33 @@
 
                  :group-word-var                     {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-word-action"}]}
 
-                 :vaca-say-3-times                   {:type        "animation-sequence",
-                                                      :target      "senoravaca",
-                                                      :track       1,
-                                                      :offset      27.493,
-                                                      :audio       "/raw/audio/english/l1/a1/vaca.m4a",
+                 :vaca-say-3-times                   {:type                   "animation-sequence",
+                                                      :target                 "senoravaca",
+                                                      :track                  1,
+                                                      :offset                 27.493,
+                                                      :audio                  "/raw/audio/english/l1/a1/vaca.m4a",
                                                       :data
-                                                                   [{:start 27.605, :end 27.966, :duration 0.361, :anim "talk"}
-                                                                    {:start 28.24, :end 30.507, :duration 2.267, :anim "talk"}],
-                                                      :start       27.493,
-                                                      :duration    3.24
-                                                      :phrase-text "Good! Let’s say it 3 times, like this:"}
+                                                                              [{:start 27.605, :end 27.966, :duration 0.361, :anim "talk"}
+                                                                               {:start 28.24, :end 30.507, :duration 2.267, :anim "talk"}],
+                                                      :start                  27.493,
+                                                      :duration               3.24
+                                                      :phrase-text            "Bueno. Digalo tres veces"
+                                                      :phrase-text-translated "Good! Let’s say it 3 times, like this:"}
 
                  :vaca-3-times-var                   {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-3-times-action"}]}
 
                  :group-3-times-var                  {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
 
-                 :vaca-once-more                     {:type        "animation-sequence",
-                                                      :target      "senoravaca",
-                                                      :track       1,
-                                                      :offset      41.747,
-                                                      :audio       "/raw/audio/english/l1/a1/vaca.m4a",
-                                                      :data        [{:start 41.893, :end 42.573, :duration 0.68, :anim "talk"}],
-                                                      :start       41.747,
-                                                      :duration    0.973
-                                                      :phrase-text "Once more!"}
+                 :vaca-once-more                     {:type                   "animation-sequence",
+                                                      :target                 "senoravaca",
+                                                      :track                  1,
+                                                      :offset                 41.747,
+                                                      :audio                  "/raw/audio/english/l1/a1/vaca.m4a",
+                                                      :data                   [{:start 41.893, :end 42.573, :duration 0.68, :anim "talk"}],
+                                                      :start                  41.747,
+                                                      :duration               0.973
+                                                      :phrase-text            "Una vez mas!"
+                                                      :phrase-text-translated "Once more!"}
 
                  :vaca-goodbye-var                   {:type                          "action"
                                                       :from-var                      [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]
