@@ -9,7 +9,8 @@
     [webchange.editor-v2.translator.translator-form.utils :refer [get-audios
                                                                   get-dialog-data
                                                                   get-graph
-                                                                  get-current-action-data]]
+                                                                  get-current-action-data
+                                                                  trim-text]]
     [webchange.editor-v2.translator.translator-form.views-form-audios :refer [audios-block]]
     [webchange.editor-v2.translator.translator-form.views-form-concepts :refer [concepts-block]]
     [webchange.editor-v2.translator.translator-form.views-form-description :refer [description-block]]
@@ -117,8 +118,8 @@
                                      :edited-data     data-store}]
                  (if phrase-action-selected?
                    [:div
-                    [phrase-block {:origin-text     (-> prepared-current-action-data :data :phrase-text)
-                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated)
+                    [phrase-block {:origin-text     (-> prepared-current-action-data :data :phrase-text trim-text)
+                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated trim-text)
                                    :on-change       (fn [new-translated-text]
                                                       (update-action-data! (-> @selected-action-node :path first)
                                                                            {:phrase-text-translated new-translated-text}))}]

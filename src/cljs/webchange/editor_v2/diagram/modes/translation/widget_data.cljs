@@ -8,7 +8,7 @@
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [get-node-type speech-node? concept-action-node?]]
     [webchange.editor-v2.translator.events :as te]
-    [webchange.editor-v2.translator.translator-form.utils :refer [action-data->phrase-data]]
+    [webchange.editor-v2.translator.translator-form.utils :refer [node-data->phrase-data]]
     [webchange.editor-v2.translator.translator-form.utils-play-audio :refer [play-audios-list]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
@@ -42,9 +42,9 @@
                   :height   "36px"}})
 
 (defn- header
-  [{:keys [name data]}]
-  (let [phrase-data (action-data->phrase-data data)
-        phrase-target (-> (:target phrase-data) (capitalize) (str ":"))
+  [{:keys [name] :as node}]
+  (let [phrase-data (node-data->phrase-data node)
+        phrase-target (-> (:target phrase-data) (or "") (capitalize) (str ":"))
         phrase-text (:phrase-text phrase-data)
         styles (get-styles)]
     (if-not (nil? phrase-text)

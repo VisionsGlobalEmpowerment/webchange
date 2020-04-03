@@ -1,15 +1,8 @@
 (ns webchange.editor-v2.translator.translator-form.views-form-dialog
   (:require
     [clojure.string :refer [capitalize trim-newline]]
-    [cljs-react-material-ui.reagent :as ui]))
-
-(defn- trim-text
-  [text]
-  (when-not (nil? text)
-    (-> text
-        (.split "\n")
-        (.map (fn [string] (.trim string)))
-        (.join "\n"))))
+    [cljs-react-material-ui.reagent :as ui]
+    [webchange.editor-v2.translator.translator-form.utils :refer [trim-text]]))
 
 (defn- data->text
   [data get-text]

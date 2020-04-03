@@ -6,6 +6,14 @@
                                                                 get-root-nodes
                                                                 remove-root-node]]))
 
+(defn trim-text
+  [text]
+  (when-not (nil? text)
+    (-> text
+        (.split "\n")
+        (.map (fn [string] (.trim string)))
+        (.join "\n"))))
+
 (defn get-graph
   [scene-data action-name concept-data]
   (when-not (nil? action-name)
@@ -40,9 +48,9 @@
       (if (get-in action-data [:data :concept-action])
         (let [{:keys [id audio target]} (:data action-data)
               url (or id audio)]
-          (let [data {:alias  nil
-                      :key    url
-                      :url    url}]
+          (let [data {:alias nil
+                      :key   url
+                      :url   url}]
             (conj result (if-not (nil? target)
                            (assoc data :target target)
                            data))))
@@ -134,11 +142,12 @@
      :type type
      :data (update-with-current-data (-> selected-node-data :path) data data-store)}))
 
-(defn action-data->phrase-data
+(defn node-data->phrase-data
   [action-data]
-  (select-keys action-data [:phrase-text
-                            :phrase-text-translated
-                            :target]))
+  (select-keys (:data action-data)
+               [:phrase-text
+                :phrase-text-translated
+                :target]))
 
 (defn- get-dialog-data-dfs
   ([get-actual-data graph]
@@ -150,7 +159,7 @@
          (if-not (contains? used-map handler)
            (get-dialog-data-dfs graph [node-name handler] get-actual-data (assoc used-map handler true) result)
            [result used-map]))
-       (let [phrase-data (action-data->phrase-data (:data (get-actual-data node-data)))]
+       (let [phrase-data (-> node-data get-actual-data node-data->phrase-data)]
          [(if-not (= node-name :root)
             (conj result phrase-data)
             result)
@@ -159,9 +168,10 @@
 
 (defn get-dialog-data
   [phrase-node graph get-actual-data]
-  (let [action-data (:data phrase-node)]
-    (if (contains? action-data :phrase-text)
-      [(select-keys action-data [:phrase-text :target])]
+  (let [phrase-node? (-> (:data phrase-node)
+                         (contains? :phrase-text))]
+    (if phrase-node?
+      [(-> phrase-node get-actual-data node-data->phrase-data)]
       (->> graph
            (get-root-nodes)
            (add-root-node graph)

@@ -29,7 +29,8 @@
 (defn- phrase-header
   [node-data]
   (let [phrase (-> node-data (get-in [:data :phrase]))
-        description (get-in node-data [:data :phrase-description])
+        description (or (get-in node-data [:data :phrase-description-translated])
+                        (get-in node-data [:data :phrase-description]))
         styles (get-styles)]
     (if-not (nil? description)
       [:h3 {:style (:header-description styles)}
