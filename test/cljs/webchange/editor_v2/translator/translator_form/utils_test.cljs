@@ -109,8 +109,9 @@
   (let [phrase-node {:data {:phrase      :move-picture
                             :phrase-text "Move the picture onto the swing."
                             :target      "mari"}}
-        dialog-graph {:mari-move-to-start-1 {:connections #{}}}]
-    (let [actual-result (get-dialog-data phrase-node dialog-graph)
+        dialog-graph {:mari-move-to-start-1 {:connections #{}}}
+        get-actual-data (fn [node-data] {:data (:data node-data)})]
+    (let [actual-result (get-dialog-data phrase-node dialog-graph get-actual-data)
           expected-result [{:target      "mari"
                             :phrase-text "Move the picture onto the swing."}]]
       (when-not (= actual-result expected-result)
@@ -120,8 +121,9 @@
 (deftest test-get-dialog-data--text-in-parent-undefined-target
   (let [phrase-node {:data {:phrase      :move-picture
                             :phrase-text "Move the picture onto the swing."}}
-        dialog-graph {:mari-move-to-start-1 {:connections #{}}}]
-    (let [actual-result (get-dialog-data phrase-node dialog-graph)
+        dialog-graph {:mari-move-to-start-1 {:connections #{}}}
+        get-actual-data (fn [node-data] {:data (:data node-data)})]
+    (let [actual-result (get-dialog-data phrase-node dialog-graph get-actual-data)
           expected-result [{:phrase-text "Move the picture onto the swing."}]]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
@@ -185,8 +187,9 @@
                                                               :handler  :mari-welcome-audio-10}}}
                       :mari-welcome-audio-10 {:data        {:phrase-text "Ok little genius, let’s begin!"
                                                             :target      "mari"}
-                                              :connections #{}}}]
-    (let [actual-result (get-dialog-data phrase-node dialog-graph)
+                                              :connections #{}}}
+        get-actual-data (fn [node-data] {:data (:data node-data)})]
+    (let [actual-result (get-dialog-data phrase-node dialog-graph get-actual-data)
           expected-result [{:target      "vera"
                             :phrase-text "Hello Mari! Are we going to play on the swings now? I like the swings."}
                            {:target      "mari"

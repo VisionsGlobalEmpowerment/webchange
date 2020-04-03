@@ -255,7 +255,8 @@
        :offset 25.749,
        :target "vera",
        :duration 3.467,
-       :phrase-text "Baby, baby, baby!"}
+       :phrase-text "Bebe, bebe, bebe!"
+       :phrase-text-translated "Baby, baby, baby!"}
       {:data
        [{:end 57.546, :anim "talk", :start 57.159, :duration 0.387}
         {:end 58.693, :anim "talk", :start 58.199, :duration 0.494}
@@ -326,7 +327,8 @@
      :target "senoravaca",
      :duration 0.787,
      :scene-id "home"
-     :phrase-text "Baby"},
+     :phrase-text "Bebe"
+     :phrase-text-translated "Baby"},
     :home-vaca-this-is-action
     {:data
      [{:end 52.933, :anim "talk", :start 52.493, :duration 0.44}
@@ -338,7 +340,8 @@
      :target "senoravaca",
      :duration 2.134,
      :scene-id "home"
-     :phrase-text "This is a baby"},
+     :phrase-text "Este es un bebe"
+     :phrase-text-translated "This is a baby"},
     :home-vaca-word-action
     {:data
      [{:end 57.599, :anim "talk", :start 57.159, :duration 0.44}],
@@ -349,7 +352,8 @@
      :target "senoravaca",
      :duration 0.694,
      :scene-id "home"
-     :phrase-text "Baby!"},
+     :phrase-text "Bebe!"
+     :phrase-text-translated "Baby!"},
     :letter "b",
     :sandbox-long-letter-action
     {:data
@@ -615,7 +619,8 @@
        :offset 19.374,
        :target "vera",
        :duration 2.893,
-       :phrase-text "Home, home, home!"}
+       :phrase-text "Casa, casa, casa!"
+       :phrase-text-translated "Home, home, home!"}
       {:data
        [{:end 44.891, :anim "talk", :start 44.424, :duration 0.467}
         {:end 46.077, :anim "talk", :start 45.571, :duration 0.506}
@@ -686,7 +691,8 @@
      :target "senoravaca",
      :duration 0.8,
      :scene-id "home"
-     :phrase-text "Home"},
+     :phrase-text "Casa"
+     :phrase-text-translated "Home"},
     :home-vaca-this-is-action
     {:data
      [{:end 39.998, :anim "talk", :start 39.571, :duration 0.427}
@@ -698,7 +704,8 @@
      :target "senoravaca",
      :duration 2.267,
      :scene-id "home"
-     :phrase-text "This is a home"},
+     :phrase-text "Este es un casa"
+     :phrase-text-translated "This is a home"},
     :home-vaca-word-action
     {:data
      [{:end 41.558, :anim "talk", :start 41.238, :duration 0.32}],
@@ -709,7 +716,8 @@
      :target "senoravaca",
      :duration 0.507,
      :scene-id "home"
-     :phrase-text "Home!"},
+     :phrase-text "Casa!"
+     :phrase-text-translated "Home!"},
     :letter "c",
     :sandbox-long-letter-action
     {:data
@@ -920,7 +928,8 @@
        :offset 19.322,
        :target "vera",
        :duration 4.16
-       :phrase-text "Toothbrush, toothbrush, toothbrush!"}
+       :phrase-text "Cepillo, cepillo, cepillo!"
+       :phrase-text-translated "Toothbrush, toothbrush, toothbrush!"}
       {:data
        [{:end 45.266, :anim "talk", :start 44.946, :duration 0.32}
         {:end 46.44, :anim "talk", :start 46.026, :duration 0.414}
@@ -990,7 +999,8 @@
      :target "senoravaca",
      :duration 0.72,
      :scene-id "home"
-     :phrase-text "Toothbrush"},
+     :phrase-text "Cepillo"
+     :phrase-text-translated "Toothbrush"},
     :home-vaca-this-is-action
     {:data
      [{:end 41.24, :anim "talk", :start 40.773, :duration 0.467}
@@ -1002,7 +1012,8 @@
      :target "senoravaca",
      :duration 2.054,
      :scene-id "home"
-     :phrase-text "This is a toothbrush"},
+     :phrase-text "Este es un cepillo"
+     :phrase-text-translated "This is a toothbrush"},
     :home-vaca-word-action
     {:data [{:end 45.36, :anim "talk", :start 44.96, :duration 0.4}],
      :type "animation-sequence",
@@ -1012,7 +1023,8 @@
      :target "senoravaca",
      :duration 0.734,
      :scene-id "home"
-     :phrase-text "Toothbrush!"},
+     :phrase-text "Cepillo!"
+     :phrase-text-translated "Toothbrush!"},
     :letter "c",
     :sandbox-long-letter-action
     {:data
@@ -1184,7 +1196,8 @@
        :offset 29.371,
        :target "vera",
        :duration 4.253,
-       :phrase-text "Chocolate, chocolate, chocolate!"}
+       :phrase-text "Chocolate, chocolate, chocolate!"
+       :phrase-text-translated "Chocolate, chocolate, chocolate!"}
       {:data
        [{:end 73.401, :anim "talk", :start 72.668, :duration 0.733}
         {:end 74.655, :anim "talk", :start 73.855, :duration 0.8}
@@ -1255,7 +1268,8 @@
      :target "senoravaca",
      :duration 1.106,
      :scene-id "home"
-     :phrase-text "Chocolate"},
+     :phrase-text "Chocolate"
+     :phrase-text-translated "Chocolate"},
     :home-vaca-this-is-action
     {:data
      [{:end 67.228, :anim "talk", :start 66.615, :duration 0.613}
@@ -1267,7 +1281,8 @@
      :target "senoravaca",
      :duration 2.694,
      :scene-id "home"
-     :phrase-text "This is a chocolate"},
+     :phrase-text "Este es un chocolate"
+     :phrase-text-translated "This is a chocolate"},
     :home-vaca-word-action
     {:data
      [{:end 73.375, :anim "talk", :start 72.655, :duration 0.72}],
@@ -1278,7 +1293,8 @@
      :target "senoravaca",
      :duration 0.973,
      :scene-id "home"
-     :phrase-text "Chocolate!"},
+     :phrase-text "Chocolate!"
+     :phrase-text-translated "Chocolate!"},
     :letter "ch",
     :sandbox-long-letter-action
     {:data
@@ -1486,7 +1502,8 @@
        :offset 2.253,
        :target "vera",
        :duration 3.686,
-       :phrase-text "Diamond, diamond, diamond!"}
+       :phrase-text "Diamante, diamante, diamante!"
+       :phrase-text-translated "Diamond, diamond, diamond!"}
       {:data
        [{:end 6.242, :anim "talk", :start 5.709, :duration 0.533}
         {:end 7.282, :anim "talk", :start 6.802, :duration 0.48}
@@ -1556,7 +1573,8 @@
      :target "senoravaca",
      :duration 1.187,
      :scene-id "home"
-     :phrase-text "Diamond"},
+     :phrase-text "Diamante"
+     :phrase-text-translated "Diamond"},
     :home-vaca-this-is-action
     {:data [{:end 2.814, :anim "talk", :start 1.187, :duration 1.627}],
      :type "animation-sequence",
@@ -1566,7 +1584,8 @@
      :target "senoravaca",
      :duration 1.907,
      :scene-id "home"
-     :phrase-text "This is a diamond"},
+     :phrase-text "Este es un diamante"
+     :phrase-text-translated "This is a diamond"},
     :home-vaca-word-action
     {:data [{:end 6.295, :anim "talk", :start 5.722, :duration 0.573}],
      :type "animation-sequence",
@@ -1576,7 +1595,8 @@
      :target "senoravaca",
      :duration 0.827,
      :scene-id "home"
-     :phrase-text "Diamond!"},
+     :phrase-text "Diamante!"
+     :phrase-text-translated "Diamond!"},
     :letter "d",
     :sandbox-long-letter-action
     {:data
@@ -1780,7 +1800,8 @@
        :offset 12.001,
        :target "vera",
        :duration 3.6,
-       :phrase-text "Elephant, elephant, elephant!"}],
+       :phrase-text "Elefant, elefant, elefant!"
+       :phrase-text-translated "Elephant, elephant, elephant!"}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word-action
@@ -1839,7 +1860,8 @@
      :target "senoravaca",
      :duration 0.813,
      :scene-id "home"
-     :phrase-text "Elephant"},
+     :phrase-text "Elefant"
+     :phrase-text-translated "Elephant"},
     :home-vaca-this-is-action
     {:data
      [{:end 62.253, :anim "talk", :start 61.48, :duration 0.773}
@@ -1851,7 +1873,8 @@
      :target "senoravaca",
      :duration 2.72,
      :scene-id "home"
-     :phrase-text "This is an elephant"},
+     :phrase-text "Este es un elefant"
+     :phrase-text-translated "This is an elephant"},
     :home-vaca-word-action
     {:data [{:end 67.56, :anim "talk", :start 66.96, :duration 0.6}],
      :type "animation-sequence",
@@ -1861,7 +1884,8 @@
      :target "senoravaca",
      :duration 0.933,
      :scene-id "home"
-     :phrase-text "Elephant!"},
+     :phrase-text "Elefant!"
+     :phrase-text-translated "Elephant!"},
     :letter "e",
     :sandbox-long-letter-action
     {:data [{:end 5.48, :anim "talk", :start 2.987, :duration 2.493}],
@@ -2091,7 +2115,8 @@
        :offset 25.187,
        :target "vera",
        :duration 2.574,
-       :phrase-text "Flower, flower, flower!"}
+       :phrase-text "Flor, flor, flor!"
+       :phrase-text-translated "Flower, flower, flower!"}
       {:data
        [{:end 57.917, :anim "talk", :start 57.543, :duration 0.374}
         {:end 59.05, :anim "talk", :start 58.557, :duration 0.493}
@@ -2162,7 +2187,8 @@
      :target "senoravaca",
      :duration 0.666,
      :scene-id "home"
-     :phrase-text "Flower"},
+     :phrase-text "Flor"
+     :phrase-text-translated "Flower"},
     :home-vaca-this-is-action
     {:data
      [{:end 53.384, :anim "talk", :start 53.197, :duration 0.187}
@@ -2174,7 +2200,8 @@
      :target "senoravaca",
      :duration 2.226,
      :scene-id "home"
-     :phrase-text "This is a flower"},
+     :phrase-text "Este es un flor"
+     :phrase-text-translated "This is a flower"},
     :home-vaca-word-action
     {:data [{:end 55.05, :anim "talk", :start 54.81, :duration 0.24}],
      :type "animation-sequence",
@@ -2184,7 +2211,8 @@
      :target "senoravaca",
      :duration 0.48,
      :scene-id "home"
-     :phrase-text "Flower!"},
+     :phrase-text "Flor!"
+     :phrase-text-translated "Flower!"},
     :letter "f",
     :sandbox-long-letter-action
     {:data
@@ -2403,7 +2431,8 @@
        :offset 31.508,
        :target "vera",
        :duration 2.666,
-       :phrase-text "Cat, cat, cat!"}
+       :phrase-text "Gato, gato, gato!"
+       :phrase-text-translated "Cat, cat, cat!"}
       {:data
        [{:end 70.236, :anim "talk", :start 69.983, :duration 0.253}
         {:end 71.449, :anim "talk", :start 70.463, :duration 0.986}
@@ -2475,7 +2504,8 @@
      :target "senoravaca",
      :duration 0.827,
      :scene-id "home"
-     :phrase-text "Cat"},
+     :phrase-text "Gato"
+     :phrase-text-translated "Cat"},
     :home-vaca-this-is-action
     {:data
      [{:end 65.583, :anim "talk", :start 65.383, :duration 0.2}
@@ -2488,7 +2518,8 @@
      :target "senoravaca",
      :duration 2.067,
      :scene-id "home"
-     :phrase-text "This is a cat"},
+     :phrase-text "Este es un gato"
+     :phrase-text-translated "This is a cat"},
     :home-vaca-word-action
     {:data
      [{:end 70.556, :anim "talk", :start 69.969, :duration 0.587}],
@@ -2499,7 +2530,8 @@
      :target "senoravaca",
      :duration 0.813,
      :scene-id "home"
-     :phrase-text "Cat!"},
+     :phrase-text "Gato!"
+     :phrase-text-translated "Cat!"},
     :letter "g",
     :sandbox-long-letter-action
     {:data
@@ -2740,7 +2772,8 @@
        :offset 31.55,
        :target "vera",
        :duration 3.44,
-       :phrase-text "Twins, twins, twins!"}
+       :phrase-text "Gemelo, gemelo, gemelo!"
+       :phrase-text-translated "Twins, twins, twins!"}
       {:data
        [{:end 69.813, :anim "talk", :start 69.466, :duration 0.347}
         {:end 71.079, :anim "talk", :start 70.546, :duration 0.533}
@@ -2811,7 +2844,8 @@
      :target "senoravaca",
      :duration 0.827,
      :scene-id "home"
-     :phrase-text "Twins"},
+     :phrase-text "Gemelo"
+     :phrase-text-translated "Twins"},
     :home-vaca-this-is-action
     {:data
      [{:end 64.959, :anim "talk", :start 64.546, :duration 0.413}
@@ -2823,7 +2857,8 @@
      :target "senoravaca",
      :duration 2.2,
      :scene-id "home"
-     :phrase-text "This is a twins"},
+     :phrase-text "Este es un gemelo"
+     :phrase-text-translated "This is a twins"},
     :home-vaca-word-action
     {:data
      [{:end 69.879, :anim "talk", :start 69.453, :duration 0.426}],
@@ -2834,7 +2869,8 @@
      :target "senoravaca",
      :duration 0.653,
      :scene-id "home"
-     :phrase-text "Twins!"},
+     :phrase-text "Gemelo!"
+     :phrase-text-translated "Twins!"},
     :letter "g",
     :sandbox-long-letter-action
     {:data
@@ -3039,7 +3075,8 @@
        :offset 44.228,
        :target "vera",
        :duration 2.987,
-       :phrase-text "Leaf, leaf, leaf!"}
+       :phrase-text "Hoja, hoja, hoja!"
+       :phrase-text-translated "Leaf, leaf, leaf!"}
       {:data
        [{:end 96.275, :anim "talk", :start 95.701, :duration 0.574}
         {:end 97.208, :anim "talk", :start 96.621, :duration 0.587}
@@ -3110,7 +3147,8 @@
      :target "senoravaca",
      :duration 0.747,
      :scene-id "home"
-     :phrase-text "Leaf"},
+     :phrase-text "Hoja"
+     :phrase-text-translated "Leaf"},
     :home-vaca-this-is-action
     {:data
      [{:end 91.808, :anim "talk", :start 91.182, :duration 0.626}
@@ -3122,7 +3160,8 @@
      :target "senoravaca",
      :duration 2.373,
      :scene-id "home"
-     :phrase-text "This is a leaf"},
+     :phrase-text "Este es un hoja"
+     :phrase-text-translated "This is a leaf"},
     :home-vaca-word-action
     {:data
      [{:end 96.328, :anim "talk", :start 95.741, :duration 0.587}],
@@ -3133,7 +3172,8 @@
      :target "senoravaca",
      :duration 0.853,
      :scene-id "home"
-     :phrase-text "Leaf!"},
+     :phrase-text "Hoja!"
+     :phrase-text-translated "Leaf!"},
     :letter "h",
     :sandbox-long-letter-action
     {:data
@@ -3368,7 +3408,8 @@
        :offset 23.385,
        :target "vera",
        :duration 4.013,
-       :phrase-text "Garden, garden, garden!"}
+       :phrase-text "Jardín, jardín, jardín!"
+       :phrase-text-translated "Garden, garden, garden!"}
       {:data
        [{:end 59.188, :anim "talk", :start 58.681, :duration 0.507}
         {:end 60.068, :anim "talk", :start 59.628, :duration 0.44}
@@ -3439,7 +3480,8 @@
      :target "senoravaca",
      :duration 0.773,
      :scene-id "home"
-     :phrase-text "Garden"},
+     :phrase-text "Jardín"
+     :phrase-text-translated "Garden"},
     :home-vaca-this-is-action
     {:data
      [{:end 53.921, :anim "talk", :start 53.361, :duration 0.56}
@@ -3451,7 +3493,8 @@
      :target "senoravaca",
      :duration 2.28,
      :scene-id "home"
-     :phrase-text "This is a garden"},
+     :phrase-text "Este es un jardín"
+     :phrase-text-translated "This is a garden"},
     :home-vaca-word-action
     {:data
      [{:end 59.108, :anim "talk", :start 58.654, :duration 0.454}],
@@ -3462,7 +3505,8 @@
      :target "senoravaca",
      :duration 0.707,
      :scene-id "home"
-     :phrase-text "Garden!"},
+     :phrase-text "Jardín!"
+     :phrase-text-translated "Garden!"},
     :letter "j",
     :sandbox-long-letter-action
     {:data
@@ -3680,7 +3724,8 @@
        :offset 51.428,
        :target "vera",
        :duration 3.387,
-       :phrase-text "Kimono, kimono, kimono!"}
+       :phrase-text "Kimono, kimono, kimono!"
+       :phrase-text-translated "Kimono, kimono, kimono!"}
       {:data
        [{:end 108.861, :anim "talk", :start 108.261, :duration 0.6}
         {:end 109.967, :anim "talk", :start 109.181, :duration 0.786}
@@ -3751,7 +3796,8 @@
      :target "senoravaca",
      :duration 0.893,
      :scene-id "home"
-     :phrase-text "Kimono"},
+     :phrase-text "Kimono"
+     :phrase-text-translated "Kimono"},
     :home-vaca-this-is-action
     {:data
      [{:end 103.581, :anim "talk", :start 103.034, :duration 0.547}
@@ -3763,7 +3809,8 @@
      :target "senoravaca",
      :duration 2.48,
      :scene-id "home"
-     :phrase-text "This is a kimono"},
+     :phrase-text "Este es un kimono"
+     :phrase-text-translated "This is a kimono"},
     :home-vaca-word-action
     {:data
      [{:end 108.767, :anim "talk", :start 108.261, :duration 0.506}],
@@ -3774,7 +3821,8 @@
      :target "senoravaca",
      :duration 0.853,
      :scene-id "home"
-     :phrase-text "Kimono!"},
+     :phrase-text "Kimono!"
+     :phrase-text-translated "Kimono!"},
     :letter "k",
     :sandbox-long-letter-action
     {:data
@@ -3933,7 +3981,8 @@
        :offset 7.119,
        :target "vera",
        :duration 3.494,
-       :phrase-text "Lion, lion, lion!"}
+       :phrase-text "Leon, leon, leon!"
+       :phrase-text-translated "Lion, lion, lion!"}
       {:data
        [{:end 20.667, :anim "talk", :start 20.16, :duration 0.507}
         {:end 21.64, :anim "talk", :start 21.174, :duration 0.466}
@@ -4003,7 +4052,8 @@
      :target "senoravaca",
      :duration 0.773,
      :scene-id "home"
-     :phrase-text "Lion"},
+     :phrase-text "Leon"
+     :phrase-text-translated "Lion"},
     :home-vaca-this-is-action
     {:data
      [{:end 15.4, :anim "talk", :start 14.947, :duration 0.453}
@@ -4015,7 +4065,8 @@
      :target "senoravaca",
      :duration 2.426,
      :scene-id "home"
-     :phrase-text "This is a lion"},
+     :phrase-text "Este es un leon"
+     :phrase-text-translated "This is a lion"},
     :home-vaca-word-action
     {:data
      [{:end 20.72, :anim "talk", :start 20.187, :duration 0.533}],
@@ -4026,7 +4077,8 @@
      :target "senoravaca",
      :duration 0.854,
      :scene-id "home"
-     :phrase-text "Lion!"},
+     :phrase-text "Leon!"
+     :phrase-text-translated "Lion!"},
     :letter "l",
     :sandbox-long-letter-action
     {:data
@@ -4244,7 +4296,8 @@
        :offset 35.451,
        :target "vera",
        :duration 3.519,
-       :phrase-text "Wrench, wrench, wrench!"}
+       :phrase-text "Llave, llave, llave!"
+       :phrase-text-translated "Wrench, wrench, wrench!"}
       {:data
        [{:end 87.802, :anim "talk", :start 87.442, :duration 0.36}
         {:end 88.882, :anim "talk", :start 88.442, :duration 0.44}
@@ -4315,7 +4368,8 @@
      :target "senoravaca",
      :duration 0.733,
      :scene-id "home"
-     :phrase-text "Wrench"},
+     :phrase-text "Llave"
+     :phrase-text-translated "Wrench"},
     :home-vaca-this-is-action
     {:data
      [{:end 82.682, :anim "talk", :start 82.228, :duration 0.454}
@@ -4327,7 +4381,8 @@
      :target "senoravaca",
      :duration 2.36,
      :scene-id "home"
-     :phrase-text "This is a wrench"},
+     :phrase-text "Este es un llave"
+     :phrase-text-translated "This is a wrench"},
     :home-vaca-word-action
     {:data
      [{:end 87.855, :anim "talk", :start 87.428, :duration 0.427}],
@@ -4338,7 +4393,8 @@
      :target "senoravaca",
      :duration 0.68,
      :scene-id "home"
-     :phrase-text "Wrench!"},
+     :phrase-text "Llave!"
+     :phrase-text-translated "Wrench!"},
     :letter "ll",
     :sandbox-long-letter-action
     {:data
@@ -4500,7 +4556,8 @@
        :offset 21.982,
        :target "vera",
        :duration 3.386,
-       :phrase-text "Magnet, magnet, magnet!"}],
+       :phrase-text "Imán, imán, imán!"
+       :phrase-text-translated "Magnet, magnet, magnet!"}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word "group-word-incendio",
@@ -4563,7 +4620,8 @@
      :target "senoravaca",
      :duration 0.786,
      :scene-id "home"
-     :phrase-text "Magnet"},
+     :phrase-text "Imán"
+     :phrase-text-translated "Magnet"},
     :home-vaca-this-is "this-is-incendio",
     :home-vaca-this-is-action
     {:data
@@ -4577,7 +4635,8 @@
      :target "senoravaca",
      :duration 3.747,
      :scene-id "home"
-     :phrase-text "This is a magnet"},
+     :phrase-text "Este es un imán"
+     :phrase-text-translated "This is a magnet"},
     :home-vaca-word "word-incendio",
     :home-vaca-word-action
     {:data
@@ -4589,7 +4648,8 @@
      :target "senoravaca",
      :duration 1.027,
      :scene-id "home"
-     :phrase-text "Magnet!"},
+     :phrase-text "Imán!"
+     :phrase-text-translated "Magnet!"},
     :poem-image-1 "/raw/img/park/poem/i1.png",
     :poem-image-2 "/raw/img/park/poem/i2.png",
     :poem-image-3 "/raw/img/park/poem/i3.png",
@@ -4970,7 +5030,8 @@
        :offset 6.133,
        :target "senoravaca",
        :duration 4.094,
-       :phrase-text "Hand, hand, hand!"}
+       :phrase-text "Mano, mano, mano!"
+       :phrase-text-translated "Hand, hand, hand!"}
       {:data
        [{:end 2.4, :anim "talk", :start 2.2, :duration 0.2}
         {:end 3.44, :anim "talk", :start 2.92, :duration 0.52}
@@ -5039,7 +5100,8 @@
      :target "senoravaca",
      :duration 0.8,
      :scene-id "home"
-     :phrase-text "Hand"},
+     :phrase-text "Mano"
+     :phrase-text-translated "Hand"},
     :home-vaca-this-is-action
     {:data
      [{:end 1.667, :anim "talk", :start 1.16, :duration 0.507}
@@ -5051,7 +5113,8 @@
      :target "senoravaca",
      :duration 1.987,
      :scene-id "home"
-     :phrase-text "This is a hand"},
+     :phrase-text "Este es un mano"
+     :phrase-text-translated "This is a hand"},
     :home-vaca-word-action
     {:data [{:end 6.693, :anim "talk", :start 6.24, :duration 0.453}],
      :type "animation-sequence",
@@ -5061,7 +5124,8 @@
      :target "senoravaca",
      :duration 0.68,
      :scene-id "home"
-     :phrase-text "Hand!"},
+     :phrase-text "Mano!"
+     :phrase-text-translated "Hand!"},
     :letter "m",
     :sandbox-long-letter-action
     {:data [{:end 7.694, :anim "talk", :start 5.814, :duration 1.88}],
@@ -5280,7 +5344,8 @@
        :offset 18.025,
        :target "vera",
        :duration 3.36,
-       :phrase-text "Baby, baby, baby!"}
+       :phrase-text "Niño, niño, niño!"
+       :phrase-text-translated "Baby, baby, baby!"}
       {:data
        [{:end 46.494, :anim "talk", :start 46.014, :duration 0.48}
         {:end 47.534, :anim "talk", :start 47.028, :duration 0.506}
@@ -5351,7 +5416,8 @@
      :target "senoravaca",
      :duration 0.853,
      :scene-id "home"
-     :phrase-text "Baby"},
+     :phrase-text "Niño"
+     :phrase-text-translated "Baby"},
     :home-vaca-this-is-action
     {:data
      [{:end 41.134, :anim "talk", :start 40.561, :duration 0.573}
@@ -5363,7 +5429,8 @@
      :target "senoravaca",
      :duration 2.467,
      :scene-id "home"
-     :phrase-text "This is a baby"},
+     :phrase-text "Este es un niño"
+     :phrase-text-translated "This is a baby"},
     :home-vaca-word-action
     {:data
      [{:end 46.481, :anim "talk", :start 46.001, :duration 0.48}],
@@ -5374,7 +5441,8 @@
      :target "senoravaca",
      :duration 0.707,
      :scene-id "home"
-     :phrase-text "Baby!"},
+     :phrase-text "Niño!"
+     :phrase-text-translated "Baby!"},
     :letter "n",
     :sandbox-long-letter-action
     {:data
@@ -5610,7 +5678,8 @@
        :offset 2.934,
        :target "vera",
        :duration 3.547,
-       :phrase-text "Bear, bear, bear!"}
+       :phrase-text "Oso, oso, oso!"
+       :phrase-text-translated "Bear, bear, bear!"}
       {:data
        [{:end 33.376, :anim "talk", :start 32.696, :duration 0.68}
         {:end 34.603, :anim "talk", :start 33.976, :duration 0.627}
@@ -5686,7 +5755,8 @@
      :target "senoravaca",
      :duration 0.908,
      :scene-id "home"
-     :phrase-text "Bear"},
+     :phrase-text "Oso"
+     :phrase-text-translated "Bear"},
     :home-vaca-this-is "this-is-oso",
     :home-vaca-this-is-action
     {:data
@@ -5700,7 +5770,8 @@
      :target "senoravaca",
      :duration 2.386,
      :scene-id "home"
-     :phrase-text "This is a bear"},
+     :phrase-text "Este es un oso"
+     :phrase-text-translated "This is a bear"},
     :home-vaca-word "word-oso",
     :home-vaca-word-action
     {:data
@@ -5712,7 +5783,8 @@
      :target "senoravaca",
      :duration 1.134,
      :scene-id "home"
-     :phrase-text "Bear!"},
+     :phrase-text "Oso!"
+     :phrase-text-translated "Bear!"},
     :letter "o",
     :poem-image-1 "/raw/img/park/poem/o1.png",
     :poem-image-2 "/raw/img/park/poem/o2.png",
@@ -6186,7 +6258,8 @@
        :offset 8.774,
        :target "vera",
        :duration 3.08,
-       :phrase-text "Ball, ball, ball!"}
+       :phrase-text "Pelota, pelota, pelota!"
+       :phrase-text-translated "Ball, ball, ball!"}
       {:data
        [{:end 20.586, :anim "talk", :start 20.213, :duration 0.373}
         {:end 21.773, :anim "talk", :start 21.32, :duration 0.453}
@@ -6258,7 +6331,8 @@
      :target "senoravaca",
      :duration 0.773,
      :scene-id "home"
-     :phrase-text "Ball"},
+     :phrase-text "Pelota"
+     :phrase-text-translated "Ball"},
     :home-vaca-this-is-action
     {:data
      [{:end 15.427, :anim "talk", :start 15.04, :duration 0.387}
@@ -6270,7 +6344,8 @@
      :target "senoravaca",
      :duration 2.319,
      :scene-id "home"
-     :phrase-text "This is a ball"},
+     :phrase-text "Este es un pelota"
+     :phrase-text-translated "This is a ball"},
     :home-vaca-word-action
     {:data [{:end 20.6, :anim "talk", :start 20.24, :duration 0.36}],
      :type "animation-sequence",
@@ -6280,7 +6355,8 @@
      :target "senoravaca",
      :duration 0.733,
      :scene-id "home"
-     :phrase-text "Ball!"},
+     :phrase-text "Pelota!"
+     :phrase-text-translated "Ball!"},
     :letter "p",
     :sandbox-long-letter-action
     {:data [{:end 9.946, :anim "talk", :start 8.96, :duration 0.986}],
@@ -6507,7 +6583,8 @@
        :offset 42.871,
        :target "vera",
        :duration 3.613,
-       :phrase-text "Cheese, cheese, cheese!"}
+       :phrase-text "Queso, queso, queso!"
+       :phrase-text-translated "Cheese, cheese, cheese!"}
       {:data
        [{:end 95.759, :anim "talk", :start 95.532, :duration 0.227}
         {:end 96.852, :anim "talk", :start 96.372, :duration 0.48}
@@ -6578,7 +6655,8 @@
      :target "senoravaca",
      :duration 0.667,
      :scene-id "home"
-     :phrase-text "Cheese"},
+     :phrase-text "Queso"
+     :phrase-text-translated "Cheese"},
     :home-vaca-this-is-action
     {:data
      [{:end 91.119, :anim "talk", :start 90.546, :duration 0.573}
@@ -6590,7 +6668,8 @@
      :target "senoravaca",
      :duration 2.307,
      :scene-id "home"
-     :phrase-text "This is a cheese"},
+     :phrase-text "Este es un queso"
+     :phrase-text-translated "This is a cheese"},
     :home-vaca-word-action
     {:data
      [{:end 95.799, :anim "talk", :start 95.479, :duration 0.32}],
@@ -6601,7 +6680,8 @@
      :target "senoravaca",
      :duration 0.534,
      :scene-id "home"
-     :phrase-text "Cheese!"},
+     :phrase-text "Queso!"
+     :phrase-text-translated "Cheese!"},
     :letter "q",
     :sandbox-long-letter-action
     {:data
@@ -6807,7 +6887,8 @@
        :offset 32.401,
        :target "senoravaca",
        :duration 3.946,
-       :phrase-text "Frog, frog, frog!"}
+       :phrase-text "Rana, rana, rana!"
+       :phrase-text-translated "Frog, frog, frog!"}
       {:data
        [{:end 13.466, :anim "talk", :start 13.132, :duration 0.334}
         {:end 14.519, :anim "talk", :start 14.052, :duration 0.467}
@@ -6879,7 +6960,8 @@
      :target "senoravaca",
      :duration 0.773,
      :scene-id "home"
-     :phrase-text "Frog"},
+     :phrase-text "Rana"
+     :phrase-text-translated "Frog"},
     :home-vaca-this-is-action
     {:data
      [{:end 28.414, :anim "talk", :start 27.934, :duration 0.48}
@@ -6891,7 +6973,8 @@
      :target "senoravaca",
      :duration 2.227,
      :scene-id "home"
-     :phrase-text "This is a frog"},
+     :phrase-text "Este es un rana"
+     :phrase-text-translated "This is a frog"},
     :home-vaca-word-action
     {:data
      [{:end 32.961, :anim "talk", :start 32.521, :duration 0.44}],
@@ -6902,7 +6985,8 @@
      :target "senoravaca",
      :duration 0.76,
      :scene-id "home"
-     :phrase-text "Frog!"},
+     :phrase-text "Rana!"
+     :phrase-text-translated "Frog!"},
     :letter "r",
     :sandbox-long-letter-action
     {:data
@@ -7094,14 +7178,14 @@
      :start 32.226,
      :duration 3.693,
      :scene-id "see-saw",
-     :phrase-text "-, -, -!"},
+     :phrase-text "Snake, snake, snake!"},
     :game-voice-action-low
     {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object_1_List.m4a",
      :type "audio",
      :start 27.373,
      :duration 3.479,
      :scene-id "see-saw",
-     :phrase-text "-, -, -.."},
+     :phrase-text "Snake, snake, snake.."},
     :hide-n-seek-current-concept-audio
     {:description "Hide and seek question",
      :offset 15.122,
@@ -7113,7 +7197,7 @@
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}],
-     :phrase-text "-"},
+     :phrase-text "snake"},
     :home-group-3-times-action
     {:data
      [{:data
@@ -7126,7 +7210,8 @@
        :offset 8.08,
        :target "vera",
        :duration 3.414,
-       :phrase-text "-, -, -!"}
+       :phrase-text "Serpiente, serpiente, serpiente!"
+       :phrase-text-translated "Snake, snake, snake!"}
       {:data
        [{:end 19.719, :anim "talk", :start 18.906, :duration 0.813}
         {:end 20.759, :anim "talk", :start 19.932, :duration 0.827}
@@ -7137,7 +7222,7 @@
        :offset 18.772,
        :target "senoravaca",
        :duration 3.813
-       :phrase-text "-, -, -!"}],
+       :phrase-text "Snake, snake, snake!"}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word-action
@@ -7150,7 +7235,7 @@
        :offset 6.68,
        :target "vera",
        :duration 0.707
-       :phrase-text "-!"}
+       :phrase-text "Snake!"}
       {:data
        [{:end 19.679, :anim "talk", :start 18.946, :duration 0.733}],
        :type "animation-sequence",
@@ -7159,7 +7244,7 @@
        :offset 18.839,
        :target "senoravaca",
        :duration 0.947
-       :phrase-text "-!"}],
+       :phrase-text "Snake!"}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -7174,7 +7259,7 @@
      :target "senoravaca",
      :duration 3.813,
      :scene-id "home"
-     :phrase-text "-, -, -!"},
+     :phrase-text "Snake, snake, snake!"},
     :home-vaca-goodbye-action
     {:data
      [{:end 24.865, :anim "talk", :start 23.505, :duration 1.36}
@@ -7186,7 +7271,7 @@
      :target "senoravaca",
      :duration 2.68,
      :scene-id "home"
-     :phrase-text "Goodbye, -! Goodbye!"},
+     :phrase-text "Goodbye, snake! Goodbye!"},
     :home-vaca-question-action
     {:data
      [{:end 17.919, :anim "talk", :start 17.012, :duration 0.907}],
@@ -7197,7 +7282,8 @@
      :target "senoravaca",
      :duration 1.08,
      :scene-id "home"
-     :phrase-text "-"},
+     :phrase-text "Serpiente"
+     :phrase-text-translated "Snake"},
     :home-vaca-this-is-action
     {:data
      [{:end 14.399, :anim "talk", :start 13.893, :duration 0.506}
@@ -7209,7 +7295,8 @@
      :target "senoravaca",
      :duration 2.506,
      :scene-id "home"
-     :phrase-text "This is a -"},
+     :phrase-text "Este es un serpiente"
+     :phrase-text-translated "This is a snake"},
     :home-vaca-word-action
     {:data
      [{:end 19.706, :anim "talk", :start 18.932, :duration 0.774}],
@@ -7220,7 +7307,8 @@
      :target "senoravaca",
      :duration 0.974,
      :scene-id "home"
-     :phrase-text "-!"},
+     :phrase-text "Serpiente!"
+     :phrase-text-translated "Snake!"},
     :letter "s",
     :sandbox-long-letter-action
     {:data [{:end 11.28, :anim "talk", :start 9.44, :duration 1.84}],
@@ -7423,7 +7511,8 @@
        :offset 2.173,
        :target "vera",
        :duration 3.106,
-       :phrase-text "Squirrel, squirrel, squirrel!"}],
+       :phrase-text "Ardilla, ardilla, ardilla!"
+       :phrase-text-translated "Squirrel, squirrel, squirrel!"}],
      :type "parallel",
      :scene-id "home"},
     :home-group-word "group-word-ardilla",
@@ -7488,7 +7577,8 @@
      :target "senoravaca",
      :data
      [{:end 21.867, :anim "talk", :start 21.133, :duration 0.734}]
-     :phrase-text "Squirrel"},
+     :phrase-text "Ardilla"
+     :phrase-text-translated "Squirrel"},
     :home-vaca-this-is "this-is-ardilla",
     :home-vaca-this-is-action
     {:offset 17.838,
@@ -7502,7 +7592,8 @@
      :data
      [{:end 18.493, :anim "talk", :start 17.947, :duration 0.546}
       {:end 19.413, :anim "talk", :start 18.64, :duration 0.773}]
-     :phrase-text "This is a squirrel"},
+     :phrase-text "Este es un ardilla"
+     :phrase-text-translated "This is a squirrel"},
     :home-vaca-word "word-ardilla",
     :home-vaca-word-action
     {:offset 22.877,
@@ -7515,7 +7606,8 @@
      :target "senoravaca",
      :data
      [{:end 23.547, :anim "talk", :start 22.973, :duration 0.574}]
-     :phrase-text "Squirrel!"},
+     :phrase-text "Ardilla!"
+     :phrase-text-translated "Squirrel!"},
     :letter "s",
     :poem-image-1 "/raw/img/park/poem/i1.png",
     :poem-image-2 "/raw/img/park/poem/i2.png",
@@ -7974,7 +8066,8 @@
        :offset 13.734,
        :target "vera",
        :duration 3.226,
-       :phrase-text "Tomato, tomato, tomato!"}
+       :phrase-text "Tomate, tomate, tomate!"
+       :phrase-text-translated "Tomato, tomato, tomato!"}
       {:data
        [{:end 32.252, :anim "talk", :start 31.612, :duration 0.64}
         {:end 33.371, :anim "talk", :start 32.678, :duration 0.693}
@@ -8045,7 +8138,8 @@
      :target "senoravaca",
      :duration 0.84,
      :scene-id "home"
-     :phrase-text "Tomato"},
+     :phrase-text "Tomate"
+     :phrase-text-translated "Tomato"},
     :home-vaca-this-is-action
     {:data
      [{:end 27.812, :anim "talk", :start 27.265, :duration 0.547}
@@ -8058,7 +8152,8 @@
      :target "senoravaca",
      :duration 2.294,
      :scene-id "home"
-     :phrase-text "This is a tomato"},
+     :phrase-text "Este es un tomate"
+     :phrase-text-translated "This is a tomato"},
     :home-vaca-word-action
     {:data
      [{:end 29.318, :anim "talk", :start 28.838, :duration 0.48}],
@@ -8069,7 +8164,8 @@
      :target "senoravaca",
      :duration 0.627,
      :scene-id "home"
-     :phrase-text "Tomato!"},
+     :phrase-text "Tomate!"
+     :phrase-text-translated "Tomato!"},
     :letter "t",
     :sandbox-long-letter-action
     {:data
@@ -8297,7 +8393,8 @@
        :offset 2.707,
        :target "vera",
        :duration 2.893,
-       :phrase-text "Grape, grape, grape!"}
+       :phrase-text "Uvas, uvas, uvas!"
+       :phrase-text-translated "Grape, grape, grape!"}
       {:data
        [{:end 6.146, :anim "talk", :start 5.666, :duration 0.48}
         {:end 7.08, :anim "talk", :start 6.653, :duration 0.427}
@@ -8366,7 +8463,8 @@
      :target "senoravaca",
      :duration 0.84,
      :scene-id "home"
-     :phrase-text "Grape"},
+     :phrase-text "Uvas"
+     :phrase-text-translated "Grape"},
     :home-vaca-this-is-action
     {:data
      [{:end 2.293, :anim "talk", :start 1, :duration 1.293}
@@ -8378,7 +8476,8 @@
      :target "senoravaca",
      :duration 2.373,
      :scene-id "home"
-     :phrase-text "This is a grape"},
+     :phrase-text "Este es un uvas"
+     :phrase-text-translated "This is a grape"},
     :home-vaca-word-action
     {:data [{:end 6.24, :anim "talk", :start 5.68, :duration 0.56}],
      :type "animation-sequence",
@@ -8388,7 +8487,8 @@
      :target "senoravaca",
      :duration 0.666,
      :scene-id "home"
-     :phrase-text "Grape!"},
+     :phrase-text "Uvas!"
+     :phrase-text-translated "Grape!"},
     :letter "u",
     :sandbox-long-letter-action
     {:data [{:end 4.48, :anim "talk", :start 2.467, :duration 2.013}],
@@ -8599,7 +8699,8 @@
        :offset 37.337,
        :target "vera",
        :duration 3.4,
-       :phrase-text "Violin, violin, violin!"}
+       :phrase-text "Violin, violin, violin!"
+       :phrase-text-translated "Violin, violin, violin!"}
       {:data
        [{:end 82.786, :anim "talk", :start 82.399, :duration 0.387}
         {:end 83.799, :anim "talk", :start 83.386, :duration 0.413}
@@ -8670,7 +8771,8 @@
      :target "senoravaca",
      :duration 0.813,
      :scene-id "home"
-     :phrase-text "Violin"},
+     :phrase-text "Violin"
+     :phrase-text-translated "Violin"},
     :home-vaca-this-is-action
     {:data
      [{:end 77.439, :anim "talk", :start 76.906, :duration 0.533}
@@ -8682,7 +8784,8 @@
      :target "senoravaca",
      :duration 2.694,
      :scene-id "home"
-     :phrase-text "This is a violin"},
+     :phrase-text "Este es un violin"
+     :phrase-text-translated "This is a violin"},
     :home-vaca-word-action
     {:data
      [{:end 82.666, :anim "talk", :start 82.386, :duration 0.28}],
@@ -8693,7 +8796,8 @@
      :target "senoravaca",
      :duration 0.814,
      :scene-id "home"
-     :phrase-text "Violin!"},
+     :phrase-text "Violin!"
+     :phrase-text-translated "Violin!"},
     :letter "v",
     :sandbox-long-letter-action
     {:data
@@ -8903,7 +9007,8 @@
        :offset 48.378,
        :target "vera",
        :duration 3.427,
-       :phrase-text "Web site, web site, web site!"}
+       :phrase-text "Web, web, web!"
+       :phrase-text-translated "Web site, web site, web site!"}
       {:data
        [{:end 110.226, :anim "talk", :start 109.639, :duration 0.587}
         {:end 111.412, :anim "talk", :start 110.692, :duration 0.72}
@@ -8974,7 +9079,8 @@
      :target "senoravaca",
      :duration 1.053,
      :scene-id "home"
-     :phrase-text "Web site"},
+     :phrase-text "Web"
+     :phrase-text-translated "Web site"},
     :home-vaca-this-is-action
     {:data
      [{:end 103.732, :anim "talk", :start 103.119, :duration 0.613}
@@ -8986,7 +9092,8 @@
      :target "senoravaca",
      :duration 2.72,
      :scene-id "home"
-     :phrase-text "This is a web site"},
+     :phrase-text "Este es un web"
+     :phrase-text-translated "This is a web site"},
     :home-vaca-word-action
     {:data
      [{:end 110.306, :anim "talk", :start 109.599, :duration 0.707}],
@@ -8997,7 +9104,8 @@
      :target "senoravaca",
      :duration 0.907,
      :scene-id "home"
-     :phrase-text "Web site!"},
+     :phrase-text "Web!"
+     :phrase-text-translated "Web site!"},
     :letter "w",
     :sandbox-long-letter-action
     {:data
@@ -9225,7 +9333,8 @@
        :offset 53.596,
        :target "vera",
        :duration 4.386,
-       :phrase-text "Xylophone, xylophone, xylophone!"}
+       :phrase-text "Xilofono, xilofono, xilofono!"
+       :phrase-text-translated "Xylophone, xylophone, xylophone!"}
       {:data
        [{:end 127.842, :anim "talk", :start 127.122, :duration 0.72}
         {:end 128.909, :anim "talk", :start 128.136, :duration 0.773}
@@ -9296,7 +9405,8 @@
      :target "senoravaca",
      :duration 1.08,
      :scene-id "home"
-     :phrase-text "Xylophone"},
+     :phrase-text "Xilofono"
+     :phrase-text-translated "Xylophone"},
     :home-vaca-this-is-action
     {:data
      [{:end 122.269, :anim "talk", :start 121.762, :duration 0.507}
@@ -9309,7 +9419,8 @@
      :target "senoravaca",
      :duration 2.614,
      :scene-id "home"
-     :phrase-text "This is a xylophone"},
+     :phrase-text "Este es un xilofono"
+     :phrase-text-translated "This is a xylophone"},
     :home-vaca-word-action
     {:data
      [{:end 127.856, :anim "talk", :start 127.162, :duration 0.694}],
@@ -9320,7 +9431,8 @@
      :target "senoravaca",
      :duration 0.866,
      :scene-id "home"
-     :phrase-text "Xylophone!"},
+     :phrase-text "Xilofono!"
+     :phrase-text-translated "Xylophone!"},
     :letter "x",
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a",
@@ -9524,7 +9636,8 @@
        :offset 47.01,
        :target "vera",
        :duration 4.186,
-       :phrase-text "Yo-yo, yo-yo, yo-yo!"}
+       :phrase-text "Yoyo, yoyo, yoyo!"
+       :phrase-text-translated "Yo-yo, yo-yo, yo-yo!"}
       {:data
        [{:end 114.616, :anim "talk", :start 114.322, :duration 0.294}
         {:end 115.669, :anim "talk", :start 115.216, :duration 0.453}
@@ -9595,7 +9708,8 @@
      :target "senoravaca",
      :duration 0.786,
      :scene-id "home"
-     :phrase-text "Yo-yo"},
+     :phrase-text "Yoyo"
+     :phrase-text-translated "Yo-yo"},
     :home-vaca-this-is-action
     {:data
      [{:end 109.882, :anim "talk", :start 109.335, :duration 0.547}
@@ -9607,7 +9721,8 @@
      :target "senoravaca",
      :duration 2.227,
      :scene-id "home"
-     :phrase-text "This is an yo-yo"},
+     :phrase-text "Este es un yoyo"
+     :phrase-text-translated "This is an yo-yo"},
     :home-vaca-word-action
     {:data
      [{:end 114.642, :anim "talk", :start 114.282, :duration 0.36}],
@@ -9618,7 +9733,8 @@
      :target "senoravaca",
      :duration 0.627,
      :scene-id "home"
-     :phrase-text "Yo-yo!"},
+     :phrase-text "Yoyo!"
+     :phrase-text-translated "Yo-yo!"},
     :letter "y",
     :sandbox-long-letter-action
     {:data
@@ -9831,7 +9947,8 @@
        :offset 40.957,
        :target "vera",
        :duration 4.093,
-       :phrase-text "Boots, boots, boots!"}
+       :phrase-text "Zapato, zapato, zapato!"
+       :phrase-text-translated "Boots, boots, boots!"}
       {:data
        [{:end 101.749, :anim "talk", :start 101.122, :duration 0.627}
         {:end 103.029, :anim "talk", :start 102.202, :duration 0.827}
@@ -9902,7 +10019,8 @@
      :target "senoravaca",
      :duration 1.013,
      :scene-id "home"
-     :phrase-text "Boots"},
+     :phrase-text "Zapato"
+     :phrase-text-translated "Boots"},
     :home-vaca-this-is-action
     {:data
      [{:end 96.295, :anim "talk", :start 95.735, :duration 0.56}
@@ -9914,7 +10032,8 @@
      :target "senoravaca",
      :duration 2.667,
      :scene-id "home"
-     :phrase-text "This is a boots"},
+     :phrase-text "Este es un zapato"
+     :phrase-text-translated "This is a boots"},
     :home-vaca-word-action
     {:data
      [{:end 101.762, :anim "talk", :start 101.069, :duration 0.693}],
@@ -9925,7 +10044,8 @@
      :target "senoravaca",
      :duration 0.867,
      :scene-id "home"
-     :phrase-text "Boots!"},
+     :phrase-text "Zapato!"
+     :phrase-text-translated "Boots!"},
     :letter "z",
     :sandbox-long-letter-action
     {:data
@@ -10152,7 +10272,8 @@
        :offset 37.281,
        :target "vera",
        :duration 3.28,
-       :phrase-text "Ostrich, ostrich, ostrich!"}
+       :phrase-text "Ñandu, ñandu, ñandu!"
+       :phrase-text-translated "Ostrich, ostrich, ostrich!"}
       {:data
        [{:end 83.342, :anim "talk", :start 82.795, :duration 0.547}
         {:end 84.489, :anim "talk", :start 83.862, :duration 0.627}
@@ -10223,7 +10344,8 @@
      :target "senoravaca",
      :duration 0.894,
      :scene-id "home"
-     :phrase-text "Ostrich"},
+     :phrase-text "Ñandu"
+     :phrase-text-translated "Ostrich"},
     :home-vaca-this-is-action
     {:data
      [{:end 78.409, :anim "talk", :start 77.782, :duration 0.627}
@@ -10235,7 +10357,8 @@
      :target "senoravaca",
      :duration 2.439,
      :scene-id "home"
-     :phrase-text "This is an ostrich"},
+     :phrase-text "Este es un ñandu"
+     :phrase-text-translated "This is an ostrich"},
     :home-vaca-word-action
     {:data
      [{:end 83.462, :anim "talk", :start 82.742, :duration 0.72}],
@@ -10246,7 +10369,8 @@
      :target "senoravaca",
      :duration 0.96,
      :scene-id "home"
-     :phrase-text "Ostrich!"},
+     :phrase-text "Ñandu!"
+     :phrase-text-translated "Ostrich!"},
     :letter "ñ",
     :sandbox-long-letter-action
     {:data

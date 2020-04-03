@@ -9,10 +9,13 @@
     [webchange.editor-v2.translator.translator-form.utils :refer [get-audios
                                                                   get-dialog-data
                                                                   get-graph
-                                                                  get-current-action-data]]
+                                                                  get-current-action-data
+                                                                  trim-text]]
     [webchange.editor-v2.translator.translator-form.views-form-audios :refer [audios-block]]
     [webchange.editor-v2.translator.translator-form.views-form-concepts :refer [concepts-block]]
+    [webchange.editor-v2.translator.translator-form.views-form-description :refer [description-block]]
     [webchange.editor-v2.translator.translator-form.views-form-diagram :refer [diagram-block]]
+    [webchange.editor-v2.translator.translator-form.views-form-dialog :refer [dialog-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.subs :as subs]))
@@ -59,6 +62,23 @@
                                                                                          :id      id
                                                                                          :data    new-data}]))))
 
+(defn- update-root-action-data
+  [data-patch]
+  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+        selected-phrase-node @(re-frame/subscribe [::editor-subs/current-action])
+        {:keys [id name type data]} (get-current-action-data selected-phrase-node nil data-store)]
+    (re-frame/dispatch [::translator-events/set-phrase-translation-action name {:changed true
+                                                                                :type    type
+                                                                                :id      id
+                                                                                :data    (merge data data-patch)}])))
+
+(defn- get-current-root-data
+  [selected-phrase-node data-store]
+  (let [name (first (:path selected-phrase-node))
+        origin-data (:data selected-phrase-node)
+        new-data (get-in data-store [name :data])]
+    (merge origin-data new-data)))
+
 (defn translator-form
   []
   (r/with-let []
@@ -74,32 +94,46 @@
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
                     {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept current-concept})
                     audios-list (get-audios scene-data graph)
-                    dialog-data (get-dialog-data @selected-phrase-node graph)
                     data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
-                    prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)]
+                    dialog-data (get-dialog-data @selected-phrase-node graph (fn [node-data]
+                                                                               (get-current-action-data node-data current-concept data-store)))
+                    prepared-root-action-data (get-current-root-data @selected-phrase-node data-store)
+                    prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)
+                    phrase-action-selected? (-> @selected-action-node (nil?) (not))
+                    concept-required? (or has-concepts? selected-action-concept?)]
                 [:div
-                 [ui/grid {:container true
-                           :spacing   16
-                           :justify   "space-between"}
-                  [ui/grid {:item true
-                            :xs   8}
-                   [phrase-block {:dialog-data dialog-data}]]
-                  [ui/grid {:item true :xs 4}
+                 [description-block {:origin-text     (:phrase-description prepared-root-action-data)
+                                     :translated-text (:phrase-description-translated prepared-root-action-data)
+                                     :on-change       (fn [new-translated-description]
+                                                        (update-root-action-data {:phrase-description-translated new-translated-description}))}]
+                 (when concept-required?
                    [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
-                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}]]]
+                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}])
+
+                 [dialog-block {:dialog-data dialog-data}]
                  [diagram-block {:graph graph}]
                  [play-phrase-block {:graph           graph
                                      :current-concept current-concept
                                      :edited-data     data-store}]
-                 [audios-block {:scene-id  scene-id
-                                :audios    audios-list
-                                :action    prepared-current-action-data
-                                :on-change (fn [audio-key region-data]
-                                             (update-action-data! (-> @selected-action-node :path first) (merge {:audio audio-key} (select-keys region-data [:start :duration]))))}]
+                 (if phrase-action-selected?
+                   [:div
+                    [phrase-block {:origin-text     (-> prepared-current-action-data :data :phrase-text trim-text)
+                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated trim-text)
+                                   :on-change       (fn [new-translated-text]
+                                                      (update-action-data! (-> @selected-action-node :path first)
+                                                                           {:phrase-text-translated new-translated-text}))}]
+                    [audios-block {:scene-id  scene-id
+                                   :audios    audios-list
+                                   :action    prepared-current-action-data
+                                   :on-change (fn [audio-key region-data]
+                                                (update-action-data! (-> @selected-action-node :path first)
+                                                                     (merge {:audio audio-key}
+                                                                            (select-keys region-data [:start :duration]))))}]]
+                   [ui/typography {:variant "subtitle1"}
+                    "Select action on diagram"])
                  [ui/dialog
-                  {:open       (and (or has-concepts?
-                                        selected-action-concept?)
+                  {:open       (and concept-required?
                                     (nil? current-concept))
                    :full-width true
                    :max-width  "xs"}

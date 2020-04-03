@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.diagram.modes.translation.widget-data
   (:require
     [clojure.string :refer [capitalize]]
-    [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
@@ -9,9 +8,8 @@
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [get-node-type speech-node? concept-action-node?]]
     [webchange.editor-v2.translator.events :as te]
-    [webchange.editor-v2.translator.translator-form.utils :refer [action-data->phrase-data]]
-    [webchange.editor-v2.translator.translator-form.utils-play-audio :refer [play-audios-list]]
-    [webchange.editor-v2.utils :refer [str->caption]]))
+    [webchange.editor-v2.translator.translator-form.utils :refer [node-data->phrase-data]]
+    [webchange.editor-v2.translator.translator-form.utils-play-audio :refer [play-audios-list]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 
@@ -25,40 +23,39 @@
 
 (defn- get-styles
   []
-  {:title       {:margin     0
-                 :padding    5
-                 :text-align "center"
-                 :max-width  "230px"
-                 :min-width  "180px"}
-   :text        {:margin     "0"
-                 :padding    "5px"
-                 :text-align "center"
-                 :max-width  "230px"
-                 :min-width  "180px"}
-   :play-button {:right    "0"
-                 :bottom   "0"
-                 :position "absolute"
-                 :margin   "10px"
-                 :width    "36px"
-                 :height   "36px"}})
+  {:title        {:margin      "0"
+                  :padding     "10px"
+                  :text-align  "left"
+                  :max-width   "250px"
+                  :min-width   "180px"
+                  :font-size   "1.5rem"
+                  :line-height "1.28571429em"}
+   :title-target {:font-size       "1.7rem"
+                  :font-weight     "bold"
+                  :margin-right    "16px"
+                  :text-decoration "underline"}
+   :play-button  {:right    "0"
+                  :bottom   "0"
+                  :position "absolute"
+                  :margin   "10px"
+                  :width    "36px"
+                  :height   "36px"}})
 
 (defn- header
-  [props]
-  (let [title (str->caption (:name props))
-        phrase-data (action-data->phrase-data (:data props))
-        target (:target phrase-data)
+  [{:keys [name] :as node}]
+  (let [phrase-data (node-data->phrase-data node)
+        phrase-target (when-not (nil? (:target phrase-data))
+                        (-> (:target phrase-data) (capitalize) (str ":")))
         phrase-text (:phrase-text phrase-data)
-        text (if (nil? phrase-text)
-               ""
-               (if (nil? target)
-                 phrase-text
-                 (str (capitalize target) ": " phrase-text)))
         styles (get-styles)]
-    [:div
-     [:h3 {:style (:title styles)}
-      title]
-     [:p {:style (:text styles)}
-      text]]))
+    (if-not (nil? phrase-text)
+      [:div {:style (:title styles)}
+       (when-not (nil? phrase-target)
+         [:span {:style (:title-target styles)} phrase-target])
+       [:span phrase-text]]
+      [:div {:style (:title styles)}
+       [:p "! NO PHRASE TEXT !"]
+       [:p name]])))
 
 (defn- play-button
   [audio-data]
