@@ -103,3 +103,29 @@ SELECT * from schools LIMIT 1
 -- :name access-code-exists? :? :1
 -- :doc retrieve first school record
 SELECT true as result from students WHERE school_id = :school_id AND access_code = :access_code
+
+-- :name create-new-school! :<!
+-- :doc creates a new school record
+INSERT INTO schools
+(name)
+VALUES (:name) RETURNING id
+
+-- :name get-school :? :1
+-- :doc retrieve school record
+SELECT * from schools
+WHERE id = :id
+
+-- :name get-schools :? :*
+-- :doc retrieve school records
+SELECT * from schools
+
+-- :name update-school! :! :n
+-- :doc updates an existing school record
+UPDATE schools
+SET name = :name
+WHERE id = :id
+
+-- :name delete-school! :! :n
+-- :doc deletes school
+DELETE from schools
+WHERE id = :id

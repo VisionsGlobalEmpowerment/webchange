@@ -78,17 +78,12 @@
     (-> (core/delete-student! (Integer/parseInt id))
         handle)))
 
-(defn handle-current-school [request]
-  (-> (core/get-current-school)
-      response))
-
 (defn handle-next-access-code [request]
   (let [school-id (current-school request)]
     (-> (core/next-code school-id)
         handle)))
 
 (defroutes class-routes
-           (GET "/api/schools/current" request (handle-current-school request))
            (GET "/api/classes" request (handle-list-classes request))
            (GET "/api/classes/:id" [id]
              (if-let [item (-> id Integer/parseInt core/get-class)]

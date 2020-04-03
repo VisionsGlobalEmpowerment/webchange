@@ -477,3 +477,42 @@
 (defn with-default-school [f]
   (school-created {:id default-school-id})
   (f))
+
+(defn get-school
+  [id]
+  (let [url (str "/api/schools/" id)
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn create-school!
+  [data]
+  (let [url (str "/api/schools")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (-> (handler/dev-handler request)
+        :body
+        (json/read-str :key-fn keyword))))
+
+(defn get-schools
+  []
+  (let [url (str "/api/schools")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn update-school!
+  [id data]
+  (let [url (str "/api/schools/" id)
+        request (-> (mock/request :put url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn delete-school!
+  [id]
+  (let [url (str "/api/schools/" id)
+        request (-> (mock/request :delete url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
