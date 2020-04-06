@@ -31,6 +31,11 @@
   (when (allowed? :warn)
     (apply js/console.warn (into [prefix "[Warn]"] args))))
 
+(defn error
+  [& args]
+  (when (allowed? :error)
+    (apply js/console.error (into [prefix "[Error]"] args))))
+
 (defn debug-folded
   [title & args]
   (when (allowed? :debug)
