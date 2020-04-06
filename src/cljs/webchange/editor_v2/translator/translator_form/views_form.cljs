@@ -97,22 +97,19 @@
 
 (defn- load-lip-sync-data!
   [{:keys [audio start duration]} {:keys [on-ready on-error]}]
-  (when (and (not (nil? audio))
-             (not (nil? start))
-             (not (nil? duration)))
-    (re-frame/dispatch [::translator-events/set-blocking-progress true])
-    (GET "/api/actions/get-talk-animations"
-         {:params          {:file     audio
-                            :start    start
-                            :duration duration}
-          :handler         (fn [data]
-                             (re-frame/dispatch [::translator-events/set-blocking-progress false])
-                             (on-ready data))
-          :error-handler   (fn [error]
-                             (re-frame/dispatch [::translator-events/set-blocking-progress false])
-                             (on-error error))
-          :response-format :json
-          :keywords?       true})))
+  (re-frame/dispatch [::translator-events/set-blocking-progress true])
+  (GET "/api/actions/get-talk-animations"
+       {:params          {:file     audio
+                          :start    start
+                          :duration duration}
+        :handler         (fn [data]
+                           (re-frame/dispatch [::translator-events/set-blocking-progress false])
+                           (on-ready data))
+        :error-handler   (fn [error]
+                           (re-frame/dispatch [::translator-events/set-blocking-progress false])
+                           (on-error error))
+        :response-format :json
+        :keywords?       true}))
 
 (defn- error-snackbar
   [{:keys [error on-close]}]
@@ -180,14 +177,15 @@
                                    :action    prepared-current-action-data
                                    :on-change (fn [audio-key region-data]
                                                 (let [action-name (-> @selected-action-node :path first)
-                                                      audio-region (merge {:audio audio-key}
-                                                                          (select-keys region-data [:start :duration]))
+                                                      audio-data (merge {:audio audio-key}
+                                                                        (select-keys region-data [:start :duration]))
                                                       handle-error (fn [error-message]
                                                                      (logger/error error-message)
                                                                      (show-error error-message))]
-                                                  (update-action-data! action-name audio-region)
-                                                  (load-lip-sync-data! audio-region {:on-ready #(apply-lip-sync-data! action-name % handle-error)
-                                                                                     :on-error #(handle-error "Getting lip sync data error")})))}]]
+                                                  (update-action-data! action-name audio-data)
+                                                  (when-not (nil? region-data)
+                                                    (load-lip-sync-data! audio-data {:on-ready #(apply-lip-sync-data! action-name % handle-error)
+                                                                                     :on-error #(handle-error "Getting lip sync data error")}))))}]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
                  [ui/dialog
