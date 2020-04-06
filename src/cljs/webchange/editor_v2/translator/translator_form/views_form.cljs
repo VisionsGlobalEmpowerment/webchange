@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.translator.translator-form.views-form
   (:require
+    [ajax.core :refer [GET]]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
@@ -62,6 +63,18 @@
                                                                                          :id      id
                                                                                          :data    new-data}]))))
 
+(defn- show-error!
+  [error-message]
+  (println "Error:" error-message))
+
+(defn- apply-lip-sync-data!
+  [action-name animation-data]
+  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+        action-type (get-in data-store [action-name :data :type])]
+    (if (= action-type "animation-sequence")
+      (update-action-data! action-name {:data animation-data})
+      (show-error! (str "Action '" action-name "' must have type 'animation-sequence'")))))
+
 (defn- update-root-action-data
   [data-patch]
   (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
@@ -78,6 +91,17 @@
         origin-data (:data selected-phrase-node)
         new-data (get-in data-store [name :data])]
     (merge origin-data new-data)))
+
+(defn- load-lip-sync-data!
+  [{:keys [audio start duration]} {:keys [on-ready on-error]}]
+  (GET "/api/actions/get-talk-animations"
+       {:params          {:file     audio
+                          :start    start
+                          :duration duration}
+        :handler         on-ready
+        :error-handler   on-error
+        :response-format :json
+        :keywords?       true}))
 
 (defn translator-form
   []
@@ -128,9 +152,12 @@
                                    :audios    audios-list
                                    :action    prepared-current-action-data
                                    :on-change (fn [audio-key region-data]
-                                                (update-action-data! (-> @selected-action-node :path first)
-                                                                     (merge {:audio audio-key}
-                                                                            (select-keys region-data [:start :duration]))))}]]
+                                                (let [action-name (-> @selected-action-node :path first)
+                                                      audio-region (merge {:audio audio-key}
+                                                                          (select-keys region-data [:start :duration]))]
+                                                  (update-action-data! action-name audio-region)
+                                                  (load-lip-sync-data! audio-region {:on-ready #(apply-lip-sync-data! action-name %)
+                                                                                     :on-error #(show-error! "Getting lip sync data error")})))}]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
                  [ui/dialog
