@@ -16,6 +16,11 @@
              (assoc-in [:editor-v2 :translator :phrase-translation-data] {}))}))
 
 (re-frame/reg-event-fx
+  ::set-blocking-progress
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db [:editor-v2 :translator :blocking-progress] value)}))
+
+(re-frame/reg-event-fx
   ::set-current-selected-action
   (fn [{:keys [db]} [_ action]]
     {:db (assoc-in db [:editor-v2 :translator :selected-action] action)}))

@@ -97,14 +97,22 @@
 
 (defn- load-lip-sync-data!
   [{:keys [audio start duration]} {:keys [on-ready on-error]}]
-  (GET "/api/actions/get-talk-animations"
-       {:params          {:file     audio
-                          :start    start
-                          :duration duration}
-        :handler         on-ready
-        :error-handler   on-error
-        :response-format :json
-        :keywords?       true}))
+  (when (and (not (nil? audio))
+             (not (nil? start))
+             (not (nil? duration)))
+    (re-frame/dispatch [::translator-events/set-blocking-progress true])
+    (GET "/api/actions/get-talk-animations"
+         {:params          {:file     audio
+                            :start    start
+                            :duration duration}
+          :handler         (fn [data]
+                             (re-frame/dispatch [::translator-events/set-blocking-progress false])
+                             (on-ready data))
+          :error-handler   (fn [error]
+                             (re-frame/dispatch [::translator-events/set-blocking-progress false])
+                             (on-error error))
+          :response-format :json
+          :keywords?       true})))
 
 (defn- error-snackbar
   [{:keys [error on-close]}]
@@ -122,7 +130,7 @@
 
 (defn translator-form
   []
-  (r/with-let [error (r/atom "FFf")
+  (r/with-let [error (r/atom nil)
                show-error #(reset! error %)
                hide-error #(reset! error nil)]
               (let [current-concept @(re-frame/subscribe [::translator-subs/current-concept])
