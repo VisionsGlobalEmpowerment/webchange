@@ -10,6 +10,13 @@
         boolean)))
 
 (re-frame/reg-sub
+  ::blocking-progress
+  (fn [db]
+    (-> db
+        (get-in [:editor-v2 :translator :blocking-progress])
+        boolean)))
+
+(re-frame/reg-sub
   ::selected-action
   (fn [db]
     (get-in db [:editor-v2 :translator :selected-action])))

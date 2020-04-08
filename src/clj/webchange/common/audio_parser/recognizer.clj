@@ -50,8 +50,10 @@
                        "--quiet"
                        "--exportFormat" "json"
                        "--machineReadable"
-                       converted-file-path)]
-        (io/delete-file converted-file-path)
+                       converted-file-path)
+            delete-silently? true]                          ; delete silently because of possible deleting from 2 racing processes
+                                                            ; (from 2 requests)
+        (io/delete-file converted-file-path delete-silently?)
         (when (= (:exit result) 1)
           (throw (Exception. (:err result))))))
     result-file))

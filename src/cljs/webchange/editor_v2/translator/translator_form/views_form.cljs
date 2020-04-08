@@ -1,5 +1,7 @@
 (ns webchange.editor-v2.translator.translator-form.views-form
   (:require
+    [ajax.core :refer [GET]]
+    [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
@@ -18,7 +20,13 @@
     [webchange.editor-v2.translator.translator-form.views-form-dialog :refer [dialog-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
-    [webchange.subs :as subs]))
+    [webchange.logger :as logger]
+    [webchange.subs :as subs]
+    [webchange.ui.theme :refer [get-in-theme]]))
+
+(defn- get-styles
+  []
+  {:error-wrapper {:background-color (get-in-theme [:palette :background :default])}})
 
 (defn default-action-data
   [selected-action-concept? action-name concept-data scene-data]
@@ -62,6 +70,14 @@
                                                                                          :id      id
                                                                                          :data    new-data}]))))
 
+(defn- apply-lip-sync-data!
+  [action-name animation-data on-error]
+  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+        action-type (get-in data-store [action-name :data :type])]
+    (if (= action-type "animation-sequence")
+      (update-action-data! action-name {:data animation-data})
+      (on-error (str "Action '" action-name "' must have type 'animation-sequence'")))))
+
 (defn- update-root-action-data
   [data-patch]
   (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
@@ -79,9 +95,41 @@
         new-data (get-in data-store [name :data])]
     (merge origin-data new-data)))
 
+(defn- load-lip-sync-data!
+  [{:keys [audio start duration]} {:keys [on-ready on-error]}]
+  (re-frame/dispatch [::translator-events/set-blocking-progress true])
+  (GET "/api/actions/get-talk-animations"
+       {:params          {:file     audio
+                          :start    start
+                          :duration duration}
+        :handler         (fn [data]
+                           (re-frame/dispatch [::translator-events/set-blocking-progress false])
+                           (on-ready data))
+        :error-handler   (fn [error]
+                           (re-frame/dispatch [::translator-events/set-blocking-progress false])
+                           (on-error error))
+        :response-format :json
+        :keywords?       true}))
+
+(defn- error-snackbar
+  [{:keys [error on-close]}]
+  (let [styles (get-styles)]
+    [ui/snackbar {:open               (not (nil? error))
+                  :anchor-origin      {:vertical   "bottom"
+                                       :horizontal "right"}
+                  :auto-hide-duration 6000
+                  :on-close           on-close}
+     [ui/snackbar-content {:message (r/as-element [ui/typography {:color "secondary"} error])
+                           :style   (:error-wrapper styles)
+                           :action  (r/as-element [ui/icon-button {:color    "secondary"
+                                                                   :on-click on-close}
+                                                   [ic/close]])}]]))
+
 (defn translator-form
   []
-  (r/with-let []
+  (r/with-let [error (r/atom nil)
+               show-error #(reset! error %)
+               hide-error #(reset! error nil)]
               (let [current-concept @(re-frame/subscribe [::translator-subs/current-concept])
                     scene-id @(re-frame/subscribe [::subs/current-scene])
                     scene-data @(re-frame/subscribe [::subs/scene scene-id])
@@ -128,9 +176,16 @@
                                    :audios    audios-list
                                    :action    prepared-current-action-data
                                    :on-change (fn [audio-key region-data]
-                                                (update-action-data! (-> @selected-action-node :path first)
-                                                                     (merge {:audio audio-key}
-                                                                            (select-keys region-data [:start :duration]))))}]]
+                                                (let [action-name (-> @selected-action-node :path first)
+                                                      audio-data (merge {:audio audio-key}
+                                                                        (select-keys region-data [:start :duration]))
+                                                      handle-error (fn [error-message]
+                                                                     (logger/error error-message)
+                                                                     (show-error error-message))]
+                                                  (update-action-data! action-name audio-data)
+                                                  (when-not (nil? region-data)
+                                                    (load-lip-sync-data! audio-data {:on-ready #(apply-lip-sync-data! action-name % handle-error)
+                                                                                     :on-error #(handle-error "Getting lip sync data error")}))))}]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
                  [ui/dialog
@@ -147,6 +202,8 @@
                   [ui/dialog-actions
                    [ui/button {:on-click #(do (re-frame/dispatch [::translator-events/clean-current-selected-action])
                                               (re-frame/dispatch [::translator-events/close-translator-modal]))}
-                    "Cancel"]]]])
+                    "Cancel"]]]
+                 [error-snackbar {:error    @error
+                                  :on-close hide-error}]])
               (finally
                 (re-frame/dispatch [::translator-events/clean-current-selected-action]))))
