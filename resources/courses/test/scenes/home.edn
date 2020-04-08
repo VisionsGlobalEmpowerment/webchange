@@ -1,9 +1,9 @@
 {:assets
                 [{:url "/raw/audio/background/Casa.mp3", :size 10, :type "audio"}
-                 {:url "/raw/audio/l1/a1/mari.mp4", :size 1, :type "audio" :alias "mari"}
-                 {:url "/raw/audio/l1/a1/vera-casa-1.mp3", :size 2, :type "audio" :alias "vera 1"}
-                 {:url "/raw/audio/l1/a1/vera-casa-2.mp3", :size 2, :type "audio" :alias "vera 2"}
-                 {:url "/raw/audio/l1/a1/vera-casa-3.mp3", :size 2, :type "audio" :alias "vera 3"}
+                 {:url "/raw/audio/l1/a1/mari.mp4", :size 1, :type "audio" :alias "mari" :target "mari"}
+                 {:url "/raw/audio/l1/a1/vera-casa-1.mp3", :size 2, :type "audio" :alias "vera 1" :target "vera"}
+                 {:url "/raw/audio/l1/a1/vera-casa-2.mp3", :size 2, :type "audio" :alias "vera 2" :target "vera"}
+                 {:url "/raw/audio/l1/a1/vera-casa-3.mp3", :size 2, :type "audio" :alias "vera 3" :target "vera"}
                  {:url "/raw/audio/effects/correct.mp3", :size 1, :type "audio"}
                  {:url "/raw/audio/effects/incorrect.mp3", :size 1, :type "audio"}
                  {:url "/raw/audio/effects/box-appear.mp3", :size 1, :type "audio"}
@@ -11,13 +11,13 @@
                  {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/casa_door.png", :size 1, :type "image"}
 
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio" :alias "vaca voice 1"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio" :alias "vaca voice 2"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio" :alias "vaca voice 3"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a", :size 2, :type "audio" :alias "vaca voice diamante"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
+                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio" :alias "vaca voice 1" :target "vaca"}
+                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio" :alias "vaca voice 2" :target "vaca"}
+                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio" :alias "vaca voice 3" :target "vaca"}
+                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a", :size 2, :type "audio" :alias "vaca voice diamante" :target "vaca"}
+                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 1" :target "vaca"}
+                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 2" :target "vaca"}
+                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 3" :target "vaca"}
                  ],
  :objects
                 {:background   {:type "background", :src "/raw/img/casa/background.jpg"},
@@ -77,31 +77,41 @@
  :actions
                 {:senora-vaca-audio-1 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 1.089
                                        :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 1.089, :duration 2.749
-                                       :data [{:start 1.089 :end 3.596 :anim "talk"}]}
+                                       :data [{:start 1.089 :end 3.596 :anim "talk"}]
+                                       :phrase             :intro
+                                       :phrase-description "Introduce activity"
+                                       :phrase-text "Vamos a aprender nuevas palabras.",}
 
                  :senora-vaca-audio-2 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 4.395
                                        :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 4.395, :duration 10.042
                                        :data [{:start 4.395 :end 5.484 :anim "talk"}
                                               {:start 6.423 :end 8.745 :anim "talk"}
                                               {:start 9.607 :end 10.342 :anim "talk"}
-                                              {:start 11.226 :end 14.302 :anim "talk"}]}
+                                              {:start 11.226 :end 14.302 :anim "talk"}]
+                                       :phrase             :touch-first-box
+                                       :phrase-description "Touch the first box"
+                                       :phrase-text        "Mira esto! Que podria estar dentro de las cajas? Vamos a ver adentro! Toca la primera caja par ver que hay adentro.",}
 
                  :senora-vaca-audio-touch-second-box
-                                                   {:type "parallel"
-                                                    :data [{:type "audio", :id "vaca-2", :start 0.587, :duration 8.772}
-                                                           {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.587
-                                                            :data [{:start 0.873 :end 2.053 :anim "talk"}
-                                                                   {:start 2.794 :end 4.952 :anim "talk"}
-                                                                   {:start 5.336 :end 6.67 :anim "talk"}
-                                                                   {:start 7.697 :end 9.136 :anim "talk"}]}]}
+                                      {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.587
+                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a" :start 0.587, :duration 8.772
+                                       :data [{:start 0.873 :end 2.053 :anim "talk"}
+                                              {:start 2.794 :end 4.952 :anim "talk"}
+                                              {:start 5.336 :end 6.67 :anim "talk"}
+                                              {:start 7.697 :end 9.136 :anim "talk"}]
+                                       :phrase             :touch-second-box
+                                       :phrase-description "Touch the second box"
+                                       :phrase-text        "Muy bien! Vamos a ver que hay dentro de la segunda caja. Toco la siguiente caja para ver que hay adentro.",}
 
                  :senora-vaca-audio-touch-third-box
-                                                   {:type "parallel"
-                                                    :data [{:type "audio", :id "vaca-3", :start 0.76, :duration 4.986}
-                                                           {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.76
-                                                            :data [{:start 0.844 :end 1.844 :anim "talk"}
-                                                                   {:start 2.214 :end 2.733 :anim "talk"}
-                                                                   {:start 2.928 :end 5.674 :anim "talk"}]}]}
+                                      {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.76
+                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a" :start 0.76, :duration 4.986
+                                       :data [{:start 0.844 :end 1.844 :anim "talk"}
+                                              {:start 2.214 :end 2.733 :anim "talk"}
+                                              {:start 2.928 :end 5.674 :anim "talk"}]
+                                       :phrase             :touch-third-box
+                                       :phrase-description "Touch the third box"
+                                       :phrase-text "Muy bien! Ahora hay que ver dentro de la tercera caja. Toca la ultima caja para ver que hay adentro.",}
 
                  :show-boxes                       {:type "parallel"
                                                     :data [{:type "state" :target "box1" :id "visible"}
@@ -207,10 +217,10 @@
 
                  :vaca-this-is-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
 
-                 :vaca-can-you-say                 {:type "parallel"
-                                                    :data [{:type "audio", :id "vaca-3", :start 11.75, :duration 0.935}
-                                                           {:type "animation-sequence" :target "senoravaca" :track 1 :offset 11.75
-                                                            :data [{:start 11.75 :end 12.62 :anim "talk"}]}]}
+                 :vaca-can-you-say                 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 11.75
+                                                    :audio "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a" :start 11.75, :duration 0.935
+                                                    :data [{:start 11.75 :end 12.62 :anim "talk"}]
+                                                    :phrase-text "Puedes decir"}
 
                  :vaca-question-var                {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-question-action"}]}
 
@@ -218,46 +228,60 @@
 
                  :group-word-var                   {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-word-action"}]}
 
-                 :vaca-say-3-times                 {:type "parallel"
-                                                    :data [{:type "audio", :id "vaca-1", :start 25.079, :duration 2.381}
-                                                           {:type "animation-sequence" :target "senoravaca" :track 1 :offset 25.079
-                                                            :data [{:start 25.152 :end 25.513 :anim "talk"}
-                                                                   {:start 25.853 :end 27.2 :anim "talk"}]}]}
+                 :vaca-say-3-times                 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 25.079
+                                                    :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 25.079, :duration 2.381
+                                                    :data [{:start 25.152 :end 25.513 :anim "talk"}
+                                                           {:start 25.853 :end 27.2 :anim "talk"}]
+                                                    :phrase-text "Bueno. Digalo tres veces"}
 
                  :vaca-3-times-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-3-times-action"}]}
 
                  :group-3-times-var                {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
 
-                 :vaca-once-more                   {:type "parallel"
-                                                    :data [{:type "audio", :id "vaca-1", :start 37.751, :duration 1.187}
-                                                           {:type "animation-sequence" :target "senoravaca" :track 1 :offset 37.751
-                                                            :data [{:start 37.751 :end 38.792 :anim "talk"}]}]}
+                 :vaca-once-more                   {:type "animation-sequence" :target "senoravaca" :track 1 :offset 37.751
+                                                    :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 37.751, :duration 1.187
+                                                    :data [{:start 37.751 :end 38.792 :anim "talk"}]
+                                                    :phrase-text "Una vez mas!"}
 
-                 :vaca-goodbye-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]}
+                 :vaca-goodbye-var                 {:type "action"
+                                                    :from-var [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]
+                                                    :phrase                        :concept-goodbye
+                                                    :phrase-description            "Adios concepto"}
 
                  :introduce-word                   {:type "sequence"
                                                     :data ["audio-correct"
                                                            "empty-big"
-                                                           "vaca-this-is-var"
-                                                           "empty-small"
-                                                           "vaca-can-you-say"
-                                                           "vaca-question-var"
-                                                           "empty-small"
-                                                           "vaca-word-var"
+                                                           "concept-intro"
                                                            "empty-big"
-                                                           "group-word-var"
-                                                           "empty-small"
-                                                           "vaca-say-3-times"
-                                                           "vaca-3-times-var"
-                                                           "empty-big"
-                                                           "group-3-times-var"
-                                                           "empty-small"
-                                                           "vaca-once-more"
-                                                           "empty-small"
-                                                           "group-3-times-var"
+                                                           "concept-chant"
                                                            "empty-small"
                                                            "vaca-goodbye-var"
                                                            "empty-big"]}
+
+                 :concept-intro                      {:type               "sequence"
+                                                      :data               ["vaca-this-is-var"
+                                                                           "empty-small"
+                                                                           "vaca-can-you-say"
+                                                                           "vaca-question-var"
+                                                                           "empty-small"
+                                                                           "vaca-word-var"
+                                                                           "empty-small-1"
+                                                                           "group-word-var"]
+                                                      :phrase             :this-is-concept
+                                                      :phrase-description "Introduce concept"}
+
+                 :concept-chant                      {:type               "sequence"
+                                                      :data               ["vaca-say-3-times"
+                                                                           "vaca-3-times-var"
+                                                                           "empty-big"
+                                                                           "group-3-times-var"
+                                                                           "empty-small-2"
+                                                                           "vaca-once-more"
+                                                                           "empty-small"
+                                                                           "group-3-times-var"
+                                                                           ]
+                                                      :phrase             :concept-chant
+                                                      :phrase-description "Chant concept"}
 
                  :senora-vaca-anim-idle            {:type "animation" :target "senoravaca" :id "idle"}
                  :senora-vaca-anim-clapping-start  {:type "animation" :target "senoravaca" :id "clapping_start" :loop false}
@@ -268,7 +292,8 @@
 
 
                  :pick-wrong                       {:type "sequence-data"
-                                                    :data [{:type "audio" :id "/raw/audio/effects/incorrect.mp3" :start 0 :duration 0.527}]}
+                                                    :data [{:type "audio" :id "/raw/audio/effects/incorrect.mp3" :start 0 :duration 0.527 :phrase-text "Intenta de nuevo!"}]
+                                                    :phrase-description "Wrong answer"}
 
                  :audio-correct {:type "audio" :id "/raw/audio/effects/correct.mp3" :start 0 :duration 1.71}
                  :renew-words                      {:type        "lesson-var-provider"
@@ -277,6 +302,10 @@
                                                     :from        "concepts"}
 
                  :empty-small                      {:type "empty" :duration 500}
+                 ;; ToDo: eliminate when graph normalizer is fixed
+                 :empty-small-1                      {:type "empty" :duration 500}
+                 :empty-small-2                      {:type "empty" :duration 500}
+
                  :empty-big                        {:type "empty" :duration 1000}
                  :clear-instruction                {:type "remove-flows" :flow-tag "instruction"}
                  :start-background-music           {:type "audio" :id "/raw/audio/background/Casa.mp3" :loop true}
@@ -306,11 +335,11 @@
                                                                {:start 17.23, :end 18.61, :anim "talk"}
                                                                {:start 19.04, :end 22.56, :anim "talk"}],
                                                               :start 0.745,
-                                                              :duration 22.05}
+                                                              :duration 22.05
+                                                              :phrase-text        "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad."}
                                                              {:type "set-variable", :var-name "restart", :var-value true}],
-                                                      :phrase "finish-activity",
-                                                      :phrase-text
-                                                      "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad."}
+                                                      :phrase             :finish-activity
+                                                      :phrase-description "Repeat or go to the next activity"}
 
                  :restart                          {:type     "test-value"
                                                     :value1   true
@@ -327,16 +356,7 @@
                                                                               {:type "state" :target "box3" :id "default"}]}
                                                                       {:type "action" :id "intro"}]}}
                  }
- :audio
-                {:casa-welcome "/raw/audio/scripts/intro/intro-welcome.mp3"
-                 :casa-finish  "/raw/audio/scripts/intro/intro-finish.mp3"
-                 :fw-try-again "/raw/audio/ferris-wheel/fw-try-again.mp3"
-                 :vaca-1       "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a"
-                 :vaca-2       "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a"
-                 :vaca-3       "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a"
-                 :vera-1       "/raw/audio/l1/a1/L1_A1_Vera_Ardilla.m4a"
-                 :vera-2       "/raw/audio/l1/a1/L1_A1_Vera_Oso.m4a"
-                 :vera-3       "/raw/audio/l1/a1/L1_A1_Vera_Iman.m4a"},
+
  :triggers      {:music {:on "start" :action "start-background-music"}
                  :back  {:on "back" :action "stop-activity"}
                  :start {:on "start" :action "intro"}}

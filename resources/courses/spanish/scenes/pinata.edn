@@ -1,0 +1,436 @@
+{:assets
+ [{:url "/raw/img/park/pinata/background.jpg", :type "image"}
+  {:url "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio"}
+  {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio", :alias "mari chants"}],
+ :actions
+ {:next-round
+  {:data
+   [{:type "set-variable", :var-name "current-slot-number", :var-value 0}
+    {:id "renew-current-concepts", :type "action"}
+    {:id "get-new-boxes", :type "action"}
+    {:id "set-concepts-data", :type "action"}
+    {:id "next-task", :type "action"}],
+   :type "sequence-data"},
+  :check-place-3
+  {:fail "mari-wrong",
+   :type "test-var-scalar",
+   :success "check-current-slot",
+   :from-var [{:var-name "current-box", :action-property "var-name"} {:var-name "letter3", :action-property "value"}]},
+  :pinata-hit
+  {:data
+   [{:id "hit", :type "animation", :target "pinata"} {:id "idle", :loop true, :type "add-animation", :target "pinata"}],
+   :type "sequence-data"},
+  :boxes-disappear
+  {:data
+   [{:skin "qwestion", :type "set-skin", :target "box1"}
+    {:skin "qwestion", :type "set-skin", :target "box2"}
+    {:skin "qwestion", :type "set-skin", :target "box3"}
+    {:type "set-attribute", :target "box1", :attr-name "type", :attr-value "transparent"}
+    {:type "set-attribute", :target "box2", :attr-name "type", :attr-value "transparent"}
+    {:type "set-attribute", :target "box3", :attr-name "type", :attr-value "transparent"}],
+   :type "parallel"},
+  :mari-voice-welcome
+  {:data
+   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 0.677, :duration 15.949}
+    {:data
+     [{:end 6.21, :anim "talk", :start 1.329}
+      {:end 10.633, :anim "talk", :start 6.79}
+      {:end 14.402, :anim "talk", :start 11.623}
+      {:end 16.287, :anim "talk", :start 14.62}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 0.677,
+     :target "mari"}],
+   :type "parallel",
+   :description
+   "Wiii, vamos a tener una fiesta con las letras!\n                                                            Cuando le pegue a la pinata, las fotos caeran.\n                                                            Empareja las letras sobre el piso a la foto correcta."},
+  :stop-activity {:id "pinata", :type "stop-activity"},
+  :check-place-2
+  {:fail "mari-wrong",
+   :type "test-var-scalar",
+   :success "check-current-slot",
+   :from-var [{:var-name "current-box", :action-property "var-name"} {:var-name "letter2", :action-property "value"}]},
+  :finish-activity
+  {:data
+   [{:id "pinata", :type "finish-activity"}
+    {:id "mari-hits-pinata-toward", :type "action"}
+    {:id "mari-hits-pinata-backward", :type "action"}
+    {:id "pinata-fall-down", :type "action"}
+    {:type "empty", :duration 2000}
+    {:type "scene", :scene-id "park"}],
+   :type "sequence-data"},
+  :start {:data ["start-activity" "init-vars" "mari-voice-welcome" "next-round"], :type "sequence"},
+  :mari-voice-act-1
+  {:data
+   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 18.776, :duration 1.716}
+    {:data [{:end 20.492, :anim "talk", :start 18.776}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 18.776,
+     :target "mari"}],
+   :type "parallel",
+   :description "Esta es la letra"},
+  :get-new-boxes
+  {:data
+   [{:id "mari-hits-pinata-toward", :type "action"}
+    {:data
+     [{:id "mari-hits-pinata-backward", :type "action"}
+      {:id "pinata-hit", :type "action"}
+      {:id "boxes-jump-out", :type "action"}],
+     :type "parallel"}],
+   :type "sequence-data"},
+  :empty {:type "empty", :duration 100},
+  :mari-voice-act-2
+  {:data
+   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 21.737, :duration 3.009}
+    {:data [{:end 24.745, :anim "talk", :start 21.737}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 21.737,
+     :target "mari"}],
+   :type "parallel",
+   :description "Coloca la foto que empieza con la letra"},
+  :pinata-fall-down
+  {:data
+   [{:id "empty", :type "animation", :target "pinata"}
+    {:id "empty_idle", :loop true, :type "add-animation", :target "pinata"}],
+   :type "sequence-data"},
+  :init-vars {:data [{:type "set-variable", :var-name "current-slot-number", :var-value 0}], :type "parallel"},
+  :next-task
+  {:data
+   [{:type "counter", :counter-id "current-slot-number", :counter-action "increase"}
+    {:id "set-next-current-slot", :type "action"}
+    {:id "mari-says-task", :type "action"}],
+   :type "sequence-data"},
+  :set-concepts-data
+  {:data
+   [{:type "set-skin", :target "box1", :from-var [{:var-name "box1", :var-property "skin", :action-property "skin"}]}
+    {:type "set-skin", :target "box2", :from-var [{:var-name "box2", :var-property "skin", :action-property "skin"}]}
+    {:type "set-skin", :target "box3", :from-var [{:var-name "box3", :var-property "skin", :action-property "skin"}]}
+    {:type "set-attribute",
+     :target "letter1",
+     :from-var [{:var-name "letter1", :var-property "letter", :action-property "attr-value"}],
+     :attr-name "text"}
+    {:type "set-attribute",
+     :target "letter2",
+     :from-var [{:var-name "letter2", :var-property "letter", :action-property "attr-value"}],
+     :attr-name "text"}
+    {:type "set-attribute",
+     :target "letter3",
+     :from-var [{:var-name "letter3", :var-property "letter", :action-property "attr-value"}],
+     :attr-name "text"}],
+   :type "parallel"},
+  :check-box-drop
+  {:data
+   [{:type "set-variable",
+     :var-name "current-box",
+     :from-params [{:param-property "target", :action-property "var-value"}]}
+    {:fail "empty",
+     :type "test-transitions-collide",
+     :success "check-place-1",
+     :from-params [{:param-property "target", :action-property "transition-1"}],
+     :transition-2 "box1-ph"}
+    {:fail "empty",
+     :type "test-transitions-collide",
+     :success "check-place-2",
+     :from-params [{:param-property "target", :action-property "transition-1"}],
+     :transition-2 "box2-ph"}
+    {:fail "empty",
+     :type "test-transitions-collide",
+     :success "check-place-3",
+     :from-params [{:param-property "target", :action-property "transition-1"}],
+     :transition-2 "box3-ph"}],
+   :type "sequence-data"},
+  :mari-voice-act-3
+  {:data
+   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 25.313, :duration 1.1}
+    {:data [{:end 26.509, :anim "talk", :start 25.313}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 25.313,
+     :target "mari"}],
+   :type "parallel",
+   :description "sobre el piso"},
+  :renew-current-concepts
+  {:data
+   [{:from "assessment",
+     :type "lesson-var-provider",
+     :on-end "finish-activity",
+     :shuffled false,
+     :variables ["concept-1" "concept-2" "concept-3"],
+     :provider-id "words-set"}
+    {:from ["concept-1" "concept-2" "concept-3"],
+     :type "vars-var-provider",
+     :shuffled true,
+     :variables ["box1" "box2" "box3"]}
+    {:from ["concept-1" "concept-2" "concept-3"],
+     :type "vars-var-provider",
+     :shuffled true,
+     :variables ["letter1" "letter2" "letter3"]}
+    {:from ["concept-1" "concept-2" "concept-3"],
+     :type "vars-var-provider",
+     :shuffled true,
+     :variables ["slot1" "slot2" "slot3"]}],
+   :type "sequence-data"},
+  :check-current-slot
+  {:fail "mari-wrong",
+   :type "test-var-scalar",
+   :success "correct",
+   :from-var
+   [{:var-name "current-box", :action-property "var-name"} {:var-name "current-slot", :action-property "value"}]},
+  :boxes-reset-position
+  {:data
+   [{:type "set-attribute", :target "box1", :attr-name "x", :attr-value 420}
+    {:type "set-attribute", :target "box1", :attr-name "y", :attr-value 595}
+    {:type "set-attribute", :target "box2", :attr-name "x", :attr-value 420}
+    {:type "set-attribute", :target "box2", :attr-name "y", :attr-value 595}
+    {:type "set-attribute", :target "box3", :attr-name "x", :attr-value 420}
+    {:type "set-attribute", :target "box3", :attr-name "y", :attr-value 595}],
+   :type "parallel"},
+  :mari-says-task
+  {:data
+   [{:id "mari-voice-act-1", :type "action"}
+    {:type "action", :from-var [{:var-name "current-slot", :var-property "mari-letter"}]}
+    {:type "empty", :duration 700}
+    {:id "mari-voice-act-2", :type "action"}
+    {:type "action", :from-var [{:var-name "current-slot", :var-property "mari-letter"}]}
+    {:id "mari-voice-act-3", :type "action"}],
+   :type "sequence-data"},
+  :boxes-show-up
+  {:data
+   [{:data
+     [{:type "set-attribute", :target "box1", :attr-name "type", :attr-value "animation"}
+      {:type "empty", :duration 100}
+      {:id "come2", :type "animation", :target "box1"}
+      {:id "idle2", :loop true, :type "add-animation", :target "box1"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "set-attribute", :target "box2", :attr-name "type", :attr-value "animation"}
+      {:type "empty", :duration 100}
+      {:id "come2", :type "animation", :target "box2"}
+      {:id "idle2", :loop true, :type "add-animation", :target "box2"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "set-attribute", :target "box3", :attr-name "type", :attr-value "animation"}
+      {:type "empty", :duration 100}
+      {:id "come2", :type "animation", :target "box3"}
+      {:id "idle2", :loop true, :type "add-animation", :target "box3"}],
+     :type "sequence-data"}],
+   :type "parallel"},
+  :mari-hits-pinata-backward
+  {:data
+   [{:to {:ease [1 1], :bezier [{:x 691, :y 500} {:x 1100, :y 420}], :duration 2},
+     :type "transition",
+     :transition-id "mari"}],
+   :type "sequence-data"},
+  :start-activity {:id "pinata", :type "start-activity"},
+  :boxes-jump-out
+  {:data
+   [{:id "boxes-reset-position", :type "action"}
+    {:id "boxes-show-up", :type "action"}
+    {:id "boxes-move-to-position", :type "action"}],
+   :type "sequence-data"},
+  :set-next-current-slot
+  {:data
+   [{:fail
+     {:fail
+      {:fail "next-round",
+       :type "test-var-scalar",
+       :value 3,
+       :success
+       {:type "set-variable", :from-var [{:var-name "slot3", :action-property "var-value"}], :var-name "current-slot"},
+       :var-name "current-slot-number"},
+      :type "test-var-scalar",
+      :value 2,
+      :success
+      {:type "set-variable", :from-var [{:var-name "slot2", :action-property "var-value"}], :var-name "current-slot"},
+      :var-name "current-slot-number"},
+     :type "test-var-scalar",
+     :value 1,
+     :success
+     {:type "set-variable", :from-var [{:var-name "slot1", :action-property "var-value"}], :var-name "current-slot"},
+     :var-name "current-slot-number"}],
+   :type "sequence-data"},
+  :check-place-1
+  {:fail "mari-wrong",
+   :type "test-var-scalar",
+   :success "check-current-slot",
+   :from-var [{:var-name "current-box", :action-property "var-name"} {:var-name "letter1", :action-property "value"}]},
+  :mari-hits-pinata-toward
+  {:data
+   [{:to {:bezier [{:x 691, :y 636} {:x 513, :y 570}], :duration 1.3}, :type "transition", :transition-id "mari"}],
+   :type "sequence-data"},
+  :boxes-move-to-position
+  {:data
+   [{:to {:bezier [{:x 256, :y 640} {:x 205, :y 930}], :duration 0.7}, :type "transition", :transition-id "box1"}
+    {:to {:bezier [{:x 395, :y 758} {:x 410, :y 985}], :duration 0.7}, :type "transition", :transition-id "box2"}
+    {:to {:bezier [{:x 570, :y 680} {:x 610, :y 955}], :duration 0.7}, :type "transition", :transition-id "box3"}],
+   :type "parallel"},
+  :correct {:data [{:id "mari-correct", :type "action"} {:id "next-task", :type "action"}], :type "sequence-data"}},
+ :objects
+ {:box2-ph
+  {:y 930,
+   :transition "box2-ph",
+   :width 40,
+   :type "transparent",
+   :scale-y 1,
+   :x 1110,
+   :scale-x 1,
+   :scene-name "box2-ph",
+   :height 40},
+  :box1-ph
+  {:y 930,
+   :transition "box1-ph",
+   :width 40,
+   :type "transparent",
+   :scale-y 1,
+   :x 880,
+   :scale-x 1,
+   :scene-name "box1-ph",
+   :height 40},
+  :letter2
+  {:y 760,
+   :align "center",
+   :vertical-align "bottom",
+   :font-size 140,
+   :fill "white",
+   :width 150,
+   :type "text",
+   :scale-y 1,
+   :x 1050,
+   :scale-x 1,
+   :font-family "Lexend Deca",
+   :height 150,
+   :text ""},
+  :background {:src "/raw/img/park/pinata/background.jpg", :type "background"},
+  :box3-ph
+  {:y 930,
+   :transition "box3-ph",
+   :width 40,
+   :type "transparent",
+   :scale-y 1,
+   :x 1340,
+   :scale-x 1,
+   :scene-name "box3-ph",
+   :height 40},
+  :box3
+  {:y 955,
+   :transition "box3",
+   :speed 0.3,
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "transparent",
+   :actions {:drag-end {:id "check-box-drop", :on "drag-end", :type "action", :params {:target "box3"}}},
+   :loop true,
+   :draggable {:var-name "drag-box-3"},
+   :anim "idle2",
+   :scale-y 0.25,
+   :x 610,
+   :scale-x 0.25,
+   :scene-name "box3",
+   :skin "qwestion",
+   :height 633},
+  :letter3
+  {:y 760,
+   :align "center",
+   :vertical-align "bottom",
+   :font-size 140,
+   :fill "white",
+   :width 150,
+   :type "text",
+   :scale-y 1,
+   :x 1250,
+   :scale-x 1,
+   :font-family "Lexend Deca",
+   :height 150,
+   :text ""},
+  :letter1
+  {:y 760,
+   :align "center",
+   :vertical-align "bottom",
+   :font-size 140,
+   :fill "white",
+   :width 150,
+   :type "text",
+   :scale-y 1,
+   :x 850,
+   :scale-x 1,
+   :font-family "Lexend Deca",
+   :height 150,
+   :text ""},
+  :pinata
+  {:y 555,
+   :transition "pinata",
+   :speed 0.35,
+   :name "pinata",
+   :width 678,
+   :start true,
+   :type "animation",
+   :loop true,
+   :anim "idle",
+   :scale-y 1,
+   :x 925,
+   :scale-x 1,
+   :scene-name "pinata",
+   :height 899},
+  :box1
+  {:y 930,
+   :transition "box1",
+   :speed 0.3,
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "transparent",
+   :actions {:drag-end {:id "check-box-drop", :on "drag-end", :type "action", :params {:target "box1"}}},
+   :loop true,
+   :draggable {:var-name "drag-box-1"},
+   :anim "idle2",
+   :scale-y 0.25,
+   :x 205,
+   :scale-x 0.25,
+   :scene-name "box1",
+   :skin "qwestion",
+   :height 633},
+  :box2
+  {:y 985,
+   :transition "box2",
+   :speed 0.3,
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "transparent",
+   :actions {:drag-end {:id "check-box-drop", :on "drag-end", :type "action", :params {:target "box2"}}},
+   :loop true,
+   :draggable {:var-name "drag-box-2"},
+   :anim "idle2",
+   :scale-y 0.25,
+   :x 410,
+   :scale-x 0.25,
+   :scene-name "box2",
+   :skin "qwestion",
+   :height 633},
+  :mari
+  {:y 420,
+   :transition "mari",
+   :speed 0.35,
+   :name "mari",
+   :width 473,
+   :start true,
+   :type "animation",
+   :loop true,
+   :anim "idle",
+   :scale-y 0.5,
+   :x 1100,
+   :scale-x 0.5,
+   :scene-name "mari",
+   :height 511}},
+ :metadata {:prev "park", :autostart true},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :templates ["coaching"],
+ :scene-objects
+ [["background"]
+  ["pinata" "mari"]
+  ["letter1" "letter2" "letter3"]
+  ["box1-ph" "box2-ph" "box3-ph"]
+  ["box1" "box2" "box3"]]}

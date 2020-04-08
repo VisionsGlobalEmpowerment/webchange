@@ -1,0 +1,130 @@
+{:assets
+ [{:url "/raw/img/library/painting-tablet/background.jpg", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/brush.png", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/back.png", :size 10, :type "image"}],
+ :actions
+ {:start
+  {:data ["start-activity" "clear-instruction" "reset-tools" "init-current-tool"],
+   :type "sequence",
+   :description "Initial action"},
+  :reset-tools
+  {:data
+   [{:id "inactive", :type "state", :target "felt-tip"}
+    {:id "inactive", :type "state", :target "brush"}
+    {:id "inactive", :type "state", :target "pencil"}
+    {:id "inactive", :type "state", :target "eraser"}],
+   :type "parallel"},
+  :start-activity {:id "painting-tablet", :type "start-activity"},
+  :finish-activity
+  {:data [{:id "painting-tablet", :type "finish-activity"} {:type "scene", :scene-id "library"}],
+   :type "sequence-data",
+   :description "Finishing action"},
+  :set-current-tool
+  {:data
+   [{:type "state", :target "painting-area", :from-params [{:param-property "tool", :action-property "value"}]}
+    {:id "inactive", :type "state", :from-var [{:var-name "current-tool", :action-property "target"}]}
+    {:id "active", :type "state", :from-params [{:param-property "tool", :action-property "target"}]}
+    {:type "set-variable",
+     :var-name "current-tool",
+     :from-params [{:param-property "tool", :action-property "var-value"}]}],
+   :type "sequence-data"},
+  :clear-instruction {:type "remove-flows", :flow-tag "instruction", :description "Remove flows"},
+  :init-current-tool {:id "set-current-tool", :type "action", :params {:tool "felt-tip"}},
+  :set-current-color
+  {:type "state", :target "painting-area", :from-params [{:param-property "color", :action-property "value"}]}},
+ :objects
+ {:back
+  {:y 50,
+   :rotation 0,
+   :width 100,
+   :type "image",
+   :src "/raw/img/library/painting-tablet/back.png",
+   :actions {:click {:id "finish-activity", :on "click", :type "action"}},
+   :scale-y 1,
+   :x 50,
+   :scale-x 1,
+   :scene-name "back",
+   :height 100},
+  :brush
+  {:y 410,
+   :rotation 0,
+   :states {:active {:x -180}, :inactive {:x -280}},
+   :width 540,
+   :type "image",
+   :src "/raw/img/library/painting-tablet/brush.png",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "brush"}}},
+   :scale-y 1,
+   :x -280,
+   :scale-x 1,
+   :scene-name "brush",
+   :height 140},
+  :eraser
+  {:y 794,
+   :rotation 0,
+   :states {:active {:x -18}, :inactive {:x -118}},
+   :width 380,
+   :type "image",
+   :src "/raw/img/library/painting-tablet/eraser.png",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "eraser"}}},
+   :scale-y 1,
+   :x -118,
+   :scale-x 1,
+   :scene-name "eraser",
+   :height 175},
+  :pencil
+  {:y 602,
+   :rotation 0,
+   :states {:active {:x -183}, :inactive {:x -283}},
+   :width 550,
+   :type "image",
+   :src "/raw/img/library/painting-tablet/pencil.png",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "pencil"}}},
+   :scale-y 1,
+   :x -283,
+   :scale-x 1,
+   :scene-name "pencil",
+   :height 135},
+  :felt-tip
+  {:y 213,
+   :rotation 0,
+   :states {:active {:x -216}, :inactive {:x -316}},
+   :width 590,
+   :type "image",
+   :src "/raw/img/library/painting-tablet/felt-tip.png",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "felt-tip"}}},
+   :scale-y 1,
+   :x -316,
+   :scale-x 1,
+   :scene-name "felt-tip",
+   :height 150},
+  :background {:src "/raw/img/library/painting-tablet/background.jpg", :type "background", :scene-name "background"},
+  :painting-area
+  {:y 0,
+   :rotation 0,
+   :width 1920,
+   :type "painting-area",
+   :scale-y 1,
+   :var-name "painting-tablet-image",
+   :x 0,
+   :scale-x 1,
+   :scene-name "painting-area",
+   :height 1080},
+  :colors-palette
+  {:y 0,
+   :rotation 0,
+   :width 180,
+   :type "colors-palette",
+   :colors ["#4479bb" "#92bd4a" "#ed91aa" "#fdc531" "#010101"],
+   :actions {:change {:id "set-current-color", :on "change", :type "action", :pick-event-param "color"}},
+   :scale-y 1,
+   :var-name "current-color",
+   :x 1680,
+   :scale-x 1,
+   :scene-name "colors-palette",
+   :height 1080}},
+ :metadata {:prev "map", :autostart true},
+ :triggers {:start {:on "start", :action "start"}, :finish {:on "back", :action "finish-activity"}},
+ :scene-objects [["background"] ["painting-area"] ["felt-tip" "brush" "pencil" "eraser" "colors-palette"] ["back"]]}

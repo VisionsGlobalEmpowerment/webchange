@@ -1,0 +1,291 @@
+{:audio {:mari "/raw/audio/l2/a5/L2_A5_Mari.m4a"},
+ :assets
+ [{:url "/raw/img/park/slide/background2.jpg", :type "image"}
+  {:url "/raw/img/park/slide/slide.png", :type "image"}
+  {:url "/raw/img/park/slide/side.png", :type "image"}
+  {:url "/raw/audio/l2/a5/L2_A5_Mari.m4a", :type "audio"}
+  {:url "/raw/audio/l2/a5/riddles/ardilla.mp3", :type "audio", :alias "ardilla"}
+  {:url "/raw/audio/l2/a5/riddles/bebe.mp3", :type "audio", :alias "bebe"}
+  {:url "/raw/audio/l2/a5/riddles/casa.mp3", :type "audio", :alias "casa"}
+  {:url "/raw/audio/l2/a5/riddles/cepillo.mp3", :type "audio", :alias "cepillo"}
+  {:url "/raw/audio/l2/a5/riddles/chocolate.mp3", :type "audio", :alias "chocolate"}
+  {:url "/raw/audio/l2/a5/riddles/diamante.mp3", :type "audio", :alias "diamante"}
+  {:url "/raw/audio/l2/a5/riddles/elefante.mp3", :type "audio", :alias "elefante"}
+  {:url "/raw/audio/l2/a5/riddles/flor.mp3", :type "audio", :alias "flor"}
+  {:url "/raw/audio/l2/a5/riddles/gato.mp3", :type "audio", :alias "gato"}
+  {:url "/raw/audio/l2/a5/riddles/gemelos.mp3", :type "audio", :alias "gemelo"}
+  {:url "/raw/audio/l2/a5/riddles/hoja.mp3", :type "audio", :alias "hoja"}
+  {:url "/raw/audio/l2/a5/riddles/iman.mp3", :type "audio", :alias "iman"}
+  {:url "/raw/audio/l2/a5/riddles/jardin.mp3", :type "audio", :alias "jardin"}
+  {:url "/raw/audio/l2/a5/riddles/kimono.mp3", :type "audio", :alias "kimono"}
+  {:url "/raw/audio/l2/a5/riddles/leon.mp3", :type "audio", :alias "leon"}
+  {:url "/raw/audio/l2/a5/riddles/llave.mp3", :type "audio", :alias "llave"}
+  {:url "/raw/audio/l2/a5/riddles/mano.mp3", :type "audio", :alias "mano"}
+  {:url "/raw/audio/l2/a5/riddles/nandu.mp3", :type "audio", :alias "nandu"}
+  {:url "/raw/audio/l2/a5/riddles/nino.mp3", :type "audio", :alias "nino"}
+  {:url "/raw/audio/l2/a5/riddles/oso.mp3", :type "audio", :alias "oso"}
+  {:url "/raw/audio/l2/a5/riddles/pelota.mp3", :type "audio", :alias "pelota"}
+  {:url "/raw/audio/l2/a5/riddles/queso.mp3", :type "audio", :alias "queso"}
+  {:url "/raw/audio/l2/a5/riddles/rana.mp3", :type "audio", :alias "rana"}
+  {:url "/raw/audio/l2/a5/riddles/serpiente.mp3", :type "audio", :alias "serpiente"}
+  {:url "/raw/audio/l2/a5/riddles/web.mp3", :type "audio", :alias "sitio web"}
+  {:url "/raw/audio/l2/a5/riddles/tomate.mp3", :type "audio", :alias "tomate"}
+  {:url "/raw/audio/l2/a5/riddles/uvas.mp3", :type "audio", :alias "uvas"}
+  {:url "/raw/audio/l2/a5/riddles/violin.mp3", :type "audio", :alias "violin"}
+  {:url "/raw/audio/l2/a5/riddles/xilofono.mp3", :type "audio", :alias "xilofono"}
+  {:url "/raw/audio/l2/a5/riddles/yoyo.mp3", :type "audio", :alias "yoyo"}
+  {:url "/raw/audio/l2/a5/riddles/zapato.mp3", :type "audio", :alias "zapato"}],
+ :actions
+ {:reset-current-target
+  {:data
+   [{:id "hidden", :type "state", :from-var [{:var-name "current-target", :action-property "target"}]}
+    {:type "empty", :duration 100}
+    {:id "init-position", :type "state", :from-var [{:var-name "current-target", :action-property "target"}]}
+    {:type "empty", :duration 100}
+    {:id "visible", :type "state", :from-var [{:var-name "current-target", :action-property "target"}]}],
+   :type "sequence-data"},
+  :mari-voice-correct
+  {:data
+   [{:id "mari", :type "audio", :start 34.714, :duration 5.089}
+    {:data [{:end 38.088, :anim "talk", :start 35.19} {:end 39.504, :anim "talk", :start 38.508}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 34.714,
+     :target "mari"}],
+   :type "parallel",
+   :description "Eso es correcto. Ya lo tienes! Wiiii!"},
+  :pick-wrong
+  {:data
+   [{:type "set-variable", :var-name "answer-clickable", :var-value false}
+    {:id "mari-voice-wrong", :type "action"}
+    {:type "empty", :duration 1000}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "riddle"}]}
+    {:type "set-variable", :var-name "answer-clickable", :var-value true}],
+   :type "sequence-data"},
+  :mari-voice-welcome
+  {:description
+   "Como estas pequeno genio? Estas listo para seguir con tu proxima actividad?\n                                                            Primero, vamos a empezar por escuchar atentamente la adivinanza.\n                                                            Despues, toca la foto para contestarla! Estas listo para empezar?",
+   :offset 0.974,
+   :start 0.974,
+   :type "animation-sequence",
+   :duration 22.612,
+   :audio "/raw/audio/l2/a5/L2_A5_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data
+   [{:end 3.872, :anim "talk", :start 1.704, :duration 2.168}
+    {:end 8.275, :anim "talk", :start 4.735, :duration 3.54}
+    {:end 15.62, :anim "talk", :start 9.248, :duration 6.372}
+    {:end 20.089, :anim "talk", :start 16.505, :duration 3.584}
+    {:end 23.342, :anim "talk", :start 21.151, :duration 2.191}]},
+  :stop-activity {:id "slide", :type "stop-activity"},
+  :finish-activity
+  {:data [{:id "slide", :type "finish-activity"} {:type "scene", :scene-id "park"}], :type "sequence-data"},
+  :reset-boxes
+  {:data
+   [{:id "hidden", :type "state", :target "box1"}
+    {:id "hidden", :type "state", :target "box2"}
+    {:id "hidden", :type "state", :target "box3"}
+    {:type "empty", :duration 100}
+    {:id "init-position", :type "state", :target "box1"}
+    {:id "init-position", :type "state", :target "box2"}
+    {:id "init-position", :type "state", :target "box3"}
+    {:skin "qwestion", :type "set-skin", :target "box1"}
+    {:skin "qwestion", :type "set-skin", :target "box2"}
+    {:skin "qwestion", :type "set-skin", :target "box3"}
+    {:id "visible", :type "state", :target "box1"}
+    {:id "visible", :type "state", :target "box2"}
+    {:id "visible", :type "state", :target "box3"}],
+   :type "sequence-data"},
+  :start
+  {:data ["start-activity" "clear-instruction" "renew-words" "mari-voice-welcome" "init-state" "renew-current-concept"],
+   :type "sequence"},
+  :init-state {:data [{:type "set-variable", :var-name "answer-clickable", :var-value false}], :type "parallel"},
+  :slide-current-target
+  {:data
+   [{:to {:ease [0.1 0.1], :bezier [{:x 770, :y 90} {:x 865, :y 460}], :duration 1.0},
+     :type "transition",
+     :from-var [{:var-name "current-target", :action-property "transition-id"}]}
+    {:to {:ease [0.1 0.1], :bezier [{:x 930, :y 560} {:x 795, :y 775} {:x 975, :y 920}], :duration 1.5},
+     :type "transition",
+     :from-var [{:var-name "current-target", :action-property "transition-id"}]}
+    {:type "empty", :duration 1000}],
+   :type "sequence-data"},
+  :pick-box-3
+  {:fail {:type "empty", :duration 100},
+   :type "test-value",
+   :value2 true,
+   :success
+   {:fail "pick-wrong",
+    :type "test-value",
+    :success
+    {:data [{:type "set-variable", :var-name "current-target", :var-value "box3"} {:id "pick-correct", :type "action"}],
+     :type "sequence-data"},
+    :from-var [{:var-name "box3", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]},
+   :from-var [{:var-name "answer-clickable", :action-property "value1"}]},
+  :renew-words
+  {:from "concepts-group",
+   :type "lesson-var-provider",
+   :shuffled true,
+   :variables ["item-1" "item-2" "item-3"],
+   :provider-id "words-set"},
+  :renew-current-concept
+  {:data
+   [{:from ["item-1" "item-2" "item-3"],
+     :type "vars-var-provider",
+     :on-end "finish-activity",
+     :shuffled true,
+     :variables ["current-concept"],
+     :provider-id "current-concept"}
+    {:from ["item-1" "item-2" "item-3"],
+     :type "vars-var-provider",
+     :from-var
+     [{:var-key "concept-name",
+       :var-name "current-concept",
+       :var-property "concept-name",
+       :action-property "exclude-property-values"}],
+     :shuffled true,
+     :variables ["pair-concept-1" "pair-concept-2"]}
+    {:from ["current-concept" "pair-concept-1" "pair-concept-2"],
+     :type "vars-var-provider",
+     :shuffled true,
+     :variables ["box1" "box2" "box3"]}
+    {:data
+     [{:type "set-skin", :target "box1", :from-var [{:var-name "box1", :var-property "skin", :action-property "skin"}]}
+      {:type "set-skin", :target "box2", :from-var [{:var-name "box2", :var-property "skin", :action-property "skin"}]}
+      {:type "set-skin",
+       :target "box3",
+       :from-var [{:var-name "box3", :var-property "skin", :action-property "skin"}]}],
+     :type "parallel"}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "riddle"}]}
+    {:type "set-variable", :var-name "answer-clickable", :var-value true}],
+   :type "sequence-data"},
+  :pick-box-1
+  {:fail {:type "empty", :duration 100},
+   :type "test-value",
+   :value2 true,
+   :success
+   {:fail "pick-wrong",
+    :type "test-value",
+    :success
+    {:data [{:type "set-variable", :var-name "current-target", :var-value "box1"} {:id "pick-correct", :type "action"}],
+     :type "sequence-data"},
+    :from-var [{:var-name "box1", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]},
+   :from-var [{:var-name "answer-clickable", :action-property "value1"}]},
+  :start-activity {:id "slide", :type "start-activity"},
+  :pick-box-2
+  {:fail {:type "empty", :duration 100},
+   :type "test-value",
+   :value2 true,
+   :success
+   {:fail "pick-wrong",
+    :type "test-value",
+    :success
+    {:data [{:type "set-variable", :var-name "current-target", :var-value "box2"} {:id "pick-correct", :type "action"}],
+     :type "sequence-data"},
+    :from-var [{:var-name "box2", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]},
+   :from-var [{:var-name "answer-clickable", :action-property "value1"}]},
+  :mari-voice-try-another
+  {:description "Vamos a intentar otra adivinanza.",
+   :offset 43.188,
+   :start 43.188,
+   :type "animation-sequence",
+   :duration 3.589,
+   :audio "/raw/audio/l2/a5/L2_A5_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 46.506, :anim "talk", :start 43.409, :duration 3.097}]},
+  :clear-instruction {:type "remove-flows", :flow-tag "instruction"},
+  :pick-correct
+  {:data
+   [{:type "set-variable", :var-name "answer-clickable", :var-value false}
+    {:data
+     [{:id "mari-voice-correct", :type "action"}
+      {:data [{:type "empty", :duration 2500} {:id "slide-current-target", :type "action"}], :type "sequence-data"}],
+     :type "parallel"}
+    {:id "mari-voice-try-another", :type "action"}
+    {:id "reset-boxes", :type "action"}
+    {:type "empty", :duration 1000}
+    {:id "renew-current-concept", :type "action"}],
+   :type "sequence-data"},
+  :mari-voice-wrong
+  {:data
+   [{:id "mari", :type "audio", :start 29.581, :duration 3.12}
+    {:data [{:end 30.621, :anim "talk", :start 29.802} {:end 32.457, :anim "talk", :start 31.019}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 29.581,
+     :target "mari"}],
+   :type "parallel",
+   :description "No, intenta de nuevo."}},
+ :objects
+ {:box1
+  {:y 216,
+   :states {:hidden {:type "transparent"}, :visible {:type "animation"}, :init-position {:x 810, :y 216}},
+   :transition "box1",
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "animation",
+   :actions {:click {:id "pick-box-1", :on "click", :type "action"}},
+   :loop true,
+   :anim "idle2",
+   :x 810,
+   :scene-name "box1",
+   :skin "qwestion",
+   :height 633},
+  :box2
+  {:y 287,
+   :states {:hidden {:type "transparent"}, :visible {:type "animation"}, :init-position {:x 500, :y 287}},
+   :transition "box2",
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "animation",
+   :actions {:click {:id "pick-box-2", :on "click", :type "action"}},
+   :loop true,
+   :anim "idle2",
+   :x 500,
+   :scene-name "box2",
+   :skin "qwestion",
+   :height 633},
+  :box3
+  {:y 212,
+   :states {:hidden {:type "transparent"}, :visible {:type "animation"}, :init-position {:x 655, :y 212}},
+   :transition "box3",
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "animation",
+   :actions {:click {:id "pick-box-3", :on "click", :type "action"}},
+   :loop true,
+   :anim "idle2",
+   :x 655,
+   :scene-name "box3",
+   :skin "qwestion",
+   :height 633},
+  :mari
+  {:y 580,
+   :transition "mari",
+   :speed 0.35,
+   :name "mari",
+   :width 473,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :scale-y 0.5,
+   :x 1600,
+   :scale-x 0.5,
+   :height 511},
+  :slide {:x 200, :y 190, :src "/raw/img/park/slide/slide.png", :type "image", :width 997, :height 758},
+  :background {:src "/raw/img/park/slide/background2.jpg", :type "background"},
+  :slide-side {:x 591, :y 450, :src "/raw/img/park/slide/side.png", :type "image", :width 234, :height 497}},
+ :metadata {:prev "park", :autostart true},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :scene-objects [["background"] ["slide" "slide-side"] ["mari"] ["box1" "box3" "box2"]]}

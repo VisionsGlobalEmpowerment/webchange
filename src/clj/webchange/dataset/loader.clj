@@ -58,7 +58,7 @@
          (into []))))
 
 (defn save
-  [config course-slug dataset-name]
+  [config course-slug new-name dataset-name]
   (let [dataset (core/get-dataset-by-name course-slug dataset-name)
         fields (->> (get-in dataset [:scheme :fields])
                     (sort-by :name)
@@ -74,7 +74,7 @@
                      (map prepare-lesson)
                      (sort-by :name)
                      (into []))
-        path (items-path config course-slug dataset-name)]
+        path (items-path config new-name dataset-name)]
     (p/pprint
       {:fields fields
        :items items
@@ -95,8 +95,8 @@
                                   :data {:items items}})))))
 
 (defn load-force
-  [config course-slug dataset-name]
-  (let [path (items-path config course-slug dataset-name)
+  [config course-slug saved-name dataset-name]
+  (let [path (items-path config saved-name dataset-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
         dataset (core/get-dataset-by-name course-slug dataset-name)]
 
@@ -110,8 +110,8 @@
     (load-lessons (:id dataset) (:lessons data))))
 
 (defn load-merge
-  [config course-slug dataset-name & field-names]
-  (let [path (items-path config course-slug dataset-name)
+  [config course-slug saved-name dataset-name & field-names]
+  (let [path (items-path config saved-name dataset-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
         field-names (or field-names (->> (:fields data) (map :name)))
         fields (->> (:fields data)

@@ -28,24 +28,32 @@
                          :image_src image-src})
   [true {:id id}])
 
+(defn get-course-latest-version
+  [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        latest-version (db/get-latest-course-version {:course_id course-id})]
+    (:data latest-version)))
+
 (defn get-course-data
   [course-slug]
   (let [course (if (contains? hardcoded course-slug)
                  (scene/get-course course-slug)
-                 (let [{course-id :id} (db/get-course {:slug course-slug})
-                       latest-version (db/get-latest-course-version {:course_id course-id})]
-                   (:data latest-version)))
+                 (get-course-latest-version course-slug))
         templates (get-course-templates course-slug)]
     (merge course {:templates templates})))
+
+(defn get-scene-latest-version
+  [course-slug scene-name]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
+        latest-version (db/get-latest-scene-version {:scene_id scene-id})]
+    (:data latest-version)))
 
 (defn get-scene-data
   [course-slug scene-name]
   (if (contains? hardcoded course-slug)
     (scene/get-scene course-slug scene-name)
-    (let [{course-id :id} (db/get-course {:slug course-slug})
-          {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
-          latest-version (db/get-latest-scene-version {:scene_id scene-id})]
-      (:data latest-version))))
+    (get-scene-latest-version course-slug scene-name)))
 
 (defn get-or-create-scene! [course-id scene-name]
   (if-let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})]

@@ -4,7 +4,8 @@
             [ring.adapter.jetty :refer [run-jetty]]
             [mount.core :as mount]
             [luminus-migrations.core :as migrations]
-            [webchange.dataset.loader :as datasets])
+            [webchange.dataset.loader :as datasets]
+            [webchange.course.loader :as courses])
   (:gen-class))
 
 (defn -main [& args]
@@ -17,6 +18,10 @@
     (datasets/command? args)
     (do
       (datasets/execute args (select-keys env [:dataset-dir]))
+      (System/exit 0))
+    (courses/command? args)
+    (do
+      (courses/execute args (select-keys env [:course-dir]))
       (System/exit 0))
     :else
     (let [port (Integer/parseInt (or (env :port) "3000"))]

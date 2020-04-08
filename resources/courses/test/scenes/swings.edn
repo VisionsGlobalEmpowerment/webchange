@@ -133,7 +133,7 @@
                                                                 :speed    0.3 :loop false :start true
                                                                 :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
                                              :initial-position {:x 600 :y 400}}
-                                :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box1" :start "box-1-start" :revert "box-1-revert"}}}}
+                                :actions    {:drag-end {:type "action" :id "drag-box1" :on "drag-end" :params {:target "box1" :start "box-1-start" :revert "box-1-revert"}}}}
 
                  :box2         {:type       "transparent" :x 850 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
                                 :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -143,7 +143,7 @@
                                                                 :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]
                                                                 :speed    0.3 :loop false :start true}
                                              :initial-position {:x 1000 :y 400}}
-                                :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box1" :start "box-2-start" :revert "box-2-revert"}}}}
+                                :actions    {:drag-end {:type "action" :id "drag-box2" :on "drag-end" :params {:target "box1" :start "box-2-start" :revert "box-2-revert"}}}}
 
                  :box3         {:type       "transparent" :x 1350 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
                                 :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -153,7 +153,7 @@
                                                                 :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]
                                                                 :speed    0.3 :loop false :start true}
                                              :initial-position {:x 1400 :y 400}}
-                                :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box1" :start "box-2-start" :revert "box-3-revert"}}}}
+                                :actions    {:drag-end {:type "action" :id "drag-box3" :on "drag-end" :params {:target "box1" :start "box-2-start" :revert "box-3-revert"}}}}
 
                  :box-ph       {:type       "transparent" :width 771 :height 1033 :x 0 :y 550 :origin {:type "center-center"}
                                 :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -165,13 +165,22 @@
                  },
  :scene-objects [["background"] ["swings"] ["tree-image"] ["vera" "mari" "rock"] ["box1" "box2" "box3"]],
  :actions
-                {:vera-welcome-audio-1 {:type "animation-sequence",
+                {:welcome-audio              {:type                          "sequence"
+                                              :data                          ["vera-welcome-audio-1"
+                                                                              "mari-welcome-audio-2"
+                                                                              "vera-welcome-audio-3"
+                                                                              "mari-welcome-audio-4"
+                                                                              "mari-welcome-audio-5"]
+                                              :phrase                        :welcome
+                                              :phrase-description            "Diálogo de bienvenida entre Vera, Mari y Rock"}
+                 :vera-welcome-audio-1 {:type "animation-sequence",
                                         :target "vera",
                                         :track 1,
                                         :offset 1.342,
                                         :audio "/raw/audio/l1/a3/vera-swings.mp3",
                                         :start 1.342,
                                         :duration 6.583,
+                                        :phrase-text            "Hola Mari! Vamos a jugar en los columpios? A mi me gustan los columpios."
                                         :data
                                         [{:start 1.56, :end 2.39, :anim "talk"}
                                          {:start 3.06, :end 4.98, :anim "talk"}
@@ -183,6 +192,7 @@
                                         :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
                                         :start 0.787,
                                         :duration 11.679,
+                                        :phrase-text            " Si! Vamos a jugar el los columpios! Nuestros amigos quieren ir a jugar en los columpios! Vamos a darles un turno a cada uno."
                                         :data
                                         [{:start 0.79, :end 7.64, :anim "talk"}
                                          {:start 7.82, :end 9.26, :anim "talk"}
@@ -194,6 +204,7 @@
                                         :audio "/raw/audio/l1/a3/vera-swings.mp3",
                                         :start 8.572,
                                         :duration 3.852,
+                                        :phrase-text            "Ok. Voy a darles turno a cada uno."
                                         :data
                                         [{:start 8.76, :end 9.31, :anim "talk"}
                                          {:start 9.79, :end 11.32, :anim "talk"}
@@ -205,6 +216,7 @@
                                         :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
                                         :start 14.999,
                                         :duration 2.933,
+                                        :phrase-text            "Muy bien! Buen trabajo!"
                                         :data [{:start 15.05, :end 17.78, :anim "talk"}]}
                  :mari-welcome-audio-5 {:type "animation-sequence",
                                         :target "mari",
@@ -213,14 +225,21 @@
                                         :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
                                         :start 29.012,
                                         :duration 3.786,
+                                        :phrase-text            "Ok pequeno genio! Vamos a comenzar!"
                                         :data
                                         [{:start 29.25, :end 30.94, :anim "talk"}
                                          {:start 31.17, :end 32.62, :anim "talk"}]}
 
-                 :mari-move-to-start
-                                             {:type  "animation-sequence" :target "mari" :track 1 :offset 34.395
-                                              :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :start 34.395, :duration 2.773
-                                              :data  [{:start 34.549 :end 36.894 :anim "talk"}]}
+                 :mari-move-to-start         {:type                          "parallel"
+                                              :data                          [{:type "sequence-data"
+                                                                               :data [{:type "animation" :target "mari" :id "wand_hit" :track 2}
+                                                                                      {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}]}
+                                                                              {:type  "animation-sequence" :target "mari" :track 1 :offset 34.395
+                                                                               :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :start 34.395, :duration 2.773
+                                                                               :data  [{:start 34.549 :end 36.894 :anim "talk"}]
+                                                                               :phrase-text            "Mueve la foto sobre el columpio!"}]
+                                              :phrase                        :move-picture
+                                              :phrase-description            "Mueve la imagen para comenzar"}
 
                  :show-boxes                 {:type "parallel"
                                               :data [{:type "state" :target "box1" :id "come"}
@@ -247,28 +266,46 @@
                  :disable-drag  {:type "set-variable" :var-name "draggable" :var-value false}
                  :enable-drag  {:type "set-variable" :var-name "draggable" :var-value true}
 
-                 :drag-box {:type     "test-value"
-                            :value1   true
-                            :from-var [{:var-name "draggable" :action-property "value2"}]
-                            :from-params [{:action-property "fail" :param-property "revert"}]
-                            :success  "check-collide"}
+                 :check-box1                 {:type     "test-var-scalar"
+                                              :var-name "box1"
+                                              :value    true
+                                              :success  "box-1-start"
+                                              :fail     "box-1-revert"}
 
-                 :check-collide {:type         "test-transitions-collide"
-                                 :transition-2 "box-ph"
-                                 :from-params [{:action-property "transition-1" :param-property "target"}
-                                               {:action-property "fail" :param-property "revert"}]
-                                 :success      "check-box"}
+                 :check-box2                 {:type     "test-var-scalar"
+                                              :var-name "box2"
+                                              :value    true
+                                              :success  "box-2-start"
+                                              :fail     "box-2-revert"}
 
-                 :check-box                 {:type     "test-var-scalar"
-                                             :var-name "current-box"
-                                             :from-params [{:action-property "value" :param-property "target"}
-                                                           {:action-property "success" :param-property "start"}
-                                                           {:action-property "fail" :param-property "revert"}]}
+                 :check-box3                 {:type     "test-var-scalar"
+                                              :var-name "box3"
+                                              :value    true
+                                              :success  "box-3-start"
+                                              :fail     "box-3-revert"}
+
+                 :drag-box1                  {:type         "test-transitions-collide"
+                                              :transition-1 "box1"
+                                              :transition-2 "box-ph"
+                                              :success      "check-box1"
+                                              :fail         "box-1-revert"}
+
+                 :drag-box2                  {:type         "test-transitions-collide"
+                                              :transition-1 "box2"
+                                              :transition-2 "box-ph"
+                                              :success      "check-box2"
+                                              :fail         "box-2-revert"}
+
+                 :drag-box3                  {:type         "test-transitions-collide"
+                                              :transition-1 "box3"
+                                              :transition-2 "box-ph"
+                                              :success      "check-box3"
+                                              :fail         "box-3-revert"}
 
                  :box-1-revert               {:type "transition" :transition-id "box1" :to {:x 500 :y 550 :duration 2}}
 
                  :box-1-start                {:type "sequence"
-                                              :data ["disable-drag"
+                                              :data [
                                                      "show-box-1-ph"
                                                      "start-swings"
                                                      "empty-before-dialog"
@@ -278,7 +315,7 @@
                                                      "set-current-box2"
                                                      "mari-box-2"
                                                      "try-another"
-                                                     "enable-drag"]}
+                                                     ]}
 
                  :show-box-1-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box1" :id "default"}
@@ -300,7 +337,7 @@
                  :box-2-revert               {:type "transition" :transition-id "box2" :to {:x 1000 :y 550 :duration 2}}
 
                  :box-2-start                {:type "sequence"
-                                              :data ["disable-drag"
+                                              :data [
                                                      "show-box-2-ph"
                                                      "start-swings"
                                                      "empty-before-dialog"
@@ -310,7 +347,7 @@
                                                      "set-current-box3"
                                                      "mari-box-3"
                                                      "try-another"
-                                                     "enable-drag"]}
+                                                     ]}
 
                  :show-box-2-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box2" :id "default"}
@@ -332,14 +369,15 @@
                  :box-3-revert               {:type "transition" :transition-id "box3" :to {:x 1500 :y 550 :duration 2}}
 
                  :box-3-start                {:type "sequence"
-                                              :data ["disable-drag"
+                                              :data [
                                                      "show-box-3-ph"
                                                      "start-swings"
                                                      "empty-before-dialog"
                                                      "dialog-var"
                                                      "stop-swings"
                                                      "hide-box-3-ph"
-                                                     "finish-activity"]}
+                                                     "finish-activity"
+                                                     "mari-finish"]}
 
                  :show-box-3-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box3" :id "default"}
@@ -358,23 +396,28 @@
                                                       :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
                                                      {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 
-                 :dialog-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "swings-dialog-action"}]}
+                 :dialog-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "swings-dialog-action"}]
+                                              :phrase                        :dialog
+                                              :phrase-description            "Historia conceptual"
+                                              :phrase-description-translated "Concept story"}
 
-                 :stop-swings                {:type "sequence-data"
-                                              :data [{:type "remove-flows" :flow-tag "swings"}
-                                                     {:type "transition" :transition-id "swings" :to {:rotation 0 :duration 0.5 :loop false}}]}
+                 :stop-swings                {:type "sequence"
+                                              :data ["stop-swings-1"
+                                                     "stop-swings-2"]}
+                 :stop-swings-1              {:type "remove-flows" :flow-tag "swings"}
+                 :stop-swings-2              {:type "transition" :transition-id "swings" :to {:rotation 0 :duration 0.5 :loop false}}
 
-                 :start-swings               {:type "action" :id "start-swings-do" :return-immediately true}
-
-                 :start-swings-do            {:type "sequence"
+                 :start-swings               {:type "sequence"
                                               :tags ["swings"]
-                                              :data ["prepare-swing" "swing"]}
-
-                 :swing                      {:type "sequence"
-                                              :tags ["swings"]
-                                              :data ["swing-right"
-                                                     "swing-left"
+                                              :data ["prepare-swing"
                                                      "swing"]}
+
+                 :swing                      {:type               "sequence"
+                                              :tags               ["swings"]
+                                              :data               ["swing-right"
+                                                                   "swing-left"
+                                                                   "swing"]
+                                              :return-immediately true}
 
                  :empty-before-dialog        {:type "empty" :duration 3000}
 
@@ -387,7 +430,12 @@
                                               :audio "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :start 40.476, :duration 8.509
                                               :data  [{:start 41.155 :end 43.225 :anim "talk"}
                                                       {:start 43.725 :end 45.534 :anim "talk"}
-                                                      {:start 46.32 :end 48.759 :anim "talk"}]}
+                                                      {:start 46.32 :end 48.759 :anim "talk"}]
+                                              :phrase                        :try-another
+                                              :phrase-description            "Prueba otra foto"
+                                              :phrase-text                   "Buen trabajo pequeno genio!
+                                                                              Vamos a intentarlo de nuevo!
+                                                                              Mueve la foto sobre los columpios. "}
 
                  :pick-wrong                 {:type "sequence"
                                               :data ["audio-wrong"]}
@@ -403,9 +451,11 @@
                  :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1181 :y 350 :duration 2 :loop false}}
                  :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1658 :y 350 :duration 2 :loop false}}
 
+                 :mari-init-wand             {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
+
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
-                 :start                      {:type "sequence"
-                                              :data ["disable-drag"
+                 :start-scene                {:type "sequence"
+                                              :data [
                                                      "start-activity"
                                                      "clear-instruction"
                                                      "renew-words"
@@ -413,19 +463,40 @@
                                                      "show-boxes"
                                                      "wait-for-box-animations"
                                                      "switch-box-animations-idle"
-                                                     "vera-welcome-audio-1"
-                                                     "mari-welcome-audio-2"
-                                                     "vera-welcome-audio-3"
-                                                     "mari-welcome-audio-4"
-                                                     "mari-welcome-audio-5"
+                                                     "welcome-audio"
+                                                     "mari-init-wand"
                                                      "mari-box-1"
                                                      "mari-move-to-start"
-                                                     "enable-drag"
+
                                                      ]}
 
                  :start-activity             {:type "start-activity" :id "swings"}
                  :finish-activity            {:type "finish-activity" :id "swings"}
                  :stop-activity              {:type "stop-activity" :id "swings"}
+
+                 :mari-finish                {:type                          "sequence-data",
+                                              :data                          [{:type          "transition",
+                                                                               :transition-id "mari",
+                                                                               :to            {:x 244, :y 300, :duration 1.3}}
+                                                                              {:type                   "animation-sequence",
+                                                                               :target                 "mari",
+                                                                               :track                  1,
+                                                                               :offset                 49.103,
+                                                                               :audio                  "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                                                               :data
+                                                                                                       [{:start 49.357, :end 52.717, :duration 3.36, :anim "talk"}
+                                                                                                        {:start 52.983, :end 54.49, :duration 1.507, :anim "talk"}
+                                                                                                        {:start 55.13, :end 57.09, :duration 1.96, :anim "talk"}
+                                                                                                        {:start 57.33, :end 59.036, :duration 1.706, :anim "talk"}
+                                                                                                        {:start 59.676, :end 61.223, :duration 1.547, :anim "talk"}],
+                                                                               :start                  49.103,
+                                                                               :duration               12.36,
+                                                                               :phrase-text            "Parece que cada foto tuvo un turno en el columpio.
+                                                                                                        Buen trabajo pequeno genio!
+                                                                                                        Puedes jugar este juego de nuevo o hacer clic sobre esta flecha para empezar tu proximo juego."}]
+                                              :phrase                        :finish
+                                              :phrase-description            "Juega de nuevo o pasa a la siguiente actividad"}
+
  }
  :audio
                 {:mari-welcome "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a"
@@ -436,7 +507,7 @@
                  :rock-oso     "/raw/audio/l1/a3/rock/Oso.m4a"
                  :rock-iman    "/raw/audio/l1/a3/rock/Iman.m4a"}
 
- :triggers      {:start {:on "start" :action "start"}
+ :triggers      {:start {:on "start" :action "start-scene"}
                  :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}

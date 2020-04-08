@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.editor.events :as ee]))
+    [webchange.editor-v2.events :as ee]))
 
 (re-frame/reg-event-fx
   ::add-dataset-item
@@ -22,7 +22,7 @@
   ::add-dataset-item-success
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)]
-      {:dispatch-n (list [:complete-request :add-dataset-item] [::ee/load-datasets])
+      {:dispatch-n (list [:complete-request :add-dataset-item] [::ee/load-lesson-sets course-id])
        :redirect [:course-editor-v2 :id course-id]})))
 
 (re-frame/reg-event-fx
@@ -41,7 +41,7 @@
   ::edit-dataset-item-success
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)]
-      {:dispatch-n (list [:complete-request :edit-dataset-item] [::ee/load-datasets])
+      {:dispatch-n (list [:complete-request :edit-dataset-item] [::ee/load-lesson-sets course-id])
        :redirect [:course-editor-v2 :id course-id]})))
 
 (re-frame/reg-event-fx
@@ -58,8 +58,9 @@
 
 (re-frame/reg-event-fx
   ::delete-dataset-item-success
-  (fn [_ _]
-    {:dispatch-n (list [:complete-request :delete-dataset-item] [::ee/load-datasets] [::close-delete-dataset-item-modal])}))
+  (fn [{:keys [db]} _]
+    (let [course-id (:current-course db)]
+      {:dispatch-n (list [:complete-request :delete-dataset-item] [::ee/load-lesson-sets course-id] [::close-delete-dataset-item-modal])})))
 
 (re-frame/reg-event-fx
   ::upload-asset

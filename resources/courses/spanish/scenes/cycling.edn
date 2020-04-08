@@ -1,0 +1,316 @@
+{:audio {:background "/raw/audio/background/POL-daily-special-short.mp3"},
+ :assets
+ [{:url "/raw/img/stadium/cycling/cycle_race_bg_01.jpg", :size 10, :type "image"}
+  {:url "/raw/img/stadium/cycling/cycle_race_bg_02.jpg", :size 10, :type "image"}
+  {:url "/raw/img/stadium/cycling/cycle_race_bg_03.jpg", :size 10, :type "image"}
+  {:url "/raw/audio/l1/a8/Mari_L1_A8.m4a", :size 2, :type "audio", :alias "mari old"}
+  {:url "/raw/audio/l1/a8/mari.mp4", :size 2, :type "audio", :alias "mari"}
+  {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
+  {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio", :alias "game voice 1 redo"}
+  {:url "/raw/audio/l1/a2/game-voice-2.mp3", :size 5, :type "audio", :alias "game voice 2"}
+  {:url "/raw/audio/l1/a2/game-voice-3.mp3", :size 5, :type "audio", :alias "game voice 3"}],
+ :actions
+ {:start-background-music {:id "background", :loop true, :type "audio"},
+  :go-to-box3-line
+  {:data
+   [{:id "bike_turndown", :type "animation", :target "vera"}
+    {:id "bike_ride", :loop true, :type "add-animation", :target "vera"}
+    {:type "set-variable", :var-name "current-line", :var-value "box3"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
+   :type "sequence-data"},
+  :pick-wrong {:data [{:id "mari-wrong", :type "action"}], :type "sequence-data"},
+  :init-slots
+  {:data
+   [{:type "set-variable", :var-name "slot1", :var-value "box1"}
+    {:type "set-variable", :var-name "slot2", :var-value "box2"}
+    {:type "set-variable", :var-name "slot3", :var-value "box3"}],
+   :type "parallel"},
+  :go-to-box2-line-down
+  {:data
+   [{:id "bike_turndown", :type "animation", :target "vera"}
+    {:id "bike_ride", :loop true, :type "add-animation", :target "vera"}
+    {:type "set-variable", :var-name "current-line", :var-value "box2"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
+   :type "sequence-data"},
+  :go-to-box2-line-up
+  {:data
+   [{:id "bike_turnup", :type "animation", :target "vera"}
+    {:id "bike_ride", :loop true, :type "add-animation", :target "vera"}
+    {:type "set-variable", :var-name "current-line", :var-value "box2"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
+   :type "sequence-data"},
+  :stop-activity {:id "cycling", :type "stop-activity"},
+  :finish-activity
+  {:data [{:id "cycling", :type "finish-activity"} {:type "scene", :scene-id "stadium"}], :type "sequence-data"},
+  :start
+  {:data
+   ["start-activity"
+    "clear-instruction"
+    "init-slots"
+    "init-vera-position"
+    "renew-words"
+    "mari-welcome-audio-1"
+    "renew-current-concept"
+    "voice-high-var"],
+   :type "sequence"},
+  :pick-box-3
+  {:data
+   [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 821, :duration 0.5}}
+    {:type "set-variable", :var-name "current-line-jump", :var-value {:y 621, :duration 1}}
+    {:type "set-variable", :var-name "jump-wait", :var-value 1200}
+    {:fail "go-to-box3-line",
+     :type "test-value",
+     :value1 "box3",
+     :success "stay-on-line",
+     :from-var [{:var-name "current-line", :action-property "value2"}]}
+    {:fail "pick-wrong",
+     :type "test-value",
+     :value1 "box3",
+     :success "pick-correct",
+     :from-var [{:var-name "current-target", :action-property "value2"}]}],
+   :type "sequence-data"},
+  :renew-words
+  {:from "concepts",
+   :type "lesson-var-provider",
+   :limit 3,
+   :repeat 4,
+   :shuffled true,
+   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+   :provider-id "words-set"},
+  :renew-current-concept
+  {:data
+   [{:data
+     [{:id "init", :type "state", :target "box1"}
+      {:id "init", :type "state", :target "box2"}
+      {:id "init", :type "state", :target "box3"}],
+     :type "parallel"}
+    {:id "wait-for-box-animations", :type "action"}
+    {:data
+     [{:to {:x 2000, :duration 0.1}, :type "transition", :transition-id "box1"}
+      {:to {:x 2200, :duration 0.1}, :type "transition", :transition-id "box2"}
+      {:to {:x 2400, :duration 0.1}, :type "transition", :transition-id "box3"}],
+     :type "parallel"}
+    {:data
+     [{:id "reset", :type "state", :target "box1"}
+      {:id "reset", :type "state", :target "box2"}
+      {:id "reset", :type "state", :target "box3"}],
+     :type "parallel"}
+    {:id "wait-for-box-animations", :type "action"}
+    {:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+     :type "vars-var-provider",
+     :on-end "finish-activity",
+     :shuffled false,
+     :variables ["current-concept"],
+     :provider-id "current-concept"}
+    {:data
+     [{:data
+       [{:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-1-skin", :action-property "var-value"}],
+         :var-name "word1"}
+        {:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-2-skin", :action-property "var-value"}],
+         :var-name "word2"}
+        {:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-3-skin", :action-property "var-value"}],
+         :var-name "word3"}
+        {:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-4-skin", :action-property "var-value"}],
+         :var-name "word4"}],
+       :type "parallel"}
+      {:from ["word1" "word2" "word3" "word4"],
+       :type "vars-var-provider",
+       :shuffled true,
+       :variables ["box1" "box2" "box3"]}],
+     :type "sequence-data"}
+    {:data
+     [{:from ["slot1" "slot2" "slot3"], :type "vars-var-provider", :shuffled true, :variables ["current-target"]}
+      {:type "set-variable",
+       :from-var
+       [{:var-name "current-concept", :var-property "skin", :action-property "var-value"}
+        {:var-name "current-target", :action-property "var-name"}]}],
+     :type "sequence-data"}
+    {:data
+     [{:type "set-skin", :target "box1", :from-var [{:var-name "box1", :action-property "skin"}]}
+      {:type "set-skin", :target "box2", :from-var [{:var-name "box2", :action-property "skin"}]}
+      {:type "set-skin", :target "box3", :from-var [{:var-name "box3", :action-property "skin"}]}],
+     :type "parallel"}
+    {:data
+     [{:to {:x 1300, :duration 2}, :type "transition", :transition-id "box1"}
+      {:to {:x 1500, :duration 2}, :type "transition", :transition-id "box2"}
+      {:to {:x 1700, :duration 2}, :type "transition", :transition-id "box3"}],
+     :type "parallel"}],
+   :type "sequence-data"},
+  :go-to-box1-line
+  {:data
+   [{:id "bike_turnup", :type "animation", :target "vera"}
+    {:id "bike_ride", :loop true, :type "add-animation", :target "vera"}
+    {:type "set-variable", :var-name "current-line", :var-value "box1"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
+   :type "sequence-data"},
+  :mari-welcome-audio-1
+  {:data
+   [{:end 3.03, :anim "talk", :start 1.49}
+    {:end 7.56, :anim "talk", :start 4.2}
+    {:end 11.9, :anim "talk", :start 8.01}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a8/mari.mp4",
+   :start 1.244,
+   :track 1,
+   :offset 1.244,
+   :target "mari",
+   :duration 10.782},
+  :wait-for-box-animations {:type "empty", :duration 100},
+  :stay-on-line {:type "empty", :duration 100},
+  :pick-box-1
+  {:data
+   [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 621, :duration 0.5}}
+    {:type "set-variable", :var-name "current-line-jump", :var-value {:y 421, :duration 1}}
+    {:type "set-variable", :var-name "jump-wait", :var-value 500}
+    {:fail "go-to-box1-line",
+     :type "test-value",
+     :value1 "box1",
+     :success "stay-on-line",
+     :from-var [{:var-name "current-line", :action-property "value2"}]}
+    {:fail "pick-wrong",
+     :type "test-value",
+     :value1 "box1",
+     :success "pick-correct",
+     :from-var [{:var-name "current-target", :action-property "value2"}]}],
+   :type "sequence-data"},
+  :voice-high-var {:type "action", :from-var [{:var-name "current-concept", :var-property "game-voice-action"}]},
+  :start-activity {:id "cycling", :type "start-activity"},
+  :pick-box-2
+  {:data
+   [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 721, :duration 0.5}}
+    {:type "set-variable", :var-name "current-line-jump", :var-value {:y 521, :duration 1}}
+    {:type "set-variable", :var-name "jump-wait", :var-value 800}
+    {:type "case",
+     :options
+     {:box1 {:id "go-to-box2-line-down", :type "action"},
+      :box2 {:id "stay-on-line", :type "action"},
+      :box3 {:id "go-to-box2-line-up", :type "action"}},
+     :from-var [{:var-name "current-line", :action-property "value"}]}
+    {:fail "pick-wrong",
+     :type "test-value",
+     :value1 "box2",
+     :success "pick-correct",
+     :from-var [{:var-name "current-target", :action-property "value2"}]}],
+   :type "sequence-data"},
+  :init-vera-position {:type "set-variable", :var-name "current-line", :var-value "box2"},
+  :clear-instruction {:type "remove-flows", :flow-tag "instruction"},
+  :pick-correct
+  {:data
+   [{:data
+     [{:id "mari-correct", :type "action"}
+      {:to {:x -700, :duration 4}, :type "transition", :transition-id "box1"}
+      {:to {:x -500, :duration 4}, :type "transition", :transition-id "box2"}
+      {:to {:x -300, :duration 4}, :type "transition", :transition-id "box3"}
+      {:data
+       [{:type "empty", :from-var [{:var-name "jump-wait", :action-property "duration"}]}
+        {:id "bike_jump", :type "animation", :target "vera"}
+        {:type "transition", :from-var [{:var-name "current-line-jump", :action-property "to"}], :transition-id "vera"}
+        {:id "bike_ride", :loop true, :type "add-animation", :target "vera"}
+        {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
+       :type "sequence-data"}],
+     :type "parallel"}
+    {:id "renew-current-concept", :type "action"}
+    {:id "voice-high-var", :type "action"}],
+   :type "sequence-data"}},
+ :objects
+ {:box1
+  {:y 683,
+   :states {:init {:type "transparent"}, :reset {:type "animation"}},
+   :transition "box1",
+   :speed 0.3,
+   :scale {:x -0.25, :y 0.25},
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "animation",
+   :actions {:click {:id "pick-box-1", :on "click", :type "action"}},
+   :loop true,
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :x 2000,
+   :scene-name "box1",
+   :skin "qwestion",
+   :height 633},
+  :box2
+  {:y 789,
+   :states {:init {:type "transparent"}, :reset {:type "animation"}},
+   :transition "box2",
+   :speed 0.3,
+   :scale {:x -0.25, :y 0.25},
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "animation",
+   :actions {:click {:id "pick-box-2", :on "click", :type "action"}},
+   :loop true,
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :x 2200,
+   :scene-name "box2",
+   :skin "qwestion",
+   :height 633},
+  :box3
+  {:y 932,
+   :states {:init {:type "transparent"}, :reset {:type "animation"}},
+   :transition "box3",
+   :speed 0.3,
+   :scale {:x -0.25, :y 0.25},
+   :name "boxes",
+   :width 671,
+   :start true,
+   :type "animation",
+   :actions {:click {:id "pick-box-3", :on "click", :type "action"}},
+   :loop true,
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :x 2400,
+   :scene-name "box3",
+   :skin "qwestion",
+   :height 633},
+  :mari
+  {:y 311,
+   :transition "mari",
+   :speed 0.35,
+   :name "mari",
+   :width 473,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :scale-y 0.5,
+   :anim-offset {:x 0, :y -150},
+   :x 1265,
+   :scale-x 0.5,
+   :scene-name "mari",
+   :height 511},
+  :vera
+  {:y 721,
+   :transition "vera",
+   :speed 0.3,
+   :scale {:x 0.4, :y 0.4},
+   :name "vera-90",
+   :width 727,
+   :start true,
+   :type "animation",
+   :anim "bike_ride",
+   :meshes true,
+   :x 500,
+   :scene-name "vera",
+   :skin "default",
+   :height 1091},
+  :background
+  {:x 0,
+   :y 0,
+   :last "/raw/img/stadium/cycling/cycle_race_bg_03.jpg",
+   :next "/raw/img/stadium/cycling/cycle_race_bg_02.jpg",
+   :type "carousel",
+   :first "/raw/img/stadium/cycling/cycle_race_bg_01.jpg",
+   :width 1920,
+   :height 1080}},
+ :metadata {:prev "stadium", :autostart true},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :templates ["coaching"],
+ :scene-objects [["background"] ["box1" "box2" "box3"] ["vera" "mari"]]}
