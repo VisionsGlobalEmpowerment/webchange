@@ -22,20 +22,45 @@
                            :margin-left (str "-" progress-margin "px")
                            :margin-top  (str "-" progress-margin "px")}}))
 
+(defn- filter-data
+  [filter-key data]
+  (->> data
+       (filter (fn [[_ {:keys [type]}]]
+                 (= type filter-key)))))
+
+(defn- group-concepts-updates
+  [data-store]
+  (->> data-store
+       (filter-data :concept)
+       (reduce (fn [result [[name id] {:keys [data]}]]
+                 (update result id merge (assoc {} name data)))
+               {})))
+
+(defn- group-scene-updates
+  [data-store]
+  (->> data-store
+       (filter-data :scene)
+       (reduce (fn [result [[name] {:keys [data]}]]
+                 (assoc result name data))
+               {})))
+
+(defn- save-scene-data
+  [scene-id data-store]
+  (doseq [[action-name action-data] (group-scene-updates data-store)]
+    (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
+  (re-frame/dispatch [::events/save-current-scene scene-id]))
+
+(defn- save-concepts-data
+  [data-store]
+  (doseq [[id data-patch] (group-concepts-updates data-store)]
+    (re-frame/dispatch [::events/update-dataset-item id data-patch])))
+
 (defn save-actions-data!
   []
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
-        save-scene-action (fn [action-name action-data scene-id]
-                            (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
-        save-concept-action (fn [concept-id field-name field-data]
-                              (re-frame/dispatch [::translator-events/update-current-concept-field concept-id field-name field-data]))]
-    (doseq [[name {:keys [id type data]}] data-store]
-      (case type
-        :scene (save-scene-action name data scene-id)
-        :concept (save-concept-action id name data)))
-    (re-frame/dispatch [::events/save-current-scene scene-id])
-    (re-frame/dispatch [::translator-events/save-current-concept])))
+        data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])]
+    (save-scene-data scene-id data-store)
+    (save-concepts-data data-store)))
 
 (def close-window! #(re-frame/dispatch [::translator-events/close-translator-modal]))
 

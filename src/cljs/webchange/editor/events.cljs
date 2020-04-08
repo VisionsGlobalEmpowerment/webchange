@@ -476,7 +476,6 @@
                   :on-success      [::edit-dataset-success]
                   :on-failure      [:api-request-error :edit-dataset]}}))
 
-
 (re-frame/reg-event-fx
   ::edit-dataset-success
   (fn [_ _]
@@ -566,6 +565,26 @@
     {:dispatch-n (list [:complete-request :edit-dataset-item]
                        [::load-current-dataset-items]
                        [::set-main-content :dataset-info])}))
+
+(re-frame/reg-event-fx
+  ::update-dataset-item
+  (fn [{:keys [db]} [_ id data-patch]]
+    (let [{:keys [name data]} (get-in db [:dataset-items id])
+          new-data (merge data data-patch)]
+      {:db (assoc-in db [:loading :update-dataset-item] true)
+       :http-xhrio {:method          :put
+                    :uri             (str "/api/dataset-items/" id)
+                    :params          {:data new-data :name name}
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::update-dataset-item-success]
+                    :on-failure      [:api-request-error :update-dataset-item]}})))
+
+(re-frame/reg-event-fx
+  ::update-dataset-item-success
+  (fn [{:keys [db]} [_ {:keys [id data]}]]
+    {:db         (assoc-in db [:dataset-items id] data)
+     :dispatch-n (list [:complete-request :update-dataset-item])}))
 
 (re-frame/reg-event-fx
   ::delete-dataset-item
