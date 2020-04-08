@@ -3,11 +3,10 @@
             [compojure.route :refer [resources not-found]]
             [ring.util.response :refer [resource-response response redirect]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
-            [clojure.tools.logging :as log]
             [webchange.common.handler :refer [handle current-user]]
-            [webchange.auth.core :as auth]
             [clojure.java.io :as io]
             [mikera.image.core :as imagez]
+            [webchange.assets.core :as core]
             [config.core :refer [env]]
             [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]))
 
@@ -54,8 +53,8 @@
 
 (defn- process-asset
   [type path]
-  (case type
-    "audio" (future (try-recognize-audio path))))
+  (when (= type "audio")
+    (future (try-recognize-audio path))))
 
 (defn upload-asset [{{:keys [tempfile size filename]} "file" type "type"}]
   (let [extension (get-extension filename)
@@ -69,11 +68,14 @@
                   xout (io/output-stream path)]
         (io/copy xin xout)
         (process-asset type relative-path)
-        (merge
-          {:url relative-path
-           :type type
-           :size (normalize-size size)}
-          params)))))
+        )
+      (core/store-asset-hash! path)
+      (merge
+        {:url relative-path
+         :type type
+         :size (normalize-size size)}
+        params))
+    ))
 
 (defroutes asset-routes
            (POST "/api/assets/" request
