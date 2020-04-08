@@ -1,0 +1,327 @@
+{:assets
+ [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
+  {:url "/raw/img/ui/back_button_01.png", :type "image"}
+  {:url "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :alias "mari voice"}
+  {:url "/raw/img/elements/squirrel.png", :type "image"}],
+ :actions
+ {:update-painting-var
+  {:fail
+   {:type "set-attribute",
+    :target "practice-canvas",
+    :from-var [{:template "writing-practice-stage-2-pt-%", :var-name "current-page", :action-property "attr-value"}],
+    :attr-name "var-name"},
+   :type "test-var-scalar",
+   :value 1,
+   :success
+   {:type "set-attribute",
+    :target "practice-canvas",
+    :from-var [{:template "writing-practice-stage-1-pt-%", :var-name "current-page", :action-property "attr-value"}],
+    :attr-name "var-name"},
+   :var-name "current-stage"},
+  :go-next-stage
+  {:data
+   [{:type "counter", :counter-id "current-stage", :counter-action "increase"}
+    {:type "counter", :counter-id "current-page", :counter-value 0, :counter-action "reset"}
+    {:id "go-next-page", :type "action"}
+    {:id "hide-stage-1", :type "action"}
+    {:id "init-stage-2", :type "action"}
+    {:id "mari-voice-intro-2", :type "action"}],
+   :type "sequence-data"},
+  :go-next {:id "check-page", :type "action"},
+  :hide-stage-1
+  {:data
+   [{:id "hidden", :type "state", :target "letter-trace"}
+    {:id "hidden", :type "state", :target "letter-tutorial-path"}],
+   :type "parallel"},
+  :init-stage-2
+  {:data
+   [{:type "set-attribute",
+     :target "letter-tutorial-1",
+     :from-var [{:var-name "letter-tutorial-path", :action-property "attr-value"}],
+     :attr-name "data"}
+    {:type "set-attribute",
+     :target "letter-tutorial-2",
+     :from-var [{:var-name "letter-tutorial-path", :action-property "attr-value"}],
+     :attr-name "data"}
+    {:type "set-attribute",
+     :target "letter-tutorial-3",
+     :from-var [{:var-name "letter-tutorial-path", :action-property "attr-value"}],
+     :attr-name "data"}
+    {:id "visible", :type "state", :target "letter-tutorial-group"}],
+   :type "parallel"},
+  :check-stage
+  {:fail "go-next-stage", :type "test-var-scalar", :value 2, :success "finish-activity", :var-name "current-stage"},
+  :mari-voice-try-again
+  {:data
+   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 52.432, :volume 0.2, :duration 3.228}
+    {:data [{:end 55.562, :anim "talk", :start 52.629}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 52.432,
+     :target "mari"}],
+   :type "parallel",
+   :description "Toca aqui para seguir rastreando"},
+  :stop-activity {:id "writing-practice", :type "stop-activity"},
+  :finish-activity
+  {:dat [{:id "writing-practice", :type "finish-activity"} {:type "scene", :scene-id "library"}],
+   :type "sequence-data"},
+  :init-stage-1
+  {:data
+   [{:type "set-attribute",
+     :target "letter-trace",
+     :from-var [{:var-name "letter-path", :action-property "attr-value"}],
+     :attr-name "data"}
+    {:type "set-attribute",
+     :target "letter-tutorial-trace",
+     :from-var [{:var-name "letter-path", :action-property "attr-value"}],
+     :attr-name "data"}
+    {:type "set-attribute",
+     :target "letter-tutorial-path",
+     :from-var [{:var-name "letter-path", :action-property "attr-value"}],
+     :attr-name "path"}],
+   :type "parallel"},
+  :start
+  {:data
+   ["start-activity"
+    "renew-concept"
+    "init-state"
+    "init-vars"
+    "init-stage-1"
+    "mari-voice-intro"
+    "mari-init-wand"
+    "mari-shows-example"
+    "mari-voice-go-next-practice"],
+   :type "sequence"},
+  :mari-voice-go-next-practice
+  {:data
+   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 62.923, :volume 0.2, :duration 4.054}
+    {:data [{:end 66.859, :anim "talk", :start 63.08}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 62.923,
+     :target "mari"}],
+   :type "parallel",
+   :description "Haz click en la flecha para seguir con tu trabajo."},
+  :init-state
+  {:data
+   [{:type "set-attribute",
+     :target "concept-image",
+     :from-var [{:var-name "current-concept", :var-property "image-src", :action-property "attr-value"}],
+     :attr-name "src"}
+    {:type "set-attribute",
+     :target "concept-word",
+     :from-var [{:var-name "current-concept", :var-property "concept-name", :action-property "attr-value"}],
+     :attr-name "text"}
+    {:type "set-attribute",
+     :target "letter-tutorial-image",
+     :from-var [{:var-name "current-concept", :var-property "letter-src", :action-property "attr-value"}],
+     :attr-name "src"}],
+   :type "parallel"},
+  :renew-concept
+  {:from "concepts-single", :type "lesson-var-provider", :variables ["current-concept"], :provider-id "concepts"},
+  :mari-voice-intro
+  {:data
+   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 32.357, :volume 0.2, :duration 17.005}
+    {:data
+     [{:end 36.254, :anim "talk", :start 33.026}
+      {:end 40.367, :anim "talk", :start 36.707}
+      {:end 45.485, :anim "talk", :start 41.627}
+      {:end 49.047, :anim "talk", :start 46.193}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 32.357,
+     :target "mari"}],
+   :type "parallel",
+   :description
+   "Escoge un lapiz o un color y sigue las flechas para rastrear la letra.\n                                                    Recuerda seguir el modelo correcto de rastrear. Yo te ensenare como hacer el primero. "},
+  :init-vars
+  {:data
+   [{:type "set-variable", :var-name "current-stage", :var-value 1}
+    {:type "set-variable", :var-name "current-page", :var-value 1}
+    {:type "calc", :value-1 30, :value-2 13, :var-name "pages-number", :operation "div-ceil"}
+    {:type "set-variable",
+     :from-var [{:var-name "current-concept", :var-property "letter-path", :action-property "var-value"}],
+     :var-name "letter-path"}
+    {:type "set-variable",
+     :from-var [{:var-name "current-concept", :var-property "letter-tutorial-path", :action-property "var-value"}],
+     :var-name "letter-tutorial-path"}],
+   :type "parallel"},
+  :mari-go-wait {:to {:x 1490, :y 130, :loop false, :duration 2}, :type "transition", :transition-id "mari"},
+  :check-page
+  {:fail "go-next-page",
+   :type "test-var-scalar",
+   :success "check-stage",
+   :from-var [{:var-name "pages-number", :action-property "value"}],
+   :var-name "current-page"},
+  :start-activity {:id "writing-practice", :type "start-activity"},
+  :go-next-page
+  {:data
+   [{:type "counter", :counter-id "current-page", :counter-action "increase"}
+    {:id "update-painting-var", :type "action"}],
+   :type "sequence-data"},
+  :mari-shows-example
+  {:data
+   [{:to {:x 980, :y 360, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+    {:id "visible", :type "state", :target "letter-tutorial-path"}
+    {:data
+     [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
+      {:to {:path "", :scale {:x 1.7, :y 1.7}, :origin {:x 680, :y 60}, :duration 5},
+       :type "transition",
+       :from-var [{:var-name "letter-path", :action-property "to.path"}],
+       :transition-id "mari"}],
+     :type "parallel"}
+    {:type "set-attribute", :target "mari", :attr-name "scale-x", :attr-value -0.5}
+    {:to {:x 1490, :y 180, :loop false, :duration 2}, :type "transition", :transition-id "mari"}],
+   :type "sequence-data"},
+  :mari-voice-intro-2
+  {:data
+   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 70.402, :volume 0.2, :duration 16.848}
+    {:data
+     [{:end 75.952, :anim "talk", :start 70.677}
+      {:end 79.298, :anim "talk", :start 76.68}
+      {:end 81.483, :anim "talk", :start 80.046}
+      {:end 86.915, :anim "talk", :start 82.073}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 70.402,
+     :target "mari"}],
+   :type "parallel",
+   :description
+   "En esta pagina, podras practicar a dibujar las letras O podras dibujar lo que gustes.\n                                                            Cuando termines, haz click sobre la flecha para ir a tu proxima actividad."},
+  :mari-init-wand {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"},
+  :mari-voice-good-job
+  {:data
+   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 58.908, :volume 0.2, :duration 2.637}
+    {:data [{:end 62.529, :anim "talk", :start 59.223}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 58.908,
+     :target "mari"}],
+   :type "parallel",
+   :description "Buen trabajo rastreando la letra"}},
+ :objects
+ {:letter-tutorial-image
+  {:x 965, :y 75, :type "image", :width 651, :height 651, :scale-x 0.45, :scale-y 0.45, :rotation 0},
+  :concept-word
+  {:y 190,
+   :align "center",
+   :vertical-align "middle",
+   :font-size 80,
+   :fill "black",
+   :width 400,
+   :type "text",
+   :scale-y 1,
+   :x 0,
+   :scale-x 1,
+   :font-family "Lexend Deca",
+   :height 100,
+   :text ""},
+  :concept-image {:x 100, :y 0, :type "image", :width 100, :height 100, :scale-x 2, :scale-y 2, :rotation 0},
+  :background {:src "/raw/img/library/painting-tablet/background.jpg", :type "background", :scene-name "background"},
+  :letter-tutorial-trace
+  {:y 25,
+   :stroke "#898989",
+   :rotation 0,
+   :states {:hidden {:type "transparent"}, :visible {:type "svg-path"}},
+   :width 225,
+   :dash [7 7],
+   :type "svg-path",
+   :stroke-width 4,
+   :scale-y 1.8,
+   :x 500,
+   :scale-x 1.8,
+   :scene-name "letter-tutorial-trace",
+   :line-cap "round",
+   :height 225,
+   :data ""},
+  :letter-trace
+  {:y 115,
+   :stroke "#898989",
+   :rotation 0,
+   :states {:hidden {:type "transparent"}, :visible {:type "svg-path"}},
+   :dash [7 7],
+   :type "svg-path",
+   :stroke-width 4,
+   :scale-y 3.2,
+   :x 600,
+   :scale-x 3.2,
+   :scene-name "letter-trace",
+   :line-cap "round",
+   :data ""},
+  :practice-canvas
+  {:y 0,
+   :rotation 0,
+   :color "#323232",
+   :states {:hidden {:type "transparent"}, :visible {:type "painting-area"}},
+   :tool "brush",
+   :width 1920,
+   :type "painting-area",
+   :scale-y 1,
+   :var-name "writing-practice-stage-1-pt-1",
+   :x 0,
+   :scale-x 1,
+   :scene-name "practice-canvas",
+   :height 1080},
+  :copybook
+  {:y 0,
+   :line-height 180,
+   :padding-height 90,
+   :rotation 0,
+   :width 1800,
+   :type "copybook",
+   :scale-y 1,
+   :x 60,
+   :scale-x 1,
+   :scene-name "copybook",
+   :height 1050},
+  :concept-card {:x 60, :y 30, :type "group", :width 400, :height 300, :children ["concept-image" "concept-word"]},
+  :letter-tutorial-path
+  {:y 25,
+   :path "",
+   :stroke "#323232",
+   :animation "stop",
+   :states {:hidden {:type "transparent"}, :visible {:type "animated-svg-path"}},
+   :fill "transparent",
+   :width 225,
+   :type "transparent",
+   :duration 5000,
+   :stroke-width 10,
+   :scale-y 1.8,
+   :x 500,
+   :scale-x 1.8,
+   :scene-name "letter-path",
+   :line-cap "round",
+   :height 225},
+  :next-button
+  {:y 915,
+   :rotation 0,
+   :width 97,
+   :type "image",
+   :src "/raw/img/ui/back_button_01.png",
+   :actions {:click {:id "go-next", :on "click", :type "action"}},
+   :scale-y 1,
+   :x 1875,
+   :scale-x -1,
+   :height 99},
+  :mari
+  {:y 520,
+   :transition "mari",
+   :speed 0.35,
+   :name "mari",
+   :width 473,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :scale-y 0.5,
+   :x 1700,
+   :scale-x 0.5,
+   :scene-name "mari",
+   :height 511},
+  :letter-trace-matrix
+  {:y 330, :el "letter-trace", :dx 675, :width 2025, :dy 360, :type "matrix", :max 3, :x -70, :height 675}},
+ :metadata {:prev "library", :autostart true},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :scene-objects
+ [["background" "concept-card"]
+  ["letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path" "letter-tutorial-image"]
+  ["practice-canvas" "next-button" "mari"]]}

@@ -1,0 +1,395 @@
+{:audio
+ {:rock-oso "/raw/audio/l1/a3/rock/Oso.m4a",
+  :vera-oso "/raw/audio/l1/a3/vera/oso.m4a",
+  :rock-iman "/raw/audio/l1/a3/rock/Iman.m4a",
+  :vera-iman "/raw/audio/l1/a3/vera/iman.m4a",
+  :mari-welcome "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+  :rock-ardilla "/raw/audio/l1/a3/rock/Ardilla.m4a",
+  :vera-ardilla "/raw/audio/l1/a3/vera/ardilla.m4a"},
+ :assets
+ [{:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio", :alias "mari old"}
+  {:url "/raw/audio/l1/a5/mari.mp4", :size 2, :type "audio", :alias "mari"}
+  {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
+  {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio", :alias "game voice 1 redo"}
+  {:url "/raw/audio/l1/a2/game-voice-2.mp3", :size 5, :type "audio", :alias "game voice 2"}
+  {:url "/raw/audio/l1/a2/game-voice-3.mp3", :size 5, :type "audio", :alias "game voice 3"}
+  {:url "/raw/img/stadium/volleyball/background.jpg", :size 10, :type "image"}
+  {:url "/raw/img/stadium/volleyball/ball.png", :size 1, :type "image"}],
+ :actions
+ {:throw-player1-player3
+  {:to {:bezier [{:x 1066, :y 284} {:x 960, :y 253} {:x 213, :y 940}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :throw-player3-player1
+  {:to {:bezier [{:x 866, :y 284} {:x 960, :y 253} {:x 1163, :y 941}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :throw-player4-player1
+  {:to {:bezier [{:x 866, :y 284} {:x 960, :y 253} {:x 1163, :y 941}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :pick-wrong
+  {:data
+   [{:id "mari-wrong", :type "action"}
+    {:type "copy-variable", :var-name "picked", :from-params [{:param-property "player", :action-property "from"}]}
+    {:type "pick-wrong",
+     :activity "volleyball",
+     :from-var
+     [{:var-name "current-concept", :var-property "concept-name", :action-property "concept-name"}
+      {:var-name "picked", :action-property "option"}]}],
+   :type "sequence-data"},
+  :init-slots
+  {:data
+   [{:type "set-variable", :var-name "slot1", :var-value "player1"}
+    {:type "set-variable", :var-name "slot2", :var-value "player2"}
+    {:type "set-variable", :var-name "slot3", :var-value "player3"}
+    {:type "set-variable", :var-name "slot4", :var-value "player4"}],
+   :type "parallel"},
+  :empty-before-dialog {:type "empty", :duration 3000},
+  :init-first-player {:type "set-variable", :var-name "current-player", :var-value "player1"},
+  :animate-throw-player1
+  {:data
+   [{:id "volley_throw", :type "animation", :target "vera"}
+    {:id "idle", :loop true, :type "add-animation", :target "vera"}],
+   :type "sequence-data"},
+  :throw-from-player3
+  {:type "action", :from-params [{:template "throw-player3-%", :param-property "player", :action-property "id"}]},
+  :animate-catch-player4
+  {:data
+   [{:id "volley_call", :type "animation", :target "girl3"}
+    {:id "volley_idle", :loop true, :type "add-animation", :target "girl3"}],
+   :type "sequence-data"},
+  :check-concept
+  {:fail "pick-wrong",
+   :type "test-var-scalar",
+   :success "pick-correct",
+   :var-name "current-target",
+   :from-params [{:param-property "player", :action-property "value"}]},
+  :animate-throw-player3
+  {:data
+   [{:id "volley_throw", :type "animation", :target "girl2"}
+    {:id "idle", :loop true, :type "add-animation", :target "girl2"}],
+   :type "sequence-data"},
+  :stop-activity {:id "volleyball", :type "stop-activity"},
+  :throw-player3-player2
+  {:to {:bezier [{:x 866, :y 284} {:x 960, :y 253} {:x 1538, :y 801}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :finish-activity
+  {:data [{:id "volleyball", :type "finish-activity"} {:type "scene", :scene-id "stadium"}], :type "sequence-data"},
+  :animate-throw-player4
+  {:data
+   [{:id "volley_throw", :type "animation", :target "girl3"}
+    {:id "idle", :loop true, :type "add-animation", :target "girl3"}],
+   :type "sequence-data"},
+  :throw-player2-player1
+  {:to {:bezier [{:x 1472, :y 487} {:x 1376, :y 451} {:x 1163, :y 941}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :start
+  {:data
+   ["start-activity"
+    "clear-instruction"
+    "init-slots"
+    "init-first-player"
+    "renew-words"
+    "renew-current-concept"
+    "mari-welcome-audio-1"
+    "voice-high-var"],
+   :type "sequence"},
+  :throw-player2-player4
+  {:to {:bezier [{:x 1066, :y 284} {:x 960, :y 253} {:x 528, :y 799}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :renew-words
+  {:from "concepts",
+   :type "lesson-var-provider",
+   :limit 3,
+   :repeat 4,
+   :shuffled true,
+   :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+   :provider-id "words-set"},
+  :throw-player1-player4
+  {:to {:bezier [{:x 1066, :y 284} {:x 960, :y 253} {:x 528, :y 799}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :throw-player4-player3
+  {:to {:bezier [{:x 446, :y 551} {:x 346, :y 451} {:x 213, :y 940}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :renew-current-concept
+  {:data
+   [{:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+     :type "vars-var-provider",
+     :on-end "finish-activity",
+     :shuffled false,
+     :variables ["current-concept"],
+     :provider-id "current-concept"}
+    {:data
+     [{:data
+       [{:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-1-skin", :action-property "var-value"}],
+         :var-name "player1"}
+        {:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-2-skin", :action-property "var-value"}],
+         :var-name "player2"}
+        {:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-3-skin", :action-property "var-value"}],
+         :var-name "player3"}
+        {:type "set-variable",
+         :from-var [{:var-name "current-concept", :var-property "word-4-skin", :action-property "var-value"}],
+         :var-name "player4"}],
+       :type "parallel"}
+      {:from ["player1" "player2" "player3" "player4"],
+       :type "vars-var-provider",
+       :shuffled true,
+       :variables ["player1" "player2" "player3" "player4"]}],
+     :type "sequence-data"}
+    {:data
+     [{:from ["slot1" "slot2" "slot3" "slot4"],
+       :type "vars-var-provider",
+       :from-var [{:var-name "current-player", :to-vector true, :action-property "exclude-values"}],
+       :shuffled true,
+       :variables ["current-target"]}
+      {:type "set-variable",
+       :from-var
+       [{:var-name "current-concept", :var-property "skin", :action-property "var-value"}
+        {:var-name "current-target", :action-property "var-name"}]}
+      {:type "set-current-concept",
+       :from-var [{:var-name "current-concept", :var-property "skin", :action-property "value"}]}],
+     :type "sequence-data"}
+    {:data
+     [{:type "set-skin", :target "box1", :from-var [{:var-name "player1", :action-property "skin"}]}
+      {:type "set-skin", :target "box2", :from-var [{:var-name "player2", :action-property "skin"}]}
+      {:type "set-skin", :target "box3", :from-var [{:var-name "player3", :action-property "skin"}]}
+      {:type "set-skin", :target "box4", :from-var [{:var-name "player4", :action-property "skin"}]}],
+     :type "parallel"}],
+   :type "sequence-data"},
+  :throw-player3-player4
+  {:to {:bezier [{:x 246, :y 551} {:x 346, :y 451} {:x 528, :y 799}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :mari-welcome-audio-1
+  {:data
+   [{:end 2.25, :anim "talk", :start 1.41}
+    {:end 5.8, :anim "talk", :start 3.14}
+    {:end 6.39, :anim "talk", :start 6.07}
+    {:end 9.47, :anim "talk", :start 6.58}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a5/mari.mp4",
+   :start 1.274,
+   :track 1,
+   :offset 1.274,
+   :target "mari",
+   :duration 8.325},
+  :animate-catch-player1
+  {:data
+   [{:id "volley_call", :type "animation", :target "vera"}
+    {:id "volley_idle", :loop true, :type "add-animation", :target "vera"}],
+   :type "sequence-data"},
+  :throw-from-player1
+  {:type "action", :from-params [{:template "throw-player1-%", :param-property "player", :action-property "id"}]},
+  :wait-for-box-animations {:type "empty", :duration 500},
+  :throw
+  {:data
+   [{:type "action", :from-var [{:template "animate-throw-%", :var-name "current-player", :action-property "id"}]}
+    {:id "visible", :type "state", :target "ball-image"}
+    {:type "empty", :duration 500}
+    {:data
+     [{:data
+       [{:type "action", :from-var [{:template "throw-from-%", :var-name "current-player", :action-property "id"}]}
+        {:id "hidden", :type "state", :target "ball-image"}],
+       :type "sequence-data"}
+      {:data
+       [{:type "empty", :duration 500}
+        {:type "action",
+         :from-params [{:template "animate-catch-%", :param-property "player", :action-property "id"}]}],
+       :type "sequence-data"}],
+     :type "parallel"}
+    {:type "set-variable",
+     :var-name "current-player",
+     :from-params [{:param-property "player", :action-property "var-value"}]}
+    {:id "renew-current-concept", :type "action"}
+    {:id "voice-high-var", :type "action"}],
+   :type "sequence-data"},
+  :voice-high-var {:type "action", :from-var [{:var-name "current-concept", :var-property "game-voice-action"}]},
+  :start-activity {:id "volleyball", :type "start-activity"},
+  :throw-player4-player2
+  {:to {:bezier [{:x 866, :y 284} {:x 960, :y 253} {:x 1538, :y 801}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :throw-player1-player2
+  {:to {:bezier [{:x 1272, :y 487} {:x 1376, :y 451} {:x 1538, :y 801}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :throw-from-player2
+  {:type "action", :from-params [{:template "throw-player2-%", :param-property "player", :action-property "id"}]},
+  :throw-from-player4
+  {:type "action", :from-params [{:template "throw-player4-%", :param-property "player", :action-property "id"}]},
+  :animate-throw-player2
+  {:data
+   [{:id "volley_throw", :type "animation", :target "boy1"}
+    {:id "idle", :loop true, :type "add-animation", :target "boy1"}],
+   :type "sequence-data"},
+  :throw-player2-player3
+  {:to {:bezier [{:x 1066, :y 284} {:x 960, :y 253} {:x 213, :y 940}], :duration 1.4},
+   :type "transition",
+   :transition-id "ball-transition"},
+  :clear-instruction {:type "remove-flows", :flow-tag "instruction"},
+  :pick-correct
+  {:data
+   [{:id "mari-correct", :type "action"}
+    {:type "pick-correct",
+     :activity "volleyball",
+     :from-var [{:var-name "current-concept", :var-property "concept-name", :action-property "concept-name"}]}
+    {:id "throw", :type "action"}],
+   :type "parallel"},
+  :animate-catch-player2
+  {:data
+   [{:id "volley_call", :type "animation", :target "boy1"}
+    {:id "volley_idle", :loop true, :type "add-animation", :target "boy1"}],
+   :type "sequence-data"},
+  :animate-catch-player3
+  {:data
+   [{:id "volley_call", :type "animation", :target "girl2"}
+    {:id "volley_idle", :loop true, :type "add-animation", :target "girl2"}],
+   :type "sequence-data"}},
+ :objects
+ {:box4
+  {:y 666,
+   :scale {:x 0.3, :y 0.3},
+   :name "boxes",
+   :width 771,
+   :type "animation",
+   :actions {:click {:id "check-concept", :on "click", :type "action", :params {:player "player4"}}},
+   :anim "idle1",
+   :anim-offset {:x 0, :y -300},
+   :origin {:type "center-center"},
+   :x 629,
+   :scene-name "box4",
+   :skin "empty",
+   :height 1033},
+  :ball
+  {:x 1163, :y 941, :type "group", :width 126, :height 126, :children ["ball-image"], :transition "ball-transition"},
+  :ball-image
+  {:type "transparent",
+   :width 126,
+   :height 126,
+   :origin {:type "center-center"},
+   :states {:hidden {:type "transparent"}, :visible {:src "/raw/img/stadium/volleyball/ball.png", :type "image"}},
+   :scale-x 0.5,
+   :scale-y 0.5},
+  :background {:src "/raw/img/stadium/volleyball/background.jpg", :type "background"},
+  :girl3
+  {:y 871,
+   :speed 0.3,
+   :scale {:x -0.25, :y 0.25},
+   :name "vera-45",
+   :width 758,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :x 512,
+   :scene-name "girl3",
+   :skin "3_girl",
+   :height 1130},
+  :box3
+  {:y 831,
+   :scale {:x 0.3, :y 0.3},
+   :name "boxes",
+   :width 771,
+   :type "animation",
+   :actions {:click {:id "check-concept", :on "click", :type "action", :params {:player "player3"}}},
+   :anim "idle1",
+   :anim-offset {:x 0, :y -300},
+   :origin {:type "center-center"},
+   :x 309,
+   :scene-name "box3",
+   :skin "empty",
+   :height 1033},
+  :vera
+  {:y 1010,
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "vera-45",
+   :width 758,
+   :start true,
+   :type "animation",
+   :anim "volley_idle",
+   :x 1182,
+   :scene-name "vera",
+   :skin "vera",
+   :height 1130},
+  :girl2
+  {:y 1010,
+   :speed 0.3,
+   :scale {:x -0.25, :y 0.25},
+   :name "vera-45",
+   :width 758,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :x 197,
+   :scene-name "girl2",
+   :skin "2_girl",
+   :height 1130},
+  :boy1
+  {:y 871,
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "vera-45",
+   :width 758,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :x 1556,
+   :scene-name "boy1",
+   :skin "1_boy",
+   :height 1130},
+  :box1
+  {:y 831,
+   :scale {:x 0.3, :y 0.3},
+   :name "boxes",
+   :width 771,
+   :type "animation",
+   :actions {:click {:id "check-concept", :on "click", :type "action", :params {:player "player1"}}},
+   :anim "idle1",
+   :anim-offset {:x 0, :y -300},
+   :origin {:type "center-center"},
+   :x 1304,
+   :scene-name "box1",
+   :skin "empty",
+   :height 1033},
+  :box2
+  {:y 666,
+   :scale {:x 0.3, :y 0.3},
+   :name "boxes",
+   :width 771,
+   :type "animation",
+   :actions {:click {:id "check-concept", :on "click", :type "action", :params {:player "player2"}}},
+   :anim "idle1",
+   :anim-offset {:x 0, :y -300},
+   :origin {:type "center-center"},
+   :x 1665,
+   :scene-name "box2",
+   :skin "empty",
+   :height 1033},
+  :mari
+  {:y 311,
+   :transition "mari",
+   :speed 0.35,
+   :name "mari",
+   :width 473,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :scale-y 0.5,
+   :anim-offset {:x 0, :y -150},
+   :x 1265,
+   :scale-x 0.5,
+   :scene-name "mari",
+   :height 511}},
+ :metadata {:prev "stadium", :autostart true},
+ :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :templates ["coaching"],
+ :scene-objects [["background"] ["vera" "boy1" "girl2" "girl3"] ["ball"] ["box1" "box2" "box3" "box4"] ["mari"]]}

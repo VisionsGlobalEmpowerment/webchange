@@ -1,0 +1,164 @@
+{:assets
+ [{:url "/raw/audio/background/Map.mp3", :size 10, :type "audio"}
+  {:url "/raw/img/map/background.jpg", :size 10, :type "image"}
+  {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
+  {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
+  {:url "/raw/img/map/feria_01.png", :size 1, :type "image"}
+  {:url "/raw/img/map/feria_02.png", :size 1, :type "image"}
+  {:url "/raw/img/map/feria_03.png", :size 1, :type "image"}
+  {:url "/raw/img/map/feria_locked.png", :size 1, :type "image"}
+  {:url "/raw/img/map/Biblioteca_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/map/Cine_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/map/Estadio_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/map/Parque_Enabled.png", :size 1, :type "image"}],
+ :actions
+ {:init
+  {:data
+   [{:type "set-variable",
+     :var-name "last-location",
+     :from-progress [{:action-property "var-value", :progress-property "last-location"}]}
+    {:type "case",
+     :options
+     {:home {:id "init-home", :type "state", :target "vera"},
+      :park {:id "init-park", :type "state", :target "vera"},
+      :feria {:id "init-feria", :type "state", :target "vera"},
+      :cinema {:id "init-cinema", :type "state", :target "vera"},
+      :library {:id "init-library", :type "state", :target "vera"},
+      :stadium {:id "init-stadium", :type "state", :target "vera"},
+      :volleyball {:id "init-stadium", :type "state", :target "vera"}},
+     :from-var [{:var-name "last-location", :action-property "value"}]}],
+   :type "sequence-data"},
+  :move
+  {:type "move",
+   :from-params [{:param-property "scene-id", :action-property "to"}],
+   :animation-on-start "go_front",
+   :transition-id "vera-transition",
+   :graph
+   {:home {:x 1000, :y 620, :links ["road-1"]},
+    :park-1 {:x 915, :y 938, :links ["park" "park-2"]},
+    :library-1 {:x 541, :y 644, :links ["library" "library-2"]},
+    :road-1 {:x 1070, :y 665, :links ["home" "park-4" "library-5" "stadium-4" "cinema-2" "feria-4"]},
+    :cinema-1 {:x 1384, :y 730, :links ["cinema" "cinema-2"]},
+    :cinema {:x 1627, :y 672, :links ["cinema-1"]},
+    :library-3 {:x 908, :y 829, :links ["library-2" "library-4" "park-2"]},
+    :cinema-2 {:x 1210, :y 655, :links ["cinema-1" "road-1" "stadium-4"]},
+    :stadium {:x 1488, :y 399, :links ["stadium-1"]},
+    :stadium-4 {:x 1149, :y 583, :links ["stadium-3" "road-1" "cinema-2"]},
+    :library-5 {:x 940, :y 725, :links ["library-4" "road-1"]},
+    :stadium-1 {:x 1298, :y 450, :links ["stadium" "stadium-2"]},
+    :feria {:x 590, :y 960, :links ["feria-1"]},
+    :library {:x 299, :y 576, :links ["library-1"]},
+    :library-4 {:x 975, :y 771, :links ["library-3" "library-5"]},
+    :park-3 {:x 975, :y 771, :links ["park-2" "park-4"]},
+    :feria-1 {:x 875, :y 938, :links ["feria" "feria-2"]},
+    :stadium-2 {:x 1169, :y 454, :links ["stadium-1" "stadium-3"]},
+    :feria-4 {:x 940, :y 725, :links ["feria-3" "road-1"]},
+    :stadium-3 {:x 1054, :y 531, :links ["stadium-2" "stadium-4"]},
+    :park {:x 1325, :y 960, :links ["park-1"]},
+    :feria-3 {:x 975, :y 771, :links ["feria-2" "feria-4"]},
+    :library-2 {:x 691, :y 829, :links ["library-1" "library-3"]},
+    :feria-2 {:x 895, :y 851, :links ["feria-1" "feria-3"]},
+    :park-2 {:x 895, :y 851, :links ["park-1" "park-3" "library-3"]},
+    :park-4 {:x 940, :y 725, :links ["park-3" "road-1"]}},
+   :default-position "road-1",
+   :from-progress [{:action-property "from", :progress-property "last-location"}],
+   :animation-on-stop "idle",
+   :animation-target "vera-go"},
+  :navigate-to-scene
+  {:data
+   [{:id "move", :type "action"}
+    {:type "set-progress",
+     :var-name "last-location",
+     :from-params [{:param-property "scene-id", :action-property "var-value"}]}
+    {:type "scene", :from-params [{:param-property "scene-id", :action-property "scene-id"}]}],
+   :type "sequence-data"},
+  :start-background-music {:id "/raw/audio/background/Map.mp3", :loop true, :type "audio"}},
+ :objects
+ {:home
+  {:y 340,
+   :states
+   {:hover {:src "/raw/img/map/casa_02.png", :type "image"}, :default {:src "/raw/img/map/casa_01.png", :type "image"}},
+   :transition "home",
+   :width 433,
+   :type "image",
+   :src "/raw/img/map/casa_01.png",
+   :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "home"}}},
+   :filter "brighten",
+   :x 731,
+   :height 380},
+  :park
+  {:y 756,
+   :transition "park",
+   :width 346,
+   :type "image",
+   :src "/raw/img/map/Parque_Enabled.png",
+   :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "park"}}},
+   :filter "brighten",
+   :x 1337,
+   :height 246},
+  :vera
+  {:y 665,
+   :states
+   {:init-home {:x 1000, :y 620},
+    :init-park {:x 1325, :y 960},
+    :init-feria {:x 590, :y 960},
+    :init-cinema {:x 1627, :y 672},
+    :init-library {:x 299, :y 576},
+    :init-stadium {:x 1488, :y 399}},
+   :transition "vera-transition",
+   :speed 1,
+   :scale {:x 0.15, :y 0.15},
+   :name "vera-45",
+   :width 758,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :x 1070,
+   :scene-name "vera-go",
+   :skin "vera",
+   :height 1130},
+  :feria
+  {:y 671,
+   :transition "feria",
+   :scale {:x 0.68, :y 0.68},
+   :width 531,
+   :type "image",
+   :src "/raw/img/map/feria_locked.png",
+   :filter "brighten",
+   :x 216,
+   :height 455},
+  :cinema
+  {:y 469,
+   :transition "cinema",
+   :scale {:x 1, :y 1},
+   :width 230,
+   :type "image",
+   :src "/raw/img/map/Cine_Enabled.png",
+   :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "cinema"}}},
+   :filter "brighten",
+   :x 1585,
+   :height 210},
+  :library
+  {:y 250,
+   :transition "library",
+   :width 293,
+   :type "image",
+   :src "/raw/img/map/Biblioteca_Enabled.png",
+   :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "library"}}},
+   :filter "brighten",
+   :x 91,
+   :height 373},
+  :stadium
+  {:y 169,
+   :transition "stadium",
+   :width 234,
+   :type "image",
+   :src "/raw/img/map/Estadio_Enabled.png",
+   :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "stadium"}}},
+   :filter "brighten",
+   :x 1481,
+   :height 228},
+  :background {:src "/raw/img/map/background.jpg", :type "background", :filter "brighten", :brightness -0.15}},
+ :metadata {:autostart true},
+ :triggers {:init {:on "start", :action "init"}, :music {:on "start", :action "start-background-music"}},
+ :scene-objects [["background" "home" "feria" "park" "library" "stadium" "cinema"] ["vera"]]}

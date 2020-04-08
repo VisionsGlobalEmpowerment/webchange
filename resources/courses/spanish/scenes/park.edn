@@ -1,0 +1,86 @@
+{:assets
+ [{:url "/raw/audio/background/Parque.mp3", :size 10, :type "audio"}
+  {:url "/raw/img/park/main/background.jpg", :size 10, :type "image"}
+  {:url "/raw/img/park/main/HideAndSeek_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/park/main/Pinata_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/park/main/Sandbox_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/park/main/SeeSaw_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/park/main/Slide_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/park/main/Swing_Enabled.png", :size 1, :type "image"}],
+ :actions {:start-background-music {:id "/raw/audio/background/Parque.mp3", :loop true, :type "audio"}},
+ :objects
+ {:vera
+  {:y 886,
+   :speed 0.3,
+   :scale {:x 0.17, :y 0.17},
+   :name "vera",
+   :width 1800,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :x 1382,
+   :height 2558},
+  :slide
+  {:y 252,
+   :transition "slide",
+   :width 661,
+   :type "image",
+   :src "/raw/img/park/main/Slide_Enabled.png",
+   :actions {:click {:on "click", :type "scene", :scene-id "slide"}},
+   :filter "brighten",
+   :x 36,
+   :height 551},
+  :pinata
+  {:y 0,
+   :transition "pinata",
+   :width 338,
+   :type "image",
+   :src "/raw/img/park/main/Pinata_Enabled.png",
+   :actions {:click {:on "click", :type "scene", :scene-id "pinata"}},
+   :filter "brighten",
+   :x 562,
+   :height 477},
+  :swings
+  {:y 214,
+   :transition "swings",
+   :width 191,
+   :type "image",
+   :src "/raw/img/park/main/Swing_Enabled.png",
+   :actions {:click {:on "click", :type "scene", :scene-id "swings"}},
+   :filter "brighten",
+   :x 1571,
+   :height 471},
+  :sandbox
+  {:y 772,
+   :transition "sandbox",
+   :width 499,
+   :type "image",
+   :src "/raw/img/park/main/Sandbox_Enabled.png",
+   :actions {:click {:on "click", :type "location", :location-id "sandbox"}},
+   :filter "brighten",
+   :x 782,
+   :height 214},
+  :see-saw
+  {:y 811,
+   :transition "see-saw",
+   :width 605,
+   :type "image",
+   :src "/raw/img/park/main/SeeSaw_Enabled.png",
+   :actions {:click {:on "click", :type "scene", :scene-id "see-saw"}},
+   :filter "brighten",
+   :x 124,
+   :height 188},
+  :background {:src "/raw/img/park/main/background.jpg", :type "background", :filter "brighten", :brightness -0.2},
+  :hide-n-seek
+  {:y 422,
+   :transition "hide-n-seek",
+   :width 207,
+   :type "image",
+   :src "/raw/img/park/main/HideAndSeek_Enabled.png",
+   :actions {:click {:on "click", :type "scene", :scene-id "hide-n-seek"}},
+   :filter "brighten",
+   :x 908,
+   :height 288}},
+ :metadata {:prev "map", :autostart true},
+ :triggers {:music {:on "start", :action "start-background-music"}},
+ :scene-objects [["background" "see-saw" "swings" "sandbox" "slide" "pinata" "hide-n-seek"] ["vera"]]}

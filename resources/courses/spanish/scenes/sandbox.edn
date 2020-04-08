@@ -1,0 +1,410 @@
+{:assets
+ [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio", :alias "mari voice old"}
+  {:url "/raw/audio/l1/a4/mari.mp4", :size 5, :type "audio", :alias "mari voice"}
+  {:url "/raw/audio/l1/a4/game-voice-set-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
+  {:url "/raw/audio/l1/a4/game-voice-set-2.mp3", :size 5, :type "audio", :alias "game voice 2"}
+  {:url "/raw/audio/l1/a4/game-voice-set-3.mp3", :size 5, :type "audio", :alias "game voice 3"}
+  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio", :alias "letter 1"}
+  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio", :alias "letter 2"}
+  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio", :alias "letter 3"}
+  {:url "/raw/img/park/sandbox/background.jpg", :size 10, :type "image"}
+  {:url "/raw/img/casa/painting_canvas.png", :type "image"}],
+ :actions
+ {:box-1-start-animation {:type "start-animation", :target "box1"},
+  :box-1-jump-in
+  {:data
+   [{:id "jump2", :type "animation", :target "box1"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 668, :y 798, :loop false, :duration 0.7}, :type "transition", :transition-id "box1"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box1"}],
+   :type "parallel"},
+  :mari-long-letter-var
+  {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-long-letter-action"}]},
+  :box-3-start
+  {:data
+   ["complete-word-3"
+    "word-3-state-var"
+    "box-3-start-animation"
+    "box-3-jump-in"
+    "word-3-state-var"
+    "box-3-jump-out"
+    "word-3-state-var"
+    "test-concept-complete"],
+   :type "sequence"},
+  :word-3-state-var
+  {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-state-word-3-action"}]},
+  :show-letter
+  {:type "set-attribute",
+   :target "letter",
+   :from-var [{:var-name "current-word", :var-property "letter", :action-property "attr-value"}],
+   :attr-name "text"},
+  :box-3-jump-out
+  {:data
+   [{:id "jump2", :type "animation", :target "box3"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 600, :y 674, :loop false, :duration 0.7}, :type "transition", :transition-id "box3"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box3"}],
+   :type "parallel"},
+  :word-4-state-var
+  {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-state-word-4-action"}]},
+  :box-1-jump-out
+  {:data
+   [{:id "jump2", :type "animation", :target "box1"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 304, :y 826, :loop false, :duration 0.7}, :type "transition", :transition-id "box1"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box1"}],
+   :type "parallel"},
+  :complete-word-1 {:type "set-variable", :var-name "word-1", :var-value true},
+  :mari-letter-1
+  {:data [{:end 9.4, :anim "talk", :start 8.07}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a4/mari.mp4",
+   :start 7.773,
+   :track 1,
+   :offset 7.773,
+   :target "mari",
+   :duration 1.56},
+  :mari-touch-audio
+  {:data [{:end 30.57, :anim "talk", :start 26.94}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a4/mari.mp4",
+   :start 26.774,
+   :track 1,
+   :offset 26.774,
+   :target "mari",
+   :duration 3.933},
+  :complete-word-3 {:type "set-variable", :var-name "word-3", :var-value true},
+  :box-2-start
+  {:data
+   ["complete-word-2"
+    "word-2-state-var"
+    "box-2-start-animation"
+    "box-2-jump-in"
+    "word-2-state-var"
+    "box-2-jump-out"
+    "word-2-state-var"
+    "test-concept-complete"],
+   :type "sequence"},
+  :stop-activity {:id "sandbox", :type "stop-activity"},
+  :finish-activity {:id "sandbox", :type "finish-activity"},
+  :box-4-change-skin
+  {:type "set-skin",
+   :target "box4",
+   :from-var [{:var-name "current-word", :var-property "word-4-skin", :action-property "skin"}]},
+  :start
+  {:data ["start-activity" "clear-instruction" "renew-words" "mari-welcome-audio" "renew-current-concept-workflow"],
+   :type "sequence"},
+  :box-1-change-skin
+  {:type "set-skin",
+   :target "box1",
+   :from-var [{:var-name "current-word", :var-property "word-1-skin", :action-property "skin"}]},
+  :box-2-jump-out
+  {:data
+   [{:id "jump2", :type "animation", :target "box2"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 401, :y 696, :loop false, :duration 0.7}, :type "transition", :transition-id "box2"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box2"}],
+   :type "parallel"},
+  :renew-current-concept-workflow
+  {:data
+   ["renew-current-concept"
+    "box-1-change-skin"
+    "box-2-change-skin"
+    "box-3-change-skin"
+    "box-4-change-skin"
+    "show-letter"
+    "mari-letter-1"
+    "mari-short-letter-var"
+    "mari-letter-2"
+    "mari-short-letter-var"
+    "mari-letter-3"
+    "mari-long-letter-var"
+    "mari-letter-4"
+    "mari-long-letter-var"],
+   :type "sequence"},
+  :box-2-change-skin
+  {:type "set-skin",
+   :target "box2",
+   :from-var [{:var-name "current-word", :var-property "word-2-skin", :action-property "skin"}]},
+  :mari-letter-2
+  {:data [{:end 12.99, :anim "talk", :start 10.46}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a4/mari.mp4",
+   :start 10.32,
+   :track 1,
+   :offset 10.32,
+   :target "mari",
+   :duration 1.72},
+  :box-3-start-animation {:type "start-animation", :target "box3"},
+  :renew-words
+  {:from "concepts",
+   :type "lesson-var-provider",
+   :shuffled false,
+   :variables ["item-1" "item-2" "item-3"],
+   :provider-id "words-set"},
+  :box-4-start
+  {:data
+   ["complete-word-4"
+    "word-4-state-var"
+    "box-4-start-animation"
+    "box-4-jump-in"
+    "word-4-state-var"
+    "box-4-jump-out"
+    "word-4-state-var"
+    "test-concept-complete"],
+   :type "sequence"},
+  :box-3-change-skin
+  {:type "set-skin",
+   :target "box3",
+   :from-var [{:var-name "current-word", :var-property "word-3-skin", :action-property "skin"}]},
+  :renew-current-concept
+  {:data
+   [{:type "set-variable", :var-name "word-1", :var-value false}
+    {:type "set-variable", :var-name "word-2", :var-value false}
+    {:type "set-variable", :var-name "word-3", :var-value false}
+    {:type "set-variable", :var-name "word-4", :var-value false}
+    {:from ["item-1" "item-2" "item-3"],
+     :type "vars-var-provider",
+     :on-end "finish-activity",
+     :shuffled false,
+     :variables ["current-word"],
+     :provider-id "current-word"}],
+   :type "parallel"},
+  :mari-welcome-audio
+  {:data [{:end 3.19, :anim "talk", :start 1.29} {:end 6.4, :anim "talk", :start 3.75}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a4/mari.mp4",
+   :start 1.195,
+   :track 1,
+   :offset 1.195,
+   :target "mari",
+   :duration 5.381},
+  :word-2-state-var
+  {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-state-word-2-action"}]},
+  :box-4-start-animation {:type "start-animation", :target "box4"},
+  :mari-letter-3
+  {:data [{:end 22.62, :anim "talk", :start 16.54}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a4/mari.mp4",
+   :start 16.374,
+   :track 1,
+   :offset 16.374,
+   :target "mari",
+   :duration 6.386},
+  :box-4-jump-out
+  {:data
+   [{:id "jump2", :type "animation", :target "box4"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 919, :y 741, :loop false, :duration 0.7}, :type "transition", :transition-id "box4"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box4"}],
+   :type "parallel"},
+  :complete-word-4 {:type "set-variable", :var-name "word-4", :var-value true},
+  :mari-short-letter-var
+  {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-short-letter-action"}]},
+  :complete-word-2 {:type "set-variable", :var-name "word-2", :var-value true},
+  :box-1-start
+  {:data
+   ["complete-word-1"
+    "word-1-state-var"
+    "box-1-start-animation"
+    "box-1-jump-in"
+    "word-1-state-var"
+    "box-1-jump-out"
+    "word-1-state-var"
+    "test-concept-complete"],
+   :type "sequence"},
+  :start-activity {:id "sandbox", :type "start-activity"},
+  :mari-more-audio
+  {:data [{:end 34.59, :anim "talk", :start 33.53} {:end 36.73, :anim "talk", :start 34.76}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a4/mari.mp4",
+   :start 33.04,
+   :track 1,
+   :offset 33.04,
+   :target "mari",
+   :duration 3.734},
+  :box-4-jump-in
+  {:data
+   [{:id "jump2", :type "animation", :target "box4"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 668, :y 798, :loop false, :duration 0.7}, :type "transition", :transition-id "box4"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box4"}],
+   :type "parallel"},
+  :hide-word {:id "default", :type "state", :target "word"},
+  :box-2-jump-in
+  {:data
+   [{:id "jump2", :type "animation", :target "box2"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 668, :y 798, :loop false, :duration 0.7}, :type "transition", :transition-id "box2"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box2"}],
+   :type "parallel"},
+  :mari-letter-4
+  {:data [{:end 22.62, :anim "talk", :start 16.54}],
+   :type "animation-sequence",
+   :audio "/raw/audio/l1/a4/mari.mp4",
+   :start 16.374,
+   :track 1,
+   :offset 16.374,
+   :target "mari",
+   :duration 6.386},
+  :word-1-state-var
+  {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-state-word-1-action"}]},
+  :next-concept-workflow {:data ["mari-more-audio" "renew-current-concept-workflow"], :type "sequence"},
+  :box-2-start-animation {:type "start-animation", :target "box2"},
+  :box-3-jump-in
+  {:data
+   [{:id "jump2", :type "animation", :target "box3"}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:x 668, :y 798, :loop false, :duration 0.7}, :type "transition", :transition-id "box3"}],
+     :type "sequence-data"}
+    {:id "idle2", :loop true, :type "add-animation", :target "box3"}],
+   :type "parallel"},
+  :test-concept-complete
+  {:type "test-var-list",
+   :values [true true true true],
+   :success "next-concept-workflow",
+   :var-names ["word-1" "word-2" "word-3" "word-4"]},
+  :clear-instruction {:type "remove-flows", :flow-tag "instruction"}},
+ :objects
+ {:box4
+  {:y 741,
+   :transition "box4",
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "boxes",
+   :width 771,
+   :start false,
+   :type "animation",
+   :actions {:click {:id "box-4-start", :on "click", :type "action", :unique-tag "box"}},
+   :loop true,
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :x 919,
+   :scene-name "box4",
+   :skin "qwestion",
+   :height 1033},
+  :letter
+  {:y 540,
+   :align "center",
+   :vertical-align "middle",
+   :font-size 140,
+   :fill "#ff8c41",
+   :width 200,
+   :type "text",
+   :x 1170,
+   :font-family "Lexend Deca",
+   :height 200,
+   :text ""},
+  :background {:src "/raw/img/park/sandbox/background.jpg", :type "background"},
+  :canvas
+  {:x 1120,
+   :y 500,
+   :src "/raw/img/casa/painting_canvas.png",
+   :type "image",
+   :width 287,
+   :height 430,
+   :scale-x 1,
+   :scale-y 1},
+  :box3
+  {:y 674,
+   :transition "box3",
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "boxes",
+   :width 771,
+   :start false,
+   :type "animation",
+   :actions {:click {:id "box-3-start", :on "click", :type "action", :unique-tag "box"}},
+   :loop true,
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :x 600,
+   :scene-name "box3",
+   :skin "qwestion",
+   :height 1033},
+  :word
+  {:x 313,
+   :y 91,
+   :type "transparent",
+   :width 1200,
+   :height 400,
+   :states
+   {:show
+    {:shadow-offset {:x 5, :y 5},
+     :align "center",
+     :shadow-color "#1a1a1a",
+     :vertical-align "middle",
+     :shadow-blur 5,
+     :font-size 160,
+     :fill "white",
+     :width 1200,
+     :type "text",
+     :shadow-opacity 0.5,
+     :font-family "Luckiest Guy",
+     :height 400},
+    :default {:type "transparent"}}},
+  :box1
+  {:y 826,
+   :transition "box1",
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "boxes",
+   :width 771,
+   :start false,
+   :type "animation",
+   :actions {:click {:id "box-1-start", :on "click", :type "action", :unique-tag "box"}},
+   :loop true,
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :x 304,
+   :scene-name "box1",
+   :skin "qwestion",
+   :height 1033},
+  :box2
+  {:y 696,
+   :transition "box2",
+   :speed 0.3,
+   :scale {:x 0.25, :y 0.25},
+   :name "boxes",
+   :width 771,
+   :start false,
+   :type "animation",
+   :actions {:click {:id "box-2-start", :on "click", :type "action", :unique-tag "box"}},
+   :loop true,
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :x 401,
+   :scene-name "box2",
+   :skin "qwestion",
+   :height 1033},
+  :mari
+  {:y 715,
+   :speed 0.35,
+   :name "mari",
+   :width 473,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :scale-y 0.5,
+   :x 1535,
+   :scale-x 0.5,
+   :scene-name "mari",
+   :height 511}},
+ :metadata {:prev "park", :autostart true},
+ :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]]}

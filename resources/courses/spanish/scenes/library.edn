@@ -1,0 +1,116 @@
+{:audio {:background "/raw/audio/background/POL-daily-special-short.mp3"},
+ :assets
+ [{:url "/raw/img/library/main/background.jpg", :size 10, :type "image"}
+  {:url "/raw/img/library/main/Books_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/library/main/Easel_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/library/main/Hat_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/img/library/main/Tablet_Enabled.png", :size 1, :type "image"}
+  {:url "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3", :size 2, :type "audio", :alias "lion - 1"}
+  {:url "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3", :size 2, :type "audio", :alias "lion - 2"}
+  {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio", :alias "librarian books intro"}
+  {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio", :alias "vera books intro"}],
+ :actions
+ {:start-book-scene
+  {:data
+   [{:data [{:end 2.73, :anim "talk", :start 0.41} {:end 5.32, :anim "talk", :start 3.89}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3",
+     :start 0.28,
+     :track 1,
+     :offset 0.28,
+     :target "librarian",
+     :duration 5.234}
+    {:data
+     [{:end 2.073, :anim "talk", :start 0.504, :duration 1.569}
+      {:end 4.562, :anim "talk", :start 2.611, :duration 1.951}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a6/L1_A6_Vera.m4a",
+     :start 0.465,
+     :track 1,
+     :offset 0.465,
+     :target "vera",
+     :duration 4.184}
+    {:data
+     [{:end 1.02, :anim "talk", :start 0.56}
+      {:end 1.92, :anim "talk", :start 1.03}
+      {:end 3.78, :anim "talk", :start 2.48}
+      {:end 5.81, :anim "talk", :start 4.23}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3",
+     :start 0.315,
+     :track 1,
+     :offset 0.315,
+     :target "librarian",
+     :duration 5.737}
+    {:type "scene", :scene-id "book"}],
+   :type "sequence-data"},
+  :start-background-music {:id "background", :loop true, :type "audio"}},
+ :objects
+ {:hat
+  {:y 535,
+   :transition "magic-hat",
+   :width 227,
+   :type "image",
+   :src "/raw/img/library/main/Hat_Enabled.png",
+   :actions {:click {:on "click", :type "scene", :scene-id "magic-hat"}},
+   :filter "brighten",
+   :x 1635,
+   :height 228},
+  :vera
+  {:y 1000,
+   :speed 0.3,
+   :scale {:x 0.17, :y 0.17},
+   :name "vera",
+   :width 1800,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :x 725,
+   :height 2558},
+  :books
+  {:y 681,
+   :transition "book",
+   :width 163,
+   :type "image",
+   :src "/raw/img/library/main/Books_Enabled.png",
+   :actions {:click {:id "start-book-scene", :on "click", :type "action"}},
+   :filter "brighten",
+   :x 1292,
+   :height 106},
+  :easel
+  {:y 319,
+   :transition "writing-lesson",
+   :width 287,
+   :type "image",
+   :src "/raw/img/library/main/Easel_Enabled.png",
+   :actions {:click {:on "click", :type "scene", :scene-id "writing-lesson"}},
+   :filter "brighten",
+   :x 791,
+   :height 430},
+  :tablet
+  {:y 657,
+   :transition "painting-tablet",
+   :width 224,
+   :type "image",
+   :src "/raw/img/library/main/Tablet_Enabled.png",
+   :actions {:click {:on "click", :type "location", :location-id "painting-tablet"}},
+   :filter "brighten",
+   :x 926,
+   :height 155},
+  :librarian
+  {:y 883,
+   :speed 0.3,
+   :scale {:x 1, :y 1},
+   :name "senoravaca",
+   :width 351,
+   :start true,
+   :type "animation",
+   :anim "idle",
+   :x 451,
+   :scene-name "librarian",
+   :skin "lion",
+   :height 717},
+  :background {:src "/raw/img/library/main/background.jpg", :type "background", :filter "brighten", :brightness -0.2}},
+ :metadata {:prev "map", :autostart true},
+ :triggers {:music {:on "start", :action "start-background-music"}},
+ :scene-objects [["background" "books" "easel" "hat" "tablet"] ["librarian" "vera"]]}

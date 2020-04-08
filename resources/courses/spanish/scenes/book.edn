@@ -1,0 +1,353 @@
+{:audio {:background "/raw/audio/background/POL-daily-special-short.mp3"},
+ :assets
+ [{:url "/raw/img/library/book/background.jpg", :size 10, :type "image"}
+  {:url "/raw/img/library/book/background2.jpg", :size 10, :type "image"}
+  {:url "/raw/img/elements/squirrel.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/bee.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/tree.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/bear.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/ear.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/eyes.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/magnet.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/iguana.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/fire.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/grapes.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/one.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/nail.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/elephant.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/star.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/nurse.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/hand.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/monkey.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/apple.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/snake.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/sun.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/watermelon.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/ball.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/duck.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/fish.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/lion.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/lemon.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/pencil.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/tomato.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/train.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/shark.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/finger.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/dragon.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/teeth.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/frog.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/rock.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/rose.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/home.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/bed.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/car.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/comb.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/pig.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/eyebrow.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/nino.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/nest.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/orange.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/flower.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/flute.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/strawberry.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/baby.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/boat.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/whale.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/garden.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/juice.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/jamon.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/cat.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/guitar.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/chicken.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/twins.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/giant.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/sunflower.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/chocolate.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/girl.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/boy.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/ostrich.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/yam.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/knot.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/violin.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/cow.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/window.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/key.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/rain.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/cry.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/leaf.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/ice cream.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/ant.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/cheese.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/five.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/fifteen.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/boots.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/fox.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/carrot.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/kimono.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/kayak.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/koala.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/website.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/deer.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/waffles.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/yoyo.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/yogurt.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/egg_yolk.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/xylophone.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/saxophone.png", :size 1, :type "image"}
+  {:url "/raw/img/elements/taxi.png", :size 1, :type "image"}
+  {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio", :alias "librarian books intro"}
+  {:url "/raw/audio/l1/a6/L1_A6_Lion_words.m4a", :size 2, :type "audio", :alias "librarian books words"}
+  {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio", :alias "vera books intro"}
+  {:url "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3", :size 2, :type "audio", :alias "lion - 3"}
+  {:url "/raw/audio/l1/a6/lion/2Vamos a leerlo juntos.mp3", :size 2, :type "audio", :alias "lion - 4"}
+  {:url "/raw/audio/l1/a6/lion/2Toca la flecha.mp3", :size 2, :type "audio", :alias "lion - 5"}
+  {:url "/raw/audio/l1/a6/lion/2Muy buen trabajo leyendo.mp3", :size 2, :type "audio", :alias "lion - 6"}
+  {:url "/raw/audio/l1/a6/lion/2La a.mp3", :size 2, :type "audio", :alias "lion - A"}
+  {:url "/raw/audio/l1/a6/lion/2La i.mp3", :size 2, :type "audio", :alias "lion - I"}
+  {:url "/raw/audio/l1/a6/lion/2La o.mp3", :size 2, :type "audio", :alias "lion - O"}
+  {:url "/raw/audio/l1/a6/lion/B.mp3", :size 2, :type "audio", :alias "lion -B"}
+  {:url "/raw/audio/l1/a6/lion/C.mp3", :size 2, :type "audio", :alias "lion -C"}
+  {:url "/raw/audio/l1/a6/lion/Ch.mp3", :size 2, :type "audio", :alias "lion -Ch"}
+  {:url "/raw/audio/l1/a6/lion/D.mp3", :size 2, :type "audio", :alias "lion -D"}
+  {:url "/raw/audio/l1/a6/lion/E.mp3", :size 2, :type "audio", :alias "lion -E"}
+  {:url "/raw/audio/l1/a6/lion/F.mp3", :size 2, :type "audio", :alias "lion -F"}
+  {:url "/raw/audio/l1/a6/lion/G.mp3", :size 2, :type "audio", :alias "lion -G"}
+  {:url "/raw/audio/l1/a6/lion/H.mp3", :size 2, :type "audio", :alias "lion -H"}
+  {:url "/raw/audio/l1/a6/lion/J.mp3", :size 2, :type "audio", :alias "lion -J"}
+  {:url "/raw/audio/l1/a6/lion/K.mp3", :size 2, :type "audio", :alias "lion -K"}
+  {:url "/raw/audio/l1/a6/lion/L.mp3", :size 2, :type "audio", :alias "lion -L"}
+  {:url "/raw/audio/l1/a6/lion/LL.mp3", :size 2, :type "audio", :alias "lion -LL"}
+  {:url "/raw/audio/l1/a6/lion/M.mp3", :size 2, :type "audio", :alias "lion -M"}
+  {:url "/raw/audio/l1/a6/lion/N.mp3", :size 2, :type "audio", :alias "lion -N"}
+  {:url "/raw/audio/l1/a6/lion/P.mp3", :size 2, :type "audio", :alias "lion -P"}
+  {:url "/raw/audio/l1/a6/lion/Qu.mp3", :size 2, :type "audio", :alias "lion -Qu"}
+  {:url "/raw/audio/l1/a6/lion/R.mp3", :size 2, :type "audio", :alias "lion -R"}
+  {:url "/raw/audio/l1/a6/lion/S.mp3", :size 2, :type "audio", :alias "lion -S"}
+  {:url "/raw/audio/l1/a6/lion/T.mp3", :size 2, :type "audio", :alias "lion -T"}
+  {:url "/raw/audio/l1/a6/lion/Tambien C.mp3", :size 2, :type "audio", :alias "lion -Tambien C"}
+  {:url "/raw/audio/l1/a6/lion/También G.mp3", :size 2, :type "audio", :alias "lion -También G"}
+  {:url "/raw/audio/l1/a6/lion/U.mp3", :size 2, :type "audio", :alias "lion -U"}
+  {:url "/raw/audio/l1/a6/lion/V.mp3", :size 2, :type "audio", :alias "lion -V"}
+  {:url "/raw/audio/l1/a6/lion/W.mp3", :size 2, :type "audio", :alias "lion -W"}
+  {:url "/raw/audio/l1/a6/lion/X.mp3", :size 2, :type "audio", :alias "lion -X"}
+  {:url "/raw/audio/l1/a6/lion/Y.mp3", :size 2, :type "audio", :alias "lion -Y"}
+  {:url "/raw/audio/l1/a6/lion/Z.mp3", :size 2, :type "audio", :alias "lion -Z"}
+  {:url "/raw/audio/l1/a6/lion/Ñ.mp3", :size 2, :type "audio", :alias "lion -Ñ"}],
+ :actions
+ {:start-background-music {:id "background", :loop true, :type "audio"},
+  :open-next-page
+  {:data
+   [{:to {:opacity 0, :duration 0.5}, :type "transition", :transition-id "content"}
+    {:id "hidden", :type "state", :target "content"}
+    {:id "renew-current-concept", :type "action"}
+    {:id "page", :loop false, :type "animation", :target "book"}
+    {:id "visible", :type "state", :target "content"}
+    {:type "empty", :duration 1500}
+    {:to {:opacity 1, :duration 0.5}, :type "transition", :transition-id "content"}
+    {:id "read-page", :type "action"}],
+   :type "sequence-data"},
+  :next-page {:type "action", :from-var [{:var-name "next-page-action", :action-property "id"}]},
+  :stop-activity {:id "book", :type "stop-activity"},
+  :finish-activity
+  {:data [{:id "book", :type "finish-activity"} {:type "scene", :scene-id "library"}], :type "sequence-data"},
+  :start {:data ["start-activity" "clear-instruction" "renew-words" "init-next-page" "read-title"], :type "sequence"},
+  :open-book
+  {:data
+   [{:id "hidden", :type "state", :target "title-text"}
+    {:type "start-animation", :target "book"}
+    {:id "open_book", :type "animation", :target "book"}
+    {:id "open", :type "state", :target "background"}
+    {:id "idle", :type "add-animation", :target "book"}
+    {:id "renew-current-concept", :type "action"}
+    {:id "visible", :type "state", :target "content"}
+    {:type "empty", :duration 3000}
+    {:to {:opacity 1, :duration 0.5}, :type "transition", :transition-id "content"}
+    {:type "set-variable", :var-name "next-page-action", :var-value "open-next-page"}
+    {:id "read-page", :type "action"}],
+   :type "sequence-data"},
+  :init-next-page {:type "set-variable", :var-name "next-page-action", :var-value "open-book"},
+  :renew-words
+  {:from "concepts",
+   :type "lesson-var-provider",
+   :shuffled false,
+   :variables ["item-1" "item-2" "item-3"],
+   :provider-id "words-set"},
+  :renew-current-concept
+  {:data
+   [{:from ["item-1" "item-2" "item-3"],
+     :type "vars-var-provider",
+     :on-end "finish-activity",
+     :shuffled false,
+     :variables ["current-word"],
+     :provider-id "current-word"}
+    {:type "action", :from-var [{:var-name "current-word", :var-property "book-content-action"}]}],
+   :type "sequence-data"},
+  :read-page
+  {:data
+   [{:data
+     [{:type "empty", :duration 5000}
+      {:id "default", :type "state", :params {:filter ""}, :target "image"}
+      {:type "empty", :duration 2000}
+      {:id "default", :type "state", :params {:filter ""}, :target "image2"}
+      {:type "empty", :duration 2000}
+      {:id "default", :type "state", :params {:filter ""}, :target "image3"}],
+     :type "sequence-data"}
+    {:type "action", :from-var [{:var-name "current-word", :var-property "book-read-action"}]}],
+   :type "parallel"},
+  :start-activity {:id "book", :type "start-activity"},
+  :read-title
+  {:data
+   [{:id "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3", :type "audio", :start 0.373, :duration 1.773}
+    {:data
+     [{:at 2.826, :end 3.052, :chunk 0, :start 2.826, :duration 0.226}
+      {:at 3.092, :end 3.252, :chunk 1, :start 3.092, :duration 0.16}
+      {:at 3.306, :end 3.492, :chunk 2, :start 3.306, :duration 0.186}
+      {:at 3.692, :end 3.799, :chunk 3, :start 3.692, :duration 0.107}
+      {:at 3.839, :end 4.092, :chunk 4, :start 3.839, :duration 0.253}
+      {:at 4.212, :end 4.399, :chunk 5, :start 4.212, :duration 0.187}
+      {:at 4.465, :end 4.612, :chunk 6, :start 4.465, :duration 0.147}
+      {:at 4.665, :end 4.785, :chunk 7, :start 4.665, :duration 0.12}
+      {:at 4.839, :end 4.972, :chunk 8, :start 4.839, :duration 0.133}
+      {:at 5.039, :end 5.225, :chunk 9, :start 5.039, :duration 0.186}
+      {:at 5.332, :end 5.518, :chunk 10, :start 5.332, :duration 0.186}],
+     :type "text-animation",
+     :audio "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
+     :start 2.693,
+     :target "title-text",
+     :duration 2.999,
+     :animation "bounce"}
+    {:id "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3", :type "audio", :start 6.052, :duration 2.532}
+    {:data
+     [{:at 2.826, :end 3.052, :chunk 0, :start 2.826, :duration 0.226}
+      {:at 3.092, :end 3.252, :chunk 1, :start 3.092, :duration 0.16}
+      {:at 3.306, :end 3.492, :chunk 2, :start 3.306, :duration 0.186}
+      {:at 3.692, :end 3.799, :chunk 3, :start 3.692, :duration 0.107}
+      {:at 3.839, :end 4.092, :chunk 4, :start 3.839, :duration 0.253}
+      {:at 4.212, :end 4.399, :chunk 5, :start 4.212, :duration 0.187}
+      {:at 4.465, :end 4.612, :chunk 6, :start 4.465, :duration 0.147}
+      {:at 4.665, :end 4.785, :chunk 7, :start 4.665, :duration 0.12}
+      {:at 4.839, :end 4.972, :chunk 8, :start 4.839, :duration 0.133}
+      {:at 5.039, :end 5.225, :chunk 9, :start 5.039, :duration 0.186}
+      {:at 5.332, :end 5.518, :chunk 10, :start 5.332, :duration 0.186}],
+     :type "text-animation",
+     :audio "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
+     :start 2.693,
+     :target "title-text",
+     :duration 2.999,
+     :animation "bounce"}
+    {:id "/raw/audio/l1/a6/L1_A6_Vera.m4a", :type "audio", :start 5.497, :duration 2.201}
+    {:id "/raw/audio/l1/a6/lion/2Vamos a leerlo juntos.mp3", :type "audio", :start 0.348, :duration 2.054}
+    {:id "/raw/audio/l1/a6/lion/2Toca la flecha.mp3", :type "audio", :start 0.52, :duration 4.164}],
+   :type "sequence-data"},
+  :clear-instruction {:type "remove-flows", :flow-tag "instruction"}},
+ :objects
+ {:letter
+  {:y 150,
+   :shadow-offset {:x 5, :y 5},
+   :shadow-color "#1a1a1a",
+   :shadow-blur 5,
+   :states {:default {}},
+   :font-size 180,
+   :width 200,
+   :type "text",
+   :shadow-opacity 0.5,
+   :x 220,
+   :font-family "Comic Sans MS",
+   :height 200},
+  :content
+  {:x 209,
+   :y 89,
+   :type "transparent",
+   :states {:hidden {:type "transparent"}, :visible {:type "group", :opacity 0}},
+   :children ["letter" "image" "image2" "image3"],
+   :transition "content"},
+  :book
+  {:y 1048,
+   :speed 0.3,
+   :name "book",
+   :width 1439,
+   :start false,
+   :type "animation",
+   :anim "close_idle",
+   :scale-y 1,
+   :anim-offset {:x 0, :y -480},
+   :x 928,
+   :scale-x 1,
+   :scene-name "book",
+   :height 960},
+  :background
+  {:src "/raw/img/library/book/background2.jpg",
+   :type "background",
+   :states
+   {:open {:src "/raw/img/library/book/background.jpg"}, :closed {:src "/raw/img/library/book/background2.jpg"}}},
+  :image3
+  {:y 570,
+   :states {:default {}},
+   :transition "image3",
+   :width 100,
+   :type "image",
+   :scale-y 2,
+   :x 980,
+   :scale-x 2,
+   :height 100},
+  :image2
+  {:y 150,
+   :states {:default {}},
+   :transition "image2",
+   :width 100,
+   :type "image",
+   :scale-y 2,
+   :x 980,
+   :scale-x 2,
+   :height 100},
+  :title-text
+  {:y 164,
+   :shadow-offset {:x 5, :y 5},
+   :align "center",
+   :shadow-color "#1a1a1a",
+   :vertical-align "middle",
+   :shadow-blur 5,
+   :states {:hidden {:type "transparent"}, :visible {:type "text"}},
+   :font-size 90,
+   :fill "white",
+   :width 680,
+   :type "text",
+   :chunks
+   [{:end 2, :start 0}
+    {:end 5, :start 3}
+    {:end 8, :start 5}
+    {:end 11, :start 9}
+    {:end 15, :start 12}
+    {:end 19, :start 16}
+    {:end 21, :start 19}
+    {:end 24, :start 21}
+    {:end 27, :start 25}
+    {:end 29, :start 27}
+    {:end 33, :start 29}],
+   :shadow-opacity 0.5,
+   :x 929,
+   :font-family "Liberation Sans",
+   :height 800,
+   :text "El libro de mis primeras palabras"},
+  :image
+  {:y 570,
+   :states {:default {}},
+   :transition "image",
+   :width 100,
+   :type "image",
+   :scale-y 2,
+   :x 220,
+   :scale-x 2,
+   :height 100},
+  :next-page-arrow
+  {:x 1640,
+   :y 92,
+   :src "/raw/img/ui/back_button_01.png",
+   :type "image",
+   :width 97,
+   :height 99,
+   :actions {:click {:id "next-page", :on "click", :type "action"}},
+   :scale-x -1}},
+ :metadata {:prev "map", :autostart true},
+ :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :scene-objects [["background"] ["book"] ["title-text" "content" "next-page-arrow"]]}

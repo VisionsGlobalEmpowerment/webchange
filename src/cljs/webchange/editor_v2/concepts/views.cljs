@@ -8,16 +8,16 @@
     [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.concepts.subs :as concepts-subs]
     [webchange.editor-v2.layout.card.views :refer [list-card get-styles]]
-    [webchange.editor-v2.subs :as editor-subs]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
 
 (defn concepts-list
   []
   (let [course @(re-frame/subscribe [::subs/current-course])
-        concepts (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
+        concepts (->> @(re-frame/subscribe [::concepts-subs/dataset-items]) (sort-by :name))
         styles (get-styles)]
-    [list-card {:title        "Concepts"
+    (js/console.log "render concept list" (->> concepts (map :name) clj->js))
+    [list-card {:title        "Concepts?"
                 :full-height  true
                 :on-add-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
      [ui/list {:style (:list-full-height styles)}

@@ -36,7 +36,7 @@
                                  :states     {:default {:type "transparent" :x 350 :y 300}
                                               :come    {:type  "animation" :name "boxes" :anim "come" :x 500 :y 550
                                                         :speed 0.3 :loop false :start true}}
-                                 :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box1" :start "box-1-start" :revert "box-1-revert"}}}}
+                                 :actions    {:drag-end {:type "action" :id "drag-box1" :on "drag-end" :params {:target "box1" :start "box-1-start" :revert "box-1-revert"}}}}
 
                  :box2          {:type       "transparent" :x 850 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -44,7 +44,7 @@
                                  :states     {:default {:type "transparent" :x 850 :y 300}
                                               :come    {:type  "animation" :name "boxes" :anim "come" :x 1000 :y 550
                                                         :speed 0.3 :loop false :start true}}
-                                 :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box2" :start "box-2-start" :revert "box-2-revert"}}}}
+                                 :actions    {:drag-end {:type "action" :id "drag-box2" :on "drag-end" :params {:target "box2" :start "box-2-start" :revert "box-2-revert"}}}}
 
                  :box3          {:type       "transparent" :x 1350 :y 300 :width 771 :height 1033 :origin {:type "center-center"}
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -52,7 +52,7 @@
                                  :states     {:default {:type "transparent" :x 1350 :y 300}
                                               :come    {:type  "animation" :name "boxes" :anim "come" :x 1500 :y 550
                                                         :speed 0.3 :loop false :start true}}
-                                 :actions    {:drag-end {:type "action" :id "drag-box" :on "drag-end" :params {:target "box3" :start "box-3-start" :revert "box-3-revert"}}}}
+                                 :actions    {:drag-end {:type "action" :id "drag-box3" :on "drag-end" :params {:target "box3" :start "box-3-start" :revert "box-3-revert"}}}}
 
                  :box-ph        {:type       "transparent" :width 771 :height 1033 :x 360 :y -30 :origin {:type "center-center"}
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
@@ -67,13 +67,23 @@
                 {:mari-welcome-audio
                                              {:type  "animation-sequence" :target "mari" :track 1 :offset 0.787
                                               :audio "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a", :start 0.787, :duration 9.716
+                                              :phrase                        :welcome
+                                              :phrase-description            "Discurso de bienvenida"
+                                              :phrase-text                   "Bienvenido al parque mi amigo!
+                                                                              Vamos a repasar unas palabras mientras juegas en el sube y baja."
                                               :data  [{:start 1.062 :end 3.914 :anim "talk"}
                                                       {:start 4.897 :end 10.167 :anim "talk"}]}
 
-                 :mari-move-to-start
-                                             {:type  "animation-sequence" :target "mari" :track 1 :offset 11.643
-                                              :audio "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a" :start 11.643, :duration 5.822
-                                              :data  [{:start 11.722 :end 17.268 :anim "talk"}]}
+                 :mari-move-to-start {:type                          "parallel"
+                                      :phrase                        :move-to-start
+                                      :phrase-description            "Mover imagen para comenzar"
+                                      :data                          [{:type "sequence-data"
+                                                                       :data [{:type "animation" :target "mari" :id "wand_hit" :track 2}
+                                                                              {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}]}
+                                                                       {:type  "animation-sequence" :target "mari" :track 1 :offset 11.643
+                                                                        :audio "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a" :start 11.643, :duration 5.822
+                                                                        :phrase-text "Coloca esta foto sobre el sube y baja para empezar el juego!"
+                                                                        :data  [{:start 11.722 :end 17.268 :anim "talk"}]}]}
 
                  :show-boxes                 {:type "parallel"
                                               :data [{:type "state" :target "box1" :id "come"}
@@ -100,23 +110,41 @@
                  :set-current-box2           {:type "set-variable" :var-name "current-box" :var-value "box2"}
                  :set-current-box3           {:type "set-variable" :var-name "current-box" :var-value "box3"}
 
-                 :drag-box {:type     "test-value"
-                            :value1   true
-                            :from-var [{:var-name "draggable" :action-property "value2"}]
-                            :from-params [{:action-property "fail" :param-property "revert"}]
-                            :success  "check-collide"}
+                 :check-box1                 {:type     "test-var-scalar"
+                                              :var-name "box1"
+                                              :value    true
+                                              :success  "box-1-start"
+                                              :fail     "box-1-revert"}
 
-                 :check-collide {:type         "test-transitions-collide"
-                                 :transition-2 "box-ph"
-                                 :from-params [{:action-property "transition-1" :param-property "target"}
-                                               {:action-property "fail" :param-property "revert"}]
-                                 :success      "check-box"}
+                 :check-box2                 {:type     "test-var-scalar"
+                                              :var-name "box2"
+                                              :value    true
+                                              :success  "box-2-start"
+                                              :fail     "box-2-revert"}
 
-                 :check-box                 {:type     "test-var-scalar"
-                                             :var-name "current-box"
-                                             :from-params [{:action-property "value" :param-property "target"}
-                                                           {:action-property "success" :param-property "start"}
-                                                           {:action-property "fail" :param-property "revert"}]}
+                 :check-box3                 {:type     "test-var-scalar"
+                                              :var-name "box3"
+                                              :value    true
+                                              :success  "box-3-start"
+                                              :fail     "box-3-revert"}
+
+                 :drag-box1                  {:type         "test-transitions-collide"
+                                              :transition-1 "box1"
+                                              :transition-2 "box-ph"
+                                              :success      "check-box1"
+                                              :fail         "box-1-revert"}
+
+                 :drag-box2                  {:type         "test-transitions-collide"
+                                              :transition-1 "box2"
+                                              :transition-2 "box-ph"
+                                              :success      "check-box2"
+                                              :fail         "box-2-revert"}
+
+                 :drag-box3                  {:type         "test-transitions-collide"
+                                              :transition-1 "box3"
+                                              :transition-2 "box-ph"
+                                              :success      "check-box3"
+                                              :fail         "box-3-revert"}
 
                  :box-1-revert               {:type "transition" :transition-id "box1" :to {:x 500 :y 550 :duration 2}}
 
@@ -185,7 +213,8 @@
                                                      "show-box-3-ph"
                                                      "introduce-concept"
                                                      "hide-box-3-ph"
-                                                     "finish-activity"]}
+                                                     "finish-activity"
+                                                     "mari-finish"]}
 
                  :show-box-3-ph              {:type "sequence-data"
                                               :data [{:type "state" :target "box3" :id "default"}
@@ -205,17 +234,29 @@
                                                      {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 
                  :introduce-concept          {:type "sequence"
-                                              :data ["go-down"
-                                                     "go-up"
-                                                     "go-down"
-                                                     "go-up"]}
+                                              :data ["go-down-1"
+                                                     "go-up-1"
+                                                     "go-down-2"
+                                                     "go-up-2"]
+                                              :phrase                        :concept-chant
+                                              :phrase-description            "Concepto, concepto, concepto!"}
 
-                 :go-down                    {:type "parallel"
+                 :go-down-1                  {:type "parallel"
                                               :data [{:type "empty" :duration 5000}
                                                      {:type "transition" :transition-id "see-saw-plank" :to {:rotation 13 :duration 5 :loop false}}
                                                      {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action-low"}]}]}
 
-                 :go-up                      {:type "parallel"
+                 :go-up-1                    {:type "parallel"
+                                              :data [{:type "empty" :duration 5000}
+                                                     {:type "transition" :transition-id "see-saw-plank" :to {:rotation -13 :duration 5 :loop false}}
+                                                     {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action"}]}]}
+
+                 :go-down-2                  {:type "parallel"
+                                              :data [{:type "empty" :duration 5000}
+                                                     {:type "transition" :transition-id "see-saw-plank" :to {:rotation 13 :duration 5 :loop false}}
+                                                     {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action-low"}]}]}
+
+                 :go-up-2                    {:type "parallel"
                                               :data [{:type "empty" :duration 5000}
                                                      {:type "transition" :transition-id "see-saw-plank" :to {:rotation -13 :duration 5 :loop false}}
                                                      {:type "action" :from-var [{:var-name "current-word" :var-property "game-voice-action"}]}]}
@@ -225,7 +266,10 @@
                                               :audio "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a", :start 21.162, :duration 5.979
                                               :data  [{:start 21.275 :end 22.367 :anim "talk"}
                                                       {:start 22.588 :end 23.989 :anim "talk"}
-                                                      {:start 24.747 :end 26.92 :anim "talk"}]}
+                                                      {:start 24.747 :end 26.92 :anim "talk"}]
+                                              :phrase                        :try-another
+                                              :phrase-description            "Prueba la siguiente foto"
+                                              :phrase-text                   "Wiiiiiiiii! Te estas divirtiendo? Hay que intentar otra foto."}
 
                  :pick-wrong                 {:type "sequence"
                                               :data ["audio-wrong"]}
@@ -241,13 +285,16 @@
                  :mari-box-2                 {:type "transition" :transition-id "mari" :to {:x 1181 :y 350 :duration 2 :loop false}}
                  :mari-box-3                 {:type "transition" :transition-id "mari" :to {:x 1658 :y 350 :duration 2 :loop false}}
 
+                 :mari-init-wand             {:type "add-animation" :target "mari" :id "wand_idle" :track 2 :loop true}
+
                  :clear-instruction          {:type "remove-flows" :flow-tag "instruction"}
-                 :start                      {:type "sequence"
+                 :start-scene                {:type "sequence"
                                               :data ["start-activity"
                                                      "clear-instruction"
                                                      "renew-words"
                                                      "disable-drag"
                                                      "mari-welcome-audio"
+                                                     "mari-init-wand"
                                                      "set-current-box1"
                                                      "show-boxes"
                                                      "wait-for-box-animations"
@@ -256,12 +303,33 @@
                                                      "mari-move-to-start"
                                                      "enable-drag"]}
 
+                 :mari-finish                {:type                          "sequence-data",
+                                              :data                          [{:type          "transition",
+                                                                               :transition-id "mari",
+                                                                               :to            {:x 244, :y 300, :duration 1.3}}
+                                                                              {:type                   "animation-sequence",
+                                                                               :target                 "mari",
+                                                                               :track                  1,
+                                                                               :offset                 0.907,
+                                                                               :audio                  "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a",
+                                                                               :data                   [{:start 1.12, :end 2.708, :duration 1.588, :anim "talk"}
+                                                                                                        {:start 3.148, :end 6.456, :duration 3.308, :anim "talk"}
+                                                                                                        {:start 7.163, :end 9.457, :duration 2.294, :anim "talk"}
+                                                                                                        {:start 9.884, :end 11.871, :duration 1.987, :anim "talk"}
+                                                                                                        {:start 12.631, :end 16.513, :duration 3.882, :anim "talk"}],
+                                                                               :start                  0.907,
+                                                                               :duration               15.819
+                                                                               :phrase-text            "Felicidades! Nos ayudaste a poner todas las fotos sobre el sube y baja!
+                                                                                                        Puedes jugar este juego de nuevo, or haz clic en esta flecha para empezar el proximo juego."}]
+                                              :phrase                        :finish
+                                              :phrase-description            "Juega de nuevo o pasa a la siguiente actividad"}
+
                  :start-activity             {:type "start-activity" :id "see-saw"}
                  :finish-activity            {:type "finish-activity" :id "see-saw"}
                  :stop-activity              {:type "stop-activity" :id "see-saw"}}
  :audio
                 {:mari    "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a"},
- :triggers      {:start {:on "start" :action "start"}
+ :triggers      {:start {:on "start" :action "start-scene"}
                  :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}
