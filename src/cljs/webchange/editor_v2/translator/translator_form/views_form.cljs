@@ -130,10 +130,11 @@
   (r/with-let [error (r/atom nil)
                show-error #(reset! error %)
                hide-error #(reset! error nil)]
-              (let [current-concept @(re-frame/subscribe [::translator-subs/current-concept])
-                    scene-id @(re-frame/subscribe [::subs/current-scene])
+              (let [scene-id @(re-frame/subscribe [::subs/current-scene])
                     scene-data @(re-frame/subscribe [::subs/scene scene-id])
+
                     concepts (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
+                    current-concept @(re-frame/subscribe [::translator-subs/current-concept])
 
                     selected-phrase-node (re-frame/subscribe [::editor-subs/current-action])
                     phrase-action-name (or (:origin-name @selected-phrase-node)
@@ -148,7 +149,11 @@
                     prepared-root-action-data (get-current-root-data @selected-phrase-node data-store)
                     prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)
                     phrase-action-selected? (-> @selected-action-node (nil?) (not))
-                    concept-required? (or has-concepts? selected-action-concept?)]
+                    concept-required? (or has-concepts? selected-action-concept?)
+
+                    set-current-concept #(re-frame/dispatch [::translator-events/set-current-concept %])
+
+                    _ (when (and concept-required? (nil? current-concept)) (set-current-concept (first concepts)))]
                 [:div
                  [description-block {:origin-text     (:phrase-description prepared-root-action-data)
                                      :translated-text (:phrase-description-translated prepared-root-action-data)
@@ -157,8 +162,7 @@
                  (when concept-required?
                    [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
-                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}])
-
+                                    :on-change       set-current-concept}])
                  [dialog-block {:dialog-data dialog-data}]
                  [diagram-block {:graph graph}]
                  [play-phrase-block {:graph           graph
@@ -168,7 +172,7 @@
                    [:div
                     ^{:key (:name prepared-current-action-data)}
                     [phrase-block {:origin-text     (-> prepared-current-action-data :data :phrase-text trim-text)
-                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated)
+                                   :translated-text (-> prepared-current-action-data :data :phrase-text-translated trim-text)
                                    :on-change       (fn [new-translated-text]
                                                       (update-action-data! (-> @selected-action-node :path first)
                                                                            {:phrase-text-translated new-translated-text}))}]
@@ -188,21 +192,6 @@
                                                                                      :on-error #(handle-error "Getting lip sync data error")}))))}]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
-                 [ui/dialog
-                  {:open       (and concept-required?
-                                    (nil? current-concept))
-                   :full-width true
-                   :max-width  "xs"}
-                  [ui/dialog-title
-                   "Select Concept"]
-                  [ui/dialog-content
-                   [concepts-block {:current-concept current-concept
-                                    :concepts-list   concepts
-                                    :on-change       #(re-frame/dispatch [::translator-events/set-current-concept %])}]]
-                  [ui/dialog-actions
-                   [ui/button {:on-click #(do (re-frame/dispatch [::translator-events/clean-current-selected-action])
-                                              (re-frame/dispatch [::translator-events/close-translator-modal]))}
-                    "Cancel"]]]
                  [error-snackbar {:error    @error
                                   :on-close hide-error}]])
               (finally

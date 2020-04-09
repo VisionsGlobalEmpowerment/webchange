@@ -3,7 +3,8 @@
     ["wavesurfer.js/dist/plugin/wavesurfer.regions.js" :as RegionsPlugin]
     ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]
     [wavesurfer.js :as WaveSurfer]
-    [webchange.interpreter.core :refer [get-data-as-blob]]))
+    [webchange.interpreter.core :refer [get-data-as-blob]]
+    [webchange.ui.theme :refer [get-in-theme]]))
 
 (def audio-color "rgba(0, 0, 0, 0.1)")
 (def additional-color "rgba(0, 0, 100, 0.3)")
@@ -29,7 +30,8 @@
    (create-wavesurfer element key {:height 256}))
   ([element key {:keys [height]}]
    (while (.-firstChild element) (-> element .-firstChild .remove))
-   (let [ws-div (.insertBefore element (js/document.createElement "div") nil)
+   (let [font-color (get-in-theme [:palette :text :primary])
+         ws-div (.insertBefore element (js/document.createElement "div") nil)
          timeline-div (.insertBefore element (js/document.createElement "div") nil)
          wavesurfer (.create WaveSurfer (clj->js {:container    ws-div
                                                   :height       (or height 256)
@@ -38,7 +40,9 @@
                                                   :plugins      [(.create RegionsPlugin (clj->js {:dragSelection false
                                                                                                   :slop          5
                                                                                                   :color         "hsla(400, 100%, 30%, 0.5)"}))
-                                                                 (.create TimelinePlugin (clj->js {:container timeline-div}))]}))]
+                                                                 (.create TimelinePlugin (clj->js {:container          timeline-div
+                                                                                                   :primaryFontColor   font-color
+                                                                                                   :secondaryFontColor font-color}))]}))]
      (.loadBlob wavesurfer (get-data-as-blob key))
      wavesurfer)))
 

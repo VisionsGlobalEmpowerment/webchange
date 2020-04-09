@@ -378,30 +378,30 @@
                                                       :data                          [{:type          "transition",
                                                                                        :transition-id "mari",
                                                                                        :to            {:x 1403, :y 657, :duration 1.3}}
-                                                                                      {:type     "animation-sequence",
-                                                                                       :target   "mari",
-                                                                                       :track    1,
-                                                                                       :offset   0.825,
-                                                                                       :audio    "/raw/audio/english/l1/a1/mari_ending.m4a",
+                                                                                      {:type                   "animation-sequence",
+                                                                                       :target                 "mari",
+                                                                                       :track                  1,
+                                                                                       :offset                 0.825,
+                                                                                       :audio                  "/raw/audio/english/l1/a1/mari_ending.m4a",
                                                                                        :data
-                                                                                                 [{:start 0.986, :end 2.586, :duration 1.6, :anim "talk"}
-                                                                                                  {:start 3.226, :end 6.039, :duration 2.813, :anim "talk"}
-                                                                                                  {:start 6.825, :end 9.412, :duration 2.587, :anim "talk"}
-                                                                                                  {:start 9.985, :end 15.117, :duration 5.132, :anim "talk"}
-                                                                                                  {:start 15.877, :end 16.77, :duration 0.893, :anim "talk"}
-                                                                                                  {:start 17.117, :end 20.356, :duration 3.239, :anim "talk"}],
-                                                                                       :start    0.825,
-                                                                                       :duration 19.811}
+                                                                                                               [{:start 0.986, :end 2.586, :duration 1.6, :anim "talk"}
+                                                                                                                {:start 3.226, :end 6.039, :duration 2.813, :anim "talk"}
+                                                                                                                {:start 6.825, :end 9.412, :duration 2.587, :anim "talk"}
+                                                                                                                {:start 9.985, :end 15.117, :duration 5.132, :anim "talk"}
+                                                                                                                {:start 15.877, :end 16.77, :duration 0.893, :anim "talk"}
+                                                                                                                {:start 17.117, :end 20.356, :duration 3.239, :anim "talk"}],
+                                                                                       :start                  0.825,
+                                                                                       :duration               19.811
+                                                                                       :phrase-text            "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez?
+                                                                                                                Toca a la Senora Vaca para poder ver adentro.
+                                                                                                                Si no, toca a la puerta para ir al parque a tu proxima actividad. "
+                                                                                       :phrase-text-translated "Great job little genius! Do you want to see what’s inside the boxes again?
+                                                                                                                Touch Senora Vaca to look inside again.
+                                                                                                                Otherwise, touch the door to go to the park for your next activity"}
                                                                                       {:type "set-variable", :var-name "restart", :var-value true}]
                                                       :phrase                        :finish-activity
                                                       :phrase-description            "Repite o pasa a la siguiente actividad"
-                                                      :phrase-description-translated "Repeat or go to the next activity"
-                                                      :phrase-text                   "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez?
-                                                                                      Toca a la Senora Vaca para poder ver adentro.
-                                                                                      Si no, toca a la puerta para ir al parque a tu proxima actividad. "
-                                                      :phrase-text-translated        "Great job little genius! Do you want to see what’s inside the boxes again?
-                                                                                      Touch Senora Vaca to look inside again.
-                                                                                      Otherwise, touch the door to go to the park for your next activity"}
+                                                      :phrase-description-translated "Repeat or go to the next activity"}
 
                  :restart                            {:type     "test-value"
                                                       :value1   true

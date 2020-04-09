@@ -82,7 +82,8 @@
       (aset this "engine" engine)
       [:div.diagram-container
        [toolbar engine root-selector]
-       [:> DiagramWidget {:diagramEngine engine}]])))
+       [:> DiagramWidget {:diagramEngine engine
+                          :deleteKeys    []}]])))
 
 (def diagram-widget
   (with-meta diagram-render
