@@ -29,7 +29,7 @@
 
 (defn audio-wave
   [{:keys [key alias start duration selected? target]} {:keys [on-change]}]
-  (r/with-let [on-change-region (fn [region] (when selected? (on-change key region)))
+  (r/with-let [on-change-region (fn [region] (on-change key region))
                on-select (fn []
                            (reset! current-key key)
                            (on-change key))

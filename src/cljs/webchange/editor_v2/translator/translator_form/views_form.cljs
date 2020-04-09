@@ -57,7 +57,7 @@
         selected-action-concept? (-> selected-action-node (get-in [:data :concept-action]) (boolean))
 
         action-name (first path)
-        current-data (get-in data-store [action-name :data] (default-action-data selected-action-concept? action-name current-concept scene-data))
+        current-data (get-in data-store [[action-name id] :data] (default-action-data selected-action-concept? action-name current-concept scene-data))
         new-data (reduce
                    (fn [current-data [field value]]
                      (let [field-path (get-update-path path field current-data)]
@@ -65,15 +65,13 @@
                    current-data
                    data-patch)]
     (when (= original-action-name action-name)
-      (re-frame/dispatch [::translator-events/set-phrase-translation-action action-name {:changed true
-                                                                                         :type    type
-                                                                                         :id      id
-                                                                                         :data    new-data}]))))
+      (re-frame/dispatch [::translator-events/set-phrase-translation-action action-name id {:type type
+                                                                                            :data new-data}]))))
 
 (defn- apply-lip-sync-data!
-  [action-name animation-data on-error]
+  [action-id action-name animation-data on-error]
   (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
-        action-type (get-in data-store [action-name :data :type])]
+        action-type (get-in data-store [[action-name action-id] :data :type])]
     (if (= action-type "animation-sequence")
       (update-action-data! action-name {:data animation-data})
       (on-error (str "Action '" action-name "' must have type 'animation-sequence'")))))
@@ -83,16 +81,14 @@
   (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
         selected-phrase-node @(re-frame/subscribe [::editor-subs/current-action])
         {:keys [id name type data]} (get-current-action-data selected-phrase-node nil data-store)]
-    (re-frame/dispatch [::translator-events/set-phrase-translation-action name {:changed true
-                                                                                :type    type
-                                                                                :id      id
-                                                                                :data    (merge data data-patch)}])))
+    (re-frame/dispatch [::translator-events/set-phrase-translation-action name id {:type type
+                                                                                   :data (merge data data-patch)}])))
 
 (defn- get-current-root-data
   [selected-phrase-node data-store]
   (let [name (first (:path selected-phrase-node))
         origin-data (:data selected-phrase-node)
-        new-data (get-in data-store [name :data])]
+        new-data (get-in data-store [[name nil] :data])]
     (merge origin-data new-data)))
 
 (defn- load-lip-sync-data!
@@ -125,6 +121,13 @@
                                                                    :on-click on-close}
                                                    [ic/close]])}]]))
 
+(defn- get-action-id
+  [action-data current-concept]
+  (let [concept-action? (-> action-data (get-in [:data :concept-action]) (boolean))]
+    (if concept-action?
+      (:id current-concept)
+      nil)))
+
 (defn translator-form
   []
   (r/with-let [error (r/atom nil)
@@ -151,7 +154,11 @@
                     phrase-action-selected? (-> @selected-action-node (nil?) (not))
                     concept-required? (or has-concepts? selected-action-concept?)
 
+                    reset-selected-action #(re-frame/dispatch [::translator-events/clean-current-selected-action])
                     set-current-concept #(re-frame/dispatch [::translator-events/set-current-concept %])
+
+                    handle-concept-changed #(do (reset-selected-action)
+                                                (set-current-concept %))
 
                     _ (when (and concept-required? (nil? current-concept)) (set-current-concept (first concepts)))]
                 [:div
@@ -162,7 +169,7 @@
                  (when concept-required?
                    [concepts-block {:current-concept current-concept
                                     :concepts-list   concepts
-                                    :on-change       set-current-concept}])
+                                    :on-change       handle-concept-changed}])
                  [dialog-block {:dialog-data dialog-data}]
                  [diagram-block {:graph graph}]
                  [play-phrase-block {:graph           graph
@@ -180,7 +187,8 @@
                                    :audios    audios-list
                                    :action    prepared-current-action-data
                                    :on-change (fn [audio-key region-data]
-                                                (let [action-name (-> @selected-action-node :path first)
+                                                (let [action-id (get-action-id @selected-action-node current-concept)
+                                                      action-name (-> @selected-action-node :path first)
                                                       audio-data (merge {:audio audio-key}
                                                                         (select-keys region-data [:start :duration]))
                                                       handle-error (fn [error-message]
@@ -188,7 +196,7 @@
                                                                      (show-error error-message))]
                                                   (update-action-data! action-name audio-data)
                                                   (when-not (nil? region-data)
-                                                    (load-lip-sync-data! audio-data {:on-ready #(apply-lip-sync-data! action-name % handle-error)
+                                                    (load-lip-sync-data! audio-data {:on-ready #(apply-lip-sync-data! action-id action-name % handle-error)
                                                                                      :on-error #(handle-error "Getting lip sync data error")}))))}]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
