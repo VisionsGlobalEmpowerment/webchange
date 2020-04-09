@@ -13,7 +13,8 @@
    :toolbar-container {:height    "64px"
                        :flex-grow 0}
    :content-container {:padding   "32px"
-                       :flex-grow 1}})
+                       :flex-grow 1
+                       :overflow  "auto"}})
 
 (defn- modal-windows
   []
