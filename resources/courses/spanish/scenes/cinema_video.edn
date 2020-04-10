@@ -1,5 +1,4 @@
-{:audio {:mari "/raw/audio/l2/a1/L2_A1_Mari.m4a", :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"},
- :assets
+{:assets
  [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
   {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
   {:url "/raw/img/ui/play_button_01.png", :size 10, :type "image"}
@@ -50,19 +49,138 @@
    :size 2,
    :type "audio",
    :alias "vaca insertions 11"}],
+ :objects
+ {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
+  :letter-video
+  {:type "transparent",
+   :x 342,
+   :y 111,
+   :width 1236,
+   :height 674,
+   :states {:hidden {:type "transparent"}, :visible {:type "video"}}},
+  :mari
+  {:type "animation",
+   :x 1613,
+   :y 785,
+   :width 473,
+   :height 511,
+   :transition "mari",
+   :anim "idle",
+   :name "mari",
+   :scale-x 0.3,
+   :scale-y 0.3,
+   :speed 0.35,
+   :start true},
+  :next-button
+  {:type "transparent",
+   :x 400,
+   :y 0,
+   :width 331,
+   :height 98,
+   :actions {:click {:id "finish-activity", :on "click", :type "action"}},
+   :src "/raw/img/ui/next_button_01.png",
+   :states {:hidden {:y 1000, :type "transparent"}, :visible {:y 0, :type "image"}}},
+  :play-button
+  {:type "image",
+   :x 0,
+   :y 0,
+   :width 331,
+   :height 99,
+   :actions {:click {:id "play-video", :on "click", :type "action"}},
+   :src "/raw/img/ui/play_button_01.png",
+   :states {:left {:x 0}, :center {:x 200}}},
+  :screen-overlay
+  {:type "image",
+   :x 342,
+   :y 109,
+   :width 1238,
+   :height 678,
+   :src "/raw/img/cinema/screen-off.png",
+   :states {:hidden {:type "transparent"}, :visible {:type "image"}}},
+  :senora-vaca
+  {:type "animation",
+   :x 263,
+   :y 915,
+   :width 351,
+   :height 717,
+   :anim "idle",
+   :name "senoravaca",
+   :scale-x 0.5,
+   :scale-y 0.5,
+   :skin "vaca",
+   :speed 0.3,
+   :start true},
+  :video-controls
+  {:type "transparent",
+   :x 616,
+   :y 400,
+   :width 730,
+   :height 100,
+   :children ["play-button" "next-button"],
+   :states {:hidden {:type "transparent"}, :visible {:type "group"}}}},
+ :scene-objects [["background"] ["letter-video" "screen-overlay"] ["video-controls"] ["senora-vaca" "mari"]],
  :actions
- {:mari-voice-touch-again-1
-  {:data
+ {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
+  :finish-activity
+  {:type "sequence-data", :data [{:id "cinema-video", :type "finish-activity"} {:type "scene", :scene-id "map"}]},
+  :hide-play-form
+  {:type "parallel",
+   :data
+   [{:id "hidden", :type "state", :target "video-controls"}
+    {:to {:x 1613, :y 785, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}]},
+  :mari-voice-touch
+  {:type "parallel",
+   :data
+   [{:id "mari", :type "audio", :start 12.841, :duration 2.479}
+    {:data [{:end 15.205, :anim "talk", :start 12.994}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 12.841,
+     :target "mari"}],
+   :description "Toca aqui para ver el video"},
+  :mari-voice-touch-again-1
+  {:type "parallel",
+   :data
    [{:id "mari", :type "audio", :start 18.667, :duration 3.271}
     {:data [{:end 21.861, :anim "talk", :start 18.82}],
      :type "animation-sequence",
      :track 1,
      :offset 18.667,
      :target "mari"}],
-   :type "parallel",
    :description "Toca aqui para ver el video de nuevo..."},
+  :mari-voice-touch-again-2
+  {:type "parallel",
+   :data
+   [{:id "mari", :type "audio", :start 22.36, :duration 4.025}
+    {:data [{:end 26.257, :anim "talk", :start 22.475}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 22.36,
+     :target "mari"}],
+   :description "..., o toca aqui para ir a tu proxima actividad."},
+  :play-video
+  {:type "sequence-data",
+   :data
+   [{:id "hide-play-form", :type "action"}
+    {:id "hidden", :type "state", :target "screen-overlay"}
+    {:id "visible", :type "state", :target "letter-video"}
+    {:type "play-video",
+     :target "letter-video",
+     :from-var [{:var-name "current-concept", :var-property "chanting-video-src", :action-property "src"}]}
+    {:id "play-video-finish", :type "action"}]},
+  :play-video-finish
+  {:type "sequence-data",
+   :data
+   [{:id "hidden", :type "state", :target "letter-video"}
+    {:id "visible", :type "state", :target "screen-overlay"}
+    {:id "vaca-clapping", :type "action"}
+    {:id "vaca-voice-very-good", :type "action"}
+    {:id "show-play-again-form", :type "action"}]},
+  :renew-concept
+  {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
   :show-play-again-form
-  {:data
+  {:type "sequence-data",
+   :data
    [{:data
      [{:id "visible", :type "state", :target "next-button"}
       {:id "left", :type "state", :target "play-button"}
@@ -71,33 +189,65 @@
     {:to {:x 990, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
     {:id "mari-voice-touch-again-1", :type "action"}
     {:to {:x 1400, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
-    {:id "mari-voice-touch-again-2", :type "action"}],
-   :type "sequence-data"},
-  :vaca-voice-very-good
-  {:data
-   [{:id "vaca-7", :type "audio", :start 27.148, :duration 1.532}
-    {:data [{:end 28.618, :anim "talk", :start 27.297}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 27.148,
-     :target "senoravaca"}],
-   :type "parallel",
-   :description "Very good!"},
-  :stop-activity {:id "cinema-video", :type "stop-activity"},
-  :finish-activity
-  {:data [{:id "cinema-video", :type "finish-activity"} {:type "scene", :scene-id "map"}], :type "sequence-data"},
+    {:id "mari-voice-touch-again-2", :type "action"}]},
+  :show-play-form
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:id "hidden", :type "state", :target "next-button"}
+      {:id "center", :type "state", :target "play-button"}
+      {:id "visible", :type "state", :target "video-controls"}],
+     :type "parallel"}
+    {:to {:x 1223, :y 546, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+    {:id "mari-voice-touch", :type "action"}]},
   :start
-  {:data
+  {:type "sequence",
+   :data
    ["start-activity"
     "clear-instruction"
     "renew-concept"
     "vaca-voice-wonderful"
     "vaca-voice-lets-watch"
     "show-play-form"],
-   :type "sequence",
    :description "Initial action"},
+  :start-activity {:type "start-activity", :id "cinema-video"},
+  :stop-activity {:type "stop-activity", :id "cinema-video"},
+  :vaca-clapping
+  {:type "sequence-data",
+   :data
+   [{:id "clapping_start", :loop false, :type "animation", :target "senoravaca"}
+    {:data [{:end 3, :anim "clapping_1clap", :start 0}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 0,
+     :target "senoravaca"}
+    {:id "clapping_finish", :loop false, :type "animation", :target "senoravaca"}]},
+  :vaca-voice-lets-watch
+  {:type "sequence-data",
+   :data
+   [{:description "Excellent! Now, let’s watch a video about the letter",
+     :offset 21.15,
+     :start 21.15,
+     :type "animation-sequence",
+     :duration 4.769,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 24.15, :anim "talk", :start 21.33} {:end 25.53, :anim "talk", :start 24.46}]}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}]},
+  :vaca-voice-very-good
+  {:type "parallel",
+   :data
+   [{:id "vaca-7", :type "audio", :start 27.148, :duration 1.532}
+    {:data [{:end 28.618, :anim "talk", :start 27.297}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 27.148,
+     :target "senoravaca"}],
+   :description "Very good!"},
   :vaca-voice-wonderful
-  {:data
+  {:type "parallel",
+   :data
    [{:id "vaca-7", :type "audio", :start 9.716, :duration 10.613}
     {:data
      [{:end 11.858, :anim "talk", :start 10.04}
@@ -108,157 +258,7 @@
      :track 1,
      :offset 9.716,
      :target "senoravaca"}],
-   :type "parallel",
-   :description "Maravilloso! Todos cantaron muy bien!  Amigas, estan pasando un buen rato?"},
-  :vaca-clapping
-  {:data
-   [{:id "clapping_start", :loop false, :type "animation", :target "senoravaca"}
-    {:data [{:end 3, :anim "clapping_1clap", :start 0}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 0,
-     :target "senoravaca"}
-    {:id "clapping_finish", :loop false, :type "animation", :target "senoravaca"}],
-   :type "sequence-data"},
-  :renew-concept
-  {:from "concepts-single", :type "lesson-var-provider", :variables ["current-concept"], :provider-id "concepts"},
-  :vaca-voice-lets-watch
-  {:data
-   [{:description "Excellent! Now, let’s watch a video about the letter",
-     :offset 21.15,
-     :start 21.15,
-     :type "animation-sequence",
-     :duration 4.769,
-     :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
-     :target "senoravaca",
-     :track 1,
-     :data [{:end 24.15, :anim "talk", :start 21.33} {:end 25.53, :anim "talk", :start 24.46}]}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}],
-   :type "sequence-data"},
-  :mari-voice-touch-again-2
-  {:data
-   [{:id "mari", :type "audio", :start 22.36, :duration 4.025}
-    {:data [{:end 26.257, :anim "talk", :start 22.475}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 22.36,
-     :target "mari"}],
-   :type "parallel",
-   :description "..., o toca aqui para ir a tu proxima actividad."},
-  :start-activity {:id "cinema-video", :type "start-activity"},
-  :mari-voice-touch
-  {:data
-   [{:id "mari", :type "audio", :start 12.841, :duration 2.479}
-    {:data [{:end 15.205, :anim "talk", :start 12.994}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 12.841,
-     :target "mari"}],
-   :type "parallel",
-   :description "Toca aqui para ver el video"},
-  :play-video
-  {:data
-   [{:id "hide-play-form", :type "action"}
-    {:id "hidden", :type "state", :target "screen-overlay"}
-    {:id "visible", :type "state", :target "letter-video"}
-    {:type "play-video",
-     :target "letter-video",
-     :from-var [{:var-name "current-concept", :var-property "chanting-video-src", :action-property "src"}]}
-    {:id "play-video-finish", :type "action"}],
-   :type "sequence-data"},
-  :hide-play-form
-  {:data
-   [{:id "hidden", :type "state", :target "video-controls"}
-    {:to {:x 1613, :y 785, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}],
-   :type "parallel"},
-  :play-video-finish
-  {:data
-   [{:id "hidden", :type "state", :target "letter-video"}
-    {:id "visible", :type "state", :target "screen-overlay"}
-    {:id "vaca-clapping", :type "action"}
-    {:id "vaca-voice-very-good", :type "action"}
-    {:id "show-play-again-form", :type "action"}],
-   :type "sequence-data"},
-  :clear-instruction {:type "remove-flows", :flow-tag "instruction", :description "Remove flows"},
-  :show-play-form
-  {:data
-   [{:data
-     [{:id "hidden", :type "state", :target "next-button"}
-      {:id "center", :type "state", :target "play-button"}
-      {:id "visible", :type "state", :target "video-controls"}],
-     :type "parallel"}
-    {:to {:x 1223, :y 546, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
-    {:id "mari-voice-touch", :type "action"}],
-   :type "sequence-data"}},
- :objects
- {:mari
-  {:y 785,
-   :transition "mari",
-   :speed 0.35,
-   :name "mari",
-   :width 473,
-   :start true,
-   :type "animation",
-   :anim "idle",
-   :scale-y 0.3,
-   :x 1613,
-   :scale-x 0.3,
-   :height 511},
-  :background {:src "/raw/img/cinema/background.jpg", :type "background"},
-  :next-button
-  {:x 400,
-   :y 0,
-   :src "/raw/img/ui/next_button_01.png",
-   :type "transparent",
-   :width 331,
-   :height 98,
-   :states {:hidden {:y 1000, :type "transparent"}, :visible {:y 0, :type "image"}},
-   :actions {:click {:id "finish-activity", :on "click", :type "action"}}},
-  :play-button
-  {:x 0,
-   :y 0,
-   :src "/raw/img/ui/play_button_01.png",
-   :type "image",
-   :width 331,
-   :height 99,
-   :states {:left {:x 0}, :center {:x 200}},
-   :actions {:click {:id "play-video", :on "click", :type "action"}}},
-  :senora-vaca
-  {:y 915,
-   :speed 0.3,
-   :name "senoravaca",
-   :width 351,
-   :start true,
-   :type "animation",
-   :anim "idle",
-   :scale-y 0.5,
-   :x 263,
-   :scale-x 0.5,
-   :skin "vaca",
-   :height 717},
-  :letter-video
-  {:x 342,
-   :y 111,
-   :type "transparent",
-   :width 1236,
-   :height 674,
-   :states {:hidden {:type "transparent"}, :visible {:type "video"}}},
-  :screen-overlay
-  {:x 342,
-   :y 109,
-   :src "/raw/img/cinema/screen-off.png",
-   :type "image",
-   :width 1238,
-   :height 678,
-   :states {:hidden {:type "transparent"}, :visible {:type "image"}}},
-  :video-controls
-  {:x 616,
-   :y 400,
-   :type "transparent",
-   :width 730,
-   :height 100,
-   :states {:hidden {:type "transparent"}, :visible {:type "group"}},
-   :children ["play-button" "next-button"]}},
- :metadata {:prev "map", :autostart true},
+   :description "Maravilloso! Todos cantaron muy bien!  Amigas, estan pasando un buen rato?"}},
  :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
- :scene-objects [["background"] ["letter-video" "screen-overlay"] ["video-controls"] ["senora-vaca" "mari"]]}
+ :metadata {:prev "map", :autostart true},
+ :audio {:mari "/raw/audio/l2/a1/L2_A1_Mari.m4a", :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"}}

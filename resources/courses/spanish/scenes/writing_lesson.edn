@@ -47,61 +47,121 @@
    :size 2,
    :type "audio",
    :alias "vaca insertions 11"}],
+ :objects
+ {:background {:type "background", :src "/raw/img/library/room2/background.jpg"},
+  :canvas
+  {:type "image",
+   :x 950,
+   :y 83,
+   :width 529,
+   :height 810,
+   :scale-x 1.2,
+   :scale-y 1.2,
+   :src "/raw/img/library/room2/canvas.png"},
+  :letter-image
+  {:type "transparent",
+   :x 1050,
+   :y 260,
+   :width 651,
+   :height 651,
+   :scale {:x 0.3, :y 0.3},
+   :origin {:type "center-center"},
+   :states {:hidden {:type "transparent"}, :visible {:type "image"}}},
+  :letter-path
+  {:type "transparent",
+   :x 1070,
+   :y 183,
+   :width 225,
+   :height 225,
+   :scene-name "letter-path",
+   :animation "stop",
+   :duration 5000,
+   :fill "transparent",
+   :line-cap "round",
+   :path "M 0 0",
+   :scale-x 2,
+   :scale-y 2,
+   :states {:hidden {:type "transparent"}, :visible {:type "animated-svg-path"}},
+   :stroke "white",
+   :stroke-width 15},
+  :mari
+  {:type "animation",
+   :x 1700,
+   :y 520,
+   :width 473,
+   :height 511,
+   :scene-name "mari",
+   :transition "mari",
+   :anim "idle",
+   :anim-offset {:x 225.87, :y 163.82},
+   :name "mari",
+   :scale-x 0.5,
+   :scale-y 0.5,
+   :speed 0.35,
+   :start true},
+  :picture-box
+  {:type "transparent",
+   :x 811,
+   :y 330,
+   :width 771.81,
+   :height 1033.42,
+   :scale {:x 0.35, :y 0.35},
+   :origin {:type "center-center"},
+   :scene-name "picture-box",
+   :transition "picture-box",
+   :anim "come",
+   :anim-offset {:x 391.97, :y 317.31},
+   :loop false,
+   :name "boxes",
+   :skin "empty",
+   :speed 0.7,
+   :start true,
+   :states {:hidden {:type "transparent"}, :visible {:type "animation"}}},
+  :senora-vaca
+  {:type "animation",
+   :x 486,
+   :y 986,
+   :width 351,
+   :height 717,
+   :scene-name "senoravaca",
+   :anim "idle",
+   :name "senoravaca",
+   :scale-x 1,
+   :scale-y 1,
+   :skin "vaca",
+   :speed 0.3,
+   :start true}},
+ :scene-objects [["background"] ["canvas" "picture-box" "letter-image" "letter-path"] ["senora-vaca" "mari"]],
  :actions
  {:draw-letter
-  {:data ["vaca-voice-help-mari" "mari-voice-sure" "mari-move-to-letter" "letter-drawing"], :type "sequence"},
-  :introduce-picture
-  {:data ["vaca-asks-sound" "show-current-word-picture" "vaca-letter-pronouncing"], :type "sequence"},
-  :vaca-asks-sound
-  {:data
-   [{:description "Ahora, pongan atencion amigos. Sabian que cada foto empieza con el sonido",
-     :offset 29.76,
-     :start 29.76,
-     :type "animation-sequence",
-     :duration 9.573,
-     :audio "/raw/audio/l2/a6/vaca.mp4",
-     :target "senoravaca",
-     :track 1,
-     :data
-     [{:end 30.66, :anim "talk", :start 30.08}
-      {:end 33.61, :anim "talk", :start 31.5}
-      {:end 39.15, :anim "talk", :start 34.92}]}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}],
-   :type "sequence-data"},
-  :vaca-voice-your-turn
-  {:description
-   "Ahora es tu turno! En la biblioteca esta un lienzo de arte para que tu puedas practicar.\n                                                             Rastera las letras con cuidado, asi como Mari lo hace.",
-   :offset 110.413,
-   :start 110.413,
-   :type "animation-sequence",
-   :duration 19.266,
-   :audio "/raw/audio/l2/a6/vaca.mp4",
-   :target "senoravaca",
-   :track 1,
+  {:type "sequence", :data ["vaca-voice-help-mari" "mari-voice-sure" "mari-move-to-letter" "letter-drawing"]},
+  :finish-activity {:type "finish-activity", :id "writing-lesson"},
+  :init-letter
+  {:type "parallel",
    :data
-   [{:end 115.63, :anim "talk", :start 110.74}
-    {:end 117.53, :anim "talk", :start 116.44}
-    {:end 119.06, :anim "talk", :start 118.07}
-    {:end 121.04, :anim "talk", :start 120.15}
-    {:end 122.67, :anim "talk", :start 121.53}
-    {:end 126.67, :anim "talk", :start 123.66}
-    {:end 129.14, :anim "talk", :start 127.66}]},
-  :start-letter-path {:type "set-attribute", :target "letter-path", :attr-name "animation", :attr-value "play"},
-  :show-letter {:id "visible", :type "state", :target "letter-path"},
-  :welcome {:data ["vaca-voice-welcome"], :type "sequence"},
-  :vaca-voice-sound-look
-  {:description "Asi es como se ve este sonido.",
-   :offset 53.826,
-   :start 53.826,
-   :type "animation-sequence",
-   :duration 3.774,
-   :audio "/raw/audio/l2/a6/vaca.mp4",
-   :target "senoravaca",
-   :track 1,
-   :data [{:end 55.89, :anim "talk", :start 53.91} {:end 57.57, :anim "talk", :start 56.14}]},
-  :invite-user {:data ["vaca-voice-your-turn" "finish-activity" "mari-click-to-practice"], :type "sequence"},
+   [{:type "set-attribute",
+     :target "letter-path",
+     :from-var [{:var-name "path", :action-property "attr-value"}],
+     :attr-name "path"}
+    {:type "set-attribute",
+     :target "letter-path",
+     :from-var [{:var-name "path-color-1", :action-property "attr-value"}],
+     :attr-name "stroke"}]},
+  :init-vars
+  {:type "parallel",
+   :data
+   [{:type "set-variable",
+     :from-var [{:var-name "current-concept", :var-property "letter-path", :action-property "var-value"}],
+     :var-name "path"}
+    {:type "set-variable", :var-name "path-color-1", :var-value "#eec166"}
+    {:type "set-variable", :var-name "path-color-2", :var-value "#6cd38a"}]},
+  :introduce-letter {:type "sequence", :data ["vaca-voice-sound-look" "init-letter" "show-letter" "pronounce-letter"]},
+  :introduce-picture
+  {:type "sequence", :data ["vaca-asks-sound" "show-current-word-picture" "vaca-letter-pronouncing"]},
+  :invite-user {:type "sequence", :data ["vaca-voice-your-turn" "finish-activity" "mari-click-to-practice"]},
   :letter-drawing
-  {:data
+  {:type "sequence-data",
+   :data
    [{:data
      [{:data
        [{:description "Mira como Mari sigue la flecha para pintar la letra",
@@ -141,74 +201,57 @@
      :target "letter-path",
      :from-var [{:var-name "path-color-2", :action-property "attr-value"}],
      :attr-name "stroke"}
-    {:id "letter-drawing-animation", :type "action"}],
-   :type "sequence-data"},
-  :mari-voice-welcome
-  {:description "Hola!",
-   :offset 0.88,
-   :start 0.88,
-   :type "animation-sequence",
-   :duration 1.107,
-   :audio "/raw/audio/l2/a6/mari.mp4",
-   :target "mari",
-   :track 1,
-   :data [{:end 1.77, :anim "talk", :start 1.06}]},
-  :stop-activity {:id "writing-lesson", :type "stop-activity"},
-  :finish-activity {:id "writing-lesson", :type "finish-activity"},
-  :start
-  {:data
-   ["start-activity"
-    "renew-concept"
-    "init-vars"
-    "vaca-voice-welcome"
-    "mari-voice-welcome"
-    "introduce-picture"
-    "introduce-letter"
-    "draw-letter"
-    "invite-user"],
-   :type "sequence"},
-  :introduce-letter {:data ["vaca-voice-sound-look" "init-letter" "show-letter" "pronounce-letter"], :type "sequence"},
-  :vaca-voice-pay-attention
-  {:description "Ahora, pongan atencion amigos. Sabian que cada foto empieza con el sonido",
-   :offset 1.541,
-   :start 1.541,
-   :type "animation-sequence",
-   :duration 6.905,
-   :id "/raw/audio/l2/a6/vaca.mp4",
-   :target "senoravaca",
-   :track 1,
+    {:id "letter-drawing-animation", :type "action"}]},
+  :letter-drawing-animation
+  {:type "sequence-data",
    :data
-   [{:end 2.249, :anim "talk", :start 1.753}
-    {:end 4.054, :anim "talk", :start 2.587}
-    {:end 6.704, :anim "talk", :start 5.036}
-    {:end 8.33, :anim "talk", :start 7.021}]},
-  :renew-concept
-  {:from "concepts-single", :type "lesson-var-provider", :variables ["current-concept"], :provider-id "concepts"},
-  :mari-move-to-letter {:to {:x 1186, :y 414, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"},
-  :init-vars
-  {:data
-   [{:type "set-variable",
-     :from-var [{:var-name "current-concept", :var-property "letter-path", :action-property "var-value"}],
-     :var-name "path"}
-    {:type "set-variable", :var-name "path-color-1", :var-value "#eec166"}
-    {:type "set-variable", :var-name "path-color-2", :var-value "#6cd38a"}],
-   :type "parallel"},
-  :show-current-word-picture
-  {:data
-   [{:id "visible", :type "state", :target "letter-image"}
-    {:type "set-attribute",
-     :target "letter-image",
-     :from-var [{:var-name "current-concept", :var-property "letter-src", :action-property "attr-value"}],
-     :attr-name "src"}
-    {:id "visible", :type "state", :target "picture-box"}
-    {:type "empty", :duration 500}
-    {:type "set-skin",
-     :target "picture-box",
-     :from-var [{:var-name "current-concept", :var-property "skin", :action-property "skin"}]}
-    {:id "idle_fly1", :loop true, :type "add-animation", :target "picture-box"}],
-   :type "sequence-data"},
+   [{:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}
+    {:to {:x 1364, :y 514, :loop false, :duration 1}, :type "transition", :transition-id "mari"}
+    {:data
+     [{:type "path-animation", :state "play", :target "letter-path"}
+      {:to {:path "", :scale {:x 2, :y 2}, :origin {:x 1130, :y 193}, :duration 5},
+       :type "transition",
+       :from-var [{:var-name "path", :action-property "to.path"}],
+       :transition-id "mari"}],
+     :type "parallel"}
+    {:to {:x 1505, :y 485, :loop false, :duration 0.7}, :type "transition", :transition-id "mari"}]},
+  :mari-click-to-practice
+  {:type "sequence-data",
+   :data
+   [{:to {:x 144, :y 200, :duration 1.3}, :type "transition", :transition-id "mari"}
+    {:description "Haz click sobre la flecha para practicar rastreando las letras!",
+     :offset 16.506,
+     :start 16.506,
+     :type "animation-sequence",
+     :duration 5.506,
+     :audio "/raw/audio/l2/a6/mari.mp4",
+     :target "mari",
+     :track 1,
+     :data [{:end 21.68, :anim "talk", :start 16.73}]}]},
+  :mari-move-to-letter {:type "transition", :to {:x 1186, :y 414, :loop false, :duration 1.5}, :transition-id "mari"},
+  :mari-voice-sure
+  {:type "animation-sequence",
+   :data [{:end 10.71, :anim "talk", :start 9.69}],
+   :target "mari",
+   :audio "/raw/audio/l2/a6/mari.mp4",
+   :start 9.432,
+   :duration 1.44,
+   :track 1,
+   :offset 9.432,
+   :description "Claro que si!"},
+  :mari-voice-welcome
+  {:type "animation-sequence",
+   :data [{:end 1.77, :anim "talk", :start 1.06}],
+   :target "mari",
+   :audio "/raw/audio/l2/a6/mari.mp4",
+   :start 0.88,
+   :duration 1.107,
+   :track 1,
+   :offset 0.88,
+   :description "Hola!"},
   :pronounce-letter
-  {:data
+  {:type "sequence-data",
+   :data
    [{:description "Esta es la letra",
      :offset 58.826,
      :start 58.826,
@@ -254,59 +297,60 @@
     {:type "empty", :duration 300}
     {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
     {:type "empty", :duration 300}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}],
-   :type "sequence-data"},
-  :letter-drawing-animation
-  {:data
-   [{:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}
-    {:to {:x 1364, :y 514, :loop false, :duration 1}, :type "transition", :transition-id "mari"}
-    {:data
-     [{:type "path-animation", :state "play", :target "letter-path"}
-      {:to {:path "", :scale {:x 2, :y 2}, :origin {:x 1130, :y 193}, :duration 5},
-       :type "transition",
-       :from-var [{:var-name "path", :action-property "to.path"}],
-       :transition-id "mari"}],
-     :type "parallel"}
-    {:to {:x 1505, :y 485, :loop false, :duration 0.7}, :type "transition", :transition-id "mari"}],
-   :type "sequence-data"},
-  :mari-voice-sure
-  {:description "Claro que si!",
-   :offset 9.432,
-   :start 9.432,
-   :type "animation-sequence",
-   :duration 1.44,
-   :audio "/raw/audio/l2/a6/mari.mp4",
-   :target "mari",
-   :track 1,
-   :data [{:end 10.71, :anim "talk", :start 9.69}]},
-  :vaca-voice-welcome
-  {:description
-   "Bienvenido a la biblioteca pequeño genio! ¿No es un lugar tan fantástico? Me encanta cómo las bibliotecas están llenas de tantos libros. Hmmm ... bueno, ¿estás listo para aprender sobre letras? ¡Vamos a empezar!\n",
-   :offset 1.826,
-   :start 1.826,
-   :type "animation-sequence",
-   :duration 27.1,
-   :audio "/raw/audio/l2/a6/vaca.mp4",
-   :target "senoravaca",
-   :track 1,
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}]},
+  :renew-concept
+  {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
+  :show-current-word-picture
+  {:type "sequence-data",
    :data
-   [{:end 4.29, :anim "talk", :start 1.9}
-    {:end 5.56, :anim "talk", :start 4.44}
-    {:end 7.93, :anim "talk", :start 6.67}
-    {:end 9.91, :anim "talk", :start 8.2}
-    {:end 10.6, :anim "talk", :start 10.48}
-    {:end 13.96, :anim "talk", :start 11.05}
-    {:end 14.99, :anim "talk", :start 14.37}
-    {:end 16.01, :anim "talk", :start 15.12}
-    {:end 17.83, :anim "talk", :start 16.24}
-    {:end 21.21, :anim "talk", :start 18.5}
-    {:end 24.2, :anim "talk", :start 21.62}
-    {:end 25.75, :anim "talk", :start 24.53}
-    {:end 26.3, :anim "talk", :start 26.15}
-    {:end 28.7, :anim "talk", :start 26.85}]},
-  :start-activity {:id "writing-lesson", :type "start-activity"},
+   [{:id "visible", :type "state", :target "letter-image"}
+    {:type "set-attribute",
+     :target "letter-image",
+     :from-var [{:var-name "current-concept", :var-property "letter-src", :action-property "attr-value"}],
+     :attr-name "src"}
+    {:id "visible", :type "state", :target "picture-box"}
+    {:type "empty", :duration 500}
+    {:type "set-slot",
+     :target "picture-box",
+     :from-var [{:var-name "current-concept", :var-property "image-src", :action-property "image"}],
+     :slot-name "box1",
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}
+    {:id "idle_fly1", :loop true, :type "add-animation", :target "picture-box"}]},
+  :show-letter {:type "state", :id "visible", :target "letter-path"},
+  :start
+  {:type "sequence",
+   :data
+   ["start-activity"
+    "renew-concept"
+    "init-vars"
+    "vaca-voice-welcome"
+    "mari-voice-welcome"
+    "introduce-picture"
+    "introduce-letter"
+    "draw-letter"
+    "invite-user"]},
+  :start-activity {:type "start-activity", :id "writing-lesson"},
+  :start-letter-path {:type "set-attribute", :target "letter-path", :attr-name "animation", :attr-value "play"},
+  :stop-activity {:type "stop-activity", :id "writing-lesson"},
+  :vaca-asks-sound
+  {:type "sequence-data",
+   :data
+   [{:description "Ahora, pongan atencion amigos. Sabian que cada foto empieza con el sonido",
+     :offset 29.76,
+     :start 29.76,
+     :type "animation-sequence",
+     :duration 9.573,
+     :audio "/raw/audio/l2/a6/vaca.mp4",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 30.66, :anim "talk", :start 30.08}
+      {:end 33.61, :anim "talk", :start 31.5}
+      {:end 39.15, :anim "talk", :start 34.92}]}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}]},
   :vaca-letter-pronouncing
-  {:data
+  {:type "sequence-data",
+   :data
    [{:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}
     {:description "empieza con el sonido",
      :offset 42.493,
@@ -325,10 +369,10 @@
     {:type "empty", :duration 500}
     {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}
     {:type "empty", :duration 500}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}],
-   :type "sequence-data"},
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}]},
   :vaca-voice-help-mari
-  {:data
+  {:type "sequence-data",
+   :data
    [{:description "Mari, puedes ayudarme a pintar la letra",
      :offset 79.88,
      :start 79.88,
@@ -338,116 +382,74 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 80.43, :anim "talk", :start 80.09} {:end 84.16, :anim "talk", :start 80.93}]}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}],
-   :type "sequence-data"},
-  :mari-click-to-practice
-  {:data
-   [{:to {:x 144, :y 200, :duration 1.3}, :type "transition", :transition-id "mari"}
-    {:description "Haz click sobre la flecha para practicar rastreando las letras!",
-     :offset 16.506,
-     :start 16.506,
-     :type "animation-sequence",
-     :duration 5.506,
-     :audio "/raw/audio/l2/a6/mari.mp4",
-     :target "mari",
-     :track 1,
-     :data [{:end 21.68, :anim "talk", :start 16.73}]}],
-   :type "sequence-data"},
-  :init-letter
-  {:data
-   [{:type "set-attribute",
-     :target "letter-path",
-     :from-var [{:var-name "path", :action-property "attr-value"}],
-     :attr-name "path"}
-    {:type "set-attribute",
-     :target "letter-path",
-     :from-var [{:var-name "path-color-1", :action-property "attr-value"}],
-     :attr-name "stroke"}],
-   :type "parallel"}},
- :objects
- {:mari
-  {:y 520,
-   :transition "mari",
-   :speed 0.35,
-   :name "mari",
-   :width 473,
-   :start true,
-   :type "animation",
-   :anim "idle",
-   :scale-y 0.5,
-   :anim-offset {:x 225.87, :y 163.82},
-   :x 1700,
-   :scale-x 0.5,
-   :scene-name "mari",
-   :height 511},
-  :canvas
-  {:x 950,
-   :y 83,
-   :src "/raw/img/library/room2/canvas.png",
-   :type "image",
-   :width 529,
-   :height 810,
-   :scale-x 1.2,
-   :scale-y 1.2},
-  :background {:src "/raw/img/library/room2/background.jpg", :type "background"},
-  :letter-path
-  {:y 183,
-   :path "M 0 0",
-   :stroke "white",
-   :animation "stop",
-   :states {:hidden {:type "transparent"}, :visible {:type "animated-svg-path"}},
-   :fill "transparent",
-   :width 225,
-   :type "transparent",
-   :duration 5000,
-   :stroke-width 15,
-   :scale-y 2,
-   :x 1070,
-   :scale-x 2,
-   :scene-name "letter-path",
-   :line-cap "round",
-   :height 225},
-  :picture-box
-  {:y 330,
-   :states {:hidden {:type "transparent"}, :visible {:type "animation"}},
-   :transition "picture-box",
-   :speed 0.7,
-   :scale {:x 0.35, :y 0.35},
-   :name "boxes",
-   :width 771.81,
-   :start true,
-   :type "transparent",
-   :loop false,
-   :anim "come",
-   :anim-offset {:x 391.97, :y 317.31},
-   :origin {:type "center-center"},
-   :x 811,
-   :scene-name "picture-box",
-   :skin "empty",
-   :height 1033.42},
-  :senora-vaca
-  {:y 986,
-   :speed 0.3,
-   :name "senoravaca",
-   :width 351,
-   :start true,
-   :type "animation",
-   :anim "idle",
-   :scale-y 1,
-   :x 486,
-   :scale-x 1,
-   :scene-name "senoravaca",
-   :skin "vaca",
-   :height 717},
-  :letter-image
-  {:x 1050,
-   :y 260,
-   :type "transparent",
-   :scale {:x 0.3, :y 0.3},
-   :width 651,
-   :height 651,
-   :origin {:type "center-center"},
-   :states {:hidden {:type "transparent"}, :visible {:type "image"}}}},
- :metadata {:prev "library", :autostart true},
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}]},
+  :vaca-voice-pay-attention
+  {:type "animation-sequence",
+   :data
+   [{:end 2.249, :anim "talk", :start 1.753}
+    {:end 4.054, :anim "talk", :start 2.587}
+    {:end 6.704, :anim "talk", :start 5.036}
+    {:end 8.33, :anim "talk", :start 7.021}],
+   :id "/raw/audio/l2/a6/vaca.mp4",
+   :target "senoravaca",
+   :start 1.541,
+   :duration 6.905,
+   :track 1,
+   :offset 1.541,
+   :description "Ahora, pongan atencion amigos. Sabian que cada foto empieza con el sonido"},
+  :vaca-voice-sound-look
+  {:type "animation-sequence",
+   :data [{:end 55.89, :anim "talk", :start 53.91} {:end 57.57, :anim "talk", :start 56.14}],
+   :target "senoravaca",
+   :audio "/raw/audio/l2/a6/vaca.mp4",
+   :start 53.826,
+   :duration 3.774,
+   :track 1,
+   :offset 53.826,
+   :description "Asi es como se ve este sonido."},
+  :vaca-voice-welcome
+  {:type "animation-sequence",
+   :data
+   [{:end 4.29, :anim "talk", :start 1.9}
+    {:end 5.56, :anim "talk", :start 4.44}
+    {:end 7.93, :anim "talk", :start 6.67}
+    {:end 9.91, :anim "talk", :start 8.2}
+    {:end 10.6, :anim "talk", :start 10.48}
+    {:end 13.96, :anim "talk", :start 11.05}
+    {:end 14.99, :anim "talk", :start 14.37}
+    {:end 16.01, :anim "talk", :start 15.12}
+    {:end 17.83, :anim "talk", :start 16.24}
+    {:end 21.21, :anim "talk", :start 18.5}
+    {:end 24.2, :anim "talk", :start 21.62}
+    {:end 25.75, :anim "talk", :start 24.53}
+    {:end 26.3, :anim "talk", :start 26.15}
+    {:end 28.7, :anim "talk", :start 26.85}],
+   :target "senoravaca",
+   :audio "/raw/audio/l2/a6/vaca.mp4",
+   :start 1.826,
+   :duration 27.1,
+   :track 1,
+   :offset 1.826,
+   :description
+   "Bienvenido a la biblioteca pequeño genio! ¿No es un lugar tan fantástico? Me encanta cómo las bibliotecas están llenas de tantos libros. Hmmm ... bueno, ¿estás listo para aprender sobre letras? ¡Vamos a empezar!\n"},
+  :vaca-voice-your-turn
+  {:type "animation-sequence",
+   :data
+   [{:end 115.63, :anim "talk", :start 110.74}
+    {:end 117.53, :anim "talk", :start 116.44}
+    {:end 119.06, :anim "talk", :start 118.07}
+    {:end 121.04, :anim "talk", :start 120.15}
+    {:end 122.67, :anim "talk", :start 121.53}
+    {:end 126.67, :anim "talk", :start 123.66}
+    {:end 129.14, :anim "talk", :start 127.66}],
+   :target "senoravaca",
+   :audio "/raw/audio/l2/a6/vaca.mp4",
+   :start 110.413,
+   :duration 19.266,
+   :track 1,
+   :offset 110.413,
+   :description
+   "Ahora es tu turno! En la biblioteca esta un lienzo de arte para que tu puedas practicar.\n                                                             Rastera las letras con cuidado, asi como Mari lo hace."},
+  :welcome {:type "sequence", :data ["vaca-voice-welcome"]}},
  :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
- :scene-objects [["background"] ["canvas" "picture-box" "letter-image" "letter-path"] ["senora-vaca" "mari"]]}
+ :metadata {:prev "library", :autostart true}}

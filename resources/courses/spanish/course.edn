@@ -1,4 +1,184 @@
-{:levels
+{:initial-scene "map",
+ :scene-list
+                {:home
+                 {:name    "Casa",
+                  :outs    [{:x 1457, :y 630, :name "map", :transition "door-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
+                 :cinema
+                 {:name    "Cinema",
+                  :outs    [{:x 100, :y 100, :name "map", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
+                 :park-poem
+                 {:name    "Poem",
+                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Park_Main.jpg"},
+                 :stadium
+                 {:name    "Stadium",
+                  :outs
+                           [{:x 100, :y 100, :name "map", :transition "back-filter"}
+                            {:x 857, :y 870, :name "volleyball", :transition "volleyball-filter"}
+                            {:x 357, :y 870, :name "cycling", :transition "cycling-filter"}
+                            {:x 1300, :y 870, :name "running", :transition "running-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Stadium_Main.jpg"},
+                 :book
+                 {:name    "Book",
+                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Library_Book.jpg"},
+                 :swings
+                 {:name    "Swings",
+                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Park_Swing.jpg"},
+                 :volleyball
+                 {:name    "Volleyball",
+                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
+                 :magic-hat
+                 {:name    "Magic Hat",
+                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Library_Magic-Hat.jpg"},
+                 :sandbox
+                 {:name    "Sandbox",
+                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg"},
+                 :running
+                 {:name    "Running",
+                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Stadium_Running.jpg"},
+                 :cycling
+                 {:name    "Cycling",
+                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
+                 :library
+                 {:name    "Library",
+                  :outs
+                           [{:x 100, :y 100, :name "map", :transition "back-filter"}
+                            {:x 1357, :y 750, :name "book", :transition "book-filter"}
+                            {:x 1057, :y 780, :name "painting-tablet", :transition "painting-tablet-filter"}
+                            {:x 926, :y 460, :name "writing-lesson", :transition "writing-lesson-filter"}
+                            {:x 1714, :y 646, :name "magic-hat", :transition "magic-hat-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Library_Room.jpg"},
+                 :cinema-video
+                 {:name    "Cinema Video",
+                  :outs    [{:x 100, :y 100, :name "map", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
+                 :cycling-letters
+                 {:name    "Cycling",
+                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
+                 :hide-n-seek
+                 {:name    "Hide and Seek",
+                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
+                  :type    "assessment",
+                  :preview "/images/dashboard/scene-preview/Park_Hide-and-seek.jpg"},
+                 :see-saw
+                 {:name    "Sea-saw",
+                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Park_See-Saw.jpg"},
+                 :slide
+                 {:name    "Slide",
+                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Park_Slide.jpg"},
+                 :painting-tablet
+                 {:name    "Painting",
+                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
+                 :pinata
+                 {:name    "Pinata",
+                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Park_Pinata.jpg"},
+                 :writing-practice
+                 {:name    "Painting",
+                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
+                 :letter-intro
+                 {:name    "Letter Intro",
+                  :outs    [{:x 1457, :y 330, :name "map", :transition "door-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
+                 :park
+                 {:name    "Park",
+                  :outs
+                           [{:x 100, :y 100, :name "map", :transition "back-filter"}
+                            {:x 407, :y 860, :name "see-saw", :transition "see-saw-filter"}
+                            {:x 1637, :y 660, :name "swings", :transition "swings-filter"}
+                            {:x 937, :y 810, :name "sandbox", :transition "sandbox-filter"}
+                            {:x 987, :y 670, :name "hide-n-seek", :transition "hide-n-seek-filter"}
+                            {:x 374, :y 525, :name "slide", :transition "slide-filter"}
+                            {:x 715, :y 250, :name "pinata", :transition "pinata-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Park_Main.jpg"},
+                 :map
+                 {:name    "Map",
+                  :outs
+                           [{:x 1447, :y 860, :name "park", :transition "park-filter"}
+                            {:x 181, :y 419, :name "library", :transition "library-filter"}
+                            {:x 1581, :y 269, :name "stadium", :transition "stadium-filter"}
+                            {:x 881, :y 490, :name "home", :transition "home-filter"}
+                            {:x 881, :y 490, :name "cinema", :transition "cinema-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
+                 :volleyball-letters
+                 {:name    "Volleyball",
+                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
+                 :writing-lesson
+                 {:name    "Writing Lesson",
+                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Library_Room.jpg"}},
+ :scenes
+                ["home"
+                 "map"
+                 "see-saw"
+                 "swings"
+                 "sandbox"
+                 "park"
+                 "stadium"
+                 "volleyball"
+                 "volleyball-letters"
+                 "hide-n-seek"
+                 "library"
+                 "book"
+                 "painting-tablet"
+                 "cinema"
+                 "cinema-video"
+                 "cycling"
+                 "cycling-letters"
+                 "running"
+                 "letter-intro"
+                 "park-poem"
+                 "slide"
+                 "writing-lesson"
+                 "writing-practice"
+                 "magic-hat"
+                 "pinata"],
+ :locations
+                {:home            [{:level 1, :scene "home"} {:level 2, :scene "letter-intro"}],
+                 :cycling         [{:level 1, :scene "cycling"} {:level 2, :scene "cycling-letters"}],
+                 :sandbox         [{:level 1, :scene "sandbox"} {:level 2, :scene "park-poem"}],
+                 :volleyball      [{:level 1, :scene "volleyball"} {:level 2, :scene "volleyball-letters"}],
+                 :painting-tablet [{:level 1, :scene "painting-tablet"} {:level 2, :scene "writing-practice"}]},
+ :levels
                 [{:name  "Level 1",
                   :level 1,
                   :scheme
@@ -640,185 +820,5 @@
                            :lesson      34,
                            :activities  [{:scored true, :activity "pinata", :time-expected 300, :expected-score-percentage 90}],
                            :lesson-sets {:assessment "assessment6"}}]}],
- :scenes
-                ["home"
-                 "map"
-                 "see-saw"
-                 "swings"
-                 "sandbox"
-                 "park"
-                 "stadium"
-                 "volleyball"
-                 "volleyball-letters"
-                 "hide-n-seek"
-                 "library"
-                 "book"
-                 "painting-tablet"
-                 "cinema"
-                 "cinema-video"
-                 "cycling"
-                 "cycling-letters"
-                 "running"
-                 "letter-intro"
-                 "park-poem"
-                 "slide"
-                 "writing-lesson"
-                 "writing-practice"
-                 "magic-hat"
-                 "pinata"],
- :locations
-                {:home            [{:level 1, :scene "home"} {:level 2, :scene "letter-intro"}],
-                 :cycling         [{:level 1, :scene "cycling"} {:level 2, :scene "cycling-letters"}],
-                 :sandbox         [{:level 1, :scene "sandbox"} {:level 2, :scene "park-poem"}],
-                 :volleyball      [{:level 1, :scene "volleyball"} {:level 2, :scene "volleyball-letters"}],
-                 :painting-tablet [{:level 1, :scene "painting-tablet"} {:level 2, :scene "writing-practice"}]},
- :scene-list
-                {:home
-                 {:name    "Casa",
-                  :outs    [{:x 1457, :y 630, :name "map", :transition "door-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
-                 :cinema
-                 {:name    "Cinema",
-                  :outs    [{:x 100, :y 100, :name "map", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
-                 :park-poem
-                 {:name    "Poem",
-                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Park_Main.jpg"},
-                 :stadium
-                 {:name    "Stadium",
-                  :outs
-                           [{:x 100, :y 100, :name "map", :transition "back-filter"}
-                            {:x 857, :y 870, :name "volleyball", :transition "volleyball-filter"}
-                            {:x 357, :y 870, :name "cycling", :transition "cycling-filter"}
-                            {:x 1300, :y 870, :name "running", :transition "running-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Stadium_Main.jpg"},
-                 :book
-                 {:name    "Book",
-                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Library_Book.jpg"},
-                 :swings
-                 {:name    "Swings",
-                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Park_Swing.jpg"},
-                 :volleyball
-                 {:name    "Volleyball",
-                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
-                 :magic-hat
-                 {:name    "Magic Hat",
-                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Library_Magic-Hat.jpg"},
-                 :sandbox
-                 {:name    "Sandbox",
-                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg"},
-                 :running
-                 {:name    "Running",
-                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Stadium_Running.jpg"},
-                 :cycling
-                 {:name    "Cycling",
-                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
-                 :library
-                 {:name    "Library",
-                  :outs
-                           [{:x 100, :y 100, :name "map", :transition "back-filter"}
-                            {:x 1357, :y 750, :name "book", :transition "book-filter"}
-                            {:x 1057, :y 780, :name "painting-tablet", :transition "painting-tablet-filter"}
-                            {:x 926, :y 460, :name "writing-lesson", :transition "writing-lesson-filter"}
-                            {:x 1714, :y 646, :name "magic-hat", :transition "magic-hat-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Library_Room.jpg"},
-                 :cinema-video
-                 {:name    "Cinema Video",
-                  :outs    [{:x 100, :y 100, :name "map", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
-                 :cycling-letters
-                 {:name    "Cycling",
-                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
-                 :hide-n-seek
-                 {:name    "Hide and Seek",
-                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
-                  :type    "assessment",
-                  :preview "/images/dashboard/scene-preview/Park_Hide-and-seek.jpg"},
-                 :see-saw
-                 {:name    "Sea-saw",
-                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Park_See-Saw.jpg"},
-                 :slide
-                 {:name    "Slide",
-                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Park_Slide.jpg"},
-                 :painting-tablet
-                 {:name    "Painting",
-                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
-                 :pinata
-                 {:name    "Pinata",
-                  :outs    [{:x 100, :y 100, :name "park", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Park_Pinata.jpg"},
-                 :writing-practice
-                 {:name    "Painting",
-                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
-                 :letter-intro
-                 {:name    "Letter Intro",
-                  :outs    [{:x 1457, :y 330, :name "map", :transition "door-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
-                 :park
-                 {:name    "Park",
-                  :outs
-                           [{:x 100, :y 100, :name "map", :transition "back-filter"}
-                            {:x 407, :y 860, :name "see-saw", :transition "see-saw-filter"}
-                            {:x 1637, :y 660, :name "swings", :transition "swings-filter"}
-                            {:x 937, :y 810, :name "sandbox", :transition "sandbox-filter"}
-                            {:x 987, :y 670, :name "hide-n-seek", :transition "hide-n-seek-filter"}
-                            {:x 374, :y 525, :name "slide", :transition "slide-filter"}
-                            {:x 715, :y 250, :name "pinata", :transition "pinata-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Park_Main.jpg"},
-                 :map
-                 {:name    "Map",
-                  :outs
-                           [{:x 1447, :y 860, :name "park", :transition "park-filter"}
-                            {:x 181, :y 419, :name "library", :transition "library-filter"}
-                            {:x 1581, :y 269, :name "stadium", :transition "stadium-filter"}
-                            {:x 881, :y 490, :name "home", :transition "home-filter"}
-                            {:x 881, :y 490, :name "cinema", :transition "cinema-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
-                 :volleyball-letters
-                 {:name    "Volleyball",
-                  :outs    [{:x 100, :y 100, :name "stadium", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
-                 :writing-lesson
-                 {:name    "Writing Lesson",
-                  :outs    [{:x 100, :y 100, :name "library", :transition "back-filter"}],
-                  :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Library_Room.jpg"}},
- :initial-scene "map",
  :default-progress
                 {:next {:level 1, :lesson 1, :activity "home"}, :finished {:1 {:1 []}}, :variables {:last-location "home"}}}

@@ -158,12 +158,12 @@
                                                   :from      ["current-concept" "pair-concept-1" "pair-concept-2"]
                                                   :shuffled  true}
                                                  {:type "parallel"
-                                                  :data [{:type     "set-skin" :target "box1"
-                                                          :from-var [{:var-name "box1" :var-property "skin" :action-property "skin"}]}
-                                                         {:type     "set-skin" :target "box2"
-                                                          :from-var [{:var-name "box2" :var-property "skin" :action-property "skin"}]}
-                                                         {:type     "set-skin" :target "box3"
-                                                          :from-var [{:var-name "box3" :var-property "skin" :action-property "skin"}]}]}
+                                                  :data [{:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "box1" :action-property "image" :var-property "image-src"}]}
+                                                         {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "box2" :action-property "image" :var-property "image-src"}]}
+                                                         {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "box3" :action-property "image" :var-property "image-src"}]}]}
                                                  {:type     "action"
                                                   :from-var [{:var-name     "current-concept"
                                                               :var-property "riddle"}]}

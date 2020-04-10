@@ -130,8 +130,7 @@
                                 :scene-name "box1" :draggable {:var-name "drag-box-1"} :transition "box1"
                                 :states     {:default          {:type "transparent" :x 350 :y 300}
                                              :come             {:type     "animation" :name "boxes" :anim "come" :x 500 :y 550
-                                                                :speed    0.3 :loop false :start true
-                                                                :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                                                                :speed    0.3 :loop false :start true}
                                              :initial-position {:x 600 :y 400}}
                                 :actions    {:drag-end {:type "action" :id "drag-box1" :on "drag-end" :params {:target "box1" :start "box-1-start" :revert "box-1-revert"}}}}
 
@@ -140,7 +139,6 @@
                                 :scene-name "box2" :draggable {:var-name "drag-box-2"} :transition "box2"
                                 :states     {:default          {:type "transparent" :x 850 :y 300}
                                              :come             {:type     "animation" :name "boxes" :anim "come" :x 1000 :y 550
-                                                                :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]
                                                                 :speed    0.3 :loop false :start true}
                                              :initial-position {:x 1000 :y 400}}
                                 :actions    {:drag-end {:type "action" :id "drag-box2" :on "drag-end" :params {:target "box1" :start "box-2-start" :revert "box-2-revert"}}}}
@@ -150,7 +148,6 @@
                                 :scene-name "box3" :draggable {:var-name "drag-box-3"} :transition "box3"
                                 :states     {:default          {:type "transparent" :x 1350 :y 300}
                                              :come             {:type     "animation" :name "boxes" :anim "come" :x 1500 :y 550
-                                                                :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]
                                                                 :speed    0.3 :loop false :start true}
                                              :initial-position {:x 1400 :y 400}}
                                 :actions    {:drag-end {:type "action" :id "drag-box3" :on "drag-end" :params {:target "box1" :start "box-2-start" :revert "box-3-revert"}}}}
@@ -247,12 +244,12 @@
                                                      {:type "state" :target "box3" :id "come"}]}
 
                  :switch-box-animations-idle {:type "parallel"
-                                              :data [{:type     "set-skin" :target "box1"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
-                                                     {:type     "set-skin" :target "box2"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
-                                                     {:type     "set-skin" :target "box3"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                                              :data [{:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
+                                                     {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
+                                                     {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}
                                                      {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}
                                                      {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
@@ -321,8 +318,8 @@
                                               :data [{:type "state" :target "box1" :id "default"}
                                                      {:type "state" :target "box-ph" :id "visible"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box-ph" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
                                                      {:type "copy-variable" :var-name "current-word" :from "item-1"}
                                                      ]}
 
@@ -330,8 +327,8 @@
                                               :data [{:type "state" :target "box-ph" :id "default"}
                                                      {:type "state" :target "box1" :id "come"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box1"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}]}
 
                  :box-2-revert               {:type "transition" :transition-id "box2" :to {:x 1000 :y 550 :duration 2}}
@@ -353,8 +350,8 @@
                                               :data [{:type "state" :target "box2" :id "default"}
                                                      {:type "state" :target "box-ph" :id "visible"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box-ph" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
                                                      {:type "copy-variable" :var-name "current-word" :from "item-2"}
                                                      ]}
 
@@ -362,8 +359,8 @@
                                               :data [{:type "state" :target "box-ph" :id "default"}
                                                      {:type "state" :target "box2" :id "come"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box2"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}]}
 
                  :box-3-revert               {:type "transition" :transition-id "box3" :to {:x 1500 :y 550 :duration 2}}
@@ -383,8 +380,8 @@
                                               :data [{:type "state" :target "box3" :id "default"}
                                                      {:type "state" :target "box-ph" :id "visible"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box-ph" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
                                                      {:type "copy-variable" :var-name "current-word" :from "item-3"}
                                                      ]}
 
@@ -392,8 +389,8 @@
                                               :data [{:type "state" :target "box-ph" :id "default"}
                                                      {:type "state" :target "box3" :id "come"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box3"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 
                  :dialog-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "swings-dialog-action"}]
@@ -474,28 +471,26 @@
                  :finish-activity            {:type "finish-activity" :id "swings"}
                  :stop-activity              {:type "stop-activity" :id "swings"}
 
-                 :mari-finish                {:type                          "sequence-data",
-                                              :data                          [{:type          "transition",
-                                                                               :transition-id "mari",
-                                                                               :to            {:x 244, :y 300, :duration 1.3}}
-                                                                              {:type                   "animation-sequence",
-                                                                               :target                 "mari",
-                                                                               :track                  1,
-                                                                               :offset                 49.103,
-                                                                               :audio                  "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
-                                                                               :data
-                                                                                                       [{:start 49.357, :end 52.717, :duration 3.36, :anim "talk"}
-                                                                                                        {:start 52.983, :end 54.49, :duration 1.507, :anim "talk"}
-                                                                                                        {:start 55.13, :end 57.09, :duration 1.96, :anim "talk"}
-                                                                                                        {:start 57.33, :end 59.036, :duration 1.706, :anim "talk"}
-                                                                                                        {:start 59.676, :end 61.223, :duration 1.547, :anim "talk"}],
-                                                                               :start                  49.103,
-                                                                               :duration               12.36,
-                                                                               :phrase-text            "Parece que cada foto tuvo un turno en el columpio.
-                                                                                                        Buen trabajo pequeno genio!
-                                                                                                        Puedes jugar este juego de nuevo o hacer clic sobre esta flecha para empezar tu proximo juego."}]
-                                              :phrase                        :finish
-                                              :phrase-description            "Juega de nuevo o pasa a la siguiente actividad"}
+                 :mari-finish                {:type               "sequence-data",
+                                              :data
+                                                                  [{:to {:x 244, :y 300, :duration 1.3}, :type "transition", :transition-id "mari"}
+                                                                   {:offset   49.103,
+                                                                    :phrase-text
+                                                                              "Parece que cada foto tuvo un turno en el columpio.\n                                                                                                        Buen trabajo pequeno genio!\n                                                                                                        Puedes jugar este juego de nuevo o hacer clic sobre esta flecha para empezar tu proximo juego.",
+                                                                    :start    65.984,
+                                                                    :type     "animation-sequence",
+                                                                    :duration 13.599,
+                                                                    :audio    "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                                                    :target   "mari",
+                                                                    :track    1,
+                                                                    :data
+                                                                              [{:end 52.717, :anim "talk", :start 49.357, :duration 3.36}
+                                                                               {:end 54.49, :anim "talk", :start 52.983, :duration 1.507}
+                                                                               {:end 57.09, :anim "talk", :start 55.13, :duration 1.96}
+                                                                               {:end 59.036, :anim "talk", :start 57.33, :duration 1.706}
+                                                                               {:end 61.223, :anim "talk", :start 59.676, :duration 1.547}]}],
+                                              :phrase             "finish",
+                                              :phrase-description "Juega de nuevo o pasa a la siguiente actividad"}
 
  }
  :audio

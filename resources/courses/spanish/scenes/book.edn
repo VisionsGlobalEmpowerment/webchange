@@ -1,5 +1,4 @@
-{:audio {:background "/raw/audio/background/POL-daily-special-short.mp3"},
- :assets
+{:assets
  [{:url "/raw/img/library/book/background.jpg", :size 10, :type "image"}
   {:url "/raw/img/library/book/background2.jpg", :size 10, :type "image"}
   {:url "/raw/img/elements/squirrel.png", :size 1, :type "image"}
@@ -133,26 +132,124 @@
   {:url "/raw/audio/l1/a6/lion/Y.mp3", :size 2, :type "audio", :alias "lion -Y"}
   {:url "/raw/audio/l1/a6/lion/Z.mp3", :size 2, :type "audio", :alias "lion -Z"}
   {:url "/raw/audio/l1/a6/lion/Ñ.mp3", :size 2, :type "audio", :alias "lion -Ñ"}],
+ :objects
+ {:background
+  {:type "background",
+   :src "/raw/img/library/book/background2.jpg",
+   :states
+   {:open {:src "/raw/img/library/book/background.jpg"}, :closed {:src "/raw/img/library/book/background2.jpg"}}},
+  :book
+  {:type "animation",
+   :x 928,
+   :y 1048,
+   :width 1439,
+   :height 960,
+   :scene-name "book",
+   :anim "close_idle",
+   :anim-offset {:x 0, :y -480},
+   :name "book",
+   :scale-x 1,
+   :scale-y 1,
+   :speed 0.3,
+   :start false},
+  :content
+  {:type "transparent",
+   :x 209,
+   :y 89,
+   :transition "content",
+   :children ["letter" "image" "image2" "image3"],
+   :states {:hidden {:type "transparent"}, :visible {:type "group", :opacity 0}}},
+  :image
+  {:type "image",
+   :x 220,
+   :y 570,
+   :width 100,
+   :height 100,
+   :transition "image",
+   :scale-x 2,
+   :scale-y 2,
+   :states {:default {}}},
+  :image2
+  {:type "image",
+   :x 980,
+   :y 150,
+   :width 100,
+   :height 100,
+   :transition "image2",
+   :scale-x 2,
+   :scale-y 2,
+   :states {:default {}}},
+  :image3
+  {:type "image",
+   :x 980,
+   :y 570,
+   :width 100,
+   :height 100,
+   :transition "image3",
+   :scale-x 2,
+   :scale-y 2,
+   :states {:default {}}},
+  :letter
+  {:type "text",
+   :x 220,
+   :y 150,
+   :width 200,
+   :height 200,
+   :font-family "Comic Sans MS",
+   :font-size 180,
+   :shadow-blur 5,
+   :shadow-color "#1a1a1a",
+   :shadow-offset {:x 5, :y 5},
+   :shadow-opacity 0.5,
+   :states {:default {}}},
+  :next-page-arrow
+  {:type "image",
+   :x 1640,
+   :y 92,
+   :width 97,
+   :height 99,
+   :actions {:click {:id "next-page", :on "click", :type "action"}},
+   :scale-x -1,
+   :src "/raw/img/ui/back_button_01.png"},
+  :title-text
+  {:type "text",
+   :x 929,
+   :y 164,
+   :width 680,
+   :height 800,
+   :align "center",
+   :chunks
+   [{:end 2, :start 0}
+    {:end 5, :start 3}
+    {:end 8, :start 5}
+    {:end 11, :start 9}
+    {:end 15, :start 12}
+    {:end 19, :start 16}
+    {:end 21, :start 19}
+    {:end 24, :start 21}
+    {:end 27, :start 25}
+    {:end 29, :start 27}
+    {:end 33, :start 29}],
+   :fill "white",
+   :font-family "Liberation Sans",
+   :font-size 90,
+   :shadow-blur 5,
+   :shadow-color "#1a1a1a",
+   :shadow-offset {:x 5, :y 5},
+   :shadow-opacity 0.5,
+   :states {:hidden {:type "transparent"}, :visible {:type "text"}},
+   :text "El libro de mis primeras palabras",
+   :vertical-align "middle"}},
+ :scene-objects [["background"] ["book"] ["title-text" "content" "next-page-arrow"]],
  :actions
- {:start-background-music {:id "background", :loop true, :type "audio"},
-  :open-next-page
-  {:data
-   [{:to {:opacity 0, :duration 0.5}, :type "transition", :transition-id "content"}
-    {:id "hidden", :type "state", :target "content"}
-    {:id "renew-current-concept", :type "action"}
-    {:id "page", :loop false, :type "animation", :target "book"}
-    {:id "visible", :type "state", :target "content"}
-    {:type "empty", :duration 1500}
-    {:to {:opacity 1, :duration 0.5}, :type "transition", :transition-id "content"}
-    {:id "read-page", :type "action"}],
-   :type "sequence-data"},
-  :next-page {:type "action", :from-var [{:var-name "next-page-action", :action-property "id"}]},
-  :stop-activity {:id "book", :type "stop-activity"},
+ {:clear-instruction {:type "remove-flows", :flow-tag "instruction"},
   :finish-activity
-  {:data [{:id "book", :type "finish-activity"} {:type "scene", :scene-id "library"}], :type "sequence-data"},
-  :start {:data ["start-activity" "clear-instruction" "renew-words" "init-next-page" "read-title"], :type "sequence"},
+  {:type "sequence-data", :data [{:id "book", :type "finish-activity"} {:type "scene", :scene-id "library"}]},
+  :init-next-page {:type "set-variable", :var-name "next-page-action", :var-value "open-book"},
+  :next-page {:type "action", :from-var [{:var-name "next-page-action", :action-property "id"}]},
   :open-book
-  {:data
+  {:type "sequence-data",
+   :data
    [{:id "hidden", :type "state", :target "title-text"}
     {:type "start-animation", :target "book"}
     {:id "open_book", :type "animation", :target "book"}
@@ -163,27 +260,21 @@
     {:type "empty", :duration 3000}
     {:to {:opacity 1, :duration 0.5}, :type "transition", :transition-id "content"}
     {:type "set-variable", :var-name "next-page-action", :var-value "open-next-page"}
-    {:id "read-page", :type "action"}],
-   :type "sequence-data"},
-  :init-next-page {:type "set-variable", :var-name "next-page-action", :var-value "open-book"},
-  :renew-words
-  {:from "concepts",
-   :type "lesson-var-provider",
-   :shuffled false,
-   :variables ["item-1" "item-2" "item-3"],
-   :provider-id "words-set"},
-  :renew-current-concept
-  {:data
-   [{:from ["item-1" "item-2" "item-3"],
-     :type "vars-var-provider",
-     :on-end "finish-activity",
-     :shuffled false,
-     :variables ["current-word"],
-     :provider-id "current-word"}
-    {:type "action", :from-var [{:var-name "current-word", :var-property "book-content-action"}]}],
-   :type "sequence-data"},
+    {:id "read-page", :type "action"}]},
+  :open-next-page
+  {:type "sequence-data",
+   :data
+   [{:to {:opacity 0, :duration 0.5}, :type "transition", :transition-id "content"}
+    {:id "hidden", :type "state", :target "content"}
+    {:id "renew-current-concept", :type "action"}
+    {:id "page", :loop false, :type "animation", :target "book"}
+    {:id "visible", :type "state", :target "content"}
+    {:type "empty", :duration 1500}
+    {:to {:opacity 1, :duration 0.5}, :type "transition", :transition-id "content"}
+    {:id "read-page", :type "action"}]},
   :read-page
-  {:data
+  {:type "parallel",
+   :data
    [{:data
      [{:type "empty", :duration 5000}
       {:id "default", :type "state", :params {:filter ""}, :target "image"}
@@ -192,11 +283,10 @@
       {:type "empty", :duration 2000}
       {:id "default", :type "state", :params {:filter ""}, :target "image3"}],
      :type "sequence-data"}
-    {:type "action", :from-var [{:var-name "current-word", :var-property "book-read-action"}]}],
-   :type "parallel"},
-  :start-activity {:id "book", :type "start-activity"},
+    {:type "action", :from-var [{:var-name "current-word", :var-property "book-read-action"}]}]},
   :read-title
-  {:data
+  {:type "sequence-data",
+   :data
    [{:id "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3", :type "audio", :start 0.373, :duration 1.773}
     {:data
      [{:at 2.826, :end 3.052, :chunk 0, :start 2.826, :duration 0.226}
@@ -237,117 +327,27 @@
      :animation "bounce"}
     {:id "/raw/audio/l1/a6/L1_A6_Vera.m4a", :type "audio", :start 5.497, :duration 2.201}
     {:id "/raw/audio/l1/a6/lion/2Vamos a leerlo juntos.mp3", :type "audio", :start 0.348, :duration 2.054}
-    {:id "/raw/audio/l1/a6/lion/2Toca la flecha.mp3", :type "audio", :start 0.52, :duration 4.164}],
-   :type "sequence-data"},
-  :clear-instruction {:type "remove-flows", :flow-tag "instruction"}},
- :objects
- {:letter
-  {:y 150,
-   :shadow-offset {:x 5, :y 5},
-   :shadow-color "#1a1a1a",
-   :shadow-blur 5,
-   :states {:default {}},
-   :font-size 180,
-   :width 200,
-   :type "text",
-   :shadow-opacity 0.5,
-   :x 220,
-   :font-family "Comic Sans MS",
-   :height 200},
-  :content
-  {:x 209,
-   :y 89,
-   :type "transparent",
-   :states {:hidden {:type "transparent"}, :visible {:type "group", :opacity 0}},
-   :children ["letter" "image" "image2" "image3"],
-   :transition "content"},
-  :book
-  {:y 1048,
-   :speed 0.3,
-   :name "book",
-   :width 1439,
-   :start false,
-   :type "animation",
-   :anim "close_idle",
-   :scale-y 1,
-   :anim-offset {:x 0, :y -480},
-   :x 928,
-   :scale-x 1,
-   :scene-name "book",
-   :height 960},
-  :background
-  {:src "/raw/img/library/book/background2.jpg",
-   :type "background",
-   :states
-   {:open {:src "/raw/img/library/book/background.jpg"}, :closed {:src "/raw/img/library/book/background2.jpg"}}},
-  :image3
-  {:y 570,
-   :states {:default {}},
-   :transition "image3",
-   :width 100,
-   :type "image",
-   :scale-y 2,
-   :x 980,
-   :scale-x 2,
-   :height 100},
-  :image2
-  {:y 150,
-   :states {:default {}},
-   :transition "image2",
-   :width 100,
-   :type "image",
-   :scale-y 2,
-   :x 980,
-   :scale-x 2,
-   :height 100},
-  :title-text
-  {:y 164,
-   :shadow-offset {:x 5, :y 5},
-   :align "center",
-   :shadow-color "#1a1a1a",
-   :vertical-align "middle",
-   :shadow-blur 5,
-   :states {:hidden {:type "transparent"}, :visible {:type "text"}},
-   :font-size 90,
-   :fill "white",
-   :width 680,
-   :type "text",
-   :chunks
-   [{:end 2, :start 0}
-    {:end 5, :start 3}
-    {:end 8, :start 5}
-    {:end 11, :start 9}
-    {:end 15, :start 12}
-    {:end 19, :start 16}
-    {:end 21, :start 19}
-    {:end 24, :start 21}
-    {:end 27, :start 25}
-    {:end 29, :start 27}
-    {:end 33, :start 29}],
-   :shadow-opacity 0.5,
-   :x 929,
-   :font-family "Liberation Sans",
-   :height 800,
-   :text "El libro de mis primeras palabras"},
-  :image
-  {:y 570,
-   :states {:default {}},
-   :transition "image",
-   :width 100,
-   :type "image",
-   :scale-y 2,
-   :x 220,
-   :scale-x 2,
-   :height 100},
-  :next-page-arrow
-  {:x 1640,
-   :y 92,
-   :src "/raw/img/ui/back_button_01.png",
-   :type "image",
-   :width 97,
-   :height 99,
-   :actions {:click {:id "next-page", :on "click", :type "action"}},
-   :scale-x -1}},
- :metadata {:prev "map", :autostart true},
+    {:id "/raw/audio/l1/a6/lion/2Toca la flecha.mp3", :type "audio", :start 0.52, :duration 4.164}]},
+  :renew-current-concept
+  {:type "sequence-data",
+   :data
+   [{:from ["item-1" "item-2" "item-3"],
+     :type "vars-var-provider",
+     :on-end "finish-activity",
+     :shuffled false,
+     :variables ["current-word"],
+     :provider-id "current-word"}
+    {:type "action", :from-var [{:var-name "current-word", :var-property "book-content-action"}]}]},
+  :renew-words
+  {:type "lesson-var-provider",
+   :from "concepts",
+   :provider-id "words-set",
+   :shuffled false,
+   :variables ["item-1" "item-2" "item-3"]},
+  :start {:type "sequence", :data ["start-activity" "clear-instruction" "renew-words" "init-next-page" "read-title"]},
+  :start-activity {:type "start-activity", :id "book"},
+  :start-background-music {:type "audio", :id "background", :loop true},
+  :stop-activity {:type "stop-activity", :id "book"}},
  :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
- :scene-objects [["background"] ["book"] ["title-text" "content" "next-page-arrow"]]}
+ :metadata {:prev "map", :autostart true},
+ :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"}}

@@ -314,10 +314,8 @@
                                                                       :action-property "attr-value"}]}
                                                          {:type "state" :target "picture-box" :id "visible"}
                                                          {:type "empty" :duration 500}
-                                                         {:type "set-skin" :target "picture-box"
-                                                          :from-var [{:var-name        "current-concept"
-                                                                      :var-property    "skin"
-                                                                      :action-property "skin"}]}
+                                                         {:type "set-slot" :target "picture-box" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "current-concept" :action-property "image" :var-property "image-src"}]}
                                                          {:type "add-animation" :target "picture-box" :id "idle_fly1" :loop true}]}
 
                  :vaca-letter-pronouncing        {:type "sequence-data"

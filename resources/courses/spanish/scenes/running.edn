@@ -1,48 +1,204 @@
-{:audio {:mari "/raw/audio/l2/a4/L2_A4_Mari.m4a"},
- :assets
+{:assets
  [{:url "/raw/img/stadium/running/bg_01.jpg", :type "image"}
   {:url "/raw/img/stadium/running/bg_02.jpg", :type "image"}
   {:url "/raw/img/stadium/running/bg_03.jpg", :type "image"}
   {:url "/raw/audio/l2/a4/L2_A4_Mari.m4a", :type "audio"}
   {:url "/raw/audio/l2/game-voice.mp3", :type "audio", :alias "game voice"}
   {:url "/raw/audio/l2/game-voice-redo.mp3", :type "audio", :alias "game voice redo"}],
+ :objects
+ {:background
+  {:type "carousel",
+   :x 0,
+   :y 0,
+   :width 1920,
+   :height 1080,
+   :first "/raw/img/stadium/running/bg_01.jpg",
+   :last "/raw/img/stadium/running/bg_03.jpg",
+   :next "/raw/img/stadium/running/bg_02.jpg"},
+  :box1
+  {:type "animation",
+   :x 2000,
+   :y 683,
+   :width 671,
+   :height 633,
+   :scale {:x -0.25, :y 0.25},
+   :scene-name "box1",
+   :transition "box1",
+   :actions {:click {:id "pick-box-1", :on "click", :type "action"}},
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :loop true,
+   :name "boxes",
+   :skin "qwestion",
+   :speed 0.3,
+   :start true,
+   :states {:init {:type "transparent"}, :reset {:x 2000, :type "animation"}}},
+  :box2
+  {:type "animation",
+   :x 2200,
+   :y 789,
+   :width 671,
+   :height 633,
+   :scale {:x -0.25, :y 0.25},
+   :scene-name "box2",
+   :transition "box2",
+   :actions {:click {:id "pick-box-2", :on "click", :type "action"}},
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :loop true,
+   :name "boxes",
+   :skin "qwestion",
+   :speed 0.3,
+   :start true,
+   :states {:init {:type "transparent"}, :reset {:x 2200, :type "animation"}}},
+  :box3
+  {:type "animation",
+   :x 2400,
+   :y 932,
+   :width 671,
+   :height 633,
+   :scale {:x -0.25, :y 0.25},
+   :scene-name "box3",
+   :transition "box3",
+   :actions {:click {:id "pick-box-3", :on "click", :type "action"}},
+   :anim "idle2",
+   :anim-offset {:x 0, :y -300},
+   :loop true,
+   :name "boxes",
+   :skin "qwestion",
+   :speed 0.3,
+   :start true,
+   :states {:init {:type "transparent"}, :reset {:x 2400, :type "animation"}}},
+  :letter1
+  {:type "text",
+   :x 1945,
+   :y 400,
+   :width 150,
+   :height 150,
+   :transition "letter1",
+   :align "center",
+   :fill "white",
+   :font-family "Lexend Deca",
+   :font-size 120,
+   :shadow-blur 5,
+   :shadow-color "#1a1a1a",
+   :shadow-offset {:x 5, :y 5},
+   :shadow-opacity 0.5,
+   :states {:init {:type "transparent"}, :reset {:x 1945, :type "text"}},
+   :text "?",
+   :vertical-align "middle"},
+  :letter2
+  {:type "text",
+   :x 2145,
+   :y 506,
+   :width 150,
+   :height 150,
+   :transition "letter2",
+   :align "center",
+   :fill "white",
+   :font-family "Lexend Deca",
+   :font-size 120,
+   :shadow-blur 5,
+   :shadow-color "#1a1a1a",
+   :shadow-offset {:x 5, :y 5},
+   :shadow-opacity 0.5,
+   :states {:init {:type "transparent"}, :reset {:x 2145, :type "text"}},
+   :text "?",
+   :vertical-align "middle"},
+  :letter3
+  {:type "text",
+   :x 2345,
+   :y 649,
+   :width 150,
+   :height 150,
+   :transition "letter3",
+   :align "center",
+   :fill "white",
+   :font-family "Lexend Deca",
+   :font-size 120,
+   :shadow-blur 5,
+   :shadow-color "#1a1a1a",
+   :shadow-offset {:x 5, :y 5},
+   :shadow-opacity 0.5,
+   :states {:init {:type "transparent"}, :reset {:x 2345, :type "text"}},
+   :text "?",
+   :vertical-align "middle"},
+  :mari
+  {:type "animation",
+   :x 1265,
+   :y 311,
+   :width 473,
+   :height 511,
+   :scene-name "mari",
+   :transition "mari",
+   :anim "idle",
+   :anim-offset {:x 0, :y -150},
+   :name "mari",
+   :scale-x 0.5,
+   :scale-y 0.5,
+   :speed 0.35,
+   :start true},
+  :vera
+  {:type "animation",
+   :x 500,
+   :y 775,
+   :width 727,
+   :height 1091,
+   :scene-name "vera",
+   :transition "vera",
+   :anim "run",
+   :meshes true,
+   :name "vera-90",
+   :scalex 0.4,
+   :scaley 0.4,
+   :skin "default",
+   :speed 1,
+   :start true}},
+ :scene-objects [["background"] ["box1" "letter1" "box2" "letter2" "box3" "letter3"] ["vera" "mari"]],
  :actions
- {:mari-voice-correct
-  {:data
+ {:clear-instruction {:type "remove-flows", :flow-tag "instruction"},
+  :current-concept-chant
+  {:type "action", :from-var [{:var-name "current-concept", :var-property "game-voice-chanting"}]},
+  :go-to-box1-line
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "current-line", :var-value "box1"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}]},
+  :go-to-box2-line-down
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "current-line", :var-value "box2"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}]},
+  :go-to-box2-line-up
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "current-line", :var-value "box2"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}]},
+  :go-to-box3-line
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "current-line", :var-value "box3"}
+    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}]},
+  :init-slots
+  {:type "parallel",
+   :data
+   [{:type "set-variable", :var-name "slot1", :var-value "box1"}
+    {:type "set-variable", :var-name "slot2", :var-value "box2"}
+    {:type "set-variable", :var-name "slot3", :var-value "box3"}]},
+  :init-vera-position {:type "set-variable", :var-name "current-line", :var-value "box2"},
+  :mari-voice-correct
+  {:type "parallel",
+   :data
    [{:id "mari", :type "audio", :start 16.291, :duration 1.661}
     {:data [{:end 17.734, :anim "talk", :start 16.405}],
      :type "animation-sequence",
      :track 1,
      :offset 16.291,
      :target "mari"}],
-   :type "parallel",
    :description "Wiiii"},
-  :go-to-box3-line
-  {:data
-   [{:type "set-variable", :var-name "current-line", :var-value "box3"}
-    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
-   :type "sequence-data"},
-  :pick-wrong
-  {:data [{:id "mari-voice-wrong", :type "action"} {:id "current-concept-chant", :type "action"}],
-   :type "sequence-data"},
-  :init-slots
-  {:data
-   [{:type "set-variable", :var-name "slot1", :var-value "box1"}
-    {:type "set-variable", :var-name "slot2", :var-value "box2"}
-    {:type "set-variable", :var-name "slot3", :var-value "box3"}],
-   :type "parallel"},
-  :go-to-box2-line-down
-  {:data
-   [{:type "set-variable", :var-name "current-line", :var-value "box2"}
-    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
-   :type "sequence-data"},
-  :go-to-box2-line-up
-  {:data
-   [{:type "set-variable", :var-name "current-line", :var-value "box2"}
-    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
-   :type "sequence-data"},
   :mari-voice-welcome
-  {:data
+  {:type "parallel",
+   :data
    [{:id "mari", :type "audio", :start 0.71, :duration 13.816}
     {:data
      [{:end 1.925, :anim "talk", :start 0.905}
@@ -53,24 +209,54 @@
      :track 1,
      :offset 0.71,
      :target "mari"}],
-   :type "parallel",
    :description
    "Hola amigo! Es hora de ponernos activos!\n                                                          Mientras corres alrededor de la pista, escucharas una cancion.\n                                                          Toca la foto que va con la cancion"},
-  :current-concept-chant
-  {:type "action", :from-var [{:var-name "current-concept", :var-property "game-voice-chanting"}]},
-  :stop-activity {:id "running", :type "stop-activity"},
-  :start
-  {:data
-   ["start-activity"
-    "clear-instruction"
-    "mari-voice-welcome"
-    "init-slots"
-    "init-vera-position"
-    "renew-words"
-    "renew-current-concept"],
-   :type "sequence"},
+  :mari-voice-wrong
+  {:type "parallel",
+   :data
+   [{:id "mari", :type "audio", :start 19.704, :duration 4.537}
+    {:data [{:end 24.138, :anim "talk", :start 19.83}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 19.704,
+     :target "mari"}],
+   :description "Ayy intentalo de nuevo, escucha atentamente!"},
+  :pick-box-1
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 675, :duration 0.5}}
+    {:type "set-variable", :var-name "current-line-jump", :var-value {:y 475, :duration 1}}
+    {:type "set-variable", :var-name "jump-wait", :var-value 600}
+    {:fail "go-to-box1-line",
+     :type "test-value",
+     :value1 "box1",
+     :success "stay-on-line",
+     :from-var [{:var-name "current-line", :action-property "value2"}]}
+    {:fail "pick-wrong",
+     :type "test-value",
+     :success "pick-correct",
+     :from-var
+     [{:var-name "box1", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]},
+  :pick-box-2
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 775, :duration 0.5}}
+    {:type "set-variable", :var-name "current-line-jump", :var-value {:y 575, :duration 1}}
+    {:type "set-variable", :var-name "jump-wait", :var-value 900}
+    {:type "case",
+     :options
+     {:box1 {:id "go-to-box2-line-down", :type "action"},
+      :box2 {:id "stay-on-line", :type "action"},
+      :box3 {:id "go-to-box2-line-up", :type "action"}},
+     :from-var [{:var-name "current-line", :action-property "value"}]}
+    {:fail "pick-wrong",
+     :type "test-value",
+     :success "pick-correct",
+     :from-var
+     [{:var-name "box2", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]},
   :pick-box-3
-  {:data
+  {:type "sequence-data",
+   :data
    [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 895, :duration 0.5}}
     {:type "set-variable", :var-name "current-line-jump", :var-value {:y 695, :duration 1}}
     {:type "set-variable", :var-name "jump-wait", :var-value 1400}
@@ -83,23 +269,33 @@
      :type "test-value",
      :success "pick-correct",
      :from-var
-     [{:var-name "box3", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}],
-   :type "sequence-data"},
-  :renew-words
-  {:data
-   [{:from "concepts-group",
-     :type "lesson-var-provider",
-     :limit 3,
-     :repeat 4,
-     :shuffled false,
-     :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"],
-     :provider-id "words-set"}
-    {:from "item-1", :type "copy-variable", :var-name "item-1-1"}
-    {:from "item-1", :type "copy-variable", :var-name "item-1-2"}
-    {:from "item-1", :type "copy-variable", :var-name "item-1-3"}],
-   :type "sequence-data"},
+     [{:var-name "box3", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}]},
+  :pick-correct
+  {:type "sequence-data",
+   :data
+   [{:data
+     [{:id "mari-voice-correct", :type "action"}
+      {:to {:x -700, :duration 4}, :type "transition", :transition-id "box1"}
+      {:to {:x -500, :duration 4}, :type "transition", :transition-id "box2"}
+      {:to {:x -300, :duration 4}, :type "transition", :transition-id "box3"}
+      {:to {:x -755, :duration 4}, :type "transition", :transition-id "letter1"}
+      {:to {:x -555, :duration 4}, :type "transition", :transition-id "letter2"}
+      {:to {:x -355, :duration 4}, :type "transition", :transition-id "letter3"}
+      {:data
+       [{:type "empty", :from-var [{:var-name "jump-wait", :action-property "duration"}]}
+        {:id "run_jump", :type "animation", :target "vera"}
+        {:type "transition", :from-var [{:var-name "current-line-jump", :action-property "to"}], :transition-id "vera"}
+        {:id "run", :loop true, :type "add-animation", :target "vera"}
+        {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
+       :type "sequence-data"}],
+     :type "parallel"}
+    {:id "renew-current-concept", :type "action"}]},
+  :pick-wrong
+  {:type "sequence-data",
+   :data [{:id "mari-voice-wrong", :type "action"} {:id "current-concept-chant", :type "action"}]},
   :renew-current-concept
-  {:data
+  {:type "sequence-data",
+   :data
    [{:data
      [{:id "init", :type "state", :target "box1"}
       {:id "init", :type "state", :target "box2"}
@@ -139,11 +335,21 @@
      :shuffled true,
      :variables ["box1" "box2" "box3"]}
     {:data
-     [{:type "set-skin", :target "box1", :from-var [{:var-name "box1", :var-property "skin", :action-property "skin"}]}
-      {:type "set-skin", :target "box2", :from-var [{:var-name "box2", :var-property "skin", :action-property "skin"}]}
-      {:type "set-skin",
+     [{:type "set-slot",
+       :target "box1",
+       :from-var [{:var-name "box1", :var-property "image-src", :action-property "image"}],
+       :slot-name "box1",
+       :attachment {:x 40, :scale-x 4, :scale-y 4}}
+      {:type "set-slot",
+       :target "box2",
+       :from-var [{:var-name "box2", :var-property "image-src", :action-property "image"}],
+       :slot-name "box1",
+       :attachment {:x 40, :scale-x 4, :scale-y 4}}
+      {:type "set-slot",
        :target "box3",
-       :from-var [{:var-name "box3", :var-property "skin", :action-property "skin"}]}],
+       :from-var [{:var-name "box3", :var-property "image-src", :action-property "image"}],
+       :slot-name "box1",
+       :attachment {:x 40, :scale-x 4, :scale-y 4}}],
      :type "parallel"}
     {:data
      [{:type "set-attribute",
@@ -167,231 +373,35 @@
       {:to {:x 1445, :duration 2}, :type "transition", :transition-id "letter2"}
       {:to {:x 1645, :duration 2}, :type "transition", :transition-id "letter3"}],
      :type "parallel"}
-    {:id "current-concept-chant", :type "action"}],
-   :type "sequence-data"},
-  :go-to-box1-line
-  {:data
-   [{:type "set-variable", :var-name "current-line", :var-value "box1"}
-    {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
-   :type "sequence-data"},
-  :stop {:data ["stop-activity"], :type "sequence"},
-  :wait-for-box-animations {:type "empty", :duration 100},
+    {:id "current-concept-chant", :type "action"}]},
+  :renew-words
+  {:type "sequence-data",
+   :data
+   [{:from "concepts-group",
+     :type "lesson-var-provider",
+     :limit 3,
+     :repeat 4,
+     :shuffled false,
+     :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"],
+     :provider-id "words-set"}
+    {:from "item-1", :type "copy-variable", :var-name "item-1-1"}
+    {:from "item-1", :type "copy-variable", :var-name "item-1-2"}
+    {:from "item-1", :type "copy-variable", :var-name "item-1-3"}]},
+  :start
+  {:type "sequence",
+   :data
+   ["start-activity"
+    "clear-instruction"
+    "mari-voice-welcome"
+    "init-slots"
+    "init-vera-position"
+    "renew-words"
+    "renew-current-concept"]},
+  :start-activity {:type "start-activity", :id "running"},
   :stay-on-line {:type "empty", :duration 100},
-  :pick-box-1
-  {:data
-   [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 675, :duration 0.5}}
-    {:type "set-variable", :var-name "current-line-jump", :var-value {:y 475, :duration 1}}
-    {:type "set-variable", :var-name "jump-wait", :var-value 600}
-    {:fail "go-to-box1-line",
-     :type "test-value",
-     :value1 "box1",
-     :success "stay-on-line",
-     :from-var [{:var-name "current-line", :action-property "value2"}]}
-    {:fail "pick-wrong",
-     :type "test-value",
-     :success "pick-correct",
-     :from-var
-     [{:var-name "box1", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}],
-   :type "sequence-data"},
-  :start-activity {:id "running", :type "start-activity"},
-  :pick-box-2
-  {:data
-   [{:type "set-variable", :var-name "current-line-pos", :var-value {:y 775, :duration 0.5}}
-    {:type "set-variable", :var-name "current-line-jump", :var-value {:y 575, :duration 1}}
-    {:type "set-variable", :var-name "jump-wait", :var-value 900}
-    {:type "case",
-     :options
-     {:box1 {:id "go-to-box2-line-down", :type "action"},
-      :box2 {:id "stay-on-line", :type "action"},
-      :box3 {:id "go-to-box2-line-up", :type "action"}},
-     :from-var [{:var-name "current-line", :action-property "value"}]}
-    {:fail "pick-wrong",
-     :type "test-value",
-     :success "pick-correct",
-     :from-var
-     [{:var-name "box2", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]}],
-   :type "sequence-data"},
-  :init-vera-position {:type "set-variable", :var-name "current-line", :var-value "box2"},
-  :clear-instruction {:type "remove-flows", :flow-tag "instruction"},
-  :pick-correct
-  {:data
-   [{:data
-     [{:id "mari-voice-correct", :type "action"}
-      {:to {:x -700, :duration 4}, :type "transition", :transition-id "box1"}
-      {:to {:x -500, :duration 4}, :type "transition", :transition-id "box2"}
-      {:to {:x -300, :duration 4}, :type "transition", :transition-id "box3"}
-      {:to {:x -755, :duration 4}, :type "transition", :transition-id "letter1"}
-      {:to {:x -555, :duration 4}, :type "transition", :transition-id "letter2"}
-      {:to {:x -355, :duration 4}, :type "transition", :transition-id "letter3"}
-      {:data
-       [{:type "empty", :from-var [{:var-name "jump-wait", :action-property "duration"}]}
-        {:id "run_jump", :type "animation", :target "vera"}
-        {:type "transition", :from-var [{:var-name "current-line-jump", :action-property "to"}], :transition-id "vera"}
-        {:id "run", :loop true, :type "add-animation", :target "vera"}
-        {:type "transition", :from-var [{:var-name "current-line-pos", :action-property "to"}], :transition-id "vera"}],
-       :type "sequence-data"}],
-     :type "parallel"}
-    {:id "renew-current-concept", :type "action"}],
-   :type "sequence-data"},
-  :mari-voice-wrong
-  {:data
-   [{:id "mari", :type "audio", :start 19.704, :duration 4.537}
-    {:data [{:end 24.138, :anim "talk", :start 19.83}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 19.704,
-     :target "mari"}],
-   :type "parallel",
-   :description "Ayy intentalo de nuevo, escucha atentamente!"}},
- :objects
- {:letter2
-  {:y 506,
-   :shadow-offset {:x 5, :y 5},
-   :align "center",
-   :shadow-color "#1a1a1a",
-   :vertical-align "middle",
-   :shadow-blur 5,
-   :states {:init {:type "transparent"}, :reset {:x 2145, :type "text"}},
-   :font-size 120,
-   :transition "letter2",
-   :fill "white",
-   :width 150,
-   :type "text",
-   :shadow-opacity 0.5,
-   :x 2145,
-   :font-family "Lexend Deca",
-   :height 150,
-   :text "?"},
-  :background
-  {:x 0,
-   :y 0,
-   :last "/raw/img/stadium/running/bg_03.jpg",
-   :next "/raw/img/stadium/running/bg_02.jpg",
-   :type "carousel",
-   :first "/raw/img/stadium/running/bg_01.jpg",
-   :width 1920,
-   :height 1080},
-  :box3
-  {:y 932,
-   :states {:init {:type "transparent"}, :reset {:x 2400, :type "animation"}},
-   :transition "box3",
-   :speed 0.3,
-   :scale {:x -0.25, :y 0.25},
-   :name "boxes",
-   :width 671,
-   :start true,
-   :type "animation",
-   :actions {:click {:id "pick-box-3", :on "click", :type "action"}},
-   :loop true,
-   :anim "idle2",
-   :anim-offset {:x 0, :y -300},
-   :x 2400,
-   :scene-name "box3",
-   :skin "qwestion",
-   :height 633},
-  :letter3
-  {:y 649,
-   :shadow-offset {:x 5, :y 5},
-   :align "center",
-   :shadow-color "#1a1a1a",
-   :vertical-align "middle",
-   :shadow-blur 5,
-   :states {:init {:type "transparent"}, :reset {:x 2345, :type "text"}},
-   :font-size 120,
-   :transition "letter3",
-   :fill "white",
-   :width 150,
-   :type "text",
-   :shadow-opacity 0.5,
-   :x 2345,
-   :font-family "Lexend Deca",
-   :height 150,
-   :text "?"},
-  :vera
-  {:y 775,
-   :scaley 0.4,
-   :transition "vera",
-   :speed 1,
-   :name "vera-90",
-   :width 727,
-   :start true,
-   :type "animation",
-   :scalex 0.4,
-   :anim "run",
-   :meshes true,
-   :x 500,
-   :scene-name "vera",
-   :skin "default",
-   :height 1091},
-  :letter1
-  {:y 400,
-   :shadow-offset {:x 5, :y 5},
-   :align "center",
-   :shadow-color "#1a1a1a",
-   :vertical-align "middle",
-   :shadow-blur 5,
-   :states {:init {:type "transparent"}, :reset {:x 1945, :type "text"}},
-   :font-size 120,
-   :transition "letter1",
-   :fill "white",
-   :width 150,
-   :type "text",
-   :shadow-opacity 0.5,
-   :x 1945,
-   :font-family "Lexend Deca",
-   :height 150,
-   :text "?"},
-  :box1
-  {:y 683,
-   :states {:init {:type "transparent"}, :reset {:x 2000, :type "animation"}},
-   :transition "box1",
-   :speed 0.3,
-   :scale {:x -0.25, :y 0.25},
-   :name "boxes",
-   :width 671,
-   :start true,
-   :type "animation",
-   :actions {:click {:id "pick-box-1", :on "click", :type "action"}},
-   :loop true,
-   :anim "idle2",
-   :anim-offset {:x 0, :y -300},
-   :x 2000,
-   :scene-name "box1",
-   :skin "qwestion",
-   :height 633},
-  :box2
-  {:y 789,
-   :states {:init {:type "transparent"}, :reset {:x 2200, :type "animation"}},
-   :transition "box2",
-   :speed 0.3,
-   :scale {:x -0.25, :y 0.25},
-   :name "boxes",
-   :width 671,
-   :start true,
-   :type "animation",
-   :actions {:click {:id "pick-box-2", :on "click", :type "action"}},
-   :loop true,
-   :anim "idle2",
-   :anim-offset {:x 0, :y -300},
-   :x 2200,
-   :scene-name "box2",
-   :skin "qwestion",
-   :height 633},
-  :mari
-  {:y 311,
-   :transition "mari",
-   :speed 0.35,
-   :name "mari",
-   :width 473,
-   :start true,
-   :type "animation",
-   :anim "idle",
-   :scale-y 0.5,
-   :anim-offset {:x 0, :y -150},
-   :x 1265,
-   :scale-x 0.5,
-   :scene-name "mari",
-   :height 511}},
- :metadata {:prev "stadium", :autostart true},
+  :stop {:type "sequence", :data ["stop-activity"]},
+  :stop-activity {:type "stop-activity", :id "running"},
+  :wait-for-box-animations {:type "empty", :duration 100}},
  :triggers {:stop {:on "back", :action "stop"}, :start {:on "start", :action "start"}},
- :scene-objects [["background"] ["box1" "letter1" "box2" "letter2" "box3" "letter3"] ["vera" "mari"]]}
+ :metadata {:prev "stadium", :autostart true},
+ :audio {:mari "/raw/audio/l2/a4/L2_A4_Mari.m4a"}}

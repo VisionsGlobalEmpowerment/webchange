@@ -25,7 +25,7 @@
   {:name "book-read-action",
    :type "action",
    :template {:type "audio", :scene-id "book"}}
-  {:name "chanting-video-src", :type "string"}
+  {:name "chanting-video-src", :type "video", :template nil}
   {:name "concept-name", :type "string"}
   {:name "concept-rest", :type "string"}
   {:name "game-voice-action",
@@ -87,7 +87,7 @@
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
-  {:name "image-src", :type "string"}
+  {:name "image-src", :type "image", :template nil}
   {:name "letter", :type "string"}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",
@@ -145,7 +145,7 @@
     :target "senoravaca",
     :scene-id "letter-intro"}}
   {:name "letter-path", :type "string"}
-  {:name "letter-src", :type "string"}
+  {:name "letter-src", :type "image", :template nil}
   {:name "letter-tutorial-path", :type "string"}
   {:name "mari-chant",
    :type "action",
@@ -187,9 +187,9 @@
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
     :scene-id "magic-hat"}}
-  {:name "poem-image-1", :type "string"}
-  {:name "poem-image-2", :type "string"}
-  {:name "poem-image-3", :type "string"}
+  {:name "poem-image-1", :type "image", :template nil}
+  {:name "poem-image-2", :type "image", :template nil}
+  {:name "poem-image-3", :type "image", :template nil}
   {:name "poem-story",
    :type "action",
    :template
@@ -240,7 +240,6 @@
   {:name "sandbox-state-word-4-action",
    :type "action",
    :template {:type "audio", :scene-id "sandbox"}}
-  {:name "skin", :type "string"}
   {:name "swings-dialog-action",
    :type "action",
    :template
@@ -267,10 +266,22 @@
     :track 1,
     :target "senoravaca",
     :scene-id "cinema"}}
-  {:name "word-1-skin", :type "string"}
-  {:name "word-2-skin", :type "string"}
-  {:name "word-3-skin", :type "string"}
-  {:name "word-4-skin", :type "string"}],
+  {:name "word-image-1",
+   :type "image",
+   :scenes ["sandbox" "cycling"],
+   :template nil}
+  {:name "word-image-2",
+   :type "image",
+   :scenes ["sandbox" "cycling"],
+   :template nil}
+  {:name "word-image-3",
+   :type "image",
+   :scenes ["sandbox" "cycling"],
+   :template nil}
+  {:name "word-image-4",
+   :type "image",
+   :scenes ["sandbox" "cycling"],
+   :template nil}],
  :items
  [{:name "ardilla",
    :data
@@ -930,7 +941,11 @@
     :word-1-skin "bee",
     :word-2-skin "tree",
     :word-3-skin "airplane",
-    :word-4-skin "spider"}}
+    :word-4-skin "spider",
+    :word-image-1 "/raw/img/elements/bee.png",
+    :word-image-2 "/raw/img/elements/tree.png",
+    :word-image-3 "/raw/img/elements/airplane.png",
+    :word-image-4 "/raw/img/elements/spider.png"}}
   {:name "bebe",
    :data
    {:book-content-action
@@ -1495,7 +1510,11 @@
     :word-1-skin "bicycle",
     :word-2-skin "boat",
     :word-3-skin "whale",
-    :word-4-skin "mouth"}}
+    :word-4-skin "mouth",
+    :word-image-1 "/raw/img/elements/bicycle.png",
+    :word-image-2 "/raw/img/elements/boat.png",
+    :word-image-3 "/raw/img/elements/whale.png",
+    :word-image-4 "/raw/img/elements/mouth.png"}}
   {:name "casa",
    :data
    {:book-content-action
@@ -2003,7 +2022,11 @@
     :word-1-skin "bed",
     :word-2-skin "car",
     :word-3-skin "candle",
-    :word-4-skin "crocodile"}}
+    :word-4-skin "crocodile",
+    :word-image-1 "/raw/img/elements/bed.png",
+    :word-image-2 "/raw/img/elements/car.png",
+    :word-image-3 "/raw/img/elements/candle.png",
+    :word-image-4 "/raw/img/elements/crocodile.png"}}
   {:name "cepillo",
    :data
    {:book-content-action
@@ -2484,7 +2507,11 @@
     :word-1-skin "pig",
     :word-2-skin "eyebrow",
     :word-3-skin "onion",
-    :word-4-skin "five"}}
+    :word-4-skin "five",
+    :word-image-1 "/raw/img/elements/pig.png",
+    :word-image-2 "/raw/img/elements/eyebrow.png",
+    :word-image-3 "/raw/img/elements/onion.png",
+    :word-image-4 "/raw/img/elements/five.png"}}
   {:name "chocolate",
    :data
    {:book-content-action
@@ -2973,7 +3000,11 @@
     :word-1-skin "girl",
     :word-2-skin "boy",
     :word-3-skin "sausage",
-    :word-4-skin "jacket"}}
+    :word-4-skin "jacket",
+    :word-image-1 "/raw/img/elements/girl.png",
+    :word-image-2 "/raw/img/elements/boy.png",
+    :word-image-3 "/raw/img/elements/sausage.png",
+    :word-image-4 "/raw/img/elements/jacket.png"}}
   {:name "diamante",
    :data
    {:book-content-action
@@ -3447,7 +3478,11 @@
     :word-1-skin "finger",
     :word-2-skin "dragon",
     :word-3-skin "teeth",
-    :word-4-skin "dino"}}
+    :word-4-skin "dino",
+    :word-image-1 "/raw/img/elements/finger.png",
+    :word-image-2 "/raw/img/elements/dragon.png",
+    :word-image-3 "/raw/img/elements/teeth.png",
+    :word-image-4 "/raw/img/elements/dinosaur.png"}}
   {:name "elefante",
    :data
    {:book-content-action
@@ -3961,7 +3996,11 @@
     :word-1-skin "salad",
     :word-2-skin "building",
     :word-3-skin "star",
-    :word-4-skin "nurse"}}
+    :word-4-skin "nurse",
+    :word-image-1 "/raw/img/elements/salad.png",
+    :word-image-2 "/raw/img/elements/building.png",
+    :word-image-3 "/raw/img/elements/star.png",
+    :word-image-4 "/raw/img/elements/nurse.png"}}
   {:name "flor",
    :data
    {:book-content-action
@@ -4466,7 +4505,11 @@
     :word-1-skin "flute",
     :word-2-skin "strawberry",
     :word-3-skin "fruits",
-    :word-4-skin "arrow"}}
+    :word-4-skin "arrow",
+    :word-image-1 "/raw/img/elements/flower.png",
+    :word-image-2 "/raw/img/elements/strawberry.png",
+    :word-image-3 "/raw/img/elements/fruits.png",
+    :word-image-4 "/raw/img/elements/arrow.png"}}
   {:name "gato",
    :data
    {:book-content-action
@@ -5000,7 +5043,11 @@
     :word-1-skin "guitar",
     :word-2-skin "earth",
     :word-3-skin "chicken",
-    :word-4-skin "glove"}}
+    :word-4-skin "glove",
+    :word-image-1 "/raw/img/elements/guitar.png",
+    :word-image-2 "/raw/img/elements/earth.png",
+    :word-image-3 "/raw/img/elements/chicken.png",
+    :word-image-4 "/raw/img/elements/glove.png"}}
   {:name "gemelo",
    :data
    {:book-content-action
@@ -5516,7 +5563,11 @@
     :word-1-skin "giant",
     :word-2-skin "sunflower",
     :word-3-skin "gemstone",
-    :word-4-skin "chalk"}}
+    :word-4-skin "chalk",
+    :word-image-1 "/raw/img/elements/giant.png",
+    :word-image-2 "/raw/img/elements/sunflower.png",
+    :word-image-3 "/raw/img/elements/gemstone.png",
+    :word-image-4 "/raw/img/elements/chalk.png"}}
   {:name "hoja",
    :data
    {:book-content-action
@@ -6034,7 +6085,11 @@
     :word-1-skin "grass",
     :word-2-skin "ice cream",
     :word-3-skin "ant",
-    :word-4-skin "egg"}}
+    :word-4-skin "egg",
+    :word-image-1 "/raw/img/elements/grass.png",
+    :word-image-2 "/raw/img/elements/ice cream.png",
+    :word-image-3 "/raw/img/elements/ant.png",
+    :word-image-4 "/raw/img/elements/egg.png"}}
   {:name "iman",
    :data
    {:book-content-action
@@ -6617,7 +6672,11 @@
     :word-1-skin "iguana",
     :word-2-skin "fire",
     :word-3-skin "insect",
-    :word-4-skin "island"}}
+    :word-4-skin "island",
+    :word-image-1 "/raw/img/elements/iguana.png",
+    :word-image-2 "/raw/img/elements/fire.png",
+    :word-image-3 "/raw/img/elements/insect.png",
+    :word-image-4 "/raw/img/elements/island.png"}}
   {:name "incendio",
    :data
    {:chanting-video-src "/raw/video/l2a1/letter-i.mp4",
@@ -7273,7 +7332,11 @@
     :word-1-skin "juice",
     :word-2-skin "toys",
     :word-3-skin "jamon",
-    :word-4-skin "giraffe"}}
+    :word-4-skin "giraffe",
+    :word-image-1 "/raw/img/elements/juice.png",
+    :word-image-2 "/raw/img/elements/toys.png",
+    :word-image-3 "/raw/img/elements/jamon.png",
+    :word-image-4 "/raw/img/elements/giraffe.png"}}
   {:name "kimono",
    :data
    {:book-content-action
@@ -7761,7 +7824,11 @@
     :word-1-skin "kayak",
     :word-2-skin "kiwi",
     :word-3-skin "ketchup",
-    :word-4-skin "koala"}}
+    :word-4-skin "koala",
+    :word-image-1 "/raw/img/elements/kayak.png",
+    :word-image-2 "/raw/img/elements/kiwi.png",
+    :word-image-3 "/raw/img/elements/ketchup.png",
+    :word-image-4 "/raw/img/elements/koala.png"}}
   {:name "leon",
    :data
    {:book-content-action
@@ -8257,7 +8324,11 @@
     :word-1-skin "lemon",
     :word-2-skin "moon",
     :word-3-skin "pencil",
-    :word-4-skin "milk"}}
+    :word-4-skin "milk",
+    :word-image-1 "/raw/img/elements/lemon.png",
+    :word-image-2 "/raw/img/elements/moon.png",
+    :word-image-3 "/raw/img/elements/pencil.png",
+    :word-image-4 "/raw/img/elements/milk.png"}}
   {:name "llave",
    :data
    {:book-content-action
@@ -8738,7 +8809,11 @@
     :word-1-skin "call",
     :word-2-skin "rain",
     :word-3-skin "lama",
-    :word-4-skin "cry"}}
+    :word-4-skin "cry",
+    :word-image-1 "/raw/img/elements/call.png",
+    :word-image-2 "/raw/img/elements/rain.png",
+    :word-image-3 "/raw/img/elements/lama.png",
+    :word-image-4 "/raw/img/elements/cry.png"}}
   {:name "mano",
    :data
    {:book-content-action
@@ -9246,7 +9321,11 @@
     :word-1-skin "mama",
     :word-2-skin "monkey",
     :word-3-skin "apple",
-    :word-4-skin "mountain"}}
+    :word-4-skin "mountain",
+    :word-image-1 "/raw/img/elements/mama.png",
+    :word-image-2 "/raw/img/elements/monkey.png",
+    :word-image-3 "/raw/img/elements/apple.png",
+    :word-image-4 "/raw/img/elements/mountain.png"}}
   {:name "niño",
    :data
    {:book-content-action
@@ -9743,7 +9822,11 @@
     :word-1-skin "cloud",
     :word-2-skin "nest",
     :word-3-skin "black",
-    :word-4-skin "orange"}}
+    :word-4-skin "orange",
+    :word-image-1 "/raw/img/elements/cloud.png",
+    :word-image-2 "/raw/img/elements/nest.png",
+    :word-image-3 "/raw/img/elements/black.png",
+    :word-image-4 "/raw/img/elements/orange.png"}}
   {:name "oso",
    :data
    {:book-content-action
@@ -10330,7 +10413,11 @@
     :word-1-skin "8",
     :word-2-skin "ear",
     :word-3-skin "sheep",
-    :word-4-skin "eyes"}}
+    :word-4-skin "eyes",
+    :word-image-1 "/raw/img/elements/8.png",
+    :word-image-2 "/raw/img/elements/ear.png",
+    :word-image-3 "/raw/img/elements/sheep.png",
+    :word-image-4 "/raw/img/elements/eyes.png"}}
   {:name "pelota",
    :data
    {:book-content-action
@@ -10847,7 +10934,11 @@
     :word-1-skin "factory",
     :word-2-skin "duck",
     :word-3-skin "potatoes",
-    :word-4-skin "fish"}}
+    :word-4-skin "fish",
+    :word-image-1 "/raw/img/elements/factory.png",
+    :word-image-2 "/raw/img/elements/duck.png",
+    :word-image-3 "/raw/img/elements/potatoes.png",
+    :word-image-4 "/raw/img/elements/fish.png"}}
   {:name "queso",
    :data
    {:book-content-action
@@ -11331,7 +11422,11 @@
     :word-1-skin "quesadilla",
     :word-2-skin "five",
     :word-3-skin "fifteen",
-    :word-4-skin "jaw"}}
+    :word-4-skin "jaw",
+    :word-image-1 "/raw/img/elements/quesadilla.png",
+    :word-image-2 "/raw/img/elements/five.png",
+    :word-image-3 "/raw/img/elements/fifteen.png",
+    :word-image-4 "/raw/img/elements/jaw.png"}}
   {:name "rana",
    :data
    {:book-content-action
@@ -11837,7 +11932,11 @@
     :word-1-skin "rock",
     :word-2-skin "rose",
     :word-3-skin "mouse",
-    :word-4-skin "queen"}}
+    :word-4-skin "queen",
+    :word-image-1 "/raw/img/elements/rock.png",
+    :word-image-2 "/raw/img/elements/rose.png",
+    :word-image-3 "/raw/img/elements/mouse.png",
+    :word-image-4 "/raw/img/elements/queen.png"}}
   {:name "serpiente",
    :data
    {:book-content-action
@@ -12321,7 +12420,11 @@
     :word-1-skin "chair",
     :word-2-skin "sun",
     :word-3-skin "watermelon",
-    :word-4-skin "soup"}}
+    :word-4-skin "soup",
+    :word-image-1 "/raw/img/elements/chair.png",
+    :word-image-2 "/raw/img/elements/sun.png",
+    :word-image-3 "/raw/img/elements/watermelon.png",
+    :word-image-4 "/raw/img/elements/soup.png"}}
   {:name "tomate",
    :data
    {:book-content-action
@@ -12837,7 +12940,11 @@
     :word-1-skin "phone",
     :word-2-skin "turtle",
     :word-3-skin "train",
-    :word-4-skin "shark"}}
+    :word-4-skin "shark",
+    :word-image-1 "/raw/img/elements/phone.png",
+    :word-image-2 "/raw/img/elements/turtle.png",
+    :word-image-3 "/raw/img/elements/train.png",
+    :word-image-4 "/raw/img/elements/shark.png"}}
   {:name "uvas",
    :data
    {:book-content-action
@@ -13346,7 +13453,11 @@
     :word-1-skin "one",
     :word-2-skin "nail",
     :word-3-skin "unicorn",
-    :word-4-skin "uniform"}}
+    :word-4-skin "uniform",
+    :word-image-1 "/raw/img/elements/one.png",
+    :word-image-2 "/raw/img/elements/nail.png",
+    :word-image-3 "/raw/img/elements/unicorn.png",
+    :word-image-4 "/raw/img/elements/uniform.png"}}
   {:name "violin",
    :data
    {:book-content-action
@@ -13830,7 +13941,11 @@
     :word-1-skin "cow",
     :word-2-skin "baby_cow",
     :word-3-skin "window",
-    :word-4-skin "green"}}
+    :word-4-skin "green",
+    :word-image-1 "/raw/img/elements/cow.png",
+    :word-image-2 "/raw/img/elements/baby_cow.png",
+    :word-image-3 "/raw/img/elements/window.png",
+    :word-image-4 "/raw/img/elements/green.png"}}
   {:name "web",
    :data
    {:book-content-action
@@ -14359,7 +14474,11 @@
     :word-1-skin "deer",
     :word-2-skin "boy",
     :word-3-skin "girl",
-    :word-4-skin "waffles"}}
+    :word-4-skin "waffles",
+    :word-image-1 "/raw/img/elements/deer.png",
+    :word-image-2 "/raw/img/elements/boy.png",
+    :word-image-3 "/raw/img/elements/girl.png",
+    :word-image-4 "/raw/img/elements/waffles.png"}}
   {:name "xilofono",
    :data
    {:book-content-action
@@ -14852,7 +14971,11 @@
     :word-1-skin "saxophone",
     :word-2-skin "mexico",
     :word-3-skin "taxi",
-    :word-4-skin "texto"}}
+    :word-4-skin "texto",
+    :word-image-1 "/raw/img/elements/saxophone.png",
+    :word-image-2 "/raw/img/elements/mexico.png",
+    :word-image-3 "/raw/img/elements/taxi.png",
+    :word-image-4 "/raw/img/elements/text.png"}}
   {:name "yoyo",
    :data
    {:book-content-action
@@ -15350,7 +15473,11 @@
     :word-1-skin "yogurt",
     :word-2-skin "yak",
     :word-3-skin "yacht",
-    :word-4-skin "egg_yolk"}}
+    :word-4-skin "egg_yolk",
+    :word-image-1 "/raw/img/elements/yogurt.png",
+    :word-image-2 "/raw/img/elements/yak.png",
+    :word-image-3 "/raw/img/elements/yacht.png",
+    :word-image-4 "/raw/img/elements/egg_yolk.png"}}
   {:name "zapato",
    :data
    {:book-content-action
@@ -15870,7 +15997,11 @@
     :word-1-skin "zebra",
     :word-2-skin "fox",
     :word-3-skin "carrot",
-    :word-4-skin "skunk"}}
+    :word-4-skin "skunk",
+    :word-image-1 "/raw/img/elements/zebra.png",
+    :word-image-2 "/raw/img/elements/fox.png",
+    :word-image-3 "/raw/img/elements/carrot.png",
+    :word-image-4 "/raw/img/elements/skunk.png"}}
   {:name "ñandu",
    :data
    {:book-content-action
@@ -16384,7 +16515,11 @@
     :word-1-skin "yam",
     :word-2-skin "knot",
     :word-3-skin "gnochi",
-    :word-4-skin "pepper"}}],
+    :word-4-skin "pepper",
+    :word-image-1 "/raw/img/elements/yam.png",
+    :word-image-2 "/raw/img/elements/knot.png",
+    :word-image-3 "/raw/img/elements/gnocchi.png",
+    :word-image-4 "/raw/img/elements/nora.png"}}],
  :lessons
  [{:name "assessment1",
    :data
