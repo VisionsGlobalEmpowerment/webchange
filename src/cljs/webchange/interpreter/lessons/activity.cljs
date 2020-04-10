@@ -54,16 +54,20 @@
       (not-last? lessons lesson-index) (activity-by-index levels level-index (inc lesson-index) 0)
       (not-last? levels level-index) (activity-by-index levels (inc level-index) 0 0))))
 
+(defn- num->keyword
+  [n]
+  (-> n str keyword))
+
 (defn finished?
   [db {:keys [level lesson activity]}]
-  (let [activities (get-in db [:progress-data :finished level lesson])]
-    (contains? activities activity)))
+  (let [activities (get-in db [:progress-data :finished (num->keyword level) (num->keyword lesson)])]
+    (some #(= activity %) activities)))
 
 (defn finish
   [db {:keys [level lesson activity] :as finished}]
   (let [next (next-for db finished)]
     (-> db
-        (update-in [:progress-data :finished level lesson] #(-> % set (conj activity)))
+        (update-in [:progress-data :finished (num->keyword level) (num->keyword lesson)] #(-> % set (conj activity)))
         (assoc-in [:progress-data :next] next))))
 
 (defn activity-progress

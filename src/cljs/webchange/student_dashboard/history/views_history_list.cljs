@@ -1,5 +1,7 @@
 (ns webchange.student-dashboard.history.views-history-list
   (:require
+    [re-frame.core :as re-frame]
+    [webchange.student-dashboard.events :as sde]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.student-dashboard.history.views-history-list-item :refer [history-list-item]]
     [webchange.ui.theme :refer [get-in-theme]]))
@@ -37,11 +39,17 @@
                        data)]
     (if (< 0 (count history-list))
       [ui/list {:style (:list styles)}
-       (for [{:keys [level lesson activity] :as item} history-list]
+       (for [{:keys [level lesson activity] :as item} (reverse history-list)]
          (let [style (when-not (last? item data)
                        (:list-item styles))]
            ^{:key (str level "-" lesson "-" activity)}
            [history-list-item (merge (prepare-data item)
                                      {:on-click on-click
-                                      :style    style})]))]
+                                      :style    style})]))
+       [ui/list-item {:button   true
+                      :on-click #(re-frame/dispatch [::sde/show-more])
+                      :style    (:block styles)}
+        [ui/button {:color    "primary"
+                    :on-click #(re-frame/dispatch [::sde/show-more])}
+         "Show More"]]]
       [empty-list-placeholder])))
