@@ -81,6 +81,5 @@
         (if loading?
           [loading-bar]
           [history {:data      finished-activities
-                    :max-count 3
                     :on-click  handle-activity-click
                     :style     (:main-content styles)}])]])))
