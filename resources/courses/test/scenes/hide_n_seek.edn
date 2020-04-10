@@ -459,20 +459,21 @@
                                                   :shuffled  true}
                                                  {:type "action" :id "show-targets"}
                                                  {:type "parallel"
-                                                  :data [{:type     "set-skin"
-                                                          :from-var [{:var-name "current-concept" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "current-target" :action-property "target"}]}
-                                                         {:type     "set-skin"
-                                                          :from-var [{:var-name "pair-concept-1" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "pair-target-1" :action-property "target"}]}
-                                                         {:type     "set-skin"
-                                                          :from-var [{:var-name "pair-concept-2" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "pair-target-2" :action-property "target"}]}
-                                                         {:type     "set-skin"
-                                                          :from-var [{:var-name "pair-concept-3" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "pair-target-3" :action-property "target"}]}]}
+                                                  :data [{:type "set-slot" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "current-target" :action-property "target"}
+                                                                     {:var-name "current-concept" :action-property "image" :var-property "image-src"}]}
+                                                         {:type "set-slot" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "pair-target-1" :action-property "target"}
+                                                                     {:var-name "pair-concept-1" :action-property "image" :var-property "image-src"}]}
+                                                         {:type "set-slot" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "pair-target-2" :action-property "target"}
+                                                                     {:var-name "pair-concept-2" :action-property "image" :var-property "image-src"}]}
+                                                         {:type "set-slot" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                          :from-var [{:var-name "pair-target-3" :action-property "target"}
+                                                                     {:var-name "pair-concept-3" :action-property "image" :var-property "image-src"}]}
+                                                         ]}
                                                  {:type     "set-current-concept"
-                                                  :from-var [{:var-name "current-concept" :action-property "value" :var-property "skin"}]}
+                                                  :from-var [{:var-name "current-concept" :action-property "value" :var-property "concept-name"}]}
                                                  {:type "action" :from-var [{:var-name "current-concept" :var-property "hide-n-seek-current-concept-audio"}]}]}
 
                  :show-targets           {:type "sequence-data"

@@ -316,30 +316,31 @@
                         :data [{:type "action" :id "stop-activity"}
                                {:type "scene" :scene-id "map"}]}
 
-                 :mari-finish                        {:type "sequence-data",
+                 :mari-finish                        {:type               "sequence-data",
                                                       :data
-                                                            [{:type "transition",
-                                                              :transition-id "mari",
-                                                              :to {:x 1403, :y 657, :duration 1.3}}
-                                                             {:type "animation-sequence",
-                                                              :target "mari",
-                                                              :track 1,
-                                                              :offset 0.745,
-                                                              :audio "/raw/audio/l1/a1/mari.mp4",
-                                                              :data
-                                                              [{:start 0.85, :end 3.11, :anim "talk"}
-                                                               {:start 3.6, :end 6.59, :anim "talk"}
-                                                               {:start 7.51, :end 10.22, :anim "talk"}
-                                                               {:start 10.7, :end 16.01, :anim "talk"}
-                                                               {:start 16.19, :end 16.51, :anim "talk"}
-                                                               {:start 17.23, :end 18.61, :anim "talk"}
-                                                               {:start 19.04, :end 22.56, :anim "talk"}],
-                                                              :start 0.745,
-                                                              :duration 22.05
-                                                              :phrase-text        "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad."}
-                                                             {:type "set-variable", :var-name "restart", :var-value true}],
-                                                      :phrase             :finish-activity
-                                                      :phrase-description "Repeat or go to the next activity"}
+                                                                          [{:to {:x 1403, :y 657, :duration 1.3}, :type "transition", :transition-id "mari"}
+                                                                           {:offset   0.745,
+                                                                            :phrase-text
+                                                                                      "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad.",
+                                                                            :start    0.745,
+                                                                            :type     "animation-sequence",
+                                                                            :duration 22.05,
+                                                                            :audio    "/raw/audio/l1/a1/mari.mp4",
+                                                                            :target   "mari",
+                                                                            :phrase-text-translated
+                                                                                      "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad.",
+                                                                            :track    1,
+                                                                            :data
+                                                                                      [{:end 3.11, :anim "talk", :start 0.85}
+                                                                                       {:end 6.59, :anim "talk", :start 3.6}
+                                                                                       {:end 10.22, :anim "talk", :start 7.51}
+                                                                                       {:end 16.01, :anim "talk", :start 10.7}
+                                                                                       {:end 16.51, :anim "talk", :start 16.19}
+                                                                                       {:end 18.61, :anim "talk", :start 17.23}
+                                                                                       {:end 22.56, :anim "talk", :start 19.04}]}
+                                                                           {:type "set-variable", :var-name "restart", :var-value true}],
+                                                      :phrase             "finish-activity",
+                                                      :phrase-description "Repeat or go to the next activity"},
 
                  :restart                          {:type     "test-value"
                                                     :value1   true

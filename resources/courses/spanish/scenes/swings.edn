@@ -113,16 +113,7 @@
                               :anim-offset {:x 0, :y -300},
                               :draggable   {:var-name "drag-box-1"},
                               :states
-                                           {:come
-                                                              {:y        550,
-                                                               :speed    0.3,
-                                                               :name     "boxes",
-                                                               :start    true,
-                                                               :type     "animation",
-                                                               :loop     false,
-                                                               :anim     "come",
-                                                               :from-var [{:var-name "item-1", :var-property "skin", :action-property "skin"}],
-                                                               :x        500},
+                                           {:come             {:x 500, :y 550, :anim "come", :loop false, :name "boxes", :type "animation", :speed 0.3, :start true},
                                             :default          {:x 350, :y 300, :type "transparent"},
                                             :initial-position {:x 600, :y 400}}},
                  :box2
@@ -144,16 +135,7 @@
                               :anim-offset {:x 0, :y -300},
                               :draggable   {:var-name "drag-box-2"},
                               :states
-                                           {:come
-                                                              {:y        550,
-                                                               :speed    0.3,
-                                                               :name     "boxes",
-                                                               :start    true,
-                                                               :type     "animation",
-                                                               :loop     false,
-                                                               :anim     "come",
-                                                               :from-var [{:var-name "item-2", :var-property "skin", :action-property "skin"}],
-                                                               :x        1000},
+                                           {:come             {:x 1000, :y 550, :anim "come", :loop false, :name "boxes", :type "animation", :speed 0.3, :start true},
                                             :default          {:x 850, :y 300, :type "transparent"},
                                             :initial-position {:x 1000, :y 400}}},
                  :box3
@@ -175,16 +157,7 @@
                               :anim-offset {:x 0, :y -300},
                               :draggable   {:var-name "drag-box-3"},
                               :states
-                                           {:come
-                                                              {:y        550,
-                                                               :speed    0.3,
-                                                               :name     "boxes",
-                                                               :start    true,
-                                                               :type     "animation",
-                                                               :loop     false,
-                                                               :anim     "come",
-                                                               :from-var [{:var-name "item-3", :var-property "skin", :action-property "skin"}],
-                                                               :x        1500},
+                                           {:come             {:x 1500, :y 550, :anim "come", :loop false, :name "boxes", :type "animation", :speed 0.3, :start true},
                                             :default          {:x 1350, :y 300, :type "transparent"},
                                             :initial-position {:x 1400, :y 400}}},
                  :mari
@@ -322,7 +295,11 @@
                                                  [{:id "default", :type "state", :target "box-ph"}
                                                   {:id "come", :type "state", :target "box1"}
                                                   {:type "empty", :duration 500}
-                                                  {:type "set-skin", :target "box1", :from-var [{:var-name "item-1", :var-property "skin", :action-property "skin"}]}
+                                                  {:type       "set-slot",
+                                                   :target     "box1",
+                                                   :from-var   [{:var-name "item-1", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:id "idle_fly1", :loop true, :type "add-animation", :target "box1"}]},
                  :hide-box-2-ph
                                           {:type "sequence-data",
@@ -330,7 +307,11 @@
                                                  [{:id "default", :type "state", :target "box-ph"}
                                                   {:id "come", :type "state", :target "box2"}
                                                   {:type "empty", :duration 500}
-                                                  {:type "set-skin", :target "box2", :from-var [{:var-name "item-2", :var-property "skin", :action-property "skin"}]}
+                                                  {:type       "set-slot",
+                                                   :target     "box2",
+                                                   :from-var   [{:var-name "item-2", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:id "idle_fly2", :loop true, :type "add-animation", :target "box2"}]},
                  :hide-box-3-ph
                                           {:type "sequence-data",
@@ -338,7 +319,11 @@
                                                  [{:id "default", :type "state", :target "box-ph"}
                                                   {:id "come", :type "state", :target "box3"}
                                                   {:type "empty", :duration 500}
-                                                  {:type "set-skin", :target "box3", :from-var [{:var-name "item-3", :var-property "skin", :action-property "skin"}]}
+                                                  {:type       "set-slot",
+                                                   :target     "box3",
+                                                   :from-var   [{:var-name "item-3", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
                  :mari-box-1              {:type "transition", :to {:x 671, :y 350, :loop false, :duration 2}, :transition-id "mari"},
                  :mari-box-2              {:type "transition", :to {:x 1181, :y 350, :loop false, :duration 2}, :transition-id "mari"},
@@ -430,9 +415,11 @@
                                                  [{:id "default", :type "state", :target "box1"}
                                                   {:id "visible", :type "state", :target "box-ph"}
                                                   {:type "empty", :duration 500}
-                                                  {:type     "set-skin",
-                                                   :target   "box-ph",
-                                                   :from-var [{:var-name "item-1", :var-property "skin", :action-property "skin"}]}
+                                                  {:type       "set-slot",
+                                                   :target     "box-ph",
+                                                   :from-var   [{:var-name "item-1", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:from "item-1", :type "copy-variable", :var-name "current-word"}]},
                  :show-box-2-ph
                                           {:type "sequence-data",
@@ -440,9 +427,11 @@
                                                  [{:id "default", :type "state", :target "box2"}
                                                   {:id "visible", :type "state", :target "box-ph"}
                                                   {:type "empty", :duration 500}
-                                                  {:type     "set-skin",
-                                                   :target   "box-ph",
-                                                   :from-var [{:var-name "item-2", :var-property "skin", :action-property "skin"}]}
+                                                  {:type       "set-slot",
+                                                   :target     "box-ph",
+                                                   :from-var   [{:var-name "item-2", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:from "item-2", :type "copy-variable", :var-name "current-word"}]},
                  :show-box-3-ph
                                           {:type "sequence-data",
@@ -450,9 +439,11 @@
                                                  [{:id "default", :type "state", :target "box3"}
                                                   {:id "visible", :type "state", :target "box-ph"}
                                                   {:type "empty", :duration 500}
-                                                  {:type     "set-skin",
-                                                   :target   "box-ph",
-                                                   :from-var [{:var-name "item-3", :var-property "skin", :action-property "skin"}]}
+                                                  {:type       "set-slot",
+                                                   :target     "box-ph",
+                                                   :from-var   [{:var-name "item-3", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:from "item-3", :type "copy-variable", :var-name "current-word"}]},
                  :show-boxes
                                           {:type "parallel",
@@ -486,9 +477,21 @@
                  :switch-box-animations-idle
                                           {:type "parallel",
                                            :data
-                                                 [{:type "set-skin", :target "box1", :from-var [{:var-name "item-1", :var-property "skin", :action-property "skin"}]}
-                                                  {:type "set-skin", :target "box2", :from-var [{:var-name "item-2", :var-property "skin", :action-property "skin"}]}
-                                                  {:type "set-skin", :target "box3", :from-var [{:var-name "item-3", :var-property "skin", :action-property "skin"}]}
+                                                 [{:type       "set-slot",
+                                                   :target     "box1",
+                                                   :from-var   [{:var-name "item-1", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:type       "set-slot",
+                                                   :target     "box2",
+                                                   :from-var   [{:var-name "item-2", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:type       "set-slot",
+                                                   :target     "box3",
+                                                   :from-var   [{:var-name "item-3", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:id "idle_fly1", :loop true, :type "add-animation", :target "box1"}
                                                   {:id "idle_fly2", :loop true, :type "add-animation", :target "box2"}
                                                   {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},

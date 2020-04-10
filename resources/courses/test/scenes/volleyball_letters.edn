@@ -209,11 +209,10 @@
                                                            :unique    true
                                                            :from-var  [{:var-name "current-target" :action-property "exclude-values" :to-vector true}]}
                                                           {:type     "set-current-concept"
-                                                           :from-var [{:var-name "current-concept" :action-property "value" :var-property "skin"}]}]}
+                                                           :from-var [{:var-name "current-concept" :action-property "value" :var-property "concept-name"}]}]}
                                                   {:type "sequence-data"
-                                                   :data [{:type     "set-skin" :target "display"
-                                                           :from-var [{:var-name        "current-concept" :var-property "skin"
-                                                                       :action-property "skin"}]}
+                                                   :data [{:type "set-slot" :target "display" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                           :from-var [{:var-name "current-concept" :action-property "image" :var-property "image-src"}]}
 
                                                           {:type     "map-value" :var-name "target-letter"
                                                            :from     ["player1" "player2" "player3" "player4"]

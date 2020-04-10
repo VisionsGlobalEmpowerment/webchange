@@ -106,13 +106,13 @@
                                                   {:type "sequence-data"
                                                    :data [{:type "parallel"
                                                            :data [{:type     "set-variable" :var-name "player1"
-                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-1-skin"}]}
+                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-image-1"}]}
                                                                   {:type     "set-variable" :var-name "player2"
-                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-2-skin"}]}
+                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-image-2"}]}
                                                                   {:type     "set-variable" :var-name "player3"
-                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-3-skin"}]}
+                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-image-3"}]}
                                                                   {:type     "set-variable" :var-name "player4"
-                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-4-skin"}]}]}
+                                                                   :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "word-image-4"}]}]}
                                                           {:type      "vars-var-provider"
                                                            :variables ["player1" "player2" "player3" "player4"]
                                                            :from      ["player1" "player2" "player3" "player4"]
@@ -125,19 +125,20 @@
                                                            :shuffled  true
                                                            :from-var  [{:var-name "current-player" :action-property "exclude-values" :to-vector true}]}
                                                           {:type     "set-variable"
-                                                           :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "skin"}
+                                                           :from-var [{:var-name "current-concept" :action-property "var-value" :var-property "image-src"}
                                                                       {:var-name "current-target" :action-property "var-name"}]}
                                                           {:type     "set-current-concept"
-                                                           :from-var [{:var-name "current-concept" :action-property "value" :var-property "skin"}]}]}
+                                                           :from-var [{:var-name "current-concept" :action-property "value" :var-property "concept-name"}]}]}
                                                   {:type "parallel"
-                                                   :data [{:type     "set-skin" :target "box1"
-                                                           :from-var [{:var-name "player1" :action-property "skin"}]}
-                                                          {:type     "set-skin" :target "box2"
-                                                           :from-var [{:var-name "player2" :action-property "skin"}]}
-                                                          {:type     "set-skin" :target "box3"
-                                                           :from-var [{:var-name "player3" :action-property "skin"}]}
-                                                          {:type     "set-skin" :target "box4"
-                                                           :from-var [{:var-name "player4" :action-property "skin"}]}]}
+                                                   :data [{:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                           :from-var [{:var-name "player" :action-property "image"}]}
+                                                          {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                           :from-var [{:var-name "player2" :action-property "image"}]}
+                                                          {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                           :from-var [{:var-name "player3" :action-property "image"}]}
+                                                          {:type "set-slot" :target "box4" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                           :from-var [{:var-name "player4" :action-property "image"}]}
+                                                          ]}
                                                   ]}
 
                  :init-slots              {:type "parallel"

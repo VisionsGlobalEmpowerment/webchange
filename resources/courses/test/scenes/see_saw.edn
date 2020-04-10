@@ -94,12 +94,12 @@
                  :enable-drag  {:type "set-variable" :var-name "draggable" :var-value true}
 
                  :switch-box-animations-idle {:type "parallel"
-                                              :data [{:type     "set-skin" :target "box1"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
-                                                     {:type     "set-skin" :target "box2"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
-                                                     {:type     "set-skin" :target "box3"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                                              :data [{:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
+                                                     {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
+                                                     {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}
                                                      {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}
                                                      {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
@@ -163,8 +163,8 @@
                                               :data [{:type "state" :target "box1" :id "default"}
                                                      {:type "state" :target "box-ph" :id "visible"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box-ph" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
                                                      {:type "copy-variable" :var-name "current-word" :from "item-1"}
                                                      ]}
 
@@ -172,8 +172,8 @@
                                               :data [{:type "state" :target "box-ph" :id "default"}
                                                      {:type "state" :target "box1" :id "come"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box1"
-                                                      :from-var [{:var-name "item-1" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}]}
 
                  :box-2-revert               {:type "transition" :transition-id "box2" :to {:x 1000 :y 550 :duration 2}}
@@ -193,8 +193,8 @@
                                               :data [{:type "state" :target "box2" :id "default"}
                                                      {:type "state" :target "box-ph" :id "visible"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box-ph" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
                                                      {:type "copy-variable" :var-name "current-word" :from "item-2"}
                                                      ]}
 
@@ -202,8 +202,8 @@
                                               :data [{:type "state" :target "box-ph" :id "default"}
                                                      {:type "state" :target "box2" :id "come"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box2"
-                                                      :from-var [{:var-name "item-2" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}]}
 
                  :box-3-revert               {:type "transition" :transition-id "box3" :to {:x 1500 :y 550 :duration 2}}
@@ -220,8 +220,8 @@
                                               :data [{:type "state" :target "box3" :id "default"}
                                                      {:type "state" :target "box-ph" :id "visible"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box-ph"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box-ph" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
                                                      {:type "copy-variable" :var-name "current-word" :from "item-3"}
                                                      ]}
 
@@ -229,8 +229,8 @@
                                               :data [{:type "state" :target "box-ph" :id "default"}
                                                      {:type "state" :target "box3" :id "come"}
                                                      {:type "empty" :duration 500}
-                                                     {:type     "set-skin" :target "box3"
-                                                      :from-var [{:var-name "item-3" :action-property "skin" :var-property "skin"}]}
+                                                     {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
+                                                      :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
                                                      {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
 
                  :introduce-concept          {:type "sequence"
@@ -303,26 +303,26 @@
                                                      "mari-move-to-start"
                                                      "enable-drag"]}
 
-                 :mari-finish                {:type                          "sequence-data",
-                                              :data                          [{:type          "transition",
-                                                                               :transition-id "mari",
-                                                                               :to            {:x 244, :y 300, :duration 1.3}}
-                                                                              {:type                   "animation-sequence",
-                                                                               :target                 "mari",
-                                                                               :track                  1,
-                                                                               :offset                 0.907,
-                                                                               :audio                  "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a",
-                                                                               :data                   [{:start 1.12, :end 2.708, :duration 1.588, :anim "talk"}
-                                                                                                        {:start 3.148, :end 6.456, :duration 3.308, :anim "talk"}
-                                                                                                        {:start 7.163, :end 9.457, :duration 2.294, :anim "talk"}
-                                                                                                        {:start 9.884, :end 11.871, :duration 1.987, :anim "talk"}
-                                                                                                        {:start 12.631, :end 16.513, :duration 3.882, :anim "talk"}],
-                                                                               :start                  0.907,
-                                                                               :duration               15.819
-                                                                               :phrase-text            "Felicidades! Nos ayudaste a poner todas las fotos sobre el sube y baja!
-                                                                                                        Puedes jugar este juego de nuevo, or haz clic en esta flecha para empezar el proximo juego."}]
-                                              :phrase                        :finish
-                                              :phrase-description            "Juega de nuevo o pasa a la siguiente actividad"}
+                 :mari-finish                {:type               "sequence-data",
+                                              :data
+                                                                  [{:to {:x 244, :y 300, :duration 1.3}, :type "transition", :transition-id "mari"}
+                                                                   {:offset   0.907,
+                                                                    :phrase-text
+                                                                              "Felicidades! Nos ayudaste a poner todas las fotos sobre el sube y baja!\n                                                                                                        Puedes jugar este juego de nuevo, or haz clic en esta flecha para empezar el proximo juego.",
+                                                                    :start    52.624,
+                                                                    :type     "animation-sequence",
+                                                                    :duration 15.639,
+                                                                    :audio    "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a",
+                                                                    :target   "mari",
+                                                                    :track    1,
+                                                                    :data
+                                                                              [{:end 2.708, :anim "talk", :start 1.12, :duration 1.588}
+                                                                               {:end 6.456, :anim "talk", :start 3.148, :duration 3.308}
+                                                                               {:end 9.457, :anim "talk", :start 7.163, :duration 2.294}
+                                                                               {:end 11.871, :anim "talk", :start 9.884, :duration 1.987}
+                                                                               {:end 16.513, :anim "talk", :start 12.631, :duration 3.882}]}],
+                                              :phrase             "finish",
+                                              :phrase-description "Juega de nuevo o pasa a la siguiente actividad"}
 
                  :start-activity             {:type "start-activity" :id "see-saw"}
                  :finish-activity            {:type "finish-activity" :id "see-saw"}

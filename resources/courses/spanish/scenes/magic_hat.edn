@@ -2,201 +2,202 @@
  [{:url "/raw/img/library/magic-hat/background.jpg", :type "image"}
   {:url "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio"}
   {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio", :alias "mari chants"}],
+ :objects
+ {:background {:type "background", :src "/raw/img/library/magic-hat/background.jpg"},
+  :box1
+  {:type "transparent",
+   :x 1270,
+   :y 800,
+   :width 671,
+   :height 633,
+   :scene-name "box1",
+   :transition "box1",
+   :actions {:click {:id "pick-box", :on "click", :type "action", :params {:target "box1"}, :unique-tag "click"}},
+   :anim "idle2",
+   :loop true,
+   :name "boxes",
+   :scale-x 0.25,
+   :scale-y 0.25,
+   :skin "qwestion",
+   :speed 0.3,
+   :start true},
+  :box2
+  {:type "transparent",
+   :x 1460,
+   :y 770,
+   :width 671,
+   :height 633,
+   :scene-name "box2",
+   :transition "box2",
+   :actions {:click {:id "pick-box", :on "click", :type "action", :params {:target "box2"}, :unique-tag "click"}},
+   :anim "idle2",
+   :loop true,
+   :name "boxes",
+   :scale-x 0.25,
+   :scale-y 0.25,
+   :skin "qwestion",
+   :speed 0.3,
+   :start true},
+  :box3
+  {:type "transparent",
+   :x 1660,
+   :y 790,
+   :width 671,
+   :height 633,
+   :scene-name "box3",
+   :transition "box3",
+   :actions {:click {:id "pick-box", :on "click", :type "action", :params {:target "box3"}, :unique-tag "click"}},
+   :anim "idle2",
+   :loop true,
+   :name "boxes",
+   :scale-x 0.25,
+   :scale-y 0.25,
+   :skin "qwestion",
+   :speed 0.3,
+   :start true},
+  :hat
+  {:type "animation",
+   :x 925,
+   :y 555,
+   :width 473,
+   :height 511,
+   :scene-name "magic-hat",
+   :transition "hat",
+   :anim "idle",
+   :loop true,
+   :name "hat",
+   :scale-x 1,
+   :scale-y 1,
+   :speed 0.35,
+   :start true},
+  :letter1
+  {:type "transparent",
+   :x 1175,
+   :y 570,
+   :width 200,
+   :height 130,
+   :align "center",
+   :fill "white",
+   :font-family "Lexend Deca",
+   :font-size 160,
+   :scale-x 1,
+   :scale-y 1,
+   :text "",
+   :vertical-align "middle"},
+  :letter2
+  {:type "transparent",
+   :x 1365,
+   :y 540,
+   :width 200,
+   :height 130,
+   :align "center",
+   :fill "white",
+   :font-family "Lexend Deca",
+   :font-size 160,
+   :scale-x 1,
+   :scale-y 1,
+   :text "",
+   :vertical-align "middle"},
+  :letter3
+  {:type "transparent",
+   :x 1565,
+   :y 560,
+   :width 200,
+   :height 130,
+   :align "center",
+   :fill "white",
+   :font-family "Lexend Deca",
+   :font-size 160,
+   :scale-x 1,
+   :scale-y 1,
+   :text "",
+   :vertical-align "middle"},
+  :mari
+  {:type "animation",
+   :x 1500,
+   :y 370,
+   :width 473,
+   :height 511,
+   :scene-name "mari",
+   :transition "mari",
+   :anim "idle",
+   :loop true,
+   :name "mari",
+   :scale-x 0.5,
+   :scale-y 0.5,
+   :speed 0.35,
+   :start true}},
+ :scene-objects [["background"] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3"] ["mari"]],
  :actions
- {:mari-voice-can-you-find
-  {:data
-   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 41.323, :volume 0.2, :duration 2.926}
-    {:data [{:end 42.792, :anim "talk", :start 41.453} {:end 44.1, :anim "talk", :start 43.021}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 41.323,
-     :target "mari"}],
-   :type "parallel",
-   :description "Puedes encontrar este foto"},
-  :mari-tap-hat
-  {:data
-   [{:id "wand_hit", :type "animation", :track 2, :target "mari"}
-    {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}],
-   :type "sequence-data"},
-  :reset-and-repeat
-  {:data
-   [{:type "set-variable", :var-name "last-pick-wrong", :var-value false}
-    {:id "letters-hide", :type "action"}
-    {:id "boxes-disappear", :type "action"}
-    {:id "play", :type "action"}],
-   :type "sequence-data"},
-  :mary-says-task
-  {:fail "current-concept-sound-x3",
-   :type "test-var-scalar",
-   :value "easy",
-   :success "current-concept-chant",
-   :var-name "current-level"},
+ {:box-jump-in
+  {:type "parallel",
+   :data
+   [{:id "jump2", :type "animation", :from-params [{:param-property "target", :action-property "target"}]}
+    {:data
+     [{:type "empty", :duration 500}
+      {:to {:bezier [{:x 960, :y 100} {:x 610, :y 435}], :duration 1.0},
+       :type "transition",
+       :from-params [{:param-property "target", :action-property "transition-id"}]}],
+     :type "sequence-data"}
+    {:id "idle2",
+     :loop true,
+     :type "add-animation",
+     :from-params [{:param-property "target", :action-property "target"}]}]},
   :boxes-disappear
-  {:data
+  {:type "parallel",
+   :data
    [{:skin "qwestion", :type "set-skin", :target "box1"}
     {:skin "qwestion", :type "set-skin", :target "box2"}
     {:skin "qwestion", :type "set-skin", :target "box3"}
     {:type "set-attribute", :target "box1", :attr-name "type", :attr-value "transparent"}
     {:type "set-attribute", :target "box2", :attr-name "type", :attr-value "transparent"}
-    {:type "set-attribute", :target "box3", :attr-name "type", :attr-value "transparent"}],
-   :type "parallel"},
-  :pick-wrong
-  {:data
-   [{:id "mari-says-wrong-answer", :type "action"}
-    {:id "count-wrong-answer", :type "action"}
-    {:id "set-boxes-skin", :type "action"}
-    {:type "set-variable", :var-name "last-pick-wrong", :var-value true}],
-   :type "sequence-data"},
-  :mari-voice-wrong-1
-  {:data
-   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 28.882, :volume 0.2, :duration 0.729}
-    {:data [{:end 29.611, :anim "talk", :start 28.882}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 28.882,
-     :target "mari"}],
-   :type "parallel",
-   :description "Es una"},
-  :mari-says-correct-answer
-  {:data [{:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}],
-   :type "sequence-data"},
-  :mari-voice-welcome
-  {:data
-   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 0.533, :volume 0.2, :duration 4.538}
-    {:data [{:end 2.083, :anim "talk", :start 0.918} {:end 4.799, :anim "talk", :start 2.629}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 0.533,
-     :target "mari"}],
-   :type "parallel",
-   :description "Hola mi amigo! Puedes ver el sombrero de magos?"},
-  :current-concept-chant {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-chant"}]},
-  :stop-activity {:id "magic-hat", :type "stop-activity"},
-  :finish-activity
-  {:data [{:id "magic-hat", :type "finish-activity"} {:type "scene", :scene-id "library"}], :type "sequence-data"},
-  :start {:data ["start-activity" "renew-words" "init-vars" "intro" "play"], :type "sequence"},
-  :mari-voice-wrong-2
-  {:data
-   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 31.579, :volume 0.2, :duration 1.922}
-    {:data [{:end 33.501, :anim "talk", :start 31.579}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 31.579,
-     :target "mari"}],
-   :type "parallel",
-   :description "empieza con el sonido"},
-  :mari-says-wrong-answer
-  {:data
-   [{:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
-    {:type "empty", :duration 500}
-    {:id "mari-voice-wrong-1", :type "action"}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
-    {:type "empty", :duration 500}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
-    {:id "mari-voice-wrong-2", :type "action"}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound"}]}
-    {:type "empty", :duration 500}
-    {:id "mari-voice-wrong-3", :type "action"}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound"}]}],
-   :type "sequence-data"},
-  :set-boxes-skin
-  {:data
-   [{:type "set-skin", :target "box1", :from-var [{:var-name "box1", :var-property "skin", :action-property "skin"}]}
-    {:type "set-skin", :target "box2", :from-var [{:var-name "box2", :var-property "skin", :action-property "skin"}]}
-    {:type "set-skin", :target "box3", :from-var [{:var-name "box3", :var-property "skin", :action-property "skin"}]}],
-   :type "parallel"},
-  :renew-words
-  {:data
-   [{:from "concepts-single",
-     :type "lesson-var-provider",
-     :limit 1,
-     :repeat 3,
-     :variables ["item-1" "item-2" "item-3"],
-     :provider-id "words-set"}
-    {:from "concepts-all",
-     :type "lesson-var-provider",
-     :shuffled true,
-     :variables ["item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
-     :provider-id "words-set"}
-    {:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
-     :type "vars-var-provider",
-     :shuffled true,
-     :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"]}],
-   :type "sequence-data"},
-  :mari-voice-intro
-  {:data
-   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 6.969, :volume 0.2, :duration 10.354}
-    {:data [{:end 10.85, :anim "talk", :start 7.13} {:end 17.05, :anim "talk", :start 11.433}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 6.969,
-     :target "mari"}],
-   :type "parallel",
-   :description
-   "Hay muchas fotos por dentro del sombrero de magos.\n                                                            Escucha el canto, y despues toca la foto que completa el canto!"},
-  :renew-current-concept
-  {:data
-   [{:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
-     :type "vars-var-provider",
-     :on-end "finish-activity",
-     :shuffled true,
-     :variables ["current-concept"],
-     :provider-id "current-concept"}
-    {:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
-     :type "vars-var-provider",
-     :unique true,
-     :from-var
-     [{:var-key "concept-name",
-       :var-name "current-concept",
-       :var-property "concept-name",
-       :action-property "exclude-property-values"}],
-     :shuffled true,
-     :variables ["pair-concept-1" "pair-concept-2"]}
-    {:from ["current-concept" "pair-concept-1" "pair-concept-2"],
-     :type "vars-var-provider",
-     :shuffled true,
-     :variables ["box1" "box2" "box3"]}],
-   :type "sequence-data"},
-  :pick-box
-  {:data
-   [{:id "set-concept-data", :type "action"}
-    {:fail "pick-wrong",
-     :type "test-var-scalar",
-     :success "pick-correct",
-     :from-var [{:var-name "current-concept", :action-property "value"}],
-     :from-params [{:param-property "target", :action-property "var-name"}]}],
-   :type "sequence-data"},
-  :letters-show
-  {:data
-   [{:type "set-attribute", :target "letter1", :attr-name "type", :attr-value "text"}
-    {:type "set-attribute", :target "letter2", :attr-name "type", :attr-value "text"}
-    {:type "set-attribute", :target "letter3", :attr-name "type", :attr-value "text"}],
-   :type "parallel"},
-  :init-vars
-  {:data
-   [{:type "set-variable", :var-name "current-level", :var-value "hard"}
-    {:type "set-variable", :var-name "correct-answers-in-row", :var-value 0}
-    {:type "set-variable", :var-name "wrong-answers-in-row", :var-value 0}
-    {:type "set-variable", :var-name "last-pick-wrong", :var-value false}],
-   :type "parallel"},
-  :current-concept-sound-x3 {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]},
-  :mari-flies-to-hat {:to {:x 1075, :y 445, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"},
-  :set-concept-data
-  {:data
-   [{:id "set-letters-text", :type "action"}
-    {:fail "set-boxes-skin",
-     :type "test-var-scalar",
-     :value "hard",
-     :success {:type "empty", :duration 100},
-     :var-name "current-level"}],
-   :type "sequence-data"},
-  :count-wrong-answer
-  {:data
-   [{:type "counter", :counter-id "wrong-answers-in-row", :counter-action "increase"}
-    {:type "set-variable", :var-name "correct-answers-in-row", :var-value 0}],
-   :type "sequence-data"},
+    {:type "set-attribute", :target "box3", :attr-name "type", :attr-value "transparent"}]},
+  :boxes-jump-out
+  {:type "sequence-data",
+   :data
+   [{:id "boxes-reset-position", :type "action"}
+    {:type "empty", :duration 200}
+    {:id "boxes-show-up", :type "action"}
+    {:id "boxes-move-to-position", :type "action"}]},
+  :boxes-move-to-position
+  {:type "parallel",
+   :data
+   [{:to {:bezier [{:x 960, :y 100} {:x 1270, :y 800}], :duration 2.0}, :type "transition", :transition-id "box1"}
+    {:to {:bezier [{:x 1055, :y 100} {:x 1460, :y 770}], :duration 2.0}, :type "transition", :transition-id "box2"}
+    {:to {:bezier [{:x 1195, :y 100} {:x 1660, :y 790}], :duration 2.0}, :type "transition", :transition-id "box3"}]},
+  :boxes-reset-position
+  {:type "parallel",
+   :data
+   [{:type "set-attribute", :target "box1", :attr-name "x", :attr-value 610}
+    {:type "set-attribute", :target "box1", :attr-name "y", :attr-value 435}
+    {:type "set-attribute", :target "box2", :attr-name "x", :attr-value 610}
+    {:type "set-attribute", :target "box2", :attr-name "y", :attr-value 435}
+    {:type "set-attribute", :target "box3", :attr-name "x", :attr-value 610}
+    {:type "set-attribute", :target "box3", :attr-name "y", :attr-value 435}]},
+  :boxes-show-up
+  {:type "parallel",
+   :data
+   [{:data
+     [{:type "set-attribute", :target "box1", :attr-name "type", :attr-value "animation"}
+      {:type "empty", :duration 200}
+      {:id "come2", :type "animation", :target "box1"}
+      {:id "idle2", :loop true, :type "add-animation", :target "box1"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "set-attribute", :target "box2", :attr-name "type", :attr-value "animation"}
+      {:type "empty", :duration 200}
+      {:id "come2", :type "animation", :target "box2"}
+      {:id "idle2", :loop true, :type "add-animation", :target "box2"}],
+     :type "sequence-data"}
+    {:data
+     [{:type "set-attribute", :target "box3", :attr-name "type", :attr-value "animation"}
+      {:type "empty", :duration 200}
+      {:id "come2", :type "animation", :target "box3"}
+      {:id "idle2", :loop true, :type "add-animation", :target "box3"}],
+     :type "sequence-data"}]},
   :check-level
-  {:data
+  {:type "sequence-data",
+   :data
    [{:fail {:type "empty", :duration 100},
      :type "test-var-scalar",
      :value 3,
@@ -222,63 +223,240 @@
         :success {:type "set-variable", :var-name "current-level", :var-value "mid"},
         :var-name "current-level"}],
       :type "sequence-data"},
-     :var-name "wrong-answers-in-row"}],
-   :type "sequence-data"},
-  :boxes-reset-position
-  {:data
-   [{:type "set-attribute", :target "box1", :attr-name "x", :attr-value 610}
-    {:type "set-attribute", :target "box1", :attr-name "y", :attr-value 435}
-    {:type "set-attribute", :target "box2", :attr-name "x", :attr-value 610}
-    {:type "set-attribute", :target "box2", :attr-name "y", :attr-value 435}
-    {:type "set-attribute", :target "box3", :attr-name "x", :attr-value 610}
-    {:type "set-attribute", :target "box3", :attr-name "y", :attr-value 435}],
-   :type "parallel"},
-  :boxes-show-up
-  {:data
-   [{:data
-     [{:type "set-attribute", :target "box1", :attr-name "type", :attr-value "animation"}
-      {:type "empty", :duration 200}
-      {:id "come2", :type "animation", :target "box1"}
-      {:id "idle2", :loop true, :type "add-animation", :target "box1"}],
-     :type "sequence-data"}
-    {:data
-     [{:type "set-attribute", :target "box2", :attr-name "type", :attr-value "animation"}
-      {:type "empty", :duration 200}
-      {:id "come2", :type "animation", :target "box2"}
-      {:id "idle2", :loop true, :type "add-animation", :target "box2"}],
-     :type "sequence-data"}
-    {:data
-     [{:type "set-attribute", :target "box3", :attr-name "type", :attr-value "animation"}
-      {:type "empty", :duration 200}
-      {:id "come2", :type "animation", :target "box3"}
-      {:id "idle2", :loop true, :type "add-animation", :target "box3"}],
-     :type "sequence-data"}],
-   :type "parallel"},
-  :start-activity {:id "magic-hat", :type "start-activity"},
-  :intro {:data ["mari-voice-welcome" "mari-flies-to-hat" "mari-init-wand" "mari-voice-intro"], :type "sequence"},
-  :box-jump-in
-  {:data
-   [{:id "jump2", :type "animation", :from-params [{:param-property "target", :action-property "target"}]}
-    {:data
-     [{:type "empty", :duration 500}
-      {:to {:bezier [{:x 960, :y 100} {:x 610, :y 435}], :duration 1.0},
-       :type "transition",
-       :from-params [{:param-property "target", :action-property "transition-id"}]}],
-     :type "sequence-data"}
-    {:id "idle2",
-     :loop true,
-     :type "add-animation",
-     :from-params [{:param-property "target", :action-property "target"}]}],
-   :type "parallel"},
-  :boxes-jump-out
-  {:data
-   [{:id "boxes-reset-position", :type "action"}
-    {:type "empty", :duration 200}
-    {:id "boxes-show-up", :type "action"}
-    {:id "boxes-move-to-position", :type "action"}],
-   :type "sequence-data"},
+     :var-name "wrong-answers-in-row"}]},
+  :count-correct-answer
+  {:type "sequence-data",
+   :data
+   [{:type "counter", :counter-id "correct-answers-in-row", :counter-action "increase"}
+    {:type "set-variable", :var-name "wrong-answers-in-row", :var-value 0}]},
+  :count-wrong-answer
+  {:type "sequence-data",
+   :data
+   [{:type "counter", :counter-id "wrong-answers-in-row", :counter-action "increase"}
+    {:type "set-variable", :var-name "correct-answers-in-row", :var-value 0}]},
+  :current-concept-chant {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-chant"}]},
+  :current-concept-sound-x3 {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]},
+  :finish-activity
+  {:type "sequence-data", :data [{:id "magic-hat", :type "finish-activity"} {:type "scene", :scene-id "library"}]},
+  :init-vars
+  {:type "parallel",
+   :data
+   [{:type "set-variable", :var-name "current-level", :var-value "hard"}
+    {:type "set-variable", :var-name "correct-answers-in-row", :var-value 0}
+    {:type "set-variable", :var-name "wrong-answers-in-row", :var-value 0}
+    {:type "set-variable", :var-name "last-pick-wrong", :var-value false}]},
+  :intro {:type "sequence", :data ["mari-voice-welcome" "mari-flies-to-hat" "mari-init-wand" "mari-voice-intro"]},
+  :letters-hide
+  {:type "parallel",
+   :data
+   [{:type "set-attribute", :target "letter1", :attr-name "type", :attr-value "transparent"}
+    {:type "set-attribute", :target "letter2", :attr-name "type", :attr-value "transparent"}
+    {:type "set-attribute", :target "letter3", :attr-name "type", :attr-value "transparent"}]},
+  :letters-show
+  {:type "parallel",
+   :data
+   [{:type "set-attribute", :target "letter1", :attr-name "type", :attr-value "text"}
+    {:type "set-attribute", :target "letter2", :attr-name "type", :attr-value "text"}
+    {:type "set-attribute", :target "letter3", :attr-name "type", :attr-value "text"}]},
+  :mari-flies-to-hat {:type "transition", :to {:x 1075, :y 445, :loop false, :duration 1.5}, :transition-id "mari"},
+  :mari-init-wand {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
+  :mari-says-correct-answer
+  {:type "sequence-data",
+   :data [{:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}]},
+  :mari-says-wrong-answer
+  {:type "sequence-data",
+   :data
+   [{:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
+    {:type "empty", :duration 500}
+    {:id "mari-voice-wrong-1", :type "action"}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
+    {:type "empty", :duration 500}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-word"}]}
+    {:id "mari-voice-wrong-2", :type "action"}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound"}]}
+    {:type "empty", :duration 500}
+    {:id "mari-voice-wrong-3", :type "action"}
+    {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound"}]}]},
+  :mari-tap-hat
+  {:type "sequence-data",
+   :data
+   [{:id "wand_hit", :type "animation", :track 2, :target "mari"}
+    {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}]},
+  :mari-voice-can-you-find
+  {:type "parallel",
+   :data
+   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 41.323, :volume 0.2, :duration 2.926}
+    {:data [{:end 42.792, :anim "talk", :start 41.453} {:end 44.1, :anim "talk", :start 43.021}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 41.323,
+     :target "mari"}],
+   :description "Puedes encontrar este foto"},
+  :mari-voice-intro
+  {:type "parallel",
+   :data
+   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 6.969, :volume 0.2, :duration 10.354}
+    {:data [{:end 10.85, :anim "talk", :start 7.13} {:end 17.05, :anim "talk", :start 11.433}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 6.969,
+     :target "mari"}],
+   :description
+   "Hay muchas fotos por dentro del sombrero de magos.\n                                                            Escucha el canto, y despues toca la foto que completa el canto!"},
+  :mari-voice-welcome
+  {:type "parallel",
+   :data
+   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 0.533, :volume 0.2, :duration 4.538}
+    {:data [{:end 2.083, :anim "talk", :start 0.918} {:end 4.799, :anim "talk", :start 2.629}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 0.533,
+     :target "mari"}],
+   :description "Hola mi amigo! Puedes ver el sombrero de magos?"},
+  :mari-voice-wrong-1
+  {:type "parallel",
+   :data
+   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 28.882, :volume 0.2, :duration 0.729}
+    {:data [{:end 29.611, :anim "talk", :start 28.882}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 28.882,
+     :target "mari"}],
+   :description "Es una"},
+  :mari-voice-wrong-2
+  {:type "parallel",
+   :data
+   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 31.579, :volume 0.2, :duration 1.922}
+    {:data [{:end 33.501, :anim "talk", :start 31.579}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 31.579,
+     :target "mari"}],
+   :description "empieza con el sonido"},
+  :mari-voice-wrong-3
+  {:type "parallel",
+   :data
+   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 35.879, :volume 0.2, :duration 2.461}
+    {:data [{:end 38.34, :anim "talk", :start 35.879}],
+     :type "animation-sequence",
+     :track 1,
+     :offset 35.879,
+     :target "mari"}],
+   :description "Toca la foto que hace este sonido."},
+  :mary-says-task
+  {:type "test-var-scalar",
+   :var-name "current-level",
+   :value "easy",
+   :success "current-concept-chant",
+   :fail "current-concept-sound-x3"},
+  :pick-box
+  {:type "sequence-data",
+   :data
+   [{:id "set-concept-data", :type "action"}
+    {:fail "pick-wrong",
+     :type "test-var-scalar",
+     :success "pick-correct",
+     :from-var [{:var-name "current-concept", :action-property "value"}],
+     :from-params [{:param-property "target", :action-property "var-name"}]}]},
+  :pick-correct
+  {:type "sequence-data",
+   :data
+   [{:id "mari-says-correct-answer", :type "action"}
+    {:fail {:type "empty", :duration 100},
+     :type "test-var-scalar",
+     :value false,
+     :success "count-correct-answer",
+     :var-name "last-pick-wrong"}
+    {:id "box-jump-in", :type "action"}
+    {:id "reset-and-repeat", :type "action"}]},
+  :pick-wrong
+  {:type "sequence-data",
+   :data
+   [{:id "mari-says-wrong-answer", :type "action"}
+    {:id "count-wrong-answer", :type "action"}
+    {:id "set-boxes-skin", :type "action"}
+    {:type "set-variable", :var-name "last-pick-wrong", :var-value true}]},
+  :play
+  {:type "sequence",
+   :data ["renew-current-concept" "check-level" "mari-tap-hat" "boxes-jump-out" "set-concept-data" "mary-says-task"]},
+  :renew-current-concept
+  {:type "sequence-data",
+   :data
+   [{:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+     :type "vars-var-provider",
+     :on-end "finish-activity",
+     :shuffled true,
+     :variables ["current-concept"],
+     :provider-id "current-concept"}
+    {:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+     :type "vars-var-provider",
+     :unique true,
+     :from-var
+     [{:var-key "concept-name",
+       :var-name "current-concept",
+       :var-property "concept-name",
+       :action-property "exclude-property-values"}],
+     :shuffled true,
+     :variables ["pair-concept-1" "pair-concept-2"]}
+    {:from ["current-concept" "pair-concept-1" "pair-concept-2"],
+     :type "vars-var-provider",
+     :shuffled true,
+     :variables ["box1" "box2" "box3"]}]},
+  :renew-words
+  {:type "sequence-data",
+   :data
+   [{:from "concepts-single",
+     :type "lesson-var-provider",
+     :limit 1,
+     :repeat 3,
+     :variables ["item-1" "item-2" "item-3"],
+     :provider-id "words-set"}
+    {:from "concepts-all",
+     :type "lesson-var-provider",
+     :shuffled true,
+     :variables ["item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+     :provider-id "words-set"}
+    {:from ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"],
+     :type "vars-var-provider",
+     :shuffled true,
+     :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"]}]},
+  :reset-and-repeat
+  {:type "sequence-data",
+   :data
+   [{:type "set-variable", :var-name "last-pick-wrong", :var-value false}
+    {:id "letters-hide", :type "action"}
+    {:id "boxes-disappear", :type "action"}
+    {:id "play", :type "action"}]},
+  :set-boxes-skin
+  {:type "parallel",
+   :data
+   [{:type "set-slot",
+     :target "box1",
+     :from-var [{:var-name "box1", :var-property "image-src", :action-property "image"}],
+     :slot-name "box1",
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}
+    {:type "set-slot",
+     :target "box2",
+     :from-var [{:var-name "box2", :var-property "image-src", :action-property "image"}],
+     :slot-name "box1",
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}
+    {:type "set-slot",
+     :target "box3",
+     :from-var [{:var-name "box3", :var-property "image-src", :action-property "image"}],
+     :slot-name "box1",
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}]},
+  :set-concept-data
+  {:type "sequence-data",
+   :data
+   [{:id "set-letters-text", :type "action"}
+    {:fail "set-boxes-skin",
+     :type "test-var-scalar",
+     :value "hard",
+     :success {:type "empty", :duration 100},
+     :var-name "current-level"}]},
   :set-letters-text
-  {:data
+  {:type "sequence-data",
+   :data
    [{:data
      [{:type "set-attribute",
        :target "letter1",
@@ -293,175 +471,9 @@
        :from-var [{:var-name "box3", :var-property "letter", :action-property "attr-value"}],
        :attr-name "text"}],
      :type "parallel"}
-    {:id "letters-show", :type "action"}],
-   :type "sequence-data"},
-  :play
-  {:data ["renew-current-concept" "check-level" "mari-tap-hat" "boxes-jump-out" "set-concept-data" "mary-says-task"],
-   :type "sequence"},
-  :letters-hide
-  {:data
-   [{:type "set-attribute", :target "letter1", :attr-name "type", :attr-value "transparent"}
-    {:type "set-attribute", :target "letter2", :attr-name "type", :attr-value "transparent"}
-    {:type "set-attribute", :target "letter3", :attr-name "type", :attr-value "transparent"}],
-   :type "parallel"},
-  :mari-init-wand {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"},
-  :mari-voice-wrong-3
-  {:data
-   [{:id "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio", :start 35.879, :volume 0.2, :duration 2.461}
-    {:data [{:end 38.34, :anim "talk", :start 35.879}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 35.879,
-     :target "mari"}],
-   :type "parallel",
-   :description "Toca la foto que hace este sonido."},
-  :count-correct-answer
-  {:data
-   [{:type "counter", :counter-id "correct-answers-in-row", :counter-action "increase"}
-    {:type "set-variable", :var-name "wrong-answers-in-row", :var-value 0}],
-   :type "sequence-data"},
-  :boxes-move-to-position
-  {:data
-   [{:to {:bezier [{:x 960, :y 100} {:x 1270, :y 800}], :duration 2.0}, :type "transition", :transition-id "box1"}
-    {:to {:bezier [{:x 1055, :y 100} {:x 1460, :y 770}], :duration 2.0}, :type "transition", :transition-id "box2"}
-    {:to {:bezier [{:x 1195, :y 100} {:x 1660, :y 790}], :duration 2.0}, :type "transition", :transition-id "box3"}],
-   :type "parallel"},
-  :pick-correct
-  {:data
-   [{:id "mari-says-correct-answer", :type "action"}
-    {:fail {:type "empty", :duration 100},
-     :type "test-var-scalar",
-     :value false,
-     :success "count-correct-answer",
-     :var-name "last-pick-wrong"}
-    {:id "box-jump-in", :type "action"}
-    {:id "reset-and-repeat", :type "action"}],
-   :type "sequence-data"}},
- :objects
- {:letter2
-  {:y 540,
-   :align "center",
-   :vertical-align "middle",
-   :font-size 160,
-   :fill "white",
-   :width 200,
-   :type "transparent",
-   :scale-y 1,
-   :x 1365,
-   :scale-x 1,
-   :font-family "Lexend Deca",
-   :height 130,
-   :text ""},
-  :background {:src "/raw/img/library/magic-hat/background.jpg", :type "background"},
-  :hat
-  {:y 555,
-   :transition "hat",
-   :speed 0.35,
-   :name "hat",
-   :width 473,
-   :start true,
-   :type "animation",
-   :loop true,
-   :anim "idle",
-   :scale-y 1,
-   :x 925,
-   :scale-x 1,
-   :scene-name "magic-hat",
-   :height 511},
-  :box3
-  {:y 790,
-   :transition "box3",
-   :speed 0.3,
-   :name "boxes",
-   :width 671,
-   :start true,
-   :type "transparent",
-   :actions {:click {:id "pick-box", :on "click", :type "action", :params {:target "box3"}, :unique-tag "click"}},
-   :loop true,
-   :anim "idle2",
-   :scale-y 0.25,
-   :x 1660,
-   :scale-x 0.25,
-   :scene-name "box3",
-   :skin "qwestion",
-   :height 633},
-  :letter3
-  {:y 560,
-   :align "center",
-   :vertical-align "middle",
-   :font-size 160,
-   :fill "white",
-   :width 200,
-   :type "transparent",
-   :scale-y 1,
-   :x 1565,
-   :scale-x 1,
-   :font-family "Lexend Deca",
-   :height 130,
-   :text ""},
-  :letter1
-  {:y 570,
-   :align "center",
-   :vertical-align "middle",
-   :font-size 160,
-   :fill "white",
-   :width 200,
-   :type "transparent",
-   :scale-y 1,
-   :x 1175,
-   :scale-x 1,
-   :font-family "Lexend Deca",
-   :height 130,
-   :text ""},
-  :box1
-  {:y 800,
-   :transition "box1",
-   :speed 0.3,
-   :name "boxes",
-   :width 671,
-   :start true,
-   :type "transparent",
-   :actions {:click {:id "pick-box", :on "click", :type "action", :params {:target "box1"}, :unique-tag "click"}},
-   :loop true,
-   :anim "idle2",
-   :scale-y 0.25,
-   :x 1270,
-   :scale-x 0.25,
-   :scene-name "box1",
-   :skin "qwestion",
-   :height 633},
-  :box2
-  {:y 770,
-   :transition "box2",
-   :speed 0.3,
-   :name "boxes",
-   :width 671,
-   :start true,
-   :type "transparent",
-   :actions {:click {:id "pick-box", :on "click", :type "action", :params {:target "box2"}, :unique-tag "click"}},
-   :loop true,
-   :anim "idle2",
-   :scale-y 0.25,
-   :x 1460,
-   :scale-x 0.25,
-   :scene-name "box2",
-   :skin "qwestion",
-   :height 633},
-  :mari
-  {:y 370,
-   :transition "mari",
-   :speed 0.35,
-   :name "mari",
-   :width 473,
-   :start true,
-   :type "animation",
-   :loop true,
-   :anim "idle",
-   :scale-y 0.5,
-   :x 1500,
-   :scale-x 0.5,
-   :scene-name "mari",
-   :height 511}},
- :metadata {:prev "library", :autostart true},
+    {:id "letters-show", :type "action"}]},
+  :start {:type "sequence", :data ["start-activity" "renew-words" "init-vars" "intro" "play"]},
+  :start-activity {:type "start-activity", :id "magic-hat"},
+  :stop-activity {:type "stop-activity", :id "magic-hat"}},
  :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
- :scene-objects [["background"] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3"] ["mari"]]}
+ :metadata {:prev "library", :autostart true}}

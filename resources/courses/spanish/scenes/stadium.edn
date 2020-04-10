@@ -1,43 +1,43 @@
-{:audio {:background "/raw/audio/background/POL-daily-special-short.mp3"},
- :assets
+{:assets
  [{:url "/raw/img/stadium/main/stadium_main_background.jpg", :size 10, :type "image"}
   {:url "/raw/img/stadium/main/bicycle_enabled.png", :size 1, :type "image"}
   {:url "/raw/img/stadium/main/run_enabled.png", :size 1, :type "image"}
   {:url "/raw/img/stadium/main/volleyball_enabled.png", :size 1, :type "image"}],
- :actions {:start-background-music {:id "background", :loop true, :type "audio"}},
  :objects
- {:cycling
-  {:y 527,
-   :transition "cycling",
+ {:background
+  {:type "background", :brightness -0.2, :filter "brighten", :src "/raw/img/stadium/main/stadium_main_background.jpg"},
+  :cycling
+  {:type "image",
+   :x 103,
+   :y 527,
    :width 498,
-   :type "image",
-   :src "/raw/img/stadium/main/bicycle_enabled.png",
+   :height 514,
+   :transition "cycling",
    :actions {:click {:on "click", :type "location", :location-id "cycling"}},
    :filter "brighten",
-   :x 103,
-   :height 514},
+   :src "/raw/img/stadium/main/bicycle_enabled.png"},
   :running
-  {:y 565,
-   :transition "running",
+  {:type "image",
+   :x 1128,
+   :y 565,
    :width 279,
-   :type "image",
-   :src "/raw/img/stadium/main/run_enabled.png",
+   :height 456,
+   :transition "running",
    :actions {:click {:on "click", :type "scene", :scene-id "running"}},
    :filter "brighten",
-   :x 1128,
-   :height 456},
-  :background
-  {:src "/raw/img/stadium/main/stadium_main_background.jpg", :type "background", :filter "brighten", :brightness -0.2},
+   :src "/raw/img/stadium/main/run_enabled.png"},
   :volleyball
-  {:y 540,
-   :transition "volleyball",
+  {:type "image",
+   :x 669,
+   :y 540,
    :width 340,
-   :type "image",
-   :src "/raw/img/stadium/main/volleyball_enabled.png",
+   :height 480,
+   :transition "volleyball",
    :actions {:click {:on "click", :type "location", :location-id "volleyball"}},
    :filter "brighten",
-   :x 669,
-   :height 480}},
- :metadata {:prev "map", :autostart true},
+   :src "/raw/img/stadium/main/volleyball_enabled.png"}},
+ :scene-objects [["background"] ["volleyball" "cycling" "running"]],
+ :actions {:start-background-music {:type "audio", :id "background", :loop true}},
  :triggers {:music {:on "start", :action "start-background-music"}},
- :scene-objects [["background"] ["volleyball" "cycling" "running"]]}
+ :metadata {:prev "map", :autostart true},
+ :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"}}
