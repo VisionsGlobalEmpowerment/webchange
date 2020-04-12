@@ -69,6 +69,9 @@
       (reset! regions-atom {})
       (.on wavesurfer "ready" #(.addRegion wavesurfer (clj->js {:start start :end end
                                                                 :color additional-color :drag true :resize true}))))))
+(defn- is-default-created?
+  [{:keys [start end]}]
+  (and (= start 0) (< end 0.1)))
 
 (defn handle-audio-region!
   ([wavesurfer region-atom key]
@@ -77,7 +80,7 @@
    (let [handle-event (fn [e]
                         (let [original (select-keys @region-atom [:start :end])
                               data (region->data e)]
-                          (when (not= original (select-keys data [:start :end]))
+                          (when (and (not= original (select-keys data [:start :end])) (not (is-default-created? data)))
                             (on-change data))
                           (swap! last-positions assoc key (:start data))
                           (reset! region-atom (assoc data :region e))))
