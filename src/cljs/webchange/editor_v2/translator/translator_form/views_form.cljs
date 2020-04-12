@@ -67,14 +67,19 @@
     (when (= original-action-name action-name)
       (re-frame/dispatch [::translator-events/set-phrase-translation-action action-name id {:type type
                                                                                             :data new-data}]))))
-
 (defn- apply-lip-sync-data!
-  [action-id action-name animation-data on-error]
+  [action-id action-name start animation-data on-error]
   (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
-        action-type (get-in data-store [[action-name action-id] :data :type])]
-    (if (= action-type "animation-sequence")
-      (update-action-data! action-name {:data animation-data})
-      (on-error (str "Action '" action-name "' must have type 'animation-sequence'")))))
+        {action-type :type action-start :start} (get-in data-store [[action-name action-id] :data])]
+    (cond
+      (not= action-type "animation-sequence") (on-error (str "Action '" action-name "' must have type 'animation-sequence'"))
+      (not= action-start start) (on-error (str "Action '" action-name "' lip-sync data was already updated"))
+      :else (update-action-data! action-name {:data animation-data}))))
+
+(defn- apply-default-lip-sync-data!
+  [action-id action-name {:keys [start end]} on-error]
+  (let [animation-data [{:start start :end end :anim "talk"}]]
+    (apply-lip-sync-data! action-id action-name start animation-data on-error)))
 
 (defn- update-root-action-data
   [data-patch]
@@ -196,8 +201,11 @@
                                                                      (show-error error-message))]
                                                   (update-action-data! action-name audio-data)
                                                   (when-not (nil? region-data)
-                                                    (load-lip-sync-data! audio-data {:on-ready #(apply-lip-sync-data! action-id action-name % handle-error)
-                                                                                     :on-error #(handle-error "Getting lip sync data error")}))))}]]
+                                                    (load-lip-sync-data! audio-data {:on-ready #(apply-lip-sync-data! action-id action-name (:start region-data) % handle-error)
+                                                                                     :on-error #(do
+                                                                                                  (apply-default-lip-sync-data! action-id action-name region-data handle-error)
+                                                                                                  (handle-error "Getting lip sync data error"))})
+                                                    )))}]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
                  [error-snackbar {:error    @error

@@ -8,7 +8,8 @@
             [webchange.auth.core :as auth]
             [clojure.java.io :as io]
             [mikera.image.core :as imagez]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]))
 
 (def types
   {"image" ["jpg" "jpeg" "png"]
@@ -51,18 +52,25 @@
 (defn gen-filename [extension]
   (str (rand-str 16) "." extension))
 
+(defn- process-asset
+  [type path]
+  (case type
+    "audio" (future (try-recognize-audio path))))
+
 (defn upload-asset [{{:keys [tempfile size filename]} "file" type "type"}]
   (let [extension (get-extension filename)
         new-name (gen-filename extension)
         path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") new-name)
         type (or (validated-type type) (get-type extension))
-        params (get-additional-params type tempfile)]
+        params (get-additional-params type tempfile)
+        relative-path (str "/upload/" new-name)]
     (try
       (with-open [xin (io/input-stream tempfile)
                   xout (io/output-stream path)]
         (io/copy xin xout)
+        (process-asset type relative-path)
         (merge
-          {:url (str "/upload/" new-name)
+          {:url relative-path
            :type type
            :size (normalize-size size)}
           params)))))
