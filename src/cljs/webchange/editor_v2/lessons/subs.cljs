@@ -58,6 +58,16 @@
         (assoc lesson :lesson-sets (zipmap (keys lesson-sets) (map (fn [name] {:name name :items (get-items db name)}) (vals lesson-sets))))))))
 
 (re-frame/reg-sub
-  ::scene-list
-  (fn [db _]
-    (get-in db [:course-data :scene-list])))
+  ::level-activities
+  (fn [db [_ level]]
+    (let [scenes-list (get-in db [:course-data :scene-list])
+          available-activities (-> db (get-level level) :available-activities)]
+      (if (nil? available-activities)
+        scenes-list
+        (let [available-activity-name? (fn [activity-name available-activities]
+                                         (some (fn [available-activity]
+                                                 (= activity-name (keyword available-activity)))
+                                               available-activities))]
+          (->> scenes-list
+               (filter (fn [[name]] (available-activity-name? name available-activities)))
+               (into {})))))))

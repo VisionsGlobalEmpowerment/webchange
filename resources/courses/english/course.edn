@@ -138,7 +138,16 @@
                       :name "Assessment"
                       :type :assessment
                       :lesson-sets {:assessment-1 "assessment1"}
-                      :activities [{:activity "hide-n-seek" :time-expected 300 :scored true :expected-score-percentage 90}]}]}]
+                      :activities [{:activity "hide-n-seek" :time-expected 300 :scored true :expected-score-percentage 90}]}]
+           :available-activities [:home
+                                  :see-saw
+                                  :swings
+                                  :sandbox
+                                  :volleyball
+                                  :book
+                                  :cycling
+                                  :painting-tablet
+                                  :hide-n-seek]}]
 
  :default-progress {:next {:level 1
                            :lesson 1

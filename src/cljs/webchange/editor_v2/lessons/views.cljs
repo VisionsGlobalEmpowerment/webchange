@@ -20,13 +20,11 @@
 (defn edit-lesson-form
   [_ level-id lesson-id]
   (let [level-scheme @(re-frame/subscribe [::lessons-subs/level-scheme level-id])
+        level-activities @(re-frame/subscribe [::lessons-subs/level-activities level-id])
         lesson @(re-frame/subscribe [::lessons-subs/lesson-with-items level-id lesson-id])
         dataset-items @(re-frame/subscribe [::concepts-subs/dataset-items])
-        scenes-list @(re-frame/subscribe [::lessons-subs/scene-list])
         data (r/atom lesson)
         styles (get-styles)]
-    (println "level-id" level-id)
-    (println "level-scheme" level-scheme)
     (if lesson
       (fn [course-id level-id lesson-id]
         (let [lesson-scheme (get level-scheme (-> @data :type keyword))
@@ -38,7 +36,7 @@
                           :level-scheme  level-scheme
                           :lesson-scheme lesson-scheme
                           :dataset-items dataset-items
-                          :scenes-list   scenes-list}]]
+                          :scenes-list   level-activities}]]
            [ui/grid {:item  true :xs 12
                      :style (:actions-container styles)}
             (when (:edit-lesson loading)
@@ -58,8 +56,8 @@
     (let [data (r/atom {:type (-> level-scheme keys first name) :activities []})]
       (fn [course-id level-id]
         (let [lesson-scheme (get level-scheme (-> @data :type keyword))
+              level-activities @(re-frame/subscribe [::lessons-subs/level-activities level-id])
               dataset-items @(re-frame/subscribe [::concepts-subs/dataset-items])
-              scenes-list @(re-frame/subscribe [::lessons-subs/scene-list])
               loading @(re-frame/subscribe [:loading])
               styles (get-styles)]
           [ui/grid {:container true
@@ -69,7 +67,7 @@
                           :level-scheme  level-scheme
                           :lesson-scheme lesson-scheme
                           :dataset-items dataset-items
-                          :scenes-list   scenes-list}]]
+                          :scenes-list   level-activities}]]
            [ui/grid {:item  true :xs 12
                      :style (:actions-container styles)}
             (when (:add-lesson loading)
