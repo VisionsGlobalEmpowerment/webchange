@@ -268,7 +268,7 @@
 (defn animation-sequence->actions [{:keys [target track offset data] :or {track 1} :as action}]
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type "sequence-data"
-                   :data [{:type "empty" :duration (* (- start offset) 1000)}
+                   :data [{:type "empty" :duration 0 #_(* (- start offset) 1000)}
                           {:type "animation" :target target :track track :id anim}
                           {:type "empty" :duration (* (- end start) 1000)}
                           {:type "remove-animation" :target target :track track}]})
