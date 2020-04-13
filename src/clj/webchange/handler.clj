@@ -90,6 +90,7 @@
 
            (GET "/dashboard" request (teachers-route request))
            (GET "/dashboard/classes" request (teachers-route request))
+           (GET "/dashboard/schools" request (teachers-route request))
            (GET "/dashboard/classes/:class-id" request (teachers-route request))
            (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))

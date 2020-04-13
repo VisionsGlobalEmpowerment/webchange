@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.dashboard.classes.events :as classes-events]
+    [webchange.dashboard.schools.events :as schools-events]
     [webchange.dashboard.students.events :as students-events]
     [webchange.validation.validate :refer [validate]]))
 
@@ -41,6 +42,12 @@
                    [::students-events/load-students class-id])}))
 
 (re-frame/reg-event-fx
+  ::open-schools
+  (fn [{:keys [db]} _]
+    {:dispatch-n (list
+                   [::schools-events/load-schools])}))
+
+(re-frame/reg-event-fx
   ::open-classes
   (fn [{:keys [db]} _]
     {:dispatch-n (list
@@ -60,3 +67,11 @@
      :dispatch-n (list
                  [::classes-events/open-delete-modal]
                  [::students-events/load-students class-id])}))
+
+(re-frame/reg-event-fx
+  ::show-delete-school-form
+  (fn [{:keys [db]} [_ school-id]]
+    {:db (assoc-in db [:dashboard :current-school-id] school-id)
+     :dispatch-n (list
+                   [::schools-events/open-delete-modal]
+                   )}))

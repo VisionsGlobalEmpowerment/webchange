@@ -24,6 +24,7 @@
                   "student-dashboard" {""          :student-dashboard}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
+                                       ["/schools"]                                     :dashboard-schools
                                        ["/classes/" :class-id]                          :dashboard-class-profile
                                        ["/classes/" :class-id "/students"]              :dashboard-students
                                        ["/classes/" :class-id "/students/" :student-id] :dashboard-student-profile}}])
@@ -43,6 +44,7 @@
       :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
       :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])
       :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
+      :dashboard-schools (re-frame/dispatch [::dashboard-events/open-schools])
       :dashboard-students (re-frame/dispatch [::dashboard-events/open-students (:class-id route-params)])
       nil)))
 
