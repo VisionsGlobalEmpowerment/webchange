@@ -60,20 +60,21 @@
 (defn edit-scene-modal
   [{:keys [open? scene-data scenes-list on-close on-save]}]
   (r/with-let [data (r/atom scene-data)]
-              [ui/dialog
-               {:open     open?
-                :on-close on-close}
-               [:form
-                [ui/dialog-title "Edit Scene"]
-                [ui/dialog-content
-                 [edit-scene-form {:data        data
-                                   :scenes-list scenes-list}]]
-                [ui/dialog-actions
-                 [ui/button {:on-click on-close} "Cancel"]
-                 [ui/button {:type     "submit"
-                             :variant  "contained"
-                             :color    "secondary"
-                             :on-click #(do (.preventDefault %)
-                                            (on-save @data)
-                                            (on-close))}
-                  "Save"]]]]))
+              (let [handle-close #(on-close (empty? scene-data))]
+                [ui/dialog
+                 {:open     open?
+                  :on-close handle-close}
+                 [:form
+                  [ui/dialog-title "Edit Scene"]
+                  [ui/dialog-content
+                   [edit-scene-form {:data        data
+                                     :scenes-list scenes-list}]]
+                  [ui/dialog-actions
+                   [ui/button {:on-click handle-close} "Cancel"]
+                   [ui/button {:type     "submit"
+                               :variant  "contained"
+                               :color    "secondary"
+                               :on-click #(do (.preventDefault %)
+                                              (on-save @data)
+                                              (on-close))}
+                    "Save"]]]])))
