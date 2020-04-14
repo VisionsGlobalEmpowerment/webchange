@@ -46,7 +46,8 @@
   (let [phrase-data (node-data->phrase-data node)
         phrase-target (when-not (nil? (:target phrase-data))
                         (-> (:target phrase-data) (capitalize) (str ":")))
-        phrase-text (:phrase-text phrase-data)
+        phrase-text (or (:phrase-text-translated phrase-data)
+                        (:phrase-text phrase-data))
         styles (get-styles)]
     (if-not (nil? phrase-text)
       [:div {:style (:title styles)}

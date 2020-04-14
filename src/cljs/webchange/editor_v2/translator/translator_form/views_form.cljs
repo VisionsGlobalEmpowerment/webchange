@@ -5,6 +5,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.editor-v2.graph-builder.utils.root-nodes :refer [get-root-nodes]]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.subs :as translator-subs]
     [webchange.editor-v2.translator.events :as translator-events]
@@ -133,6 +134,29 @@
       (:id current-concept)
       nil)))
 
+(defn- set-current-concept
+  [concept]
+  (re-frame/dispatch [::translator-events/set-current-concept concept]))
+
+(defn- set-selected-action
+  [action]
+  (re-frame/dispatch [::translator-events/set-current-selected-action action]))
+
+(defn- reset-selected-action
+  []
+  (re-frame/dispatch [::translator-events/clean-current-selected-action]))
+
+(defn- set-initial-state
+  [{:keys [concept-required? concepts current-concept graph selected-action-node]}]
+  (when (and concept-required? (nil? current-concept))
+    (set-current-concept (first concepts)))
+  (if concept-required?
+    (when (and (nil? selected-action-node)
+               (not (nil? current-concept)))
+      (set-selected-action (->> graph get-root-nodes first (get graph))))
+    (when (nil? selected-action-node)
+      (set-selected-action (->> graph get-root-nodes first (get graph))))))
+
 (defn translator-form
   []
   (r/with-let [error (r/atom nil)
@@ -159,13 +183,13 @@
                     phrase-action-selected? (-> @selected-action-node (nil?) (not))
                     concept-required? (or has-concepts? selected-action-concept?)
 
-                    reset-selected-action #(re-frame/dispatch [::translator-events/clean-current-selected-action])
-                    set-current-concept #(re-frame/dispatch [::translator-events/set-current-concept %])
-
                     handle-concept-changed #(do (reset-selected-action)
-                                                (set-current-concept %))
-
-                    _ (when (and concept-required? (nil? current-concept)) (set-current-concept (first concepts)))]
+                                                (set-current-concept %))]
+                (set-initial-state {:concept-required?    concept-required?
+                                    :concepts             concepts
+                                    :current-concept      current-concept
+                                    :graph                graph
+                                    :selected-action-node @selected-action-node})
                 [:div
                  [description-block {:origin-text     (:phrase-description prepared-root-action-data)
                                      :translated-text (:phrase-description-translated prepared-root-action-data)
@@ -176,7 +200,9 @@
                                     :concepts-list   concepts
                                     :on-change       handle-concept-changed}])
                  [dialog-block {:dialog-data dialog-data}]
-                 [diagram-block {:graph graph}]
+                 [diagram-block {:graph           graph
+                                 :current-concept current-concept
+                                 :edited-data     data-store}]
                  [play-phrase-block {:graph           graph
                                      :current-concept current-concept
                                      :edited-data     data-store}]
