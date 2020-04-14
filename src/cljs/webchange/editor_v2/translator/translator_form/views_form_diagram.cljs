@@ -13,8 +13,7 @@
           data-store))
 
 (defn diagram-block
-  [{:keys [graph current-concept edited-data]}]
-  (let [prepared-graph (update-graph graph edited-data (:id current-concept))]
-    [diagram-widget {:graph prepared-graph
-                     :mode  :translation}]))
+  [{:keys [graph]}]
+  [diagram-widget {:graph graph
+                   :mode  :translation}])
 

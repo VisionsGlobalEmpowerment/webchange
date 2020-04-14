@@ -200,9 +200,7 @@
                                     :concepts-list   concepts
                                     :on-change       handle-concept-changed}])
                  [dialog-block {:dialog-data dialog-data}]
-                 [diagram-block {:graph           graph
-                                 :current-concept current-concept
-                                 :edited-data     data-store}]
+                 [diagram-block {:graph           graph}]
                  [play-phrase-block {:graph           graph
                                      :current-concept current-concept
                                      :edited-data     data-store}]
