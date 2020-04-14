@@ -40,33 +40,35 @@
         common-theme {:typography {:h2                {:fontSize    "1.875rem"
                                                        :font-weight "900"}
                                    :use-next-variants true}
-                      :overrides  {:MuiInputBase  {:root {:&:before {:display "none"}
-                                                          :&:after  {:display "none"}}}
-                                   :MuiButton     {:root      {:font-size      "0.85rem"
-                                                               :font-weight    "bold"
-                                                               :text-transform "capitalize"}
-                                                   :contained {:border-radius "20px"
-                                                               :padding       "6px 40px"}
-                                                   :flat      {:background-color (get-in color-themes [theme :palette :flat-button :background-color])
-                                                               :padding          "6px 40px"
-                                                               :border-radius    "15px"}}
-                                   :MuiInputLabel {:formControl {:transform "translate(20px, 28px)"}}
-                                   :MuiList       {:root {:background-color (get-in color-themes [theme :palette :background :paper])
-                                                          :padding          "8px"}}
-                                   :MuiMenu       {:paper {:margin-top  "-2px"
-                                                           :margin-left "1px"}}
-                                   :MuiMenuItem   {:root {:padding       "5px 11px"
-                                                          :border-radius "6px"
-                                                          :margin        "5px 0"}}
-                                   :MuiSelect     {:selectMenu {:border-color  (get-in color-themes [theme :palette :border :default])
-                                                                :border-width  "1px"
-                                                                :border-style  "solid"
-                                                                :border-radius "6px"
-                                                                :padding       "10px 19px"
-                                                                :text-align    "start"
-                                                                :&:focus       {:border-radius "6px"}}
-                                                   :icon       {:right "9px"
-                                                                :color (get-in color-themes [theme :palette :border :default])}}}}]
+                      :overrides  {:MuiInputBase     {:root {:&:before {:display "none"}
+                                                             :&:after  {:display "none"}}}
+                                   :MuiButton        {:root      {:font-size      "0.85rem"
+                                                                  :font-weight    "bold"
+                                                                  :text-transform "capitalize"}
+                                                      :contained {:border-radius "20px"
+                                                                  :padding       "6px 40px"}
+                                                      :flat      {:background-color (get-in color-themes [theme :palette :flat-button :background-color])
+                                                                  :padding          "6px 40px"
+                                                                  :border-radius    "15px"}}
+                                   :MuiOutlinedInput {:input {:padding "11.5px 14px"}}
+                                   :MuiInputLabel    {:formControl {:transform "translate(20px, 28px)"}
+                                                      :outlined {:transform "translate(14px, 14px)"}}
+                                   :MuiList          {:root {:background-color (get-in color-themes [theme :palette :background :paper])
+                                                             :padding          "8px"}}
+                                   :MuiMenu          {:paper {:margin-top  "-2px"
+                                                              :margin-left "1px"}}
+                                   :MuiMenuItem      {:root {:padding       "5px 11px"
+                                                             :border-radius "6px"
+                                                             :margin        "5px 0"}}
+                                   :MuiSelect        {:selectMenu {:border-color  (get-in color-themes [theme :palette :border :default])
+                                                                   :border-width  "1px"
+                                                                   :border-style  "solid"
+                                                                   :border-radius "6px"
+                                                                   :padding       "10px 19px"
+                                                                   :text-align    "start"
+                                                                   :&:focus       {:border-radius "6px"}}
+                                                      :icon       {:right "9px"
+                                                                   :color (get-in color-themes [theme :palette :border :default])}}}}]
     (create-mui-theme (deep-merge common-theme color-theme))))
 
 (defn get-in-theme

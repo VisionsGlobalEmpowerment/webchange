@@ -16,8 +16,7 @@
   (let [course @(re-frame/subscribe [::subs/current-course])
         concepts (->> @(re-frame/subscribe [::concepts-subs/dataset-items]) (sort-by :name))
         styles (get-styles)]
-    (js/console.log "render concept list" (->> concepts (map :name) clj->js))
-    [list-card {:title        "Concepts?"
+    [list-card {:title        "Concepts"
                 :full-height  true
                 :on-add-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
      [ui/list {:style (:list-full-height styles)}
