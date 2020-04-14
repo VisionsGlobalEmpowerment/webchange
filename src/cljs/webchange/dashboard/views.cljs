@@ -6,6 +6,7 @@
     [webchange.dashboard.dashboard-layout.views :refer [app-bar drawer progress-bar side-menu]]
     [webchange.dashboard.dashboard-layout.utils :refer [get-shift-styles]]
     [webchange.dashboard.classes.views :refer [classes-list class-modal class-delete-modal class-profile]]
+    [webchange.dashboard.schools.views :refer [schools-list school-modal school-delete-modal]]
     [webchange.dashboard.students.views :refer [students-list student-modal student-delete-modal student-remove-from-class-modal student-profile]]
     [webchange.dashboard.subs :as dashboard-subs]
     [webchange.routes :refer [redirect-to]]))
@@ -24,6 +25,7 @@
   (case main-content
     :dashboard (do (redirect-to :dashboard-classes) [content-page {:title (translate [:content :redirect])}])
     :classes-list [classes-list]
+    :schools-list [schools-list]
     :class-profile [class-profile]
     :students-list [students-list]
     :student-profile [student-profile]
@@ -33,6 +35,8 @@
   []
   [:div
    [class-modal]
+   [school-modal]
+   [school-delete-modal]
    [class-delete-modal]
    [student-modal]
    [student-remove-from-class-modal]

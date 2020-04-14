@@ -59,6 +59,7 @@
       :student-id (str->int-param route-params :student-id)}])
   [dashboard])
 
+
 (defn- panels
   [panel-name route-params]
   (case panel-name
@@ -81,6 +82,8 @@
     :dashboard-class-profile [dashboard-panel :class-profile route-params]
     :dashboard-students [dashboard-panel :students-list route-params]
     :dashboard-student-profile [dashboard-panel :student-profile route-params]
+    :dashboard-schools [dashboard-panel :schools-list route-params]
+
     ;; student dashboard
     :student-login [student-access-form]
     :student-dashboard [student-dashboard-page]

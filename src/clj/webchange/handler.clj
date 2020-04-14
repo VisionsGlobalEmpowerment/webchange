@@ -10,6 +10,7 @@
             [webchange.common.audio-parser :refer [get-talking-animation]]
             [webchange.course.handler :refer [course-routes]]
             [webchange.class.handler :refer [class-routes]]
+            [webchange.school.handler :refer [school-routes]]
             [webchange.progress.handler :refer [progress-routes]]
             [webchange.dataset.handler :refer [dataset-routes]]
             [webchange.assets.handler :refer [asset-routes]]
@@ -89,6 +90,7 @@
 
            (GET "/dashboard" request (teachers-route request))
            (GET "/dashboard/classes" request (teachers-route request))
+           (GET "/dashboard/schools" request (teachers-route request))
            (GET "/dashboard/classes/:class-id" request (teachers-route request))
            (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
@@ -114,6 +116,7 @@
            auth-routes
            course-routes
            class-routes
+           school-routes
            dataset-routes
            progress-routes
            resources-routes

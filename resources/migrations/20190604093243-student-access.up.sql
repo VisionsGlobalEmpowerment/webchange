@@ -12,6 +12,8 @@ ALTER TABLE ONLY schools
 --;;
 INSERT INTO schools (id, name) VALUES (1, 'default');
 --;;
+ALTER SEQUENCE schools_id_seq RESTART WITH 2;
+--;;
 
 CREATE TABLE teachers
 (id SERIAL,
