@@ -61,6 +61,7 @@
   :figwheel {:css-dirs ["resources/public/css"]
              :ring-handler webchange.handler/dev-handler
              :server-ip   "0.0.0.0"
+             :server-logfile "log/figwheel.log"
              }
 
   :migratus {:store :database

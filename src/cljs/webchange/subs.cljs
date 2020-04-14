@@ -22,10 +22,13 @@
   (fn [db]
     (-> db :course-data :levels)))
 
+(defn current-scene
+  [db]
+  (:current-scene db))
+
 (re-frame/reg-sub
   ::current-scene
-  (fn [db]
-    (:current-scene db)))
+  current-scene)
 
 (re-frame/reg-sub
   ::current-course
@@ -48,6 +51,12 @@
     (get-in db [:scenes scene-id :scene-objects] [])))
 
 (re-frame/reg-sub
+  ::current-scene-objects
+  (fn [db [_]]
+    (let [current-scene-id (current-scene db)]
+      (get-in db [:scenes current-scene-id :objects] {}))))
+
+(re-frame/reg-sub
   ::scene-actions
   (fn [db [_ scene-id]]
     (get-in db [:scenes scene-id :actions] [])))
@@ -58,7 +67,7 @@
     (get-in db [:scenes scene-id :triggers] [])))
 
 (re-frame/reg-sub
-  ::current-scene-objects
+  ::current-scene-data-objects
   (fn [db]
     (get-in db [:current-scene-data :scene-objects] [])))
 
@@ -85,6 +94,15 @@
   ::scene-asset
   (fn [db [_ scene-id id]]
     (get-in db [:scenes scene-id :assets id] {})))
+
+(defn scene-assets
+  [db scene-id]
+  (get-in db [:scenes scene-id :assets] {}))
+
+(re-frame/reg-sub
+  ::scene-assets
+  (fn [db [_ scene-id]]
+    (scene-assets db scene-id)))
 
 (re-frame/reg-sub
   ::current-scene-object

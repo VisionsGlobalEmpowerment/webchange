@@ -7,7 +7,8 @@
     [webchange.editor.core :as editor]
     [webchange.common.anim :refer [animations]]
     [webchange.editor.common.actions.events :as actions.events]
-    [webchange.interpreter.variables.events :as vars.events]))
+    [webchange.interpreter.variables.events :as vars.events]
+    [webchange.editor-v2.translator.translator-form.audio-assets.events :as translator-assets.events]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -19,8 +20,8 @@
   ::load-datasets
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)]
-      {:db (-> db
-               (assoc-in [:loading :datasets] true))
+      {:db         (-> db
+                       (assoc-in [:loading :datasets] true))
        :http-xhrio {:method          :get
                     :uri             (str "/api/courses/" course-id "/datasets")
                     :format          (json-request-format)
@@ -31,7 +32,7 @@
 (re-frame/reg-event-fx
   ::load-datasets-success
   (fn [{:keys [db]} [_ result]]
-    {:db (assoc-in db [:editor :course-datasets] (:datasets result))
+    {:db         (assoc-in db [:editor :course-datasets] (:datasets result))
      :dispatch-n (list [:complete-request :datasets])}))
 
 (re-frame/reg-event-fx
@@ -136,7 +137,7 @@
     (when-not action (throw (js/Error. "Action is not defined")))
     (when-not scene-id (throw (js/Error. "Scene id is not defined")))
     (let [action-data (get-in db [:scenes scene-id :actions (keyword action)])]
-      {:db (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action})
+      {:db       (assoc-in db [:editor :selected-scene-action] {:scene-id scene-id :action action})
        :dispatch [::actions.events/set-form-data action-data]})))
 
 (re-frame/reg-event-fx
@@ -164,7 +165,7 @@
   (fn [{:keys [db]} [_ action scene-id]]
     (when-not action (throw (js/Error. "Action is not defined")))
     (when-not scene-id (throw (js/Error. "Scene id is not defined")))
-    {:db (assoc-in db [:editor :shown-scene-action] {:scene-id scene-id :action action})
+    {:db         (assoc-in db [:editor :shown-scene-action] {:scene-id scene-id :action action})
      :dispatch-n (list [::set-main-content :actions]
                        [::select-scene-action action scene-id])}))
 
@@ -173,7 +174,7 @@
   (fn [{:keys [db]} [_ action type scene-id]]
     (when-not action (throw (js/Error. "Action is not defined")))
     (when-not scene-id (throw (js/Error. "Scene id is not defined")))
-    {:db (assoc-in db [:scenes scene-id :actions (keyword action)] {:type type})
+    {:db       (assoc-in db [:scenes scene-id :actions (keyword action)] {:type type})
      :dispatch [::select-scene-action action scene-id]}))
 
 (re-frame/reg-event-fx
@@ -185,9 +186,9 @@
     (let [old-key (keyword old-name)
           new-key (keyword new-name)
           action (get-in db [:scenes scene-id :actions old-key])]
-      {:db (-> db
-               (update-in [:scenes scene-id :actions] dissoc old-key)
-               (assoc-in [:scenes scene-id :actions new-key] action))
+      {:db         (-> db
+                       (update-in [:scenes scene-id :actions] dissoc old-key)
+                       (assoc-in [:scenes scene-id :actions new-key] action))
        :dispatch-n (list [::show-scene-action new-name scene-id])})))
 
 (re-frame/reg-event-fx
@@ -224,15 +225,25 @@
           assets (-> db
                      (get-in [:scenes scene-id :assets] [])
                      (conj asset))]
-      {:db (assoc-in db [:scenes scene-id :assets] assets)
+      {:db           (assoc-in db [:scenes scene-id :assets] assets)
+       :dispatch     [::translator-assets.events/init-assets-data]
        :reload-asset state})))
 
 (re-frame/reg-event-fx
   ::edit-asset
   (fn [{:keys [db]} [_ {:keys [scene-id id state]}]]
     (let [asset (-> (get-in db [:scenes scene-id :assets id]) (merge state))]
-      {:db (assoc-in db [:scenes scene-id :assets id] asset)
+      {:db           (assoc-in db [:scenes scene-id :assets id] asset)
        :reload-asset asset})))
+
+(re-frame/reg-event-fx
+  ::reset-audio-assets
+  (fn [{:keys [db]} [_ scene-id audio-assets]]
+    (let [assets (get-in db [:scenes scene-id :assets])
+          new-assets (->> assets
+                          (filter (fn [{:keys [type]}] (not (= type "audio"))))
+                          (concat audio-assets))]
+      {:db (assoc-in db [:scenes scene-id :assets] new-assets)})))
 
 (re-frame/reg-event-fx
   ::reset-asset
@@ -324,7 +335,7 @@
   ::create-scene
   (fn [{:keys [db]} [_ scene-id]]
     (let [course-id (:current-course db)]
-      {:db (assoc-in db [:loading :create-scene] true)
+      {:db         (assoc-in db [:loading :create-scene] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
                     :params          {:scene {}}
@@ -340,15 +351,15 @@
     (let [course-id (:current-course db)
           course-data (-> (:course-data db)
                           (update-in [:scenes] conj scene-name))]
-    {:dispatch-n (list [:complete-request :create-scene]
-                       [::save-course course-id course-data]
-                       [::set-main-content :editor])})))
+      {:dispatch-n (list [:complete-request :create-scene]
+                         [::save-course course-id course-data]
+                         [::set-main-content :editor])})))
 
 
 (re-frame/reg-event-fx
   ::save-course
   (fn [{:keys [db]} [_ course-id data]]
-    {:db (assoc db :course-data data)
+    {:db         (assoc db :course-data data)
      :http-xhrio {:method          :post
                   :uri             (str "/api/courses/" course-id)
                   :params          {:course data}
@@ -367,9 +378,9 @@
   ::open-current-course-versions
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)]
-      {:db (-> db
-               (assoc-in [:loading :course-versions] true)
-               (assoc-in [:editor :current-main-content] :course-versions))
+      {:db         (-> db
+                       (assoc-in [:loading :course-versions] true)
+                       (assoc-in [:editor :current-main-content] :course-versions))
        :http-xhrio {:method          :get
                     :uri             (str "/api/courses/" course-id "/versions")
                     :format          (json-request-format)
@@ -381,13 +392,13 @@
 (re-frame/reg-event-fx
   ::open-current-course-versions-success
   (fn [{:keys [db]} [_ result]]
-    {:db (assoc-in db [:editor :course-versions] (:versions result))
+    {:db         (assoc-in db [:editor :course-versions] (:versions result))
      :dispatch-n (list [:complete-request :course-versions])}))
 
 (re-frame/reg-event-fx
   ::restore-course-version
   (fn [{:keys [db]} [_ version-id]]
-    {:db (assoc-in db [:loading :restore-course-version] true)
+    {:db         (assoc-in db [:loading :restore-course-version] true)
      :http-xhrio {:method          :post
                   :uri             (str "/api/course-versions/" version-id "/restore")
                   :params          {:id version-id}
@@ -408,9 +419,9 @@
   (fn [{:keys [db]} _]
     (let [course-id (:current-course db)
           scene-id (:current-scene db)]
-      {:db (-> db
-               (assoc-in [:loading :scene-versions] true)
-               (assoc-in [:editor :current-main-content] :scene-versions))
+      {:db         (-> db
+                       (assoc-in [:loading :scene-versions] true)
+                       (assoc-in [:editor :current-main-content] :scene-versions))
        :http-xhrio {:method          :get
                     :uri             (str "/api/courses/" course-id "/scenes/" scene-id "/versions")
                     :format          (json-request-format)
@@ -422,13 +433,13 @@
 (re-frame/reg-event-fx
   ::open-current-scene-versions-success
   (fn [{:keys [db]} [_ result]]
-    {:db (assoc-in db [:editor :scene-versions] (:versions result))
+    {:db         (assoc-in db [:editor :scene-versions] (:versions result))
      :dispatch-n (list [:complete-request :scene-versions])}))
 
 (re-frame/reg-event-fx
   ::restore-scene-version
   (fn [{:keys [db]} [_ version-id]]
-    {:db (assoc-in db [:loading :restore-scene-version] true)
+    {:db         (assoc-in db [:loading :restore-scene-version] true)
      :http-xhrio {:method          :post
                   :uri             (str "/api/scene-versions/" version-id "/restore")
                   :params          {:id version-id}
@@ -448,7 +459,7 @@
   ::add-dataset
   (fn [{:keys [db]} [_ {:keys [name fields]}]]
     (let [course-id (:current-course db)]
-      {:db (assoc-in db [:loading :add-dataset] true)
+      {:db         (assoc-in db [:loading :add-dataset] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/datasets")
                     :params          {:course-slug course-id :name name :scheme {:fields fields}}
@@ -467,7 +478,7 @@
 (re-frame/reg-event-fx
   ::edit-dataset
   (fn [{:keys [db]} [_ dataset-id {:keys [fields]}]]
-    {:db (assoc-in db [:loading :edit-dataset] true)
+    {:db         (assoc-in db [:loading :edit-dataset] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/datasets/" dataset-id)
                   :params          {:scheme {:fields fields}}
@@ -485,13 +496,13 @@
 (re-frame/reg-event-fx
   ::show-edit-dataset-form
   (fn [{:keys [db]} [_ dataset-id]]
-    {:db (assoc-in db [:editor :current-dataset-id] dataset-id)
+    {:db       (assoc-in db [:editor :current-dataset-id] dataset-id)
      :dispatch [::set-main-content :edit-dataset-form]}))
 
 (re-frame/reg-event-fx
   ::show-dataset
   (fn [{:keys [db]} [_ dataset-id]]
-    {:db (assoc-in db [:editor :current-dataset-id] dataset-id)
+    {:db         (assoc-in db [:editor :current-dataset-id] dataset-id)
      :dispatch-n (list [::load-current-dataset-items]
                        [::load-current-dataset-lessons]
                        [::set-main-content :dataset-info])}))
@@ -500,8 +511,8 @@
   ::load-current-dataset-items
   (fn [{:keys [db]} _]
     (let [dataset-id (get-in db [:editor :current-dataset-id])]
-      {:db (-> db
-               (assoc-in [:loading :dataset-items] true))
+      {:db         (-> db
+                       (assoc-in [:loading :dataset-items] true))
        :http-xhrio {:method          :get
                     :uri             (str "/api/datasets/" dataset-id "/items")
                     :format          (json-request-format)
@@ -512,7 +523,7 @@
 (re-frame/reg-event-fx
   ::load-current-dataset-items-success
   (fn [{:keys [db]} [_ result]]
-    {:db (assoc-in db [:editor :current-dataset-items] (:items result))
+    {:db         (assoc-in db [:editor :current-dataset-items] (:items result))
      :dispatch-n (list [:complete-request :dataset-items])}))
 
 (re-frame/reg-event-fx
@@ -524,7 +535,7 @@
   ::add-dataset-item
   (fn [{:keys [db]} [_ {:keys [name data]}]]
     (let [dataset-id (get-in db [:editor :current-dataset-id])]
-      {:db (assoc-in db [:loading :add-dataset-item] true)
+      {:db         (assoc-in db [:loading :add-dataset-item] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/dataset-items")
                     :params          {:dataset-id dataset-id :name name :data data}
@@ -544,13 +555,13 @@
 (re-frame/reg-event-fx
   ::show-edit-dataset-item-form
   (fn [{:keys [db]} [_ item-id]]
-    {:db (assoc-in db [:editor :current-dataset-item-id] item-id)
+    {:db       (assoc-in db [:editor :current-dataset-item-id] item-id)
      :dispatch [::set-main-content :edit-dataset-item-form]}))
 
 (re-frame/reg-event-fx
   ::edit-dataset-item
   (fn [{:keys [db]} [_ item-id {:keys [data name]}]]
-    {:db (assoc-in db [:loading :edit-dataset-item] true)
+    {:db         (assoc-in db [:loading :edit-dataset-item] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/dataset-items/" item-id)
                   :params          {:data data :name name}
@@ -571,7 +582,7 @@
   (fn [{:keys [db]} [_ id data-patch]]
     (let [{:keys [name data]} (get-in db [:dataset-items id])
           new-data (merge data data-patch)]
-      {:db (assoc-in db [:loading :update-dataset-item] true)
+      {:db         (assoc-in db [:loading :update-dataset-item] true)
        :http-xhrio {:method          :put
                     :uri             (str "/api/dataset-items/" id)
                     :params          {:data new-data :name name}
@@ -589,7 +600,7 @@
 (re-frame/reg-event-fx
   ::delete-dataset-item
   (fn [{:keys [db]} [_ item-id]]
-    {:db (assoc-in db [:loading :delete-dataset-item] true)
+    {:db         (assoc-in db [:loading :delete-dataset-item] true)
      :http-xhrio {:method          :delete
                   :uri             (str "/api/dataset-items/" item-id)
                   :format          (json-request-format)
@@ -608,8 +619,8 @@
   ::load-current-dataset-lessons
   (fn [{:keys [db]} _]
     (let [dataset-id (get-in db [:editor :current-dataset-id])]
-      {:db (-> db
-               (assoc-in [:loading :dataset-lessons] true))
+      {:db         (-> db
+                       (assoc-in [:loading :dataset-lessons] true))
        :http-xhrio {:method          :get
                     :uri             (str "/api/datasets/" dataset-id "/lesson-sets")
                     :format          (json-request-format)
@@ -621,7 +632,7 @@
 (re-frame/reg-event-fx
   ::load-current-dataset-lessons-success
   (fn [{:keys [db]} [_ result]]
-    {:db (assoc-in db [:editor :current-dataset-lessons] (:lesson-sets result))
+    {:db         (assoc-in db [:editor :current-dataset-lessons] (:lesson-sets result))
      :dispatch-n (list [:complete-request :dataset-lessons])}))
 
 (re-frame/reg-event-fx
@@ -633,7 +644,7 @@
   ::add-dataset-lesson
   (fn [{:keys [db]} [_ {:keys [name data]}]]
     (let [dataset-id (get-in db [:editor :current-dataset-id])]
-      {:db (assoc-in db [:loading :add-dataset-lesson] true)
+      {:db         (assoc-in db [:loading :add-dataset-lesson] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/lesson-sets")
                     :params          {:dataset-id dataset-id :name name :data data}
@@ -653,13 +664,13 @@
 (re-frame/reg-event-fx
   ::show-edit-dataset-lesson-form
   (fn [{:keys [db]} [_ id]]
-    {:db (assoc-in db [:editor :current-dataset-lesson-id] id)
+    {:db       (assoc-in db [:editor :current-dataset-lesson-id] id)
      :dispatch [::set-main-content :edit-dataset-lesson-form]}))
 
 (re-frame/reg-event-fx
   ::edit-dataset-lesson
   (fn [{:keys [db]} [_ id {{items :items} :data}]]
-    {:db (assoc-in db [:loading :edit-dataset-lesson] true)
+    {:db         (assoc-in db [:loading :edit-dataset-lesson] true)
      :http-xhrio {:method          :put
                   :uri             (str "/api/lesson-sets/" id)
                   :params          {:data {:items items}}
@@ -679,7 +690,7 @@
 (re-frame/reg-event-fx
   ::delete-dataset-lesson
   (fn [{:keys [db]} [_ id]]
-    {:db (assoc-in db [:loading :delete-dataset-lesson] true)
+    {:db         (assoc-in db [:loading :delete-dataset-lesson] true)
      :http-xhrio {:method          :delete
                   :uri             (str "/api/lesson-sets/" id)
                   :format          (json-request-format)
@@ -700,7 +711,7 @@
     (let [form-data (doto
                       (js/FormData.)
                       (.append "file" js-file-value))]
-      {:db (assoc-in db [:loading :upload-asset] true)
+      {:db         (assoc-in db [:loading :upload-asset] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/assets/")
                     :body            form-data
@@ -711,9 +722,9 @@
 (re-frame/reg-event-fx
   ::upload-asset-success
   (fn [{:keys [db]} [_ scene-id props result]]
-      {:dispatch-n (list [:complete-request :upload-asset]
-                         [::add-asset {:scene-id scene-id :state (merge result props)}]
-                         [::set-main-content :editor])}))
+    {:dispatch-n (list [:complete-request :upload-asset]
+                       [::add-asset {:scene-id scene-id :state (merge result props)}]
+                       [::set-main-content :editor])}))
 
 (re-frame/reg-event-fx
   ::upload-and-add-asset
@@ -722,7 +733,7 @@
     (let [form-data (doto
                       (js/FormData.)
                       (.append "file" js-file-value))]
-      {:db (assoc-in db [:loading :upload-and-add-asset] true)
+      {:db         (assoc-in db [:loading :upload-and-add-asset] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/assets/")
                     :body            form-data
@@ -757,13 +768,13 @@
   (fn [{:keys [db]} [_ {asset-id :id x :offsetX y :offsetY asset :asset} scene-id]]
     (when-not scene-id (throw (js/Error. "Scene id is not defined")))
     (let [asset (or asset (get-in db [:scenes scene-id :assets asset-id]))
-          state {:type :image :scene-layer 5 :scene-name "image"
-                 :x x :y y
-                 :src (:url asset)
-                 :width (:width asset)
+          state {:type   :image :scene-layer 5 :scene-name "image"
+                 :x      x :y y
+                 :src    (:url asset)
+                 :width  (:width asset)
                  :height (:height asset)}]
       (if (= "image" (:type asset))
-        {:db (assoc-in db [:editor :new-object-defaults] state)
+        {:db         (assoc-in db [:editor :new-object-defaults] state)
          :dispatch-n (list [::show-form :add-object])}))))
 
 (defn next-name [names prefix]
@@ -792,15 +803,15 @@
   (fn [{:keys [db]} [_ {id :id x :offsetX y :offsetY}]]
     (let [name (object-name db "animation")
           animation (get animations (keyword id))
-          state {:type :animation :scene-layer 5 :scene-name name :start true
-                 :x x :y y :name id
-                 :width (:width animation) :height (:height animation)
+          state {:type    :animation :scene-layer 5 :scene-name name :start true
+                 :x       x :y y :name id
+                 :width   (:width animation) :height (:height animation)
                  :scale-x (:scale-x animation) :scale-y (:scale-y animation)
-                 :speed (:speed animation)
-                 :anim (-> animation :animations first)
-                 :skin (-> animation :skins first)}]
-        {:db (assoc-in db [:editor :new-object-defaults] state)
-         :dispatch-n (list [::show-form :add-object])})))
+                 :speed   (:speed animation)
+                 :anim    (-> animation :animations first)
+                 :skin    (-> animation :skins first)}]
+      {:db         (assoc-in db [:editor :new-object-defaults] state)
+       :dispatch-n (list [::show-form :add-object])})))
 
 (re-frame/reg-event-fx
   ::add-audio-action-to-scene
@@ -809,7 +820,7 @@
     (when-not scene-id (throw (js/Error. "Scene id is not defined")))
     (let [name (keyword (action-name db "audio"))
           state {:type "audio" :id (:url asset)}]
-      {:db (assoc-in db [:scenes scene-id :actions name] state)
+      {:db         (assoc-in db [:scenes scene-id :actions name] state)
        :dispatch-n (list [::set-main-content :actions]
                          [::select-scene-action name scene-id])})))
 
@@ -846,7 +857,7 @@
 (re-frame/reg-event-fx
   ::detect-lip-sync
   (fn [{:keys [db]} [_ audio-action]]
-    {:db (assoc-in db [:loading :get-talk-animation] true)
+    {:db         (assoc-in db [:loading :get-talk-animation] true)
      :http-xhrio {:method          :get
                   :uri             (str "/api/actions/get-talk-animations")
                   :params          {:file     (:audio audio-action)
@@ -876,7 +887,7 @@
   ::play-current-scene
   (fn [{:keys [db]} [_ _]]
     (let [current-scene (:current-scene db)]
-      {:db (-> db
-               (assoc-in [:scenes current-scene :objects] (get-in db [:current-scene-data :objects])))
+      {:db         (-> db
+                       (assoc-in [:scenes current-scene :objects] (get-in db [:current-scene-data :objects])))
        :dispatch-n (list [::set-main-content :play-scene]
                          [::vars.events/clear-vars])})))

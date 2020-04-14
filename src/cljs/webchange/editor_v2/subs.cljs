@@ -12,18 +12,24 @@
   (fn [db]
     (get-in db [:editor-v2 :current-action])))
 
+(defn course-concept
+  [db]
+  (->> (get-in db [:editor :course-datasets])
+       (some (fn [dataset]
+               (and (= "concepts" (:name dataset))
+                    dataset)))))
+
 (re-frame/reg-sub
   ::course-concept
-  (fn [db]
-    (->> (get-in db [:editor :course-datasets])
-         (some (fn [dataset]
-                 (and (= "concepts" (:name dataset))
-                      dataset))))))
+  course-concept)
+
+(defn course-dataset-items
+  [db]
+  (get-in db [:dataset-items]))
 
 (re-frame/reg-sub
   ::course-dataset-items
-  (fn [db]
-    (get-in db [:dataset-items])))
+  course-dataset-items)
 
 (re-frame/reg-sub
   ::course-info

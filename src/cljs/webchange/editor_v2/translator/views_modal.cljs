@@ -7,6 +7,7 @@
     [webchange.editor-v2.components.confirm-dialog.views :refer [confirm-dialog]]
     [webchange.editor-v2.translator.events :as translator-events]
     [webchange.editor-v2.translator.subs :as translator-subs]
+    [webchange.editor-v2.translator.translator-form.audio-assets.subs :as assets-subs]
     [webchange.editor-v2.translator.translator-form.views-form :refer [translator-form]]
     [webchange.subs :as subs]))
 
@@ -44,23 +45,26 @@
                  (assoc result name data))
                {})))
 
-(defn- save-scene-data
-  [scene-id data-store]
-  (doseq [[action-name action-data] (group-scene-updates data-store)]
-    (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
-  (re-frame/dispatch [::events/save-current-scene scene-id]))
-
-(defn- save-concepts-data
-  [data-store]
-  (doseq [[id data-patch] (group-concepts-updates data-store)]
-    (re-frame/dispatch [::events/update-dataset-item id data-patch])))
-
-(defn save-actions-data!
+(defn- save-scene-data!
   []
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        assets @(re-frame/subscribe [::assets-subs/assets-data])
         data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])]
-    (save-scene-data scene-id data-store)
-    (save-concepts-data data-store)))
+    (doseq [[action-name action-data] (group-scene-updates (:actions data-store))]
+      (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
+    (re-frame/dispatch [::events/reset-audio-assets scene-id (vals assets)])
+    (re-frame/dispatch [::events/save-current-scene scene-id])))
+
+(defn- save-concepts-data!
+  []
+  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])]
+    (doseq [[id data-patch] (group-concepts-updates (:actions data-store))]
+      (re-frame/dispatch [::events/update-dataset-item id data-patch]))))
+
+(defn- save-edited-data!
+  []
+  (save-scene-data!)
+  (save-concepts-data!))
 
 (def close-window! #(re-frame/dispatch [::translator-events/close-translator-modal]))
 
@@ -70,7 +74,7 @@
               (let [open? @(re-frame/subscribe [::translator-subs/translator-modal-state])
                     data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
                     blocking-progress? @(re-frame/subscribe [::translator-subs/blocking-progress])
-                    handle-save #(do (save-actions-data!)
+                    handle-save #(do (save-edited-data!)
                                      (close-window!))
                     handle-close #(if (empty? data-store)
                                     (close-window!)

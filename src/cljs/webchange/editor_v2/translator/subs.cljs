@@ -27,6 +27,16 @@
     (get-in db [:editor-v2 :translator :phrase-translation-data] {})))
 
 (re-frame/reg-sub
+  ::phrase-translation-actions-data
+  (fn [db]
+    (get-in db [:editor-v2 :translator :phrase-translation-data :actions] {})))
+
+(re-frame/reg-sub
+  ::phrase-translation-assets-data
+  (fn [db]
+    (get-in db [:editor-v2 :translator :phrase-translation-data :assets] {})))
+
+(re-frame/reg-sub
   ::current-concept
   (fn [db]
     (get-in db [:editor-v2 :translator :current-concept])))
