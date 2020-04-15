@@ -11,6 +11,7 @@
             [webchange.course.handler :refer [course-routes website-api-routes]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.school.handler :refer [school-routes]]
+            [webchange.secondary.handler :refer [secondary-school-routes]]
             [webchange.progress.handler :refer [progress-routes]]
             [webchange.dataset.handler :refer [dataset-routes]]
             [webchange.assets.handler :refer [asset-routes]]
@@ -132,6 +133,7 @@
            course-routes
            class-routes
            school-routes
+           secondary-school-routes
            dataset-routes
            progress-routes
            resources-routes

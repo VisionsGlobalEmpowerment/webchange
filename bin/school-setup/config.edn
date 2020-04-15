@@ -1,0 +1,3 @@
+{ :database-url "jdbc:postgresql://localhost/webchange?user=webchange&password=webchange"
+ :secondary {:host-url "http://localhost:3000/"}
+ }

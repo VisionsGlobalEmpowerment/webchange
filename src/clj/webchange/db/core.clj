@@ -26,7 +26,10 @@
           :stop (conman/disconnect! *db*))
 
 
-(conman/bind-connection *db* "sql/queries.sql" "sql/dataset.sql" "sql/class.sql" "sql/progress.sql" "sql/assets.sql")
+(conman/bind-connection *db*
+                        "sql/queries.sql" "sql/dataset.sql" "sql/class.sql"
+                        "sql/progress.sql" "sql/assets.sql" "sql/secondary.sql"
+                        )
 
 #_(def conn (conman/connect! {:jdbc-url (get (System/getenv) "DATABASE_URL")}))
 

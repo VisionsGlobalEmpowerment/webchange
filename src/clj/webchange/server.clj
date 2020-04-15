@@ -5,6 +5,7 @@
             [mount.core :as mount]
             [luminus-migrations.core :as migrations]
             [webchange.dataset.loader :as datasets]
+            [webchange.secondary.loader :as secondary]
             [webchange.assets.loader :as assets]
             [webchange.course.loader :as courses])
   (:gen-class))
@@ -27,6 +28,10 @@
     (courses/command? args)
     (do
       (courses/execute args (select-keys env [:course-dir]))
+      (System/exit 0))
+    (secondary/command? args)
+    (do
+      (secondary/execute args {})
       (System/exit 0))
     :else
     (let [port (Integer/parseInt (or (env :port) "3000"))]

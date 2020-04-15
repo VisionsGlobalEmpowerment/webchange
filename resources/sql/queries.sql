@@ -43,6 +43,13 @@ WHERE website_id = :website_id
 DELETE FROM users
 WHERE id = :id
 
+-- :name get-users-by-school :? :*
+-- :doc retrieve all versions of given course
+SELECT u.* FROM users u
+LEFT JOIN teachers t ON (t.user_id=u.id)
+LEFT JOIN students s ON (s.user_id=u.id)
+WHERE t.school_id = :school_id or s.school_id = :school_id;
+
 -- :name create-course! :<!
 -- :doc creates a new course record
 INSERT INTO courses (name, slug, lang, image_src, status, owner_id, website_user_id) VALUES (:name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id) RETURNING id
@@ -94,6 +101,10 @@ WHERE course_id = :course_id ORDER BY created_at DESC LIMIT 1;
 SELECT * from course_versions
 WHERE course_id = :course_id ORDER BY created_at DESC LIMIT 30;
 
+-- :name get-courses :? :*
+-- :doc retrieve a course record given the name
+SELECT * from courses;
+
 -- :name create-scene! :<!
 -- :doc creates a new scene record
 INSERT INTO scenes (course_id, name) VALUES (:course_id, :name) RETURNING id
@@ -108,6 +119,10 @@ VALUES (:scene_id, :data, :owner_id, :created_at) RETURNING id
 -- :doc retrieve a scene record given the course id and the name
 SELECT * from scenes
 WHERE course_id = :course_id AND name = :name;
+
+-- :name get-scenes :? :*
+-- :doc retrieve a scene record given the course id and the name
+SELECT * from scenes;
 
 -- :name get-scene-version :? :1
 -- :doc retrieve scene version by id

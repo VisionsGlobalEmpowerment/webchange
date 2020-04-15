@@ -16,6 +16,25 @@ WHERE id = :id
 SELECT * FROM course_progresses
 WHERE user_id = :user_id and course_id = :course_id
 
+-- :name get-course-progresses-by-school :? :*
+-- :doc retrieves a progress record given the user id and course id
+SELECT cp.* FROM course_progresses cp
+JOIN users u ON (cp.user_id=u.id)
+JOIN students s ON (s.user_id=u.id)
+WHERE s.school_id = :school_id
+
+-- :name get-course-events-by-school :? :*
+-- :doc retrieves a progress record given the user id and course id
+SELECT ce.* FROM course_events ce
+JOIN users u ON (ce.user_id=u.id)
+JOIN students s ON (s.user_id=u.id)
+WHERE s.school_id = :school_id
+
+-- :name find-course-events-by-id :? :1
+-- :doc retrieves a progress record given the user id and course id
+SELECT * FROM course_events
+WHERE id = :id
+
 -- :name create-event! :<!
 -- :doc creates a new course event record
 INSERT INTO course_events
@@ -34,6 +53,13 @@ RETURNING id
 -- :doc retrieves course stats records for given class id and course id
 SELECT * FROM course_stats
 WHERE class_id = :class_id and course_id = :course_id
+
+-- :name get-course-stats-by-school :? :*
+-- :doc retrieves course stats records for given user id and course id
+SELECT cs.* FROM course_stats cs
+JOIN users u ON (cs.user_id=u.id)
+JOIN students s ON (s.user_id=u.id)
+WHERE s.school_id = :school_id
 
 -- :name get-user-course-stat :? :1
 -- :doc retrieves course stats records for given user id and course id
@@ -85,3 +111,10 @@ WHERE user_id = :user_id and course_id = :course_id and activity_id = :activity_
 UPDATE activity_stats
 SET data = :data
 WHERE id = :id
+
+-- :name get-activity-stats-by-school :? :*
+-- :doc retrieves activity stats records for given school
+SELECT ast.* FROM activity_stats ast
+JOIN users u ON (ast.user_id=u.id)
+JOIN students s ON (s.user_id=u.id)
+WHERE s.school_id = :school_id

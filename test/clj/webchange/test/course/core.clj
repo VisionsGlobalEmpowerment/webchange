@@ -15,4 +15,4 @@
 
 (deftest scene-can-be-retrieved
   (let [{course-slug :course-slug scene-name :name} (f/scene-created)]
-    (is (= {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"} (course/get-scene-data course-slug scene-name)))))
+    (is (= {:test "test" :test-dash "test-dash-value" :test-3 "test-3-value"} (course/get-scene-data course-slug scene-name)))))

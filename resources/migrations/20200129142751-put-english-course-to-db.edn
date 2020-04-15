@@ -1,3 +1,0 @@
-{:ns webchange.migrations.put-english-course-to-db
- :up-fn migrate-up
- :down-fn migrate-down}

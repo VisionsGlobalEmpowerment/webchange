@@ -106,13 +106,14 @@
   (let [{course-id :id course-name :name course-slug :slug} (course-created)
         scene-name "test-scene"
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
-        data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
+        data {:test "test" :test-dash "test-dash-value" :test-3 "test-3-value"}
         [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id scene-id
      :course-name course-name
      :course-slug course-slug
      :name scene-name
      :data data
+     :course-id course-id
      :version-id version-id}))
 
 (defn dataset-created
@@ -150,6 +151,7 @@
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-lesson-set! data)]
+     (assoc data :dataset-id (:dataset-id options))
      (->> (assoc data :id id)
           (transform-keys ->kebab-case-keyword)))))
 
@@ -620,3 +622,74 @@
                                             ))]
       (is (= (:status response) 200))
       response))
+
+(defn get-school-dump
+  [id]
+  (let [url  (str "/api/school/dump-full/" id)
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn course-stat-created []
+  (let [course (course-created)
+        class (class-created)
+        user (student-created)
+        course-stat-id (db/create-course-stat! {:user_id (:user-id user)
+                                 :class_id (:id class)
+                                 :course_id (:id course)
+                                 :data {}
+                                 })]
+    {:id course-stat-id
+     :class-id (:id class)
+     :user-id (:user-id user)
+     :course-id (:id course)
+     }))
+
+(defn course-progresses-created []
+  (let [course (course-created)
+        user (student-created)
+        [{course-progress-id :id}] (db/create-progress! {:user_id (:user-id user)
+                                                :course_id (:id course)
+                                                :data {}
+                                                })]
+    {:id course-progress-id
+     :user-id (:user-id user)
+     :course-id (:id course)
+     }))
+
+(defn course-events-created []
+  (let [course (course-created)
+        user (student-created)
+        [{course-events-id :id}] (db/create-event! {:user_id (:user-id user)
+                                                :course_id (:id course)
+                                                :type "test"
+                                              :created_at (jt/local-date-time)
+                                                :data {}
+                                                })]
+    {:id course-events-id
+     :user-id (:user-id user)
+     :course-id (:id course)
+     }))
+
+(defn datasets-created []
+  (let [course (course-created)
+        [{datasets-id :id}] (db/create-dataset! {:course_id (:id course)
+                                                :name "test"
+                                                :scheme {}
+                                                })]
+    {:id datasets-id
+     :course-id (:id course)
+     }))
+
+(defn activity-stat-created []
+  (let [activity_id "Test"
+        user (student-user-created)
+        _ (student-created {:user-id (:id user)})
+        course (course-created)
+        [{id :id}] (db/create-activity-stat! {
+                                             :user_id (:id user)
+                                             :course_id (:id course)
+                                              :activity_id activity_id
+                                              :data {:hello "world"}
+                                             })
+        ] {:id id :course_id (:id course) :user_id (:id user) :activity_id activity_id}))
