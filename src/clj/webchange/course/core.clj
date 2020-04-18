@@ -122,3 +122,55 @@
                     (map #(dissoc % :data))
                     (map #(assoc % :created-at (-> % :created-at str)))
                     (map #(assoc % :owner-name "todo")))}))
+
+(defn- with-course-page
+  [{slug :slug :as course}]
+  (let [url (str "/courses/" slug "/editor-v2")]
+    (assoc course :url url)))
+
+(defn localize
+  [course-id {:keys [lang owner-id website-user-id]}]
+  (let [current-time (jt/local-date-time)
+        {course-name :name course-slug :course-slug image :image-src} (db/get-course-by-id {:id course-id})
+        localized-course-data {:name course-name
+                               :slug (str course-slug "-" lang)
+                               :lang lang
+                               :owner_id owner-id
+                               :image_src image
+                               :website_user_id website-user-id}
+        [{new-course-id :id}] (db/create-course! localized-course-data)
+        course-data (:data (db/get-latest-course-version {:course_id course-id}))
+        scenes (->> course-data
+                    :scene-list
+                    keys
+                    (map name))]
+    (db/save-course! {:course_id new-course-id
+                      :data course-data
+                      :owner_id owner-id
+                      :created_at current-time})
+    (doseq [scene-name scenes]
+      (let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
+            scene-data (:data (db/get-latest-scene-version {:scene_id scene-id}))
+            scene-id (get-or-create-scene! new-course-id scene-name)]
+        (db/save-scene! {:scene_id scene-id
+                         :data scene-data
+                         :owner_id owner-id
+                         :created_at current-time})))
+    (-> localized-course-data
+        (assoc :id new-course-id)
+        (with-course-page))))
+
+(defn- ->website-course
+  [course]
+  (-> (select-keys course [:id :name :language :slug :image-src])
+      (with-course-page)))
+
+(defn get-available-courses
+  []
+  (->> (db/get-available-courses)
+       (map ->website-course)))
+
+(defn get-courses-by-website-user
+  [website-user-id]
+  (->> (db/get-courses-by-website-user {:website_user_id website-user-id})
+       (map ->website-course)))

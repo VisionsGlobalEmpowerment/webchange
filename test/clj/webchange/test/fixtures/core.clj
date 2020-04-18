@@ -69,7 +69,7 @@
 (defn course-created []
   (let [course-name "test-course"
         course-slug "test-course-slug"
-        [{course-id :id}] (db/create-course! {:name course-name :slug course-slug})
+        [{course-id :id}] (db/create-course! {:name course-name :slug course-slug :lang nil :image_src nil})
         data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
         [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id course-id

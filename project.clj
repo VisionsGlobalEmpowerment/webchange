@@ -29,7 +29,7 @@
                  [cljs-ajax "0.8.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
-                 [cheshire "5.8.1"]
+                 [cheshire "5.10.0"]
                  [conman "0.8.3"]
                  [mount "0.1.15"]
                  [camel-snake-kebab "0.4.1"]
@@ -40,6 +40,7 @@
                  [cljs-idxdb "0.1.0"]
                  [phrase "0.3-alpha4"]
                  [funcool/promesa "5.0.0"]
+                 [clj-http "3.10.1"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]

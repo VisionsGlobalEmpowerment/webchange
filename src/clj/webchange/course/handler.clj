@@ -6,7 +6,8 @@
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
             [webchange.common.handler :refer [handle current-user current-school validation-error]]
-            [webchange.validation.validate :refer [validate]]))
+            [webchange.validation.validate :refer [validate]]
+            [webchange.auth.core :as auth]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
@@ -49,7 +50,18 @@
     (-> (core/restore-scene-version! (Integer/parseInt version-id) owner-id)
         handle)))
 
+(defn handle-localize-course
+  [course-id request]
+  (let [data (:body request)
+        website-user-id (:user-id data)
+        language (:language data)
+        {owner-id :id} (auth/get-user-id-by-website-id! website-user-id)]
+    (-> (core/localize course-id {:lang language :owner-id owner-id :website-user-id website-user-id})
+        handle)))
+
 (defroutes course-routes
+           ;should go before general "/api/courses/:course-slug" to be accessible
+           (GET "/api/courses/available" [] (-> (core/get-available-courses) response))
            (GET "/api/courses/:course-slug" [course-slug] (-> course-slug core/get-course-data response))
            (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name] (-> (core/get-scene-data course-slug scene-name) response))
            (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
@@ -67,4 +79,8 @@
            (POST "/api/course-versions/:version-id/restore" [version-id :as request]
              (handle-restore-course-version version-id request))
            (POST "/api/scene-versions/:version-id/restore" [version-id :as request]
-             (handle-restore-scene-version version-id request)))
+             (handle-restore-scene-version version-id request))
+
+           (POST "/api/courses/:course-id/translate" [course-id :as request]
+             (handle-localize-course course-id request))
+           (GET "/api/courses/by-website-user/:website-user-id" [website-user-id :as request] (-> (core/get-courses-by-website-user website-user-id) response)))

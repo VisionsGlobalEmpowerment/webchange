@@ -2,7 +2,9 @@
   (:require [buddy.hashers :as hashers]
             [webchange.db.core :refer [*db*] :as db]
             [java-time :as jt]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [clj-http.client :as http]
+            [cheshire.core :refer [parse-string]]))
 
 (def error-invalid-credentials {:errors {:form "Invalid credentials"}})
 
@@ -22,6 +24,7 @@
         (assoc :created_at created-at)
         (assoc :last_login last-login)
         (assoc :active false)
+        (assoc :website_id nil)
         db/create-user!)))
 
 (defn create-user-with-credentials!
@@ -97,3 +100,34 @@
       prepare-student-data
       (assoc :id user-id)
       db/update-student-user!))
+
+(def website-host "https://webchange.com")
+
+(defn- website->platform-user
+  [{:keys [id first-name last-name email]}]
+  {:last_name last-name
+   :first_name first-name
+   :email email
+   :website_id id})
+
+(defn create-user-from-website!
+  [website-user-id]
+  (let [url (str "http://" website-host "/api/user/" website-user-id)
+        user-data (-> (http/get url {:accept :json})
+                      (parse-string true)
+                      (website->platform-user))
+        created-at (jt/local-date-time)
+        last-login (jt/local-date-time)]
+    (-> user-data
+        (assoc :created_at created-at)
+        (assoc :last_login last-login)
+        (assoc :active true)
+        db/create-user!
+        first)))
+
+(defn get-user-id-by-website-id!
+  [website-user-id]
+  (if-let [{id :id} (db/find-user-by-website-id {:website_id website-user-id})]
+    id
+    (-> (create-user-from-website! website-user-id)
+        :id)))

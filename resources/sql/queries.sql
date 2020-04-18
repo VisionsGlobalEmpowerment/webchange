@@ -1,8 +1,8 @@
 -- :name create-user! :<!
 -- :doc creates a new user record
 INSERT INTO users
-(first_name, last_name, email, password, active, created_at, last_login)
-VALUES (:first_name, :last_name, :email, :password, :active, :created_at, :last_login)
+(first_name, last_name, email, password, active, created_at, last_login, website_id)
+VALUES (:first_name, :last_name, :email, :password, :active, :created_at, :last_login, :website_id)
 RETURNING id
 
 -- :name update-student-user! :! :n
@@ -27,6 +27,11 @@ WHERE id = :id
 SELECT * FROM users
 WHERE email = :email
 
+-- :name find-user-by-website-id :? :1
+-- :doc retrieves a user record given the website id
+SELECT * FROM users
+WHERE website_id = :website_id
+
 -- :name delete-user! :! :n
 -- :doc deletes a user record given the id
 DELETE FROM users
@@ -34,7 +39,7 @@ WHERE id = :id
 
 -- :name create-course! :<!
 -- :doc creates a new course record
-INSERT INTO courses (name, slug) VALUES (:name, :slug) RETURNING id
+INSERT INTO courses (name, slug, lang, image_scr) VALUES (:name, :slug, :lang, :image_src) RETURNING id
 
 -- :name save-course-info! :! :n
 -- :doc updates an existing course record
@@ -48,10 +53,25 @@ INSERT INTO course_versions
 (course_id, data, owner_id, created_at)
 VALUES (:course_id, :data, :owner_id, :created_at) RETURNING id
 
+-- :name get-course-by-id :? :1
+-- :doc retrieve a course record given the id
+SELECT * from courses
+WHERE id = :id;
+
 -- :name get-course :? :1
--- :doc retrieve a course record given the name
+-- :doc retrieve a course record given the slug
 SELECT * from courses
 WHERE slug = :slug;
+
+-- :name get-available-courses :? :*
+-- :doc retrieve all available courses
+SELECT * from courses
+WHERE status = 'published' ORDER BY name DESC LIMIT 30;
+
+-- :name get-courses-by-website-user :? :*
+-- :doc retrieve draft courses given website user id
+SELECT * from courses
+WHERE status = 'draft' AND website_user_id = :website_user_id ORDER BY name DESC LIMIT 30;
 
 -- :name get-course-version :? :1
 -- :doc retrieve course version by id
