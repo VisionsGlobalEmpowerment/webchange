@@ -261,7 +261,7 @@
 (defn scene
   []
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene-objects (re-frame/subscribe [::subs/current-scene-objects])]
+        scene-objects (re-frame/subscribe [::subs/current-scene-data-objects])]
     [:> Group
      (for [layer @scene-objects
            name layer]

@@ -1,10 +1,12 @@
-(ns webchange.editor-v2.translator.translator-form.views-form-audios
+(ns webchange.editor-v2.translator.translator-form.audio-assets.views
   (:require
     [clojure.string :refer [capitalize]]
     [cljs-react-material-ui.reagent :as ui]
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.interpreter.core :refer [load-assets]]
-    [webchange.editor.form-elements.wavesurfer.wave-form :refer [audio-wave-form]]
+    [webchange.editor-v2.translator.translator-form.audio-assets.subs :as subs]
+    [webchange.editor-v2.translator.translator-form.audio-assets.views-audio-wave :refer [audio-wave]]
     [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
     [webchange.editor-v2.translator.translator-form.views-form-audio-upload :refer [upload-audio-form]]))
 
@@ -27,35 +29,8 @@
              {:key (or action-url
                        action-key)}))))
 
-(defn audio-wave
-  [{:keys [key alias start duration selected? target]} {:keys [on-change]}]
-  (r/with-let [on-change-region (fn [region] (on-change key region))
-               on-select (fn []
-                           (reset! current-key key)
-                           (on-change key))
-               audio-data {:key   key
-                           :start (or start 0)
-                           :end   (+ start duration)}]
-    (let [form-params {:height         64
-                       :on-change      on-change-region
-                       :show-controls? selected?}
-          border-style (if selected? {:border "solid 1px #00c0ff"} {})]
-      [ui/card {:style    (merge border-style
-                                 {:margin-bottom 8})
-                :on-click on-select}
-       [ui/card-content
-        (when-not (nil? target)
-          [ui/chip {:label target
-                    :style {:margin  "0 10px 0 0"
-                            :padding "0"}}])
-        [ui/typography {:variant "subtitle2"
-                        :color   "default"
-                        :style   {:display "inline-block"}}
-         (or alias key)]
-        [audio-wave-form audio-data form-params]]])))
-
 (defn waves-list
-  [{:keys [audios-data action-name on-change audios-filter]}]
+  [{:keys [audios-data action-name on-change-region audios-filter targets]}]
   (let [filtered-audios-data (if-not (nil? audios-filter)
                                (filter (fn [{:keys [target]}]
                                          (= target (:target audios-filter)))
@@ -64,7 +39,9 @@
     [:div
      (for [audio-data filtered-audios-data]
        ^{:key (if (:selected? audio-data) (str (:key audio-data) "-" action-name) (:key audio-data))}
-       [audio-wave audio-data {:on-change on-change}])]))
+       [audio-wave audio-data {:on-change-region on-change-region
+                               :targets          targets
+                               :current-key      current-key}])]))
 
 (defn audio-key->audio-data
   [audios]
@@ -112,22 +89,24 @@
                                    :margin-top  18}}])
 
 (defn audios-list-block-render
-  [{:keys [scene-id audios action on-change audios-filter]}]
+  [{:keys [scene-id action on-change-region audios-filter targets]}]
   (r/with-let [assets-loaded (r/atom false)
                assets-loading-progress (r/atom 0)]
-    (let [action-data (:data action)
-          action-audio-data (get-action-audio-data action-data audios)
-          audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
-      [:div
-       (if @assets-loaded
-         [waves-list {:audios-data           audios-data
-                      :audios-filter         audios-filter
-                      :action-name           (:name action)
-                      :on-change             on-change}]
-         [audios-loading-block {:audios-list      (map #(:url %) audios)
-                                :loading-progress assets-loading-progress
-                                :loaded           assets-loaded}])
-       [upload-audio-form {:scene-id scene-id}]])))
+              (let [action-data (:data action)
+                    audios (map second @(re-frame/subscribe [::subs/assets-data]))
+                    action-audio-data (get-action-audio-data action-data audios)
+                    audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
+                [:div
+                 (if @assets-loaded
+                   [waves-list {:audios-data      audios-data
+                                :audios-filter    audios-filter
+                                :targets          targets
+                                :action-name      (:name action)
+                                :on-change-region on-change-region}]
+                   [audios-loading-block {:audios-list      (map #(:url %) audios)
+                                          :loading-progress assets-loading-progress
+                                          :loaded           assets-loaded}])
+                 [upload-audio-form {:scene-id scene-id}]])))
 
 (defn audios-list-block-did-mount
   [this]
@@ -152,11 +131,9 @@
               :component-did-update audios-list-block-did-update}))
 
 (defn audios-block
-  [{:keys [audios] :as props}]
-  (let [targets (conj (->> audios
-                           (map :target)
-                           (filter #(-> % nil? not))
-                           (distinct)) "any")]
+  [props]
+  (let [audios-targets @(re-frame/subscribe [::subs/available-targets])
+        targets (conj audios-targets "any")]
     (r/with-let [current-target (r/atom "any")]
                 [:div
                  [:div {:style {:margin-bottom "15px"}}
@@ -173,6 +150,7 @@
                      [ui/menu-item {:value target}
                       (capitalize target)])]]
                  [audios-list-block (merge props
-                                           {:audios-filter (if-not (= @current-target "any")
+                                           {:targets       audios-targets
+                                            :audios-filter (if-not (= @current-target "any")
                                                              {:target @current-target}
                                                              nil)})]])))

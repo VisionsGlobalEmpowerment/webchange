@@ -1,9 +1,9 @@
 {:assets        [{:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
                  {:url "/raw/img/casa/door.png", :size 1, :type "image"}
-                 {:url "/raw/audio/english/l1/a1/vaca.m4a", :size 2, :type "audio" :alias "vaca voice" :target "vaca"}
+                 {:url "/raw/audio/english/l1/a1/vaca.m4a", :size 2, :type "audio" :alias "vaca voice" :target "senora-vaca"}
                  {:url "/raw/audio/english/l1/a1/vera.mp3", :size 2, :type "audio" :alias "vera voice" :target "vera"}
                  {:url "/raw/audio/english/l1/a1/mari_ending.m4a", :size 2, :type "audio" :alias "mari ending" :target "mari"}
-                 {:url "/raw/audio/ferris-wheel/fw-try-again.mp3", :size 2, :type "audio" :alias "try again" :target "vaca"}],
+                 {:url "/raw/audio/ferris-wheel/fw-try-again.mp3", :size 2, :type "audio" :alias "try again" :target "senora-vaca"}],
  :objects       {:background   {:type "background", :src "/raw/img/casa/background.jpg"},
                  :vera         {:type  "animation" :x 1128 :y 960 :name "vera" :anim "idle" :speed 0.3
                                 :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
