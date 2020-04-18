@@ -9,6 +9,8 @@
             [ring.middleware.session.store :as store]
             [java-time :as jt]
             [ring.mock.request :as mock]
+            [ring.util.mime-type :as mime]
+            [clojure.java.io :as io]
             [clojure.data.json :as json]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
@@ -30,6 +32,7 @@
   (db/clear-table :courses)
   (db/clear-table :teachers)
   (db/clear-table :schools)
+  (db/clear-table :asset_hashes)
   (db/clear-table :users))
 
 (defn clear-db-fixture [f]
@@ -516,3 +519,51 @@
         request (-> (mock/request :delete url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
+
+(defn is-created-asset-hash?
+  [hash]
+  (let [id (db/get-asset-hash {:path_hash hash})]
+    (not (nil? id))
+    ))
+
+(defn extract-filename
+  [path]
+  (let [filename-start (inc (clojure.string/last-index-of path "/"))
+        file-extension-start (clojure.string/last-index-of path ".")
+        file-name (subs path filename-start file-extension-start)]
+    file-name)
+  )
+(defn extract-extension
+  [path]
+  (let [
+        file-extension-start (clojure.string/last-index-of path ".")
+        file-extension (subs path file-extension-start)]
+    file-extension
+  ))
+
+(defn create-temp-file
+  [file-path]
+  (let [
+        file-name (extract-filename file-path)
+        file-extension (extract-extension file-path)
+        temp-file (java.io.File/createTempFile file-name file-extension)]
+    (io/copy (io/file file-path) temp-file)
+    temp-file))
+
+(defn upload-file!
+  [file-path]
+    (let [
+          file-extension (extract-extension file-path)
+          filecontent {:tempfile (create-temp-file file-path)
+                       :content-type (mime/ext-mime-type file-path),
+                       :filename      (str (extract-filename file-path) "." file-extension)
+                       :size (.length (io/file file-path))
+                       }
+          response (handler/dev-handler (-> (assoc
+                              (mock/request :post "/api/assets/")
+                              :params {:filecontent filecontent}
+                              :multipart-params {"file" filecontent})
+                                             (teacher-logged-in)
+                                            ))]
+      (is (= (:status response) 200))
+      response))

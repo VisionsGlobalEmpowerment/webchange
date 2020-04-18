@@ -5,6 +5,7 @@
             [mount.core :as mount]
             [luminus-migrations.core :as migrations]
             [webchange.dataset.loader :as datasets]
+            [webchange.assets.loader :as assets]
             [webchange.course.loader :as courses])
   (:gen-class))
 
@@ -18,6 +19,10 @@
     (datasets/command? args)
     (do
       (datasets/execute args (select-keys env [:dataset-dir]))
+      (System/exit 0))
+    (assets/command? args)
+    (do
+      (assets/execute args)
       (System/exit 0))
     (courses/command? args)
     (do
