@@ -124,9 +124,9 @@
 
 (re-frame/reg-fx
   :set-slot
-  (fn [{:keys [state slot-name image region attachment]}]
+  (fn [{:keys [state slot-name slot-attachment-name image region attachment]}]
     (let [skeleton (:skeleton state)]
-      (set-slot skeleton slot-name image region attachment))))
+      (set-slot skeleton slot-name slot-attachment-name image region attachment))))
 
 (re-frame/reg-fx
   :set-skin

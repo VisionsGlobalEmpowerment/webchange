@@ -131,7 +131,7 @@
                                                            :from-var [{:var-name "current-concept" :action-property "value" :var-property "concept-name"}]}]}
                                                   {:type "parallel"
                                                    :data [{:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
-                                                           :from-var [{:var-name "player" :action-property "image"}]}
+                                                           :from-var [{:var-name "player1" :action-property "image"}]}
                                                           {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
                                                            :from-var [{:var-name "player2" :action-property "image"}]}
                                                           {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
