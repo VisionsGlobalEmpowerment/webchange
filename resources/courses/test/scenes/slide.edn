@@ -275,19 +275,17 @@
                                            {:start 16.505, :end 20.089, :duration 3.584, :anim "talk"}
                                            {:start 21.151, :end 23.342, :duration 2.191, :anim "talk"}]}
 
-                 :mari-voice-correct     {:type        "parallel"
+                 :mari-voice-correct     {:type "animation-sequence" :target "mari" :track 1 :offset 34.714
+                                          :audio "/raw/audio/l2/a5/L2_A5_Mari.m4a" :start 34.714 :duration 5.089
                                           :description "Eso es correcto. Ya lo tienes! Wiiii!"
-                                          :data        [{:type "audio" :id "mari" :start 34.714 :duration 5.089}
-                                                        {:type "animation-sequence" :target "mari" :track 1 :offset 34.714
-                                                         :data [{:start 35.190 :end 38.088 :anim "talk"}
-                                                                {:start 38.508 :end 39.504 :anim "talk"}]}]}
+                                          :data [{:start 35.190 :end 38.088 :anim "talk"}
+                                                 {:start 38.508 :end 39.504 :anim "talk"}]}
 
-                 :mari-voice-wrong       {:type        "parallel"
+                 :mari-voice-wrong       {:type "animation-sequence" :target "mari" :track 1 :offset 29.581
+                                          :audio "/raw/audio/l2/a5/L2_A5_Mari.m4a" :start 29.581 :duration 3.120
                                           :description "No, intenta de nuevo."
-                                          :data        [{:type "audio" :id "mari" :start 29.581 :duration 3.120}
-                                                        {:type "animation-sequence" :target "mari" :track 1 :offset 29.581
-                                                         :data [{:start 29.802 :end 30.621 :anim "talk"}
-                                                                {:start 31.019 :end 32.457 :anim "talk"}]}]}
+                                          :data [{:start 29.802 :end 30.621 :anim "talk"}
+                                                 {:start 31.019 :end 32.457 :anim "talk"}]}
 
                  :mari-voice-try-another {:description "Vamos a intentar otra adivinanza.",
                                           :offset 43.188,

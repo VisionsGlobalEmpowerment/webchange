@@ -34,7 +34,7 @@
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                                  :scene-name "box1" :draggable {:var-name "drag-box-1"} :transition "box1"
                                  :states     {:default {:type "transparent" :x 350 :y 300}
-                                              :come    {:type  "animation" :name "boxes" :anim "come" :x 500 :y 550
+                                              :come    {:type  "animation" :name "boxes" :anim "come" :skin "default" :x 500 :y 550
                                                         :speed 0.3 :loop false :start true}}
                                  :actions    {:drag-end {:type "action" :id "drag-box1" :on "drag-end" :params {:target "box1" :start "box-1-start" :revert "box-1-revert"}}}}
 
@@ -42,7 +42,7 @@
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                                  :scene-name "box2" :draggable {:var-name "drag-box-2"} :transition "box2"
                                  :states     {:default {:type "transparent" :x 850 :y 300}
-                                              :come    {:type  "animation" :name "boxes" :anim "come" :x 1000 :y 550
+                                              :come    {:type  "animation" :name "boxes" :anim "come" :skin "default" :x 1000 :y 550
                                                         :speed 0.3 :loop false :start true}}
                                  :actions    {:drag-end {:type "action" :id "drag-box2" :on "drag-end" :params {:target "box2" :start "box-2-start" :revert "box-2-revert"}}}}
 
@@ -50,7 +50,7 @@
                                  :scale      {:x 0.3 :y 0.3} :anim-offset {:x 0 :y -300}
                                  :scene-name "box3" :draggable {:var-name "drag-box-3"} :transition "box3"
                                  :states     {:default {:type "transparent" :x 1350 :y 300}
-                                              :come    {:type  "animation" :name "boxes" :anim "come" :x 1500 :y 550
+                                              :come    {:type  "animation" :name "boxes" :anim "come" :skin "default" :x 1500 :y 550
                                                         :speed 0.3 :loop false :start true}}
                                  :actions    {:drag-end {:type "action" :id "drag-box3" :on "drag-end" :params {:target "box3" :start "box-3-start" :revert "box-3-revert"}}}}
 
@@ -106,9 +106,9 @@
 
                  :wait-for-box-animations    {:type "empty" :duration 500}
 
-                 :set-current-box1           {:type "set-variable" :var-name "current-box" :var-value "box1"}
-                 :set-current-box2           {:type "set-variable" :var-name "current-box" :var-value "box2"}
-                 :set-current-box3           {:type "set-variable" :var-name "current-box" :var-value "box3"}
+                 :set-current-box1           {:type "set-variable" :var-name "box1" :var-value true}
+                 :set-current-box2           {:type "set-variable" :var-name "box2" :var-value true}
+                 :set-current-box3           {:type "set-variable" :var-name "box3" :var-value true}
 
                  :check-box1                 {:type     "test-var-scalar"
                                               :var-name "box1"

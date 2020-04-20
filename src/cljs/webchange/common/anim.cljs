@@ -35,7 +35,7 @@
   (get @renderers context))
 
 (defn set-slot
-  [skeleton slot-name image region-options attachment-options]
+  [skeleton slot-name slot-attachment-name image region-options attachment-options]
   (let [texture (.get spine-manager image)
         region (doto (s/TextureAtlasRegion.)
                  (set! -x (get region-options :x 0))
@@ -57,8 +57,11 @@
                      (set! -width (get attachment-options :width 100))
                      (set! -height (get attachment-options :height 100))
                      (.updateOffset))
-        slot (.findSlot skeleton slot-name)]
-    (.setAttachment slot attachment)))
+        slot-index (.findSlotIndex skeleton slot-name)
+        new-skin (s/Skin. image)]
+    (.setAttachment new-skin slot-index (or slot-attachment-name "boxes") attachment)
+    (.setSkin skeleton new-skin)
+    (.setToSetupPose skeleton)))
 
 (defn anim
   [{:keys [name anim speed on-mount start mix skin anim-offset meshes]

@@ -390,34 +390,30 @@
 
                  ;; ---
 
-                 :mari-voice-welcome        {:type        "parallel"
+                 :mari-voice-welcome        {:type "animation-sequence" :target "mari" :track 1 :offset 0.677
+                                             :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 0.677 :duration 15.949
                                              :description "Wiii, vamos a tener una fiesta con las letras!
                                                             Cuando le pegue a la pinata, las fotos caeran.
                                                             Empareja las letras sobre el piso a la foto correcta."
-                                             :data        [{:type "audio" :id "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 0.677 :duration 15.949}
-                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 0.677
-                                                            :data [{:start 1.329 :end 6.210 :anim "talk"}
-                                                                   {:start 6.790 :end 10.633 :anim "talk"}
-                                                                   {:start 11.623 :end 14.402 :anim "talk"}
-                                                                   {:start 14.620 :end 16.287 :anim "talk"}]}]}
+                                             :data [{:start 1.329 :end 6.210 :anim "talk"}
+                                                    {:start 6.790 :end 10.633 :anim "talk"}
+                                                    {:start 11.623 :end 14.402 :anim "talk"}
+                                                    {:start 14.620 :end 16.287 :anim "talk"}]}
 
-                 :mari-voice-act-1          {:type        "parallel"
+                 :mari-voice-act-1          {:type "animation-sequence" :target "mari" :track 1 :offset 18.776
+                                             :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 18.776 :duration 1.716
                                              :description "Esta es la letra"
-                                             :data        [{:type "audio" :id "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 18.776 :duration 1.716}
-                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 18.776
-                                                            :data [{:start 18.776 :end 20.492 :anim "talk"}]}]}
+                                             :data [{:start 18.776 :end 20.492 :anim "talk"}]}
 
-                 :mari-voice-act-2          {:type        "parallel"
+                 :mari-voice-act-2          {:type "animation-sequence" :target "mari" :track 1 :offset 21.737
+                                             :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 21.737 :duration 3.009
                                              :description "Coloca la foto que empieza con la letra"
-                                             :data        [{:type "audio" :id "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 21.737 :duration 3.009}
-                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 21.737
-                                                            :data [{:start 21.737 :end 24.745 :anim "talk"}]}]}
+                                             :data [{:start 21.737 :end 24.745 :anim "talk"}]}
 
-                 :mari-voice-act-3          {:type        "parallel"
+                 :mari-voice-act-3          {:type "animation-sequence" :target "mari" :track 1 :offset 25.313
+                                             :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 25.313 :duration 1.100
                                              :description "sobre el piso"
-                                             :data        [{:type "audio" :id "/raw/audio/l2/a11/L2_A11_Mari.m4a" :start 25.313 :duration 1.100}
-                                                           {:type "animation-sequence" :target "mari" :track 1 :offset 25.313
-                                                            :data [{:start 25.313 :end 26.509 :anim "talk"}]}]}}
+                                             :data [{:start 25.313 :end 26.509 :anim "talk"}]}}
 
  :triggers      {:start {:on "start" :action "start"}
                  :stop  {:on "back" :action "stop-activity"}}

@@ -265,10 +265,11 @@
              (> r2y (+ r1y r1height))
              (< (+ r2y r2height) r1y)))))
 
-(defn animation-sequence->actions [{:keys [target track offset data] :or {track 1} :as action}]
+(defn animation-sequence->actions [{audio-start :start :keys [target track data] :or {track 1} :as action}]
+  (js/console.log "audio-start: " audio-start)
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type "sequence-data"
-                   :data [{:type "empty" :duration 0 #_(* (- start offset) 1000)}
+                   :data [{:type "empty" :duration (* (- start audio-start) 1000)}
                           {:type "animation" :target target :track track :id anim}
                           {:type "empty" :duration (* (- end start) 1000)}
                           {:type "remove-animation" :target target :track track}]})
