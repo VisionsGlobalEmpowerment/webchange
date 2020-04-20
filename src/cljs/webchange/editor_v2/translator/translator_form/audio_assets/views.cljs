@@ -30,7 +30,7 @@
                        action-key)}))))
 
 (defn waves-list
-  [{:keys [audios-data action-name on-change-region audios-filter targets]}]
+  [{:keys [audios-data on-change-region audios-filter targets]}]
   (let [filtered-audios-data (if-not (nil? audios-filter)
                                (filter (fn [{:keys [target]}]
                                          (= target (:target audios-filter)))
@@ -38,10 +38,11 @@
                                audios-data)]
     [:div
      (for [audio-data filtered-audios-data]
-       ^{:key (if (:selected? audio-data) (str (:key audio-data) "-" action-name) (:key audio-data))}
-       [audio-wave audio-data {:on-change-region on-change-region
-                               :targets          targets
-                               :current-key      current-key}])]))
+       ^{:key (:key audio-data)}
+       [audio-wave (merge audio-data
+                          {:on-change-region on-change-region
+                           :targets          targets
+                           :current-key      current-key})])]))
 
 (defn audio-key->audio-data
   [audios]

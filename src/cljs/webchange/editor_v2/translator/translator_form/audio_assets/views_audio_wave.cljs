@@ -5,7 +5,7 @@
     [clojure.string :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor.form-elements.wavesurfer.wave-form :refer [audio-wave-form]]
+    [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.audio-assets.events :as assets-events]))
 
@@ -148,30 +148,29 @@
                                 :on-delete handle-delete}])])))
 
 (defn audio-wave
-  [{:keys [key alias start duration selected? target]}
-   {:keys [current-key targets on-change-region]}]
-  (r/with-let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset key data]))
-               handle-change-region (fn [region] (on-change-region key region))
-               handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset key]))
-               on-select (fn []
-                           (reset! current-key key)
-                           (on-change-region key))
-               audio-data {:key   key
-                           :start (or start 0)
-                           :end   (+ start duration)}
-               styles (get-styles)]
-              (let [form-params {:height         64
-                                 :on-change      handle-change-region
-                                 :show-controls? selected?}]
-                [ui/card {:on-click on-select
-                          :style    (if selected?
-                                      (:block-wrapper-selected styles)
-                                      (:block-wrapper styles))}
-                 [ui/card-content
-                  [header {:alias             (or alias key)
-                           :target            target
-                           :available-targets targets
-                           :selected?         selected?
-                           :on-change-data    handle-change-data
-                           :on-delete         handle-delete}]
-                  [audio-wave-form audio-data form-params]]])))
+  [{:keys [key alias start duration selected? target current-key targets on-change-region]}]
+  (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset key data]))
+        handle-change-region (fn [region] (on-change-region key region))
+        handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset key]))
+        on-select (fn []
+                    (reset! current-key key)
+                    (on-change-region key))
+        audio-data {:key   key
+                    :start (or start 0)
+                    :end   (+ start duration)}
+        styles (get-styles)]
+    [ui/card {:on-click on-select
+              :style    (if selected?
+                          (:block-wrapper-selected styles)
+                          (:block-wrapper styles))}
+     [ui/card-content
+      [header {:alias             (or alias key)
+               :target            target
+               :available-targets targets
+               :selected?         selected?
+               :on-change-data    handle-change-data
+               :on-delete         handle-delete}]
+      [audio-wave-form (merge audio-data
+                              {:height         64
+                               :on-change      handle-change-region
+                               :show-controls? selected?})]]]))
