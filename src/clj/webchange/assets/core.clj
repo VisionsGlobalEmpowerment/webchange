@@ -31,20 +31,15 @@
   [^String string]
   (let [crc (java.util.zip.CRC32.)]
      (. crc update (. string getBytes))
-    (str (Long/toHexString (. crc getValue))))
-  )
+    (str (Long/toHexString (. crc getValue)))))
 
 (defn update-asset-hash!
   [path]
-  (let [
-        file-crc (crc32 (slurp path))
-        path-md5 (md5 path)
-        ]
+  (let [file-crc (crc32 (slurp path))
+        path-md5 (md5 path)]
     (db/update-asset-hash! {:path_hash path-md5
                             :file_hash file-crc
-                            })
-    )
-  )
+                            })))
 
 (defn create-asset-hash!
   [path]
@@ -52,10 +47,7 @@
         file-crc (crc32 (slurp path))]
     (db/create-asset-hash! {:path_hash path-md5
                             :path      path
-                            :file_hash file-crc
-                            })
-    )
-  )
+                            :file_hash file-crc})))
 
 (defn clear-asset-hash-table!
   []
@@ -65,6 +57,6 @@
   [path]
   (let [path-md5 (md5 path)
         asset-hash (db/get-asset-hash {:path_hash path-md5})]
-    (if (= (count asset-hash) 0) (create-asset-hash! path) (update-asset-hash! path))
-    )
-  )
+    (if (= (count asset-hash) 0)
+      (create-asset-hash! path)
+      (update-asset-hash! path))))

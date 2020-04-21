@@ -6,9 +6,9 @@
     [reagent.core :as r]
     [webchange.interpreter.core :refer [load-assets]]
     [webchange.editor-v2.translator.translator-form.audio-assets.subs :as subs]
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views :refer [add-audio-form]]
     [webchange.editor-v2.translator.translator-form.audio-assets.views-audio-wave :refer [audio-wave]]
-    [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
-    [webchange.editor-v2.translator.translator-form.views-form-audio-upload :refer [upload-audio-form]]))
+    [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]))
 
 (def current-key (r/atom nil))
 
@@ -90,7 +90,7 @@
                                    :margin-top  18}}])
 
 (defn audios-list-block-render
-  [{:keys [scene-id action on-change-region audios-filter targets]}]
+  [{:keys [action on-change-region audios-filter targets]}]
   (r/with-let [assets-loaded (r/atom false)
                assets-loading-progress (r/atom 0)]
               (let [action-data (:data action)
@@ -107,7 +107,7 @@
                    [audios-loading-block {:audios-list      (map #(:url %) audios)
                                           :loading-progress assets-loading-progress
                                           :loaded           assets-loaded}])
-                 [upload-audio-form {:scene-id scene-id}]])))
+                 [add-audio-form]])))
 
 (defn audios-list-block-did-mount
   [this]

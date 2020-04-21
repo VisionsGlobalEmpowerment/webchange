@@ -1,28 +1,11 @@
 (ns webchange.common.audio-parser.recognizer
   (:require
     [clojure.data.json :as json]
-    [clojure.string :as s]
     [webchange.common.files :as f]
     [clojure.java.io :as io]
     [clojure.java.shell :refer [sh]]
-    [config.core :refer [env]]))
-
-
-(defn get-changed-extension
-  [audio-file-path extension]
-  (let [directory (f/get-directory audio-file-path)
-        audio-file-name (f/get-file-name audio-file-path)
-        result-file-name (subs audio-file-name 0 (s/last-index-of audio-file-name "."))]
-    (str directory "/" result-file-name "." extension)))
-
-(defn convert-file
-  [file-path]
-  (let [converted-file-path (get-changed-extension file-path "wav")]
-    (when-not (f/file-exist? converted-file-path)
-      (let [result (sh "ffmpeg" "-i" file-path converted-file-path)]
-        (when (= (:exit result) 1)
-          (throw (Exception. (:err result))))))
-    converted-file-path))
+    [config.core :refer [env]]
+    [webchange.common.audio-parser.converter :refer [get-changed-extension convert-to-wav]]))
 
 (defn- result-file-for
   [file-path]
@@ -44,7 +27,7 @@
 (defn do-recognize-audio
   [file-path]
   (let [result-file (result-file-for file-path)
-        converted-file-path (convert-file file-path)
+        converted-file-path (convert-to-wav file-path {:absolute-path? true})
         recognizer (get ["pocketSphinx" "phonetic"] 0)
         result (sh "rhubarb"
                    "-o" result-file
@@ -53,8 +36,7 @@
                    "--exportFormat" "json"
                    "--machineReadable"
                    converted-file-path)
-        delete-silently? true]                          ; delete silently because of possible deleting from 2 racing processes
-    ; (from 2 requests)
+        delete-silently? true]
     (io/delete-file converted-file-path delete-silently?)
     (when (= (:exit result) 1)
       (throw (Exception. (:err result))))
