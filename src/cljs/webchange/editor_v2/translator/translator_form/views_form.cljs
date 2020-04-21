@@ -211,8 +211,7 @@
                                    :on-change       (fn [new-translated-text]
                                                       (update-action-data! (-> @selected-action-node :path first)
                                                                            {:phrase-text-translated new-translated-text}))}]
-                    [audios-block {:scene-id         scene-id
-                                   :action           prepared-current-action-data
+                    [audios-block {:action           prepared-current-action-data
                                    :on-change-region (fn [audio-key region-data]
                                                        (let [action-id (get-action-id @selected-action-node current-concept)
                                                              action-name (-> @selected-action-node :path first)
