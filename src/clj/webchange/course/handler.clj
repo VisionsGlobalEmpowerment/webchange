@@ -55,8 +55,8 @@
   (let [data (:body request)
         website-user-id (:user-id data)
         language (:language data)
-        {owner-id :id} (auth/get-user-id-by-website-id! website-user-id)]
-    (-> (core/localize course-id {:lang language :owner-id owner-id :website-user-id website-user-id})
+        owner-id (auth/get-user-id-by-website-id! website-user-id)]
+    (-> (core/localize (Integer/parseInt course-id) {:lang language :owner-id owner-id :website-user-id website-user-id})
         handle)))
 
 (defroutes course-routes

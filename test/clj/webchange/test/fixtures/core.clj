@@ -13,7 +13,11 @@
             [clojure.java.io :as io]
             [clojure.data.json :as json]
             [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
+            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]
+            [clj-http.client :as c]
+            [clojure.data.json :as json]
+            [clojure.tools.logging :as log]))
+
 (def default-school-id 1)
 
 (defn clear-db []
@@ -69,14 +73,19 @@
 (defn course-created []
   (let [course-name "test-course"
         course-slug "test-course-slug"
-        [{course-id :id}] (db/create-course! {:name course-name :slug course-slug :lang nil :image_src nil})
+        owner-id 1
+        status "draft"
+        [{course-id :id}] (db/create-course! {:name course-name :slug course-slug :lang nil :image_src nil :status status :website_user_id nil :owner_id owner-id})
         data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
-        [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
+        [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id owner-id :created_at (jt/local-date-time)})]
     {:id course-id
      :name course-name
      :slug course-slug
      :lang nil
      :image-src nil
+     :status status
+     :owner-id owner-id
+     :website-user-id nil
      :data data
      :version-id version-id}))
 
@@ -212,6 +221,14 @@
 (defn save-course!
   [course-slug data]
   (let [course-url (str "/api/courses/" course-slug)
+        request (-> (mock/request :post course-url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn localize-course!
+  [course-id data]
+  (let [course-url (str "/api/courses/" course-id "/translate")
         request (-> (mock/request :post course-url (json/write-str data))
                     (mock/header :content-type "application/json")
                     teacher-logged-in)]

@@ -3,8 +3,7 @@
             [webchange.db.core :refer [*db*] :as db]
             [java-time :as jt]
             [clojure.tools.logging :as log]
-            [clj-http.client :as http]
-            [cheshire.core :refer [parse-string]]))
+            [clj-http.client :as http]))
 
 (def error-invalid-credentials {:errors {:form "Invalid credentials"}})
 
@@ -101,20 +100,25 @@
       (assoc :id user-id)
       db/update-student-user!))
 
-(def website-host "https://webchange.com")
+(def website-host "webchange.com")
+
+(defn website-user-resource
+  [website-user-id]
+  (str "http://" website-host "/api/user/" website-user-id))
 
 (defn- website->platform-user
-  [{:keys [id first-name last-name email]}]
+  [{:keys [id first-name last-name email] :as response}]
   {:last_name last-name
    :first_name first-name
    :email email
-   :website_id id})
+   :website_id id
+   :password nil})
 
 (defn create-user-from-website!
   [website-user-id]
-  (let [url (str "http://" website-host "/api/user/" website-user-id)
+  (let [url (website-user-resource website-user-id)
         user-data (-> (http/get url {:accept :json})
-                      (parse-string true)
+                      :body
                       (website->platform-user))
         created-at (jt/local-date-time)
         last-login (jt/local-date-time)]

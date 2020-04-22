@@ -3,7 +3,9 @@
             [ring.mock.request :as mock]
             [webchange.test.fixtures.core :as f]
             [clojure.data.json :as json]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [webchange.auth.core :as auth])
+  (:use clj-http.fake))
 
 (use-fixtures :once f/init)
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
@@ -73,7 +75,7 @@
            (is (= original-value retrieved-value))))
 
 (deftest course-info-can-be-retrieved
-  (let [keys [:id :slug :name :lang :image-src]
+  (let [keys [:id :slug :name :lang :image-src :status :website-user-id :owner-id]
         course (f/course-created)
         response (f/get-course-info (:slug course))
         body (json/read-str (:body response) :key-fn keyword)]
@@ -92,3 +94,13 @@
     (is (= slug (:slug retrieved)))
     (is (= lang (:lang retrieved)))
     (is (= image-src (:image-src retrieved)))))
+
+(def website-user-id 123)
+(def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last"})
+
+(deftest course-can-be-localized
+  (let [course (f/course-created)
+        new-language "new-language"]
+    (with-global-fake-routes-in-isolation {(auth/website-user-resource website-user-id) (fn [request] {:status 200 :headers {} :body (json/write-str website-user)})}
+                      (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body (json/read-str :key-fn keyword))]
+                        (is (= new-language (:lang new-course)))))))

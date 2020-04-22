@@ -39,7 +39,7 @@ WHERE id = :id
 
 -- :name create-course! :<!
 -- :doc creates a new course record
-INSERT INTO courses (name, slug, lang, image_scr) VALUES (:name, :slug, :lang, :image_src) RETURNING id
+INSERT INTO courses (name, slug, lang, image_src, status, owner_id, website_user_id) VALUES (:name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id) RETURNING id
 
 -- :name save-course-info! :! :n
 -- :doc updates an existing course record

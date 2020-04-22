@@ -131,13 +131,14 @@
 (defn localize
   [course-id {:keys [lang owner-id website-user-id]}]
   (let [current-time (jt/local-date-time)
-        {course-name :name course-slug :course-slug image :image-src} (db/get-course-by-id {:id course-id})
+        {course-name :name course-slug :slug image :image-src} (db/get-course-by-id {:id course-id})
         localized-course-data {:name course-name
                                :slug (str course-slug "-" lang)
                                :lang lang
                                :owner_id owner-id
                                :image_src image
-                               :website_user_id website-user-id}
+                               :website_user_id website-user-id
+                               :status "draft"}
         [{new-course-id :id}] (db/create-course! localized-course-data)
         course-data (:data (db/get-latest-course-version {:course_id course-id}))
         scenes (->> course-data
@@ -156,9 +157,9 @@
                          :data scene-data
                          :owner_id owner-id
                          :created_at current-time})))
-    (-> localized-course-data
-        (assoc :id new-course-id)
-        (with-course-page))))
+    [true (-> localized-course-data
+              (assoc :id new-course-id)
+              (with-course-page))]))
 
 (defn- ->website-course
   [course]

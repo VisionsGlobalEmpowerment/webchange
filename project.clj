@@ -41,6 +41,7 @@
                  [phrase "0.3-alpha4"]
                  [funcool/promesa "5.0.0"]
                  [clj-http "3.10.1"]
+                 [clj-http-fake "1.0.3"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
