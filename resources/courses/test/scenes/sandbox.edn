@@ -84,17 +84,11 @@
                                                   :duration 5.381,
                                                   :data
                                                   [{:start 1.29, :end 3.19, :anim "talk"}
-                                                   {:start 3.75, :end 6.4, :anim "talk"}]}
+                                                   {:start 3.75, :end 6.4, :anim "talk"}]
+                                                  :phrase             :welcome
+                                                  :phrase-description "Welcome"
+                                                  :phrase-text        "Bienvendio al arenero! Aprendamos algunas palabras nuevas."}
 
-                 :mari-touch-audio
-                                                 {:type "animation-sequence",
-                                                  :target "mari",
-                                                  :track 1,
-                                                  :offset 26.774,
-                                                  :audio "/raw/audio/l1/a4/mari.mp4",
-                                                  :start 26.774,
-                                                  :duration 3.933,
-                                                  :data [{:start 26.94, :end 30.57, :anim "talk"}]}
                  :mari-more-audio
                                                  {:type "animation-sequence",
                                                   :target "mari",
@@ -105,7 +99,10 @@
                                                   :duration 3.734,
                                                   :data
                                                   [{:start 33.53, :end 34.59, :anim "talk"}
-                                                   {:start 34.76, :end 36.73, :anim "talk"}]}
+                                                   {:start 34.76, :end 36.73, :anim "talk"}]
+                                                  :phrase             :more-words
+                                                  :phrase-description "More words"
+                                                  :phrase-text        "Excellente! Quieres escuchar mas palabras?"}
 
                  :mari-letter-1
                                                  {:type "animation-sequence",
@@ -115,7 +112,8 @@
                                                   :audio "/raw/audio/l1/a4/mari.mp4",
                                                   :start 7.773,
                                                   :duration 1.56,
-                                                  :data [{:start 8.07, :end 9.4, :anim "talk"}]}
+                                                  :data [{:start 8.07, :end 9.4, :anim "talk"}]
+                                                  :phrase-text "Esta es la letra"}
                  :mari-letter-2
                                                  {:type "animation-sequence",
                                                   :target "mari",
@@ -124,7 +122,8 @@
                                                   :audio "/raw/audio/l1/a4/mari.mp4",
                                                   :start 10.32,
                                                   :duration 1.72,
-                                                  :data [{:start 10.46, :end 12.99, :anim "talk"}]}
+                                                  :data [{:start 10.46, :end 12.99, :anim "talk"}]
+                                                  :phrase-text "Sabias que la letra"}
                  :mari-letter-3
                                                  {:type "animation-sequence",
                                                   :target "mari",
@@ -133,7 +132,8 @@
                                                   :audio "/raw/audio/l1/a4/mari.mp4",
                                                   :start 16.374,
                                                   :duration 6.386,
-                                                  :data [{:start 16.54, :end 22.62, :anim "talk"}]}
+                                                  :data [{:start 16.54, :end 22.62, :anim "talk"}]
+                                                  :phrase-text "hace el sonido"}
                  :mari-letter-4
                                                  {:type "animation-sequence",
                                                   :target "mari",
@@ -142,7 +142,8 @@
                                                   :audio "/raw/audio/l1/a4/mari.mp4",
                                                   :start 16.374,
                                                   :duration 6.386,
-                                                  :data [{:start 16.54, :end 22.62, :anim "talk"}]}
+                                                  :data [{:start 16.54, :end 22.62, :anim "talk"}]
+                                                  :phrase-text "Haz click en las imágenes para escuchar mas palabras que comienzan con el sonido"}
 
                  :mari-short-letter-var          {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-short-letter-action"}]}
                  :mari-long-letter-var           {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-long-letter-action"}]}
@@ -167,24 +168,40 @@
                                                          "word-1-state-var"
                                                          "test-concept-complete"]}
 
-                 :word-1-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-1-action"}]}
-                 :word-2-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-2-action"}]}
-                 :word-3-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-3-action"}]}
-                 :word-4-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-4-action"}]}
+                 :word-1-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-1-action"}]
+                                                  :phrase             :word-1
+                                                  :phrase-description "Pair word 1"}
+                 :word-2-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-2-action"}]
+                                                  :phrase             :word-2
+                                                  :phrase-description "Pair word 2"}
+                 :word-3-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-3-action"}]
+                                                  :phrase             :word-3
+                                                  :phrase-description "Pair word 3"}
+                 :word-4-state-var               {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-4-action"}]
+                                                  :phrase             :word-4
+                                                  :phrase-description "Pair word 4"}
 
-                 :box-1-jump-in                  {:type "parallel"
-                                                  :data [{:type "animation" :target "box1" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box1" :to {:x 668 :y 798 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box1" :id "idle2" :loop true}]}
+                 :box-1-jump-in                  {:type "sequence"
+                                                  :data ["box-1-jump-in-animation-jump"
+                                                         "box-1-jump-in-empty"
+                                                         "box-1-jump-in-transition"
+                                                         "box-1-jump-in-animation-idle"]}
 
-                 :box-1-jump-out                 {:type "parallel"
-                                                  :data [{:type "animation" :target "box1" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box1" :to {:x 304 :y 826 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box1" :id "idle2" :loop true}]}
+                 :box-1-jump-in-animation-jump   {:type "animation" :target "box1" :id "jump2"}
+                 :box-1-jump-in-empty            {:type "empty" :duration 500}
+                 :box-1-jump-in-transition       {:type "transition" :transition-id "box1" :to {:x 668 :y 798 :duration 0.7 :loop false}}
+                 :box-1-jump-in-animation-idle   {:type "add-animation" :target "box1" :id "idle2" :loop true}
+
+                 :box-1-jump-out                 {:type "sequence"
+                                                  :data ["box-1-jump-out-animation-jump"
+                                                         "box-1-jump-out-empty"
+                                                         "box-1-jump-out-transition"
+                                                         "box-1-jump-out-animation-idle"]}
+
+                 :box-1-jump-out-animation-jump  {:type "animation" :target "box1" :id "jump2"}
+                 :box-1-jump-out-empty           {:type "empty" :duration 500}
+                 :box-1-jump-out-transition      {:type "transition" :transition-id "box1" :to {:x 304 :y 826 :duration 0.7 :loop false}}
+                 :box-1-jump-out-animation-idle  {:type "add-animation" :target "box1" :id "idle2" :loop true}
 
                  :box-2-start                    {:type "sequence"
                                                   :data ["complete-word-2"
@@ -196,19 +213,27 @@
                                                          "word-2-state-var"
                                                          "test-concept-complete"]}
 
-                 :box-2-jump-in                  {:type "parallel"
-                                                  :data [{:type "animation" :target "box2" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box2" :to {:x 668 :y 798 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box2" :id "idle2" :loop true}]}
+                 :box-2-jump-in                  {:type "sequence"
+                                                  :data ["box-2-jump-in-animation-jump"
+                                                         "box-2-jump-in-empty"
+                                                         "box-2-jump-in-transition"
+                                                         "box-2-jump-in-animation-idle"]}
 
-                 :box-2-jump-out                 {:type "parallel"
-                                                  :data [{:type "animation" :target "box2" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box2" :to {:x 401 :y 696 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box2" :id "idle2" :loop true}]}
+                 :box-2-jump-in-animation-jump   {:type "animation" :target "box2" :id "jump2"}
+                 :box-2-jump-in-empty            {:type "empty" :duration 500}
+                 :box-2-jump-in-transition       {:type "transition" :transition-id "box2" :to {:x 668 :y 798 :duration 0.7 :loop false}}
+                 :box-2-jump-in-animation-idle   {:type "add-animation" :target "box2" :id "idle2" :loop true}
+
+                 :box-2-jump-out                 {:type "sequence"
+                                                  :data ["box-2-jump-out-animation-jump"
+                                                         "box-2-jump-out-empty"
+                                                         "box-2-jump-out-transition"
+                                                         "box-2-jump-out-animation-idle"]}
+
+                 :box-2-jump-out-animation-jump  {:type "animation" :target "box2" :id "jump2"}
+                 :box-2-jump-out-empty           {:type "empty" :duration 500}
+                 :box-2-jump-out-transition      {:type "transition" :transition-id "box2" :to {:x 401 :y 696 :duration 0.7 :loop false}}
+                 :box-2-jump-out-animation-idle  {:type "add-animation" :target "box2" :id "idle2" :loop true}
 
                  :box-3-start                    {:type "sequence"
                                                   :data ["complete-word-3"
@@ -220,20 +245,27 @@
                                                          "word-3-state-var"
                                                          "test-concept-complete"]}
 
-                 :box-3-jump-in                  {:type "parallel"
-                                                  :data [{:type "animation" :target "box3" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box3" :to {:x 668 :y 798 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box3" :id "idle2" :loop true}]}
+                 :box-3-jump-in                  {:type "sequence"
+                                                  :data ["box-3-jump-in-animation-jump"
+                                                         "box-3-jump-in-empty"
+                                                         "box-3-jump-in-transition"
+                                                         "box-3-jump-in-animation-idle"]}
 
-                 :box-3-jump-out                 {:type "parallel"
-                                                  :data [{:type "animation" :target "box3" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box3" :to {:x 600 :y 674 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box3" :id "idle2" :loop true}]}
+                 :box-3-jump-in-animation-jump   {:type "animation" :target "box3" :id "jump2"}
+                 :box-3-jump-in-empty            {:type "empty" :duration 500}
+                 :box-3-jump-in-transition       {:type "transition" :transition-id "box3" :to {:x 668 :y 798 :duration 0.7 :loop false}}
+                 :box-3-jump-in-animation-idle   {:type "add-animation" :target "box3" :id "idle2" :loop true}
 
+                 :box-3-jump-out                 {:type "sequence"
+                                                  :data ["box-3-jump-out-animation-jump"
+                                                         "box-3-jump-out-empty"
+                                                         "box-3-jump-out-transition"
+                                                         "box-3-jump-out-animation-idle"]}
+
+                 :box-3-jump-out-animation-jump  {:type "animation" :target "box3" :id "jump2"}
+                 :box-3-jump-out-empty           {:type "empty" :duration 500}
+                 :box-3-jump-out-transition      {:type "transition" :transition-id "box3" :to {:x 600 :y 674 :duration 0.7 :loop false}}
+                 :box-3-jump-out-animation-idle  {:type "add-animation" :target "box3" :id "idle2" :loop true}
 
                  :box-4-start                    {:type "sequence"
                                                   :data ["complete-word-4"
@@ -245,19 +277,27 @@
                                                          "word-4-state-var"
                                                          "test-concept-complete"]}
 
-                 :box-4-jump-in                  {:type "parallel"
-                                                  :data [{:type "animation" :target "box4" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box4" :to {:x 668 :y 798 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box4" :id "idle2" :loop true}]}
+                 :box-4-jump-in                  {:type "sequence"
+                                                  :data ["box-4-jump-in-animation-jump"
+                                                         "box-4-jump-in-empty"
+                                                         "box-4-jump-in-transition"
+                                                         "box-4-jump-in-animation-idle"]}
 
-                 :box-4-jump-out                 {:type "parallel"
-                                                  :data [{:type "animation" :target "box4" :id "jump2"}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 500}
-                                                                 {:type "transition" :transition-id "box4" :to {:x 919 :y 741 :duration 0.7 :loop false}}]}
-                                                         {:type "add-animation" :target "box4" :id "idle2" :loop true}]}
+                 :box-4-jump-in-animation-jump   {:type "animation" :target "box4" :id "jump2"}
+                 :box-4-jump-in-empty            {:type "empty" :duration 500}
+                 :box-4-jump-in-transition       {:type "transition" :transition-id "box4" :to {:x 668 :y 798 :duration 0.7 :loop false}}
+                 :box-4-jump-in-animation-idle   {:type "add-animation" :target "box4" :id "idle2" :loop true}
+
+                 :box-4-jump-out                 {:type "sequence"
+                                                  :data ["box-4-jump-out-animation-jump"
+                                                         "box-4-jump-out-empty"
+                                                         "box-4-jump-out-transition"
+                                                         "box-4-jump-out-animation-idle"]}
+
+                 :box-4-jump-out-animation-jump  {:type "animation" :target "box4" :id "jump2"}
+                 :box-4-jump-out-empty           {:type "empty" :duration 500}
+                 :box-4-jump-out-transition      {:type "transition" :transition-id "box4" :to {:x 919 :y 741 :duration 0.7 :loop false}}
+                 :box-4-jump-out-animation-idle  {:type "add-animation" :target "box4" :id "idle2" :loop true}
 
                  :test-concept-complete          {:type      "test-var-list"
                                                   :var-names ["word-1" "word-2" "word-3" "word-4"]
@@ -296,14 +336,19 @@
                                                          "box-3-change-skin"
                                                          "box-4-change-skin"
                                                          "show-letter"
-                                                         "mari-letter-1"
-                                                         "mari-short-letter-var"
-                                                         "mari-letter-2"
-                                                         "mari-short-letter-var"
-                                                         "mari-letter-3"
-                                                         "mari-long-letter-var"
-                                                         "mari-letter-4"
-                                                         "mari-long-letter-var"]}
+                                                         "letter-intro"]}
+
+                 :letter-intro                   {:type               "sequence"
+                                                  :data               ["mari-letter-1"
+                                                                       "mari-short-letter-var"
+                                                                       "mari-letter-2"
+                                                                       "mari-short-letter-var"
+                                                                       "mari-letter-3"
+                                                                       "mari-long-letter-var"
+                                                                       "mari-letter-4"
+                                                                       "mari-long-letter-var"]
+                                                  :phrase             :letter-intro
+                                                  :phrase-description "Learn concept sound"}
 
                  :next-concept-workflow          {:type "sequence"
                                                   :data ["mari-more-audio"
@@ -319,7 +364,7 @@
                                                   :from-var [{:var-name "current-word" :action-property "image" :var-property "word-image-4"}]}
 
                  :clear-instruction              {:type "remove-flows" :flow-tag "instruction"}
-                 :start                          {:type "sequence"
+                 :start-scene                    {:type "sequence"
                                                   :data ["start-activity"
                                                          "clear-instruction"
                                                          "renew-words"
@@ -330,7 +375,7 @@
                  :start-activity                 {:type "start-activity" :id "sandbox"}
                  :finish-activity                {:type "finish-activity" :id "sandbox"}
                  :stop-activity              {:type "stop-activity" :id "sandbox"}}
- :triggers      {:start {:on "start" :action "start"}
+ :triggers      {:start {:on "start" :action "start-scene"}
                  :back  {:on "back" :action "stop-activity"}}
  :metadata      {:autostart true
                  :prev      "park"}}

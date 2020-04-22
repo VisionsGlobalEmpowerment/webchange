@@ -261,7 +261,7 @@
  :scene-objects [["background"] ["book"] ["title-text" "content" "next-page-arrow"]],
 
  :actions
-                {:start
+                {:start-scene
                                   {:type "sequence"
                                    :data ["start-activity"
                                           "clear-instruction"
@@ -327,14 +327,19 @@
                                                   {:type "state" :target "image2" :id "default" :params {:filter ""}}
                                                   {:type "empty" :duration 2000}
                                                   {:type "state" :target "image3" :id "default" :params {:filter ""}}]}
-                                          {:type "action" :from-var [{:var-name "current-word" :var-property "book-read-action"}]}]}
+                                          {:type "action" :id "read-page-current-concept"}]}
+
+                 :read-page-current-concept {:type        "action" :from-var [{:var-name "current-word" :var-property "book-read-action"}]
+                                             :phrase      :read-page
+                                             :phrase-description "Read concept words"}
 
                  :read-title
                                   {:type "sequence-data"
                                    :data [{:type "audio",
                                            :id "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
                                            :start 0.373,
-                                           :duration 1.773}
+                                           :duration 1.773
+                                           :phrase-text "Do you see this title?"}
                                           {:type "text-animation",
                                            :audio "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
                                            :start 2.693,
@@ -353,11 +358,13 @@
                                             {:start 4.839, :end 4.972, :duration 0.133, :at 4.839, :chunk 8}
                                             {:start 5.039, :end 5.225, :duration 0.186, :at 5.039, :chunk 9}
                                             {:start 5.332, :end 5.518, :duration 0.186, :at 5.332, :chunk 10}
-                                            ]}
+                                            ]
+                                           :phrase-text "My first words book"}
                                           {:type "audio",
                                            :id "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
                                            :start 6.052,
-                                           :duration 2.532}
+                                           :duration 2.532
+                                           :phrase-text "The title of this book is"}
                                           {:type "text-animation",
                                            :audio "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
                                            :start 2.693,
@@ -376,19 +383,27 @@
                                             {:start 4.839, :end 4.972, :duration 0.133, :at 4.839, :chunk 8}
                                             {:start 5.039, :end 5.225, :duration 0.186, :at 5.039, :chunk 9}
                                             {:start 5.332, :end 5.518, :duration 0.186, :at 5.332, :chunk 10}
-                                            ]}
-                                          {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Vera.m4a", :start 5.497, :duration 2.201}
+                                            ]
+                                           :phrase-text "My first words book"}
+                                          {:type "audio", :id "/raw/audio/l1/a6/L1_A6_Vera.m4a", :start 5.497, :duration 2.201
+                                           :phrase-text "My first words book."}
                                           {:type "audio",
                                            :id "/raw/audio/l1/a6/lion/2Vamos a leerlo juntos.mp3",
                                            :start 0.348,
-                                           :duration 2.054}
+                                           :duration 2.054
+                                           :phrase-text "Vamos a leerlo juntos!"}
                                           {:type "audio",
                                            :id "/raw/audio/l1/a6/lion/2Toca la flecha.mp3",
                                            :start 0.52,
-                                           :duration 4.164}]}
+                                           :duration 4.164
+                                           :phrase-text "Touch the arrow to turn the page."}]
+                                   :phrase             :read-title
+                                   :phrase-description "Read title"}
 
                  :next-page
-                                  {:type "action" :from-var [{:var-name "next-page-action" :action-property "id"}]}
+                                  {:type "action" :from-var [{:var-name "next-page-action" :action-property "id"
+                                                              :possible-values [:open-book
+                                                                                :open-next-page]}]}
 
                  :finish-activity {:type "sequence-data"
                                    :data [{:type "finish-activity" :id "book"}
@@ -401,7 +416,7 @@
  :audio
                 {:background "/raw/audio/background/POL-daily-special-short.mp3"}
  :triggers
-                {:start {:on "start" :action "start"}
+                {:start {:on "start" :action "start-scene"}
                  :back  {:on "back" :action "stop-activity"}}
  :metadata
                 {:autostart true
