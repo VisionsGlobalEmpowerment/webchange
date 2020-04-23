@@ -116,12 +116,12 @@
 (defn- error-snackbar
   [{:keys [error on-close]}]
   (let [styles (get-styles)]
-    [ui/snackbar {:open               (not (nil? error))
+    [ui/snackbar {:open               (not (nil? @error))
                   :anchor-origin      {:vertical   "bottom"
                                        :horizontal "right"}
                   :auto-hide-duration 6000
                   :on-close           on-close}
-     [ui/snackbar-content {:message (r/as-element [ui/typography {:color "secondary"} error])
+     [ui/snackbar-content {:message (r/as-element [ui/typography {:color "secondary"} @error])
                            :style   (:error-wrapper styles)
                            :action  (r/as-element [ui/icon-button {:color    "secondary"
                                                                    :on-click on-close}
@@ -229,7 +229,7 @@
                                                                                                          (handle-error "Getting lip sync data error"))}))))}]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
-                 [error-snackbar {:error    @error
+                 [error-snackbar {:error    error
                                   :on-close hide-error}]])
               (finally
                 (re-frame/dispatch [::translator-events/clean-current-selected-action]))))

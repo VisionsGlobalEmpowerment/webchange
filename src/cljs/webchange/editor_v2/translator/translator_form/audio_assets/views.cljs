@@ -94,7 +94,9 @@
   (r/with-let [assets-loaded (r/atom false)
                assets-loading-progress (r/atom 0)]
               (let [action-data (:data action)
-                    audios (map second @(re-frame/subscribe [::subs/assets-data]))
+                    audios (->> @(re-frame/subscribe [::subs/assets-data])
+                                (map second)
+                                (sort-by :date >))
                     action-audio-data (get-action-audio-data action-data audios)
                     audios-data (get-prepared-audios-data audios @current-key action-audio-data)]
                 [:div
