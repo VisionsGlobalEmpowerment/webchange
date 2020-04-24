@@ -8,20 +8,13 @@
     [webchange.editor-v2.translator.events :as translator-events]
     [webchange.editor-v2.translator.subs :as translator-subs]
     [webchange.editor-v2.translator.translator-form.audio-assets.subs :as assets-subs]
+    [webchange.editor-v2.translator.translator-form.subs :as form-subs]
     [webchange.editor-v2.translator.translator-form.views-form :refer [translator-form]]
     [webchange.subs :as subs]))
 
 (defn- get-styles
-  [{:keys [progress-size]}]
-  (let [progress-margin (-> (/ progress-size 2)
-                            (Math/ceil)
-                            (int))]
-    {:save-button-wrapper {:position "relative"}
-     :save-hover-progress {:position    "absolute"
-                           :left        "50%"
-                           :top         "50%"
-                           :margin-left (str "-" progress-margin "px")
-                           :margin-top  (str "-" progress-margin "px")}}))
+  []
+  {:save-button-wrapper {:position "relative"}})
 
 (defn- filter-data
   [filter-key data]
@@ -49,7 +42,7 @@
   []
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
         assets @(re-frame/subscribe [::assets-subs/assets-data])
-        data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])]
+        data-store @(re-frame/subscribe [::form-subs/edited-data])]
     (doseq [[action-name action-data] (group-scene-updates (:actions data-store))]
       (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
     (re-frame/dispatch [::events/reset-audio-assets scene-id (vals assets)])
@@ -57,7 +50,7 @@
 
 (defn- save-concepts-data!
   []
-  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])]
+  (let [data-store @(re-frame/subscribe [::form-subs/edited-data])]
     (doseq [[id data-patch] (group-concepts-updates (:actions data-store))]
       (re-frame/dispatch [::events/update-dataset-item id data-patch]))))
 
@@ -72,15 +65,13 @@
   []
   (r/with-let [confirm-open? (r/atom false)]
               (let [open? @(re-frame/subscribe [::translator-subs/translator-modal-state])
-                    data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
-                    blocking-progress? @(re-frame/subscribe [::translator-subs/blocking-progress])
+                    data-store @(re-frame/subscribe [::form-subs/edited-actions-data])
                     handle-save #(do (save-edited-data!)
                                      (close-window!))
                     handle-close #(if (empty? data-store)
                                     (close-window!)
                                     (reset! confirm-open? true))
-                    progress-size 18
-                    styles (get-styles {:progress-size progress-size})]
+                    styles (get-styles)]
                 [ui/dialog
                  {:open       open?
                   :on-close   handle-close
@@ -104,9 +95,5 @@
                   [:div {:style (:save-button-wrapper styles)}
                    [ui/button {:color    "secondary"
                                :variant  "contained"
-                               :on-click handle-save
-                               :disabled blocking-progress?}
-                    "Save"]
-                   (when blocking-progress?
-                     [ui/circular-progress {:size  progress-size
-                                            :style (:save-hover-progress styles)}])]]])))
+                               :on-click handle-save}
+                    "Save"]]]])))
