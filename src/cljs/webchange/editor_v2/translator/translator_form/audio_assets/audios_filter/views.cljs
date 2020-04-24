@@ -3,16 +3,21 @@
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.translator.translator-form.audio-assets.common.views-target-selector :refer [target-selector]]))
 
+(defn- get-styles
+  []
+  {:wrapper {:style {:margin-bottom "15px"}}
+   :title   {:display "inline-block"
+             :margin  "5px 0"}})
+
 (defn audios-filter
   [{:keys [on-change]}]
-  (let [handle-target-changed (fn [target]
-                                (on-change {:target target}))]
-    [:div {:style {:margin-bottom "15px"}}
+  (let [empty-target-option {:text "Any" :value ""}
+        handle-target-changed (fn [target] (on-change {:target target}))
+        styles (get-styles)]
+    [:div (:wrapper styles)
      [ui/typography {:variant "h6"
-                     :style   {:display "inline-block"
-                               :margin  "5px 0"}}
+                     :style   (:title styles)}
       "Show for target:"]
-     [target-selector {:default-value ""
-                       :extra-options [{:text  "Any"
-                                        :value ""}]
+     [target-selector {:default-value (:value empty-target-option)
+                       :extra-options [empty-target-option]
                        :on-change     handle-target-changed}]]))
