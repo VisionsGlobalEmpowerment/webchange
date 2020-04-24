@@ -3,9 +3,8 @@
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [clojure.string :refer [capitalize]]
-    [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.translator.translator-form.audio-assets.subs :as subs]))
+    [webchange.editor-v2.translator.translator-form.audio-assets.common.views-target-selector :refer [target-selector]]))
 
 (defn- get-styles
   []
@@ -16,24 +15,17 @@
 (defn audio-params-panel
   [{:keys [on-save on-cancel]}]
   (r/with-let [props (r/atom {})]
-              (let [targets (->> @(re-frame/subscribe [::subs/available-targets])
-                                 (map (fn [target] {:text  (capitalize target)
-                                                    :value target}))
-                                 (into [{:text  "No Target"
-                                         :value ""}]))
-                    handle-save (fn [] (on-save @props))
+              (let [handle-save (fn [] (on-save @props))
                     handle-cancel (fn [] (on-cancel))
                     styles (get-styles)]
                 [:div
                  [ui/icon-button {:on-click handle-cancel}
                   [ic/backspace]]
-                 [ui/select {:value         (or (:target @props) "")
-                             :display-empty true
-                             :on-change     #(swap! props assoc :target (.. % -target -value))
-                             :style         (:target-control styles)}
-                  (for [{:keys [text value]} targets]
-                    ^{:key value}
-                    [ui/menu-item {:value value} text])]
+                 [target-selector {:default-value ""
+                                   :on-change     #(swap! props assoc :target %)
+                                   :extra-options [{:text  "No Target"
+                                                    :value ""}]
+                                   :styles        {:control (:target-control styles)}}]
                  [ui/form-control {:style (:alias-control styles)}
                   [ui/text-field {:label     "Alias"
                                   :variant   "outlined"
