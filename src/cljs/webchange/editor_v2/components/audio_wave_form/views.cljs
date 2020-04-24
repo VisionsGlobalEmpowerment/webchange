@@ -16,17 +16,17 @@
 
        :component-did-mount
                      (fn [this]
-                       (let [{:keys [key start end on-change height]} (r/props this)]
-                         (reset! ws (create-wavesurfer @element key {:height height}))
+                       (let [{:keys [url start end on-change height]} (r/props this)]
+                         (reset! ws (create-wavesurfer @element url {:height height}))
                          (reset! region {:start start :end end})
-                         (handle-audio-region! @ws region key on-change)
-                         (init-audio-region! @ws region true key)))
+                         (handle-audio-region! @ws region url on-change)
+                         (init-audio-region! @ws region true url)))
 
        :component-did-update
                      (fn [this]
-                       (let [{:keys [key start end]} (r/props this)]
+                       (let [{:keys [url start end]} (r/props this)]
                          (reset! region {:start start :end end})
-                         (init-audio-region! @ws region true key)))
+                         (init-audio-region! @ws region true url)))
 
        :component-will-unmount
                      (fn []

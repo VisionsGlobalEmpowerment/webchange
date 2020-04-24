@@ -9,6 +9,7 @@
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.subs :as translator-subs]
     [webchange.editor-v2.translator.events :as translator-events]
+    [webchange.editor-v2.translator.translator-form.subs :as form-subs]
     [webchange.editor-v2.translator.translator-form.utils :refer [get-dialog-data
                                                                   get-graph
                                                                   get-current-action-data
@@ -178,7 +179,7 @@
                     dialog-data (get-dialog-data @selected-phrase-node graph (fn [node-data]
                                                                                (get-current-action-data node-data current-concept data-store)))
                     prepared-root-action-data (get-current-root-data @selected-phrase-node data-store)
-                    prepared-current-action-data (get-current-action-data @selected-action-node current-concept data-store)
+                    prepared-current-action-data @(re-frame/subscribe [::form-subs/current-action-data])
                     phrase-action-selected? (-> @selected-action-node (nil?) (not))
                     concept-required? (or has-concepts? selected-action-concept?)
 
@@ -211,8 +212,7 @@
                                    :on-change       (fn [new-translated-text]
                                                       (update-action-data! (-> @selected-action-node :path first)
                                                                            {:phrase-text-translated new-translated-text}))}]
-                    [audios-block {:action           prepared-current-action-data
-                                   :on-change-region (fn [audio-key region-data]
+                    [audios-block {:on-change-region (fn [audio-key region-data]
                                                        (let [action-id (get-action-id @selected-action-node current-concept)
                                                              action-name (-> @selected-action-node :path first)
                                                              audio-data (merge {:audio audio-key}

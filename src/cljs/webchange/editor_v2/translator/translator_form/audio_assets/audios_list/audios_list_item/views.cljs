@@ -143,14 +143,14 @@
                                 :on-delete handle-delete}])])))
 
 (defn audios-list-item
-  [{:keys [key alias start duration selected? target current-key on-change-region]}]
-  (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset key data]))
-        handle-change-region (fn [region] (on-change-region key region))
-        handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset key]))
+  [{:keys [url alias start duration selected? target current-key on-change-region]}]
+  (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset url data]))
+        handle-change-region (fn [region] (on-change-region url region))
+        handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset url]))
         on-select (fn []
-                    (reset! current-key key)
-                    (on-change-region key))
-        audio-data {:key   key
+                    (reset! current-key url)
+                    (on-change-region url))
+        audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
         styles (get-styles)]
@@ -159,7 +159,7 @@
                           (:block-wrapper-selected styles)
                           (:block-wrapper styles))}
      [ui/card-content
-      [header {:alias             (or alias key)
+      [header {:alias             (or alias url)
                :target            target
                :selected?         selected?
                :on-change-data    handle-change-data

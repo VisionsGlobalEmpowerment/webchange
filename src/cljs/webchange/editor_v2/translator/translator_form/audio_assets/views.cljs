@@ -21,10 +21,10 @@
 (defn audios-block
   [{:keys [action on-change-region]}]
   (r/with-let [current-filter (r/atom nil)]
-              (let [audios (->> @(re-frame/subscribe [::subs/assets-data])
-                                (map second)
+              (let [audios (->> @(re-frame/subscribe [::subs/audios-list])
                                 (filter-audios @current-filter))
                     handle-filter-change (fn [filter] (reset! current-filter filter))]
+                (println "audios" audios)
                 [:div
                  [audios-filter {:on-change handle-filter-change}]
                  [audios-list {:audios           audios
