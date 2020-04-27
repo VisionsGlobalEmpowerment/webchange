@@ -5,8 +5,17 @@
     [webchange.editor-v2.translator.translator-form.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]
     [webchange.editor-v2.translator.translator-form.utils-update-action :refer [get-action-update-data]]
-    [webchange.editor-v2.translator.subs :as translator.subs]
     [webchange.subs :as subs]))
+
+(re-frame/reg-event-fx
+  ::set-current-selected-action
+  (fn [{:keys [db]} [_ action]]
+    {:db (assoc-in db (path-to-db [:selected-action]) action)}))
+
+(re-frame/reg-event-fx
+  ::clean-current-selected-action
+  (fn [{:keys []} [_]]
+    {:dispatch-n (list [::set-current-selected-action nil])}))
 
 (re-frame/reg-event-fx
   ::reset-edited-data
@@ -22,8 +31,8 @@
   ::patch-current-action-edited-data
   (fn [{:keys [db]} [_ data-patch]]
     (let [data-store (translator-form-subs/edited-actions-data db)
-          current-concept (translator.subs/current-concept db)
-          selected-action-node (translator.subs/selected-action db)
+          current-concept (translator-form-subs/current-concept db)
+          selected-action-node (translator-form-subs/selected-action db)
           scene-data (subs/current-scene-data db)
           original-action-name (-> selected-action-node :path first)
           {:keys [id name type data]} (get-action-update-data {:scene-data           scene-data
@@ -46,6 +55,11 @@
                        :duration duration}]
       {:dispatch-n (list [::patch-current-action-edited-data region-data]
                          [::load-lip-sync-data audio-url start duration])})))
+
+(re-frame/reg-event-fx
+  ::set-current-action-phrase-translated-text
+  (fn [{:keys [_]} [_ text]]
+    {:dispatch-n (list [::patch-current-action-edited-data {:phrase-text-translated text}])}))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data
@@ -75,3 +89,14 @@
                                   :anim  "talk"}]]
       {:dispatch-n (list [:api-request-error :load-lip-sync-data]
                          [::patch-current-action-edited-data {:data default-lip-sync-data}])})))
+
+(re-frame/reg-event-fx
+  ::set-current-concept
+  (fn [{:keys [db]} [_ data]]
+    {:db         (assoc-in db (path-to-db [:current-concept]) data)
+     :dispatch-n (list [::clean-current-selected-action])}))
+
+(re-frame/reg-event-fx
+  ::reset-current-concept
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n (list [::set-current-concept nil])}))

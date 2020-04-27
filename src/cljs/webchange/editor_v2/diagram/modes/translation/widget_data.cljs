@@ -7,7 +7,7 @@
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.colors :refer [colors]]
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [get-node-type speech-node? concept-action-node?]]
-    [webchange.editor-v2.translator.events :as te]
+    [webchange.editor-v2.translator.translator-form.events :as te]
     [webchange.editor-v2.translator.translator-form.utils :refer [node-data->phrase-data]]
     [webchange.editor-v2.translator.translator-form.utils-play-audio :refer [play-audios-list]]))
 

@@ -8,7 +8,7 @@
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.audio-assets.events :as assets-events]
-    [webchange.editor-v2.translator.translator-form.events :as translator-form.events]))
+    [webchange.editor-v2.translator.translator-form.events :as translator-form-events]))
 
 (defn- capitalize-words
   [s]
@@ -146,12 +146,12 @@
 (defn audios-list-item
   [{:keys [url alias start duration selected? target]}]
   (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset url data]))
-        handle-change-region (fn [region] (re-frame/dispatch [::translator-form.events/set-current-action-audio-region
+        handle-change-region (fn [region] (re-frame/dispatch [::translator-form-events/set-current-action-audio-region
                                                               url
                                                               (:start region)
                                                               (:duration region)]))
         handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset url]))
-        on-select (fn [] (re-frame/dispatch [::translator-form.events/set-current-action-audio url]))
+        on-select (fn [] (re-frame/dispatch [::translator-form-events/set-current-action-audio url]))
         audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}

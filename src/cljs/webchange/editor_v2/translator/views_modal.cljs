@@ -13,16 +13,8 @@
     [webchange.subs :as subs]))
 
 (defn- get-styles
-  [{:keys [progress-size]}]
-  (let [progress-margin (-> (/ progress-size 2)
-                            (Math/ceil)
-                            (int))]
-    {:save-button-wrapper {:position "relative"}
-     :save-hover-progress {:position    "absolute"
-                           :left        "50%"
-                           :top         "50%"
-                           :margin-left (str "-" progress-margin "px")
-                           :margin-top  (str "-" progress-margin "px")}}))
+  []
+  {:save-button-wrapper {:position "relative"}})
 
 (defn- filter-data
   [filter-key data]
@@ -74,14 +66,12 @@
   (r/with-let [confirm-open? (r/atom false)]
               (let [open? @(re-frame/subscribe [::translator-subs/translator-modal-state])
                     data-store @(re-frame/subscribe [::form-subs/edited-actions-data])
-                    blocking-progress? @(re-frame/subscribe [::translator-subs/blocking-progress])
                     handle-save #(do (save-edited-data!)
                                      (close-window!))
                     handle-close #(if (empty? data-store)
                                     (close-window!)
                                     (reset! confirm-open? true))
-                    progress-size 18
-                    styles (get-styles {:progress-size progress-size})]
+                    styles (get-styles)]
                 [ui/dialog
                  {:open       open?
                   :on-close   handle-close
@@ -105,9 +95,5 @@
                   [:div {:style (:save-button-wrapper styles)}
                    [ui/button {:color    "secondary"
                                :variant  "contained"
-                               :on-click handle-save
-                               :disabled blocking-progress?}
-                    "Save"]
-                   (when blocking-progress?
-                     [ui/circular-progress {:size  progress-size
-                                            :style (:save-hover-progress styles)}])]]])))
+                               :on-click handle-save}
+                    "Save"]]]])))
