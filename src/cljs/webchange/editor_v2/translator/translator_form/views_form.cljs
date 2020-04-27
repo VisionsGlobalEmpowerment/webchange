@@ -9,6 +9,7 @@
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.subs :as translator-subs]
     [webchange.editor-v2.translator.events :as translator-events]
+    [webchange.editor-v2.translator.translator-form.events :as translator-form.events]
     [webchange.editor-v2.translator.translator-form.subs :as form-subs]
     [webchange.editor-v2.translator.translator-form.utils :refer [get-dialog-data
                                                                   get-graph
@@ -21,7 +22,6 @@
     [webchange.editor-v2.translator.translator-form.views-form-dialog :refer [dialog-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
-    [webchange.logger :as logger]
     [webchange.subs :as subs]
     [webchange.ui.theme :refer [get-in-theme]]))
 
@@ -47,7 +47,7 @@
 
 (defn update-action-data!
   [original-action-name data-patch]
-  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-actions-data])
+  (let [data-store @(re-frame/subscribe [::form-subs/edited-actions-data])
         current-concept @(re-frame/subscribe [::translator-subs/current-concept])
         selected-action-node @(re-frame/subscribe [::translator-subs/selected-action])
         {:keys [id type]} (get-current-action-data selected-action-node current-concept data-store)
@@ -66,30 +66,16 @@
                    current-data
                    data-patch)]
     (when (= original-action-name action-name)
-      (re-frame/dispatch [::translator-events/set-phrase-translation-action action-name id {:type type
-                                                                                            :data new-data}]))))
-
-(defn- apply-lip-sync-data!
-  [action-id action-name start animation-data on-error]
-  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-actions-data])
-        {action-type :type action-start :start} (get-in data-store [[action-name action-id] :data])]
-    (cond
-      (not= action-type "animation-sequence") (on-error (str "Action '" action-name "' must have type 'animation-sequence'"))
-      (not= action-start start) (on-error (str "Action '" action-name "' lip-sync data was already updated"))
-      :else (update-action-data! action-name {:data animation-data}))))
-
-(defn- apply-default-lip-sync-data!
-  [action-id action-name {:keys [start end]} on-error]
-  (let [animation-data [{:start start :end end :anim "talk"}]]
-    (apply-lip-sync-data! action-id action-name start animation-data on-error)))
+      (re-frame/dispatch [::translator-form.events/set-action-edited-data action-name id {:type type
+                                                                                          :data new-data}]))))
 
 (defn- update-root-action-data
   [data-patch]
-  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-actions-data])
+  (let [data-store @(re-frame/subscribe [::form-subs/edited-actions-data])
         selected-phrase-node @(re-frame/subscribe [::editor-subs/current-action])
         {:keys [id name type data]} (get-current-action-data selected-phrase-node nil data-store)]
-    (re-frame/dispatch [::translator-events/set-phrase-translation-action name id {:type type
-                                                                                   :data (merge data data-patch)}])))
+    (re-frame/dispatch [::translator-form.events/set-action-edited-data name id {:type type
+                                                                                 :data (merge data data-patch)}])))
 
 (defn- get-current-root-data
   [selected-phrase-node data-store]
@@ -97,22 +83,6 @@
         origin-data (:data selected-phrase-node)
         new-data (get-in data-store [[name nil] :data])]
     (merge origin-data new-data)))
-
-(defn- load-lip-sync-data!
-  [{:keys [audio start duration]} {:keys [on-ready on-error]}]
-  (re-frame/dispatch [::translator-events/set-blocking-progress true])
-  (GET "/api/actions/get-talk-animations"
-       {:params          {:file     audio
-                          :start    start
-                          :duration duration}
-        :handler         (fn [data]
-                           (re-frame/dispatch [::translator-events/set-blocking-progress false])
-                           (on-ready data))
-        :error-handler   (fn [error]
-                           (re-frame/dispatch [::translator-events/set-blocking-progress false])
-                           (on-error error))
-        :response-format :json
-        :keywords?       true}))
 
 (defn- error-snackbar
   [{:keys [error on-close]}]
@@ -175,7 +145,7 @@
                     selected-action-node (re-frame/subscribe [::translator-subs/selected-action])
                     selected-action-concept? (-> @selected-action-node (get-in [:data :concept-action]) (boolean))
                     {:keys [graph has-concepts?]} (get-graph scene-data phrase-action-name {:current-concept current-concept})
-                    data-store @(re-frame/subscribe [::translator-subs/phrase-translation-actions-data])
+                    data-store @(re-frame/subscribe [::form-subs/edited-actions-data])
                     dialog-data (get-dialog-data @selected-phrase-node graph (fn [node-data]
                                                                                (get-current-action-data node-data current-concept data-store)))
                     prepared-root-action-data (get-current-root-data @selected-phrase-node data-store)
@@ -212,20 +182,7 @@
                                    :on-change       (fn [new-translated-text]
                                                       (update-action-data! (-> @selected-action-node :path first)
                                                                            {:phrase-text-translated new-translated-text}))}]
-                    [audios-block {:on-change-region (fn [audio-key region-data]
-                                                       (let [action-id (get-action-id @selected-action-node current-concept)
-                                                             action-name (-> @selected-action-node :path first)
-                                                             audio-data (merge {:audio audio-key}
-                                                                               (select-keys region-data [:start :duration]))
-                                                             handle-error (fn [error-message]
-                                                                            (logger/error error-message)
-                                                                            (show-error error-message))]
-                                                         (update-action-data! action-name audio-data)
-                                                         (when-not (nil? region-data)
-                                                           (load-lip-sync-data! audio-data {:on-ready #(apply-lip-sync-data! action-id action-name (:start region-data) % handle-error)
-                                                                                            :on-error #(do
-                                                                                                         (apply-default-lip-sync-data! action-id action-name region-data handle-error)
-                                                                                                         (handle-error "Getting lip sync data error"))}))))}]]
+                    [audios-block]]
                    [ui/typography {:variant "subtitle1"}
                     "Select action on diagram"])
                  [error-snackbar {:error    @error

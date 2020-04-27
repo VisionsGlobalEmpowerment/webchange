@@ -19,14 +19,12 @@
           audios-list))
 
 (defn audios-block
-  [{:keys [action on-change-region]}]
+  [{:keys []}]
   (r/with-let [current-filter (r/atom nil)]
               (let [audios (->> @(re-frame/subscribe [::subs/audios-list])
                                 (filter-audios @current-filter))
                     handle-filter-change (fn [filter] (reset! current-filter filter))]
                 [:div
                  [audios-filter {:on-change handle-filter-change}]
-                 [audios-list {:audios           audios
-                               :action           action
-                               :on-change-region on-change-region}]
+                 [audios-list {:audios audios}]
                  [add-audio-form]])))

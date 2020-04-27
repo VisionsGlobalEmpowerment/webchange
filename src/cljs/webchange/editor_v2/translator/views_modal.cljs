@@ -8,6 +8,7 @@
     [webchange.editor-v2.translator.events :as translator-events]
     [webchange.editor-v2.translator.subs :as translator-subs]
     [webchange.editor-v2.translator.translator-form.audio-assets.subs :as assets-subs]
+    [webchange.editor-v2.translator.translator-form.subs :as form-subs]
     [webchange.editor-v2.translator.translator-form.views-form :refer [translator-form]]
     [webchange.subs :as subs]))
 
@@ -49,7 +50,7 @@
   []
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
         assets @(re-frame/subscribe [::assets-subs/assets-data])
-        data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])]
+        data-store @(re-frame/subscribe [::form-subs/edited-data])]
     (doseq [[action-name action-data] (group-scene-updates (:actions data-store))]
       (re-frame/dispatch [::events/update-scene-action scene-id action-name action-data]))
     (re-frame/dispatch [::events/reset-audio-assets scene-id (vals assets)])
@@ -57,7 +58,7 @@
 
 (defn- save-concepts-data!
   []
-  (let [data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])]
+  (let [data-store @(re-frame/subscribe [::form-subs/edited-data])]
     (doseq [[id data-patch] (group-concepts-updates (:actions data-store))]
       (re-frame/dispatch [::events/update-dataset-item id data-patch]))))
 
@@ -72,7 +73,7 @@
   []
   (r/with-let [confirm-open? (r/atom false)]
               (let [open? @(re-frame/subscribe [::translator-subs/translator-modal-state])
-                    data-store @(re-frame/subscribe [::translator-subs/phrase-translation-data])
+                    data-store @(re-frame/subscribe [::form-subs/edited-actions-data])
                     blocking-progress? @(re-frame/subscribe [::translator-subs/blocking-progress])
                     handle-save #(do (save-edited-data!)
                                      (close-window!))

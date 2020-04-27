@@ -6,16 +6,12 @@
     [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
     [webchange.interpreter.core :refer [load-assets]]))
 
-(def current-key (r/atom nil))
-
 (defn- waves-list
-  [{:keys [audios-data on-change-region]}]
+  [{:keys [audios-data]}]
   [:div
    (for [audio-data audios-data]
      ^{:key (:url audio-data)}
-     [audios-list-item (merge audio-data
-                              {:on-change-region on-change-region
-                               :current-key      current-key})])])
+     [audios-list-item audio-data])])
 
 (defn- audios-loading-block
   [{:keys [audios-list loading-progress loaded]}]
@@ -30,13 +26,12 @@
                                    :margin-top  18}}])
 
 (defn audios-list
-  [{:keys [audios on-change-region]}]
+  [{:keys [audios]}]
   (r/with-let [assets-loaded (r/atom false)                 ;; ToDo: move out of list
                assets-loading-progress (r/atom 0)]
               [:div
                (if @assets-loaded
-                 [waves-list {:audios-data      audios
-                              :on-change-region on-change-region}]
+                 [waves-list {:audios-data      audios}]
                  [audios-loading-block {:audios-list      (map #(:url %) audios)
                                         :loading-progress assets-loading-progress
                                         :loaded           assets-loaded}])]))
