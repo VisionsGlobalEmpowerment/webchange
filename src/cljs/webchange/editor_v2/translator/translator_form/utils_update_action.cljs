@@ -40,7 +40,7 @@
         edited-node-action-data (get-in edited-action-data inner-path)]
     (merge node-action-data edited-node-action-data)))
 
-(defn- get-current-action-data
+(defn get-current-action-data
   [selected-node-data current-concept-data data-store]
   (let [concept-action? (get-in selected-node-data [:data :concept-action])
         [type id name data] (if concept-action?

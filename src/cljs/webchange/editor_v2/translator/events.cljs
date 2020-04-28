@@ -3,15 +3,14 @@
     [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.editor-v2.translator.db :refer [path-to-db]]
-    [webchange.editor-v2.translator.translator-form.events :as translator-form-events]
-    [webchange.editor-v2.translator.translator-form.audio-assets.events :as audio-assets]))
+    [webchange.editor-v2.translator.translator-form.events :as translator-form-events]))
 
 (re-frame/reg-event-fx
   ::open-translator-modal
   (fn [{:keys [db]} [_]]
     {:db         (assoc-in db (path-to-db [:translator-modal-state]) true)
      :dispatch-n (list [:complete-request :login]
-                       [::audio-assets/init-state])}))
+                       [::translator-form-events/init-state])}))
 
 (re-frame/reg-event-fx
   ::close-translator-modal

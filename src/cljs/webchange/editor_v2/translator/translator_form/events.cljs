@@ -2,10 +2,59 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.graph-builder.utils.root-nodes :refer [get-root-nodes]]
+    [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]
-    [webchange.editor-v2.translator.translator-form.utils-update-action :refer [get-action-update-data]]
+    [webchange.editor-v2.translator.translator-form.utils :refer [get-graph]]
+    [webchange.editor-v2.translator.translator-form.utils-update-action :refer [get-action-update-data
+                                                                                get-current-action-data]]
+    [webchange.editor-v2.translator.translator-form.audio-assets.events :as audio-assets-events]
     [webchange.subs :as subs]))
+
+(defn- get-current-concept
+  [db]
+  (let [concepts (editor-subs/course-dataset-items db)]
+    (->> concepts (vals) (sort-by :name) (first))))
+
+(defn- get-graph-data
+  [db current-concept]
+  (let [scene-data (subs/current-scene-data db)
+        selected-phrase-node (editor-subs/current-action db)
+        phrase-action-name (or (:origin-name selected-phrase-node)
+                               (keyword (:name selected-phrase-node)))]
+    (get-graph scene-data phrase-action-name {:current-concept current-concept})))
+
+(defn- get-current-action
+  [graph]
+  (->> graph get-root-nodes first (get graph)))
+
+(re-frame/reg-event-fx
+  ::init-state
+  (fn [{:keys [db]} [_]]
+    (let [current-concept (get-current-concept db)]
+      {:dispatch-n (list [::audio-assets-events/init-state]
+                         [::set-current-concept current-concept]
+                         [::init-graph current-concept])})))
+
+(re-frame/reg-event-fx
+  ::set-graph
+  (fn [{:keys [db]} [_ graph]]
+    {:db (assoc-in db (path-to-db [:graph]) graph)}))
+
+(re-frame/reg-event-fx
+  ::set-concept-required
+  (fn [{:keys [db]} [_ concept-required?]]
+    {:db (assoc-in db (path-to-db [:concept-required?]) concept-required?)}))
+
+(re-frame/reg-event-fx
+  ::init-graph
+  (fn [{:keys [db]} [_ current-concept]]
+    (let [{:keys [graph has-concepts?]} (get-graph-data db current-concept)
+          current-action (get-current-action graph)]
+      {:dispatch-n (list [::set-graph graph]
+                         [::set-concept-required has-concepts?]
+                         [::set-current-selected-action current-action])})))
 
 (re-frame/reg-event-fx
   ::set-current-selected-action
@@ -26,6 +75,19 @@
   ::set-action-edited-data
   (fn [{:keys [db]} [_ action-name action-id data]]
     {:db (assoc-in db (path-to-db [:edited-data :actions [action-name action-id]]) data)}))
+
+(re-frame/reg-event-fx
+  ::patch-dialog-action-edited-data
+  (fn [{:keys [db]} [_ data-patch]]
+    (let [data-store (translator-form-subs/edited-actions-data db)
+          selected-phrase-node (editor-subs/current-action db)
+          {:keys [id name type data]} (get-current-action-data selected-phrase-node nil data-store)]
+      {:dispatch-n (list [::set-action-edited-data name id {:type type :data (merge data data-patch)}])})))
+
+(re-frame/reg-event-fx
+  ::set-dialog-action-description-translated
+  (fn [{:keys [_]} [_ text]]
+    {:dispatch-n (list [::patch-dialog-action-edited-data {:phrase-description-translated text}])}))
 
 (re-frame/reg-event-fx
   ::patch-current-action-edited-data
@@ -92,9 +154,9 @@
 
 (re-frame/reg-event-fx
   ::set-current-concept
-  (fn [{:keys [db]} [_ data]]
-    {:db         (assoc-in db (path-to-db [:current-concept]) data)
-     :dispatch-n (list [::clean-current-selected-action])}))
+  (fn [{:keys [db]} [_ concept]]
+    {:db (assoc-in db (path-to-db [:current-concept]) concept)
+     :dispatch-n (list [::init-graph concept])}))
 
 (re-frame/reg-event-fx
   ::reset-current-concept

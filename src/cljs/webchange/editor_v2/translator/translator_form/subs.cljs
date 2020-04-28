@@ -45,3 +45,12 @@
   ::current-concept
   current-concept)
 
+(re-frame/reg-sub
+  ::graph
+  (fn [db]
+    (get-in db (path-to-db [:graph]))))
+
+(re-frame/reg-sub
+  ::concept-required
+  (fn [db]
+    (get-in db (path-to-db [:concept-required?]))))
