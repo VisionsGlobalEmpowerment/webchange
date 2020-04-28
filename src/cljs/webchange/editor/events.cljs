@@ -150,7 +150,6 @@
   ::update-scene-action
   (fn [{:keys [db]} [_ scene-id action-name action-data]]
     (let [action-path [:scenes scene-id :actions (keyword action-name)]]
-      (println "::update-scene-action" scene-id action-name)
       {:db (update-in db action-path merge action-data)})))
 
 (re-frame/reg-event-fx
@@ -581,7 +580,6 @@
 (re-frame/reg-event-fx
   ::update-dataset-item
   (fn [{:keys [db]} [_ id data-patch]]
-    (println "::update-dataset-item" id (keys data-patch))
     (let [{:keys [name data]} (get-in db [:dataset-items id])
           new-data (merge data data-patch)]
       {:db         (assoc-in db [:loading :update-dataset-item] true)

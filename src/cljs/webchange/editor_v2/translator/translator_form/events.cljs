@@ -113,7 +113,8 @@
 (re-frame/reg-event-fx
   ::set-current-action-audio-region
   (fn [{:keys [_]} [_ audio-url start duration]]
-    (let [region-data {:start    start
+    (let [region-data {:audio    audio-url
+                       :start    start
                        :duration duration}]
       {:dispatch-n (list [::patch-current-action-edited-data region-data]
                          [::load-lip-sync-data audio-url start duration])})))
@@ -155,7 +156,7 @@
 (re-frame/reg-event-fx
   ::set-current-concept
   (fn [{:keys [db]} [_ concept]]
-    {:db (assoc-in db (path-to-db [:current-concept]) concept)
+    {:db         (assoc-in db (path-to-db [:current-concept]) concept)
      :dispatch-n (list [::init-graph concept])}))
 
 (re-frame/reg-event-fx

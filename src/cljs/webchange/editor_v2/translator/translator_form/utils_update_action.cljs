@@ -51,6 +51,14 @@
      :type type
      :data (update-with-current-data (-> selected-node-data :path) id data data-store)}))
 
+(defn- fix-data-patch
+  [data-patch selected-action-node]
+  (if (and (= "audio" (get-in selected-action-node [:data :type]))
+           (contains? data-patch :audio))
+    (-> data-patch
+        (assoc :id (:audio data-patch))
+        (dissoc :audio))
+    data-patch))
 
 (defn get-action-update-data
   [{:keys [scene-data data-store current-concept selected-action-node original-action-name data-patch]}]
@@ -64,7 +72,7 @@
                      (let [field-path (get-update-path path field current-data)]
                        (assoc-in current-data field-path value)))
                    current-data
-                   data-patch)]
+                   (fix-data-patch data-patch selected-action-node))]
     (when (= original-action-name action-name)
       {:id   id
        :type type

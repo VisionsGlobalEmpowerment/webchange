@@ -113,6 +113,15 @@
   (fn [db [_ scene-id]]
     (scene-assets db scene-id)))
 
+(defn scene-audio
+  [db scene-id]
+  (get-in db [:scenes scene-id :audio] {}))
+
+(re-frame/reg-sub
+  ::scene-audio
+  (fn [db [_ scene-id]]
+    (scene-audio db scene-id)))
+
 (re-frame/reg-sub
   ::current-scene-object
   (fn [db [_ name]]

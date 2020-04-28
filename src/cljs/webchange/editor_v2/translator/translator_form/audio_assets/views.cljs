@@ -23,7 +23,7 @@
   (r/with-let [current-filter (r/atom nil)]
               (let [audios (->> @(re-frame/subscribe [::subs/audios-list])
                                 (filter-audios @current-filter)
-                                (sort-by :date >))          ;; ToDo: check
+                                (sort-by :date >))
                     handle-filter-change (fn [filter] (reset! current-filter filter))]
                 [:div
                  [audios-filter {:on-change handle-filter-change}]

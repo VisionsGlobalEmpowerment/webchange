@@ -146,17 +146,17 @@
 (defn audios-list-item
   [{:keys [url alias start duration selected? target]}]
   (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset url data]))
+        handle-select (fn [] (re-frame/dispatch [::translator-form-events/set-current-action-audio url]))
         handle-change-region (fn [region] (re-frame/dispatch [::translator-form-events/set-current-action-audio-region
                                                               url
                                                               (:start region)
                                                               (:duration region)]))
         handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset url]))
-        on-select (fn [] (re-frame/dispatch [::translator-form-events/set-current-action-audio url]))
         audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
         styles (get-styles)]
-    [ui/card {:on-click on-select
+    [ui/card {:on-click handle-select
               :style    (if selected?
                           (:block-wrapper-selected styles)
                           (:block-wrapper styles))}
