@@ -1,5 +1,6 @@
 {:assets
                 [{:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio" :alias "mari old"}
+                 {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "mari old"}
                  {:url "/raw/audio/l1/a5/mari.mp4", :size 2, :type "audio" :alias "mari"}
 
                  {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio" :alias "game voice 1"}

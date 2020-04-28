@@ -33,9 +33,13 @@
         activities (-> (get-lesson lessons lesson) :activities)]
     (get-activity activities activity)))
 
-(defn- activity-by-index
+(defn- activity-data-by-index
   [levels level lesson activity]
-  (get-in levels [level :lessons lesson :activities activity]))
+  (merge (get-in levels [level :lessons lesson :activities activity])
+         {:level (get-in levels [level :level])
+         :lesson (get-in levels [level :lessons lesson :lesson])}
+    )
+  )
 
 (defn- not-last?
   [coll index]
@@ -50,9 +54,9 @@
         activities (-> (get-lesson lessons lesson) :activities)
         activity-index (index-by-key activities :activity activity)]
     (cond
-      (not-last? activities activity-index) (activity-by-index levels level-index lesson-index (inc activity-index))
-      (not-last? lessons lesson-index) (activity-by-index levels level-index (inc lesson-index) 0)
-      (not-last? levels level-index) (activity-by-index levels (inc level-index) 0 0))))
+      (not-last? activities activity-index) (activity-data-by-index levels level-index lesson-index (inc activity-index))
+      (not-last? lessons lesson-index) (activity-data-by-index levels level-index (inc lesson-index) 0)
+      (not-last? levels level-index) (activity-data-by-index levels (inc level-index) 0 0))))
 
 (defn- num->keyword
   [n]
