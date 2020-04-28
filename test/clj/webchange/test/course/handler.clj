@@ -101,6 +101,25 @@
 (deftest course-can-be-localized
   (let [course (f/course-created)
         new-language "new-language"]
-    (with-global-fake-routes-in-isolation {(auth/website-user-resource website-user-id) (fn [request] {:status 200 :headers {} :body (json/write-str website-user)})}
-                      (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body (json/read-str :key-fn keyword))]
-                        (is (= new-language (:lang new-course)))))))
+    (with-global-fake-routes-in-isolation
+      {(auth/website-user-resource website-user-id) (fn [request] {:status 200 :headers {} :body (json/write-str website-user)})}
+      (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body (json/read-str :key-fn keyword))]
+        (is (= new-language (:lang new-course)))))))
+
+(deftest localized-course-can-be-retrieved
+  (let [course (f/course-created)
+        new-language "new-language"]
+    (with-global-fake-routes-in-isolation
+      {(auth/website-user-resource website-user-id) (fn [request] {:status 200 :headers {} :body (json/write-str website-user)})}
+      (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
+            my-courses (-> (f/get-courses-by-website-user website-user-id) :body (json/read-str :key-fn keyword))]
+        (is (= 1 (count my-courses)))))))
+
+(deftest available-courses-can-be-retrieved
+  (let [course-name "available course"
+        _ (f/course-created {:name course-name :status "published"})
+        response (f/get-available-courses)
+        courses (-> response :body (json/read-str :key-fn keyword))]
+    (is (= 200 (:status response)))
+    (is (= 1 (count courses)))
+    (is (= course-name (-> courses first :name)))))

@@ -4,7 +4,9 @@
             [clojure.tools.logging :as log]
             [clojure.data.json :as json]
             [webchange.scene :as scene]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [camel-snake-kebab.extras :refer [transform-keys]]
+            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
 
 (def hardcoded (env :hardcoded-courses {"test" true}))
 
@@ -128,6 +130,11 @@
   (let [url (str "/courses/" slug "/editor-v2")]
     (assoc course :url url)))
 
+(defn- ->website-course
+  [course]
+  (-> (select-keys course [:id :name :language :slug :image-src :lang])
+      (with-course-page)))
+
 (defn localize
   [course-id {:keys [lang owner-id website-user-id]}]
   (let [current-time (jt/local-date-time)
@@ -157,14 +164,9 @@
                          :data scene-data
                          :owner_id owner-id
                          :created_at current-time})))
-    [true (-> localized-course-data
+    [true (-> (transform-keys ->kebab-case-keyword localized-course-data)
               (assoc :id new-course-id)
-              (with-course-page))]))
-
-(defn- ->website-course
-  [course]
-  (-> (select-keys course [:id :name :language :slug :image-src])
-      (with-course-page)))
+              (->website-course))]))
 
 (defn get-available-courses
   []

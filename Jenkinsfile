@@ -6,8 +6,15 @@ node {
         sh 'cp -rf $HOME/build-cache/profiles.clj ./'
     }
 
-    stage('Test') {
+    stage('Migrate test') {
+        sh 'lein with-profile test migratus migrate'
+    }
+
+    stage('Test clj') {
         sh 'lein test'
+    }
+
+    stage('Test cljs') {
         sh 'lein doo chrome-headless test once'
     }
 

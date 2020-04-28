@@ -3,6 +3,7 @@
             [webchange.db.core :refer [*db*] :as db]
             [webchange.auth.core :as auth]
             [webchange.handler :as handler]
+            [webchange.course.handler :as course-handler]
             [config.core :refer [env]]
             [mount.core :as mount]
             [luminus-migrations.core :as migrations]
@@ -45,7 +46,7 @@
 
 (defn init [f]
   (mount/start #'webchange.db.core/*db*)
-  (migrations/migrate ["migrate"] (select-keys env [:database-url]))
+  #_(migrations/migrate ["migrate"] (select-keys env [:database-url]))
   (f))
 
 (defn teacher-user-created
@@ -70,24 +71,26 @@
      (auth/activate-user! user-id)
      (assoc options :id user-id))))
 
-(defn course-created []
-  (let [course-name "test-course"
-        course-slug "test-course-slug"
-        owner-id 1
-        status "draft"
-        [{course-id :id}] (db/create-course! {:name course-name :slug course-slug :lang nil :image_src nil :status status :website_user_id nil :owner_id owner-id})
-        data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
-        [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id owner-id :created_at (jt/local-date-time)})]
-    {:id course-id
-     :name course-name
-     :slug course-slug
-     :lang nil
-     :image-src nil
-     :status status
-     :owner-id owner-id
-     :website-user-id nil
-     :data data
-     :version-id version-id}))
+(defn course-created
+  ([] (course-created {}))
+  ([options]
+   (let [defaults {:name "test-course"
+                   :slug "test-course-slug"
+                   :lang nil
+                   :image-src nil
+                   :status "draft"
+                   :website-user-id nil
+                   :owner-id 1}
+         course-data (->> (merge defaults options)
+                          (transform-keys ->snake_case_keyword))
+         [{course-id :id}] (db/create-course! course-data)
+         data {:initial-scene "test-scene" :workflow-actions [{:id 1 :type "set-activity" :activity "home" :activity-number 1 :lesson 1 :level 1}] :templates {}}
+         [{version-id :id}] (db/save-course! {:course_id course-id :data data :owner_id (:owner_id course-data) :created_at (jt/local-date-time)})]
+     (->> (assoc course-data
+           :id course-id
+           :data data
+           :version-id version-id)
+          (transform-keys ->kebab-case-keyword)))))
 
 (defn scene-created []
   (let [{course-id :id course-name :name course-slug :slug} (course-created)
@@ -229,7 +232,25 @@
 (defn localize-course!
   [course-id data]
   (let [course-url (str "/api/courses/" course-id "/translate")
-        request (-> (mock/request :post course-url (json/write-str data))
+        request (-> (mock/request :post course-url)
+                    (mock/content-type "application/json")
+                    (mock/body (json/write-str data))
+                    teacher-logged-in)]
+    #_(course-handler/website-api-routes request)
+    (handler/dev-handler request)))
+
+(defn get-courses-by-website-user
+  [user-id]
+  (let [url (str "/api/courses/by-website-user/" user-id)
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-available-courses
+  []
+  (let [url (str "/api/courses/available")
+        request (-> (mock/request :get url)
                     (mock/header :content-type "application/json")
                     teacher-logged-in)]
     (handler/dev-handler request)))
