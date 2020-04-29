@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.translator.translator-form.audio-assets.views-audio-wave
+(ns webchange.editor-v2.translator.translator-form.audio-assets.audios-list.audios-list-item.views
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
@@ -7,7 +7,8 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
-    [webchange.editor-v2.translator.translator-form.audio-assets.events :as assets-events]))
+    [webchange.editor-v2.translator.translator-form.audio-assets.events :as assets-events]
+    [webchange.editor-v2.translator.translator-form.events :as translator-form-events]))
 
 (defn- capitalize-words
   [s]
@@ -59,6 +60,7 @@
   [{:keys [alias target available-targets on-save on-cancel]}]
   (r/with-let [current-data (r/atom {:alias  alias
                                      :target target})]
+
               (let [targets (map name available-targets)
                     styles (get-styles)]
                 [:div {:style (:info-form styles)}
@@ -91,8 +93,6 @@
                      :on-click #(on-save @current-data)}
                     [ic/done {:style (:menu-item-icon styles)}]]]]])))
 
-
-
 (defn- audio-menu
   [{:keys [on-edit on-delete]}]
   (r/with-let [menu-anchor (r/atom nil)]
@@ -122,7 +122,7 @@
                     "Delete"]]]])))
 
 (defn- header
-  [{:keys [alias target available-targets selected? on-change-data on-delete]}]
+  [{:keys [alias target selected? on-change-data on-delete]}]
   (r/with-let [edit-state? (r/atom false)]
               (let [styles (get-styles)
                     handle-edit #(reset! edit-state? true)
@@ -132,44 +132,40 @@
                     handle-delete on-delete]
                 [:div {:style (:block-header styles)}
                  (if @edit-state?
-                   [audio-info-form {:alias             alias
-                                     :target            target
-                                     :available-targets available-targets
-                                     :on-save           handle-save
-                                     :on-cancel         handle-cancel}]
-                   [audio-info {:alias             alias
-                                :target            target
-                                :available-targets available-targets
-                                :on-save           handle-save}])
-
+                   [audio-info-form {:alias     alias
+                                     :target    target
+                                     :on-save   handle-save
+                                     :on-cancel handle-cancel}]
+                   [audio-info {:alias  alias
+                                :target target}])
                  (when (and selected?
                             (not @edit-state?))
                    [audio-menu {:on-edit   handle-edit
                                 :on-delete handle-delete}])])))
 
-(defn audio-wave
-  [{:keys [key alias start duration selected? target current-key targets on-change-region]}]
-  (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset key data]))
-        handle-change-region (fn [region] (on-change-region key region))
-        handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset key]))
-        on-select (fn []
-                    (reset! current-key key)
-                    (on-change-region key))
-        audio-data {:key   key
+(defn audios-list-item
+  [{:keys [url alias start duration selected? target]}]
+  (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset url data]))
+        handle-select (fn [] (re-frame/dispatch [::translator-form-events/set-current-action-audio url]))
+        handle-change-region (fn [region] (re-frame/dispatch [::translator-form-events/set-current-action-audio-region
+                                                              url
+                                                              (:start region)
+                                                              (:duration region)]))
+        handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset url]))
+        audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
         styles (get-styles)]
-    [ui/card {:on-click on-select
+    [ui/card {:on-click handle-select
               :style    (if selected?
                           (:block-wrapper-selected styles)
                           (:block-wrapper styles))}
      [ui/card-content
-      [header {:alias             (or alias key)
-               :target            target
-               :available-targets targets
-               :selected?         selected?
-               :on-change-data    handle-change-data
-               :on-delete         handle-delete}]
+      [header {:alias          (or alias url)
+               :target         target
+               :selected?      selected?
+               :on-change-data handle-change-data
+               :on-delete      handle-delete}]
       [audio-wave-form (merge audio-data
                               {:height         64
                                :on-change      handle-change-region

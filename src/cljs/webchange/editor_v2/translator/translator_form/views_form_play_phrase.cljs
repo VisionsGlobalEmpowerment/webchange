@@ -6,6 +6,7 @@
     [reagent.core :as r]
     [webchange.common.events :as ce]
     [webchange.editor-v2.graph-builder.utils.graph-to-nodes-seq :refer [graph-to-nodes-seq]]
+    [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]
     [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets
                                                                   get-current-action-data]]
     [webchange.interpreter.core :refer [load-assets]]))
@@ -13,6 +14,13 @@
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 
 (def action-flow-id :translation-phrase-play)
+
+(def common-button-params {:color "default"
+                           :size  "small"
+                           :style {:position "relative"
+                                   :top      "-40px"
+                                   :left     "100%"
+                                   :margin   "-50px"}})
 
 (defn adapt-action
   [{:keys [id start duration type] :as action}]
@@ -52,15 +60,12 @@
        (distinct)))
 
 (defn play-phrase-block
-  [{:keys [graph current-concept edited-data]}]
+  []
   (r/with-let [state (r/atom "pause")
                loading-progress (r/atom nil)]
-              (let [common-button-params {:color "default"
-                                          :size  "small"
-                                          :style {:position "relative"
-                                                  :top      "-40px"
-                                                  :left     "100%"
-                                                  :margin   "-50px"}}
+              (let [graph @(re-frame/subscribe [::translator-form-subs/graph])
+                    current-concept @(re-frame/subscribe [::translator-form-subs/current-concept])
+                    edited-data @(re-frame/subscribe [::translator-form-subs/edited-actions-data])
                     graph-contains-concept? (->> graph
                                                  (some (fn [[_ node-data]]
                                                          (get-in node-data [:data :concept-action])))

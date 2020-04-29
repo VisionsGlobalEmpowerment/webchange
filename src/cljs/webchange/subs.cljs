@@ -50,6 +50,15 @@
   (fn [db [_ scene-id]]
     (get-in db [:scenes scene-id :scene-objects] [])))
 
+(defn current-scene-data
+  [db]
+  (let [current-scene-id (current-scene db)]
+    (get-in db [:scenes current-scene-id] {})))
+
+(re-frame/reg-sub
+  ::current-scene-data
+  current-scene-data)
+
 (re-frame/reg-sub
   ::current-scene-objects
   (fn [db [_]]
@@ -103,6 +112,15 @@
   ::scene-assets
   (fn [db [_ scene-id]]
     (scene-assets db scene-id)))
+
+(defn scene-audio
+  [db scene-id]
+  (get-in db [:scenes scene-id :audio] {}))
+
+(re-frame/reg-sub
+  ::scene-audio
+  (fn [db [_ scene-id]]
+    (scene-audio db scene-id)))
 
 (re-frame/reg-sub
   ::current-scene-object

@@ -46,6 +46,14 @@
       get-data
       new-blob))
 
+(defn wait-data-as-blob
+  [key callback]
+  (let [timeout 100
+        data (get-data key)]
+    (if-not (nil? data)
+      (callback (new-blob data))
+      (.setTimeout js/window #(wait-data-as-blob key callback) timeout))))
+
 (def host "/api")
 (def resources "")
 (def http-buffer (atom {}))

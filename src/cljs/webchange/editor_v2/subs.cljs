@@ -7,10 +7,13 @@
   (fn [db]
     (get-in db [:editor-v2 :diagram-mode])))
 
+(defn current-action
+  [db]
+  (get-in db [:editor-v2 :current-action]))
+
 (re-frame/reg-sub
   ::current-action
-  (fn [db]
-    (get-in db [:editor-v2 :current-action])))
+  current-action)
 
 (defn course-concept
   [db]
