@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.diagram.widget :refer [diagram-widget]]
-    [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]))
+    [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]))
 
 (defn- update-graph
   [graph data-store current-concept-id]
@@ -16,6 +16,6 @@
 
 (defn diagram-block
   []
-  (let [graph @(re-frame/subscribe [::translator-form-subs/graph])]
+  (let [graph @(re-frame/subscribe [::translator-form.graph/graph])]
     [diagram-widget {:graph graph
                      :mode  :translation}]))

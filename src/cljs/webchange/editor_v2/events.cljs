@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
-    [webchange.editor-v2.translator.events :as translator-events]))
+    [webchange.editor-v2.translator.state.window :as translator.window]
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -40,15 +41,10 @@
     {:db (assoc-in db [:editor-v2 :diagram-mode] mode)}))
 
 (re-frame/reg-event-fx
-  ::set-current-action
-  (fn [{:keys [db]} [_ action]]
-    {:db (assoc-in db [:editor-v2 :current-action] action)}))
-
-(re-frame/reg-event-fx
   ::show-translator-form
-  (fn [{:keys [_]} [_ action]]
-    {:dispatch-n (list [::set-current-action action]
-                       [::translator-events/open-translator-modal])}))
+  (fn [{:keys [_]} [_ action-node]]
+    {:dispatch-n (list [::translator-form.actions/set-current-dialog-action action-node]
+                       [::translator.window/open])}))
 
 (re-frame/reg-event-fx
   ::load-course-info

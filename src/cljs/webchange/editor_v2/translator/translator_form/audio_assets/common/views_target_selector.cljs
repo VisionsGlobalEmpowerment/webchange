@@ -4,7 +4,7 @@
     [clojure.string :refer [capitalize]]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.translator.translator-form.audio-assets.subs :as subs]
+    [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
     [webchange.ui.utils :refer [deep-merge]]))
 
 (defn- get-styles
@@ -14,7 +14,7 @@
 
 (defn target-selector
   [{:keys [default-value extra-options styles on-change]}]
-  (let [targets (->> @(re-frame/subscribe [::subs/available-targets])
+  (let [targets (->> @(re-frame/subscribe [::translator-form.audios/available-targets])
                      (map (fn [target] {:text  (capitalize target)
                                         :value target}))
                      (into extra-options))

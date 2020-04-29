@@ -15,10 +15,14 @@
         (.join "\n"))))
 
 (defn get-graph
-  [scene-data action-name concept-data]
-  (when-not (nil? action-name)
-    (get-diagram-graph scene-data :translation {:start-node   action-name
-                                                :concept-data concept-data})))
+  [{:keys [scene-data start-node concept]}]
+  (let [start-node-name (or (:origin-name start-node)
+                            (keyword (:name start-node)))
+        params {:start-node   start-node-name
+                :concept-data {:current-concept concept}}
+        diagram-mode :translation]
+    (when-not (nil? start-node-name)
+      (get-diagram-graph scene-data diagram-mode params))))
 
 (defn audios->assets
   [audios]
@@ -69,16 +73,16 @@
                 :target]))
 
 (defn- get-dialog-data-dfs
-  ([get-actual-data graph]
-   (first (get-dialog-data-dfs graph [:root :root] get-actual-data {} [])))
-  ([graph [prev-node-name node-name] get-actual-data used-map result]
+  ([graph]
+   (first (get-dialog-data-dfs graph [:root :root] {} [])))
+  ([graph [prev-node-name node-name] used-map result]
    (let [node-data (get graph node-name)]
      (reduce
        (fn [[result used-map] {:keys [handler]}]
          (if-not (contains? used-map handler)
-           (get-dialog-data-dfs graph [node-name handler] get-actual-data (assoc used-map handler true) result)
+           (get-dialog-data-dfs graph [node-name handler] (assoc used-map handler true) result)
            [result used-map]))
-       (let [phrase-data (-> node-data get-actual-data node-data->phrase-data)]
+       (let [phrase-data (-> node-data node-data->phrase-data)]
          [(if-not (= node-name :root)
             (conj result phrase-data)
             result)
@@ -86,12 +90,12 @@
        (get-children node-name node-data prev-node-name)))))
 
 (defn get-dialog-data
-  [phrase-node graph get-actual-data]
+  [phrase-node graph]
   (let [phrase-node? (-> (:data phrase-node)
                          (contains? :phrase-text))]
     (if phrase-node?
-      [(-> phrase-node get-actual-data node-data->phrase-data)]
+      [(-> phrase-node node-data->phrase-data)]
       (->> graph
            (get-root-nodes)
            (add-root-node graph)
-           (get-dialog-data-dfs get-actual-data)))))
+           (get-dialog-data-dfs)))))

@@ -1,6 +1,6 @@
-(ns webchange.editor-v2.translator.translator-form.db
+(ns webchange.editor-v2.translator.translator-form.state.db
   (:require
-    [webchange.editor-v2.translator.db :as parent-db]))
+    [webchange.editor-v2.translator.state.db :as parent-db]))
 
 (defn path-to-db
   [relative-path]

@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.translator.db)
+(ns webchange.editor-v2.translator.state.db)
 
 (defn path-to-db
   [relative-path]

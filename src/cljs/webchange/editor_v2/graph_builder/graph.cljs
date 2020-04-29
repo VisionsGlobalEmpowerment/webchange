@@ -44,7 +44,7 @@
                                                 (get-phrases-graph))
                   (= diagram-mode :translation) (let [graph (-> scene-data
                                                                 (parse-scene (select-keys params [:start-node :concept-data])))]
-                                                  {:graph         (get-translation-graph graph)
+                                                  {:data         (get-translation-graph graph)
                                                    :has-concepts? (graph-has-concepts? graph)})
                   :default (-> scene-data
                                (parse-scene (select-keys params [:start-node]))))]

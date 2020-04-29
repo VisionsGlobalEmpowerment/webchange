@@ -7,8 +7,9 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
-    [webchange.editor-v2.translator.translator-form.audio-assets.events :as assets-events]
-    [webchange.editor-v2.translator.translator-form.events :as translator-form-events]))
+    [webchange.editor-v2.translator.translator-form.audio-assets.common.views-target-selector :refer [target-selector]]
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 (defn- capitalize-words
   [s]
@@ -40,8 +41,7 @@
    :form-button            {:margin-left "8px"
                             :padding     "10px"}
    :alias-form             {:width "170px"}
-   :target-form            {:width        "130px"
-                            :margin-right "16px"}
+   :target-form            {:margin-right "16px"}
    :target-form-label      {:top "-16px"}
    :target-form-input      {:margin 0}})
 
@@ -57,25 +57,20 @@
                    :style   {:display "inline-block"}} alias]])
 
 (defn- audio-info-form
-  [{:keys [alias target available-targets on-save on-cancel]}]
+  [{:keys [alias target on-save on-cancel]}]
   (r/with-let [current-data (r/atom {:alias  alias
                                      :target target})]
 
-              (let [targets (map name available-targets)
-                    styles (get-styles)]
+              (let [styles (get-styles)]
                 [:div {:style (:info-form styles)}
                  [:div
                   [ui/form-control {:style (:target-form styles)}
                    [ui/input-label {:html-for "target"
                                     :style    (:target-form-label styles)}
                     "Target"]
-                   [ui/select {:value       (or (:target @current-data) "")
-                               :on-change   #(swap! current-data assoc :target (-> % .-target .-value))
-                               :input-props {:id "target"}
-                               :style       (:target-form-input styles)}
-                    (for [target targets]
-                      ^{:key target}
-                      [ui/menu-item {:value target} (target->caption target)])]]
+                   [target-selector {:default-value (or (:target @current-data) "")
+                                     :styles        {:control (:target-form-input styles)}
+                                     :on-change     #(swap! current-data assoc :target %)}]]
                   [ui/form-control {:style (:alias-form styles)}
                    [ui/text-field {:label     "Alias"
                                    :value     (or (:alias @current-data) "")
@@ -145,13 +140,13 @@
 
 (defn audios-list-item
   [{:keys [url alias start duration selected? target]}]
-  (let [handle-change-data (fn [data] (re-frame/dispatch [::assets-events/patch-asset url data]))
-        handle-select (fn [] (re-frame/dispatch [::translator-form-events/set-current-action-audio url]))
-        handle-change-region (fn [region] (re-frame/dispatch [::translator-form-events/set-current-action-audio-region
+  (let [handle-change-data (fn [data] (re-frame/dispatch [::translator-form.scene/update-asset url data]))
+        handle-select (fn [] (re-frame/dispatch [::translator-form.actions/set-phrase-action-audio url]))
+        handle-change-region (fn [region] (re-frame/dispatch [::translator-form.actions/set-phrase-action-audio-region
                                                               url
                                                               (:start region)
                                                               (:duration region)]))
-        handle-delete (fn [] (re-frame/dispatch [::assets-events/delete-asset url]))
+        handle-delete (fn [] (re-frame/dispatch [::translator-form.scene/delete-asset url]))
         audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
@@ -161,7 +156,7 @@
                           (:block-wrapper-selected styles)
                           (:block-wrapper styles))}
      [ui/card-content
-      [header {:alias          (or alias url)
+      [header {:alias          (or alias "alias not defined")
                :target         target
                :selected?      selected?
                :on-change-data handle-change-data

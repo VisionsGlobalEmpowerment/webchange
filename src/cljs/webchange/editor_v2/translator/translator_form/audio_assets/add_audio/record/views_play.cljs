@@ -4,9 +4,10 @@
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.events :as events]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.utils-audio :as audio]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-layout :refer [panel-layout]]))
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-layout :refer [panel-layout]]
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.state.record-panel :as add-audio.record-panel]
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.state.select-method  :as add-audio.select-method]))
 
 (defn- get-styles
   []
@@ -59,13 +60,13 @@
   []
   (let [actions [{:text    "cancel recording"
                   :icon    ic/backspace
-                  :handler (fn [] (re-frame/dispatch [::events/show-select-method-panel]))}
+                  :handler (fn [] (re-frame/dispatch [::add-audio.select-method/show-select-method-panel]))}
                  {:text    "re-record"
                   :icon    ic/cached
-                  :handler (fn [] (re-frame/dispatch [::events/show-start-record-panel]))}
+                  :handler (fn [] (re-frame/dispatch [::add-audio.record-panel/show-start-record-panel]))}
                  {:text    "done"
                   :icon    ic/done
-                  :handler (fn [] (re-frame/dispatch [::events/show-set-record-params-panel]))}]
+                  :handler (fn [] (re-frame/dispatch [::add-audio.record-panel/show-set-record-params-panel]))}]
         styles (get-styles)]
     [:div
      (for [{:keys [text icon handler]} actions]
