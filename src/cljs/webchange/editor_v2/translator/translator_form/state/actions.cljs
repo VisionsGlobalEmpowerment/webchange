@@ -47,11 +47,21 @@
      (re-frame/subscribe [::translator-form.scene/actions-data])
      (re-frame/subscribe [::translator-form.concepts/current-concept-data])])
   (fn [[{:keys [path type]} actions-data current-concept]]
-    (when-not (nil? path)
-      (cond
-        (= type :concept-action) (get-in current-concept path)
-        (= type :scene-action) (get-in actions-data path)
-        :else nil))))
+    (let [action-path (actions/node-path->action-path path)]
+      (when-not (nil? action-path)
+        (cond
+          (= type :concept-action) (get-in current-concept action-path)
+          (= type :scene-action) (get-in actions-data action-path)
+          :else nil)))))
+
+(re-frame/reg-sub
+  ::phrase-node-available-actions
+  (fn []
+    [(re-frame/subscribe [::translator-form.concepts/current-concept])])
+  (fn [[current-concept] [_ node]]
+    (if (actions/available-to-edit-actions? node current-concept)
+      [:insert-before :insert-after :delete]
+      [])))
 
 ;; Events
 
@@ -66,10 +76,11 @@
   (fn [{:keys [db]} [_ target-action data-patch]]
     (let [{:keys [path type]} (cond
                                 (= target-action :dialog) (current-dialog-action-info db)
-                                (= target-action :phrase) (current-phrase-action-info db))]
+                                (= target-action :phrase) (current-phrase-action-info db))
+          action-path (actions/node-path->action-path path)]
       (cond
-        (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept path data-patch])}
-        (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action path data-patch])}))))
+        (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}
+        (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action action-path data-patch])}))))
 
 ;; Dialog Action
 
@@ -99,6 +110,11 @@
   ::clean-current-phrase-action
   (fn [{:keys []} [_]]
     {:dispatch-n (list [::set-current-phrase-action nil])}))
+
+(re-frame/reg-event-fx
+  ::set-phrase-action-phrase
+  (fn [{:keys [_]} [_ text]]
+    {:dispatch-n (list [::update-action :phrase {:phrase-text text}])}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-phrase-translated
@@ -150,6 +166,24 @@
 
 (re-frame/reg-event-fx
   ::add-new-phrase-action
-  (fn [{:keys [_]} [_ trigger-node position]]
-    (println "::add-empty-action" position trigger-node)
-    {}))
+  (fn [{:keys [db]} [_ node relative-position]]
+    (let [current-concept (translator-form.concepts/current-concept db)
+          {:keys [concept-action? parent-action parent-path target-position]} (actions/get-node-data node current-concept)
+          empty-action {:type  "animation-sequence"
+                        :audio nil}
+          data-patch (-> parent-action
+                         (actions/insert-child-action empty-action target-position relative-position)
+                         (select-keys [:data]))]
+      (if concept-action?
+        {:dispatch-n (list [::translator-form.concepts/update-current-concept parent-path data-patch])}))))
+
+(re-frame/reg-event-fx
+  ::delete-phrase-action
+  (fn [{:keys [db]} [_ node]]
+    (let [current-concept (translator-form.concepts/current-concept db)
+          {:keys [concept-action? parent-action parent-path target-position]} (actions/get-node-data node current-concept)
+          data-patch (-> parent-action
+                         (actions/delete-child-action target-position)
+                         (select-keys [:data]))]
+      (if concept-action?
+        {:dispatch-n (list [::translator-form.concepts/update-current-concept parent-path data-patch])}))))

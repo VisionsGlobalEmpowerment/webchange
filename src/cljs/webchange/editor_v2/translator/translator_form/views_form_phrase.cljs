@@ -16,6 +16,9 @@
         origin-text (-> current-phrase-action :phrase-text trim-text)
         translated-text (-> current-phrase-action :phrase-text-translated trim-text)
         handle-text-change (fn [event] (let [new-value (.. event -target -value)]
+                                         (re-frame/dispatch [::translator-form.actions/set-phrase-action-phrase
+                                                             new-value])))
+        handle-text-translated-change (fn [event] (let [new-value (.. event -target -value)]
                                          (re-frame/dispatch [::translator-form.actions/set-phrase-action-phrase-translated
                                                              new-value])))]
     [ui/grid {:container true
@@ -23,13 +26,13 @@
               :justify   "space-between"}
      [ui/grid {:item true :xs 6}
       [ui/text-field (merge text-input-params
-                            {:label    "Origin Text"
-                             :value    (or origin-text "")
-                             :disabled true})]]
+                            {:label     "Origin Text"
+                             :value     (or origin-text "")
+                             :on-change handle-text-change})]]
      [ui/grid {:item true :xs 6}
       [ui/text-field (merge text-input-params
                             {:label           "Translated Text"
                              :value           (or translated-text "")
-                             :on-change       handle-text-change
+                             :on-change       handle-text-translated-change
                              :InputLabelProps {:shrink  true
                                                :focused true}})]]]))

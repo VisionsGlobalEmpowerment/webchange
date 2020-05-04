@@ -1,17 +1,7 @@
-(ns webchange.editor-v2.translator.translator-form.state.scene-utils)
-
-(defn- get-index
-  [list key value]
-  (->> list
-       (map-indexed vector)
-       (some (fn [[index item]]
-               (and (= (get item key) value)
-                    index)))))
-
-(defn- remove-by-index
-  [list index]
-  (vec (concat (subvec list 0 index)
-               (subvec list (inc index)))))
+(ns webchange.editor-v2.translator.translator-form.state.scene-utils
+  (:require
+    [webchange.editor-v2.translator.translator-form.state.utils :refer [get-index
+                                                                        remove-by-index]]))
 
 (defn add-if-not-exist
   [list key value data]
