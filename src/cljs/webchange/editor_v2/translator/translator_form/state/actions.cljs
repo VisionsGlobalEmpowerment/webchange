@@ -122,6 +122,11 @@
     {:dispatch-n (list [::update-action :phrase {:phrase-text-translated text}])}))
 
 (re-frame/reg-event-fx
+  ::set-phrase-action-target
+  (fn [{:keys [_]} [_ target]]
+    {:dispatch-n (list [::update-action :phrase {:target target}])}))
+
+(re-frame/reg-event-fx
   ::set-phrase-action-audio
   (fn [{:keys [_]} [_ audio-url]]
     {:dispatch-n (list [::update-action :phrase {:audio audio-url}])}))

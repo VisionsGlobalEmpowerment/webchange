@@ -4,7 +4,7 @@
     [cljs-react-material-ui.icons :as ic]
     [clojure.string :refer [capitalize]]
     [reagent.core :as r]
-    [webchange.editor-v2.translator.translator-form.audio-assets.common.views-target-selector :refer [target-selector]]))
+    [webchange.editor-v2.translator.translator-form.common.views-target-selector :refer [target-selector]]))
 
 (defn- get-styles
   []

@@ -11,6 +11,7 @@
     [webchange.editor-v2.translator.translator-form.views-form-dialog :refer [dialog-block]]
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
+    [webchange.editor-v2.translator.translator-form.views-form-target :refer [target-block]]
     [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn- get-styles
@@ -28,6 +29,7 @@
      [dialog-block]
      [diagram-block]
      [play-phrase-block]
+     [target-block]
      (if-not (nil? current-phrase-action)
        [:div
         [phrase-block]
