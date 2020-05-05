@@ -7,14 +7,14 @@
     [webchange.editor-v2.diagram.diagram-model.init :refer [init-diagram-model]]
     [webchange.editor-v2.diagram.diagram-utils.utils :refer [reorder zoom-to-fit]]
     [webchange.editor-v2.utils :refer [keyword->caption]]
-    [webchange.editor-v2.diagram.widget.views-toolbar :refer [toolbar]]))
+    [webchange.editor-v2.diagram.widget.views-toolbar :refer [toolbar]]
+    [webchange.editor-v2.diagram.widget.utils :refer [get-graph-changes]]))
 
 (defn reorder-nodes
-  [this]
-  (let [engine (aget this "engine")]
-    (when-not (nil? engine)
-      (.setTimeout js/window #(do (reorder engine)
-                                  (zoom-to-fit engine)) 100))))
+  [engine]
+  (when-not (nil? engine)
+    (.setTimeout js/window #(do (reorder engine)
+                                (zoom-to-fit engine)) 100)))
 
 (defn empty-graph-placeholder
   []
@@ -26,28 +26,39 @@
                   :font-size "20px"}}
     "Empty"]])
 
+(defn update-graph
+  [engine nodes old-graph new-graph]
+  (let [changes-list (get-graph-changes old-graph new-graph)]
+    (doseq [{:keys [type node data]} changes-list]
+      (case type
+        :update (.updateProps (get nodes node) (assoc data :name node))))
+    (.setTimeout js/window (fn [] (.repaintCanvas engine)) 100)))
+
 (defn diagram-widget
   []
-  (let [force-update? (r/atom false)]
+  (let [diagram-engine (atom nil)
+        diagram-nodes (atom nil)
+        force-update? (r/atom false)]
     (r/create-class
-      {:display-name "diagram-widgett"
+      {:display-name "diagram-widget"
 
        :should-component-update
                      (fn [_ [_ old-props] [_ new-props]]
                        (let [old-graph (:graph old-props)
                              new-graph (:graph new-props)
-                             should-update? (or @force-update?
+                             should-rebuild? (or @force-update?
                                                 (not (= (count (keys old-graph))
                                                         (count (keys new-graph)))))]
-                         should-update?))
+                         (when-not should-rebuild?
+                           (update-graph @diagram-engine @diagram-nodes old-graph new-graph))
+
+                         should-rebuild?))
 
        :component-did-mount
-                     (fn [this]
-                       (reorder-nodes this))
+                     (fn [] (reorder-nodes @diagram-engine))
 
        :component-did-update
-                     (fn [this]
-                       (reorder-nodes this))
+                     (fn [] (reorder-nodes @diagram-engine))
 
        :reagent-render
                      (fn [{:keys [graph mode root-selector]}]
@@ -56,9 +67,9 @@
                           [toolbar {:force-update force-update?
                                     :engine       nil} root-selector]
                           [empty-graph-placeholder]]
-                         (let [engine (init-diagram-model graph mode)
-                               this (r/current-component)]
-                           (aset this "engine" engine)
+                         (let [{:keys [engine nodes]} (init-diagram-model graph mode)]
+                           (reset! diagram-engine engine)
+                           (reset! diagram-nodes nodes)
                            [:div.diagram-container
                             [toolbar {:force-update force-update?
                                       :engine       engine} root-selector]

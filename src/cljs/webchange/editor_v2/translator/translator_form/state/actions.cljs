@@ -171,8 +171,9 @@
   (fn [{:keys [db]} [_ node relative-position]]
     (let [current-concept (translator-form.concepts/current-concept db)
           {:keys [concept-action? parent-action parent-path target-position]} (actions/get-node-data node current-concept)
-          empty-action {:type  "animation-sequence"
-                        :audio nil}
+          empty-action {:type        "animation-sequence"
+                        :phrase-text "New action"
+                        :audio       nil}
           data-patch (-> parent-action
                          (actions/insert-child-action empty-action target-position relative-position)
                          (select-keys [:data]))]

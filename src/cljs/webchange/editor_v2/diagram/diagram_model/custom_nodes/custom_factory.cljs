@@ -23,7 +23,7 @@
       (fn [_ node]
         (this-as this
           (r/as-element [custom-widget (merge (get-widget-data (.-mode this))
-                                              {:node node}) ]))))
+                                              {:node node})]))))
 
 (set! (.. custom-factory -prototype -getNewInstance)
       (fn []

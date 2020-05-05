@@ -17,12 +17,12 @@
   (let [model (DiagramModel.)
         [nodes links] (create-diagram-items graph)]
     (.setDiagramModel engine model)
-    (doseq [node nodes] (.addNode model node))
+    (doseq [node (vals nodes)] (.addNode model node))
     (doseq [link links] (.addLink model link))
-    engine))
+    {:engine engine
+     :nodes  nodes}))
 
 (defn init-diagram-model
   [graph diagram-mode]
-  (let [engine (-> (init-engine diagram-mode)
-                   (init-model graph))]
-    engine))
+  (-> (init-engine diagram-mode)
+      (init-model graph)))
