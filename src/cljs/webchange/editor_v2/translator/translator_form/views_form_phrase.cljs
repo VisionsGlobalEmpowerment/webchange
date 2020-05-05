@@ -28,9 +28,10 @@
               :justify   "space-between"}
      [ui/grid {:item true :xs 6}
       [text-field (merge text-input-params
-                         {:label     "Origin Text"
-                          :value     (or origin-text "")
-                          :on-change handle-text-change})]]
+                         {:label           "Origin Text"
+                          :value           (or origin-text "")
+                          :on-change       handle-text-change
+                          :InputLabelProps {:shrink true}})]]
      [ui/grid {:item true :xs 6}
       [text-field (merge text-input-params
                          {:label           "Translated Text"

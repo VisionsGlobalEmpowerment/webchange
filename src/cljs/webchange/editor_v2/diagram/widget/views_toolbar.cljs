@@ -1,22 +1,13 @@
-(ns webchange.editor-v2.diagram.widget
+(ns webchange.editor-v2.diagram.widget.views-toolbar
   (:require
-    ["@projectstorm/react-diagrams" :refer [DiagramWidget]]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [reagent.core :as r]
-    [webchange.editor-v2.diagram.diagram-model.init :refer [init-diagram-model]]
     [webchange.editor-v2.diagram.diagram-utils.utils :refer [reorder zoom-to-fit]]
     [webchange.editor-v2.utils :refer [keyword->caption]]))
 
-(defn reorder-nodes
-  [this]
-  (let [engine (aget this "engine")]
-    (when-not (nil? engine)
-      (.setTimeout js/window #(do (reorder engine)
-                                  (zoom-to-fit engine)) 100))))
-
 (defn toolbar
-  [engine {:keys [values current-value on-changed]}]
+  [{:keys [engine force-update]} {:keys [values current-value on-changed]}]
   (r/with-let [menu-anchor (r/atom nil)]
               [:div {:style {:padding          4
                              :position         "absolute"
@@ -51,41 +42,8 @@
                  "Reorder"]
                 [ui/menu-item
                  {:on-click #(zoom-to-fit engine)}
-                 "Fit to zoom"]]]))
-
-(defn diagram-did-mount
-  [this]
-  (reorder-nodes this))
-
-(defn diagram-did-update
-  [this]
-  (reorder-nodes this))
-
-(defn empty-graph-placeholder
-  []
-  [:div {:style {:display         "flex"
-                 :height          "100%"
-                 :align-items     "center"
-                 :justify-content "center"}}
-   [:div {:style {:color     "white"
-                  :font-size "20px"}}
-    "Empty"]])
-
-(defn diagram-render
-  [{:keys [graph mode root-selector]}]
-  (if (empty? graph)
-    [:div.diagram-container
-     [toolbar nil root-selector]
-     [empty-graph-placeholder]]
-    (let [engine (init-diagram-model graph mode)
-          this (r/current-component)]
-      (aset this "engine" engine)
-      [:div.diagram-container
-       [toolbar engine root-selector]
-       [:> DiagramWidget {:diagramEngine engine
-                          :deleteKeys    []}]])))
-
-(def diagram-widget
-  (with-meta diagram-render
-             {:component-did-mount  diagram-did-mount
-              :component-did-update diagram-did-update}))
+                 "Fit to zoom"]
+                [ui/menu-item
+                 {:on-click #(reset! force-update (not @force-update))}
+                 "Force update"
+                 [ui/switch {:checked @force-update}]]]]))

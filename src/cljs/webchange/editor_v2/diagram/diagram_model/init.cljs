@@ -12,10 +12,6 @@
     (.registerNodeFactory engine (get-custom-factory diagram-mode))
     engine))
 
-(defn get-engine-model
-  [engine]
-  (.getDiagramModel engine))
-
 (defn init-model
   [engine graph]
   (let [model (DiagramModel.)
