@@ -6,7 +6,8 @@
     [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer :refer [override-concept-actions
                                                                                        graph-has-concepts?]]
     [webchange.editor-v2.graph-builder.scene-parser.scene-parser :refer [parse-data]]
-    [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer :refer [normalize-graph]]))
+    [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer :refer [normalize-graph]]
+    [webchange.editor-v2.graph-builder.utils.root-nodes :refer [get-root-nodes]]))
 
 (defn parse-scene
   "Return a map of prepared nodes
@@ -43,8 +44,11 @@
                                                 (parse-scene (select-keys params [:start-node]))
                                                 (get-phrases-graph))
                   (= diagram-mode :translation) (let [graph (-> scene-data
-                                                                (parse-scene (select-keys params [:start-node :concept-data])))]
-                                                  {:data         (get-translation-graph graph)
+                                                                (parse-scene (select-keys params [:start-node :concept-data])))
+                                                      translation-graph (get-translation-graph graph)
+                                                      root-node (get translation-graph (first (get-root-nodes translation-graph)))]
+                                                  {:data          translation-graph
+                                                   :root          root-node
                                                    :has-concepts? (graph-has-concepts? graph)})
                   :default (-> scene-data
                                (parse-scene (select-keys params [:start-node]))))]

@@ -94,11 +94,6 @@
                          [::set-edited-concepts []])})))
 
 (re-frame/reg-event-fx
-  ::reset-state
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n (list [::set-current-concept])}))
-
-(re-frame/reg-event-fx
   ::set-current-concept
   (fn [{:keys [db]} [_ concept-id]]
     {:db (assoc-in db (path-to-db [:concepts :current-concept]) concept-id)}))

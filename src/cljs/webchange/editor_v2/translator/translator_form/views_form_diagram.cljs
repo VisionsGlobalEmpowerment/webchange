@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.diagram.widget :refer [diagram-widget]]
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]))
 
 (defn graph-component
@@ -18,12 +19,18 @@
                                                   (count (keys new-graph))))]
                        should-update?))
 
+     :component-did-update
+                   (fn [this]
+                     (let [props (r/props this)]
+                       (re-frame/dispatch [::translator-form.actions/init-current-phrase-action (:root props)])))
+
      :reagent-render
                    (fn [props]
                      [diagram-widget props])}))
 
 (defn diagram-block
   []
-  (let [graph @(re-frame/subscribe [::translator-form.graph/graph])]
-    [graph-component {:graph graph
+  (let [{:keys [data root]} @(re-frame/subscribe [::translator-form.graph/graph-data])]
+    [graph-component {:graph data
+                      :root  root
                       :mode  :translation}]))

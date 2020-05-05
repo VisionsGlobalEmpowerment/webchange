@@ -66,12 +66,6 @@
 ;; Events
 
 (re-frame/reg-event-fx
-  ::reset-state
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n (list [::clean-current-dialog-action]
-                       [::clean-current-phrase-action])}))
-
-(re-frame/reg-event-fx
   ::update-action
   (fn [{:keys [db]} [_ target-action data-patch]]
     (let [{:keys [path type]} (cond
@@ -87,12 +81,10 @@
 (re-frame/reg-event-fx
   ::set-current-dialog-action
   (fn [{:keys [db]} [_ action-node]]
-    {:db (assoc-in db (path-to-db [:current-dialog-action]) (actions/node->info action-node))}))
-
-(re-frame/reg-event-fx
-  ::clean-current-dialog-action
-  (fn [{:keys []} [_]]
-    {:dispatch-n (list [::set-current-dialog-action nil])}))
+    (let [action-info (if-not (nil? action-node)
+                        (actions/node->info action-node)
+                        nil)]
+      {:db (assoc-in db (path-to-db [:current-dialog-action]) action-info)})))
 
 (re-frame/reg-event-fx
   ::set-dialog-action-description-translated
@@ -104,12 +96,17 @@
 (re-frame/reg-event-fx
   ::set-current-phrase-action
   (fn [{:keys [db]} [_ action-node]]
-    {:db (assoc-in db (path-to-db [:current-phrase-action]) (actions/node->info action-node))}))
+    (let [action-info (if-not (nil? action-node)
+                        (actions/node->info action-node)
+                        nil)]
+      {:db (assoc-in db (path-to-db [:current-phrase-action]) action-info)})))
 
 (re-frame/reg-event-fx
-  ::clean-current-phrase-action
-  (fn [{:keys []} [_]]
-    {:dispatch-n (list [::set-current-phrase-action nil])}))
+  ::init-current-phrase-action
+  (fn [{:keys [db]} [_ action-node]]
+    (let [phrase-action-info (current-phrase-action-info db)]
+      (when (nil? phrase-action-info)
+        {:dispatch-n (list [::set-current-phrase-action action-node])}))))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-phrase

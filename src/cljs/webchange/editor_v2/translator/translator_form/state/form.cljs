@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor.events :as editor]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.db :as db]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
@@ -29,9 +29,8 @@
 
 (re-frame/reg-event-fx
   ::reset-state
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n (list [::translator-form.actions/reset-state]
-                       [::translator-form.concepts/reset-state])}))
+  (fn [{:keys [db]} [_]]
+    {:db (update-in db (db/path-to-parent-db) dissoc db/db-key)}))
 
 (re-frame/reg-event-fx
   ::save-changes
