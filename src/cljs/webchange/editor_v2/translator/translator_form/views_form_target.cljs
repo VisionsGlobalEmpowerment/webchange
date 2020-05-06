@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.translator.translator-form.utils :refer [trim-text]]
     [webchange.editor-v2.translator.translator-form.common.views-target-selector :refer [target-selector]]))
 
 (defn- get-styles

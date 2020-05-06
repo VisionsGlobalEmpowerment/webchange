@@ -1,12 +1,12 @@
-(ns webchange.editor-v2.translator.translator-form.views-form-dialog
+(ns webchange.editor-v2.translator.translator-form.dialog.views
   (:require
     [clojure.string :refer [capitalize trim-newline]]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
-    [webchange.editor-v2.translator.translator-form.utils :refer [get-dialog-data
-                                                                  trim-text]]))
+    [webchange.editor-v2.translator.translator-form.dialog.utils :refer [get-dialog-data]]
+    [webchange.editor-v2.translator.translator-form.utils :refer [trim-text]]))
 
 (def text-input-params {:placeholder     "Dialog text"
                         :variant         "outlined"
