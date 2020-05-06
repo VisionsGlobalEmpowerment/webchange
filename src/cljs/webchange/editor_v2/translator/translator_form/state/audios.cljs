@@ -20,15 +20,14 @@
     (get-audio-assets-data current-phrase-action scene-audios)))
 
 (re-frame/reg-sub
-  ::available-targets
+  ::available-audio-targets
   (fn []
-    [(re-frame/subscribe [::translator-form.scene/objects-data])])
-  (fn [[scene-objects]]
-    (->> scene-objects
-         (filter (fn [[_ {:keys [type]}]]
-                   (= type "animation")))
-         (map first)
-         (map name))))
+    [(re-frame/subscribe [::translator-form.scene/audio-assets])])
+  (fn [[audio-assets]]
+    (->> audio-assets
+         (map :target)
+         (filter #(-> % nil? not))
+         (distinct))))
 
 ;; Events
 

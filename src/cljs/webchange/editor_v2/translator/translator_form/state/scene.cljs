@@ -67,6 +67,17 @@
   (fn [[scene-data]]
     (:objects scene-data)))
 
+(re-frame/reg-sub
+  ::available-animation-targets
+  (fn []
+    [(re-frame/subscribe [::objects-data])])
+  (fn [[scene-objects]]
+    (->> scene-objects
+         (filter (fn [[_ {:keys [type]}]]
+                   (= type "animation")))
+         (map first)
+         (map name))))
+
 ;; Events
 
 (re-frame/reg-event-fx
@@ -105,6 +116,11 @@
     (let [assets (assets-data db)]
       {:db         (assoc-in db (path-to-db [:scene :data :assets]) (update-by-key assets :url asset-url data-patch))
        :dispatch-n (list [::set-changes])})))
+
+(re-frame/reg-event-fx
+  ::update-asset-date
+  (fn [_ [_ asset-url date]]
+    {:dispatch-n (list [::update-asset asset-url {:date date}])}))
 
 (re-frame/reg-event-fx
   ::delete-asset

@@ -7,21 +7,9 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
-    [webchange.editor-v2.translator.translator-form.common.views-target-selector :refer [target-selector]]
+    [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
-
-(defn- capitalize-words
-  [s]
-  (->> (s/split (str s) #"\b")
-       (map s/capitalize)
-       s/join))
-
-(defn- target->caption
-  [target]
-  (-> target
-      (s/replace "-" " ")
-      capitalize-words))
 
 (defn- get-styles
   []
@@ -60,7 +48,6 @@
   [{:keys [alias target on-save on-cancel]}]
   (r/with-let [current-data (r/atom {:alias  alias
                                      :target target})]
-
               (let [styles (get-styles)]
                 [:div {:style (:info-form styles)}
                  [:div
@@ -68,9 +55,10 @@
                    [ui/input-label {:html-for "target"
                                     :style    (:target-form-label styles)}
                     "Target"]
-                   [target-selector {:default-value (or (:target @current-data) "")
-                                     :styles        {:control (:target-form-input styles)}
-                                     :on-change     #(swap! current-data assoc :target %)}]]
+                   [audio-target-selector {:default-value            (or (:target @current-data) "")
+                                           :styles                   {:control (:target-form-input styles)}
+                                           :on-change                #(swap! current-data assoc :target %)
+                                           :custom-option-available? true}]]
                   [ui/form-control {:style (:alias-form styles)}
                    [ui/text-field {:label     "Alias"
                                    :value     (or (:alias @current-data) "")
@@ -89,9 +77,10 @@
                     [ic/done {:style (:menu-item-icon styles)}]]]]])))
 
 (defn- audio-menu
-  [{:keys [on-edit on-delete]}]
+  [{:keys [on-edit on-delete on-bring-to-top]}]
   (r/with-let [menu-anchor (r/atom nil)]
               (let [handle-edit #(do (reset! menu-anchor nil) (on-edit))
+                    handle-bring-to-top #(do (reset! menu-anchor nil) (on-bring-to-top))
                     handle-delete #(do (reset! menu-anchor nil) (on-delete))
                     handle-cancel #(reset! menu-anchor nil)
                     styles (get-styles)]
@@ -104,6 +93,10 @@
                   {:anchor-el @menu-anchor
                    :open      (boolean @menu-anchor)
                    :on-close  #(reset! menu-anchor nil)}
+                  [ui/menu-item {:on-click handle-bring-to-top}
+                   [ui/list-item-icon
+                    [ic/vertical-align-top {:style (:menu-item-icon styles)}]]
+                   "Bring To Top"]
                   [ui/menu-item {:on-click handle-edit}
                    [ui/list-item-icon
                     [ic/edit {:style (:menu-item-icon styles)}]]
@@ -117,13 +110,14 @@
                     "Delete"]]]])))
 
 (defn- header
-  [{:keys [alias target selected? on-change-data on-delete]}]
+  [{:keys [alias target selected? on-change-data on-bring-to-top on-delete]}]
   (r/with-let [edit-state? (r/atom false)]
               (let [styles (get-styles)
                     handle-edit #(reset! edit-state? true)
                     handle-save #(do (reset! edit-state? false)
                                      (on-change-data %))
                     handle-cancel #(reset! edit-state? false)
+                    handle-bring-to-top #(on-bring-to-top)
                     handle-delete on-delete]
                 [:div {:style (:block-header styles)}
                  (if @edit-state?
@@ -135,8 +129,9 @@
                                 :target target}])
                  (when (and selected?
                             (not @edit-state?))
-                   [audio-menu {:on-edit   handle-edit
-                                :on-delete handle-delete}])])))
+                   [audio-menu {:on-edit         handle-edit
+                                :on-bring-to-top handle-bring-to-top
+                                :on-delete       handle-delete}])])))
 
 (defn audios-list-item
   [{:keys [url alias start duration selected? target]}]
@@ -146,6 +141,7 @@
                                                               url
                                                               (:start region)
                                                               (:duration region)]))
+        handle-bring-to-top (fn [] (re-frame/dispatch [::translator-form.scene/update-asset-date url (.now js/Date)]))
         handle-delete (fn [] (re-frame/dispatch [::translator-form.scene/delete-asset url]))
         audio-data {:url   url
                     :start (or start 0)
@@ -156,11 +152,12 @@
                           (:block-wrapper-selected styles)
                           (:block-wrapper styles))}
      [ui/card-content
-      [header {:alias          (or alias "alias not defined")
-               :target         target
-               :selected?      selected?
-               :on-change-data handle-change-data
-               :on-delete      handle-delete}]
+      [header {:alias           (or alias "alias not defined")
+               :target          target
+               :selected?       selected?
+               :on-change-data  handle-change-data
+               :on-bring-to-top handle-bring-to-top
+               :on-delete       handle-delete}]
       [audio-wave-form (merge audio-data
                               {:height         64
                                :on-change      handle-change-region
