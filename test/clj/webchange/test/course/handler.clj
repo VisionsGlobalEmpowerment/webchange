@@ -4,7 +4,7 @@
             [webchange.test.fixtures.core :as f]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [webchange.auth.core :as auth])
+            [webchange.auth.website :as website])
   (:use clj-http.fake))
 
 (use-fixtures :once f/init)
@@ -96,13 +96,13 @@
     (is (= image-src (:image-src retrieved)))))
 
 (def website-user-id 123)
-(def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last"})
+(def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last" :image "https://example.com/image.png"})
 
 (deftest course-can-be-localized
   (let [course (f/course-created)
         new-language "new-language"]
     (with-global-fake-routes-in-isolation
-      {(auth/website-user-resource website-user-id) (fn [request] {:status 200 :headers {} :body (json/write-str website-user)})}
+      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
       (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body (json/read-str :key-fn keyword))]
         (is (= new-language (:lang new-course)))))))
 
@@ -110,7 +110,7 @@
   (let [course (f/course-created)
         new-language "new-language"]
     (with-global-fake-routes-in-isolation
-      {(auth/website-user-resource website-user-id) (fn [request] {:status 200 :headers {} :body (json/write-str website-user)})}
+      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
       (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
             my-courses (-> (f/get-courses-by-website-user website-user-id) :body (json/read-str :key-fn keyword))]
         (is (= 1 (count my-courses)))))))

@@ -16,7 +16,7 @@
             [webchange.assets.handler :refer [asset-routes]]
             [webchange.resources.handler :refer [resources-routes]]
             [ring.middleware.session :refer [wrap-session]]
-            [buddy.auth :refer [authenticated? throw-unauthorized]]
+            [buddy.auth :refer [throw-unauthorized authenticated?]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
             [clojure.edn :as edn]

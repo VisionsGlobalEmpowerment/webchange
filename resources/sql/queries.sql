@@ -11,6 +11,12 @@ UPDATE users
 SET first_name = :first_name, last_name = :last_name
 WHERE id = :id
 
+-- :name update-website-user! :! :n
+-- :doc updates an existing user record
+UPDATE users
+SET first_name = :first_name, last_name = :last_name, email = :email
+WHERE website_id = :website_id
+
 -- :name activate-user! :! :n
 -- :doc activates an existing user record
 UPDATE users

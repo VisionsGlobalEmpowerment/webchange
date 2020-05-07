@@ -49,6 +49,16 @@
   #_(migrations/migrate ["migrate"] (select-keys env [:database-url]))
   (f))
 
+(def website-user-id 123)
+(def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last" :image "https://example.com/image.png"})
+
+(defn website-user-created
+  ([] (website-user-created {}))
+  ([options]
+   (let [defaults website-user
+         data (merge defaults options)]
+     (auth/replace-user-from-website! data))))
+
 (defn teacher-user-created
   ([] (teacher-user-created {}))
   ([options]

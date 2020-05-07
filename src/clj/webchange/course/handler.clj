@@ -8,6 +8,7 @@
             [webchange.common.handler :refer [handle current-user current-school validation-error]]
             [webchange.validation.validate :refer [validate]]
             [webchange.auth.core :as auth]
+            [webchange.auth.website :as website]
             [spec-tools.data-spec :as ds]
             [schema.core :as s]
             [compojure.api.middleware :as mw]))
@@ -57,9 +58,13 @@
   [course-id data request]
   (let [website-user-id (:user-id data)
         language (:language data)
-        owner-id (auth/get-user-id-by-website-id! website-user-id)]
-    (-> (core/localize course-id {:lang language :owner-id owner-id :website-user-id website-user-id})
-        handle)))
+        owner-id (some-> website-user-id
+                         website/get-user-by-id
+                         auth/get-user-id-by-website!)]
+    (if owner-id
+      (-> (core/localize course-id {:lang language :owner-id owner-id :website-user-id website-user-id})
+          handle)
+      (handle [false {:message "User not found"}]))))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str)})
 (s/defschema Translate {:user-id s/Int :language s/Str})
