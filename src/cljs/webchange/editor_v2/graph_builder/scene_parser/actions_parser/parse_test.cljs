@@ -22,12 +22,16 @@
   [{:keys [action-name action-data prev-action path]}]
   (->> (create-graph-node {:data        action-data
                            :path        (or path [action-name])
-                           :connections [{:previous prev-action
-                                          :name     "success"
-                                          :handler  (get-test-handler-name action-name action-data :success)}
-                                         {:previous prev-action
-                                          :name     "fail"
-                                          :handler  (get-test-handler-name action-name action-data :fail)}]})
+                           :connections (->> [(when (contains? action-data :success)
+                                                {:previous prev-action
+                                                 :name     "success"
+                                                 :handler  (get-test-handler-name action-name action-data :success)})
+                                              (when (contains? action-data :fail)
+                                                {:previous prev-action
+                                                 :name     "fail"
+                                                 :handler  (get-test-handler-name action-name action-data :fail)})]
+                                             (remove nil?)
+                                             (vec))})
        (assoc {} action-name)))
 
 (defn parse-test-action-chain

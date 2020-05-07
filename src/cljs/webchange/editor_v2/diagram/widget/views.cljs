@@ -32,7 +32,7 @@
     (doseq [{:keys [type node data]} changes-list]
       (case type
         :update (.updateProps (get nodes node) (assoc data :name node))))
-    (.setTimeout js/window (fn [] (.repaintCanvas engine)) 100)))
+    (.setTimeout js/window (fn [] (when-not (nil? engine) (.repaintCanvas engine))) 100)))
 
 (defn diagram-widget
   []

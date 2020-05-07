@@ -11,7 +11,7 @@
     [webchange.editor-v2.graph-builder.utils.remove-extra-nodes :refer [remove-extra-nodes]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [phrase-node?]]))
 
-(defn remove-node?
+(defn- remove-node?
   [nodes-weights node-name node-data]
   (let [significant? (-> (get nodes-weights node-name)
                          (weight-changer?))
@@ -19,7 +19,7 @@
     (and action?
          (not significant?))))
 
-(defn remove-detached-nodes
+(defn- remove-detached-nodes
   [graph nodes-weights]
   (reduce (fn [graph [node-name _]]
             (let [counted? (contains? nodes-weights node-name)
@@ -31,6 +31,17 @@
           graph
           graph))
 
+(defn- remove-empty-connections
+  [graph]
+  (let [filter-connections (fn [connections]
+                             (->> connections
+                                  (filter :handler)
+                                  (set)))]
+    (reduce (fn [graph [node-name _]]
+              (update-in graph [node-name :connections] filter-connections))
+            graph
+            graph)))
+
 (defn get-phrases-graph
   [scene-graph]
   (let [graph (->> scene-graph
@@ -40,4 +51,6 @@
     (-> graph
         (remove-extra-nodes (partial remove-node? subtree-phrase-weights))
         (remove-detached-nodes subtree-phrase-weights)
-        (remove-root-node))))
+        (remove-root-node)
+        (remove-empty-connections)                          ;; ToDo: Remove when 'remove-extra-nodes' doesn't leave no-handler connections
+        )))                                                 ;;       Case: 'Swings' scene, ':box3' node
