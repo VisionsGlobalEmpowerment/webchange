@@ -73,11 +73,12 @@
            (is (= original-value retrieved-value))))
 
 (deftest course-info-can-be-retrieved
-  (let [course (f/course-created)
+  (let [keys [:id :slug :name :lang :image-src]
+        course (f/course-created)
         response (f/get-course-info (:slug course))
         body (json/read-str (:body response) :key-fn keyword)]
     (is (= 200 (:status response)))
-    (is (= (select-keys course [:id :slug :name :lang :image-src]) body))))
+    (is (= (select-keys course keys) (select-keys body keys)))))
 
 (deftest course-info-can-be-saved
   (let [course (f/course-created)
