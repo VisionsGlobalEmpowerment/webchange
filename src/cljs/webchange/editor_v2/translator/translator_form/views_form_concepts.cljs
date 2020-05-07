@@ -2,9 +2,7 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.subs :as editor-subs]
-    [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]
-    [webchange.editor-v2.translator.translator-form.events :as translator-form-events]))
+    [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]))
 
 (defn- get-styles
   []
@@ -22,9 +20,9 @@
 
 (defn concepts-block
   []
-  (let [current-concept @(re-frame/subscribe [::translator-form-subs/current-concept])
-        concepts-list (->> @(re-frame/subscribe [::editor-subs/course-dataset-items]) (vals) (sort-by :name))
-        handle-concept-changed #(re-frame/dispatch [::translator-form-events/set-current-concept %])
+  (let [current-concept @(re-frame/subscribe [::translator-form.concepts/current-concept])
+        concepts-list (->> @(re-frame/subscribe [::translator-form.concepts/concepts-list]))
+        handle-concept-changed #(re-frame/dispatch [::translator-form.concepts/set-current-concept (:id %)])
         styles (get-styles)]
     [:div {:style (:wrapper styles)}
      [ui/typography {:variant "body1"

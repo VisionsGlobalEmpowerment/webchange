@@ -3,10 +3,9 @@
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.events :as events]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.subs :as subs]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views :refer [audio-record-panel]]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.upload.views :refer [audio-upload-panel]]))
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.upload.views :refer [audio-upload-panel]]
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.state.select-method :as add-audio.select-method]))
 
 (defn- get-styles
   []
@@ -33,8 +32,8 @@
 
 (defn- select-method-panel
   []
-  (let [handle-record-click #(re-frame/dispatch [::events/show-record-file-form])
-        handle-upload-click #(re-frame/dispatch [::events/show-upload-file-form])]
+  (let [handle-record-click #(re-frame/dispatch [::add-audio.select-method/show-record-file-form])
+        handle-upload-click #(re-frame/dispatch [::add-audio.select-method/show-upload-file-form])]
     [:div
      [select-method-button {:text     "Upload new file"
                             :icon     ic/cloud-upload
@@ -45,7 +44,7 @@
 
 (defn add-audio-form
   []
-  (let [current-method @(re-frame/subscribe [::subs/current-method])
+  (let [current-method @(re-frame/subscribe [::add-audio.select-method/current-method])
         styles (get-styles)]
     [ui/card {:style (:card-wrapper styles)}
      [ui/card-content {:style (:card-content styles)}

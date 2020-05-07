@@ -7,4 +7,4 @@
   [scene-data]
   (let [nodes (create-nodes scene-data)
         links (create-links scene-data nodes)]
-    [(vals nodes) links]))
+    [nodes links]))

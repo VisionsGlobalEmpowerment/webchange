@@ -6,9 +6,8 @@
     [reagent.core :as r]
     [webchange.common.events :as ce]
     [webchange.editor-v2.graph-builder.utils.graph-to-nodes-seq :refer [graph-to-nodes-seq]]
-    [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]
-    [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets
-                                                                  get-current-action-data]]
+    [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
+    [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
     [webchange.interpreter.core :refer [load-assets]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
@@ -35,14 +34,14 @@
       nil)))
 
 (defn get-phrase-actions-sequence
-  [graph current-concept edited-data callback]
+  [graph callback]
   {:type       "sequence-data"
    :unique-tag action-flow-id
    :data       (conj (->> graph
                           (graph-to-nodes-seq)
                           (map (fn [node]
                                  (let [[node-name node-data] (->> node seq first)]
-                                   (get-current-action-data (merge node-data {:name node-name}) current-concept edited-data))))
+                                   (merge node-data {:name node-name}))))
                           (map #(adapt-action (:data %)))
                           (filter #(not (nil? %)))
                           (vec))
@@ -63,19 +62,12 @@
   []
   (r/with-let [state (r/atom "pause")
                loading-progress (r/atom nil)]
-              (let [graph @(re-frame/subscribe [::translator-form-subs/graph])
-                    current-concept @(re-frame/subscribe [::translator-form-subs/current-concept])
-                    edited-data @(re-frame/subscribe [::translator-form-subs/edited-actions-data])
-                    graph-contains-concept? (->> graph
-                                                 (some (fn [[_ node-data]]
-                                                         (get-in node-data [:data :concept-action])))
-                                                 boolean)]
+              (let [graph @(re-frame/subscribe [::translator-form.graph/graph])]
                 (case @state
                   "pause" [fab (merge common-button-params
-                                      {:disabled (and graph-contains-concept?
-                                                      (nil? current-concept))
+                                      {:disabled (nil? graph)
                                        :on-click (fn []
-                                                   (let [action (get-phrase-actions-sequence graph current-concept edited-data #(reset! state "pause"))
+                                                   (let [action (get-phrase-actions-sequence graph #(reset! state "pause"))
                                                          audios-list (action->audios-list action)]
                                                      (reset! state "loading")
                                                      (load-assets (audios->assets audios-list)

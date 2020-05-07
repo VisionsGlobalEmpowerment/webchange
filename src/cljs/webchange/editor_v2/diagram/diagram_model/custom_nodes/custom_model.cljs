@@ -55,6 +55,11 @@
                       :height (.-height this)}]
             (clj->js (merge parent-result size))))))
 
+(set! (.. custom-model -prototype -updateProps)
+      (fn [new-props]
+        (this-as this
+          (aset this "props" new-props))))
+
 (defn get-custom-model
   ([]
    (get-custom-model {:name "Untitled"}))

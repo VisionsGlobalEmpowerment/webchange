@@ -1,21 +1,28 @@
 (ns webchange.editor-v2.translator.translator-form.views-form-diagram
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.diagram.widget :refer [diagram-widget]]
-    [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]))
+    [reagent.core :as r]
+    [webchange.editor-v2.diagram.widget.views :refer [diagram-widget]]
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]))
 
-(defn- update-graph
-  [graph data-store current-concept-id]
-  (reduce (fn [graph [[action-name concept-id] action-data]]
-            (if (or (nil? concept-id)
-                    (= concept-id current-concept-id))
-              (update-in graph [action-name :data] merge (:data action-data))
-              graph))
-          graph
-          data-store))
+(defn graph-component
+  []
+  (r/create-class
+    {:display-name "graph-component"
+
+     :component-did-update
+                   (fn [this]
+                     (let [{:keys [root]} (r/props this)]
+                       (re-frame/dispatch [::translator-form.actions/init-current-phrase-action root])))
+
+     :reagent-render
+                   (fn [props]
+                     [diagram-widget (select-keys props [:graph :mode])])}))
 
 (defn diagram-block
   []
-  (let [graph @(re-frame/subscribe [::translator-form-subs/graph])]
-    [diagram-widget {:graph graph
-                     :mode  :translation}]))
+  (let [{:keys [data root]} @(re-frame/subscribe [::translator-form.graph/graph-data])]
+    [graph-component {:graph data
+                      :root  root
+                      :mode  :translation}]))

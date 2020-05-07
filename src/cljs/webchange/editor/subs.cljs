@@ -60,10 +60,13 @@
   (fn [db]
     (get-in db [:editor :scene-versions])))
 
+(defn course-datasets
+  [db]
+  (get-in db [:editor :course-datasets]))
+
 (re-frame/reg-sub
   ::course-datasets
-  (fn [db]
-    (get-in db [:editor :course-datasets])))
+  course-datasets)
 
 (re-frame/reg-sub
   ::current-dataset-id

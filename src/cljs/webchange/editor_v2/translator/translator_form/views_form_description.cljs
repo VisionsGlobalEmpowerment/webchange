@@ -2,9 +2,7 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.subs :as editor-subs]
-    [webchange.editor-v2.translator.translator-form.events :as translator-form-events]
-    [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]))
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
 
 (def text-input-params {:placeholder "Enter description text"
                         :variant     "outlined"
@@ -12,23 +10,14 @@
                         :multiline   true
                         :full-width  true})
 
-(defn- get-current-root-data
-  [selected-phrase-node data-store]
-  (let [name (first (:path selected-phrase-node))
-        origin-data (:data selected-phrase-node)
-        new-data (get-in data-store [[name nil] :data])]
-    (merge origin-data new-data)))
-
 (defn description-block
   []
-  (let [selected-phrase-node @(re-frame/subscribe [::editor-subs/current-action])
-        data-store @(re-frame/subscribe [::translator-form-subs/edited-actions-data])
-        prepared-root-action-data (get-current-root-data selected-phrase-node data-store)
-        origin-text (:phrase-description prepared-root-action-data)
-        translated-text (:phrase-description-translated prepared-root-action-data)
+  (let [current-dialog-action @(re-frame/subscribe [::translator-form.actions/current-dialog-action])
+        origin-text (:phrase-description current-dialog-action)
+        translated-text (:phrase-description-translated current-dialog-action)
         handle-change (fn [event]
                         (let [value (.. event -target -value)]
-                          (re-frame/dispatch [::translator-form-events/set-dialog-action-description-translated value])))]
+                          (re-frame/dispatch [::translator-form.actions/set-dialog-action-description-translated value])))]
     [ui/grid {:container true
               :spacing   16
               :justify   "space-between"}
@@ -40,8 +29,7 @@
      [ui/grid {:item true :xs 6}
       [ui/text-field (merge text-input-params
                             {:label           "Translated Description"
-                             :default-value   (or translated-text "")
+                             :value   (or translated-text "")
                              :on-change       handle-change
                              :InputLabelProps {:shrink  true
                                                :focused true}})]]]))
-

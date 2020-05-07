@@ -7,8 +7,7 @@
     [webchange.editor.core :as editor]
     [webchange.common.anim :refer [animations]]
     [webchange.editor.common.actions.events :as actions.events]
-    [webchange.interpreter.variables.events :as vars.events]
-    [webchange.editor-v2.translator.translator-form.audio-assets.events :as translator-assets.events]))
+    [webchange.interpreter.variables.events :as vars.events]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -226,7 +225,6 @@
                      (get-in [:scenes scene-id :assets] [])
                      (conj asset))]
       {:db           (assoc-in db [:scenes scene-id :assets] assets)
-       :dispatch     [::translator-assets.events/init-assets-data]
        :reload-asset state})))
 
 (re-frame/reg-event-fx
@@ -237,13 +235,14 @@
        :reload-asset asset})))
 
 (re-frame/reg-event-fx
-  ::reset-audio-assets
-  (fn [{:keys [db]} [_ scene-id audio-assets]]
-    (let [assets (get-in db [:scenes scene-id :assets])
-          new-assets (->> assets
-                          (filter (fn [{:keys [type]}] (not (= type "audio"))))
-                          (concat audio-assets))]
-      {:db (assoc-in db [:scenes scene-id :assets] new-assets)})))
+  ::reset-scene-assets
+  (fn [{:keys [db]} [_ scene-id assets]]
+    {:db (assoc-in db [:scenes scene-id :assets] assets)}))
+
+(re-frame/reg-event-fx
+  ::reset-scene-actions
+  (fn [{:keys [db]} [_ scene-id actions]]
+    {:db (assoc-in db [:scenes scene-id :actions] actions)}))
 
 (re-frame/reg-event-fx
   ::reset-asset

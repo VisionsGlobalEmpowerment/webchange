@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.graph-builder.graph :refer [get-diagram-graph]]
     [webchange.editor-v2.graph-builder.utils.root-nodes :refer [get-root-nodes]]
-    [webchange.editor-v2.diagram.widget :refer [diagram-widget]]
+    [webchange.editor-v2.diagram.widget.views :refer [diagram-widget]]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.subs :as subs]))
 

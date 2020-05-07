@@ -1,13 +1,12 @@
-(ns webchange.editor-v2.translator.translator-form.views-form-dialog
+(ns webchange.editor-v2.translator.translator-form.dialog.views
   (:require
     [clojure.string :refer [capitalize trim-newline]]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.subs :as editor-subs]
-    [webchange.editor-v2.translator.translator-form.subs :as translator-form-subs]
-    [webchange.editor-v2.translator.translator-form.utils :refer [get-current-action-data
-                                                                  get-dialog-data
-                                                                  trim-text]]))
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
+    [webchange.editor-v2.translator.translator-form.dialog.utils :refer [get-dialog-data]]
+    [webchange.editor-v2.translator.translator-form.utils :refer [trim-text]]))
 
 (def text-input-params {:placeholder     "Dialog text"
                         :variant         "outlined"
@@ -37,13 +36,9 @@
 
 (defn dialog-block
   []
-  (let [selected-phrase-node (re-frame/subscribe [::editor-subs/current-action])
-        graph @(re-frame/subscribe [::translator-form-subs/graph])
-        current-concept @(re-frame/subscribe [::translator-form-subs/current-concept])
-        data-store @(re-frame/subscribe [::translator-form-subs/edited-actions-data])
-        dialog-data (get-dialog-data selected-phrase-node graph (fn [node-data]
-                                                                   (get-current-action-data node-data current-concept data-store)))
-
+  (let [selected-phrase-node (re-frame/subscribe [::translator-form.actions/current-phrase-action])
+        graph @(re-frame/subscribe [::translator-form.graph/graph])
+        dialog-data (get-dialog-data selected-phrase-node graph)
         origin-text (data->text dialog-data #(get % :phrase-text))
         translated-text (data->text dialog-data #(or (get % :phrase-text-translated)
                                                      (get % :phrase-text)))]

@@ -2,17 +2,17 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.subs :as subs]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-params :refer [record-params-panel]]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-play :refer [play-record-panel]]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-start :refer [start-record-panel]]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-stop :refer [stop-record-panel]]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-layout :refer [panel-layout]]))
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views-layout :refer [panel-layout]]
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.state.record-panel :as add-audio.record-panel]))
 
 (defn audio-record-panel
   []
   (r/with-let [audio-blob (atom nil)]
-              (let [current-state @(re-frame/subscribe [::subs/record-panel-state])]
+              (let [current-state @(re-frame/subscribe [::add-audio.record-panel/state])]
                 (case current-state
                   :start-record [start-record-panel]
                   :stop-record [stop-record-panel {:audio-blob audio-blob}]
