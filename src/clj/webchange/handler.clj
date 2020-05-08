@@ -8,7 +8,7 @@
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.handler :refer [auth-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
-            [webchange.course.handler :refer [course-routes]]
+            [webchange.course.handler :refer [course-routes website-api-routes]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.school.handler :refer [school-routes]]
             [webchange.progress.handler :refer [progress-routes]]
@@ -16,7 +16,7 @@
             [webchange.assets.handler :refer [asset-routes]]
             [webchange.resources.handler :refer [resources-routes]]
             [ring.middleware.session :refer [wrap-session]]
-            [buddy.auth :refer [authenticated? throw-unauthorized]]
+            [buddy.auth :refer [throw-unauthorized authenticated?]]
             [buddy.auth.backends.session :refer [session-backend]]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
             [clojure.edn :as edn]
@@ -102,7 +102,7 @@
            (files "/upload/" {:root (env :upload-dir)})
            (resources "/"))
 
-(defroutes api-routes
+(defroutes animation-routes
            (GET "/api/actions/get-talk-animations" _ (->> handle-parse-audio-animation wrap-params)))
 
 (defroutes service-worker-route
@@ -110,9 +110,31 @@
            (GET "/service-worker.js" [] (-> (resource-response "js/compiled/service-worker.js" {:root "public"})
                                             (assoc-in [:headers "Content-Type"] "text/javascript"))))
 
+(defn wrap-body-as-string
+  [handler]
+  (fn [{body :body-params :as request}]
+    (handler (assoc request :body body))))
+
+(defn- json-response
+  [{body :body :as response}]
+  (if (or (string? body) (nil? body))
+    response
+    (assoc response :body (slurp body))))
+
+(defn wrap-response-body-as-string
+  "Middleware that converts response body from ByteStream to String
+  This is required for legacy tests"
+  [handler]
+  (fn
+    ([request]
+     (json-response (handler request)))
+    ([request respond raise]
+     (handler request (fn [response] (respond (json-response response))) raise))))
+
 (defroutes app
+           website-api-routes
            pages-routes
-           api-routes
+           animation-routes
            auth-routes
            course-routes
            class-routes
@@ -127,19 +149,15 @@
 
 (def dev-store (mem/memory-store))
 
-(def dev-handler (-> #'app
-                     wrap-reload
-                     (wrap-authorization auth-backend)
-                     (wrap-authentication auth-backend)
-                     (wrap-json-body {:keywords? true})
-                     wrap-json-response
-                     (wrap-session {:store dev-store})
-                     wrap-exception-handling))
-
 (def handler (-> #'app
                  (wrap-authorization auth-backend)
                  (wrap-authentication auth-backend)
-                 (wrap-json-body {:keywords? true})
-                 wrap-json-response
-                 wrap-session
-                 wrap-exception-handling))
+                 (wrap-session {:store dev-store})
+                 wrap-exception-handling
+                 wrap-body-as-string
+                 (muuntaja.middleware/wrap-params)
+                 (muuntaja.middleware/wrap-format)))
+
+(def dev-handler (-> #'handler
+                     wrap-reload
+                     wrap-response-body-as-string))

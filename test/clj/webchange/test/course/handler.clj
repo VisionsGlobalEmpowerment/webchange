@@ -3,7 +3,9 @@
             [ring.mock.request :as mock]
             [webchange.test.fixtures.core :as f]
             [clojure.data.json :as json]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [webchange.auth.website :as website])
+  (:use clj-http.fake))
 
 (use-fixtures :once f/init)
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
@@ -73,7 +75,7 @@
            (is (= original-value retrieved-value))))
 
 (deftest course-info-can-be-retrieved
-  (let [keys [:id :slug :name :lang :image-src]
+  (let [keys [:id :slug :name :lang :image-src :status :website-user-id :owner-id]
         course (f/course-created)
         response (f/get-course-info (:slug course))
         body (json/read-str (:body response) :key-fn keyword)]
@@ -92,3 +94,32 @@
     (is (= slug (:slug retrieved)))
     (is (= lang (:lang retrieved)))
     (is (= image-src (:image-src retrieved)))))
+
+(def website-user-id 123)
+(def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last" :image "https://example.com/image.png"})
+
+(deftest course-can-be-localized
+  (let [course (f/course-created)
+        new-language "new-language"]
+    (with-global-fake-routes-in-isolation
+      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
+      (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body (json/read-str :key-fn keyword))]
+        (is (= new-language (:lang new-course)))))))
+
+(deftest localized-course-can-be-retrieved
+  (let [course (f/course-created)
+        new-language "new-language"]
+    (with-global-fake-routes-in-isolation
+      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
+      (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
+            my-courses (-> (f/get-courses-by-website-user website-user-id) :body (json/read-str :key-fn keyword))]
+        (is (= 1 (count my-courses)))))))
+
+(deftest available-courses-can-be-retrieved
+  (let [course-name "available course"
+        _ (f/course-created {:name course-name :status "published"})
+        response (f/get-available-courses)
+        courses (-> response :body (json/read-str :key-fn keyword))]
+    (is (= 200 (:status response)))
+    (is (= 1 (count courses)))
+    (is (= course-name (-> courses first :name)))))

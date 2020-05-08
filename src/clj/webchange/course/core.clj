@@ -4,7 +4,9 @@
             [clojure.tools.logging :as log]
             [clojure.data.json :as json]
             [webchange.scene :as scene]
-            [config.core :refer [env]]))
+            [config.core :refer [env]]
+            [camel-snake-kebab.extras :refer [transform-keys]]
+            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
 
 (def hardcoded (env :hardcoded-courses {"test" true}))
 
@@ -122,3 +124,56 @@
                     (map #(dissoc % :data))
                     (map #(assoc % :created-at (-> % :created-at str)))
                     (map #(assoc % :owner-name "todo")))}))
+
+(defn- with-course-page
+  [{slug :slug :as course}]
+  (let [url (str "/courses/" slug "/editor-v2")]
+    (assoc course :url url)))
+
+(defn- ->website-course
+  [course]
+  (-> (select-keys course [:id :name :language :slug :image-src :lang])
+      (with-course-page)))
+
+(defn localize
+  [course-id {:keys [lang owner-id website-user-id]}]
+  (let [current-time (jt/local-date-time)
+        {course-name :name course-slug :slug image :image-src} (db/get-course-by-id {:id course-id})
+        localized-course-data {:name course-name
+                               :slug (str course-slug "-" lang)
+                               :lang lang
+                               :owner_id owner-id
+                               :image_src image
+                               :website_user_id website-user-id
+                               :status "draft"}
+        [{new-course-id :id}] (db/create-course! localized-course-data)
+        course-data (:data (db/get-latest-course-version {:course_id course-id}))
+        scenes (->> course-data
+                    :scene-list
+                    keys
+                    (map name))]
+    (db/save-course! {:course_id new-course-id
+                      :data course-data
+                      :owner_id owner-id
+                      :created_at current-time})
+    (doseq [scene-name scenes]
+      (let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
+            scene-data (:data (db/get-latest-scene-version {:scene_id scene-id}))
+            scene-id (get-or-create-scene! new-course-id scene-name)]
+        (db/save-scene! {:scene_id scene-id
+                         :data scene-data
+                         :owner_id owner-id
+                         :created_at current-time})))
+    [true (-> (transform-keys ->kebab-case-keyword localized-course-data)
+              (assoc :id new-course-id)
+              (->website-course))]))
+
+(defn get-available-courses
+  []
+  (->> (db/get-available-courses)
+       (map ->website-course)))
+
+(defn get-courses-by-website-user
+  [website-user-id]
+  (->> (db/get-courses-by-website-user {:website_user_id website-user-id})
+       (map ->website-course)))

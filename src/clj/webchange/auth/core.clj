@@ -2,7 +2,9 @@
   (:require [buddy.hashers :as hashers]
             [webchange.db.core :refer [*db*] :as db]
             [java-time :as jt]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [clj-http.client :as http]
+            [config.core :refer [env]]))
 
 (def error-invalid-credentials {:errors {:form "Invalid credentials"}})
 
@@ -22,6 +24,7 @@
         (assoc :created_at created-at)
         (assoc :last_login last-login)
         (assoc :active false)
+        (assoc :website_id nil)
         db/create-user!)))
 
 (defn create-user-with-credentials!
@@ -42,7 +45,7 @@
     (hashers/check password (:password user))))
 
 (defn visible-user [user]
-  (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id]))
+  (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id :website-id]))
 
 (defn visible-student [student]
   (-> (select-keys student [:id :user-id :class-id :school-id :gender :date-of-birth :user :class])
@@ -97,3 +100,57 @@
       prepare-student-data
       (assoc :id user-id)
       db/update-student-user!))
+
+(defn website-user-resource
+  [website-user-id]
+  (let [website-host (env :website-host)]
+    (str "http://" website-host "/api/user/" website-user-id)))
+
+(defn- website->platform-user
+  [{:keys [id first_name last_name email] :as response}]
+  {:first_name first_name
+   :last_name  last_name
+   :email      email
+   :website_id id
+   :password   nil})
+
+(defn- create-user-from-website!
+  [user-data]
+  (let [created-at (jt/local-date-time)
+        last-login (jt/local-date-time)]
+    (-> user-data
+        (assoc :created_at created-at)
+        (assoc :last_login last-login)
+        (assoc :active true)
+        db/create-user!
+        first)))
+
+(defn- update-user-from-website!
+  [user-data]
+  (let [last-login (jt/local-date-time)]
+    (-> user-data
+        (assoc :last_login last-login)
+        db/update-website-user!)))
+
+(defn- has-website-user?
+  [website-user-id]
+  (boolean (db/find-user-by-website-id {:website_id website-user-id})))
+
+(defn replace-user-from-website!
+  [{website-user-id :id :as website-user}]
+  (let [user-data (website->platform-user website-user)]
+    (if (has-website-user? website-user-id)
+      (update-user-from-website! user-data)
+      (create-user-from-website! user-data))
+    (-> (db/find-user-by-website-id {:website_id website-user-id})
+        visible-user)))
+
+(defn get-user-id-by-website!
+  [website-user]
+  (-> (replace-user-from-website! website-user) :id))
+
+(defn user->identity [user]
+  (select-keys user [:id :school-id :teacher-id :student-id]))
+
+(defn with-updated-identity [request response identity]
+  (assoc response :session (merge (:session request) {:identity identity})))
