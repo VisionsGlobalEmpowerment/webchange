@@ -4,10 +4,12 @@
 
 (defn reorder
   [engine]
-  (let [model (.getDiagramModel engine)]
-    (arrange-items model engine)
-    (.repaintCanvas engine)))
+  (when-not (nil? engine)
+    (let [model (.getDiagramModel engine)]
+      (arrange-items model engine)
+      (.repaintCanvas engine))))
 
 (defn zoom-to-fit
   [engine]
-  (.zoomToFit engine))
+  (when-not (nil? engine)
+    (.zoomToFit engine)))

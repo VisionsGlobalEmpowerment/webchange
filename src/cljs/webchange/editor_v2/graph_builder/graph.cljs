@@ -28,7 +28,6 @@
 (defn print-result
   [graph diagram-mode]
   (when (= :phrases diagram-mode)
-    (println "Phrases Graph:")
     (->> graph
          (reduce (fn [result [node-name node-data]]
                    (assoc result node-name (dissoc node-data :data)))

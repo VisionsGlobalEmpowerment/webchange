@@ -28,9 +28,9 @@
       (add-out-ports! (get-node-outs node-data))))
 
 (defn create-nodes
-  [scene-data]
+  [graph]
   (reduce
     (fn [result [name data]]
       (assoc result name (create-node name data)))
     {}
-    scene-data))
+    graph))
