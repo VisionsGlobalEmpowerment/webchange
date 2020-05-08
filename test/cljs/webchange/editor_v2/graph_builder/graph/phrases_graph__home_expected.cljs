@@ -3,8 +3,7 @@
 (def data {:senora-vaca                        {:path        [:senora-vaca]
                                                 :entity      :object
                                                 :children    []
-                                                :connections #{{:previous :root :name "click" :handler :senora-vaca-audio-1}
-                                                               {:previous :root :name "click" :handler :restart-fail}}}
+                                                :connections #{{:previous :root :name "click" :handler :senora-vaca-audio-1}}}
            :senora-vaca-audio-touch-second-box {:path        [:senora-vaca-audio-touch-second-box]
                                                 :entity      :action
                                                 :children    []
