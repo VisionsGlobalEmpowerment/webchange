@@ -4,7 +4,7 @@
     [cljs-react-material-ui.icons :as ic]
     [clojure.string :refer [capitalize]]
     [reagent.core :as r]
-    [webchange.editor-v2.translator.translator-form.common.views-target-selector :refer [target-selector]]))
+    [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]))
 
 (defn- get-styles
   []
@@ -21,11 +21,12 @@
                 [:div
                  [ui/icon-button {:on-click handle-cancel}
                   [ic/backspace]]
-                 [target-selector {:default-value ""
-                                   :on-change     #(swap! props assoc :target %)
-                                   :extra-options [{:text  "No Target"
-                                                    :value ""}]
-                                   :styles        {:control (:target-control styles)}}]
+                 [audio-target-selector {:default-value            ""
+                                         :on-change                #(swap! props assoc :target %)
+                                         :extra-options            [{:text  "No Target"
+                                                                     :value ""}]
+                                         :custom-option-available? true
+                                         :styles                   {:control (:target-control styles)}}]
                  [ui/form-control {:style (:alias-control styles)}
                   [ui/text-field {:label     "Alias"
                                   :variant   "outlined"

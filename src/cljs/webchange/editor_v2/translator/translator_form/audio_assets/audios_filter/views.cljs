@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.translator.translator-form.audio-assets.audios-filter.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.editor-v2.translator.translator-form.common.views-target-selector :refer [target-selector]]))
+    [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]))
 
 (defn- get-styles
   []
@@ -18,6 +18,6 @@
      [ui/typography {:variant "h6"
                      :style   (:title styles)}
       "Filter audios:"]
-     [target-selector {:default-value (:value empty-target-option)
-                       :extra-options [empty-target-option]
-                       :on-change     handle-target-changed}]]))
+     [audio-target-selector {:default-value (:value empty-target-option)
+                             :extra-options [empty-target-option]
+                             :on-change     handle-target-changed}]]))
