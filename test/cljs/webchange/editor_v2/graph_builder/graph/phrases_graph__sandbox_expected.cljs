@@ -7,11 +7,7 @@
             :connections  #{{:previous :word-1-state-var-copy-2,
                              :name     "next",
                              :sequence :box-1-start,
-                             :handler  :mari-more-audio}
-                            {:previous :word-1-state-var-copy-2,
-                             :name     "next",
-                             :sequence :box-1-start,
-                             :handler  :test-concept-complete-fail}},
+                             :handler  :mari-more-audio}},
             :origin-name  :word-1-state-var,
             :copy-counter 1},
            :box4
@@ -28,11 +24,7 @@
             :connections  #{{:previous :word-2-state-var-copy-2,
                              :name     "next",
                              :sequence :box-2-start,
-                             :handler  :mari-more-audio}
-                            {:previous :word-2-state-var-copy-2,
-                             :name     "next",
-                             :sequence :box-2-start,
-                             :handler  :test-concept-complete-fail}},
+                             :handler  :mari-more-audio}},
             :origin-name  :word-2-state-var,
             :copy-counter 1},
            :word-4-state-var-copy-1
@@ -120,11 +112,7 @@
             :connections  #{{:previous :word-3-state-var-copy-2,
                              :name     "next",
                              :sequence :box-3-start,
-                             :handler  :mari-more-audio}
-                            {:previous :word-3-state-var-copy-2,
-                             :name     "next",
-                             :sequence :box-3-start,
-                             :handler  :test-concept-complete-fail}},
+                             :handler  :mari-more-audio}},
             :origin-name  :word-3-state-var,
             :copy-counter 1},
            :box1

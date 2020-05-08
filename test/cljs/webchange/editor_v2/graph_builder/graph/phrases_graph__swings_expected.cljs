@@ -118,15 +118,13 @@
             :entity   :object,
             :children [],
             :connections
-                      #{{:previous :root, :name "drag-end", :handler nil}
-                        {:previous :root, :name "drag-end", :handler :dialog-var}}},
+                      #{{:previous :root, :name "drag-end", :handler :dialog-var}}},
            :box1
            {:path     [:box1],
             :entity   :object,
             :children [],
             :connections
-                      #{{:previous :root, :name "drag-end", :handler nil}
-                        {:previous :root, :name "drag-end", :handler :dialog-var}}},
+                      #{{:previous :root, :name "drag-end", :handler :dialog-var}}},
            :mari-move-to-start
            {:path        [:mari-move-to-start],
             :entity      :action,
@@ -137,5 +135,4 @@
             :entity   :object,
             :children [],
             :connections
-                      #{{:previous :root, :name "drag-end", :handler nil}
-                        {:previous :root, :name "drag-end", :handler :dialog-var}}}})
+                      #{{:previous :root, :name "drag-end", :handler :dialog-var}}}})
