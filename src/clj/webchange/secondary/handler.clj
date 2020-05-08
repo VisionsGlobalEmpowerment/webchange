@@ -9,10 +9,25 @@
             [webchange.auth.core :as auth]
             [webchange.db.core :refer [*db*] :as db]
             [webchange.validation.validate :refer [validate]]
+            [clojure.data.json :as json]
             [webchange.validation.specs.student :as student-specs]))
 
 (defn handle-dump-full [id request]
       (response (core/get-dump-by-school id)))
 
+(defn handle-load-school-update [id request]
+  (let [data (-> request :body slurp (json/read-str :key-fn keyword))]
+
+    (core/import-secondary-data! (Integer/parseInt id) data)
+    response {}))
+
+(defn handle-load-school-sync [id request]
+  (let [school (db/get-school {:id (Integer/parseInt id)})]
+    (core/upload-stat (:id school))
+    response {}))
+
 (defroutes secondary-school-routes
-           (GET "/api/school/dump-full/:id" [id :as request] (handle-dump-full id request)))
+           (GET "/api/school/dump-full/:id" [id :as request] (handle-dump-full id request))
+           (PUT "/api/school/update/:id" [id :as request] (handle-load-school-update id request))
+           (POST "/api/school/sync/:id" [id :as request] (handle-load-school-sync id request))
+           )

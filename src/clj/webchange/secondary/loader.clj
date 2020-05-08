@@ -30,6 +30,12 @@
     (core/load-full! school)
     ))
 
+(defn upload-secondary-school
+  []
+  (doseq [school (:schools (school-core/get-schools))]
+    (core/upload-stat (:id school))
+    ))
+
 (def commands
   {"init-secondary"
    (fn [config args]
@@ -37,6 +43,9 @@
    "load-secondary-school"
    (fn [config args]
      (apply load-secondary-school! config))
+   "upload-secondary-school"
+   (fn [config args]
+     (apply upload-secondary-school config))
    })
 
 (defn command? [[arg]]

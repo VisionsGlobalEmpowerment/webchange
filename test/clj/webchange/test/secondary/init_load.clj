@@ -1,4 +1,4 @@
-(ns webchange.test.secondary.handler
+(ns webchange.test.secondary.init-load
   (:require [clojure.test :refer :all]
             [ring.mock.request :as mock]
             [webchange.test.fixtures.core :as f]
@@ -25,30 +25,31 @@
       (assert (not (nil? user-new)))
       (assert (not (nil? school-new)))
       (assert (= user-old user-new))
-      (assert (= school-old school-new)))))
+      (assert (= school-old school-new)))
+    ))
 
 (deftest can-import-teacher
   (let [user (f/teacher-user-created)
         _ (f/teacher-created {:user-id (:id user)})
-        teacher-old (db/get-teacher-by-user {:user_id (:id user)})
+        teacher-old (dissoc (db/get-teacher-by-user {:user_id (:id user)}) :id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data (json/read-str (:body dump) :key-fn keyword))
-    (let [teacher-new (db/get-teacher-by-user {:user_id (:id user)})]
+    (let [teacher-new (dissoc (db/get-teacher-by-user {:user_id (:id user)}) :id)]
       (assert (not (nil? teacher-old)))
       (assert (= teacher-old teacher-new)))))
 
 (deftest can-import-student-and-class
   (let [student (f/student-created)
-        student-old (db/get-student-by-user {:user_id (:user-id student)})
-        class-old (db/get-class {:id (:class-id student)})
+        student-old (dissoc (db/get-student-by-user {:user_id (:user-id student)}) :id)
+        class-old (dissoc (db/get-class {:id (:class-id student)}) :id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data (json/read-str (:body dump) :key-fn keyword))
-    (let [student-new (db/get-student-by-user {:user_id (:user-id student)})
-          class-new (db/get-class {:id (:class-id student)})]
+    (let [student-new (dissoc (db/get-student-by-user {:user_id (:user-id student)}) :id)
+          class-new (dissoc (db/get-class {:id (:class-id student)}) :id)]
       (assert (= student-old student-new))
       (assert (= class-old class-new))
       (assert (not (nil? student-old)))
@@ -72,53 +73,57 @@
       )))
 
 (deftest can-import-course-stats
-  (let [course-stat (f/course-stat-created)
-        course-stats-old (db/get-user-course-stat {:user_id (:user-id course-stat)
-                                                   :course_id (:course-id course-stat)})
+  (let [course (f/course-created)
+        course-stat (f/course-stat-created course)
+        course-stats-old (dissoc (db/get-user-course-stat {:user_id (:user-id course-stat)
+                                                   :course_id (:course-id course-stat)}) :id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data (json/read-str (:body dump) :key-fn keyword))
-    (let [course-stats-new (db/get-user-course-stat {:user_id (:user-id course-stat)
-                                                     :course_id (:course-id course-stat)})]
+    (let [course-stats-new (dissoc (db/get-user-course-stat {:user_id (:user-id course-stat)
+                                                     :course_id (:course-id course-stat)}) :id)]
       (assert (not (nil? course-stats-old)))
       (assert (= course-stats-old course-stats-new))
       )))
 
 (deftest can-import-course-progresses
-  (let [course-progresses (f/course-progresses-created)
-        course-progresses-old (db/get-progress {:user_id (:user-id course-progresses)
-                                                   :course_id (:course-id course-progresses)})
+  (let [user (f/student-created)
+        course (f/course-created)
+        course-progresses (f/course-progresses-created (assoc user :course-id (:id course)))
+        course-progresses-old (dissoc (db/get-progress {:user_id (:user-id course-progresses)
+                                                   :course_id (:course-id course-progresses)}) :id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data (json/read-str (:body dump) :key-fn keyword))
-    (let [course-progresses-new (db/get-progress {:user_id (:user-id course-progresses)
-                                                     :course_id (:course-id course-progresses)})]
+    (let [course-progresses-new (dissoc (db/get-progress {:user_id (:user-id course-progresses)
+                                                     :course_id (:course-id course-progresses)}) :id)]
       (assert (not (nil? course-progresses-old)))
       (assert (= course-progresses-old course-progresses-new))
       )))
 
 (deftest can-import-course-events
-  (let [course-events (f/course-events-created)
-        course-events-old (db/find-course-events-by-id {:id (:id course-events)})
+  (let [user (f/student-created)
+        course-events (f/course-events-created user)
+        course-events-old (map #(dissoc % :id) (db/get-course-events-by-school {:school_id f/default-school-id}))
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data (json/read-str (:body dump) :key-fn keyword))
-    (let [course-events-new (db/find-course-events-by-id {:id (:id course-events)})]
+    (let [course-events-new (map #(dissoc % :id) (db/get-course-events-by-school {:school_id f/default-school-id}))]
       (assert (not (nil? course-events-old)))
       (assert (= course-events-old course-events-new))
       )))
 
 (deftest can-import-dataset
   (let [dataset (f/datasets-created)
-        dataset-old (db/get-dataset {:id (:id dataset)})
+        dataset-old (map #(dissoc % :id) (db/get-datasets-by-course  {:course_id (:course-id dataset)}))
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data (json/read-str (:body dump) :key-fn keyword))
-    (let [dataset-new (db/get-dataset {:id (:id dataset)})]
+    (let [dataset-new (map #(dissoc % :id) (db/get-datasets-by-course {:course_id (:course-id dataset)}))]
       (assert (not (nil? dataset-old)))
       (assert (= dataset-old dataset-new))
       )))
@@ -164,13 +169,14 @@
       )))
 
 (deftest can-import-activity-stats
-  (let [activity-stat (f/activity-stat-created)
-        activity-stat-old (db/get-activity-stat  activity-stat)
+  (let [user (f/student-created)
+        activity-stat (f/activity-stat-created {:id (:user-id user)})
+        activity-stat-old (dissoc (db/get-activity-stat  activity-stat) :id)
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
     (core/process-data (json/read-str (:body dump) :key-fn keyword))
-    (let [activity-stat-new (db/get-activity-stat  activity-stat)]
+    (let [activity-stat-new (dissoc (db/get-activity-stat  activity-stat) :id)]
       (assert (not (nil? activity-stat-old)))
       (assert (= activity-stat-old activity-stat-new))
       )))

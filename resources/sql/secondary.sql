@@ -1,20 +1,29 @@
 -- :name create-or-update-user! :! :n
 -- :doc creates a new user record
 INSERT INTO users
-(id, first_name, last_name, email, password, active, created_at, last_login)
-VALUES (:id, :first_name, :last_name, :email, :password, :active, :created_at, :last_login)
+(id, first_name, last_name, email, password, active, created_at, last_login, guid)
+VALUES (:id, :first_name, :last_name, :email, :password, :active, :created_at, :last_login, :guid)
 ON CONFLICT ON CONSTRAINT users_pkey
 DO UPDATE SET first_name=:first_name, last_name=:last_name, email=:email, password=:password,
-active=:active, created_at=:created_at, last_login=:last_login WHERE users.id=:id
+active=:active, created_at=:created_at, last_login=:last_login WHERE users.guid=:guid
+
+-- :name create-or-update-user-by-guid! :! :n
+-- :doc creates a new user record
+INSERT INTO users
+(guid, first_name, last_name, email, password, active, created_at, last_login)
+VALUES (:guid, :first_name, :last_name, :email, :password, :active, :created_at, :last_login)
+ON CONFLICT ON CONSTRAINT user_unique
+DO UPDATE SET first_name=:first_name, last_name=:last_name, email=:email, password=:password,
+active=:active, created_at=:created_at, last_login=:last_login WHERE users.guid=:guid
+
 
 -- :name create-or-update-teacher! :! :n
 -- :doc creates a new teacher record
 INSERT INTO teachers
-(id, user_id, school_id)
-VALUES (:id, :user_id, :school_id)
-ON CONFLICT ON CONSTRAINT teachers_pkey
-DO UPDATE SET user_id=:user_id, school_id=:school_id WHERE teachers.id=:id
-
+(user_id, school_id)
+VALUES (:user_id, :school_id)
+ON CONFLICT ON CONSTRAINT teacher_unique
+DO NOTHING;
 
 -- :name clear-teachers! :! :n
 -- :doc deletes teachers
@@ -23,19 +32,27 @@ DELETE from teachers;
 -- :name create-or-update-student! :! :n
 -- :doc creates a new student record
 INSERT INTO students
-(id, class_id, user_id, school_id, access_code, gender, date_of_birth)
-VALUES (:id, :class_id, :user_id, :school_id, :access_code, :gender, :date_of_birth)
-ON CONFLICT ON CONSTRAINT students_pkey
-DO UPDATE SET class_id=:class_id, user_id=:user_id, school_id=:school_id, access_code=:access_code,
-gender=:gender, date_of_birth=:date_of_birth WHERE students.id=:id
+(class_id, user_id, school_id, access_code, gender, date_of_birth)
+VALUES (:class_id, :user_id, :school_id, :access_code, :gender, :date_of_birth)
+ON CONFLICT ON CONSTRAINT student_unique
+DO UPDATE SET school_id=:school_id, access_code=:access_code,
+gender=:gender, date_of_birth=:date_of_birth WHERE students.class_id=:class_id and students.user_id=:user_id
 
 -- :name create-or-update-class! :! :n
 -- :doc creates a new student record
 INSERT INTO classes
-(id, name, school_id)
-VALUES (:id, :name, :school_id)
+(id, name, school_id, guid)
+VALUES (:id, :name, :school_id, :guid)
 ON CONFLICT ON CONSTRAINT classes_pkey
 DO UPDATE SET name=:name, school_id=:school_id WHERE classes.id=:id
+
+-- :name create-or-update-class-by-guid! :! :n
+-- :doc creates a new student record
+INSERT INTO classes
+(guid, name, school_id)
+VALUES (:guid, :name, :school_id)
+ON CONFLICT ON CONSTRAINT class_unique
+DO UPDATE SET name=:name, school_id=:school_id WHERE classes.guid=:guid
 
 -- :name create-or-update-courses! :! :n
 -- :doc creates a new student record
@@ -64,29 +81,33 @@ INNER JOIN (
 -- :name create-or-update-course-stat! :! :n
 -- :doc creates a new course stat record
 INSERT INTO course_stats
-(id, user_id, class_id, course_id, data)
-VALUES (:id, :user_id, :class_id, :course_id, :data)
-ON CONFLICT ON CONSTRAINT course_stats_pkey
-DO UPDATE SET user_id=:user_id, class_id=:class_id, course_id=:course_id, data=:data
-WHERE course_stats.id=:id
+(user_id, class_id, course_id, data)
+VALUES (:user_id, :class_id, :course_id, :data)
+ON CONFLICT ON CONSTRAINT course_stats_unique
+DO UPDATE SET  data=:data
+WHERE course_stats.user_id=:user_id and course_stats.class_id=:class_id and course_stats.course_id=:course_id;
 
 -- :name create-or-update-progress! :! :n
 -- :doc creates a new course progress record
 INSERT INTO course_progresses
-(id, user_id, course_id, data)
-VALUES (:id, :user_id, :course_id, :data)
-ON CONFLICT ON CONSTRAINT course_progresses_pkey
-DO UPDATE SET user_id=:user_id, course_id=:course_id, data=:data
-WHERE course_progresses.id=:id
+(user_id, course_id, data)
+VALUES (:user_id, :course_id, :data)
+ON CONFLICT ON CONSTRAINT course_progresses_unique
+DO UPDATE SET data=:data
+WHERE course_progresses.user_id=:user_id and course_progresses.course_id=:course_id;
 
 -- :name create-or-update-event! :! :n
 -- :doc creates a new course event record
 INSERT INTO course_events
-(id, user_id, course_id, created_at, type, data)
-VALUES (:id, :user_id, :course_id, :created_at, :type, :data)
-ON CONFLICT ON CONSTRAINT course_actions_pkey
-DO UPDATE SET user_id=:user_id, course_id=:course_id, created_at=:created_at, type=:type, data=:data
-WHERE course_events.id=:id
+(user_id, course_id, created_at, type, guid, data)
+VALUES (:user_id, :course_id, :created_at, :type, :guid, :data)
+ON CONFLICT ON CONSTRAINT course_events_unique
+DO UPDATE SET data=:data WHERE course_events.guid=:guid;
+
+-- :name find-course-events-by-id :? :1
+-- :doc retrieves a progress record given the user id and course id
+SELECT * FROM course_events
+WHERE id = :id
 
 -- :name create-or-update-dataset! :! :n
 -- :doc creates a new dataset record
@@ -141,9 +162,66 @@ INNER JOIN (
 -- :name create-or-update-activity-stat! :! :n
 -- :doc creates a new activity stat record
 INSERT INTO activity_stats
-(id, user_id, course_id, activity_id, data)
-VALUES (:id, :user_id, :course_id, :activity_id, :data)
-ON CONFLICT ON CONSTRAINT activity_stats_pkey
-DO UPDATE SET user_id=:user_id, course_id=:course_id, activity_id=:activity_id, data=:data
-WHERE activity_stats.id=:id
+(user_id, course_id, activity_id, data)
+VALUES (:user_id, :course_id, :activity_id, :data)
+ON CONFLICT ON CONSTRAINT activity_stats_unique
+DO UPDATE SET data=:data
+WHERE activity_stats.user_id=:user_id and activity_stats.course_id=:course_id and activity_stats.activity_id=:activity_id;
 
+-- :name find-users-by-guid :? :*
+-- :doc Characters with returned columns specified
+select * from users where guid in (:v*:guids);
+
+-- :name delete-activity-stats-by-user-id! :! :n
+-- :doc deletes activity stats
+DELETE from activity_stats where user_id=:user_id;
+
+-- :name delete-activity-stats-by-id! :! :n
+-- :doc deletes activity stats
+DELETE from activity_stats where id=:id;
+
+-- :name delete-course-events-by-user-id! :! :n
+-- :doc deletes course events
+DELETE from course_events where user_id=:user_id;
+
+-- :name delete-course-events-by-id! :! :n
+-- :doc deletes course events
+DELETE from course_events where id=:id;
+
+-- :name delete-course-progresses-by-user-id! :! :n
+-- :doc deletes course progresses
+DELETE from course_progresses where user_id=:user_id;
+
+-- :name delete-course-progresses-by-id! :! :n
+-- :doc deletes course progresses
+DELETE from course_progresses where id=:id;
+
+-- :name delete-course-stats-by-class-id! :! :n
+-- :doc deletes course progresses
+DELETE from course_stats where class_id=:class_id;
+
+-- :name delete-course-stats-by-user-id! :! :n
+-- :doc deletes course progresses
+DELETE from course_stats where user_id=:user_id;
+
+-- :name delete-course-stats-by-id! :! :n
+-- :doc deletes course progresses
+DELETE from course_stats where id=:id;
+
+-- :name delete-teachers-by-user-id! :! :n
+-- :doc deletes teachers
+DELETE from teachers where user_id=:user_id;
+
+-- :name delete-student-by-class-id! :! :n
+-- :doc deletes student
+DELETE from students
+WHERE class_id = :class_id
+
+-- :name delete-student-by-id! :! :n
+-- :doc deletes student
+DELETE from students
+WHERE id = :id
+
+-- :name delete-teacher-by-id! :! :n
+-- :doc deletes teacher by id
+DELETE from teachers WHERE id=:id;

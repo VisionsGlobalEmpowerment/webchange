@@ -30,16 +30,11 @@ JOIN users u ON (ce.user_id=u.id)
 JOIN students s ON (s.user_id=u.id)
 WHERE s.school_id = :school_id
 
--- :name find-course-events-by-id :? :1
--- :doc retrieves a progress record given the user id and course id
-SELECT * FROM course_events
-WHERE id = :id
-
 -- :name create-event! :<!
 -- :doc creates a new course event record
 INSERT INTO course_events
-(user_id, course_id, created_at, type, data)
-VALUES (:user_id, :course_id, :created_at, :type, :data)
+(user_id, course_id, created_at, type, guid, data)
+VALUES (:user_id, :course_id, :created_at, :type, :guid, :data)
 RETURNING id
 
 -- :name create-course-stat! :<!

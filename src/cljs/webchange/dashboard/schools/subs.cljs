@@ -34,3 +34,8 @@
   ::delete-modal-state
   (fn [db]
     (get-in db [:dashboard :delete-school-modal-state])))
+
+(re-frame/reg-sub
+  ::sync-modal-state
+  (fn [db]
+    (get-in db [:dashboard :sync-school-modal-state])))

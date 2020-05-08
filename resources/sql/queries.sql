@@ -41,7 +41,7 @@ WHERE website_id = :website_id
 -- :name delete-user! :! :n
 -- :doc deletes a user record given the id
 DELETE FROM users
-WHERE id = :id
+WHERE id = :id;
 
 -- :name get-users-by-school :? :*
 -- :doc retrieve all versions of given course

@@ -4,7 +4,7 @@
   ))
 
 (defn date-time2iso-str [date]
-  (jt/format "yyyy-MM-dd'T'HH:mm:ss.SSS" date))
+  (jt/format "yyyy-MM-dd'T'HH:mm:ss.SSSSSS" date))
 
 (defn date2str [date]
   (jt/format "yyyy-MM-dd" date))
@@ -13,4 +13,4 @@
   (jt/local-date "yyyy-MM-dd"  date))
 
 (defn iso-str2date-time [date]
-  (jt/local-date-time "yyyy-MM-dd'T'HH:mm:ss.SSS" date))
+  (jt/local-date-time "yyyy-MM-dd'T'HH:mm:ss.SSSSSS" date))

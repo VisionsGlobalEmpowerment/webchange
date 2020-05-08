@@ -630,44 +630,41 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
-(defn course-stat-created []
-  (let [course (course-created)
-        class (class-created)
-        user (student-created)
-        course-stat-id (db/create-course-stat! {:user_id (:user-id user)
-                                 :class_id (:id class)
+(defn course-stat-created [course]
+  (let [user (student-created)
+        [{course-stat-id :id}] (db/create-course-stat! {:user_id (:user-id user)
+                                 :class_id (:class-id user)
                                  :course_id (:id course)
                                  :data {}
                                  })]
     {:id course-stat-id
-     :class-id (:id class)
+     :class-id (:class-id user)
      :user-id (:user-id user)
+     :student-id (:id user)
      :course-id (:id course)
      }))
 
-(defn course-progresses-created []
-  (let [course (course-created)
-        user (student-created)
-        [{course-progress-id :id}] (db/create-progress! {:user_id (:user-id user)
-                                                :course_id (:id course)
+(defn course-progresses-created [options]
+  (let [[{course-progress-id :id}] (db/create-progress! {:user_id (:user-id options)
+                                                :course_id (:course-id options)
                                                 :data {}
                                                 })]
     {:id course-progress-id
-     :user-id (:user-id user)
-     :course-id (:id course)
+     :user-id (:user-id options)
+     :course-id (:course-id options)
      }))
 
-(defn course-events-created []
+(defn course-events-created [options]
   (let [course (course-created)
-        user (student-created)
-        [{course-events-id :id}] (db/create-event! {:user_id (:user-id user)
-                                                :course_id (:id course)
-                                                :type "test"
-                                              :created_at (jt/local-date-time)
-                                                :data {}
+        [{course-events-id :id}] (db/create-event! {:guid (java.util.UUID/randomUUID)
+                                                    :user_id (:user-id options)
+                                                    :course_id (:id course)
+                                                    :type "test"
+                                                    :created_at (jt/local-date-time)
+                                                    :data {}
                                                 })]
     {:id course-events-id
-     :user-id (:user-id user)
+     :user-id (:user-id options)
      :course-id (:id course)
      }))
 
@@ -681,10 +678,8 @@
      :course-id (:id course)
      }))
 
-(defn activity-stat-created []
+(defn activity-stat-created [user]
   (let [activity_id "Test"
-        user (student-user-created)
-        _ (student-created {:user-id (:id user)})
         course (course-created)
         [{id :id}] (db/create-activity-stat! {
                                              :user_id (:id user)
