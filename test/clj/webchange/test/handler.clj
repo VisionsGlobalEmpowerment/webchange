@@ -18,9 +18,9 @@
                     (mock/header :content-type "application/json")
                     (mock/body (json/write-str credentials)))
         response (handler/dev-handler request)
-        body (json/read-str (:body response))]
+        body (-> response :body slurp (json/read-str :key-fn keyword))]
     (is (= 200 (:status response)))
-    (is (= (:email user) (get-in body ["email"])))))
+    (is (= (:email user) (:email body)))))
 
 (deftest student-can-log-in
   (let [student (f/student-created)
@@ -29,7 +29,7 @@
                     (mock/header :content-type "application/json")
                     (mock/body (json/write-str credentials)))
         response (handler/dev-handler request)
-        body (json/read-str (:body response) :key-fn keyword)]
+        body (-> response :body slurp (json/read-str :key-fn keyword))]
     (is (= 200 (:status response)))
     (is (= (:user-id student) (:id body)))
     (is (= (:school-id student) (:school-id body)))))

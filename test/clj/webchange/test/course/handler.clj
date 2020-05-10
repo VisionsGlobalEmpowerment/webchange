@@ -13,22 +13,22 @@
 (deftest course-can-be-retrieved
          (let [course (f/course-created)
                response (f/get-course (:slug course))
-               body (json/read-str (:body response))]
+               body (-> response :body slurp (json/read-str :key-fn keyword))]
            (is (= 200 (:status response)))
-           (is (= (get-in course [:data :initial-scene]) (get body "initial-scene")))))
+           (is (= (get-in course [:data :initial-scene]) (:initial-scene body)))))
 
 (deftest course-can-be-saved
          (let [course (f/course-created)
                edited-value "test-scene-edited"
                _ (f/save-course! (:slug course) {:course {:initial-scene edited-value}})
-               retrieved-value (-> (:slug course) f/get-course :body json/read-str (get "initial-scene"))]
+               retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
            (is (= edited-value retrieved-value))))
 
 (deftest scene-can-be-retrieved
          (let [scene (f/scene-created)
                response (f/get-scene (:course-slug scene) (:name scene))]
            (is (= 200 (:status response)))
-           (is (= (get-in scene [:data :test]) (-> response :body json/read-str (get "test"))))))
+           (is (= (get-in scene [:data :test]) (-> response :body slurp (json/read-str :key-fn keyword) :test)))))
 
 (deftest scene-can-be-saved
          (let [scene (f/scene-created)
@@ -36,14 +36,15 @@
                _ (f/save-scene! (:course-slug scene) (:name scene) {:scene {:test edited-value}})
                retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
                                    :body
-                                   json/read-str
-                                   (get "test"))]
+                                   slurp
+                                   (json/read-str :key-fn keyword)
+                                   :test)]
            (is (= edited-value retrieved-value))))
 
 (deftest course-versions-can-be-retrieved
          (let [course (f/course-created)
                _ (f/save-course! (:slug course) {:course {:initial-scene "edited-value"}})
-               versions (-> (:slug course) f/get-course-versions :body json/read-str (get "versions"))]
+               versions (-> (:slug course) f/get-course-versions :body slurp (json/read-str :key-fn keyword) :versions)]
            (is (= 2 (count versions)))))
 
 (deftest course-version-can-be-restored
@@ -51,7 +52,7 @@
                original-value (-> course :data :initial-scene)
                _ (f/save-course! (:slug course) {:course {:initial-scene "edited-value"}})
                _ (f/restore-course-version! (:version-id course))
-               retrieved-value (-> (:slug course) f/get-course :body json/read-str (get "initial-scene"))]
+               retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
            (is (= original-value retrieved-value))))
 
 (deftest scene-versions-can-be-retrieved
@@ -59,8 +60,9 @@
                _ (f/save-scene! (:course-slug scene) (:name scene) {:scene {:test "edited-value"}})
                versions (-> (f/get-scene-versions (:course-slug scene) (:name scene))
                             :body
-                            json/read-str
-                            (get "versions"))]
+                            slurp
+                            (json/read-str :key-fn keyword)
+                            :versions)]
            (is (= 2 (count versions)))))
 
 (deftest scene-version-can-be-restored
@@ -70,15 +72,16 @@
                _ (f/restore-scene-version! (:version-id scene))
                retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
                                    :body
-                                   json/read-str
-                                   (get "test"))]
+                                   slurp
+                                   (json/read-str :key-fn keyword)
+                                   :test)]
            (is (= original-value retrieved-value))))
 
 (deftest course-info-can-be-retrieved
   (let [keys [:id :slug :name :lang :image-src :status :website-user-id :owner-id]
         course (f/course-created)
         response (f/get-course-info (:slug course))
-        body (json/read-str (:body response) :key-fn keyword)]
+        body (-> response :body slurp (json/read-str :key-fn keyword))]
     (is (= 200 (:status response)))
     (is (= (select-keys course keys) (select-keys body keys)))))
 
@@ -89,7 +92,7 @@
         lang "lang-edited"
         image-src "image-src-edited"
         _ (f/save-course-info! (:id course) {:name name :slug slug :lang lang :image-src image-src})
-        retrieved (-> slug f/get-course-info :body (json/read-str :key-fn keyword))]
+        retrieved (-> slug f/get-course-info :body slurp (json/read-str :key-fn keyword))]
     (is (= name (:name retrieved)))
     (is (= slug (:slug retrieved)))
     (is (= lang (:lang retrieved)))
@@ -103,7 +106,7 @@
         new-language "new-language"]
     (with-global-fake-routes-in-isolation
       {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
-      (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body (json/read-str :key-fn keyword))]
+      (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body slurp (json/read-str :key-fn keyword))]
         (is (= new-language (:lang new-course)))))))
 
 (deftest localized-course-can-be-retrieved
@@ -112,14 +115,14 @@
     (with-global-fake-routes-in-isolation
       {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
       (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
-            my-courses (-> (f/get-courses-by-website-user website-user-id) :body (json/read-str :key-fn keyword))]
+            my-courses (-> (f/get-courses-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
         (is (= 1 (count my-courses)))))))
 
 (deftest available-courses-can-be-retrieved
   (let [course-name "available course"
         _ (f/course-created {:name course-name :status "published"})
         response (f/get-available-courses)
-        courses (-> response :body (json/read-str :key-fn keyword))]
+        courses (-> response :body slurp (json/read-str :key-fn keyword))]
     (is (= 200 (:status response)))
     (is (= 1 (count courses)))
     (is (= course-name (-> courses first :name)))))

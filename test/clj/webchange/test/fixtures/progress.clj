@@ -71,6 +71,7 @@
                     (f/student-logged-in user-id))]
     (-> (handler/dev-handler request)
         :body
+        slurp
         (json/read-str :key-fn keyword))))
 
 (defn get-class-profile

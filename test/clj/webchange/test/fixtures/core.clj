@@ -370,6 +370,7 @@
                     teacher-logged-in)]
     (-> (handler/dev-handler request)
         :body
+        slurp
         (json/read-str :key-fn keyword))))
 
 (defn update-dataset-item!
@@ -403,6 +404,7 @@
                     teacher-logged-in)]
     (-> (handler/dev-handler request)
         :body
+        slurp
         (json/read-str :key-fn keyword))))
 
 (defn update-lesson-set!
@@ -443,6 +445,7 @@
                     teacher-logged-in)]
     (-> (handler/dev-handler request)
         :body
+        slurp
         (json/read-str :key-fn keyword))))
 
 (defn update-class!
@@ -489,6 +492,7 @@
                     teacher-logged-in)]
     (-> (handler/dev-handler request)
         :body
+        slurp
         (json/read-str :key-fn keyword))))
 
 (defn update-student!
@@ -544,6 +548,7 @@
                     teacher-logged-in)]
     (-> (handler/dev-handler request)
         :body
+        slurp
         (json/read-str :key-fn keyword))))
 
 (defn get-schools

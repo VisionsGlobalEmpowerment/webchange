@@ -23,7 +23,7 @@
                                (mock/header :content-type "application/json")
                                (mock/body (json/write-str {:token token})))
                    response (handler/dev-handler request)
-                   user (-> response :body (json/read-str :key-fn keyword))]
+                   user (-> response :body slurp (json/read-str :key-fn keyword))]
                (is (= (:first_name website-user) (:first-name user)))
                (is (= (:last_name website-user) (:last-name user)))))))
 
@@ -38,5 +38,5 @@
                         (mock/header :content-type "application/json")
                         (mock/body (json/write-str {:token token})))
             response (handler/dev-handler request)
-            user (-> response :body (json/read-str :key-fn keyword))]
+            user (-> response :body slurp (json/read-str :key-fn keyword))]
         (is (= new-last-name (:last-name user)))))))

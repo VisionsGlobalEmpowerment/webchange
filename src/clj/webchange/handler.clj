@@ -112,24 +112,17 @@
 
 (defn wrap-body-as-string
   [handler]
-  (fn [{body :body-params :as request}]
-    (handler (assoc request :body body))))
+  (fn [{body-params :body-params :as request}]
+    (let [response (if body-params
+                     (handler (assoc request :body body-params))
+                     (handler request))]
+      response)))
 
 (defn- json-response
   [{body :body :as response}]
   (if (or (string? body) (nil? body))
     response
     (assoc response :body (slurp body))))
-
-(defn wrap-response-body-as-string
-  "Middleware that converts response body from ByteStream to String
-  This is required for legacy tests"
-  [handler]
-  (fn
-    ([request]
-     (json-response (handler request)))
-    ([request respond raise]
-     (handler request (fn [response] (respond (json-response response))) raise))))
 
 (defroutes app
            website-api-routes
@@ -159,5 +152,4 @@
                  (muuntaja.middleware/wrap-format)))
 
 (def dev-handler (-> #'handler
-                     wrap-reload
-                     wrap-response-body-as-string))
+                     wrap-reload))

@@ -13,12 +13,12 @@
 (deftest school-can-be-created
   (let [test-name "test-name"
         school (f/create-school! {:name test-name})
-        retrieved (-> school :id f/get-school :body (json/read-str :key-fn keyword) :school)
+        retrieved (-> school :id f/get-school :body slurp (json/read-str :key-fn keyword) :school)
         ]
     (is (= test-name (:name retrieved)))))
 
 (deftest schools-can-be-retrieved
-  (let [retrieved (-> (f/get-schools) :body (json/read-str :key-fn keyword) :schools)]
+  (let [retrieved (-> (f/get-schools) :body slurp (json/read-str :key-fn keyword) :schools)]
     (is (= 1 (count retrieved)))))
 
 (deftest school-can-be-updated
@@ -26,7 +26,7 @@
         {school-id :id} (f/create-school! {:name test-name})
         updated-name "edited"
         _ (f/update-school! school-id {:name updated-name})
-        retrieved (-> school-id f/get-school :body (json/read-str :key-fn keyword) :school)]
+        retrieved (-> school-id f/get-school :body slurp (json/read-str :key-fn keyword) :school)]
     (is (= updated-name (:name retrieved)))))
 
 (deftest school-can-be-deleted
@@ -37,5 +37,5 @@
     (is (= 404 status))))
 
 (deftest current-school-can-be-retrieved
-  (let [school (-> (f/get-current-school) :body (json/read-str :key-fn keyword))]
+  (let [school (-> (f/get-current-school) :body slurp (json/read-str :key-fn keyword))]
     (is (= f/default-school-id (:id school)))))

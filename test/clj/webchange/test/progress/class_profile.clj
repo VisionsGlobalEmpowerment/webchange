@@ -27,7 +27,7 @@
         {user-id :user-id class-id :class-id} (f/student-created)
         data (progress-with-event course-started)
         _ (fp/save-current-progress! user-id course-slug data)
-        retrieved (-> (fp/get-class-profile class-id course-slug) :body (json/read-str :key-fn keyword) :stats)]
+        retrieved (-> (fp/get-class-profile class-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats)]
     (is (= 1 (count retrieved)))))
 
 (deftest last-login-changed-on-start-course
@@ -37,14 +37,14 @@
                  (assoc :created-at date)
                  progress-with-event)
         _ (fp/save-current-progress! user-id course-slug data)
-        retrieved (-> (fp/get-class-profile class-id course-slug) :body (json/read-str :key-fn keyword) :stats first)]
+        retrieved (-> (fp/get-class-profile class-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats first)]
     (is (= date (-> retrieved :data :last-login)))))
 
 (deftest latest-activity-changed-on-start-activity
   (let [{:keys [class-id course-slug user-id]} (fp/course-stat-created)
         data (progress-with-event activity-started)
         _ (fp/save-current-progress! user-id course-slug data)
-        retrieved (-> (fp/get-class-profile class-id course-slug) :body (json/read-str :key-fn keyword) :stats first)]
+        retrieved (-> (fp/get-class-profile class-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats first)]
     (is (= {:id "volleyball" :lesson 1 :level 1} (-> retrieved :data :latest-activity)))))
 
 (deftest cumulative-score-not-summed-for-same-activity-on-finish-activity
@@ -52,26 +52,26 @@
         data (progress-with-event activity-finished)
         _ (fp/save-current-progress! user-id course-slug data)
         _ (fp/save-current-progress! user-id course-slug data)
-        retrieved (-> (fp/get-class-profile class-id course-slug) :body (json/read-str :key-fn keyword) :stats first)]
+        retrieved (-> (fp/get-class-profile class-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats first)]
     (is (= {:correct 10, :mistake 5, :incorrect 2} (-> retrieved :data :cumulative-score)))))
 
 (deftest cumulative-score-summed-for-different-activities-on-finish-activity
   (let [{:keys [class-id course-slug user-id]} (fp/course-stat-created)
         _ (fp/save-current-progress! user-id course-slug (progress-with-event activity-finished))
         _ (fp/save-current-progress! user-id course-slug (-> activity-finished (assoc :lesson 2) progress-with-event))
-        retrieved (-> (fp/get-class-profile class-id course-slug) :body (json/read-str :key-fn keyword) :stats first)]
+        retrieved (-> (fp/get-class-profile class-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats first)]
     (is (= {:correct 20 :incorrect 4 :mistake 10} (-> retrieved :data :cumulative-score)))))
 
 (deftest activity-progress-increased-on-activity-progress
   (let [{:keys [class-id course-slug user-id]} (fp/course-stat-created)
         data (progress-with-event activity-progress)
         _ (fp/save-current-progress! user-id course-slug data)
-        retrieved (-> (fp/get-class-profile class-id course-slug) :body (json/read-str :key-fn keyword) :stats first)]
+        retrieved (-> (fp/get-class-profile class-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats first)]
     (is (= (:activity-progress activity-progress) (-> retrieved :data :activity-progress)))))
 
 (deftest cumulative-time-increased-on-finish-activity
   (let [{:keys [class-id course-slug user-id]} (fp/course-stat-created)
         data (progress-with-event activity-finished)
         _ (fp/save-current-progress! user-id course-slug data)
-        retrieved (-> (fp/get-class-profile class-id course-slug) :body (json/read-str :key-fn keyword) :stats first)]
+        retrieved (-> (fp/get-class-profile class-id course-slug) :body slurp (json/read-str :key-fn keyword) :stats first)]
     (is (= (:time-spent activity-finished) (-> retrieved :data :cumulative-time)))))
