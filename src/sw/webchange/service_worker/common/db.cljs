@@ -3,7 +3,7 @@
     [cljs-idxdb.core :as idx]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.config :as config]
-    [webchange.service-worker.wrappers :refer [promise]]))
+    [webchange.service-worker.wrappers :refer [promise promise-reject then catch]]))
 
 (def db (atom nil))
 (def database-version config/release-number)
@@ -72,10 +72,10 @@
   (idx/get-by-index @db store index 0 success-fn))
 
 (defn get-by-key
-  ([store key success-fn]
-   (idx/get-by-key @db store key success-fn))
-  ([store key]
-   (promise #(idx/get-by-key @db store key %))))
+  [store key]
+  (if @db
+    (promise #(idx/get-by-key @db store key %))
+    (promise-reject "DB is not initialized")))
 
 (defn set-value
   ([key value]
@@ -85,12 +85,12 @@
      (add-item data-store-name data success-fn))))
 
 (defn get-value
-  [key success-fn]
-  (get-by-key data-store-name key #(success-fn (:value %))))
+  [key]
+  (-> (get-by-key data-store-name key)
+      (then #(:value %))))
 
 (defn get-current-course
   []
-  (promise (fn [resolve]
-             (get-value current-course-db-key resolve))))
+  (get-value current-course-db-key))
 
 

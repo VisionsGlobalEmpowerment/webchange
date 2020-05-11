@@ -67,6 +67,12 @@
   ([data]
    (js/Promise.resolve data)))
 
+(defn promise-reject
+  ([]
+   (promise-reject nil))
+  ([data]
+   (js/Promise.reject data)))
+
 (defn promise
   [handler]
   (js/Promise. handler))
