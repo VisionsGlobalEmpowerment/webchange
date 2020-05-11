@@ -6,11 +6,12 @@
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.strategies :as strategy]
     [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers :refer [js-fetch promise-all request-pathname then]]))
+    [webchange.service-worker.wrappers :refer [js-fetch promise-all request-pathname then catch]]))
 
 (def pages-paths ["/student-login"
                   "/courses"
-                  "/dashboard"])
+                  "/dashboard"
+                  "/student-dashboard"])
 
 (defn- belong-paths?
   [request paths]
@@ -39,7 +40,8 @@
                    (if response
                      response
                      (do (logger/debug (str "Not matched: " (request-pathname request)))
-                         (js-fetch request)))))))))
+                         (js-fetch request))))))
+        (catch #(js-fetch request)))))
 
 (defn- get-response
   [request]
@@ -48,7 +50,8 @@
               (cond
                 (vs/api-request? request) (vs/handle-request request course-name)
                 (belong-paths? request pages-paths) (serve-page-skeleton course-name)
-                :else (serve-rest-content request course-name))))))
+                :else (serve-rest-content request course-name))))
+      (catch #(js-fetch request))))
 
 (defn handle
   [event]

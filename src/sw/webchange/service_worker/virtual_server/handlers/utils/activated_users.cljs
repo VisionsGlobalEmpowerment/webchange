@@ -11,7 +11,7 @@
 
 (defn get-current-code
   []
-  (promise #(db/get-value "current-code" %)))
+  (db/get-value "current-code"))
 
 (defn store-activated-user
   [code response]
@@ -27,7 +27,7 @@
   [code]
   (logger/debug "[get-activated-user-by-code]" code)
   (if-not (nil? code)
-    (promise #(db/get-by-key db/activated-users-store-name code %))
+    (db/get-by-key db/activated-users-store-name code)
     (do (logger/warn "Can not get user: activation code is not defined")
         (promise-resolve nil))))
 

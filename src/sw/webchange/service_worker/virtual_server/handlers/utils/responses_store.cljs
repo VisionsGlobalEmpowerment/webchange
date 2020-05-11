@@ -15,7 +15,7 @@
 
 (defn- take-from-store
   [pathname]
-  (promise #(db/get-by-key store-name pathname %)))
+  (db/get-by-key store-name pathname))
 
 (defn- put-response
   [response]

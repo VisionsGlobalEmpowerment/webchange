@@ -11,8 +11,7 @@
 
 (defn- get-current-course
   []
-  (promise (fn [resolve]
-             (get-value current-course-db-key resolve))))
+  (get-value current-course-db-key))
 
 (defn- set-current-course
   [current-course]

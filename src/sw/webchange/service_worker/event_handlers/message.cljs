@@ -31,8 +31,8 @@
 
 (defn- handle-get-last-update
   []
-  (db/get-value "last-update" (fn [last-update]
-                                (send-last-update last-update))))
+  (-> (db/get-value "last-update")
+      (then #(send-last-update %))))
 
 (defn handle
   [event]
