@@ -18,7 +18,7 @@
 (deftest user-can-login-with-token
          (let [token "some-token"]
            (with-global-fake-routes-in-isolation
-             {(website/website-token-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
+             {(website/website-token-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
              (let [request (-> (mock/request :post "/api/users/login-token")
                                (mock/header :content-type "application/json")
                                (mock/body (json/write-str {:token token})))
@@ -33,7 +33,7 @@
         new-data (assoc website-user :id website-id :last_name new-last-name)
         token "some-token"]
     (with-global-fake-routes-in-isolation
-      {(website/website-token-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data new-data})})}
+      {(website/website-token-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data new-data})})}
       (let [request (-> (mock/request :post "/api/users/login-token")
                         (mock/header :content-type "application/json")
                         (mock/body (json/write-str {:token token})))

@@ -105,7 +105,7 @@
   (let [course (f/course-created)
         new-language "new-language"]
     (with-global-fake-routes-in-isolation
-      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
+      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
       (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body slurp (json/read-str :key-fn keyword))]
         (is (= new-language (:lang new-course)))))))
 
@@ -113,7 +113,7 @@
   (let [course (f/course-created)
         new-language "new-language"]
     (with-global-fake-routes-in-isolation
-      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:data website-user})})}
+      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
       (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
             my-courses (-> (f/get-courses-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
         (is (= 1 (count my-courses)))))))
