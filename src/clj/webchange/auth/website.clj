@@ -8,6 +8,10 @@
             [buddy.auth :as buddy]
             [webchange.auth.core :as core]))
 
+(defn- success?
+  [response]
+  (and (http/success? response) (= "success" (-> response :body :status))))
+
 (defn website-user-resource
   []
   (let [website-host (env :website-host)]
@@ -19,7 +23,7 @@
         response (http/post url {:accept :json
                                  :as :json
                                  :form-params {:user_id website-user-id}})]
-    (if (http/success? response)
+    (if (success? response)
       (-> response :body :data))))
 
 (defn website-token-resource
@@ -33,5 +37,5 @@
         response (http/post url {:accept :json
                                  :as :json
                                  :form-params {:token token}})]
-    (if (http/success? response)
+    (if (success? response)
       (-> response :body :data))))
