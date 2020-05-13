@@ -479,7 +479,8 @@
      :offset 0.813,
      :target "senoravaca",
      :duration 0.414,
-     :scene-id "letter-intro"},
+     :scene-id "letter-intro"
+     :phrase-text "A"},
     :letter-intro-letter-mari
     {:data [{:end 1.89, :anim "talk", :start 1.3}],
      :type "animation-sequence",
@@ -1112,6 +1113,7 @@
     :letter-intro-letter
     {:offset 26.961,
      :scene-id "letter-intro",
+     :phrase-text "B"
      :start 26.961,
      :type "animation-sequence",
      :duration 0.667,
@@ -1673,6 +1675,7 @@
     :letter-intro-letter
     {:offset 1.293,
      :scene-id "letter-intro",
+     :phrase-text "C"
      :start 1.293,
      :type "animation-sequence",
      :duration 1.24,
@@ -2180,6 +2183,7 @@
     :letter-intro-letter
     {:offset 27.358,
      :scene-id "letter-intro",
+     :phrase-text "C",
      :start 27.358,
      :type "animation-sequence",
      :duration 1.413,
@@ -2665,6 +2669,7 @@
     :letter-intro-letter
     {:offset 2.612,
      :scene-id "letter-intro",
+     :phrase-text "Ch",
      :start 2.612,
      :type "animation-sequence",
      :duration 0.599,
@@ -3152,6 +3157,7 @@
     :letter-intro-letter
     {:offset 13.428,
      :scene-id "letter-intro",
+     :phrase-text "D",
      :start 13.428,
      :type "animation-sequence",
      :duration 0.733,
@@ -3628,6 +3634,7 @@
     :letter-intro-letter
     {:offset 63.269,
      :scene-id "letter-intro",
+     :phrase-text "E",
      :start 63.269,
      :type "animation-sequence",
      :duration 0.707,
@@ -4137,6 +4144,7 @@
     :letter-intro-letter
     {:offset 13.814,
      :scene-id "letter-intro",
+     :phrase-text "F",
      :start 13.814,
      :type "animation-sequence",
      :duration 0.933,
@@ -4641,6 +4649,7 @@
     :letter-intro-letter
     {:offset 35.357,
      :scene-id "letter-intro",
+     :phrase-text "G",
      :start 35.357,
      :type "animation-sequence",
      :duration 1.6,
@@ -5174,6 +5183,7 @@
     :letter-intro-letter
     {:offset 43.009,
      :scene-id "letter-intro",
+     :phrase-text "G",
      :start 43.009,
      :type "animation-sequence",
      :duration 1.387,
@@ -5691,6 +5701,7 @@
     :letter-intro-letter
     {:offset 20.425,
      :scene-id "letter-intro",
+     :phrase-text "H",
      :start 20.425,
      :type "animation-sequence",
      :duration 0.813,
@@ -6218,6 +6229,7 @@
     :letter-intro-letter
     {:offset 24.094,
      :scene-id "letter-intro",
+     :phrase-text "I",
      :start 24.094,
      :type "animation-sequence",
      :duration 0.627,
@@ -6943,6 +6955,7 @@
     :letter-intro-letter
     {:offset 0.907,
      :scene-id "letter-intro",
+     :phrase-text "J",
      :start 0.907,
      :type "animation-sequence",
      :duration 0.866,
@@ -7449,6 +7462,7 @@
     :letter-intro-letter
     {:offset 2.067,
      :scene-id "letter-intro",
+     :phrase-text "K",
      :start 2.067,
      :type "animation-sequence",
      :duration 0.64,
@@ -7936,6 +7950,7 @@
     :letter-intro-letter
     {:offset 42.025,
      :scene-id "letter-intro",
+     :phrase-text "L",
      :start 42.025,
      :type "animation-sequence",
      :duration 0.747,
@@ -8424,6 +8439,7 @@
     :letter-intro-letter
     {:offset 0.68,
      :scene-id "letter-intro",
+     :phrase-text "Ll",
      :start 0.68,
      :type "animation-sequence",
      :duration 0.907,
@@ -8909,6 +8925,7 @@
     :letter-intro-letter
     {:offset 1.213,
      :scene-id "letter-intro",
+     :phrase-text "M",
      :start 1.213,
      :type "animation-sequence",
      :duration 0.814,
@@ -9411,6 +9428,7 @@
     :letter-intro-letter
     {:offset 0.88,
      :scene-id "letter-intro",
+     :phrase-text "N",
      :start 0.88,
      :type "animation-sequence",
      :duration 0.827,
@@ -9921,6 +9939,7 @@
     :letter-intro-letter
     {:offset 12.254,
      :scene-id "letter-intro",
+     :phrase-text "O",
      :start 12.254,
      :type "animation-sequence",
      :duration 0.626,
@@ -10496,6 +10515,7 @@
     :letter-intro-letter
     {:offset 28.319,
      :scene-id "letter-intro",
+     :phrase-text "P",
      :start 28.319,
      :type "animation-sequence",
      :duration 0.56,
@@ -11006,6 +11026,7 @@
     :letter-intro-letter
     {:offset 32.57,
      :scene-id "letter-intro",
+     :phrase-text "Qu",
      :start 32.57,
      :type "animation-sequence",
      :duration 0.84,
@@ -11490,6 +11511,7 @@
     :letter-intro-letter
     {:offset 27.162,
      :scene-id "letter-intro",
+     :phrase-text "R",
      :start 27.162,
      :type "animation-sequence",
      :duration 0.786,
@@ -11996,6 +12018,7 @@
     :letter-intro-letter
     {:offset 13.426,
      :scene-id "letter-intro",
+     :phrase-text "S",
      :start 13.426,
      :type "animation-sequence",
      :duration 0.773,
@@ -12476,6 +12499,7 @@
     :letter-intro-letter
     {:offset 0.8,
      :scene-id "letter-intro",
+     :phrase-text "T",
      :start 0.8,
      :type "animation-sequence",
      :duration 0.627,
@@ -12990,6 +13014,7 @@
     :letter-intro-letter
     {:offset 37.748,
      :scene-id "letter-intro",
+     :phrase-text "U",
      :start 37.748,
      :type "animation-sequence",
      :duration 0.64,
@@ -13497,6 +13522,7 @@
     :letter-intro-letter
     {:offset 14.254,
      :scene-id "letter-intro",
+     :phrase-text "V",
      :start 14.254,
      :type "animation-sequence",
      :duration 0.76,
@@ -13986,6 +14012,7 @@
     :letter-intro-letter
     {:offset 29.786,
      :scene-id "letter-intro",
+     :phrase-text "W",
      :start 29.786,
      :type "animation-sequence",
      :duration 1.067,
@@ -14511,6 +14538,7 @@
     :letter-intro-letter
     {:offset 13.971,
      :scene-id "letter-intro",
+     :phrase-text "X",
      :start 13.971,
      :type "animation-sequence",
      :duration 0.866,
@@ -15003,6 +15031,7 @@
     :letter-intro-letter
     {:offset 1.173,
      :scene-id "letter-intro",
+     :phrase-text "Y",
      :start 1.173,
      :type "animation-sequence",
      :duration 0.947,
@@ -15496,6 +15525,7 @@
     :letter-intro-letter
     {:offset 55.395,
      :scene-id "letter-intro",
+     :phrase-text "Z",
      :start 55.395,
      :type "animation-sequence",
      :duration 0.853,
@@ -16010,6 +16040,7 @@
     :letter-intro-letter
     {:offset 0.733,
      :scene-id "letter-intro",
+     :phrase-text "ñ",
      :start 0.733,
      :type "animation-sequence",
      :duration 0.787,

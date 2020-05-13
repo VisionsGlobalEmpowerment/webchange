@@ -129,35 +129,40 @@
    [{:id "hidden", :type "state", :target "video-controls"}
     {:to {:x 1613, :y 785, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}]},
   :mari-voice-touch
-  {:type "parallel",
-   :data
-   [{:id "mari", :type "audio", :start 12.841, :duration 2.479}
-    {:data [{:end 15.205, :anim "talk", :start 12.994}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 12.841,
-     :target "mari"}],
-   :description "Toca aqui para ver el video"},
+  {:phrase :touch
+   :phrase-description "Touch to play"
+   :offset 12.841,
+   :phrase-text "Touch here to view the video",
+   :phrase-text-translated "Toca aqui para ver el video",
+   :start 12.841,
+   :type "animation-sequence",
+   :duration 2.479,
+   :audio "mari",
+   :target "mari",
+   :track 1,
+   :data [{:end 15.205, :anim "talk", :start 12.994}]},
   :mari-voice-touch-again-1
-  {:type "parallel",
-   :data
-   [{:id "mari", :type "audio", :start 18.667, :duration 3.271}
-    {:data [{:end 21.861, :anim "talk", :start 18.82}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 18.667,
-     :target "mari"}],
-   :description "Toca aqui para ver el video de nuevo..."},
+  {:offset 18.667,
+   :phrase-text "Touch here to view the video again",
+   :phrase-text-translated "Toca aqui para ver el video de nuevo",
+   :start 18.667,
+   :type "animation-sequence",
+   :duration 3.271,
+   :audio "mari",
+   :target "mari",
+   :track 1,
+   :data [{:end 21.861, :anim "talk", :start 18.82}]},
   :mari-voice-touch-again-2
-  {:type "parallel",
-   :data
-   [{:id "mari", :type "audio", :start 22.36, :duration 4.025}
-    {:data [{:end 26.257, :anim "talk", :start 22.475}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 22.36,
-     :target "mari"}],
-   :description "..., o toca aqui para ir a tu proxima actividad."},
+  {:offset 22.36,
+   :phrase-text "or touch here to go to your next activity.\n"
+   :phrase-text-translated "o toca aqui para ir a tu proxima actividad.",
+   :start 22.36,
+   :type "animation-sequence",
+   :duration 4.025,
+   :audio "mari",
+   :target "mari",
+   :track 1,
+   :data [{:end 26.257, :anim "talk", :start 22.475}]},
   :play-video
   {:type "sequence-data",
    :data
@@ -169,7 +174,9 @@
      :from-var [{:var-name "current-concept", :var-property "chanting-video-src", :action-property "src"}]}
     {:id "play-video-finish", :type "action"}]},
   :play-video-finish
-  {:type "sequence-data",
+  {:phrase :finish
+   :phrase-description "Play video finish"
+   :type "sequence-data",
    :data
    [{:id "hidden", :type "state", :target "letter-video"}
     {:id "visible", :type "state", :target "screen-overlay"}
@@ -200,7 +207,7 @@
      :type "parallel"}
     {:to {:x 1223, :y 546, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
     {:id "mari-voice-touch", :type "action"}]},
-  :start
+  :start-scene
   {:type "sequence",
    :data
    ["start-activity"
@@ -224,8 +231,11 @@
     {:id "clapping_finish", :loop false, :type "animation", :target "senoravaca"}]},
   :vaca-voice-lets-watch
   {:type "sequence-data",
+   :phrase :lets-watch
+   :phrase-description "Lets watch video"
    :data
-   [{:description "Excellent! Now, let’s watch a video about the letter",
+   [{:phrase-text "Excellent! Now, let’s watch a video about the letter",
+     :phrase-text-translated "Ahora veamos un video sobre la letra",
      :offset 21.15,
      :start 21.15,
      :type "animation-sequence",
@@ -236,29 +246,32 @@
      :data [{:end 24.15, :anim "talk", :start 21.33} {:end 25.53, :anim "talk", :start 24.46}]}
     {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}]},
   :vaca-voice-very-good
-  {:type "parallel",
-   :data
-   [{:id "vaca-7", :type "audio", :start 27.148, :duration 1.532}
-    {:data [{:end 28.618, :anim "talk", :start 27.297}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 27.148,
-     :target "senoravaca"}],
-   :description "Very good!"},
+  {:offset 27.148,
+   :phrase-text "Very good!",
+   :start 27.148,
+   :type "animation-sequence",
+   :duration 1.532,
+   :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+   :target "senoravaca",
+   :track 1,
+   :data [{:end 28.618, :anim "talk", :start 27.297}]},
   :vaca-voice-wonderful
-  {:type "parallel",
+  {:offset 9.716,
+   :phrase :intro
+   :phrase-description "Intro"
+   :phrase-text "Wonderful! That was good singing everyone! Are you having a good time?",
+   :phrase-text-translated "Maravilloso! Todos cantaron muy bien!  Amigas, estan pasando un buen rato?",
+   :start 9.716,
+   :type "animation-sequence",
+   :duration 10.613,
+   :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+   :target "senoravaca",
+   :track 1,
    :data
-   [{:id "vaca-7", :type "audio", :start 9.716, :duration 10.613}
-    {:data
-     [{:end 11.858, :anim "talk", :start 10.04}
-      {:end 14.723, :anim "talk", :start 12.431}
-      {:end 16.691, :anim "talk", :start 15.695}
-      {:end 19.979, :anim "talk", :start 17.115}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 9.716,
-     :target "senoravaca"}],
-   :description "Maravilloso! Todos cantaron muy bien!  Amigas, estan pasando un buen rato?"}},
- :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+   [{:end 11.858, :anim "talk", :start 10.04}
+    {:end 14.723, :anim "talk", :start 12.431}
+    {:end 16.691, :anim "talk", :start 15.695}
+    {:end 19.979, :anim "talk", :start 17.115}]}},
+ :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "map", :autostart true},
  :audio {:mari "/raw/audio/l2/a1/L2_A1_Mari.m4a", :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"}}
