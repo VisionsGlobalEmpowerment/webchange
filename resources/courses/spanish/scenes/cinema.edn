@@ -1,1341 +1,1406 @@
 {:assets
- [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
-  {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/baby.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/ball.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/bear.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/boots.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/boy.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/cat.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/cheese.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/chocolate.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/diamond.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/elephant.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/frog.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/garden.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/grapes.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/home.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/hand.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/kimono.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/leaf.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/lion.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/magnet.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/ostrich.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/snake.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/squirrel.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/sunflower.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/tomato.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/violin.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/website.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/wrench.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/xylophone.png", :size 10, :type "image"}
-  {:url "/raw/img/elements/yoyo.png", :size 10, :type "image"}
-  {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio", :alias "mari voice 1"}
-  {:url "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a", :size 5, :type "audio", :alias "vaca voice 1"}
-  {:url "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", :size 5, :type "audio", :alias "vaca voice 2"}
-  {:url "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", :size 5, :type "audio", :alias "vaca voice 3"}
-  {:url "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", :size 5, :type "audio", :alias "vaca voice 4"}
-  {:url "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", :size 5, :type "audio", :alias "vaca voice 5"}
-  {:url "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", :size 5, :type "audio", :alias "vaca voice 6"}
-  {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio", :alias "vaca voice 7"}],
+           [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
+            {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/baby.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/ball.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/bear.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/boots.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/boy.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/cat.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/cheese.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/chocolate.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/diamond.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/elephant.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/frog.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/garden.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/grapes.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/home.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/hand.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/kimono.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/leaf.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/lion.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/magnet.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/ostrich.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/snake.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/squirrel.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/sunflower.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/tomato.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/violin.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/website.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/wrench.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/xylophone.png", :size 10, :type "image"}
+            {:url "/raw/img/elements/yoyo.png", :size 10, :type "image"}
+            {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio", :alias "mari voice 1"}
+            {:url "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a", :size 5, :type "audio", :alias "vaca voice 1"}
+            {:url "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", :size 5, :type "audio", :alias "vaca voice 2"}
+            {:url "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", :size 5, :type "audio", :alias "vaca voice 3"}
+            {:url "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", :size 5, :type "audio", :alias "vaca voice 4"}
+            {:url "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", :size 5, :type "audio", :alias "vaca voice 5"}
+            {:url "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", :size 5, :type "audio", :alias "vaca voice 6"}
+            {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio", :alias "vaca voice 7"}],
  :objects
- {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
-  :card-a
-  {:type "group",
-   :x 350,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-a-image" "card-a-text"],
-   :states {:normal {:x 350, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 335, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-a-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-a",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/squirrel.png"},
-  :card-a-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "a",
-   :vertical-align "middle"},
-  :card-b
-  {:type "group",
-   :x 475,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-b-image" "card-b-text"],
-   :states {:normal {:x 475, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 450, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-b-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-b",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/baby.png"},
-  :card-b-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "b",
-   :vertical-align "middle"},
-  :card-c
-  {:type "group",
-   :x 600,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-c-image" "card-c-text"],
-   :states {:normal {:x 600, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 585, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-c-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-c",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/home.png"},
-  :card-c-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "c",
-   :vertical-align "middle"},
-  :card-ch
-  {:type "group",
-   :x 725,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-ch-image" "card-ch-text"],
-   :states {:normal {:x 725, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 710, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-ch-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-ch",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/chocolate.png"},
-  :card-ch-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "ch",
-   :vertical-align "middle"},
-  :card-d
-  {:type "group",
-   :x 850,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-d-image" "card-d-text"],
-   :states {:normal {:x 850, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 835, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-d-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-d",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/diamond.png"},
-  :card-d-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "d",
-   :vertical-align "middle"},
-  :card-e
-  {:type "group",
-   :x 975,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-e-image" "card-e-text"],
-   :states {:normal {:x 975, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 960, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-e-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-e",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/elephant.png"},
-  :card-e-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "e",
-   :vertical-align "middle"},
-  :card-f
-  {:type "group",
-   :x 1100,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-f-image" "card-f-text"],
-   :states {:normal {:x 1100, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1085, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-f-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-f",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/sunflower.png"},
-  :card-f-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "f",
-   :vertical-align "middle"},
-  :card-g
-  {:type "group",
-   :x 1225,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-g-image" "card-g-text"],
-   :states {:normal {:x 1225, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1210, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-g-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-g",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/cat.png"},
-  :card-g-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "g",
-   :vertical-align "middle"},
-  :card-h
-  {:type "group",
-   :x 1350,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-h-image" "card-h-text"],
-   :states {:normal {:x 1350, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1335, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-h-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-h",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/leaf.png"},
-  :card-h-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "h",
-   :vertical-align "middle"},
-  :card-i
-  {:type "group",
-   :x 1475,
-   :y 120,
-   :width 100,
-   :height 164,
-   :children ["card-i-image" "card-i-text"],
-   :states {:normal {:x 1475, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1460, :y 95, :scale-x 1.3, :scale-y 1.3}}},
-  :card-i-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-i",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/magnet.png"},
-  :card-i-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "i",
-   :vertical-align "middle"},
-  :card-j
-  {:type "group",
-   :x 350,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-j-image" "card-j-text"],
-   :states {:normal {:x 350, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 335, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-j-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-j",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/garden.png"},
-  :card-j-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "j",
-   :vertical-align "middle"},
-  :card-k
-  {:type "group",
-   :x 475,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-k-image" "card-k-text"],
-   :states {:normal {:x 475, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 460, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-k-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-k",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/kimono.png"},
-  :card-k-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "k",
-   :vertical-align "middle"},
-  :card-l
-  {:type "group",
-   :x 600,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-l-image" "card-l-text"],
-   :states {:normal {:x 600, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 585, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-l-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-l",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/lion.png"},
-  :card-l-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "l",
-   :vertical-align "middle"},
-  :card-ll
-  {:type "group",
-   :x 725,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-ll-image" "card-ll-text"],
-   :states {:normal {:x 725, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 710, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-ll-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-ll",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/wrench.png"},
-  :card-ll-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "ll",
-   :vertical-align "middle"},
-  :card-m
-  {:type "group",
-   :x 850,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-m-image" "card-m-text"],
-   :states {:normal {:x 850, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 835, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-m-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-m",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/hand.png"},
-  :card-m-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "m",
-   :vertical-align "middle"},
-  :card-n
-  {:type "group",
-   :x 975,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-n-image" "card-n-text"],
-   :states {:normal {:x 975, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 960, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-n-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-n",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/boy.png"},
-  :card-n-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "n",
-   :vertical-align "middle"},
-  :card-o
-  {:type "group",
-   :x 1225,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-o-image" "card-o-text"],
-   :states {:normal {:x 1225, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1210, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-o-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-o",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/bear.png"},
-  :card-o-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "o",
-   :vertical-align "middle"},
-  :card-p
-  {:type "group",
-   :x 1350,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-p-image" "card-p-text"],
-   :states {:normal {:x 1350, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1335, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-p-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-p",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/ball.png"},
-  :card-p-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "p",
-   :vertical-align "middle"},
-  :card-q
-  {:type "group",
-   :x 1475,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-q-image" "card-q-text"],
-   :states {:normal {:x 1475, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1460, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-q-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-q",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/cheese.png"},
-  :card-q-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "q",
-   :vertical-align "middle"},
-  :card-r
-  {:type "group",
-   :x 350,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-r-image" "card-r-text"],
-   :states {:normal {:x 350, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 335, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-r-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-r",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/frog.png"},
-  :card-r-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "r",
-   :vertical-align "middle"},
-  :card-s
-  {:type "group",
-   :x 600,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-s-image" "card-s-text"],
-   :states {:normal {:x 600, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 585, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-s-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-s",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/snake.png"},
-  :card-s-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "s",
-   :vertical-align "middle"},
-  :card-t
-  {:type "group",
-   :x 725,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-t-image" "card-t-text"],
-   :states {:normal {:x 725, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 710, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-t-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-t",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/tomato.png"},
-  :card-t-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "t",
-   :vertical-align "middle"},
-  :card-u
-  {:type "group",
-   :x 850,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-u-image" "card-u-text"],
-   :states {:normal {:x 850, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 835, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-u-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-u",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/grapes.png"},
-  :card-u-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "u",
-   :vertical-align "middle"},
-  :card-v
-  {:type "group",
-   :x 975,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-v-image" "card-v-text"],
-   :states {:normal {:x 975, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 960, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-v-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-v",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/violin.png"},
-  :card-v-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "v",
-   :vertical-align "middle"},
-  :card-w
-  {:type "group",
-   :x 1100,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-w-image" "card-w-text"],
-   :states {:normal {:x 1100, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1085, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-w-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-w",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/website.png"},
-  :card-w-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "w",
-   :vertical-align "middle"},
-  :card-x
-  {:type "group",
-   :x 1225,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-x-image" "card-x-text"],
-   :states {:normal {:x 1225, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1210, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-x-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-x",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/xylophone.png"},
-  :card-x-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "x",
-   :vertical-align "middle"},
-  :card-y
-  {:type "group",
-   :x 1350,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-y-image" "card-y-text"],
-   :states {:normal {:x 1350, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1335, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-y-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-y",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/yoyo.png"},
-  :card-y-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "y",
-   :vertical-align "middle"},
-  :card-z
-  {:type "group",
-   :x 1475,
-   :y 520,
-   :width 100,
-   :height 164,
-   :children ["card-z-image" "card-z-text"],
-   :states {:normal {:x 1475, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1460, :y 495, :scale-x 1.3, :scale-y 1.3}}},
-  :card-z-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-z",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/boots.png"},
-  :card-z-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "z",
-   :vertical-align "middle"},
-  :card-ñ
-  {:type "group",
-   :x 1100,
-   :y 320,
-   :width 100,
-   :height 164,
-   :children ["card-ñ-image" "card-ñ-text"],
-   :states {:normal {:x 1100, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1085, :y 295, :scale-x 1.3, :scale-y 1.3}}},
-  :card-ñ-image
-  {:type "image",
-   :x 50,
-   :y 50,
-   :width 100,
-   :height 100,
-   :origin {:type "center-top"},
-   :transition "card-ñ",
-   :brightness -0.25,
-   :filter "brighten",
-   :src "/raw/img/elements/ostrich.png"},
-  :card-ñ-text
-  {:type "text",
-   :x 0,
-   :y 0,
-   :width 100,
-   :height 50,
-   :align "center",
-   :fill "black",
-   :font-family "Lexend Deca",
-   :font-size 64,
-   :text "ñ",
-   :vertical-align "middle"},
-  :mari
-  {:type "animation",
-   :x 1613,
-   :y 785,
-   :width 473,
-   :height 511,
-   :transition "mari",
-   :anim "idle",
-   :name "mari",
-   :scale-x 0.3,
-   :scale-y 0.3,
-   :speed 0.35,
-   :start true},
-  :screen-overlay
-  {:type "image",
-   :x 342,
-   :y 109,
-   :width 1238,
-   :height 678,
-   :src "/raw/img/cinema/screen-off.png",
-   :states {:hidden {:type "transparent"}, :visible {:type "image"}}},
-  :senora-vaca
-  {:type "animation",
-   :x 263,
-   :y 915,
-   :width 351,
-   :height 717,
-   :anim "idle",
-   :name "senoravaca",
-   :scale-x 0.5,
-   :scale-y 0.5,
-   :skin "vaca",
-   :speed 0.3,
-   :start true}},
+           {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
+            :card-a
+                        {:type "group",
+                         :x 350,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-a-image" "card-a-text"],
+                         :states {:normal {:x 350, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 335, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-a-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-a",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/squirrel.png"},
+            :card-a-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "a",
+                         :vertical-align "middle"},
+            :card-b
+                        {:type "group",
+                         :x 475,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-b-image" "card-b-text"],
+                         :states {:normal {:x 475, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 450, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-b-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-b",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/baby.png"},
+            :card-b-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "b",
+                         :vertical-align "middle"},
+            :card-c
+                        {:type "group",
+                         :x 600,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-c-image" "card-c-text"],
+                         :states {:normal {:x 600, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 585, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-c-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-c",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/home.png"},
+            :card-c-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "c",
+                         :vertical-align "middle"},
+            :card-ch
+                        {:type "group",
+                         :x 725,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-ch-image" "card-ch-text"],
+                         :states {:normal {:x 725, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 710, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-ch-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-ch",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/chocolate.png"},
+            :card-ch-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "ch",
+                         :vertical-align "middle"},
+            :card-d
+                        {:type "group",
+                         :x 850,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-d-image" "card-d-text"],
+                         :states {:normal {:x 850, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 835, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-d-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-d",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/diamond.png"},
+            :card-d-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "d",
+                         :vertical-align "middle"},
+            :card-e
+                        {:type "group",
+                         :x 975,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-e-image" "card-e-text"],
+                         :states {:normal {:x 975, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 960, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-e-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-e",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/elephant.png"},
+            :card-e-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "e",
+                         :vertical-align "middle"},
+            :card-f
+                        {:type "group",
+                         :x 1100,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-f-image" "card-f-text"],
+                         :states {:normal {:x 1100, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1085, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-f-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-f",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/sunflower.png"},
+            :card-f-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "f",
+                         :vertical-align "middle"},
+            :card-g
+                        {:type "group",
+                         :x 1225,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-g-image" "card-g-text"],
+                         :states {:normal {:x 1225, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1210, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-g-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-g",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/cat.png"},
+            :card-g-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "g",
+                         :vertical-align "middle"},
+            :card-h
+                        {:type "group",
+                         :x 1350,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-h-image" "card-h-text"],
+                         :states {:normal {:x 1350, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1335, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-h-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-h",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/leaf.png"},
+            :card-h-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "h",
+                         :vertical-align "middle"},
+            :card-i
+                        {:type "group",
+                         :x 1475,
+                         :y 120,
+                         :width 100,
+                         :height 164,
+                         :children ["card-i-image" "card-i-text"],
+                         :states {:normal {:x 1475, :y 120, :scale-x 1, :scale-y 1}, :pointed {:x 1460, :y 95, :scale-x 1.3, :scale-y 1.3}}},
+            :card-i-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-i",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/magnet.png"},
+            :card-i-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "i",
+                         :vertical-align "middle"},
+            :card-j
+                        {:type "group",
+                         :x 350,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-j-image" "card-j-text"],
+                         :states {:normal {:x 350, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 335, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-j-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-j",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/garden.png"},
+            :card-j-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "j",
+                         :vertical-align "middle"},
+            :card-k
+                        {:type "group",
+                         :x 475,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-k-image" "card-k-text"],
+                         :states {:normal {:x 475, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 460, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-k-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-k",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/kimono.png"},
+            :card-k-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "k",
+                         :vertical-align "middle"},
+            :card-l
+                        {:type "group",
+                         :x 600,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-l-image" "card-l-text"],
+                         :states {:normal {:x 600, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 585, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-l-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-l",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/lion.png"},
+            :card-l-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "l",
+                         :vertical-align "middle"},
+            :card-ll
+                        {:type "group",
+                         :x 725,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-ll-image" "card-ll-text"],
+                         :states {:normal {:x 725, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 710, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-ll-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-ll",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/wrench.png"},
+            :card-ll-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "ll",
+                         :vertical-align "middle"},
+            :card-m
+                        {:type "group",
+                         :x 850,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-m-image" "card-m-text"],
+                         :states {:normal {:x 850, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 835, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-m-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-m",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/hand.png"},
+            :card-m-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "m",
+                         :vertical-align "middle"},
+            :card-n
+                        {:type "group",
+                         :x 975,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-n-image" "card-n-text"],
+                         :states {:normal {:x 975, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 960, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-n-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-n",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/boy.png"},
+            :card-n-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "n",
+                         :vertical-align "middle"},
+            :card-o
+                        {:type "group",
+                         :x 1225,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-o-image" "card-o-text"],
+                         :states {:normal {:x 1225, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1210, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-o-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-o",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/bear.png"},
+            :card-o-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "o",
+                         :vertical-align "middle"},
+            :card-p
+                        {:type "group",
+                         :x 1350,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-p-image" "card-p-text"],
+                         :states {:normal {:x 1350, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1335, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-p-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-p",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/ball.png"},
+            :card-p-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "p",
+                         :vertical-align "middle"},
+            :card-q
+                        {:type "group",
+                         :x 1475,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-q-image" "card-q-text"],
+                         :states {:normal {:x 1475, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1460, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-q-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-q",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/cheese.png"},
+            :card-q-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "q",
+                         :vertical-align "middle"},
+            :card-r
+                        {:type "group",
+                         :x 350,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-r-image" "card-r-text"],
+                         :states {:normal {:x 350, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 335, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-r-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-r",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/frog.png"},
+            :card-r-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "r",
+                         :vertical-align "middle"},
+            :card-s
+                        {:type "group",
+                         :x 600,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-s-image" "card-s-text"],
+                         :states {:normal {:x 600, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 585, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-s-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-s",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/snake.png"},
+            :card-s-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "s",
+                         :vertical-align "middle"},
+            :card-t
+                        {:type "group",
+                         :x 725,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-t-image" "card-t-text"],
+                         :states {:normal {:x 725, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 710, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-t-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-t",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/tomato.png"},
+            :card-t-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "t",
+                         :vertical-align "middle"},
+            :card-u
+                        {:type "group",
+                         :x 850,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-u-image" "card-u-text"],
+                         :states {:normal {:x 850, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 835, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-u-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-u",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/grapes.png"},
+            :card-u-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "u",
+                         :vertical-align "middle"},
+            :card-v
+                        {:type "group",
+                         :x 975,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-v-image" "card-v-text"],
+                         :states {:normal {:x 975, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 960, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-v-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-v",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/violin.png"},
+            :card-v-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "v",
+                         :vertical-align "middle"},
+            :card-w
+                        {:type "group",
+                         :x 1100,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-w-image" "card-w-text"],
+                         :states {:normal {:x 1100, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1085, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-w-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-w",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/website.png"},
+            :card-w-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "w",
+                         :vertical-align "middle"},
+            :card-x
+                        {:type "group",
+                         :x 1225,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-x-image" "card-x-text"],
+                         :states {:normal {:x 1225, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1210, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-x-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-x",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/xylophone.png"},
+            :card-x-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "x",
+                         :vertical-align "middle"},
+            :card-y
+                        {:type "group",
+                         :x 1350,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-y-image" "card-y-text"],
+                         :states {:normal {:x 1350, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1335, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-y-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-y",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/yoyo.png"},
+            :card-y-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "y",
+                         :vertical-align "middle"},
+            :card-z
+                        {:type "group",
+                         :x 1475,
+                         :y 520,
+                         :width 100,
+                         :height 164,
+                         :children ["card-z-image" "card-z-text"],
+                         :states {:normal {:x 1475, :y 520, :scale-x 1, :scale-y 1}, :pointed {:x 1460, :y 495, :scale-x 1.3, :scale-y 1.3}}},
+            :card-z-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-z",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/boots.png"},
+            :card-z-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "z",
+                         :vertical-align "middle"},
+            :card-ñ
+                        {:type "group",
+                         :x 1100,
+                         :y 320,
+                         :width 100,
+                         :height 164,
+                         :children ["card-ñ-image" "card-ñ-text"],
+                         :states {:normal {:x 1100, :y 320, :scale-x 1, :scale-y 1}, :pointed {:x 1085, :y 295, :scale-x 1.3, :scale-y 1.3}}},
+            :card-ñ-image
+                        {:type "image",
+                         :x 50,
+                         :y 50,
+                         :width 100,
+                         :height 100,
+                         :origin {:type "center-top"},
+                         :transition "card-ñ",
+                         :brightness -0.25,
+                         :filter "brighten",
+                         :src "/raw/img/elements/ostrich.png"},
+            :card-ñ-text
+                        {:type "text",
+                         :x 0,
+                         :y 0,
+                         :width 100,
+                         :height 50,
+                         :align "center",
+                         :fill "black",
+                         :font-family "Lexend Deca",
+                         :font-size 64,
+                         :text "ñ",
+                         :vertical-align "middle"},
+            :mari
+                        {:type "animation",
+                         :x 1613,
+                         :y 785,
+                         :width 473,
+                         :height 511,
+                         :transition "mari",
+                         :anim "idle",
+                         :name "mari",
+                         :scale-x 0.3,
+                         :scale-y 0.3,
+                         :speed 0.35,
+                         :start true},
+            :screen-overlay
+                        {:type "image",
+                         :x 342,
+                         :y 109,
+                         :width 1238,
+                         :height 678,
+                         :src "/raw/img/cinema/screen-off.png",
+                         :states {:hidden {:type "transparent"}, :visible {:type "image"}}},
+            :senora-vaca
+                        {:type "animation",
+                         :x 263,
+                         :y 915,
+                         :width 351,
+                         :height 717,
+                         :anim "idle",
+                         :name "senoravaca",
+                         :scale-x 0.5,
+                         :scale-y 0.5,
+                         :skin "vaca",
+                         :speed 0.3,
+                         :start true}},
  :scene-objects
- [["background"]
-  ["card-a"
-   "card-b"
-   "card-c"
-   "card-ch"
-   "card-d"
-   "card-e"
-   "card-f"
-   "card-g"
-   "card-h"
-   "card-i"
-   "card-j"
-   "card-k"
-   "card-l"
-   "card-ll"
-   "card-m"
-   "card-n"
-   "card-ñ"
-   "card-o"
-   "card-p"
-   "card-q"
-   "card-r"
-   "card-s"
-   "card-t"
-   "card-u"
-   "card-v"
-   "card-w"
-   "card-x"
-   "card-y"
-   "card-z"]
-  ["screen-overlay"]
-  ["senora-vaca" "mari"]],
+           [["background"]
+            ["card-a"
+             "card-b"
+             "card-c"
+             "card-ch"
+             "card-d"
+             "card-e"
+             "card-f"
+             "card-g"
+             "card-h"
+             "card-i"
+             "card-j"
+             "card-k"
+             "card-l"
+             "card-ll"
+             "card-m"
+             "card-n"
+             "card-ñ"
+             "card-o"
+             "card-p"
+             "card-q"
+             "card-r"
+             "card-s"
+             "card-t"
+             "card-u"
+             "card-v"
+             "card-w"
+             "card-x"
+             "card-y"
+             "card-z"]
+            ["screen-overlay"]
+            ["senora-vaca" "mari"]],
  :actions
- {:chant-current-letter
-  {:type "sequence-data",
-   :data
-   [{:id "vaca-voice-next", :type "action"}
-    {:id "pointed",
-     :type "state",
-     :from-var [{:template "card-%", :var-name "current-letter", :action-property "target"}]}
-    {:id "start-highlight", :type "action", :return-immediately true}
-    {:id "move-to-current-card", :type "action"}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-word"}]}
-    {:id "vaca-voice-chanting-4", :type "action"}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-song"}]}
-    {:id "stop-highlight", :type "action"}]},
-  :check-round
-  {:type "test-var-scalar",
-   :var-name "current-round",
-   :success "finish-chanting",
-   :fail "go-next-round",
-   :from-var [{:var-name "rounds-number", :action-property "value"}]},
-  :clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
-  :finish-activity
-  {:type "sequence-data", :data [{:id "cinema", :type "finish-activity"} {:type "scene", :scene-id "cinema-video"}]},
-  :finish-chanting
-  {:type "sequence-data",
-   :data
-   [{:data
-     [{:id "vaca-voice-finish", :type "action"}
-      {:id "visible", :type "state", :target "screen-overlay"}
-      {:to {:x 1613, :y 785, :loop false}, :type "transition", :transition-id "mari"}],
-     :type "parallel"}
-    {:id "finish-activity", :type "action"}]},
-  :go-next-round
-  {:type "sequence-data",
-   :data
-   [{:type "counter", :counter-id "current-round", :counter-action "increase"}
-    {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name []}}
-    {:id "vaca-voice-one-more-round", :type "action"}
-    {:id "renew-current-letter", :type "action"}]},
-  :init-vaca-voice-next
-  {:type "parallel",
-   :data
-   [{:type "set-variable", :var-name "vaca-voice-next-1", :var-value "vaca-voice-next-1"}
-    {:type "set-variable", :var-name "vaca-voice-next-2", :var-value "vaca-voice-next-2"}
-    {:type "set-variable", :var-name "vaca-voice-next-3", :var-value "vaca-voice-next-3"}
-    {:type "set-variable", :var-name "vaca-voice-next-4", :var-value "vaca-voice-next-4"}]},
-  :init-vars
-  {:type "parallel",
-   :data
-   [{:type "set-variable", :var-name "current-round", :var-value 1}
-    {:type "set-variable", :var-name "rounds-number", :var-value 2}
-    {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name ["ardilla" "oso"]}}]},
-  :intro
-  {:type "sequence-data",
-   :data
-   [{:id "hidden", :type "state", :target "screen-overlay"}
-    {:data
-     [{:id "vaca-1", :type "audio", :start 0.593, :duration 20.321}
-      {:data
-       [{:end 2.017, :anim "talk", :start 0.763}
-        {:end 4.335, :anim "talk", :start 2.672}
-        {:end 8.642, :anim "talk", :start 5.098}
-        {:end 16.058, :anim "talk", :start 9.406}
-        {:end 20.502, :anim "talk", :start 17.067}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 0.593,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description
-     "Buenas Dias! It’s learning time. Look at all these words you already know.\n                                                       Let’s start this activity by first reviewing the beginning sounds of words.\n                                                       Mari, can you please turn the screen on?"}
-    {:data
-     [{:id "mari", :type "audio", :start 0.793, :duration 2.379}
-      {:data [{:end 3.173, :anim "talk", :start 0.793}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 0.793,
-       :target "mari"}],
-     :type "parallel",
-     :description "Claro que si, Senora Vaca!"}
-    {:to {:x 1290, :y 580, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
-    {:data
-     [{:id "vaca-2", :type "audio", :start 0.954, :duration 17.236}
-      {:data
-       [{:end 4.98, :anim "talk", :start 1.252}
-        {:end 6.59, :anim "talk", :start 5.636}
-        {:end 10.288, :anim "talk", :start 7.127}
-        {:end 12.644, :anim "talk", :start 10.944}
-        {:end 13.747, :anim "talk", :start 12.882}
-        {:end 15.924, :anim "talk", :start 14.612}
-        {:end 18.071, :anim "talk", :start 16.699}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 0.954,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description
-     "Escucha los sonidos al principio de cada palabra.\n                                                       Por ejemplo, cuando decimos la palabra “ardilla,” escuchamos el sonido “aaaaaa”.\n                                                       “Aaaardilla. Aaaardilla.”"}
-    {:type "set-variable", :var-name "current-letter", :var-value "a"}
-    {:id "start-highlight", :type "action", :return-immediately true}
-    {:id "move-to-current-card", :type "action"}
-    {:data
-     [{:id "vaca-2", :type "audio", :start 19.115, :duration 6.531}
-      {:data [{:end 21.381, :anim "talk", :start 19.204} {:end 25.586, :anim "talk", :start 22.156}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 19.115,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Vamos a componer una cancion- Ardilla! Ardilla! a-a-A!"}
-    {:data
-     [{:id "vaca-2", :type "audio", :start 26.301, :duration 11.66}
-      {:data
-       [{:end 28.001, :anim "talk", :start 26.361}
-        {:end 31.43, :anim "talk", :start 28.568}
-        {:end 34.74, :anim "talk", :start 31.758}
-        {:end 37.901, :anim "talk", :start 35.009}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 26.301,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description
-     "Dilo conmigo tres veces!- Ardilla! Ardilla! a-a-A!\n                                                       Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A!"}
-    {:id "stop-highlight", :type "action"}
-    {:id "vaca-voice-chanting-4", :type "action"}
-    {:type "set-variable", :var-name "current-letter", :var-value "o"}
-    {:id "start-highlight", :type "action", :return-immediately true}
-    {:id "move-to-current-card", :type "action"}
-    {:data
-     [{:id "vaca-2", :type "audio", :start 41.927, :duration 10.735}
-      {:data
-       [{:end 42.673, :anim "talk", :start 41.927}
-        {:end 46.549, :anim "talk", :start 43.627}
-        {:end 46.549, :anim "talk", :start 43.627}
-        {:end 48.01, :anim "talk", :start 46.937}
-        {:end 47.861, :anim "talk", :start 46.937}
-        {:end 49.084, :anim "talk", :start 48.219}
-        {:end 50.903, :anim "talk", :start 49.8}
-        {:end 52.513, :anim "talk", :start 51.47}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 41.927,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description
-     "Oso. Al principio de la palabra\n                                                       “Oso”, escuchamos el sonido “ooooo.” Ooooso. Oooso"}
-    {:data
-     [{:id "vaca-2", :type "audio", :start 53.438, :duration 11.004}
-      {:data
-       [{:end 55.018, :anim "talk", :start 53.527}
-        {:end 57.076, :anim "talk", :start 55.525}
-        {:end 58.388, :anim "talk", :start 57.404}
-        {:end 61.833, :anim "talk", :start 59.581}
-        {:end 64.412, :anim "talk", :start 61.698}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 53.438,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description
-     "El sonido oooooo se escucha asi. Ooooo.\n                                                       Vamos a cantarlo- Oso, Oso, o-o-O!!"}
-    {:id "stop-highlight", :type "action"}],
-   :description "Initial action"},
-  :move-to-current-card
-  {:type "transition",
-   :from-var-object
-   [{:offset 170,
-     :var-name "current-letter",
-     :action-property "to.x",
-     :object-property "x",
-     :object-name-template "card-%"}
-    {:offset 180,
-     :var-name "current-letter",
-     :action-property "to.y",
-     :object-property "y",
-     :object-name-template "card-%"}],
-   :to {:loop false, :duration 2},
-   :transition-id "mari"},
-  :renew-current-letter
-  {:type "sequence-data",
-   :data
-   [{:from "concepts-all",
-     :type "lesson-var-provider",
-     :on-end "check-round",
-     :from-var
-     [{:template "concept-round-%", :var-name "current-round", :action-property "provider-id"}
-      {:var-name "exclude-concepts", :action-property "exclude-property-values"}],
-     :shuffled true,
-     :variables ["current-concept"]}
-    {:type "set-variable",
-     :from-var [{:var-name "current-concept", :var-property "letter", :action-property "var-value"}],
-     :var-name "current-letter"}
-    {:id "chant-current-letter", :type "action"}
-    {:id "renew-current-letter", :type "action"}]},
-  :start
-  {:type "sequence",
-   :data ["start-activity" "clear-instruction" "init-vaca-voice-next" "init-vars" "intro" "renew-current-letter"],
-   :description "Initial action"},
-  :start-activity {:type "start-activity", :id "cinema"},
-  :start-highlight
-  {:type "transition",
-   :from-var
-   [{:template "card-%-filter", :var-name "current-letter", :action-property "transition-id"}
-    {:template "card-%-filter", :var-name "current-letter", :action-property "transition-tag"}],
-   :from {:brightness -0.25},
-   :to {:yoyo true, :easing "strong-ease-in", :duration 1, :brightness 0.25}},
-  :stop-activity {:type "stop-activity", :id "cinema"},
-  :stop-highlight
-  {:type "stop-transition", :from-var [{:template "card-%-filter", :var-name "current-letter", :action-property "id"}]},
-  :vaca-voice-chanting-1
-  {:type "parallel",
-   :data
-   [{:id "vaca-2", :type "audio", :start 43.545, :duration 2.297}
-    {:data [{:end 45.766, :anim "talk", :start 43.677}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 43.545,
-     :target "senoravaca"}],
-   :description "Al principio de la palabra"},
-  :vaca-voice-chanting-2
-  {:type "parallel",
-   :data
-   [{:id "vaca-2", :type "audio", :start 53.541, :duration 0.762}
-    {:data [{:end 54.243, :anim "talk", :start 53.596}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 53.541,
-     :target "senoravaca"}],
-   :description "el sonido"},
-  :vaca-voice-chanting-3
-  {:type "parallel",
-   :data
-   [{:id "vaca-2", :type "audio", :start 55.481, :duration 1.628}
-    {:data [{:end 57.109, :anim "talk", :start 55.481}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 55.481,
-     :target "senoravaca"}],
-   :description "se escucha asi"},
-  :vaca-voice-chanting-4
-  {:type "parallel",
-   :data
-   [{:id "vaca-2", :type "audio", :start 59.566, :duration 1.261}
-    {:data [{:end 60.742, :anim "talk", :start 59.66}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 59.566,
-     :target "senoravaca"}],
-   :description "Vamos a cantarlo"},
-  :vaca-voice-finish
-  {:type "parallel",
-   :data
-   [{:id "vaca-7", :type "audio", :start 0.897, :duration 8.719}
-    {:data
-     [{:end 2.915, :anim "talk", :start 1.158}
-      {:end 6.191, :anim "talk", :start 3.4}
-      {:end 8.968, :anim "talk", :start 6.926}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 0.897,
-     :target "senoravaca"}],
-   :description "Wiiiiiiii! Lo cantaste conmigo asi de fuerte? Estoy impresionada!"},
-  :vaca-voice-next
-  {:type "sequence-data",
-   :data
-   [{:from ["vaca-voice-next-1" "vaca-voice-next-2" "vaca-voice-next-3" "vaca-voice-next-4"],
-     :type "vars-var-provider",
-     :shuffled true,
-     :variables ["current-vaca-voice-next"]}
-    {:type "action", :from-var [{:var-name "current-vaca-voice-next", :action-property "id"}]}]},
-  :vaca-voice-next-1
-  {:type "parallel",
-   :data
-   [{:id "vaca-2", :type "audio", :start 38.932, :duration 2.56}
-    {:data [{:end 41.182, :anim "talk", :start 39.303}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 38.932,
-     :target "senoravaca"}],
-   :description "Cual es la siguiente foto?"},
-  :vaca-voice-next-2
-  {:type "parallel",
-   :data
-   [{:id "vaca-2", :type "audio", :start 65.604, :duration 2.505}
-    {:data [{:end 66.409, :anim "talk", :start 65.664} {:end 68.05, :anim "talk", :start 66.708}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 65.604,
-     :target "senoravaca"}],
-   :description "Y ahora la proxima foto!"},
-  :vaca-voice-next-3
-  {:type "parallel",
-   :data
-   [{:id "vaca-2", :type "audio", :start 73.805, :duration 1.324}
-    {:data [{:end 74.878, :anim "talk", :start 73.984}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 73.805,
-     :target "senoravaca"}],
-   :description "Que sigue?!"},
-  :vaca-voice-next-4
-  {:type "parallel",
-   :data
-   [{:id "vaca-3", :type "audio", :start 0.907, :duration 1.36}
-    {:data [{:end 2.189, :anim "talk", :start 0.97}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 0.907,
-     :target "senoravaca"}],
-   :description "Sigue! Sigue!"},
-  :vaca-voice-one-more-round
-  {:type "parallel",
-   :data
-   [{:id "vaca-6", :type "audio", :start 15.147, :duration 13.047}
-    {:data
-     [{:end 18.641, :anim "talk", :start 15.221}
-      {:end 25.908, :anim "talk", :start 19.087}
-      {:end 28.027, :anim "talk", :start 26.428}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 15.147,
-     :target "senoravaca"}],
-   :description
-   "Fantastico!! Lo estas haciendo muy bien!\n                                                  Crees que podremos hacer todas estas fotos y los sonidos una vez mas?\n                                                  Vamos a hacerlo!"}},
- :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+           {
+            :chant-current-letter
+                               {:type "sequence-data",
+                                :data
+                                [{:id "pointed",
+                                  :type "state",
+                                  :from-var [{:template "card-%", :var-name "current-letter", :action-property "target"}]}
+                                 {:id "start-highlight", :type "action", :return-immediately true}
+                                 {:id "move-to-current-card-copy-3", :type "action"}
+                                 {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-word"}]}
+                                 {:id "vaca-voice-chanting-4", :type "action"}
+                                 {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-song"}]}
+                                 {:id "stop-highlight", :type "action"}]
+                                :phrase                        :chant-concept,
+                                :phrase-description            "Chant current concept"},
+
+            :check-round
+                               {:type "test-var-scalar",
+                                :var-name "current-round",
+                                :success "finish-chanting",
+                                :fail "go-next-round",
+                                :from-var [{:var-name "rounds-number", :action-property "value"}]},
+            :clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
+            :finish-activity
+                               {:type "sequence-data", :data [{:id "cinema", :type "finish-activity"} {:type "scene", :scene-id "cinema-video"}]},
+            :finish-chanting
+                               {:type "sequence-data",
+                                :data
+                                      [{:data
+                                              [{:id "vaca-voice-finish", :type "action"}
+                                               {:id "visible", :type "state", :target "screen-overlay"}
+                                               {:to {:x 1613, :y 785, :loop false}, :type "transition", :transition-id "mari"}],
+                                        :type "parallel"}
+                                       {:id "finish-activity", :type "action"}]},
+            :go-next-round
+                               {:type "sequence-data",
+                                :data
+                                      [{:type "counter", :counter-id "current-round", :counter-action "increase"}
+                                       {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name []}}
+                                       {:id "vaca-voice-one-more-round", :type "action"}
+                                       {:id "renew-current-letter", :type "action"}]},
+            :init-vaca-voice-next
+                               {:type "parallel",
+                                :data
+                                      [{:type "set-variable", :var-name "vaca-voice-next-1", :var-value "vaca-voice-next-1"}
+                                       {:type "set-variable", :var-name "vaca-voice-next-2", :var-value "vaca-voice-next-2"}
+                                       {:type "set-variable", :var-name "vaca-voice-next-3", :var-value "vaca-voice-next-3"}
+                                       {:type "set-variable", :var-name "vaca-voice-next-4", :var-value "vaca-voice-next-4"}]},
+            :init-vars
+                               {:type "parallel",
+                                :data
+                                      [{:type "set-variable", :var-name "current-round", :var-value 1}
+                                       {:type "set-variable", :var-name "rounds-number", :var-value 2}
+                                       {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name ["ardilla" "oso"]}}]},
+            :intro
+                               {:type "sequence-data",
+                                :phrase                        :intro
+                                :phrase-description            "Start Activity",
+                                :data
+                                [{:id "hidden", :type "state", :target "screen-overlay"}
+                                 {:audio "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a",
+                                  :start 0.593,
+                                  :duration 20.321,
+                                  :type "animation-sequence",
+                                  :track 1,
+                                  :offset 0.593,
+                                  :target "senoravaca",
+                                  :data
+                                  [{:end 2.017, :anim "talk", :start 0.763}
+                                   {:end 4.335, :anim "talk", :start 2.672}
+                                   {:end 8.642, :anim "talk", :start 5.098}
+                                   {:end 16.058, :anim "talk", :start 9.406}
+                                   {:end 20.502, :anim "talk", :start 17.067}]
+                                  :phrase-text "Hello everyone! Are you ready to practice letter sounds? Look at all these words you already know! Let’s review the sound at the beginning of each word. Mari, can you fly around and point to each picture and letter?"
+                                  :phrase-text-translated "Buenos dias! Hoy es tiempo de aprender. Mira todas las palabras que ya conoces. Vamos empezar esta actividad por repasar los sonidos de las palabras. Mari, puedes volar y senalar cada imagen y letra?"
+                                  }
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Mari.m4a",
+                                  :start 0.793,
+                                  :duration 2.379,
+                                  :track 1,
+                                  :offset 0.793,
+                                  :target "mari",
+                                  :data [{:end 3.173, :anim "talk", :start 0.793}]
+                                  :phrase-text "Sure thing, Senora Vaca!"
+                                  :phrase-text-translated "Claro que si, Senora Vaca!"}
+                                 {:to {:x 1290, :y 580, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 0.954,
+                                  :duration 17.236,
+                                  :track 1,
+                                  :offset 0.954,
+                                  :target "senoravaca",
+                                  :data
+                                  [{:end 4.98, :anim "talk", :start 1.252}
+                                   {:end 6.59, :anim "talk", :start 5.636}
+                                   {:end 10.288, :anim "talk", :start 7.127}
+                                   {:end 12.644, :anim "talk", :start 10.944}
+                                   {:end 13.747, :anim "talk", :start 12.882}
+                                   {:end 15.924, :anim "talk", :start 14.612}
+                                   {:end 18.071, :anim "talk", :start 16.699}],
+                                  :phrase-text "Listen to the sounds at the beginning of each word.  For example, When we say the word “Ant”, we hear an “aaaaa” sound.  “Aa- Aaant. Aa - Aant."
+                                  :phrase-text-translated "Escucha los sonidos al principio de cada palabra. Por ejemplo, cuando decimos la palabra “ardilla,” escuchamos el sonido “aaaaaa”.\n                                                       “Aaaardilla. Aaaardilla.”"}
+                                 {:type "set-variable", :var-name "current-letter", :var-value "a"}
+                                 {:id "start-highlight", :type "action", :return-immediately true}
+                                 {:id "move-to-current-card-copy-1", :type "action"}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 19.115,
+                                  :duration 6.531,
+                                  :track 1,
+                                  :offset 19.115,
+                                  :target "senoravaca"
+                                  :data [{:end 21.381, :anim "talk", :start 19.204} {:end 25.586, :anim "talk", :start 22.156}],
+                                  :phrase-text "Let’s say the word and beginning sound 3 times like this - Ant! Ant!  a-a-A!"
+                                  :phrase-text-translated "Vamos a componer una cancion- Ardilla! Ardilla! a-a-A!"}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 26.301,
+                                  :duration 11.66,
+                                  :track 1,
+                                  :offset 26.301,
+                                  :target "senoravaca"
+                                  :data
+                                  [{:end 28.001, :anim "talk", :start 26.361}
+                                   {:end 31.43, :anim "talk", :start 28.568}
+                                   {:end 34.74, :anim "talk", :start 31.758}
+                                   {:end 37.901, :anim "talk", :start 35.009}],
+                                  :phrase-text "Say it with me 3 times! - Ant! Ant!  a-a-A! Ant! Ant!  a-a-A! Ant! Ant!  a-a-A!"
+                                  :phrase-text-translated "Dilo conmigo tres veces!- Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A!"}
+                                 {:id "stop-highlight", :type "action"}
+                                 {:id "vaca-voice-chanting-4", :type "action"}
+                                 {:type "set-variable", :var-name "current-letter", :var-value "o"}
+                                 {:id "start-highlight", :type "action", :return-immediately true}
+                                 {:id "move-to-current-card-copy-2", :type "action"}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 41.927,
+                                  :duration 10.735,
+                                  :track 1,
+                                  :offset 41.927,
+                                  :target "senoravaca",
+                                  :data
+                                  [{:end 42.673, :anim "talk", :start 41.927}
+                                   {:end 46.549, :anim "talk", :start 43.627}
+                                   {:end 46.549, :anim "talk", :start 43.627}
+                                   {:end 48.01, :anim "talk", :start 46.937}
+                                   {:end 47.861, :anim "talk", :start 46.937}
+                                   {:end 49.084, :anim "talk", :start 48.219}
+                                   {:end 50.903, :anim "talk", :start 49.8}
+                                   {:end 52.513, :anim "talk", :start 51.47}],
+                                  :phrase-text "At the beginning of the word “Oso”, we hear the “oooooo” sound. Ooooso.  Ooooso."
+                                  :phrase-text-translated "Oso. Al principio de la palabra “Oso”, escuchamos el sonido “ooooo.” Ooooso. Oooso"}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 53.438,
+                                  :duration 11.004
+                                  :track 1,
+                                  :offset 53.438,
+                                  :target "senoravaca"
+                                  :data
+                                  [{:end 55.018, :anim "talk", :start 53.527}
+                                   {:end 57.076, :anim "talk", :start 55.525}
+                                   {:end 58.388, :anim "talk", :start 57.404}
+                                   {:end 61.833, :anim "talk", :start 59.581}
+                                   {:end 64.412, :anim "talk", :start 61.698}],
+                                  :phrase-text "This is what the oooooo sound looks like. oooooo. Let’s sing it -  Mat, mat, M-M-Mmm!!"
+                                  :phrase-text-translated "El sonido oooooo se escucha asi. Ooooo. Vamos a cantarlo- Oso, Oso, o-o-O!!"}
+                                 {:id "stop-highlight", :type "action"}
+                                 ],
+                                :description "Initial action"},
+            :move-to-current-card-copy-1
+                               {:type "transition",
+                                :from-var-object
+                                [{:offset 170,
+                                  :var-name "current-letter",
+                                  :action-property "to.x",
+                                  :object-property "x",
+                                  :object-name-template "card-%"}
+                                 {:offset 180,
+                                  :var-name "current-letter",
+                                  :action-property "to.y",
+                                  :object-property "y",
+                                  :object-name-template "card-%"}],
+                                :to {:loop false, :duration 2},
+                                :transition-id "mari"},
+            :move-to-current-card-copy-2
+                               {:type "transition",
+                                :from-var-object
+                                [{:offset 170,
+                                  :var-name "current-letter",
+                                  :action-property "to.x",
+                                  :object-property "x",
+                                  :object-name-template "card-%"}
+                                 {:offset 180,
+                                  :var-name "current-letter",
+                                  :action-property "to.y",
+                                  :object-property "y",
+                                  :object-name-template "card-%"}],
+                                :to {:loop false, :duration 2},
+                                :transition-id "mari"},
+            :move-to-current-card-copy-3
+                               {:type "transition",
+                                :from-var-object
+                                [{:offset 170,
+                                  :var-name "current-letter",
+                                  :action-property "to.x",
+                                  :object-property "x",
+                                  :object-name-template "card-%"}
+                                 {:offset 180,
+                                  :var-name "current-letter",
+                                  :action-property "to.y",
+                                  :object-property "y",
+                                  :object-name-template "card-%"}],
+                                :to {:loop false, :duration 2},
+                                :transition-id "mari"},
+            :renew-current-letter
+                               {:type "sequence-data",
+                                :data
+                                      [{:from "concepts-all",
+                                        :type "lesson-var-provider",
+                                        :on-end "check-round",
+                                        :from-var
+                                        [{:template "concept-round-%", :var-name "current-round", :action-property "provider-id"}
+                                         {:var-name "exclude-concepts", :action-property "exclude-property-values"}],
+                                        :shuffled true,
+                                        :variables ["current-concept"]}
+                                       {:type "set-variable",
+                                        :from-var [{:var-name "current-concept", :var-property "letter", :action-property "var-value"}],
+                                        :var-name "current-letter"}
+                                       {:id "vaca-voice-next", :type "action"}
+                                       {:id "chant-current-letter", :type "action"}
+                                       {:id "renew-current-letter", :type "action"}]},
+            :start-scene
+                               {:type "sequence",
+                                :data ["start-activity" "clear-instruction" "init-vaca-voice-next" "init-vars" "intro" "renew-current-letter"],
+                                :description "Initial action"},
+            :start-activity {:type "start-activity", :id "cinema"},
+            :start-highlight
+                               {:type "transition",
+                                :from-var
+                                      [{:template "card-%-filter", :var-name "current-letter", :action-property "transition-id"}
+                                       {:template "card-%-filter", :var-name "current-letter", :action-property "transition-tag"}],
+                                :from {:brightness -0.25},
+                                :to {:yoyo true, :easing "strong-ease-in", :duration 1, :brightness 0.25}},
+            :stop-activity {:type "stop-activity", :id "cinema"},
+            :stop-highlight
+                               {:type "stop-transition", :from-var [{:template "card-%-filter", :var-name "current-letter", :action-property "id"}]},
+            :vaca-voice-chanting-1
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                :start 43.545,
+                                :duration 2.297,
+                                :track 1,
+                                :offset 43.545,
+                                :target "senoravaca",
+                                :data
+                                [{:end 45.766, :anim "talk", :start 43.677}],
+                                :description "Al principio de la palabra"},
+            :vaca-voice-chanting-2
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                :start 53.541,
+                                :duration 0.762,
+                                :track 1,
+                                :offset 53.541,
+                                :target "senoravaca",
+                                :data
+                                [{:end 54.243, :anim "talk", :start 53.596}],
+                                :description "el sonido"},
+            :vaca-voice-chanting-3
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                :start 55.481,
+                                :duration 1.628,
+                                :track 1,
+                                :offset 55.481,
+                                :target "senoravaca",
+                                :data
+                                [{:end 57.109, :anim "talk", :start 55.481}],
+                                :description "se escucha asi"},
+            :vaca-voice-chanting-4
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                :start 59.566,
+                                :duration 1.261,
+                                :track 1,
+                                :offset 59.566,
+                                :target "senoravaca",
+                                :data [{:end 60.742, :anim "talk", :start 59.66}],
+                                :phrase-text "Let’s sing it"
+                                :phrase-text-translated "Vamos a cantarlo"},
+            :vaca-voice-finish
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+                                :start 0.897,
+                                :duration 8.719,
+                                :track 1,
+                                :offset 0.897,
+                                :target "senoravaca"
+                                :data
+                                [{:end 2.915, :anim "talk", :start 1.158}
+                                 {:end 6.191, :anim "talk", :start 3.4}
+                                 {:end 8.968, :anim "talk", :start 6.926}],
+                                :phrase :finish-activity
+                                :phrase-description "Finish activity"
+                                :phrase-text "Woohoo! Did you sing all the letters nice and loud? I’m impressed!"
+                                :phrase-text-translated "Wiiiiiiii! Lo cantaste conmigo asi de fuerte? Estoy impresionada!"},
+            :vaca-voice-next
+                               {:type "sequence",
+                                :data ["vaca-voice-next-1" "vaca-voice-next-2"]
+                                :phrase :next-photo
+                                :phrase-description "Next photo"},
+            :vaca-voice-next-1
+                               {:from ["vaca-voice-next-1" "vaca-voice-next-2" "vaca-voice-next-3" "vaca-voice-next-4"],
+                                :type "vars-var-provider",
+                                :shuffled true,
+                                :variables ["current-vaca-voice-next"]}
+            :vaca-voice-next-2
+                               {:type "action",
+                                :from-var [{:var-name "current-vaca-voice-next", :action-property "id"
+                                            :possible-values ["vaca-voice-next-picture-1"
+                                                              "vaca-voice-next-picture-2"
+                                                              "vaca-voice-next-picture-3"
+                                                              "vaca-voice-next-picture-4"]}]}
+            :vaca-voice-next-picture-1
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                :start 38.932,
+                                :duration 2.56
+                                :track 1,
+                                :offset 38.932,
+                                :target "senoravaca",
+                                :data [{:end 41.182, :anim "talk", :start 39.303}],
+                                :phrase-text "What’s the next picture?",
+                                :phrase-text-translated "Cual es la siguiente foto?"},
+            :vaca-voice-next-picture-2
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                :start 65.604,
+                                :duration 2.505,
+                                :track 1,
+                                :offset 65.604,
+                                :target "senoravaca",
+                                :data [{:end 66.409, :anim "talk", :start 65.664} {:end 68.05, :anim "talk", :start 66.708}],
+                                :phrase-text "And now the next picture!",
+                                :phrase-text-translated "Y ahora la proxima foto!"},
+            :vaca-voice-next-picture-3
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                :start 73.805,
+                                :duration 1.324,
+                                :track 1,
+                                :offset 73.805,
+                                :target "senoravaca",
+                                :data [{:end 74.878, :anim "talk", :start 73.984}],
+                                :phrase-text "What’s next?!",
+                                :phrase-text-translated "Que sigue?!"},
+            :vaca-voice-next-picture-4
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+                                :start 0.907,
+                                :duration 1.36,
+                                :track 1,
+                                :offset 0.907,
+                                :target "senoravaca",
+                                :data [{:end 2.189, :anim "talk", :start 0.97}],
+                                :phrase-text "Keep going!",
+                                :phrase-text-translated "Sigue! Sigue!"},
+            :vaca-voice-one-more-round
+                               {:type "animation-sequence",
+                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+                                :start 15.147,
+                                :duration 13.047,
+                                :track 1,
+                                :offset 15.147,
+                                :target "senoravaca",
+                                :data
+                                [{:end 18.641, :anim "talk", :start 15.221}
+                                 {:end 25.908, :anim "talk", :start 19.087}
+                                 {:end 28.027, :anim "talk", :start 26.428}],
+                                :phrase :one-more-round
+                                :phrase-description "One more round"
+                                :phrase-text
+                                "Fantastic!! You are so good! Do you think we can do all those pictures and sounds one more time?  Let’s do it!"
+                                :phrase-text-translated
+                                "Fantastico!! Lo estas haciendo muy bien! Crees que podremos hacer todas estas fotos y los sonidos una vez mas? Vamos a hacerlo!"}
+            },
+ :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "map", :autostart true},
  :audio
- {:mari "/raw/audio/l2/a1/L2_A1_Mari.m4a",
-  :vaca-1 "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a",
-  :vaca-2 "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-  :vaca-3 "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-  :vaca-6 "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-  :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"}}
+           {:mari "/raw/audio/l2/a1/L2_A1_Mari.m4a",
+            :vaca-1 "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a",
+            :vaca-2 "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+            :vaca-3 "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+            :vaca-6 "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+            :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"}}

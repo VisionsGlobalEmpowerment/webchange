@@ -84,17 +84,28 @@
                                             prev-actions)})
          (assoc {} action-name))))
 
+(defn- already-parsed?
+  [action-name action-data graph]
+  (and (contains? graph action-name)
+       (clojure.set/superset? (get-in graph [action-name :connections])
+                              (get action-data :connections))))
+
 (defmethod parse-actions-chain "action"
-  [actions-data {:keys [action-data action-name parent-action next-action sequence-path] :as params}]
-  (let [referred-actions (get-referred-actions action-data)]
-    (reduce
-      (fn [result referred-action]
-        (merge-actions result (parse-actions-chain actions-data
-                                                   {:action-name   referred-action
-                                                    :action-data   (get actions-data referred-action)
-                                                    :parent-action parent-action
-                                                    :next-action   next-action
-                                                    :prev-action   action-name
-                                                    :sequence-path sequence-path})))
-      (get-action-data-action params)
-      referred-actions)))
+  [actions-data {:keys [action-data action-name parent-action next-action sequence-path graph] :as params}]
+  (let [referred-actions (get-referred-actions action-data)
+        action-node (get-action-data-action params)]
+    (if-not (already-parsed? action-name (get action-node action-name) graph)
+      (reduce
+        (fn [result referred-action]
+          (merge-actions result (parse-actions-chain actions-data
+                                                     {:action-name   referred-action
+                                                      :action-data   (get actions-data referred-action)
+                                                      :parent-action parent-action
+                                                      :next-action   next-action
+                                                      :prev-action   action-name
+                                                      :sequence-path sequence-path
+                                                      :graph         result})))
+        (->> (get-action-data-action params)
+             (merge-actions graph))
+        referred-actions)
+      {})))

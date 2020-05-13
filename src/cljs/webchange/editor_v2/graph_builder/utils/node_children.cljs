@@ -24,6 +24,7 @@
                     (if (and (or (nil? prev-node)
                                  (= previous prev-node))
                              (or (nil? searched-sequence)
+                                 (nil? sequence)
                                  (= sequence node-name)
                                  (= sequence (last searched-sequence)))
                              (or (nil? used-map)

@@ -38,7 +38,8 @@
                          "library"
                          "book"
                          "hide-n-seek"
-                         "cycling"]]
+                         "cycling"
+                         "cinema"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id
@@ -46,7 +47,9 @@
                  :disabled (->> prepared-scenes
                                 (some #{scene-id})
                                 (not))}))
-         (sort-by :disabled))))
+         (sort-by (fn [{:keys [value]}]
+                    (let [index (.indexOf prepared-scenes value)]
+                      (if (= index -1) 999 index)))))))
 
 (defn data
   []

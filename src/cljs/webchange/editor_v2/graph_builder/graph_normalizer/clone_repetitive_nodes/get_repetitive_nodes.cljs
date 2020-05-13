@@ -120,6 +120,11 @@
                           ;; cycling
                           :wait-for-box-animations
                           :stay-on-line
+                          ;; cinema
+                          :start-highlight
+                          :stop-highlight
+                          :move-to-current-card
+                          :vaca-voice-chanting-4
                           ]]
     (select-keys extra-nodes-map actions-to-clone)))
 

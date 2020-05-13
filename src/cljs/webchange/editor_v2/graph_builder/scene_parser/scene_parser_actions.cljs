@@ -2,6 +2,7 @@
   (:require
     [webchange.editor-v2.graph-builder.utils.merge-actions :refer [merge-actions]]
     [webchange.editor-v2.graph-builder.scene-parser.actions-parser.interface :refer [parse-actions-chain]]
+    [webchange.editor-v2.graph-builder.scene-parser.actions-parser.parse-provider]
     [webchange.editor-v2.graph-builder.scene-parser.actions-parser.parse-sequence]
     [webchange.editor-v2.graph-builder.scene-parser.actions-parser.parse-test]
     [webchange.editor-v2.graph-builder.scene-parser.actions-parser.parse-action]

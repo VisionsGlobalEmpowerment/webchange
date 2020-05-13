@@ -1,7 +1,11 @@
 (ns webchange.editor-v2.graph-builder.scene-parser.actions-parser.parse-sequence
   (:require
-    [webchange.editor-v2.graph-builder.utils.node-data :refer [case-node-data?
-                                                               parallel-node-data?]]
+    [clojure.set :refer [superset?]]
+    [webchange.editor-v2.graph-builder.utils.node-data :refer [action-with-many-possible-ids?
+                                                               case-node-data?
+                                                               get-action-possible-ids
+                                                               parallel-node-data?
+                                                               provider-node-data?]]
     [webchange.editor-v2.graph-builder.scene-parser.actions-parser.interface :refer [parse-actions-chain]]
     [webchange.editor-v2.graph-builder.scene-parser.utils.create-graph-node :refer [create-graph-node
                                                                                     get-sequence-item-name]]
@@ -24,11 +28,13 @@
        (if (< 0 (count children))
          (let [node-data (get graph node-name)]
            (cond
+             (provider-node-data? node-data) node-name
              (case-node-data? node-data) (->> children
                                               (map (fn [child]
                                                      (get-last-children graph child (conj path node-name))))
                                               (flatten))
              (parallel-node-data? node-data) children
+             (action-with-many-possible-ids? node-data) (get-action-possible-ids node-data)
              :else (let [last-child (last children)]
                      (get-last-children graph last-child (conj path node-name)))))
          node-name)))))
@@ -60,7 +66,7 @@
          (assoc {} action-name))))
 
 (defmethod parse-actions-chain "parallel"
-  [actions-data {:keys [action-name action-data next-action sequence-path parent-action path] :as params}]
+  [actions-data {:keys [action-name action-data next-action sequence-path parent-action path graph] :as params}]
   (let [parsed-action (get-action-data-parallel params)
         next-actions (get-parallel-action-data-children action-name action-data)
         path (or path [action-name])]
@@ -73,7 +79,8 @@
                                                     :next-action   next-action
                                                     :prev-action   action-name
                                                     :path          (conj path index)
-                                                    :sequence-path (conj sequence-path action-name)})))
+                                                    :sequence-path (conj sequence-path action-name)
+                                                    :graph         result})))
       parsed-action
       next-actions)))
 
@@ -99,7 +106,7 @@
          (assoc {} action-name))))
 
 (defmethod parse-actions-chain "sequence"
-  [actions-data {:keys [action-name action-data prev-action next-action parent-action sequence-path] :as params}]
+  [actions-data {:keys [action-name action-data prev-action next-action parent-action sequence-path graph] :as params}]
   (let [parsed-action (get-action-data-sequence (assoc params
                                                   :prev-action
                                                   (get-last-children actions-data prev-action)))
@@ -122,9 +129,10 @@
                                                               :parent-action (if last-item? parent-action action-name)
                                                               :next-action   next-item-name
                                                               :prev-action   prev-action
-                                                              :sequence-path (conj sequence-path action-name)}))
+                                                              :sequence-path (conj sequence-path action-name)
+                                                              :graph         result}))
                   sequence-item-name]))
-             [parsed-action nil])
+             [(merge-actions graph parsed-action) nil])
            (first))
       parsed-action)))
 
@@ -148,7 +156,7 @@
          (assoc {} action-name))))
 
 (defmethod parse-actions-chain "sequence-data"
-  [actions-data {:keys [action-name action-data next-action parent-action sequence-path path] :as params}]
+  [actions-data {:keys [action-name action-data next-action parent-action sequence-path path graph] :as params}]
   (let [parsed-action (get-action-data-sequence-data params)
         sequence-data (->> action-data :data)
         next-actions (map-indexed (fn [index item] [index item]) sequence-data)]
@@ -171,7 +179,8 @@
                                                             :next-action   next-item-name
                                                             :prev-action   prev-action
                                                             :sequence-path (conj sequence-path action-name)
-                                                            :path          path}))
+                                                            :path          path
+                                                            :graph         result}))
                 sequence-item-name]))
-           [parsed-action nil])
+           [(merge-actions graph parsed-action) nil])
          (first))))

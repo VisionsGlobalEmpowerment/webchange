@@ -12,6 +12,33 @@
   [node-data]
   (= "case" (get-node-type node-data)))
 
+(defn provider-node-data?
+  [node-data]
+  (= "lesson-var-provider" (get-node-type node-data)))
+
+(defn action-node-data?
+  [node-data]
+  (= "action" (get-node-type node-data)))
+
+(defn- get-action-id-from-var
+  [node-data]
+  (some
+    (fn [{:keys [action-property] :as from-var}]
+      (and (= action-property "id")
+           from-var))
+    (get-in node-data [:data :from-var])))
+
+(defn action-with-many-possible-ids?
+  [node-data]
+  (when (action-node-data? node-data)
+    (let [from-var-id (get-action-id-from-var node-data)]
+      (and (-> from-var-id nil? not)
+           (contains? from-var-id :possible-values)))))
+
+(defn get-action-possible-ids
+  [node-data]
+  (->> node-data get-action-id-from-var :possible-values (map keyword)))
+
 (defn speech-node?
   [node-data]
   (let [node-type (get-node-type node-data)]

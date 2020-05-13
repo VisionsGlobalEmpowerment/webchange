@@ -29,7 +29,7 @@
          (assoc {} action-name))))
 
 (defn parse-case-action-chain
-  [actions-data {:keys [action-name action-data next-action parent-action sequence-path path] :as params}]
+  [actions-data {:keys [action-name action-data next-action parent-action sequence-path path graph] :as params}]
   (let [action-path (or path [action-name])
         options (get-case-options action-name action-data)]
     (reduce
@@ -41,8 +41,9 @@
                                                     :next-action   next-action
                                                     :prev-action   action-name
                                                     :sequence-path sequence-path
-                                                    :path          (concat action-path [:options option-name])})))
-      (get-case-action-data params action-path)
+                                                    :path          (concat action-path [:options option-name])
+                                                    :graph         result})))
+      (merge-actions graph (get-case-action-data params action-path))
       options)))
 
 (defmethod parse-actions-chain "case"
