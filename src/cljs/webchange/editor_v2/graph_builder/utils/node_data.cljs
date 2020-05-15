@@ -20,6 +20,13 @@
   [node-data]
   (= "action" (get-node-type node-data)))
 
+(defn test-node-data?
+  [node-data]
+  (some #{(get-node-type node-data)} ["test-var-scalar"
+                                      "test-transitions-collide"
+                                      "test-var-list"
+                                      "test-value"]))
+
 (defn- get-action-id-from-var
   [node-data]
   (some
