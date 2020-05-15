@@ -25,6 +25,18 @@
                                   :entity      :action
                                   :children    []
                                   :connections #{}}
+           :box1                 {:path        [:box1]
+                                  :entity      :object
+                                  :children    []
+                                  :connections #{{:previous :root
+                                                  :name     "click"
+                                                  :handler  :mari-says-correct}
+                                                 {:previous :root
+                                                  :name     "click"
+                                                  :handler  :voice-high-var}
+                                                 {:previous :root
+                                                  :name     "click"
+                                                  :handler  :mari-says-wrong}}}
            :box2                 {:path        [:box2]
                                   :entity      :object
                                   :children    []
@@ -36,4 +48,16 @@
                                                   :handler  :mari-says-wrong}
                                                  {:previous :root
                                                   :name     "click"
-                                                  :handler  :voice-high-var}}}})
+                                                  :handler  :voice-high-var}}}
+           :box3                 {:path        [:box3]
+                                  :entity      :object
+                                  :children    []
+                                  :connections #{{:previous :root
+                                                  :name     "click"
+                                                  :handler  :mari-says-correct}
+                                                 {:previous :root
+                                                  :name     "click"
+                                                  :handler  :voice-high-var}
+                                                 {:previous :root
+                                                  :name     "click"
+                                                  :handler  :mari-says-wrong}}}})

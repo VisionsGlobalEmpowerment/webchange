@@ -5,7 +5,8 @@
                                                                case-node-data?
                                                                get-action-possible-ids
                                                                parallel-node-data?
-                                                               provider-node-data?]]
+                                                               provider-node-data?
+                                                               test-node-data?]]
     [webchange.editor-v2.graph-builder.scene-parser.actions-parser.interface :refer [parse-actions-chain]]
     [webchange.editor-v2.graph-builder.scene-parser.utils.create-graph-node :refer [create-graph-node
                                                                                     get-sequence-item-name]]
@@ -29,10 +30,11 @@
          (let [node-data (get graph node-name)]
            (cond
              (provider-node-data? node-data) node-name
-             (case-node-data? node-data) (->> children
-                                              (map (fn [child]
-                                                     (get-last-children graph child (conj path node-name))))
-                                              (flatten))
+             (or (test-node-data? node-data)
+                 (case-node-data? node-data)) (->> children
+                                                   (map (fn [child]
+                                                          (get-last-children graph child (conj path node-name))))
+                                                   (flatten))
              (parallel-node-data? node-data) children
              (action-with-many-possible-ids? node-data) (get-action-possible-ids node-data)
              :else (let [last-child (last children)]

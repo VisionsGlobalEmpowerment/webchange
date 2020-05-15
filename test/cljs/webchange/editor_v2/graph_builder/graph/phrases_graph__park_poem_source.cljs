@@ -1,4 +1,6 @@
-{:assets
+(ns webchange.editor-v2.graph-builder.graph.phrases-graph--park-poem-source)
+
+(def data {:assets
  [{:url "/raw/img/park/sandbox/background.jpg", :size 10, :type "image"}
   {:url "/raw/img/park/poem/i1.png", :type "image"}
   {:url "/raw/img/park/poem/i2.png", :type "image"}
@@ -469,3 +471,4 @@
  :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "park", :autostart true},
  :audio {:mari "/raw/audio/l2/a3/L2_A3_Mari.m4a"}}
+)
