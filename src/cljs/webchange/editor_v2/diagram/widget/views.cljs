@@ -28,7 +28,8 @@
 
 (defn update-graph
   [engine nodes old-graph new-graph]
-  (let [changes-list (get-graph-changes old-graph new-graph)]
+  (let [changes-list (->> (get-graph-changes old-graph new-graph)
+                          (filter #(= (:type %) :update)))]
     (doseq [{:keys [type node data]} changes-list]
       (case type
         :update (.updateProps (get nodes node) (assoc data :name node))))

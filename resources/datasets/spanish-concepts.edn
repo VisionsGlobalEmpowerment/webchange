@@ -911,33 +911,27 @@
      "Really long description for this action to test label"},
     :vaca-chanting-song
     {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 22.037,
-       :duration 3.593}
-      {:data
-       [{:end 23.021, :anim "talk", :start 22.201}
-        {:end 24.065, :anim "talk", :start 23.26}
-        {:end 25.511, :anim "talk", :start 24.423}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 22.037,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Ardilla! Ardilla! a-a-A!"},
+     [{:end 23.021, :anim "talk", :start 22.201}
+      {:end 24.065, :anim "talk", :start 23.26}
+      {:end 25.511, :anim "talk", :start 24.423}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :track 1,
+     :offset 22.037,
+     :target "senoravaca"
+     :start 22.037,
+     :duration 3.593
+     :phrase-text "Ardilla! Ardilla! a-a-A!"},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 22.007,
-       :duration 1.208}
-      {:data [{:end 23.066, :anim "talk", :start 22.201}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 22.007,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Ardilla"},
+    {:data [{:end 23.066, :anim "talk", :start 22.201}],
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :track 1,
+     :offset 22.007,
+     :target "senoravaca",
+     :start 22.007,
+     :duration 1.208
+     :type "animation-sequence",
+     :phrase-text "Ardilla"},
     :word-1-skin "bee",
     :word-2-skin "tree",
     :word-3-skin "airplane",
@@ -1479,34 +1473,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 33.548,
-       :duration 3.37}
-      {:data
-       [{:end 34.125, :anim "talk", :start 33.65}
-        {:end 35.109, :anim "talk", :start 34.6}
-        {:end 36.805, :anim "talk", :start 35.685}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 33.548,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Bebe, bebe, b-b-b!"},
+    {:offset 33.548,
+     :phrase-text "Bebe, bebe, b-b-b!",
+     :start 33.548,
+     :type "animation-sequence",
+     :duration 3.37,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 34.125, :anim "talk", :start 33.65}
+      {:end 35.109, :anim "talk", :start 34.6}
+      {:end 36.805, :anim "talk", :start 35.685}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 33.593,
-       :duration 0.633}
-      {:data [{:end 34.125, :anim "talk", :start 33.65}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 33.593,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Bebe"},
+    {:offset 33.593,
+     :phrase-text "Bebe",
+     :start 33.593,
+     :type "animation-sequence",
+     :duration 0.633,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 34.125, :anim "talk", :start 33.65}]},
     :word-1-skin "bicycle",
     :word-2-skin "boat",
     :word-3-skin "whale",
@@ -1991,34 +1979,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 17.277,
-       :duration 3.37}
-      {:data
-       [{:end 18.035, :anim "talk", :start 17.356}
-        {:end 18.951, :anim "talk", :start 18.264}
-        {:end 20.522, :anim "talk", :start 19.46}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 17.277,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Casa, casa, c-c-c!"},
+    {:offset 17.277,
+     :phrase-text "Casa, casa, c-c-c!",
+     :start 17.277,
+     :type "animation-sequence",
+     :duration 3.37,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 18.035, :anim "talk", :start 17.356}
+      {:end 18.951, :anim "talk", :start 18.264}
+      {:end 20.522, :anim "talk", :start 19.46}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 18.204,
-       :duration 0.859}
-      {:data [{:end 18.951, :anim "talk", :start 18.284}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 18.204,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Casa"},
+    {:offset 18.204,
+     :phrase-text "Casa",
+     :start 18.204,
+     :type "animation-sequence",
+     :duration 0.859,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 18.951, :anim "talk", :start 18.284}]},
     :word-1-skin "bed",
     :word-2-skin "car",
     :word-3-skin "candle",
@@ -2969,34 +2951,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 5.429,
-       :duration 4.072}
-      {:data
-       [{:end 6.431, :anim "talk", :start 5.502}
-        {:end 7.611, :anim "talk", :start 6.651}
-        {:end 9.417, :anim "talk", :start 8.175}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 5.429,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Chocolate, chocolate, ch-ch-ch!"},
+    {:offset 5.429,
+     :phrase-text "Chocolate, chocolate, ch-ch-ch!",
+     :start 5.429,
+     :type "animation-sequence",
+     :duration 4.072,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 6.431, :anim "talk", :start 5.502}
+      {:end 7.611, :anim "talk", :start 6.651}
+      {:end 9.417, :anim "talk", :start 8.175}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 6.588,
-       :duration 1.128}
-      {:data [{:end 7.611, :anim "talk", :start 6.651}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 6.588,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Chocolate"},
+    {:offset 6.588,
+     :phrase-text "Chocolate",
+     :start 6.588,
+     :type "animation-sequence",
+     :duration 1.128,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 7.611, :anim "talk", :start 6.651}]},
     :word-1-skin "girl",
     :word-2-skin "boy",
     :word-3-skin "sausage",
@@ -3447,34 +3423,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 8.56,
-       :duration 3.426}
-      {:data
-       [{:end 9.555, :anim "talk", :start 8.616}
-        {:end 10.335, :anim "talk", :start 9.588}
-        {:end 11.872, :anim "talk", :start 10.719}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 8.56,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Diamante, diamante, d-d-d!"},
+    {:offset 8.56,
+     :phrase-text "Diamante, diamante, d-d-d!",
+     :start 8.56,
+     :type "animation-sequence",
+     :duration 3.426,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 9.555, :anim "talk", :start 8.616}
+      {:end 10.335, :anim "talk", :start 9.588}
+      {:end 11.872, :anim "talk", :start 10.719}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 9.532,
-       :duration 0.882}
-      {:data [{:end 10.335, :anim "talk", :start 9.555}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 9.532,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Diamante"},
+    {:offset 9.532,
+     :phrase-text "Diamante",
+     :start 9.532,
+     :type "animation-sequence",
+     :duration 0.882,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 10.335, :anim "talk", :start 9.555}]},
     :word-1-skin "finger",
     :word-2-skin "dragon",
     :word-3-skin "teeth",
@@ -3965,34 +3935,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 82.304,
-       :duration 5.219}
-      {:data
-       [{:end 83.496, :anim "talk", :start 82.304}
-        {:end 86.21, :anim "talk", :start 84.182}
-        {:end 87.522, :anim "talk", :start 86.359}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 82.304,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Elefante, elefante, e-e-e!!"},
+    {:offset 82.304,
+     :phrase-text "Elefante, elefante, e-e-e!!",
+     :start 82.304,
+     :type "animation-sequence",
+     :duration 5.219,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 83.496, :anim "talk", :start 82.304}
+      {:end 86.21, :anim "talk", :start 84.182}
+      {:end 87.522, :anim "talk", :start 86.359}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 82.229,
-       :duration 1.342}
-      {:data [{:end 83.496, :anim "talk", :start 82.304}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 82.229,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Elefante"},
+    {:offset 82.229,
+     :phrase-text "Elefante",
+     :start 82.229,
+     :type "animation-sequence",
+     :duration 1.342,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 83.496, :anim "talk", :start 82.304}]},
     :word-1-skin "salad",
     :word-2-skin "building",
     :word-3-skin "star",
@@ -4474,34 +4438,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 30.02,
-       :duration 3.053}
-      {:data
-       [{:end 30.427, :anim "talk", :start 30.133}
-        {:end 31.411, :anim "talk", :start 31.038}
-        {:end 32.949, :anim "talk", :start 31.92}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 30.02,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Flor, flor, f-f-f!"},
+    {:offset 30.02,
+     :phrase-text "Flor, flor, f-f-f!",
+     :start 30.02,
+     :type "animation-sequence",
+     :duration 3.053,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 30.427, :anim "talk", :start 30.133}
+      {:end 31.411, :anim "talk", :start 31.038}
+      {:end 32.949, :anim "talk", :start 31.92}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 30.936,
-       :duration 0.577}
-      {:data [{:end 31.411, :anim "talk", :start 31.038}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 30.936,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Flor"},
+    {:offset 30.936,
+     :phrase-text "Flor",
+     :start 30.936,
+     :type "animation-sequence",
+     :duration 0.577,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 31.411, :anim "talk", :start 31.038}]},
     :word-1-skin "flute",
     :word-2-skin "strawberry",
     :word-3-skin "fruits",
@@ -5012,34 +4970,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 41.712,
-       :duration 3.109}
-      {:data
-       [{:end 42.707, :anim "talk", :start 41.825}
-        {:end 43.363, :anim "talk", :start 42.73}
-        {:end 44.731, :anim "talk", :start 43.612}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 37.37,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Gato, gato, g-g-g!"},
+    {:offset 37.37,
+     :phrase-text "Gato, gato, g-g-g!",
+     :start 41.712,
+     :type "animation-sequence",
+     :duration 3.109,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 42.707, :anim "talk", :start 41.825}
+      {:end 43.363, :anim "talk", :start 42.73}
+      {:end 44.731, :anim "talk", :start 43.612}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 42.707,
-       :duration 0.712}
-      {:data [{:end 43.363, :anim "talk", :start 42.73}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 42.707,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Gato"},
+    {:offset 42.707,
+     :phrase-text "Gato",
+     :start 42.707,
+     :type "animation-sequence",
+     :duration 0.712,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 43.363, :anim "talk", :start 42.73}]},
     :word-1-skin "guitar",
     :word-2-skin "earth",
     :word-3-skin "chicken",
@@ -6055,33 +6007,27 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 24.911,
-       :duration 1.827}
-      {:data
-       [{:end 25.747, :anim "talk", :start 24.984}
-        {:end 26.634, :anim "talk", :start 25.935}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 24.911,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Hoja, hoja!, h-h-h!"},
+    {:offset 24.911,
+     :phrase-text "Hoja, hoja!, h-h-h!",
+     :start 24.911,
+     :type "animation-sequence",
+     :duration 1.827,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 25.747, :anim "talk", :start 24.984}
+      {:end 26.634, :anim "talk", :start 25.935}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 25.872,
-       :duration 0.856}
-      {:data [{:end 26.634, :anim "talk", :start 25.935}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 25.872,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Hoja"},
+    {:offset 25.872,
+     :phrase-text "Hoja",
+     :start 25.872,
+     :type "animation-sequence",
+     :duration 0.856,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 26.634, :anim "talk", :start 25.935}]},
     :word-1-skin "grass",
     :word-2-skin "ice cream",
     :word-3-skin "ant",
@@ -6798,34 +6744,28 @@
     :skin "magnet",
     :swings-dialog "dialog-incendio",
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 69.004,
-       :duration 3.549}
-      {:data
-       [{:end 69.749, :anim "talk", :start 69.063}
-        {:end 70.793, :anim "talk", :start 69.988}
-        {:end 72.523, :anim "talk", :start 71.211}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 69.004,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Iman, Iman i-i-I!"},
+    {:offset 69.004,
+     :phrase-text "Iman, Iman i-i-I!",
+     :start 69.004,
+     :type "animation-sequence",
+     :duration 3.549,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 69.749, :anim "talk", :start 69.063}
+      {:end 70.793, :anim "talk", :start 69.988}
+      {:end 72.523, :anim "talk", :start 71.211}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 68.941,
-       :duration 0.847}
-      {:data [{:end 69.749, :anim "talk", :start 69.063}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 68.941,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Iman"},
+    {:offset 68.941,
+     :phrase-text "Iman",
+     :start 68.941,
+     :type "animation-sequence",
+     :duration 0.847,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 69.749, :anim "talk", :start 69.063}]},
     :word-1-skin "iguana",
     :word-2-skin "fire",
     :word-3-skin "insect",
@@ -7317,18 +7257,15 @@
      :type "parallel",
      :description "Jardín, jardín, j-j-j!"},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 37.37,
-       :duration 0.758}
-      {:data [{:end 38.037, :anim "talk", :start 37.46}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 37.37,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Jardín"},
+    {:offset 37.37,
+     :phrase-text "Jardín",
+     :start 37.37,
+     :type "animation-sequence",
+     :duration 0.758,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 38.037, :anim "talk", :start 37.46}]},
     :word-1-skin "juice",
     :word-2-skin "toys",
     :word-3-skin "jamon",
@@ -7793,34 +7730,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 38.683,
-       :duration 3.686}
-      {:data
-       [{:end 39.758, :anim "talk", :start 38.776}
-        {:end 40.739, :anim "talk", :start 39.821}
-        {:end 42.18, :anim "talk", :start 41.063}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 38.683,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Kimono, kimono, k-k-k!"},
+    {:offset 38.683,
+     :phrase-text "Kimono, kimono, k-k-k!",
+     :start 38.683,
+     :type "animation-sequence",
+     :duration 3.686,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 39.758, :anim "talk", :start 38.776}
+      {:end 40.739, :anim "talk", :start 39.821}
+      {:end 42.18, :anim "talk", :start 41.063}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 39.747,
-       :duration 1.086}
-      {:data [{:end 40.739, :anim "talk", :start 39.821}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 39.747,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Kimono"},
+    {:offset 39.747,
+     :phrase-text "Kimono",
+     :start 39.747,
+     :type "animation-sequence",
+     :duration 1.086,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 40.739, :anim "talk", :start 39.821}]},
     :word-1-skin "kayak",
     :word-2-skin "kiwi",
     :word-3-skin "ketchup",
@@ -8293,34 +8224,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-       :type "audio",
-       :start 11.221,
-       :duration 3.414}
-      {:data
-       [{:end 11.865, :anim "talk", :start 11.306}
-        {:end 12.786, :anim "talk", :start 12.113}
-        {:end 14.571, :anim "talk", :start 13.396}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 11.221,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "León, León, l-l-l"},
+    {:offset 11.221,
+     :phrase-text "León, León, l-l-l",
+     :start 11.221,
+     :type "animation-sequence",
+     :duration 3.414,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 11.865, :anim "talk", :start 11.306}
+      {:end 12.786, :anim "talk", :start 12.113}
+      {:end 14.571, :anim "talk", :start 13.396}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-       :type "audio",
-       :start 11.185,
-       :duration 0.772}
-      {:data [{:end 11.851, :anim "talk", :start 11.313}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 11.185,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "León"},
+    {:offset 11.185,
+     :phrase-text "León",
+     :start 11.185,
+     :type "animation-sequence",
+     :duration 0.772,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 11.851, :anim "talk", :start 11.313}]},
     :word-1-skin "lemon",
     :word-2-skin "moon",
     :word-3-skin "pencil",
@@ -8778,34 +8703,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 20.422,
-       :duration 3.56}
-      {:data
-       [{:end 21.602, :anim "talk", :start 20.526}
-        {:end 22.343, :anim "talk", :start 21.623}
-        {:end 23.867, :anim "talk", :start 22.74}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 20.422,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Llave, llave, ll-ll-ll!"},
+    {:offset 20.422,
+     :phrase-text "Llave, llave, ll-ll-ll!",
+     :start 20.422,
+     :type "animation-sequence",
+     :duration 3.56,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 21.602, :anim "talk", :start 20.526}
+      {:end 22.343, :anim "talk", :start 21.623}
+      {:end 23.867, :anim "talk", :start 22.74}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 21.602,
-       :duration 0.835}
-      {:data [{:end 22.343, :anim "talk", :start 21.623}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 21.602,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Llave"},
+    {:offset 21.602,
+     :phrase-text "Llave",
+     :start 21.602,
+     :type "animation-sequence",
+     :duration 0.835,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 22.343, :anim "talk", :start 21.623}]},
     :word-1-skin "call",
     :word-2-skin "rain",
     :word-3-skin "lama",
@@ -9290,34 +9209,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 88.387,
-       :duration 3.4}
-      {:data
-       [{:end 89.341, :anim "talk", :start 88.536}
-        {:end 90.146, :anim "talk", :start 89.371}
-        {:end 91.697, :anim "talk", :start 90.385}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 88.387,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Mano, mano, m-m-m,!!"},
+    {:offset 88.387,
+     :phrase-text "Mano, mano, m-m-m,!!",
+     :start 88.387,
+     :type "animation-sequence",
+     :duration 3.4,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 89.341, :anim "talk", :start 88.536}
+      {:end 90.146, :anim "talk", :start 89.371}
+      {:end 91.697, :anim "talk", :start 90.385}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 88.476,
-       :duration 0.895}
-      {:data [{:end 89.341, :anim "talk", :start 88.536}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 88.476,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Mano"},
+    {:offset 88.476,
+     :phrase-text "Mano",
+     :start 88.476,
+     :type "animation-sequence",
+     :duration 0.895,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 89.341, :anim "talk", :start 88.536}]},
     :word-1-skin "mama",
     :word-2-skin "monkey",
     :word-3-skin "apple",
@@ -9791,34 +9704,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 25.758,
-       :duration 3.381}
-      {:data
-       [{:end 26.662, :anim "talk", :start 25.871}
-        {:end 27.499, :anim "talk", :start 26.764}
-        {:end 29.059, :anim "talk", :start 27.94}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 25.758,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Niño, niño, n-n-n!"},
+    {:offset 25.758,
+     :phrase-text "Niño, niño, n-n-n!",
+     :start 25.758,
+     :type "animation-sequence",
+     :duration 3.381,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 26.662, :anim "talk", :start 25.871}
+      {:end 27.499, :anim "talk", :start 26.764}
+      {:end 29.059, :anim "talk", :start 27.94}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 26.764,
-       :duration 0.859}
-      {:data [{:end 27.499, :anim "talk", :start 26.764}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 26.764,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Niño"},
+    {:offset 26.764,
+     :phrase-text "Niño",
+     :start 26.764,
+     :type "animation-sequence",
+     :duration 0.859,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 27.499, :anim "talk", :start 26.764}]},
     :word-1-skin "cloud",
     :word-2-skin "nest",
     :word-3-skin "black",
@@ -10382,34 +10289,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 61.504,
-       :duration 2.997}
-      {:data
-       [{:end 62.324, :anim "talk", :start 61.668}
-        {:end 63.055, :anim "talk", :start 62.384}
-        {:end 64.322, :anim "talk", :start 63.249}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 61.504,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description " Oso, Oso, o-o-O"},
+    {:offset 61.504,
+     :phrase-text " Oso, Oso, o-o-O",
+     :start 61.504,
+     :type "animation-sequence",
+     :duration 2.997,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 62.324, :anim "talk", :start 61.668}
+      {:end 63.055, :anim "talk", :start 62.384}
+      {:end 64.322, :anim "talk", :start 63.249}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 41.793,
-       :duration 0.969}
-      {:data [{:end 42.658, :anim "talk", :start 41.897}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 41.793,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Oso"},
+    {:offset 41.793,
+     :phrase-text "Oso",
+     :start 41.793,
+     :type "animation-sequence",
+     :duration 0.969,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 42.658, :anim "talk", :start 41.897}]},
     :word-1-skin "8",
     :word-2-skin "ear",
     :word-3-skin "sheep",
@@ -10903,34 +10804,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-       :type "audio",
-       :start 7.077,
-       :duration 3.124}
-      {:data
-       [{:end 7.913, :anim "talk", :start 7.14}
-        {:end 8.834, :anim "talk", :start 8.047}
-        {:end 10.087, :anim "talk", :start 9.124}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 7.077,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Pelota, pelota, p-p-p"},
+    {:offset 7.077,
+     :phrase-text "Pelota, pelota, p-p-p",
+     :start 7.077,
+     :type "animation-sequence",
+     :duration 3.124,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 7.913, :anim "talk", :start 7.14}
+      {:end 8.834, :anim "talk", :start 8.047}
+      {:end 10.087, :anim "talk", :start 9.124}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-       :type "audio",
-       :start 7.077,
-       :duration 0.9}
-      {:data [{:end 7.913, :anim "talk", :start 7.14}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 7.077,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Pelota"},
+    {:offset 7.077,
+     :phrase-text "Pelota",
+     :start 7.077,
+     :type "animation-sequence",
+     :duration 0.9,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 7.913, :anim "talk", :start 7.14}]},
     :word-1-skin "factory",
     :word-2-skin "duck",
     :word-3-skin "potatoes",
@@ -11391,34 +11286,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 29.202,
-       :duration 3.425}
-      {:data
-       [{:end 30.173, :anim "talk", :start 29.296}
-        {:end 30.936, :anim "talk", :start 30.299}
-        {:end 32.46, :anim "talk", :start 31.332}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 29.202,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Queso, queso, qu-qu-qu!"},
+    {:offset 29.202,
+     :phrase-text "Queso, queso, qu-qu-qu!",
+     :start 29.202,
+     :type "animation-sequence",
+     :duration 3.425,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 30.173, :anim "talk", :start 29.296}
+      {:end 30.936, :anim "talk", :start 30.299}
+      {:end 32.46, :anim "talk", :start 31.332}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 30.215,
-       :duration 0.814}
-      {:data [{:end 30.936, :anim "talk", :start 30.299}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 30.215,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Queso"},
+    {:offset 30.215,
+     :phrase-text "Queso",
+     :start 30.215,
+     :type "animation-sequence",
+     :duration 0.814,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 30.936, :anim "talk", :start 30.299}]},
     :word-1-skin "quesadilla",
     :word-2-skin "five",
     :word-3-skin "fifteen",
@@ -11901,34 +11790,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 12.585,
-       :duration 3.076}
-      {:data
-       [{:end 13.512, :anim "talk", :start 12.664}
-        {:end 14.247, :anim "talk", :start 13.636}
-        {:end 15.593, :anim "talk", :start 14.484}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 12.585,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Rana, rana, r-r-r!"},
+    {:offset 12.585,
+     :phrase-text "Rana, rana, r-r-r!",
+     :start 12.585,
+     :type "animation-sequence",
+     :duration 3.076,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 13.512, :anim "talk", :start 12.664}
+      {:end 14.247, :anim "talk", :start 13.636}
+      {:end 15.593, :anim "talk", :start 14.484}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 13.535,
-       :duration 0.791}
-      {:data [{:end 14.236, :anim "talk", :start 13.614}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 13.535,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Rana"},
+    {:offset 13.535,
+     :phrase-text "Rana",
+     :start 13.535,
+     :type "animation-sequence",
+     :duration 0.791,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 14.236, :anim "talk", :start 13.614}]},
     :word-1-skin "rock",
     :word-2-skin "rose",
     :word-3-skin "mouse",
@@ -12390,33 +12273,27 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-       :type "audio",
-       :start 2.819,
-       :duration 3.485}
-      {:data
-       [{:end 4.675, :anim "talk", :start 2.876}
-        {:end 6.22, :anim "talk", :start 4.98}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 2.819,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Serpiente, Serpiente, s-s-s"},
+    {:offset 2.819,
+     :phrase-text "Serpiente, Serpiente, s-s-s",
+     :start 2.819,
+     :type "animation-sequence",
+     :duration 3.485,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 4.675, :anim "talk", :start 2.876}
+      {:end 6.22, :anim "talk", :start 4.98}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-       :type "audio",
-       :start 3.878,
-       :duration 0.871}
-      {:data [{:end 4.697, :anim "talk", :start 3.896}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 3.878,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Serpiente"},
+    {:offset 3.878,
+     :phrase-text "Serpiente",
+     :start 3.878,
+     :type "animation-sequence",
+     :duration 0.871,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 4.697, :anim "talk", :start 3.896}]},
     :word-1-skin "chair",
     :word-2-skin "sun",
     :word-3-skin "watermelon",
@@ -12909,34 +12786,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 4.681,
-       :duration 3.098}
-      {:data
-       [{:end 5.518, :anim "talk", :start 4.794}
-        {:end 6.332, :anim "talk", :start 5.608}
-        {:end 7.689, :anim "talk", :start 6.671}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 4.681,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Tomate, tomate, t-t-t!"},
+    {:offset 4.681,
+     :phrase-text "Tomate, tomate, t-t-t!",
+     :start 4.681,
+     :type "animation-sequence",
+     :duration 3.098,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 5.518, :anim "talk", :start 4.794}
+      {:end 6.332, :anim "talk", :start 5.608}
+      {:end 7.689, :anim "talk", :start 6.671}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 5.529,
-       :duration 0.916}
-      {:data [{:end 6.343, :anim "talk", :start 5.62}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 5.529,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Tomate"},
+    {:offset 5.529,
+     :phrase-text "Tomate",
+     :start 5.529,
+     :type "animation-sequence",
+     :duration 0.916,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 6.343, :anim "talk", :start 5.62}]},
     :word-1-skin "phone",
     :word-2-skin "turtle",
     :word-3-skin "train",
@@ -13438,18 +13309,15 @@
      :type "parallel",
      :description "Uvas, Uvas, u-u-u!!"},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 75.803,
-       :duration 1.118}
-      {:data [{:end 76.906, :anim "talk", :start 75.922}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 75.803,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Uvas"},
+    {:offset 75.803,
+     :phrase-text "Uvas",
+     :start 75.803,
+     :type "animation-sequence",
+     :duration 1.118,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 76.906, :anim "talk", :start 75.922}]},
     :word-1-skin "one",
     :word-2-skin "nail",
     :word-3-skin "unicorn",
@@ -13910,34 +13778,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 15.703,
-       :duration 3.957}
-      {:data
-       [{:end 16.496, :anim "talk", :start 15.765}
-        {:end 17.603, :anim "talk", :start 16.851}
-        {:end 19.566, :anim "talk", :start 18.313}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 15.703,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Violin, violin, v-v-v!"},
+    {:offset 15.703,
+     :phrase-text "Violin, violin, v-v-v!",
+     :start 15.703,
+     :type "animation-sequence",
+     :duration 3.957,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 16.496, :anim "talk", :start 15.765}
+      {:end 17.603, :anim "talk", :start 16.851}
+      {:end 19.566, :anim "talk", :start 18.313}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 16.736,
-       :duration 0.981}
-      {:data [{:end 17.603, :anim "talk", :start 16.851}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 16.736,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Violin"},
+    {:offset 16.736,
+     :phrase-text "Violin",
+     :start 16.736,
+     :type "animation-sequence",
+     :duration 0.981,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 17.603, :anim "talk", :start 16.851}]},
     :word-1-skin "cow",
     :word-2-skin "baby_cow",
     :word-3-skin "window",
@@ -14443,34 +14305,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-       :type "audio",
-       :start 1.541,
-       :duration 3.609}
-      {:data
-       [{:end 2.503, :anim "talk", :start 1.713}
-        {:end 3.254, :anim "talk", :start 2.832}
-        {:end 4.993, :anim "talk", :start 3.82}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 1.541,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Sitio Web, Web w-w-w!"},
+    {:offset 1.541,
+     :phrase-text "Sitio Web, Web w-w-w!",
+     :start 1.541,
+     :type "animation-sequence",
+     :duration 3.609,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 2.503, :anim "talk", :start 1.713}
+      {:end 3.254, :anim "talk", :start 2.832}
+      {:end 4.993, :anim "talk", :start 3.82}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-       :type "audio",
-       :start 2.727,
-       :duration 0.619}
-      {:data [{:end 3.254, :anim "talk", :start 2.832}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 2.727,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Web"},
+    {:offset 2.727,
+     :phrase-text "Web",
+     :start 2.727,
+     :type "animation-sequence",
+     :duration 0.619,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 3.254, :anim "talk", :start 2.832}]},
     :word-1-skin "deer",
     :word-2-skin "boy",
     :word-3-skin "girl",
@@ -14940,34 +14796,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-       :type "audio",
-       :start 10.025,
-       :duration 3.662}
-      {:data
-       [{:end 11.092, :anim "talk", :start 10.13}
-        {:end 12.067, :anim "talk", :start 11.158}
-        {:end 13.582, :anim "talk", :start 12.422}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 10.025,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Xilofono, xilofono, x-x-x,!"},
+    {:offset 10.025,
+     :phrase-text "Xilofono, xilofono, x-x-x,!",
+     :start 10.025,
+     :type "animation-sequence",
+     :duration 3.662,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 11.092, :anim "talk", :start 10.13}
+      {:end 12.067, :anim "talk", :start 11.158}
+      {:end 13.582, :anim "talk", :start 12.422}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-       :type "audio",
-       :start 11.079,
-       :duration 1.12}
-      {:data [{:end 12.067, :anim "talk", :start 11.158}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 11.079,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Xilofono"},
+    {:offset 11.079,
+     :phrase-text "Xilofono",
+     :start 11.079,
+     :type "animation-sequence",
+     :duration 1.12,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 12.067, :anim "talk", :start 11.158}]},
     :word-1-skin "saxophone",
     :word-2-skin "mexico",
     :word-3-skin "taxi",
@@ -15442,34 +15292,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-       :type "audio",
-       :start 5.757,
-       :duration 3.386}
-      {:data
-       [{:end 6.861, :anim "talk", :start 5.888}
-        {:end 7.496, :anim "talk", :start 6.863}
-        {:end 8.997, :anim "talk", :start 7.864}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 5.757,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Yoyo, yoyo, y-y-y!"},
+    {:offset 5.757,
+     :phrase-text "Yoyo, yoyo, y-y-y!",
+     :start 5.757,
+     :type "animation-sequence",
+     :duration 3.386,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 6.861, :anim "talk", :start 5.888}
+      {:end 7.496, :anim "talk", :start 6.863}
+      {:end 8.997, :anim "talk", :start 7.864}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-       :type "audio",
-       :start 6.863,
-       :duration 0.738}
-      {:data [{:end 7.496, :anim "talk", :start 6.863}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 6.863,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Yoyo"},
+    {:offset 6.863,
+     :phrase-text "Yoyo",
+     :start 6.863,
+     :type "animation-sequence",
+     :duration 0.738,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 7.496, :anim "talk", :start 6.863}]},
     :word-1-skin "yogurt",
     :word-2-skin "yak",
     :word-3-skin "yacht",
@@ -15966,34 +15810,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 33.483,
-       :duration 3.842}
-      {:data
-       [{:end 34.558, :anim "talk", :start 33.577}
-        {:end 35.592, :anim "talk", :start 34.569}
-        {:end 37.221, :anim "talk", :start 35.989}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 33.483,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Zapato, zapato, z-z-z!"},
+    {:offset 33.483,
+     :phrase-text "Zapato, zapato, z-z-z!",
+     :start 33.483,
+     :type "animation-sequence",
+     :duration 3.842,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 34.558, :anim "talk", :start 33.577}
+      {:end 35.592, :anim "talk", :start 34.569}
+      {:end 37.221, :anim "talk", :start 35.989}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 34.569,
-       :duration 1.117}
-      {:data [{:end 35.592, :anim "talk", :start 34.569}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 34.569,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Zapato"},
+    {:offset 34.569,
+     :phrase-text "Zapato",
+     :start 34.569,
+     :type "animation-sequence",
+     :duration 1.117,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 35.592, :anim "talk", :start 34.569}]},
     :word-1-skin "zebra",
     :word-2-skin "fox",
     :word-3-skin "carrot",
@@ -16484,34 +16322,28 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 10.399,
-       :duration 4.281}
-      {:data
-       [{:end 11.286, :anim "talk", :start 10.524}
-        {:end 12.675, :anim "talk", :start 11.819}
-        {:end 14.586, :anim "talk", :start 13.354}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 10.399,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Ñandu, ñandu, ñ-ñ-ñ!"},
+    {:offset 10.399,
+     :phrase-text "Ñandu, ñandu, ñ-ñ-ñ!",
+     :start 10.399,
+     :type "animation-sequence",
+     :duration 4.281,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data
+     [{:end 11.286, :anim "talk", :start 10.524}
+      {:end 12.675, :anim "talk", :start 11.819}
+      {:end 14.586, :anim "talk", :start 13.354}]},
     :vaca-chanting-word
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
-       :type "audio",
-       :start 11.725,
-       :duration 1.075}
-      {:data [{:end 12.675, :anim "talk", :start 11.819}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 11.725,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Ñandu"},
+    {:offset 11.725,
+     :phrase-text "Ñandu",
+     :start 11.725,
+     :type "animation-sequence",
+     :duration 1.075,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 12.675, :anim "talk", :start 11.819}]},
     :word-1-skin "yam",
     :word-2-skin "knot",
     :word-3-skin "gnochi",

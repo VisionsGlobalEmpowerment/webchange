@@ -1361,15 +1361,15 @@
 
 (deftest test-scene-parser--case
   (let [start-node-name :a
-        scene-data {:actions {:a {:type     "case"
-                                  :options  {:case-1 {:type "action" :id "b"}
-                                             :case-2 {:type "empty"}}}
+        scene-data {:actions {:a {:type    "case"
+                                  :options {:case-1 {:type "action" :id "b"}
+                                            :case-2 {:type "empty"}}}
                               :b {:type "empty"}}}]
     (let [actual-result (parse-data scene-data start-node-name)
           expected-result {:a        {:entity      :action
-                                      :data        {:type     "case"
-                                                    :options  {:case-1 {:type "action" :id "b"}
-                                                               :case-2 {:type "empty"}}}
+                                      :data        {:type    "case"
+                                                    :options {:case-1 {:type "action" :id "b"}
+                                                              :case-2 {:type "empty"}}}
                                       :path        [:a]
                                       :children    [:a-case-1 :a-case-2]
                                       :connections #{{:previous :root
@@ -1466,6 +1466,104 @@
                                                       :handler  :d
                                                       :sequence :x}
                                                      {:previous :a-case-2
+                                                      :name     "next"
+                                                      :handler  :d
+                                                      :sequence :x}}}
+                           :d        {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:d]
+                                      :children    []
+                                      :connections #{}}}]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-scene-parser--lesson-var-provider-with-action-name
+  (let [start-node-name :x
+        scene-data {:actions {:x {:type   "lesson-var-provider"
+                                  :on-end "a"}
+                              :a {:type "empty"}}}]
+    (let [actual-result (parse-data scene-data start-node-name)
+          expected-result {:x {:data        {:type   "lesson-var-provider"
+                                             :on-end "a"}
+                               :path        [:x]
+                               :entity      :action
+                               :children    [:a]
+                               :connections #{{:previous :root
+                                               :name     "on-end"
+                                               :handler  :a}}}
+                           :a {:data        {:type "empty"}
+                               :path        [:a]
+                               :entity      :action
+                               :children    []
+                               :connections #{}}}]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-scene-parser--lesson-var-provider-with-action-data
+  (let [start-node-name :x
+        scene-data {:actions {:x {:type   "lesson-var-provider"
+                                  :on-end {:type "empty"}}}}]
+    (let [actual-result (parse-data scene-data start-node-name)
+          expected-result {:x        {:data        {:type   "lesson-var-provider"
+                                                    :on-end {:type "empty"}}
+                                      :path        [:x]
+                                      :entity      :action
+                                      :children    [:x-on-end]
+                                      :connections #{{:previous :root
+                                                      :name     "on-end"
+                                                      :handler  :x-on-end}}}
+                           :x-on-end {:data        {:type "empty"}
+                                      :path        [:x :on-end]
+                                      :entity      :action
+                                      :children    []
+                                      :connections #{}}}]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-scene-parser--lesson-var-provider-in-sequence
+  (let [start-node-name :x
+        scene-data {:actions {:x {:type "sequence"
+                                  :data ["a" "c" "d"]}
+                              :a {:type   "lesson-var-provider"
+                                  :on-end "b"}
+                              :b {:type "empty"}
+                              :c {:type "empty"}
+                              :d {:type "empty"}}}]
+    (let [actual-result (parse-data scene-data start-node-name)
+          expected-result {:x        {:entity      :action
+                                      :data        {:type "sequence"
+                                                    :data ["a" "c" "d"]}
+                                      :path        [:x]
+                                      :children    [:a :c :d]
+                                      :connections #{{:previous :root
+                                                      :name     "next"
+                                                      :handler  :a
+                                                      :sequence :x}}}
+                           :a        {:entity      :action
+                                      :data        {:type   "lesson-var-provider"
+                                                    :on-end "b"}
+                                      :path        [:a]
+                                      :children    [:b]
+                                      :connections #{{:previous :x
+                                                      :name     "next"
+                                                      :handler  :c
+                                                      :sequence :x}
+                                                     {:previous :x
+                                                      :name     "on-end"
+                                                      :handler  :b}}}
+                           :b        {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:b]
+                                      :children    []
+                                      :connections #{}}
+                           :c        {:entity      :action
+                                      :data        {:type "empty"}
+                                      :path        [:c]
+                                      :children    []
+                                      :connections #{{:previous :a
                                                       :name     "next"
                                                       :handler  :d
                                                       :sequence :x}}}

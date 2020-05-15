@@ -35,7 +35,7 @@
        (assoc {} action-name)))
 
 (defn parse-test-action-chain
-  [actions-data {:keys [action-name action-data sequence-path path] :as params}]
+  [actions-data {:keys [action-name action-data sequence-path path graph] :as params}]
   (reduce
     (fn [result event-name]
       (if-not (nil? (get action-data event-name))
@@ -47,8 +47,8 @@
                                                         :parent-action nil
                                                         :next-action   nil
                                                         :prev-action   action-name
-                                                        :sequence-path sequence-path})))
-
+                                                        :sequence-path sequence-path
+                                                        :graph         result})))
           (let [next-node-name (get-test-handler-name action-name action-data event-name)
                 next-node-data (get action-data event-name)
                 path (conj (or path [action-name]) event-name)]
@@ -59,10 +59,11 @@
                                                         :next-action   nil
                                                         :prev-action   action-name
                                                         :sequence-path sequence-path
-                                                        :path          path}))))
-        result)
-      )
-    (get-test-action-data params)
+                                                        :path          path
+                                                        :graph         result}))))
+        result))
+    (->> (get-test-action-data params)
+         (merge-actions graph))
     [:success :fail]))
 
 ;; test-var-scalar
