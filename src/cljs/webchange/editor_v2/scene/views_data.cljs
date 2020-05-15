@@ -39,7 +39,8 @@
                          "book"
                          "hide-n-seek"
                          "cycling"
-                         "cinema"]]
+                         "cinema"
+                         "cinema-video"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id
