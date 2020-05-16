@@ -30,7 +30,9 @@
     [webchange.editor-v2.graph-builder.graph.phrases-graph--park-poem-source :as park-poem-source]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--park-poem-expected :as park-poem-expected]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--running-source :as running-source]
-    [webchange.editor-v2.graph-builder.graph.phrases-graph--running-expected :as running-expected]))
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--running-expected :as running-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--slide-source :as slide-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--slide-expected :as slide-expected]))
 
 (defn remove-actions-data
   [graph]
@@ -189,6 +191,17 @@
     (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
                             (remove-actions-data))
           expected-result running-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--slide
+  (let [scene-data slide-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result slide-expected/data]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
