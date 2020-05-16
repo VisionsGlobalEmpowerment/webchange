@@ -32,7 +32,19 @@
     [webchange.editor-v2.graph-builder.graph.phrases-graph--running-source :as running-source]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--running-expected :as running-expected]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--slide-source :as slide-source]
-    [webchange.editor-v2.graph-builder.graph.phrases-graph--slide-expected :as slide-expected]))
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--slide-expected :as slide-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-lesson-source :as writing-lesson-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-lesson-expected :as writing-lesson-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-practice-source :as writing-practice-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-practice-expected :as writing-practice-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--magic-hat-source :as magic-hat-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--magic-hat-expected :as magic-hat-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--cycling-letters-source :as cycling-letters-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--cycling-letters-expected :as cycling-letters-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-letters-source :as volleyball-letters-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-letters-expected :as volleyball-letters-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--pinata-source :as pinata-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--pinata-expected :as pinata-expected]))
 
 (defn remove-actions-data
   [graph]
@@ -202,6 +214,74 @@
     (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
                             (remove-actions-data))
           expected-result slide-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--writing-lesson
+  (let [scene-data writing-lesson-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result writing-lesson-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--writing-practice
+  (let [scene-data writing-practice-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result writing-practice-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+;; Temporary disabled
+;
+;(deftest test-get-diagram-graph--magic-hat
+;  (let [scene-data magic-hat-source/data
+;        diagram-mode :phrases
+;        params {:start-node nil}]
+;    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+;                            (remove-actions-data))
+;          expected-result magic-hat-expected/data]
+;      (when-not (= actual-result expected-result)
+;        (print-maps-comparison actual-result expected-result))
+;      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--cycling-letters
+  (let [scene-data cycling-letters-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result cycling-letters-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--volleyball-letters
+  (let [scene-data volleyball-letters-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result volleyball-letters-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--pinata
+  (let [scene-data pinata-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result pinata-expected/data]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))

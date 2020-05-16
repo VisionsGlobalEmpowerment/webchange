@@ -44,7 +44,13 @@
                          "letter-intro"
                          "park-poem"
                          "running"
-                         "slide"]]
+                         "slide"
+                         "writing-lesson"
+                         "writing-practice"
+                         "magic-hat"
+                         "cycling-letters"
+                         "volleyball-letters"
+                         "pinata"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id

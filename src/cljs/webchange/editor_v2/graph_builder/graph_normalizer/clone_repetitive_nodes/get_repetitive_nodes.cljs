@@ -125,6 +125,8 @@
                           :stop-highlight
                           :move-to-current-card
                           :vaca-voice-chanting-4
+                          ;; pinata
+                          :empty
                           ]]
     (select-keys extra-nodes-map actions-to-clone)))
 

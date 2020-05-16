@@ -1,4 +1,6 @@
-{:assets
+(ns webchange.editor-v2.graph-builder.graph.phrases-graph--writing-practice-source)
+
+(def data {:assets
  [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
   {:url "/raw/img/ui/back_button_01.png", :type "image"}
   {:url "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :alias "mari voice"}
@@ -338,4 +340,4 @@
     :from-var [{:template "writing-practice-stage-2-pt-%", :var-name "current-page", :action-property "attr-value"}],
     :attr-name "var-name"}}},
  :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata {:prev "library", :autostart true}}
+ :metadata {:prev "library", :autostart true}})
