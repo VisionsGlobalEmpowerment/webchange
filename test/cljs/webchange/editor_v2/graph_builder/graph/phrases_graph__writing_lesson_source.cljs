@@ -1,4 +1,6 @@
-{:assets
+(ns webchange.editor-v2.graph-builder.graph.phrases-graph--writing-lesson-source)
+
+(def data {:assets
  [{:url "/raw/img/library/room2/background.jpg", :type "image"}
   {:url "/raw/img/library/room2/canvas.png", :type "image"}
   {:url "/raw/audio/l2/a6/mari.mp4", :type "audio", :alias "mari voice"}
@@ -178,6 +180,7 @@
    :type "sequence-data",
    :data
    [{:data
+     [{:data
        [{:phrase-text "Watch how Mari follows the arrows to paint the letter"
          :phrase-text-translated "Mira como Mari sigue la flecha para pintar la letra",
          :offset 86.226,
@@ -191,9 +194,10 @@
          [{:end 87.75, :anim "talk", :start 86.37}
           {:end 89.9, :anim "talk", :start 88.12}
           {:end 91.61, :anim "talk", :start 90.15}]}
-        {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}
-        {:id "letter-drawing-animation", :type "action"}],
+        {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}],
        :type "sequence-data"}
+      {:id "letter-drawing-animation", :type "action"}],
+     :type "parallel"}
     {:phrase-text "Wonderful! Well done Mari! Can you show us one more time? Remember to watch how Mari follows the arrows to paint the letter."
      :phrase-text-translated "Maravilloso! Buen trabajo Mari! Nos puedes mostrar una vez mas? Recuerda ver como Mari sigue la flecha para pintar la letra."
      :offset 93.533,
@@ -473,3 +477,6 @@
    "Ahora es tu turno! En la biblioteca esta un lienzo de arte para que tu puedas practicar. Rastera las letras con cuidado, asi como Mari lo hace."}},
  :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "library", :autostart true}}
+
+
+)
