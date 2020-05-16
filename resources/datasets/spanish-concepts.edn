@@ -889,7 +889,8 @@
      :type "audio",
      :start 0.021,
      :duration 9.628,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 15.651,
      :scene-id "home",
@@ -1476,7 +1477,8 @@
      :type "audio",
      :start 0.109,
      :duration 10.802,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 52.399,
      :scene-id "home",
@@ -1989,7 +1991,8 @@
      :type "audio",
      :start 0.041,
      :duration 9.203,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 39.451,
      :scene-id "home",
@@ -2481,7 +2484,8 @@
      :type "audio",
      :start 0.013,
      :duration 11.534,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 40.666,
      :scene-id "home",
@@ -2975,7 +2979,8 @@
      :type "audio",
      :start 0.036,
      :duration 10.62,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 66.561,
      :scene-id "home",
@@ -3455,7 +3460,8 @@
      :type "audio",
      :start 0.224,
      :duration 11.635,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 1.147,
      :scene-id "home",
@@ -3974,7 +3980,8 @@
      :type "audio",
      :start 0.101,
      :duration 10.925,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 0.987,
      :scene-id "home",
@@ -4483,7 +4490,8 @@
      :type "audio",
      :start 0.213,
      :duration 14.348,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 53.104,
      :scene-id "home",
@@ -5021,7 +5029,8 @@
      :type "audio",
      :start 0.107,
      :duration 12.49,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 65.303,
      :scene-id "home",
@@ -5548,7 +5557,8 @@
      :type "audio",
      :start 0.062,
      :duration 11.137,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 64.479,
      :scene-id "home",
@@ -6072,7 +6082,8 @@
      :type "audio",
      :start 0.093,
      :duration 15.028,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 77.676,
      :scene-id "home",
@@ -6653,7 +6664,8 @@
      :type "audio",
      :start 0.239,
      :duration 11.816,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 9.04,
      :scene-id "home",
@@ -6842,6 +6854,7 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 69.749, :anim "talk", :start 69.063}]},
+    :riddle {:phrase-text "Riddle"},
     :sandbox-state-word-1-action
     {:data
      [{:id "show",
@@ -7329,7 +7342,8 @@
      :type "audio",
      :start 0.067,
      :duration 13.004,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 53.268,
      :scene-id "home",
@@ -7822,7 +7836,8 @@
      :type "audio",
      :start 0.063,
      :duration 8.067,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 102.941,
      :scene-id "home",
@@ -8324,7 +8339,8 @@
      :type "audio",
      :start 0.23,
      :duration 8.373,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 14.854,
      :scene-id "home",
@@ -8809,7 +8825,8 @@
      :type "audio",
      :start 0.107,
      :duration 14.349,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 82.135,
      :scene-id "home",
@@ -9322,7 +9339,8 @@
      :type "audio",
      :start 0.13,
      :duration 11.508,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 1.053,
      :scene-id "home",
@@ -9824,7 +9842,8 @@
      :type "audio",
      :start 0.112,
      :duration 9.84,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 40.494,
      :scene-id "home",
@@ -10401,7 +10420,8 @@
      :type "audio",
      :start 0.267,
      :duration 12.202,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 10.268,
      :scene-id "home",
@@ -10938,7 +10958,8 @@
      :type "audio",
      :start 0.102,
      :duration 11.241,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 14.907,
      :scene-id "home",
@@ -11426,7 +11447,8 @@
      :type "audio",
      :start 0.39,
      :duration 11.105,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 90.479,
      :scene-id "home",
@@ -11937,7 +11959,8 @@
      :type "audio",
      :start 0.05,
      :duration 11.112,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 27.814,
      :scene-id "home",
@@ -12427,7 +12450,8 @@
      :type "audio",
      :start 0.12,
      :duration 13.109,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 13.786,
      :scene-id "home",
@@ -12947,7 +12971,8 @@
      :type "audio",
      :start 0.093,
      :duration 15.015,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 27.118,
      :scene-id "home",
@@ -13466,7 +13491,8 @@
      :type "audio",
      :start 0.16,
      :duration 16.45,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 0.907,
      :scene-id "home",
@@ -13954,7 +13980,8 @@
      :type "audio",
      :start 0.14,
      :duration 8.805,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 76.839,
      :scene-id "home",
@@ -14487,7 +14514,8 @@
      :type "audio",
      :start 0.133,
      :duration 12.688,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 103.052,
      :scene-id "home",
@@ -14985,7 +15013,8 @@
      :type "audio",
      :start 0.234,
      :duration 11.404,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 121.642,
      :scene-id "home",
@@ -15488,7 +15517,8 @@
      :type "audio",
      :start 0.08,
      :duration 14.232,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 109.242,
      :scene-id "home",
@@ -16014,7 +16044,8 @@
      :type "audio",
      :start 0.17,
      :duration 8.725,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 95.642,
      :scene-id "home",
@@ -16533,7 +16564,8 @@
      :type "audio",
      :start 0.133,
      :duration 14.323,
-     :scene-id "slide"},
+     :scene-id "slide",
+     :phrase-text "Riddle"},
     :home-vaca-this-is-action
     {:offset 77.676,
      :scene-id "home",
