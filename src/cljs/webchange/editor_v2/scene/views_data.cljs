@@ -42,7 +42,8 @@
                          "cinema"
                          "cinema-video"
                          "letter-intro"
-                         "park-poem"]]
+                         "park-poem"
+                         "running"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id

@@ -1,4 +1,6 @@
-{:assets
+(ns webchange.editor-v2.graph-builder.graph.phrases-graph--running-source)
+
+(def data {:assets
  [{:url "/raw/img/stadium/running/bg_01.jpg", :type "image"}
   {:url "/raw/img/stadium/running/bg_02.jpg", :type "image"}
   {:url "/raw/img/stadium/running/bg_03.jpg", :type "image"}
@@ -414,3 +416,4 @@
  :triggers {:stop {:on "back", :action "stop-scene"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "stadium", :autostart true},
  :audio {:mari "/raw/audio/l2/a4/L2_A4_Mari.m4a"}}
+)

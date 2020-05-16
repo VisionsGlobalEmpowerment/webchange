@@ -468,7 +468,8 @@
      :type "audio",
      :start 0.067,
      :duration 4.373,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Ardilla, ardilla, a, a, A!"},
     :seesaw-voice-high "word-ardilla-high",
     :letter-path "M144.76,92.43a37.5,37.5,0,1,0,0,39.28m0-57.21v75",
     :letter-big "A",
@@ -1073,7 +1074,8 @@
      :type "audio",
      :start 85.48,
      :duration 4.373,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Bebé, bebé, b, b, B!"},
     :letter-path "M77.77 0.71v149M77.77,92.64a37.5,37.5,0,1,1,0,39.28",
     :letter-big "B",
     :home-group-word-action
@@ -1644,7 +1646,8 @@
      :type "audio",
      :start 60.17,
      :duration 4.079,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Casa, casa, c, c, C!"},
     :letter-path
     "M147.23,92.35a37.51,37.51,0,1,0,0,39.27-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
     :letter-big "C",
@@ -2156,7 +2159,8 @@
      :type "audio",
      :start 14.815,
      :duration 4.987,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Cepillo, cepillo, c, c, C!"},
     :letter-path "M147.23,92.35a37.51,37.51,0,1,0,0,39.27",
     :letter-big "C",
     :home-group-word-action
@@ -2645,7 +2649,8 @@
      :type "audio",
      :start 104.567,
      :duration 4.226,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Chocolate, chocolate, ch, ch, Ch!"},
     :letter-path
     "M95.73,92.59a37.5,37.5,0,1,0,0,39.28M129.27 0.66v149M129.27,92.59a37.51,37.51,0,0,1,69.46,19.64v37.5",
     :letter-big "Ch",
@@ -3138,7 +3143,8 @@
      :type "audio",
      :start 49.597,
      :duration 4.826,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Diamante, diamante, d, d, D!"},
     :letter-path "M147.23,91.88a37.5,37.5,0,1,0,0,39.28M147.23,0v14",
     :letter-big "D",
     :home-group-word-action
@@ -3617,7 +3623,8 @@
      :type "audio",
      :start 19.319,
      :duration 4.426,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Elefante, elefante, e, e, E!"},
     :letter-path "M77,112h73a37.5,37.5,0,1,0-11.21,26.74",
     :letter-big "E",
     :home-group-word-action
@@ -4136,7 +4143,8 @@
      :type "audio",
      :start 80.968,
      :duration 4.027,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Flor, flor, f, f, F!"},
     :letter-path
     "M156.12,13.21A36.35,36.35,0,0,0,128.36.29h0A36.49,36.49,0,0,0,92,36.68V149M68.88,74.78H116",
     :letter-big "F",
@@ -4647,7 +4655,8 @@
      :type "audio",
      :start 95.301,
      :duration 3.733,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Gato, gato, g, g, G!"},
     :letter-path
     "M147.23,92.62a37.5,37.5,0,1,0,0,39.28M147.23,74.86V181a34.73,34.73,0,0,1-67.65,11.09",
     :letter-big "G",
@@ -5182,7 +5191,8 @@
      :type "audio",
      :start 14.693,
      :duration 5.04,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Gemelo, gemelo, g, g, G!"},
     :letter-path
     "M147.23,92.62a37.5,37.5,0,1,0,0,39.28M147.23,74.86V181a34.73,34.73,0,0,1-67.65,11.09",
     :letter-big "G",
@@ -5707,7 +5717,8 @@
      :type "audio",
      :start 127.406,
      :duration 4.053,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Hoja, hoja, h, h, H!"},
     :letter-path
     "M77.77 0.71v149M77.77,92.64a37.51,37.51,0,0,1,69.46,19.64v37.5",
     :letter-big "H",
@@ -6275,7 +6286,8 @@
      :type "audio",
      :start 9.986,
      :duration 4.173,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Iman, iman, i, i, I!"},
     :seesaw-voice-high "word-incendio-high",
     :letter-path
     "M101.7,74.26v75M107.7,34.78a6,6,0,1,1-6-6A6,6,0,0,1,107.7,34.78Z",
@@ -6769,6 +6781,7 @@
       {:end 92.025, :anim "talk", :start 86.795}
       {:end 100.281, :anim "talk", :start 93.228}]},
     :letter-intro-word-repeat {:phrase-text ". ."},
+    :game-voice-chanting {:phrase-text "Iman, iman, i, i, I!"},
     :seesaw-voice-high "word-incendio-high",
     :letter-intro-sound {:phrase-text "Iiii..."},
     :sandbox-state-word-2 "incendio",
@@ -6976,7 +6989,8 @@
      :type "audio",
      :start 90.587,
      :duration 4.133,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Jardín, jardín, j, j, J!"},
     :letter-path
     "M106.5,74V180.1a34.73,34.73,0,0,1-67.64,11.09M112.5,34.21a6,6,0,1,1-6-6A6,6,0,0,1,112.5,34.21Z",
     :letter-big "J",
@@ -7483,7 +7497,8 @@
      :type "audio",
      :start 142.258,
      :duration 4.133,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Kimono, kimono, k, k, K!"},
     :letter-path "M112.5-.22v150M162.63,74.78l-48,29.06,61.55,45.94",
     :letter-big "K",
     :home-group-word-action
@@ -7978,7 +7993,8 @@
      :type "audio",
      :start 39.771,
      :duration 4.16,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Leon, leon, l, l, L!"},
     :letter-path "M112.5 0.19v150",
     :letter-big "L",
     :home-group-word-action
@@ -8475,7 +8491,8 @@
      :type "audio",
      :start 122.566,
      :duration 4.36,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Llave, llave, ll, ll, Ll!"},
     :letter-path "M84.5 0.19v150M140.5 0.19v150",
     :letter-big "Ll",
     :home-group-word-action
@@ -8962,7 +8979,8 @@
      :type "audio",
      :start 24.385,
      :duration 4.333,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Mano, mano, m, m, M!"},
     :letter-path
     "M71.86,75v75M71.85,91.79C79.19,80,93.46,76.45,101.17,78.27c11.89,2.8,19.93,12.51,19.93,23.27V150M119.85,91.79c7.34-11.77,21.61-15.34,29.32-13.52,11.89,2.8,19.93,12.51,19.93,23.27V150",
     :letter-big "M",
@@ -9472,7 +9490,8 @@
      :type "audio",
      :start 20.348,
      :duration 4.734,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Niño, niño, n, n, N!"},
     :letter-path
     "M82.05,74.42v75M82.05,91.55A32.35,32.35,0,0,1,143,106.77v42.65",
     :letter-big "N",
@@ -10021,7 +10040,8 @@
      :type "audio",
      :start 5.24,
      :duration 4.026,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Oso, oso, o, o, O!"},
     :seesaw-voice-high "word-oso-high",
     :letter-path
     "M110.65,74a37.5,37.5,0,1,0,37.5,37.5A37.5,37.5,0,0,0,110.65,74Z",
@@ -10565,7 +10585,8 @@
      :type "audio",
      :start 34.545,
      :duration 4.239,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Pelota, pelota, p, p, P!"},
     :letter-path "M77.77,74.37v149M77.77,93.1a37.5,37.5,0,1,1,0,39.28",
     :letter-big "P",
     :home-group-word-action
@@ -11084,7 +11105,8 @@
      :type "audio",
      :start 132.285,
      :duration 4.187,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Queso, queso, qu, qu, Qu!"},
     :letter-path
     "M148.58,92.61a37.5,37.5,0,1,0,0,39.27M148.58,74.37v149",
     :letter-big "Qu",
@@ -11574,7 +11596,8 @@
      :type "audio",
      :start 9.521,
      :duration 4.587,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Rana, rana, r, r, R!"},
     :letter-path
     "M85.86,75.66v75M85.85,92.79a32.37,32.37,0,0,1,53.3-5.63",
     :letter-big "R",
@@ -12085,7 +12108,8 @@
      :type "audio",
      :start 29.398,
      :duration 4.52,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Serpiente, serpiente, s, s, S!"},
     :letter-path
     "M131.91,90.75c1.33-9.39-10.49-14.17-18.28-14.39A21.71,21.71,0,0,0,97.69,82.7a16.08,16.08,0,0,0-3.89,16c1.65,5.12,6.13,8.58,10.93,10.57,6.67,2.77,13.9,4,20.26,7.62,7,3.94,10.77,12.34,8,20.14-5.06,14.06-27.62,17.67-37.73,5.77a18.91,18.91,0,0,1-4.11-10.2",
     :letter-big "S",
@@ -12570,7 +12594,8 @@
      :type "audio",
      :start 44.544,
      :duration 4.173,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Tomate, tomate, t, t, T!"},
     :letter-path "M112.5,35.29v115M89.4,75.29h46.2",
     :letter-big "T",
     :home-group-word-action
@@ -13094,7 +13119,8 @@
      :type "audio",
      :start 14.932,
      :duration 3.76,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Uvas, uvas, u, u, U!"},
     :letter-path
     "M82.05,75v42.65A32.35,32.35,0,0,0,143,132.87M143,74.38V149.6",
     :letter-big "U",
@@ -13607,7 +13633,8 @@
      :type "audio",
      :start 114.793,
      :duration 4.8,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Violin, violin, v, v, V!"},
     :letter-path "M79.56,75l32.88,75M112.56,150l32.88-75",
     :letter-big "V",
     :home-group-word-action
@@ -14099,7 +14126,8 @@
      :type "audio",
      :start 147.124,
      :duration 4.507,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Web, web, w, w, W!"},
     :letter-path
     "M73.71,75.66l18.58,75M93.71,150.66l18.58-75M112.71,75.66l18.58,75M132.71,150.66l18.58-75",
     :letter-big "W",
@@ -14618,7 +14646,8 @@
      :type "audio",
      :start 156.791,
      :duration 4.333,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Xilofono, xilofono, x, x, X!"},
     :letter-path "M81.53,75.66l61.94,75M143.47,75.66l-61.94,75",
     :letter-big "X",
     :home-group-word-action
@@ -15126,7 +15155,8 @@
      :type "audio",
      :start 152.297,
      :duration 3.84,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Yoyo, yoyo, y, y, Y!"},
     :letter-path "M78.19,74.78l34.84,75M146.81,74.78,96.61,188.91",
     :letter-big "Y",
     :home-group-word-action
@@ -15625,7 +15655,8 @@
      :type "audio",
      :start 137.112,
      :duration 4.639,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Zapato, zapato, z, z, Z!"},
     :letter-path "M79.86,75.66h61.29l-57.29,75h61.28",
     :letter-big "Z",
     :home-group-word-action
@@ -16151,7 +16182,8 @@
      :type "audio",
      :start 70.102,
      :duration 4.987,
-     :scene-id "running"},
+     :scene-id "running",
+     :phrase-text "Ñandu, ñandu, ñ, ñ, Ñ!"},
     :letter-path
     "M82,74.83v75M82,92a32.36,32.36,0,0,1,60.9,15.23v42.65M86,48.06s4.12-11.83,13.63-7.88c3.71,1.54,7.49,2.94,11.29,4.27,10.27,3.6,22.52,2.17,28-8.67",
     :letter-big "ñ",
