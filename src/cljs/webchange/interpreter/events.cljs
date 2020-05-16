@@ -296,12 +296,16 @@
   (fn [{:keys [db]} [_ {:keys [scene-id] :as action}]]
     {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))}))
 
+;; audio action
+;; First try to get audio url from :audio field
+;; Second try to get audio url from :id field and scene :audios map
+;; Last return :id as audio url
 (re-frame/reg-event-fx
   ::execute-audio
   [ce/event-as-action ce/with-flow]
-  (fn [{:keys [db]} {:keys [id] :as action}]
+  (fn [{:keys [db]} {:keys [id audio] :as action}]
     {:execute-audio (-> action
-                        (assoc :key (or (get-audio-key db id) id))
+                        (assoc :key (or audio (get-audio-key db id) id))
                         (assoc :on-ended (ce/dispatch-success-fn action)))}))
 
 (re-frame/reg-event-fx
