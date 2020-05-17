@@ -1,4 +1,6 @@
-{:assets
+(ns webchange.editor-v2.graph-builder.graph.phrases-graph--slide-source)
+
+(def data {:assets
  [{:url "/raw/img/park/slide/background2.jpg", :type "image"}
   {:url "/raw/img/park/slide/slide.png", :type "image"}
   {:url "/raw/img/park/slide/side.png", :type "image"}
@@ -315,4 +317,4 @@
   :stop-activity {:type "stop-activity", :id "slide"}},
  :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "park", :autostart true},
- :audio {:mari "/raw/audio/l2/a5/L2_A5_Mari.m4a"}}
+ :audio {:mari "/raw/audio/l2/a5/L2_A5_Mari.m4a"}})

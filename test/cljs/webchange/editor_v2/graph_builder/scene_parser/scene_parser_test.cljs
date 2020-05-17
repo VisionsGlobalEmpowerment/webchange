@@ -992,7 +992,7 @@
                                              :success "b"
                                              :fail    "c"}
                                :path        [:a]
-                               :children    []
+                               :children    [:b :c]
                                :connections #{{:previous :root
                                                :name     "success"
                                                :handler  :b}
@@ -1024,7 +1024,7 @@
                                                      :success {:type "empty"}
                                                      :fail    {:type "empty"}}
                                        :path        [:a]
-                                       :children    []
+                                       :children    [:a-success :a-fail]
                                        :connections #{{:previous :root
                                                        :name     "success"
                                                        :handler  :a-success}

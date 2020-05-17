@@ -19,23 +19,32 @@
            (keyword)))))
 
 (defn get-test-action-data
-  [{:keys [action-name action-data prev-action path]}]
-  (->> (create-graph-node {:data        action-data
-                           :path        (or path [action-name])
-                           :connections (->> [(when (contains? action-data :success)
-                                                {:previous prev-action
-                                                 :name     "success"
-                                                 :handler  (get-test-handler-name action-name action-data :success)})
-                                              (when (contains? action-data :fail)
-                                                {:previous prev-action
-                                                 :name     "fail"
-                                                 :handler  (get-test-handler-name action-name action-data :fail)})]
-                                             (remove nil?)
-                                             (vec))})
-       (assoc {} action-name)))
+  [{:keys [action-name action-data prev-action next-action path]}]
+  (let [success-child (when (contains? action-data :success) (get-test-handler-name action-name action-data :success))
+        fail-child (when (contains? action-data :fail) (get-test-handler-name action-name action-data :fail))]
+    (->> (create-graph-node {:data        action-data
+                             :path        (or path [action-name])
+                             :children    (->> [success-child fail-child]
+                                               (remove nil?))
+                             :connections (->> [(when-not (nil? success-child)
+                                                  {:previous prev-action
+                                                   :name     "success"
+                                                   :handler  success-child})
+                                                (when-not (nil? fail-child)
+                                                  {:previous prev-action
+                                                   :name     "fail"
+                                                   :handler  fail-child})
+                                                (when (or (nil? success-child)
+                                                          (nil? fail-child))
+                                                  {:previous prev-action
+                                                   :name     "next"
+                                                   :handler  next-action})]
+                                               (remove nil?)
+                                               (vec))})
+         (assoc {} action-name))))
 
 (defn parse-test-action-chain
-  [actions-data {:keys [action-name action-data sequence-path path graph] :as params}]
+  [actions-data {:keys [action-name action-data sequence-path path graph next-action] :as params}]
   (reduce
     (fn [result event-name]
       (if-not (nil? (get action-data event-name))
@@ -45,7 +54,7 @@
                                                        {:action-name   next-node-name
                                                         :action-data   (get actions-data next-node-name)
                                                         :parent-action nil
-                                                        :next-action   nil
+                                                        :next-action   next-action
                                                         :prev-action   action-name
                                                         :sequence-path sequence-path
                                                         :graph         result})))
@@ -56,7 +65,7 @@
                                                        {:action-name   next-node-name
                                                         :action-data   next-node-data
                                                         :parent-action nil
-                                                        :next-action   nil
+                                                        :next-action   next-action
                                                         :prev-action   action-name
                                                         :sequence-path sequence-path
                                                         :path          path
