@@ -17,10 +17,8 @@
 
 (defn- set-current-audio-selection
   [current-audio-data assets]
-  (map (fn [{:keys [url id] :as asset-data}]
-         (if (or (defined-and-equal url (:url current-audio-data))
-                 (defined-and-equal id (:id current-audio-data))
-                 (defined-and-equal url (:id current-audio-data)))
+  (map (fn [{:keys [url] :as asset-data}]
+         (if (defined-and-equal url (:url current-audio-data))
            (-> asset-data
                (assoc :selected? true)
                (assoc :start (:start current-audio-data))
@@ -28,12 +26,18 @@
            asset-data))
        assets))
 
-(defn get-action-audio-data
+(defn- action-audio-url
   [{:keys [type] :as action-data}]
-  (merge (select-keys action-data [:target :start :duration])
-         (cond
-           (= type "audio") {:id (:id action-data)}
-           (= type "animation-sequence") {:url (:audio action-data)})))
+  (if (= type "audio")
+    (or (:audio action-data) (:id action-data))
+    (:audio action-data)))
+
+(defn get-action-audio-data
+  [action-data]
+  (let [url (action-audio-url action-data)]
+    (-> action-data
+        (select-keys [:target :start :duration])
+        (assoc :url url))))
 
 (defn get-audio-assets-data
   "Add region selection data to audio assets list - :start :duration :selected?

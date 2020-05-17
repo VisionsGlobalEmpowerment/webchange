@@ -40,11 +40,15 @@
     tags))
 
 (def event-as-action
+  "Interceptor
+  Transform event arguments to action-data"
   (re-frame/->interceptor
     :before  (fn [context]
                (update-in context [:coeffects :event] #(second %)))))
 
 (def with-flow
+  "Interceptor
+  Add and register flow if it is not defined"
   (re-frame/->interceptor
     :before  (fn [context]
                (let [flow-id (get-in context [:coeffects :event :flow-id])]
