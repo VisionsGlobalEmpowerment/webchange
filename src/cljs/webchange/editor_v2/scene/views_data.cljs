@@ -45,7 +45,8 @@
                          "park-poem"
                          "running"
                          "slide"
-                         "writing-lesson"]]
+                         "writing-lesson"
+                         "writing-practice"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id
