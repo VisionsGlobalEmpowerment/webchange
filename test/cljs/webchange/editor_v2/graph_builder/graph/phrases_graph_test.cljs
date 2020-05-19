@@ -36,7 +36,9 @@
     [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-lesson-source :as writing-lesson-source]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-lesson-expected :as writing-lesson-expected]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-practice-source :as writing-practice-source]
-    [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-practice-expected :as writing-practice-expected]))
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--writing-practice-expected :as writing-practice-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--magic-hat-source :as magic-hat-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--magic-hat-expected :as magic-hat-expected]))
 
 (defn remove-actions-data
   [graph]
@@ -228,6 +230,17 @@
     (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
                             (remove-actions-data))
           expected-result writing-practice-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--magic-hat
+  (let [scene-data magic-hat-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result magic-hat-expected/data]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))

@@ -1,4 +1,6 @@
-{:assets
+(ns webchange.editor-v2.graph-builder.graph.phrases-graph--magic-hat-source)
+
+(def data {:assets
  [{:url "/raw/img/library/magic-hat/background.jpg", :type "image"}
   {:url "/raw/audio/l2/a8/L2_A8_Mari.m4a", :type "audio"}
   {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio", :alias "mari chants"}],
@@ -524,4 +526,4 @@
   :start-activity {:type "start-activity", :id "magic-hat"},
   :stop-activity {:type "stop-activity", :id "magic-hat"}},
  :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata {:prev "library", :autostart true}}
+ :metadata {:prev "library", :autostart true}})
