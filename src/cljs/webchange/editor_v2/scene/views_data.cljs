@@ -47,7 +47,8 @@
                          "slide"
                          "writing-lesson"
                          "writing-practice"
-                         "magic-hat"]]
+                         "magic-hat"
+                         "cycling-letters"]]
     (->> scenes-list
          (map (fn [scene-id]
                 {:value    scene-id
