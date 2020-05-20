@@ -1,4 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --;;
 ALTER TABLE ONLY users
     ADD COLUMN guid uuid NOT NULL DEFAULT uuid_generate_v1mc();

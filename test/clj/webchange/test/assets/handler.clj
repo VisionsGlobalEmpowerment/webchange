@@ -4,6 +4,7 @@
             [webchange.assets.loader :as loader]
             [webchange.assets.core :as core]
             [clojure.data.json :as json]
+            [webchange.common.files :as files]
             [webchange.db.core :refer [*db*] :as db]
             ))
 
@@ -18,7 +19,7 @@
   (let [file-path "test/clj/webchange/resources/raw/background.png"]
       (f/upload-file! file-path)
       (let [row (first (db/get-all-asset-hash))]
-        (is (= (core/crc32 (slurp (:path row))) (:file-hash row))))))
+        (is (= (core/crc32 (slurp (files/relative->absolute-path (:path row)))) (:file-hash row))))))
 
 (deftest could-upload-asset
   (let [file-path "test/clj/webchange/resources/raw/background.png"

@@ -24,17 +24,17 @@
      })
   )
 
-(defn load-secondary-school!
-  []
+(defn load-secondary-school! []
   (doseq [school (:schools (school-core/get-schools))]
-    (core/load-full! school)
-    ))
+    (core/load-full! school)))
 
-(defn upload-secondary-school
-  []
-  (doseq [school (:schools (school-core/get-schools))]
-    (core/upload-stat (:id school))
-    ))
+(defn download-course-data! [config school-id]
+  (println "Update course data....")
+  (core/update-course-data! school-id)
+  (println "Update assets....")
+  (core/update-assets!)
+  (println "Done!")
+  )
 
 (def commands
   {"init-secondary"
@@ -42,10 +42,10 @@
      (apply init-secondary! config args))
    "load-secondary-school"
    (fn [config args]
-     (apply load-secondary-school! config))
-   "upload-secondary-school"
+     (load-secondary-school!))
+   "download-course-data"
    (fn [config args]
-     (apply upload-secondary-school config))
+     (apply download-course-data! config args))
    })
 
 (defn command? [[arg]]

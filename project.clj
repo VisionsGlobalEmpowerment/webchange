@@ -46,6 +46,7 @@
                  [funcool/promesa "5.0.0"]
                  [clj-http "3.10.1"]
                  [clj-http-fake "1.0.3"]
+                 [ring/ring-codec "1.1.2"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -91,7 +92,9 @@
    {:dependencies [[binaryage/devtools "0.9.10"]
                    [day8.re-frame/re-frame-10x "0.3.3"]
                    [day8.re-frame/tracing "0.5.1"]
-                   [ring/ring-mock "0.3.2"]]
+                   [ring/ring-mock "0.3.2"]
+                   [mockery "0.1.4"]
+                   ]
 
     :plugins      [[lein-figwheel "0.5.19"]
                    [lein-doo "0.1.8"]]

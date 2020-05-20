@@ -11,16 +11,16 @@
             [clojure.data.json :as json]
             [webchange.auth.core :as auth]
             [webchange.secondary.guid :as guid]
+            [webchange.assets.core :as assets]))
 
-            ))
+(import '(java.util.concurrent Executors))
 
 (defn make-url-absolute [path]
   (let [host-url (:host-url (env :secondary))
         url (str host-url (if (.endsWith host-url "/") "" "/") path)]
     url))
 
-(defn update-school!
-  [data]
+(defn update-school! [data]
   (db/update-school! data))
 
 (defn prepare-users
@@ -177,7 +177,6 @@
     (process-data data)
     ))
 
-
 (defn get-users-by-school [id]
   (mapv #(let [last-login (dt/date-time2iso-str (:last-login %))
                created-at (dt/date-time2iso-str (:created-at %))
@@ -205,7 +204,7 @@
         (db/get-students-by-school {:school_id id})
         ))
 
-(defn get-course-versions [id]
+(defn get-course-versions []
   (mapv #(let [created-at (dt/date-time2iso-str (:created-at %))]
            (-> %
                (assoc :created-at created-at)))
@@ -223,7 +222,7 @@
         )
   )
 
-(defn get-scene-versions [id]
+(defn get-scene-versions []
   (mapv #(let [created-at (dt/date-time2iso-str (:created-at %))]
            (-> %
                (assoc :created-at created-at)))
@@ -239,7 +238,7 @@
         students (get-students-by-school id)
         classes (get-classes id)
         courses (db/get-courses)
-        course-versions (get-course-versions id)
+        course-versions (get-course-versions)
         course-stats (db/get-course-stats-by-school {:school_id id})
         course-progresses (db/get-course-progresses-by-school {:school_id id})
         course-events (get-course-events-by-school id)
@@ -247,7 +246,7 @@
         dataset-items (db/get-dataset-items-by-school)
         lesson-sets (db/get-lesson-sets)
         scenes (db/get-scenes)
-        scene-versions (get-scene-versions id)
+        scene-versions (get-scene-versions)
         activity-stats (db/get-activity-stats-by-school {:school_id id})
         ]
     {
@@ -267,6 +266,29 @@
      :scenes            scenes
      :scene-versions    scene-versions
      :activity-stats    activity-stats
+     })
+  )
+
+(defn get-course-update [id]
+  (let [id (Integer/parseInt id)
+        school (db/get-school {:id id})
+        courses (db/get-courses)
+        course-versions (get-course-versions)
+        datasets (db/get-datasets)
+        dataset-items (db/get-dataset-items-by-school)
+        lesson-sets (db/get-lesson-sets)
+        scenes (db/get-scenes)
+        scene-versions (get-scene-versions)
+        ]
+    {
+     :school            school
+     :courses           courses
+     :course-versions   course-versions
+     :datasets          datasets
+     :dataset-items     dataset-items
+     :lesson-sets       lesson-sets
+     :scenes            scenes
+     :scene-versions    scene-versions
      })
   )
 
@@ -398,8 +420,7 @@
 (defn import-secondary-data! [id data]
   (let [users-imported (:users data)
         classes-imported (:classes data)
-        users-guid (process-users-imported! users-imported)
-        ]
+          users-guid (process-users-imported! users-imported)]
         (process-class-imported! classes-imported)
         (let [users (prepare-local-identity-data (db/find-users-by-guid  {:guids users-guid}))
               classes-db (db/get-classes {:school_id id})
@@ -408,8 +429,7 @@
               remote-users (prepare-remote-identity-data users-imported)
               remote-classes (prepare-remote-identity-data classes-imported)
               data-with-users (prepare-imported-data data :user-id remote-users users)
-              data-processed (prepare-imported-data data-with-users :class-id remote-classes classes-identity)
-              ]
+              data-processed (prepare-imported-data data-with-users :class-id remote-classes classes-identity)]
               (store-data-localy! data-processed)
               (let [users (db/get-users-by-school {:school_id id})
                     teachers (db/get-teacher-by-school {:school_id id})
@@ -436,3 +456,108 @@
                 (delete-not-in-guid-list course-events-guid course-events guid/guid-from-course-events delete-course-events)
                 (delete-not-in-guid-list activity-stats-guid activity-stats guid/guid-from-activity-stats delete-activity-stats)
           ))))
+
+(defn import-primary-data! [data]
+  (if-let [school (:school data)]
+    (update-school! school))
+  (if-let [courses (:courses data)]
+    (update-courses! courses))
+  (if-let [course-versions (:course-versions data)]
+    (update-course-versions! course-versions))
+  (if-let [datasets (:datasets data)]
+    (update-dataset! datasets))
+  (if-let [dataset-items (:dataset-items data)]
+    (update-dataset-item-with-id! dataset-items))
+  (if-let [lesson-sets (:lesson-sets data)]
+    (update-lesson-set! lesson-sets))
+  (if-let [scenes (:scenes data)]
+    (update-scene! scenes))
+  (if-let [scene-versions (:scene-versions data)]
+    (update-scene-versions! scene-versions))
+  (let [
+        courses (db/get-courses)
+        course-versions (get-course-versions)
+        datasets (db/get-datasets)
+        dataset-items (db/get-dataset-items-by-school)
+        lesson-sets (db/get-lesson-sets)
+        scenes (db/get-scenes)
+        scene-versions (get-scene-versions)
+
+        courses-guid (guid/guids-from-entries (:courses data) guid/guid-is-id)
+        course-versions-guid (guid/guids-from-entries (:course-versions data) guid/guid-is-id)
+        datasets-guid (guid/guids-from-entries (:datasets data) guid/guid-is-id)
+        dataset-items-guid (guid/guids-from-entries (:dataset-items data) guid/guid-is-id)
+        lesson-sets-guid (guid/guids-from-entries (:lesson-sets data) guid/guid-is-id)
+        scenes-guid (guid/guids-from-entries (:scenes data) guid/guid-is-id)
+        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)
+        ]
+    (delete-not-in-guid-list course-versions-guid course-versions :id db/delete-course-version-by-id!)
+    (delete-not-in-guid-list courses-guid courses :id db/delete-course-by-id!)
+    (delete-not-in-guid-list dataset-items-guid dataset-items :id db/delete-dataset-item-by-id!)
+    (delete-not-in-guid-list datasets-guid datasets :id db/delete-dataset-by-id!)
+    (delete-not-in-guid-list lesson-sets-guid lesson-sets :id db/delete-lesson-set-by-id!)
+    (delete-not-in-guid-list scene-versions-guid scene-versions :id db/delete-scene-version-by-id!)
+    (delete-not-in-guid-list scenes-guid scenes :id db/delete-scene-by-id!)
+    )
+  )
+
+(defn update-course-data! [id]
+  (let [url (make-url-absolute (str "api/school/update/" id))
+        data (json/read-str (:body (client/get url)) :key-fn keyword)]
+    (import-primary-data! data)))
+
+(defn to-set [hashes]
+  (set (mapv (fn [item] (str (:path-hash item) "-" (:file-hash item))) hashes))
+  )
+
+(defn to-vec [hashes]
+  (mapv (fn [item]
+          (let [ids (clojure.string/split item #"-")]
+            {:path-hash (get ids 0)  :file-hash (get ids 1)}))
+        hashes))
+
+(defn fill-additional-data [update]
+  (mapv (fn [item]
+          (let [file-hash (db/get-asset-hash {:path_hash (:path-hash item)})]
+            file-hash))
+        update))
+
+
+(defn calc-asset-update [school-hashes]
+  (let [
+        hashes (map (fn [item] {:path-hash (:path-hash item) :file-hash (:file-hash item)}) (db/get-all-asset-hash))
+        school-hashes-set (to-set school-hashes)
+        hashes-set (to-set hashes)
+        to-remove (clojure.set/difference school-hashes-set hashes-set)
+        to-update (clojure.set/difference hashes-set school-hashes-set)
+        remove (to-vec to-remove)
+        update (fill-additional-data (to-vec to-update))
+        ]
+     {:remove remove :update update}))
+
+(defn download-files [files]
+  (let [nthreads 10
+        pool (Executors/newFixedThreadPool nthreads)
+        tasks (map (fn [item] (fn [] (assets/update-file-from-primary (:path item)))) files)]
+    (let [ret (.invokeAll pool tasks)]
+      (.shutdown pool)
+      (map #(.get %) ret))
+  ))
+
+(defn update-assets! []
+  (let [asset-hashes (db/get-all-asset-hash)
+        hashes (map (fn [item] {:path-hash (:path-hash item) :file-hash (:file-hash item)}) asset-hashes)
+        url (make-url-absolute "api/school/asset/difference/")
+        response (client/post url {:body (json/json-str hashes)
+                                   :body-encoding "UTF-8"
+                                   :content-type "application/json"
+                                   :accept :json
+                                   })
+        update (-> response :body (json/read-str :key-fn keyword))
+        remove (fill-additional-data (:remove update))
+        download (:update update)
+        ]
+      (doseq [item remove]
+        (assets/remove-file-with-hash! item))
+      (download-files download)
+    ))

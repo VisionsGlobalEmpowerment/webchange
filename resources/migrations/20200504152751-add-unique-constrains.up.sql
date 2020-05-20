@@ -2,7 +2,7 @@ ALTER TABLE teachers
 ADD CONSTRAINT teacher_unique UNIQUE (user_id, school_id);
 --;;
 ALTER TABLE students
-ADD CONSTRAINT student_unique UNIQUE (user_id, class_id);
+ADD CONSTRAINT student_unique UNIQUE (user_id);
 --;;
 ALTER TABLE course_stats
 ADD CONSTRAINT course_stats_unique UNIQUE (user_id, class_id, course_id);

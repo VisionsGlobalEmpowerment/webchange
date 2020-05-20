@@ -79,7 +79,7 @@
                   :uri             (str "/api/school/sync/" id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::sync-school-success ::close-sync-modal]
+                  :on-success      [::sync-school-success]
                   :on-failure      [:api-request-error :sync-school]}}))
 
 
@@ -93,6 +93,7 @@
   ::sync-school-success
   (fn [_ _]
     {:dispatch-n (list [:complete-request :sync-school]
+                       [::close-sync-modal]
                        [::load-schools])}))
 
 (re-frame/reg-event-fx

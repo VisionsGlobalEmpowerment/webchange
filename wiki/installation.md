@@ -90,7 +90,7 @@ postgres@user$ createuser --interactive -P // create user 'webchange'
               
 $ psql webchange < dump.sql
 
-$ psql  --command="CREATE EXTENSION IF NOT EXISTS 'uuid-ossp';"
+$ psql  --command='CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 ```
 
 - Install Java:

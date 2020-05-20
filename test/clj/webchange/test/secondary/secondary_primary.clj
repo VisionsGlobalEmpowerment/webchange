@@ -192,10 +192,8 @@
          activity-stat (f/activity-stat-created {:id (:user-id student-user)})
          update (as-> (core/get-stat f/default-school-id) upd
                       (assoc upd :activity-stats (map (fn [stat] (assoc stat :data data)) (:activity-stats upd))))]
-    (println update)
     (core/import-secondary-data! f/default-school-id update)
     (let [[updated-activity-stat] (db/get-user-activity-stats  activity-stat)]
-      (println updated-activity-stat)
       (assert (= data (:data updated-activity-stat))))))
 
 (deftest can-update-activity-stats

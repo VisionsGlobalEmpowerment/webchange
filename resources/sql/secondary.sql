@@ -36,7 +36,7 @@ INSERT INTO students
 VALUES (:class_id, :user_id, :school_id, :access_code, :gender, :date_of_birth)
 ON CONFLICT ON CONSTRAINT student_unique
 DO UPDATE SET school_id=:school_id, access_code=:access_code,
-gender=:gender, date_of_birth=:date_of_birth WHERE students.class_id=:class_id and students.user_id=:user_id
+gender=:gender, date_of_birth=:date_of_birth, class_id=:class_id WHERE students.user_id=:user_id
 
 -- :name create-or-update-class! :! :n
 -- :doc creates a new student record
@@ -56,9 +56,12 @@ DO UPDATE SET name=:name, school_id=:school_id WHERE classes.guid=:guid
 
 -- :name create-or-update-courses! :! :n
 -- :doc creates a new student record
-INSERT INTO courses (id, name, slug) VALUES (:id, :name, :slug)
+INSERT INTO courses (id, name, slug, lang, image_src, status, owner_id, website_user_id)
+VALUES (:id, :name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id)
 ON CONFLICT ON CONSTRAINT courses_pkey
-DO UPDATE SET name=:name, slug=:slug WHERE courses.id=:id
+DO UPDATE SET name=:name, slug=:slug, lang=:lang, image_src=:image_src, status=:status,
+owner_id=:owner_id, website_user_id=:website_user_id
+WHERE courses.id=:id
 
 -- :name create-or-update-course-versions! :! :n
 -- :doc creates a new student record
@@ -225,3 +228,33 @@ WHERE id = :id
 -- :name delete-teacher-by-id! :! :n
 -- :doc deletes teacher by id
 DELETE from teachers WHERE id=:id;
+
+
+-- :name delete-course-by-id! :! :n
+-- :doc deletes courses by id
+DELETE from courses WHERE id=:id;
+
+-- :name delete-course-version-by-id! :! :n
+-- :doc deletes course-version by id
+DELETE from course_versions WHERE id=:id;
+
+-- :name delete-dataset-by-id! :! :n
+-- :doc deletes dataset by id
+DELETE from datasets WHERE id=:id;
+
+-- :name delete-dataset-item-by-id! :! :n
+-- :doc deletes dataset-item by id
+DELETE from dataset_items WHERE id=:id;
+
+-- :name delete-lesson-set-by-id! :! :n
+-- :doc deletes lesson-set by id
+DELETE from lesson_sets WHERE id=:id;
+
+-- :name delete-scene-by-id! :! :n
+-- :doc deletes scene by id
+DELETE from scenes WHERE id=:id;
+
+-- :name delete-scene-version-by-id! :! :n
+-- :doc deletes scene-version by id
+DELETE from scene_versions WHERE id=:id;
+

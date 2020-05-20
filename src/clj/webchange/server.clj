@@ -23,7 +23,7 @@
       (System/exit 0))
     (assets/command? args)
     (do
-      (assets/execute args)
+      (assets/execute args env)
       (System/exit 0))
     (courses/command? args)
     (do

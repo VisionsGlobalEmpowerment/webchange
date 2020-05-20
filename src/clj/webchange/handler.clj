@@ -154,4 +154,5 @@
                  (muuntaja.middleware/wrap-exception)))
 
 (def dev-handler (-> #'handler
-                     wrap-reload))
+                     wrap-reload
+                     ))

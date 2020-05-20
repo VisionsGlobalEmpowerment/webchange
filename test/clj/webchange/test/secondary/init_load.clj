@@ -19,7 +19,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [user-new (db/find-user-by-email {:email (:email user)})
           school-new (db/get-school {:id f/default-school-id})]
       (assert (not (nil? user-new)))
@@ -35,7 +35,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [teacher-new (dissoc (db/get-teacher-by-user {:user_id (:id user)}) :id)]
       (assert (not (nil? teacher-old)))
       (assert (= teacher-old teacher-new)))))
@@ -47,7 +47,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [student-new (dissoc (db/get-student-by-user {:user_id (:user-id student)}) :id)
           class-new (dissoc (db/get-class {:id (:class-id student)}) :id)]
       (assert (= student-old student-new))
@@ -63,7 +63,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [course-new (db/get-course {:slug (:slug course)})
           course-version-new (db/get-course-version {:id (:version-id course)})]
       (assert (= course-old course-new))
@@ -80,7 +80,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [course-stats-new (dissoc (db/get-user-course-stat {:user_id (:user-id course-stat)
                                                      :course_id (:course-id course-stat)}) :id)]
       (assert (not (nil? course-stats-old)))
@@ -96,7 +96,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [course-progresses-new (dissoc (db/get-progress {:user_id (:user-id course-progresses)
                                                      :course_id (:course-id course-progresses)}) :id)]
       (assert (not (nil? course-progresses-old)))
@@ -110,7 +110,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [course-events-new (map #(dissoc % :id) (db/get-course-events-by-school {:school_id f/default-school-id}))]
       (assert (not (nil? course-events-old)))
       (assert (= course-events-old course-events-new))
@@ -122,7 +122,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [dataset-new (map #(dissoc % :id) (db/get-datasets-by-course {:course_id (:course-id dataset)}))]
       (assert (not (nil? dataset-old)))
       (assert (= dataset-old dataset-new))
@@ -134,7 +134,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [dataset-item-new (db/get-dataset-item {:id (:id dataset-item)})]
       (assert (not (nil? dataset-item-old)))
       (assert (= dataset-item-old dataset-item-new))
@@ -146,7 +146,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [lesson-set-new (db/get-lesson-set-by-name  {:dataset_id (:dataset-id lesson-set) :name (:name lesson-set)})]
       (assert (not (nil? lesson-set-old)))
       (assert (= lesson-set-old lesson-set-new))
@@ -159,7 +159,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [scene-new (db/get-scene {:course_id (:course-id scene-data) :name (:name scene-data)})
           scene-version-new (db/get-scene-version {:id (:version-id scene-data)})]
       (assert (not (nil? scene-old)))
@@ -175,7 +175,7 @@
         dump (f/get-school-dump f/default-school-id)]
     (f/clear-db-fixture #())
     (f/with-default-school #())
-    (core/process-data (json/read-str (:body dump) :key-fn keyword))
+    (core/process-data dump)
     (let [activity-stat-new (dissoc (db/get-activity-stat  activity-stat) :id)]
       (assert (not (nil? activity-stat-old)))
       (assert (= activity-stat-old activity-stat-new))
