@@ -42,7 +42,9 @@
     [webchange.editor-v2.graph-builder.graph.phrases-graph--cycling-letters-source :as cycling-letters-source]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--cycling-letters-expected :as cycling-letters-expected]
     [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-letters-source :as volleyball-letters-source]
-    [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-letters-expected :as volleyball-letters-expected]))
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--volleyball-letters-expected :as volleyball-letters-expected]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--pinata-source :as pinata-source]
+    [webchange.editor-v2.graph-builder.graph.phrases-graph--pinata-expected :as pinata-expected]))
 
 (defn remove-actions-data
   [graph]
@@ -267,6 +269,17 @@
     (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
                             (remove-actions-data))
           expected-result volleyball-letters-expected/data]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
+(deftest test-get-diagram-graph--pinata
+  (let [scene-data pinata-source/data
+        diagram-mode :phrases
+        params {:start-node nil}]
+    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+                            (remove-actions-data))
+          expected-result pinata-expected/data]
       (when-not (= actual-result expected-result)
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
