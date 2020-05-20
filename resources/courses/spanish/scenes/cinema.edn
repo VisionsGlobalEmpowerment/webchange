@@ -1050,10 +1050,10 @@
             :init-vaca-voice-next
                                {:type "parallel",
                                 :data
-                                      [{:type "set-variable", :var-name "vaca-voice-next-1", :var-value "vaca-voice-next-1"}
-                                       {:type "set-variable", :var-name "vaca-voice-next-2", :var-value "vaca-voice-next-2"}
-                                       {:type "set-variable", :var-name "vaca-voice-next-3", :var-value "vaca-voice-next-3"}
-                                       {:type "set-variable", :var-name "vaca-voice-next-4", :var-value "vaca-voice-next-4"}]},
+                                      [{:type "set-variable", :var-name "vaca-voice-next-picture-1", :var-value "vaca-voice-next-picture-1"}
+                                       {:type "set-variable", :var-name "vaca-voice-next-picture-2", :var-value "vaca-voice-next-picture-2"}
+                                       {:type "set-variable", :var-name "vaca-voice-next-picture-3", :var-value "vaca-voice-next-picture-3"}
+                                       {:type "set-variable", :var-name "vaca-voice-next-picture-4", :var-value "vaca-voice-next-picture-4"}]},
             :init-vars
                                {:type "parallel",
                                 :data
@@ -1321,7 +1321,7 @@
                                 :phrase :next-photo
                                 :phrase-description "Next photo"},
             :vaca-voice-next-1
-                               {:from ["vaca-voice-next-1" "vaca-voice-next-2" "vaca-voice-next-3" "vaca-voice-next-4"],
+                               {:from ["vaca-voice-next-picture-1" "vaca-voice-next-picture-2" "vaca-voice-next-picture-3" "vaca-voice-next-picture-4"],
                                 :type "vars-var-provider",
                                 :shuffled true,
                                 :variables ["current-vaca-voice-next"]}
@@ -1396,11 +1396,4 @@
                                 "Fantastico!! Lo estas haciendo muy bien! Crees que podremos hacer todas estas fotos y los sonidos una vez mas? Vamos a hacerlo!"}
             },
  :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata {:prev "map", :autostart true},
- :audio
-           {:mari "/raw/audio/l2/a1/L2_A1_Mari.m4a",
-            :vaca-1 "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a",
-            :vaca-2 "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-            :vaca-3 "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
-            :vaca-6 "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
-            :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"}}
+ :metadata {:prev "map", :autostart true}}

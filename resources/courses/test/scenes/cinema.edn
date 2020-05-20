@@ -38,12 +38,7 @@
                  {:url "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", :size 5, :type "audio" :alias "vaca voice 5"}
                  {:url "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", :size 5, :type "audio" :alias "vaca voice 6"}
                  {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio" :alias "vaca voice 7"}]
- :audio         {:mari   "/raw/audio/l2/a1/L2_A1_Mari.m4a"
-                 :vaca-1 "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a"
-                 :vaca-2 "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a"
-                 :vaca-3 "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a"
-                 :vaca-6 "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a"
-                 :vaca-7 "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a"}
+
  :objects       {:background     {:type "background"
                                   :src  "/raw/img/cinema/background.jpg"}
                  :screen-overlay {:type   "image"
@@ -982,90 +977,118 @@
                                  {:type        "sequence-data"
                                   :description "Initial action",
                                   :data        [{:type "state" :target "screen-overlay" :id "hidden"}
-                                                {:type "parallel"
-                                                 :description
-                                                       "Buenas Dias! It’s learning time. Look at all these words you already know.
-                                                       Let’s start this activity by first reviewing the beginning sounds of words.
-                                                       Mari, can you please turn the screen on?"
-                                                 :data [{:type "audio" :id "vaca-1" :start 0.593 :duration 20.321}
-                                                        {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.593
-                                                         :data [{:start 0.763 :end 2.017 :anim "talk"}
-                                                                {:start 2.672 :end 4.335 :anim "talk"}
-                                                                {:start 5.098 :end 8.642 :anim "talk"}
-                                                                {:start 9.406 :end 16.058 :anim "talk"}
-                                                                {:start 17.067 :end 20.502 :anim "talk"}]}]}
-                                                {:type        "parallel"
-                                                 :description "Claro que si, Senora Vaca!"
-                                                 :data        [{:type "audio" :id "mari" :start 0.793 :duration 2.379}
-                                                               {:type "animation-sequence" :target "mari" :track 1 :offset 0.793
-                                                                :data [{:start 0.793 :end 3.173 :anim "talk"}]}]}
+                                                {:audio "/raw/audio/l2/a1/L2_A1_Vaca_1.m4a",
+                                                 :start 0.593,
+                                                 :duration 20.321,
+                                                 :type "animation-sequence",
+                                                 :track 1,
+                                                 :offset 0.593,
+                                                 :target "senoravaca",
+                                                 :data
+                                                 [{:end 2.017, :anim "talk", :start 0.763}
+                                                  {:end 4.335, :anim "talk", :start 2.672}
+                                                  {:end 8.642, :anim "talk", :start 5.098}
+                                                  {:end 16.058, :anim "talk", :start 9.406}
+                                                  {:end 20.502, :anim "talk", :start 17.067}]
+                                                 :phrase-text "Hello everyone! Are you ready to practice letter sounds? Look at all these words you already know! Let’s review the sound at the beginning of each word. Mari, can you fly around and point to each picture and letter?"
+                                                 :phrase-text-translated "Buenos dias! Hoy es tiempo de aprender. Mira todas las palabras que ya conoces. Vamos empezar esta actividad por repasar los sonidos de las palabras. Mari, puedes volar y senalar cada imagen y letra?"
+                                                 }
+                                                {:type "animation-sequence",
+                                                 :audio "/raw/audio/l2/a1/L2_A1_Mari.m4a",
+                                                 :start 0.793,
+                                                 :duration 2.379,
+                                                 :track 1,
+                                                 :offset 0.793,
+                                                 :target "mari",
+                                                 :data [{:end 3.173, :anim "talk", :start 0.793}]
+                                                 :phrase-text "Sure thing, Senora Vaca!"
+                                                 :phrase-text-translated "Claro que si, Senora Vaca!"}
                                                 {:type "transition" :transition-id "mari" :to {:x 1290 :y 580 :loop false :duration 1.5}}
-                                                {:type "parallel"
-                                                 :description
-                                                       "Escucha los sonidos al principio de cada palabra.
-                                                       Por ejemplo, cuando decimos la palabra “ardilla,” escuchamos el sonido “aaaaaa”.
-                                                       “Aaaardilla. Aaaardilla.”"
-                                                 :data [{:type "audio" :id "vaca-2" :start 0.954 :duration 17.236}
-                                                        {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.954
-                                                         :data [{:start 1.252 :end 4.98 :anim "talk"}
-                                                                {:start 5.636 :end 6.59 :anim "talk"}
-                                                                {:start 7.127 :end 10.288 :anim "talk"}
-                                                                {:start 10.944 :end 12.644 :anim "talk"}
-                                                                {:start 12.882 :end 13.747 :anim "talk"}
-                                                                {:start 14.612 :end 15.924 :anim "talk"}
-                                                                {:start 16.699 :end 18.071 :anim "talk"}]}]}
+                                                {:type "animation-sequence",
+                                                 :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                                 :start 0.954,
+                                                 :duration 17.236,
+                                                 :track 1,
+                                                 :offset 0.954,
+                                                 :target "senoravaca",
+                                                 :data
+                                                 [{:end 4.98, :anim "talk", :start 1.252}
+                                                  {:end 6.59, :anim "talk", :start 5.636}
+                                                  {:end 10.288, :anim "talk", :start 7.127}
+                                                  {:end 12.644, :anim "talk", :start 10.944}
+                                                  {:end 13.747, :anim "talk", :start 12.882}
+                                                  {:end 15.924, :anim "talk", :start 14.612}
+                                                  {:end 18.071, :anim "talk", :start 16.699}],
+                                                 :phrase-text "Listen to the sounds at the beginning of each word.  For example, When we say the word “Ant”, we hear an “aaaaa” sound.  “Aa- Aaant. Aa - Aant."
+                                                 :phrase-text-translated "Escucha los sonidos al principio de cada palabra. Por ejemplo, cuando decimos la palabra “ardilla,” escuchamos el sonido “aaaaaa”.\n                                                       “Aaaardilla. Aaaardilla.”"}
 
                                                 ;; Mari! Nos puedes mostrar como se escucha el sonido aaaaa? aaaaaa.
 
                                                 {:type "set-variable" :var-name "current-letter" :var-value "a"}
                                                 {:type "action" :id "start-highlight" :return-immediately true}
                                                 {:type "action" :id "move-to-current-card"}
-                                                {:type        "parallel"
-                                                 :description "Vamos a componer una cancion- Ardilla! Ardilla! a-a-A!"
-                                                 :data        [{:type "audio" :id "vaca-2" :start 19.115 :duration 6.531}
-                                                               {:type "animation-sequence" :target "senoravaca" :track 1 :offset 19.115
-                                                                :data [{:start 19.204 :end 21.381 :anim "talk"}
-                                                                       {:start 22.156 :end 25.586 :anim "talk"}]}]}
-                                                {:type "parallel"
-                                                 :description
-                                                       "Dilo conmigo tres veces!- Ardilla! Ardilla! a-a-A!
-                                                       Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A!"
-                                                 :data [{:type "audio" :id "vaca-2" :start 26.301 :duration 11.66}
-                                                        {:type "animation-sequence" :target "senoravaca" :track 1 :offset 26.301
-                                                         :data [{:start 26.361 :end 28.001 :anim "talk"}
-                                                                {:start 28.568 :end 31.430 :anim "talk"}
-                                                                {:start 31.758 :end 34.740 :anim "talk"}
-                                                                {:start 35.009 :end 37.901 :anim "talk"}]}]}
+                                                {:type "animation-sequence",
+                                                 :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                                 :start 19.115,
+                                                 :duration 6.531,
+                                                 :track 1,
+                                                 :offset 19.115,
+                                                 :target "senoravaca"
+                                                 :data [{:end 21.381, :anim "talk", :start 19.204} {:end 25.586, :anim "talk", :start 22.156}],
+                                                 :phrase-text "Let’s say the word and beginning sound 3 times like this - Ant! Ant!  a-a-A!"
+                                                 :phrase-text-translated "Vamos a componer una cancion- Ardilla! Ardilla! a-a-A!"}
+                                                {:type "animation-sequence",
+                                                 :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                                 :start 26.301,
+                                                 :duration 11.66,
+                                                 :track 1,
+                                                 :offset 26.301,
+                                                 :target "senoravaca"
+                                                 :data
+                                                 [{:end 28.001, :anim "talk", :start 26.361}
+                                                  {:end 31.43, :anim "talk", :start 28.568}
+                                                  {:end 34.74, :anim "talk", :start 31.758}
+                                                  {:end 37.901, :anim "talk", :start 35.009}],
+                                                 :phrase-text "Say it with me 3 times! - Ant! Ant!  a-a-A! Ant! Ant!  a-a-A! Ant! Ant!  a-a-A!"
+                                                 :phrase-text-translated "Dilo conmigo tres veces!- Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A!"}
                                                 {:type "action" :id "stop-highlight"}
                                                 {:type "action" :id "vaca-voice-chanting-4"}
                                                 {:type "set-variable" :var-name "current-letter" :var-value "o"}
                                                 {:type "action" :id "start-highlight" :return-immediately true}
                                                 {:type "action" :id "move-to-current-card"}
-                                                {:type "parallel"
-                                                 :description
-                                                       "Oso. Al principio de la palabra
-                                                       “Oso”, escuchamos el sonido “ooooo.” Ooooso. Oooso"
-                                                 :data [{:type "audio" :id "vaca-2" :start 41.927 :duration 10.735}
-                                                        {:type "animation-sequence" :target "senoravaca" :track 1 :offset 41.927
-                                                         :data [{:start 41.927 :end 42.673 :anim "talk"}
-                                                                {:start 43.627 :end 46.549 :anim "talk"}
-                                                                {:start 43.627 :end 46.549 :anim "talk"}
-                                                                {:start 46.937 :end 48.010 :anim "talk"}
-                                                                {:start 46.937 :end 47.861 :anim "talk"}
-                                                                {:start 48.219 :end 49.084 :anim "talk"}
-                                                                {:start 49.800 :end 50.903 :anim "talk"}
-                                                                {:start 51.470 :end 52.513 :anim "talk"}]}]}
-                                                {:type "parallel"
-                                                 :description
-                                                       "El sonido oooooo se escucha asi. Ooooo.
-                                                       Vamos a cantarlo- Oso, Oso, o-o-O!!"
-                                                 :data [{:type "audio" :id "vaca-2" :start 53.438 :duration 11.004}
-                                                        {:type "animation-sequence" :target "senoravaca" :track 1 :offset 53.438
-                                                         :data [{:start 53.527 :end 55.018 :anim "talk"}
-                                                                {:start 55.525 :end 57.076 :anim "talk"}
-                                                                {:start 57.404 :end 58.388 :anim "talk"}
-                                                                {:start 59.581 :end 61.833 :anim "talk"}
-                                                                {:start 61.698 :end 64.412 :anim "talk"}]}]}
+                                                {:type "animation-sequence",
+                                                 :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                                 :start 41.927,
+                                                 :duration 10.735,
+                                                 :track 1,
+                                                 :offset 41.927,
+                                                 :target "senoravaca",
+                                                 :data
+                                                 [{:end 42.673, :anim "talk", :start 41.927}
+                                                  {:end 46.549, :anim "talk", :start 43.627}
+                                                  {:end 46.549, :anim "talk", :start 43.627}
+                                                  {:end 48.01, :anim "talk", :start 46.937}
+                                                  {:end 47.861, :anim "talk", :start 46.937}
+                                                  {:end 49.084, :anim "talk", :start 48.219}
+                                                  {:end 50.903, :anim "talk", :start 49.8}
+                                                  {:end 52.513, :anim "talk", :start 51.47}],
+                                                 :phrase-text "At the beginning of the word “Oso”, we hear the “oooooo” sound. Ooooso.  Ooooso."
+                                                 :phrase-text-translated "Oso. Al principio de la palabra “Oso”, escuchamos el sonido “ooooo.” Ooooso. Oooso"}
+                                                {:type "animation-sequence",
+                                                 :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                                 :start 53.438,
+                                                 :duration 11.004
+                                                 :track 1,
+                                                 :offset 53.438,
+                                                 :target "senoravaca"
+                                                 :data
+                                                 [{:end 55.018, :anim "talk", :start 53.527}
+                                                  {:end 57.076, :anim "talk", :start 55.525}
+                                                  {:end 58.388, :anim "talk", :start 57.404}
+                                                  {:end 61.833, :anim "talk", :start 59.581}
+                                                  {:end 64.412, :anim "talk", :start 61.698}],
+                                                 :phrase-text "This is what the oooooo sound looks like. oooooo. Let’s sing it -  Mat, mat, M-M-Mmm!!"
+                                                 :phrase-text-translated "El sonido oooooo se escucha asi. Ooooo. Vamos a cantarlo- Oso, Oso, o-o-O!!"}
                                                 {:type "action" :id "stop-highlight"}]}
 
                  :move-to-current-card
@@ -1085,101 +1108,159 @@
                  ;; Vaca voices for letter chanting
 
                  :vaca-voice-chanting-1
-                                 {:type        "parallel"
-                                  :description "Al principio de la palabra"
-                                  :data        [{:type "audio" :id "vaca-2" :start 43.545 :duration 2.297}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 43.545
-                                                 :data [{:start 43.677 :end 45.766 :anim "talk"}]}]}
-
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 43.545,
+                                  :duration 2.297,
+                                  :track 1,
+                                  :offset 43.545,
+                                  :target "senoravaca",
+                                  :data
+                                  [{:end 45.766, :anim "talk", :start 43.677}],
+                                  :description "Al principio de la palabra"},
                  :vaca-voice-chanting-2
-                                 {:type        "parallel"
-                                  :description "el sonido"
-                                  :data        [{:type "audio" :id "vaca-2" :start 53.541 :duration 0.762}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 53.541
-                                                 :data [{:start 53.596 :end 54.243 :anim "talk"}]}]}
-
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 53.541,
+                                  :duration 0.762,
+                                  :track 1,
+                                  :offset 53.541,
+                                  :target "senoravaca",
+                                  :data
+                                  [{:end 54.243, :anim "talk", :start 53.596}],
+                                  :description "el sonido"},
                  :vaca-voice-chanting-3
-                                 {:type        "parallel"
-                                  :description "se escucha asi"
-                                  :data        [{:type "audio" :id "vaca-2" :start 55.481 :duration 1.628}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 55.481
-                                                 :data [{:start 55.481 :end 57.109 :anim "talk"}]}]}
-
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 55.481,
+                                  :duration 1.628,
+                                  :track 1,
+                                  :offset 55.481,
+                                  :target "senoravaca",
+                                  :data
+                                  [{:end 57.109, :anim "talk", :start 55.481}],
+                                  :description "se escucha asi"},
                  :vaca-voice-chanting-4
-                                 {:type        "parallel"
-                                  :description "Vamos a cantarlo"
-                                  :data        [{:type "audio" :id "vaca-2" :start 59.566 :duration 1.261}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 59.566
-                                                 :data [{:start 59.660 :end 60.742 :anim "talk"}]}]}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 59.566,
+                                  :duration 1.261,
+                                  :track 1,
+                                  :offset 59.566,
+                                  :target "senoravaca",
+                                  :data [{:end 60.742, :anim "talk", :start 59.66}],
+                                  :phrase-text "Let’s sing it"
+                                  :phrase-text-translated "Vamos a cantarlo"},
 
                  ;; Vaca voices for round ending
 
                  :vaca-voice-one-more-round
-                                 {:type        "parallel"
-                                  :description "Fantastico!! Lo estas haciendo muy bien!
-                                                  Crees que podremos hacer todas estas fotos y los sonidos una vez mas?
-                                                  Vamos a hacerlo!"
-                                  :data        [{:type "audio" :id "vaca-6" :start 15.147 :duration 13.047}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 15.147
-                                                 :data [{:start 15.221 :end 18.641 :anim "talk"}
-                                                        {:start 19.087 :end 25.908 :anim "talk"}
-                                                        {:start 26.428 :end 28.027 :anim "talk"}]}]}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a",
+                                  :start 15.147,
+                                  :duration 13.047,
+                                  :track 1,
+                                  :offset 15.147,
+                                  :target "senoravaca",
+                                  :data
+                                  [{:end 18.641, :anim "talk", :start 15.221}
+                                   {:end 25.908, :anim "talk", :start 19.087}
+                                   {:end 28.027, :anim "talk", :start 26.428}],
+                                  :phrase :one-more-round
+                                  :phrase-description "One more round"
+                                  :phrase-text
+                                  "Fantastic!! You are so good! Do you think we can do all those pictures and sounds one more time?  Let’s do it!"
+                                  :phrase-text-translated
+                                  "Fantastico!! Lo estas haciendo muy bien! Crees que podremos hacer todas estas fotos y los sonidos una vez mas? Vamos a hacerlo!"}
 
                  :vaca-voice-finish
-                                 {:type        "parallel"
-                                  :description "Wiiiiiiii! Lo cantaste conmigo asi de fuerte? Estoy impresionada!"
-                                  :data        [{:type "audio" :id "vaca-7" :start 0.897 :duration 8.719}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.897
-                                                 :data [{:start 1.158 :end 2.915 :anim "talk"}
-                                                        {:start 3.400 :end 6.191 :anim "talk"}
-                                                        {:start 6.926 :end 8.968 :anim "talk"}]}]}
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+                                  :start 0.897,
+                                  :duration 8.719,
+                                  :track 1,
+                                  :offset 0.897,
+                                  :target "senoravaca"
+                                  :data
+                                  [{:end 2.915, :anim "talk", :start 1.158}
+                                   {:end 6.191, :anim "talk", :start 3.4}
+                                   {:end 8.968, :anim "talk", :start 6.926}],
+                                  :phrase :finish-activity
+                                  :phrase-description "Finish activity"
+                                  :phrase-text "Woohoo! Did you sing all the letters nice and loud? I’m impressed!"
+                                  :phrase-text-translated "Wiiiiiiii! Lo cantaste conmigo asi de fuerte? Estoy impresionada!"},
 
                  ;; Vaca voices for going to the next letter
 
                  :vaca-voice-next
-                                 {:type "sequence-data"
-                                  :data [{:type      "vars-var-provider"
-                                          :variables ["current-vaca-voice-next"]
-                                          :from      ["vaca-voice-next-1"
-                                                      "vaca-voice-next-2"
-                                                      "vaca-voice-next-3"
-                                                      "vaca-voice-next-4"]
-                                          :shuffled  true}
-                                         {:type "action" :from-var [{:var-name "current-vaca-voice-next" :action-property "id"}]}]}
+                                 {:type "sequence",
+                                  :data ["vaca-voice-next-1" "vaca-voice-next-2"]
+                                  :phrase :next-photo
+                                  :phrase-description "Next photo"},
+                 :vaca-voice-next-1
+                                 {:from ["vaca-voice-next-picture-1" "vaca-voice-next-picture-2" "vaca-voice-next-picture-3" "vaca-voice-next-picture-4"],
+                                  :type "vars-var-provider",
+                                  :shuffled true,
+                                  :variables ["current-vaca-voice-next"]}
+                 :vaca-voice-next-2
+                                 {:type "action",
+                                  :from-var [{:var-name "current-vaca-voice-next", :action-property "id"
+                                              :possible-values ["vaca-voice-next-picture-1"
+                                                                "vaca-voice-next-picture-2"
+                                                                "vaca-voice-next-picture-3"
+                                                                "vaca-voice-next-picture-4"]}]}
+                 :vaca-voice-next-picture-1
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 38.932,
+                                  :duration 2.56
+                                  :track 1,
+                                  :offset 38.932,
+                                  :target "senoravaca",
+                                  :data [{:end 41.182, :anim "talk", :start 39.303}],
+                                  :phrase-text "What’s the next picture?",
+                                  :phrase-text-translated "Cual es la siguiente foto?"},
+                 :vaca-voice-next-picture-2
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 65.604,
+                                  :duration 2.505,
+                                  :track 1,
+                                  :offset 65.604,
+                                  :target "senoravaca",
+                                  :data [{:end 66.409, :anim "talk", :start 65.664} {:end 68.05, :anim "talk", :start 66.708}],
+                                  :phrase-text "And now the next picture!",
+                                  :phrase-text-translated "Y ahora la proxima foto!"},
+                 :vaca-voice-next-picture-3
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+                                  :start 73.805,
+                                  :duration 1.324,
+                                  :track 1,
+                                  :offset 73.805,
+                                  :target "senoravaca",
+                                  :data [{:end 74.878, :anim "talk", :start 73.984}],
+                                  :phrase-text "What’s next?!",
+                                  :phrase-text-translated "Que sigue?!"},
+                 :vaca-voice-next-picture-4
+                                 {:type "animation-sequence",
+                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a",
+                                  :start 0.907,
+                                  :duration 1.36,
+                                  :track 1,
+                                  :offset 0.907,
+                                  :target "senoravaca",
+                                  :data [{:end 2.189, :anim "talk", :start 0.97}],
+                                  :phrase-text "Keep going!",
+                                  :phrase-text-translated "Sigue! Sigue!"},
 
                  :init-vaca-voice-next
                                  {:type "parallel"
-                                  :data [{:type "set-variable" :var-name "vaca-voice-next-1" :var-value "vaca-voice-next-1"}
-                                         {:type "set-variable" :var-name "vaca-voice-next-2" :var-value "vaca-voice-next-2"}
-                                         {:type "set-variable" :var-name "vaca-voice-next-3" :var-value "vaca-voice-next-3"}
-                                         {:type "set-variable" :var-name "vaca-voice-next-4" :var-value "vaca-voice-next-4"}]}
+                                  :data [{:type "set-variable" :var-name "vaca-voice-next-picture-1" :var-value "vaca-voice-next-picture-1"}
+                                         {:type "set-variable" :var-name "vaca-voice-next-picture-2" :var-value "vaca-voice-next-picture-2"}
+                                         {:type "set-variable" :var-name "vaca-voice-next-picture-3" :var-value "vaca-voice-next-picture-3"}
+                                         {:type "set-variable" :var-name "vaca-voice-next-picture-4" :var-value "vaca-voice-next-picture-4"}]}
 
-                 :vaca-voice-next-1
-                                 {:type        "parallel"
-                                  :description "Cual es la siguiente foto?"
-                                  :data        [{:type "audio" :id "vaca-2" :start 38.932 :duration 2.560}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 38.932
-                                                 :data [{:start 39.303 :end 41.182 :anim "talk"}]}]}
-
-                 :vaca-voice-next-2
-                                 {:type        "parallel"
-                                  :description "Y ahora la proxima foto!"
-                                  :data        [{:type "audio" :id "vaca-2" :start 65.604 :duration 2.505}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 65.604
-                                                 :data [{:start 65.664 :end 66.409 :anim "talk"}
-                                                        {:start 66.708 :end 68.050 :anim "talk"}]}]}
-                 :vaca-voice-next-3
-                                 {:type        "parallel"
-                                  :description "Que sigue?!"
-                                  :data        [{:type "audio" :id "vaca-2" :start 73.805 :duration 1.324}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 73.805
-                                                 :data [{:start 73.984 :end 74.878 :anim "talk"}]}]}
-                 :vaca-voice-next-4
-                                 {:type        "parallel"
-                                  :description "Sigue! Sigue!"
-                                  :data        [{:type "audio" :id "vaca-3" :start 0.907 :duration 1.360}
-                                                {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.907
-                                                 :data [{:start 0.970 :end 2.189 :anim "talk"}]}]}
                  :start-highlight     {:type "transition"
                                        :from-var [{:action-property "transition-id"
                                                    :template        "card-%-filter"
