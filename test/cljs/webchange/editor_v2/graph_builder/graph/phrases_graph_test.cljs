@@ -240,16 +240,18 @@
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
 
-(deftest test-get-diagram-graph--magic-hat
-  (let [scene-data magic-hat-source/data
-        diagram-mode :phrases
-        params {:start-node nil}]
-    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
-                            (remove-actions-data))
-          expected-result magic-hat-expected/data]
-      (when-not (= actual-result expected-result)
-        (print-maps-comparison actual-result expected-result))
-      (is (= actual-result expected-result)))))
+;; Temporary disabled
+;
+;(deftest test-get-diagram-graph--magic-hat
+;  (let [scene-data magic-hat-source/data
+;        diagram-mode :phrases
+;        params {:start-node nil}]
+;    (let [actual-result (-> (get-diagram-graph scene-data diagram-mode params)
+;                            (remove-actions-data))
+;          expected-result magic-hat-expected/data]
+;      (when-not (= actual-result expected-result)
+;        (print-maps-comparison actual-result expected-result))
+;      (is (= actual-result expected-result)))))
 
 (deftest test-get-diagram-graph--cycling-letters
   (let [scene-data cycling-letters-source/data
