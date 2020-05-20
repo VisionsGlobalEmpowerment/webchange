@@ -340,12 +340,12 @@
                                                                  :variables ["current-audio-correct"]
                                                                  :from      ["audio-correct1" "audio-correct2" "audio-correct3" "audio-correct4" "audio-correct5"]
                                                                  :shuffled  true}
-                                                                {:type "action" :from-var [{:var-name "current-audio-correct" :action-property "id"}
-                                                                                           :possible-values [:mari-welcome-audio-1
-                                                                                                             :mari-welcome-audio-2
-                                                                                                             :mari-welcome-audio-3
-                                                                                                             :mari-welcome-audio-4
-                                                                                                             :mari-welcome-audio-5]]}]
+                                                                {:type "action" :from-var [{:var-name "current-audio-correct" :action-property "id"
+                                                                                            :possible-values [:mari-audio-correct-1
+                                                                                                              :mari-audio-correct-2
+                                                                                                              :mari-audio-correct-3
+                                                                                                              :mari-audio-correct-4
+                                                                                                              :mari-audio-correct-5]}]}]
                                            :phrase             :correct
                                            :phrase-description "Correct answer"}
 
