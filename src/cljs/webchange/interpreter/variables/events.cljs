@@ -176,7 +176,8 @@
                               first
                               :lesson-sets)
 
-          lesson (get-lesson db (get lesson-sets (keyword from)))
+          lesson-set-name (or (get lesson-sets (keyword from)) from)
+          lesson (get-lesson db lesson-set-name)
           items (->> (:item-ids lesson)
                      (map #(get-in db [:dataset-items %]))
                      (map #(merge (:data %) {:id (:name %)})))
