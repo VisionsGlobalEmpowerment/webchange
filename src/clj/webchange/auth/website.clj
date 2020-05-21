@@ -8,6 +8,10 @@
             [buddy.auth :as buddy]
             [webchange.auth.core :as core]))
 
+(defn coerce-user-types
+  [{id :id :as user}]
+  (assoc user :id (if (int? id) id (Integer/parseInt id))))
+
 (defn- success?
   [response]
   (and (http/success? response) (= "success" (-> response :body :status))))
@@ -24,7 +28,7 @@
                                  :as :json
                                  :form-params {:user_id website-user-id}})]
     (if (success? response)
-      (-> response :body :data))))
+      (-> response :body :data coerce-user-types))))
 
 (defn website-token-resource
   []
@@ -38,4 +42,4 @@
                                  :as :json
                                  :form-params {:token token}})]
     (if (success? response)
-      (-> response :body :data))))
+      (-> response :body :data coerce-user-types))))
