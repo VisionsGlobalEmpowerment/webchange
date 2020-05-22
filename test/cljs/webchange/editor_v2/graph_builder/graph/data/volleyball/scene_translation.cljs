@@ -7,99 +7,36 @@
            :box4                 {:path        [:box4]
                                   :entity      :object
                                   :children    []
-                                  :connections #{{:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-say-correct}
-                                                 {:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-audio-wrong}}}
+                                  :connections #{{:handler :mari-say-correct
+                                                  :name    "next"}
+                                                 {:handler :mari-audio-wrong
+                                                  :name    "next"}}}
            :start                {:path        [:start]
                                   :entity      :trigger
                                   :children    []
-                                  :connections #{{:previous :root
-                                                  :name     "start"
-                                                  :handler  :mari-welcome-audio-1}
-                                                 {:previous :root
-                                                  :name     "start"
-                                                  :handler  :word-oso-high}
-                                                 {:previous :root
-                                                  :name     "start"
-                                                  :handler  :word-incendio-high}
-                                                 {:previous :root
-                                                  :name     "start"
-                                                  :handler  :word-ardilla-high}}}
+                                  :connections #{{:handler :word-ardilla-high
+                                                  :name    "next"}
+                                                 {:handler :word-incendio-high
+                                                  :name    "next"}
+                                                 {:handler :word-oso-high
+                                                  :name    "next"}
+                                                 {:handler :mari-welcome-audio-1
+                                                  :name    "next"}}}
            :box3                 {:path        [:box3]
                                   :entity      :object
                                   :children    []
-                                  :connections #{{:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-say-correct}
-                                                 {:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-audio-wrong}}}
+                                  :connections #{{:handler :mari-say-correct
+                                                  :name    "next"} {:handler :mari-audio-wrong
+                                                                    :name    "next"}}}
            :mari-welcome-audio-1 {:path        [:mari-welcome-audio-1]
                                   :entity      :action
                                   :children    []
-                                  :connections #{{:previous :start
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-ardilla-high}
-                                                 {:previous :throw-from-player4
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-oso-high}
-                                                 {:previous :throw-from-player4
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-incendio-high}
-                                                 {:previous :throw-from-player1
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-incendio-high}
-                                                 {:previous :throw-from-player1
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-oso-high}
-                                                 {:previous :start
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-oso-high}
-                                                 {:previous :throw-from-player3
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-ardilla-high}
-                                                 {:previous :throw-from-player2
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-incendio-high}
-                                                 {:previous :throw-from-player2
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-oso-high}
-                                                 {:previous :throw-from-player1
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-ardilla-high}
-                                                 {:previous :start
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-incendio-high}
-                                                 {:previous :throw-from-player4
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-ardilla-high}
-                                                 {:previous :throw-from-player3
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-oso-high}
-                                                 {:previous :throw-from-player3
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-incendio-high}
-                                                 {:previous :throw-from-player2
-                                                  :name     "next"
-                                                  :sequence :start-scene
-                                                  :handler  :word-ardilla-high}}}
+                                  :connections #{{:handler :word-ardilla-high
+                                                  :name    "next"}
+                                                 {:handler :word-incendio-high
+                                                  :name    "next"}
+                                                 {:handler :word-oso-high
+                                                  :name    "next"}}}
            :word-incendio-high   {:path        [:word-incendio-high]
                                   :entity      :action
                                   :children    []
@@ -107,12 +44,10 @@
            :box1                 {:path        [:box1]
                                   :entity      :object
                                   :children    []
-                                  :connections #{{:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-say-correct}
-                                                 {:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-audio-wrong}}}
+                                  :connections #{{:handler :mari-say-correct
+                                                  :name    "next"}
+                                                 {:handler :mari-audio-wrong
+                                                  :name    "next"}}}
            :mari-audio-wrong     {:path        [:mari-audio-wrong]
                                   :entity      :action
                                   :children    [:mari-audio-wrong-0 :mari-audio-wrong-1]
@@ -124,12 +59,10 @@
            :box2                 {:path        [:box2]
                                   :entity      :object
                                   :children    []
-                                  :connections #{{:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-say-correct}
-                                                 {:previous :root
-                                                  :name     "click"
-                                                  :handler  :mari-audio-wrong}}}
+                                  :connections #{{:handler :mari-say-correct
+                                                  :name    "next"}
+                                                 {:handler :mari-audio-wrong
+                                                  :name    "next"}}}
            :mari-say-correct     {:path        [:mari-say-correct]
                                   :entity      :action
                                   :children    [:mari-say-correct-1 :mari-say-correct-2]
