@@ -3,9 +3,8 @@
 (def data {:start                     {:path        [:start]
                                        :entity      :trigger
                                        :children    []
-                                       :connections #{{:previous :root
-                                                       :name     "start"
-                                                       :handler  :intro}}}
+                                       :connections #{{:handler :intro
+                                                       :name    "next"}}}
            :intro                     {:path        [:intro]
                                        :entity      :action
                                        :children    [:intro-0
@@ -26,26 +25,17 @@
                                                      :intro-15
                                                      :intro-16
                                                      :intro-17]
-                                       :connections #{{:previous :start
-                                                       :name     "next"
-                                                       :sequence :intro
-                                                       :handler  :vaca-voice-finish}
-                                                      {:previous :start
-                                                       :name     "next"
-                                                       :sequence :intro
-                                                       :handler  :vaca-voice-one-more-round}
-                                                      {:previous :start
-                                                       :name     "next"
-                                                       :sequence :intro
-                                                       :handler  :vaca-voice-next}}}
+                                       :connections #{{:handler :vaca-voice-finish
+                                                       :name    "next"}
+                                                      {:handler :vaca-voice-one-more-round
+                                                       :name    "next"}
+                                                      {:handler :vaca-voice-next
+                                                       :name    "next"}}}
            :vaca-voice-next           {:path        [:vaca-voice-next]
                                        :entity      :action
-                                       :children    [:vaca-voice-next-1
-                                                     :vaca-voice-next-2]
-                                       :connections #{{:previous :intro
-                                                       :name     "next"
-                                                       :sequence :vaca-voice-next
-                                                       :handler  :chant-current-letter}}}
+                                       :children    [:vaca-voice-next-1 :vaca-voice-next-2]
+                                       :connections #{{:handler :chant-current-letter
+                                                       :name    "next"}}}
            :chant-current-letter      {:path        [:chant-current-letter]
                                        :entity      :action
                                        :children    [:chant-current-letter-0
@@ -60,7 +50,6 @@
                                        :entity      :action
                                        :children    []
                                        :connections #{}}
-
            :vaca-voice-one-more-round {:path        [:vaca-voice-one-more-round]
                                        :entity      :action
                                        :children    []

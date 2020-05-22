@@ -3,16 +3,8 @@
 (def data {:senora-vaca             {:path        [:senora-vaca]
                                      :entity      :object
                                      :children    []
-                                     :connections #{{:previous :root ;;extra connection
-                                                     :name     "click"
-                                                     :handler  :stage-intro}
-                                                    {:previous :root
-                                                     :name     "click"
-                                                     :handler  :current-sound}}}
-           :mari-voice-finish       {:path        [:mari-voice-finish]
-                                     :entity      :action
-                                     :children    []
-                                     :connections #{}}
+                                     :connections #{{:handler :stage-intro, :name "next"} {:handler :current-sound, :name "next"}}}
+           :mari-voice-finish       {:path [:mari-voice-finish], :entity :action, :children [], :connections #{}}
            :touch-small-letter      {:path        [:touch-small-letter]
                                      :entity      :action
                                      :children    [:touch-small-letter-0
@@ -23,24 +15,15 @@
            :letter-small            {:path        [:letter-small]
                                      :entity      :object
                                      :children    []
-                                     :connections #{{:previous :root
-                                                     :name     "click"
-                                                     :handler  :stage-big}}}
+                                     :connections #{{:handler :stage-big, :name "next"}}}
            :start                   {:path        [:start]
                                      :entity      :trigger
                                      :children    []
-                                     :connections #{{:previous :root
-                                                     :name     "start"
-                                                     :handler  :stage-intro}
-                                                    {:previous :root
-                                                     :name     "start"
-                                                     :handler  :current-sound}}}
+                                     :connections #{{:handler :stage-intro, :name "next"} {:handler :current-sound, :name "next"}}}
            :letter-big              {:path        [:letter-big]
                                      :entity      :object
                                      :children    []
-                                     :connections #{{:previous :root
-                                                     :name     "click"
-                                                     :handler  :mari-voice-finish}}}
+                                     :connections #{{:handler :mari-voice-finish, :name "next"}}}
            :stage-small             {:path        [:stage-small]
                                      :entity      :action
                                      :children    [:stage-small-0
@@ -63,24 +46,11 @@
                                                    :stage-small-17
                                                    :stage-small-18
                                                    :stage-small-19]
-                                     :connections #{{:previous :vaca-voice-2-ways-write
-                                                     :name     "next"
-                                                     :sequence :stage-small
-                                                     :handler  :touch-small-letter}}}
+                                     :connections #{{:handler :touch-small-letter, :name "next"}}}
            :stage-intro             {:path        [:stage-intro]
                                      :entity      :action
-                                     :children    [:stage-intro-0
-                                                   :stage-intro-1
-                                                   :stage-intro-2
-                                                   :stage-intro-3]
-                                     :connections #{{:previous :start
-                                                     :name     "next"
-                                                     :sequence :stage-intro
-                                                     :handler  :current-sound}
-                                                    {:previous :senora-vaca ;;extra connection
-                                                     :name     "next"
-                                                     :sequence :stage-intro
-                                                     :handler  :current-sound}}}
+                                     :children    [:stage-intro-0 :stage-intro-1 :stage-intro-2 :stage-intro-3]
+                                     :connections #{{:handler :current-sound, :name "next"}}}
            :stage-big               {:path        [:stage-big]
                                      :entity      :action
                                      :children    [:stage-big-0
@@ -97,16 +67,10 @@
                                                    :stage-big-11
                                                    :stage-big-12
                                                    :stage-big-13]
-                                     :connections #{{:previous :letter-small
-                                                     :name     "next"
-                                                     :sequence :stage-big
-                                                     :handler  :touch-big-letter}}}
+                                     :connections #{{:handler :touch-big-letter, :name "next"}}}
            :touch-big-letter        {:path        [:touch-big-letter]
                                      :entity      :action
-                                     :children    [:touch-big-letter-0
-                                                   :touch-big-letter-1
-                                                   :touch-big-letter-2
-                                                   :touch-big-letter-3]
+                                     :children    [:touch-big-letter-0 :touch-big-letter-1 :touch-big-letter-2 :touch-big-letter-3]
                                      :connections #{}}
            :vaca-voice-2-ways-write {:path        [:vaca-voice-2-ways-write]
                                      :entity      :action
@@ -115,10 +79,7 @@
                                                    :vaca-voice-2-ways-write-2
                                                    :vaca-voice-2-ways-write-3
                                                    :vaca-voice-2-ways-write-4]
-                                     :connections #{{:previous :current-sound
-                                                     :name     "next"
-                                                     :sequence :vaca-voice-2-ways-write
-                                                     :handler  :stage-small}}}
+                                     :connections #{{:handler :stage-small, :name "next"}}}
            :current-sound           {:path        [:current-sound]
                                      :entity      :action
                                      :children    [:current-sound-0
@@ -136,15 +97,4 @@
                                                    :current-sound-12
                                                    :current-sound-13
                                                    :current-sound-14]
-                                     :connections #{{:previous :senora-vaca
-                                                     :name     "next"
-                                                     :sequence :current-sound
-                                                     :handler  :vaca-voice-2-ways-write}
-                                                    {:previous :start ;;extra connection
-                                                     :name     "next"
-                                                     :sequence :current-sound
-                                                     :handler  :vaca-voice-2-ways-write}
-                                                    {:previous :stage-intro
-                                                     :name     "next"
-                                                     :sequence :current-sound
-                                                     :handler  :vaca-voice-2-ways-write}}}})
+                                     :connections #{{:handler :vaca-voice-2-ways-write, :name "next"}}}})

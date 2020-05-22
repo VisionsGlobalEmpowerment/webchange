@@ -1,64 +1,6 @@
 (ns webchange.editor-v2.graph-builder.graph.data.magic-hat.scene-translation)
 
-(def data {:start                    {:path        [:start]
-                                      :entity      :trigger
-                                      :children    []
-                                      :connections #{{:previous :root
-                                                      :name     "start"
-                                                      :handler  :intro}}}
-           :intro                    {:path        [:intro]
-                                      :entity      :action
-                                      :children    [:mari-voice-welcome
-                                                    :mari-flies-to-hat
-                                                    :mari-init-wand
-                                                    :mari-voice-intro]
-                                      :connections #{}}
-           :box1                     {:path        [:box1]
-                                      :entity      :object
-                                      :children    []
-                                      :connections #{{:previous :root
-                                                      :name     "click"
-                                                      :handler  :current-concept-chant}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :mari-says-correct-answer}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :current-concept-sound-x3}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :mari-says-wrong-answer}}}
-           :box2                     {:path        [:box2]
-                                      :entity      :object
-                                      :children    []
-                                      :connections #{{:previous :root
-                                                      :name     "click"
-                                                      :handler  :mari-says-correct-answer}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :mari-says-wrong-answer}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :current-concept-sound-x3}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :current-concept-chant}}}
-           :box3                     {:path        [:box3]
-                                      :entity      :object
-                                      :children    []
-                                      :connections #{{:previous :root
-                                                      :name     "click"
-                                                      :handler  :current-concept-sound-x3}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :mari-says-wrong-answer}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :current-concept-chant}
-                                                     {:previous :root
-                                                      :name     "click"
-                                                      :handler  :mari-says-correct-answer}}}
-           :mari-says-correct-answer {:path        [:mari-says-correct-answer]
+(def data {:mari-says-correct-answer {:path        [:mari-says-correct-answer]
                                       :entity      :action
                                       :children    []
                                       :connections #{}}
@@ -66,6 +8,11 @@
                                       :entity      :action
                                       :children    []
                                       :connections #{}}
+           :start                    {:path        [:start]
+                                      :entity      :trigger
+                                      :children    []
+                                      :connections #{{:handler :intro
+                                                      :name    "next"}}}
            :mari-says-wrong-answer   {:path        [:mari-says-wrong-answer]
                                       :entity      :action
                                       :children    [:mari-says-wrong-answer-0
@@ -80,7 +27,44 @@
                                                     :mari-says-wrong-answer-9
                                                     :mari-says-wrong-answer-10]
                                       :connections #{}}
+           :box3                     {:path        [:box3]
+                                      :entity      :object
+                                      :children    []
+                                      :connections #{{:handler :mari-says-correct-answer
+                                                      :name    "next"}
+                                                     {:handler :current-concept-chant
+                                                      :name    "next"}
+                                                     {:handler :mari-says-wrong-answer
+                                                      :name    "next"}
+                                                     {:handler :current-concept-sound-x3
+                                                      :name    "next"}}}
            :current-concept-sound-x3 {:path        [:current-concept-sound-x3]
                                       :entity      :action
                                       :children    []
-                                      :connections #{}}})
+                                      :connections #{}}
+           :box1                     {:path        [:box1]
+                                      :entity      :object
+                                      :children    []
+                                      :connections #{{:handler :mari-says-correct-answer
+                                                      :name    "next"}
+                                                     {:handler :current-concept-chant
+                                                      :name    "next"}
+                                                     {:handler :mari-says-wrong-answer
+                                                      :name    "next"}
+                                                     {:handler :current-concept-sound-x3
+                                                      :name    "next"}}}
+           :intro                    {:path        [:intro]
+                                      :entity      :action
+                                      :children    [:mari-voice-welcome :mari-flies-to-hat :mari-init-wand :mari-voice-intro]
+                                      :connections #{}}
+           :box2                     {:path        [:box2]
+                                      :entity      :object
+                                      :children    []
+                                      :connections #{{:handler :mari-says-correct-answer
+                                                      :name    "next"}
+                                                     {:handler :current-concept-chant
+                                                      :name    "next"}
+                                                     {:handler :mari-says-wrong-answer
+                                                      :name    "next"}
+                                                     {:handler :current-concept-sound-x3
+                                                      :name    "next"}}}})

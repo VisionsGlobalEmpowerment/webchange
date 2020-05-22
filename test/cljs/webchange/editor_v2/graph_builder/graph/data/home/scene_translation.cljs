@@ -3,7 +3,8 @@
 (def data {:senora-vaca                        {:path        [:senora-vaca]
                                                 :entity      :object
                                                 :children    []
-                                                :connections #{{:previous :root :name "click" :handler :senora-vaca-audio-1}}}
+                                                :connections #{{:handler :senora-vaca-audio-1
+                                                                :name    "next"}}}
            :senora-vaca-audio-touch-second-box {:path        [:senora-vaca-audio-touch-second-box]
                                                 :entity      :action
                                                 :children    []
@@ -18,33 +19,17 @@
                                                               :vaca-word-var
                                                               :empty-small-1
                                                               :group-word-var]
-                                                :connections #{{:previous :box3
-                                                                :name     "next"
-                                                                :sequence :concept-intro
-                                                                :handler  :concept-chant}
-                                                               {:previous :box1
-                                                                :name     "next"
-                                                                :sequence :concept-intro
-                                                                :handler  :concept-chant}
-                                                               {:previous :box2
-                                                                :name     "next"
-                                                                :sequence :concept-intro
-                                                                :handler  :concept-chant}}}
+                                                :connections #{{:handler :concept-chant
+                                                                :name    "next"}}}
            :vaca-goodbye-var                   {:path        [:vaca-goodbye-var]
                                                 :entity      :action
                                                 :children    []
-                                                :connections #{{:previous :concept-chant
-                                                                :name     "next"
-                                                                :sequence :introduce-word
-                                                                :handler  :mari-finish}
-                                                               {:previous :concept-chant
-                                                                :name     "next"
-                                                                :sequence :introduce-word
-                                                                :handler  :senora-vaca-audio-touch-second-box}
-                                                               {:previous :concept-chant
-                                                                :name     "next"
-                                                                :sequence :introduce-word
-                                                                :handler  :senora-vaca-audio-touch-third-box}}}
+                                                :connections #{{:handler :mari-finish
+                                                                :name    "next"}
+                                                               {:handler :senora-vaca-audio-touch-second-box
+                                                                :name    "next"}
+                                                               {:handler :senora-vaca-audio-touch-third-box
+                                                                :name    "next"}}}
            :senora-vaca-audio-2                {:path        [:senora-vaca-audio-2]
                                                 :entity      :action
                                                 :children    []
@@ -68,14 +53,13 @@
                                                               :vaca-once-more
                                                               :empty-small
                                                               :group-3-times-var]
-                                                :connections #{{:previous :concept-intro
-                                                                :name     "next"
-                                                                :sequence :concept-chant
-                                                                :handler  :vaca-goodbye-var}}}
+                                                :connections #{{:handler :vaca-goodbye-var
+                                                                :name    "next"}}}
            :start                              {:path        [:start]
                                                 :entity      :trigger
                                                 :children    []
-                                                :connections #{{:previous :root :name "start" :handler :senora-vaca-audio-1}}}
+                                                :connections #{{:handler :senora-vaca-audio-1
+                                                                :name    "next"}}}
            :senora-vaca-audio-touch-third-box  {:path        [:senora-vaca-audio-touch-third-box]
                                                 :entity      :action
                                                 :children    []
@@ -83,26 +67,27 @@
            :box3                               {:path        [:box3]
                                                 :entity      :object
                                                 :children    []
-                                                :connections #{{:previous :root :name "click" :handler :concept-intro}
-                                                               {:previous :root :name "click" :handler :pick-wrong}}}
+                                                :connections #{{:handler :pick-wrong
+                                                                :name    "next"}
+                                                               {:handler :concept-intro
+                                                                :name    "next"}}}
            :senora-vaca-audio-1                {:path        [:senora-vaca-audio-1]
                                                 :entity      :action
                                                 :children    []
-                                                :connections #{{:previous :start
-                                                                :name     "next"
-                                                                :sequence :intro
-                                                                :handler  :senora-vaca-audio-2}
-                                                               {:previous :senora-vaca
-                                                                :name     "next"
-                                                                :sequence :intro
-                                                                :handler  :senora-vaca-audio-2}}}
+                                                :connections #{{:handler :senora-vaca-audio-2
+                                                                :name    "next"}}}
            :box1                               {:path        [:box1]
                                                 :entity      :object
                                                 :children    []
-                                                :connections #{{:previous :root :name "click" :handler :concept-intro}
-                                                               {:previous :root :name "click" :handler :pick-wrong}}}
+                                                :connections #{{:handler :pick-wrong
+                                                                :name    "next"}
+                                                               {:handler :concept-intro
+                                                                :name    "next"}}}
            :box2                               {:path        [:box2]
                                                 :entity      :object
                                                 :children    []
-                                                :connections #{{:previous :root :name "click" :handler :concept-intro}
-                                                               {:previous :root :name "click" :handler :pick-wrong}}}})
+                                                :connections #{{:handler :pick-wrong
+                                                                :name    "next"}
+                                                               {:handler :concept-intro
+                                                                :name    "next"}}}}
+  )
