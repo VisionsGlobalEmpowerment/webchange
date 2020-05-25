@@ -5,6 +5,7 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.events :as events]
+    [webchange.interpreter.events :as ie]
     ))
 
 (re-frame/reg-event-fx
@@ -78,4 +79,4 @@
   (fn [{:keys [db]} [_ user]]
     {:db (update-in db [:user] merge user)
      :dispatch-n (list [:complete-request :student-login]
-                       [:open-student-dashboard])}))
+                       [::ie/open-student-dashboard])}))
