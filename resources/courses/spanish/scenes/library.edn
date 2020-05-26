@@ -19,6 +19,7 @@
    :transition "book",
    :actions {:click {:id "start-book-scene", :on "click", :type "action"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/library/main/Books_Enabled.png"},
   :easel
   {:type "image",
@@ -29,6 +30,7 @@
    :transition "writing-lesson",
    :actions {:click {:on "click", :type "scene", :scene-id "writing-lesson"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/library/main/Easel_Enabled.png"},
   :hat
   {:type "image",
@@ -39,6 +41,7 @@
    :transition "magic-hat",
    :actions {:click {:on "click", :type "scene", :scene-id "magic-hat"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/library/main/Hat_Enabled.png"},
   :librarian
   {:type "animation",
@@ -62,6 +65,7 @@
    :transition "painting-tablet",
    :actions {:click {:on "click", :type "location", :location-id "painting-tablet"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/library/main/Tablet_Enabled.png"},
   :vera
   {:type "animation",

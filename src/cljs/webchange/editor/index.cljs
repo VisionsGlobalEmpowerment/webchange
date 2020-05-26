@@ -12,6 +12,7 @@
     [webchange.common.events :as ce]
     [webchange.common.core :refer [with-parent-origin
                                    with-origin-offset]]
+    [webchange.common.image-filters.filter-outlined :refer [filter-outlined]]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]
@@ -145,10 +146,16 @@
    [:> Group {:on-click remove-transform}
     [kimage (get-data-as-url (:src object))]]])
 
+(defn- get-filters
+  [params]
+  (if (contains? params :highlight)
+    [filter-outlined]
+    []))
+
 (defn image
   [scene-id name object]
   [:> Group (object-params object)
-   [kimage (get-data-as-url (:src object))]
+   [kimage (get-data-as-url (:src object)) {:filters (get-filters object)}]
    [:> Rect (rect-params scene-id name object)]])
 
 (defn transparent

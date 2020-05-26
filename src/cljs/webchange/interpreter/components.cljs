@@ -30,7 +30,7 @@
                                    prepare-animated-svg-path-params
                                    with-origin-offset
                                    with-filter-transition]]
-
+    [webchange.common.image-filters.filter-outlined :refer [filter-outlined]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [konva :as k]))
 
@@ -87,7 +87,7 @@
         y (:y left)]
     {:x x :y y}))
 
-(defn empty-filter [] {:filter nil})
+(defn empty-filter [] {:filters []})
 
 (defn grayscale-filter
   []
@@ -99,11 +99,18 @@
     {:filters [k/Filters.Brighten] :brightness brightness :transition transition}
     with-filter-transition))
 
+(defn- with-highlight
+  [image-params object-params]
+  (if (contains? object-params :highlight)
+    (update-in image-params [:filters] conj filter-outlined)
+    image-params))
+
 (defn filter-params [{:keys [filter] :as params}]
-  (case filter
-    "grayscale" (grayscale-filter)
-    "brighten" (brighten-filter params)
-    (empty-filter)))
+  (-> (case filter
+        "grayscale" (grayscale-filter)
+        "brighten" (brighten-filter params)
+        (empty-filter))
+      (with-highlight params)))
 
 (defn settings
   []

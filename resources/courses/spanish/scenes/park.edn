@@ -18,6 +18,7 @@
    :transition "hide-n-seek",
    :actions {:click {:on "click", :type "scene", :scene-id "hide-n-seek"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/park/main/HideAndSeek_Enabled.png"},
   :pinata
   {:type "image",
@@ -28,6 +29,7 @@
    :transition "pinata",
    :actions {:click {:on "click", :type "scene", :scene-id "pinata"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/park/main/Pinata_Enabled.png"},
   :sandbox
   {:type "image",
@@ -38,6 +40,7 @@
    :transition "sandbox",
    :actions {:click {:on "click", :type "location", :location-id "sandbox"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/park/main/Sandbox_Enabled.png"},
   :see-saw
   {:type "image",
@@ -48,6 +51,7 @@
    :transition "see-saw",
    :actions {:click {:on "click", :type "scene", :scene-id "see-saw"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/park/main/SeeSaw_Enabled.png"},
   :slide
   {:type "image",
@@ -58,6 +62,7 @@
    :transition "slide",
    :actions {:click {:on "click", :type "scene", :scene-id "slide"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/park/main/Slide_Enabled.png"},
   :swings
   {:type "image",
@@ -68,6 +73,7 @@
    :transition "swings",
    :actions {:click {:on "click", :type "scene", :scene-id "swings"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/park/main/Swing_Enabled.png"},
   :vera
   {:type "animation",
