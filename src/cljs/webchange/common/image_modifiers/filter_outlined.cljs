@@ -1,4 +1,4 @@
-(ns webchange.common.image-filters.filter-outlined)
+(ns webchange.common.image-modifiers.filter-outlined)
 
 (def default-params {:color     "#fcec00"                   ;; name or hex color
                      :thickness 20                          ;; thickness in pixels

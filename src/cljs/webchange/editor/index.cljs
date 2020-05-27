@@ -12,7 +12,7 @@
     [webchange.common.events :as ce]
     [webchange.common.core :refer [with-parent-origin
                                    with-origin-offset]]
-    [webchange.common.image-filters.filter-outlined :refer [filter-outlined]]
+    [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]

@@ -274,7 +274,6 @@
              (< (+ r2y r2height) r1y)))))
 
 (defn animation-sequence->actions [{audio-start :start :keys [target track data] :or {track 1} :as action}]
-  (js/console.log "audio-start: " audio-start)
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type "sequence-data"
                    :data [{:type "empty" :duration (* (- start audio-start) 1000)}

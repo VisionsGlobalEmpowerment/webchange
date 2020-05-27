@@ -2,9 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.subs :as subs]
-    [webchange.events :as events]
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.painting-area :refer [painting-area]]
     [webchange.common.copybook :refer [copybook]]
@@ -21,7 +19,6 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
     [webchange.common.core :refer [prepare-anim-rect-params
                                    prepare-colors-palette-params
@@ -30,7 +27,8 @@
                                    prepare-animated-svg-path-params
                                    with-origin-offset
                                    with-filter-transition]]
-    [webchange.common.image-filters.filter-outlined :refer [filter-outlined]]
+    [webchange.common.image-modifiers.animation-eager :refer [animation-eager]]
+    [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [konva :as k]))
 
@@ -105,12 +103,19 @@
     (update-in image-params [:filters] conj filter-outlined)
     image-params))
 
+(defn- with-pulsation
+  [image-params object-params]
+  (if (:eager object-params)
+    (assoc image-params :animation animation-eager)
+    image-params))
+
 (defn filter-params [{:keys [filter] :as params}]
   (-> (case filter
         "grayscale" (grayscale-filter)
         "brighten" (brighten-filter params)
         (empty-filter))
-      (with-highlight params)))
+      (with-highlight params)
+      (with-pulsation params)))
 
 (defn settings
   []
