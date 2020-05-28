@@ -1,6 +1,7 @@
 (ns webchange.interpreter.executor
   (:require
-    [webchange.interpreter.core :refer [get-data create-tagged-key has-data put-data]]))
+    [webchange.interpreter.core :refer [get-data create-tagged-key has-data put-data]]
+    [webchange.logger :as logger]))
 
 (defonce audio-ctx (atom nil))
 (defonce music-gain (atom nil))
@@ -53,19 +54,19 @@
 
 (defn get-audio
   [key destination]
-  (let [buffer-key (create-tagged-key "audioBuffer" key)]
-    (when-not (has-data buffer-key)
-      (let [key-data (get-data key)]
-        (if-not (nil? key-data)
-          (let [data (-> key-data .slice)
-                promise (.decodeAudioData @audio-ctx data)]
-            (put-data promise buffer-key))
-          (-> (str "Audio '" key "' was not found") js/Error. throw))))
-    (let [buffer-data (get-data buffer-key)]
-      (-> buffer-data
-          (.then create-buffered-source)
-          (.then (connect destination))))
-    ))
+  (let [buffer-key (create-tagged-key "audioBuffer" key)
+        key-data (get-data key)]
+    (if (and (not (has-data buffer-key))
+             (nil? key-data))
+      (.reject js/Promise (str "Audio '" key "' was not found"))
+      (do (when-not (has-data buffer-key)
+            (let [data (-> key-data .slice)
+                  promise (.decodeAudioData @audio-ctx data)]
+              (put-data promise buffer-key)))
+          (let [buffer-data (get-data buffer-key)]
+            (-> buffer-data
+                (.then create-buffered-source)
+                (.then (connect destination))))))))
 
 (defn with-on-ended
   [cb]
@@ -100,7 +101,11 @@
   (let [audio (get-audio key @effects-gain)]
     (-> audio
         (.then (with-on-ended on-ended))
-        (.then (start-audio offset start duration)))))
+        (.then (start-audio offset start duration))
+        (.catch (fn [error]
+                  (logger/error error)
+                  (logger/log "Audio will be skipped")
+                  (on-ended))))))
 
 (defn execute-audio-music
   [{:keys [key start offset on-ended] :as params}]

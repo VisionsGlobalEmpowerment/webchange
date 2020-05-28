@@ -236,10 +236,11 @@
 
 (defn back-button
   [x y]
-  [:> Group {:x x :y y
-             :on-click #(re-frame/dispatch [::ie/close-scene])
-             :on-tap #(re-frame/dispatch [::ie/close-scene])}
-   [kimage (get-data-as-url "/raw/img/ui/back_button_01.png") (filter-params {:filter "brighten" :transition "back"})]])
+  (let [back-button-state @(re-frame/subscribe [::subs/current-scene-back-button])]
+    [:> Group {:x        x :y y
+               :on-click #(re-frame/dispatch [::ie/close-scene])
+               :on-tap   #(re-frame/dispatch [::ie/close-scene])}
+     [kimage (get-data-as-url "/raw/img/ui/back_button_01.png") (filter-params back-button-state)]]))
 
 (defn settings-button
   [x y]

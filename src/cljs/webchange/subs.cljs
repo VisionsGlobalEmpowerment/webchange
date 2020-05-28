@@ -66,6 +66,13 @@
       (get-in db [:scenes current-scene-id :objects] {}))))
 
 (re-frame/reg-sub
+  ::current-scene-back-button
+  (fn []
+    [(re-frame/subscribe [::current-scene-objects])])
+  (fn [[scene-objects]]
+    (:back scene-objects)))
+
+(re-frame/reg-sub
   ::scene-actions
   (fn [db [_ scene-id]]
     (get-in db [:scenes scene-id :actions] [])))
