@@ -234,68 +234,82 @@
     {:type "set-attribute", :target "mari", :attr-name "scale-x", :attr-value -0.5}
     {:to {:x 1490, :y 180, :loop false, :duration 2}, :type "transition", :transition-id "mari"}]},
   :mari-voice-go-next-practice
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 62.923, :volume 0.2, :duration 4.054}
-    {:data [{:end 66.859, :anim "talk", :start 63.08}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 62.923,
-     :target "mari"}],
-   :description "Haz click en la flecha para seguir con tu trabajo."},
-  :mari-voice-good-job
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 58.908, :volume 0.2, :duration 2.637}
-    {:data [{:end 62.529, :anim "talk", :start 59.223}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 58.908,
-     :target "mari"}],
-   :description "Buen trabajo rastreando la letra"},
+  {:type "sequence-data"
+   :phrase :next-practice
+   :phrase-description "Next practice"
+   :data [{:offset 58.908,
+           :phrase-text "Good job tracing the letter a!"
+           :phrase-text-translated "Buen trabajo rastreando la letra",
+           :start 58.908,
+           :type "animation-sequence",
+           :duration 2.637,
+           :volume 0.2,
+           :audio "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+           :target "mari",
+           :track 1,
+           :data [{:end 62.529, :anim "talk", :start 59.223}]}
+          {:offset 62.923,
+           :phrase-text "Click on the arrow to do a little more writing work."
+           :phrase-text-translated "Haz click en la flecha para seguir con tu trabajo.",
+           :start 62.923,
+           :type "animation-sequence",
+           :duration 4.054,
+           :volume 0.2,
+           :audio "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+           :target "mari",
+           :track 1,
+           :data [{:end 66.859, :anim "talk", :start 63.08}]}]}
   :mari-voice-intro
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 32.357, :volume 0.2, :duration 17.005}
-    {:data
-     [{:end 36.254, :anim "talk", :start 33.026}
-      {:end 40.367, :anim "talk", :start 36.707}
-      {:end 45.485, :anim "talk", :start 41.627}
-      {:end 49.047, :anim "talk", :start 46.193}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 32.357,
-     :target "mari"}],
-   :description
-   "Escoge un lapiz o un color y sigue las flechas para rastrear la letra.\n                                                    Recuerda seguir el modelo correcto de rastrear. Yo te ensenare como hacer el primero. "},
+  {:offset 32.357,
+   :phrase :welcome
+   :phrase-description "Welcome"
+   :phrase-text "Pick a pencil or a color and follow the arrows to trace the letter.  Remember to follow the correct tracing pattern.  I’ll show you how to do the first one."
+   :phrase-text-translated "Escoge un lapiz o un color y sigue las flechas para rastrear la letra. Recuerda seguir el modelo correcto de rastrear. Yo te ensenare como hacer el primero. ",
+   :start 32.357,
+   :type "animation-sequence",
+   :duration 17.005,
+   :volume 0.2,
+   :audio "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 36.254, :anim "talk", :start 33.026}
+          {:end 40.367, :anim "talk", :start 36.707}
+          {:end 45.485, :anim "talk", :start 41.627}
+          {:end 49.047, :anim "talk", :start 46.193}]},
   :mari-voice-intro-2
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 70.402, :volume 0.2, :duration 16.848}
-    {:data
-     [{:end 75.952, :anim "talk", :start 70.677}
-      {:end 79.298, :anim "talk", :start 76.68}
-      {:end 81.483, :anim "talk", :start 80.046}
-      {:end 86.915, :anim "talk", :start 82.073}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 70.402,
-     :target "mari"}],
-   :description
-   "En esta pagina, podras practicar a dibujar las letras O podras dibujar lo que gustes.\n                                                            Cuando termines, haz click sobre la flecha para ir a tu proxima actividad."},
+  {:offset 70.402,
+   :phrase :free-drawing
+   :phrase-description "Free drawing intro"
+   :phrase-text "On this page, you should practice drawing the letters OR you can draw anything you want. When you are finished drawing, click the arrow to go to your next activity.",
+   :phrase-text-translated "En esta pagina, podras practicar a dibujar las letras O podras dibujar lo que gustes. Cuando termines, haz click sobre la flecha para ir a tu proxima actividad.",
+   :start 70.402,
+   :type "animation-sequence",
+   :duration 16.848,
+   :volume 0.2,
+   :audio "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 75.952, :anim "talk", :start 70.677}
+          {:end 79.298, :anim "talk", :start 76.68}
+          {:end 81.483, :anim "talk", :start 80.046}
+          {:end 86.915, :anim "talk", :start 82.073}]},
   :mari-voice-try-again
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :start 52.432, :volume 0.2, :duration 3.228}
-    {:data [{:end 55.562, :anim "talk", :start 52.629}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 52.432,
-     :target "mari"}],
-   :description "Toca aqui para seguir rastreando"},
+  {:offset 52.432,
+   :phrase :more-practice
+   :phrase-description "More practice"
+   :phrase-text "Touch here for more tracing practice",
+   :phrase-text-translated "Toca aqui para seguir rastreando",
+   :start 52.432,
+   :type "animation-sequence",
+   :duration 3.228,
+   :volume 0.2,
+   :audio "/raw/audio/l2/a7/L2_A7_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 55.562, :anim "talk", :start 52.629}]},
   :renew-concept
   {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
-  :start
+  :start-scene
   {:type "sequence",
    :data
    ["start-activity"
@@ -323,5 +337,5 @@
     :target "practice-canvas",
     :from-var [{:template "writing-practice-stage-2-pt-%", :var-name "current-page", :action-property "attr-value"}],
     :attr-name "var-name"}}},
- :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "library", :autostart true}}

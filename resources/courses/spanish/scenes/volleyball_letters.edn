@@ -287,7 +287,11 @@
     {:type "set-variable", :var-name "slot3", :var-value "player3"}
     {:type "set-variable", :var-name "slot4", :var-value "player4"}]},
   :mari-welcome-audio
-  {:type "animation-sequence",
+  {:phrase :welcome
+   :phrase-description "Welcome"
+   :phrase-text "It’s time to play volleyball with letters!  Listen to the words and touch the letter that makes the beginning sound of the word!"
+   :phrase-text-translated "Es tiempo de jugar volleyball con las letras! Escucha las palabras y toca la letra que hacen el sonido al principio de la palabra!"
+   :type "animation-sequence",
    :data
    [{:end 4.442, :anim "talk", :start 0.564}
     {:end 6.741, :anim "talk", :start 5.14}
@@ -411,7 +415,7 @@
    :repeat 4,
    :shuffled true,
    :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"]},
-  :start
+  :start-scene
   {:type "sequence",
    :data
    ["start-activity"
@@ -504,8 +508,11 @@
   {:type "transition",
    :to {:bezier [{:x 446, :y 551} {:x 346, :y 451} {:x 213, :y 940}], :duration 1.4},
    :transition-id "ball-transition"},
-  :voice-high-var {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]},
+  :voice-high-var {:phrase :concept-chant
+                   :phrase-description "Concept chant"
+                   :type "action",
+                   :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]},
   :wait-for-box-animations {:type "empty", :duration 500}},
- :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "stadium", :autostart true},
  :templates ["coaching"]}

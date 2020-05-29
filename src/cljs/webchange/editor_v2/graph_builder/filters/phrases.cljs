@@ -1,56 +1,52 @@
 (ns webchange.editor-v2.graph-builder.filters.phrases
   (:require
-    [webchange.editor-v2.graph-builder.utils.node-children :refer [get-children]]
     [webchange.editor-v2.graph-builder.utils.change-node :refer [remove-node]]
-    [webchange.editor-v2.graph-builder.utils.remove-sub-graph :refer [remove-sub-graph]]
-    [webchange.editor-v2.graph-builder.utils.root-nodes :refer [add-root-node
-                                                                get-root-nodes
-                                                                remove-root-node]]
-    [webchange.editor-v2.graph-builder.utils.count-nodes-weights :refer [count-nodes-weights
-                                                                         weight-changer?]]
-    [webchange.editor-v2.graph-builder.utils.remove-extra-nodes :refer [remove-extra-nodes]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [phrase-node?]]))
 
-(defn- remove-node?
-  [nodes-weights node-name node-data]
-  (let [significant? (-> (get nodes-weights node-name)
-                         (weight-changer?))
-        action? (= :action (:entity node-data))]
-    (and action?
-         (not significant?))))
-
 (defn- remove-detached-nodes
-  [graph nodes-weights]
-  (reduce (fn [graph [node-name _]]
-            (let [counted? (contains? nodes-weights node-name)
-                  zero-weight? (= 0 (-> nodes-weights (get node-name) (first)))]
-              (if (or zero-weight?
-                      (not counted?))
-                (dissoc graph node-name)
-                graph)))
+  [graph]
+  (reduce (fn [graph [node-name node-data]]
+            (if (and (not (= (:entity node-data) :action))
+                     (empty? (:connections node-data)))
+              (dissoc graph node-name)
+              graph))
           graph
           graph))
 
-(defn- remove-empty-connections
+(defn- remove-node?
+  [node-data]
+  (and (= (:entity node-data) :action)
+       (not (phrase-node? node-data))))
+
+(defn remove-extra-nodes
+  [graph remove?]
+  (reduce (fn [graph [node-name node-data]]
+            (if (remove? node-data)
+              (remove-node graph node-name)
+              graph))
+          graph
+          graph))
+
+(defn- simplify-connections
+  "Remove duplicated connection with the same handler but different previous nodes.
+   Keep only handler. Name hardcoded with 'next' for diagram builder compatibility."
   [graph]
-  (let [filter-connections (fn [connections]
-                             (->> connections
-                                  (filter :handler)
-                                  (set)))]
-    (reduce (fn [graph [node-name _]]
-              (update-in graph [node-name :connections] filter-connections))
-            graph
-            graph)))
+  (reduce (fn [graph [node-name node-data]]
+            (let [simplified-connections (->> (:connections node-data)
+                                              (map :handler)
+                                              (distinct)
+                                              (remove nil?) ;; ToDo: Remove when 'remove-extra-nodes' doesn't leave no-handler connections. Case: 'Swings' scene, ':box3' node
+                                              (map (fn [handler]
+                                                     {:handler handler
+                                                      :name    "next"}))
+                                              (set))]
+              (assoc-in graph [node-name :connections] simplified-connections)))
+          graph
+          graph))
 
 (defn get-phrases-graph
   [scene-graph]
-  (let [graph (->> scene-graph
-                   (get-root-nodes)
-                   (add-root-node scene-graph))
-        subtree-phrase-weights (count-nodes-weights graph phrase-node?)]
-    (-> graph
-        (remove-extra-nodes (partial remove-node? subtree-phrase-weights))
-        (remove-detached-nodes subtree-phrase-weights)
-        (remove-root-node)
-        (remove-empty-connections)                          ;; ToDo: Remove when 'remove-extra-nodes' doesn't leave no-handler connections
-        )))                                                 ;;       Case: 'Swings' scene, ':box3' node
+  (-> scene-graph
+      (remove-extra-nodes remove-node?)
+      (remove-detached-nodes)
+      (simplify-connections)))

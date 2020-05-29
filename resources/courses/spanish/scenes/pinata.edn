@@ -292,7 +292,9 @@
    :data
    [{:to {:bezier [{:x 691, :y 636} {:x 513, :y 570}], :duration 1.3}, :type "transition", :transition-id "mari"}]},
   :mari-says-task
-  {:type "sequence-data",
+  {:phrase :current-task
+   :phrase-description "Place current letter"
+   :type "sequence-data",
    :data
    [{:id "mari-voice-act-1", :type "action"}
     {:type "action", :from-var [{:var-name "current-slot", :var-property "mari-letter"}]}
@@ -301,50 +303,54 @@
     {:type "action", :from-var [{:var-name "current-slot", :var-property "mari-letter"}]}
     {:id "mari-voice-act-3", :type "action"}]},
   :mari-voice-act-1
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 18.776, :duration 1.716}
-    {:data [{:end 20.492, :anim "talk", :start 18.776}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 18.776,
-     :target "mari"}],
-   :description "Esta es la letra"},
+  {:offset 18.776,
+   :phrase-text "This is the letter"
+   :phrase-text-translated "Esta es la letra",
+   :start 18.776,
+   :type "animation-sequence",
+   :duration 1.716,
+   :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 20.492, :anim "talk", :start 18.776}]},
   :mari-voice-act-2
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 21.737, :duration 3.009}
-    {:data [{:end 24.745, :anim "talk", :start 21.737}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 21.737,
-     :target "mari"}],
-   :description "Coloca la foto que empieza con la letra"},
+  {:offset 21.737,
+   :phrase-text "Place the picture that starts with the letter"
+   :phrase-text-translated "Coloca la foto que empieza con la letra",
+   :start 21.737,
+   :type "animation-sequence",
+   :duration 3.009,
+   :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 24.745, :anim "talk", :start 21.737}]},
   :mari-voice-act-3
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 25.313, :duration 1.1}
-    {:data [{:end 26.509, :anim "talk", :start 25.313}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 25.313,
-     :target "mari"}],
-   :description "sobre el piso"},
+  {:offset 25.313,
+   :phrase-text "on the title."
+   :phrase-text-translated "sobre el piso",
+   :start 25.313,
+   :type "animation-sequence",
+   :duration 1.1,
+   :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 26.509, :anim "talk", :start 25.313}]},
   :mari-voice-welcome
-  {:type "parallel",
-   :data
-   [{:id "/raw/audio/l2/a11/L2_A11_Mari.m4a", :type "audio", :start 0.677, :duration 15.949}
-    {:data
-     [{:end 6.21, :anim "talk", :start 1.329}
-      {:end 10.633, :anim "talk", :start 6.79}
-      {:end 14.402, :anim "talk", :start 11.623}
-      {:end 16.287, :anim "talk", :start 14.62}],
-     :type "animation-sequence",
-     :track 1,
-     :offset 0.677,
-     :target "mari"}],
-   :description
-   "Wiii, vamos a tener una fiesta con las letras!\n                                                            Cuando le pegue a la pinata, las fotos caeran.\n                                                            Empareja las letras sobre el piso a la foto correcta."},
+  {:offset 0.677,
+   :phrase :welcome
+   :phrase-description "Welcome"
+   :phrase-text "Hooray, we’re going to have a party with letters!!  When I hit the pinata, pictures will fall out.  Match the letters on the tile to the correct picture."
+   :phrase-text-translated "Wiii, vamos a tener una fiesta con las letras! Cuando le pegue a la pinata, las fotos caeran. Empareja las letras sobre el piso a la foto correcta.",
+   :start 0.677,
+   :type "animation-sequence",
+   :duration 15.949,
+   :audio "/raw/audio/l2/a11/L2_A11_Mari.m4a",
+   :target "mari",
+   :track 1,
+   :data [{:end 6.21, :anim "talk", :start 1.329}
+          {:end 10.633, :anim "talk", :start 6.79}
+          {:end 14.402, :anim "talk", :start 11.623}
+          {:end 16.287, :anim "talk", :start 14.62}]},
   :next-round
   {:type "sequence-data",
    :data
@@ -441,9 +447,9 @@
      :success
      {:type "set-variable", :from-var [{:var-name "slot1", :action-property "var-value"}], :var-name "current-slot"},
      :var-name "current-slot-number"}]},
-  :start {:type "sequence", :data ["start-activity" "init-vars" "mari-voice-welcome" "next-round"]},
+  :start-scene {:type "sequence", :data ["start-activity" "init-vars" "mari-voice-welcome" "next-round"]},
   :start-activity {:type "start-activity", :id "pinata"},
   :stop-activity {:type "stop-activity", :id "pinata"}},
- :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "park", :autostart true},
  :templates ["coaching"]}

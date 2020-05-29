@@ -202,7 +202,10 @@
    :start true}},
  :scene-objects [["background"] ["group1" "group2" "group3"] ["vera" "mari"]],
  :actions
- {:current-concept-sound-x3 {:type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]},
+ {:current-concept-sound-x3
+  {:phrase :concept-chant
+   :phrase-description "Concept chant"
+   :type "action", :from-var [{:var-name "current-concept", :var-property "mari-sound-3"}]},
   :finish-activity
   {:type "sequence-data",
    :data [{:id "cycling-letters", :type "finish-activity"} {:type "scene", :scene-id "stadium"}]},
@@ -242,7 +245,11 @@
     {:type "set-variable", :var-name "slot3", :var-value "box3"}]},
   :init-vera-position {:type "set-variable", :var-name "current-line", :var-value "box2"},
   :mari-welcome-audio
-  {:type "animation-sequence",
+  {:phrase :welcome
+   :phrase-description "Welcome"
+   :phrase-text "Listen to the sounds and touch the letter that goes with the sound!"
+   :phrase-text-translated "Escucha los sonidos y toca la letra que va con el sonido! "
+   :type "animation-sequence",
    :data [{:end 5.314, :anim "talk", :start 0.802}],
    :target "mari",
    :audio "/raw/audio/l2/a9/L2_A9_Mari.m4a",
@@ -305,9 +312,9 @@
   :pick-correct
   {:type "sequence-data",
    :data
-   [{:data
-     [{:id "mari-correct", :type "action"}
-      {:to {:x -700, :duration 4}, :type "transition", :transition-id "group1"}
+   [{:id "mari-correct", :type "action"}
+    {:data
+     [{:to {:x -700, :duration 4}, :type "transition", :transition-id "group1"}
       {:to {:x -500, :duration 4}, :type "transition", :transition-id "group2"}
       {:to {:x -300, :duration 4}, :type "transition", :transition-id "group3"}
       {:data
@@ -320,7 +327,7 @@
      :type "parallel"}
     {:id "renew-current-concept", :type "action"}
     {:id "current-concept-sound-x3", :type "action"}]},
-  :pick-wrong {:type "sequence-data", :data [{:id "mari-wrong", :type "action"}]},
+  :pick-wrong {:id "mari-wrong", :type "action"},
   :renew-current-concept
   {:type "sequence-data",
    :data
@@ -400,14 +407,12 @@
    :repeat 4,
    :shuffled true,
    :variables ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"]},
-  :start
+  :start-scene
   {:type "sequence",
    :data
    ["start-activity"
     "init-slots"
     "init-vera-position"
-    "init-audio-correct"
-    "init-audio-try-again"
     "renew-words"
     "mari-welcome-audio"
     "renew-current-concept"
@@ -417,7 +422,7 @@
   :stay-on-line {:type "empty", :duration 100},
   :stop-activity {:type "stop-activity", :id "cycling-letters"},
   :wait-for-box-animations {:type "empty", :duration 100}},
- :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
+ :triggers {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata {:prev "stadium", :autostart true},
  :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"},
  :templates ["coaching"]}
