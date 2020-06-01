@@ -274,7 +274,6 @@
              (< (+ r2y r2height) r1y)))))
 
 (defn animation-sequence->actions [{audio-start :start :keys [target track data] :or {track 1} :as action}]
-  (js/console.log "audio-start: " audio-start)
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type "sequence-data"
                    :data [{:type "empty" :duration (* (- start audio-start) 1000)}
@@ -300,30 +299,6 @@
                           {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y -20 :duration 0.01}}
                           {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}]})
                 data)))
-
-(defn find-path
-  [from to scenes]
-  (let [visited (atom #{from})]
-    (loop [[head & tail] [[from]]]
-      (if head
-        (let [node-name (last head)
-              scene (get scenes (keyword node-name))
-              sibling-names (->> scene :outs (map :name) (into #{}))
-              non-visited (clojure.set/difference sibling-names @visited)
-              _ (swap! visited #(clojure.set/union % non-visited))
-              new-paths (map (fn [next-node] (conj head next-node)) non-visited)]
-          (if (= node-name to)
-            head
-            (recur (concat tail new-paths))))))))
-
-
-(defn find-exit-position
-  [from to scenes]
-  (let [scene (get scenes (keyword from))
-        [_ second & _] (find-path from to scenes)]
-    (->> (:outs scene)
-         (filter #(= second (:name %)))
-         first)))
 
 (defn find-nav-path
   [from to graph]

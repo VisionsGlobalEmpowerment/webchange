@@ -15,6 +15,7 @@
    :transition "cycling",
    :actions {:click {:on "click", :type "location", :location-id "cycling"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/stadium/main/bicycle_enabled.png"},
   :running
   {:type "image",
@@ -25,6 +26,7 @@
    :transition "running",
    :actions {:click {:on "click", :type "scene", :scene-id "running"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/stadium/main/run_enabled.png"},
   :volleyball
   {:type "image",
@@ -35,6 +37,7 @@
    :transition "volleyball",
    :actions {:click {:on "click", :type "location", :location-id "volleyball"}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/stadium/main/volleyball_enabled.png"}},
  :scene-objects [["background"] ["volleyball" "cycling" "running"]],
  :actions {:start-background-music {:type "audio", :id "background", :loop true}},

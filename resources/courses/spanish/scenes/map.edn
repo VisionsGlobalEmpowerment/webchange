@@ -23,6 +23,7 @@
    :transition "cinema",
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "cinema"}}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/map/Cine_Enabled.png"},
   :feria
   {:type "image",
@@ -43,6 +44,7 @@
    :transition "home",
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "home"}}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/map/casa_01.png",
    :states
    {:hover {:src "/raw/img/map/casa_02.png", :type "image"},
@@ -56,6 +58,7 @@
    :transition "library",
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "library"}}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/map/Biblioteca_Enabled.png"},
   :park
   {:type "image",
@@ -66,6 +69,7 @@
    :transition "park",
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "park"}}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/map/Parque_Enabled.png"},
   :stadium
   {:type "image",
@@ -76,6 +80,7 @@
    :transition "stadium",
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "stadium"}}},
    :filter "brighten",
+   :highlight true,
    :src "/raw/img/map/Estadio_Enabled.png"},
   :vera
   {:type "animation",

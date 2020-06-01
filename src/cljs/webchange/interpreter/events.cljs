@@ -11,6 +11,7 @@
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
+    [webchange.interpreter.utils.find-exit :refer [find-exit-position]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.sw-utils.events :as swe]
     [webchange.sw-utils.message :as sw]
@@ -545,7 +546,8 @@
   (fn [{:keys [db]} _]
     (let [finished (get-in db [:progress-data :next])]
       {:db         (lessons-activity/finish db finished)
-       :dispatch (activity-progress-event db)})))
+       :dispatch-n (list (activity-progress-event db)
+                         [::reset-navigation])})))
 
 (re-frame/reg-event-fx
   :progress-data-changed
@@ -823,26 +825,37 @@
 (re-frame/reg-event-fx
   ::reset-navigation
   (fn [{:keys [db]} _]
-    (let [current-activity (get-in db [:progress-data :current-activity])
+    (let [next-activity (get-in db [:progress-data :next :activity])
           current-scene (get-in db [:current-scene])
           scene-list (get-in db [:course-data :scene-list])
-          exit (i/find-exit-position current-scene current-activity scene-list)
+          exit (find-exit-position current-scene next-activity scene-list)
           activity-started? (:activity-started db)
-          show-navigation? (and (not activity-started?) (not= current-activity current-scene))]
-      (i/kill-transition! :navigation)
-      (if show-navigation?
-        {:dispatch [::execute-transition {:transition-id  (:transition exit)
-                                          :transition-tag :navigation
-                                          :to             {:brightness 0.25
-                                                           :duration   1
-                                                           :yoyo       true
-                                                           :easing     "strong-ease-in"}
-                                          :from           {:brightness 0}}]}))))
+          show-navigation? (and (not activity-started?) (not= next-activity current-scene))
+          navigation-items (->> (get-in scene-list [(keyword current-scene) :outs])
+                                (map :object)
+                                (remove nil?)
+                                (map (fn [target] {:target (keyword target)
+                                                   :active (and show-navigation?
+                                                                (= target (:object exit)))})))]
+      {:dispatch-n (map (fn [{:keys [target active]}]
+                          [::execute-set-attribute {:target     target
+                                                    :attr-name  :eager
+                                                    :attr-value active}])
+                        navigation-items)})))
 
 (re-frame/reg-event-fx
   ::disable-navigation
-  (fn [_ _]
-    (i/kill-transition! :navigation)))
+  (fn [{:keys [db]} _]
+    (let [current-scene (get-in db [:current-scene])
+          scene-list (get-in db [:course-data :scene-list])
+          navigation-items (->> (get-in scene-list [(keyword current-scene) :outs])
+                                (map :object)
+                                (remove nil?))]
+      {:dispatch-n (map (fn [target]
+                          [::execute-set-attribute {:target     target
+                                                    :attr-name  :eager
+                                                    :attr-value false}])
+                        navigation-items)})))
 
 (re-frame/reg-event-fx
   ::progress-loaded

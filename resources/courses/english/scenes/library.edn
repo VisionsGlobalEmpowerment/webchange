@@ -15,12 +15,12 @@
                               :scene-name "librarian"
                               :width      351 :height 717 :scale {:x 1 :y 1} :start true}
 
-                 :books      {:type    "image" :x 1292 :y 681 :width 163 :height 106 :src "/raw/img/library/main/Books_Enabled.png"
+                 :books      {:type    "image" :x 1292 :y 681 :width 163 :height 106 :src "/raw/img/library/main/Books_Enabled.png" :highlight true
                               :actions {:click {:type "action", :id "start-book-scene", :on "click"}}}
 
-                 :easel      {:type "image" :x 791 :y 319 :width 287 :height 430 :src "/raw/img/library/main/Easel_Enabled.png"}
-                 :hat        {:type "image" :x 1635 :y 535 :width 227 :height 228 :src "/raw/img/library/main/Hat_Enabled.png"}
-                 :tablet     {:type    "image" :x 926 :y 657 :width 224 :height 155 :src "/raw/img/library/main/Tablet_Enabled.png"
+                 :easel      {:type "image" :x 791 :y 319 :width 287 :height 430 :src "/raw/img/library/main/Easel_Enabled.png" :highlight true}
+                 :hat        {:type "image" :x 1635 :y 535 :width 227 :height 228 :src "/raw/img/library/main/Hat_Enabled.png" :highlight true}
+                 :tablet     {:type    "image" :x 926 :y 657 :width 224 :height 155 :src "/raw/img/library/main/Tablet_Enabled.png" :highlight true
                               :actions {:click {:type "scene", :scene-id "painting-tablet", :on "click"}}}},
  :scene-objects [["background" "books" "easel" "hat" "tablet"] ["librarian" "vera"]],
  :actions       {:start-book-scene       {:type "sequence",

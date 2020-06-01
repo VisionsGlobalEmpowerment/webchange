@@ -21,26 +21,26 @@
                                            :init-library {:x 299 :y 576}
                                            :init-stadium {:x 1488 :y 399}}}
                  :home       {:type    "image" :x 731 :y 340 :width 433 :height 380 :src "/raw/img/map/casa_01.png",
-                              :filter  "brighten" :transition "home"
+                              :filter  "brighten" :highlight true :transition "home"
                               :states  {:default {:type "image", :src "/raw/img/map/casa_01.png"},
                                         :hover   {:type "image", :src "/raw/img/map/casa_02.png"}},
                               :actions {:click {:type "action", :id "navigate-to-scene" :params {:scene-id "home"}, :on "click"}}}
 
                  :park       {:type    "image" :x 1337 :y 756 :width 346 :height 246 :src "/raw/img/map/Parque_Enabled.png"
-                              :filter  "brighten" :transition "park"
+                              :filter  "brighten" :highlight true :transition "park"
                               :actions {:click {:type "action", :id "navigate-to-scene" :params {:scene-id "park"}, :on "click"}}}
                  :library    {:type    "image" :x 91 :y 250 :width 293 :height 373 :src "/raw/img/map/Biblioteca_Enabled.png"
-                              :filter  "brighten" :transition "library"
+                              :filter  "brighten" :highlight true :transition "library"
                               :actions {:click {:type "action", :id "navigate-to-scene" :params {:scene-id "library"}, :on "click"}}}
                  :stadium    {:type    "image" :x 1481 :y 169 :width 234 :height 228 :src "/raw/img/map/Estadio_Enabled.png"
-                              :filter  "brighten" :transition "stadium"
+                              :filter  "brighten" :highlight true :transition "stadium"
                               :actions {:click {:type "action", :id "navigate-to-scene" :params {:scene-id "stadium"}, :on "click"}}}
                  :feria      {:type   "image" :width 531 :height 455 :x 216 :y 671
                               :filter "brighten" :transition "feria"
                               :scale  {:x 0.68 :y 0.68}
                               :src    "/raw/img/map/feria_locked.png"}
                  :cinema     {:type    "image" :width 230 :height 210 :x 1585 :y 469
-                              :filter  "brighten" :transition "cinema"
+                              :filter  "brighten" :highlight true :transition "cinema"
                               :scale   {:x 1 :y 1}
                               :src     "/raw/img/map/Cine_Enabled.png"
                               :actions {:click {:type "action", :id "navigate-to-scene" :params {:scene-id "cinema"}, :on "click"}}}},

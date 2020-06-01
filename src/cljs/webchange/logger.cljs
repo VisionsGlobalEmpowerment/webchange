@@ -8,7 +8,8 @@
 
 (def log-levels {:debug 1
                  :log   2
-                 :warn  3})
+                 :warn  3
+                 :error 4})
 
 (defn- allowed?
   [level]

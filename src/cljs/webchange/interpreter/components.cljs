@@ -2,9 +2,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.subs :as subs]
-    [webchange.events :as events]
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.painting-area :refer [painting-area]]
     [webchange.common.copybook :refer [copybook]]
@@ -21,7 +19,6 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
     [webchange.common.core :refer [prepare-anim-rect-params
                                    prepare-colors-palette-params
@@ -30,7 +27,8 @@
                                    prepare-animated-svg-path-params
                                    with-origin-offset
                                    with-filter-transition]]
-
+    [webchange.common.image-modifiers.animation-eager :refer [animation-eager]]
+    [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [konva :as k]))
 
@@ -87,7 +85,7 @@
         y (:y left)]
     {:x x :y y}))
 
-(defn empty-filter [] {:filter nil})
+(defn empty-filter [] {:filters []})
 
 (defn grayscale-filter
   []
@@ -99,11 +97,25 @@
     {:filters [k/Filters.Brighten] :brightness brightness :transition transition}
     with-filter-transition))
 
+(defn- with-highlight
+  [image-params object-params]
+  (if (contains? object-params :highlight)
+    (update-in image-params [:filters] conj filter-outlined)
+    image-params))
+
+(defn- with-pulsation
+  [image-params object-params]
+  (if (:eager object-params)
+    (assoc image-params :animation animation-eager)
+    image-params))
+
 (defn filter-params [{:keys [filter] :as params}]
-  (case filter
-    "grayscale" (grayscale-filter)
-    "brighten" (brighten-filter params)
-    (empty-filter)))
+  (-> (case filter
+        "grayscale" (grayscale-filter)
+        "brighten" (brighten-filter params)
+        (empty-filter))
+      (with-highlight params)
+      (with-pulsation params)))
 
 (defn settings
   []
@@ -224,10 +236,11 @@
 
 (defn back-button
   [x y]
-  [:> Group {:x x :y y
-             :on-click #(re-frame/dispatch [::ie/close-scene])
-             :on-tap #(re-frame/dispatch [::ie/close-scene])}
-   [kimage (get-data-as-url "/raw/img/ui/back_button_01.png") (filter-params {:filter "brighten" :transition "back"})]])
+  (let [back-button-state @(re-frame/subscribe [::subs/current-scene-back-button])]
+    [:> Group {:x        x :y y
+               :on-click #(re-frame/dispatch [::ie/close-scene])
+               :on-tap   #(re-frame/dispatch [::ie/close-scene])}
+     [kimage (get-data-as-url "/raw/img/ui/back_button_01.png") (filter-params back-button-state)]]))
 
 (defn settings-button
   [x y]
