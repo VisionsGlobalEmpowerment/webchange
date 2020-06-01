@@ -99,9 +99,7 @@
  :actions
  {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
   :finish-activity
-  {:type "sequence-data",
-   :data [{:id "painting-tablet", :type "finish-activity"} {:type "scene", :scene-id "library"}],
-   :description "Finishing action"},
+  {:id "painting-tablet", :type "finish-activity"},
   :init-current-tool {:type "action", :id "set-current-tool", :params {:tool "felt-tip"}},
   :reset-tools
   {:type "parallel",

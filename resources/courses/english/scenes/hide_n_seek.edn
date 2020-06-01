@@ -550,10 +550,7 @@
                                           :from-params [{:action-property "option" :param-property "box"}]}
 
                  :start-activity         {:type "start-activity" :id "hide-n-seek"}
-                 :finish-activity        {:type        "sequence-data"
-                                          :description "Finishing action",
-                                          :data        [{:type "finish-activity" :id "hide-n-seek"}
-                                                        {:type "scene" :scene-id "map"}]}},
+                 :finish-activity        {:type "finish-activity" :id "hide-n-seek"}},
  :triggers      {:start {:on "start" :action "start-scene"}}
  :metadata      {:autostart true
                  :prev      "park"}}

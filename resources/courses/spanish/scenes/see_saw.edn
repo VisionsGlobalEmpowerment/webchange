@@ -181,7 +181,7 @@
                  :box-3-revert            {:type "transition", :to {:x 1500, :y 550, :duration 2}, :transition-id "box3"},
                  :box-3-start
                                           {:type "sequence",
-                                           :data ["disable-drag" "show-box-3-ph" "introduce-concept" "hide-box-3-ph" "finish-activity" "mari-finish"]},
+                                           :data ["disable-drag" "show-box-3-ph" "introduce-concept" "hide-box-3-ph" "mari-finish" "finish-activity"]},
                  :check-box1              {:type "test-var-scalar", :var-name "box1", :value true, :success "box-1-start", :fail "box-1-revert"},
                  :check-box2              {:type "test-var-scalar", :var-name "box2", :value true, :success "box-2-start", :fail "box-2-revert"},
                  :check-box3              {:type "test-var-scalar", :var-name "box3", :value true, :success "box-3-start", :fail "box-3-revert"},

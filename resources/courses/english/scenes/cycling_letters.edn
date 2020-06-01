@@ -152,9 +152,7 @@
 
                  :stop-activity           {:type "stop-activity" :id "cycling"}
 
-                 :finish-activity         {:type "sequence-data"
-                                           :data [{:type "finish-activity" :id "cycling"}
-                                                  {:type "scene" :scene-id "stadium"}]}
+                 :finish-activity         {:type "finish-activity" :id "cycling"}
 
                  :clear-instruction       {:type "remove-flows" :flow-tag "instruction"}
 

@@ -122,7 +122,7 @@
  :actions
  {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
   :finish-activity
-  {:type "sequence-data", :data [{:id "cinema-video", :type "finish-activity"} {:type "scene", :scene-id "map"}]},
+  {:id "cinema-video", :type "finish-activity"},
   :hide-play-form
   {:type "parallel",
    :data

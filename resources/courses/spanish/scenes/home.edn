@@ -391,7 +391,7 @@
                                                            {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
                  :third-word
                                                    {:type       "sequence",
-                                                    :data       ["show-third-box-word" "introduce-word" "bye-current-box" "finish-activity" "mari-finish"],
+                                                    :data       ["show-third-box-word" "introduce-word" "bye-current-box" "mari-finish" "finish-activity"],
                                                     :unique-tag "box"},
                  :vaca-3-times-var                 {:type "action", :from-var [{:var-name "current-word", :var-property "home-vaca-3-times-action"}]},
                  :vaca-can-you-say

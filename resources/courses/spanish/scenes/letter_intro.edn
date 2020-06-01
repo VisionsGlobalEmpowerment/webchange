@@ -214,7 +214,7 @@
   {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]},
   :clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
   :finish-activity
-  {:type "sequence-data", :data [{:id "letter-intro", :type "finish-activity"} {:type "scene", :scene-id "map"}]},
+  {:id "letter-intro", :type "finish-activity"},
   :init-state
   {:type "parallel",
    :data

@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :refer [anim animations init-spine-player]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]

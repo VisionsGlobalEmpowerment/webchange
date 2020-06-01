@@ -139,9 +139,7 @@
                                                    {:type "transition" :transition-id "mari" :to {:x 1613 :y 785 :duration 1.5 :loop false}}]}
 
                  :start-activity           {:type "start-activity" :id "cinema-video"}
-                 :finish-activity          {:type "sequence-data"
-                                            :data [{:type "finish-activity" :id "cinema-video"}
-                                                   {:type "scene" :scene-id "map"}]}
+                 :finish-activity          {:type "finish-activity" :id "cinema-video"}
 
                  :vaca-clapping            {:type "sequence-data"
                                             :data [{:type "animation" :target "senoravaca" :id "clapping_start" :loop false}

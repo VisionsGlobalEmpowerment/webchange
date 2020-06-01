@@ -13,13 +13,20 @@
     [webchange.common.anim :refer [anim]]
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
-    [webchange.common.slider :refer [slider]]
     [webchange.interpreter.components.video :refer [video]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.variables.events :as vars.events]
+    [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right]]
+    [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
+    [webchange.interpreter.screens.activity-finished :refer [activity-finished-screen]]
+    [webchange.interpreter.screens.course-loading :refer [course-loading-screen]]
+    [webchange.interpreter.screens.preloader :refer [preloader-screen]]
+    [webchange.interpreter.screens.score :refer [score-screen]]
+    [webchange.interpreter.screens.settings :refer [settings-screen]]
+    [webchange.interpreter.screens.state :as screens]
     [webchange.common.core :refer [prepare-anim-rect-params
                                    prepare-colors-palette-params
                                    prepare-group-params
@@ -29,61 +36,9 @@
                                    with-filter-transition]]
     [webchange.common.image-modifiers.animation-eager :refer [animation-eager]]
     [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
+    [webchange.logger :as logger]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [konva :as k]))
-
-(defn get-viewbox
-  [viewport]
-  (let [width 1920
-        height 1080
-        original-ratio (/ width height)
-        window-ratio (/ (:width viewport) (:height viewport))]
-    (if (< original-ratio window-ratio)
-      {:width width :height (Math/round (* height (/ original-ratio window-ratio)))}
-      {:width (Math/round (* width (/ window-ratio original-ratio))) :height height})))
-
-(defn compute-x
-  [viewbox]
-  (let [width 1920]
-    (/ (- (:width viewbox) width) 2)))
-
-(defn compute-y
-  [viewbox]
-  (let [height 1080]
-    (/ (- height (:height viewbox)) 2)))
-
-(defn compute-scale [viewport]
-  (let [width 1920
-        height 1080
-        original-ratio (/ width height)
-        window-ratio (/ (:width viewport) (:height viewport))]
-    (if (> original-ratio window-ratio)
-      (/ (:height viewport) height)
-      (/ (:width viewport) width))))
-
-(defn do-start
-  []
-  (e/init)
-  (re-frame/dispatch [::ie/start-playing]))
-
-(defn top-left
-  []
-  (let [viewport (re-frame/subscribe [::subs/viewport])
-        viewbox (get-viewbox @viewport)
-        scale (/ (:width viewbox) (:width @viewport))
-        x (Math/round (* (compute-x viewbox) scale -1))
-        y (Math/round (* (compute-y viewbox) scale))]
-    {:x x :y y}))
-
-(defn top-right
-  []
-  (let [left (top-left)
-        viewport (re-frame/subscribe [::subs/viewport])
-        viewbox (get-viewbox @viewport)
-        scale (/ (:width viewbox) (:width @viewport))
-        x (+ (* (:width @viewport) scale) (:x left))
-        y (:y left)]
-    {:x x :y y}))
 
 (defn empty-filter [] {:filters []})
 
@@ -117,81 +72,6 @@
       (with-highlight params)
       (with-pulsation params)))
 
-(defn settings
-  []
-  (let [top-right (top-right)
-        ui-screen @(re-frame/subscribe [::subs/ui-screen])]
-    (when (= ui-screen :settings)
-      [:> Group
-       [kimage (get-data-as-url "/raw/img/bg.jpg")]
-
-       [:> Group top-right
-        [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
-         {:x (- 108) :y 20
-          :on-click #(re-frame/dispatch [::ie/close-settings])
-          :on-tap #(re-frame/dispatch [::ie/close-settings])}]]
-
-       [kimage (get-data-as-url "/raw/img/ui/settings/settings.png") {:x 779 :y 345}]
-       [kimage (get-data-as-url "/raw/img/ui/settings/music_icon.png") {:x 675 :y 516}]
-       [kimage (get-data-as-url "/raw/img/ui/settings/music.png") {:x 763 :y 528}]
-       [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx_icon.png") {:x 581 :y 647}]
-       [kimage (get-data-as-url "/raw/img/ui/settings/sound_fx.png") {:x 669 :y 645}]
-
-       [slider {:x 979 :y 556 :width 352 :height 24 :event ::ie/set-music-volume :sub ::subs/get-music-volume}]
-       [slider {:x 979 :y 672 :width 352 :height 24 :event ::ie/set-effects-volume :sub ::subs/get-effects-volume}]
-
-       ])
-    )
-  )
-
-(defn star
-  [result idx]
-  (let [full (* idx 2)
-        half (- (* idx 2) 1)]
-    (cond
-      (>= result full) "/raw/img/ui/star_03.png"
-      (>= result half) "/raw/img/ui/star_02.png"
-      :else "/raw/img/ui/star_01.png")))
-
-(defn score-screen
-  []
-  (let [top-right (top-right)
-        scene-id (re-frame/subscribe [::subs/current-scene])
-        successes (re-frame/subscribe [::vars.subs/variable @scene-id "successes"])
-        fails (re-frame/subscribe [::vars.subs/variable @scene-id "fails"])
-        result (* (/ @successes (+ @successes @fails)) 10)]
-    [:> Group
-     [kimage (get-data-as-url "/raw/img/bg.jpg")]
-
-     [:> Group top-right
-      [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")
-       {:x (- 108) :y 20
-        :on-click #(re-frame/dispatch [::ie/next-scene])
-        :on-tap #(re-frame/dispatch [::ie/next-scene])}]]
-
-     [kimage (get-data-as-url "/raw/img/ui/form.png") {:x 639 :y 155}]
-     [kimage (get-data-as-url "/raw/img/ui/clear.png") {:x 829 :y 245}]
-
-     [kimage (get-data-as-url (star result 1)) {:x 758 :y 363}]
-     [kimage (get-data-as-url (star result 2)) {:x 836 :y 363}]
-     [kimage (get-data-as-url (star result 3)) {:x 913 :y 363}]
-     [kimage (get-data-as-url (star result 4)) {:x 991 :y 363}]
-     [kimage (get-data-as-url (star result 5)) {:x 1068 :y 363}]
-
-     [:> Text {:x 880 :y 490 :text (str (Math/floor result) "/10")
-               :font-size 80 :font-family "Luckiest Guy" :fill "white"
-               :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5}]
-
-     [kimage (get-data-as-url "/raw/img/ui/vera.png") {:x 851 :y 581}]
-     [kimage (get-data-as-url "/raw/img/ui/reload_button_01.png") {:x 679 :y 857
-                                                                   :on-click #(re-frame/dispatch [::ie/restart-scene])
-                                                                   :on-tap #(re-frame/dispatch [::ie/restart-scene])}]
-     [kimage (get-data-as-url "/raw/img/ui/next_button_01.png") {:x 796 :y 857
-                                                                 :on-click #(re-frame/dispatch [::ie/next-scene])
-                                                                 :on-tap #(re-frame/dispatch [::ie/next-scene])}]
-
-     ]))
-
 (defn score
   []
   (let [scene-id (re-frame/subscribe [::subs/current-scene])
@@ -199,40 +79,12 @@
     (if (:visible @score-var)
       [score-screen])))
 
-(defn preloader
-  []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        progress (re-frame/subscribe [::subs/scene-loading-progress @scene-id])
-        loaded (re-frame/subscribe [::subs/scene-loading-complete @scene-id])]
-    [:> Group
-     [kimage (get-data-as-url "/raw/img/bg.jpg")]
-
-     [:> Group {:x 628 :y 294}
-      [kimage "/raw/img/ui/logo.png"]]
-     (if @loaded
-       [:> Group {:x 779 :y 750 :on-click do-start :on-tap do-start}
-        [kimage "/raw/img/ui/play_button_01.png"]]
-       [:> Group {:x 719 :y 780}
-        [:> Rect {:x 1 :width 460 :height 24 :fill "#ffffff" :corner-radius 25}]
-        [:> Group {:clip-x 0 :clip-y 0 :clip-width (+ 0.1 (* @progress 4.62)) :clip-height 24}
-         [:> Rect {:width 462 :height 24 :fill "#2c9600" :corner-radius 25}]]
-        ])
-     ]))
-
-(defn course-loading-screen []
-  [:> Group
-   [kimage (get-data-as-url "/raw/img/bg.jpg")]
-
-   [:> Group {:x 628 :y 294}
-    [kimage "/raw/img/ui/logo.png"]]
-   ])
-
 (defn close-button
   [x y]
   [:> Group {:x x :y y
              :on-click #(re-frame/dispatch [::ie/open-student-dashboard])
              :on-tap #(re-frame/dispatch [::ie/open-student-dashboard])}
-   [kimage (get-data-as-url "/raw/img/ui/close_button_01.png")]])
+   [kimage {:src (get-data-as-url "/raw/img/ui/close_button_01.png")}]])
 
 (defn back-button
   [x y]
@@ -240,14 +92,15 @@
     [:> Group {:x        x :y y
                :on-click #(re-frame/dispatch [::ie/close-scene])
                :on-tap   #(re-frame/dispatch [::ie/close-scene])}
-     [kimage (get-data-as-url "/raw/img/ui/back_button_01.png") (filter-params back-button-state)]]))
+     [kimage (merge {:src (get-data-as-url "/raw/img/ui/back_button_01.png")}
+                    (filter-params back-button-state)) ]]))
 
 (defn settings-button
   [x y]
   [:> Group {:x x :y y
              :on-click #(re-frame/dispatch [::ie/open-settings])
              :on-tap #(re-frame/dispatch [::ie/open-settings])}
-   [kimage (get-data-as-url "/raw/img/ui/settings_button_01.png")]])
+   [kimage {:src (get-data-as-url "/raw/img/ui/settings_button_01.png")}]])
 
 (defn menu
   []
@@ -350,11 +203,13 @@
 (defn image
   [scene-id name object]
   [:> Group (prepare-group-params object)
-   [kimage (get-data-as-url (:src object)) (filter-params object)]])
+   [kimage (merge {:src (get-data-as-url (:src object))}
+                  (filter-params object))]])
 
 (defn background
   [scene-id name object]
-  [kimage (get-data-as-url (:src object)) (filter-params object)])
+  [kimage (merge {:src (get-data-as-url (:src object))}
+                 (filter-params object))])
 
 (defn animation
   [scene-id name object]
@@ -374,7 +229,7 @@
   (let [position @(re-frame/subscribe [::subs/navigation])]
     (when position
       [:> Group (select-keys position [:x :y])
-       [kimage (get-data-as-url "/raw/img/ui/hand.png")]])))
+       [kimage {:src (get-data-as-url "/raw/img/ui/hand.png")}]])))
 
 (defn triggers
   [scene-id]
@@ -402,22 +257,29 @@
         scene-ready (scene-ready @scene-id)]
     (if scene-ready
       [scene @scene-id]
-      [preloader])
-    ))
+      [preloader-screen])))
+
+(defn overlay-screens
+  []
+  (let [ui-screen @(re-frame/subscribe [::screens/ui-screen])]
+    [:> Layer
+       (case ui-screen
+         :activity-finished [activity-finished-screen]
+         :course-loading [course-loading-screen]
+         :preloader [preloader-screen]
+         :score [score-screen]
+         :settings [settings-screen]
+         (when-not (nil? ui-screen)
+           (logger/error (str "Overlay screen '" ui-screen "' is not implemented"))))]))
 
 (defn course
   [course-id]
   (fn [course-id]
     (let [viewport (re-frame/subscribe [::subs/viewport])
-          viewbox (get-viewbox @viewport)
-          ui-screen @(re-frame/subscribe [::subs/ui-screen])]
+          viewbox (get-viewbox @viewport)]
       [:div
        [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
        [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (compute-x viewbox) :y (- (compute-y viewbox))
                   :scale-x (compute-scale @viewport) :scale-y (compute-scale @viewport)}
-        [:> Layer
-         (case ui-screen
-           :course-loading [course-loading-screen]
-           [current-scene]
-           )
-         [settings]]]])))
+        [:> Layer [current-scene]]
+        [overlay-screens]]])))

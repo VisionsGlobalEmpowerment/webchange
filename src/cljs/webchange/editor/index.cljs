@@ -15,7 +15,7 @@
     [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
-    [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]
+    [webchange.interpreter.components :refer [scene overlay-screens] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
     [webchange.editor.components.data-sets.data-set-item.index :refer [add-dataset-item-form
                                                                        edit-dataset-item-form]]
@@ -144,7 +144,7 @@
   [scene-id name object]
   [:> Group (object-params (dissoc object :x :y))
    [:> Group {:on-click remove-transform}
-    [kimage (get-data-as-url (:src object))]]])
+    [kimage {:src (get-data-as-url (:src object))}]]])
 
 (defn- get-filters
   [params]
@@ -155,7 +155,8 @@
 (defn image
   [scene-id name object]
   [:> Group (object-params object)
-   [kimage (get-data-as-url (:src object)) {:filters (get-filters object)}]
+   [kimage {:src     (get-data-as-url (:src object))
+            :filters (get-filters object)}]
    [:> Rect (rect-params scene-id name object)]])
 
 (defn transparent
@@ -225,7 +226,7 @@
 (defn carousel-object
   [scene-id name object]
   [:> Group (object-params object)
-   [kimage (get-data-as-url (:first object))]
+   [kimage {:src (get-data-as-url (:first object))}]
    [:> Rect (rect-params scene-id name object)]])
 
 (defn painting-area
@@ -280,10 +281,9 @@
   (let [scene-id (re-frame/subscribe [::subs/current-scene])
         progress (re-frame/subscribe [::subs/scene-loading-progress @scene-id])]
     [:> Group
-     [kimage "/raw/img/bg.jpg"]
-
-     [kimage "/raw/img/ui/logo.png" {:x 628 :y 294}]
-
+     [kimage {:src "/raw/img/bg.jpg"}]
+     [kimage {:src "/raw/img/ui/logo.png"
+              :x 628 :y 294}]
      [:> Group {:x 729 :y 750}
       [:> Rect {:x 1 :width 460 :height 24 :fill "#ffffff" :corner-radius 25}]
       [:> Group {:clip-x 0 :clip-y 0 :clip-width (+ 0.1 (* @progress 4.62)) :clip-height 24}
@@ -680,7 +680,8 @@
           :style        {:display         "flex"
                          :justify-content "center"}}
     [:> Stage (merge {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6} props)
-     [:> Layer component]]]))
+     [:> Layer component]
+     [overlay-screens]]]))
 
 (defn main-content
   []

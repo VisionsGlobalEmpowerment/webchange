@@ -193,7 +193,7 @@
   :clear-instruction {:type "remove-flows", :flow-tag "instruction"},
   :empty-before-dialog {:type "empty", :duration 3000},
   :finish-activity
-  {:type "sequence-data", :data [{:id "volleyball", :type "finish-activity"} {:type "scene", :scene-id "stadium"}]},
+  {:id "volleyball", :type "finish-activity"},
   :init-first-player {:type "set-variable", :var-name "current-player", :var-value "player1"},
   :init-slots
   {:type "parallel",

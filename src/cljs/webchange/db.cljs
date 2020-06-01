@@ -12,7 +12,7 @@
    :scene-loading-progress {}
    :scene-loading-complete {}
    :scenes                 {}
-   :ui-screen              :default
+   :ui-screen              nil
    :settings               {:music-volume   10
                             :effects-volume 30}
    :dashboard              {:access-codes {}}

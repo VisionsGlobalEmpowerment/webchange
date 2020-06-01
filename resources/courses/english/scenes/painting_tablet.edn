@@ -119,10 +119,7 @@
                                                    "clear-instruction"
                                                    "reset-tools"
                                                    "init-current-tool"]}
-                 :finish-activity   {:type        "sequence-data"
-                                     :description "Finishing action"
-                                     :data        [{:type "finish-activity" :id "painting-tablet"}
-                                                   {:type "scene" :scene-id "library"}]}
+                 :finish-activity   {:type "finish-activity" :id "painting-tablet"}
                  :reset-tools       {:type "parallel"
                                      :data [{:type "state" :id "inactive" :target "felt-tip"}
                                             {:type "state" :id "inactive" :target "brush"}
