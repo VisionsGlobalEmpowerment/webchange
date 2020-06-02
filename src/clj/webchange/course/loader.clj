@@ -114,6 +114,16 @@
          data (-> path io/reader java.io.PushbackReader. edn/read)]
      (core/save-scene! course-slug scene-name data owner-id))))
 
+(defn merge-scene-info
+  [config course-slug saved-name scene-name field]
+  (let [field-key (keyword field)
+        path-name (->snake_case_string scene-name)
+        path (scene-path config saved-name path-name)
+        data (-> path io/reader java.io.PushbackReader. edn/read)
+        original (core/get-scene-latest-version course-slug scene-name)
+        merged-value (assoc original field-key (get data field-key))]
+    (core/save-scene! course-slug scene-name merged-value owner-id)))
+
 (defn save-course
   ([config course-slug] (save-course config course-slug course-slug))
   ([config course-slug new-name]
@@ -145,6 +155,15 @@
       (doseq [scene-name scenes]
         (load-scene config course-slug saved-name scene-name)))))
 
+(defn merge-course-info
+  [config course-slug saved-name field]
+  (let [field-key (keyword field)
+        path (course-path config saved-name)
+        data (-> path io/reader java.io.PushbackReader. edn/read)
+        original (core/get-course-latest-version course-slug)
+        merged-value (assoc original field-key (get data field-key))]
+    (core/save-course! course-slug merged-value owner-id)))
+
 (def commands
   {"save-course"
    (fn [config args]
@@ -161,6 +180,14 @@
    "load-scene"
    (fn [config args]
      (apply load-scene config args))
+
+   "merge-course-info"
+   (fn [config args]
+     (apply merge-course-info config args))
+
+   "merge-scene-info"
+   (fn [config args]
+     (apply merge-scene-info config args))
    })
 
 (defn command? [[arg]]
