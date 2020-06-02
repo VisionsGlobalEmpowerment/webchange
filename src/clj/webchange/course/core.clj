@@ -130,17 +130,42 @@
   (let [url (str "/courses/" slug "/editor-v2")]
     (assoc course :url url)))
 
+(defn- with-default-image
+  [{image-src :image-src :as course}]
+  (if image-src
+    course
+    (assoc course :image-src "/images/default-course.jpg")))
+
+(def hostname (get env :platform-host "webchange.local"))
+
+(defn- with-host-name
+  [course field]
+  (let [original (get course field)
+        value (str "https://" hostname original)]
+    (assoc course field value)))
+
 (defn- ->website-course
   [course]
   (-> (select-keys course [:id :name :language :slug :image-src :lang])
-      (with-course-page)))
+      (with-course-page)
+      (with-default-image)
+      (with-host-name :image-src)))
+
+(defn- rand-str [len]
+  (apply str (take len (repeatedly #(char (+ (rand 26) 65))))))
+
+(defn- slug
+  [original lang]
+  (let [suffix (rand-str 8)]
+    (-> (str original "-" lang "-" suffix)
+        (clojure.string/lower-case))))
 
 (defn localize
   [course-id {:keys [lang owner-id website-user-id]}]
   (let [current-time (jt/local-date-time)
         {course-name :name course-slug :slug image :image-src} (db/get-course-by-id {:id course-id})
         localized-course-data {:name course-name
-                               :slug (str course-slug "-" lang)
+                               :slug (slug course-slug lang)
                                :lang lang
                                :owner_id owner-id
                                :image_src image

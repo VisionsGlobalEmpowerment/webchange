@@ -4,7 +4,9 @@
             [webchange.test.fixtures.core :as f]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [webchange.auth.website :as website])
+            [webchange.auth.website :as website]
+            [webchange.course.core :as course]
+            [config.core :refer [env]])
   (:use clj-http.fake))
 
 (use-fixtures :once f/init)
@@ -126,3 +128,15 @@
     (is (= 200 (:status response)))
     (is (= 1 (count courses)))
     (is (= course-name (-> courses first :name)))))
+
+(deftest retrieved-course-has-default-image-src
+  (let [course-name "available course"
+        _ (f/course-created {:name course-name :status "published"})
+        course (-> (f/get-available-courses) :body slurp (json/read-str :key-fn keyword) first)]
+    (is (not (nil? (:image-src course))))))
+
+(deftest retrieved-course-image-src-has-host-name
+  (let [course-name "available course"
+        _ (f/course-created {:name course-name :status "published"})
+        course (-> (f/get-available-courses) :body slurp (json/read-str :key-fn keyword) first)]
+    (is (clojure.string/includes? (:image-src course) course/hostname))))
