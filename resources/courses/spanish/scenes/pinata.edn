@@ -265,12 +265,11 @@
   :finish-activity
   {:type "sequence-data",
    :data
-   [{:id "pinata", :type "finish-activity"}
-    {:id "mari-hits-pinata-toward", :type "action"}
+   [{:id "mari-hits-pinata-toward", :type "action"}
     {:id "mari-hits-pinata-backward", :type "action"}
     {:id "pinata-fall-down", :type "action"}
     {:type "empty", :duration 2000}
-    {:type "scene", :scene-id "park"}]},
+    {:id "pinata", :type "finish-activity"}]},
   :get-new-boxes
   {:type "sequence-data",
    :data

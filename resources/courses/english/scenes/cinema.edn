@@ -883,10 +883,7 @@
                                                 "renew-current-letter"]}
 
                  :start-activity {:type "start-activity" :id "cinema"}
-                 :finish-activity
-                                 {:type "sequence-data"
-                                  :data [{:type "finish-activity" :id "cinema"}
-                                         {:type "scene" :scene-id "cinema-video"}]}
+                 :finish-activity {:type "finish-activity" :id "cinema"}
 
                  :renew-current-letter
                                  {:type "sequence-data"

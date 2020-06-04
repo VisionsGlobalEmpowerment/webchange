@@ -106,7 +106,7 @@
  :actions
  {:clear-instruction {:type "remove-flows", :flow-tag "instruction"},
   :finish-activity
-  {:type "sequence-data", :data [{:id "slide", :type "finish-activity"} {:type "scene", :scene-id "park"}]},
+  {:id "slide", :type "finish-activity"},
   :init-state {:type "parallel", :data [{:type "set-variable", :var-name "answer-clickable", :var-value false}]},
   :mari-voice-correct
   {:offset 34.714,

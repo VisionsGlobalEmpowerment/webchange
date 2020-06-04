@@ -378,9 +378,7 @@
    :from-params [{:param-property "box", :action-property "value"}]},
   :clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
   :finish-activity
-  {:type "sequence-data",
-   :data [{:id "hide-n-seek", :type "finish-activity"} {:type "scene", :scene-id "map"}],
-   :description "Finishing action"},
+  {:id "hide-n-seek", :type "finish-activity"},
   :hide-targets
   {:type "sequence-data",
    :data

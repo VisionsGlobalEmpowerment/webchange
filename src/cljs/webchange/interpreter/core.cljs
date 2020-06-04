@@ -8,7 +8,6 @@
     [reagent.core :as r]
     [react-konva :refer [Stage, Layer, Group, Rect]]
     [konva :refer [Tween]]
-    [webchange.common.kimage :refer [kimage]]
     [webchange.common.anim :as anim]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]

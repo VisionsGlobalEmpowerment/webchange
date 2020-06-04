@@ -216,8 +216,8 @@
                                               :data       ["show-box-3-ph"
                                                            "introduce-concept"
                                                            "hide-box-3-ph"
-                                                           "finish-activity"
-                                                           "mari-finish"]
+                                                           "mari-finish"
+                                                           "finish-activity"]
                                               :unique-tag "box"}
 
                  :show-box-3-ph              {:type "sequence-data"

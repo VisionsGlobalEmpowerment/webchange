@@ -155,11 +155,6 @@
     (:scene-started db)))
 
 (re-frame/reg-sub
-  ::ui-screen
-  (fn [db]
-    (:ui-screen db)))
-
-(re-frame/reg-sub
   ::get-music-volume
   (fn [db]
     (get-in db [:settings :music-volume])))

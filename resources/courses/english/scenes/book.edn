@@ -230,9 +230,7 @@
                                                                         :possible-values [:open-book
                                                                                           :open-next-page]}]}
 
-                 :finish-activity           {:type "sequence-data"
-                                             :data [{:type "finish-activity" :id "book"}
-                                                    {:type "scene" :scene-id "library"}]}
+                 :finish-activity           {:type "finish-activity" :id "book"}
                  :start-activity            {:type "start-activity" :id "book"}
                  :start-background-music    {:type "audio" :id "background" :loop true}},
  :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"}

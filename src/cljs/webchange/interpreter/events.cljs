@@ -8,6 +8,7 @@
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
     [webchange.interpreter.lessons.activity :as lessons-activity]
+    [webchange.interpreter.screens.state :as screens]
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
@@ -48,7 +49,7 @@
   ::sw-cache-course
   (fn [_ [_ course-id]]
     {:sw-cache-course [course-id]
-     :dispatch [::swe/set-sw-status :syncing]}))
+     :dispatch        [::swe/set-sw-status :syncing]}))
 
 (re-frame/reg-fx
   :load-course
@@ -507,8 +508,8 @@
         time-spent (if start-time
                      (- (js/Date.) (get db :activity-start-time))
                      0)]
-    [::add-pending-event :activity-finished (merge activity-action {:score           score
-                                                                    :time-spent      time-spent})]))
+    [::add-pending-event :activity-finished (merge activity-action {:score      score
+                                                                    :time-spent time-spent})]))
 
 (defn lesson-activity-finished?
   [db {activity-name :id}]
@@ -547,7 +548,8 @@
     (let [finished (get-in db [:progress-data :next])]
       {:db         (lessons-activity/finish db finished)
        :dispatch-n (list (activity-progress-event db)
-                         [::reset-navigation])})))
+                         [::reset-navigation]
+                         [::screens/show-activity-progress])})))
 
 (re-frame/reg-event-fx
   :progress-data-changed
@@ -599,8 +601,8 @@
                {:db          (-> db
                                  (assoc :loaded-course course-id)
                                  (assoc :current-course course-id)
-                                 (assoc :ui-screen :course-loading)
                                  (assoc-in [:loading :load-course] true))
+                :dispatch    [::screens/show-course-loading]
                 :load-course {:course-id course-id
                               :scene-id  scene-id}})))
 
@@ -646,11 +648,16 @@
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
-       :dispatch-n (list [::vars.events/clear-vars]
-                         [::execute-stop-audio]
-                         [::ce/execute-remove-flows {:flow-tag (str "scene-" current-scene)}]
-                         [::ce/execute-remove-timers]
+       :dispatch-n (list [::reset-scene-flows current-scene]
                          [::load-scene scene-id])})))
+
+(re-frame/reg-event-fx
+  ::reset-scene-flows
+  (fn [_ [_ scene-id]]
+    {:dispatch-n (list [::vars.events/clear-vars]
+                       [::execute-stop-audio]
+                       [::ce/execute-remove-flows {:flow-tag (str "scene-" scene-id)}]
+                       [::ce/execute-remove-timers])}))
 
 (re-frame/reg-event-fx
   ::set-course-data
@@ -673,13 +680,13 @@
 (re-frame/reg-event-fx
   ::set-progress-data
   (fn [{:keys [db]} [_ data]]
-    {:db       (assoc db :progress-data data)}))
+    {:db (assoc db :progress-data data)}))
 
 (re-frame/reg-event-fx
   ::init-default-progress
   (fn [{:keys [db]} [_ _]]
     (let [default-progress (get-in db [:course-data :default-progress])]
-      {:db       (update-in db [:progress-data] merge default-progress)})))
+      {:db (update-in db [:progress-data] merge default-progress)})))
 
 (re-frame/reg-event-db
   ::register-transition
@@ -710,19 +717,33 @@
           default-actions (get default-triggers trigger)]
       {:dispatch-n (concat actions default-actions)})))
 
+(defn- next-location
+  [db]
+  (let [next-activity (get-in db [:progress-data :next :activity])
+        current-scene (get-in db [:current-scene])
+        scene-list (get-in db [:course-data :scene-list])]
+    (find-exit-position current-scene next-activity scene-list)))
+
 (re-frame/reg-event-fx
   ::next-scene
   (fn [{:keys [db]} [_ _]]
-    (let [scene-id (:current-scene db)
-          scene (get-in db [:scenes scene-id])
-          next (get-in scene [:metadata :next])]
-      {:dispatch [::set-current-scene next]})))
+    (let [next-scene-id (-> db next-location :name)]
+      {:dispatch-n (list [::set-current-scene next-scene-id]
+                         [::screens/reset-ui-screen])})))
+
+(re-frame/reg-event-fx
+  ::run-next-activity
+  (fn [{:keys [db]} [_ _]]
+    (let [next-activity (get-in db [:progress-data :next :activity])]
+      {:dispatch-n (list [::set-current-scene next-activity]
+                         [::screens/reset-ui-screen])})))
 
 (re-frame/reg-event-fx
   ::restart-scene
   (fn [{:keys [db]} [_ _]]
     (let [scene-id (:current-scene db)]
-      {:dispatch [::set-current-scene scene-id]})))
+      {:dispatch-n (list [::screens/reset-ui-screen]
+                         [::reset-scene-flows scene-id])})))
 
 (re-frame/reg-event-fx
   ::close-scene
@@ -762,17 +783,12 @@
      :load-lessons course-id}))
 
 (re-frame/reg-event-fx
-  ::show-scene-loading
-  (fn [{:keys [db]} _]
-    {:db (assoc db :ui-screen :default)}))
-
-(re-frame/reg-event-fx
   ::check-course-loaded
   (fn [{:keys [db]} _]
     (let [loading (:loading db)]
       (if (some #(get loading %) [:load-course :load-progress :load-lessons :load-lessons-assets])
-        {:db (assoc db :ui-screen :course-loading)}
-        {:db (assoc db :ui-screen :default)}))))
+        {:dispatch [::screens/show-course-loading]}
+        {:dispatch [::screens/reset-ui-screen]}))))
 
 (re-frame/reg-event-fx
   ::set-course-dataset-items
@@ -828,7 +844,7 @@
     (let [next-activity (get-in db [:progress-data :next :activity])
           current-scene (get-in db [:current-scene])
           scene-list (get-in db [:course-data :scene-list])
-          exit (find-exit-position current-scene next-activity scene-list)
+          exit (next-location db)
           activity-started? (:activity-started db)
           show-navigation? (and (not activity-started?) (not= next-activity current-scene))
           navigation-items (->> (get-in scene-list [(keyword current-scene) :outs])
@@ -905,7 +921,7 @@
                            :always (vars.events/set-variable :score-first-attempt false))
        :dispatch-n (list
                      [::add-pending-event :concept-picked-wrong (merge current-activity {:concept-name concept-name
-                                                                                         :option option})]
+                                                                                         :option       option})]
                      (ce/success-event action))})))
 
 (re-frame/reg-event-fx
@@ -929,16 +945,16 @@
     {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
                        (ce/success-event action))}))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
   ::open-settings
-  (fn [db _]
-    (assoc db :ui-screen :settings)))
+  (fn [_ _]
+    {:dispatch [::screens/show-settings]}))
 
 (re-frame/reg-event-fx
   ::close-settings
-  (fn [{:keys [db]} _]
-    {:db       (assoc db :ui-screen :default)
-     :dispatch [::save-settings]}))
+  (fn [_ _]
+    {:dispatch-n (list [::save-settings]
+                       [::screens/reset-ui-screen])}))
 
 (re-frame/reg-event-fx
   ::save-settings

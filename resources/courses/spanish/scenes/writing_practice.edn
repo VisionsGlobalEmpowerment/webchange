@@ -137,8 +137,7 @@
   :check-stage
   {:type "test-var-scalar", :var-name "current-stage", :value 2, :success "finish-activity", :fail "go-next-stage"},
   :finish-activity
-  {:type "sequence-data",
-   :dat [{:id "writing-practice", :type "finish-activity"} {:type "scene", :scene-id "library"}]},
+  {:id "writing-practice", :type "finish-activity"},
   :go-next {:type "action", :id "check-page"},
   :go-next-page
   {:type "sequence-data",

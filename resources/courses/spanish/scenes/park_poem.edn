@@ -167,7 +167,7 @@
    [{:id "clickable", :type "state", :target "image-story-1"}
     {:type "set-variable", :var-name "story-1-clickable", :var-value true}]},
   :finish-activity
-  {:type "sequence-data", :data [{:id "park-poem", :type "finish-activity"} {:type "scene", :scene-id "park"}]},
+  {:id "park-poem", :type "finish-activity"},
   :image-story-1-clicked
   {:type "test-var-scalar",
    :var-name "story-1-clickable",

@@ -11,6 +11,14 @@
      :image preview}))
 
 (re-frame/reg-sub
+  ::course-activities
+  (fn [db]
+    (let [scenes (get-in db [:course-data :scene-list])
+          activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
+      (->> activities
+           (map #(merge % (scene-name->scene (:activity %) scenes)))))))
+
+(re-frame/reg-sub
   ::finished-activities
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
@@ -44,3 +52,12 @@
     (or
       (get-in db [:loading :load-course])
       (get-in db [:loading :load-progress]))))
+
+(re-frame/reg-sub
+  ::overall-progress
+  (fn []
+    [(re-frame/subscribe [::course-activities])
+     (re-frame/subscribe [::finished-activities])])
+  (fn [[course-activities finished-activities]]
+    (/ (count finished-activities)
+       (count course-activities))))

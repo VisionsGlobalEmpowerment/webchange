@@ -106,7 +106,7 @@
  :actions
  {:clear-instruction {:type "remove-flows", :flow-tag "instruction"},
   :finish-activity
-  {:type "sequence-data", :data [{:id "cycling", :type "finish-activity"} {:type "scene", :scene-id "stadium"}]},
+  {:id "cycling", :type "finish-activity"},
   :go-to-box1-line
   {:type "sequence-data",
    :data

@@ -207,8 +207,8 @@
                                                                    "show-third-box-word"
                                                                    "introduce-word"
                                                                    "bye-current-box"
-                                                                   "finish-activity"
-                                                                   "mari-finish"]
+                                                                   "mari-finish"
+                                                                   "finish-activity"]
                                                       :unique-tag "box"}
 
                  :set-reminder-position-1            {:type "sequence-data"

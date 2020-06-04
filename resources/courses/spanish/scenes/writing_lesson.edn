@@ -167,7 +167,7 @@
   {:phrase :invite-user
    :phrase-description "Invite user"
    :type "sequence",
-   :data ["vaca-voice-your-turn" "finish-activity" "mari-click-to-practice"]},
+   :data ["vaca-voice-your-turn" "mari-click-to-practice" "finish-activity"]},
   :letter-drawing-prepare
   {:phrase :mari-starts
    :phrase-description "Mari starts drawing"

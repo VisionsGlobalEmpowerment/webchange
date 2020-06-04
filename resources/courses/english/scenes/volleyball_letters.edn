@@ -153,9 +153,7 @@
                  ["display" "mari" "ball"]],
  :actions       {:start-activity          {:type "start-activity" :id "volleyball"}
                  :stop-activity           {:type "stop-activity" :id "volleyball"}
-                 :finish-activity         {:type "sequence-data"
-                                           :data [{:type "finish-activity" :id "volleyball"}
-                                                  {:type "scene" :scene-id "stadium"}]}
+                 :finish-activity         {:type "finish-activity" :id "volleyball"}
                  :clear-instruction       {:type "remove-flows" :flow-tag "instruction"}
                  :start                   {:type "sequence"
                                            :data ["start-activity"

@@ -1030,7 +1030,7 @@
                                 :from-var [{:var-name "rounds-number", :action-property "value"}]},
             :clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
             :finish-activity
-                               {:type "sequence-data", :data [{:id "cinema", :type "finish-activity"} {:type "scene", :scene-id "cinema-video"}]},
+                               {:id "cinema", :type "finish-activity"},
             :finish-chanting
                                {:type "sequence-data",
                                 :data

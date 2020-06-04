@@ -132,9 +132,7 @@
                                                        "enable-story-1"]}
 
                  :start-activity        {:type "start-activity" :id "park-poem"}
-                 :finish-activity       {:type "sequence-data"
-                                         :data [{:type "finish-activity" :id "park-poem"}
-                                                {:type "scene" :scene-id "park"}]}
+                 :finish-activity       {:type "finish-activity" :id "park-poem"}
 
                  :init-state            {:type "sequence-data"
                                          :data [{:type "set-variable" :var-name "poem-paused" :var-value false}
