@@ -1,7 +1,10 @@
 {:assets        [{:url "/raw/img/library/painting-tablet/background.jpg" :type "image"}
                  {:url "/raw/img/ui/back_button_01.png" :type "image"}
                  {:url "/raw/audio/l2/a7/L2_A7_Mari.m4a" :type "audio" :alias "mari voice"}
-                 {:url "/raw/img/elements/squirrel.png" :type "image"}]
+                 {:url "/raw/img/library/painting-tablet/brush.png", :size 10, :type "image"}
+                 {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10, :type "image"}
+                 {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
+                 {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}]
  :objects       {:background            {:type       "background"
                                          :scene-name "background"
                                          :src        "/raw/img/library/painting-tablet/background.jpg"}
@@ -20,7 +23,7 @@
                                          :scale-y    0.5}
                  :next-button           {:type     "image"
                                          :src      "/raw/img/ui/back_button_01.png"
-                                         :x        1875
+                                         :x        1800
                                          :y        915
                                          :width    97
                                          :height   99
@@ -56,6 +59,66 @@
                                          :color      "#323232"
                                          :states     {:hidden  {:type "transparent"}
                                                       :visible {:type "painting-area"}}}
+                 :brush                 {:type       "image",
+                                         :x          -196,
+                                         :y          450,
+                                         :width      540,
+                                         :height     140,
+                                         :scene-name "brush",
+                                         :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "brush"}}},
+                                         :rotation   0,
+                                         :scale-x    0.7,
+                                         :scale-y    0.7,
+                                         :src        "/raw/img/library/painting-tablet/brush.png",
+                                         :states     {:active {:x -126}, :inactive {:x -196}}},
+                 :colors-palette        {:type       "colors-palette",
+                                         :x          1680,
+                                         :y          100,
+                                         :width      140,
+                                         :height     800,
+                                         :scene-name "colors-palette",
+                                         :actions    {:change {:id "set-current-color", :on "change", :type "action", :pick-event-param "color"}},
+                                         :colors     ["#4479bb" "#92bd4a" "#ed91aa" "#fdc531" "#010101"],
+                                         :rotation   0,
+                                         :scale-x    1,
+                                         :scale-y    1,
+                                         :var-name   "current-color"},
+                 :eraser                {:type       "image",
+                                         :x          -82,
+                                         :y          794,
+                                         :width      380,
+                                         :height     175,
+                                         :scene-name "eraser",
+                                         :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "eraser"}}},
+                                         :rotation   0,
+                                         :scale-x    0.7,
+                                         :scale-y    0.7,
+                                         :src        "/raw/img/library/painting-tablet/eraser.png",
+                                         :states     {:active {:x -12}, :inactive {:x -82}}},
+                 :felt-tip              {:type       "image",
+                                         :x          -221,
+                                         :y          273,
+                                         :width      590,
+                                         :height     150,
+                                         :scene-name "felt-tip",
+                                         :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "felt-tip"}}},
+                                         :rotation   0,
+                                         :scale-x    0.7,
+                                         :scale-y    0.7,
+                                         :src        "/raw/img/library/painting-tablet/felt-tip.png",
+                                         :states     {:active {:x -151}, :inactive {:x -221}}},
+                 :pencil                {:type       "image",
+                                         :x          -198,
+                                         :y          622,
+                                         :width      550,
+                                         :height     135,
+                                         :scene-name "pencil",
+                                         :actions    {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "pencil"}}},
+                                         :rotation   0,
+                                         :scale-x    0.7,
+                                         :scale-y    0.7,
+                                         :src        "/raw/img/library/painting-tablet/pencil.png",
+                                         :states     {:active {:x -128}, :inactive {:x -198}}}
                  :letter-tutorial-1     {:type         "svg-path"
                                          :scene-name   "letter-tutorial-1"
                                          :data         ""
@@ -171,11 +234,23 @@
  :scene-objects [["background" "copybook" "concept-card"]
                  ["letter-trace-matrix" "letter-path"]
                  ["letter-tutorial-group"]
-                 ["practice-canvas" "next-button" "mari"]]
- :actions       {:start                       {:type "sequence"
+                 ["practice-canvas"]
+                 ["felt-tip" "brush" "pencil" "eraser" "colors-palette"]
+                 ["next-button" "mari"]]
+ :actions       {:set-current-tool            {:type "sequence-data",
+                                               :data
+                                                     [{:type "state", :target "practice-canvas", :from-params [{:param-property "tool", :action-property "value"}]}
+                                                      {:id "inactive", :type "state", :from-var [{:var-name "current-tool", :action-property "target"}]}
+                                                      {:id "active", :type "state", :from-params [{:param-property "tool", :action-property "target"}]}
+                                                      {:type        "set-variable",
+                                                       :var-name    "current-tool",
+                                                       :from-params [{:param-property "tool", :action-property "var-value"}]}]},
+                 :set-current-color           {:type "state", :target "practice-canvas", :from-params [{:param-property "color", :action-property "value"}]},
+                 :start                       {:type "sequence"
                                                :data ["start-activity"
                                                       "clear-instruction"
                                                       "init-vars"
+                                                      "init-current-tool"
                                                       "init-stage-1"
                                                       "mari-voice-intro"
                                                       "mari-shows-example"
@@ -196,7 +271,7 @@
                                                       {:type "calc" :var-name "pages-number" :operation "div-ceil" :value-1 30 :value-2 13}
                                                       {:type "set-variable" :var-name "letter-path" :var-value "M 80 25 A 40,40 0 1,0 80,75 M 80 10 L 80 90"}
                                                       {:type "set-variable" :var-name "letter-tutorial-path" :var-value "M 105 50 A 40,40 0 1,0 105,100 M 105 35 L 105 115 M 70 15 A 60,60 0 0,0 10,75 l 5 0 l -5 10 l -5 -10 l 5 0 M 130 35 L 130 100 l 5 0 l -5 10 l -5 -10 l 5 0 M 85 2 l 0 20 M 125 5 a 5 5 0 1 1 10 5 l -10 13 l 10 0"}]}
-
+                 :init-current-tool           {:type "action", :id "set-current-tool", :params {:tool "felt-tip"}},
                  :init-stage-1                {:type "parallel"
                                                :data [{:type     "set-attribute" :target "letter-trace" :attr-name "data"
                                                        :from-var [{:var-name "letter-path" :action-property "attr-value"}]}
