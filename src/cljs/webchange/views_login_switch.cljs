@@ -6,7 +6,7 @@
     [webchange.interpreter.events :as ie]))
 
 (def courses
-  [{:key :test :value "test" :text "Español"}
+  [{:key :spanish :value "spanish" :text "Español"}
    {:key :english :value "english" :text "English"}])
 
 (defn login-switch
@@ -41,8 +41,8 @@
              "Student"]]]]]]
        [sa/GridRow {}
         [sa/GridColumn {:text-align "center"}
-           [sa/FormDropdown {:label "Course " :options courses :inline true :default-value "test"
+           [sa/FormDropdown {:label "Course " :options courses :inline true :default-value "spanish"
                              :on-change #(re-frame/dispatch [::ie/set-current-course (.-value %2)])}]]]
        [sa/GridRow {}
         [sa/GridColumn {:text-align "center"}
-         [:a {:href "/courses/english/editor"} "Editor Demo"]]]]]]]])
+         [:a {:href "/courses/english/editor-v2"} "Translation Module"]]]]]]]])

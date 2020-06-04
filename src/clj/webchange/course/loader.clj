@@ -115,13 +115,13 @@
      (core/save-scene! course-slug scene-name data owner-id))))
 
 (defn merge-scene-info
-  [config course-slug saved-name scene-name field]
-  (let [field-key (keyword field)
+  [config course-slug saved-name scene-name & fields]
+  (let [ks (->> fields (map keyword) (into []))
         path-name (->snake_case_string scene-name)
         path (scene-path config saved-name path-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
         original (core/get-scene-latest-version course-slug scene-name)
-        merged-value (assoc original field-key (get data field-key))]
+        merged-value (assoc-in original ks (get-in data ks))]
     (core/save-scene! course-slug scene-name merged-value owner-id)))
 
 (defn save-course
@@ -156,12 +156,12 @@
         (load-scene config course-slug saved-name scene-name)))))
 
 (defn merge-course-info
-  [config course-slug saved-name field]
-  (let [field-key (keyword field)
+  [config course-slug saved-name & fields]
+  (let [ks (->> fields (map keyword) (into []))
         path (course-path config saved-name)
         data (-> path io/reader java.io.PushbackReader. edn/read)
         original (core/get-course-latest-version course-slug)
-        merged-value (assoc original field-key (get data field-key))]
+        merged-value (assoc-in original ks (get-in data ks))]
     (core/save-course! course-slug merged-value owner-id)))
 
 (def commands

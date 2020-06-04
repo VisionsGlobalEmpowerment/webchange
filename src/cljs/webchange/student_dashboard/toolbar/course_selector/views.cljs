@@ -10,7 +10,7 @@
 ;; ToDo: get courses list from API
 (def courses
   [{:key "en" :value "english" :text "English"}
-   {:key "es" :value "test" :text "Español"}])
+   {:key "es" :value "spanish" :text "Español"}])
 
 (defn- get-styles
   []
