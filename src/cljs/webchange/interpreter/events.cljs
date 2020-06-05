@@ -529,7 +529,8 @@
     (let [events (cond-> (list (ce/success-event action))
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
                          :always (conj (activity-finished-event db action))
-                         :always (conj [::reset-navigation]))
+                         :always (conj [::reset-navigation])
+                         :always (conj [::screens/show-activity-progress]))
           activity-started? (:activity-started db)]
       (if activity-started?
         {:db         (-> db
@@ -548,8 +549,7 @@
     (let [finished (get-in db [:progress-data :next])]
       {:db         (lessons-activity/finish db finished)
        :dispatch-n (list (activity-progress-event db)
-                         [::reset-navigation]
-                         [::screens/show-activity-progress])})))
+                         [::reset-navigation])})))
 
 (re-frame/reg-event-fx
   :progress-data-changed

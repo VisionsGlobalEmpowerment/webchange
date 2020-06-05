@@ -406,9 +406,9 @@
                  :prepare-swing           {:type "transition", :to {:loop false, :duration 1, :rotation -15}, :transition-id "swings"},
                  :renew-words
                                           {:type "lesson-var-provider", :from "concepts", :provider-id "words-set", :variables ["item-1" "item-2" "item-3"]},
-                 :set-current-box1        {:type "set-variable", :var-name "current-box", :var-value "box1"},
-                 :set-current-box2        {:type "set-variable", :var-name "current-box", :var-value "box2"},
-                 :set-current-box3        {:type "set-variable", :var-name "current-box", :var-value "box3"},
+                 :set-current-box1           {:type "set-variable" :var-name "box1" :var-value true}
+                 :set-current-box2           {:type "set-variable" :var-name "box2" :var-value true}
+                 :set-current-box3           {:type "set-variable" :var-name "box3" :var-value true}
                  :show-box-1-ph
                                           {:type "sequence-data",
                                            :data
