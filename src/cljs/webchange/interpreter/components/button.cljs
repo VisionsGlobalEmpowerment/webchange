@@ -17,8 +17,9 @@
 
 (defn button
   [{:keys [x y skin on-click]}]
-  [kimage {:src (get-skin skin)}
-   {:x        x
+  [kimage
+   {:src (get-skin skin)
+    :x        x
     :y        y
     :on-click on-click
     :on-tap   on-click}])

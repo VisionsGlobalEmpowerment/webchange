@@ -13,7 +13,7 @@
 
 (defn- title
   [{:keys [x y]}]
-  (let [text "Clear!"
+  (let [text "Nice Work!"
         font-size 102]
     [:> Text {:x              x
               :y              (- y (/ font-size 2))
