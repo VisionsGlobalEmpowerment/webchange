@@ -8,24 +8,39 @@
   [next-actions]
   (if (sequential? next-actions) next-actions [next-actions]))
 
+(defn- add-handler
+  [handlers handler]
+  (if-not (nil? handler)
+    (conj handlers handler)
+    handlers))
+
+(defn- add-on-end-handler
+  [{:keys [scene-data action-name action-data action-path]}]
+  (when (contains? action-data :on-end)
+    (let [on-end (:on-end action-data)]
+      (if (string? on-end)
+        (let [name (keyword on-end)]
+          {:handler-name name
+           :handler-data (get scene-data name)
+           :event-name   "on-end"})
+        (let [name (-> action-name clojure.core/name (str "-on-end") keyword)]
+          {:handler-name name
+           :handler-data on-end
+           :handler-path (conj action-path :on-end)
+           :event-name   "on-end"})))))
+
 (defn- get-specific-handlers
-  [scene-data action-name action-data action-path]
-  [(let [on-end (:on-end action-data)]
-     (if (string? on-end)
-       (let [name (keyword on-end)]
-         {:handler-name name
-          :handler-data (get scene-data name)
-          :event-name   "on-end"})
-       (let [name (-> action-name clojure.core/name (str "-on-end") keyword)]
-         {:handler-name name
-          :handler-data on-end
-          :handler-path (conj action-path :on-end)
-          :event-name   "on-end"})))])
+  [params]
+  (-> []
+      (add-handler (add-on-end-handler params))))
 
 (defn parse-provider-action-chain
   [scene-data {:keys [action-name action-data parent-action next-action prev-action path graph]}]
   (let [action-path (or path [action-name])
-        specific-handlers (get-specific-handlers scene-data action-name action-data action-path)
+        specific-handlers (get-specific-handlers {:scene-data  scene-data
+                                                  :action-name action-name
+                                                  :action-data action-data
+                                                  :action-path action-path})
         prev-actions (make-sequential prev-action)
         next-actions (make-sequential next-action)
         connections (reduce (fn [result prev-action]
@@ -59,5 +74,9 @@
       specific-handlers)))
 
 (defmethod parse-actions-chain "lesson-var-provider"
+  [actions-data params]
+  (parse-provider-action-chain actions-data params))
+
+(defmethod parse-actions-chain "vars-var-provider"
   [actions-data params]
   (parse-provider-action-chain actions-data params))
