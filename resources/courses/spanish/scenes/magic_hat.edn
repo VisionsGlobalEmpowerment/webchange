@@ -250,7 +250,7 @@
   :init-vars
   {:type "parallel",
    :data
-   [{:type "set-variable", :var-name "current-level", :var-value "hard"}
+   [{:type "set-variable", :var-name "current-level", :var-value "mid"}
     {:type "set-variable", :var-name "correct-answers-in-row", :var-value 0}
     {:type "set-variable", :var-name "wrong-answers-in-row", :var-value 0}
     {:type "set-variable", :var-name "last-pick-wrong", :var-value false}]},
