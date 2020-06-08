@@ -1,4 +1,4 @@
-{:assets  [{:url "/raw/audio/l1/mari-coaching.mp4", :size 2, :type "audio" :alias "statements"}]
+{:assets  [{:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}]
  :actions {:init-audio-correct     {:type "sequence-data"
                                     :data [{:type "set-variable" :var-name "audio-correct1" :var-value "mari-audio-correct-1"}
                                            {:type "set-variable" :var-name "audio-correct2" :var-value "mari-audio-correct-2"}
