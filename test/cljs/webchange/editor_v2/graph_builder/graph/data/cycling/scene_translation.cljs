@@ -3,7 +3,8 @@
 (def data {:mari-says-correct    {:path        [:mari-says-correct]
                                   :entity      :action
                                   :children    [:mari-says-correct-0 :mari-says-correct-1]
-                                  :connections #{}}
+                                  :connections #{{:handler :voice-high-var
+                                                  :name    "next"}}}
            :mari-says-wrong      {:path        [:mari-says-wrong]
                                   :entity      :action
                                   :children    [:mari-says-wrong-0 :mari-says-wrong-1]

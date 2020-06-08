@@ -8,7 +8,8 @@
            :mari-voice-welcome {:path        [:mari-voice-welcome]
                                 :entity      :action
                                 :children    []
-                                :connections #{}}
+                                :connections #{{:handler :mari-says-task
+                                                :name    "next"}}}
            :box1               {:path        [:box1]
                                 :entity      :object
                                 :children    []

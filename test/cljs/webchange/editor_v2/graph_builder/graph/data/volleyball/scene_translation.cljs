@@ -66,4 +66,11 @@
            :mari-say-correct     {:path        [:mari-say-correct]
                                   :entity      :action
                                   :children    [:mari-say-correct-1 :mari-say-correct-2]
-                                  :connections #{}}})
+                                  :connections #{{:handler :mari-welcome-audio-1
+                                                  :name    "next"}
+                                                 {:handler :word-oso-high
+                                                  :name    "next"}
+                                                 {:handler :word-ardilla-high
+                                                  :name    "next"}
+                                                 {:handler :word-incendio-high
+                                                  :name    "next"}}}})

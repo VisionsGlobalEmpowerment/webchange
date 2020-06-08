@@ -3,7 +3,12 @@
 (def data {:mari-says-correct-answer {:path        [:mari-says-correct-answer]
                                       :entity      :action
                                       :children    []
-                                      :connections #{}}
+                                      :connections #{{:handler :current-concept-chant
+                                                      :name    "next"}
+                                                     {:handler :current-concept-sound-x3
+                                                      :name    "next"}
+                                                     {:handler :mari-says-wrong-answer
+                                                      :name    "next"}}}
            :current-concept-chant    {:path        [:current-concept-chant]
                                       :entity      :action
                                       :children    []
@@ -56,7 +61,14 @@
            :intro                    {:path        [:intro]
                                       :entity      :action
                                       :children    [:mari-voice-welcome :mari-flies-to-hat :mari-init-wand :mari-voice-intro]
-                                      :connections #{}}
+                                      :connections #{{:handler :current-concept-chant
+                                                      :name    "next"}
+                                                     {:handler :current-concept-sound-x3
+                                                      :name    "next"}
+                                                     {:handler :mari-says-wrong-answer
+                                                      :name    "next"}
+                                                     {:handler :mari-says-correct-answer
+                                                      :name    "next"}}}
            :box2                     {:path        [:box2]
                                       :entity      :object
                                       :children    []
