@@ -545,6 +545,10 @@
                                            :offset      8.572
                                            :skippable true},
                  :wait-for-box-animations {:type "empty", :duration 500},
+                 :start-background-music           {:type               "audio",
+                                                    :loop               true,
+                                                    :phrase             "Background music",
+                                                    :phrase-description "Background music"},
                  :welcome-audio
                                           {:type               "sequence",
                                            :data
@@ -552,7 +556,11 @@
                                            :phrase             "welcome",
                                            :phrase-description "Diálogo de bienvenida entre Vera, Mari y Rock"
                                            :skippable true}},
- :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :triggers      {
+                 :back {:on "back", :action "stop-activity"},
+                 :music {:on "start", :action "start-background-music"},
+                 :start {:on "start", :action "start-scene"}
+                 },
  :metadata      {:prev "park", :autostart true},
  :audio
                 {:rock-oso     "/raw/audio/l1/a3/rock/Oso.m4a",

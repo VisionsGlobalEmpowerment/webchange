@@ -1,46 +1,48 @@
 {:assets
- [{:url "/raw/img/stadium/main/stadium_main_background.jpg", :size 10, :type "image"}
-  {:url "/raw/img/stadium/main/bicycle_enabled.png", :size 1, :type "image"}
-  {:url "/raw/img/stadium/main/run_enabled.png", :size 1, :type "image"}
-  {:url "/raw/img/stadium/main/volleyball_enabled.png", :size 1, :type "image"}],
+                [{:url "/raw/img/stadium/main/stadium_main_background.jpg", :size 10, :type "image"}
+                 {:url "/raw/img/stadium/main/bicycle_enabled.png", :size 1, :type "image"}
+                 {:url "/raw/img/stadium/main/run_enabled.png", :size 1, :type "image"}
+                 {:url "/raw/img/stadium/main/volleyball_enabled.png", :size 1, :type "image"}],
  :objects
- {:background
-  {:type "background", :brightness -0.2, :filter "brighten", :src "/raw/img/stadium/main/stadium_main_background.jpg"},
-  :cycling
-  {:type "image",
-   :x 103,
-   :y 527,
-   :width 498,
-   :height 514,
-   :transition "cycling",
-   :actions {:click {:on "click", :type "location", :location-id "cycling"}},
-   :filter "brighten",
-   :highlight true,
-   :src "/raw/img/stadium/main/bicycle_enabled.png"},
-  :running
-  {:type "image",
-   :x 1128,
-   :y 565,
-   :width 279,
-   :height 456,
-   :transition "running",
-   :actions {:click {:on "click", :type "scene", :scene-id "running"}},
-   :filter "brighten",
-   :highlight true,
-   :src "/raw/img/stadium/main/run_enabled.png"},
-  :volleyball
-  {:type "image",
-   :x 669,
-   :y 540,
-   :width 340,
-   :height 480,
-   :transition "volleyball",
-   :actions {:click {:on "click", :type "location", :location-id "volleyball"}},
-   :filter "brighten",
-   :highlight true,
-   :src "/raw/img/stadium/main/volleyball_enabled.png"}},
+                {:background
+                 {:type "background", :brightness -0.2, :filter "brighten", :src "/raw/img/stadium/main/stadium_main_background.jpg"},
+                 :cycling
+                 {:type       "image",
+                  :x          103,
+                  :y          527,
+                  :width      498,
+                  :height     514,
+                  :transition "cycling",
+                  :actions    {:click {:on "click", :type "location", :location-id "cycling"}},
+                  :filter     "brighten",
+                  :highlight  true,
+                  :src        "/raw/img/stadium/main/bicycle_enabled.png"},
+                 :running
+                 {:type       "image",
+                  :x          1128,
+                  :y          565,
+                  :width      279,
+                  :height     456,
+                  :transition "running",
+                  :actions    {:click {:on "click", :type "scene", :scene-id "running"}},
+                  :filter     "brighten",
+                  :highlight  true,
+                  :src        "/raw/img/stadium/main/run_enabled.png"},
+                 :volleyball
+                 {:type       "image",
+                  :x          669,
+                  :y          540,
+                  :width      340,
+                  :height     480,
+                  :transition "volleyball",
+                  :actions    {:click {:on "click", :type "location", :location-id "volleyball"}},
+                  :filter     "brighten",
+                  :highlight  true,
+                  :src        "/raw/img/stadium/main/volleyball_enabled.png"}},
  :scene-objects [["background"] ["volleyball" "cycling" "running"]],
- :actions {:start-background-music {:type "audio", :id "background", :loop true}},
- :triggers {:music {:on "start", :action "start-background-music"}},
- :metadata {:prev "map", :autostart true},
- :audio {:background "/raw/audio/background/POL-daily-special-short.mp3"}}
+ :actions       {:start-background-music {:type               "audio", :id "background", :loop true,
+                                          :phrase             "Background music",
+                                          :phrase-description "Background music"}},
+ :triggers      {:music {:on "start", :action "start-background-music"}},
+ :metadata      {:prev "map", :autostart true},
+ :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"}}

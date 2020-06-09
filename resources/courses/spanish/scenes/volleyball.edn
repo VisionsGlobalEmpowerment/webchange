@@ -324,21 +324,21 @@
                                            :phrase             "wrong",
                                            :phrase-description "Wrong answer"},
                  :mari-welcome-audio-1
-                                          {:type               "animation-sequence",
+                                          {:type     "animation-sequence",
                                            :data
-                                                               [{:end 2.25, :anim "talk", :start 1.41}
-                                                                {:end 5.8, :anim "talk", :start 3.14}
-                                                                {:end 6.39, :anim "talk", :start 6.07}
-                                                                {:end 9.47, :anim "talk", :start 6.58}],
+                                                     [{:end 2.25, :anim "talk", :start 1.41}
+                                                      {:end 5.8, :anim "talk", :start 3.14}
+                                                      {:end 6.39, :anim "talk", :start 6.07}
+                                                      {:end 9.47, :anim "talk", :start 6.58}],
                                            :phrase             "welcome",
                                            :phrase-description "Welcome speech",
                                            :phrase-text        "Hola! Quieres jugar volleyball con nosotros? Haz click en  la foto que quisieras escuchar.",
-                                           :target             "mari",
-                                           :audio              "/raw/audio/l1/a5/mari.mp4",
-                                           :start              1.274,
-                                           :duration           8.325,
-                                           :track              1,
-                                           :offset             1.274},
+                                           :target   "mari",
+                                           :audio    "/raw/audio/l1/a5/mari.mp4",
+                                           :start    1.274,
+                                           :duration 8.325,
+                                           :track    1,
+                                           :offset   1.274},
                  :pick-correct
                                           {:type "parallel",
                                            :data
@@ -522,13 +522,18 @@
                                           {:type          "transition",
                                            :to            {:bezier [{:x 446, :y 551} {:x 346, :y 451} {:x 213, :y 940}], :duration 1.4},
                                            :transition-id "ball-transition"},
-                 :voice-high-var
-                                          {:type               "action",
-                                           :phrase             "game-voice",
-                                           :phrase-description "Game voice",
-                                           :from-var           [{:var-name "current-concept", :var-property "game-voice-action"}]},
+                 :start-background-music           {:type               "audio",
+                                                    :loop               true,
+                                                    :phrase             "Background music",
+                                                    :phrase-description "Background music"},
+                 :voice-high-var          {:type "action",:phrase             "game-voice",
+                                           :phrase-description "Game voice", :from-var [{:var-name "current-concept", :var-property "game-voice-action"}]},
                  :wait-for-box-animations {:type "empty", :duration 500}},
- :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :triggers      {
+                 :back {:on "back", :action "stop-activity"},
+                 :music {:on "start", :action "start-background-music"},
+                 :start {:on "start", :action "start-scene"}
+                 },
  :metadata      {:prev "stadium", :autostart true},
  :audio
                 {:rock-oso     "/raw/audio/l1/a3/rock/Oso.m4a",

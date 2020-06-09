@@ -117,7 +117,7 @@
                                                     :data [{:type "state" :target "box1" :id "visible"}
                                                            {:type "state" :target "box2" :id "visible"}
                                                            {:type "state" :target "box3" :id "visible"}
-                                                           #_{:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}]}
+                                                           {:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}]}
 
                  :switch-box-animations-idle       {:type "parallel"
                                                     :data [{:type "add-animation" :target "box1" :id "idle_fly1" :loop true}
@@ -161,7 +161,8 @@
                                                     :fail     "pick-wrong"}
 
                  :first-word                       {:type "sequence"
-                                                    :data ["show-first-box-word"
+                                                    :data ["box-open"
+                                                           "show-first-box-word"
                                                            "introduce-word"
                                                            "bye-current-box"
                                                            "set-current-box2"
@@ -169,7 +170,8 @@
                                                     :unique-tag "box"}
 
                  :second-word                      {:type "sequence"
-                                                    :data ["show-second-box-word"
+                                                    :data ["box-open"
+                                                           "show-second-box-word"
                                                            "introduce-word"
                                                            "bye-current-box"
                                                            "set-current-box3"
@@ -177,16 +179,19 @@
                                                     :unique-tag "box"}
 
                  :third-word                       {:type "sequence"
-                                                    :data ["show-third-box-word"
+                                                    :data ["box-open"
+                                                           "show-third-box-word"
                                                            "introduce-word"
                                                            "bye-current-box"
                                                            "finish-activity"
                                                            "mari-finish"]
                                                     :unique-tag "box"}
-
+                 :box-open                    {:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}
                  :bye-current-box                    {:type "sequence-data"
                                                       :data [{:type "parallel"
-                                                              :data [{:type     "animation" :id "jump"
+                                                              :data [
+                                                                     {:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}
+                                                                     {:type     "animation" :id "jump"
                                                                       :from-var [{:var-name "current-box" :action-property "target"}]}
                                                                      {:type     "transition" :to {:y -100 :duration 2}
                                                                       :from-var [{:var-name "current-box" :action-property "transition-id"}

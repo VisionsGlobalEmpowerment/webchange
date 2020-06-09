@@ -133,7 +133,10 @@
                               :start  true}},
  :scene-objects [["background" "door"] ["vera" "senora-vaca" "mari"] ["door-trigger"] ["box1" "box2" "box3"]],
  :actions
-                {:audio-correct                    {:type "audio", :id "/raw/audio/effects/correct.mp3", :start 0, :duration 1.71},
+                {:audio-correct                    {:type               "audio", :id "/raw/audio/effects/correct.mp3", :start 0, :duration 1.71,
+                                                    :phrase             "Answer is correct",
+                                                    :phrase-description "Answer is correct"
+                                                    },
                  :bye-current-box
                                                    {:type "sequence-data",
                                                     :data
@@ -143,7 +146,12 @@
                                                                     :type "transition",
                                                                     :from-var
                                                                           [{:var-name "current-box", :action-property "transition-id"}
-                                                                           {:var-name "current-position-x", :action-property "to.x"}]}],
+                                                                           {:var-name "current-position-x", :action-property "to.x"}]}
+                                                                   {:type               "audio",
+                                                                    :phrase             "Bye current box audio",
+                                                                    :phrase-description "Bye current box audio"
+                                                                    }
+                                                                   ],
                                                             :type "parallel"}
                                                            {:id "default", :type "state", :from-var [{:var-name "current-box", :action-property "target"}]}]},
                  :clear-instruction                {:type "remove-flows", :flow-tag "instruction"},
@@ -348,7 +356,12 @@
                                                     :data
                                                           [{:id "visible", :type "state", :target "box1"}
                                                            {:id "visible", :type "state", :target "box2"}
-                                                           {:id "visible", :type "state", :target "box3"}]},
+                                                           {:id "visible", :type "state", :target "box3"}
+                                                           {:type               "audio",
+                                                            :phrase             "Show boxes audio",
+                                                            :phrase-description "Show boxes audio",
+                                                            },
+                                                           ]},
                  :show-first-box-word
                                                    {:type "parallel",
                                                     :data
@@ -383,7 +396,11 @@
                                                            {:from "item-3", :type "copy-variable", :var-name "current-word"}
                                                            {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
                  :start-activity                   {:type "start-activity", :id "home"},
-                 :start-background-music           {:type "audio", :id "/raw/audio/background/Casa.mp3", :loop true},
+                 :start-background-music           {:id "/raw/audio/background/Casa.mp3",
+                                                    :type               "audio",
+                                                    :loop               true
+                                                    :phrase             "Background music",
+                                                    :phrase-description "Background music"},
                  :stop-activity                    {:type "stop-activity", :id "home"},
                  :switch-box-animations-idle
                                                    {:type "parallel",

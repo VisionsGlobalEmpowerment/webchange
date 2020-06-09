@@ -437,7 +437,15 @@
                                            :track              1,
                                            :offset             21.162
                                            :skippable true},
+                 :start-background-music           {:type               "audio",
+                                                    :loop               true,
+                                                    :phrase             "Background music",
+                                                    :phrase-description "Background music"},
                  :wait-for-box-animations {:type "empty", :duration 500}},
- :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :triggers      {
+                 :back {:on "back", :action "stop-activity"},
+                 :music {:on "start", :action "start-background-music"},
+                 :start {:on "start", :action "start-scene"}
+                 },
  :metadata      {:prev "park", :autostart true},
  :audio         {:mari "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a"}}

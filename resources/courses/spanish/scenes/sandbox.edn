@@ -446,6 +446,15 @@
                                                 {:type               "action",
                                                  :phrase             "word-4",
                                                  :phrase-description "Pair word 4",
-                                                 :from-var           [{:var-name "current-word", :var-property "sandbox-state-word-4-action"}]}},
- :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+                                                 :from-var           [{:var-name "current-word", :var-property "sandbox-state-word-4-action"}]}
+                 :start-background-music           {:type               "audio",
+                                                    :loop               true,
+                                                    :phrase             "Background music",
+                                                    :phrase-description "Background music"},
+                 },
+ :triggers      {
+                 :back {:on "back", :action "stop-activity"},
+                 :music {:on "start", :action "start-background-music"},
+                 :start {:on "start", :action "start-scene"}
+                 },
  :metadata      {:prev "park", :autostart true}}
