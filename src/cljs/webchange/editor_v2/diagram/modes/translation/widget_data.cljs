@@ -7,6 +7,7 @@
     [webchange.editor-v2.diagram.modes.translation.widget-menu :refer [menu]]
     [webchange.editor-v2.diagram.modes.translation.widget-phrase :refer [phrase]]
     [webchange.editor-v2.diagram.modes.translation.widget-play-button :refer [play-button]]
+    [webchange.editor-v2.diagram.modes.translation.widget-loop-icon :refer [loop-icon]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node?]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
 
@@ -38,7 +39,8 @@
     (into [:div {:on-click #(re-frame/dispatch [::translator-form.actions/set-current-phrase-action node-data])
                  :style    (merge custom-wrapper/node-style
                                   (:node styles))}
-           [play-button node-data]]
+           [play-button node-data]
+           [loop-icon node-data]]
           (r/children this))))
 
 (defn get-widget-data

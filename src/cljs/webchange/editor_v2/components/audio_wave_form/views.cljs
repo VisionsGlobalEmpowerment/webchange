@@ -7,9 +7,9 @@
     [webchange.editor-v2.components.audio-wave-form.views-controls :refer [float-control]]))
 
 (defn audio-wave-form
-  []
+  [{:keys [start end]}]
   (let [ws (r/atom nil)
-        region (r/atom {:start 0 :end 0})
+        region (r/atom {:start start :end end})
         element (r/atom nil)]
     (r/create-class
       {:display-name "audio-wave-form"

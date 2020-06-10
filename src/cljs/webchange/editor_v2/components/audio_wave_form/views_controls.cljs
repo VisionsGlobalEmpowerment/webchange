@@ -22,7 +22,9 @@
                     is-playing? (= @state "play")
                     handle-play (fn [event]
                                   (.stopPropagation event)
-                                  (when (:region @region) (-> @region :region .play))
+                                  (if (:region @region) (-> @region :region .play)
+                                                        (.play @ws)
+                                                        )
                                   (reset! state "play"))
                     handle-pause (fn [event]
                                    (.stopPropagation event)

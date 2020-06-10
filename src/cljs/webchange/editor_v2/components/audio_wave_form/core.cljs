@@ -53,6 +53,9 @@
                      :end    (:end @region-atom)
                      :drag   edit
                      :resize edit}]
+    (when (and (= (:start region-data) 0) (= (:end region-data) 0))
+      (.stop wave-surfer)
+      (.clearRegions wave-surfer))
     (when (and (> (:start region-data) 0) (> (:end region-data) 0))
       (.stop wave-surfer)
       (.clearRegions wave-surfer)
@@ -82,6 +85,7 @@
                           (swap! last-positions assoc key (:start data))
                           (reset! region-atom (assoc data :region e))))
          remove-region #(when (:region @region-atom) (-> @region-atom :region .remove))]
+
      (.enableDragSelection wavesurfer (clj->js {:color audio-color}))
      (.on wavesurfer "region-created" (fn [e] (remove-region) (handle-event e)))
      (.on wavesurfer "region-update-end" handle-event))))
