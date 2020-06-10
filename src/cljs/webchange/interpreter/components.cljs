@@ -13,6 +13,7 @@
     [webchange.common.anim :refer [anim]]
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
+    [webchange.common.scene-components.components :as components]
     [webchange.interpreter.components.video :refer [video]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
@@ -132,6 +133,7 @@
 (declare group)
 (declare matrix-object)
 (declare placeholder)
+(declare button)
 (declare image)
 (declare animation)
 (declare text)
@@ -148,6 +150,7 @@
          type (keyword (:type o))]
      (case type
        :background [background scene-id name o]
+       :button [button scene-id name o]
        :image [image scene-id name o]
        :transparent [:> Group (prepare-group-params o)
                      [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
@@ -205,6 +208,12 @@
   [:> Group (prepare-group-params object)
    [kimage (merge {:src (get-data-as-url (:src object))}
                   (filter-params object))]])
+
+(defn button
+  [scene-id name object]
+  [components/button-interpreter (-> object
+                                     (merge {:name name :scene-id scene-id})
+                                     (prepare-group-params))])
 
 (defn background
   [scene-id name object]

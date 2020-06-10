@@ -1,8 +1,6 @@
 {:assets
  [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
   {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
-  {:url "/raw/img/ui/play_button_01.png", :size 10, :type "image"}
-  {:url "/raw/img/ui/next_button_01.png", :size 10, :type "image"}
   {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio", :alias "vaca voice 1"}
   {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio", :alias "vaca voice 7"}
   {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
@@ -75,19 +73,19 @@
   {:type "transparent",
    :x 400,
    :y 0,
-   :width 331,
-   :height 98,
+   :width 420
+   :text "Próxima"
+   :font-size 76
    :actions {:click {:id "finish-activity", :on "click", :type "action"}},
-   :src "/raw/img/ui/next_button_01.png",
-   :states {:hidden {:y 1000, :type "transparent"}, :visible {:y 0, :type "image"}}},
+   :states {:hidden {:y 1000, :type "transparent"}, :visible {:y 0, :type "button"}}},
   :play-button
-  {:type "image",
+  {:type "button",
    :x 0,
    :y 0,
-   :width 331,
-   :height 99,
+   :width 300
+   :text "Ver"
+   :font-size 76
    :actions {:click {:id "play-video", :on "click", :type "action"}},
-   :src "/raw/img/ui/play_button_01.png",
    :states {:left {:x 0}, :center {:x 200}}},
   :screen-overlay
   {:type "image",
@@ -198,7 +196,7 @@
      :data [{:to {:x 990, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
             {:id "mari-voice-touch-again-1", :type "action"}]}
     {:type "parallel"
-     :data [{:to {:x 1400, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+     :data [{:to {:x 1500, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
             {:id "mari-voice-touch-again-2", :type "action"}]}]},
   :show-play-form
   {:type "parallel",
