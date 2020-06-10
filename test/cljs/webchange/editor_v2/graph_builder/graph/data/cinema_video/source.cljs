@@ -3,8 +3,6 @@
 (def data {:assets
                           [{:url "/raw/img/cinema/background.jpg", :size 10, :type "image"}
                            {:url "/raw/img/cinema/screen-off.png", :size 10, :type "image"}
-                           {:url "/raw/img/ui/play_button_01.png", :size 10, :type "image"}
-                           {:url "/raw/img/ui/next_button_01.png", :size 10, :type "image"}
                            {:url "/raw/audio/l2/a1/L2_A1_Mari.m4a", :size 5, :type "audio", :alias "vaca voice 1"}
                            {:url "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a", :size 5, :type "audio", :alias "vaca voice 7"}
                            {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
@@ -74,23 +72,23 @@
                                         :speed      0.35,
                                         :start      true},
                            :next-button
-                                       {:type    "transparent",
-                                        :x       400,
-                                        :y       0,
-                                        :width   331,
-                                        :height  98,
-                                        :actions {:click {:id "finish-activity", :on "click", :type "action"}},
-                                        :src     "/raw/img/ui/next_button_01.png",
-                                        :states  {:hidden {:y 1000, :type "transparent"}, :visible {:y 0, :type "image"}}},
+                                       {:type      "transparent",
+                                        :x         400,
+                                        :y         0,
+                                        :width     420
+                                        :text      "Próxima"
+                                        :font-size 76
+                                        :actions   {:click {:id "finish-activity", :on "click", :type "action"}},
+                                        :states    {:hidden {:y 1000, :type "transparent"}, :visible {:y 0, :type "button"}}},
                            :play-button
-                                       {:type    "image",
-                                        :x       0,
-                                        :y       0,
-                                        :width   331,
-                                        :height  99,
-                                        :actions {:click {:id "play-video", :on "click", :type "action"}},
-                                        :src     "/raw/img/ui/play_button_01.png",
-                                        :states  {:left {:x 0}, :center {:x 200}}},
+                                       {:type      "button",
+                                        :x         0,
+                                        :y         0,
+                                        :width     300
+                                        :text      "Ver"
+                                        :font-size 76
+                                        :actions   {:click {:id "play-video", :on "click", :type "action"}},
+                                        :states    {:left {:x 0}, :center {:x 200}}},
                            :screen-overlay
                                        {:type   "image",
                                         :x      342,
@@ -124,7 +122,7 @@
            :actions
                           {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
                            :finish-activity
-                                              {:type "sequence-data", :data [{:id "cinema-video", :type "finish-activity"} {:type "scene", :scene-id "map"}]},
+                                              {:id "cinema-video", :type "finish-activity"},
                            :hide-play-form
                                               {:type "parallel",
                                                :data
@@ -144,7 +142,9 @@
                                                :track                  1,
                                                :data                   [{:end 15.205, :anim "talk", :start 12.994}]},
                            :mari-voice-touch-again-1
-                                              {:offset                 18.667,
+                                              {:phrase                 :click-to-replay
+                                               :phrase-description     "Click to replay"
+                                               :offset                 18.667,
                                                :phrase-text            "Touch here to view the video again",
                                                :phrase-text-translated "Toca aqui para ver el video de nuevo",
                                                :start                  18.667,
@@ -155,8 +155,10 @@
                                                :track                  1,
                                                :data                   [{:end 21.861, :anim "talk", :start 18.82}]},
                            :mari-voice-touch-again-2
-                                              {:offset                 22.36,
-                                               :phrase-text            "or touch here to go to your next activity.\n"
+                                              {:phrase                 :click-to-next
+                                               :phrase-description     "Click to go next"
+                                               :offset                 22.36,
+                                               :phrase-text            "or touch here to go to your next activity"
                                                :phrase-text-translated "o toca aqui para ir a tu proxima actividad.",
                                                :start                  22.36,
                                                :type                   "animation-sequence",
@@ -168,39 +170,38 @@
                            :play-video
                                               {:type "sequence-data",
                                                :data
-                                                     [{:id "hide-play-form", :type "action"}
-                                                      {:id "hidden", :type "state", :target "screen-overlay"}
-                                                      {:id "visible", :type "state", :target "letter-video"}
-                                                      {:type     "play-video",
-                                                       :target   "letter-video",
-                                                       :from-var [{:var-name "current-concept", :var-property "chanting-video-src", :action-property "src"}]}
+                                                     [{:type "parallel"
+                                                       :data [
+                                                              {:id "hide-play-form", :type "action"}
+                                                              {:id "hidden", :type "state", :target "screen-overlay"}
+                                                              {:id "visible", :type "state", :target "letter-video"}
+                                                              {:type     "play-video",
+                                                               :target   "letter-video",
+                                                               :from-var [{:var-name "current-concept", :var-property "chanting-video-src", :action-property "src"}]}]}
                                                       {:id "play-video-finish", :type "action"}]},
                            :play-video-finish
-                                              {:phrase             :finish
-                                               :phrase-description "Play video finish"
-                                               :type               "sequence-data",
+                                              {:type "sequence-data",
                                                :data
-                                                                   [{:id "hidden", :type "state", :target "letter-video"}
-                                                                    {:id "visible", :type "state", :target "screen-overlay"}
-                                                                    {:id "vaca-clapping", :type "action"}
-                                                                    {:id "vaca-voice-very-good", :type "action"}
-                                                                    {:id "show-play-again-form", :type "action"}]},
+                                                     [{:id "hidden", :type "state", :target "letter-video"}
+                                                      {:id "visible", :type "state", :target "screen-overlay"}
+                                                      {:id "vaca-voice-very-good", :type "action"}
+                                                      {:id "show-play-again-form", :type "action"}]},
                            :renew-concept
                                               {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
                            :show-play-again-form
                                               {:type "sequence-data",
                                                :data
-                                                     [{:data
-                                                             [{:id "visible", :type "state", :target "next-button"}
-                                                              {:id "left", :type "state", :target "play-button"}
-                                                              {:id "visible", :type "state", :target "video-controls"}],
-                                                       :type "parallel"}
-                                                      {:to {:x 990, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
-                                                      {:id "mari-voice-touch-again-1", :type "action"}
-                                                      {:to {:x 1400, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
-                                                      {:id "mari-voice-touch-again-2", :type "action"}]},
+                                                     [{:id "visible", :type "state", :target "next-button"}
+                                                      {:id "left", :type "state", :target "play-button"}
+                                                      {:id "visible", :type "state", :target "video-controls"}
+                                                      {:type "parallel"
+                                                       :data [{:to {:x 990, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+                                                              {:id "mari-voice-touch-again-1", :type "action"}]}
+                                                      {:type "parallel"
+                                                       :data [{:to {:x 1500, :y 540, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+                                                              {:id "mari-voice-touch-again-2", :type "action"}]}]},
                            :show-play-form
-                                              {:type "sequence-data",
+                                              {:type "parallel",
                                                :data
                                                      [{:data
                                                              [{:id "hidden", :type "state", :target "next-button"}
@@ -208,7 +209,9 @@
                                                               {:id "visible", :type "state", :target "video-controls"}],
                                                        :type "parallel"}
                                                       {:to {:x 1223, :y 546, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
-                                                      {:id "mari-voice-touch", :type "action"}]},
+                                                      {:type "sequence-data"
+                                                       :data [{:type "empty" :duration 500}
+                                                              {:id "mari-voice-touch", :type "action"}]}]},
                            :start-scene
                                               {:type        "sequence",
                                                :data
@@ -221,16 +224,6 @@
                                                :description "Initial action"},
                            :start-activity    {:type "start-activity", :id "cinema-video"},
                            :stop-activity     {:type "stop-activity", :id "cinema-video"},
-                           :vaca-clapping
-                                              {:type "sequence-data",
-                                               :data
-                                                     [{:id "clapping_start", :loop false, :type "animation", :target "senoravaca"}
-                                                      {:data   [{:end 3, :anim "clapping_1clap", :start 0}],
-                                                       :type   "animation-sequence",
-                                                       :track  1,
-                                                       :offset 0,
-                                                       :target "senoravaca"}
-                                                      {:id "clapping_finish", :loop false, :type "animation", :target "senoravaca"}]},
                            :vaca-voice-lets-watch
                                               {:type               "sequence-data",
                                                :phrase             :lets-watch
@@ -248,15 +241,26 @@
                                                                      :data                   [{:end 24.15, :anim "talk", :start 21.33} {:end 25.53, :anim "talk", :start 24.46}]}
                                                                     {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}]},
                            :vaca-voice-very-good
-                                              {:offset      27.148,
-                                               :phrase-text "Very good!",
-                                               :start       27.148,
-                                               :type        "animation-sequence",
-                                               :duration    1.532,
-                                               :audio       "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
-                                               :target      "senoravaca",
-                                               :track       1,
-                                               :data        [{:end 28.618, :anim "talk", :start 27.297}]},
+                                              {:type "sequence-data"
+                                               :data [{:id "clapping_start", :loop false, :type "animation", :target "senoravaca"}
+                                                      {:type "parallel"
+                                                       :data [{:data   [{:end 2, :anim "clapping_1clap", :start 0}],
+                                                               :type   "animation-sequence",
+                                                               :track  2,
+                                                               :offset 0,
+                                                               :target "senoravaca"}
+                                                              {:phrase             :very-good
+                                                               :phrase-description "Very good"
+                                                               :offset             27.148,
+                                                               :phrase-text        "Very good!",
+                                                               :start              27.148,
+                                                               :type               "animation-sequence",
+                                                               :duration           1.532,
+                                                               :audio              "/raw/audio/l2/a1/L2_A1_Vaca_7.m4a",
+                                                               :target             "senoravaca",
+                                                               :track              1,
+                                                               :data               [{:end 28.618, :anim "talk", :start 27.297}]}]}
+                                                      {:id "clapping_finish", :loop false, :type "animation", :target "senoravaca"}]},
                            :vaca-voice-wonderful
                                               {:offset                 9.716,
                                                :phrase                 :intro
