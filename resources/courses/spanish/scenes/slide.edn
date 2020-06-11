@@ -2,7 +2,9 @@
  [{:url "/raw/img/park/slide/background2.jpg", :type "image"}
   {:url "/raw/img/park/slide/slide.png", :type "image"}
   {:url "/raw/img/park/slide/side.png", :type "image"}
+  {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}
   {:url "/raw/audio/l2/a5/L2_A5_Mari.m4a", :type "audio"}
+  {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio", :alias "mari chants"}
   {:url "/raw/audio/l2/a5/riddles/ardilla.mp3", :type "audio", :alias "ardilla"}
   {:url "/raw/audio/l2/a5/riddles/bebe.mp3", :type "audio", :alias "bebe"}
   {:url "/raw/audio/l2/a5/riddles/casa.mp3", :type "audio", :alias "casa"}
@@ -106,7 +108,20 @@
  :actions
  {:clear-instruction {:type "remove-flows", :flow-tag "instruction"},
   :finish-activity
-  {:id "slide", :type "finish-activity"},
+  {:type "sequence-data"
+   :data [{:type "animation-sequence",
+           :target "mari",
+           :track 1,
+           :offset 4.697,
+           :audio "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+           :start 4.697,
+           :duration 1.358,
+           :data [{:start 4.867, :end 5.926, :duration 1.059, :anim "talk"}],
+           :phrase :finish,
+           :phrase-description "Finish Good job",
+           :phrase-text "Good job!"
+           :phrase-text-translated "Buen trabajo!"}
+          {:id "slide", :type "finish-activity"}] },
   :init-state {:type "parallel", :data [{:type "set-variable", :var-name "answer-clickable", :var-value false}]},
   :mari-voice-correct
   {:offset 34.714,
@@ -168,7 +183,10 @@
    :track 1,
    :data [{:end 30.621, :anim "talk", :start 29.802} {:end 32.457, :anim "talk", :start 31.019}]},
   :pick-box-1
-  {:type "test-value",
+  {:type "sequence-data"
+   :data [{:type "copy-variable" :var-name "selected-concept" :from "box1"}
+          {:type "action" :id "say-selected-concept"}
+          {:type "test-value",
    :value2 true,
    :success
    {:fail "pick-wrong",
@@ -178,9 +196,12 @@
      :type "sequence-data"},
     :from-var [{:var-name "box1", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]},
    :fail {:type "empty", :duration 100},
-   :from-var [{:var-name "answer-clickable", :action-property "value1"}]},
+   :from-var [{:var-name "answer-clickable", :action-property "value1"}]}]}
   :pick-box-2
-  {:type "test-value",
+  {:type "sequence-data"
+   :data [{:type "copy-variable" :var-name "selected-concept" :from "box2"}
+          {:type "action" :id "say-selected-concept"}
+          {:type "test-value",
    :value2 true,
    :success
    {:fail "pick-wrong",
@@ -190,9 +211,12 @@
      :type "sequence-data"},
     :from-var [{:var-name "box2", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]},
    :fail {:type "empty", :duration 100},
-   :from-var [{:var-name "answer-clickable", :action-property "value1"}]},
+   :from-var [{:var-name "answer-clickable", :action-property "value1"}]}]}
   :pick-box-3
-  {:type "test-value",
+  {:type "sequence-data"
+   :data [{:type "copy-variable" :var-name "selected-concept" :from "box3"}
+          {:type "action" :id "say-selected-concept"}
+          {:type "test-value",
    :value2 true,
    :success
    {:fail "pick-wrong",
@@ -202,14 +226,17 @@
      :type "sequence-data"},
     :from-var [{:var-name "box3", :action-property "value1"} {:var-name "current-concept", :action-property "value2"}]},
    :fail {:type "empty", :duration 100},
-   :from-var [{:var-name "answer-clickable", :action-property "value1"}]},
+   :from-var [{:var-name "answer-clickable", :action-property "value1"}]}]}
+  :say-selected-concept
+   {:phrase :concept-name,
+    :phrase-description "Content name",
+    :type "action", :from-var [{:var-name "selected-concept", :var-property "mari-word"}]}
   :pick-correct
   {:type "sequence-data",
    :data
    [{:type "set-variable", :var-name "answer-clickable", :var-value false}
     {:id "mari-voice-correct", :type "action"}
-    {:data [{:type "empty", :duration 2500} {:id "slide-current-target", :type "action"}], :type "sequence-data"}
-    {:id "mari-voice-try-another", :type "action"}
+    {:id "slide-current-target", :type "action"}
     {:id "reset-boxes", :type "action"}
     {:type "empty", :duration 1000}
     {:id "renew-current-concept", :type "action"}]},
@@ -230,6 +257,7 @@
      :shuffled true,
      :variables ["current-concept"],
      :provider-id "current-concept"}
+    {:id "mari-voice-try-another", :type "action"}
     {:from ["item-1" "item-2" "item-3"],
      :type "vars-var-provider",
      :from-var
@@ -259,7 +287,7 @@
        :from-var [{:var-name "box3", :var-property "image-src", :action-property "image"}],
        :slot-name "box1",
        :attachment {:x 40, :scale-x 4, :scale-y 4}}],
-     :type "parallel"}
+     :type "sequence-data"}
     {:id "riddle" :type "action" }
     {:type "set-variable", :var-name "answer-clickable", :var-value true}]},
   :riddle
