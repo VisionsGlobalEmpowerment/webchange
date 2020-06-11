@@ -2,10 +2,13 @@
  [{:url "/raw/img/library/painting-tablet/background.jpg", :type "image"}
   {:url "/raw/img/ui/back_button_01.png", :type "image"}
   {:url "/raw/audio/l2/a7/L2_A7_Mari.m4a", :type "audio", :alias "mari voice"}
-  {:url "/raw/img/elements/squirrel.png", :type "image"}],
+  {:url "/raw/img/library/painting-tablet/brush.png", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/pencil.png", :size 10, :type "image"}
+  {:url "/raw/img/library/painting-tablet/eraser.png", :size 10, :type "image"}],
  :objects
  {:background {:type "background", :scene-name "background", :src "/raw/img/library/painting-tablet/background.jpg"},
-  :concept-card {:type "group", :x 60, :y 30, :width 400, :height 300, :children ["concept-image" "concept-word"]},
+  :concept-card {:type "group", :x 230, :y 100, :width 400, :height 300, :children ["concept-image" "concept-word"]},
   :concept-image {:type "image", :x 100, :y 0, :width 100, :height 100, :rotation 0, :scale-x 2, :scale-y 2},
   :concept-word
   {:type "text",
@@ -48,12 +51,12 @@
    :stroke "#898989",
    :stroke-width 4},
   :letter-trace-matrix
-  {:type "matrix", :x -70, :y 330, :width 2025, :height 675, :dx 675, :dy 360, :el "letter-trace", :max 3},
+  {:type "matrix", :x 80, :y 330, :width 2025, :height 675, :dx 480, :dy 360, :el "letter-trace", :max 3},
   :letter-tutorial-image
-  {:type "image", :x 965, :y 75, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
+  {:type "image", :x 1065, :y 75, :width 651, :height 651, :rotation 0, :scale-x 0.45, :scale-y 0.45},
   :letter-tutorial-path
   {:type "transparent",
-   :x 500,
+   :x 600,
    :y 25,
    :width 225,
    :height 225,
@@ -70,7 +73,7 @@
    :stroke-width 10},
   :letter-tutorial-trace
   {:type "svg-path",
-   :x 500,
+   :x 600,
    :y 25,
    :width 225,
    :height 225,
@@ -100,7 +103,7 @@
    :start true},
   :next-button
   {:type "image",
-   :x 1875,
+   :x 1800,
    :y 915,
    :width 97,
    :height 99,
@@ -122,13 +125,91 @@
    :scale-y 1,
    :states {:hidden {:type "transparent"}, :visible {:type "painting-area"}},
    :tool "brush",
-   :var-name "writing-practice-stage-1-pt-1"}},
+   :var-name "writing-practice-stage-1-pt-1"},
+  :brush
+  {:type "image",
+   :x -196,
+   :y 450,
+   :width 540,
+   :height 140,
+   :scene-name "brush",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "brush"}}},
+   :rotation 0,
+   :scale-x 0.7,
+   :scale-y 0.7,
+   :src "/raw/img/library/painting-tablet/brush.png",
+   :states {:active {:x -126}, :inactive {:x -196}}},
+  :colors-palette
+  {:type "colors-palette",
+   :x 1680,
+   :y 100,
+   :width 140,
+   :height 800,
+   :scene-name "colors-palette",
+   :actions {:change {:id "set-current-color", :on "change", :type "action", :pick-event-param "color"}},
+   :colors ["#4479bb" "#92bd4a" "#ed91aa" "#fdc531" "#010101"],
+   :rotation 0,
+   :scale-x 1,
+   :scale-y 1,
+   :var-name "current-color"},
+  :eraser
+  {:type "image",
+   :x -82,
+   :y 794,
+   :width 380,
+   :height 175,
+   :scene-name "eraser",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "eraser"}}},
+   :rotation 0,
+   :scale-x 0.7,
+   :scale-y 0.7,
+   :src "/raw/img/library/painting-tablet/eraser.png",
+   :states {:active {:x -12}, :inactive {:x -82}}},
+  :felt-tip
+  {:type "image",
+   :x -221,
+   :y 273,
+   :width 590,
+   :height 150,
+   :scene-name "felt-tip",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "felt-tip"}}},
+   :rotation 0,
+   :scale-x 0.7,
+   :scale-y 0.7,
+   :src "/raw/img/library/painting-tablet/felt-tip.png",
+   :states {:active {:x -151}, :inactive {:x -221}}},
+  :pencil
+  {:type "image",
+   :x -198,
+   :y 622,
+   :width 550,
+   :height 135,
+   :scene-name "pencil",
+   :actions {:click {:id "set-current-tool", :on "click", :type "action", :params {:tool "pencil"}}},
+   :rotation 0,
+   :scale-x 0.7,
+   :scale-y 0.7,
+   :src "/raw/img/library/painting-tablet/pencil.png",
+   :states {:active {:x -128}, :inactive {:x -198}}}},
  :scene-objects
  [["background" "concept-card"]
   ["letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path" "letter-tutorial-image"]
-  ["practice-canvas" "next-button" "mari"]],
+  ["practice-canvas"]
+  ["felt-tip" "brush" "pencil" "eraser" "colors-palette"]
+  ["next-button" "mari"]],
  :actions
- {:check-page
+ {:set-current-tool
+  {:type "sequence-data",
+   :data
+   [{:type "state", :target "practice-canvas", :from-params [{:param-property "tool", :action-property "value"}]}
+    {:id "inactive", :type "state", :from-var [{:var-name "current-tool", :action-property "target"}]}
+    {:id "active", :type "state", :from-params [{:param-property "tool", :action-property "target"}]}
+    {:type "set-variable",
+     :var-name "current-tool",
+     :from-params [{:param-property "tool", :action-property "var-value"}]}]},
+  :set-current-color
+  {:type "state", :target "practice-canvas", :from-params [{:param-property "color", :action-property "value"}]},
+  :check-page
   {:type "test-var-scalar",
    :var-name "current-page",
    :success "check-stage",
@@ -216,16 +297,17 @@
     {:type "set-variable",
      :from-var [{:var-name "current-concept", :var-property "letter-tutorial-path", :action-property "var-value"}],
      :var-name "letter-tutorial-path"}]},
+  :init-current-tool {:type "action", :id "set-current-tool", :params {:tool "felt-tip"}},
   :mari-go-wait {:type "transition", :to {:x 1490, :y 130, :loop false, :duration 2}, :transition-id "mari"},
   :mari-init-wand {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
   :mari-shows-example
   {:type "sequence-data",
    :data
-   [{:to {:x 980, :y 360, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+   [{:to {:x 1080, :y 360, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
     {:id "visible", :type "state", :target "letter-tutorial-path"}
     {:data
      [{:type "path-animation", :state "play", :target "letter-tutorial-path"}
-      {:to {:path "", :scale {:x 1.7, :y 1.7}, :origin {:x 680, :y 60}, :duration 5},
+      {:to {:path "", :scale {:x 1.7, :y 1.7}, :origin {:x 780, :y 60}, :duration 5},
        :type "transition",
        :from-var [{:var-name "letter-path", :action-property "to.path"}],
        :transition-id "mari"}],
@@ -315,6 +397,7 @@
     "renew-concept"
     "init-state"
     "init-vars"
+    "init-current-tool"
     "init-stage-1"
     "mari-voice-intro"
     "mari-init-wand"

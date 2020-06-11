@@ -105,9 +105,11 @@
   [point image stage]
   {:x (-> (.-x point)
           (- (* (.x image) (.scaleX stage)))
+          (- (.x stage))
           (/ (.scaleX stage)))
    :y (-> (.-y point)
           (- (* (.y image) (.scaleY stage)))
+          (- (.y stage))
           (/ (.scaleY stage)))})
 
 (defn get-draw-points

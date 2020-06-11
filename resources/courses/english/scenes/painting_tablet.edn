@@ -2,8 +2,7 @@
                  {:url "/raw/img/library/painting-tablet/brush.png", :size 10 :type "image"}
                  {:url "/raw/img/library/painting-tablet/felt-tip.png", :size 10 :type "image"}
                  {:url "/raw/img/library/painting-tablet/pencil.png", :size 10 :type "image"}
-                 {:url "/raw/img/library/painting-tablet/eraser.png", :size 10 :type "image"}
-                 {:url "/raw/img/library/painting-tablet/back.png", :size 10 :type "image"}]
+                 {:url "/raw/img/library/painting-tablet/eraser.png", :size 10 :type "image"}]
  :objects       {:background     {:type       "background",
                                   :scene-name "background",
                                   :src        "/raw/img/library/painting-tablet/background.jpg"}
@@ -81,19 +80,6 @@
                                                        :id     "set-current-tool"
                                                        :params {:tool "eraser"}
                                                        :on     "click"}}}
-                 :back           {:type       "image"
-                                  :scene-name "back"
-                                  :x          50
-                                  :y          50
-                                  :width      100
-                                  :height     100
-                                  :scale-x    1
-                                  :scale-y    1
-                                  :rotation   0
-                                  :src        "/raw/img/library/painting-tablet/back.png"
-                                  :actions    {:click {:type "action"
-                                                       :id   "finish-activity"
-                                                       :on   "click"}}}
                  :colors-palette {:scene-name "colors-palette"
                                   :type       "colors-palette"
                                   :var-name   "current-color"
@@ -109,7 +95,7 @@
                                                         :id               "set-current-color"
                                                         :on               "change"
                                                         :pick-event-param "color"}}}}
- :scene-objects [["background"] ["painting-area"] ["felt-tip" "brush" "pencil" "eraser" "colors-palette"] ["back"]]
+ :scene-objects [["background"] ["painting-area"] ["felt-tip" "brush" "pencil" "eraser" "colors-palette"]]
  :actions       {:clear-instruction {:type        "remove-flows"
                                      :description "Remove flows"
                                      :flow-tag    "instruction"}
