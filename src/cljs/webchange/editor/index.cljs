@@ -13,6 +13,7 @@
     [webchange.common.core :refer [with-parent-origin
                                    with-origin-offset]]
     [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
+    [webchange.common.scene-components.components :as components]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene overlay-screens] :rename {scene play-scene}]
@@ -40,6 +41,7 @@
                                   GridRow]]))
 
 (declare background)
+(declare button)
 (declare image)
 (declare transparent)
 (declare group)
@@ -59,6 +61,7 @@
   [type]
   (case type
     :background background
+    :button button
     :image image
     :transparent transparent
     :group group
@@ -145,6 +148,18 @@
   [:> Group (object-params (dissoc object :x :y))
    [:> Group {:on-click remove-transform}
     [kimage {:src (get-data-as-url (:src object))}]]])
+
+(defn with-editor-wrapper
+  [component scene-id name object]
+  (let [props (merge object {:scene-id scene-id :name name})]
+    [:> Group (object-params object)
+     [component (-> props
+                    (merge {:x 0 :y 0}))]
+     [:> Rect (rect-params scene-id name object)]]))
+
+(defn button
+  [scene-id name object]
+  (with-editor-wrapper components/button-editor scene-id name object))
 
 (defn- get-filters
   [params]
@@ -284,7 +299,7 @@
     [:> Group
      [kimage {:src "/raw/img/bg.jpg"}]
      [kimage {:src "/raw/img/ui/logo.png"
-              :x 628 :y 294}]
+              :x   628 :y 294}]
      [:> Group {:x 729 :y 750}
       [:> Rect {:x 1 :width 460 :height 24 :fill "#ffffff" :corner-radius 25}]
       [:> Group {:clip-x 0 :clip-y 0 :clip-width (+ 0.1 (* @progress 4.62)) :clip-height 24}

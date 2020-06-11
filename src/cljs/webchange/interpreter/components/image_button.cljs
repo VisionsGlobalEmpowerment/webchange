@@ -1,4 +1,4 @@
-(ns webchange.interpreter.components.button
+(ns webchange.interpreter.components.image-button
   (:require
     [webchange.common.kimage :refer [kimage]]
     [webchange.interpreter.core :refer [get-data-as-url]]))
@@ -15,7 +15,7 @@
        (get skins)
        (get-data-as-url)))
 
-(defn button
+(defn image-button
   [{:keys [x y skin on-click]}]
   [kimage
    {:src (get-skin skin)

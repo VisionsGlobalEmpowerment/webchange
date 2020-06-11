@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [react-konva :refer [Group Rect Text]]
     [webchange.common.kimage :refer [kimage]]
-    [webchange.interpreter.components.button :refer [button]]
+    [webchange.interpreter.components.image-button :refer [image-button] :rename {image-button button}]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.screens.state :as screens]

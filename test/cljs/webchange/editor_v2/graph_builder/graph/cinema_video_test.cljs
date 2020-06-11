@@ -5,9 +5,11 @@
     [webchange.editor-v2.graph-builder.graph.utils :refer [compare-results]]
     [webchange.editor-v2.graph-builder.graph.data.concept-sample :as concept]
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.source :as source]
-    [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--finish :as finish]
+    [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--click-to-next :as click-to-next]
+    [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--click-to-replay :as click-to-replay]
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--lets-watch :as lets-watch]
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--touch-to-play :as touch-to-play]
+    [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--very-good :as very-good]
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--welcome :as welcome]
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.scene-translation :as full-scene]))
 
@@ -20,14 +22,26 @@
                      {:pick-data?   false
                       :keep-phrase? false})))
 
+;current-dialog-action-name :vaca-voice-very-good
+;client.cljs?rel=1591782929345:39 current-dialog-action-name nil
+;client.cljs?rel=1591782929345:39 current-dialog-action-name :mari-voice-touch-again-1
+;client.cljs?rel=1591782929345:39 current-dialog-action-name nil
+;client.cljs?rel=1591782929345:39 current-dialog-action-name :mari-voice-touch-again-2
+;client.cljs?rel=1591782929345:39 current-dialog-action-name nil
+
 (let [diagram-mode :translation
       scene-data source/data
       params {:concept-data {:current-concept concept/data}}]
 
-  (deftest test-get-dialog-graph--cinema-video--finish
+  (deftest test-get-dialog-graph--cinema-video--click-to-next
     (compare-results (get-diagram-graph scene-data diagram-mode
-                                        (assoc params :start-node :play-video-finish))
-                     finish/data))
+                                        (assoc params :start-node :mari-voice-touch-again-1))
+                     click-to-next/data))
+
+  (deftest test-get-dialog-graph--cinema-video--click-to-replay
+    (compare-results (get-diagram-graph scene-data diagram-mode
+                                        (assoc params :start-node :mari-voice-touch-again-2))
+                     click-to-replay/data))
 
   (deftest test-get-dialog-graph--cinema-video--lets-watch
     (compare-results (get-diagram-graph scene-data diagram-mode
@@ -38,6 +52,11 @@
     (compare-results (get-diagram-graph scene-data diagram-mode
                                         (assoc params :start-node :mari-voice-touch))
                      touch-to-play/data))
+
+  (deftest test-get-dialog-graph--cinema-video--very-good
+    (compare-results (get-diagram-graph scene-data diagram-mode
+                                        (assoc params :start-node :vaca-voice-very-good))
+                     very-good/data))
 
   (deftest test-get-dialog-graph--cinema-video--welcome
     (compare-results (get-diagram-graph scene-data diagram-mode
