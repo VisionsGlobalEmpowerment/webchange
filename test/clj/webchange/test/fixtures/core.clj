@@ -112,7 +112,7 @@
   (let [{course-id :id course-name :name course-slug :slug} course
         scene-name "test-scene"
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
-        data {:test "test" :test-dash "test-dash-value" :test-3 "test-3-value"}
+        data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
         [{version-id :id}] (db/save-scene! {:scene_id scene-id :data data :owner_id 0 :created_at (jt/local-date-time)})]
     {:id scene-id
      :course-name course-name

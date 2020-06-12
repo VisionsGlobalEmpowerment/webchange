@@ -6,6 +6,7 @@
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword]]
             [clj-http.client :as client]
+            [webchange.db.core :as db-core]
             [config.core :refer [env]]
             [clojure.reflect :as cr]
             [clojure.data.json :as json]
@@ -121,12 +122,13 @@
   (doseq [scene scenes]
     (db/create-or-update-scene! (transform-keys ->snake_case_keyword scene))))
 
+
 (defn update-scene-versions!
   [scene-versions]
   (doseq [scene-version scene-versions]
     (-> scene-version
         (assoc :created-at (dt/iso-str2date-time (:created-at scene-version)))
-        (#(transform-keys ->snake_case_keyword %))
+        (#(db-core/transform-keys-one-level ->snake_case_keyword %))
         (db/create-or-update-scene-version!)
         )))
 
