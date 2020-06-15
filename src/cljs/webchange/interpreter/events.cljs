@@ -12,7 +12,7 @@
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
-    [webchange.interpreter.utils.find-exit :refer [find-exit-position]]
+    [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.sw-utils.events :as swe]
     [webchange.sw-utils.message :as sw]
@@ -717,6 +717,16 @@
           default-actions (get default-triggers trigger)]
       {:dispatch-n (concat actions default-actions)})))
 
+(defn- next-scene-location
+  [db]
+  (let [next-activity (get-in db [:progress-data :next :activity])
+        current-scene (get-in db [:current-scene])
+        scene-list (get-in db [:course-data :scene-list])]
+    (->> (find-path current-scene next-activity scene-list)
+         (drop 1)
+         (take-last 3)
+         (first))))
+
 (defn- next-location
   [db]
   (let [next-activity (get-in db [:progress-data :next :activity])
@@ -727,7 +737,7 @@
 (re-frame/reg-event-fx
   ::next-scene
   (fn [{:keys [db]} [_ _]]
-    (let [next-scene-id (-> db next-location :name)]
+    (let [next-scene-id (-> db next-scene-location)]
       {:dispatch-n (list [::set-current-scene next-scene-id]
                          [::screens/reset-ui-screen])})))
 
