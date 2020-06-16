@@ -13,7 +13,10 @@
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
+    [webchange.interpreter.utils.propagate-objects :refer [get-propagated-objects
+                                                           replace-object]]
     [webchange.interpreter.variables.events :as vars.events]
+    [webchange.state.lessons.subs :as lessons]
     [webchange.sw-utils.state.resources :as sw-resources]))
 
 (re-frame/reg-fx
@@ -187,6 +190,7 @@
 (ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
 (ce/reg-simple-executor :set-interval ::execute-set-interval)
 (ce/reg-simple-executor :remove-interval ::execute-remove-interval)
+(ce/reg-simple-executor :propagate-objects ::execute-propagate-objects)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -941,6 +945,18 @@
   (fn [{:keys [db]} [_ {:keys [id] :as action}]]
     {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
                        (ce/success-event action))}))
+
+(re-frame/reg-event-fx
+  ::execute-propagate-objects
+  (fn [{:keys [db]} [_ {object-to-propagate :id lesson-name :from :as action}]]
+    (let [scene-id (:current-scene db)
+          object-data (get-in db [:scenes scene-id :objects (keyword object-to-propagate)])
+          lesson-items (lessons/lesson-dataset-items db lesson-name)
+          {:keys [objects scene-objects]} (get-propagated-objects object-data lesson-items)]
+      {:db       (-> db
+                     (update-in [:scenes scene-id :objects] merge objects)
+                     (update-in [:scenes scene-id :scene-objects] replace-object object-to-propagate scene-objects))
+       :dispatch (ce/success-event action)})))
 
 (re-frame/reg-event-fx
   ::open-settings

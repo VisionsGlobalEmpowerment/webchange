@@ -3,7 +3,8 @@
     [clojure.set :refer [union]]
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [webchange.common.events :as e]))
+    [webchange.common.events :as e]
+    [webchange.state.lessons.subs :as lessons]))
 
 (e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider)
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
@@ -157,30 +158,11 @@
       {:db (provide db items variables provider-id {:shuffled true})
        :dispatch (e/success-event action)})))
 
-(defn get-lesson
-  [db lesson-set-name]
-  (let [lesson (get-in db [:lessons lesson-set-name])]
-    (when (nil? lesson) (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined"))))
-    lesson))
-
 ;TODO: level get lessons from levels
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
-    (let [current-activity (:activity db)
-          lesson-sets (->> (get-in db [:course-data :levels])
-                              (filter #(= (:level current-activity) (:level %)))
-                              first
-                              :lessons
-                              (filter #(= (:lesson current-activity) (:lesson %)))
-                              first
-                              :lesson-sets)
-
-          lesson-set-name (or (get lesson-sets (keyword from)) from)
-          lesson (get-lesson db lesson-set-name)
-          items (->> (:item-ids lesson)
-                     (map #(get-in db [:dataset-items %]))
-                     (map #(merge (:data %) {:id (:name %)})))
+    (let [items (lessons/lesson-dataset-items db from)
           has-next (has-next db items provider-id action)
           scene-id (:current-scene db)
           on-end-action (->> on-end

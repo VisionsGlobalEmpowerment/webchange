@@ -56,6 +56,7 @@
 (declare animated-svg-path)
 (declare svg-path-object)
 (declare matrix-group)
+(declare propagate-group)
 
 (defn object
   [type]
@@ -76,6 +77,7 @@
     :colors-palette colors-palette
     :video video
     :matrix matrix-group
+    :propagate propagate-group
     (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))))
 
 (defn to-props
@@ -204,6 +206,11 @@
   [:> Group (object-params object)
    (matrix-objects-list object scene-id d)
    [:> Rect (rect-params scene-id name object)]])
+
+(defn propagate-group
+  [scene-id name object]
+  [:> Group (object-params object)
+     [:> Rect (rect-params scene-id name object)]])
 
 (defn placeholder
   [scene-id name object]

@@ -887,6 +887,7 @@
   (fn [{:keys [db]} [_ _]]
     (let [current-scene (:current-scene db)]
       {:db         (-> db
-                       (assoc-in [:scenes current-scene :objects] (get-in db [:current-scene-data :objects])))
+                       (assoc-in [:scenes current-scene :objects] (get-in db [:current-scene-data :objects]))
+                       (assoc-in [:scenes current-scene :scene-objects] (get-in db [:current-scene-data :scene-objects])))
        :dispatch-n (list [::set-main-content :play-scene]
                          [::vars.events/clear-vars])})))
