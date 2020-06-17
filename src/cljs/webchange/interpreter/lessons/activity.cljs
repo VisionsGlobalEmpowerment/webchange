@@ -14,17 +14,25 @@
   [coll key value]
   (reduce #(when (= value (get %2 key)) (reduced %2)) nil coll))
 
-(defn- get-level
+(defn get-level
   [levels level]
   (first-by-key levels :level level))
 
-(defn- get-lesson
+(defn get-lesson
   [lessons lesson]
   (first-by-key lessons :lesson lesson))
 
 (defn- get-activity
   [activities activity]
   (first-by-key activities :activity activity))
+
+(defn get-activities
+  [db level lesson]
+  (let [levels (get-in db [:course-data :levels])
+        lessons (-> (get-level levels level) :lessons)
+        activities (-> (get-lesson lessons lesson) :activities)]
+    activities
+  ))
 
 (defn workflow-action
   [db {:keys [level lesson activity]}]
