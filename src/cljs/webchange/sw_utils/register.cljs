@@ -1,15 +1,15 @@
 (ns webchange.sw-utils.register
   (:require [re-frame.core :as re-frame]
-            [webchange.sw-utils.events :as events]
+            [webchange.sw-utils.state.status :as status]
             [webchange.sw-utils.subscribe :refer [subscribe-to-notifications]]))
 
 (defn- worker-ready
   [_]
-  (re-frame/dispatch [::events/set-sw-status :installed]))
+  (re-frame/dispatch [::status/set-sync-status :installed]))
 
 (defn- track-installing
   [worker]
-  (re-frame/dispatch [::events/set-sw-status :installing])
+  (re-frame/dispatch [::status/set-sync-status :installing])
   (.addEventListener worker "statechange" (fn []
                                             (when (= "activated" (.-state worker))
                                               (worker-ready worker)))))
@@ -43,4 +43,5 @@
       (if use-cache
         (do (register service-worker path)
             (subscribe-to-notifications))
-        (unregister service-worker)))))
+        (do (unregister service-worker)
+            (re-frame/dispatch [::status/set-sync-status :disabled]))))))

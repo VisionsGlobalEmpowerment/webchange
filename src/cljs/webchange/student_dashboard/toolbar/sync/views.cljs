@@ -5,18 +5,20 @@
     [cljs-react-material-ui.reagent :as ui]
     [webchange.sw-utils.message :as sw]
     [webchange.sw-utils.subs :as subs]
+    [webchange.sw-utils.state.status :as status]
     [webchange.student-dashboard.toolbar.sync.events :as events]
     [webchange.student-dashboard.toolbar.sync.views-sync-list :refer [sync-list-modal]]
     [webchange.student-dashboard.toolbar.sync.icons.icon-ready :as icon-ready]
     [webchange.student-dashboard.toolbar.sync.icons.icon-syncing :as icon-syncing]
     [webchange.student-dashboard.toolbar.sync.icons.icon-unavailable :as icon-unavailable]))
 
-(defn sync-status
+(defn- sync-status
   []
-  (let [offline-mode @(re-frame/subscribe [::subs/offline-mode])]
-    (case offline-mode
+  (let [sync-status @(re-frame/subscribe [::status/sync-status])]
+    (case sync-status
       :syncing [icon-unavailable/get-shape]
       :synced [icon-syncing/get-shape]
+      :disabled [icon-unavailable/get-shape {:color "#cccccc"}]
       [icon-ready/get-shape])))
 
 (defn current-version-data
@@ -59,11 +61,13 @@
 (defn sync
   []
   (r/with-let [menu-anchor (r/atom nil)]
-              (let [handle-select-resources-click #(do (reset! menu-anchor nil)
+              (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
+                    handle-select-resources-click #(do (reset! menu-anchor nil)
                                                        (re-frame/dispatch [::events/open-sync-list]))]
                 [:div
                  [ui/icon-button
-                  {:on-click #(reset! menu-anchor (.-currentTarget %))}
+                  {:disabled disabled?
+                   :on-click #(reset! menu-anchor (.-currentTarget %))}
                   [sync-status]]
                  [ui/menu
                   {:anchor-el               @menu-anchor

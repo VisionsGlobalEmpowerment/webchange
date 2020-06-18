@@ -3,11 +3,6 @@
     [re-frame.core :as re-frame]))
 
 (re-frame/reg-event-db
-  ::set-sw-status
-  (fn [db [_ mode]]
-    (assoc-in db [:service-worker :offline-mode] mode)))
-
-(re-frame/reg-event-db
   ::set-last-update
   (fn [db [_ date-str version]]
     (-> db
