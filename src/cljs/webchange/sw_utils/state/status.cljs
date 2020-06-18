@@ -6,7 +6,10 @@
 
 (def sync-statuses [:not-started
                     :disabled
-                    :syncing])
+                    :installing
+                    :installed
+                    :syncing
+                    :synced])
 
 (defn- valid-sync-status?
   [status]

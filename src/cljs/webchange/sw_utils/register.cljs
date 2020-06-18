@@ -24,7 +24,7 @@
 
 (defn- register
   [service-worker path]
-  (-> (.register service-worker path)
+  (-> (.register service-worker path (clj->js {:scope "/"}))
       (.then check-state)
       (.catch #(println (str "[ServiceWorker] Registration failed:" %)))))
 
