@@ -61,6 +61,16 @@
   )
 
 (re-frame/reg-sub
+  ::finished-level-lesson-activities
+  (fn [db]
+    (let [progress-data (get-in db [:progress-data :finished])
+          last-level (last-level-done progress-data)
+          last-lesson (last-lesson-done progress-data last-level)
+          finished-activities ((keyword (str last-lesson))  ((keyword (str last-level)) progress-data))
+          ]
+      finished-activities)))
+
+(re-frame/reg-sub
   ::lesson-progress
   (fn [db]
     (let [

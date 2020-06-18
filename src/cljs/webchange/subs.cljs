@@ -13,6 +13,19 @@
     (:viewport db)))
 
 (re-frame/reg-sub
+  ::scene-list
+  (fn [db]
+    (get-in db [:course-data :scene-list])))
+
+(re-frame/reg-sub
+  ::navigation-mode
+  (fn [db]
+    (let [navigation-mode (get-in db [:course-data :navigation-mode])]
+      (if (= navigation-mode nil)
+        :activity
+        (keyword navigation-mode)))))
+
+(re-frame/reg-sub
   ::course-scenes
   (fn [db]
     (-> db :course-data :scenes)))

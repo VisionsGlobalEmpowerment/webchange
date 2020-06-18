@@ -3,6 +3,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
+    [webchange.student-dashboard.subs :as student-dashboard-subs]
+    [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
     [webchange.common.kimage :refer [kimage]]
     [webchange.common.painting-area :refer [painting-area]]
     [webchange.common.copybook :refer [copybook]]
@@ -39,6 +41,7 @@
     [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
     [webchange.logger :as logger]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
+    [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
     [konva :as k]))
 
 (defn empty-filter [] {:filters []})
@@ -143,12 +146,46 @@
 (declare background)
 (declare empty-component)
 
+(defn lock-object [o]
+  (let [o (-> o
+    (assoc :actions {})
+    (assoc :filter "grayscale"))]
+  o
+))
+
+(defn get-lesson-based-open-activity []
+  (let [{:keys [id]} @(re-frame/subscribe [::student-dashboard-subs/next-activity])
+        finished-level-lesson-activities @(re-frame/subscribe [::student-dashboard-subs/finished-level-lesson-activities])
+        activities (conj finished-level-lesson-activities id)]
+    activities))
+
+(defn get-activity-based-open-activity []
+  (let [{:keys [id]} @(re-frame/subscribe [::student-dashboard-subs/next-activity])
+        finished-activities (set (map #(:id %) @(re-frame/subscribe [::student-dashboard-subs/finished-activities])))
+        activities (conj finished-activities id)]
+    activities))
+
+(defn add-navigation-params [scene-id object-name o]
+  (let [
+        navigation-mode @(re-frame/subscribe [::subs/navigation-mode])
+        activities (if (= navigation-mode :lesson) (get-lesson-based-open-activity) (get-activity-based-open-activity))
+        scene-list @(re-frame/subscribe [::subs/scene-list])
+        all-activities (set (flatten (map #(find-path scene-id % scene-list) activities)))
+        outs  (set (flatten (map #(:name %) (:outs ((keyword scene-id) scene-list)))))]
+     (if (contains? outs object-name)
+       (if (contains? all-activities object-name) o (lock-object o))
+        o )))
+
 (defn draw-object
   ([scene-id name]
    (draw-object scene-id name {}))
   ([scene-id name props]
    (let [o (merge @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]) props)
-         type (keyword (:type o))]
+         type (keyword (:type o))
+         o (add-navigation-params scene-id name o)
+         ]
+
+
      (case type
        :background [background scene-id name o]
        :button [button scene-id name o]
