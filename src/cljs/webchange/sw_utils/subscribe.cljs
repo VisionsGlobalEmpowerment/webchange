@@ -1,17 +1,18 @@
 (ns webchange.sw-utils.subscribe
   (:require [re-frame.core :as re-frame]
-            [webchange.sw-utils.events :as events]))
+            [webchange.sw-utils.state.status :as status]
+            [webchange.sw-utils.state.resources :as resources]))
 
 (defn- set-cached-resources-list
   [data]
-  (re-frame/dispatch [::events/set-synced-game-resources data]))
+  (re-frame/dispatch [::resources/set-synced-game-resources data]))
 
 (defn- set-last-update
   [data]
   (let [date (get data "date")
         version (get data "version")]
-    (re-frame/dispatch [::events/set-last-update date version])
-    (re-frame/dispatch [::events/set-sw-status :synced])))
+    (re-frame/dispatch [::status/set-last-update date version])
+    (re-frame/dispatch [::status/set-sync-status :synced])))
 
 (defn subscribe-to-notifications
   []

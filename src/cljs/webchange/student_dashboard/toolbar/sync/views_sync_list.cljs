@@ -5,8 +5,8 @@
     [clojure.set :refer [difference union]]
     [webchange.student-dashboard.toolbar.sync.events :as events]
     [webchange.student-dashboard.toolbar.sync.subs :as subs]
+    [webchange.sw-utils.state.resources :as resources]
     [webchange.sw-utils.message :as sw]
-    [webchange.sw-utils.subs :as sw-subs]
     [webchange.student-dashboard.toolbar.sync.views-sync-list-present :refer [sync-list-modal-view]]
     [webchange.subs :as global-subs]))
 
@@ -150,7 +150,7 @@
   [this]
   (let [{:keys [scenes-data synced-game-resources course]} (r/props this)]
     (reset! data (get-levels-data scenes-data synced-game-resources))
-    (re-frame/dispatch [::events/load-scenes])
+    (re-frame/dispatch [::resources/load-scenes])
     (sw/get-cached-resources course)))
 
 (defn- component-did-update
@@ -192,9 +192,9 @@
 (defn sync-list-modal
   []
   (let [current-course @(re-frame/subscribe [::global-subs/current-course])
-        scenes-data @(re-frame/subscribe [::subs/scenes-data])
-        scenes-loading @(re-frame/subscribe [::subs/scenes-loading])
-        synced-game-resources @(re-frame/subscribe [::sw-subs/get-synced-game-resources])
+        scenes-data @(re-frame/subscribe [::resources/scenes-data])
+        scenes-loading @(re-frame/subscribe [::resources/scenes-loading])
+        synced-game-resources @(re-frame/subscribe [::resources/synced-game-resources])
         window-opened? @(re-frame/subscribe [::subs/list-open])]
     [sync-list-modal-wrapper {:course                current-course
                               :scenes-data           scenes-data

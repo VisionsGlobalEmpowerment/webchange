@@ -29,13 +29,27 @@
   ::sync-disabled?
   sync-disabled?)
 
+(re-frame/reg-sub
+  ::last-update
+  (fn [db]
+    (get-in db (path-to-db [:last-update]))))
+
+(re-frame/reg-sub
+  ::version
+  (fn [db]
+    (get-in db (path-to-db [:version]))))
+
 (re-frame/reg-event-db
   ::set-sync-status
   (fn [db [_ status]]
-
-    (println "::set-sync-status" status)
-
     (if (valid-sync-status? status)
       (assoc-in db (path-to-db [:sync-status]) status)
       (do (logger/error (str "Sync status '" status "' is not valid"))
           db))))
+
+(re-frame/reg-event-db
+  ::set-last-update
+  (fn [db [_ date-str version]]
+    (-> db
+        (assoc-in (path-to-db [:last-update]) date-str)
+        (assoc-in (path-to-db [:version]) version))))
