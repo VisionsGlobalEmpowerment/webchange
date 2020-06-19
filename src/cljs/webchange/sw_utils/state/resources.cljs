@@ -14,10 +14,13 @@
 
 (re-frame/reg-event-fx
   ::cache-course
-  (fn [{:keys [db]} [_ course-id]]
+  [(re-frame/inject-cofx :online?)]
+  (fn [{:keys [db online?]} [_ course-id]]
     (when-not (status/sync-disabled? db)
-      {:cache-course [course-id]
-       :dispatch     [::status/set-sync-status :syncing]})))
+      (if online?
+        {:cache-course [course-id]
+         :dispatch     [::status/set-sync-status :syncing]}
+        {:dispatch [::status/set-sync-status :offline]}))))
 
 (re-frame/reg-sub
   ::scenes-data
@@ -33,7 +36,7 @@
   ::load-scenes
   (fn [{:keys [db]} _]
     (let [current-course (:current-course db)]
-      {:db (-> db (assoc-in [:sync-resources :scenes :loading] true))
+      {:db         (-> db (assoc-in [:sync-resources :scenes :loading] true))
        :http-xhrio {:method          :get
                     :uri             (str "/api/resources/game-app/" current-course "/scenes")
                     :format          (json-request-format)

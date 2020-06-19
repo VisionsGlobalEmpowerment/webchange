@@ -15,10 +15,12 @@
   []
   (let [sync-status @(re-frame/subscribe [::status/sync-status])]
     (case sync-status
-      :syncing [icon-unavailable/get-shape]
-      :synced [icon-syncing/get-shape]
+      :installing [icon-syncing/get-shape]
+      :syncing [icon-syncing/get-shape]
+      :synced [icon-ready/get-shape]
       :disabled [icon-unavailable/get-shape {:color "#cccccc"}]
-      [icon-ready/get-shape])))
+      :offline [icon-ready/get-shape {:color "#278600"}]
+      [icon-unavailable/get-shape])))
 
 (defn current-version-data
   [{:keys [update-date-str version]}]

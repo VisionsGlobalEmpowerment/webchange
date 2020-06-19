@@ -9,7 +9,8 @@
                     :installing
                     :installed
                     :syncing
-                    :synced])
+                    :synced
+                    :offline])
 
 (defn- valid-sync-status?
   [status]
@@ -56,3 +57,8 @@
     (-> db
         (assoc-in (path-to-db [:last-update]) date-str)
         (assoc-in (path-to-db [:version]) version))))
+
+(re-frame/reg-cofx
+  :online?
+  (fn [co-effects]
+    (assoc co-effects :online? (.-onLine js/navigator))))
