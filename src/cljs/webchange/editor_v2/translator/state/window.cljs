@@ -19,8 +19,7 @@
   ::open
   (fn [{:keys [db]} [_]]
     {:db         (assoc-in db (path-to-db [:translator-modal-state]) true)
-     :dispatch-n (list [:complete-request :login]
-                       [::translator-form/init-state])}))
+     :dispatch [::translator-form/init-state]}))
 
 (re-frame/reg-event-fx
   ::close

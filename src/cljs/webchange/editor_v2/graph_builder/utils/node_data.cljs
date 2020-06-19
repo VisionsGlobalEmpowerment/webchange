@@ -51,6 +51,8 @@
   (let [node-type (get-node-type node-data)]
     (or (= "audio" node-type)
         (and (= "animation-sequence" node-type)
+             (contains? (:data node-data) :audio))
+        (and (= "text-animation" node-type)
              (contains? (:data node-data) :audio)))))
 
 (defn concept-action-node?

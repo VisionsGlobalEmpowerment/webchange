@@ -41,9 +41,11 @@
 
           scene-id (translator-form.scene/scene-id db)
           actions (translator-form.scene/actions-data db)
-          assets (translator-form.scene/assets-data db)]
+          assets (translator-form.scene/assets-data db)
+          objects (translator-form.scene/objects-data db)]
       {:dispatch-n (->> edited-concepts
                         (map (fn [[id {:keys [data]}]] [::editor/update-dataset-item id data]))
                         (concat (list [::editor/reset-scene-actions scene-id actions]
                                       [::editor/reset-scene-assets scene-id assets]
+                                      [::editor/reset-scene-objects scene-id objects]
                                       [::editor/save-current-scene scene-id])))})))
