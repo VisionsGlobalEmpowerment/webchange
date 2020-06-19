@@ -4,8 +4,7 @@
     [re-frame.core :as re-frame]
     [webchange.student-dashboard.toolbar.sync.state.course-resources :as course-resources]
     [webchange.student-dashboard.toolbar.sync.state.sync-list :as sync-list]
-    [webchange.student-dashboard.toolbar.sync.views-resources-list :refer [resources-list]]
-    ))
+    [webchange.student-dashboard.toolbar.sync.views-resources-list :refer [resources-list]]))
 
 (defn sync-list-modal
   []
