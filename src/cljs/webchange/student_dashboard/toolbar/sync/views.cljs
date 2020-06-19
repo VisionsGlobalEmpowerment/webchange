@@ -5,7 +5,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [webchange.sw-utils.message :as sw]
     [webchange.sw-utils.state.status :as status]
-    [webchange.student-dashboard.toolbar.sync.events :as events]
+    [webchange.student-dashboard.toolbar.sync.state.sync-list :as sync-list]
     [webchange.student-dashboard.toolbar.sync.views-sync-list :refer [sync-list-modal]]
     [webchange.student-dashboard.toolbar.sync.icons.icon-ready :as icon-ready]
     [webchange.student-dashboard.toolbar.sync.icons.icon-syncing :as icon-syncing]
@@ -64,7 +64,7 @@
   (r/with-let [menu-anchor (r/atom nil)]
               (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
                     handle-select-resources-click #(do (reset! menu-anchor nil)
-                                                       (re-frame/dispatch [::events/open-sync-list]))]
+                                                       (re-frame/dispatch [::sync-list/open]))]
                 [:div
                  [ui/icon-button
                   {:disabled disabled?

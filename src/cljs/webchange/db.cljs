@@ -20,7 +20,4 @@
                             :sync-status      :not-started
                             :last-update      nil
                             :version          nil}
-   :sync-resources         {:list-open false
-                            :scenes    {:loading false
-                                        :data    nil}}
    })
