@@ -610,54 +610,59 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.47, :anim "talk", :start 0.19}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+      {:offset 0.054,
+       :phrase-text "Había en el bosque una ardilla",
        :start 0.054,
-       :track 1,
-       :offset 0.054,
+       :type "animation-sequence",
+       :duration 3.613,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
        :target "rock",
-       :duration 3.613}
+       :track 1,
+       :data [{:end 3.47, :anim "talk", :start 0.19}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 7.45, :anim "talk", :start 4.27}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+      {:offset 4.094,
+       :phrase-text "Que le gustaba sentarse en su silla",
        :start 4.094,
-       :track 1,
-       :offset 4.094,
-       :target "rock",
-       :duration 3.493}
-      {:id "poem-pause", :type "action"}
-      {:data [{:end 10.65, :anim "talk", :start 8.21}],
        :type "animation-sequence",
+       :duration 3.493,
        :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
-       :start 8.107,
-       :track 1,
-       :offset 8.107,
        :target "rock",
-       :duration 2.68}
+       :track 1,
+       :data [{:end 7.45, :anim "talk", :start 4.27}]}
+      {:id "poem-pause", :type "action"}
+      {:offset 8.107,
+       :phrase-text "A comer pan con mantequilla",
+       :start 8.107,
+       :type "animation-sequence",
+       :duration 2.68,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+       :target "rock",
+       :track 1,
+       :data [{:end 10.65, :anim "talk", :start 8.21}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 14.13, :anim "talk", :start 11.33}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+      {:offset 11.214,
+       :phrase-text "A veces le dolía su rodilla",
        :start 11.214,
-       :track 1,
-       :offset 11.214,
-       :target "rock",
-       :duration 2.933}
-      {:id "poem-pause", :type "action"}
-      {:data
-       [{:end 16.16, :anim "talk", :start 14.89}
-        {:end 17.8, :anim "talk", :start 16.57}],
        :type "animation-sequence",
+       :duration 2.933,
        :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
-       :start 14.666,
-       :track 1,
-       :offset 14.666,
        :target "rock",
-       :duration 3.486}
+       :track 1,
+       :data [{:end 14.13, :anim "talk", :start 11.33}]}
+      {:id "poem-pause", :type "action"}
+      {:offset 14.666,
+       :phrase-text "¡Pobre ardilla a a a.!",
+       :start 14.666,
+       :type "animation-sequence",
+       :duration 3.486,
+       :audio "/raw/audio/l2/a3/poems-pro/ardilla.mp3",
+       :target "rock",
+       :track 1,
+       :data
+       [{:end 16.16, :anim "talk", :start 14.89}
+        {:end 17.8, :anim "talk", :start 16.57}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -1266,38 +1271,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.78, :anim "talk", :start 0.61}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
+      {:offset 0.506,
+       :phrase-text "Mi hermano menor es un bebé",
        :start 0.506,
-       :track 1,
-       :offset 0.506,
+       :type "animation-sequence",
+       :duration 3.399,
+       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
        :target "rock",
-       :duration 3.399}
+       :track 1,
+       :data [{:end 3.78, :anim "talk", :start 0.61}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 7.18, :anim "talk", :start 4.23}
-        {:end 10.13, :anim "talk", :start 7.63}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
+      {:offset 4.158,
        :start 4.158,
-       :track 1,
-       :offset 4.158,
+       :type "animation-sequence",
+       :duration 6.172,
+       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
        :target "rock",
-       :duration 6.172}
+       :phrase-text-translated
+       "Y aunque aún no tiene nombre\nme gusta llamarlo bebé,",
+       :track 1,
+       :data
+       [{:end 7.18, :anim "talk", :start 4.23}
+        {:end 10.13, :anim "talk", :start 7.63}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 13.35, :anim "talk", :start 11.12}
-        {:end 15.86, :anim "talk", :start 13.5}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
+      {:offset 11.036,
+       :phrase-text "De esa manera recuerdo la letra b,b,b",
        :start 11.036,
-       :track 1,
-       :offset 11.036,
+       :type "animation-sequence",
+       :duration 4.945,
+       :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
        :target "rock",
-       :duration 4.945}
+       :track 1,
+       :data
+       [{:end 13.35, :anim "talk", :start 11.12}
+        {:end 15.86, :anim "talk", :start 13.5}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -1844,37 +1853,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 8.35, :anim "talk", :start 0.65}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
+      {:offset 0.454,
        :start 0.454,
-       :track 1,
-       :offset 0.454,
+       :type "animation-sequence",
+       :duration 8.199,
+       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
        :target "rock",
-       :duration 8.199}
+       :phrase-text-translated
+       "Un día mi amiga me invitó a su casa, Me sorprendió  su color, mostaza.",
+       :track 1,
+       :data [{:end 8.35, :anim "talk", :start 0.65}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 12.6, :anim "talk", :start 9.29}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
+      {:offset 8.986,
+       :phrase-text "Cuando la vi, me preguntó ¿qué pasa?",
        :start 8.986,
-       :track 1,
-       :offset 8.986,
+       :type "animation-sequence",
+       :duration 3.814,
+       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
        :target "rock",
-       :duration 3.814}
+       :track 1,
+       :data [{:end 12.6, :anim "talk", :start 9.29}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 13.042,
+       :start 13.042,
+       :type "animation-sequence",
+       :duration 5.454,
+       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "Yo le respondí: “¡qué linda la C C C de casa!”",
+       :track 1,
+       :data
        [{:end 16.57, :anim "talk", :start 13.14}
         {:end 17.06, :anim "talk", :start 16.87}
-        {:end 18.21, :anim "talk", :start 17.34}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
-       :start 13.042,
-       :track 1,
-       :offset 13.042,
-       :target "rock",
-       :duration 5.454}
+        {:end 18.21, :anim "talk", :start 17.34}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -2364,40 +2378,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.98, :anim "talk", :start 0.56}
-        {:end 7.3, :anim "talk", :start 4.65}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
+      {:offset 0.426,
        :start 0.426,
-       :track 1,
-       :offset 0.426,
+       :type "animation-sequence",
+       :duration 7.051,
+       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :duration 7.051}
+       :phrase-text-translated
+       "Cepillo mi cabello con mi nuevo cepillo,\nEl cual es azul y amarillo.",
+       :track 1,
+       :data
+       [{:end 3.98, :anim "talk", :start 0.56}
+        {:end 7.3, :anim "talk", :start 4.65}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 11.3, :anim "talk", :start 8.12}
-        {:end 14.07, :anim "talk", :start 11.88}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
+      {:offset 8.01,
        :start 8.01,
-       :track 1,
-       :offset 8.01,
+       :type "animation-sequence",
+       :duration 6.238,
+       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :duration 6.238}
+       :phrase-text-translated
+       "Mi mamá lleva puesto su anillo\nQue tiene mucho brillo",
+       :track 1,
+       :data
+       [{:end 11.3, :anim "talk", :start 8.12}
+        {:end 14.07, :anim "talk", :start 11.88}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 17.08, :anim "talk", :start 14.57}
-        {:end 21.12, :anim "talk", :start 17.81}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
+      {:offset 14.341,
        :start 14.341,
-       :track 1,
-       :offset 14.341,
+       :type "animation-sequence",
+       :duration 7.037,
+       :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :duration 7.037}
+       :phrase-text-translated
+       "Y también, su nuevo vestido\nQue es amarillo como mi nuevo cepillo.",
+       :track 1,
+       :data
+       [{:end 17.08, :anim "talk", :start 14.57}
+        {:end 21.12, :anim "talk", :start 17.81}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -2860,42 +2880,48 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
+      {:offset 0.28,
+       :start 0.28,
+       :type "animation-sequence",
+       :duration 6.546,
+       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "Me gusta practicar karate\ny después comer chocolate.",
+       :track 1,
+       :data
        [{:end 2.26, :anim "talk", :start 0.41}
         {:end 3.14, :anim "talk", :start 2.39}
         {:end 5.42, :anim "talk", :start 3.77}
-        {:end 6.58, :anim "talk", :start 5.55}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
-       :start 0.28,
-       :track 1,
-       :offset 0.28,
-       :target "rock",
-       :duration 6.546}
+        {:end 6.58, :anim "talk", :start 5.55}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 10.87, :anim "talk", :start 7.35}
-        {:end 14.29, :anim "talk", :start 11.36}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
+      {:offset 7.039,
        :start 7.039,
-       :track 1,
-       :offset 7.039,
+       :type "animation-sequence",
+       :duration 7.439,
+       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :duration 7.439}
+       :phrase-text-translated
+       "El otro día me caí sobre el zacate,\nmientras comía un rico chocolate",
+       :track 1,
+       :data
+       [{:end 10.87, :anim "talk", :start 7.35}
+        {:end 14.29, :anim "talk", :start 11.36}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 17.72, :anim "talk", :start 15.01}
-        {:end 20.87, :anim "talk", :start 18.2}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
+      {:offset 14.758,
        :start 14.758,
-       :track 1,
-       :offset 14.758,
+       :type "animation-sequence",
+       :duration 6.332,
+       :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :duration 6.332}
+       :phrase-text-translated
+       "y mi mamá preparaba una salsa\nde cacahuates y chocolate.",
+       :track 1,
+       :data
+       [{:end 17.72, :anim "talk", :start 15.01}
+        {:end 20.87, :anim "talk", :start 18.2}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -3357,38 +3383,43 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.74, :anim "talk", :start 0.58}
-        {:end 7.09, :anim "talk", :start 4.39}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
+      {:offset 0.44,
        :start 0.44,
-       :track 1,
-       :offset 0.44,
+       :type "animation-sequence",
+       :duration 6.89,
+       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
        :target "rock",
-       :duration 6.89}
+       :phrase-text-translated
+       "En la calle encontré un diamante,\nEra pequeño pero brillante.",
+       :track 1,
+       :data
+       [{:end 3.74, :anim "talk", :start 0.58}
+        {:end 7.09, :anim "talk", :start 4.39}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 9.85, :anim "talk", :start 7.9}
-        {:end 13.61, :anim "talk", :start 10.34}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
+      {:offset 7.784,
        :start 7.784,
-       :track 1,
-       :offset 7.784,
+       :type "animation-sequence",
+       :duration 6.051,
+       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
        :target "rock",
-       :duration 6.051}
+       :phrase-text-translated
+       "Un día me desperté Y mi diamante era gigante.\n",
+       :track 1,
+       :data
+       [{:end 9.85, :anim "talk", :start 7.9}
+        {:end 13.61, :anim "talk", :start 10.34}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 17, :anim "talk", :start 14.29}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
+      {:offset 14.168,
+       :phrase-text "Wowww, D, d, d",
        :start 14.168,
-       :track 1,
-       :offset 14.168,
+       :type "animation-sequence",
+       :duration 2.985,
+       :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
        :target "rock",
-       :duration 2.985}
+       :track 1,
+       :data [{:end 17, :anim "talk", :start 14.29}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -3837,39 +3868,44 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
+      {:offset 0.186,
+       :start 0.186,
+       :type "animation-sequence",
+       :duration 6.479,
+       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "En el zoológico conocí\na un simpático elefante",
+       :track 1,
+       :data
        [{:end 3.06, :anim "talk", :start 0.45}
         {:end 4.63, :anim "talk", :start 3.59}
-        {:end 6.48, :anim "talk", :start 4.85}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
-       :start 0.186,
-       :track 1,
-       :offset 0.186,
-       :target "rock",
-       :duration 6.479}
+        {:end 6.48, :anim "talk", :start 4.85}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 10.31, :anim "talk", :start 7.4}
-        {:end 13.99, :anim "talk", :start 11.05}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
+      {:offset 7.238,
        :start 7.238,
-       :track 1,
-       :offset 7.238,
+       :type "animation-sequence",
+       :duration 6.919,
+       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
        :target "rock",
-       :duration 6.919}
+       :phrase-text-translated
+       "Que era fuerte y gigante\nY siempre vestía muy elegante",
+       :track 1,
+       :data
+       [{:end 10.31, :anim "talk", :start 7.4}
+        {:end 13.99, :anim "talk", :start 11.05}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 17.69, :anim "talk", :start 14.66}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
+      {:offset 14.517,
+       :phrase-text "El E E E elefante",
        :start 14.517,
-       :track 1,
-       :offset 14.517,
+       :type "animation-sequence",
+       :duration 3.372,
+       :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
        :target "rock",
-       :duration 3.372}
+       :track 1,
+       :data [{:end 17.69, :anim "talk", :start 14.66}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -4374,37 +4410,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 7.57, :anim "talk", :start 0.47}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
+      {:offset 0.32,
        :start 0.32,
-       :track 1,
-       :offset 0.32,
+       :type "animation-sequence",
+       :duration 7.453,
+       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
        :target "rock",
-       :duration 7.453}
+       :phrase-text-translated
+       "Caminando por la calle\nEncontré una linda flor,\nDe un hermoso color.",
+       :track 1,
+       :data [{:end 7.57, :anim "talk", :start 0.47}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
+      {:offset 7.867,
+       :start 7.867,
+       :type "animation-sequence",
+       :duration 5.894,
+       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "Entonces la olí\nY aún más hermoso era su olor",
+       :track 1,
+       :data
        [{:end 9.98, :anim "talk", :start 8.03}
         {:end 13.63, :anim "talk", :start 10.36}
-        {:end 14.09, :anim "talk", :start 13.76}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
-       :start 7.867,
-       :track 1,
-       :offset 7.867,
-       :target "rock",
-       :duration 5.894}
+        {:end 14.09, :anim "talk", :start 13.76}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 18.89, :anim "talk", :start 13.76}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
+      {:offset 13.665,
+       :phrase-text "Bella y fragante la F F F flor.",
        :start 13.665,
-       :track 1,
-       :offset 13.665,
+       :type "animation-sequence",
+       :duration 5.52,
+       :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
        :target "rock",
-       :duration 5.52}
+       :track 1,
+       :data [{:end 18.89, :anim "talk", :start 13.76}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -4887,39 +4928,44 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 0.81, :anim "talk", :start 0.48}
-        {:end 5.96, :anim "talk", :start 0.98}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
+      {:offset 0.387,
        :start 0.387,
-       :track 1,
-       :offset 0.387,
+       :type "animation-sequence",
+       :duration 5.853,
+       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
        :target "rock",
-       :duration 5.853}
+       :phrase-text-translated
+       "Mi tío Amato tiene un gato\nQue se llama Garabato",
+       :track 1,
+       :data
+       [{:end 0.81, :anim "talk", :start 0.48}
+        {:end 5.96, :anim "talk", :start 0.98}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
+      {:offset 6.48,
+       :start 6.48,
+       :type "animation-sequence",
+       :duration 6.519,
+       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "Es pequeño y muy chato\nEl pobre G G G gato",
+       :track 1,
+       :data
        [{:end 9.15, :anim "talk", :start 6.67}
         {:end 11.88, :anim "talk", :start 9.81}
-        {:end 13.68, :anim "talk", :start 12.23}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
-       :start 6.48,
-       :track 1,
-       :offset 6.48,
-       :target "rock",
-       :duration 6.519}
+        {:end 13.68, :anim "talk", :start 12.23}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 16.01, :anim "talk", :start 13.68}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
+      {:offset 12.973,
+       :phrase-text "G G G Garabato",
        :start 12.973,
-       :track 1,
-       :offset 12.973,
+       :type "animation-sequence",
+       :duration 3.439,
+       :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
        :target "rock",
-       :duration 3.439}
+       :track 1,
+       :data [{:end 16.01, :anim "talk", :start 13.68}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -5432,38 +5478,44 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.68, :anim "talk", :start 0.5}
-        {:end 5.04, :anim "talk", :start 2.94}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
+      {:offset 0.226,
        :start 0.226,
-       :track 1,
-       :offset 0.226,
+       :type "animation-sequence",
+       :duration 4.958,
+       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :duration 4.958}
+       :phrase-text-translated
+       "Tengo un hermano gemelo,\nsu nombre es Carmelo.",
+       :track 1,
+       :data
+       [{:end 2.68, :anim "talk", :start 0.5}
+        {:end 5.04, :anim "talk", :start 2.94}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 11.21, :anim "talk", :start 5.23}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
+      {:offset 5.171,
        :start 5.171,
-       :track 1,
-       :offset 5.171,
+       :type "animation-sequence",
+       :duration 6.13,
+       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :duration 6.13}
+       :phrase-text-translated
+       "y nos gusta el mismo caramelo.\nA mí me gusta mirar el cielo",
+       :track 1,
+       :data [{:end 11.21, :anim "talk", :start 5.23}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 13.9, :anim "talk", :start 11.48}
-        {:end 16.58, :anim "talk", :start 14.11}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
+      {:offset 11.342,
        :start 11.342,
-       :track 1,
-       :offset 11.342,
+       :type "animation-sequence",
+       :duration 5.344,
+       :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :duration 5.344}
+       :phrase-text-translated
+       "y cuando él toca el hielo\nyo siento que me congelo.",
+       :track 1,
+       :data
+       [{:end 13.9, :anim "talk", :start 11.48}
+        {:end 16.58, :anim "talk", :start 14.11}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -5956,42 +6008,48 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
+      {:offset 0.107,
+       :start 0.107,
+       :type "animation-sequence",
+       :duration 7.678,
+       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "En otoño caen las hojas de los árboles\nSon rojas y de varios colores",
+       :track 1,
+       :data
        [{:end 1.29, :anim "talk", :start 0.31}
         {:end 3.88, :anim "talk", :start 1.46}
-        {:end 7.53, :anim "talk", :start 4.33}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
-       :start 0.107,
-       :track 1,
-       :offset 0.107,
-       :target "rock",
-       :duration 7.678}
+        {:end 7.53, :anim "talk", :start 4.33}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 11.46, :anim "talk", :start 8.18}
-        {:end 14.53, :anim "talk", :start 11.97}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
+      {:offset 7.997,
        :start 7.997,
-       :track 1,
-       :offset 7.997,
+       :type "animation-sequence",
+       :duration 6.732,
+       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
        :target "rock",
-       :duration 6.732}
+       :phrase-text-translated
+       "En primavera sus hojas serán verdes\nY crecerán más fuertes",
+       :track 1,
+       :data
+       [{:end 11.46, :anim "talk", :start 8.18}
+        {:end 14.53, :anim "talk", :start 11.97}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 14.824,
+       :start 14.824,
+       :type "animation-sequence",
+       :duration 7.373,
+       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "Algunos árboles tendrán flores.\nHoy encontré una hoja y es roja.",
+       :track 1,
+       :data
        [{:end 16.34, :anim "talk", :start 14.97}
         {:end 17.74, :anim "talk", :start 16.5}
-        {:end 21.95, :anim "talk", :start 18.2}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
-       :start 14.824,
-       :track 1,
-       :offset 14.824,
-       :target "rock",
-       :duration 7.373}
+        {:end 21.95, :anim "talk", :start 18.2}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -6504,38 +6562,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.02, :anim "talk", :start 0.22}
-        {:end 6.58, :anim "talk", :start 3.59}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
+      {:offset 0.134,
        :start 0.134,
-       :track 1,
-       :offset 0.134,
+       :type "animation-sequence",
+       :duration 6.719,
+       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
        :target "rock",
-       :duration 6.719}
+       :phrase-text-translated
+       "Un día encontré un imán,\nY se lo enseñé a mi tío Germán.",
+       :track 1,
+       :data
+       [{:end 3.02, :anim "talk", :start 0.22}
+        {:end 6.58, :anim "talk", :start 3.59}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 10.06, :anim "talk", :start 7.14}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
+      {:offset 6.88,
+       :phrase-text "Le pregunté, ¿te gusta mi imán?",
        :start 6.88,
-       :track 1,
-       :offset 6.88,
+       :type "animation-sequence",
+       :duration 3.494,
+       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
        :target "rock",
-       :duration 3.494}
+       :track 1,
+       :data [{:end 10.06, :anim "talk", :start 7.14}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 14.08, :anim "talk", :start 10.64}
-        {:end 14.94, :anim "talk", :start 14.34}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
+      {:offset 10.394,
+       :phrase-text "Y me contestó  sí. I I I, Imán.",
        :start 10.394,
-       :track 1,
-       :offset 10.394,
+       :type "animation-sequence",
+       :duration 4.831,
+       :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
        :target "rock",
-       :duration 4.831}
+       :track 1,
+       :data
+       [{:end 14.08, :anim "talk", :start 10.64}
+        {:end 14.94, :anim "talk", :start 14.34}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -7254,38 +7316,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.96, :anim "talk", :start 0.56}
-        {:end 6.38, :anim "talk", :start 3.8}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
+      {:offset 0.453,
        :start 0.453,
-       :track 1,
-       :offset 0.453,
+       :type "animation-sequence",
+       :duration 6.053,
+       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
        :target "rock",
-       :duration 6.053}
+       :phrase-text-translated
+       "Me gusta mucho mi jardín,\nPuedo ver las flores sin fin,",
+       :track 1,
+       :data
+       [{:end 2.96, :anim "talk", :start 0.56}
+        {:end 6.38, :anim "talk", :start 3.8}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 9.48, :anim "talk", :start 7.08}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
+      {:offset 6.879,
+       :phrase-text "Una vez planté un jazmín,",
        :start 6.879,
-       :track 1,
-       :offset 6.879,
+       :type "animation-sequence",
+       :duration 2.894,
+       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
        :target "rock",
-       :duration 2.894}
+       :track 1,
+       :data [{:end 9.48, :anim "talk", :start 7.08}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 11.65, :anim "talk", :start 10.19}
-        {:end 12.95, :anim "talk", :start 11.8}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
+      {:offset 9.979,
+       :phrase-text "Hola, mi nombre  es Joaquín.",
        :start 9.979,
-       :track 1,
-       :offset 9.979,
+       :type "animation-sequence",
+       :duration 3.445,
+       :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
        :target "rock",
-       :duration 3.445}
+       :track 1,
+       :data
+       [{:end 11.65, :anim "talk", :start 10.19}
+        {:end 12.95, :anim "talk", :start 11.8}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -7768,40 +7834,45 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.18, :anim "talk", :start 0.28}
-        {:end 5.99, :anim "talk", :start 3.57}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
+      {:offset 0.187,
        :start 0.187,
-       :track 1,
-       :offset 0.187,
+       :type "animation-sequence",
+       :duration 5.906,
+       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
        :target "rock",
-       :duration 5.906}
+       :phrase-text-translated
+       "En la selva conocí a un mono,\nVestido con un kimono,",
+       :track 1,
+       :data
+       [{:end 3.18, :anim "talk", :start 0.28}
+        {:end 5.99, :anim "talk", :start 3.57}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 8.78, :anim "talk", :start 6.56}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
+      {:offset 6.279,
+       :phrase-text "Y con un kilo de plomo.",
        :start 6.279,
-       :track 1,
-       :offset 6.279,
+       :type "animation-sequence",
+       :duration 2.8,
+       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
        :target "rock",
-       :duration 2.8}
+       :track 1,
+       :data [{:end 8.78, :anim "talk", :start 6.56}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 9.471,
+       :start 9.471,
+       :type "animation-sequence",
+       :duration 6.56,
+       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "¡Que animal tan pesado\n el mono con el  K K K kimono!",
+       :track 1,
+       :data
        [{:end 11.7, :anim "talk", :start 9.67}
         {:end 14.12, :anim "talk", :start 11.91}
         {:end 14.63, :anim "talk", :start 14.28}
-        {:end 15.89, :anim "talk", :start 15.12}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
-       :start 9.471,
-       :track 1,
-       :offset 9.471,
-       :target "rock",
-       :duration 6.56}
+        {:end 15.89, :anim "talk", :start 15.12}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -8267,36 +8338,41 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 5.14, :anim "talk", :start 0.57}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
+      {:offset 0.4,
        :start 0.4,
-       :track 1,
-       :offset 0.4,
+       :type "animation-sequence",
+       :duration 4.958,
+       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
        :target "rock",
-       :duration 4.958}
+       :phrase-text-translated
+       "Yo conozco  a un león,\nCon colores de camaleón,",
+       :track 1,
+       :data [{:end 5.14, :anim "talk", :start 0.57}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 8.03, :anim "talk", :start 5.69}
-        {:end 10.64, :anim "talk", :start 8.45}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
+      {:offset 5.612,
        :start 5.612,
-       :track 1,
-       :offset 5.612,
+       :type "animation-sequence",
+       :duration 5.159,
+       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
        :target "rock",
-       :duration 5.159}
+       :phrase-text-translated
+       "Su nombre es Napoleón\nY tiene camisa neón",
+       :track 1,
+       :data
+       [{:end 8.03, :anim "talk", :start 5.69}
+        {:end 10.64, :anim "talk", :start 8.45}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 14.26, :anim "talk", :start 11.23}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
+      {:offset 10.942,
+       :phrase-text "el L L L león.",
        :start 10.942,
-       :track 1,
-       :offset 10.942,
+       :type "animation-sequence",
+       :duration 3.528,
+       :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
        :target "rock",
-       :duration 3.528}
+       :track 1,
+       :data [{:end 14.26, :anim "talk", :start 11.23}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -8768,39 +8844,44 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.8, :anim "talk", :start 0.35}
-        {:end 6.21, :anim "talk", :start 3.02}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
+      {:offset 0.16,
        :start 0.16,
-       :track 1,
-       :offset 0.16,
+       :type "animation-sequence",
+       :duration 6.012,
+       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
        :target "rock",
-       :duration 6.012}
+       :phrase-text-translated
+       "Esta gallina tiene una llave, donde la puso ella no sabe",
+       :track 1,
+       :data
+       [{:end 2.8, :anim "talk", :start 0.35}
+        {:end 6.21, :anim "talk", :start 3.02}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
+      {:offset 6.159,
+       :start 6.159,
+       :type "animation-sequence",
+       :duration 7.492,
+       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "Busca que busca en el gallinero\nSi pierde la llave, sería muy grave",
+       :track 1,
+       :data
        [{:end 7.95, :anim "talk", :start 6.21}
         {:end 9.27, :anim "talk", :start 8.09}
-        {:end 13.39, :anim "talk", :start 9.82}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
-       :start 6.159,
-       :track 1,
-       :offset 6.159,
-       :target "rock",
-       :duration 7.492}
+        {:end 13.39, :anim "talk", :start 9.82}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 17.38, :anim "talk", :start 14.08}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
+      {:offset 13.811,
+       :phrase-text "Pobre gallina, ¿encontrará su llave?",
        :start 13.811,
-       :track 1,
-       :offset 13.811,
+       :type "animation-sequence",
+       :duration 3.919,
+       :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
        :target "rock",
-       :duration 3.919}
+       :track 1,
+       :data [{:end 17.38, :anim "talk", :start 14.08}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -9265,41 +9346,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.12, :anim "talk", :start 0.74}
-        {:end 6.56, :anim "talk", :start 3.75}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
+      {:offset 0.56,
        :start 0.56,
-       :track 1,
-       :offset 0.56,
+       :type "animation-sequence",
+       :duration 6.134,
+       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
        :target "rock",
-       :duration 6.134}
+       :phrase-text-translated
+       "Tengo cinco dedos en mi mano,\nY con ellos toco el piano,",
+       :track 1,
+       :data
+       [{:end 3.12, :anim "talk", :start 0.74}
+        {:end 6.56, :anim "talk", :start 3.75}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 9.72, :anim "talk", :start 7.06}
-        {:end 12.4, :anim "talk", :start 10.26}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
+      {:offset 6.975,
        :start 6.975,
-       :track 1,
-       :offset 6.975,
+       :type "animation-sequence",
+       :duration 5.666,
+       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
        :target "rock",
-       :duration 5.666}
+       :phrase-text-translated
+       "También nado en el océano.\nComo Mario mi hermano.",
+       :track 1,
+       :data
+       [{:end 9.72, :anim "talk", :start 7.06}
+        {:end 12.4, :anim "talk", :start 10.26}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 12.783,
+       :phrase-text "Y cuando llamarlo digo m, m, m Mario!",
+       :start 12.783,
+       :type "animation-sequence",
+       :duration 5.147,
+       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
+       :target "rock",
+       :track 1,
+       :data
        [{:end 15, :anim "talk", :start 13.08}
         {:end 16.53, :anim "talk", :start 15.14}
-        {:end 17.38, :anim "talk", :start 16.71}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
-       :start 12.783,
-       :track 1,
-       :offset 12.783,
-       :target "rock",
-       :duration 5.147}
+        {:end 17.38, :anim "talk", :start 16.71}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -9777,36 +9863,40 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 5.68, :anim "talk", :start 2.05}
-        {:end 8.9, :anim "talk", :start 6.05}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
+      {:offset 1.96,
        :start 1.96,
-       :track 1,
-       :offset 1.96,
+       :type "animation-sequence",
+       :duration 7.104,
+       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
        :target "rock",
-       :duration 7.104}
+       :phrase-text-translated
+       "Cuando era niño jugaba a saltar la cuerda\nAhora extraño ser pequeño",
+       :track 1,
+       :data
+       [{:end 5.68, :anim "talk", :start 2.05}
+        {:end 8.9, :anim "talk", :start 6.05}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 12.49, :anim "talk", :start 9.45}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
+      {:offset 9.211,
+       :phrase-text "Compraré este año otra cuerda",
        :start 9.211,
-       :track 1,
-       :offset 9.211,
+       :type "animation-sequence",
+       :duration 3.505,
+       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
        :target "rock",
-       :duration 3.505}
+       :track 1,
+       :data [{:end 12.49, :anim "talk", :start 9.45}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 16.98, :anim "talk", :start 13.06}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
+      {:offset 12.833,
+       :phrase-text "Para sentirme de nuevo N N Niño.",
        :start 12.833,
-       :track 1,
-       :offset 12.833,
+       :type "animation-sequence",
+       :duration 4.385,
+       :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
        :target "rock",
-       :duration 4.385}
+       :track 1,
+       :data [{:end 16.98, :anim "talk", :start 13.06}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -10303,36 +10393,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 5.41, :anim "talk", :start 0.44}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
+      {:offset 0.227,
        :start 0.227,
-       :track 1,
-       :offset 0.227,
+       :type "animation-sequence",
+       :duration 5.067,
+       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :duration 5.067}
+       :phrase-text-translated
+       "Había una vez un oso,\nQue era muy cariñoso.",
+       :track 1,
+       :data [{:end 5.41, :anim "talk", :start 0.44}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 8.2, :anim "talk", :start 5.41}
-        {:end 11.11, :anim "talk", :start 8.49}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
+      {:offset 5.266,
        :start 5.266,
-       :track 1,
-       :offset 5.266,
+       :type "animation-sequence",
+       :duration 6.079,
+       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :duration 6.079}
+       :phrase-text-translated
+       "Un día se cayó a un pozo\nY eso fue muy doloroso",
+       :track 1,
+       :data
+       [{:end 8.2, :anim "talk", :start 5.41}
+        {:end 11.11, :anim "talk", :start 8.49}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 17.74, :anim "talk", :start 11.52}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
+      {:offset 11.298,
        :start 11.298,
-       :track 1,
-       :offset 11.298,
+       :type "animation-sequence",
+       :duration 6.579,
+       :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :duration 6.579}
+       :phrase-text-translated
+       "Seguramente ese oso\nera muy perezoso O O O",
+       :track 1,
+       :data [{:end 17.74, :anim "talk", :start 11.52}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -10897,41 +10993,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.97, :anim "talk", :start 0.86}
-        {:end 5.8, :anim "talk", :start 3.32}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
+      {:offset 0.786,
        :start 0.786,
-       :track 1,
-       :offset 0.786,
+       :type "animation-sequence",
+       :duration 5.173,
+       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
        :target "rock",
-       :duration 5.173}
+       :phrase-text-translated
+       "Juego mucho a la pelota,\nY más cuando es grandota,",
+       :track 1,
+       :data
+       [{:end 2.97, :anim "talk", :start 0.86}
+        {:end 5.8, :anim "talk", :start 3.32}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 8.21, :anim "talk", :start 6.15}
-        {:end 10.89, :anim "talk", :start 8.71}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
+      {:offset 6.04,
        :start 6.04,
-       :track 1,
-       :offset 6.04,
+       :type "animation-sequence",
+       :duration 5.039,
+       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
        :target "rock",
-       :duration 5.039}
+       :phrase-text-translated
+       "Me gusta cuando rebota\nAunque a veces  me agota",
+       :track 1,
+       :data
+       [{:end 8.21, :anim "talk", :start 6.15}
+        {:end 10.89, :anim "talk", :start 8.71}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 11.359,
+       :phrase-text "Jugar tanto a la P P P pelota.",
+       :start 11.359,
+       :type "animation-sequence",
+       :duration 4.786,
+       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
+       :target "rock",
+       :track 1,
+       :data
        [{:end 13.61, :anim "talk", :start 11.53}
         {:end 14.15, :anim "talk", :start 13.99}
-        {:end 15.9, :anim "talk", :start 14.49}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
-       :start 11.359,
-       :track 1,
-       :offset 11.359,
-       :target "rock",
-       :duration 4.786}
+        {:end 15.9, :anim "talk", :start 14.49}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -11420,36 +11521,40 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 2.58, :anim "talk", :start 0.36}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
+      {:offset 0.309,
+       :phrase-text "Me gusta mucho el queso",
        :start 0.309,
-       :track 1,
-       :offset 0.309,
+       :type "animation-sequence",
+       :duration 2.333,
+       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
        :target "rock",
-       :duration 2.333}
+       :track 1,
+       :data [{:end 2.58, :anim "talk", :start 0.36}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 4.96, :anim "talk", :start 2.91}
-        {:end 7.49, :anim "talk", :start 5.35}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
+      {:offset 2.836,
        :start 2.836,
-       :track 1,
-       :offset 2.836,
+       :type "animation-sequence",
+       :duration 4.839,
+       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
        :target "rock",
-       :duration 4.839}
+       :phrase-text-translated
+       "Para mi es delicioso,\nNo importa qué tipo sea",
+       :track 1,
+       :data
+       [{:end 4.96, :anim "talk", :start 2.91}
+        {:end 7.49, :anim "talk", :start 5.35}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 10.69, :anim "talk", :start 8.15}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
+      {:offset 7.995,
+       :phrase-text "Comer queso no es tarea",
        :start 7.995,
-       :track 1,
-       :offset 7.995,
+       :type "animation-sequence",
+       :duration 2.864,
+       :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
        :target "rock",
-       :duration 2.864}
+       :track 1,
+       :data [{:end 10.69, :anim "talk", :start 8.15}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -11917,38 +12022,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 4.63, :anim "talk", :start 0.78}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
+      {:offset 0.533,
        :start 0.533,
-       :track 1,
-       :offset 0.533,
+       :type "animation-sequence",
+       :duration 4.36,
+       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
        :target "rock",
-       :duration 4.36}
+       :phrase-text-translated
+       "A Susana la rana,\nle gusta comer manzanas",
+       :track 1,
+       :data [{:end 4.63, :anim "talk", :start 0.78}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 7.65, :anim "talk", :start 5.08}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
+      {:offset 4.959,
+       :phrase-text "y también muchas  bananas",
        :start 4.959,
-       :track 1,
-       :offset 4.959,
+       :type "animation-sequence",
+       :duration 2.879,
+       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
        :target "rock",
-       :duration 2.879}
+       :track 1,
+       :data [{:end 7.65, :anim "talk", :start 5.08}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 8.148,
+       :phrase-text "¡Qué rara es la R R R rana Susana!",
+       :start 8.148,
+       :type "animation-sequence",
+       :duration 4.988,
+       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
+       :target "rock",
+       :track 1,
+       :data
        [{:end 9.63, :anim "talk", :start 8.49}
         {:end 10.09, :anim "talk", :start 9.77}
         {:end 11.24, :anim "talk", :start 10.33}
-        {:end 13.03, :anim "talk", :start 11.56}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
-       :start 8.148,
-       :track 1,
-       :offset 8.148,
-       :target "rock",
-       :duration 4.988}
+        {:end 13.03, :anim "talk", :start 11.56}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -12436,43 +12545,49 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.53, :anim "talk", :start 0.61}
-        {:end 5.53, :anim "talk", :start 3.28}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
+      {:offset 0.36,
        :start 0.36,
-       :track 1,
-       :offset 0.36,
+       :type "animation-sequence",
+       :duration 5.385,
+       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :duration 5.385}
+       :phrase-text-translated
+       "A la serpiente  Vicente\nun día por accidente",
+       :track 1,
+       :data
+       [{:end 2.53, :anim "talk", :start 0.61}
+        {:end 5.53, :anim "talk", :start 3.28}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 7.95, :anim "talk", :start 6.09}
-        {:end 10.96, :anim "talk", :start 8.48}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
+      {:offset 5.919,
        :start 5.919,
-       :track 1,
-       :offset 5.919,
+       :type "animation-sequence",
+       :duration 5.265,
+       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :duration 5.265}
+       :phrase-text-translated
+       "se le cayó un diente\ncuando mordió algo crujiente",
+       :track 1,
+       :data
+       [{:end 7.95, :anim "talk", :start 6.09}
+        {:end 10.96, :anim "talk", :start 8.48}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 11.317,
+       :start 11.317,
+       :type "animation-sequence",
+       :duration 8.092,
+       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "Pero siempre muy sonriente,\nestá Vicente  la S S S serpiente",
+       :track 1,
+       :data
        [{:end 13.93, :anim "talk", :start 11.58}
         {:end 16.97, :anim "talk", :start 14.43}
         {:end 17.51, :anim "talk", :start 17.2}
         {:end 18.01, :anim "talk", :start 17.69}
-        {:end 19.27, :anim "talk", :start 18.25}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
-       :start 11.317,
-       :track 1,
-       :offset 11.317,
-       :target "rock",
-       :duration 8.092}
+        {:end 19.27, :anim "talk", :start 18.25}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -12929,41 +13044,45 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.66, :anim "talk", :start 0.16}
-        {:end 5.12, :anim "talk", :start 3.27}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
+      {:offset 0.026,
        :start 0.026,
-       :track 1,
-       :offset 0.026,
+       :type "animation-sequence",
+       :duration 5.225,
+       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
        :target "rock",
-       :duration 5.225}
+       :phrase-text-translated
+       "Me gusta mucho comer tomate,\nY también el aguacate.",
+       :track 1,
+       :data
+       [{:end 2.66, :anim "talk", :start 0.16}
+        {:end 5.12, :anim "talk", :start 3.27}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 8.33, :anim "talk", :start 6.95}
-        {:end 10.38, :anim "talk", :start 9.19}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
+      {:offset 6.678,
+       :phrase-text "Por supuesto el chocolate",
        :start 6.678,
-       :track 1,
-       :offset 6.678,
+       :type "animation-sequence",
+       :duration 3.293,
+       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
        :target "rock",
-       :duration 3.293}
+       :track 1,
+       :data
+       [{:end 8.33, :anim "talk", :start 6.95}
+        {:end 10.38, :anim "talk", :start 9.19}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 9.069,
+       :phrase-text "Pero ¡qué rico es el T T T tomate!",
+       :start 9.069,
+       :type "animation-sequence",
+       :duration 5.185,
+       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
+       :target "rock",
+       :track 1,
+       :data
        [{:end 12.19, :anim "talk", :start 9.19}
         {:end 12.76, :anim "talk", :start 12.57}
-        {:end 14.04, :anim "talk", :start 13.2}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
-       :start 9.069,
-       :track 1,
-       :offset 9.069,
-       :target "rock",
-       :duration 5.185}
+        {:end 14.04, :anim "talk", :start 13.2}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -13453,56 +13572,61 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.45, :anim "talk", :start 0.84}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+      {:offset 0.507,
+       :phrase-text "La uva es mi fruta favorita",
        :start 0.507,
-       :track 1,
-       :offset 0.507,
+       :type "animation-sequence",
+       :duration 3.333,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
        :target "rock",
-       :duration 3.333}
+       :track 1,
+       :data [{:end 3.45, :anim "talk", :start 0.84}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 7.06, :anim "talk", :start 4.02}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+      {:offset 3.893,
+       :phrase-text "Sea blanca, rosada  o negrita",
        :start 3.893,
-       :track 1,
-       :offset 3.893,
-       :target "rock",
-       :duration 3.399}
-      {:id "poem-pause", :type "action"}
-      {:data [{:end 10.3, :anim "talk", :start 7.96}],
        :type "animation-sequence",
+       :duration 3.399,
        :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+       :target "rock",
+       :track 1,
+       :data [{:end 7.06, :anim "talk", :start 4.02}]}
+      {:id "poem-pause", :type "action"}
+      {:offset 7.932,
+       :phrase-text "No sólo luce preciosa",
        :start 7.932,
-       :track 1,
-       :offset 7.932,
-       :target "rock",
-       :duration 2.48}
-      {:id "poem-pause", :type "action"}
-      {:data
-       [{:end 12.27, :anim "talk", :start 10.94}
-        {:end 13.8, :anim "talk", :start 12.41}],
        :type "animation-sequence",
+       :duration 2.48,
        :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
-       :start 10.692,
-       :track 1,
-       :offset 10.692,
        :target "rock",
-       :duration 3.213}
+       :track 1,
+       :data [{:end 10.3, :anim "talk", :start 7.96}]}
+      {:id "poem-pause", :type "action"}
+      {:offset 10.692,
+       :phrase-text "sino también es deliciosa.",
+       :start 10.692,
+       :type "animation-sequence",
+       :duration 3.213,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+       :target "rock",
+       :track 1,
+       :data
+       [{:end 12.27, :anim "talk", :start 10.94}
+        {:end 13.8, :anim "talk", :start 12.41}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 17.04, :anim "talk", :start 14.33}
-        {:end 20.17, :anim "talk", :start 17.35}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
+      {:offset 14.147,
+       :phrase-text "¡La UUU uva, qué fruta tan exquisita!",
        :start 14.147,
-       :track 1,
-       :offset 14.147,
+       :type "animation-sequence",
+       :duration 6.161,
+       :audio "/raw/audio/l2/a3/poems-pro/uvas.mp3",
        :target "rock",
-       :duration 6.161}
+       :track 1,
+       :data
+       [{:end 17.04, :anim "talk", :start 14.33}
+        {:end 20.17, :anim "talk", :start 17.35}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -13974,38 +14098,43 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.02, :anim "talk", :start 0.87}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
+      {:offset 0.68,
+       :phrase-text "Mi nombre es Agustín.",
        :start 0.68,
-       :track 1,
-       :offset 0.68,
+       :type "animation-sequence",
+       :duration 2.507,
+       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
        :target "rock",
-       :duration 2.507}
+       :track 1,
+       :data [{:end 3.02, :anim "talk", :start 0.87}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 5.67, :anim "talk", :start 3.48}
-        {:end 8.85, :anim "talk", :start 6.46}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
+      {:offset 3.361,
        :start 3.361,
-       :track 1,
-       :offset 3.361,
+       :type "animation-sequence",
+       :duration 5.68,
+       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
        :target "rock",
-       :duration 5.68}
+       :phrase-text-translated
+       "Me gusta tocar el violín\ncomo mi amigo Valentín.",
+       :track 1,
+       :data
+       [{:end 5.67, :anim "talk", :start 3.48}
+        {:end 8.85, :anim "talk", :start 6.46}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 12.61, :anim "talk", :start 9.5}
-        {:end 15.95, :anim "talk", :start 13.11}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
+      {:offset 9.366,
        :start 9.366,
-       :track 1,
-       :offset 9.366,
+       :type "animation-sequence",
+       :duration 6.826,
+       :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
        :target "rock",
-       :duration 6.826}
+       :phrase-text-translated
+       "Cuando sea grande seré bailarín\nY daré conciertos de violín.",
+       :track 1,
+       :data
+       [{:end 12.61, :anim "talk", :start 9.5}
+        {:end 15.95, :anim "talk", :start 13.11}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -14480,38 +14609,42 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.61, :anim "talk", :start 0.71}
-        {:end 6.44, :anim "talk", :start 4.35}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
+      {:offset 0.613,
        :start 0.613,
-       :track 1,
-       :offset 0.613,
+       :type "animation-sequence",
+       :duration 5.956,
+       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
        :target "rock",
-       :duration 5.956}
+       :phrase-text-translated
+       "El maestro Walter nos enseña\nMucho sobre Internet",
+       :track 1,
+       :data
+       [{:end 3.61, :anim "talk", :start 0.71}
+        {:end 6.44, :anim "talk", :start 4.35}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 9.3, :anim "talk", :start 7.06}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
+      {:offset 6.902,
+       :phrase-text "Es interesante la Web",
        :start 6.902,
-       :track 1,
-       :offset 6.902,
+       :type "animation-sequence",
+       :duration 2.266,
+       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
        :target "rock",
-       :duration 2.266}
+       :track 1,
+       :data [{:end 9.3, :anim "talk", :start 7.06}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 10.76, :anim "talk", :start 9.3}
-        {:end 12.61, :anim "talk", :start 11.23}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
+      {:offset 9.271,
+       :phrase-text "Que en español se llama “Red.”",
        :start 9.271,
-       :track 1,
-       :offset 9.271,
+       :type "animation-sequence",
+       :duration 3.564,
+       :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
        :target "rock",
-       :duration 3.564}
+       :track 1,
+       :data
+       [{:end 10.76, :anim "talk", :start 9.3}
+        {:end 12.61, :anim "talk", :start 11.23}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -15016,36 +15149,40 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 3.78, :anim "talk", :start 0.96}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
+      {:offset 0.76,
+       :phrase-text "Aprendo a tocar el xilófono.",
        :start 0.76,
-       :track 1,
-       :offset 0.76,
+       :type "animation-sequence",
+       :duration 3.12,
+       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
        :target "rock",
-       :duration 3.12}
+       :track 1,
+       :data [{:end 3.78, :anim "talk", :start 0.96}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 7.09, :anim "talk", :start 4.14}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
+      {:offset 4.027,
+       :phrase-text "Que es muy distinto que el micrófono",
        :start 4.027,
-       :track 1,
-       :offset 4.027,
+       :type "animation-sequence",
+       :duration 3.253,
+       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
        :target "rock",
-       :duration 3.253}
+       :track 1,
+       :data [{:end 7.09, :anim "talk", :start 4.14}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
-       [{:end 10.9, :anim "talk", :start 7.53}
-        {:end 14.33, :anim "talk", :start 11.35}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
+      {:offset 7.33,
        :start 7.33,
-       :track 1,
-       :offset 7.33,
+       :type "animation-sequence",
+       :duration 7.076,
+       :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
        :target "rock",
-       :duration 7.076}
+       :phrase-text-translated
+       "Y aunque los dos terminan en “ófono”\nLa música es del xilófono",
+       :track 1,
+       :data
+       [{:end 10.9, :anim "talk", :start 7.53}
+        {:end 14.33, :anim "talk", :start 11.35}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -15520,36 +15657,40 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 2.69, :anim "talk", :start 0.77}
-        {:end 6.51, :anim "talk", :start 3.36}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
+      {:offset 0.601,
        :start 0.601,
-       :track 1,
-       :offset 0.601,
+       :type "animation-sequence",
+       :duration 6.055,
+       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
        :target "rock",
-       :duration 6.055}
+       :phrase-text-translated
+       "Para mi cumpleaños en mayo,\nmi hermano me regaló un yoyo,",
+       :track 1,
+       :data
+       [{:end 2.69, :anim "talk", :start 0.77}
+        {:end 6.51, :anim "talk", :start 3.36}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data [{:end 9.03, :anim "talk", :start 7.07}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
+      {:offset 7.003,
+       :phrase-text "Y un día mientras jugaba.",
        :start 7.003,
-       :track 1,
-       :offset 7.003,
+       :type "animation-sequence",
+       :duration 2.214,
+       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
        :target "rock",
-       :duration 2.214}
+       :track 1,
+       :data [{:end 9.03, :anim "talk", :start 7.07}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data [{:end 12.59, :anim "talk", :start 9.71}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
+      {:offset 9.584,
+       :phrase-text "Se me cayó y se destruyó.",
        :start 9.584,
-       :track 1,
-       :offset 9.584,
+       :type "animation-sequence",
+       :duration 3.208,
+       :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
        :target "rock",
-       :duration 3.208}
+       :track 1,
+       :data [{:end 12.59, :anim "talk", :start 9.71}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -16029,41 +16170,46 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data
-       [{:end 3.39, :anim "talk", :start 0.7}
-        {:end 6.61, :anim "talk", :start 3.87}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
+      {:offset 0.533,
        :start 0.533,
-       :track 1,
-       :offset 0.533,
+       :type "animation-sequence",
+       :duration 6.415,
+       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
        :target "rock",
-       :duration 6.415}
+       :phrase-text-translated
+       "Mi amigo Renato es un pato,\nQue usa sólo un zapato",
+       :track 1,
+       :data
+       [{:end 3.39, :anim "talk", :start 0.7}
+        {:end 6.61, :anim "talk", :start 3.87}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 9.62, :anim "talk", :start 7.22}
-        {:end 12.8, :anim "talk", :start 10.07}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
+      {:offset 7.081,
        :start 7.081,
-       :track 1,
-       :offset 7.081,
+       :type "animation-sequence",
+       :duration 5.868,
+       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
        :target "rock",
-       :duration 5.868}
+       :phrase-text-translated
+       "Cuando fue a comprar un plato\nSe divirtió mucho el pato",
+       :track 1,
+       :data
+       [{:end 9.62, :anim "talk", :start 7.22}
+        {:end 12.8, :anim "talk", :start 10.07}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 13.375,
+       :phrase-text "Con su plato y su Z Z Z zapato",
+       :start 13.375,
+       :type "animation-sequence",
+       :duration 5.054,
+       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
+       :target "rock",
+       :track 1,
+       :data
        [{:end 15.54, :anim "talk", :start 13.51}
         {:end 17.03, :anim "talk", :start 15.76}
-        {:end 18.25, :anim "talk", :start 17.2}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
-       :start 13.375,
-       :track 1,
-       :offset 13.375,
-       :target "rock",
-       :duration 5.054}
+        {:end 18.25, :anim "talk", :start 17.2}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
@@ -16556,40 +16702,45 @@
     :poem-story
     {:data
      [{:id "run-bubble-1", :type "action"}
-      {:data [{:end 4.22, :anim "talk", :start 0.89}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
+      {:offset 0.72,
+       :phrase-text "Hoy en la escuela leí sobre el ñandú,",
        :start 0.72,
-       :track 1,
-       :offset 0.72,
+       :type "animation-sequence",
+       :duration 3.654,
+       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
        :target "rock",
-       :duration 3.654}
+       :track 1,
+       :data [{:end 4.22, :anim "talk", :start 0.89}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
-      {:data
-       [{:end 8.14, :anim "talk", :start 4.71}
-        {:end 11.32, :anim "talk", :start 8.77}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
+      {:offset 4.64,
        :start 4.64,
-       :track 1,
-       :offset 4.64,
+       :type "animation-sequence",
+       :duration 6.774,
+       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
        :target "rock",
-       :duration 6.774}
+       :phrase-text-translated
+       "Aprendí que es parecido al avestruz,\nEs una ave que no puede volar",
+       :track 1,
+       :data
+       [{:end 8.14, :anim "talk", :start 4.71}
+        {:end 11.32, :anim "talk", :start 8.77}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
-      {:data
+      {:offset 11.7,
+       :start 11.7,
+       :type "animation-sequence",
+       :duration 7.962,
+       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
+       :target "rock",
+       :phrase-text-translated
+       "pero si es capaz de correr y nadar. \nTiene dos patas con tres dedos.",
+       :track 1,
+       :data
        [{:end 13.29, :anim "talk", :start 11.82}
         {:end 15.49, :anim "talk", :start 13.52}
         {:end 18.23, :anim "talk", :start 16.16}
-        {:end 19.53, :anim "talk", :start 18.41}],
-       :type "animation-sequence",
-       :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
-       :start 11.7,
-       :track 1,
-       :offset 11.7,
-       :target "rock",
-       :duration 7.962}
+        {:end 19.53, :anim "talk", :start 18.41}]}
       {:id "poem-pause", :type "action"}],
      :type "sequence-data",
      :scene-id "park-poem"},
