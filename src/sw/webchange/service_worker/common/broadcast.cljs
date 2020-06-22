@@ -1,21 +1,13 @@
-(ns webchange.service-worker.common.broadcast
-  (:require
-    [webchange.service-worker.config :as config]))
+(ns webchange.service-worker.common.broadcast)
 
 (defn- broadcast-message
   [key data]
   (let [broadcast-channel "sw-messages"
-        type (get {:last-update      "last-update"
-                   :cached-resources "get-cached-resources"} key)]
+        type (get {:current-state "current-state"} key)]
     (-> (js/BroadcastChannel. broadcast-channel)
         (.postMessage (clj->js {:type type
                                 :data data})))))
 
-(defn send-last-update
-  [date]
-  (broadcast-message :last-update {:date    date
-                                   :version config/release-number}))
-
-(defn send-cached-resources
+(defn send-current-state
   [resources]
-  (broadcast-message :cached-resources resources))
+  (broadcast-message :current-state resources))
