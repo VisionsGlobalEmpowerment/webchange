@@ -132,7 +132,7 @@
 
           action (if (get-in all-lessons [lesson-id :selected?]) :remove :add)]
       {:dispatch (if (= action :add)
-                   [::sw-resources/sync-game-data {:resources (get-lists-diff updated-resources-list current-resources-list)
-                                                   :endpoints (get-lists-diff updated-endpoints-list current-endpoints-list)}]
+                   [::sw-resources/add-game-data {:resources (get-lists-diff updated-resources-list current-resources-list)
+                                                  :endpoints (get-lists-diff updated-endpoints-list current-endpoints-list)}]
                    [::sw-resources/remove-game-data {:resources (get-lists-diff current-resources-list updated-resources-list)
                                                      :endpoints (get-lists-diff current-endpoints-list updated-endpoints-list)}])})))

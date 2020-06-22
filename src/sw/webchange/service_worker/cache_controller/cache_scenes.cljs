@@ -2,7 +2,8 @@
   (:require
     [webchange.service-worker.common.cache :refer [cache-game-resources
                                                    cache-endpoints
-                                                   remove-game-resources]]))
+                                                   remove-game-resources]]
+    [webchange.service-worker.wrappers :refer [promise-all]]))
 
 (defn- get-field
   [data field-name]
@@ -25,6 +26,6 @@
   (let [{:keys [resources-to-add
                 resources-to-remove
                 endpoints-to-add]} (get-params data)]
-    (cache-game-resources resources-to-add course-name)
-    (remove-game-resources resources-to-remove course-name)
-    (cache-endpoints endpoints-to-add course-name)))
+    (promise-all [(cache-game-resources resources-to-add course-name)
+                  (remove-game-resources resources-to-remove course-name)
+                  (cache-endpoints endpoints-to-add course-name)])))

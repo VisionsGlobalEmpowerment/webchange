@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.sw-utils.message :as sw]
     [webchange.sw-utils.state.status :as status]
     [webchange.student-dashboard.toolbar.sync.state.sync-list :as sync-list]
     [webchange.student-dashboard.toolbar.sync.views-sync-list :refer [sync-list-modal]]
@@ -44,7 +43,6 @@
 
 (defn current-version
   []
-  (sw/get-last-update)
   (let [last-update @(re-frame/subscribe [::status/last-update])
         version @(re-frame/subscribe [::status/version])]
     [ui/menu-item

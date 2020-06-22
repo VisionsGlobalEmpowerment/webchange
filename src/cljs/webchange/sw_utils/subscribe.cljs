@@ -3,16 +3,21 @@
             [webchange.sw-utils.state.status :as status]
             [webchange.sw-utils.state.resources :as resources]))
 
-(defn- set-cached-resources-list
+(defn- set-current-state
   [data]
-  (re-frame/dispatch [::resources/set-synced-game-resources data]))
+  (if-let [version (:version data)]
+    (re-frame/dispatch [::status/set-version version]))
 
-(defn- set-last-update
-  [data]
-  (let [date (get data "date")
-        version (get data "version")]
-    (re-frame/dispatch [::status/set-last-update date version])
-    (re-frame/dispatch [::status/set-sync-status :synced])))
+  (if-let [last-update (:last-update data)]
+    (re-frame/dispatch [::status/set-last-update last-update]))
+
+  (if-let [resources (:game-resources data)]
+    (re-frame/dispatch [::resources/set-synced-game-resources resources]))
+
+  (if-let [endpoints (:game-endpoints data)]
+    (re-frame/dispatch [::resources/set-synced-game-endpoints endpoints]))
+
+  (re-frame/dispatch [::status/set-sync-status :synced]))
 
 (defn subscribe-to-notifications
   []
@@ -20,8 +25,7 @@
     (.addEventListener channel "message" (fn [event]
                                            (let [event-data (aget event "data")
                                                  type (aget event-data "type")
-                                                 data (-> event-data (aget "data") (js->clj))]
+                                                 data (-> event-data (aget "data") (js->clj :keywordize-keys true))]
                                              (case type
-                                               "get-cached-resources" (set-cached-resources-list data)
-                                               "last-update" (set-last-update data)
-                                               (-> (str "Unhandled service worker message type" type) js/Error. throw)))))))
+                                               "current-state" (set-current-state data)
+                                               (-> (str "Unhandled service worker message type " type) js/Error. throw)))))))

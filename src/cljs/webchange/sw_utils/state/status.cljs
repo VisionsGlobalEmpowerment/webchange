@@ -51,12 +51,15 @@
       (do (logger/error (str "Sync status '" status "' is not valid"))
           db))))
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
   ::set-last-update
-  (fn [db [_ date-str version]]
-    (-> db
-        (assoc-in (path-to-db [:last-update]) date-str)
-        (assoc-in (path-to-db [:version]) version))))
+  (fn [{:keys [db]} [_ date-str]]
+    {:db (assoc-in db (path-to-db [:last-update]) date-str)}))
+
+(re-frame/reg-event-fx
+  ::set-version
+  (fn [{:keys [db]} [_ version]]
+    {:db (assoc-in db (path-to-db [:version]) version)}))
 
 (re-frame/reg-cofx
   :online?
