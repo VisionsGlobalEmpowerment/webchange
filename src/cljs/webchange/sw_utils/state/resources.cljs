@@ -55,15 +55,9 @@
   ::add-game-data
   (fn [{:keys [db]} [_ {:keys [resources endpoints]}]]
     (let [current-course (:current-course db)]
-
-      (println "::add-game-data" {:course    current-course
-                         :resources {:add resources}
-                         :endpoints {:add endpoints}})
-
       {:set-cached-data {:course    current-course
                          :resources {:add resources}
-                         :endpoints {:add endpoints}}}
-      )))
+                         :endpoints {:add endpoints}}})))
 
 (re-frame/reg-event-fx
   ::remove-game-data
