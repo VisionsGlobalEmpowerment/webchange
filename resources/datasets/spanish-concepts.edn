@@ -346,10 +346,10 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "Ardilla",
      :start 0.133,
      :type "audio",
      :duration 1.307,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
@@ -1019,11 +1019,12 @@
      :scene-id "running",
      :phrase-text "Bebé, bebé, b, b, B!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 22.106,
      :duration 0.893,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "bebe"},
     :home-group-3-times-action
     {:data
      [{:offset 30.959,
@@ -1597,11 +1598,12 @@
      :scene-id "running",
      :phrase-text "Casa, casa, c, c, C!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 17.173,
      :duration 0.88,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "casa"},
     :home-group-3-times-action
     {:data
      [{:offset 41.236,
@@ -2124,11 +2126,12 @@
      :scene-id "running",
      :phrase-text "Cepillo, cepillo, c, c, C!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 18.226,
      :duration 1.28,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "cepillo"},
     :home-group-3-times-action
     {:data
      [{:offset 24.146,
@@ -2626,11 +2629,12 @@
      :scene-id "running",
      :phrase-text "Chocolate, chocolate, ch, ch, Ch!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 27.025,
      :duration 1.147,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "chocolate"},
     :home-group-3-times-action
     {:data
      [{:offset 40.041,
@@ -3133,11 +3137,12 @@
      :scene-id "running",
      :phrase-text "Diamante, diamante, d, d, D!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 14.453,
      :duration 1.28,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "diamante"},
     :home-group-3-times-action
     {:data
      [{:offset 16.573,
@@ -3626,11 +3631,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "elefante",
      :start 5.893,
      :type "audio",
      :duration 1.107,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -4154,11 +4159,12 @@
      :scene-id "running",
      :phrase-text "Flor, flor, f, f, F!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 20.919,
      :duration 1.053,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "flor"},
     :home-group-3-times-action
     {:data
      [{:offset 48.049,
@@ -4673,11 +4679,12 @@
      :scene-id "running",
      :phrase-text "Gato, gato, g, g, G!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 24.412,
      :duration 0.92,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "gato"},
     :home-group-3-times-action
     {:data
      [{:offset 55.315,
@@ -5226,11 +5233,12 @@
      :scene-id "running",
      :phrase-text "Gemelo, gemelo, g, g, G!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 25.612,
      :duration 1.333,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "gemelo"},
     :home-group-3-times-action
     {:data
      [{:offset 37.785,
@@ -5762,11 +5770,12 @@
      :scene-id "running",
      :phrase-text "Hoja, hoja, h, h, H!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 32.732,
      :duration 0.88,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "hoja"},
     :home-group-3-times-action
     {:data
      [{:offset 76.74,
@@ -6300,11 +6309,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "iman",
      :start 2.893,
      :type "audio",
      :duration 1.213,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -7061,11 +7070,12 @@
      :scene-id "running",
      :phrase-text "Jardín, jardín, j, j, J!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 23.239,
      :duration 0.987,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "jardin"},
     :home-group-3-times-action
     {:data
      [{:offset 32.001,
@@ -7581,11 +7591,12 @@
      :scene-id "running",
      :phrase-text "Kimono, kimono, k, k, K!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 36.558,
      :duration 1.12,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "kimono"},
     :home-group-3-times-action
     {:data
      [{:offset 83.699,
@@ -8087,11 +8098,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "leon",
      :start 11.679,
      :type "audio",
      :duration 1.094,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -8595,11 +8606,12 @@
      :scene-id "running",
      :phrase-text "Llave, llave, ll, ll, Ll!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 31.332,
      :duration 1.04,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "llave"},
     :home-group-3-times-action
     {:data
      [{:offset 47.815,
@@ -9097,11 +9109,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "mano",
      :start 7.4,
      :type "audio",
      :duration 1.013,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -9618,11 +9630,13 @@
      :scene-id "running",
      :phrase-text "Niño, niño, n, n, N!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/a2/L1_A2_GameVoice_Object 3 List.m4a",
+    {:data [{:end 20.63, :anim "talk", :start 19.82}],
      :type "audio",
-     :start 55.654,
-     :duration 1.094,
-     :scene-id "see-saw"},
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
+     :start 19.652,
+     :duration 1.16,
+     :scene-id "hide-n-seek",
+     :phrase-text "nino"},
     :home-group-3-times-action
     {:data
      [{:offset 24.654,
@@ -10132,11 +10146,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "oso",
      :start 1.707,
      :type "audio",
      :duration 0.826,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -10736,11 +10750,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "pelota",
      :start 10.32,
      :type "audio",
      :duration 1.026,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -11268,11 +11282,12 @@
      :scene-id "running",
      :phrase-text "Queso, queso, qu, qu, Qu!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 34.038,
      :duration 0.894,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "queso"},
     :home-group-3-times-action
     {:data
      [{:offset 52.998,
@@ -11767,11 +11782,12 @@
      :scene-id "running",
      :phrase-text "Rana, rana, r, r, R!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 15.933,
      :duration 1.053,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "rana"},
     :home-group-3-times-action
     {:data
      [{:offset 17.24,
@@ -12288,11 +12304,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "serpiente",
      :start 8.56,
      :type "audio",
      :duration 1.306,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -12789,11 +12805,12 @@
      :scene-id "running",
      :phrase-text "Tomate, tomate, t, t, T!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 13.159,
      :duration 1.16,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "tomate"},
     :home-group-3-times-action
     {:data
      [{:offset 34.397,
@@ -13320,11 +13337,11 @@
     {:description "Hide and seek question",
      :offset 0,
      :scene-id "hide-n-seek",
+     :phrase-text "uvas",
      :start 4.546,
      :type "audio",
      :duration 1.094,
-     :id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :audio "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :target "mari",
      :track 1,
      :data [{:end 2.67, :anim "talk", :start 0.775}]},
@@ -13846,11 +13863,12 @@
      :scene-id "running",
      :phrase-text "Violin, violin, v, v, V!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 29.852,
      :duration 1.2,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "violin"},
     :home-group-3-times-action
     {:data
      [{:offset 45.518,
@@ -14349,11 +14367,13 @@
      :scene-id "running",
      :phrase-text "Web, web, w, w, W!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
+    {:data [{:end 39.06, :anim "talk", :start 37.94}],
      :type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 37.785,
      :duration 1.333,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "sitio web"},
     :home-group-3-times-action
     {:data
      [{:offset 60.451,
@@ -14891,11 +14911,13 @@
      :scene-id "running",
      :phrase-text "Xilofono, xilofono, x, x, X!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a",
+    {:data [{:end 41.59, :anim "talk", :start 40.61}],
      :type "audio",
-     :start 50.189,
-     :duration 1.2,
-     :scene-id "hide-n-seek"},
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
+     :start 40.558,
+     :duration 1,
+     :scene-id "hide-n-seek",
+     :phrase-text "xilofono"},
     :home-group-3-times-action
     {:data
      [{:offset 70.642,
@@ -15401,11 +15423,12 @@
      :scene-id "running",
      :phrase-text "Yoyo, yoyo, y, y, Y!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 39.385,
      :duration 0.76,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "yoyo"},
     :home-group-3-times-action
     {:data
      [{:offset 63.282,
@@ -15911,11 +15934,12 @@
      :scene-id "running",
      :phrase-text "Zapato, zapato, z, z, Z!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 35.038,
      :duration 1.24,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "zapato"},
     :home-group-3-times-action
     {:data
      [{:offset 55.441,
@@ -16447,11 +16471,12 @@
      :scene-id "running",
      :phrase-text "Ñandu, ñandu, ñ, ñ, Ñ!"},
     :hide-n-seek-current-concept-audio
-    {:id "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
-     :type "audio",
+    {:type "audio",
+     :audio "/raw/audio/l1/assessment1/game-voice-set-main.mp3",
      :start 28.492,
      :duration 1.027,
-     :scene-id "hide-n-seek"},
+     :scene-id "hide-n-seek",
+     :phrase-text "ñandu"},
     :home-group-3-times-action
     {:data
      [{:offset 62.274,
