@@ -7,6 +7,17 @@
     [sodium.core :as na]
     [reagent.core :as r]))
 
+(defn- get-styles
+  []
+  {:student-access-form {:background-image "url(/images/dashboard/bg_02.jpg)"
+                         :height           "100%"
+                         :display          "flex"
+                         :flex-direction   "column"
+                         :justify-content  "space-between"
+                         :padding          "40px"
+                         :align-items      "center"}
+   :num-pad             {:width "370px"}})
+
 (defn teacher-login
   [& args]
   (apply teacher-login/teacher-login-page args))
@@ -56,51 +67,36 @@
 
 (defn student-access-form []
   (r/with-let [code (r/atom "")]
-    (let [loading  @(re-frame/subscribe [:loading])
-          errors   @(re-frame/subscribe [:errors])]
-      (cond
-        (:init-current-school loading) [sa/Loader {:active true :inline "centered"}]
-        (:student-login loading) [sa/Loader {:active true :inline "centered"}]
-        :else
-        [:div {:class-name "student-access-form"}
-         [:style "body {background-color: #00d2ff}"]
-         [na/grid {:text-align "center" :centered? true}
+              (let [loading @(re-frame/subscribe [:loading])
+                    errors @(re-frame/subscribe [:errors])
+                    styles (get-styles)]
+                (cond
+                  (:init-current-school loading) [sa/Loader {:active true :inline "centered"}]
+                  (:student-login loading) [sa/Loader {:active true :inline "centered"}]
+                  :else
+                  [:div {:style (:student-access-form styles)}
+                   [:div
+                    [na/header {:as      "h2" :text-align "center" :style {:color "#ffffff" :font-size "40pt" :font-family "Roboto"}
+                                :content "STUDENT ACCESS"}]
+                    (when (:student-login errors)
+                      [:div [sa/Message {:negative true :compact true} [:p (-> errors :student-login :form)]]])]
 
-          [na/grid-row {:centered? true :style {:margin-top "90px"}}
-           [na/grid-column {:style {:height "80px"} :text-align "center" }
-            [na/header {:as "h2" :text-align "center" :style {:color "#ffffff" :font-size "40pt" :font-family "Roboto"}
-                        :content "STUDENT ACCESS"}]
-            (when (:student-login errors)
-              [:div [sa/Message {:negative true :compact true} [:p (-> errors :student-login :form)]]])]]
+                   [:div
+                    [code-form @code]]
 
-          [na/grid-row {:centered? true :style {:margin-top "50px"}}
-           [na/grid-column {}
-            [code-form @code]]]
-
-          [na/grid-row {:divided? false :style {:margin-top "90px"}}
-
-
-
-           [na/grid-column {}]
-
-           [na/grid-column {:style {:min-width 363}}
-
-            [na/grid {}
-             [na/grid-row {:columns 3 :centered? true}
-              [na/grid-column {} [number-form "1" #(enter-code code "1")]]
-              [na/grid-column {} [number-form "2" #(enter-code code "2")]]
-              [na/grid-column {} [number-form "3" #(enter-code code "3")]]]
-             [na/grid-row {:columns 3 :centered? true}
-              [na/grid-column {} [number-form "4" #(enter-code code "4")]]
-              [na/grid-column {} [number-form "5" #(enter-code code "5")]]
-              [na/grid-column {} [number-form "6" #(enter-code code "6")]]]
-             [na/grid-row {:columns 3 :centered? true}
-              [na/grid-column {} [number-form "7" #(enter-code code "7")]]
-              [na/grid-column {} [number-form "8" #(enter-code code "8")]]
-              [na/grid-column {} [number-form "9" #(enter-code code "9")]]]
-             [na/grid-row {:columns 3 :centered? true}
-              [na/grid-column {} [number-form "0" #(enter-code code "0")]]]
-             ]
-            ]
-           [na/grid-column {}]
-           ]]]))))
+                   [:div {:style (:num-pad styles)}
+                    [na/grid {}
+                      [na/grid-row {:columns 3 :centered? true}
+                       [na/grid-column {} [number-form "1" #(enter-code code "1")]]
+                       [na/grid-column {} [number-form "2" #(enter-code code "2")]]
+                       [na/grid-column {} [number-form "3" #(enter-code code "3")]]]
+                      [na/grid-row {:columns 3 :centered? true}
+                       [na/grid-column {} [number-form "4" #(enter-code code "4")]]
+                       [na/grid-column {} [number-form "5" #(enter-code code "5")]]
+                       [na/grid-column {} [number-form "6" #(enter-code code "6")]]]
+                      [na/grid-row {:columns 3 :centered? true}
+                       [na/grid-column {} [number-form "7" #(enter-code code "7")]]
+                       [na/grid-column {} [number-form "8" #(enter-code code "8")]]
+                       [na/grid-column {} [number-form "9" #(enter-code code "9")]]]
+                      [na/grid-row {:columns 3 :centered? true}
+                       [na/grid-column {} [number-form "0" #(enter-code code "0")]]]]]]))))
