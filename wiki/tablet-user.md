@@ -14,9 +14,11 @@ To be able to play offline you have to run the game and cache resources you need
 
  - Close the browser and **launch the app** from home screen. Enter user's access code 
 
- - Now on student dashboard page click **resources button** (cloud pic in the right side of toolbar)
-
-`ToDo: Continue cache resources docs`
+ - Now on student dashboard page click **resources button** (cloud pic in the right side of toolbar). In open dropdown menu and click "Select Resources"
+ 
+ - In popup window "Select Resources" check lessons you need to work offline.
+ 
+ - Close window. Wait until sync icon in toolbar become blue with check mark.
 
 ---
 

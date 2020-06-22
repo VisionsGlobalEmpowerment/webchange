@@ -2,18 +2,18 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.sw-utils.state.status :as status]
-    [webchange.sw-utils.message :as sw]
+    [webchange.sw-utils.message :refer [set-cached-data cache-course]]
     [webchange.sw-utils.state.db :refer [path-to-db]]))
 
 (re-frame/reg-fx
   :cache-course
   (fn [[course-id]]
-    (sw/cache-course course-id)))
+    (cache-course course-id)))
 
 (re-frame/reg-fx
   :set-cached-data
   (fn [data]
-    (sw/set-cached-data data)))
+    (set-cached-data data)))
 
 (re-frame/reg-event-fx
   ::cache-course
@@ -55,9 +55,15 @@
   ::add-game-data
   (fn [{:keys [db]} [_ {:keys [resources endpoints]}]]
     (let [current-course (:current-course db)]
+
+      (println "::add-game-data" {:course    current-course
+                         :resources {:add resources}
+                         :endpoints {:add endpoints}})
+
       {:set-cached-data {:course    current-course
                          :resources {:add resources}
-                         :endpoints {:add endpoints}}})))
+                         :endpoints {:add endpoints}}}
+      )))
 
 (re-frame/reg-event-fx
   ::remove-game-data
