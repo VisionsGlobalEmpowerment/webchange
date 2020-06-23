@@ -1,6 +1,7 @@
 (ns webchange.service-worker.virtual-server.handlers.core
   (:require
     [bidi.bidi :as bidi]
+    [webchange.service-worker.logger :as logger]
     [webchange.service-worker.virtual-server.cache :as cache]
     [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
     [webchange.service-worker.virtual-server.handlers.login :as login]
@@ -41,7 +42,9 @@
   [request course-name]
   (let [match (match-request request)
         handler (get-handler request (:handler match) course-name)]
-    (handler request (:route-params match))))
+    (try
+      (handler request (:route-params match))
+      (catch js/Object e (logger/error e)))))
 
 (defn prefetch
   [routes]

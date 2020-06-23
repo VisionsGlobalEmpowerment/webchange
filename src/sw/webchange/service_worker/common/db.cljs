@@ -1,11 +1,10 @@
 (ns webchange.service-worker.common.db
   (:require
     [cljs-idxdb.core :as idx]
-    [webchange.service-worker.logger :as logger]
     [webchange.service-worker.config :as config]
+    [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [promise promise-reject then catch]]))
 
-(def db (atom nil))
 (def database-version config/release-number)
 
 (def data-store-name "data-store")
@@ -26,8 +25,6 @@
    :new-version (.-newVersion e)
    :db          (-> e .-target .-result)})
 
-(defn base-event [e] {:db (-> e .-target .-result)})
-
 (defn upgrade-db
   [{:keys [old-version db]}]
   (when (< old-version 1)
@@ -42,40 +39,67 @@
   (when (< old-version 4)
     (-> (idx/create-store db endpoints-data-store-name {:keyPath "endpoint"}))))
 
-(defn init-db
+(def db (atom {:course   ""
+               :instance nil}))
+
+(defn- init-db
   [course-name]
-  (promise (fn [resolve]
+  (promise (fn [resolve reject]
              (let [database-name (get-database-name course-name)
                    request (.open js/indexedDB database-name database-version)]
                (set! (.-onsuccess request) (fn [e]
-                                             (reset! db (-> e .-target .-result))
-                                             (resolve)))
+                                             (let [db-instance (-> e .-target .-result)]
+                                               (reset! db {:course   course-name
+                                                           :instance db-instance})
+                                               (resolve (-> e .-target .-result)))))
                (set! (.-onupgradeneeded request) (fn [e]
                                                    (-> (version-change-event e)
                                                        (upgrade-db))))
-               (set! (.-onerror request) #(logger/warn "Open indexedDB failed" %))))))
+               (set! (.-onerror request) #(reject "Open indexedDB failed" %))))))
+
+(defn- get-db
+  []
+  (promise (fn [resolve]
+             (let [current-course "spanish"]                ;; ToDo: Fix it
+               (if (and (-> (:instance @db) nil? not)
+                        (= (:course @db) current-course))
+                 (resolve (:instance @db))
+                 (-> (init-db current-course)
+                     (then resolve)
+                     (catch (fn [error]
+                              (logger/error "Getting DB error" error)))))))))
 
 (defn add-item
   ([store data success-fn]
-   (idx/add-item @db store data success-fn))
+   (-> (get-db)
+       (then (fn [db] (idx/add-item db store data success-fn)))))
   ([store data]
-   (promise #(idx/add-item @db store data %))))
+   (promise (fn [resolve]
+              (-> (get-db)
+                  (then (fn [db] (idx/add-item db store data resolve))))))))
 
 (defn remove-item
   [store-name key success-fn]
-  (let [store (idx/get-tx-store @db store-name)
-        request (.delete store key)]
-    (set! (.-onsuccess request) #(success-fn))))
+  (-> (get-db)
+      (then (fn [db]
+              (let [store (idx/get-tx-store db store-name)
+                    request (.delete store key)]
+                (set! (.-onsuccess request) #(success-fn)))))))
 
 (defn get-by-index
   [store index success-fn]
-  (idx/get-by-index @db store index 0 success-fn))
+  (-> (get-db)
+      (then (fn [db]
+              (idx/get-by-index db store index 0 success-fn)))))
 
 (defn get-by-key
   [store key]
-  (if @db
-    (promise #(idx/get-by-key @db store key %))
-    (promise-reject "DB is not initialized")))
+  (promise (fn [resolve reject]
+             (-> (get-db)
+                 (then (fn [db]
+                         (if db
+                           (idx/get-by-key db store key resolve)
+                           (reject "DB is not initialized"))))))))
 
 (defn set-value
   ([key value]

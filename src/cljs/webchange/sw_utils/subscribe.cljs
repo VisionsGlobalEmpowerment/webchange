@@ -1,5 +1,6 @@
 (ns webchange.sw-utils.subscribe
   (:require [re-frame.core :as re-frame]
+            [webchange.config :as config]
             [webchange.sw-utils.state.status :as status]
             [webchange.sw-utils.state.resources :as resources]))
 
@@ -19,6 +20,11 @@
 
   (re-frame/dispatch [::status/set-sync-status :synced]))
 
+(defn- handle-error
+  [error]
+  (when config/debug?
+    (re-frame/dispatch [::status/handle-error error])))
+
 (defn subscribe-to-notifications
   []
   (let [channel (js/BroadcastChannel. "sw-messages")]
@@ -28,4 +34,5 @@
                                                  data (-> event-data (aget "data") (js->clj :keywordize-keys true))]
                                              (case type
                                                "current-state" (set-current-state data)
+                                               "error" (handle-error data)
                                                (-> (str "Unhandled service worker message type " type) js/Error. throw)))))))

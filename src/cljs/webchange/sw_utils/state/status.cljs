@@ -65,3 +65,20 @@
   :online?
   (fn [co-effects]
     (assoc co-effects :online? (.-onLine js/navigator))))
+
+(re-frame/reg-event-fx
+  ::handle-error
+  (fn [{:keys [db]} [_ error]]
+    {:db (-> db
+             (update-in (path-to-db [:errors]) conj error)
+             (assoc-in (path-to-db [:current-error]) error))}))
+
+(re-frame/reg-sub
+  ::current-error
+  (fn [db]
+    (get-in db (path-to-db [:current-error]))))
+
+(re-frame/reg-event-fx
+  ::reset-current-error
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db (path-to-db [:current-error]) nil)}))
