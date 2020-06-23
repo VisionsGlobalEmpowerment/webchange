@@ -2,7 +2,8 @@
  [{:url "/raw/img/park/hide-n-seek/background.jpg", :size 14, :type "image", :alias nil, :width 1920, :height 1080}
   {:url "/raw/img/park/hide-n-seek/front-objects.png", :size 37, :type "image", :alias nil, :width 1920, :height 1080}
   {:url "/raw/audio/l1/assessment1/mari.mp4", :size 5, :type "audio", :alias "mari voice"}
-  {:url "/raw/audio/l1/assessment1/game-voice-set-main.mp3", :size 5, :type "audio", :alias "words"}],
+  {:url "/raw/audio/l1/assessment1/game-voice-set-main.mp3", :size 5, :type "audio", :alias "words"}
+  {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}],
  :objects
  {:background
   {:type "background", :scene-name "background", :scene-layer 0, :src "/raw/img/park/hide-n-seek/background.jpg"},
@@ -412,11 +413,41 @@
     {:type "set-variable", :var-name "box9", :var-value "box9"}
     {:type "set-variable", :var-name "box10", :var-value "box10"}
     {:type "set-variable", :var-name "box11", :var-value "box11"}]},
-  :mari-audio-correct {:type "action", :id "mari-correct"},
-  :mari-audio-try-again {:type "action", :id "mari-wrong"},
+  :make-riddle
+  {:type "action",
+   :phrase "concept-riddle",
+   :phrase-description "Concept word",
+   :from-var [{:var-name "current-concept", :var-property "hide-n-seek-current-concept-audio"}]},
+  :mari-audio-correct
+  {:type "animation-sequence",
+   :data [{:end 2.505, :anim "talk", :start 1.052, :duration 1.453}],
+   :phrase "correct",
+   :phrase-description "Correct answer",
+   :phrase-text "That’s correct!",
+   :target "mari",
+   :audio "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+   :start 0.858,
+   :duration 1.837,
+   :track 1,
+   :offset 0.858},
+  :mari-audio-try-again
+  {:type "animation-sequence",
+   :data [{:end 20.242, :anim "talk", :start 18.983, :duration 1.259}],
+   :phrase "try-again",
+   :phrase-description "Wrong answer",
+   :phrase-text "Try again!",
+   :target "mari",
+   :audio "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
+   :start 18.915,
+   :duration 1.493,
+   :track 1,
+   :offset 18.915},
   :mari-welcome-audio
   {:type "animation-sequence",
    :data [{:end 5.14, :anim "talk", :start 1.66} {:end 9.07, :anim "talk", :start 5.83}],
+   :phrase "welcome",
+   :phrase-description "Welcome speech",
+   :phrase-text "Hola! Vamos a jugar el juego de las escondidas! Encuentra las fotos que se esconden en el parque!",
    :target "mari",
    :audio "/raw/audio/l1/assessment1/mari.mp4",
    :start 1.288,
@@ -485,7 +516,7 @@
      :type "parallel"}
     {:type "set-current-concept",
      :from-var [{:var-name "current-concept", :var-property "concept-name", :action-property "value"}]}
-    {:type "action", :from-var [{:var-name "current-concept", :var-property "hide-n-seek-current-concept-audio"}]}]},
+    {:id "make-riddle", :type "action"}]},
   :renew-words
   {:type "lesson-var-provider",
    :from "assessment-1",
@@ -512,12 +543,11 @@
       {:id "visible", :type "state", :from-var [{:var-name "pair-target-3", :action-property "target"}]}],
      :type "parallel"}
     {:type "empty", :duration 700}]},
-  :start
+  :start-activity {:type "start-activity", :id "hide-n-seek"},
+  :start-scene
   {:type "sequence",
    :data ["start-activity" "clear-instruction" "mari-welcome-audio" "init-boxes" "renew-words" "renew-current-concept"],
    :description "Initial action"},
-  :start-activity {:type "start-activity", :id "hide-n-seek"},
   :stop-activity {:type "stop-activity", :id "hide-n-seek"}},
- :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start"}},
- :metadata {:prev "park", :autostart true},
- :templates ["coaching"]}
+ :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :metadata {:prev "park", :autostart true}}
