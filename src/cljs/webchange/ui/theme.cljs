@@ -21,7 +21,7 @@
                                    :paper   "#323232"}
                      :border      {:default "#555555"}
                      :primary     {:main "#1272e6"}
-                     :text        {:secondary "#555555"}
+                     :text        {:secondary "#bcbcbc"}
                      :flat-button {:background-color "#3c3c3c"}}}
    :light {:palette {:type        "light"
                      :background  {:default "#ffffff"
