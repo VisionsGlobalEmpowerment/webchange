@@ -1,6 +1,6 @@
 (ns webchange.interpreter.utils.find-exit)
 
-(defn- find-path
+(defn find-path
   [from to scenes]
   (let [visited (atom #{from})]
     (loop [[head & tail] [[from]]]
