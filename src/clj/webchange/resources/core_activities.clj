@@ -27,7 +27,10 @@
    },
    ...]"
   [course-slug]
-  (let [course-data (course/get-course-data course-slug)]
+  (let [course-data (course/get-course-data course-slug)
+        transit-scenes (->> (:scene-list course-data)
+                            (filter (fn [[_ scene-data]] (< 1 (->> scene-data :outs count))))
+                            (map (fn [[scene-name _]] (name scene-name))))]
     (->> (:levels course-data)
          (map (fn [level]
                 (let [level-data {:level-number (:level level)
@@ -35,7 +38,7 @@
                   (map (fn [lesson]
                          (let [activities (->> (:activities lesson)
                                                (map :activity)
-                                               (concat ["map"]))
+                                               (concat transit-scenes))
                                activities-resources (reduce (fn [result activity-name]
                                                               (assoc result (keyword activity-name) (get-scene-resources course-slug activity-name)))
                                                             {}

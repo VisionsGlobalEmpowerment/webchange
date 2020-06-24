@@ -98,8 +98,7 @@
   ([config course-slug new-name scene-name]
    (let [scene-info (-> (core/get-scene-latest-version course-slug scene-name)
                         sort-scene)
-         path-name (->snake_case_string scene-name)
-         path (scene-path config new-name path-name)]
+         path (scene-path config course-slug new-name)]
      (clojure.java.io/make-parents path)
      (binding [p/*print-right-margin* 121]
        (p/pprint
@@ -109,8 +108,7 @@
 (defn load-scene
   ([config course-slug scene-name] (load-scene config course-slug course-slug scene-name))
   ([config course-slug saved-name scene-name]
-   (let [path-name (->snake_case_string scene-name)
-         path (scene-path config saved-name path-name)
+   (let [path (scene-path config course-slug saved-name)
          data (-> path io/reader java.io.PushbackReader. edn/read)]
      (core/save-scene! course-slug scene-name data owner-id))))
 
