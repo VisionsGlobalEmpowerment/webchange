@@ -7,6 +7,7 @@
     [webchange.editor-v2.diagram.modes.translation.widget-menu :refer [menu]]
     [webchange.editor-v2.diagram.modes.translation.widget-phrase :refer [phrase]]
     [webchange.editor-v2.diagram.modes.translation.widget-play-button :refer [play-button]]
+    [webchange.editor-v2.diagram.modes.translation.widget-config-button :refer [config-button]]
     [webchange.editor-v2.diagram.modes.translation.widget-loop-icon :refer [loop-icon]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node?]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
@@ -40,7 +41,8 @@
                  :style    (merge custom-wrapper/node-style
                                   (:node styles))}
            [play-button node-data]
-           [loop-icon node-data]]
+           [loop-icon node-data]
+           [config-button node-data]]
           (r/children this))))
 
 (defn get-widget-data

@@ -245,6 +245,11 @@
     {:db (assoc-in db [:scenes scene-id :actions] actions)}))
 
 (re-frame/reg-event-fx
+  ::reset-scene-objects
+  (fn [{:keys [db]} [_ scene-id objects]]
+    {:db (assoc-in db [:scenes scene-id :objects] objects)}))
+
+(re-frame/reg-event-fx
   ::reset-asset
   (fn [{:keys [db]} [_]]
     {:db (update-in db [:editor] dissoc :selected-asset)}))

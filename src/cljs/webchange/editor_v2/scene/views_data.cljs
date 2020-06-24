@@ -28,6 +28,12 @@
                                             :phrase (keyword->caption (:phrase action-data))}))
                {})))
 
+(defn scene-data->objects-list
+  [scene-data]
+  (->> (:objects scene-data)
+       (filter (fn [[_ object-data]] (= "text" (:type object-data))))
+       (filter (fn [[_ object-data]] (not-empty (:chunks object-data))))))
+
 (defn get-scenes-options
   [scenes-list]
   (let [prepared-scenes ["home"
@@ -69,7 +75,7 @@
         scenes (re-frame/subscribe [::subs/course-scenes])
         diagram-mode (re-frame/subscribe [::editor-subs/diagram-mode])
         scene-data (re-frame/subscribe [::subs/scene @scene-id])]
-    (let [phrases (scene-data->phrases-list @scene-data)
+    (let [objects (scene-data->objects-list @scene-data)
           scenes-options (get-scenes-options @scenes)]
       [:div.data-selector
        [ui/form-control {:full-width true
@@ -97,14 +103,13 @@
            [ui/menu-item {:value mode-value}
             mode-text])
          ]]
-       [ui/form-control {:full-width true
-                         :margin     "normal"}
-        [ui/input-label "Select Phrase"]
-        [ui/select {:value     ""
-                    :on-change #(let [node-name (-> % (.. -target -value) (keyword))
-                                      node-data (get-in phrases [node-name :data])]
-                                  (re-frame/dispatch [::ee/show-translator-form {:name node-name
-                                                                                 :data node-data}]))}
-         (for [[node-name {:keys [phrase]}] phrases]
-           ^{:key (clojure.core/name node-name)}
-           [ui/menu-item {:value node-name} phrase])]]])))
+       (when (not-empty objects)
+         [ui/form-control {:full-width true
+                           :margin     "normal"}
+          [ui/input-label "Select Object"]
+          [ui/select {:value     ""
+                      :on-change #(let [object-id (-> % (.. -target -value) (keyword))]
+                                    (re-frame/dispatch [::editor-events/show-configure-object-form {:path [object-id]}]))}
+           (for [[object-id {:keys [type]}] objects]
+             ^{:key (name object-id)}
+             [ui/menu-item {:value object-id} (str (name object-id) " (" type ")")])]])])))

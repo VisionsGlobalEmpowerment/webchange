@@ -8,11 +8,12 @@
                        (fn [[_ {:keys [id on]}]]
                          {:name    on
                           :handler id})
-                       (:actions object-data))]
+                       (:actions object-data))
+        object-root-info (if (= "text" (:type object-data)) {:name :default :handler :default})]
     (assoc {} object-name (create-graph-node {:entity      :object
                                               :data        object-data
                                               :path        [object-name]
-                                              :connections actions-data}))))
+                                              :connections (conj actions-data object-root-info)}))))
 
 (defn parse-objects
   [scene-data]

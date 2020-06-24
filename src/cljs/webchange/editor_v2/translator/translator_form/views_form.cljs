@@ -12,6 +12,7 @@
     [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-target :refer [target-block]]
+    [webchange.editor-v2.translator.text.chunks :refer [text-chunks-modal]]
     [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn- get-styles
@@ -35,4 +36,5 @@
         [phrase-block]
         [audios-block]]
        [ui/typography {:variant "subtitle1"}
-        "Select action on diagram"])]))
+        "Select action on diagram"])
+     [text-chunks-modal]]))

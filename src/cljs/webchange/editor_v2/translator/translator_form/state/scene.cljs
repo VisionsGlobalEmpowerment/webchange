@@ -60,6 +60,10 @@
   (fn [[assets-data]]
     (filter #(= (:type %) "audio") assets-data)))
 
+(defn objects-data
+  [db]
+  (-> db scene-data :objects))
+
 (re-frame/reg-sub
   ::objects-data
   (fn []
@@ -136,4 +140,13 @@
           action-data (get-in actions-data action-path)
           updated-data (merge action-data data-patch)]
       {:db         (assoc-in db (path-to-db (concat [:scene :data :actions] action-path)) updated-data)
+       :dispatch-n (list [::set-changes])})))
+
+(re-frame/reg-event-fx
+  ::update-object
+  (fn [{:keys [db]} [_ object-path data-patch]]
+    (let [objects-data (objects-data db)
+          object-data (get-in objects-data object-path)
+          updated-data (merge object-data data-patch)]
+      {:db         (assoc-in db (path-to-db (concat [:scene :data :objects] object-path)) updated-data)
        :dispatch-n (list [::set-changes])})))

@@ -4,7 +4,8 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
     [webchange.editor-v2.translator.state.window :as translator.window]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.text.views :as translator.text]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -45,6 +46,12 @@
   (fn [{:keys [_]} [_ action-node]]
     {:dispatch-n (list [::translator-form.actions/set-current-dialog-action action-node]
                        [::translator.window/open])}))
+
+(re-frame/reg-event-fx
+  ::show-configure-object-form
+  (fn [{:keys [_]} [_ object-info]]
+    {:dispatch-n (list [::translator.text/set-current-dialog-text object-info]
+                       [::translator.text/open])}))
 
 (re-frame/reg-event-fx
   ::load-course-info
