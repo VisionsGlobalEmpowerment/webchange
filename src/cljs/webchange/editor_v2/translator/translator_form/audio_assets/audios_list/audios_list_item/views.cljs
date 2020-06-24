@@ -77,12 +77,13 @@
                     [ic/done {:style (:menu-item-icon styles)}]]]]])))
 
 (defn- audio-menu
-  [{:keys [on-edit on-delete on-bring-to-top]}]
+  [{:keys [on-edit on-delete on-bring-to-top on-clear-selection]}]
   (r/with-let [menu-anchor (r/atom nil)]
               (let [handle-edit #(do (reset! menu-anchor nil) (on-edit))
                     handle-bring-to-top #(do (reset! menu-anchor nil) (on-bring-to-top))
                     handle-delete #(do (reset! menu-anchor nil) (on-delete))
                     handle-cancel #(reset! menu-anchor nil)
+                    handle-clear-selection #(do (reset! menu-anchor nil) (on-clear-selection))
                     styles (get-styles)]
                 [:div
                  [ui/icon-button
@@ -101,6 +102,10 @@
                    [ui/list-item-icon
                     [ic/edit {:style (:menu-item-icon styles)}]]
                    "Edit Data"]
+                  [ui/menu-item {:on-click handle-clear-selection}
+                   [ui/list-item-icon
+                    [ic/edit {:style (:menu-item-icon styles)}]]
+                   "Clear selection"]
                   [with-confirmation {:message    "Remove audio asset from scene?"
                                       :on-confirm handle-delete
                                       :on-cancel  handle-cancel}
@@ -110,7 +115,7 @@
                     "Delete"]]]])))
 
 (defn- header
-  [{:keys [alias target selected? on-change-data on-bring-to-top on-delete]}]
+  [{:keys [alias target selected? on-change-data on-bring-to-top on-delete on-clear-selection]}]
   (r/with-let [edit-state? (r/atom false)]
               (let [styles (get-styles)
                     handle-edit #(reset! edit-state? true)
@@ -118,7 +123,9 @@
                                      (on-change-data %))
                     handle-cancel #(reset! edit-state? false)
                     handle-bring-to-top #(on-bring-to-top)
-                    handle-delete on-delete]
+                    handle-delete on-delete
+                    handle-clear-selection on-clear-selection
+                    ]
                 [:div {:style (:block-header styles)}
                  (if @edit-state?
                    [audio-info-form {:alias     alias
@@ -131,17 +138,22 @@
                             (not @edit-state?))
                    [audio-menu {:on-edit         handle-edit
                                 :on-bring-to-top handle-bring-to-top
+                                :on-clear-selection handle-clear-selection
                                 :on-delete       handle-delete}])])))
 
 (defn audios-list-item
-  [{:keys [url alias start duration selected? target]}]
-  (let [handle-change-data (fn [data] (re-frame/dispatch [::translator-form.scene/update-asset url data]))
+  [audio-data]
+  (let [
+        {:keys [url alias start duration selected? target]} audio-data
+        handle-change-data (fn [data] (re-frame/dispatch [::translator-form.scene/update-asset url data]))
         handle-select (fn [] (re-frame/dispatch [::translator-form.actions/set-phrase-action-audio url]))
         handle-change-region (fn [region] (re-frame/dispatch [::translator-form.actions/set-phrase-action-audio-region
                                                               url
                                                               (:start region)
                                                               (:duration region)]))
         handle-bring-to-top (fn [] (re-frame/dispatch [::translator-form.scene/update-asset-date url (.now js/Date)]))
+        handle-clear-selection (fn [] (re-frame/dispatch [::translator-form.actions/update-action :phrase
+                                                          {:audio url :start nil :end nil :duration nil}]))
         handle-delete (fn [] (re-frame/dispatch [::translator-form.scene/delete-asset url]))
         audio-data {:url   url
                     :start (or start 0)
@@ -157,6 +169,7 @@
                :selected?       selected?
                :on-change-data  handle-change-data
                :on-bring-to-top handle-bring-to-top
+               :on-clear-selection handle-clear-selection
                :on-delete       handle-delete}]
       [audio-wave-form (merge audio-data
                               {:height         64
