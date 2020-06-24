@@ -59,22 +59,31 @@
   [resources course-name]
   (remove-caches (get-cache-name :game course-name) resources))
 
+(defn- resources->urls
+  [resources]
+  (loop [index 0
+         result []
+         count (or (aget resources "length") 0)]
+    (if-not (= index count)
+      (recur (inc index)
+             (conj result (-> resources
+                              (aget index)
+                              (aget "url")
+                              (js/URL.)
+                              (aget "pathname")
+                              (js/decodeURI)))
+             count)
+      result)))
+
 (defn get-cached-activity-urls
   [course-name]
   (-> (get-cached-activity-resources course-name)
-      (then (fn [resources]
-              (loop [index 0
-                     result []
-                     count (aget resources "length")]
-                (if-not (= index count)
-                  (recur (inc index)
-                         (conj result (-> resources
-                                          (aget index)
-                                          (aget "url")
-                                          (js/URL.)
-                                          (aget "pathname")))
-                         count)
-                  result))))))
+      (then resources->urls)))
+
+(defn get-cached-activity-endpoints
+  [course-name]
+  (-> (get-cache-resources (get-cache-name :api course-name))
+      (then resources->urls)))
 
 (defn cache-endpoints
   [endpoints course-name]

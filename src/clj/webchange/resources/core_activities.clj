@@ -6,49 +6,59 @@
     [webchange.resources.utils :refer [find-resources]]
     [webchange.resources.get-dataset-resources :refer [get-dataset-resources]]))
 
-(defn- get-course-levels
-  [course-data]
-  (->> (:workflow-actions course-data)
-       (filter :level)
-       (group-by :level)
-       (reduce (fn [result [level-number level-activities]]
-                 (conj result {:id         (->> level-number (str "level-") (keyword))
-                               :name       (->> level-number (str "Level "))
-                               :activities (->> level-activities
-                                                (filter (fn [activity]
-                                                          (= "set-activity" (:type activity))))
-                                                (map :activity)
-                                                (concat ["map"])
-                                                (distinct))}))
-               [])))
-
 (defn- get-scene-resources
   [course-slug scene-name]
   (->> scene-name
        (course/get-scene-data course-slug)
        (find-resources)))
 
-(defn- add-scenes-data
-  [levels course-slug]
-  (->> levels
-       (map (fn [{:keys [activities] :as level}]
-              (assoc level :activities (map (fn [scene-name]
-                                              {:id        (keyword scene-name)
-                                               :name      (-> scene-name
-                                                              (->Camel_Snake_Case)
-                                                              (s/replace "_" " "))
-                                               :endpoint  (str "/api/courses/" course-slug "/scenes/" scene-name)
-                                               :resources (-> (concat (get-scene-resources course-slug scene-name)
-                                                                      (get-dataset-resources course-slug [scene-name]))
-                                                              (distinct))})
-                                            activities))))))
-
 (defn get-activities-resources
+  "Returns a list of lessons data.
+   Params:
+    course-slug <string> - course name
+   Return example:
+   [{
+    :level-number  1
+    :level-name    'Level 1'
+    :lesson-number 1
+    :lesson-name   'Lesson 1'
+    :resources     ['/raw/img/casa/door.png', ...]
+    :endpoints     ['/api/courses/spanish/scenes/map', ...]
+   },
+   ...]"
   [course-slug]
-  (-> course-slug
-      (course/get-course-data)
-      (get-course-levels)
-      (add-scenes-data course-slug)))
+  (let [course-data (course/get-course-data course-slug)]
+    (->> (:levels course-data)
+         (map (fn [level]
+                (let [level-data {:level-number (:level level)
+                                  :level-name   (:name level)}]
+                  (map (fn [lesson]
+                         (let [activities (->> (:activities lesson)
+                                               (map :activity)
+                                               (concat ["map"]))
+                               activities-resources (reduce (fn [result activity-name]
+                                                              (assoc result (keyword activity-name) (get-scene-resources course-slug activity-name)))
+                                                            {}
+                                                            activities)
+                               lesson-sets (->> (:lesson-sets lesson) (vals))
+                               lesson-sets-resources (reduce (fn [result lesson-set-name]
+                                                               (assoc result (keyword lesson-set-name) (get-dataset-resources course-slug activities)))
+                                                             {}
+                                                             lesson-sets)
+                               overall-resources (->> (concat (vals activities-resources)
+                                                              (vals lesson-sets-resources))
+                                                      (flatten)
+                                                      (distinct))
+                               endpoints (map (fn [activity-name]
+                                                (str "/api/courses/" course-slug "/scenes/" activity-name))
+                                              activities)]
+                           (merge level-data
+                                  {:lesson-number (:lesson lesson)
+                                   :lesson-name   (:name lesson)
+                                   :resources     overall-resources
+                                   :endpoints     endpoints})))
+                       (:lessons level)))))
+         (flatten))))
 
 (defn get-start-resources
   [course-slug]

@@ -23,18 +23,13 @@
                  (logger/warn "Can not post message: Service worker is not defined."))))
       (.catch (fn [e] (logger/warn "Can not post message." e)))))
 
-(defn get-cached-resources
-  [course-id]
-  (post-message {:type (:get-cached-resources config/messages)
-                 :data {:course course-id}}))
-
-(defn get-last-update
+(defn get-current-state
   []
-  (post-message {:type (:get-last-update config/messages)}))
+  (post-message {:type (:get-current-state config/messages)}))
 
-(defn set-cached-scenes
+(defn set-cached-data
   [data]
-  (post-message {:type (:cache-scenes config/messages)
+  (post-message {:type (:update-cached-scenes config/messages)
                  :data data}))
 
 (defn cache-course

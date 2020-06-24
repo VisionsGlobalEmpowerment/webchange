@@ -3,21 +3,23 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.sw-utils.message :as sw]
-    [webchange.sw-utils.subs :as subs]
-    [webchange.student-dashboard.toolbar.sync.events :as events]
+    [webchange.sw-utils.state.status :as status]
+    [webchange.student-dashboard.toolbar.sync.state.sync-list :as sync-list]
     [webchange.student-dashboard.toolbar.sync.views-sync-list :refer [sync-list-modal]]
     [webchange.student-dashboard.toolbar.sync.icons.icon-ready :as icon-ready]
     [webchange.student-dashboard.toolbar.sync.icons.icon-syncing :as icon-syncing]
     [webchange.student-dashboard.toolbar.sync.icons.icon-unavailable :as icon-unavailable]))
 
-(defn sync-status
+(defn- sync-status
   []
-  (let [offline-mode @(re-frame/subscribe [::subs/offline-mode])]
-    (case offline-mode
-      :syncing [icon-unavailable/get-shape]
-      :synced [icon-syncing/get-shape]
-      [icon-ready/get-shape])))
+  (let [sync-status @(re-frame/subscribe [::status/sync-status])]
+    (case sync-status
+      :installing [icon-syncing/get-shape]
+      :syncing [icon-syncing/get-shape]
+      :synced [icon-ready/get-shape]
+      :disabled [icon-unavailable/get-shape {:color "#cccccc"}]
+      :offline [icon-ready/get-shape {:color "#278600"}]
+      [icon-unavailable/get-shape])))
 
 (defn current-version-data
   [{:keys [update-date-str version]}]
@@ -41,9 +43,8 @@
 
 (defn current-version
   []
-  (sw/get-last-update)
-  (let [last-update @(re-frame/subscribe [::subs/last-update])
-        version @(re-frame/subscribe [::subs/version])]
+  (let [last-update @(re-frame/subscribe [::status/last-update])
+        version @(re-frame/subscribe [::status/version])]
     [ui/menu-item
      {:disabled true
       :style    {:height          50
@@ -59,11 +60,13 @@
 (defn sync
   []
   (r/with-let [menu-anchor (r/atom nil)]
-              (let [handle-select-resources-click #(do (reset! menu-anchor nil)
-                                                       (re-frame/dispatch [::events/open-sync-list]))]
+              (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
+                    handle-select-resources-click #(do (reset! menu-anchor nil)
+                                                       (re-frame/dispatch [::sync-list/open]))]
                 [:div
                  [ui/icon-button
-                  {:on-click #(reset! menu-anchor (.-currentTarget %))}
+                  {:disabled disabled?
+                   :on-click #(reset! menu-anchor (.-currentTarget %))}
                   [sync-status]]
                  [ui/menu
                   {:anchor-el               @menu-anchor

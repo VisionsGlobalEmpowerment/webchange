@@ -14,9 +14,7 @@
                                          merge-scene-data]]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.sw-utils.events :as swe]
-    [webchange.sw-utils.message :as sw]
-    ))
+    [webchange.sw-utils.state.resources :as sw-resources]))
 
 (re-frame/reg-fx
   :execute-audio
@@ -41,21 +39,10 @@
     (e/effects-volume (/ value 100))))
 
 (re-frame/reg-fx
-  :sw-cache-course
-  (fn [[course-id]]
-    (sw/cache-course course-id)))
-
-(re-frame/reg-event-fx
-  ::sw-cache-course
-  (fn [_ [_ course-id]]
-    {:sw-cache-course [course-id]
-     :dispatch        [::swe/set-sw-status :syncing]}))
-
-(re-frame/reg-fx
   :load-course
   (fn [{:keys [course-id scene-id]}]
     (i/load-course course-id (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
-                                              (re-frame/dispatch [::sw-cache-course course-id])
+                                              (re-frame/dispatch [::sw-resources/cache-course course-id])
                                               (re-frame/dispatch [::set-course-data course])
                                               (re-frame/dispatch [::load-progress course-id])
                                               (re-frame/dispatch [::load-lessons course-id])
