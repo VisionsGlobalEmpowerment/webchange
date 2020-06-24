@@ -141,6 +141,7 @@
 (declare get-painting-area)
 (declare get-colors-palette)
 (declare background)
+(declare empty-component)
 
 (defn draw-object
   ([scene-id name]
@@ -166,7 +167,10 @@
        :animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
        :svg-path [svg-path o]
        :matrix [matrix-object scene-id name o draw-object]
+       :propagate [empty-component]
        (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))))))
+
+(defn empty-component [_] nil)
 
 (defn placeholder
   [scene-id name {item :var :as object}]

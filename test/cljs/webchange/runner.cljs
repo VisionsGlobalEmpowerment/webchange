@@ -47,6 +47,7 @@
             [webchange.interpreter.events-test]
             [webchange.interpreter.variables.events-test]
             [webchange.interpreter.utils-test]
+            [webchange.interpreter.utils.propagate-objects-test]
             [webchange.interpreter.utils.find-exit-test]
             [webchange.common.svg-path.path-to-transitions-test]
             [webchange.common.svg-path.path-splitter-test]))
@@ -99,6 +100,7 @@
   'webchange.interpreter.events-test
   'webchange.interpreter.variables.events-test
   'webchange.interpreter.utils-test
+  'webchange.interpreter.utils.propagate-objects-test
   'webchange.interpreter.utils.find-exit-test
   'webchange.common.svg-path.path-to-transitions-test
   'webchange.common.svg-path.path-splitter-test

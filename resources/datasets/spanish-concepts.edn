@@ -2233,7 +2233,7 @@
      :target "senoravaca",
      :phrase-text-translated "cepillo",
      :data [{:end 45.36, :anim "talk", :start 44.96, :duration 0.4}]},
-    :image-src "/raw/img/elements/toothbrush.png",
+    :image-src "/raw/img/elements/comb.png",
     :letter "c",
     :letter-big "C",
     :letter-intro-letter
@@ -7499,21 +7499,17 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
-       :type "audio",
-       :start 37.37,
-       :duration 3.268}
-      {:data
-       [{:end 38.037, :anim "talk", :start 37.46}
-        {:end 39.123, :anim "talk", :start 38.422}
-        {:end 40.581, :anim "talk", :start 39.53}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 37.37,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Jardín, jardín, j-j-j!"},
+    {:offset 37.37,
+     :phrase-text "Jardín, jardín, j-j-j!",
+     :start 37.37,
+     :type "animation-sequence",
+     :duration 3.268,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 38.037, :anim "talk", :start 37.46}
+            {:end 39.123, :anim "talk", :start 38.422}
+            {:end 40.581, :anim "talk", :start 39.53}]},
     :vaca-chanting-word
     {:offset 37.37,
      :phrase-text "Jardín",
@@ -8715,7 +8711,7 @@
      :phrase-text-translated "llave",
      :data
      [{:end 87.855, :anim "talk", :start 87.428, :duration 0.427}]},
-    :image-src "/raw/img/elements/wrench.png",
+    :image-src "/raw/img/elements/key.png",
     :letter "ll",
     :letter-big "Ll",
     :letter-intro-letter
@@ -13772,21 +13768,17 @@
      :type "sequence-data",
      :scene-id "swings"},
     :vaca-chanting-song
-    {:data
-     [{:id "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-       :type "audio",
-       :start 75.833,
-       :duration 3.847}
-      {:data
-       [{:end 76.906, :anim "talk", :start 75.922}
-        {:end 78.039, :anim "talk", :start 77.145}
-        {:end 79.56, :anim "talk", :start 78.308}],
-       :type "animation-sequence",
-       :track 1,
-       :offset 75.833,
-       :target "senoravaca"}],
-     :type "parallel",
-     :description "Uvas, Uvas, u-u-u!!"},
+    {:offset 75.833,
+     :phrase-text "Uvas, Uvas, u-u-u!!",
+     :start 75.833,
+     :type "animation-sequence",
+     :duration 3.847,
+     :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
+     :target "senoravaca",
+     :track 1,
+     :data [{:end 76.906, :anim "talk", :start 75.922}
+            {:end 78.039, :anim "talk", :start 77.145}
+            {:end 79.56, :anim "talk", :start 78.308}]},
     :vaca-chanting-word
     {:offset 75.803,
      :phrase-text "Uvas",

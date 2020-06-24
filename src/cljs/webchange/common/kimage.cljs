@@ -108,13 +108,15 @@
                          (create-image src i))
                        (let [filtered-params (-> params
                                                  (dissoc :animations))
+                             origin-ref (:ref params)
                              image-params (merge {:image @i}
                                                  filtered-params
                                                  {:ref (fn [ref]
                                                          (when ref
                                                            (reset! konva-image ref)
-                                                           (when @i
-                                                             (.cache ref))))})]
+                                                           (when @i (.cache ref))
+                                                           (when origin-ref
+                                                             (origin-ref ref))))})]
                          [:> Group
                           (-> {}
                               (with-clip (:border-radius params) (get-image-dimension @i params)))
