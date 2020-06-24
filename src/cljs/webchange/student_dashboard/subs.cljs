@@ -53,6 +53,27 @@
       (get-in db [:loading :load-course])
       (get-in db [:loading :load-progress]))))
 
+(defn last-level-done [progress-data]
+  (apply max (map #(int (name %)) (keys progress-data))))
+
+(defn last-lesson-done [progress-data level]
+    (apply max (map #(int (name %))  (keys ((keyword (str level)) progress-data))))
+  )
+
+(re-frame/reg-sub
+  ::lesson-progress
+  (fn [db]
+    (let [
+          progress-data (get-in db [:progress-data :finished])
+          last-level (last-level-done progress-data)
+          last-lesson (last-lesson-done progress-data last-level)
+
+          finished-activities ((keyword (str last-lesson))  ((keyword (str last-level)) progress-data))
+          activities (lessons-activity/get-activities db last-level last-lesson)
+          ]
+      (/ (count finished-activities)
+         (count activities)))))
+
 (re-frame/reg-sub
   ::overall-progress
   (fn []

@@ -166,7 +166,7 @@
         offset-top (/ (- 1080 window-height) 2)
 
         next-activity @(re-frame/subscribe [::subs/next-activity])
-        progress-value @(re-frame/subscribe [::subs/overall-progress])
+        progress-value @(re-frame/subscribe [::subs/lesson-progress])
 
         go-to-next-activity #(re-frame/dispatch [::ie/run-next-activity])
         restart-activity #(re-frame/dispatch [::ie/restart-scene])
