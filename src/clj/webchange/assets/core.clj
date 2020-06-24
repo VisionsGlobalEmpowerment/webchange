@@ -2,7 +2,9 @@
   (:require [webchange.db.core :refer [*db*] :as db]
             [clojure.java.io :as io]
             [webchange.common.files :as f]
-            [clojure.string :refer [join]]))
+            [config.core :refer [env]]
+            [clojure.string :refer [join]]
+            [clojure.tools.logging :as log]))
 
 (import 'java.security.MessageDigest
         'java.math.BigInteger)
@@ -15,8 +17,7 @@
 
 (defn files
   [dir]
-  (let [f (io/file dir)]
-    (file-seq f)))
+  (let [f (io/file dir)] (file-seq f)))
 
 
 (defn md5
@@ -34,29 +35,53 @@
     (str (Long/toHexString (. crc getValue)))))
 
 (defn update-asset-hash!
-  [path]
-  (let [file-crc (crc32 (slurp path))
+  [path full-path]
+  (println "update-asset-hash!" path " " full-path)
+  (let [file-crc (crc32 (slurp full-path))
         path-md5 (md5 path)]
     (db/update-asset-hash! {:path_hash path-md5
                             :file_hash file-crc
                             })))
 
 (defn create-asset-hash!
-  [path]
+  [path full-path]
   (let [path-md5 (md5 path)
-        file-crc (crc32 (slurp path))]
+        file-crc (crc32 (slurp full-path))]
     (db/create-asset-hash! {:path_hash path-md5
                             :path      path
                             :file_hash file-crc})))
 
-(defn clear-asset-hash-table!
-  []
+(defn clear-asset-hash-table! []
   (db/clear-asset-hash!))
 
 (defn store-asset-hash!
-  [path]
-  (let [path-md5 (md5 path)
+  [full-path]
+  (let [path (clojure.string/replace-first full-path (:public-dir env) "")
+        path-md5 (md5 path)
         asset-hash (db/get-asset-hash {:path_hash path-md5})]
     (if (= (count asset-hash) 0)
-      (create-asset-hash! path)
-      (update-asset-hash! path))))
+      (create-asset-hash! path full-path)
+      (update-asset-hash! path full-path))
+    {:path path
+     :full-path full-path}
+    )
+  )
+
+(defn remove-file-with-hash! [asset-hash]
+  (io/delete-file (f/relative->absolute-path (:path asset-hash)))
+  (db/remove-asset-hash! {:path_hash (:path-hash asset-hash)})
+  )
+
+(defn save-file-from-uri [uri file]
+  (with-open [in (io/input-stream uri)
+              out (io/output-stream file)]
+    (io/copy in out)))
+
+(defn update-file-from-primary [path]
+  (let [uri (f/relative->absolute-primary-uri path)
+        file (f/relative->absolute-path path)]
+    (try
+      (save-file-from-uri uri file)
+      (store-asset-hash! file)
+      (catch Exception e
+        (log/error (str "Can not download " uri ", because " (:cause e)))))))

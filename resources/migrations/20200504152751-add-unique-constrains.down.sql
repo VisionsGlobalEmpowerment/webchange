@@ -1,0 +1,14 @@
+ALTER TABLE teachers DROP CONSTRAINT teacher_unique;
+--;;
+ALTER TABLE students DROP CONSTRAINT student_unique;
+--;;
+ALTER TABLE course_stats DROP CONSTRAINT course_stats_unique;
+--;;
+ALTER TABLE course_progresses DROP CONSTRAINT course_progresses_unique;
+--;;
+ALTER TABLE course_events DROP CONSTRAINT course_events_unique;
+--;;
+ALTER TABLE ONLY course_events DROP COLUMN guid;
+--;;
+ALTER TABLE activity_stats DROP CONSTRAINT activity_stats_unique;
+--;;

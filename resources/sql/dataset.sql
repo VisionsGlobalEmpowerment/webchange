@@ -13,6 +13,10 @@ WHERE id = :id
 SELECT * from datasets
 WHERE id = :id;
 
+-- :name get-datasets :? :*
+-- :doc retrieve dataset by id
+SELECT * from datasets;
+
 -- :name get-datasets-by-course :? :*
 -- :doc retrieve datasets given course id
 SELECT * from datasets
@@ -42,6 +46,11 @@ SELECT * from dataset_items
 WHERE dataset_id = :dataset_id
 ORDER BY name;
 
+
+-- :name get-dataset-items-by-school :? :*
+-- :doc retrieve items given dataset id
+SELECT * from dataset_items;
+
 -- :name update-dataset-item! :! :n
 -- :doc updates an existing dataset item record
 UPDATE dataset_items
@@ -64,6 +73,10 @@ VALUES (:name, :dataset_id, :data) RETURNING id
 SELECT * from lesson_sets
 WHERE dataset_id = :dataset_id AND name = :name;
 
+-- :name get-lesson-sets :? :*
+-- :doc retrieve lesson set given name
+SELECT * from lesson_sets;
+
 -- :name get-dataset-lessons :? :*
 -- :doc retrieve lesson sets given dataset id
 SELECT * from lesson_sets
@@ -78,15 +91,15 @@ WHERE id = :id
 
 -- :name delete-lesson-set! :! :n
 -- :doc deletes lesson set
-DELETE from lesson_sets
+DELETE FROM lesson_sets
 WHERE id = :id
 
 -- :name get-course-items :? :*
 -- :doc retrieve dataset items given course id
-SELECT di.* from dataset_items di INNER JOIN datasets d ON di.dataset_id = d.id
+SELECT di.* FROM dataset_items di INNER JOIN datasets d ON di.dataset_id = d.id
 WHERE d.course_id = :course_id;
 
 -- :name get-course-lessons :? :*
 -- :doc retrieve lesson sets given course id
-SELECT ls.* from lesson_sets ls INNER JOIN datasets d ON ls.dataset_id = d.id
+SELECT ls.* FROM lesson_sets ls INNER JOIN datasets d ON ls.dataset_id = d.id
 WHERE d.course_id = :course_id;

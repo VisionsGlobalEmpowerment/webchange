@@ -32,7 +32,7 @@
           path))
 
 (defn- schools-list-item
-  [{:keys [on-edit-click  on-remove-click]}
+  [{:keys [on-edit-click  on-remove-click on-sync-click]}
    {:keys [name] :as school}]
   [ui/table-row {:hover true}
    [ui/table-cell {} name]
@@ -41,6 +41,9 @@
     [ui/tooltip
      {:title (translate [:actions :edit])}
      [ui/icon-button {:on-click #(on-edit-click school)} [ic/create]]]
+    [ui/tooltip
+     {:title (translate [:actions :sync])}
+     [ui/icon-button {:on-click #(on-sync-click school)} [ic/refresh]]]
     [ui/tooltip
      {:title (translate [:actions :remove])}
      [ui/icon-button {:on-click #(on-remove-click school)} [ic/delete]]]]])
@@ -64,7 +67,9 @@
        [:div
         [schools-list
          {:on-edit-click     (fn [{:keys [id]}] (re-frame/dispatch [::schools-events/show-edit-school-form id]))
-          :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::dashboard-events/show-delete-school-form id]))}
+          :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::dashboard-events/show-delete-school-form id]))
+          :on-sync-click     (fn [{:keys [id]}] (re-frame/dispatch [::schools-events/show-sync-school-form id]))
+          }
          schools]
         [fab
          {

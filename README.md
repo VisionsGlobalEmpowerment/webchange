@@ -9,3 +9,4 @@
 - [Build production version](wiki/build.md)
 - [Troubleshooting](wiki/troubleshooting.md)
 - [Used libs and frameworks](wiki/libs.md)
+- [School syncronization](wiki/school-synchronization.md)

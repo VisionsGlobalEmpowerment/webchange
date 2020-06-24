@@ -6,7 +6,7 @@
     [webchange.dashboard.dashboard-layout.views :refer [app-bar drawer progress-bar side-menu]]
     [webchange.dashboard.dashboard-layout.utils :refer [get-shift-styles]]
     [webchange.dashboard.classes.views :refer [classes-list class-modal class-delete-modal class-profile]]
-    [webchange.dashboard.schools.views :refer [schools-list school-modal school-delete-modal]]
+    [webchange.dashboard.schools.views :refer [schools-list school-modal school-delete-modal school-sync-modal]]
     [webchange.dashboard.students.views :refer [students-list student-modal student-delete-modal student-remove-from-class-modal student-profile]]
     [webchange.dashboard.subs :as dashboard-subs]
     [webchange.routes :refer [redirect-to]]))
@@ -37,6 +37,7 @@
    [class-modal]
    [school-modal]
    [school-delete-modal]
+   [school-sync-modal]
    [class-delete-modal]
    [student-modal]
    [student-remove-from-class-modal]

@@ -26,7 +26,10 @@
           :stop (conman/disconnect! *db*))
 
 
-(conman/bind-connection *db* "sql/queries.sql" "sql/dataset.sql" "sql/class.sql" "sql/progress.sql" "sql/assets.sql")
+(conman/bind-connection *db*
+                        "sql/queries.sql" "sql/dataset.sql" "sql/class.sql"
+                        "sql/progress.sql" "sql/assets.sql" "sql/secondary.sql"
+                        )
 
 #_(def conn (conman/connect! {:jdbc-url (get (System/getenv) "DATABASE_URL")}))
 
@@ -106,6 +109,11 @@
   [this result options]
   (->> (hugsql.adapter/result-many this result options)
        (map #(transform-keys transform-key %))))
+
+(defn transform-keys-one-level
+  [t coll]
+  (letfn [(transform [[k v]] [(t k) v])]
+    (into {} (map (fn [x] (transform x)) coll))))
 
 (defmethod hugsql.core/hugsql-result-fn :1 [sym]
   'webchange.db.core/result-one-snake->kebab)

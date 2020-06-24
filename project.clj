@@ -21,7 +21,9 @@
                  [cljsjs/material-ui "3.9.3-0"]
                  [reanimated "0.6.1"]
                  [cljs-http "0.1.45"]
+                 [clj-http "3.10.1"]
                  [soda-ash "0.83.0"]
+                 [tupelo "0.9.185"]
                  [com.degel/sodium "0.12.0"]
                  [day8.re-frame/test "0.1.5"]
                  [day8.re-frame/http-fx "0.1.6"]
@@ -44,6 +46,7 @@
                  [funcool/promesa "5.0.0"]
                  [clj-http "3.10.1"]
                  [clj-http-fake "1.0.3"]
+                 [ring/ring-codec "1.1.2"]
                  ]
 
   :plugins [[lein-cljsbuild "1.1.7"]
@@ -89,7 +92,9 @@
    {:dependencies [[binaryage/devtools "0.9.10"]
                    [day8.re-frame/re-frame-10x "0.3.3"]
                    [day8.re-frame/tracing "0.5.1"]
-                   [ring/ring-mock "0.3.2"]]
+                   [ring/ring-mock "0.3.2"]
+                   [mockery "0.1.4"]
+                   ]
 
     :plugins      [[lein-figwheel "0.5.19"]
                    [lein-doo "0.1.8"]]

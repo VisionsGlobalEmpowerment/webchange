@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 9.6.8
--- Dumped by pg_dump version 10.6 (Ubuntu 10.6-0ubuntu0.18.04.1)
+-- Dumped by pg_dump version 9.6.8
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -41,8 +41,7 @@ CREATE TABLE public.activity_stats (
     id integer NOT NULL,
     user_id integer,
     course_id integer,
-    level_number integer NOT NULL,
-    activity_number integer NOT NULL,
+    activity_id character varying(32) NOT NULL,
     data json NOT NULL
 );
 
@@ -76,7 +75,8 @@ ALTER SEQUENCE public.activity_stats_id_seq OWNED BY public.activity_stats.id;
 
 CREATE TABLE public.classes (
     id integer NOT NULL,
-    name character varying(30) NOT NULL
+    name character varying(30) NOT NULL,
+    school_id integer
 );
 
 
@@ -104,10 +104,10 @@ ALTER SEQUENCE public.classes_id_seq OWNED BY public.classes.id;
 
 
 --
--- Name: course_actions; Type: TABLE; Schema: public; Owner: webchange
+-- Name: course_events; Type: TABLE; Schema: public; Owner: webchange
 --
 
-CREATE TABLE public.course_actions (
+CREATE TABLE public.course_events (
     id integer NOT NULL,
     user_id integer,
     course_id integer,
@@ -117,7 +117,7 @@ CREATE TABLE public.course_actions (
 );
 
 
-ALTER TABLE public.course_actions OWNER TO webchange;
+ALTER TABLE public.course_events OWNER TO webchange;
 
 --
 -- Name: course_actions_id_seq; Type: SEQUENCE; Schema: public; Owner: webchange
@@ -137,7 +137,7 @@ ALTER TABLE public.course_actions_id_seq OWNER TO webchange;
 -- Name: course_actions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webchange
 --
 
-ALTER SEQUENCE public.course_actions_id_seq OWNED BY public.course_actions.id;
+ALTER SEQUENCE public.course_actions_id_seq OWNED BY public.course_events.id;
 
 
 --
@@ -253,7 +253,10 @@ ALTER SEQUENCE public.course_versions_id_seq OWNED BY public.course_versions.id;
 
 CREATE TABLE public.courses (
     id integer NOT NULL,
-    name character varying(30) NOT NULL
+    name character varying(30) NOT NULL,
+    slug character varying(30),
+    lang character varying(30),
+    image_src character varying(1024)
 );
 
 
@@ -469,13 +472,50 @@ CREATE TABLE public.schema_migrations (
 ALTER TABLE public.schema_migrations OWNER TO webchange;
 
 --
+-- Name: schools; Type: TABLE; Schema: public; Owner: webchange
+--
+
+CREATE TABLE public.schools (
+    id integer NOT NULL,
+    name character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.schools OWNER TO webchange;
+
+--
+-- Name: schools_id_seq; Type: SEQUENCE; Schema: public; Owner: webchange
+--
+
+CREATE SEQUENCE public.schools_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.schools_id_seq OWNER TO webchange;
+
+--
+-- Name: schools_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webchange
+--
+
+ALTER SEQUENCE public.schools_id_seq OWNED BY public.schools.id;
+
+
+--
 -- Name: students; Type: TABLE; Schema: public; Owner: webchange
 --
 
 CREATE TABLE public.students (
     id integer NOT NULL,
     user_id integer,
-    class_id integer
+    class_id integer,
+    school_id integer,
+    access_code character varying(30),
+    gender integer,
+    date_of_birth date
 );
 
 
@@ -500,6 +540,40 @@ ALTER TABLE public.students_id_seq OWNER TO webchange;
 --
 
 ALTER SEQUENCE public.students_id_seq OWNED BY public.students.id;
+
+
+--
+-- Name: teachers; Type: TABLE; Schema: public; Owner: webchange
+--
+
+CREATE TABLE public.teachers (
+    id integer NOT NULL,
+    user_id integer,
+    school_id integer
+);
+
+
+ALTER TABLE public.teachers OWNER TO webchange;
+
+--
+-- Name: teachers_id_seq; Type: SEQUENCE; Schema: public; Owner: webchange
+--
+
+CREATE SEQUENCE public.teachers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.teachers_id_seq OWNER TO webchange;
+
+--
+-- Name: teachers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webchange
+--
+
+ALTER SEQUENCE public.teachers_id_seq OWNED BY public.teachers.id;
 
 
 --
@@ -556,10 +630,10 @@ ALTER TABLE ONLY public.classes ALTER COLUMN id SET DEFAULT nextval('public.clas
 
 
 --
--- Name: course_actions id; Type: DEFAULT; Schema: public; Owner: webchange
+-- Name: course_events id; Type: DEFAULT; Schema: public; Owner: webchange
 --
 
-ALTER TABLE ONLY public.course_actions ALTER COLUMN id SET DEFAULT nextval('public.course_actions_id_seq'::regclass);
+ALTER TABLE ONLY public.course_events ALTER COLUMN id SET DEFAULT nextval('public.course_actions_id_seq'::regclass);
 
 
 --
@@ -626,10 +700,24 @@ ALTER TABLE ONLY public.scenes ALTER COLUMN id SET DEFAULT nextval('public.scene
 
 
 --
+-- Name: schools id; Type: DEFAULT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.schools ALTER COLUMN id SET DEFAULT nextval('public.schools_id_seq'::regclass);
+
+
+--
 -- Name: students id; Type: DEFAULT; Schema: public; Owner: webchange
 --
 
 ALTER TABLE ONLY public.students ALTER COLUMN id SET DEFAULT nextval('public.students_id_seq'::regclass);
+
+
+--
+-- Name: teachers id; Type: DEFAULT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.teachers ALTER COLUMN id SET DEFAULT nextval('public.teachers_id_seq'::regclass);
 
 
 --
@@ -643,24 +731,45 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 -- Data for Name: activity_stats; Type: TABLE DATA; Schema: public; Owner: webchange
 --
 
-COPY public.activity_stats (id, user_id, course_id, level_number, activity_number, data) FROM stdin;
+COPY public.activity_stats (id, user_id, course_id, activity_id, data) FROM stdin;
 \.
+
+
+--
+-- Name: activity_stats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.activity_stats_id_seq', 1, false);
 
 
 --
 -- Data for Name: classes; Type: TABLE DATA; Schema: public; Owner: webchange
 --
 
-COPY public.classes (id, name) FROM stdin;
-1	a3
+COPY public.classes (id, name, school_id) FROM stdin;
+1	a3	1
 \.
 
 
 --
--- Data for Name: course_actions; Type: TABLE DATA; Schema: public; Owner: webchange
+-- Name: classes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
 --
 
-COPY public.course_actions (id, user_id, course_id, created_at, type, data) FROM stdin;
+SELECT pg_catalog.setval('public.classes_id_seq', 1, true);
+
+
+--
+-- Name: course_actions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.course_actions_id_seq', 1, false);
+
+
+--
+-- Data for Name: course_events; Type: TABLE DATA; Schema: public; Owner: webchange
+--
+
+COPY public.course_events (id, user_id, course_id, created_at, type, data) FROM stdin;
 \.
 
 
@@ -669,8 +778,14 @@ COPY public.course_actions (id, user_id, course_id, created_at, type, data) FROM
 --
 
 COPY public.course_progresses (id, user_id, course_id, data) FROM stdin;
-1	1	3	{"sets": {"concepts": "ls1"}, "variables": {"last-location": "park"}, "current-scene": "home", "current-lesson": 1, "workflow-action": "finish-activity", "current-activity": "home", "finished-workflow-actions": {}}
 \.
+
+
+--
+-- Name: course_progresses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.course_progresses_id_seq', 1, true);
 
 
 --
@@ -679,6 +794,13 @@ COPY public.course_progresses (id, user_id, course_id, data) FROM stdin;
 
 COPY public.course_stats (id, user_id, class_id, course_id, data) FROM stdin;
 \.
+
+
+--
+-- Name: course_stats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.course_stats_id_seq', 1, false);
 
 
 --
@@ -699,14 +821,29 @@ COPY public.course_versions (id, course_id, data, owner_id, created_at) FROM std
 
 
 --
+-- Name: course_versions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.course_versions_id_seq', 9, true);
+
+
+--
 -- Data for Name: courses; Type: TABLE DATA; Schema: public; Owner: webchange
 --
 
-COPY public.courses (id, name) FROM stdin;
-1	demo
-2	reading
-3	test
+COPY public.courses (id, name, slug, lang, image_src) FROM stdin;
+1	demo	demo	\N	\N
+2	reading	reading	\N	\N
+3	test	test	\N	\N
+4	english	english	\N	\N
 \.
+
+
+--
+-- Name: courses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.courses_id_seq', 4, true);
 
 
 --
@@ -716,10 +853,43 @@ COPY public.courses (id, name) FROM stdin;
 COPY public.dataset_items (id, name, dataset_id, data) FROM stdin;
 3	bat	1	{"src": "bat.png", "width": "100"}
 4	flower	1	{"src": "flower.png", "width": "150"}
-7	ardilla	2	{"skin": "squirrel", "concept-name": "ardilla", "swings-dialog": "dialog-ardilla", "home-vaca-word": "word-ardilla", "home-group-word": "group-word-ardilla", "seesaw-voice-low": "word-ardilla-low", "home-vaca-3-times": "vaca-3-times-ardilla", "home-vaca-goodbye": "goodbye-ardilla", "home-vaca-this-is": "this-is-ardilla", "seesaw-voice-high": "word-ardilla-high", "home-group-3-times": "group-3-times-ardilla", "home-vaca-question": "question-ardilla", "sandbox-state-word-1": "abeja", "sandbox-state-word-2": "arbol", "sandbox-state-word-3": "avion", "sandbox-state-word-4": "arana", "sandbox-this-is-letter": "mari-this-is-letter-a"}
-8	oso	2	{"skin": "bear", "concept-name": "oso", "swings-dialog": "dialog-oso", "home-vaca-word": "word-oso", "home-group-word": "group-word-oso", "seesaw-voice-low": "word-oso-low", "home-vaca-3-times": "vaca-3-times-oso", "home-vaca-goodbye": "goodbye-oso", "home-vaca-this-is": "this-is-oso", "seesaw-voice-high": "word-oso-high", "home-group-3-times": "group-3-times-oso", "home-vaca-question": "question-oso", "sandbox-state-word-1": "ocho", "sandbox-state-word-2": "oreja", "sandbox-state-word-3": "oveja", "sandbox-state-word-4": "ojos", "sandbox-this-is-letter": "mari-this-is-letter-o"}
-9	incendio	2	{"skin": "magnet", "concept-name": "iman", "swings-dialog": "dialog-incendio", "home-vaca-word": "word-incendio", "home-group-word": "group-word-incendio", "seesaw-voice-low": "word-incendio-low", "home-vaca-3-times": "vaca-3-times-incendio", "home-vaca-goodbye": "goodbye-incendio", "home-vaca-this-is": "this-is-incendio", "seesaw-voice-high": "word-incendio-high", "home-group-3-times": "group-3-times-incendio", "home-vaca-question": "question-incendio", "sandbox-state-word-1": "iguana", "sandbox-state-word-2": "incendio", "sandbox-state-word-3": "insecto", "sandbox-state-word-4": "isla", "sandbox-this-is-letter": "mari-this-is-letter-i"}
+7	ardilla	2	{"skin": "squirrel", "letter": "a", "test-new": {"id": "init", "type": "action", "scene-id": "sandbox", "description": "Really long description for this action to test label"}, "word-1-skin": "bee", "word-2-skin": "tree", "word-3-skin": "airplane", "word-4-skin": "spider", "concept-name": "ardilla", "swings-dialog": "dialog-ardilla", "home-vaca-word": "word-ardilla", "home-group-word": "group-word-ardilla", "seesaw-voice-low": "word-ardilla-low", "game-voice-action": {"id": "/raw/audio/l1/a8/GameVoice.m4a", "type": "audio", "start": 6.76, "duration": 1.094, "scene-id": "cycling"}, "home-vaca-3-times": "vaca-3-times-ardilla", "home-vaca-goodbye": "goodbye-ardilla", "home-vaca-this-is": "this-is-ardilla", "seesaw-voice-high": "word-ardilla-high", "chanting-video-src": "/raw/video/l2a1/letter-a.mp4", "home-group-3-times": "group-3-times-ardilla", "home-vaca-question": "question-ardilla", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 22.037, "duration": 3.593}, {"data": [{"end": 23.021, "anim": "talk", "start": 22.201}, {"end": 24.065, "anim": "talk", "start": 23.26}, {"end": 25.511, "anim": "talk", "start": 24.423}], "type": "animation-sequence", "track": 1, "offset": 22.037, "target": "senoravaca"}], "type": "parallel", "description": "Ardilla! Ardilla! a-a-A!"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 22.007, "duration": 1.208}, {"data": [{"end": 23.066, "anim": "talk", "start": 22.201}], "type": "animation-sequence", "track": 1, "offset": 22.007, "target": "senoravaca"}], "type": "parallel", "description": "Ardilla"}, "sandbox-state-word-1": "abeja", "sandbox-state-word-2": "arbol", "sandbox-state-word-3": "avion", "sandbox-state-word-4": "arana", "sandbox-this-is-letter": "mari-this-is-letter-a", "sandbox-state-word-1-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Abeja"}, "target": "word"}, {"id": "voice-1", "type": "audio", "start": 6.218, "duration": 0.871}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-abeja"}, "sandbox-state-word-2-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Arbol"}, "target": "word"}, {"id": "voice-1", "type": "audio", "start": 7.873, "duration": 0.871}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-arbol"}, "sandbox-state-word-3-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Avion"}, "target": "word"}, {"id": "voice-1", "type": "audio", "start": 9.506, "duration": 0.871}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-avion"}, "sandbox-state-word-4-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Arana"}, "target": "word"}, {"id": "voice-1", "type": "audio", "start": 11.144, "duration": 1.06}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-arana"}, "sandbox-change-skin-1-action": {"skin": "bee", "type": "set-skin", "target": "box1", "scene-id": "sandbox", "description": ":box-1-set-skin-abeja"}, "sandbox-change-skin-2-action": {"skin": "tree", "type": "set-skin", "target": "box2", "scene-id": "sandbox", "description": ":box-1-set-skin-arbol"}, "sandbox-change-skin-3-action": {"skin": "airplane", "type": "set-skin", "target": "box3", "scene-id": "sandbox", "description": ":box-1-set-skin-avion"}, "sandbox-change-skin-4-action": {"skin": "spider", "type": "set-skin", "target": "box4", "scene-id": "sandbox", "description": ":box-1-set-skin-arana"}, "sandbox-this-is-letter-action": {"data": [{"end": 16.639, "anim": "talk", "start": 14.552}, {"end": 18.999, "anim": "talk", "start": 17.341}, {"end": 20.475, "anim": "talk", "start": 19.373}, {"end": 21.997, "anim": "talk", "start": 20.885}, {"end": 30.417, "anim": "talk", "start": 23.173}], "type": "animation-sequence", "audio": "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", "start": "14.397", "track": "1", "offset": "14.397", "target": "mari", "duration": "16.202", "scene-id": "sandbox", "description": ":mari-this-is-letter-a"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 6.821, "track": 1, "offset": 6.821, "target": "mari", "duration": 1.067, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+9	incendio	2	{"skin": "magnet", "letter": "i", "word-1-skin": "iguana", "word-2-skin": "fire", "word-3-skin": "insect", "word-4-skin": "island", "concept-name": "iman", "swings-dialog": "dialog-incendio", "home-vaca-word": "word-incendio", "home-group-word": "group-word-incendio", "seesaw-voice-low": "word-incendio-low", "game-voice-action": {"id": "/raw/audio/l1/a8/GameVoice.m4a", "type": "audio", "start": 9.534, "duration": 0.853, "scene-id": "cycling"}, "home-vaca-3-times": "vaca-3-times-incendio", "home-vaca-goodbye": "goodbye-incendio", "home-vaca-this-is": "this-is-incendio", "seesaw-voice-high": "word-incendio-high", "chanting-video-src": "/raw/video/l2a1/letter-i.mp4", "home-group-3-times": "group-3-times-incendio", "home-vaca-question": "question-incendio", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 69.004, "duration": 3.549}, {"data": [{"end": 69.749, "anim": "talk", "start": 69.063}, {"end": 70.793, "anim": "talk", "start": 69.988}, {"end": 72.523, "anim": "talk", "start": 71.211}], "type": "animation-sequence", "track": 1, "offset": 69.004, "target": "senoravaca"}], "type": "parallel", "description": "Iman, Iman i-i-I!"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 68.941, "duration": 0.847}, {"data": [{"end": 69.749, "anim": "talk", "start": 69.063}], "type": "animation-sequence", "track": 1, "offset": 68.941, "target": "senoravaca"}], "type": "parallel", "description": "Iman"}, "sandbox-state-word-1": "iguana", "sandbox-state-word-2": "incendio", "sandbox-state-word-3": "insecto", "sandbox-state-word-4": "isla", "sandbox-this-is-letter": "mari-this-is-letter-i", "sandbox-state-word-1-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Iguana"}, "target": "word"}, {"id": "voice-3", "type": "audio", "start": 4.828, "duration": 1.27}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-iguana"}, "sandbox-state-word-2-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Incendio"}, "target": "word"}, {"id": "voice-3", "type": "audio", "start": 6.591, "duration": 1.375}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-incendio"}, "sandbox-state-word-3-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Insecto"}, "target": "word"}, {"id": "voice-3", "type": "audio", "start": 8.699, "duration": 1.465}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-insecto"}, "sandbox-state-word-4-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Isla"}, "target": "word"}, {"id": "voice-3", "type": "audio", "start": 10.911, "duration": 1.151}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-isla"}, "sandbox-change-skin-1-action": {"skin": "iguana", "type": "set-skin", "target": "box1", "scene-id": "sandbox", "description": ":box-1-set-skin-iguana"}, "sandbox-change-skin-2-action": {"skin": "fire", "type": "set-skin", "target": "box2", "scene-id": "sandbox", "description": ":box-1-set-skin-incendio"}, "sandbox-change-skin-3-action": {"skin": "insect", "type": "set-skin", "target": "box3", "scene-id": "sandbox", "description": ":box-1-set-skin-insecto"}, "sandbox-change-skin-4-action": {"skin": "island", "type": "set-skin", "target": "box4", "scene-id": "sandbox", "description": ":box-1-set-skin-isla"}, "sandbox-this-is-letter-action": {"data": [{"end": 86.148, "anim": "talk", "start": 83.942}, {"end": 92.025, "anim": "talk", "start": 86.795}, {"end": 100.281, "anim": "talk", "start": 93.228}], "type": "animation-sequence", "audio": "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", "start": "83.778", "track": "1", "offset": "83.778", "target": "mari", "duration": "16.63", "scene-id": "sandbox", "description": ":mari-this-is-letter-i"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 9.515, "track": 1, "offset": 9.515, "target": "mari", "duration": 1, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+15	mano	2	{"skin": "dino", "letter": "m", "word-1-skin": null, "word-2-skin": null, "word-3-skin": null, "word-4-skin": null, "concept-name": "mano", "game-voice-action": {}, "chanting-video-src": "/raw/video/l2a1/letter-m.mp4", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 88.387, "duration": 3.4}, {"data": [{"end": 89.341, "anim": "talk", "start": 88.536}, {"end": 90.146, "anim": "talk", "start": 89.371}, {"end": 91.697, "anim": "talk", "start": 90.385}], "type": "animation-sequence", "track": 1, "offset": 88.387, "target": "senoravaca"}], "type": "parallel", "description": "Mano, mano, m-m-m,!!"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 88.476, "duration": 0.895}, {"data": [{"end": 89.341, "anim": "talk", "start": 88.536}], "type": "animation-sequence", "track": 1, "offset": 88.476, "target": "senoravaca"}], "type": "parallel", "description": "Mano"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 13.814, "track": 1, "offset": 13.814, "target": "mari", "duration": 1.014, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+11	serpiente	2	{"skin": "iguana", "letter": "s", "word-1-skin": null, "word-2-skin": null, "word-3-skin": null, "word-4-skin": null, "concept-name": "serpiente", "game-voice-action": {}, "chanting-video-src": "/raw/video/l2a1/letter-s.mp4", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", "type": "audio", "start": 2.819, "duration": 3.485}, {"data": [{"end": 4.675, "anim": "talk", "start": 2.876}, {"end": 6.22, "anim": "talk", "start": 4.98}], "type": "animation-sequence", "track": 1, "offset": 2.819, "target": "senoravaca"}], "type": "parallel", "description": "Serpiente, Serpiente, s-s-s"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", "type": "audio", "start": 3.878, "duration": 0.871}, {"data": [{"end": 4.697, "anim": "talk", "start": 3.896}], "type": "animation-sequence", "track": 1, "offset": 3.878, "target": "senoravaca"}], "type": "parallel", "description": "Serpiente"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 15.122, "track": 1, "offset": 15.122, "target": "mari", "duration": 1.28, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+8	oso	2	{"skin": "bear", "letter": "o", "word-1-skin": "8", "word-2-skin": "ear", "word-3-skin": "sheep", "word-4-skin": "eyes", "concept-name": "oso", "swings-dialog": "dialog-oso", "home-vaca-word": "word-oso", "home-group-word": "group-word-oso", "seesaw-voice-low": "word-oso-low", "game-voice-action": {"id": "/raw/audio/l1/a8/GameVoice.m4a", "type": "audio", "start": 8.24, "duration": 0.907, "scene-id": "cycling"}, "home-vaca-3-times": "vaca-3-times-oso", "home-vaca-goodbye": "goodbye-oso", "home-vaca-this-is": "this-is-oso", "seesaw-voice-high": "word-oso-high", "chanting-video-src": "/raw/video/l2a1/letter-o.mp4", "home-group-3-times": "group-3-times-oso", "home-vaca-question": "question-oso", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 61.504, "duration": 2.997}, {"data": [{"end": 62.324, "anim": "talk", "start": 61.668}, {"end": 63.055, "anim": "talk", "start": 62.384}, {"end": 64.322, "anim": "talk", "start": 63.249}], "type": "animation-sequence", "track": 1, "offset": 61.504, "target": "senoravaca"}], "type": "parallel", "description": " Oso, Oso, o-o-O"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 41.793, "duration": 0.969}, {"data": [{"end": 42.658, "anim": "talk", "start": 41.897}], "type": "animation-sequence", "track": 1, "offset": 41.793, "target": "senoravaca"}], "type": "parallel", "description": "Oso"}, "sandbox-state-word-1": "ocho", "sandbox-state-word-2": "oreja", "sandbox-state-word-3": "oveja", "sandbox-state-word-4": "ojos", "sandbox-this-is-letter": "mari-this-is-letter-o", "sandbox-state-word-1-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Ocho"}, "target": "word"}, {"id": "voice-2", "type": "audio", "start": 6.496, "duration": 0.864}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-ocho"}, "sandbox-state-word-2-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Oreja"}, "target": "word"}, {"id": "voice-2", "type": "audio", "start": 7.532, "duration": 1.017}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-oreja"}, "sandbox-state-word-3-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Oveja"}, "target": "word"}, {"id": "voice-2", "type": "audio", "start": 8.511, "duration": 1.103}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-oveja"}, "sandbox-state-word-4-action": {"data": [{"id": "show", "type": "state", "params": {"text": "Ojos"}, "target": "word"}, {"id": "voice-2", "type": "audio", "start": 9.873, "duration": 0.835}, {"id": "default", "type": "state", "target": "word"}], "type": "sequence-data", "scene-id": "sandbox", "description": ":sandbox-state-word-ojos"}, "sandbox-change-skin-1-action": {"skin": "8", "type": "set-skin", "target": "box1", "scene-id": "sandbox", "description": ":box-1-set-skin-ocho"}, "sandbox-change-skin-2-action": {"skin": "ear", "type": "set-skin", "target": "box2", "scene-id": "sandbox", "description": ":box-1-set-skin-oreja"}, "sandbox-change-skin-3-action": {"skin": "sheep", "type": "set-skin", "target": "box3", "scene-id": "sandbox", "description": ":box-1-set-skin-oveja"}, "sandbox-change-skin-4-action": {"skin": "eyes", "type": "set-skin", "target": "box4", "scene-id": "sandbox", "description": ":box-1-set-skin-ojos"}, "sandbox-this-is-letter-action": {"data": [{"end": 61.472, "anim": "talk", "start": 53.717}, {"end": 69.746, "anim": "talk", "start": 62.374}], "type": "animation-sequence", "audio": "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", "start": "53.626", "track": "1", "offset": "53.626", "target": "mari", "duration": "16.284", "scene-id": "sandbox", "description": ":mari-this-is-letter-o"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 8.288, "track": 1, "offset": 8.288, "target": "mari", "duration": 0.813, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+12	elefante	2	{"skin": "ear", "letter": "e", "word-1-skin": null, "word-2-skin": null, "word-3-skin": null, "word-4-skin": null, "concept-name": "elefante", "game-voice-action": {}, "chanting-video-src": "/raw/video/l2a1/letter-e.mp4", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 82.304, "duration": 5.219}, {"data": [{"end": 83.496, "anim": "talk", "start": 82.304}, {"end": 86.21, "anim": "talk", "start": 84.182}, {"end": 87.522, "anim": "talk", "start": 86.359}], "type": "animation-sequence", "track": 1, "offset": 82.304, "target": "senoravaca"}], "type": "parallel", "description": "Elefante, elefante, e-e-e!!"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 82.229, "duration": 1.342}, {"data": [{"end": 83.496, "anim": "talk", "start": 82.304}], "type": "animation-sequence", "track": 1, "offset": 82.229, "target": "senoravaca"}], "type": "parallel", "description": "Elefante"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 12.37, "track": 1, "offset": 12.37, "target": "mari", "duration": 1.28, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+13	leon	2	{"skin": "sheep", "letter": "l", "word-1-skin": null, "word-2-skin": null, "word-3-skin": null, "word-4-skin": null, "concept-name": "leon", "game-voice-action": {}, "chanting-video-src": "/raw/video/l2a1/letter-l.mp4", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", "type": "audio", "start": 11.221, "duration": 3.414}, {"data": [{"end": 11.865, "anim": "talk", "start": 11.306}, {"end": 12.786, "anim": "talk", "start": 12.113}, {"end": 14.571, "anim": "talk", "start": 13.396}], "type": "animation-sequence", "track": 1, "offset": 11.221, "target": "senoravaca"}], "type": "parallel", "description": "León, León, l-l-l"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", "type": "audio", "start": 11.185, "duration": 0.772}, {"data": [{"end": 11.851, "anim": "talk", "start": 11.313}], "type": "animation-sequence", "track": 1, "offset": 11.185, "target": "senoravaca"}], "type": "parallel", "description": "León"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 18.011, "track": 1, "offset": 18.011, "target": "mari", "duration": 1.027, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+16	uvas	2	{"skin": "tree", "letter": "u", "word-1-skin": null, "word-2-skin": null, "word-3-skin": null, "word-4-skin": null, "concept-name": "uvas", "game-voice-action": {}, "chanting-video-src": "/raw/video/l2a1/letter-u.mp4", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 75.833, "duration": 3.847}, {"data": [{"end": 76.906, "anim": "talk", "start": 75.922}, {"end": 78.039, "anim": "talk", "start": 77.145}, {"end": 79.56, "anim": "talk", "start": 78.308}], "type": "animation-sequence", "track": 1, "offset": 75.833, "target": "senoravaca"}], "type": "parallel", "description": "Uvas, Uvas, u-u-u!!"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a", "type": "audio", "start": 75.803, "duration": 1.118}, {"data": [{"end": 76.906, "anim": "talk", "start": 75.922}], "type": "animation-sequence", "track": 1, "offset": 75.803, "target": "senoravaca"}], "type": "parallel", "description": "Uvas"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 11.027, "track": 1, "offset": 11.027, "target": "mari", "duration": 0.96, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+14	pelota	2	{"skin": "8", "letter": "p", "word-1-skin": null, "word-2-skin": null, "word-3-skin": null, "word-4-skin": null, "concept-name": "pelota", "game-voice-action": {}, "chanting-video-src": "/raw/video/l2a1/letter-p.mp4", "vaca-chanting-song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", "type": "audio", "start": 7.077, "duration": 3.124}, {"data": [{"end": 7.913, "anim": "talk", "start": 7.14}, {"end": 8.834, "anim": "talk", "start": 8.047}, {"end": 10.087, "anim": "talk", "start": 9.124}], "type": "animation-sequence", "track": 1, "offset": 7.077, "target": "senoravaca"}], "type": "parallel", "description": "Pelota, pelota, p-p-p"}, "vaca-chanting-word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_3.m4a", "type": "audio", "start": 7.077, "duration": 0.9}, {"data": [{"end": 7.913, "anim": "talk", "start": 7.14}], "type": "animation-sequence", "track": 1, "offset": 7.077, "target": "senoravaca"}], "type": "parallel", "description": "Pelota"}, "hide-n-seek-current-concept-audio": {"data": [{"end": 2.67, "anim": "talk", "start": 0.775}], "type": "animation-sequence", "audio": "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", "start": 16.756, "track": 1, "offset": 16.756, "target": "mari", "duration": 0.894, "scene-id": "hide-n-seek", "description": "Hide and seek question"}}
+17	tomate	2	{"letter": "t", "chanting_video_src": "/raw/video/l2a1/letter-t.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 4.681, "duration": 3.098}, {"data": [{"end": 5.518, "anim": "talk", "start": 4.794}, {"end": 6.332, "anim": "talk", "start": 5.608}, {"end": 7.689, "anim": "talk", "start": 6.671}], "type": "animation-sequence", "track": 1, "offset": 4.681, "target": "senoravaca"}], "type": "parallel", "description": "Tomate, tomate, t-t-t!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 5.529, "duration": 0.916}, {"data": [{"end": 6.343, "anim": "talk", "start": 5.62}], "type": "animation-sequence", "track": 1, "offset": 5.529, "target": "senoravaca"}], "type": "parallel", "description": "Tomate"}}
+18	diamante	2	{"letter": "d", "chanting_video_src": "/raw/video/l2a1/letter-d.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 8.56, "duration": 3.426}, {"data": [{"end": 9.555, "anim": "talk", "start": 8.616}, {"end": 10.335, "anim": "talk", "start": 9.588}, {"end": 11.872, "anim": "talk", "start": 10.719}], "type": "animation-sequence", "track": 1, "offset": 8.56, "target": "senoravaca"}], "type": "parallel", "description": "Diamante, diamante, d-d-d!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 9.532, "duration": 0.882}, {"data": [{"end": 10.335, "anim": "talk", "start": 9.555}], "type": "animation-sequence", "track": 1, "offset": 9.532, "target": "senoravaca"}], "type": "parallel", "description": "Diamante"}}
+19	rana	2	{"letter": "r", "chanting_video_src": "/raw/video/l2a1/letter-r.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 12.585, "duration": 3.076}, {"data": [{"end": 13.512, "anim": "talk", "start": 12.664}, {"end": 14.247, "anim": "talk", "start": 13.636}, {"end": 15.593, "anim": "talk", "start": 14.484}], "type": "animation-sequence", "track": 1, "offset": 12.585, "target": "senoravaca"}], "type": "parallel", "description": "Rana, rana, r-r-r!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 13.535, "duration": 0.791}, {"data": [{"end": 14.236, "anim": "talk", "start": 13.614}], "type": "animation-sequence", "track": 1, "offset": 13.535, "target": "senoravaca"}], "type": "parallel", "description": "Rana"}}
+20	casa	2	{"letter": "c", "chanting_video_src": "/raw/video/l2a1/letter-c.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 17.277, "duration": 3.37}, {"data": [{"end": 18.035, "anim": "talk", "start": 17.356}, {"end": 18.951, "anim": "talk", "start": 18.264}, {"end": 20.522, "anim": "talk", "start": 19.46}], "type": "animation-sequence", "track": 1, "offset": 17.277, "target": "senoravaca"}], "type": "parallel", "description": "Casa, casa, c-c-c!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 18.204, "duration": 0.859}, {"data": [{"end": 18.951, "anim": "talk", "start": 18.284}], "type": "animation-sequence", "track": 1, "offset": 18.204, "target": "senoravaca"}], "type": "parallel", "description": "Casa"}}
+21	niño	2	{"letter": "n", "chanting_video_src": "/raw/video/l2a1/letter-n.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 25.758, "duration": 3.381}, {"data": [{"end": 26.662, "anim": "talk", "start": 25.871}, {"end": 27.499, "anim": "talk", "start": 26.764}, {"end": 29.059, "anim": "talk", "start": 27.94}], "type": "animation-sequence", "track": 1, "offset": 25.758, "target": "senoravaca"}], "type": "parallel", "description": "Niño, niño, n-n-n!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 26.764, "duration": 0.859}, {"data": [{"end": 27.499, "anim": "talk", "start": 26.764}], "type": "animation-sequence", "track": 1, "offset": 26.764, "target": "senoravaca"}], "type": "parallel", "description": "Niño"}}
+22	flor	2	{"letter": "f", "chanting_video_src": "/raw/video/l2a1/letter-f.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 30.02, "duration": 3.053}, {"data": [{"end": 30.427, "anim": "talk", "start": 30.133}, {"end": 31.411, "anim": "talk", "start": 31.038}, {"end": 32.949, "anim": "talk", "start": 31.92}], "type": "animation-sequence", "track": 1, "offset": 30.02, "target": "senoravaca"}], "type": "parallel", "description": "Flor, flor, f-f-f!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 30.936, "duration": 0.577}, {"data": [{"end": 31.411, "anim": "talk", "start": 31.038}], "type": "animation-sequence", "track": 1, "offset": 30.936, "target": "senoravaca"}], "type": "parallel", "description": "Flor"}}
+23	bebe	2	{"letter": "b", "chanting_video_src": "/raw/video/l2a1/letter-b.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 33.548, "duration": 3.37}, {"data": [{"end": 34.125, "anim": "talk", "start": 33.65}, {"end": 35.109, "anim": "talk", "start": 34.6}, {"end": 36.805, "anim": "talk", "start": 35.685}], "type": "animation-sequence", "track": 1, "offset": 33.548, "target": "senoravaca"}], "type": "parallel", "description": "Bebe, bebe, b-b-b!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 33.593, "duration": 0.633}, {"data": [{"end": 34.125, "anim": "talk", "start": 33.65}], "type": "animation-sequence", "track": 1, "offset": 33.593, "target": "senoravaca"}], "type": "parallel", "description": "Bebe"}}
+24	gato	2	{"letter": "g", "chanting_video_src": "/raw/video/l2a1/letter-g.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 41.712, "duration": 3.109}, {"data": [{"end": 42.707, "anim": "talk", "start": 41.825}, {"end": 43.363, "anim": "talk", "start": 42.73}, {"end": 44.731, "anim": "talk", "start": 43.612}], "type": "animation-sequence", "track": 1, "offset": 37.37, "target": "senoravaca"}], "type": "parallel", "description": "Gato, gato, g-g-g!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 42.707, "duration": 0.712}, {"data": [{"end": 43.363, "anim": "talk", "start": 42.73}], "type": "animation-sequence", "track": 1, "offset": 42.707, "target": "senoravaca"}], "type": "parallel", "description": "Gato"}}
+25	jardín	2	{"letter": "j", "chanting_video_src": "/raw/video/l2a1/letter-j.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 37.37, "duration": 3.268}, {"data": [{"end": 38.037, "anim": "talk", "start": 37.46}, {"end": 39.123, "anim": "talk", "start": 38.422}, {"end": 40.581, "anim": "talk", "start": 39.53}], "type": "animation-sequence", "track": 1, "offset": 37.37, "target": "senoravaca"}], "type": "parallel", "description": "Jardín, jardín, j-j-j!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a", "type": "audio", "start": 37.37, "duration": 0.758}, {"data": [{"end": 38.037, "anim": "talk", "start": 37.46}], "type": "animation-sequence", "track": 1, "offset": 37.37, "target": "senoravaca"}], "type": "parallel", "description": "Jardín"}}
+26	chocolate	2	{"letter": "ch", "chanting_video_src": "/raw/video/l2a1/letter-ch.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 5.429, "duration": 4.072}, {"data": [{"end": 6.431, "anim": "talk", "start": 5.502}, {"end": 7.611, "anim": "talk", "start": 6.651}, {"end": 9.417, "anim": "talk", "start": 8.175}], "type": "animation-sequence", "track": 1, "offset": 5.429, "target": "senoravaca"}], "type": "parallel", "description": "Chocolate, chocolate, ch-ch-ch!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 6.588, "duration": 1.128}, {"data": [{"end": 7.611, "anim": "talk", "start": 6.651}], "type": "animation-sequence", "track": 1, "offset": 6.588, "target": "senoravaca"}], "type": "parallel", "description": "Chocolate"}}
+27	ñandu	2	{"letter": "ñ", "chanting_video_src": "/raw/video/l2a1/letter-ñ.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 10.399, "duration": 4.281}, {"data": [{"end": 11.286, "anim": "talk", "start": 10.524}, {"end": 12.675, "anim": "talk", "start": 11.819}, {"end": 14.586, "anim": "talk", "start": 13.354}], "type": "animation-sequence", "track": 1, "offset": 10.399, "target": "senoravaca"}], "type": "parallel", "description": "Ñandu, ñandu, ñ-ñ-ñ!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 11.725, "duration": 1.075}, {"data": [{"end": 12.675, "anim": "talk", "start": 11.819}], "type": "animation-sequence", "track": 1, "offset": 11.725, "target": "senoravaca"}], "type": "parallel", "description": "Ñandu"}}
+28	violin	2	{"letter": "v", "chanting_video_src": "/raw/video/l2a1/letter-v.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 15.703, "duration": 3.957}, {"data": [{"end": 16.496, "anim": "talk", "start": 15.765}, {"end": 17.603, "anim": "talk", "start": 16.851}, {"end": 19.566, "anim": "talk", "start": 18.313}], "type": "animation-sequence", "track": 1, "offset": 15.703, "target": "senoravaca"}], "type": "parallel", "description": "Violin, violin, v-v-v!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 16.736, "duration": 0.981}, {"data": [{"end": 17.603, "anim": "talk", "start": 16.851}], "type": "animation-sequence", "track": 1, "offset": 16.736, "target": "senoravaca"}], "type": "parallel", "description": "Violin"}}
+29	llave	2	{"letter": "ll", "chanting_video_src": "/raw/video/l2a1/letter-ll.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 20.422, "duration": 3.56}, {"data": [{"end": 21.602, "anim": "talk", "start": 20.526}, {"end": 22.343, "anim": "talk", "start": 21.623}, {"end": 23.867, "anim": "talk", "start": 22.74}], "type": "animation-sequence", "track": 1, "offset": 20.422, "target": "senoravaca"}], "type": "parallel", "description": "Llave, llave, ll-ll-ll!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 21.602, "duration": 0.835}, {"data": [{"end": 22.343, "anim": "talk", "start": 21.623}], "type": "animation-sequence", "track": 1, "offset": 21.602, "target": "senoravaca"}], "type": "parallel", "description": "Llave"}}
+30	hoja	2	{"letter": "h", "chanting_video_src": "/raw/video/l2a1/letter-h.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 24.911, "duration": 1.827}, {"data": [{"end": 25.747, "anim": "talk", "start": 24.984}, {"end": 26.634, "anim": "talk", "start": 25.935}], "type": "animation-sequence", "track": 1, "offset": 24.911, "target": "senoravaca"}], "type": "parallel", "description": "Hoja, hoja!, h-h-h!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 25.872, "duration": 0.856}, {"data": [{"end": 26.634, "anim": "talk", "start": 25.935}], "type": "animation-sequence", "track": 1, "offset": 25.872, "target": "senoravaca"}], "type": "parallel", "description": "Hoja"}}
+31	queso	2	{"letter": "q", "chanting_video_src": "/raw/video/l2a1/letter-q.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 29.202, "duration": 3.425}, {"data": [{"end": 30.173, "anim": "talk", "start": 29.296}, {"end": 30.936, "anim": "talk", "start": 30.299}, {"end": 32.46, "anim": "talk", "start": 31.332}], "type": "animation-sequence", "track": 1, "offset": 29.202, "target": "senoravaca"}], "type": "parallel", "description": "Queso, queso, qu-qu-qu!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 30.215, "duration": 0.814}, {"data": [{"end": 30.936, "anim": "talk", "start": 30.299}], "type": "animation-sequence", "track": 1, "offset": 30.215, "target": "senoravaca"}], "type": "parallel", "description": "Queso"}}
+32	zapato	2	{"letter": "z", "chanting_video_src": "/raw/video/l2a1/letter-z.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 33.483, "duration": 3.842}, {"data": [{"end": 34.558, "anim": "talk", "start": 33.577}, {"end": 35.592, "anim": "talk", "start": 34.569}, {"end": 37.221, "anim": "talk", "start": 35.989}], "type": "animation-sequence", "track": 1, "offset": 33.483, "target": "senoravaca"}], "type": "parallel", "description": "Zapato, zapato, z-z-z!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 34.569, "duration": 1.117}, {"data": [{"end": 35.592, "anim": "talk", "start": 34.569}], "type": "animation-sequence", "track": 1, "offset": 34.569, "target": "senoravaca"}], "type": "parallel", "description": "Zapato"}}
+33	kimono	2	{"letter": "k", "chanting_video_src": "/raw/video/l2a1/letter-k.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 38.683, "duration": 3.686}, {"data": [{"end": 39.758, "anim": "talk", "start": 38.776}, {"end": 40.739, "anim": "talk", "start": 39.821}, {"end": 42.18, "anim": "talk", "start": 41.063}], "type": "animation-sequence", "track": 1, "offset": 38.683, "target": "senoravaca"}], "type": "parallel", "description": "Kimono, kimono, k-k-k!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_5.m4a", "type": "audio", "start": 39.747, "duration": 1.086}, {"data": [{"end": 40.739, "anim": "talk", "start": 39.821}], "type": "animation-sequence", "track": 1, "offset": 39.747, "target": "senoravaca"}], "type": "parallel", "description": "Kimono"}}
+34	yoyo	2	{"letter": "y", "chanting_video_src": "/raw/video/l2a1/letter-y.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", "type": "audio", "start": 5.757, "duration": 3.386}, {"data": [{"end": 6.861, "anim": "talk", "start": 5.888}, {"end": 7.496, "anim": "talk", "start": 6.863}, {"end": 8.997, "anim": "talk", "start": 7.864}], "type": "animation-sequence", "track": 1, "offset": 5.757, "target": "senoravaca"}], "type": "parallel", "description": "Yoyo, yoyo, y-y-y!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", "type": "audio", "start": 6.863, "duration": 0.738}, {"data": [{"end": 7.496, "anim": "talk", "start": 6.863}], "type": "animation-sequence", "track": 1, "offset": 6.863, "target": "senoravaca"}], "type": "parallel", "description": "Yoyo"}}
+35	xilofono	2	{"letter": "x", "chanting_video_src": "/raw/video/l2a1/letter-x.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", "type": "audio", "start": 10.025, "duration": 3.662}, {"data": [{"end": 11.092, "anim": "talk", "start": 10.13}, {"end": 12.067, "anim": "talk", "start": 11.158}, {"end": 13.582, "anim": "talk", "start": 12.422}], "type": "animation-sequence", "track": 1, "offset": 10.025, "target": "senoravaca"}], "type": "parallel", "description": "Xilofono, xilofono, x-x-x,!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", "type": "audio", "start": 11.079, "duration": 1.12}, {"data": [{"end": 12.067, "anim": "talk", "start": 11.158}], "type": "animation-sequence", "track": 1, "offset": 11.079, "target": "senoravaca"}], "type": "parallel", "description": "Xilofono"}}
+36	web	2	{"letter": "w", "chanting_video_src": "/raw/video/l2a1/letter-w.mp4", "vaca_chanting_song": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", "type": "audio", "start": 1.541, "duration": 3.609}, {"data": [{"end": 2.503, "anim": "talk", "start": 1.713}, {"end": 3.254, "anim": "talk", "start": 2.832}, {"end": 4.993, "anim": "talk", "start": 3.82}], "type": "animation-sequence", "track": 1, "offset": 1.541, "target": "senoravaca"}], "type": "parallel", "description": "Sitio Web, Web w-w-w!"}, "vaca_chanting_word": {"data": [{"id": "/raw/audio/l2/a1/L2_A1_Vaca_6.m4a", "type": "audio", "start": 2.727, "duration": 0.619}, {"data": [{"end": 3.254, "anim": "talk", "start": 2.832}], "type": "animation-sequence", "track": 1, "offset": 2.727, "target": "senoravaca"}], "type": "parallel", "description": "Web"}}
 \.
+
+
+--
+-- Name: dataset_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.dataset_items_id_seq', 36, true);
 
 
 --
@@ -728,8 +898,16 @@ COPY public.dataset_items (id, name, dataset_id, data) FROM stdin;
 
 COPY public.datasets (id, course_id, name, scheme) FROM stdin;
 1	1	item	{"fields": [{"name": "src", "type": "string"}, {"name": "width", "type": "number"}]}
-2	3	concepts	{"fields": [{"name": "home-vaca-this-is", "type": "string"}, {"name": "home-vaca-question", "type": "string"}, {"name": "home-vaca-word", "type": "string"}, {"name": "home-group-word", "type": "string"}, {"name": "home-vaca-3-times", "type": "string"}, {"name": "home-group-3-times", "type": "string"}, {"name": "home-vaca-goodbye", "type": "string"}, {"name": "skin", "type": "string"}, {"name": "seesaw-voice-low", "type": "string"}, {"name": "seesaw-voice-high", "type": "string"}, {"name": "swings-dialog", "type": "string"}, {"name": "sandbox-this-is-letter", "type": "string"}, {"name": "sandbox-state-word-1", "type": "string"}, {"name": "sandbox-state-word-2", "type": "string"}, {"name": "sandbox-state-word-3", "type": "string"}, {"name": "sandbox-state-word-4", "type": "string"}, {"name": "concept-name", "type": "string"}]}
+3	4	concepts	{}
+2	3	concepts	{"fields": [{"name": "home-vaca-this-is", "type": "string"}, {"name": "home-vaca-question", "type": "string"}, {"name": "home-vaca-word", "type": "string"}, {"name": "home-group-word", "type": "string"}, {"name": "home-vaca-3-times", "type": "string"}, {"name": "home-group-3-times", "type": "string"}, {"name": "home-vaca-goodbye", "type": "string"}, {"name": "skin", "type": "string"}, {"name": "seesaw-voice-low", "type": "string"}, {"name": "seesaw-voice-high", "type": "string"}, {"name": "swings-dialog", "type": "string"}, {"name": "sandbox-this-is-letter", "type": "string"}, {"name": "sandbox-state-word-1", "type": "string"}, {"name": "sandbox-state-word-2", "type": "string"}, {"name": "sandbox-state-word-3", "type": "string"}, {"name": "sandbox-state-word-4", "type": "string"}, {"name": "concept-name", "type": "string"}, {"name": "sandbox-this-is-letter-action", "type": "action"}, {"name": "sandbox-state-word-1-action", "type": "action"}, {"name": "sandbox-state-word-2-action", "type": "action"}, {"name": "sandbox-state-word-3-action", "type": "action"}, {"name": "sandbox-state-word-4-action", "type": "action"}, {"name": "sandbox-change-skin-1-action", "type": "action"}, {"name": "sandbox-change-skin-2-action", "type": "action"}, {"name": "sandbox-change-skin-3-action", "type": "action"}, {"name": "sandbox-change-skin-4-action", "type": "action"}, {"name": "hide-n-seek-current-concept-audio", "type": "action"}, {"name": "word-1-skin", "type": "string"}, {"name": "word-2-skin", "type": "string"}, {"name": "word-3-skin", "type": "string"}, {"name": "word-4-skin", "type": "string"}, {"name": "game-voice-action", "type": "action"}, {"name": "letter", "type": "string"}, {"name": "vaca-chanting-word", "type": "action"}, {"name": "vaca-chanting-song", "type": "action"}, {"name": "chanting-video-src", "type": "string"}]}
 \.
+
+
+--
+-- Name: datasets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.datasets_id_seq', 3, true);
 
 
 --
@@ -739,7 +917,15 @@ COPY public.datasets (id, course_id, name, scheme) FROM stdin;
 COPY public.lesson_sets (id, name, dataset_id, data) FROM stdin;
 1	ls1	1	{"items": [{"id": 3}]}
 3	ls1	2	{"items": [{"id": 7}, {"id": 8}, {"id": 9}]}
+5	assessment1	2	{"items": [{"id": 8}, {"id": 9}, {"id": 7}, {"id": 12}, {"id": 13}, {"id": 11}, {"id": 14}, {"id": 15}, {"id": 16}]}
 \.
+
+
+--
+-- Name: lesson_sets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.lesson_sets_id_seq', 5, true);
 
 
 --
@@ -768,6 +954,13 @@ COPY public.scene_versions (id, scene_id, data, owner_id, created_at) FROM stdin
 
 
 --
+-- Name: scene_versions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.scene_versions_id_seq', 17, true);
+
+
+--
 -- Data for Name: scenes; Type: TABLE DATA; Schema: public; Owner: webchange
 --
 
@@ -784,6 +977,13 @@ COPY public.scenes (id, course_id, name) FROM stdin;
 
 
 --
+-- Name: scenes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.scenes_id_seq', 8, true);
+
+
+--
 -- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: webchange
 --
 
@@ -793,16 +993,68 @@ COPY public.schema_migrations (id, applied, description) FROM stdin;
 20190130102810	2019-02-05 16:08:07.046	datasets
 20190207110755	2019-02-11 13:58:58.586	add-classes
 20190213075414	2019-03-18 17:48:11.042	course-progress
+20190523105702	2020-04-15 12:41:17.896	update-dataset-items
+20190529163901	2020-04-15 12:41:17.926	add-hide-and-seek-scene-data
+20190604093243	2020-04-15 12:42:08.868	student-access
+20190624161640	2020-04-15 12:42:08.884	rename-actions
+20190701104523	2020-04-15 12:42:08.905	activity-stats
+20190716152300	2020-04-15 12:42:08.932	update-concepts
+20190718173000	2020-04-15 12:42:08.946	add-video-to-concept
+20190719130700	2020-04-15 12:42:08.964	add-concepts
+20190730131258	2020-04-15 12:42:08.972	lesson-set-sequence
+20190827163639	2020-04-15 12:42:08.99	english-course
+20190926145300	2020-04-15 12:42:09.04	add-default-user
+20200316183744	2020-04-15 12:42:42.685	delete-progress
+20200324160721	2020-04-15 12:42:42.705	course-info
 \.
+
+
+--
+-- Data for Name: schools; Type: TABLE DATA; Schema: public; Owner: webchange
+--
+
+COPY public.schools (id, name) FROM stdin;
+1	default
+\.
+
+
+--
+-- Name: schools_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.schools_id_seq', 2, false);
 
 
 --
 -- Data for Name: students; Type: TABLE DATA; Schema: public; Owner: webchange
 --
 
-COPY public.students (id, user_id, class_id) FROM stdin;
-1	2	1
+COPY public.students (id, user_id, class_id, school_id, access_code, gender, date_of_birth) FROM stdin;
+1	2	1	1	\N	\N	\N
 \.
+
+
+--
+-- Name: students_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.students_id_seq', 1, true);
+
+
+--
+-- Data for Name: teachers; Type: TABLE DATA; Schema: public; Owner: webchange
+--
+
+COPY public.teachers (id, user_id, school_id) FROM stdin;
+1	1	1
+\.
+
+
+--
+-- Name: teachers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
+--
+
+SELECT pg_catalog.setval('public.teachers_id_seq', 1, true);
 
 
 --
@@ -813,97 +1065,6 @@ COPY public.users (id, first_name, last_name, email, password, active, created_a
 1	demo	demo	demo@example.com	bcrypt+sha512$4aa3337f1bafdf16c6997232e6ac6e82$12$e20cdea3b67accdcd17e742c3d36ae9aac0cb2b8760dc82b	t	2019-01-16 18:26:02.229+04	2019-01-16 18:26:02.229+04
 2	test	test	test123@example.com	bcrypt+sha512$57bb4c736e9fc398929d9cae8d434571$12$41923abe1f80e4231e57657d64c349eecb4ec3803fb4608d	t	2019-02-11 18:31:01.92+04	2019-02-11 18:31:01.92+04
 \.
-
-
---
--- Name: activity_stats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.activity_stats_id_seq', 1, false);
-
-
---
--- Name: classes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.classes_id_seq', 1, true);
-
-
---
--- Name: course_actions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.course_actions_id_seq', 1, false);
-
-
---
--- Name: course_progresses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.course_progresses_id_seq', 1, true);
-
-
---
--- Name: course_stats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.course_stats_id_seq', 1, false);
-
-
---
--- Name: course_versions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.course_versions_id_seq', 9, true);
-
-
---
--- Name: courses_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.courses_id_seq', 3, true);
-
-
---
--- Name: dataset_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.dataset_items_id_seq', 9, true);
-
-
---
--- Name: datasets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.datasets_id_seq', 2, true);
-
-
---
--- Name: lesson_sets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.lesson_sets_id_seq', 3, true);
-
-
---
--- Name: scene_versions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.scene_versions_id_seq', 17, true);
-
-
---
--- Name: scenes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.scenes_id_seq', 8, true);
-
-
---
--- Name: students_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webchange
---
-
-SELECT pg_catalog.setval('public.students_id_seq', 1, true);
 
 
 --
@@ -930,10 +1091,10 @@ ALTER TABLE ONLY public.classes
 
 
 --
--- Name: course_actions course_actions_pkey; Type: CONSTRAINT; Schema: public; Owner: webchange
+-- Name: course_events course_actions_pkey; Type: CONSTRAINT; Schema: public; Owner: webchange
 --
 
-ALTER TABLE ONLY public.course_actions
+ALTER TABLE ONLY public.course_events
     ADD CONSTRAINT course_actions_pkey PRIMARY KEY (id);
 
 
@@ -1018,11 +1179,35 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: students school_access_code_key; Type: CONSTRAINT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.students
+    ADD CONSTRAINT school_access_code_key UNIQUE (school_id, access_code);
+
+
+--
+-- Name: schools schools_pkey; Type: CONSTRAINT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.schools
+    ADD CONSTRAINT schools_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: students students_pkey; Type: CONSTRAINT; Schema: public; Owner: webchange
 --
 
 ALTER TABLE ONLY public.students
     ADD CONSTRAINT students_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: teachers teachers_pkey; Type: CONSTRAINT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.teachers
+    ADD CONSTRAINT teachers_pkey PRIMARY KEY (id);
 
 
 --
@@ -1052,7 +1237,7 @@ CREATE UNIQUE INDEX dataset_items_name ON public.dataset_items USING btree (data
 -- Name: datasets_name; Type: INDEX; Schema: public; Owner: webchange
 --
 
-CREATE UNIQUE INDEX datasets_name ON public.datasets USING btree (name);
+CREATE UNIQUE INDEX datasets_name ON public.datasets USING btree (course_id, name);
 
 
 --
@@ -1072,18 +1257,26 @@ ALTER TABLE ONLY public.activity_stats
 
 
 --
--- Name: course_actions course_actions_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
+-- Name: classes classes_school_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
 --
 
-ALTER TABLE ONLY public.course_actions
+ALTER TABLE ONLY public.classes
+    ADD CONSTRAINT classes_school_id_fkey FOREIGN KEY (school_id) REFERENCES public.schools(id);
+
+
+--
+-- Name: course_events course_actions_course_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.course_events
     ADD CONSTRAINT course_actions_course_id_fkey FOREIGN KEY (course_id) REFERENCES public.courses(id);
 
 
 --
--- Name: course_actions course_actions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
+-- Name: course_events course_actions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
 --
 
-ALTER TABLE ONLY public.course_actions
+ALTER TABLE ONLY public.course_events
     ADD CONSTRAINT course_actions_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
@@ -1184,11 +1377,35 @@ ALTER TABLE ONLY public.students
 
 
 --
+-- Name: students students_school_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.students
+    ADD CONSTRAINT students_school_id_fkey FOREIGN KEY (school_id) REFERENCES public.schools(id);
+
+
+--
 -- Name: students students_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
 --
 
 ALTER TABLE ONLY public.students
     ADD CONSTRAINT students_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: teachers teachers_school_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.teachers
+    ADD CONSTRAINT teachers_school_id_fkey FOREIGN KEY (school_id) REFERENCES public.schools(id);
+
+
+--
+-- Name: teachers teachers_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webchange
+--
+
+ALTER TABLE ONLY public.teachers
+    ADD CONSTRAINT teachers_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --

@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [webchange.db.core :refer [*db*] :as db]
             [webchange.auth.core :as auth]
+            [webchange.assets.core :as assets]
             [webchange.handler :as handler]
             [webchange.course.handler :as course-handler]
             [config.core :refer [env]]
@@ -17,7 +18,8 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]
             [clj-http.client :as c]
             [clojure.data.json :as json]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log])
+  (:import (org.eclipse.jetty.server HttpInputOverHTTP)))
 
 (def default-school-id 1)
 
@@ -102,8 +104,12 @@
            :version-id version-id)
           (transform-keys ->kebab-case-keyword)))))
 
-(defn scene-created []
-  (let [{course-id :id course-name :name course-slug :slug} (course-created)
+(defn scene-created
+  ([]
+   (let [course (course-created)]
+     (scene-created course)))
+  ([course]
+  (let [{course-id :id course-name :name course-slug :slug} course
         scene-name "test-scene"
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-name})
         data {:test "test" :test-dash "test-dash-value" :test3 "test-3-value"}
@@ -113,7 +119,8 @@
      :course-slug course-slug
      :name scene-name
      :data data
-     :version-id version-id}))
+     :course-id course-id
+     :version-id version-id})))
 
 (defn dataset-created
   ([]
@@ -150,6 +157,7 @@
                    (merge defaults)
                    (transform-keys ->snake_case_keyword))
          [{id :id}] (db/create-lesson-set! data)]
+     (assoc data :dataset-id (:dataset-id options))
      (->> (assoc data :id id)
           (transform-keys ->kebab-case-keyword)))))
 
@@ -573,11 +581,33 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn asset-hash-created [options]
+  (let [params (merge {:path_hash (assets/md5 "test/clj/webchange/resources/raw/background.png")
+                       :path "test/clj/webchange/resources/raw/background.png"
+                       :file_hash (assets/crc32 "test content")
+                       } options)]
+    (db/create-asset-hash!  params)
+    {:path-hash (:path_hash params)
+     :path (:path params)
+     :file-hash (:file_hash params)}
+  ))
+
 (defn is-created-asset-hash?
   [hash]
   (let [id (db/get-asset-hash {:path_hash hash})]
     (not (nil? id))
     ))
+
+(defn create-test-file! []
+  (let [content "Hello"
+        filename "/test.jpg"
+        public-dir (:public-dir env)
+        file (str public-dir filename)
+        ]
+    (spit file content)
+    file
+    )
+  )
 
 (defn extract-filename
   [path]
@@ -620,3 +650,88 @@
                                             ))]
       (is (= (:status response) 200))
       response))
+
+(defn get-difference
+  [data]
+  (let [url "/api/school/asset/difference/"
+        request (-> (mock/request :post url)
+                    (mock/header :content-type "application/json")
+                    (mock/header :body-encoding "UTF-8")
+                    (mock/header :accept "application/json")
+                    (assoc :body (json/write-str data))
+                    teacher-logged-in)
+        response (handler/dev-handler request)
+        ]
+    (json/read-str (slurp (:body response)) :key-fn keyword)
+    ))
+
+(defn get-school-dump
+  [id]
+  (let [url  (str "/api/school/dump-full/" id)
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (-> (handler/dev-handler request)
+        :body
+        (slurp)
+        (json/read-str :key-fn keyword)
+        )
+    ))
+
+(defn course-stat-created [course]
+  (let [user (student-created)
+        [{course-stat-id :id}] (db/create-course-stat! {:user_id (:user-id user)
+                                 :class_id (:class-id user)
+                                 :course_id (:id course)
+                                 :data {}
+                                 })]
+    {:id course-stat-id
+     :class-id (:class-id user)
+     :user-id (:user-id user)
+     :student-id (:id user)
+     :course-id (:id course)
+     }))
+
+(defn course-progresses-created [options]
+  (let [[{course-progress-id :id}] (db/create-progress! {:user_id (:user-id options)
+                                                :course_id (:course-id options)
+                                                :data {}
+                                                })]
+    {:id course-progress-id
+     :user-id (:user-id options)
+     :course-id (:course-id options)
+     }))
+
+(defn course-events-created [options]
+  (let [course (course-created)
+        [{course-events-id :id}] (db/create-event! {:guid (java.util.UUID/randomUUID)
+                                                    :user_id (:user-id options)
+                                                    :course_id (:id course)
+                                                    :type "test"
+                                                    :created_at (jt/local-date-time)
+                                                    :data {}
+                                                })]
+    {:id course-events-id
+     :user-id (:user-id options)
+     :course-id (:id course)
+     }))
+
+(defn datasets-created []
+  (let [course (course-created)
+        [{datasets-id :id}] (db/create-dataset! {:course_id (:id course)
+                                                :name "test"
+                                                :scheme {}
+                                                })]
+    {:id datasets-id
+     :course-id (:id course)
+     }))
+
+(defn activity-stat-created [user]
+  (let [activity_id "Test"
+        course (course-created)
+        [{id :id}] (db/create-activity-stat! {
+                                             :user_id (:id user)
+                                             :course_id (:id course)
+                                              :activity_id activity_id
+                                              :data {:hello "world"}
+                                             })
+        ] {:id id :course_id (:id course) :user_id (:id user) :activity_id activity_id}))

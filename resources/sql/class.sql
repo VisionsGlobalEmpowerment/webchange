@@ -58,12 +58,17 @@ WHERE school_id = :school_id
 -- :name get-class :? :1
 -- :doc retrieve class record
 SELECT * from classes
-WHERE id = :id
+WHERE id = :id;
 
 -- :name get-students-by-class :? :*
 -- :doc retrieve students given class id
 SELECT * from students
 WHERE class_id = :class_id
+
+-- :name get-students-by-school :? :*
+-- :doc retrieve students given class id
+SELECT * from students
+WHERE school_id = :school_id
 
 -- :name get-students-unassigned :? :*
 -- :doc retrieve students without a class
@@ -95,6 +100,11 @@ VALUES (:user_id, :school_id) RETURNING id
 -- :doc retrieve teacher by user id
 SELECT * from teachers
 WHERE user_id = :user_id
+
+-- :name get-teacher-by-school :? :*
+-- :doc retrieve teacher by user id
+SELECT * from teachers
+WHERE school_id = :school_id
 
 -- :name get-first-school :? :1
 -- :doc retrieve first school record

@@ -118,7 +118,14 @@
 (defn save-events! [owner-id course-id events]
   (doseq [{created-at-string :created-at type :type :as data} events]
     (let [created-at (jt/offset-date-time created-at-string)]
-      (db/create-event! {:user_id owner-id :course_id course-id :created_at created-at :type type :data data})
+      (db/create-event! {
+                         :user_id owner-id
+                         :course_id course-id
+                         :created_at created-at
+                         :type type
+                         :guid (java.util.UUID/fromString (:id data))
+                         :data data
+                         })
       (events/dispatch (-> data
                            (assoc :user-id owner-id)
                            (assoc :course-id course-id))))))

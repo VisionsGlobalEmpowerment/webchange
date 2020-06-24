@@ -8,8 +8,7 @@ TRUNCATE TABLE asset_hashes;
 
 -- :name get-asset-hash :? :1
 -- :doc retrieve class record
-SELECT * from asset_hashes
-WHERE path_hash = :path_hash;
+SELECT * from asset_hashes WHERE path_hash = :path_hash;
 
 -- :name update-asset-hash! :! :n
 -- :doc retrieve class record
@@ -18,4 +17,8 @@ WHERE path_hash = :path_hash;
 
 -- :name get-all-asset-hash :? :*
 -- :doc retrieve class record
-SELECT * from asset_hashes
+SELECT * from asset_hashes;
+
+-- :name remove-asset-hash! :! :n
+-- :doc remove record
+DELETE from asset_hashes WHERE path_hash = :path_hash;
