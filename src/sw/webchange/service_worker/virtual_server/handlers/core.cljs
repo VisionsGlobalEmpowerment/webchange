@@ -51,3 +51,9 @@
   (let [prefetch-route (fn [route] (-> (js-fetch route)
                                        (then #(store/put %))))]
     (promise-all (map prefetch-route routes))))
+
+(defn flush
+  []
+  (doseq [handlers (vals handlers)]
+    (when (contains? handlers :flush)
+      ((:flush handlers)))))

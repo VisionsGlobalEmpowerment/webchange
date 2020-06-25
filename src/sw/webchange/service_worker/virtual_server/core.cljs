@@ -25,3 +25,7 @@
   (if (handlers/has-handler? request)
     (handlers/handle-request request course-name)
     (cache/handle-request request course-name)))
+
+(defn flush
+  []
+  (handlers/flush))

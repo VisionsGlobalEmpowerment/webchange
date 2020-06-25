@@ -47,6 +47,7 @@
         "https://fonts.googleapis.com/css?family=Lexend+Deca"
         "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
         "https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh6UVSwiPGQ.woff2"
+        "https://fonts.gstatic.com/s/lexenddeca/v1/K2F1fZFYk-dHSE0UPPuwQ5qnJy8.woff2"
         "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"]
        (flatten)
        (remove nil?)

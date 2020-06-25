@@ -78,8 +78,8 @@
                   :on-close           handle-close}
      [ui/snackbar-content {:style   (:error-message styles)
                            :message (r/as-element [:span
-                                                   [:div (:message error)]
-                                                   [:div (:error error)]])}]]))
+                                                   [:div (str (:message error))]
+                                                   [:div (str (:error error))]])}]]))
 
 (defn- panels
   [panel-name route-params]
