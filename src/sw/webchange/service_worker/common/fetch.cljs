@@ -10,11 +10,3 @@
 (defn fetch-web-app-resources
   []
   (get-resources-from-api "/api/resources/student-dashboard"))
-
-(defn fetch-game-app-resources
-  []
-  (get-resources-from-api "/api/resources/game-app"))
-
-(defn fetch-game-start-resources
-  [course-name]
-  (get-resources-from-api (str "/api/resources/game-app/" course-name "/start-resources")))

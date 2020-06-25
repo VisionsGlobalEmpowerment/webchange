@@ -1,7 +1,6 @@
 (ns webchange.service-worker.event-handlers.message
   (:require
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.common.cache :refer [get-cached-activity-urls]]
     [webchange.service-worker.common.broadcast :as bc]
     [webchange.service-worker.wrappers :refer [then]]
     [webchange.service-worker.cache-controller.controller :as cache-controller]))

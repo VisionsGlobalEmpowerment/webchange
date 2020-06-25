@@ -17,7 +17,7 @@
   (let [value (str prefix public-fold)
         pos (s/index-of s value)
         len (count value)]
-    (str "./" (subs s (+ pos len)))))
+    (str "/" (subs s (+ pos len)))))
 
 (defn- get-files-list
   [dir]
@@ -34,20 +34,15 @@
   []
   "sw/web_app_resources.edn")
 
-(defn get-resources-list
-  []
-  (let [path (get-resources-file-path)]
-    (-> path io/resource io/reader java.io.PushbackReader. edn/read)))
-
 (defn generate-app-resources
   []
-  (->> ["./manifest.json"
-        "./page-skeleton"
+  (->> ["/manifest.json"
+        "/page-skeleton"
         (get-files-list (str js-fold "app.js"))
         (get-files-list (str js-fold "out/"))
         (get-files-list css-fold)
         (get-files-list img-fold)
-        (->> defaults/default-assets (map #(str "." (:url %))))
+        (->> defaults/default-assets (map :url))
         "https://fonts.googleapis.com/css?family=Luckiest+Guy"
         "https://fonts.googleapis.com/css?family=Lexend+Deca"
         "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
@@ -57,7 +52,12 @@
        (remove nil?)
        (vec)))
 
-(defn get-resources
+(defn- get-resources-list
+  []
+  (let [path (get-resources-file-path)]
+    (-> path io/resource io/reader java.io.PushbackReader. edn/read)))
+
+(defn- get-resources
   []
   (if (env :dev?)
     (generate-app-resources)
