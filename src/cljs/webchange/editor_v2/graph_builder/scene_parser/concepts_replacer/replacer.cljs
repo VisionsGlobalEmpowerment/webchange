@@ -144,9 +144,13 @@
 
 (defn graph-has-concepts?
   [graph]
-  (->> graph
-       (some (fn [[_ {:keys [data]}]] (concept-action-ref? data nil)))
-       (boolean)))
+  (let [has-concept-ref? (->> graph
+                              (some (fn [[_ {:keys [data]}]] (concept-action-ref? data nil)))
+                              (boolean))
+        has-concept-action? (->> graph
+                                (some (fn [[_ {:keys [data]}]] (:concept-action data)))
+                                (boolean))]
+    (or has-concept-ref? has-concept-action?)))
 
 (defn get-concept-actions-copy-counter
   [graph current-concept]
