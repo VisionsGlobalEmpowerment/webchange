@@ -1,7 +1,7 @@
 (ns webchange.service-worker.event-handlers.fetch
   (:require
     [clojure.string :refer [starts-with?]]
-    [webchange.service-worker.common.db :refer [get-current-course]]
+    [webchange.service-worker.common.cache-common :refer [get-current-course]]
     [webchange.service-worker.config :refer [get-cache-name]]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.strategies :as strategy]
