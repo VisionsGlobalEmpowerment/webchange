@@ -20,13 +20,13 @@
 
 (defn- serve-page-skeleton
   [course-name]
-  (strategy/cache-only {:request    "./page-skeleton"
-                        :cache-name (get-cache-name :static course-name)}))
+  (strategy/network-or-cache {:request    "./page-skeleton"
+                              :cache-name (get-cache-name :static course-name)}))
 
 (defn- serve-cache-asset
   [request cache-name]
-  (strategy/cache-only {:request    request
-                        :cache-name cache-name}))
+  (strategy/network-or-cache {:request    request
+                              :cache-name cache-name}))
 
 (defn- serve-rest-content
   [request course-name]
@@ -36,11 +36,11 @@
     (-> match-promises
         (promise-all)
         (then (fn [responses]
-                 (let [response (some identity responses)]
-                   (if response
-                     response
-                     (do (logger/debug (str "Not matched: " (request-pathname request)))
-                         (js-fetch request))))))
+                (let [response (some identity responses)]
+                  (if response
+                    response
+                    (do (logger/debug (str "Not matched: " (request-pathname request)))
+                        (js-fetch request))))))
         (catch #(js-fetch request)))))
 
 (defn- get-response
