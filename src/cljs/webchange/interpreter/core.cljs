@@ -144,19 +144,21 @@
         (on-asset-complete)))))
 
 (defn load-course
-  [course-id cb]
+  [{:keys [course-id load-assets?]} cb]
   (go (let [course-response (<! (get-course course-id))
             course (:body course-response)]
-        (load-assets (->> course :templates vals (map :assets) (apply concat)))
+        (when load-assets?
+          (load-assets (->> course :templates vals (map :assets) (apply concat))))
         (cb course))))
 
 (defn load-scene
-  [course-id scene-id cb]
+  [{:keys [course-id scene-id load-assets?]} cb]
   (go (let [scene-response (<! (get-scene course-id scene-id))
             scene (:body scene-response)]
-        (load-assets (concat default-assets (:assets scene))
-                     #(re-frame/dispatch [::events/set-loading-progress scene-id %])
-                     #(re-frame/dispatch [::events/set-scene-loaded scene-id true]))
+        (when load-assets?
+          (load-assets (concat default-assets (:assets scene))
+                       #(re-frame/dispatch [::events/set-loading-progress scene-id %])
+                       #(re-frame/dispatch [::events/set-scene-loaded scene-id true])))
         (cb scene))))
 
 (defn load-progress
@@ -166,10 +168,12 @@
         (cb result))))
 
 (defn load-lessons
-  [course-id cb on-asset-progress on-asset-complete]
+  [course-id load-assets? cb on-asset-progress on-asset-complete]
   (go (let [response (<! (get-lessons course-id))
             result (-> response :body)]
-        (load-assets (:assets result) on-asset-progress on-asset-complete)
+        (if load-assets?
+          (load-assets (:assets result) on-asset-progress on-asset-complete)
+          (on-asset-complete))
         (cb result))))
 
 (defn get-data-as-url

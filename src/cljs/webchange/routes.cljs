@@ -21,7 +21,6 @@
                                        ["/" :id "/editor-v2/" :scene-id] :course-editor-v2-scene
                                        ["/" :id "/dashboard"] :student-course-dashboard
                                        ["/" :id "/dashboard/finished"] :finished-activities}
-                  "student-dashboard" {""          :student-dashboard}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
                                        ["/schools"]                                     :dashboard-schools
@@ -38,14 +37,16 @@
     (re-frame/dispatch [::events/set-active-route params])
     (case handler
       :course (re-frame/dispatch [::ie/start-course (:id route-params)])
-      :student-course-dashboard (do (re-frame/dispatch [::ie/start-course (:id route-params)]) (re-frame/dispatch [::ie/clear-current-scene]))
-      :finished-activities (do (re-frame/dispatch [::ie/start-course (:id route-params)]) (re-frame/dispatch [::ie/clear-current-scene]))
-      :student-dashboard (do (re-frame/dispatch [::ie/start-course current-course]) (re-frame/dispatch [::ie/clear-current-scene]))
+
       :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
       :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])
       :dashboard-classes (re-frame/dispatch [::dashboard-events/open-classes])
       :dashboard-schools (re-frame/dispatch [::dashboard-events/open-schools])
       :dashboard-students (re-frame/dispatch [::dashboard-events/open-students (:class-id route-params)])
+
+      ;; student dashboard
+      :student-course-dashboard (re-frame/dispatch [::ie/load-course (:id route-params)])
+      :finished-activities (re-frame/dispatch [::ie/load-course (:id route-params)])
       nil)))
 
 (def history
