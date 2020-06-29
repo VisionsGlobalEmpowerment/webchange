@@ -5,6 +5,7 @@
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
             [webchange.auth.website :as website]
+            [webchange.test.course.core :as core]
             [webchange.course.core :as course]
             [config.core :refer [env]])
   (:use clj-http.fake))
@@ -140,3 +141,33 @@
         _ (f/course-created {:name course-name :status "published"})
         course (-> (f/get-available-courses) :body slurp (json/read-str :key-fn keyword) first)]
     (is (clojure.string/includes? (:image-src course) course/hostname))))
+
+(deftest can-retrieve-editor-tags
+  (let [tag (f/editor-tag-created "China")
+        tag-retirved (first (core/retrieve-editor-tags))]
+    (assert (= tag tag-retirved))))
+
+(deftest can-retrieve-editor-assets
+  (let [tag-china (f/editor-tag-created "China")
+        tag-india (f/editor-tag-created "Idida")
+        background (f/editor-asset-created course/editor_asset_type_background)
+        details (f/editor-asset-created course/editor_asset_type_details)
+        _ (f/link-editor-asset-tag (:id tag-china) (:id background))
+        _ (f/link-editor-asset-tag (:id tag-india) (:id background))
+        _ (f/link-editor-asset-tag (:id tag-china) (:id details))
+        china-assets (core/retrieve-editor-assets (:id tag-china) nil)
+        india-assets (core/retrieve-editor-assets (:id tag-india) nil)
+        background-assets (core/retrieve-editor-assets nil course/editor_asset_type_background)
+        background-china-assets (core/retrieve-editor-assets (:id tag-china) course/editor_asset_type_background)
+        ]
+    (assert (= (count china-assets) 2))
+    (assert (= (count india-assets) 1))
+    (assert (= (count background-assets) 1))
+    (assert (= (count background-china-assets) 1))))
+
+
+(deftest can-retrieve-retrieve-editor-character-skin
+  (let [ _ (course/update-character-skins {:public-dir "test/clj/webchange/resources"})
+        skins (core/retrieve-editor-character-skin)]
+    (assert (= (count skins) 2))
+    ))

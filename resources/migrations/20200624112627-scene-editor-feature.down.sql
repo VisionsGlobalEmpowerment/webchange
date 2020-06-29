@@ -1,0 +1,10 @@
+DROP TABLE editor_assets_tags;
+--;;
+DROP TABLE editor_tags;
+--;;
+DROP TABLE editor_assets;
+--;;
+DROP type editor_asset_type;
+--;;
+DROP TABLE character_skins;
+--;;

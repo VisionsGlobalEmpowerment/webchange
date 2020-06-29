@@ -1,0 +1,2369 @@
+{
+  "skeleton": {
+    "hash": "p96Au9iV0PEzSAaPq0mzbrNA3hQ",
+    "spine": "3.8.72",
+    "x": -719.95,
+    "y": -463.76,
+    "width": 1439.72,
+    "height": 960.36,
+    "images": "",
+    "audio": ""
+  },
+  "bones": [
+    {
+      "name": "root"
+    },
+    {
+      "name": "book",
+      "parent": "root",
+      "color": "c2de7eff"
+    },
+    {
+      "name": "page",
+      "parent": "book",
+      "length": 492.63,
+      "x": 0.92,
+      "y": 21.57,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone5",
+      "parent": "page",
+      "length": 514.5,
+      "rotation": 0.45,
+      "x": -0.29,
+      "y": 229.84,
+      "shearX": 0.01,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone6",
+      "parent": "page",
+      "length": 495.95,
+      "rotation": -0.6,
+      "x": -0.49,
+      "y": -252.11,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "book2",
+      "parent": "book",
+      "length": 234.99,
+      "rotation": 1.82,
+      "x": 4.11,
+      "y": -104.45,
+      "color": "898989ff"
+    },
+    {
+      "name": "book3",
+      "parent": "book",
+      "length": 318.01,
+      "rotation": 179.63,
+      "x": -7.96,
+      "y": 114.47,
+      "color": "c2de7eff"
+    },
+    {
+      "name": "bone7",
+      "parent": "root",
+      "length": 299.74,
+      "rotation": -90.58,
+      "x": -689.69,
+      "y": 41.32
+    },
+    {
+      "name": "book4",
+      "parent": "book",
+      "length": 313.73,
+      "rotation": 179.76,
+      "x": -9.33,
+      "y": -140.01,
+      "color": "515151ff"
+    },
+    {
+      "name": "book5",
+      "parent": "book",
+      "length": 196.97,
+      "rotation": -91.11,
+      "x": 1.11,
+      "y": 424.68,
+      "color": "c2de7eff"
+    },
+    {
+      "name": "book6",
+      "parent": "book3",
+      "length": 624.43,
+      "rotation": 0.27,
+      "x": -5.38,
+      "y": -208.14,
+      "color": "c2de7eff"
+    },
+    {
+      "name": "book7",
+      "parent": "book3",
+      "length": 627.49,
+      "rotation": 0.49,
+      "x": -7.58,
+      "y": 420.09,
+      "color": "c2de7eff"
+    },
+    {
+      "name": "page2",
+      "parent": "book",
+      "length": 492.63,
+      "x": 0.92,
+      "y": 21.57,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone8",
+      "parent": "page2",
+      "length": 514.5,
+      "rotation": 0.45,
+      "x": -0.29,
+      "y": 229.84,
+      "shearX": 0.01,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone9",
+      "parent": "page2",
+      "length": 495.95,
+      "rotation": -0.6,
+      "x": -0.49,
+      "y": -252.11,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "page3",
+      "parent": "book",
+      "length": 492.63,
+      "x": 0.92,
+      "y": 21.57,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone10",
+      "parent": "page3",
+      "length": 514.5,
+      "rotation": 0.45,
+      "x": -0.29,
+      "y": 229.84,
+      "shearX": 0.01,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone11",
+      "parent": "page3",
+      "length": 495.95,
+      "rotation": -0.6,
+      "x": -0.49,
+      "y": -252.11,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "page4",
+      "parent": "book",
+      "length": 492.63,
+      "x": 0.92,
+      "y": 21.57,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone12",
+      "parent": "page4",
+      "length": 514.5,
+      "rotation": 0.45,
+      "x": -0.29,
+      "y": 229.84,
+      "shearX": 0.01,
+      "color": "ff4e4eff"
+    },
+    {
+      "name": "bone13",
+      "parent": "page4",
+      "length": 495.95,
+      "rotation": -0.6,
+      "x": -0.49,
+      "y": -252.11,
+      "color": "ff4e4eff"
+    }
+  ],
+  "slots": [
+    {
+      "name": "Book_Background_02",
+      "bone": "root"
+    },
+    {
+      "name": "Book_3",
+      "bone": "book",
+      "color": "ff0000ab"
+    },
+    {
+      "name": "Book_8",
+      "bone": "book",
+      "attachment": "Book_08"
+    },
+    {
+      "name": "Book_081",
+      "bone": "book6",
+      "attachment": "Book_081"
+    },
+    {
+      "name": "Book_082",
+      "bone": "book7",
+      "attachment": "Book_086"
+    },
+    {
+      "name": "Book_10",
+      "bone": "bone7",
+      "attachment": "Book_10"
+    },
+    {
+      "name": "Book_11",
+      "bone": "book5",
+      "attachment": "Book_11"
+    },
+    {
+      "name": "Book_08",
+      "bone": "book3",
+      "attachment": "Book_08"
+    },
+    {
+      "name": "Book_14",
+      "bone": "book",
+      "attachment": "Book_14"
+    },
+    {
+      "name": "Book_17",
+      "bone": "book3",
+      "attachment": "Book_14"
+    },
+    {
+      "name": "Book_09",
+      "bone": "book",
+      "attachment": "Book_09"
+    },
+    {
+      "name": "Book_9",
+      "bone": "book4",
+      "attachment": "Book_07"
+    },
+    {
+      "name": "Book_15",
+      "bone": "book",
+      "attachment": "Book_15"
+    },
+    {
+      "name": "Book_7",
+      "bone": "book2",
+      "attachment": "Book_04"
+    },
+    {
+      "name": "Book_19",
+      "bone": "page3"
+    },
+    {
+      "name": "Book_22",
+      "bone": "page4"
+    },
+    {
+      "name": "Book_20",
+      "bone": "bone10"
+    },
+    {
+      "name": "Book_23",
+      "bone": "bone12"
+    },
+    {
+      "name": "Book_21",
+      "bone": "bone11"
+    },
+    {
+      "name": "Book_24",
+      "bone": "bone13"
+    },
+    {
+      "name": "Book_12",
+      "bone": "page2"
+    },
+    {
+      "name": "Book_13",
+      "bone": "bone8"
+    },
+    {
+      "name": "Book_18",
+      "bone": "bone9"
+    },
+    {
+      "name": "Book_4",
+      "bone": "page",
+      "attachment": "Book_04"
+    },
+    {
+      "name": "Book_5",
+      "bone": "bone5",
+      "attachment": "Book_05"
+    },
+    {
+      "name": "Book_6",
+      "bone": "bone6",
+      "attachment": "Book_06"
+    },
+    {
+      "name": "Book_086",
+      "bone": "book6"
+    },
+    {
+      "name": "Book_86",
+      "bone": "book7"
+    }
+  ],
+  "skins": [
+    {
+      "name": "default",
+      "attachments": {
+        "Book_6": {
+          "Book_06": {
+            "x": 310.02,
+            "y": 15.86,
+            "rotation": 0.6,
+            "width": 620,
+            "height": 482
+          },
+          "Book_062": {
+            "x": 311.93,
+            "y": 11.42,
+            "width": 620,
+            "height": 482
+          }
+        },
+        "Book_7": {
+          "Book_04": {
+            "x": 309.93,
+            "y": 110.88,
+            "rotation": -1.82,
+            "width": 620,
+            "height": 960
+          }
+        },
+        "Book_8": {
+          "Book_08": {
+            "x": 362.27,
+            "y": 9.88,
+            "scaleX": -1,
+            "width": 715,
+            "height": 935
+          }
+        },
+        "Book_9": {
+          "Book_07": {
+            "x": 300.7,
+            "y": -157.4,
+            "rotation": -179.76,
+            "width": 620,
+            "height": 950
+          }
+        },
+        "Book_20": {
+          "Book_05": {
+            "x": 309.92,
+            "y": 19.14,
+            "rotation": -0.45,
+            "width": 620,
+            "height": 447
+          },
+          "Book_052": {
+            "x": 311.16,
+            "y": 24.42,
+            "width": 620,
+            "height": 447
+          }
+        },
+        "Book_10": {
+          "Book_10": {
+            "x": 34.93,
+            "y": 4.73,
+            "scaleX": 1.8854,
+            "scaleY": 1.8648,
+            "rotation": 90.58,
+            "width": 33,
+            "height": 500
+          }
+        },
+        "Book_11": {
+          "Book_11": {
+            "x": 414.68,
+            "y": -20.75,
+            "scaleX": 1.0091,
+            "scaleY": 1.0091,
+            "rotation": 91.11,
+            "width": 109,
+            "height": 928
+          }
+        },
+        "Book_4": {
+          "Book_04": {
+            "x": 309.56,
+            "y": 0.11,
+            "scaleY": 0.98,
+            "width": 620,
+            "height": 960
+          },
+          "Book_07": {
+            "x": 308.67,
+            "y": 0.68,
+            "scaleX": -1,
+            "width": 620,
+            "height": 950
+          }
+        },
+        "Book_13": {
+          "Book_05": {
+            "x": 309.92,
+            "y": 19.14,
+            "rotation": -0.45,
+            "width": 620,
+            "height": 447
+          },
+          "Book_052": {
+            "x": 311.16,
+            "y": 24.42,
+            "width": 620,
+            "height": 447
+          }
+        },
+        "Book_14": {
+          "Book_14": {
+            "x": 329.56,
+            "y": -21.67,
+            "scaleX": -1,
+            "width": 698,
+            "height": 874
+          }
+        },
+        "Book_15": {
+          "Book_15": {
+            "x": 626.42,
+            "y": 22.75,
+            "width": 74,
+            "height": 872
+          }
+        },
+        "Book_17": {
+          "Book_14": {
+            "x": 319.98,
+            "y": 136.19,
+            "rotation": -179.63,
+            "width": 698,
+            "height": 874
+          }
+        },
+        "Book_18": {
+          "Book_06": {
+            "x": 310.02,
+            "y": 15.86,
+            "rotation": 0.6,
+            "width": 620,
+            "height": 482
+          },
+          "Book_062": {
+            "x": 311.93,
+            "y": 11.42,
+            "width": 620,
+            "height": 482
+          }
+        },
+        "Book_19": {
+          "Book_04": {
+            "x": 309.56,
+            "y": 0.11,
+            "scaleY": 0.98,
+            "width": 620,
+            "height": 960
+          },
+          "Book_07": {
+            "x": 308.67,
+            "y": 0.68,
+            "scaleX": -1,
+            "width": 620,
+            "height": 950
+          }
+        },
+        "Book_12": {
+          "Book_04": {
+            "x": 309.56,
+            "y": 0.11,
+            "scaleY": 0.98,
+            "width": 620,
+            "height": 960
+          },
+          "Book_07": {
+            "x": 308.67,
+            "y": 0.68,
+            "scaleX": -1,
+            "width": 620,
+            "height": 950
+          }
+        },
+        "Book_5": {
+          "Book_05": {
+            "x": 309.92,
+            "y": 19.14,
+            "rotation": -0.45,
+            "width": 620,
+            "height": 447
+          },
+          "Book_052": {
+            "x": 311.16,
+            "y": 24.42,
+            "width": 620,
+            "height": 447
+          }
+        },
+        "Book_081": {
+          "Book_081": {
+            "x": 357.67,
+            "y": -3.81,
+            "rotation": -179.9,
+            "width": 715,
+            "height": 302
+          },
+          "Book_086": {
+            "x": 355.44,
+            "y": -6.52,
+            "scaleX": -1,
+            "scaleY": -1,
+            "width": 715,
+            "height": 302
+          }
+        },
+        "Book_082": {
+          "Book_082": {
+            "x": 357.67,
+            "y": -8.36,
+            "rotation": 179.88,
+            "width": 715,
+            "height": 316
+          },
+          "Book_086": {
+            "x": 355.66,
+            "y": 0.97,
+            "scaleX": -1,
+            "width": 715,
+            "height": 302
+          }
+        },
+        "Book_21": {
+          "Book_06": {
+            "x": 310.02,
+            "y": 15.86,
+            "rotation": 0.6,
+            "width": 620,
+            "height": 482
+          },
+          "Book_062": {
+            "x": 311.93,
+            "y": 11.42,
+            "width": 620,
+            "height": 482
+          }
+        },
+        "Book_22": {
+          "Book_04": {
+            "x": 309.56,
+            "y": 0.11,
+            "scaleY": 0.98,
+            "width": 620,
+            "height": 960
+          },
+          "Book_07": {
+            "x": 308.67,
+            "y": 0.68,
+            "scaleX": -1,
+            "width": 620,
+            "height": 950
+          }
+        },
+        "Book_23": {
+          "Book_05": {
+            "x": 309.92,
+            "y": 19.14,
+            "rotation": -0.45,
+            "width": 620,
+            "height": 447
+          },
+          "Book_052": {
+            "x": 311.16,
+            "y": 24.42,
+            "width": 620,
+            "height": 447
+          }
+        },
+        "Book_24": {
+          "Book_06": {
+            "x": 310.02,
+            "y": 15.86,
+            "rotation": 0.6,
+            "width": 620,
+            "height": 482
+          },
+          "Book_062": {
+            "x": 311.93,
+            "y": 11.42,
+            "width": 620,
+            "height": 482
+          }
+        },
+        "Book_3": {
+          "Book_03": {
+            "x": 1.84,
+            "y": 23.86,
+            "width": 1432,
+            "height": 960
+          }
+        },
+        "Book_08": {
+          "Book_08": {
+            "x": 350.84,
+            "y": 106.84,
+            "scaleX": -1,
+            "width": 715,
+            "height": 935
+          },
+          "Book_083": {
+            "x": 347.62,
+            "y": 105.36,
+            "scaleX": -1,
+            "rotation": 0.27,
+            "width": 715,
+            "height": 935
+          }
+        },
+        "Book_09": {
+          "Book_09": {
+            "x": -1.06,
+            "y": 9.52,
+            "scaleX": 4.69,
+            "scaleY": 4.67,
+            "width": 22,
+            "height": 200
+          }
+        }
+      }
+    }
+  ],
+  "animations": {
+    "close_idle": {
+      "slots": {
+        "Book_081": {
+          "attachment": [
+            {
+              "name": "Book_086"
+            }
+          ]
+        },
+        "Book_09": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_9": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_17": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        }
+      },
+      "bones": {
+        "book2": {
+          "scale": [
+            {
+              "x": 1.1,
+              "y": 0.96
+            }
+          ]
+        },
+        "book3": {
+          "rotate": [
+            {
+              "angle": -179.63
+            }
+          ],
+          "translate": [
+            {
+              "x": 10.54,
+              "y": -210.41
+            }
+          ]
+        },
+        "book5": {
+          "translate": [
+            {
+              "x": 26.77
+            }
+          ]
+        },
+        "bone7": {
+          "translate": [
+            {
+              "x": 1388.86,
+              "y": 4.76
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.99,
+              "y": 0.5
+            }
+          ]
+        },
+        "page": {
+          "scale": [
+            {
+              "y": 0.96
+            }
+          ]
+        },
+        "page2": {
+          "scale": [
+            {
+              "y": 0.96
+            }
+          ]
+        },
+        "page3": {
+          "scale": [
+            {
+              "y": 0.96
+            }
+          ]
+        }
+      },
+      "drawOrder": [
+        {
+          "offsets": [
+            {
+              "slot": "Book_081",
+              "offset": 20
+            },
+            {
+              "slot": "Book_082",
+              "offset": 20
+            },
+            {
+              "slot": "Book_10",
+              "offset": 20
+            },
+            {
+              "slot": "Book_11",
+              "offset": -2
+            },
+            {
+              "slot": "Book_08",
+              "offset": 15
+            }
+          ]
+        }
+      ]
+    },
+    "idle": {
+      "slots": {
+        "Book_13": {
+          "color": [
+            {
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_052"
+            }
+          ]
+        },
+        "Book_12": {
+          "color": [
+            {
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_6": {
+          "color": [
+            {
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_22": {
+          "attachment": [
+            {
+              "name": "Book_04"
+            }
+          ]
+        },
+        "Book_23": {
+          "attachment": [
+            {
+              "name": "Book_05"
+            }
+          ]
+        },
+        "Book_21": {
+          "attachment": [
+            {
+              "name": "Book_062"
+            }
+          ]
+        },
+        "Book_4": {
+          "color": [
+            {
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_24": {
+          "attachment": [
+            {
+              "name": "Book_06"
+            }
+          ]
+        },
+        "Book_5": {
+          "color": [
+            {
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_20": {
+          "attachment": [
+            {
+              "name": "Book_052"
+            }
+          ]
+        },
+        "Book_9": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_18": {
+          "color": [
+            {
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_062"
+            }
+          ]
+        },
+        "Book_10": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_19": {
+          "attachment": [
+            {
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_082": {
+          "attachment": [
+            {
+              "name": "Book_082"
+            }
+          ]
+        }
+      },
+      "bones": {
+        "book3": {
+          "rotate": [
+            {
+              "angle": -179.63
+            }
+          ],
+          "translate": [
+            {
+              "x": 10.54,
+              "y": -210.41
+            }
+          ],
+          "scale": [
+            {
+              "x": -1
+            }
+          ]
+        },
+        "book5": {
+          "translate": [
+            {
+              "x": 26.77
+            }
+          ]
+        },
+        "bone7": {
+          "translate": [
+            {
+              "x": -5.33,
+              "y": 6.32
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.99,
+              "y": 0.502
+            }
+          ],
+          "shear": [
+            {
+              "x": 1.2
+            }
+          ]
+        },
+        "page": {
+          "translate": [
+            {
+              "y": 2
+            }
+          ],
+          "scale": [
+            {
+              "x": -1.07,
+              "y": 0.9
+            }
+          ]
+        },
+        "bone6": {
+          "scale": [
+            {
+              "x": 0.98
+            }
+          ],
+          "shear": [
+            {
+              "x": -1.2
+            }
+          ]
+        },
+        "page2": {
+          "translate": [
+            {
+              "x": 7.96
+            }
+          ],
+          "scale": [
+            {
+              "x": -1.04,
+              "y": 0.94
+            }
+          ]
+        },
+        "bone8": {
+          "translate": [
+            {
+              "x": -4.75
+            }
+          ]
+        },
+        "bone9": {
+          "translate": [
+            {
+              "x": -4.55,
+              "y": 6.45
+            }
+          ]
+        },
+        "page3": {
+          "translate": [
+            {
+              "x": 8
+            }
+          ],
+          "scale": [
+            {
+              "x": -1
+            }
+          ]
+        },
+        "bone10": {
+          "translate": [
+            {
+              "x": 18.99,
+              "y": -4.02
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.96
+            }
+          ]
+        },
+        "bone11": {
+          "translate": [
+            {
+              "x": 18.99,
+              "y": 10.05
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.96
+            }
+          ]
+        }
+      },
+      "drawOrder": [
+        {
+          "offsets": [
+            {
+              "slot": "Book_3",
+              "offset": 12
+            },
+            {
+              "slot": "Book_081",
+              "offset": 8
+            },
+            {
+              "slot": "Book_082",
+              "offset": 8
+            },
+            {
+              "slot": "Book_10",
+              "offset": 4
+            },
+            {
+              "slot": "Book_08",
+              "offset": 3
+            },
+            {
+              "slot": "Book_19",
+              "offset": 6
+            },
+            {
+              "slot": "Book_22",
+              "offset": 10
+            },
+            {
+              "slot": "Book_20",
+              "offset": 5
+            },
+            {
+              "slot": "Book_23",
+              "offset": 9
+            },
+            {
+              "slot": "Book_21",
+              "offset": 4
+            },
+            {
+              "slot": "Book_24",
+              "offset": 8
+            },
+            {
+              "slot": "Book_12",
+              "offset": -3
+            },
+            {
+              "slot": "Book_13",
+              "offset": -3
+            },
+            {
+              "slot": "Book_18",
+              "offset": -3
+            }
+          ]
+        }
+      ]
+    },
+    "open_book": {
+      "slots": {
+        "Book_13": {
+          "color": [
+            {
+              "time": 1.7333,
+              "color": "ffffffff"
+            },
+            {
+              "time": 1.9333,
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "time": 0.5,
+              "name": "Book_05"
+            },
+            {
+              "time": 1.1667,
+              "name": "Book_052"
+            }
+          ]
+        },
+        "Book_12": {
+          "color": [
+            {
+              "time": 1.7333,
+              "color": "ffffffff"
+            },
+            {
+              "time": 1.9333,
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "time": 0.5,
+              "name": "Book_04"
+            },
+            {
+              "time": 1.1667,
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_081": {
+          "attachment": [
+            {
+              "name": "Book_086"
+            },
+            {
+              "time": 0.6667,
+              "name": "Book_081"
+            }
+          ]
+        },
+        "Book_6": {
+          "color": [
+            {
+              "time": 1.6667,
+              "color": "ffffffff"
+            },
+            {
+              "time": 1.8333,
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "time": 1,
+              "name": "Book_062"
+            },
+            {
+              "time": 1.6333,
+              "name": null
+            }
+          ]
+        },
+        "Book_21": {
+          "attachment": [
+            {
+              "time": 0.6667,
+              "name": "Book_06"
+            },
+            {
+              "time": 1.3333,
+              "name": "Book_062"
+            }
+          ]
+        },
+        "Book_4": {
+          "color": [
+            {
+              "time": 1.6667,
+              "color": "ffffffff"
+            },
+            {
+              "time": 1.8333,
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "time": 1,
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_09": {
+          "attachment": [
+            {
+              "name": null
+            },
+            {
+              "time": 0.9333,
+              "name": "Book_09"
+            }
+          ]
+        },
+        "Book_5": {
+          "color": [
+            {
+              "time": 1.6667,
+              "color": "ffffffff"
+            },
+            {
+              "time": 1.8333,
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "time": 1,
+              "name": "Book_052"
+            },
+            {
+              "time": 1.6333,
+              "name": null
+            }
+          ]
+        },
+        "Book_20": {
+          "attachment": [
+            {
+              "time": 0.6667,
+              "name": "Book_05"
+            },
+            {
+              "time": 1.3333,
+              "name": "Book_052"
+            }
+          ]
+        },
+        "Book_9": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_17": {
+          "attachment": [
+            {
+              "name": null
+            },
+            {
+              "time": 1.5667,
+              "name": "Book_14"
+            }
+          ]
+        },
+        "Book_18": {
+          "color": [
+            {
+              "time": 1.7333,
+              "color": "ffffffff"
+            },
+            {
+              "time": 1.9333,
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "time": 0.5,
+              "name": "Book_06"
+            },
+            {
+              "time": 1.1667,
+              "name": "Book_062"
+            }
+          ]
+        },
+        "Book_10": {
+          "attachment": [
+            {
+              "time": 1.3333,
+              "name": null
+            }
+          ]
+        },
+        "Book_19": {
+          "attachment": [
+            {
+              "time": 0.6667,
+              "name": "Book_04"
+            },
+            {
+              "time": 1.3333,
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_082": {
+          "attachment": [
+            {
+              "time": 0.6667,
+              "name": "Book_082"
+            }
+          ]
+        }
+      },
+      "bones": {
+        "book2": {
+          "scale": [
+            {
+              "x": 1.1,
+              "y": 0.96
+            },
+            {
+              "time": 0.5
+            }
+          ]
+        },
+        "book3": {
+          "rotate": [
+            {
+              "angle": -179.63
+            }
+          ],
+          "translate": [
+            {
+              "x": 10.54,
+              "y": -210.41
+            },
+            {
+              "time": 0.6333,
+              "x": 7.15,
+              "y": -210.41
+            },
+            {
+              "time": 0.7667,
+              "x": 10.54,
+              "y": -210.41
+            },
+            {
+              "time": 1.3333,
+              "x": 10.54,
+              "y": -210.41
+            }
+          ],
+          "scale": [
+            {},
+            {
+              "time": 1.3333,
+              "x": -1
+            }
+          ]
+        },
+        "book5": {
+          "translate": [
+            {
+              "x": 26.77
+            }
+          ]
+        },
+        "bone7": {
+          "translate": [
+            {
+              "x": 1388.86,
+              "y": 4.76
+            },
+            {
+              "time": 0.6333,
+              "x": 741.8,
+              "y": 40.32
+            },
+            {
+              "time": 0.7,
+              "x": 634.24,
+              "y": 40.32
+            },
+            {
+              "time": 1.3333,
+              "x": -5.33,
+              "y": 6.32
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.99,
+              "y": 0.5
+            },
+            {
+              "time": 0.6333,
+              "x": 1.3,
+              "y": 0.84,
+              "curve": "stepped"
+            },
+            {
+              "time": 0.7,
+              "x": 1.3,
+              "y": 0.84
+            },
+            {
+              "time": 1.3333,
+              "x": 0.99,
+              "y": 0.502
+            }
+          ],
+          "shear": [
+            {
+              "time": 1.3333,
+              "x": 1.2
+            }
+          ]
+        },
+        "book7": {
+          "shear": [
+            {},
+            {
+              "time": 0.6667,
+              "x": 14.4
+            },
+            {
+              "time": 1.3333
+            }
+          ]
+        },
+        "book6": {
+          "shear": [
+            {},
+            {
+              "time": 0.6667,
+              "x": -9.6
+            },
+            {
+              "time": 1.3333
+            }
+          ]
+        },
+        "bone5": {
+          "translate": [
+            {
+              "time": 0.3333,
+              "curve": 0.245,
+              "c3": 0.637,
+              "c4": 0.56
+            },
+            {
+              "time": 1.1333,
+              "x": 18.13,
+              "curve": 0.352,
+              "c2": 0.4,
+              "c3": 0.693,
+              "c4": 0.76
+            },
+            {
+              "time": 1.4333,
+              "x": -3.7,
+              "curve": 0.353,
+              "c2": 0.44,
+              "c3": 0.688,
+              "c4": 0.79
+            },
+            {
+              "time": 1.5667,
+              "x": -3.26,
+              "curve": 0.354,
+              "c2": 0.65,
+              "c3": 0.689
+            },
+            {
+              "time": 1.6667
+            }
+          ],
+          "shear": [
+            {
+              "time": 0.3333,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1,
+              "x": 14.4,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.6667
+            }
+          ]
+        },
+        "page": {
+          "translate": [
+            {
+              "time": 0.3333
+            },
+            {
+              "time": 1.0333,
+              "x": 5.24
+            },
+            {
+              "time": 1.1333,
+              "x": 6.77
+            },
+            {
+              "time": 1.5
+            },
+            {
+              "time": 1.6667,
+              "y": 2
+            }
+          ],
+          "scale": [
+            {
+              "y": 0.96
+            },
+            {
+              "time": 0.3333,
+              "curve": 0.487,
+              "c3": 0.597,
+              "c4": 0.83
+            },
+            {
+              "time": 1.5,
+              "x": -0.971,
+              "curve": 0.299,
+              "c2": 0.85,
+              "c3": 0.629,
+              "c4": 1.23
+            },
+            {
+              "time": 1.6667,
+              "x": -1.07,
+              "y": 0.9
+            }
+          ]
+        },
+        "bone6": {
+          "translate": [
+            {
+              "time": 0.3333,
+              "curve": 0.245,
+              "c3": 0.711,
+              "c4": 0.83
+            },
+            {
+              "time": 1.5333,
+              "x": 4.2,
+              "y": 19.51,
+              "curve": 0.36,
+              "c2": 0.64,
+              "c3": 0.695
+            },
+            {
+              "time": 1.6667
+            }
+          ],
+          "scale": [
+            {
+              "time": 1.3333,
+              "curve": 0.379,
+              "c2": 0.6,
+              "c3": 0.724
+            },
+            {
+              "time": 1.6667,
+              "x": 0.98
+            }
+          ],
+          "shear": [
+            {
+              "time": 0.3333,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1,
+              "x": -9.6,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.6667
+            }
+          ]
+        },
+        "page2": {
+          "translate": [
+            {
+              "time": 0.5
+            },
+            {
+              "time": 1.1667,
+              "x": 7.96
+            }
+          ],
+          "scale": [
+            {
+              "y": 0.96
+            },
+            {
+              "time": 0.5,
+              "curve": 0.466,
+              "c3": 0.521,
+              "c4": 1.05
+            },
+            {
+              "time": 1.8333,
+              "x": -1.04,
+              "y": 0.94
+            }
+          ]
+        },
+        "bone8": {
+          "translate": [
+            {
+              "time": 0.5,
+              "curve": 0.244,
+              "c3": 0.694,
+              "c4": 0.77
+            },
+            {
+              "time": 1.6333,
+              "x": -0.23,
+              "curve": 0.369,
+              "c2": 0.63,
+              "c3": 0.706
+            },
+            {
+              "time": 1.8333,
+              "x": -4.75
+            }
+          ],
+          "shear": [
+            {
+              "time": 0.5,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.1667,
+              "x": 14.4,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.8333
+            }
+          ]
+        },
+        "bone9": {
+          "translate": [
+            {
+              "time": 0.5,
+              "curve": 0.244,
+              "c3": 0.694,
+              "c4": 0.77
+            },
+            {
+              "time": 1.6333,
+              "x": -0.05,
+              "curve": 0.369,
+              "c2": 0.63,
+              "c3": 0.706
+            },
+            {
+              "time": 1.8333,
+              "x": -4.55
+            },
+            {
+              "time": 1.9333,
+              "x": -4.55,
+              "y": 6.45
+            }
+          ],
+          "shear": [
+            {
+              "time": 0.5,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.1667,
+              "x": -9.6,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.8333
+            }
+          ]
+        },
+        "page3": {
+          "translate": [
+            {
+              "time": 0.6667
+            },
+            {
+              "time": 1.6667,
+              "x": 10
+            },
+            {
+              "time": 2,
+              "x": 8
+            }
+          ],
+          "scale": [
+            {
+              "y": 0.96
+            },
+            {
+              "time": 0.6667,
+              "curve": 0.466,
+              "c3": 0.521,
+              "c4": 1.05
+            },
+            {
+              "time": 2,
+              "x": -1
+            }
+          ]
+        },
+        "bone10": {
+          "translate": [
+            {
+              "time": 0.6667,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 2,
+              "x": 18.99,
+              "y": -4.02
+            }
+          ],
+          "scale": [
+            {
+              "time": 0.6667,
+              "curve": 0.243,
+              "c3": 0.655,
+              "c4": 0.63
+            },
+            {
+              "time": 2,
+              "x": 0.96
+            }
+          ],
+          "shear": [
+            {
+              "time": 0.6667,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.3333,
+              "x": 14.4,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 2
+            }
+          ]
+        },
+        "bone11": {
+          "translate": [
+            {
+              "time": 0.6667,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 2,
+              "x": 18.99,
+              "y": 10.05
+            }
+          ],
+          "scale": [
+            {
+              "time": 0.6667,
+              "curve": 0.243,
+              "c3": 0.655,
+              "c4": 0.63
+            },
+            {
+              "time": 2,
+              "x": 0.96
+            }
+          ],
+          "shear": [
+            {
+              "time": 0.6667,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 1.3333,
+              "x": -9.6,
+              "curve": 0.25,
+              "c3": 0.75
+            },
+            {
+              "time": 2
+            }
+          ]
+        }
+      },
+      "drawOrder": [
+        {
+          "offsets": [
+            {
+              "slot": "Book_081",
+              "offset": 20
+            },
+            {
+              "slot": "Book_082",
+              "offset": 20
+            },
+            {
+              "slot": "Book_10",
+              "offset": 20
+            },
+            {
+              "slot": "Book_11",
+              "offset": -2
+            },
+            {
+              "slot": "Book_08",
+              "offset": 15
+            }
+          ]
+        },
+        {
+          "time": 0.9333,
+          "offsets": [
+            {
+              "slot": "Book_081",
+              "offset": 17
+            },
+            {
+              "slot": "Book_082",
+              "offset": 17
+            },
+            {
+              "slot": "Book_10",
+              "offset": 17
+            },
+            {
+              "slot": "Book_08",
+              "offset": 12
+            }
+          ]
+        },
+        {
+          "time": 1.1333,
+          "offsets": [
+            {
+              "slot": "Book_081",
+              "offset": 14
+            },
+            {
+              "slot": "Book_082",
+              "offset": 14
+            },
+            {
+              "slot": "Book_10",
+              "offset": 14
+            },
+            {
+              "slot": "Book_08",
+              "offset": 9
+            },
+            {
+              "slot": "Book_09",
+              "offset": -2
+            },
+            {
+              "slot": "Book_12",
+              "offset": 3
+            },
+            {
+              "slot": "Book_13",
+              "offset": 3
+            },
+            {
+              "slot": "Book_18",
+              "offset": 3
+            }
+          ]
+        },
+        {
+          "time": 1.3,
+          "offsets": [
+            {
+              "slot": "Book_3",
+              "offset": 15
+            },
+            {
+              "slot": "Book_081",
+              "offset": 11
+            },
+            {
+              "slot": "Book_082",
+              "offset": 11
+            },
+            {
+              "slot": "Book_10",
+              "offset": 7
+            },
+            {
+              "slot": "Book_08",
+              "offset": 6
+            },
+            {
+              "slot": "Book_19",
+              "offset": 9
+            },
+            {
+              "slot": "Book_20",
+              "offset": 8
+            },
+            {
+              "slot": "Book_21",
+              "offset": 7
+            },
+            {
+              "slot": "Book_12",
+              "offset": 0
+            },
+            {
+              "slot": "Book_13",
+              "offset": 0
+            },
+            {
+              "slot": "Book_18",
+              "offset": 0
+            }
+          ]
+        }
+      ]
+    },
+    "page": {
+      "slots": {
+        "Book_13": {
+          "color": [
+            {
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_052"
+            }
+          ]
+        },
+        "Book_12": {
+          "color": [
+            {
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_6": {
+          "color": [
+            {
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_22": {
+          "attachment": [
+            {
+              "name": "Book_04"
+            },
+            {
+              "time": 0.5,
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_23": {
+          "attachment": [
+            {
+              "name": "Book_05"
+            },
+            {
+              "time": 0.5,
+              "name": "Book_052"
+            }
+          ]
+        },
+        "Book_21": {
+          "attachment": [
+            {
+              "name": "Book_062"
+            }
+          ]
+        },
+        "Book_4": {
+          "color": [
+            {
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_24": {
+          "attachment": [
+            {
+              "name": "Book_06"
+            },
+            {
+              "time": 0.5,
+              "name": "Book_062"
+            }
+          ]
+        },
+        "Book_5": {
+          "color": [
+            {
+              "color": "d3d3d3ff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_20": {
+          "attachment": [
+            {
+              "name": "Book_052"
+            }
+          ]
+        },
+        "Book_9": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_18": {
+          "color": [
+            {
+              "color": "edededff"
+            }
+          ],
+          "attachment": [
+            {
+              "name": "Book_062"
+            }
+          ]
+        },
+        "Book_10": {
+          "attachment": [
+            {
+              "name": null
+            }
+          ]
+        },
+        "Book_19": {
+          "attachment": [
+            {
+              "name": "Book_07"
+            }
+          ]
+        },
+        "Book_082": {
+          "attachment": [
+            {
+              "name": "Book_082"
+            }
+          ]
+        }
+      },
+      "bones": {
+        "book3": {
+          "rotate": [
+            {
+              "angle": -179.63
+            }
+          ],
+          "translate": [
+            {
+              "x": 10.54,
+              "y": -210.41
+            }
+          ],
+          "scale": [
+            {
+              "x": -1
+            }
+          ]
+        },
+        "book5": {
+          "translate": [
+            {
+              "x": 26.77
+            }
+          ]
+        },
+        "bone7": {
+          "translate": [
+            {
+              "x": -5.33,
+              "y": 6.32
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.99,
+              "y": 0.502
+            }
+          ],
+          "shear": [
+            {
+              "x": 1.2
+            }
+          ]
+        },
+        "page": {
+          "translate": [
+            {
+              "y": 2
+            }
+          ],
+          "scale": [
+            {
+              "x": -1.07,
+              "y": 0.9
+            }
+          ]
+        },
+        "bone6": {
+          "scale": [
+            {
+              "x": 0.98
+            }
+          ],
+          "shear": [
+            {
+              "x": -1.2
+            }
+          ]
+        },
+        "page2": {
+          "translate": [
+            {
+              "x": 7.96
+            }
+          ],
+          "scale": [
+            {
+              "x": -1.04,
+              "y": 0.94
+            }
+          ]
+        },
+        "bone8": {
+          "translate": [
+            {
+              "x": -4.75
+            }
+          ]
+        },
+        "bone9": {
+          "translate": [
+            {
+              "x": -4.55,
+              "y": 6.45
+            }
+          ]
+        },
+        "page3": {
+          "translate": [
+            {
+              "x": 8
+            }
+          ],
+          "scale": [
+            {
+              "x": -1
+            }
+          ]
+        },
+        "bone10": {
+          "translate": [
+            {
+              "x": 18.99,
+              "y": -4.02
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.96
+            }
+          ]
+        },
+        "bone11": {
+          "translate": [
+            {
+              "x": 18.99,
+              "y": 10.05
+            }
+          ],
+          "scale": [
+            {
+              "x": 0.96
+            }
+          ]
+        },
+        "page4": {
+          "scale": [
+            {},
+            {
+              "time": 1,
+              "x": -1
+            }
+          ]
+        },
+        "bone12": {
+          "rotate": [
+            {
+              "time": 0.5,
+              "angle": -0.45
+            }
+          ],
+          "scale": [
+            {
+              "time": 1,
+              "x": 0.98
+            }
+          ],
+          "shear": [
+            {},
+            {
+              "time": 0.5,
+              "x": 14.4
+            },
+            {
+              "time": 1,
+              "x": -0.01
+            }
+          ]
+        },
+        "bone13": {
+          "shear": [
+            {},
+            {
+              "time": 0.5,
+              "x": -9.6
+            },
+            {
+              "time": 1
+            }
+          ]
+        }
+      },
+      "drawOrder": [
+        {
+          "offsets": [
+            {
+              "slot": "Book_3",
+              "offset": 12
+            },
+            {
+              "slot": "Book_081",
+              "offset": 8
+            },
+            {
+              "slot": "Book_082",
+              "offset": 8
+            },
+            {
+              "slot": "Book_10",
+              "offset": 4
+            },
+            {
+              "slot": "Book_08",
+              "offset": 3
+            },
+            {
+              "slot": "Book_19",
+              "offset": 6
+            },
+            {
+              "slot": "Book_22",
+              "offset": 10
+            },
+            {
+              "slot": "Book_20",
+              "offset": 5
+            },
+            {
+              "slot": "Book_23",
+              "offset": 9
+            },
+            {
+              "slot": "Book_21",
+              "offset": 4
+            },
+            {
+              "slot": "Book_24",
+              "offset": 8
+            },
+            {
+              "slot": "Book_12",
+              "offset": -3
+            },
+            {
+              "slot": "Book_13",
+              "offset": -3
+            },
+            {
+              "slot": "Book_18",
+              "offset": -3
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
