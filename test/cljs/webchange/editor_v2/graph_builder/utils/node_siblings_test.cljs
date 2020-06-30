@@ -30,6 +30,21 @@
         (print-maps-comparison actual-result expected-result))
       (is (= actual-result expected-result)))))
 
+(deftest test-get-node-ins-can-remove-two-nodes-in-a-row
+  (let [graph {:a {:connections #{{:previous :root
+                                   :name     "next"
+                                   :handler  :y}}}
+               :y {:connections #{{:previous :a
+                                   :name     "next"
+                                   :handler  :y}}}}
+        node-name :y]
+    (let [actual-result (get-node-ins graph node-name)
+          expected-result {:a []
+                           :y []}]
+      (when-not (= actual-result expected-result)
+        (print-maps-comparison actual-result expected-result))
+      (is (= actual-result expected-result)))))
+
 (deftest test-get-node-outs
   (let [node-data {:connections #{{:previous :a
                                    :name     "next"

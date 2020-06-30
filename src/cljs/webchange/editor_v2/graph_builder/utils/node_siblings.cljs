@@ -11,8 +11,9 @@
     (reduce
       (fn [result parent]
         (assoc result parent (->> (get-in graph [node-name :connections])
-                                  (filter (fn [{:keys [previous]}]
-                                            (= previous parent)))
+                                  (filter (fn [{:keys [previous handler]}]
+                                            (and (= previous parent)
+                                                 (not= handler node-name))))
                                   (map :handler))))
       {}
       parents)))

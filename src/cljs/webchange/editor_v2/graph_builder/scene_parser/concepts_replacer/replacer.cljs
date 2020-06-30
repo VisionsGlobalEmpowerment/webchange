@@ -6,8 +6,6 @@
                                                                  change-parent-node-connections
                                                                  change-child-node-connections]]
     [webchange.editor-v2.graph-builder.utils.insert-sub-graph :refer [insert-sub-graph]]
-    [webchange.editor-v2.graph-builder.utils.node-siblings :refer [get-node-ins
-                                                                   get-node-outs]]
     [webchange.editor-v2.graph-builder.utils.node-children :refer [get-children]]
     [webchange.editor-v2.graph-builder.utils.root-nodes :refer [add-root-node
                                                                 get-root-nodes
@@ -56,45 +54,6 @@
        :prev-action   :prev-action
        :path          [action-name]
        :sequence-path []})))
-
-(defn update-prev-nodes
-  [graph replacing-node-name new-nodes-graph]
-  (let [replacing-node-ins (-> (get-node-ins graph replacing-node-name) keys)]
-    (reduce
-      (fn [graph node-in]
-        (reduce
-          (fn [graph first-node-name]
-            (change-parent-node-connections graph node-in replacing-node-name [first-node-name]))
-          graph
-          (get-root-nodes new-nodes-graph)))
-      graph
-      replacing-node-ins)))
-
-(defn update-next-nodes
-  [graph replacing-node-name new-nodes-graph]
-  (let [replacing-node-data (get graph replacing-node-name)
-        replacing-node-outs (-> replacing-node-data get-node-outs keys)]
-    (reduce
-      (fn [graph node-out]
-        (let [last-node-names (get-nodes-by-next-node-name new-nodes-graph node-out)]
-          (change-child-node-connections graph node-out replacing-node-name last-node-names)))
-      graph
-      replacing-node-outs)))
-
-(defn update-new-nodes
-  [new-nodes prev-node-name]
-  (reduce
-    (fn [result [node-name node-data]]
-      (assoc result node-name (-> node-data
-                                  (assoc-in [:data :concept-action] true)
-                                  (assoc-in [:connections] (->> (:connections node-data)
-                                                                (map (fn [{:keys [previous] :as connection}]
-                                                                       (if (= :root previous)
-                                                                         (assoc connection :previous prev-node-name)
-                                                                         connection)))
-                                                                (set))))))
-    {}
-    new-nodes))
 
 (defn insert-concept-nodes
   [graph prev-node-name node-name concept-nodes-data]

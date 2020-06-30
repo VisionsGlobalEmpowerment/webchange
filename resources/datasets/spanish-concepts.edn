@@ -1289,7 +1289,7 @@
        :duration 6.172,
        :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Y aunque aún no tiene nombre\nme gusta llamarlo bebé,",
        :track 1,
        :data
@@ -1861,7 +1861,7 @@
        :duration 8.199,
        :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Un día mi amiga me invitó a su casa, Me sorprendió  su color, mostaza.",
        :track 1,
        :data [{:end 8.35, :anim "talk", :start 0.65}]}
@@ -1884,7 +1884,7 @@
        :duration 5.454,
        :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Yo le respondí: “¡qué linda la C C C de casa!”",
        :track 1,
        :data
@@ -2387,7 +2387,7 @@
        :duration 7.051,
        :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Cepillo mi cabello con mi nuevo cepillo,\nEl cual es azul y amarillo.",
        :track 1,
        :data
@@ -2401,7 +2401,7 @@
        :duration 6.238,
        :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Mi mamá lleva puesto su anillo\nQue tiene mucho brillo",
        :track 1,
        :data
@@ -2415,7 +2415,7 @@
        :duration 7.037,
        :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Y también, su nuevo vestido\nQue es amarillo como mi nuevo cepillo.",
        :track 1,
        :data
@@ -2890,7 +2890,7 @@
        :duration 6.546,
        :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Me gusta practicar karate\ny después comer chocolate.",
        :track 1,
        :data
@@ -2906,7 +2906,7 @@
        :duration 7.439,
        :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "El otro día me caí sobre el zacate,\nmientras comía un rico chocolate",
        :track 1,
        :data
@@ -2920,7 +2920,7 @@
        :duration 6.332,
        :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "y mi mamá preparaba una salsa\nde cacahuates y chocolate.",
        :track 1,
        :data
@@ -3394,7 +3394,7 @@
        :duration 6.89,
        :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "En la calle encontré un diamante,\nEra pequeño pero brillante.",
        :track 1,
        :data
@@ -3408,7 +3408,7 @@
        :duration 6.051,
        :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Un día me desperté Y mi diamante era gigante.\n",
        :track 1,
        :data
@@ -3879,7 +3879,7 @@
        :duration 6.479,
        :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "En el zoológico conocí\na un simpático elefante",
        :track 1,
        :data
@@ -3894,7 +3894,7 @@
        :duration 6.919,
        :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Que era fuerte y gigante\nY siempre vestía muy elegante",
        :track 1,
        :data
@@ -4422,7 +4422,7 @@
        :duration 7.453,
        :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Caminando por la calle\nEncontré una linda flor,\nDe un hermoso color.",
        :track 1,
        :data [{:end 7.57, :anim "talk", :start 0.47}]}
@@ -4434,7 +4434,7 @@
        :duration 5.894,
        :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Entonces la olí\nY aún más hermoso era su olor",
        :track 1,
        :data
@@ -4941,7 +4941,7 @@
        :duration 5.853,
        :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Mi tío Amato tiene un gato\nQue se llama Garabato",
        :track 1,
        :data
@@ -4955,7 +4955,7 @@
        :duration 6.519,
        :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Es pequeño y muy chato\nEl pobre G G G gato",
        :track 1,
        :data
@@ -5492,7 +5492,7 @@
        :duration 4.958,
        :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Tengo un hermano gemelo,\nsu nombre es Carmelo.",
        :track 1,
        :data
@@ -5506,7 +5506,7 @@
        :duration 6.13,
        :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "y nos gusta el mismo caramelo.\nA mí me gusta mirar el cielo",
        :track 1,
        :data [{:end 11.21, :anim "talk", :start 5.23}]}
@@ -5518,7 +5518,7 @@
        :duration 5.344,
        :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "y cuando él toca el hielo\nyo siento que me congelo.",
        :track 1,
        :data
@@ -6023,7 +6023,7 @@
        :duration 7.678,
        :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "En otoño caen las hojas de los árboles\nSon rojas y de varios colores",
        :track 1,
        :data
@@ -6038,7 +6038,7 @@
        :duration 6.732,
        :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "En primavera sus hojas serán verdes\nY crecerán más fuertes",
        :track 1,
        :data
@@ -6052,7 +6052,7 @@
        :duration 7.373,
        :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Algunos árboles tendrán flores.\nHoy encontré una hoja y es roja.",
        :track 1,
        :data
@@ -6577,7 +6577,7 @@
        :duration 6.719,
        :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Un día encontré un imán,\nY se lo enseñé a mi tío Germán.",
        :track 1,
        :data
@@ -7332,7 +7332,7 @@
        :duration 6.053,
        :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Me gusta mucho mi jardín,\nPuedo ver las flores sin fin,",
        :track 1,
        :data
@@ -7847,7 +7847,7 @@
        :duration 5.906,
        :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "En la selva conocí a un mono,\nVestido con un kimono,",
        :track 1,
        :data
@@ -7872,7 +7872,7 @@
        :duration 6.56,
        :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "¡Que animal tan pesado\n el mono con el  K K K kimono!",
        :track 1,
        :data
@@ -8351,7 +8351,7 @@
        :duration 4.958,
        :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Yo conozco  a un león,\nCon colores de camaleón,",
        :track 1,
        :data [{:end 5.14, :anim "talk", :start 0.57}]}
@@ -8363,7 +8363,7 @@
        :duration 5.159,
        :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Su nombre es Napoleón\nY tiene camisa neón",
        :track 1,
        :data
@@ -8858,7 +8858,7 @@
        :duration 6.012,
        :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Esta gallina tiene una llave, donde la puso ella no sabe",
        :track 1,
        :data
@@ -8872,7 +8872,7 @@
        :duration 7.492,
        :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Busca que busca en el gallinero\nSi pierde la llave, sería muy grave",
        :track 1,
        :data
@@ -9360,7 +9360,7 @@
        :duration 6.134,
        :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Tengo cinco dedos en mi mano,\nY con ellos toco el piano,",
        :track 1,
        :data
@@ -9374,7 +9374,7 @@
        :duration 5.666,
        :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "También nado en el océano.\nComo Mario mi hermano.",
        :track 1,
        :data
@@ -9879,7 +9879,7 @@
        :duration 7.104,
        :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Cuando era niño jugaba a saltar la cuerda\nAhora extraño ser pequeño",
        :track 1,
        :data
@@ -10409,7 +10409,7 @@
        :duration 5.067,
        :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Había una vez un oso,\nQue era muy cariñoso.",
        :track 1,
        :data [{:end 5.41, :anim "talk", :start 0.44}]}
@@ -10421,7 +10421,7 @@
        :duration 6.079,
        :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Un día se cayó a un pozo\nY eso fue muy doloroso",
        :track 1,
        :data
@@ -10435,7 +10435,7 @@
        :duration 6.579,
        :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Seguramente ese oso\nera muy perezoso O O O",
        :track 1,
        :data [{:end 17.74, :anim "talk", :start 11.52}]}
@@ -11009,7 +11009,7 @@
        :duration 5.173,
        :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Juego mucho a la pelota,\nY más cuando es grandota,",
        :track 1,
        :data
@@ -11023,7 +11023,7 @@
        :duration 5.039,
        :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Me gusta cuando rebota\nAunque a veces  me agota",
        :track 1,
        :data
@@ -11549,7 +11549,7 @@
        :duration 4.839,
        :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Para mi es delicioso,\nNo importa qué tipo sea",
        :track 1,
        :data
@@ -12040,7 +12040,7 @@
        :duration 4.36,
        :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "A Susana la rana,\nle gusta comer manzanas",
        :track 1,
        :data [{:end 4.63, :anim "talk", :start 0.78}]}
@@ -12563,7 +12563,7 @@
        :duration 5.385,
        :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "A la serpiente  Vicente\nun día por accidente",
        :track 1,
        :data
@@ -12577,7 +12577,7 @@
        :duration 5.265,
        :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "se le cayó un diente\ncuando mordió algo crujiente",
        :track 1,
        :data
@@ -12591,7 +12591,7 @@
        :duration 8.092,
        :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Pero siempre muy sonriente,\nestá Vicente  la S S S serpiente",
        :track 1,
        :data
@@ -13063,7 +13063,7 @@
        :duration 5.225,
        :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Me gusta mucho comer tomate,\nY también el aguacate.",
        :track 1,
        :data
@@ -14125,7 +14125,7 @@
        :duration 5.68,
        :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Me gusta tocar el violín\ncomo mi amigo Valentín.",
        :track 1,
        :data
@@ -14139,7 +14139,7 @@
        :duration 6.826,
        :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Cuando sea grande seré bailarín\nY daré conciertos de violín.",
        :track 1,
        :data
@@ -14627,7 +14627,7 @@
        :duration 5.956,
        :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "El maestro Walter nos enseña\nMucho sobre Internet",
        :track 1,
        :data
@@ -15191,7 +15191,7 @@
        :duration 7.076,
        :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Y aunque los dos terminan en “ófono”\nLa música es del xilófono",
        :track 1,
        :data
@@ -15678,7 +15678,7 @@
        :duration 6.055,
        :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Para mi cumpleaños en mayo,\nmi hermano me regaló un yoyo,",
        :track 1,
        :data
@@ -16192,7 +16192,7 @@
        :duration 6.415,
        :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Mi amigo Renato es un pato,\nQue usa sólo un zapato",
        :track 1,
        :data
@@ -16206,7 +16206,7 @@
        :duration 5.868,
        :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Cuando fue a comprar un plato\nSe divirtió mucho el pato",
        :track 1,
        :data
@@ -16736,7 +16736,7 @@
        :duration 6.774,
        :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "Aprendí que es parecido al avestruz,\nEs una ave que no puede volar",
        :track 1,
        :data
@@ -16750,7 +16750,7 @@
        :duration 7.962,
        :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
        :target "rock",
-       :phrase-text-translated
+       :phrase-text
        "pero si es capaz de correr y nadar. \nTiene dos patas con tres dedos.",
        :track 1,
        :data

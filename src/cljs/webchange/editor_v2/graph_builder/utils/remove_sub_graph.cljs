@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.graph-builder.utils.remove-sub-graph
   (:require
     [webchange.editor-v2.graph-builder.utils.change-node :refer [remove-handler]]
-    [webchange.editor-v2.graph-builder.utils.node-siblings :refer [get-node-ins]]
     [webchange.editor-v2.graph-builder.utils.node-children :refer [get-children]]))
 
 (defn remove-extra-nodes-dfs
