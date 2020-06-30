@@ -48,18 +48,20 @@
                        (let [old-graph (:graph old-props)
                              new-graph (:graph new-props)
                              should-rebuild? (or @force-update?
-                                                (not (= (count (keys old-graph))
-                                                        (count (keys new-graph)))))]
+                                                (not (= (keys old-graph)
+                                                        (keys new-graph))))]
                          (when-not should-rebuild?
                            (update-graph @diagram-engine @diagram-nodes old-graph new-graph))
 
                          should-rebuild?))
 
        :component-did-mount
-                     (fn [] (reorder-nodes @diagram-engine))
+                     (fn []
+                       (reorder-nodes @diagram-engine))
 
        :component-did-update
-                     (fn [] (reorder-nodes @diagram-engine))
+                     (fn []
+                       (reorder-nodes @diagram-engine))
 
        :reagent-render
                      (fn [{:keys [graph mode root-selector]}]
