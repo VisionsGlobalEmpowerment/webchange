@@ -1,7 +1,9 @@
 (ns webchange.service-worker.virtual-server.handlers.login
   (:require
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.handlers.utils.activated-users :as activated-users]
+    [webchange.service-worker.db.users :as db-users]
+    [webchange.service-worker.db.state :as db-state]
+    [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
     [webchange.service-worker.wrappers :refer [js-fetch promise-all request-clone body-json then catch data->response require-status-ok!]]))
 
 (defn post-offline
@@ -10,8 +12,8 @@
   (-> (-> request body-json)
       (then #(js->clj % :keywordize-keys true))
       (then #(get % :access-code))
-      (then activated-users/store-current-code!)
-      (then activated-users/get-activated-user-by-code)
+      (then db-state/set-current-code)
+      (then db-users/get-current-user)
       (then data->response)))
 
 (defn post-online
@@ -23,7 +25,8 @@
     (-> (promise-all [request-body-promise response-promise])
         (then (fn [[request-body response]]
                 (require-status-ok! response)
-                (activated-users/store-activated-user (-> request-body (js->clj :keywordize-keys true) :access-code) response)
+                (-> (db-users/save-user (-> request-body (js->clj :keywordize-keys true) :access-code) response)
+                    (then (current-progress/flush)))
                 response))
         (catch #(do
                   (logger/warn "[login] [POST] [online] failed with" (-> % .-message))

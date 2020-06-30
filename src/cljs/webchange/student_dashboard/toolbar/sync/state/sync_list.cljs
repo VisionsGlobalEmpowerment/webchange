@@ -18,10 +18,16 @@
 (re-frame/reg-event-fx
   ::open
   (fn [{:keys [db]} [_]]
-    {:db (assoc-in db (path-to-db [:open?]) true)
-     :dispatch-n (list [::course-resources/load-course-resources])}))
+    {:db       (assoc-in db (path-to-db [:open?]) true)
+     :dispatch [::course-resources/init-state]}))
 
 (re-frame/reg-event-fx
-  ::close
+  ::cancel
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db (path-to-db [:open?]) false)}))
+
+(re-frame/reg-event-fx
+  ::save
+  (fn [{:keys [db]} [_]]
+    {:db       (assoc-in db (path-to-db [:open?]) false)
+     :dispatch [::course-resources/save-sync-list]}))

@@ -165,7 +165,6 @@
   (->> (request-url request)
        (js/URL.)))
 
-
 (defn request-pathname
   [request]
   (->> request

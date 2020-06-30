@@ -1,17 +1,29 @@
 (ns webchange.service-worker.event-handlers.install
   (:require
+    [webchange.service-worker.broadcast.core :as broadcast]
+    [webchange.service-worker.controllers.web-app-resources :as web-app]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [catch promise-resolve then]]))
 
 (defn- install
   []
-  (promise-resolve))
+  (logger/debug "Install...")
+  (broadcast/send-sync-status :installing)
+  (web-app/cache-app))
+
+(defn- installed
+  []
+  (logger/log "Installation done.")
+  (broadcast/send-sync-status :installed)
+  (.skipWaiting js/self))
+
+(defn- installation-failed
+  [error]
+  (logger/error "Installation failed." (.-message error))
+  (broadcast/send-sync-status :broken))
 
 (defn handle
   [event]
-  (logger/debug "Install...")
   (.waitUntil event (-> (install)
-                        (then #(do (logger/log "Installation done.")
-                                   (.skipWaiting js/self)))
-                        (catch #(do (logger/warn "Installation failed." (.-message %))
-                                    (throw %))))))
+                        (then installed)
+                        (catch installation-failed))))

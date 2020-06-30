@@ -6,20 +6,9 @@
     [webchange.sw-utils.state.status :as status]
     [webchange.student-dashboard.toolbar.sync.state.sync-list :as sync-list]
     [webchange.student-dashboard.toolbar.sync.views-sync-list :refer [sync-list-modal]]
-    [webchange.student-dashboard.toolbar.sync.icons.icon-ready :as icon-ready]
-    [webchange.student-dashboard.toolbar.sync.icons.icon-syncing :as icon-syncing]
-    [webchange.student-dashboard.toolbar.sync.icons.icon-unavailable :as icon-unavailable]))
-
-(defn- sync-status
-  []
-  (let [sync-status @(re-frame/subscribe [::status/sync-status])]
-    (case sync-status
-      :installing [icon-syncing/get-shape]
-      :syncing [icon-syncing/get-shape]
-      :synced [icon-ready/get-shape]
-      :disabled [icon-unavailable/get-shape {:color "#cccccc"}]
-      :offline [icon-ready/get-shape {:color "#278600"}]
-      [icon-unavailable/get-shape])))
+    [webchange.student-dashboard.toolbar.sync.icons.icon-ready :refer [icon-ready]]
+    [webchange.student-dashboard.toolbar.sync.icons.icon-syncing :refer [icon-syncing]]
+    [webchange.student-dashboard.toolbar.sync.icons.icon-unavailable :refer [icon-unavailable]]))
 
 (defn current-version-data
   [{:keys [update-date-str version]}]
@@ -57,17 +46,36 @@
        [current-version-data {:update-date-str last-update
                               :version         version}])]))
 
+(defn- sync-status-icon
+  [sync-status]
+  (case sync-status
+    ;; preparing
+    :installing [icon-syncing]
+    :installed [icon-syncing]
+    :activating [icon-syncing]
+    :syncing [icon-syncing]
+    ;; ready to work
+    :activated [icon-ready]
+    :synced [icon-ready]
+    :offline [icon-ready {:color "#278600"}]
+    ;; not available
+    :disabled [icon-unavailable {:color "#cccccc"}]
+    :broken [icon-unavailable {:color "#ff2121"}]
+    [icon-unavailable {:color "#ff9f21"}]))
+
 (defn sync
   []
   (r/with-let [menu-anchor (r/atom nil)]
               (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
+                    sync-status @(re-frame/subscribe [::status/sync-status])
                     handle-select-resources-click #(do (reset! menu-anchor nil)
                                                        (re-frame/dispatch [::sync-list/open]))]
                 [:div
-                 [ui/icon-button
-                  {:disabled disabled?
-                   :on-click #(reset! menu-anchor (.-currentTarget %))}
-                  [sync-status]]
+                 [ui/tooltip {:title (name sync-status)}
+                  [ui/icon-button
+                   {:disabled disabled?
+                    :on-click #(reset! menu-anchor (.-currentTarget %))}
+                   [sync-status-icon sync-status]]]
                  [ui/menu
                   {:anchor-el               @menu-anchor
                    :open                    (boolean @menu-anchor)

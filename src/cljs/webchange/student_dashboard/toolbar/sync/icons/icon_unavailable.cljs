@@ -2,7 +2,7 @@
 
 (def default-props {:color "#ff4a4a"})
 
-(defn get-shape
+(defn icon-unavailable
   [props]
   (let [{:keys [color]} (merge default-props props)]
     [:svg {:xmlns   "http://www.w3.org/2000/svg"

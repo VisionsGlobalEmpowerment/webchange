@@ -1,8 +1,9 @@
 (ns webchange.service-worker.strategies
   (:require
+    [clojure.string :refer [starts-with?]]
     [webchange.service-worker.wrappers :refer [cache-match cache-open cache-put
                                                js-fetch promise-resolve then catch
-                                               response-clone response-ok?]]))
+                                               response-clone response-ok? request-url]]))
 (defn cache-only
   "Always answering from cache on fetch events."
   [{:keys [request cache-name]}]
@@ -17,6 +18,5 @@
       (then (fn [cache]
               (-> (js-fetch request)
                   (then (fn [response]
-                          (cache-put cache request (response-clone response))
                           (promise-resolve response)))
                   (catch #(cache-match cache request)))))))

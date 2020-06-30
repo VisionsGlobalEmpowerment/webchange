@@ -17,7 +17,7 @@
                                                            replace-object]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.state.lessons.subs :as lessons]
-    [webchange.sw-utils.state.resources :as sw-resources]))
+    [webchange.sw-utils.state.status :as sw-status]))
 
 (re-frame/reg-fx
   :execute-audio
@@ -48,7 +48,7 @@
       (i/load-course {:course-id    course-id
                       :load-assets? load-assets?}
                      (fn [course] (do (re-frame/dispatch [:complete-request :load-course])
-                                      (re-frame/dispatch [::sw-resources/cache-course course-id])
+                                      (re-frame/dispatch [::sw-status/set-current-course course-id])
                                       (re-frame/dispatch [::set-course-data course])
                                       (re-frame/dispatch [::load-progress course-id])
                                       (re-frame/dispatch [::load-lessons course-id load-assets?])

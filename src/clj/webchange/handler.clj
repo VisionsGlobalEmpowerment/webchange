@@ -115,7 +115,9 @@
 (defroutes service-worker-route
            (GET "/page-skeleton" [] (public-route))
            (GET "/service-worker.js" [] (-> (resource-response "js/compiled/service-worker.js" {:root "public"})
-                                            (assoc-in [:headers "Content-Type"] "text/javascript"))))
+                                            (assoc-in [:headers "Content-Type"] "text/javascript")))
+           (GET "/service-worker.js.map" [] (-> (resource-response "js/compiled/service-worker.js.map" {:root "public"})
+                                                (assoc-in [:headers "Content-Type"] "application/json"))))
 
 (defn wrap-body-as-string
   [handler]

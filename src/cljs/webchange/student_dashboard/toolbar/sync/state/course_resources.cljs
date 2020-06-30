@@ -1,11 +1,10 @@
 (ns webchange.student-dashboard.toolbar.sync.state.course-resources
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
-    [clojure.set :refer [difference]]
     [day8.re-frame.http-fx]
     [re-frame.core :as re-frame]
     [webchange.student-dashboard.toolbar.sync.state.db :as db]
-    [webchange.sw-utils.state.resources :as sw-resources]))
+    [webchange.sw-utils.state.resources :as sw]))
 
 (defn- path-to-db
   [relative-path]
@@ -13,126 +12,112 @@
        (concat [:course-resources])
        (db/path-to-db)))
 
-(defn- contains-in?
-  [sub-list super-list]
-  (-> (difference (set sub-list)
-                  (set super-list))
-      (empty?)))
+(def course-lessons-path (path-to-db [:course-lessons]))
+(def loading-status-path (path-to-db [:loading-status]))
+(def selected-lessons-path (path-to-db [:selected-lessons]))
 
-(defn- course-resources
-  [db]
-  (let [course-lessons (get-in db (path-to-db [:data]) {})
-        synced-resources (sw-resources/synced-game-resources db)
-        synced-endpoints (sw-resources/synced-game-endpoints db)]
-    (->> course-lessons
-         (map (fn [[lesson-id {:keys [resources endpoints] :as lesson}]]
-                [lesson-id (assoc lesson :selected? (and (contains-in? resources synced-resources)
-                                                         (contains-in? endpoints synced-endpoints)))]))
-         (into {}))))
-
-(re-frame/reg-sub
-  ::course-resources
-  course-resources)
-
-(re-frame/reg-sub
-  ::course-resources-list
-  (fn []
-    [(re-frame/subscribe [::course-resources])])
-  (fn [[resources-data]]
-    (->> resources-data
-         (map (fn [[id data]] (assoc data :id id)))
-         (sort-by :id))))
+(re-frame/reg-event-fx
+  ::init-state
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n (list [::reset-selected-lessons]
+                       [::load-course-lessons])}))
 
 (defn- load-status
   [db]
-  (get-in db (path-to-db [:load-status]) :not-loaded))
+  (get-in db loading-status-path :not-loaded))
 
-(re-frame/reg-sub
-  ::load-status
-  load-status)
-
-(re-frame/reg-sub
-  ::loading?
-  (fn [db]
-    (->> (load-status db)
-         (= :loading))))
-
+(re-frame/reg-sub ::loading-status load-status)
+(re-frame/reg-sub ::loading? (fn [db] (->> (load-status db) (= :loading))))
 (re-frame/reg-event-fx
-  ::set-load-status
+  ::set-loading-status
   (fn [{:keys [db]} [_ status]]
-    {:db (assoc-in db (path-to-db [:load-status]) status)}))
+    {:db (assoc-in db loading-status-path status)}))
+
+(defn course-lessons [db] (get-in db course-lessons-path []))
+(re-frame/reg-sub ::course-lessons course-lessons)
+
+(defn selected-lessons [db] (get-in db selected-lessons-path {}))
+(re-frame/reg-sub ::selected-lessons selected-lessons)
+(re-frame/reg-event-fx
+  ::set-selected-lessons
+  (fn [{:keys [db]} [_ id value]]
+    {:db (assoc-in db (concat selected-lessons-path [id]) value)}))
+(re-frame/reg-event-fx
+  ::remove-selected-lessons
+  (fn [{:keys [db]} [_ id]]
+    {:db (update-in db selected-lessons-path dissoc id)}))
+(re-frame/reg-event-fx
+  ::reset-selected-lessons
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db selected-lessons-path {})}))
+
+(defn sync-list->data
+  [sync-list]
+  (reduce (fn [result [lesson-id selected?]]
+            (update result (if selected? :add :remove) conj lesson-id))
+          {}
+          sync-list))
 
 (re-frame/reg-event-fx
-  ::load-course-resources
+  ::save-sync-list
+  (fn [{:keys [db]} [_]]
+    (let [sync-data (-> db selected-lessons sync-list->data)]
+      {:dispatch [::sw/cache-lessons sync-data
+                  ::reset-selected-lessons]})))
+
+(re-frame/reg-sub
+  ::course-lessons-list
+  (fn []
+    [(re-frame/subscribe [::course-lessons])
+     (re-frame/subscribe [::selected-lessons])
+     (re-frame/subscribe [::sw/cached-lessons])])
+  (fn [[lessons-data selected-lessons cached-lessons]]
+    (->> lessons-data
+         (reduce (fn [lessons-list [lesson-id lesson-data]]
+                   (let [cached? (->> cached-lessons (some #{lesson-id}) (boolean))
+                         currently-selected? (->> lesson-id (get selected-lessons) (= true))
+                         rejected? (->> lesson-id (get selected-lessons) (= false))]
+                     (conj lessons-list (assoc lesson-data :selected? (and (or cached? currently-selected?)
+                                                                           (not rejected?))))))
+                 [])
+         (sort-by :id))))
+
+(re-frame/reg-event-fx
+  ::select-lesson
+  (fn [{:keys [db]} [_ id value]]
+    (let [current-selected-lessons (selected-lessons db)]
+      (if (contains? current-selected-lessons id)
+        {:dispatch [::remove-selected-lessons id]}
+        {:dispatch [::set-selected-lessons id value]}))))
+
+(re-frame/reg-event-fx
+  ::load-course-lessons
   (fn [{:keys [db]} _]
     (let [status (load-status db)
           current-course (:current-course db)]
-      (when (or (= status :not-loaded)
-                (= status :failed))
-        {:dispatch   [::set-load-status :loading]
+      (when (not= status :loading)
+        {:dispatch   [::set-loading-status :loading]
          :http-xhrio {:method          :get
-                      :uri             (str "/api/resources/game-app/" current-course "/scenes")
+                      :uri             (str "/api/resources/game-app/" current-course "/lessons")
                       :format          (json-request-format)
                       :response-format (json-response-format {:keywords? true})
-                      :on-success      [::load-course-resources-success]
-                      :on-failure      [::load-course-resources-failed]}}))))
+                      :on-success      [::load-course-lessons-success]
+                      :on-failure      [::load-course-lessons-failed]}}))))
 
-(defn- generate-lesson-id
-  [{:keys [level-number lesson-number]}]
-  (+ (* level-number 1000) lesson-number))
+(defn- lessons-list->map
+  [lessons-list]
+  (reduce (fn [result {:keys [id] :as lesson}]
+            (assoc result id lesson))
+          {}
+          lessons-list))
 
 (re-frame/reg-event-fx
-  ::load-course-resources-success
+  ::load-course-lessons-success
   (fn [{:keys [db]} [_ response]]
-    (let [data (->> response
-                    (map (fn [lesson] [(generate-lesson-id lesson) lesson]))
-                    (into {}))]
-      {:db       (assoc-in db (path-to-db [:data]) data)
-       :dispatch [::set-load-status :loaded]})))
+    {:db       (assoc-in db course-lessons-path (lessons-list->map response))
+     :dispatch [::set-loading-status :loaded]}))
 
 (re-frame/reg-event-fx
-  ::load-course-resources-failed
-  (fn [{:keys [db]} [_ _]]
-    {:db       (assoc-in db (path-to-db [:loading]) false)
-     :dispatch [::set-load-status :failed]}))
-
-(defn- get-lists-diff
-  [list-1 list-2]
-  (-> (difference (set list-1)
-                  (set list-2))
-      (vec)))
-
-(defn- get-selected-data
-  [lessons key]
-  (->> lessons
-       (map second)
-       (filter :selected?)
-       (map key)
-       (flatten)
-       (distinct)))
-
-(defn- get-selected-resources
-  [lessons]
-  (get-selected-data lessons :resources))
-
-(defn- get-selected-endpoints
-  [lessons]
-  (get-selected-data lessons :endpoints))
-
-(re-frame/reg-event-fx
-  ::switch-lesson-resources
-  (fn [{:keys [db]} [_ lesson-id]]
-    (let [all-lessons (course-resources db)
-          current-resources-list (get-selected-resources all-lessons)
-          current-endpoints-list (get-selected-endpoints all-lessons)
-
-          all-lessons-updated (update-in all-lessons [lesson-id :selected?] not)
-          updated-resources-list (get-selected-resources all-lessons-updated)
-          updated-endpoints-list (get-selected-endpoints all-lessons-updated)
-
-          action (if (get-in all-lessons [lesson-id :selected?]) :remove :add)]
-      {:dispatch (if (= action :add)
-                   [::sw-resources/add-game-data {:resources (get-lists-diff updated-resources-list current-resources-list)
-                                                  :endpoints (get-lists-diff updated-endpoints-list current-endpoints-list)}]
-                   [::sw-resources/remove-game-data {:resources (get-lists-diff current-resources-list updated-resources-list)
-                                                     :endpoints (get-lists-diff current-endpoints-list updated-endpoints-list)}])})))
+  ::load-course-lessons-failed
+  (fn [_ [_ _]]
+    {:dispatch [::set-loading-status :failed]}))

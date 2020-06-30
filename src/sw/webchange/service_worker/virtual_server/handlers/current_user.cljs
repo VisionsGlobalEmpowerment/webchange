@@ -1,13 +1,13 @@
 (ns webchange.service-worker.virtual-server.handlers.current-user
   (:require
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.handlers.utils.activated-users :as activated-users]
+    [webchange.service-worker.db.users :as db-users]
     [webchange.service-worker.wrappers :refer [js-fetch request-clone then catch data->response require-status-ok!]]))
 
 (defn get-offline
   [request]
   (logger/debug "[current-user] [GET] [offline]")
-  (-> (activated-users/get-current-user)
+  (-> (db-users/get-current-user)
       (then data->response)
       (catch #(data->response nil))))
 
