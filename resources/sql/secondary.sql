@@ -119,6 +119,9 @@ ON CONFLICT ON CONSTRAINT datasets_pkey
 DO UPDATE SET course_id=:course_id, name=:name, scheme=:scheme
 WHERE datasets.id=:id
 
+-- :name clear-dataset-items! :! :<!
+-- :doc truncate table
+TRUNCATE TABLE dataset_items;
 
 -- :name create-or-update-dataset-item-with-id! :! :n
 -- :doc creates a new dataset item record
