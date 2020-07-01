@@ -145,6 +145,7 @@
 (declare get-painting-area)
 (declare get-colors-palette)
 (declare background)
+(declare layered-background)
 (declare empty-component)
 
 (defn lock-object [o]
@@ -187,6 +188,7 @@
          o (if (contains? o :actions) o (assoc o :listening false))]
      (case type
        :background [background scene-id name o]
+       :layered-background [layered-background scene-id name o]
        :button [button scene-id name o]
        :image [image scene-id name o]
        :transparent [:> Group (prepare-group-params o)
@@ -260,6 +262,19 @@
   [kimage (merge {:src       (get-data-as-url (:src object))
                   :listening false}
                  (filter-params object))])
+
+(defn layered-background
+  [scene-id name object]
+  [:> Group {}
+   [kimage (merge {:src       (get-data-as-url (:src (:background object)))
+                   :listening false}
+                  (filter-params (first (:data object))))]
+   [kimage (merge {:src       (get-data-as-url (:src (:surface object)))
+                   :listening false}
+                  (filter-params (second (:data object))))]
+   [kimage (merge {:src       (get-data-as-url (:src (:decoration object)))
+                   :listening false}
+                  (filter-params (last (:data object))))]])
 
 (defn animation
   [scene-id name object]
