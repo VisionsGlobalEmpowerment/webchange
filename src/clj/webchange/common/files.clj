@@ -9,13 +9,18 @@
   ([relative-path config]
    (str (config :public-dir) relative-path)))
 
+(defn encode-path [path]
+  (clojure.string/join "/"
+    (map #(codec/url-encode %)
+      (clojure.string/split path #"/"))))
+
 (defn relative->absolute-primary-uri
   [relative-path]
    (if (clojure.string/starts-with? relative-path "/")
      (let [relative-path (clojure.string/replace-first relative-path "/" "")]
-       (str (:host-url (:secondary env)) (codec/url-encode relative-path))
+       (str (:host-url (:secondary env)) (encode-path relative-path))
        )
-     (str (:host-url (:secondary env)) (codec/url-encode relative-path))
+     (str (:host-url (:secondary env)) (encode-path relative-path))
    ))
 
 

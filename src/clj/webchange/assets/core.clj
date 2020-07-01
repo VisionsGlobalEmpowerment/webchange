@@ -36,7 +36,6 @@
 
 (defn update-asset-hash!
   [path full-path]
-  (println "update-asset-hash!" path " " full-path)
   (let [file-crc (crc32 (slurp full-path))
         path-md5 (md5 path)]
     (db/update-asset-hash! {:path_hash path-md5
@@ -81,7 +80,9 @@
   (let [uri (f/relative->absolute-primary-uri path)
         file (f/relative->absolute-path path)]
     (try
+      (clojure.java.io/make-parents file)
       (save-file-from-uri uri file)
       (store-asset-hash! file)
+      (log/debug (str "Stored " uri " to " file))
       (catch Exception e
-        (log/error (str "Can not download " uri ", because " (:cause e)))))))
+        (log/error (str "Can not download " uri ", because " (:cause (Throwable->map e))))))))

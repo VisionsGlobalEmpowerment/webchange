@@ -469,7 +469,10 @@
   (if-let [datasets (:datasets data)]
     (update-dataset! datasets))
   (if-let [dataset-items (:dataset-items data)]
-    (update-dataset-item-with-id! dataset-items))
+    (do
+      (db/clear-dataset-items!)
+      (update-dataset-item-with-id! dataset-items)
+      ))
   (if-let [lesson-sets (:lesson-sets data)]
     (update-lesson-set! lesson-sets))
   (if-let [scenes (:scenes data)]
