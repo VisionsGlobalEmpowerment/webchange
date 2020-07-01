@@ -2,6 +2,7 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
     [webchange.editor.index :refer [editor]]
@@ -12,8 +13,14 @@
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.student-dashboard.views :refer [student-dashboard-page student-dashboard-finished-page]]
+    [webchange.sw-utils.state.status :as sw]
     [webchange.error-pages.page-404 :refer [page-404]]
-    [webchange.views-login-switch :refer [login-switch]]))
+    [webchange.views-login-switch :refer [login-switch]]
+    [webchange.ui.theme :refer [get-in-theme]]))
+
+(defn- get-styles
+  []
+  {:error-message {:background-color (get-in-theme [:palette :error :dark])}})
 
 (defn- str->int-param
   [map key]
@@ -59,6 +66,20 @@
       :student-id (str->int-param route-params :student-id)}])
   [dashboard])
 
+(defn- error-message
+  []
+  (let [error @(re-frame/subscribe [::sw/current-error])
+        handle-close #(re-frame/dispatch [::sw/reset-current-error])
+        styles (get-styles)]
+    [ui/snackbar {:anchor-origin      {:vertical   "bottom"
+                                       :horizontal "right"}
+                  :open               (boolean error)
+                  :auto-hide-duration 6000
+                  :on-close           handle-close}
+     [ui/snackbar-content {:style   (:error-message styles)
+                           :message (r/as-element [:span
+                                                   [:div (str (:message error))]
+                                                   [:div (str (:error error))]])}]]))
 
 (defn- panels
   [panel-name route-params]
@@ -95,4 +116,5 @@
   (let [{:keys [handler route-params]} @(re-frame/subscribe [::subs/active-route])]
     [:div
      [ui/css-baseline]
-     [panels handler route-params]]))
+     [panels handler route-params]
+     [error-message]]))

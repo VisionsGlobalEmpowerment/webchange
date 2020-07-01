@@ -1,31 +1,56 @@
 (ns webchange.service-worker.common.cache
   (:require
+    [clojure.set :refer [difference]]
     [webchange.service-worker.config :refer [get-cache-name]]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.virtual-server.core :as vs]
     [webchange.service-worker.wrappers :refer [cache-open cache-add-all cache-keys cache-delete-resource
                                                promise-all promise-resolve response-json then catch]]))
 
+(defn- request->pathname
+  [request]
+  (-> request
+      (aget "url")
+      (js/URL.)
+      (aget "pathname")
+      (js/decodeURI)))
+
+(defn- get-cached-pathnames
+  [cache]
+  (-> (cache-keys cache)
+      (then (fn [keys]
+              (map request->pathname keys)))))
+
+(defn- get-new-resources
+  [pathnames cache]
+  (-> (get-cached-pathnames cache)
+      (then (fn [cached-pathnames]
+              (->> (difference (set pathnames)
+                               (set cached-pathnames))
+                   (into []))))))
+
 (defn- cache-resources
   [cache-name resources]
   (logger/debug-folded (str "Resources to cache into " cache-name) resources)
   (-> (cache-open cache-name)
       (then (fn [cache]
-              (logger/debug "Caching" cache-name "resources count: " (count resources))
-              (loop [left (vec resources)
-                     p (promise-resolve nil)]
-                (let [limit (min 100 (count left))
-                      current (subvec left 0 limit)
-                      next (subvec left limit)
-                      current-p (-> p
-                                    (then #(cache-add-all cache current))
-                                    (catch (fn [error]
-                                             (logger/error "Caching error" error)
-                                             (cache-add-all cache current))))]
-                  (logger/debug "Caching inner count: " (count current))
-                  (if (> (count next) 0)
-                    (recur next current-p)
-                    current-p)))))))
+              (-> (get-new-resources resources cache)
+                  (then (fn [new-resources]
+                          (logger/debug "Caching" cache-name "resources count: " (count new-resources))
+                          (loop [left (vec new-resources)
+                                 p (promise-resolve nil)]
+                            (let [limit (min 100 (count left))
+                                  current (subvec left 0 limit)
+                                  next (subvec left limit)
+                                  current-p (-> p
+                                                (then #(cache-add-all cache current))
+                                                (catch (fn [error]
+                                                         (logger/error "Caching error" error)
+                                                         (cache-add-all cache current))))]
+                              (logger/debug "Caching inner count: " (count current))
+                              (if (> (count next) 0)
+                                (recur next current-p)
+                                current-p))))))))))
 
 (defn- remove-caches
   [cache-name resources]
@@ -68,10 +93,7 @@
       (recur (inc index)
              (conj result (-> resources
                               (aget index)
-                              (aget "url")
-                              (js/URL.)
-                              (aget "pathname")
-                              (js/decodeURI)))
+                              (request->pathname)))
              count)
       result)))
 

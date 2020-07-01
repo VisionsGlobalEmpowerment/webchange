@@ -2,30 +2,23 @@
   (:require
     [compojure.core :refer [GET defroutes]]
     [webchange.common.handler :refer [handle]]
-    [webchange.resources.core :as core]))
+    [webchange.resources.core-activities :refer [get-activities-resources]]
+    [webchange.resources.core-web-app :refer [get-web-app-resources]]))
+
+(defn- wrap
+  [data]
+  (handle [true data]))
 
 (defn handle-activities-resources
   [course-slug]
-  (-> (core/get-activities-resources course-slug)
-      handle))
-
-(defn handle-start-resources
-  [course-slug]
-  (-> (core/get-start-resources course-slug)
-      handle))
-
-(defn handle-game-app-resources
-  []
-  (-> (core/get-game-app-resources)
-      handle))
+  (-> (get-activities-resources course-slug)
+      (wrap)))
 
 (defn handle-web-app-resources
   []
-  (-> (core/get-web-app-resources)
-      handle))
+  (-> (get-web-app-resources)
+      (wrap)))
 
 (defroutes resources-routes
            (GET "/api/resources/student-dashboard" _ (handle-web-app-resources))
-           (GET "/api/resources/game-app" _ (handle-game-app-resources))
-           (GET "/api/resources/game-app/:course-slug/scenes" [course-slug] (handle-activities-resources course-slug))
-           (GET "/api/resources/game-app/:course-slug/start-resources" [course-slug] (handle-start-resources course-slug)))
+           (GET "/api/resources/game-app/:course-slug/scenes" [course-slug] (handle-activities-resources course-slug)))

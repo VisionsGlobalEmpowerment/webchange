@@ -38,8 +38,10 @@
 ;; --- Fetch ---
 
 (defn js-fetch
-  [request]
-  (-> (js/fetch request)))
+  ([request]
+   (js/fetch request))
+  ([request params]
+   (js/fetch request params)))
 
 ;; --- JSON ---
 

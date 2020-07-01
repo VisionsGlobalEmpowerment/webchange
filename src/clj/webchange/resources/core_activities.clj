@@ -27,7 +27,10 @@
    },
    ...]"
   [course-slug]
-  (let [course-data (course/get-course-data course-slug)]
+  (let [course-data (course/get-course-data course-slug)
+        transit-scenes (->> (:scene-list course-data)
+                            (filter (fn [[_ scene-data]] (< 1 (->> scene-data :outs count))))
+                            (map (fn [[scene-name _]] (name scene-name))))]
     (->> (:levels course-data)
          (map (fn [level]
                 (let [level-data {:level-number (:level level)
@@ -35,7 +38,7 @@
                   (map (fn [lesson]
                          (let [activities (->> (:activities lesson)
                                                (map :activity)
-                                               (concat ["map"]))
+                                               (concat transit-scenes))
                                activities-resources (reduce (fn [result activity-name]
                                                               (assoc result (keyword activity-name) (get-scene-resources course-slug activity-name)))
                                                             {}
@@ -49,9 +52,12 @@
                                                               (vals lesson-sets-resources))
                                                       (flatten)
                                                       (distinct))
-                               endpoints (map (fn [activity-name]
-                                                (str "/api/courses/" course-slug "/scenes/" activity-name))
-                                              activities)]
+                               endpoints (->> activities
+                                              (map (fn [activity-name]
+                                                     (str "/api/courses/" course-slug "/scenes/" activity-name)))
+                                              (concat ["/api/schools/current"
+                                                       (str "/api/courses/" course-slug)
+                                                       (str "/api/courses/" course-slug "/lesson-sets")]))]
                            (merge level-data
                                   {:lesson-number (:lesson lesson)
                                    :lesson-name   (:name lesson)
@@ -59,16 +65,3 @@
                                    :endpoints     endpoints})))
                        (:lessons level)))))
          (flatten))))
-
-(defn get-start-resources
-  [course-slug]
-  (let [initial-scene (:initial-scene (course/get-course-data course-slug))
-        initial-scene-resources (get-scene-resources course-slug initial-scene)
-        datasets-resources (get-dataset-resources course-slug [initial-scene])]
-    {:resources (-> (concat initial-scene-resources
-                            datasets-resources)
-                    (distinct))
-     :endpoints [(str "/api/courses/" course-slug)
-                 (str "/api/courses/" course-slug "/lesson-sets")
-                 (str "/api/courses/" course-slug "/scenes/" initial-scene)
-                 (str "/api/courses/" course-slug "/current-progress")]}))

@@ -1,10 +1,10 @@
 (ns webchange.service-worker.event-handlers.message
   (:require
-    [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.common.cache :refer [get-cached-activity-urls]]
+    [webchange.service-worker.cache-controller.controller :as cache-controller]
     [webchange.service-worker.common.broadcast :as bc]
-    [webchange.service-worker.wrappers :refer [then]]
-    [webchange.service-worker.cache-controller.controller :as cache-controller]))
+    [webchange.service-worker.logger :as logger]
+    [webchange.service-worker.virtual-server.core :as vs]
+    [webchange.service-worker.wrappers :refer [then online?]]))
 
 (defn- send-current-state
   []
@@ -13,6 +13,8 @@
 
 (defn- handle-cache-course
   [data]
+  (when (online?)
+    (vs/flush))
   (let [course-name (aget data "course")]
     (-> (cache-controller/cache-course course-name)
         (.then send-current-state))))

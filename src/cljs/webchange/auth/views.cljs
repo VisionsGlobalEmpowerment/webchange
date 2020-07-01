@@ -27,10 +27,13 @@
    [:div {:style {:width "101px" :height "101px" :background (str "url(/images/auth/" image ") no-repeat center center")}}]])
 
 (defn number-form [value on-click]
-  [:div {:on-click on-click :style {:padding "38px"
-                                    :width "101px" :height "101px"
+  [:div {:on-click on-click :style {:padding          "38px"
+                                    :width            "101px"
+                                    :height           "101px"
                                     :background-image "url(/images/auth/form.png)"
-                                    :font-size "40pt" :font-family "Roboto"}}
+                                    :font-size        "40pt"
+                                    :font-family      "Roboto"
+                                    :user-select      "none"}}
    value])
 
 (defn is-number-code? [c] (re-matches #"\d" c))
@@ -76,8 +79,13 @@
                   :else
                   [:div {:style (:student-access-form styles)}
                    [:div
-                    [na/header {:as      "h2" :text-align "center" :style {:color "#ffffff" :font-size "40pt" :font-family "Roboto"}
-                                :content "STUDENT ACCESS"}]
+                    [na/header {:as         "h2"
+                                :text-align "center"
+                                :style      {:color       "#ffffff"
+                                             :font-size   "40pt"
+                                             :font-family "Roboto"
+                                             :user-select "none"}
+                                :content    "STUDENT ACCESS"}]
                     (when (:student-login errors)
                       [:div [sa/Message {:negative true :compact true} [:p (-> errors :student-login :form)]]])]
 
@@ -86,17 +94,17 @@
 
                    [:div {:style (:num-pad styles)}
                     [na/grid {}
-                      [na/grid-row {:columns 3 :centered? true}
-                       [na/grid-column {} [number-form "1" #(enter-code code "1")]]
-                       [na/grid-column {} [number-form "2" #(enter-code code "2")]]
-                       [na/grid-column {} [number-form "3" #(enter-code code "3")]]]
-                      [na/grid-row {:columns 3 :centered? true}
-                       [na/grid-column {} [number-form "4" #(enter-code code "4")]]
-                       [na/grid-column {} [number-form "5" #(enter-code code "5")]]
-                       [na/grid-column {} [number-form "6" #(enter-code code "6")]]]
-                      [na/grid-row {:columns 3 :centered? true}
-                       [na/grid-column {} [number-form "7" #(enter-code code "7")]]
-                       [na/grid-column {} [number-form "8" #(enter-code code "8")]]
-                       [na/grid-column {} [number-form "9" #(enter-code code "9")]]]
-                      [na/grid-row {:columns 3 :centered? true}
-                       [na/grid-column {} [number-form "0" #(enter-code code "0")]]]]]]))))
+                     [na/grid-row {:columns 3 :centered? true}
+                      [na/grid-column {} [number-form "1" #(enter-code code "1")]]
+                      [na/grid-column {} [number-form "2" #(enter-code code "2")]]
+                      [na/grid-column {} [number-form "3" #(enter-code code "3")]]]
+                     [na/grid-row {:columns 3 :centered? true}
+                      [na/grid-column {} [number-form "4" #(enter-code code "4")]]
+                      [na/grid-column {} [number-form "5" #(enter-code code "5")]]
+                      [na/grid-column {} [number-form "6" #(enter-code code "6")]]]
+                     [na/grid-row {:columns 3 :centered? true}
+                      [na/grid-column {} [number-form "7" #(enter-code code "7")]]
+                      [na/grid-column {} [number-form "8" #(enter-code code "8")]]
+                      [na/grid-column {} [number-form "9" #(enter-code code "9")]]]
+                     [na/grid-row {:columns 3 :centered? true}
+                      [na/grid-column {} [number-form "0" #(enter-code code "0")]]]]]]))))

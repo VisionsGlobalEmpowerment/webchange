@@ -3,7 +3,7 @@
     [webchange.service-worker.cache-controller.cache-course :as cache-course]
     [webchange.service-worker.cache-controller.cache-scenes :as cache-scenes]
     [webchange.service-worker.common.cache :refer [get-cached-activity-urls get-cached-activity-endpoints]]
-    [webchange.service-worker.common.db :refer [init-db get-value set-value]]
+    [webchange.service-worker.common.db :refer [get-value set-value]]
     [webchange.service-worker.config :as config]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [promise promise-all promise-resolve promise-reject then]]))
@@ -43,9 +43,7 @@
   (logger/debug "Cache course" course-name)
   (if (nil? course-name)
     (logger/error "Course name is not defined")
-    (-> (init-db course-name)
-        (then (fn []
-                (set-current-course course-name)))
+    (-> (set-current-course course-name)
         (then (fn []
                 (cache-course/cache-course course-name)))
         (then (fn []

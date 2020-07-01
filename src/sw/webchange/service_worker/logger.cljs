@@ -1,5 +1,6 @@
 (ns webchange.service-worker.logger
   (:require
+    [webchange.service-worker.common.broadcast :as broadcast]
     [webchange.service-worker.config :refer [log-level]]))
 
 (def current-level log-level)
@@ -35,7 +36,8 @@
 (defn error
   [& args]
   (when (allowed? :error)
-    (apply js/console.error (into [prefix "[Error]"] args))))
+    (apply js/console.error (into [prefix "[Error]"] args))
+    (apply broadcast/send-error args)))
 
 (defn debug-folded
   [title & args]

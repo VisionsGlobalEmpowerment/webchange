@@ -46,28 +46,27 @@
         image-width 400
         image-height 225
         text-padding 40]
-    [:> Group {:x x
-               :y y}
+    [:> Group {:x        x
+               :y        y
+               :on-click on-click
+               :on-tap   on-click}
      [:> Rect {:x             0
                :y             0
                :width         card-width
                :height        card-height
                :fill          "#ffffff"
-               :corner-radius border-radius
-               :on-click      on-click}]
+               :corner-radius border-radius}]
      [kimage {:src           (get-data-as-url image)
               :width         image-width
               :height        image-height
               :stroke        "#bd13c7"
               :stroke-width  1
-              :border-radius [border-radius border-radius 0 0]
-              :on-click      on-click}]
+              :border-radius [border-radius border-radius 0 0]}]
      [:> Text {:x         text-padding
                :y         (+ image-height text-padding)
                :font-size 32
                :text      name
-               :color     "#000000"
-               :on-click  on-click}]]))
+               :color     "#000000"}]]))
 
 (defn- progress-bar
   [{:keys [x y width height value]}]
@@ -117,7 +116,8 @@
 (defn- featured-content
   [{:keys [x y next-activity on-click]}]
   (let [title "Featured Content"]
-    [:> Group {:x x :y y}
+    [:> Group {:x x
+               :y y}
      [:> Text {:x           0
                :y           0
                :text        title
