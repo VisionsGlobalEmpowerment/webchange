@@ -1,4 +1,5 @@
 {:initial-scene "map",
+ :navigation-mode :activity, ; possible values :activity, :lesson
  :scene-list
                 {:home
                  {:name    "Casa",
