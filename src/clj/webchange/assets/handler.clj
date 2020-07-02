@@ -8,6 +8,7 @@
             [mikera.image.core :as imagez]
             [webchange.assets.core :as core]
             [config.core :refer [env]]
+            [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.common.audio-parser.converter :refer [convert-to-mp3 get-changed-extension]]
             [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
             [webchange.common.files :as f]))
@@ -87,6 +88,23 @@
            :size (normalize-size size)}
           params)))))
 
+
+(defn upload-asset-by-path [{{:keys [tempfile]} "file" target-path "target-path" :as request}]
+  (let [full-path (f/relative->absolute-path target-path)]
+    (clojure.java.io/make-parents full-path)
+    (with-open [xin (io/input-stream tempfile)
+                xout (io/output-stream full-path)]
+      (io/copy xin xout))
+    (core/store-asset-hash! full-path)))
+
 (defroutes asset-routes
            (POST "/api/assets/" request
-             (-> request :multipart-params upload-asset response)))
+             (wrap-multipart-params
+               (fn [request]
+                (-> request :multipart-params upload-asset response)))))
+
+(defroutes asset-maintainer-routes
+           (POST "/api/assets/by-path/" request
+             (wrap-multipart-params
+               (fn [request]
+                (-> request :multipart-params upload-asset-by-path response)))))
