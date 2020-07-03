@@ -46,18 +46,16 @@
                           (map :activity)
                           (concat transit-scenes))
           activities-resources (reduce (fn [result activity-name]
-                                         (assoc result (keyword activity-name) (get-scene-resources course-slug activity-name)))
-                                       {}
+                                         (concat result (get-scene-resources course-slug activity-name)))
+                                       []
                                        activities)
           lesson-sets (->> (:lesson-sets lesson) (vals))
-
-          ;; ToDo: get lesson sets resources only for needed sets
           lesson-sets-resources (reduce (fn [result lesson-set-name]
-                                          (assoc result (keyword lesson-set-name) (get-dataset-resources course-slug activities)))
-                                        {}
+                                          (concat result (get-dataset-resources course-slug lesson-set-name activities)))
+                                        []
                                         lesson-sets)
-          overall-resources (->> (concat (vals activities-resources)
-                                         (vals lesson-sets-resources))
+          overall-resources (->> (concat activities-resources
+                                         lesson-sets-resources)
                                  (flatten)
                                  (distinct))
           endpoints (->> activities
