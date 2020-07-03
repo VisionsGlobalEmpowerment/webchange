@@ -29,6 +29,12 @@
       (then (fn [url]
               (core/get url)))))
 
+(defn get-current-progress
+  []
+  (-> (get-url :current-progress)
+      (then (fn [url]
+              (core/get url)))))
+
 (defn post-current-progress
   [progress-data]
   (-> (get-url :current-progress)
