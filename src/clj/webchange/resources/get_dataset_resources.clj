@@ -39,16 +39,17 @@
          (map keyword))))
 
 (defn- get-items-ids
-  [lesson-sets]
+  [lesson-sets lesson-set-name]
   (->> lesson-sets
+       (filter (fn [{:keys [name]}] (= name lesson-set-name)))
        (map (fn [lesson-set]
               (map :id (get-in lesson-set [:data :items]))))
        (flatten)
        (distinct)))
 
 (defn- get-current-items
-  [lesson-sets items]
-  (let [items-ids (get-items-ids lesson-sets)]
+  [lesson-sets lesson-set-name items]
+  (let [items-ids (get-items-ids lesson-sets lesson-set-name)]
     (filter (fn [{:keys [id]}] (some #{id} items-ids)) items)))
 
 (defn- get-actions-resources
@@ -61,8 +62,8 @@
        (distinct)))
 
 (defn get-dataset-resources
-  [course-slug scenes-names]
+  [course-slug lesson-set-name scenes-names]
   (let [{:keys [datasets items lesson-sets]} (dataset/get-course-lessons course-slug)
-        current-items (get-current-items lesson-sets items)
+        current-items (get-current-items lesson-sets lesson-set-name items)
         dataset-fields-names (get-datasets-fields-names lesson-sets datasets scenes-names)]
     (get-actions-resources current-items dataset-fields-names)))
