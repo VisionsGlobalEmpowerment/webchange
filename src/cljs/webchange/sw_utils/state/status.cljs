@@ -2,15 +2,26 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.logger :as logger]
+    [webchange.sw-utils.message :refer [set-current-course]]
     [webchange.sw-utils.state.db :refer [path-to-db]]))
+
+(re-frame/reg-cofx
+  :online?
+  (fn [co-effects]
+    (assoc co-effects :online? (.-onLine js/navigator))))
+
+;; Sync status
 
 (def sync-statuses [:not-started
                     :disabled
                     :installing
                     :installed
+                    :activating
+                    :activated
                     :syncing
                     :synced
-                    :offline])
+                    :offline
+                    :broken])
 
 (defn- valid-sync-status?
   [status]
@@ -26,22 +37,11 @@
 
 (defn sync-disabled?
   [db]
-  (-> (sync-status db)
-      (= :disabled)))
+  (-> (sync-status db) (= :disabled)))
 
 (re-frame/reg-sub
   ::sync-disabled?
   sync-disabled?)
-
-(re-frame/reg-sub
-  ::last-update
-  (fn [db]
-    (get-in db (path-to-db [:last-update]))))
-
-(re-frame/reg-sub
-  ::version
-  (fn [db]
-    (get-in db (path-to-db [:version]))))
 
 (re-frame/reg-event-db
   ::set-sync-status
@@ -51,20 +51,47 @@
       (do (logger/error (str "Sync status '" status "' is not valid"))
           db))))
 
+;; Current Course
+
+(re-frame/reg-fx
+  :set-current-course
+  (fn [[course-id]]
+    (set-current-course course-id)))
+
+(re-frame/reg-event-fx
+  ::set-current-course
+  [(re-frame/inject-cofx :online?)]
+  (fn [{:keys [db online?]} [_ course-id]]
+    (when-not (sync-disabled? db)
+      (if online?
+        {:set-current-course [course-id]}
+        {:dispatch [::set-sync-status :offline]}))))
+
+;; Last update
+
+(re-frame/reg-sub
+  ::last-update
+  (fn [db]
+    (get-in db (path-to-db [:last-update]))))
+
 (re-frame/reg-event-fx
   ::set-last-update
   (fn [{:keys [db]} [_ date-str]]
     {:db (assoc-in db (path-to-db [:last-update]) date-str)}))
+
+;; Version
+
+(re-frame/reg-sub
+  ::version
+  (fn [db]
+    (get-in db (path-to-db [:version]))))
 
 (re-frame/reg-event-fx
   ::set-version
   (fn [{:keys [db]} [_ version]]
     {:db (assoc-in db (path-to-db [:version]) version)}))
 
-(re-frame/reg-cofx
-  :online?
-  (fn [co-effects]
-    (assoc co-effects :online? (.-onLine js/navigator))))
+;; Error
 
 (re-frame/reg-event-fx
   ::handle-error

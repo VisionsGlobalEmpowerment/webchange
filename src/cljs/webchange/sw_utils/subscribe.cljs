@@ -1,8 +1,8 @@
 (ns webchange.sw-utils.subscribe
   (:require [re-frame.core :as re-frame]
             [webchange.config :as config]
-            [webchange.sw-utils.state.status :as status]
-            [webchange.sw-utils.state.resources :as resources]))
+            [webchange.sw-utils.state.resources :as resources]
+            [webchange.sw-utils.state.status :as status]))
 
 (defn- set-current-state
   [data]
@@ -12,13 +12,12 @@
   (if-let [last-update (:last-update data)]
     (re-frame/dispatch [::status/set-last-update last-update]))
 
-  (if-let [resources (:game-resources data)]
-    (re-frame/dispatch [::resources/set-synced-game-resources resources]))
+  (if-let [cached-lessons (:cached-lessons data)]
+    (re-frame/dispatch [::resources/set-cached-lessons cached-lessons])))
 
-  (if-let [endpoints (:game-endpoints data)]
-    (re-frame/dispatch [::resources/set-synced-game-endpoints endpoints]))
-
-  (re-frame/dispatch [::status/set-sync-status :synced]))
+(defn- set-sync-status
+  [value]
+  (re-frame/dispatch [::status/set-sync-status (keyword value)]))
 
 (defn- handle-error
   [error]
@@ -34,5 +33,6 @@
                                                  data (-> event-data (aget "data") (js->clj :keywordize-keys true))]
                                              (case type
                                                "current-state" (set-current-state data)
+                                               "sync-status" (set-sync-status data)
                                                "error" (handle-error data)
                                                (-> (str "Unhandled service worker message type " type) js/Error. throw)))))))

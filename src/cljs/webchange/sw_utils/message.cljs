@@ -27,12 +27,13 @@
   []
   (post-message {:type (:get-current-state config/messages)}))
 
-(defn set-cached-data
-  [data]
-  (post-message {:type (:update-cached-scenes config/messages)
-                 :data data}))
 
-(defn cache-course
+(defn set-current-course
   [course-id]
-  (post-message {:type (:cache-course config/messages)
+  (post-message {:type (:set-current-course config/messages)
                  :data {:course course-id}}))
+
+(defn cache-lessons
+  [lessons]
+  (post-message {:type (:cache-lessons config/messages)
+                 :data lessons}))

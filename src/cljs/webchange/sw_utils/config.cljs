@@ -1,5 +1,5 @@
 (ns webchange.sw-utils.config)
 
-(def messages {:cache-course         "cache-course"
-               :update-cached-scenes "update-cached-scenes"
-               :get-current-state    "get-current-state"})
+(def messages {:cache-lessons      "cache-lessons"
+               :get-current-state  "get-current-state"
+               :set-current-course "set-current-course"})

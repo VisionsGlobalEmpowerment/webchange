@@ -1,6 +1,5 @@
 (ns webchange.service-worker.logger
   (:require
-    [webchange.service-worker.common.broadcast :as broadcast]
     [webchange.service-worker.config :refer [log-level]]))
 
 (def current-level log-level)
@@ -21,28 +20,27 @@
 (defn debug
   [& args]
   (when (allowed? :debug)
-    (apply js/console.info (into [prefix "[Debug]"] args))))
+    (apply js/console.info (into [prefix "[Debug]"] (map clj->js args)))))
 
 (defn log
   [& args]
   (when (allowed? :log)
-    (apply js/console.log (into [prefix "[Log]"] args))))
+    (apply js/console.log (into [prefix "[Log]"] (map clj->js args)))))
 
 (defn warn
   [& args]
   (when (allowed? :warn)
-    (apply js/console.warn (into [prefix "[Warn]"] args))))
+    (apply js/console.warn (into [prefix "[Warn]"] (map clj->js args)))))
 
 (defn error
   [& args]
   (when (allowed? :error)
-    (apply js/console.error (into [prefix "[Error]"] args))
-    (apply broadcast/send-error args)))
+    (apply js/console.error (into [prefix "[Error]"] (map clj->js args)))))
 
 (defn debug-folded
   [title & args]
   (when (allowed? :debug)
     (let [group-name (str prefix " [Debug] " title)]
       (js/console.groupCollapsed group-name)
-      (apply js/console.log args)
+      (apply js/console.log (map clj->js args))
       (js/console.groupEnd group-name))))

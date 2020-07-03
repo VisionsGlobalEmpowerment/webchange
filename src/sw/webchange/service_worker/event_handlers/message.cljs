@@ -1,42 +1,37 @@
 (ns webchange.service-worker.event-handlers.message
   (:require
-    [webchange.service-worker.cache-controller.controller :as cache-controller]
-    [webchange.service-worker.common.broadcast :as bc]
+    [webchange.service-worker.controllers.worker-state :as worker-state]
+    [webchange.service-worker.broadcast.core :as broadcast]
+    [webchange.service-worker.controllers.game-resources :as game-resources]
+    [webchange.service-worker.db.general :as general]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.core :as vs]
     [webchange.service-worker.wrappers :refer [then online?]]))
 
 (defn- send-current-state
   []
-  (-> (cache-controller/get-current-state)
-      (.then bc/send-current-state)))
+  (-> (worker-state/get-current-state)
+      (then broadcast/send-current-state)))
 
-(defn- handle-cache-course
-  [data]
-  (when (online?)
-    (vs/flush))
-  (let [course-name (aget data "course")]
-    (-> (cache-controller/cache-course course-name)
-        (.then send-current-state))))
+(defn- handle-set-current-course
+  [{:keys [course]}]
+  (-> (general/set-current-course course)
+      (then send-current-state)
+      (then (fn []
+              (broadcast/send-sync-status :activated)))))
 
-(defn- handle-cache-scenes
+(defn- handle-cache-lessons
   [data]
-  (let [course-name (aget data "course")
-        params {:resources-to-add    (-> data (aget "resources") (aget "add"))
-                :resources-to-remove (-> data (aget "resources") (aget "remove"))
-                :endpoints-to-add    (-> data (aget "endpoints") (aget "add"))
-                :endpoints-to-remove (-> data (aget "endpoints") (aget "remove"))}]
-    (-> (cache-controller/cache-scenes params course-name)
-        (.then send-current-state))))
+  (game-resources/update-cached-lessons data))
 
 (defn handle
   [event]
   (let [message (.-data event)
         type (.-type message)
-        data (.-data message)]
+        data (-> (.-data message)
+                 (js->clj :keywordize-keys true))]
     (logger/debug "Get message" type data)
     (case type
-      "cache-course" (handle-cache-course data)
-      "update-cached-scenes" (handle-cache-scenes data)
+      "set-current-course" (handle-set-current-course data)
+      "cache-lessons" (handle-cache-lessons data)
       "get-current-state" (send-current-state)
       (logger/warn "Unhandled message type:" type))))

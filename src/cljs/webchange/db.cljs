@@ -16,8 +16,7 @@
    :settings               {:music-volume   10
                             :effects-volume 30}
    :dashboard              {:access-codes {}}
-   :service-worker         {:synced-resources {:game []}
-                            :sync-status      :not-started
+   :service-worker         {:sync-status      :not-started
                             :last-update      nil
                             :version          nil}
    })

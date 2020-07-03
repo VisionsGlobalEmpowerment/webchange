@@ -49,6 +49,8 @@
                  [ring/ring-codec "1.1.2"]
                  ]
 
+  ;:node-dependencies [[source-map-support "0.2.8"]]
+
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]
@@ -160,8 +162,17 @@
      :source-paths ["src/sw"]
      :compiler {:main webchange.service-worker
                 :output-to "resources/public/js/compiled/service-worker.js"
-                :output-dir           "resources/public/js/compiled/out-sw"
+                :output-dir "resources/public/js/compiled/out-sw"
                 :optimizations :advanced
+                :pretty-print false}}
+    {:id           "sw-dev"
+     :source-paths ["src/sw"]
+     :compiler {:main webchange.service-worker
+                :output-to "resources/public/js/compiled/service-worker.js"
+                :output-dir "resources/public/js/compiled/out-sw-dev"
+                :optimizations :simple
+                :source-map "resources/public/js/compiled/service-worker.js.map"
+                :source-map-path "/js/compiled/out-sw-dev/"
                 :pretty-print true}}
     {:id           "min"
      :source-paths ["src/cljs"]

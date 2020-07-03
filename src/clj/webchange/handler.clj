@@ -33,12 +33,14 @@
   (if (api-request? request)
     (if (authenticated? request)
       {:status 403
-       :body {:errors [{:message "Unauthorized"}]}}
+       :body   {:errors [{:message "Unauthorized"}]}}
       {:status 401
-       :body {:errors [{:message "Unauthenticated"}]}})
+       :body   {:errors [{:message "Unauthenticated"}]}})
     (if (authenticated? request)
       (resource-response "error403.html" {:root "public"})
-      (redirect (str "/login" "?redirect=" (:uri request))))))
+      (redirect (if (:student-page metadata)
+                  (str "/student-login" "?redirect=" (:uri request))
+                  (str "/login" "?redirect=" (:uri request)))))))
 
 (def auth-backend
   (session-backend {:unauthorized-handler unauthorized-handler}))
@@ -61,9 +63,13 @@
         handle)))
 
 (defn public-route [] (resource-response "index.html" {:root "public"}))
-(defn authenticated-route [request] (if-not (authenticated? request)
-                         (throw-unauthorized)
-                         (resource-response "index.html" {:root "public"})))
+(defn authenticated-route
+  ([request]
+   (authenticated-route request {}))
+  ([request metadata]
+   (if-not (authenticated? request)
+     (throw-unauthorized metadata)
+     (resource-response "index.html" {:root "public"}))))
 
 (defn teacher? [request]
   (and (authenticated? request)
@@ -96,10 +102,10 @@
            (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
 
-           (GET "/student-dashboard" request (authenticated-route request))
-           (GET "/courses/:id/dashboard" request (authenticated-route request))
-           (GET "/student-dashboard/finished" request (authenticated-route request))
-           (GET "/courses/:id/dashboard/finished" request (authenticated-route request))
+           ;; student dashboard
+           (GET "/courses/:id/dashboard" request (authenticated-route request {:student-page true}))
+           (GET "/courses/:id/dashboard/finished" request (authenticated-route request {:student-page true}))
+
            (files "/upload/" {:root (env :upload-dir)})
            (resources "/"))
 
@@ -109,7 +115,9 @@
 (defroutes service-worker-route
            (GET "/page-skeleton" [] (public-route))
            (GET "/service-worker.js" [] (-> (resource-response "js/compiled/service-worker.js" {:root "public"})
-                                            (assoc-in [:headers "Content-Type"] "text/javascript"))))
+                                            (assoc-in [:headers "Content-Type"] "text/javascript")))
+           (GET "/service-worker.js.map" [] (-> (resource-response "js/compiled/service-worker.js.map" {:root "public"})
+                                                (assoc-in [:headers "Content-Type"] "application/json"))))
 
 (defn wrap-body-as-string
   [handler]

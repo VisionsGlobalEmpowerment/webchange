@@ -1,8 +1,8 @@
 (ns webchange.service-worker.event-handlers.fetch
   (:require
     [clojure.string :refer [starts-with?]]
-    [webchange.service-worker.common.cache-common :refer [get-current-course]]
     [webchange.service-worker.config :refer [get-cache-name]]
+    [webchange.service-worker.db.general :as general]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.strategies :as strategy]
     [webchange.service-worker.virtual-server.core :as vs]
@@ -45,7 +45,7 @@
 
 (defn- get-response
   [request]
-  (-> (get-current-course)
+  (-> (general/get-current-course)
       (then (fn [course-name]
               (cond
                 (vs/api-request? request) (vs/handle-request request course-name)
