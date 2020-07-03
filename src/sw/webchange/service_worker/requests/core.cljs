@@ -17,7 +17,8 @@
 (defn get
   [url]
   (logger/debug "Get from url: " url)
-  (-> (js-fetch url)
+  (-> (js-fetch url (clj->js {:method  "GET"
+                              :headers {"Content-Type" "application/json"}}))
       (then response-json)
       (then (fn [data]
               (let [prepared-data (js->clj data :keywordize-keys true)]
