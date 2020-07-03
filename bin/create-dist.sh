@@ -5,5 +5,6 @@ cd ../
 mkdir distr
 cp $DIR/school-setup/* distr
 cp dump-secondary.sql distr
+lein uberjar
 cp target/webchange.jar distr/current.jar
 zip -r distr/raw.zip resources/public/raw
