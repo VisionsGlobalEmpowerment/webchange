@@ -4,6 +4,9 @@
             [webchange.auth.core :as auth-core]
             [webchange.secondary.core :as core]
             [webchange.school.core :as school-core]
+            [config.core :refer [env]]
+            [webchange.assets.loader :as assets-loader]
+            [clj-http.client :as client]
             ))
 
 (defn init-secondary!
@@ -36,6 +39,30 @@
   (println "Done!")
   )
 
+
+(defn upload-local-files!
+  [config]
+  (print "Do you want to update asset hashes. (Y) ")
+  (flush)
+  (when (= (read-line) "Y")
+    (println "Updating asset hashes....")
+    (assets-loader/calc-hashes! config))
+  (println "Calculate difference and search files to upload....")
+  (let [to-upload (core/calc-upload-assets)]
+    (println "About to upload....")
+    (doseq [file to-upload]
+      (println (:path file)))
+    (print "Are you sure you want to continue(Y)?")
+    (flush)
+    (let [user-input (read-line)]
+      (when (= user-input "Y")
+        (doseq [file to-upload]
+          (println "Uploading file" file)
+          (core/upload-file (:path file))))
+      (println "Done!")
+      )))
+
+
 (def commands
   {"init-secondary"
    (fn [config args]
@@ -46,6 +73,9 @@
    "download-course-data"
    (fn [config args]
      (apply download-course-data! config args))
+   "upload-local-files"
+   (fn [config args]
+     (apply upload-local-files! env args))
    })
 
 (defn command? [[arg]]

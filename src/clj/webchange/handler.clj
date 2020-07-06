@@ -14,12 +14,12 @@
             [webchange.secondary.handler :refer [secondary-school-routes]]
             [webchange.progress.handler :refer [progress-routes]]
             [webchange.dataset.handler :refer [dataset-routes]]
-            [webchange.assets.handler :refer [asset-routes]]
+            [webchange.assets.handler :refer [asset-routes asset-maintainer-routes]]
             [webchange.resources.handler :refer [resources-routes]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [throw-unauthorized authenticated?]]
             [buddy.auth.backends.session :refer [session-backend]]
-            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization authorization-error]]
             [clojure.edn :as edn]
             [clojure.tools.logging :as log]
             [ring.middleware.session.memory :as mem]
@@ -133,6 +133,19 @@
     response
     (assoc response :body (slurp body))))
 
+(defn wrap-key-protected
+  [handler]
+  (fn [{{api-key "api-key"} :headers :as request}]
+     (let [response (if (= api-key (:api-key env))
+                      (handler request)
+                      {:status 403
+                       :body {:errors [{:message "Unauthorized"}]}})
+           ] response)))
+
+;(try (handler request)
+;     (catch Exception e
+;       (authorization-error request e backend)))
+
 (defroutes app
            website-api-routes
            pages-routes
@@ -146,8 +159,9 @@
            progress-routes
            resources-routes
            service-worker-route
-           (-> asset-routes
-               wrap-multipart-params)
+           asset-routes
+           (-> asset-maintainer-routes
+               wrap-key-protected)
            (not-found "Not Found"))
 
 (def dev-store (mem/memory-store))

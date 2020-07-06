@@ -7,10 +7,10 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword]]
             [clj-http.client :as client]
             [webchange.db.core :as db-core]
+            [webchange.common.files :as f]
             [config.core :refer [env]]
             [clojure.reflect :as cr]
             [clojure.data.json :as json]
-            [webchange.auth.core :as auth]
             [webchange.secondary.guid :as guid]
             [webchange.assets.core :as assets]))
 
@@ -549,7 +549,7 @@
       (map #(.get %) ret))
   ))
 
-(defn update-assets! []
+(defn get-difference-data []
   (let [asset-hashes (db/get-all-asset-hash)
         hashes (map (fn [item] {:path-hash (:path-hash item) :file-hash (:file-hash item)}) asset-hashes)
         url (make-url-absolute "api/school/asset/difference/")
@@ -562,7 +562,21 @@
         remove (fill-additional-data (:remove update))
         download (:update update)
         ]
+    {:remove remove :download download}))
+
+(defn update-assets! []
+  (let [{remove :remove download :download} (get-difference-data)]
       (doseq [item remove]
         (assets/remove-file-with-hash! item))
-      (download-files download)
-    ))
+      (download-files download)))
+
+(defn calc-upload-assets []
+  (let [{remove :remove download :download} (get-difference-data)]
+    remove))
+
+(defn upload-file [path]
+  (let [file-path (f/relative->absolute-path path)
+        url (make-url-absolute "/api/assets/by-path/")
+        response (client/post url {:headers {:api-key (:api-key env)}
+                                   :multipart [{:name "target-path" :content path}
+                                               {:name "file" :content (clojure.java.io/file file-path)}]})]))
