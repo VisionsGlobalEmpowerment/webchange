@@ -100,7 +100,7 @@ Set public and upload folders path in profiles `env`:
     $ lein run load-scene spanish  home-stored home
     ```
 
-- **Load** scene from edn to db. merges scene fields
+- **Merge** scene fields from edn to db.
     ```
     lein run merge-scene-info <course-slug> <saved-name> <scene-name> [field1] [field2] [...]
     
