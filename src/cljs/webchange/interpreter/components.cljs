@@ -21,7 +21,7 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right]]
+    [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right bottom-center]]
     [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.screens.activity-finished :refer [activity-finished-screen]]
@@ -118,6 +118,17 @@
       [close-button (- 108) 20]]
      ]
     ))
+
+(defn skip-menu
+  []
+  (let [show-skip @(re-frame/subscribe [::subs/show-skip])
+        {:keys [x y]} (bottom-center)]
+    (when show-skip
+      [:> Group {:x        (- x 150)
+                 :y        (- y 200)
+                 :on-click #(re-frame/dispatch [::ce/skip])
+                 :on-tap   #(re-frame/dispatch [::ce/skip])}
+       [components/button-interpreter {:text "Skip"}]])))
 
 (defn scene-started
   [scene-data]
@@ -298,6 +309,7 @@
         ^{:key (str scene-id name)} [draw-object scene-id name])
      [score]
      [menu]
+     [skip-menu]
      [triggers scene-id]
      ]))
 

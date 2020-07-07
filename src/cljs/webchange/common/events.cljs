@@ -5,6 +5,15 @@
     [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
 (def executors (atom {}))
+(def on-skip-handlers
+  "A list of functions to invoke on skip actions.
+  Is used to cancel current action (e.g. stop audio, finish transition) and continue the flow (success event)."
+  (atom []))
+
+(defn on-skip!
+  "Register function to invoke on skip action"
+  [handler]
+  (swap! on-skip-handlers conj handler))
 
 (defn prepare-params
   [action params from-params]
@@ -34,10 +43,10 @@
   #(re-frame/dispatch (success-event action)))
 
 (defn get-action-tags
-  [{:keys [tags unique-tag]}]
-  (if-not (nil? unique-tag)
-    (conj tags unique-tag)
-    tags))
+  [{:keys [tags unique-tag skippable]}]
+  (cond-> tags
+          unique-tag (conj unique-tag)
+          skippable (conj "skip")))
 
 (def event-as-action
   "Interceptor
@@ -176,6 +185,7 @@
 (reg-simple-executor :parallel ::execute-parallel)
 (reg-simple-executor :remove-flows ::execute-remove-flows)
 (reg-simple-executor :callback ::execute-callback)
+(reg-simple-executor :reset-skip ::execute-reset-skip)
 
 (re-frame/reg-event-fx
   ::execute-action
@@ -285,48 +295,51 @@
   ::execute-sequence
   [event-as-action with-vars]
   (fn [{:keys [db]} action]
-    (let [flow-id (random-uuid)
-          action-id (random-uuid)
-          [current & rest] (:data action)
-          next [::execute-sequence (-> action (assoc :data rest))]
-          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (get-action-tags action)}]]
-      (if current
-        {:dispatch-n (list flow-event
-                           [::execute-action (-> current
-                                                 (get-action db action)
-                                                 (assoc :flow-id flow-id)
-                                                 (assoc :action-id action-id)
-                                                 (with-prev action))])}
-        {:dispatch (success-event action)}))))
+    (let [data (->> (:data action)
+                    (map #(get-action % db action))
+                    (into []))]
+      {:dispatch [::execute-sequence-data (assoc action :data data)]})))
 
 (re-frame/reg-event-fx
   ::execute-sequence-data
   [event-as-action with-vars]
   (fn [{:keys [db]} action]
-    (let [flow-id (random-uuid)
-          action-id (random-uuid)
-          [current & rest] (:data action)
-          next [::execute-sequence-data (-> action (assoc :data rest))]
-          flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (get-action-tags action)}]]
-      (if current
+    (if (empty? (:data action))
+      {:dispatch (success-event action)}
+      (let [[current & rest] (:data action)
+            sequence-skippable? (:skippable action)
+            skippable? (:skippable current)
+            rest (if skippable? (into [{:type "reset-skip"}] rest) rest)
+            next [::execute-sequence-data (-> action (assoc :data rest))]
+            flow-id (random-uuid)
+            action-id (random-uuid)
+            flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (get-action-tags action)}]
+            current-action (-> current
+                               (assoc :flow-id flow-id)
+                               (assoc :action-id action-id)
+                               (with-prev action))]
+        (when skippable?
+          (on-skip! #(re-frame/dispatch (success-event current-action))))
+        (when sequence-skippable?
+          (on-skip! #(re-frame/dispatch [::execute-remove-flows {:flow-tag "skip"}])))
         {:dispatch-n (list flow-event
-                           [::execute-action (-> current
-                                                 (assoc :flow-id flow-id)
-                                                 (assoc :action-id action-id)
-                                                 (with-prev action))])}
-        {:dispatch (success-event action)}))))
+                           (when skippable? [::show-skip true])
+                           [::execute-action current-action])}))))
 
 (re-frame/reg-event-fx
   ::execute-parallel
   [event-as-action with-vars]
   (fn [{:keys [db]} action]
     (let [flow-id (random-uuid)
+          sequence-skippable? (:skippable action)
           actions (->> (:data action)
                       (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))))
                       (map (fn [v] (with-prev v action))))
           action-ids (map #(get % :action-id) actions)
           flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tags (get-action-tags action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
+      (when sequence-skippable?
+        (on-skip! #(re-frame/dispatch [::execute-remove-flows {:flow-tag "skip"}])))
       {:dispatch-n (cons flow-event action-events)})))
 
 (re-frame/reg-event-fx
@@ -336,3 +349,23 @@
     (when-not (nil? callback)
       (callback))
     {:dispatch (success-event action)}))
+
+(re-frame/reg-event-fx
+  ::show-skip
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :show-skip value)}))
+
+(re-frame/reg-event-fx
+  ::execute-reset-skip
+  [event-as-action with-flow]
+  (fn [{:keys [db]} action]
+    {:db (assoc db :show-skip false)
+     :dispatch (success-event action)}))
+
+(re-frame/reg-event-fx
+  ::skip
+  (fn [{:keys [db]} _]
+    (let [[on-skip-list _] (reset-vals! on-skip-handlers [])]
+      (doseq [on-skip on-skip-list]
+        (on-skip)))
+    {:db (assoc db :show-skip false)}))

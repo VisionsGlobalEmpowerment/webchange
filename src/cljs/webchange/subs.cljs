@@ -201,3 +201,8 @@
   ::navigation
   (fn [db]
     (:navigation db)))
+
+(re-frame/reg-sub
+  ::show-skip
+  (fn [db]
+    (:show-skip db)))
