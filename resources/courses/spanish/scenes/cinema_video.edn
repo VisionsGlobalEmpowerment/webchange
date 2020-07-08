@@ -116,7 +116,7 @@
    :height 100,
    :children ["play-button" "next-button"],
    :states {:hidden {:type "transparent"}, :visible {:type "group"}}}},
- :scene-objects [["background"] ["letter-video" "screen-overlay"] ["video-controls"] ["senora-vaca" "mari"]],
+ :scene-objects [["background"] ["letter-video" "screen-overlay" "video-controls" "senora-vaca" "mari"]],
  :actions
  {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
   :finish-activity

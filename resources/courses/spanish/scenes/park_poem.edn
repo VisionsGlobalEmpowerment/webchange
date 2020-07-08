@@ -156,10 +156,7 @@
    :start true}},
  :scene-objects
  [["background"]
-  ["image-story-1" "image-story-2" "image-story-3"]
-  ["letter-image" "concept-image"]
-  ["mari" "rock"]
-  ["bubble-1" "bubble-2" "bubble-3"]],
+  ["image-story-1" "image-story-2" "image-story-3" "letter-image" "concept-image" "mari" "rock" "bubble-1" "bubble-2" "bubble-3"]],
  :actions
  {:enable-story-1
   {:type "sequence-data",

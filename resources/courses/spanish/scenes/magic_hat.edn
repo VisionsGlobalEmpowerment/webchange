@@ -129,7 +129,7 @@
    :speed 0.35,
    :start true}
   },
- :scene-objects [["background"] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3"] ["mari"]],
+ :scene-objects [["background"] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3" "mari"]],
  :actions
  {
   :box-jump-in

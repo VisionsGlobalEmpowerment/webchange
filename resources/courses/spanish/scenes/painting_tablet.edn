@@ -82,7 +82,7 @@
    :scale-y 1,
    :src "/raw/img/library/painting-tablet/pencil.png",
    :states {:active {:x -183}, :inactive {:x -283}}}},
- :scene-objects [["background"] ["painting-area"] ["felt-tip" "brush" "pencil" "eraser" "colors-palette"]],
+ :scene-objects [["background"] ["painting-area" "felt-tip" "brush" "pencil" "eraser" "colors-palette"]],
  :actions
  {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
   :finish-activity

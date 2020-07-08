@@ -162,10 +162,7 @@
    :start true}},
  :scene-objects
  [["background"]
-  ["pinata" "mari"]
-  ["letter1" "letter2" "letter3"]
-  ["box1-ph" "box2-ph" "box3-ph"]
-  ["box1" "box2" "box3"]],
+  ["pinata" "mari" "letter1" "letter2" "letter3" "box1-ph" "box2-ph" "box3-ph" "box1" "box2" "box3"]],
  :actions
  {:boxes-disappear
   {:type "parallel",

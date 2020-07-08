@@ -192,11 +192,8 @@
    :src "/raw/img/library/painting-tablet/pencil.png",
    :states {:active {:x -128}, :inactive {:x -198}}}},
  :scene-objects
- [["background" "concept-card"]
-  ["letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path" "letter-tutorial-image"]
-  ["practice-canvas"]
-  ["felt-tip" "brush" "pencil" "eraser" "colors-palette"]
-  ["next-button" "mari"]],
+ [["background" ]
+  ["concept-card" "letter-trace-matrix" "letter-tutorial-trace" "letter-tutorial-path" "letter-tutorial-image" "practice-canvas" "felt-tip" "brush" "pencil" "eraser" "colors-palette" "next-button" "mari"]],
  :actions
  {:set-current-tool
   {:type "sequence-data",

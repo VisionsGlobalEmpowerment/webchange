@@ -88,10 +88,7 @@
                          :speed 0.3,
                          :start true}},
  :scene-objects
-           [["background"]
-            ["cards"]
-            ["screen-overlay"]
-            ["senora-vaca" "mari"]],
+           [["background"] ["cards" "screen-overlay" "senora-vaca" "mari"]],
  :actions
            {
             :chant-current-concept
