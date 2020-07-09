@@ -288,7 +288,8 @@
                                                     :start              1.089,
                                                     :duration           2.749,
                                                     :track              1,
-                                                    :offset             1.089},
+                                                    :offset             1.089
+                                                    :skippable true},
                  :senora-vaca-audio-2
                                                    {:type               "animation-sequence",
                                                     :data
@@ -305,7 +306,8 @@
                                                     :start              4.395,
                                                     :duration           10.042,
                                                     :track              1,
-                                                    :offset             4.395},
+                                                    :offset             4.395
+                                                    :skippable true},
                  :senora-vaca-audio-touch-second-box
                                                    {:type               "animation-sequence",
                                                     :data

@@ -21,9 +21,14 @@
 
 (re-frame/reg-fx
   :execute-audio
-  (fn [params]
+  (fn [{:keys [flow-id skippable] :as params}]
     (e/init)
-    (e/execute-audio params)))
+    (-> (e/execute-audio params)
+        (.then (fn [audio]
+                 (when skippable
+                   (ce/on-skip! #(.stop audio)))
+                 audio))
+        (.then (fn [audio] (re-frame/dispatch [::ce/register-flow-remove-handler {:flow-id flow-id :handler (fn [] (.stop audio))}]))))))
 
 (re-frame/reg-fx
   :stop-all-audio
@@ -214,7 +219,7 @@
                           (assoc :on-ended (ce/dispatch-success-fn action)))})))
 
 (defn execute-transition
-  [db {:keys [transition-id transition-tag to from] :as action}]
+  [db {:keys [transition-id transition-tag to from skippable] :as action}]
   (let [scene-id (:current-scene db)
         transition (get-in db [:transitions scene-id transition-id])
         id (or transition-tag transition-id)]
@@ -223,7 +228,8 @@
                     :component transition
                     :to        to
                     :from      from
-                    :on-ended  (ce/dispatch-success-fn action)}})))
+                    :on-ended  (ce/dispatch-success-fn action)
+                    :skippable skippable}})))
 
 (defn point->transition
   [to transition-id]
@@ -707,7 +713,7 @@
       (assoc-in db [:scenes scene-id :animations name] animation))))
 
 (def default-triggers
-  {:start [[::reset-navigation]]})
+  {:start [[::reset-navigation] [::ce/execute-reset-skip]]})
 
 (re-frame/reg-event-fx
   ::trigger

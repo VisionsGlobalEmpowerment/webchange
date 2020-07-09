@@ -225,7 +225,6 @@
                                            :data
                                                  ["show-box-1-ph"
                                                   "start-swings"
-                                                  "empty-before-dialog"
                                                   "dialog-var"
                                                   "stop-swings"
                                                   "hide-box-1-ph"
@@ -238,7 +237,6 @@
                                            :data
                                                  ["show-box-2-ph"
                                                   "start-swings"
-                                                  "empty-before-dialog"
                                                   "dialog-var"
                                                   "stop-swings"
                                                   "hide-box-2-ph"
@@ -251,7 +249,6 @@
                                            :data
                                                  ["show-box-3-ph"
                                                   "start-swings"
-                                                  "empty-before-dialog"
                                                   "dialog-var"
                                                   "stop-swings"
                                                   "hide-box-3-ph"
@@ -286,7 +283,6 @@
                                            :fail         "box-3-revert",
                                            :transition-1 "box3",
                                            :transition-2 "box-ph"},
-                 :empty-before-dialog     {:type "empty", :duration 3000},
                  :enable-drag             {:type "set-variable", :var-name "draggable", :var-value true},
                  :finish-activity         {:type "finish-activity", :id "swings"},
                  :hide-box-1-ph
@@ -325,9 +321,12 @@
                                                    :slot-name  "box1",
                                                    :attachment {:x 40, :scale-x 4, :scale-y 4}}
                                                   {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
-                 :mari-box-1              {:type "transition", :to {:x 671, :y 350, :loop false, :duration 2}, :transition-id "mari"},
-                 :mari-box-2              {:type "transition", :to {:x 1181, :y 350, :loop false, :duration 2}, :transition-id "mari"},
-                 :mari-box-3              {:type "transition", :to {:x 1658, :y 350, :loop false, :duration 2}, :transition-id "mari"},
+                 :mari-box-1              {:type "transition", :to {:x 671, :y 350, :loop false, :duration 2}, :transition-id "mari"
+                                           :skippable true},
+                 :mari-box-2              {:type "transition", :to {:x 1181, :y 350, :loop false, :duration 2}, :transition-id "mari"
+                                           :skippable true},
+                 :mari-box-3              {:type "transition", :to {:x 1658, :y 350, :loop false, :duration 2}, :transition-id "mari"
+                                           :skippable true},
                  :mari-finish
                                           {:type               "sequence-data",
                                            :data
@@ -365,9 +364,11 @@
                                                                  :audio       "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
                                                                  :target      "mari",
                                                                  :track       1,
-                                                                 :data        [{:end 36.894, :anim "talk", :start 34.549}]}],
+                                                                 :data        [{:end 36.894, :anim "talk", :start 34.549}]
+                                                                 :skippable true}],
                                            :phrase             "move-picture",
-                                           :phrase-description "Mueve la imagen para comenzar"},
+                                           :phrase-description "Mueve la imagen para comenzar"
+                                           :skippable true},
                  :mari-welcome-audio-2
                                           {:type     "animation-sequence",
                                            :data
@@ -381,7 +382,8 @@
                                            :start    0.787,
                                            :duration 11.679,
                                            :track    1,
-                                           :offset   0.787},
+                                           :offset   0.787
+                                           :skippable true},
                  :mari-welcome-audio-4
                                           {:type        "animation-sequence",
                                            :data        [{:end 17.78, :anim "talk", :start 15.05}],
@@ -391,7 +393,8 @@
                                            :start       14.999,
                                            :duration    2.933,
                                            :track       1,
-                                           :offset      14.999},
+                                           :offset      14.999
+                                           :skippable true},
                  :mari-welcome-audio-5
                                           {:type        "animation-sequence",
                                            :data        [{:end 30.94, :anim "talk", :start 29.25} {:end 32.62, :anim "talk", :start 31.17}],
@@ -401,7 +404,8 @@
                                            :start       29.012,
                                            :duration    3.786,
                                            :track       1,
-                                           :offset      29.012},
+                                           :offset      29.012
+                                           :skippable true},
                  :pick-wrong              {:type "sequence", :data ["audio-wrong"]},
                  :prepare-swing           {:type "transition", :to {:loop false, :duration 1, :rotation -15}, :transition-id "swings"},
                  :renew-words
@@ -510,7 +514,8 @@
                                            :start              40.476,
                                            :duration           8.509,
                                            :track              1,
-                                           :offset             40.476},
+                                           :offset             40.476
+                                           :skippable true},
                  :vera-welcome-audio-1
                                           {:type        "animation-sequence",
                                            :data
@@ -523,7 +528,8 @@
                                            :start       1.342,
                                            :duration    6.583,
                                            :track       1,
-                                           :offset      1.342},
+                                           :offset      1.342
+                                           :skippable true},
                  :vera-welcome-audio-3
                                           {:type        "animation-sequence",
                                            :data
@@ -536,14 +542,16 @@
                                            :start       8.572,
                                            :duration    3.852,
                                            :track       1,
-                                           :offset      8.572},
+                                           :offset      8.572
+                                           :skippable true},
                  :wait-for-box-animations {:type "empty", :duration 500},
                  :welcome-audio
                                           {:type               "sequence",
                                            :data
                                                                ["vera-welcome-audio-1" "mari-welcome-audio-2" "vera-welcome-audio-3" "mari-welcome-audio-4" "mari-welcome-audio-5"],
                                            :phrase             "welcome",
-                                           :phrase-description "Diálogo de bienvenida entre Vera, Mari y Rock"}},
+                                           :phrase-description "Diálogo de bienvenida entre Vera, Mari y Rock"
+                                           :skippable true}},
  :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata      {:prev "park", :autostart true},
  :audio

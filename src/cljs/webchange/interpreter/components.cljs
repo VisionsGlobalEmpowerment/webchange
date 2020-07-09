@@ -21,7 +21,7 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.variables.events :as vars.events]
-    [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right]]
+    [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right bottom-center]]
     [webchange.common.events :as ce]
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.screens.activity-finished :refer [activity-finished-screen]]
@@ -119,6 +119,17 @@
      ]
     ))
 
+(defn skip-menu
+  []
+  (let [show-skip @(re-frame/subscribe [::subs/show-skip])
+        {:keys [x y]} (bottom-center)]
+    (when show-skip
+      [:> Group {:x        (- x 150)
+                 :y        (- y 200)
+                 :on-click #(re-frame/dispatch [::ce/skip])
+                 :on-tap   #(re-frame/dispatch [::ce/skip])}
+       [components/button-interpreter {:text "Skip"}]])))
+
 (defn scene-started
   [scene-data]
   (let [scene-started (re-frame/subscribe [::subs/scene-started])]
@@ -148,10 +159,10 @@
 
 (defn lock-object [o]
   (let [o (-> o
-    (assoc :actions {})
-    (assoc :filter "grayscale"))]
-  o
-))
+              (assoc :actions {})
+              (dissoc :highlight)
+              (assoc :filter "grayscale"))]
+    o))
 
 (defn get-lesson-based-open-activity []
   (let [{:keys [id]} @(re-frame/subscribe [::student-dashboard-subs/next-activity])
@@ -182,9 +193,7 @@
   ([scene-id name props]
    (let [o (merge @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]) props)
          type (keyword (:type o))
-         o (add-navigation-params scene-id name o)
-         ]
-
+         o (add-navigation-params scene-id name o)]
 
      (case type
        :background [background scene-id name o]
@@ -298,6 +307,7 @@
         ^{:key (str scene-id name)} [draw-object scene-id name])
      [score]
      [menu]
+     [skip-menu]
      [triggers scene-id]
      ]))
 

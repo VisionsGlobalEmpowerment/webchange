@@ -9,6 +9,7 @@
     [react-konva :refer [Stage, Layer, Group, Rect]]
     [konva :refer [Tween]]
     [webchange.common.anim :as anim]
+    [webchange.common.events :as ce]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
@@ -238,7 +239,7 @@
     (register-transition! id #(.kill tween))))
 
 (defn konva-tween
-  [{:keys [id component to from on-ended]}]
+  [{:keys [id component to from on-ended skippable]}]
   (let [duration (transition-duration @component to)
         params (-> to
                    (assoc :node @component)
@@ -250,6 +251,8 @@
         tween (-> params clj->js Tween.)]
     (when from
       (.setAttrs @component (clj->js from)))
+    (when skippable
+      (ce/on-skip! #(.finish tween)))
     (register-transition! id #(.destroy tween))
     (.play tween)))
 
@@ -276,13 +279,15 @@
              (> r2y (+ r1y r1height))
              (< (+ r2y r2height) r1y)))))
 
-(defn animation-sequence->actions [{audio-start :start :keys [target track data] :or {track 1} :as action}]
+(defn animation-sequence->actions [{audio-start :start :keys [target track data skippable] :or {track 1}}]
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type "sequence-data"
                    :data [{:type "empty" :duration (* (- start audio-start) 1000)}
                           {:type "animation" :target target :track track :id anim}
                           {:type "empty" :duration (* (- end start) 1000)}
-                          {:type "remove-animation" :target target :track track}]})
+                          {:type "remove-animation" :target target :track track}]
+                   :skippable skippable
+                   :on-skip #(re-frame/dispatch [::ce/execute-action {:type "remove-animation" :target target :track track}])})
                 data)))
 
 (defn animation-sequence->audio-action [{:keys [start duration audio] :as action}]

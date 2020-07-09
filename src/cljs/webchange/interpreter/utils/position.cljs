@@ -50,3 +50,10 @@
         x (+ (* (:width @viewport) scale) (:x left))
         y (:y left)]
     {:x x :y y}))
+
+(defn bottom-center
+  []
+  (let [right (top-right)
+        x (/ (:x right) 2)
+        y 1080]
+    {:x x :y y}))

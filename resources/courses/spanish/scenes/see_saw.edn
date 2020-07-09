@@ -272,9 +272,12 @@
                                            :data               ["go-down-1" "go-up-1" "go-down-2" "go-up-2"],
                                            :phrase             "concept-chant",
                                            :phrase-description "Concepto, concepto, concepto!"},
-                 :mari-box-1              {:type "transition", :to {:x 671, :y 350, :loop false, :duration 2}, :transition-id "mari"},
-                 :mari-box-2              {:type "transition", :to {:x 1181, :y 350, :loop false, :duration 2}, :transition-id "mari"},
-                 :mari-box-3              {:type "transition", :to {:x 1658, :y 350, :loop false, :duration 2}, :transition-id "mari"},
+                 :mari-box-1              {:type "transition", :to {:x 671, :y 350, :loop false, :duration 2}, :transition-id "mari"
+                                           :skippable true},
+                 :mari-box-2              {:type "transition", :to {:x 1181, :y 350, :loop false, :duration 2}, :transition-id "mari"
+                                           :skippable true},
+                 :mari-box-3              {:type "transition", :to {:x 1658, :y 350, :loop false, :duration 2}, :transition-id "mari"
+                                           :skippable true},
                  :mari-finish
                                           {:type               "sequence-data",
                                            :data
@@ -312,9 +315,11 @@
                                                                  :audio       "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a",
                                                                  :target      "mari",
                                                                  :track       1,
-                                                                 :data        [{:end 17.268, :anim "talk", :start 11.722}]}],
+                                                                 :data        [{:end 17.268, :anim "talk", :start 11.722}]
+                                                                 :skippable true}],
                                            :phrase             "move-to-start",
-                                           :phrase-description "Mover imagen para comenzar"},
+                                           :phrase-description "Mover imagen para comenzar"
+                                           :skippable true},
                  :mari-welcome-audio
                                           {:type               "animation-sequence",
                                            :data               [{:end 3.914, :anim "talk", :start 1.062} {:end 10.167, :anim "talk", :start 4.897}],
@@ -327,7 +332,8 @@
                                            :start              0.787,
                                            :duration           9.716,
                                            :track              1,
-                                           :offset             0.787},
+                                           :offset             0.787
+                                           :skippable true},
                  :pick-wrong              {:type "sequence", :data ["audio-wrong"]},
                  :renew-words
                                           {:type "lesson-var-provider", :from "concepts", :provider-id "words-set", :variables ["item-1" "item-2" "item-3"]},
@@ -429,7 +435,8 @@
                                            :start              21.162,
                                            :duration           5.979,
                                            :track              1,
-                                           :offset             21.162},
+                                           :offset             21.162
+                                           :skippable true},
                  :wait-for-box-animations {:type "empty", :duration 500}},
  :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata      {:prev "park", :autostart true},
