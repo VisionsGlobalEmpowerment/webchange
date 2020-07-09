@@ -65,9 +65,7 @@
       (create-asset-hash! path full-path)
       (update-asset-hash! path full-path))
     {:path path
-     :full-path full-path}
-    )
-  )
+     :full-path full-path}))
 
 (defn remove-file-with-hash! [asset-hash]
   (io/delete-file (f/relative->absolute-path (:path asset-hash)))

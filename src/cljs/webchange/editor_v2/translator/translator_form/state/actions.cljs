@@ -171,6 +171,12 @@
         (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}
         (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action action-path data-patch])}))))
 
+(re-frame/reg-event-fx
+  ::update-metadata
+  (fn [{:keys [db]} [_ key data]]
+    {:db         (assoc-in db (path-to-db (concat [:scene :data :metadata] [key])) data)
+     :dispatch-n (list [::translator-form.scene/set-changes])}))
+
 ;; Dialog Action
 
 (re-frame/reg-event-fx
@@ -272,8 +278,10 @@
     (let [default-lip-sync-data [{:start start
                                   :end   (+ start duration)
                                   :anim  "talk"}]]
-      {:dispatch-n (list [:api-request-error :load-lip-sync-data]
-                         [::update-action :phrase {:data default-lip-sync-data}])})))
+      {:dispatch-n (list
+                     [:api-request-error :load-lip-sync-data]
+                     [::update-metadata :lip-not-sync true]
+                     [::update-action :phrase {:data default-lip-sync-data}])})))
 
 (def empty-action {:type        "animation-sequence"
                    :phrase-text "New action"

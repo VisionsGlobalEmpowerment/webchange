@@ -5,6 +5,7 @@
             [webchange.assets.core :as assets]
             [webchange.common.files :as f]
             [clojure.data.json :as json]
+            [webchange.common.audio-parser :as ap]
             [webchange.scene :as scene]
             [config.core :refer [env]]
             [clojure.string :as string]
@@ -593,3 +594,37 @@
     (->> scenes
          (map with-skills)
          (map with-is-placeholder))))
+
+
+(defn replace-anim-data [{:keys [audio start duration] :as action}]
+  (let [animation (try
+                    (ap/get-talking-animation audio start duration)
+                    (catch Exception e nil))]
+    (cond-> action
+            animation (assoc :data (vec animation)))))
+
+(defn process-action
+  [action]
+  (case (:type action)
+    "animation-sequence" (replace-anim-data action)
+    "parallel" (assoc action :data (vec (map (fn [value] (process-action value)) (:data action))))
+    "sequence-data" (assoc action :data (vec (map (fn [value] (process-action value)) (:data action))))
+    action))
+
+
+(defn update-scene-lip-data
+  [scene-data]
+  (let [actions (into {} (map (fn [[key value]] [key (process-action value)]) (:actions scene-data)))]
+    (-> scene-data
+        (assoc :actions actions)
+        (assoc-in [:metadata :lip-not-sync] false))))
+
+
+(defn save-scene-with-processing
+  [course-slug scene-name data owner-id]
+  (let [scene-data (update-scene-lip-data data)
+        save-result (save-scene! course-slug scene-name scene-data owner-id)
+        {scene-name :name scene-id :id} (last save-result)
+        {scene-version-data :data} (db/get-latest-scene-version {:scene_id scene-id})]
+    [true {:scene-id scene-name
+           :data     scene-version-data}]))

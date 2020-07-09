@@ -4,7 +4,14 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
-    [webchange.editor-v2.concepts.subs :as concepts-subs]))
+    [webchange.editor-v2.concepts.subs :as concepts-subs]
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+
+(re-frame/reg-event-fx
+  ::init-editor
+  (fn [_ [_ course-id scene-id]]
+    {:dispatch-n (list [::ie/start-course course-id scene-id]
+                       [::load-datasets])}))
 
 (re-frame/reg-event-fx
   ::load-datasets
@@ -99,6 +106,11 @@
     {:db (assoc-in db [:scenes scene-id :objects] objects)}))
 
 (re-frame/reg-event-fx
+  ::reset-scene-metadata
+  (fn [{:keys [db]} [_ scene-id metadata]]
+    {:db (assoc-in db [:scenes scene-id :metadata] metadata)}))
+
+(re-frame/reg-event-fx
   ::reset-scene-skills
   (fn [{:keys [db]} [_ scene-id skills]]
     {:db (assoc-in db [:scene-skills scene-id] skills)}))
@@ -131,7 +143,10 @@
 
 (re-frame/reg-event-fx
   ::save-scene-success
-  (fn [_ _]
+  (fn [{:keys [db]} [_ {:keys [scene-id data]}]]
+    (re-frame/dispatch [::ie/set-scene scene-id data])
+    (re-frame/dispatch [::ie/store-scene scene-id data])
+    (re-frame/dispatch [::translator-form.scene/init-state])
     {:dispatch-n (list [:complete-request :save-scene])}))
 
 (defn update-scene

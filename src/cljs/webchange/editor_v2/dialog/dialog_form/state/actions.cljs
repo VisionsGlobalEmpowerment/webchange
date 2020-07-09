@@ -199,6 +199,7 @@
                                   :end   (+ start duration)
                                   :anim  "talk"}]]
       {:dispatch-n (list [:api-request-error :load-lip-sync-data]
+                         [::translator-form.actions/update-metadata :lip-not-sync true]
                          [::update-dialog-audio-action :phrase (merge rest-data {:data default-lip-sync-data})])})))
 
 (re-frame/reg-event-fx

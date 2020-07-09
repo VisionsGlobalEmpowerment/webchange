@@ -1,8 +1,7 @@
 (ns webchange.assets.loader
   (:require
             [clojure.string :refer [join]]
-            [webchange.assets.core :as core]
-            ))
+            [webchange.assets.core :as core]))
 
 
 (defn calc-hashes!
