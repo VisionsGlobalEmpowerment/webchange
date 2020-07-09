@@ -713,7 +713,7 @@
       (assoc-in db [:scenes scene-id :animations name] animation))))
 
 (def default-triggers
-  {:start [[::reset-navigation]]})
+  {:start [[::reset-navigation] [::ce/execute-reset-skip]]})
 
 (re-frame/reg-event-fx
   ::trigger

@@ -286,7 +286,8 @@
                           {:type "animation" :target target :track track :id anim}
                           {:type "empty" :duration (* (- end start) 1000)}
                           {:type "remove-animation" :target target :track track}]
-                   :skippable skippable})
+                   :skippable skippable
+                   :on-skip #(re-frame/dispatch [::ce/execute-action {:type "remove-animation" :target target :track track}])})
                 data)))
 
 (defn animation-sequence->audio-action [{:keys [start duration audio] :as action}]

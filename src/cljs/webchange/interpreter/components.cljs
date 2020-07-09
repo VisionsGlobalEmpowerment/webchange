@@ -159,10 +159,10 @@
 
 (defn lock-object [o]
   (let [o (-> o
-    (assoc :actions {})
-    (assoc :filter "grayscale"))]
-  o
-))
+              (assoc :actions {})
+              (dissoc :highlight)
+              (assoc :filter "grayscale"))]
+    o))
 
 (defn get-lesson-based-open-activity []
   (let [{:keys [id]} @(re-frame/subscribe [::student-dashboard-subs/next-activity])
@@ -193,9 +193,7 @@
   ([scene-id name props]
    (let [o (merge @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]) props)
          type (keyword (:type o))
-         o (add-navigation-params scene-id name o)
-         ]
-
+         o (add-navigation-params scene-id name o)]
 
      (case type
        :background [background scene-id name o]

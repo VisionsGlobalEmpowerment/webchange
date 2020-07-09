@@ -1,8 +1,8 @@
 (ns webchange.common.image-modifiers.filter-outlined)
 
-(def default-params {:color     "#fcec00"                   ;; name or hex color
+(def default-params {:color     "#ffffff"                   ;; name or hex color
                      :thickness 20                          ;; thickness in pixels
-                     :blur      50})                        ;; [0..255]
+                     :blur      100})                        ;; [0..255]
 
 (defn- create-canvas
   [width height]
