@@ -90,6 +90,7 @@
                 ref-fn (fn [ref] (when ref
                                    (.setStrokeHitEnabled ref false)
                                    (.shadowForStrokeEnabled ref false)
+                                   (.perfectDrawEnabled ref false)
                                    (when start (start-animation ref))
                                    (on-mount {:animation-state animation-state :skeleton skeleton :shape ref})
                                    ))]

@@ -16,7 +16,7 @@
     [webchange.common.scene-components.components :as components]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
-    [webchange.interpreter.components :refer [scene overlay-screens] :rename {scene play-scene}]
+    [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]
     [webchange.interpreter.events :as ie]
     [webchange.editor.components.data-sets.data-set-item.index :refer [add-dataset-item-form
                                                                        edit-dataset-item-form]]
@@ -703,8 +703,7 @@
           :style        {:display         "flex"
                          :justify-content "center"}}
     [:> Stage (merge {:width 1152 :height 648 :scale-x 0.6 :scale-y 0.6} props)
-     [:> Layer component]
-     [overlay-screens]]]))
+     [:> Layer component]]]))
 
 (defn main-content
   []

@@ -240,7 +240,7 @@
                   :states         {:hidden {:type "transparent"}, :visible {:type "text"}},
                   :text           "El libro de mis primeras palabras",
                   :vertical-align "middle"}},
- :scene-objects [["background"] ["book"] ["title-text" "content" "next-page-arrow"]],
+ :scene-objects [["background"] ["book" "title-text" "content" "next-page-arrow"]],
  :actions
                 {:clear-instruction      {:type "remove-flows", :flow-tag "instruction"},
                  :finish-activity

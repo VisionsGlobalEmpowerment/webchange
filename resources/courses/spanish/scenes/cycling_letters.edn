@@ -200,7 +200,7 @@
    :skin "default",
    :speed 0.3,
    :start true}},
- :scene-objects [["background"] ["group1" "group2" "group3"] ["vera" "mari"]],
+ :scene-objects [["background"] ["group1" "group2" "group3" "vera" "mari"]],
  :actions
  {:current-concept-sound-x3
   {:phrase :concept-chant

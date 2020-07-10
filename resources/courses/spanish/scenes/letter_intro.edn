@@ -192,10 +192,7 @@
    :text ""}},
  :scene-objects
  [["background"]
-  ["canvas"]
-  ["letter-small" "letter-big" "word-1-first" "word-1-rest" "word-2-first" "word-2-rest"]
-  ["senora-vaca" "mari"]
-  ["image"]],
+  ["canvas" "letter-small" "letter-big" "word-1-first" "word-1-rest" "word-2-first" "word-2-rest" "senora-vaca" "mari" "image"]],
  :actions
  {:big-letter-click
   {:type "test-var-scalar",

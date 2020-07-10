@@ -356,10 +356,20 @@
    :start true}},
  :scene-objects
  [["background"]
-  ["mari"]
-  ["box1" "box2" "box3" "box4" "box5" "box6" "box7" "box8" "box9" "box10" "box11"]
-  ["front-objects"]
-  ["box1-click-area"
+  ["mari"
+   "box1"
+   "box2"
+   "box3"
+   "box4"
+   "box5"
+   "box6"
+   "box7"
+   "box8"
+   "box9"
+   "box10"
+   "box11"
+   "front-objects"
+   "box1-click-area"
    "box2-click-area"
    "box3-click-area"
    "box4-click-area"

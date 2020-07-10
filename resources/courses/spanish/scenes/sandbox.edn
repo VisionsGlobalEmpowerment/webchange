@@ -134,7 +134,7 @@
                                                  :font-family    "Luckiest Guy",
                                                  :height         400},
                                        :default {:type "transparent"}}}},
- :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]],
+ :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter" "mari"]],
  :actions
                 {:box-1-change-skin
                                                 {:type       "set-slot",

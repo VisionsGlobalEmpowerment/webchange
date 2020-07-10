@@ -154,7 +154,7 @@
    :skin "default",
    :speed 1,
    :start true}},
- :scene-objects [["background"] ["box1" "letter1" "box2" "letter2" "box3" "letter3"] ["vera" "mari"]],
+ :scene-objects [["background"] ["box1" "letter1" "box2" "letter2" "box3" "letter3" "vera" "mari"]],
  :actions
  {:clear-instruction {:type "remove-flows", :flow-tag "instruction"},
   :current-concept-chant
