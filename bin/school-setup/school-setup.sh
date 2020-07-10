@@ -5,4 +5,4 @@ sudo apt -y install openjdk-8-jre
 ./install-db.sh
 ./install-app.sh
 ./init-app.sh
-install-nginx.sh
+./install-nginx.sh

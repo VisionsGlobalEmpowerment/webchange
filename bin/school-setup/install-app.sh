@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo chmod 777 mkdir /srv/
 mkdir -p /srv/www/webchange/releases
 cp ./run /srv/www/webchange/run
 cp ./config.edn /srv/www/webchange/
