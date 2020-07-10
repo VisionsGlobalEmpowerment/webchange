@@ -41,14 +41,14 @@
 
 
 (defn upload-local-files!
-  [config]
+  [config path]
   (print "Do you want to update asset hashes. (Y) ")
   (flush)
   (when (= (read-line) "Y")
     (println "Updating asset hashes....")
     (assets-loader/calc-hashes! config))
   (println "Calculate difference and search files to upload....")
-  (let [to-upload (core/calc-upload-assets)]
+  (let [to-upload (filter  (fn [file] (clojure.string/starts-with? (:path file) path)) (core/calc-upload-assets))]
     (println "About to upload....")
     (doseq [file to-upload]
       (println (:path file)))
