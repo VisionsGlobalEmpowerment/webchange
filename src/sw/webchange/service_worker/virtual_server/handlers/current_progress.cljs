@@ -1,12 +1,13 @@
 (ns webchange.service-worker.virtual-server.handlers.current-progress
   (:require
     [promesa.core :as p]
+    [webchange.service-worker.broadcast.core :as bc]
     [webchange.service-worker.db.progress :as db-progress]
     [webchange.service-worker.db.events :as db-events]
     [webchange.service-worker.db.users :as db-users]
     [webchange.service-worker.virtual-server.logger :as logger]
     [webchange.service-worker.requests.api :as api]
-    [webchange.service-worker.wrappers :refer [request-clone js-fetch promise-all promise-resolve promise-reject body-json request-clone then catch data->response require-status-ok!]]))
+    [webchange.service-worker.wrappers :refer [request-clone js-fetch promise-all promise-resolve promise-reject body-json require-status-ok! request-clone then catch data->response]]))
 
 (defn store-current-progress!
   [{progress :progress events :events offline :offline}]
@@ -27,7 +28,7 @@
               (if-not (nil? current-user)
                 (db-progress/get-progress current-user)
                 (do (logger/warn "Can not get current progress: current user is not defined")
-                    (promise-resolve nil)))))))
+                    (bc/redirect-to-login)))))))
 
 (defn store-body!
   [body offline]
@@ -37,8 +38,8 @@
                 (-> body-cloned
                     (js->clj :keywordize-keys true)
                     (assoc :offline offline)
-                    store-current-progress!))))
-    body))
+                    (store-current-progress!)))))
+    (promise-resolve body)))
 
 (defn get-offline
   [request]
@@ -60,10 +61,11 @@
             offline (:offline stored-progress)]
            (if offline
              (get-offline request)
-             (-> (api/get-current-progress)
-                 (then require-status-ok!)
+             (-> (api/get-current-progress {:raw? true})
                  (then #(store-body! % false))
-                 (catch #(get-offline cloned)))))))
+                 (catch (fn [error]
+                          (logger/warn "[current-progress] [GET] [online]" error)
+                          (get-offline cloned))))))))
 
 (defn post-online
   [request]
@@ -74,7 +76,7 @@
         (then require-status-ok!)
         (catch #(post-offline cloned)))))
 
-(defn flush
+(defn flush-current-progress
   []
   (-> (db-users/get-current-user)
       (then (fn [current-user]
@@ -95,4 +97,4 @@
                        :offline get-offline}
                "POST" {:online  post-online
                        :offline post-offline}
-               :flush flush})
+               :flush flush-current-progress})

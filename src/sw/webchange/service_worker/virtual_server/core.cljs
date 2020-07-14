@@ -16,7 +16,7 @@
     (-> (general/get-current-course)
         (then (fn [course-name]
                 (promise-all [(cache/cache-all routes-to-cache course-name)
-                  (handlers/prefetch routes-to-prefetch)]))))))
+                              (handlers/prefetch routes-to-prefetch)]))))))
 
 (defn api-request?
   [request]
@@ -29,6 +29,6 @@
     (handlers/handle-request request course-name)
     (cache/handle-request request course-name)))
 
-(defn flush
+(defn flush-state
   []
-  (handlers/flush))
+  (handlers/flush-state))

@@ -130,9 +130,6 @@
        (response-url-object)
        (.-pathname)))
 
-(defn response-url
-  [response]
-  (.-url response))
 
 ;; -- Request ---
 
@@ -182,4 +179,4 @@
     (let [message (str "Response is required to be OK!" (.-url response))]
       (logger/warn message)
       (-> message js/Error. throw)))
-  response)
+  (promise-resolve response))

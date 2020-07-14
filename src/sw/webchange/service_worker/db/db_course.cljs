@@ -5,8 +5,8 @@
     [webchange.service-worker.db.core :as core]
     [webchange.service-worker.wrappers :refer [promise-resolve then]]))
 
-(def db (atom {:course   ""
-               :instance nil}))
+(defonce db (atom {:course   ""
+                   :instance nil}))
 
 (def progress-store-name "progress")
 (def events-store-name "events")

@@ -2,7 +2,7 @@
   (:require
     [webchange.service-worker.db.core :as core]
     [webchange.service-worker.db.db-course :as db-course]
-    [webchange.service-worker.wrappers :refer [promise promise-resolve then]]))
+    [webchange.service-worker.wrappers :refer [promise-resolve then]]))
 
 (def cached-lessons-key "cached-lessons")
 (def current-code-key "current-code")

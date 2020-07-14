@@ -2,7 +2,7 @@
   (:require
     [cljs-idxdb.core :as idx]
     [webchange.service-worker.config :as config]
-    [webchange.service-worker.wrappers :refer [promise promise-resolve promise-reject then catch]]))
+    [webchange.service-worker.wrappers :refer [promise promise-resolve promise-reject then]]))
 
 (def database-version config/release-number)
 
@@ -24,12 +24,12 @@
              (let [database-name (get-database-name db-name)
                    request (.open js/indexedDB database-name database-version)]
                (set! (.-onsuccess request) (fn [e]
-                                             (resolve (event->db e))))
-               (set! (.-onupgradeneeded request) (fn [e]
-                                                   (-> (version-change-event e)
-                                                       (upgrade-db))))
-               (set! (.-onerror request) #(reject "Open indexedDB failed" %))))))
-
+                                             (let [db (event->db e)]
+                                               (set! (.-onversionchange db) (fn [e] (-> e .-target .close)))
+                                               (resolve db))))
+               (set! (.-onupgradeneeded request) (fn [e] (-> e version-change-event upgrade-db)))
+               (set! (.-onerror request) (fn [error] (reject "Open indexedDB failed" error)))
+               (set! (.-onblocked request) (fn [error] (reject "Open indexedDB blocked" error)))))))
 
 (defn add-item
   ([db store-name data]

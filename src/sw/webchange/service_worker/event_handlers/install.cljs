@@ -1,6 +1,7 @@
 (ns webchange.service-worker.event-handlers.install
   (:require
     [webchange.service-worker.broadcast.core :as broadcast]
+    [webchange.service-worker.controllers.game-resources :as game]
     [webchange.service-worker.controllers.web-app-resources :as web-app]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [catch promise-resolve then]]))
@@ -9,7 +10,8 @@
   []
   (logger/debug "Install...")
   (broadcast/send-sync-status :installing)
-  (web-app/cache-app))
+  (-> (web-app/cache-app)
+      (then game/restore-cached-lessons)))
 
 (defn- installed
   []

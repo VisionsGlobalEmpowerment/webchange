@@ -5,7 +5,8 @@
 (def broadcast-channel "sw-messages")
 (def messages {:current-state "current-state"
                :sync-status   "sync-status"
-               :error         "error"})
+               :error         "error"
+               :redirect      "redirect"})
 
 (defn- broadcast-message
   [key data]
@@ -27,3 +28,7 @@
   [message error]
   (broadcast-message :error {:message message
                              :error   error}))
+
+(defn redirect-to-login
+  []
+  (broadcast-message :redirect "login"))

@@ -4,7 +4,7 @@
     [webchange.service-worker.db.core :as core]
     [webchange.service-worker.wrappers :refer [promise-resolve then]]))
 
-(def db (atom nil))
+(defonce db (atom nil))
 
 (def state-store-name "state")
 
