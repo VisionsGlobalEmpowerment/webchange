@@ -6,6 +6,7 @@
             [clojure.tools.logging :as log]
             [webchange.auth.website :as website]
             [webchange.course.core :as course]
+            [webchange.db.core :refer [*db*] :as db]
             [config.core :refer [env]])
   (:use clj-http.fake))
 
@@ -140,3 +141,21 @@
         _ (f/course-created {:name course-name :status "published"})
         course (-> (f/get-available-courses) :body slurp (json/read-str :key-fn keyword) first)]
     (is (clojure.string/includes? (:image-src course) course/hostname))))
+
+
+(deftest scene-version-do-not-create-same
+  (let [scene (f/scene-created)
+        data (-> scene :data)
+        _ (f/save-scene! (:course-slug scene) (:name scene) {:scene data})
+        scene-new  (db/get-latest-scene-version {:scene_id (:id scene)})
+        ]
+    (is (:version-id scene) (:id scene-new))))
+
+
+(deftest scene-version-do-create-new
+  (let [scene (f/scene-created)
+        _ (f/save-scene! (:course-slug scene) (:name scene) {:scene {:test "edited-value"}})
+        scene-new  (db/get-latest-scene-version {:scene_id (:id scene)})
+        ]
+
+    (is (not= (:version-id scene) (:id scene-new)))))
