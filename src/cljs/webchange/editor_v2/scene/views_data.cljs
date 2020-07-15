@@ -3,10 +3,10 @@
     [cljs-react-material-ui.reagent :as ui]
     [clojure.string :as s]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.events :as ee]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
     [webchange.interpreter.core :refer [load-course]]
+    [webchange.editor-v2.scene.data.background.views-background :refer [change-background]]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.events :as editor-events]
     [webchange.editor-v2.utils :refer [keyword->caption]]))
@@ -103,6 +103,7 @@
            [ui/menu-item {:value mode-value}
             mode-text])
          ]]
+       [change-background]
        (when (not-empty objects)
          [ui/form-control {:full-width true
                            :margin     "normal"}

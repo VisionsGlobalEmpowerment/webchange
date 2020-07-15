@@ -224,19 +224,19 @@
 (defn background
   [scene-id name object]
   [kimage (merge {:src (get-data-as-url (:src object))}
-                 (filter-params object))]
-
-  )
+                 (filter-params object))])
 
 (defn layered-background
   [scene-id name object]
-  [:> Group {}
-             [kimage (merge {:src (get-data-as-url (:src (:background object)))}
-                              (filter-params (first (:data object))))]
-             [kimage (merge {:src (get-data-as-url (:src (:surface object)))}
-                             (filter-params (second (:data object))))]
-             [kimage (merge {:src (get-data-as-url (:src (:decoration object)))}
-                            (filter-params (last (:data object))))]])
+  (let [layers (map (fn [key] {:key key
+                               :src (get-data-as-url (get-in object [key :src]))})
+                    [:background :surface :decoration])]
+    [:> Group {}
+     (for [{:keys [key src]} layers]
+       (when src
+         ^{:key key}
+         [kimage (merge {:src src}
+                        (filter-params (first (:data object))))]))]))
 
 (defn animation
   [scene-id name object]
