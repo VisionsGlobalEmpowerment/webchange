@@ -41,6 +41,7 @@
                                   GridRow]]))
 
 (declare background)
+(declare layered-background)
 (declare button)
 (declare image)
 (declare transparent)
@@ -62,6 +63,7 @@
   [type]
   (case type
     :background background
+    :layered-background layered-background
     :button button
     :image image
     :transparent transparent
@@ -151,6 +153,18 @@
    [:> Group {:on-click remove-transform}
     [kimage {:src (get-data-as-url (:src object))}]]])
 
+(defn layered-background
+  [scene-id name object]
+  (let [layers (map (fn [key] {:key key
+                               :src (get-data-as-url (get-in object [key :src]))})
+                    [:background :surface :decoration])]
+    [:> Group (object-params (dissoc object :x :y))
+     [:> Group {:on-click remove-transform}
+      (for [{:keys [key src]} layers]
+        (when src
+          ^{:key key}
+          [kimage {:src src}]))]]))
+
 (defn with-editor-wrapper
   [component scene-id name object]
   (let [props (merge object {:scene-id scene-id :name name})]
@@ -210,7 +224,7 @@
 (defn propagate-group
   [scene-id name object]
   [:> Group (object-params object)
-     [:> Rect (rect-params scene-id name object)]])
+   [:> Rect (rect-params scene-id name object)]])
 
 (defn placeholder
   [scene-id name object]
