@@ -26,7 +26,7 @@
         (then (fn [[request-body response]]
                 (require-status-ok! response)
                 (-> (db-users/save-user (-> request-body (js->clj :keywordize-keys true) :access-code) response)
-                    (then (current-progress/flush)))
+                    (then (current-progress/flush-current-progress)))
                 response))
         (catch #(do
                   (logger/warn "[login] [POST] [online] failed with" (-> % .-message))

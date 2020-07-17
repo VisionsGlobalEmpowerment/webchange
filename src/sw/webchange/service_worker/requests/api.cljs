@@ -21,16 +21,22 @@
   [lessons]
   (-> (get-url :game-resources {:lessons (join "," lessons)})
       (then (fn [url]
-              (core/get url)))))
+              (core/http-get url)))))
 
 (defn get-web-app-resources
   []
   (-> (get-url :web-app-resources)
       (then (fn [url]
-              (core/get url)))))
+              (core/http-get url)))))
+
+(defn get-current-progress
+  [params]
+  (-> (get-url :current-progress)
+      (then (fn [url]
+              (core/http-get url params)))))
 
 (defn post-current-progress
   [progress-data]
   (-> (get-url :current-progress)
       (then (fn [url]
-              (core/post url progress-data)))))
+              (core/http-post url progress-data)))))

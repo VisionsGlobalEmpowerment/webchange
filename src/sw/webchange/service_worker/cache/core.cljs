@@ -76,5 +76,9 @@
       (then (fn [cache] (promise-all [(promise-resolve cache)
                                       (get-new-resources resources cache)])))
       (then (fn [[cache new-resources]]
-              (logger/debug-folded (str "Caching new resources into" cache-name " (" (count new-resources) ")") new-resources)
-              (cache-partially cache new-resources 50)))))
+              (let [debug-message (str "Caching new resources into " cache-name " (" (count new-resources) ")")
+                    result-promise (cache-partially cache new-resources 5)]
+                (logger/debug-folded debug-message new-resources)
+                (-> result-promise
+                    (then (fn [] (logger/debug (str debug-message " done")))))
+                result-promise)))))

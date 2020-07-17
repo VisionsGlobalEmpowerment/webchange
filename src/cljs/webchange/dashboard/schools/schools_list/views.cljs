@@ -7,8 +7,7 @@
     [webchange.dashboard.schools.events :as schools-events]
     [webchange.dashboard.schools.subs :as schools-subs]
     [webchange.dashboard.events :as dashboard-events]
-    [webchange.dashboard.common.views :refer [content-page]]
-    [webchange.routes :refer [redirect-to]]))
+    [webchange.dashboard.common.views :refer [content-page]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 

@@ -1,6 +1,7 @@
 (ns webchange.sw-utils.subscribe
   (:require [re-frame.core :as re-frame]
             [webchange.config :as config]
+            [webchange.routes :as routes]
             [webchange.sw-utils.state.resources :as resources]
             [webchange.sw-utils.state.status :as status]))
 
@@ -24,6 +25,11 @@
   (when config/debug?
     (re-frame/dispatch [::status/handle-error error])))
 
+(defn- handle-redirect
+  [redirect-target]
+  (case redirect-target
+    "login" (routes/redirect-to :student-login)))
+
 (defn subscribe-to-notifications
   []
   (let [channel (js/BroadcastChannel. "sw-messages")]
@@ -35,4 +41,5 @@
                                                "current-state" (set-current-state data)
                                                "sync-status" (set-sync-status data)
                                                "error" (handle-error data)
+                                               "redirect" (handle-redirect data)
                                                (-> (str "Unhandled service worker message type " type) js/Error. throw)))))))

@@ -52,7 +52,7 @@
                                        (then #(store/put %))))]
     (promise-all (map prefetch-route routes))))
 
-(defn flush
+(defn flush-state
   []
   (doseq [handlers (vals handlers)]
     (when (contains? handlers :flush)
