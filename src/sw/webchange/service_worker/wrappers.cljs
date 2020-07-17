@@ -175,7 +175,8 @@
 
 (defn require-status-ok!
   [response]
-  (when-not (.-ok response)
+  (when (or (not (.-ok response))
+            (.-redirected response))
     (let [message (str "Response is required to be OK!" (.-url response))]
       (logger/warn message)
       (-> message js/Error. throw)))

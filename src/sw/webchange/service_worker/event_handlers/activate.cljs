@@ -1,8 +1,7 @@
 (ns webchange.service-worker.event-handlers.activate
   (:require
-    [webchange.service-worker.cache.core :as cache]
     [webchange.service-worker.broadcast.core :as broadcast]
-    [webchange.service-worker.config :as config]
+    [webchange.service-worker.controllers.course-resources :as course-resources]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [catch promise-resolve then]]))
 
@@ -10,7 +9,8 @@
   []
   (logger/debug "Activate...")
   (broadcast/send-sync-status :activating)
-  (cache/remove-old-caches config/cache-names-prefix config/release-number))
+
+  (course-resources/remove-outdated-data))
 
 (defn- activated
   []

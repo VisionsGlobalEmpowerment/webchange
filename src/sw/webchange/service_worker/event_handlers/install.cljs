@@ -1,8 +1,7 @@
 (ns webchange.service-worker.event-handlers.install
   (:require
     [webchange.service-worker.broadcast.core :as broadcast]
-    [webchange.service-worker.controllers.game-resources :as game]
-    [webchange.service-worker.controllers.web-app-resources :as web-app]
+    [webchange.service-worker.controllers.course-resources :as course-resources]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [catch promise-resolve then]]))
 
@@ -10,8 +9,11 @@
   []
   (logger/debug "Install...")
   (broadcast/send-sync-status :installing)
-  (-> (web-app/cache-app)
-      (then game/restore-cached-lessons)))
+
+  (-> (course-resources/fetch-current-course-data)
+      (catch (fn [error]
+               (logger/warn "Install: resources caching skipped." error)
+               (promise-resolve)))))
 
 (defn- installed
   []

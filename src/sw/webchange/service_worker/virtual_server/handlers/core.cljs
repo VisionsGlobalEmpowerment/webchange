@@ -2,7 +2,6 @@
   (:require
     [bidi.bidi :as bidi]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.virtual-server.cache :as cache]
     [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
     [webchange.service-worker.virtual-server.handlers.login :as login]
     [webchange.service-worker.virtual-server.handlers.current-user :as current-user]
@@ -25,23 +24,23 @@
     (bidi/match-route routes route)))
 
 (defn- get-handler
-  [request handler-name course-name]
+  [request handler-name]
   (let [handlers-map (get handlers handler-name)
         method (request-method request)]
     (if (contains? handlers-map method)
       (if (online?)
         (get-in handlers-map [method :online])
         (get-in handlers-map [method :offline]))
-      (cache/handle-request request course-name))))
+      (-> (str "Method <" method "> is not defined ind <" handler-name "> handlers") js/Error. throw))))
 
 (defn has-handler?
   [request-or-route]
   (boolean (match-request request-or-route)))
 
 (defn handle-request
-  [request course-name]
+  [request]
   (let [match (match-request request)
-        handler (get-handler request (:handler match) course-name)]
+        handler (get-handler request (:handler match))]
     (try
       (handler request (:route-params match))
       (catch js/Object e (logger/error e)))))
