@@ -102,7 +102,10 @@
                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-word"}]}
                                  {:id "vaca-voice-chanting-4", :type "action"}
                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "vaca-chanting-song"}]}
-                                 {:id "stop-highlight", :type "action"}]
+                                 {:id "stop-highlight", :type "action"}
+                                 {:id "normal",
+                                  :type "state",
+                                  :from-var [{:template "card-%", :var-name "current-concept-name", :action-property "target"}]}]
                                 :phrase                        :chant-concept,
                                 :phrase-description            "Chant current concept"},
 
@@ -143,7 +146,7 @@
                                 :data
                                       [{:type "set-variable", :var-name "current-round", :var-value 1}
                                        {:type "set-variable", :var-name "rounds-number", :var-value 2}
-                                       {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name ["ardilla" "oso"]}}]},
+                                       {:type "set-variable", :var-name "exclude-concepts", :var-value {:concept-name []}}]},
             :mari-init-wand          {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true}
             :intro
                                {:type "sequence-data",
@@ -196,112 +199,8 @@
                                    {:end 18.071, :anim "talk", :start 16.699}],
                                   :phrase-text "Listen to the sounds at the beginning of each word.  For example, When we say the word “Ant”, we hear an “aaaaa” sound.  “Aa- Aaant. Aa - Aant."
                                   :phrase-text-translated "Escucha los sonidos al principio de cada palabra. Por ejemplo, cuando decimos la palabra “ardilla,” escuchamos el sonido “aaaaaa”. “Aaaardilla. Aaaardilla.”"}
-                                 {:type "set-variable", :var-name "current-concept-name", :var-value "ardilla"}
-                                 {:type "state", :id "pointed", :target "card-ardilla"}
-                                 {:id "start-highlight", :type "action", :return-immediately true}
-                                 {:id "move-to-current-card-copy-1", :type "action"}
-                                 {:type "animation-sequence",
-                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                  :start 19.115,
-                                  :duration 6.531,
-                                  :track 1,
-                                  :offset 19.115,
-                                  :target "senoravaca"
-                                  :data [{:end 21.381, :anim "talk", :start 19.204} {:end 25.586, :anim "talk", :start 22.156}],
-                                  :phrase-text "Let’s say the word and beginning sound 3 times like this - Ant! Ant!  a-a-A!"
-                                  :phrase-text-translated "Vamos a componer una cancion- Ardilla! Ardilla! a-a-A!"}
-                                 {:type "animation-sequence",
-                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                  :start 26.301,
-                                  :duration 11.66,
-                                  :track 1,
-                                  :offset 26.301,
-                                  :target "senoravaca"
-                                  :data
-                                  [{:end 28.001, :anim "talk", :start 26.361}
-                                   {:end 31.43, :anim "talk", :start 28.568}
-                                   {:end 34.74, :anim "talk", :start 31.758}
-                                   {:end 37.901, :anim "talk", :start 35.009}],
-                                  :phrase-text "Say it with me 3 times! - Ant! Ant!  a-a-A! Ant! Ant!  a-a-A! Ant! Ant!  a-a-A!"
-                                  :phrase-text-translated "Dilo conmigo tres veces!- Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A! Ardilla! Ardilla! a-a-A!"}
-                                 {:id "stop-highlight", :type "action"}
-                                 {:id "vaca-voice-chanting-4", :type "action"}
-                                 {:type "set-variable", :var-name "current-concept-name", :var-value "oso"}
-                                 {:type "state", :id "pointed", :target "card-oso"}
-                                 {:id "start-highlight", :type "action", :return-immediately true}
-                                 {:id "move-to-current-card-copy-2", :type "action"}
-                                 {:type "animation-sequence",
-                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                  :start 41.927,
-                                  :duration 10.735,
-                                  :track 1,
-                                  :offset 41.927,
-                                  :target "senoravaca",
-                                  :data
-                                  [{:end 42.673, :anim "talk", :start 41.927}
-                                   {:end 46.549, :anim "talk", :start 43.627}
-                                   {:end 46.549, :anim "talk", :start 43.627}
-                                   {:end 48.01, :anim "talk", :start 46.937}
-                                   {:end 47.861, :anim "talk", :start 46.937}
-                                   {:end 49.084, :anim "talk", :start 48.219}
-                                   {:end 50.903, :anim "talk", :start 49.8}
-                                   {:end 52.513, :anim "talk", :start 51.47}],
-                                  :phrase-text "At the beginning of the word “Oso”, we hear the “oooooo” sound. Ooooso.  Ooooso."
-                                  :phrase-text-translated "Oso. Al principio de la palabra “Oso”, escuchamos el sonido “ooooo.” Ooooso. Oooso"}
-                                 {:type "animation-sequence",
-                                  :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                  :start 53.438,
-                                  :duration 11.004
-                                  :track 1,
-                                  :offset 53.438,
-                                  :target "senoravaca"
-                                  :data
-                                  [{:end 55.018, :anim "talk", :start 53.527}
-                                   {:end 57.076, :anim "talk", :start 55.525}
-                                   {:end 58.388, :anim "talk", :start 57.404}
-                                   {:end 61.833, :anim "talk", :start 59.581}
-                                   {:end 64.412, :anim "talk", :start 61.698}],
-                                  :phrase-text "This is what the oooooo sound looks like. oooooo. Let’s sing it -  Mat, mat, M-M-Mmm!!"
-                                  :phrase-text-translated "El sonido oooooo se escucha asi. Ooooo. Vamos a cantarlo- Oso, Oso, o-o-O!!"}
-                                 {:id "stop-highlight", :type "action"}
                                  ],
                                 :description "Initial action"},
-            :move-to-current-card-copy-1
-                               {:type "sequence-data"
-                                :data [{:type "transition",
-                                        :from-var-object
-                                        [{:offset 210,
-                                          :var-name "current-concept-name",
-                                          :action-property "to.x",
-                                          :object-property "x",
-                                          :object-name-template "card-%"}
-                                         {:offset 120,
-                                          :var-name "current-concept-name",
-                                          :action-property "to.y",
-                                          :object-property "y",
-                                          :object-name-template "card-%"}],
-                                        :to {:loop false, :duration 2},
-                                        :transition-id "mari"}
-                                       {:id "wand_hit", :type "animation", :track 2, :target "mari"}
-                                       {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}]},
-            :move-to-current-card-copy-2
-                               {:type "sequence-data"
-                                :data [{:type "transition",
-                                        :from-var-object
-                                        [{:offset 210,
-                                          :var-name "current-concept-name",
-                                          :action-property "to.x",
-                                          :object-property "x",
-                                          :object-name-template "card-%"}
-                                         {:offset 120,
-                                          :var-name "current-concept-name",
-                                          :action-property "to.y",
-                                          :object-property "y",
-                                          :object-name-template "card-%"}],
-                                        :to {:loop false, :duration 2},
-                                        :transition-id "mari"}
-                                       {:id "wand_hit", :type "animation", :track 2, :target "mari"}
-                                       {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}]},
             :move-to-current-card-copy-3
                                {:type "sequence-data"
                                 :data [{:type "transition",
@@ -334,8 +233,9 @@
                                        {:type "set-variable",
                                         :from-var [{:var-name "current-concept", :var-property "concept-name", :action-property "var-value"}],
                                         :var-name "current-concept-name"}
-                                       {:id "vaca-voice-next", :type "action"}
-                                       {:id "chant-current-concept", :type "action"}
+                                       {:type "parallel"
+                                        :data [{:id "vaca-voice-next", :type "action"}
+                                               {:id "chant-current-concept", :type "action"}]}
                                        {:id "renew-current-concept", :type "action"}]},
             :start-scene
                                {:type "sequence",
@@ -353,39 +253,7 @@
             :stop-activity {:type "stop-activity", :id "cinema"},
             :stop-highlight
                                {:type "stop-transition", :from-var [{:template "card-%-filter", :var-name "current-concept-name", :action-property "id"}]},
-            :vaca-voice-chanting-1
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                :start 43.545,
-                                :duration 2.297,
-                                :track 1,
-                                :offset 43.545,
-                                :target "senoravaca",
-                                :data
-                                [{:end 45.766, :anim "talk", :start 43.677}],
-                                :description "Al principio de la palabra"},
-            :vaca-voice-chanting-2
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                :start 53.541,
-                                :duration 0.762,
-                                :track 1,
-                                :offset 53.541,
-                                :target "senoravaca",
-                                :data
-                                [{:end 54.243, :anim "talk", :start 53.596}],
-                                :description "el sonido"},
-            :vaca-voice-chanting-3
-                               {:type "animation-sequence",
-                                :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
-                                :start 55.481,
-                                :duration 1.628,
-                                :track 1,
-                                :offset 55.481,
-                                :target "senoravaca",
-                                :data
-                                [{:end 57.109, :anim "talk", :start 55.481}],
-                                :description "se escucha asi"},
+
             :vaca-voice-chanting-4
                                {:type "animation-sequence",
                                 :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",

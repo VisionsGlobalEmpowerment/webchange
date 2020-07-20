@@ -207,7 +207,7 @@
     (if (= value1 value2)
       {:dispatch-n (list [::e/execute-action (cond-action db action success)])}
       (if fail
-        {:dispatch-n (list [::e/execute-action (cond-action db action fail)] (e/success-event action))}
+        {:dispatch-n (list [::e/execute-action (cond-action db action fail)])}
         {:dispatch-n (list (e/success-event action))}
         ))))
 

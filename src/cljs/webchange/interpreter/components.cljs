@@ -26,7 +26,6 @@
     [webchange.interpreter.screens.activity-finished :refer [activity-finished-screen]]
     [webchange.interpreter.screens.course-loading :refer [course-loading-screen]]
     [webchange.interpreter.screens.preloader :refer [preloader-screen]]
-    [webchange.interpreter.screens.score :refer [score-screen]]
     [webchange.interpreter.screens.settings :refer [settings-screen]]
     [webchange.interpreter.screens.state :as screens]
     [webchange.common.core :refer [prepare-anim-rect-params
@@ -39,7 +38,8 @@
     [webchange.common.image-modifiers.animation-eager :refer [animation-eager]]
     [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
-    [konva :as k]))
+    [konva :as k]
+    [webchange.interpreter.utils.i18n :refer [t]]))
 
 (defn empty-filter [] {:filters []})
 
@@ -72,13 +72,6 @@
         (empty-filter))
       (with-highlight params)
       (with-pulsation params)))
-
-(defn score
-  []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        score-var (re-frame/subscribe [::vars.subs/variable @scene-id "score"])]
-    (if (:visible @score-var)
-      [score-screen])))
 
 (defn close-button
   [x y]
@@ -125,7 +118,7 @@
                  :y        (- y 200)
                  :on-click #(re-frame/dispatch [::ce/skip])
                  :on-tap   #(re-frame/dispatch [::ce/skip])}
-       [components/button-interpreter {:text "Skip"}]])))
+       [components/button-interpreter {:text (t "skip")}]])))
 
 (defn scene-started
   [scene-data]
@@ -305,10 +298,8 @@
        (case ui-screen
          :activity-finished [activity-finished-screen]
          :course-loading [course-loading-screen]
-         :score [score-screen]
          :settings [settings-screen]
          [:> Group
-          [score]
           [menu]
           [skip-menu]
           [triggers scene-id]]))]))

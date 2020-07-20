@@ -1,556 +1,556 @@
-{:assets        [{:url    "/raw/img/park/hide-n-seek/background.jpg",
-                  :type   "image",
-                  :size   14,
-                  :width  1920,
-                  :height 1080,
-                  :alias  nil}
-                 {:url    "/raw/img/park/hide-n-seek/front-objects.png",
-                  :type   "image",
-                  :size   37,
-                  :width  1920,
-                  :height 1080,
-                  :alias  nil}
-                 {:url "/raw/audio/l1/assessment1/Mari_Level1_Assessment1.m4a", :size 5, :type "audio" :alias "mari voice" :target "mari"}
-                 {:url "/raw/audio/l1/assessment1/Assessment1_GameVoice_Set1.m4a", :size 5, :type "audio" :alias "words" :target "game-voice"}
-                 {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements" :target "mari"}],
- :objects       {:background       {:type        "background",
-                                    :scene-name  "background",
-                                    :scene-layer 0,
-                                    :src         "/raw/img/park/hide-n-seek/background.jpg"},
-                 :front-objects    {:y           0,
-                                    :rotation    0,
-                                    :scene-layer 2,
-                                    :width       1920,
-                                    :type        "image",
-                                    :src         "/raw/img/park/hide-n-seek/front-objects.png",
-                                    :scale-y     1,
-                                    :x           0,
-                                    :scale-x     1,
-                                    :scene-name  "front-objects",
-                                    :height      1080},
-                 :mari             {:y           300,
-                                    :rotation    0,
-                                    :scene-layer 1,
-                                    :speed       0.35,
-                                    :name        "mari",
-                                    :width       473,
-                                    :type        "animation",
-                                    :anim        "idle",
-                                    :scale-y     0.5,
-                                    :x           700,
-                                    :scale-x     0.5,
-                                    :scene-name  "mari",
-                                    :skin        "default",
-                                    :start       true
-                                    :height      511}
-                 :box1             {:scene-name "box1"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          200
-                                    :y          180
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box1-click-area  {:type       "transparent"
-                                    :x          200
-                                    :y          180
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box1-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box1"}
-                                                         :on     "click"}}}
-                 :box2             {:scene-name "box2"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          290
-                                    :y          610
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box2-click-area  {:type       "transparent"
-                                    :x          290
-                                    :y          610
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box2-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box2"}
-                                                         :on     "click"}}}
-                 :box3             {:scene-name "box3"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          310
-                                    :y          840
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box3-click-area  {:type       "transparent"
-                                    :x          310
-                                    :y          840
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box3-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box3"}
-                                                         :on     "click"}}}
-                 :box4             {:scene-name "box4"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          780
-                                    :y          560
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box4-click-area  {:type       "transparent"
-                                    :x          780
-                                    :y          560
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box4-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box4"}
-                                                         :on     "click"}}}
-                 :box5             {:scene-name "box5"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          720
-                                    :y          800
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box5-click-area  {:type       "transparent"
-                                    :x          720
-                                    :y          800
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box5-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box5"}
-                                                         :on     "click"}}}
-                 :box6             {:scene-name "box6"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          1080
-                                    :y          170
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box6-click-area  {:type       "transparent"
-                                    :x          1080
-                                    :y          170
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box6-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box6"}
-                                                         :on     "click"}}}
-                 :box7             {:scene-name "box7"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          1240
-                                    :y          760
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0,
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true},
-                 :box7-click-area  {:type       "transparent"
-                                    :x          1240
-                                    :y          760
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box7-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box7"}
-                                                         :on     "click"}}}
-                 :box8             {:scene-name "box8"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          1450
-                                    :y          470
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box8-click-area  {:type       "transparent"
-                                    :x          1450
-                                    :y          470
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box8-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box8"}
-                                                         :on     "click"}}}
-                 :box9             {:scene-name "box9"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          1660
-                                    :y          260
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box9-click-area  {:type       "transparent"
-                                    :x          1660
-                                    :y          260
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box9-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box9"}
-                                                         :on     "click"}}}
-                 :box10            {:scene-name "box10"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          1560
-                                    :y          910
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box10-click-area {:type       "transparent"
-                                    :x          1560
-                                    :y          910
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box10-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box10"}
-                                                         :on     "click"}}}
-                 :box11            {:scene-name "box11"
-                                    :name       "boxes"
-                                    :skin       "qwestion"
-                                    :x          1775
-                                    :y          700
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :speed      0.2
-                                    :type       "transparent"
-                                    :states     {:hidden  {:type "transparent"}
-                                                 :visible {:type "animation"}}
-                                    :anim       "idle2"
-                                    :loop       true
-                                    :start      true}
-                 :box11-click-area {:type       "transparent"
-                                    :x          1775
-                                    :y          700
-                                    :width      771
-                                    :height     1033
-                                    :scale-x    0.25
-                                    :scale-y    0.25
-                                    :rotation   0
-                                    :origin     {:type "center-center"}
-                                    :scene-name "box11-click-area"
-                                    :actions    {:click {:type   "action"
-                                                         :id     "check-concept"
-                                                         :params {:box "box11"}
-                                                         :on     "click"}}}}
- :scene-objects [["background"]
-                 ["mari"]
-                 ["box1" "box2" "box3" "box4" "box5" "box6" "box7" "box8" "box9" "box10" "box11"]
-                 ["front-objects"]
-                 ["box1-click-area" "box2-click-area" "box3-click-area"
-                  "box4-click-area" "box5-click-area" "box6-click-area"
-                  "box7-click-area" "box8-click-area" "box9-click-area"
-                  "box10-click-area" "box11-click-area"]],
- :actions       {:clear-instruction      {:type        "remove-flows",
-                                          :description "Remove flows",
-                                          :flow-tag    "instruction"}
-                 :mari-welcome-audio     {:description        "Welcome audio",
-                                          :offset             0.098
-                                          :start              0.098,
-                                          :type               "animation-sequence",
-                                          :duration           11.504,
-                                          :audio              "/raw/audio/l1/assessment1/Mari_Level1_Assessment1.m4a",
-                                          :target             "mari",
-                                          :track              1,
-                                          :data               [{:start 1.04 :end 1.944 :anim "talk"}
-                                                               {:start 2.641 :end 6.256 :anim "talk"}
-                                                               {:start 7.238 :end 11.176 :anim "talk"}]
-                                          :phrase             :welcome
-                                          :phrase-description "Welcome speech"
-                                          :phrase-text        "Hola! Let’s play a game of hide and seek! Find the pictures hiding in the park!"}
-                 :mari-audio-correct     {:type               "animation-sequence",
-                                          :target             "mari",
-                                          :track              1,
-                                          :offset             0.858,
-                                          :audio              "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                          :start              0.858,
-                                          :duration           1.837,
-                                          :data               [{:start 1.052, :end 2.505, :duration 1.453, :anim "talk"}]
-                                          :phrase             :correct
-                                          :phrase-description "Correct answer"
-                                          :phrase-text        "That’s correct!"}
-                 :mari-audio-try-again   {:type               "animation-sequence",
-                                          :target             "mari",
-                                          :track              1,
-                                          :offset             18.915,
-                                          :audio              "/raw/audio/l1/a5/Mari_Coaching_statements.m4a",
-                                          :start              18.915,
-                                          :duration           1.493,
-                                          :data               [{:start 18.983, :end 20.242, :duration 1.259, :anim "talk"}]
-                                          :phrase             :try-again
-                                          :phrase-description "Wrong answer"
-                                          :phrase-text        "Try again!"}
-                 :start-scene            {:type        "sequence",
-                                          :description "Initial action",
-                                          :data        ["start-activity"
-                                                        "clear-instruction"
-                                                        "mari-welcome-audio"
-                                                        "init-boxes"
-                                                        "renew-words"
-                                                        "renew-current-concept"]}
-                 :init-boxes             {:type "parallel"
-                                          :data [{:type "set-variable" :var-name "box1" :var-value "box1"}
-                                                 {:type "set-variable" :var-name "box2" :var-value "box2"}
-                                                 {:type "set-variable" :var-name "box3" :var-value "box3"}
-                                                 {:type "set-variable" :var-name "box4" :var-value "box4"}
-                                                 {:type "set-variable" :var-name "box5" :var-value "box5"}
-                                                 {:type "set-variable" :var-name "box6" :var-value "box6"}
-                                                 {:type "set-variable" :var-name "box7" :var-value "box7"}
-                                                 {:type "set-variable" :var-name "box8" :var-value "box8"}
-                                                 {:type "set-variable" :var-name "box9" :var-value "box9"}
-                                                 {:type "set-variable" :var-name "box10" :var-value "box10"}
-                                                 {:type "set-variable" :var-name "box11" :var-value "box11"}]}
-                 :renew-words            {:type        "lesson-var-provider"
-                                          :provider-id "words-set"
-                                          :variables   ["word-1" "word-2" "word-3"
-                                                        "word-4" "word-5" "word-6"
-                                                        "word-7" "word-8" "word-9"]
-                                          :shuffled    true
-                                          :from        "assessment-1"}
-                 :renew-current-concept  {:type "sequence-data"
-                                          :data [{:type        "vars-var-provider"
-                                                  :provider-id "current-concept"
-                                                  :variables   ["current-concept"]
-                                                  :from        ["word-1" "word-2" "word-3"
-                                                                "word-4" "word-5" "word-6"
-                                                                "word-7" "word-8" "word-9"]
-                                                  :shuffled    false
-                                                  :on-end      "finish-activity"}
-                                                 {:type      "vars-var-provider"
-                                                  :variables ["pair-concept-1" "pair-concept-2" "pair-concept-3"]
-                                                  :from      ["word-1" "word-2" "word-3"
-                                                              "word-4" "word-5" "word-6"
-                                                              "word-7" "word-8" "word-9"]
-                                                  :shuffled  true
-                                                  :from-var  [{:var-name "current-concept" :var-property "concept-name" :var-key "concept-name" :action-property "exclude-property-values"}]}
-                                                 {:type      "vars-var-provider"
-                                                  :variables ["current-target" "pair-target-1" "pair-target-2" "pair-target-3"]
-                                                  :from      ["box1" "box2" "box3" "box4" "box5" "box6" "box7" "box8" "box9" "box10" "box11"]
-                                                  :shuffled  true}
-                                                 {:type "action" :id "show-targets"}
-                                                 {:type "parallel"
-                                                  :data [{:type     "set-skin"
-                                                          :from-var [{:var-name "current-concept" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "current-target" :action-property "target"}]}
-                                                         {:type     "set-skin"
-                                                          :from-var [{:var-name "pair-concept-1" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "pair-target-1" :action-property "target"}]}
-                                                         {:type     "set-skin"
-                                                          :from-var [{:var-name "pair-concept-2" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "pair-target-2" :action-property "target"}]}
-                                                         {:type     "set-skin"
-                                                          :from-var [{:var-name "pair-concept-3" :action-property "skin" :var-property "skin"}
-                                                                     {:var-name "pair-target-3" :action-property "target"}]}]}
-                                                 {:type     "set-current-concept"
-                                                  :from-var [{:var-name "current-concept" :action-property "value" :var-property "skin"}]}
-                                                 {:type "action" :id "make-riddle"}]}
-
-                 :make-riddle            {:type               "action" :from-var [{:var-name "current-concept" :var-property "hide-n-seek-current-concept-audio"}]
-                                          :phrase             :concept-riddle
-                                          :phrase-description "Concept word"}
-
-                 :show-targets           {:type "sequence-data"
-                                          :data [{:type "parallel"
-                                                  :data [{:type "state" :id "visible" :from-var [{:var-name "current-target" :action-property "target"}]}
-                                                         {:type "state" :id "visible" :from-var [{:var-name "pair-target-1" :action-property "target"}]}
-                                                         {:type "state" :id "visible" :from-var [{:var-name "pair-target-2" :action-property "target"}]}
-                                                         {:type "state" :id "visible" :from-var [{:var-name "pair-target-3" :action-property "target"}]}]}
-                                                 {:type "empty" :duration 700}]}
-
-                 :hide-targets           {:type "sequence-data"
-                                          :data [{:type "parallel"
-                                                  :data [{:type "state" :id "hidden" :from-var [{:var-name "current-target" :action-property "target"}]}
-                                                         {:type "state" :id "hidden" :from-var [{:var-name "pair-target-1" :action-property "target"}]}
-                                                         {:type "state" :id "hidden" :from-var [{:var-name "pair-target-2" :action-property "target"}]}
-                                                         {:type "state" :id "hidden" :from-var [{:var-name "pair-target-3" :action-property "target"}]}]}
-                                                 {:type "empty" :duration 700}]}
-
-                 :set-target-animation   {:type "sequence-data"
-                                          :data [{:type "animation-props" :props {:speed 0.6} :from-var [{:var-name "current-target" :action-property "target"}]}
-                                                 {:type "animation" :id "idle1" :from-var [{:var-name "current-target" :action-property "target"}]}]}
-
-                 :reset-target-animation {:type "sequence-data"
-                                          :data [{:type "animation-props" :props {:speed 0.2} :from-var [{:var-name "current-target" :action-property "target"}]}
-                                                 {:type "animation" :id "idle2" :from-var [{:var-name "current-target" :action-property "target"}]}]}
-
-                 :check-concept          {:type        "test-var-scalar"
-                                          :var-name    "current-target"
-                                          :success     "pick-correct"
-                                          :fail        "pick-wrong"
-                                          :from-params [{:action-property "value" :param-property "box"}]}
-
-                 :pick-correct           {:type "sequence"
-                                          :data ["inc-correct"
-                                                 "set-target-animation"
-                                                 "mari-audio-correct"
-                                                 "reset-target-animation"
-                                                 "hide-targets"
-                                                 "renew-current-concept"]}
-
-                 :inc-correct            {:type     "pick-correct" :activity "hide-n-seek"
-                                          :from-var [{:var-name "current-concept" :action-property "concept-name" :var-property "concept-name"}]}
-
-                 :pick-wrong             {:type "sequence"
-                                          :data ["inc-wrong"
-                                                 "mari-audio-try-again"]}
-
-                 :inc-wrong              {:type        "pick-wrong" :activity "hide-n-seek"
-                                          :from-var    [{:var-name "current-concept" :action-property "concept-name" :var-property "concept-name"}]
-                                          :from-params [{:action-property "option" :param-property "box"}]}
-
-                 :start-activity         {:type "start-activity" :id "hide-n-seek"}
-                 :finish-activity        {:type "finish-activity" :id "hide-n-seek"}},
- :triggers      {:start {:on "start" :action "start-scene"}}
- :metadata      {:autostart true
-                 :prev      "park"}}
+{:assets
+                [{:url "/raw/img/park/swings/background.jpg", :size 10, :type "image"}
+                 {:url "/raw/img/park/swings/swings.png", :size 1, :type "image"}
+                 {:url "/raw/img/park/swings/tree.png", :size 1, :type "image"}
+                 {:url "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a", :size 2, :type "audio", :alias "mari-welcome"}
+                 {:url "/raw/audio/l1/a3/vera-swings.mp3", :size 2, :type "audio", :alias "vera-welcome"}
+                 {:url "/raw/audio/l1/a3/vera/ardilla.mp3", :size 2, :type "audio", :alias "vera-ardilla"}
+                 {:url "/raw/audio/l1/a3/rock/Ardilla.m4a", :size 2, :type "audio", :alias "rock-ardilla"}
+                 {:url "/raw/audio/l1/a3/vera/bebe.mp3", :size 2, :type "audio", :alias "vera-bebe"}
+                 {:url "/raw/audio/l1/a3/rock/Bebe.m4a", :size 2, :type "audio", :alias "rock-bebe"}
+                 {:url "/raw/audio/l1/a3/rock/Bebe_ending.m4a", :size 2, :type "audio", :alias "rock-bebe-ending"}
+                 {:url "/raw/audio/l1/a3/vera/casa.mp3", :size 2, :type "audio", :alias "vera-casa"}
+                 {:url "/raw/audio/l1/a3/rock/Casa.m4a", :size 2, :type "audio", :alias "rock-casa"}
+                 {:url "/raw/audio/l1/a3/vera/cepillo.mp3", :size 2, :type "audio", :alias "vera-cepillo"}
+                 {:url "/raw/audio/l1/a3/rock/Cepillo.m4a", :size 2, :type "audio", :alias "rock-cepillo"}
+                 {:url "/raw/audio/l1/a3/vera/chocolate.mp3", :size 2, :type "audio", :alias "vera-chocolate"}
+                 {:url "/raw/audio/l1/a3/rock/Chocolate.m4a", :size 2, :type "audio", :alias "rock-chocolate"}
+                 {:url "/raw/audio/l1/a3/vera/diamante.mp3", :size 2, :type "audio", :alias "vera-diamante"}
+                 {:url "/raw/audio/l1/a3/rock/Diamante.m4a", :size 2, :type "audio", :alias "rock-diamante"}
+                 {:url "/raw/audio/l1/a3/vera/elefante.mp3", :size 2, :type "audio", :alias "vera-elefante"}
+                 {:url "/raw/audio/l1/a3/rock/Elefante.m4a", :size 2, :type "audio", :alias "rock-elefante"}
+                 {:url "/raw/audio/l1/a3/vera/flor.mp3", :size 2, :type "audio", :alias "vera-flor"}
+                 {:url "/raw/audio/l1/a3/rock/Flor.m4a", :size 2, :type "audio", :alias "rock-flor"}
+                 {:url "/raw/audio/l1/a3/vera/gato.mp3", :size 2, :type "audio", :alias "vera-gato"}
+                 {:url "/raw/audio/l1/a3/rock/Gato.m4a", :size 2, :type "audio", :alias "rock-gato"}
+                 {:url "/raw/audio/l1/a3/vera/gemelo.mp3", :size 2, :type "audio", :alias "vera-gemelos"}
+                 {:url "/raw/audio/l1/a3/rock/Gemelos.m4a", :size 2, :type "audio", :alias "rock-gemelos"}
+                 {:url "/raw/audio/l1/a3/vera/hoja.mp3", :size 2, :type "audio", :alias "vera-hoja"}
+                 {:url "/raw/audio/l1/a3/rock/Hoja.m4a", :size 2, :type "audio", :alias "rock-hoja"}
+                 {:url "/raw/audio/l1/a3/vera/iman.mp3", :size 2, :type "audio", :alias "vera-iman"}
+                 {:url "/raw/audio/l1/a3/rock/Iman.m4a", :size 2, :type "audio", :alias "rock-iman"}
+                 {:url "/raw/audio/l1/a3/vera/jardin.mp3", :size 2, :type "audio", :alias "vera-jardin"}
+                 {:url "/raw/audio/l1/a3/rock/Jardin.m4a", :size 2, :type "audio", :alias "rock-jardin"}
+                 {:url "/raw/audio/l1/a3/vera/kimono.mp3", :size 2, :type "audio", :alias "vera-kimono"}
+                 {:url "/raw/audio/l1/a3/rock/Kimono.m4a", :size 2, :type "audio", :alias "rock-kimono"}
+                 {:url "/raw/audio/l1/a3/vera/leon.mp3", :size 2, :type "audio", :alias "vera-leon"}
+                 {:url "/raw/audio/l1/a3/rock/Leon.m4a", :size 2, :type "audio", :alias "rock-leon"}
+                 {:url "/raw/audio/l1/a3/rock/Leon_roar.m4a", :size 2, :type "audio", :alias "rock-leon-roar"}
+                 {:url "/raw/audio/l1/a3/rock/Llaves.mp4", :size 2, :type "audio", :alias "rock-llave"}
+                 {:url "/raw/audio/l1/a3/vera/llaves.mp3", :size 2, :type "audio", :alias "vera-llave"}
+                 {:url "/raw/audio/l1/a3/vera/mano.mp3", :size 2, :type "audio", :alias "vera-mano"}
+                 {:url "/raw/audio/l1/a3/rock/Manos.m4a", :size 2, :type "audio", :alias "rock-mano"}
+                 {:url "/raw/audio/l1/a3/vera/nandu.mp3", :size 2, :type "audio", :alias "vera-nandu"}
+                 {:url "/raw/audio/l1/a3/rock/Nandu.m4a", :size 2, :type "audio", :alias "rock-nandu"}
+                 {:url "/raw/audio/l1/a3/vera/nino.mp3", :size 2, :type "audio", :alias "vera-nino"}
+                 {:url "/raw/audio/l1/a3/rock/Nino.m4a", :size 2, :type "audio", :alias "rock-nino"}
+                 {:url "/raw/audio/l1/a3/vera/oso.mp3", :size 2, :type "audio", :alias "vera-oso"}
+                 {:url "/raw/audio/l1/a3/rock/Oso.m4a", :size 2, :type "audio", :alias "rock-oso"}
+                 {:url "/raw/audio/l1/a3/vera/pelota.mp3", :size 2, :type "audio", :alias "vera-pelota"}
+                 {:url "/raw/audio/l1/a3/rock/Pelota.m4a", :size 2, :type "audio", :alias "rock-pelota"}
+                 {:url "/raw/audio/l1/a3/vera/queso.mp3", :size 2, :type "audio", :alias "vera-queso"}
+                 {:url "/raw/audio/l1/a3/rock/Queso.m4a", :size 2, :type "audio", :alias "rock-queso"}
+                 {:url "/raw/audio/l1/a3/vera/rana.mp3", :size 2, :type "audio", :alias "vera-rana"}
+                 {:url "/raw/audio/l1/a3/rock/Rana.m4a", :size 2, :type "audio", :alias "rock-rana"}
+                 {:url "/raw/audio/l1/a3/vera/serpiente.mp3", :size 2, :type "audio", :alias "vera-serpiente"}
+                 {:url "/raw/audio/l1/a3/rock/Serpiente.m4a", :size 2, :type "audio", :alias "rock-serpiente"}
+                 {:url "/raw/audio/l1/a3/vera/tomate.mp3", :size 2, :type "audio", :alias "vera-tomate"}
+                 {:url "/raw/audio/l1/a3/rock/Tomate.m4a", :size 2, :type "audio", :alias "rock-tomate"}
+                 {:url "/raw/audio/l1/a3/vera/uvas.mp3", :size 2, :type "audio", :alias "vera-uvas"}
+                 {:url "/raw/audio/l1/a3/rock/Uvas.m4a", :size 2, :type "audio", :alias "rock-uvas"}
+                 {:url "/raw/audio/l1/a3/vera/violin.mp3", :size 2, :type "audio", :alias "vera-violin"}
+                 {:url "/raw/audio/l1/a3/rock/Violin.m4a", :size 2, :type "audio", :alias "rock-violin"}
+                 {:url "/raw/audio/l1/a3/vera/web.mp3", :size 2, :type "audio", :alias "vera-web"}
+                 {:url "/raw/audio/l1/a3/rock/Web.m4a", :size 2, :type "audio", :alias "rock-web"}
+                 {:url "/raw/audio/l1/a3/vera/xilofono.mp3", :size 2, :type "audio", :alias "vera-xylofono"}
+                 {:url "/raw/audio/l1/a3/rock/Xylofono.m4a", :size 2, :type "audio", :alias "rock-xylofono"}
+                 {:url "/raw/audio/l1/a3/rock/Xylofono_song.m4a", :size 2, :type "audio", :alias "rock-xylofono-song"}
+                 {:url "/raw/audio/l1/a3/vera/yoyo.mp3", :size 2, :type "audio", :alias "vera-yoyo"}
+                 {:url "/raw/audio/l1/a3/rock/Yoyo.m4a", :size 2, :type "audio", :alias "rock-yoyo"}
+                 {:url "/raw/audio/l1/a3/vera/zapatos.mp3", :size 2, :type "audio", :alias "vera-zapatos"}
+                 {:url "/raw/audio/l1/a3/rock/Zapatos.m4a", :size 2, :type "audio", :alias "rock-zapatos"}],
+ :objects
+                {:background {:type "background", :src "/raw/img/park/swings/background.jpg"},
+                 :box-ph
+                             {:type        "transparent",
+                              :x           0,
+                              :y           550,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.3, :y 0.3},
+                              :origin      {:type "center-center"},
+                              :scene-name  "box-ph",
+                              :transition  "box-ph",
+                              :anim-offset {:x 0, :y -300},
+                              :states
+                                           {:default {:x 0, :y 550, :type "transparent"},
+                                            :visible
+                                                     {:y     785,
+                                                      :speed 0.3,
+                                                      :name  "boxes",
+                                                      :start false,
+                                                      :type  "animation",
+                                                      :loop  true,
+                                                      :anim  "idle2",
+                                                      :x     177,
+                                                      :skin  "empty"}}},
+                 :box1
+                             {:type        "transparent",
+                              :x           350,
+                              :y           300,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.3, :y 0.3},
+                              :origin      {:type "center-center"},
+                              :scene-name  "box1",
+                              :transition  "box1",
+                              :actions
+                                           {:drag-end
+                                            {:id     "drag-box1",
+                                             :on     "drag-end",
+                                             :type   "action",
+                                             :params {:start "box-1-start", :revert "box-1-revert", :target "box1"}}},
+                              :anim-offset {:x 0, :y -300},
+                              :draggable   {:var-name "drag-box-1"},
+                              :states
+                                           {:come             {:x 500, :y 550, :anim "come", :loop false, :name "boxes", :type "animation", :speed 0.3, :start true},
+                                            :default          {:x 350, :y 300, :type "transparent"},
+                                            :initial-position {:x 600, :y 400}}},
+                 :box2
+                             {:type        "transparent",
+                              :x           850,
+                              :y           300,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.3, :y 0.3},
+                              :origin      {:type "center-center"},
+                              :scene-name  "box2",
+                              :transition  "box2",
+                              :actions
+                                           {:drag-end
+                                            {:id     "drag-box2",
+                                             :on     "drag-end",
+                                             :type   "action",
+                                             :params {:start "box-2-start", :revert "box-2-revert", :target "box1"}}},
+                              :anim-offset {:x 0, :y -300},
+                              :draggable   {:var-name "drag-box-2"},
+                              :states
+                                           {:come             {:x 1000, :y 550, :anim "come", :loop false, :name "boxes", :type "animation", :speed 0.3, :start true},
+                                            :default          {:x 850, :y 300, :type "transparent"},
+                                            :initial-position {:x 1000, :y 400}}},
+                 :box3
+                             {:type        "transparent",
+                              :x           1350,
+                              :y           300,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.3, :y 0.3},
+                              :origin      {:type "center-center"},
+                              :scene-name  "box3",
+                              :transition  "box3",
+                              :actions
+                                           {:drag-end
+                                            {:id     "drag-box3",
+                                             :on     "drag-end",
+                                             :type   "action",
+                                             :params {:start "box-2-start", :revert "box-3-revert", :target "box1"}}},
+                              :anim-offset {:x 0, :y -300},
+                              :draggable   {:var-name "drag-box-3"},
+                              :states
+                                           {:come             {:x 1500, :y 550, :anim "come", :loop false, :name "boxes", :type "animation", :speed 0.3, :start true},
+                                            :default          {:x 1350, :y 300, :type "transparent"},
+                                            :initial-position {:x 1400, :y 400}}},
+                 :mari
+                             {:type       "animation",
+                              :x          1535,
+                              :y          715,
+                              :width      473,
+                              :height     511,
+                              :scene-name "mari",
+                              :transition "mari",
+                              :anim       "idle",
+                              :name       "mari",
+                              :scale-x    0.5,
+                              :scale-y    0.5,
+                              :speed      0.35,
+                              :start      true},
+                 :rock
+                             {:type       "animation",
+                              :x          1168,
+                              :y          748,
+                              :width      591,
+                              :height     681,
+                              :scene-name "rock",
+                              :anim       "idle",
+                              :name       "rock",
+                              :scale-x    0.6,
+                              :scale-y    0.6,
+                              :skin       "female",
+                              :speed      0.35,
+                              :start      true},
+                 :swings
+                             {:type       "group",
+                              :x          589,
+                              :y          160,
+                              :origin     {:type "center-center"},
+                              :transition "swings",
+                              :children   ["swings-image" "box-ph"]},
+                 :swings-image
+                             {:type "image", :width 248, :height 681, :origin {:type "center-top"}, :src "/raw/img/park/swings/swings.png"},
+                 :tree-image
+                             {:type   "image",
+                              :x      656,
+                              :y      0,
+                              :width  592,
+                              :height 196,
+                              :origin {:type "center-top"},
+                              :src    "/raw/img/park/swings/tree.png"},
+                 :vera
+                             {:type   "animation",
+                              :x      251,
+                              :y      990,
+                              :width  1800,
+                              :height 2558,
+                              :scale  {:x 0.2, :y 0.2},
+                              :anim   "idle",
+                              :name   "vera",
+                              :speed  0.3,
+                              :start  true}},
+ :scene-objects [["background"] ["swings"] ["tree-image"] ["vera" "mari" "rock"] ["box1" "box2" "box3"]],
+ :actions
+                {:audio-wrong             {:type "audio", :id "fw-try-again", :start 0.892, :duration 1.869, :offset 0.2},
+                 :box-1-revert            {:type "transition", :to {:x 500, :y 550, :duration 2}, :transition-id "box1"},
+                 :box-1-start
+                                          {:type "sequence",
+                                           :data
+                                                 ["show-box-1-ph"
+                                                  "start-swings"
+                                                  "empty-before-dialog"
+                                                  "dialog-var"
+                                                  "stop-swings"
+                                                  "hide-box-1-ph"
+                                                  "set-current-box2"
+                                                  "mari-box-2"
+                                                  "try-another"]},
+                 :box-2-revert            {:type "transition", :to {:x 1000, :y 550, :duration 2}, :transition-id "box2"},
+                 :box-2-start
+                                          {:type "sequence",
+                                           :data
+                                                 ["show-box-2-ph"
+                                                  "start-swings"
+                                                  "empty-before-dialog"
+                                                  "dialog-var"
+                                                  "stop-swings"
+                                                  "hide-box-2-ph"
+                                                  "set-current-box3"
+                                                  "mari-box-3"
+                                                  "try-another"]},
+                 :box-3-revert            {:type "transition", :to {:x 1500, :y 550, :duration 2}, :transition-id "box3"},
+                 :box-3-start
+                                          {:type "sequence",
+                                           :data
+                                                 ["show-box-3-ph"
+                                                  "start-swings"
+                                                  "empty-before-dialog"
+                                                  "dialog-var"
+                                                  "stop-swings"
+                                                  "hide-box-3-ph"
+                                                  "mari-finish"
+                                                  "finish-activity"]},
+                 :check-box1              {:type "test-var-scalar", :var-name "box1", :value true, :success "box-1-start", :fail "box-1-revert"},
+                 :check-box2              {:type "test-var-scalar", :var-name "box2", :value true, :success "box-2-start", :fail "box-2-revert"},
+                 :check-box3              {:type "test-var-scalar", :var-name "box3", :value true, :success "box-3-start", :fail "box-3-revert"},
+                 :clear-instruction       {:type "remove-flows", :flow-tag "instruction"},
+                 :dialog-var
+                                          {:type                          "action",
+                                           :phrase                        "dialog",
+                                           :phrase-description            "Historia conceptual",
+                                           :phrase-description-translated "Concept story",
+                                           :from-var                      [{:var-name "current-word", :var-property "swings-dialog-action"}]},
+                 :disable-drag            {:type "set-variable", :var-name "draggable", :var-value false},
+                 :drag-box1
+                                          {:type         "test-transitions-collide",
+                                           :success      "check-box1",
+                                           :fail         "box-1-revert",
+                                           :transition-1 "box1",
+                                           :transition-2 "box-ph"},
+                 :drag-box2
+                                          {:type         "test-transitions-collide",
+                                           :success      "check-box2",
+                                           :fail         "box-2-revert",
+                                           :transition-1 "box2",
+                                           :transition-2 "box-ph"},
+                 :drag-box3
+                                          {:type         "test-transitions-collide",
+                                           :success      "check-box3",
+                                           :fail         "box-3-revert",
+                                           :transition-1 "box3",
+                                           :transition-2 "box-ph"},
+                 :empty-before-dialog     {:type "empty", :duration 3000},
+                 :enable-drag             {:type "set-variable", :var-name "draggable", :var-value true},
+                 :finish-activity         {:type "finish-activity", :id "swings"},
+                 :hide-box-1-ph
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:id "default", :type "state", :target "box-ph"}
+                                                  {:id "come", :type "state", :target "box1"}
+                                                  {:type "empty", :duration 500}
+                                                  {:type       "set-slot",
+                                                   :target     "box1",
+                                                   :from-var   [{:var-name "item-1", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:id "idle_fly1", :loop true, :type "add-animation", :target "box1"}]},
+                 :hide-box-2-ph
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:id "default", :type "state", :target "box-ph"}
+                                                  {:id "come", :type "state", :target "box2"}
+                                                  {:type "empty", :duration 500}
+                                                  {:type       "set-slot",
+                                                   :target     "box2",
+                                                   :from-var   [{:var-name "item-2", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:id "idle_fly2", :loop true, :type "add-animation", :target "box2"}]},
+                 :hide-box-3-ph
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:id "default", :type "state", :target "box-ph"}
+                                                  {:id "come", :type "state", :target "box3"}
+                                                  {:type "empty", :duration 500}
+                                                  {:type       "set-slot",
+                                                   :target     "box3",
+                                                   :from-var   [{:var-name "item-3", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
+                 :mari-box-1              {:type "transition", :to {:x 671, :y 350, :loop false, :duration 2}, :transition-id "mari"},
+                 :mari-box-2              {:type "transition", :to {:x 1181, :y 350, :loop false, :duration 2}, :transition-id "mari"},
+                 :mari-box-3              {:type "transition", :to {:x 1658, :y 350, :loop false, :duration 2}, :transition-id "mari"},
+                 :mari-finish
+                                          {:type               "sequence-data",
+                                           :data
+                                                               [{:to {:x 244, :y 300, :duration 1.3}, :type "transition", :transition-id "mari"}
+                                                                {:offset   49.103,
+                                                                 :phrase-text
+                                                                           "Parece que cada foto tuvo un turno en el columpio.\n                                                                                                        Buen trabajo pequeno genio!\n                                                                                                        Puedes jugar este juego de nuevo o hacer clic sobre esta flecha para empezar tu proximo juego.",
+                                                                 :start    65.984,
+                                                                 :type     "animation-sequence",
+                                                                 :duration 13.599,
+                                                                 :audio    "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                                                 :target   "mari",
+                                                                 :track    1,
+                                                                 :data
+                                                                           [{:end 52.717, :anim "talk", :start 49.357, :duration 3.36}
+                                                                            {:end 54.49, :anim "talk", :start 52.983, :duration 1.507}
+                                                                            {:end 57.09, :anim "talk", :start 55.13, :duration 1.96}
+                                                                            {:end 59.036, :anim "talk", :start 57.33, :duration 1.706}
+                                                                            {:end 61.223, :anim "talk", :start 59.676, :duration 1.547}]}],
+                                           :phrase             "finish",
+                                           :phrase-description "Juega de nuevo o pasa a la siguiente actividad"},
+                 :mari-init-wand          {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
+                 :mari-move-to-start
+                                          {:type               "parallel",
+                                           :data
+                                                               [{:data
+                                                                       [{:id "wand_hit", :type "animation", :track 2, :target "mari"}
+                                                                        {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}],
+                                                                 :type "sequence-data"}
+                                                                {:offset      34.395,
+                                                                 :phrase-text "Mueve la foto sobre el columpio!",
+                                                                 :start       34.395,
+                                                                 :type        "animation-sequence",
+                                                                 :duration    2.773,
+                                                                 :audio       "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                                                 :target      "mari",
+                                                                 :track       1,
+                                                                 :data        [{:end 36.894, :anim "talk", :start 34.549}]}],
+                                           :phrase             "move-picture",
+                                           :phrase-description "Mueve la imagen para comenzar"},
+                 :mari-welcome-audio-2
+                                          {:type     "animation-sequence",
+                                           :data
+                                                     [{:end 7.64, :anim "talk", :start 0.79}
+                                                      {:end 9.26, :anim "talk", :start 7.82}
+                                                      {:end 12.21, :anim "talk", :start 9.66}],
+                                           :phrase-text
+                                                     " Si! Vamos a jugar el los columpios! Nuestros amigos quieren ir a jugar en los columpios! Vamos a darles un turno a cada uno.",
+                                           :target   "mari",
+                                           :audio    "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                           :start    0.787,
+                                           :duration 11.679,
+                                           :track    1,
+                                           :offset   0.787},
+                 :mari-welcome-audio-4
+                                          {:type        "animation-sequence",
+                                           :data        [{:end 17.78, :anim "talk", :start 15.05}],
+                                           :phrase-text "Muy bien! Buen trabajo!",
+                                           :target      "mari",
+                                           :audio       "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                           :start       14.999,
+                                           :duration    2.933,
+                                           :track       1,
+                                           :offset      14.999},
+                 :mari-welcome-audio-5
+                                          {:type        "animation-sequence",
+                                           :data        [{:end 30.94, :anim "talk", :start 29.25} {:end 32.62, :anim "talk", :start 31.17}],
+                                           :phrase-text "Ok pequeno genio! Vamos a comenzar!",
+                                           :target      "mari",
+                                           :audio       "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                           :start       29.012,
+                                           :duration    3.786,
+                                           :track       1,
+                                           :offset      29.012},
+                 :pick-wrong              {:type "sequence", :data ["audio-wrong"]},
+                 :prepare-swing           {:type "transition", :to {:loop false, :duration 1, :rotation -15}, :transition-id "swings"},
+                 :renew-words
+                                          {:type "lesson-var-provider", :from "concepts", :provider-id "words-set", :variables ["item-1" "item-2" "item-3"]},
+                 :set-current-box1        {:type "set-variable", :var-name "current-box", :var-value "box1"},
+                 :set-current-box2        {:type "set-variable", :var-name "current-box", :var-value "box2"},
+                 :set-current-box3        {:type "set-variable", :var-name "current-box", :var-value "box3"},
+                 :show-box-1-ph
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:id "default", :type "state", :target "box1"}
+                                                  {:id "visible", :type "state", :target "box-ph"}
+                                                  {:type "empty", :duration 500}
+                                                  {:type       "set-slot",
+                                                   :target     "box-ph",
+                                                   :from-var   [{:var-name "item-1", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:from "item-1", :type "copy-variable", :var-name "current-word"}]},
+                 :show-box-2-ph
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:id "default", :type "state", :target "box2"}
+                                                  {:id "visible", :type "state", :target "box-ph"}
+                                                  {:type "empty", :duration 500}
+                                                  {:type       "set-slot",
+                                                   :target     "box-ph",
+                                                   :from-var   [{:var-name "item-2", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:from "item-2", :type "copy-variable", :var-name "current-word"}]},
+                 :show-box-3-ph
+                                          {:type "sequence-data",
+                                           :data
+                                                 [{:id "default", :type "state", :target "box3"}
+                                                  {:id "visible", :type "state", :target "box-ph"}
+                                                  {:type "empty", :duration 500}
+                                                  {:type       "set-slot",
+                                                   :target     "box-ph",
+                                                   :from-var   [{:var-name "item-3", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:from "item-3", :type "copy-variable", :var-name "current-word"}]},
+                 :show-boxes
+                                          {:type "parallel",
+                                           :data
+                                                 [{:id "come", :type "state", :target "box1"}
+                                                  {:id "come", :type "state", :target "box2"}
+                                                  {:id "come", :type "state", :target "box3"}]},
+                 :start-activity          {:type "start-activity", :id "swings"},
+                 :start-scene
+                                          {:type "sequence",
+                                           :data
+                                                 ["start-activity"
+                                                  "clear-instruction"
+                                                  "renew-words"
+                                                  "set-current-box1"
+                                                  "show-boxes"
+                                                  "wait-for-box-animations"
+                                                  "switch-box-animations-idle"
+                                                  "welcome-audio"
+                                                  "mari-init-wand"
+                                                  "mari-box-1"
+                                                  "mari-move-to-start"]},
+                 :start-swings            {:type "sequence", :data ["prepare-swing" "swing"], :tags ["swings"]},
+                 :stop-activity           {:type "stop-activity", :id "swings"},
+                 :stop-swings             {:type "sequence", :data ["stop-swings-1" "stop-swings-2"]},
+                 :stop-swings-1           {:type "remove-flows", :flow-tag "swings"},
+                 :stop-swings-2           {:type "transition", :to {:loop false, :duration 0.5, :rotation 0}, :transition-id "swings"},
+                 :swing                   {:type "sequence", :data ["swing-right" "swing-left" "swing"], :return-immediately true, :tags ["swings"]},
+                 :swing-left              {:type "transition", :to {:loop false, :duration 2, :rotation -15}, :transition-id "swings"},
+                 :swing-right             {:type "transition", :to {:loop false, :duration 2, :rotation 15}, :transition-id "swings"},
+                 :switch-box-animations-idle
+                                          {:type "parallel",
+                                           :data
+                                                 [{:type       "set-slot",
+                                                   :target     "box1",
+                                                   :from-var   [{:var-name "item-1", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:type       "set-slot",
+                                                   :target     "box2",
+                                                   :from-var   [{:var-name "item-2", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:type       "set-slot",
+                                                   :target     "box3",
+                                                   :from-var   [{:var-name "item-3", :var-property "image-src", :action-property "image"}],
+                                                   :slot-name  "box1",
+                                                   :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:id "idle_fly1", :loop true, :type "add-animation", :target "box1"}
+                                                  {:id "idle_fly2", :loop true, :type "add-animation", :target "box2"}
+                                                  {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
+                 :try-another
+                                          {:type               "animation-sequence",
+                                           :data
+                                                               [{:end 43.225, :anim "talk", :start 41.155}
+                                                                {:end 45.534, :anim "talk", :start 43.725}
+                                                                {:end 48.759, :anim "talk", :start 46.32}],
+                                           :phrase             "try-another",
+                                           :phrase-description "Prueba otra foto",
+                                           :phrase-text
+                                                               "Buen trabajo pequeno genio!\n                                                                              Vamos a intentarlo de nuevo!\n                                                                              Mueve la foto sobre los columpios. ",
+                                           :target             "mari",
+                                           :audio              "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                                           :start              40.476,
+                                           :duration           8.509,
+                                           :track              1,
+                                           :offset             40.476},
+                 :vera-welcome-audio-1
+                                          {:type        "animation-sequence",
+                                           :data
+                                                        [{:end 2.39, :anim "talk", :start 1.56}
+                                                         {:end 4.98, :anim "talk", :start 3.06}
+                                                         {:end 7.73, :anim "talk", :start 5.75}],
+                                           :phrase-text "Hola Mari! Vamos a jugar en los columpios? A mi me gustan los columpios.",
+                                           :target      "vera",
+                                           :audio       "/raw/audio/l1/a3/vera-swings.mp3",
+                                           :start       1.342,
+                                           :duration    6.583,
+                                           :track       1,
+                                           :offset      1.342},
+                 :vera-welcome-audio-3
+                                          {:type        "animation-sequence",
+                                           :data
+                                                        [{:end 9.31, :anim "talk", :start 8.76}
+                                                         {:end 11.32, :anim "talk", :start 9.79}
+                                                         {:end 12.26, :anim "talk", :start 11.51}],
+                                           :phrase-text "Ok. Voy a darles turno a cada uno.",
+                                           :target      "vera",
+                                           :audio       "/raw/audio/l1/a3/vera-swings.mp3",
+                                           :start       8.572,
+                                           :duration    3.852,
+                                           :track       1,
+                                           :offset      8.572},
+                 :wait-for-box-animations {:type "empty", :duration 500},
+                 :welcome-audio
+                                          {:type               "sequence",
+                                           :data
+                                                               ["vera-welcome-audio-1" "mari-welcome-audio-2" "vera-welcome-audio-3" "mari-welcome-audio-4" "mari-welcome-audio-5"],
+                                           :phrase             "welcome",
+                                           :phrase-description "Diálogo de bienvenida entre Vera, Mari y Rock"}},
+ :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :metadata      {:prev "park", :autostart true},
+ :audio
+                {:rock-oso     "/raw/audio/l1/a3/rock/Oso.m4a",
+                 :vera-oso     "/raw/audio/l1/a3/vera/oso.m4a",
+                 :rock-iman    "/raw/audio/l1/a3/rock/Iman.m4a",
+                 :vera-iman    "/raw/audio/l1/a3/vera/iman.m4a",
+                 :mari-welcome "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
+                 :rock-ardilla "/raw/audio/l1/a3/rock/Ardilla.m4a",
+                 :vera-ardilla "/raw/audio/l1/a3/vera/ardilla.m4a"}}

@@ -311,8 +311,8 @@
                                                                       "mari-letter-4"
                                                                       "mari-long-letter-var"],
                                                  :phrase             "letter-intro",
-                                                 :phrase-description "Learn concept sound"
-                                                 :skippable true},
+                                                 :phrase-description "Learn concept sound",
+                                                 :skippable          true},
                  :mari-letter-1
                                                 {:type        "animation-sequence",
                                                  :data        [{:end 9.4, :anim "talk", :start 8.07}],
@@ -335,12 +335,12 @@
                                                  :offset      10.32},
                  :mari-letter-3
                                                 {:type        "animation-sequence",
-                                                 :data        [{:end 22.62, :anim "talk", :start 16.54}],
+                                                 :data        [{:end 14.11, :anim "talk", :start 12.99}],
                                                  :phrase-text "hace el sonido",
                                                  :target      "mari",
                                                  :audio       "/raw/audio/l1/a4/mari.mp4",
-                                                 :start       16.374,
-                                                 :duration    6.386,
+                                                 :start       12.92,
+                                                 :duration    1.174,
                                                  :track       1,
                                                  :offset      16.374},
                  :mari-letter-4
@@ -380,8 +380,8 @@
                                                  :start              1.195,
                                                  :duration           5.381,
                                                  :track              1,
-                                                 :offset             1.195
-                                                 :skippable true},
+                                                 :offset             1.195,
+                                                 :skippable          true},
                  :next-concept-workflow         {:type "sequence", :data ["mari-more-audio" "renew-current-concept-workflow"]},
                  :renew-current-concept
                                                 {:type "parallel",
