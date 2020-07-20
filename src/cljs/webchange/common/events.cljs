@@ -43,11 +43,19 @@
   [action]
   #(re-frame/dispatch (success-event action)))
 
+(defn register-flow-tags-event
+  [{:keys [flow-id tags]}]
+  [::register-flow-tags flow-id tags])
+
 (defn get-action-tags
   [{:keys [tags unique-tag skippable]}]
   (cond-> tags
           unique-tag (conj unique-tag)
           skippable (conj "skip")))
+
+(defn flow-registered?
+  [flows tag]
+  (some #(contains? (:tags %) tag) (vals flows)))
 
 (def event-as-action
   "Interceptor
@@ -61,21 +69,24 @@
   Add and register flow if it is not defined"
   (re-frame/->interceptor
     :before  (fn [context]
-               (let [flow-id (get-in context [:coeffects :event :flow-id])]
-                 (if flow-id
+               (let [action (get-in context [:coeffects :event])
+                     db (get-in context [:coeffects :db])
+                     registered? (flow-registered? (:flows db) (:unique-tag action))
+                     flow-id (:flow-id action)]
+                 (if (or flow-id registered?)
                    context
                    (-> context
                      (update-in [:coeffects :event] assoc :flow-id (random-uuid) :action-id (random-uuid) :register-flow true))
                    )))
     :after (fn [context]
              (let [action (get-in context [:coeffects :event])
-                   register-flow (:register-flow action)]
+                   register-flow (:register-flow action)
+                   original-dispatch (get-in context [:effects :dispatch-n] (list))]
                (if register-flow
                  (-> context
-                     (assoc-in [:effects :dispatch-n] (list [::register-flow {:flow-id (:flow-id action)
-                                                                              :actions [(:action-id action)]
-                                                                              :type :all
-                                                                              :tags (get-action-tags action)}])))
+                     (assoc-in [:effects :dispatch-n] (conj original-dispatch [::register-flow {:flow-id (:flow-id action)
+                                                                                                :actions [(:action-id action)]
+                                                                                                :type :all :tags (get-action-tags action)}])))
                  context))
              )))
 
@@ -172,10 +183,6 @@
            (with-prev prev))
        (-> (str "Action '" id "' was not found") js/Error. throw)))))
 
-(defn flow-registered?
-  [flows tag]
-  (some #(contains? (:tags %) tag) (vals flows)))
-
 (reg-executor :action (fn [{:keys [db action]}] [::execute-action (-> action
                                                                       :id
                                                                       (get-action db action)
@@ -185,26 +192,28 @@
 (reg-simple-executor :sequence-data ::execute-sequence-data)
 (reg-simple-executor :parallel ::execute-parallel)
 (reg-simple-executor :remove-flows ::execute-remove-flows)
+(reg-simple-executor :remove-flow-tag ::execute-remove-flow-tag)
 (reg-simple-executor :callback ::execute-callback)
 (reg-simple-executor :hide-skip ::execute-hide-skip)
 
 (re-frame/reg-event-fx
   ::execute-action
   [event-as-action with-vars with-flow]
-  (fn-traced [{:keys [db]} {:keys [type return-immediately unique-tag flow-id] :as action}]
-    (let [handler (get @executors (keyword type))]
-      (cond
-        (flow-registered? (:flows db) unique-tag) {:dispatch [::discard-flow flow-id]}
-        return-immediately {:dispatch-n (list (handler {:db db :action action})
-                                              (success-event action))}
-        :else {:dispatch (handler {:db db :action action})}))))
+  (fn-traced [{:keys [db]} {:keys [type return-immediately unique-tag flow-id tags] :as action}]
+    (if (flow-registered? (:flows db) unique-tag)
+      {:dispatch [::discard-flow flow-id]}
+      (let [handler (get @executors (keyword type))]
+        {:dispatch-n (list (handler {:db db :action action})
+                           (when return-immediately (success-event action))
+                           (when tags (register-flow-tags-event action)))}))))
 
 (re-frame/reg-event-fx
   ::discard-flow
   (fn [{:keys [db]} [_ flow-id]]
-    (let [flow  (get-in db [:flows flow-id])
+    (let [flow (get-in db [:flows flow-id])
           handler (:on-remove flow)]
-      (handler)
+      (when handler
+        (handler))
       {:db (update db :flows dissoc flow-id)})))
 
 (re-frame/reg-event-fx
@@ -221,6 +230,20 @@
         (handler))
       {:db       (assoc db :flows flows)
        :dispatch (success-event action)})))
+
+(defn remove-tag
+  [flow tag]
+  (let [tags (->> (:tags flow)
+                  (remove #{tag})
+                  (into #{}))]
+    (assoc flow :tags tags)))
+
+(defn add-tags
+  [flow tags]
+  (let [tags (->> (:tags flow)
+                  (concat tags)
+                  (into #{}))]
+    (assoc flow :tags tags)))
 
 (defn destroy-timer
   [timer]
@@ -256,9 +279,10 @@
     (let [scene-id (:current-scene db)
           flow-id (:flow-id flow)
           current-flow (get-in db [:flows flow-id])
+          original-tags (into #{} (:tags current-flow))
           flow-data (-> current-flow
                         (merge flow)
-                        (update-in [:tags] #(into #{} %))
+                        (update-in [:tags] #(into original-tags %))
                         (update-in [:tags] conj (str "scene-" scene-id)))]
       {:db       (assoc-in db [:flows flow-id] flow-data)
        :dispatch [::check-flow flow-id]})))
@@ -267,6 +291,31 @@
   ::register-flow-remove-handler
   (fn [{:keys [db]} [_ {:keys [flow-id handler]}]]
     {:db (update-in db [:flows flow-id :on-remove] conj handler)}))
+
+(re-frame/reg-event-fx
+  ::register-flow-tags
+  (fn [{:keys [db]} [_ flow-id tags]]
+    (when flow-id
+      {:db (update-in db [:flows flow-id] add-tags tags)})))
+
+(defn flow-ancestors
+  [db flow-id]
+  (let [flow (get-in db [:flows flow-id])
+        parent (:parent flow)]
+    (if parent
+      (concat [flow] (flow-ancestors db parent))
+      [flow])))
+
+(re-frame/reg-event-fx
+  ::execute-remove-flow-tag
+  (fn [{:keys [db]} [_ {:keys [flow-id tag] :as action}]]
+    (let [
+          flow-ancestors (->> (flow-ancestors db flow-id)
+                         (map #(remove-tag % tag))
+                         (map (juxt :flow-id identity))
+                         (into {}))]
+      {:db       (update db :flows merge flow-ancestors)
+       :dispatch (success-event action)})))
 
 (re-frame/reg-event-fx
   ::flow-success
@@ -295,7 +344,7 @@
 (re-frame/reg-event-fx
   ::execute-sequence
   [event-as-action with-vars]
-  (fn [{:keys [db]} action]
+  (fn-traced [{:keys [db]} action]
     (let [data (->> (:data action)
                     (map #(get-action % db action))
                     (into []))]
@@ -304,7 +353,7 @@
 (re-frame/reg-event-fx
   ::execute-sequence-data
   [event-as-action with-vars]
-  (fn [{:keys [db]} action]
+  (fn-traced [{:keys [db]} action]
     (if (empty? (:data action))
       {:dispatch (success-event action)}
       (let [[current & rest] (:data action)
@@ -314,7 +363,7 @@
             next [::execute-sequence-data (-> action (assoc :data rest))]
             flow-id (random-uuid)
             action-id (random-uuid)
-            flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :tags (get-action-tags action)}]
+            flow-event [::register-flow {:flow-id flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)}]
             current-action (-> current
                                (assoc :flow-id flow-id)
                                (assoc :action-id action-id)
@@ -331,14 +380,14 @@
 (re-frame/reg-event-fx
   ::execute-parallel
   [event-as-action with-vars]
-  (fn [{:keys [db]} action]
+  (fn-traced [{:keys [db]} action]
     (let [flow-id (random-uuid)
           sequence-skippable? (:skippable action)
           actions (->> (:data action)
                       (map (fn [v] (assoc v :flow-id flow-id :action-id (random-uuid))))
                       (map (fn [v] (with-prev v action))))
           action-ids (map #(get % :action-id) actions)
-          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :tags (get-action-tags action)}]
+          flow-event [::register-flow {:flow-id flow-id :actions action-ids :type :all :next (success-event action) :parent (:flow-id action) :tags (get-action-tags action)}]
           action-events (map (fn [a] [::execute-action a]) actions)]
       (when sequence-skippable?
         (on-skip! (:on-skip action))

@@ -299,25 +299,6 @@
                                                                 :start       0.373,
                                                                 :duration    1.773,
                                                                 :phrase-text "Do you see this title?"}
-                                                               {:data
-                                                                             [{:at 2.826, :end 3.052, :chunk 0, :start 2.826, :duration 0.226}
-                                                                              {:at 3.092, :end 3.252, :chunk 1, :start 3.092, :duration 0.16}
-                                                                              {:at 3.306, :end 3.492, :chunk 2, :start 3.306, :duration 0.186}
-                                                                              {:at 3.692, :end 3.799, :chunk 3, :start 3.692, :duration 0.107}
-                                                                              {:at 3.839, :end 4.092, :chunk 4, :start 3.839, :duration 0.253}
-                                                                              {:at 4.212, :end 4.399, :chunk 5, :start 4.212, :duration 0.187}
-                                                                              {:at 4.465, :end 4.612, :chunk 6, :start 4.465, :duration 0.147}
-                                                                              {:at 4.665, :end 4.785, :chunk 7, :start 4.665, :duration 0.12}
-                                                                              {:at 4.839, :end 4.972, :chunk 8, :start 4.839, :duration 0.133}
-                                                                              {:at 5.039, :end 5.225, :chunk 9, :start 5.039, :duration 0.186}
-                                                                              {:at 5.332, :end 5.518, :chunk 10, :start 5.332, :duration 0.186}],
-                                                                :type        "text-animation",
-                                                                :audio       "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
-                                                                :start       2.693,
-                                                                :target      "title-text",
-                                                                :duration    2.999,
-                                                                :animation   "bounce",
-                                                                :phrase-text "My first words book"}
                                                                {:id          "/raw/audio/l1/a6/lion/2Mis primeras palabras.mp3",
                                                                 :type        "audio",
                                                                 :start       6.052,
@@ -342,11 +323,6 @@
                                                                 :duration    2.999,
                                                                 :animation   "bounce",
                                                                 :phrase-text "My first words book"}
-                                                               {:id          "/raw/audio/l1/a6/L1_A6_Vera.m4a",
-                                                                :type        "audio",
-                                                                :start       5.497,
-                                                                :duration    2.201,
-                                                                :phrase-text "My first words book."}
                                                                {:id          "/raw/audio/l1/a6/lion/2Vamos a leerlo juntos.mp3",
                                                                 :type        "audio",
                                                                 :start       0.348,

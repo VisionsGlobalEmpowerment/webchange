@@ -1,454 +1,771 @@
-{:assets        [{:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
-                 {:url "/raw/img/casa/painting_canvas.png", :size 10 :type "image"}
-                 {:url "/raw/img/elements/squirrel.png", :size 10 :type "image"}
-                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a", :size 2, :type "audio"}
-                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a", :size 2, :type "audio"}
-                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_3.m4a", :size 2, :type "audio"}
-                 {:url "/raw/audio/l2/a2/L2_A2_Mari.m4a", :size 2, :type "audio"}
-                 {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio"}
-                 ]
- :audio         {:vaca-1 "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a"
-                 :vaca-2 "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a"
-                 :vaca-3 "/raw/audio/l2/a2/L2_A2_Vaca_3.m4a"
-                 :mari   "/raw/audio/l2/a2/L2_A2_Mari.m4a"}
- :objects       {:background   {:type "background"
-                                :src  "/raw/img/casa/background.jpg"}
-
-                 :senora-vaca  {:type    "animation"
-                                :name    "senoravaca"
-                                :skin "vaca"
-                                :anim    "idle"
-                                :x       380
-                                :y       1000
-                                :speed   0.3
-                                :width   351
-                                :height  717
-                                :start   true
-                                :actions {:click {:type "action"
-                                                  :id   "vaca-click"
-                                                  :on   "click"}}}
-                 :mari         {:type       "animation"
-                                :name       "mari"
-                                :transition "mari"
-                                :anim       "idle"
-                                :start      true
-                                :speed      0.35
-                                :x          1600
-                                :y          635
-                                :width      473
-                                :height     511
-                                :scale-y    0.5
-                                :scale-x    0.5}
-
-                 :canvas       {:type    "image"
-                                :src     "/raw/img/casa/painting_canvas.png"
-                                :x       650
-                                :y       130
-                                :width   287
-                                :height  430
-                                :scale-y 2
-                                :scale-x 2}
-
-                 :image        {:type       "image"
-                                :transition "image"
-                                :src        "/raw/img/elements/squirrel.png"
-                                :x          1805
-                                :y          502
-                                :width      100
-                                :height     100
-                                :scale-y    1.3
-                                :scale-x    1.3
-                                :states     {:init-position {:x 1805 :y 502}}}
-
-                 :letter-small {:type           "transparent"
-                                :text           "a"
-                                :align          "center"
-                                :vertical-align "middle"
-                                :x              1040
-                                :y              240
-                                :width          130
-                                :height         130
-                                :font-size      120
-                                :font-family    "Lato"
-                                :fill           "#b23c18"
-                                :states         {:big     {:font-size 160}
-                                                 :normal  {:font-size 120}
-                                                 :hidden  {:type "transparent"}
-                                                 :visible {:type "text"}}
-                                :actions        {:click {:type "action"
-                                                         :id   "small-letter-click"
-                                                         :on   "click"}}}
-
-                 :letter-big   {:type           "transparent"
-                                :text           "A"
-                                :align          "center"
-                                :vertical-align "middle"
-                                :x              910
-                                :y              240
-                                :width          130
-                                :height         130
-                                :font-size      120
-                                :font-family    "Lato"
-                                :fill           "#b23c18"
-                                :states         {:big     {:font-size 160}
-                                                 :normal  {:font-size 120}
-                                                 :hidden  {:type "transparent"}
-                                                 :visible {:type "text"}}
-                                :actions        {:click {:type "action"
-                                                         :id   "big-letter-click"
-                                                         :on   "click"}}}
-
-                 :word-1-first {:type        "transparent"
-                                :text        "a"
-                                :x           740
-                                :y           410
-                                :width       110
-                                :height      90
-                                :font-size   100
-                                :font-family "Lato"
-                                :font-weight "bold"
-                                :align       "right"
-                                :fill        "#b23c18"
-                                :states      {:normal  {:y 410 :font-size 100}
-                                              :big     {:y 390 :font-size 120}
-                                              :hidden  {:type "transparent"}
-                                              :visible {:type "text"}}}
-                 :word-1-rest  {:type        "transparent"
-                                :text        "rdilla"
-                                :x           855
-                                :y           410
-                                :width       315
-                                :height      90
-                                :font-size   100
-                                :font-family "Lato"
-                                :fill        "#b23c18"
-                                :states      {:normal  {:y 410 :font-size 100}
-                                              :big     {:y 390 :font-size 120}
-                                              :hidden  {:type "transparent"}
-                                              :visible {:type "text"}}}
-
-                 :word-2-first {:type        "transparent"
-                                :text        "A"
-                                :x           740
-                                :y           510
-                                :width       110
-                                :height      90
-                                :font-size   100
-                                :font-family "Lato"
-                                :align       "right"
-                                :fill        "#b23c18"
-                                :states      {:normal  {:y 510 :font-size 100}
-                                              :big     {:y 490 :font-size 120}
-                                              :hidden  {:type "transparent"}
-                                              :visible {:type "text"}}}
-
-                 :word-2-rest  {:type        "transparent"
-                                :text        "rdilla"
-                                :x           855
-                                :y           510
-                                :width       315
-                                :height      90
-                                :font-size   100
-                                :font-family "Lato"
-                                :fill        "#b23c18"
-                                :states      {:normal  {:y 510 :font-size 100}
-                                              :big     {:y 490 :font-size 120}
-                                              :hidden  {:type "transparent"}
-                                              :visible {:type "text"}}}}
-
- :scene-objects [["background"]
-                 ["canvas"]
-                 ["letter-small" "letter-big" "word-1-first" "word-1-rest" "word-2-first" "word-2-rest"]
-                 ["senora-vaca" "mari"]
-                 ["image"]]
-
- :actions       {:clear-instruction                  {:type        "remove-flows"
-                                                      :description "Remove flows"
-                                                      :flow-tag    "instruction"}
-                 :start-activity                     {:type        "sequence"
-                                                      :description "Initial action"
-                                                      :data        ["clear-instruction"
-                                                                    "init-state"
-                                                                    "stage-intro"
-                                                                    "stage-sound-a"]}
-                 :stage-intro                        {:type "sequence" :data ["vaca-voice-welcome"]}
-                 :stage-sound-a                      {:type "sequence-data"
-                                                      :data [{:type "state" :target "letter-small" :id "visible"}
-                                                             {:type "empty" :duration 700}
-                                                             {:type "action" :id "vaca-voice-give-word-a"}
-                                                             {:type "empty" :duration 300}
-                                                             {:type "empty" :duration 300}
-                                                             {:type "transition" :transition-id "mari" :to {:x 1903 :y 557 :duration 0.7 :loop false}}
-                                                             {:type "parallel"
-                                                              :data [{:type "transition" :transition-id "mari" :to {:x 866 :y 295 :duration 2 :loop false}}
-                                                                     {:type "transition" :transition-id "image" :to {:x 740 :y 240 :duration 2 :loop false}}]}
-                                                             {:type "empty" :duration 1000}
-                                                             {:type "parallel"
-                                                              :data [{:type "transition" :transition-id "mari" :to {:x 1600 :y 635 :duration 1.5 :loop false}}
-                                                                     {:type "action" :id "vaca-voice-listen-a"}
-                                                                     ]}
-                                                             {:type "action" :id "vaca-voice-say-with-me"}
-                                                             {:type "empty" :duration 500}
-                                                             {:type "action" :id "vaca-voice-chanting"}
-                                                             {:type "empty" :duration 500}
-                                                             {:type "action" :id "stage-write-2-ways"}]}
-                 :stage-write-2-ways                 {:type "sequence" :data ["vaca-voice-2-ways-write"
-                                                                              "stage-small-a"]}
-                 :stage-small-a                      {:type "sequence-data"
-                                                      :data [
-                                                             {:type "state" :target "letter-small" :id "big"}
-                                                             {:type "action" :id "vaca-voice-small-a"}
-                                                             {:type "action" :id "vaca-voice-small-a-sound"}
-                                                             {:type "action" :id "vaca-voice-a-first-sound"}
-                                                             {:type "state" :target "word-1-first" :id "visible"}
-                                                             {:type "state" :target "word-1-rest" :id "visible"}
-                                                             {:type "parallel"
-                                                              :data [
-                                                                     {:type "action" :id "vaca-voice-ardilla"}
-                                                                     {:type "sequence-data"
-                                                                      :data [{:type "state" :target "word-1-first" :id "big"}
-                                                                             {:type "empty" :duration 400}
-                                                                             {:type "state" :target "word-1-first" :id "normal"}
-                                                                             {:type "state" :target "word-1-rest" :id "big"}
-                                                                             {:type "empty" :duration 500}
-                                                                             {:type "state" :target "word-1-rest" :id "normal"}
-                                                                             {:type "empty" :duration 500}
-                                                                             {:type "state" :target "word-1-first" :id "big"}
-                                                                             {:type "empty" :duration 400}
-                                                                             {:type "state" :target "word-1-first" :id "normal"}
-                                                                             {:type "state" :target "word-1-rest" :id "big"}
-                                                                             {:type "empty" :duration 500}
-                                                                             {:type "state" :target "word-1-rest" :id "normal"}]}]}
-                                                             {:type "empty" :duration 1000}
-                                                             {:type "action" :id "mari-voice-touch-small-a"}]}
-                 :stage-big-a                        {:type "sequence-data"
-                                                      :data [{:type "state" :target "letter-big" :id "visible"}
-                                                             {:type "state" :target "letter-big" :id "big"}
-                                                             {:type "action" :id "vaca-voice-big-a"}
-                                                             {:type "state" :target "word-2-first" :id "visible"}
-                                                             {:type "state" :target "word-2-rest" :id "visible"}
-                                                             {:type "parallel"
-                                                              :data [
-                                                                     {:type "action" :id "vaca-voice-ardilla-2"}
-                                                                     {:type "sequence-data"
-                                                                      :data [{:type "state" :target "word-2-first" :id "big"}
-                                                                             {:type "empty" :duration 400}
-                                                                             {:type "state" :target "word-2-first" :id "normal"}
-                                                                             {:type "state" :target "word-2-rest" :id "big"}
-                                                                             {:type "empty" :duration 500}
-                                                                             {:type "state" :target "word-2-rest" :id "normal"}
-                                                                             {:type "empty" :duration 500}
-                                                                             {:type "state" :target "word-2-first" :id "big"}
-                                                                             {:type "empty" :duration 400}
-                                                                             {:type "state" :target "word-2-first" :id "normal"}
-                                                                             {:type "state" :target "word-2-rest" :id "big"}
-                                                                             {:type "empty" :duration 500}
-                                                                             {:type "state" :target "word-2-rest" :id "normal"}]}]}
-                                                             {:type "empty" :duration 700}
-                                                             {:type "action" :id "mari-voice-touch-big-a"}]}
-
-                 :stage-repeat-all                   {:type "sequence-data"
-                                                      :data [{:type "transition" :transition-id "mari" :to {:x 1325 :y 500 :duration 0.7 :loop false}}
-                                                             {:type "action" :id "vaca-voice-insertion-chant"}
-                                                             {:type "transition" :transition-id "mari" :to {:x 1325 :y 610 :duration 0.7 :loop false}}
-                                                             {:type "action" :id "vaca-voice-insertion-chant"}
-                                                             {:type "action" :id "stage-finish"}]}
-
-                 :stage-other-words                  {:description "Other words that starts with sound a"
-                                                      :type        "empty" :duration 100}
-
-                 :stage-finish                       {:type "sequence-data"
-                                                      :data [{:type "set-variable" :var-name "vaca-click-available" :var-value 1}
-                                                             {:type "transition" :transition-id "mari" :to {:x 1600 :y 635 :duration 0.7 :loop false}}
-                                                             {:type "action" :id "mari-voice-finish"}]}
-
-                 :init-state                         {:type "parallel"
-                                                      :data [{:type "set-variable" :var-name "small-a-clicked" :var-value 0}
-                                                             {:type "set-variable" :var-name "big-a-clicked" :var-value 0}
-                                                             {:type "set-variable" :var-name "vaca-click-available" :var-value 0}
-                                                             {:type "state" :target "letter-small" :id "hidden"}
-                                                             {:type "state" :target "letter-big" :id "hidden"}
-                                                             {:type "state" :target "word-1-first" :id "hidden"}
-                                                             {:type "state" :target "word-1-rest" :id "hidden"}
-                                                             {:type "state" :target "word-2-first" :id "hidden"}
-                                                             {:type "state" :target "word-2-rest" :id "hidden"}
-                                                             {:type "state" :target "image" :id "init-position"}]}
-
-                 :vaca-click                         {:type     "test-var-scalar"
-                                                      :var-name "vaca-click-available"
-                                                      :success  "vaca-click-success"
-                                                      :fail     "vaca-click-fail"
-                                                      :value    1}
-
-                 :vaca-click-success                 {:type "sequence-data"
-                                                      :data [{:type "action" :id "init-state"}
-                                                             {:type "action" :id "stage-sound-a"}]}
-                 :vaca-click-fail                    {:type "empty" :duration 100}
-
-                 :small-letter-click                 {:type     "test-var-scalar"
-                                                      :var-name "small-a-clicked"
-                                                      :success  "small-letter-click-first"
-                                                      :fail     "small-letter-click-further"
-                                                      :value    0}
-                 :small-letter-click-first           {:type "sequence-data"
-                                                      :data [{:type "counter" :counter-action "increase" :counter-id "small-a-clicked"}
-                                                             {:type "state" :target "letter-small" :id "normal"}
-                                                             {:type "action" :id "vaca-voice-insertion-a-small"}
-                                                             {:type "action" :id "stage-big-a"}]}
-                 :small-letter-click-further         {:type "action" :id "vaca-voice-insertion-a-small"}
-
-                 :big-letter-click                   {:type     "test-var-scalar"
-                                                      :var-name "big-a-clicked"
-                                                      :success  "big-letter-click-first"
-                                                      :fail     "big-letter-click-further"
-                                                      :value    0}
-                 :big-letter-click-first             {:type "sequence-data"
-                                                      :data [{:type "counter" :counter-action "increase" :counter-id "big-a-clicked"}
-                                                             {:type "state" :target "letter-big" :id "normal"}
-                                                             {:type "action" :id "vaca-voice-insertion-a-big"}
-                                                             {:type "action" :id "stage-repeat-all"}]}
-                 :big-letter-click-further           {:type "action" :id "vaca-voice-insertion-a-big"}
-
-                 :vaca-voice-welcome                 {:type        "parallel"
-                                                      :description "Hola pequeno genio! Hoy empezaremos a aprender sobre la letra “a.”"
-                                                      :data        [{:type "audio" :id "vaca-1" :start 1.108 :duration 5.741 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 1.108
-                                                                     :data [{:start 1.283 :end 2.634 :anim "talk"}
-                                                                            {:start 3.309 :end 6.281 :anim "talk"}
-                                                                            {:start 6.430 :end 6.686 :anim "talk"}]}]}
-                 :vaca-voice-give-word-a             {:type        "parallel"
-                                                      :description "Mari, puedes darme una palabra que comienze con la letra ‘a’?"
-                                                      :data        [{:type "audio" :id "vaca-1" :start 7.578 :duration 4.674 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 7.578
-                                                                     :data [{:start 7.754 :end 8.213 :anim "talk"}
-                                                                            {:start 8.699 :end 11.549 :anim "talk"}
-                                                                            {:start 11.630 :end 12.090 :anim "talk"}]}]}
-                 :vaca-voice-listen-a                {:type        "parallel"
-                                                      :description "Excellente! Tenemos una ardilla.  Escucha el primer sonida en la palabra ‘ardilla’.
-                                                          Aaaaaaaaardilla. Aaaaaardilla. Cantalo conmigo! Ardilla, ardilla, a, a, a!!!"
-                                                      :data        [{:type "audio" :id "vaca-1" :start 13.116 :duration 17.830 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 13.116
-                                                                     :data [{:start 13.305 :end 14.616 :anim "talk"}
-                                                                            {:start 15.318 :end 16.993 :anim "talk"}
-                                                                            {:start 17.749 :end 20.991 :anim "talk"}
-                                                                            {:start 21.640 :end 22.963 :anim "talk"}
-                                                                            {:start 23.693 :end 24.990 :anim "talk"}
-                                                                            {:start 25.665 :end 27.002 :anim "talk"}
-                                                                            {:start 27.543 :end 30.812 :anim "talk"}]}]}
-                 :vaca-voice-say-with-me             {:type        "parallel"
-                                                      :description "Dilo conmigo! Cantalo tres veces!"
-                                                      :data        [{:type "audio" :id "vaca-1" :start 31.527 :duration 4.255 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 31.527
-                                                                     :data [{:start 31.703 :end 33.054 :anim "talk"}
-                                                                            {:start 33.662 :end 34.364 :anim "talk"}
-                                                                            {:start 34.634 :end 35.634 :anim "talk"}]}]}
-                 :vaca-voice-chanting                {:type        "parallel"
-                                                      :description "Ardilla, ardilla, a, a, a!!!  Ardilla, ardilla, a, a, a!!!  Ardilla, ardilla, a, a, a!!"
-                                                      :data        [{:type "audio" :id "vaca-1" :start 36.127 :duration 11.043 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 36.127
-                                                                     :data [{:start 36.495 :end 46.829 :anim "talk"}]}]}
-                 :vaca-voice-2-ways-write            {:type        "parallel"
-                                                      :description "Bueno! Hay dos formas de escribir este sonido.
-                                                          Puedes escribir con ‘a’ miniscula o ‘a’ mayuscula."
-                                                      :data        [{:type "audio" :id "vaca-1" :start 47.750 :duration 10.496 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 47.750
-                                                                     :data [{:start 47.886 :end 48.385 :anim "talk"}
-                                                                            {:start 48.926 :end 51.816 :anim "talk"}
-                                                                            {:start 52.654 :end 54.437 :anim "talk"}
-                                                                            {:start 54.856 :end 55.747 :anim "talk"}
-                                                                            {:start 56.247 :end 58.098 :anim "talk"}]}]}
-                 :vaca-voice-small-a                 {:type        "parallel"
-                                                      :description "Esta es la ‘a’ miniscula."
-                                                      :data        [{:type "audio" :id "vaca-2" :start 1.286 :duration 2.908 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 1.286
-                                                                     :data [{:start 1.365 :end 1.948 :anim "talk"}
-                                                                            {:start 2.285 :end 4.134 :anim "talk"}]}]}
-                 :vaca-voice-small-a-sound           {:type        "parallel"
-                                                      :description "Esta letra ‘a’ hace el sonido ‘aaaaaaa’."
-                                                      :data        [{:type "audio" :id "vaca-2" :start 5.172 :duration 4.609 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 5.172
-                                                                     :data [{:start 5.242 :end 5.835 :anim "talk"}
-                                                                            {:start 6.082 :end 6.735 :anim "talk"}
-                                                                            {:start 6.943 :end 7.457 :anim "talk"}
-                                                                            {:start 7.961 :end 9.662 :anim "talk"}]}]}
-                 :vaca-voice-a-first-sound           {:type        "parallel"
-                                                      :description "Aaaaa es el primer sonido en la palabra ardilla.  Aaaaa es para ardilla."
-                                                      :data        [{:type "audio" :id "vaca-2" :start 11.561 :duration 5.021 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 11.561
-                                                                     :data [{:start 11.670 :end 12.392 :anim "talk"}
-                                                                            {:start 12.966 :end 16.140 :anim "talk"}]}]}
-                 :vaca-voice-ardilla                 {:type        "parallel"
-                                                      :description "Aaaaaardilla.  Aaaaaardilla."
-                                                      :data        [{:type "audio" :id "vaca-2" :start 20.907 :duration 2.581 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 20.907
-                                                                     :data [{:start 21.046 :end 21.867 :anim "talk"}
-                                                                            {:start 22.450 :end 23.350 :anim "talk"}]}]}
-                 :vaca-voice-big-a                   {:type        "parallel"
-                                                      :description "Esta es otra forma de escribir sonido ‘aaaa’.
-                                                            Esta es la ‘a’ mayuscula. La ‘a’ mayuscula tambien suena ‘aaaaaa’."
-                                                      :data        [{:type "audio" :id "vaca-2" :start 25.783 :duration 11.443 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 25.783
-                                                                     :data [{:start 25.872 :end 29.314 :anim "talk"}
-                                                                            {:start 30.520 :end 33.121 :anim "talk"}
-                                                                            {:start 33.913 :end 37.107 :anim "talk"}]}]}
-                 :vaca-voice-ardilla-2               {:type        "parallel"
-                                                      :description "Aaaaaardilla.  Aaaaaardilla."
-                                                      :data        [{:type "audio" :id "vaca-2" :start 38.066 :duration 3.452 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 38.066
-                                                                     :data [{:start 38.165 :end 39.382 :anim "talk"}
-                                                                            {:start 40.203 :end 41.419 :anim "talk"}]}]}
-                 :mari-voice-touch-small-a           {:type        "parallel"
-                                                      :description "Toca la ‘a’ minuscula para escuchar como suena."
-                                                      :data        [{:type "audio" :id "mari" :start 1.414 :duration 4.973}
-                                                                    {:type "animation-sequence" :target "mari" :track 1 :offset 1.414
-                                                                     :data [{:start 1.824 :end 6.313 :anim "talk"}]}]}
-                 :mari-voice-touch-big-a             {:type        "parallel"
-                                                      :description "Toca la ‘a’ mayuscula para escuchar como suena."
-                                                      :data        [{:type "audio" :id "mari" :start 10.645 :duration 5.360}
-                                                                    {:type "animation-sequence" :target "mari" :track 1 :offset 10.645
-                                                                     :data [{:start 10.764 :end 15.871 :anim "talk"}]}]}
-                 :mari-voice-finish                  {:type        "parallel"
-                                                      :description "Toca a la Senora Vaca para escuchar esta lecion otra vez,
-                                                            o toca la flecha para ir a tu proxima actividad!"
-                                                      :data        [{:type "audio" :id "mari" :start 22.481 :duration 9.915}
-                                                                    {:type "animation-sequence" :target "mari" :track 1 :offset 22.481
-                                                                     :data [{:start 22.570 :end 32.322 :anim "talk"}]}]}
-                 :vaca-voice-insertion-a-big         {:type        "parallel"
-                                                      :description "A"
-                                                      :data        [{:type  "audio" :id "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a"
-                                                                     :start 0.539 :duration 1.078 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.539
-                                                                     :data [{:start 0.859 :end 1.196 :anim "talk"}]}]}
-                 :vaca-voice-insertion-ardilla-big   {:type        "parallel"
-                                                      :description "Ardilla"
-                                                      :data        [{:type  "audio" :id "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a"
-                                                                     :start 2.089 :duration 1.162 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 2.089
-                                                                     :data [{:start 2.257 :end 3.083 :anim "talk"}]}]}
-                 :vaca-voice-insertion-a-small       {:type        "parallel"
-                                                      :description "a"
-                                                      :data        [{:type  "audio" :id "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a"
-                                                                     :start 3.723 :duration 0.893 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 3.723
-                                                                     :data [{:start 3.908 :end 4.430 :anim "talk"}]}]}
-                 :vaca-voice-insertion-ardilla-small {:type        "parallel"
-                                                      :description "ardilla"
-                                                      :data        [{:type  "audio" :id "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a"
-                                                                     :start 5.256 :duration 1.482 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 5.256
-                                                                     :data [{:start 5.509 :end 6.553 :anim "talk"}]}]}
-                 :vaca-voice-insertion-ardilla-twice {:type        "parallel"
-                                                      :description "Ardilla, ardilla"
-                                                      :data        [{:type  "audio" :id "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a"
-                                                                     :start 7.058 :duration 2.342 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 7.058
-                                                                     :data [{:start 7.311 :end 9.265 :anim "talk"}]}]}
-                 :vaca-voice-insertion-chant         {:type        "parallel"
-                                                      :description "Ardilla, ardilla, a, a, a!!!"
-                                                      :data        [{:type  "audio" :id "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a"
-                                                                     :start 6.957 :duration 4.430 :volume 1.33}
-                                                                    {:type "animation-sequence" :target "senoravaca" :track 1 :offset 6.957
-                                                                     :data [{:start 7.311 :end 11.068 :anim "talk"}]}]}}
- :triggers      {:start {:on "start" :action "start-activity"}}
- :metadata      {:autostart true
-                 :prev      "map"}}
+{:assets
+            [{:url "/raw/img/casa/background.jpg", :size 10, :type "image"}
+             {:url "/raw/img/casa/painting_canvas.png", :size 10, :type "image"}
+             {:url "/raw/img/elements/squirrel.png", :size 10, :type "image"}
+             {:url "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a", :size 2, :type "audio", :alias "vaca 1"}
+             {:url "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a", :size 2, :type "audio", :alias "vaca 2"}
+             {:url "/raw/audio/l2/a2/L2_A2_Vaca_3.m4a", :size 2, :type "audio", :alias "vaca 3"}
+             {:url "/raw/audio/l2/a2/L2_A2_Mari.m4a", :size 2, :type "audio", :alias "mari"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 1"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_2.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 2"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_3.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 3"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_4.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 4"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_5.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 5"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_6.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 6"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_7.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 7"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_8.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 8"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_9.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 9"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_10.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 10"}
+             {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_11.m4a",
+              :size  2,
+              :type  "audio",
+              :alias "vaca insertions 11"}
+             {:url "/raw/audio/l2/mari-chants.m4a", :size 5, :type "audio", :alias "mari chants"}
+             {:url "/raw/audio/l2/mari-letter-names.mp4", :size 5, :type "audio", :alias "mari letter names"}
+             {:url    "/upload/YMGPYAUPECIYISVM.m4a",
+              :date   1592242051374,
+              :size   71,
+              :type   "audio",
+              :alias  "Touch letter",
+              :target "Mari"}
+             {:url    "/upload/JWNXREHMBXCSIEJT.m4a",
+              :date   1590074608710,
+              :size   922,
+              :type   "audio",
+              :alias  "Letters & Sounds",
+              :target "Mari"}
+             {:url "/upload/EFZEOADUFBVAJGNA.m4a", :date 1592242516858, :size 1295, :type "audio", :alias "Take 2", :target "Vaca"}
+             {:url    "/upload/VDTTXNFGYDBEEHVQ.m4a",
+              :date   1591998403321,
+              :size   200,
+              :type   "audio",
+              :alias  "Reference list 1",
+              :target "Vaca"}
+             {:url    "/upload/AWELBTMLUUQGGNNA.m4a",
+              :date   1591998426843,
+              :size   200,
+              :type   "audio",
+              :alias  "Reference  list 2",
+              :target "Vaca"}
+             {:url    "/upload/YGFFOIJIGQRKFPVH.m4a",
+              :date   1591998455804,
+              :size   778,
+              :type   "audio",
+              :alias  "Reference list 3",
+              :target "Vaca"}],
+ :objects
+            {:background {:type "background", :src "/raw/img/casa/background.jpg"},
+             :canvas
+                         {:type    "image",
+                          :x       650,
+                          :y       130,
+                          :width   287,
+                          :height  430,
+                          :scale-x 2,
+                          :scale-y 2,
+                          :src     "/raw/img/casa/painting_canvas.png"},
+             :image
+                         {:type       "image",
+                          :x          1805,
+                          :y          502,
+                          :width      100,
+                          :height     100,
+                          :transition "image",
+                          :scale-x    1.3,
+                          :scale-y    1.3,
+                          :src        "",
+                          :states     {:init-position {:x 1805, :y 502}}},
+             :letter-big
+                         {:type           "transparent",
+                          :x              720,
+                          :y              260,
+                          :width          165,
+                          :height         130,
+                          :actions        {:click {:id "big-letter-click", :on "click", :type "action", :unique-tag "click"}},
+                          :align          "center",
+                          :fill           "#ef545c",
+                          :font-family    "Lexend Deca",
+                          :font-size      120,
+                          :states         {:big {:font-size 160}, :hidden {:type "transparent"}, :normal {:font-size 120}, :visible {:type "text"}},
+                          :text           "",
+                          :vertical-align "middle"},
+             :letter-small
+                         {:type           "transparent",
+                          :x              885,
+                          :y              260,
+                          :width          150,
+                          :height         130,
+                          :actions        {:click {:id "small-letter-click", :on "click", :type "action", :unique-tag "click"}},
+                          :align          "center",
+                          :fill           "#ef545c",
+                          :font-family    "Lexend Deca",
+                          :font-size      120,
+                          :states         {:big {:font-size 160}, :hidden {:type "transparent"}, :normal {:font-size 120}, :visible {:type "text"}},
+                          :text           "",
+                          :vertical-align "middle"},
+             :mari
+                         {:type       "animation",
+                          :x          1600,
+                          :y          635,
+                          :width      473,
+                          :height     511,
+                          :transition "mari",
+                          :anim       "idle",
+                          :name       "mari",
+                          :scale-x    0.5,
+                          :scale-y    0.5,
+                          :speed      0.35,
+                          :start      true},
+             :senora-vaca
+                         {:type    "animation",
+                          :x       380,
+                          :y       1000,
+                          :width   351,
+                          :height  717,
+                          :actions {:click {:id "vaca-click", :on "click", :type "action"}},
+                          :anim    "idle",
+                          :name    "senoravaca",
+                          :skin    "vaca",
+                          :speed   0.3,
+                          :start   true},
+             :word-1-first
+                         {:type        "transparent",
+                          :x           720,
+                          :y           410,
+                          :width       120,
+                          :height      90,
+                          :align       "right",
+                          :fill        "#ef545c",
+                          :font-family "Lexend Deca",
+                          :font-size   80,
+                          :font-weight "bold",
+                          :states
+                                       {:big     {:y 390, :font-size 90},
+                                        :hidden  {:type "transparent"},
+                                        :normal  {:y 410, :font-size 80},
+                                        :visible {:type "text"}},
+                          :text        ""},
+             :word-1-rest
+                         {:type        "transparent",
+                          :x           840,
+                          :y           410,
+                          :width       340,
+                          :height      90,
+                          :fill        "#fc8e51",
+                          :font-family "Lexend Deca",
+                          :font-size   80,
+                          :states
+                                       {:big     {:y 390, :font-size 90},
+                                        :hidden  {:type "transparent"},
+                                        :normal  {:y 410, :font-size 80},
+                                        :visible {:type "text"}},
+                          :text        ""},
+             :word-2-first
+                         {:type        "transparent",
+                          :x           720,
+                          :y           510,
+                          :width       120,
+                          :height      90,
+                          :align       "right",
+                          :fill        "#ef545c",
+                          :font-family "Lexend Deca",
+                          :font-size   80,
+                          :states
+                                       {:big     {:y 490, :font-size 90},
+                                        :hidden  {:type "transparent"},
+                                        :normal  {:y 510, :font-size 80},
+                                        :visible {:type "text"}},
+                          :text        ""},
+             :word-2-rest
+                         {:type        "transparent",
+                          :x           840,
+                          :y           510,
+                          :width       340,
+                          :height      90,
+                          :fill        "#fc8e51",
+                          :font-family "Lexend Deca",
+                          :font-size   80,
+                          :states
+                                       {:big     {:y 490, :font-size 90},
+                                        :hidden  {:type "transparent"},
+                                        :normal  {:y 510, :font-size 80},
+                                        :visible {:type "text"}},
+                          :text        ""}},
+ :scene-objects
+            [["background"]
+             ["canvas"]
+             ["letter-small" "letter-big" "word-1-first" "word-1-rest" "word-2-first" "word-2-rest"]
+             ["senora-vaca" "mari"]
+             ["image"]],
+ :actions
+            {:big-letter-click
+                                 {:type     "test-var-scalar",
+                                  :var-name "big-letter-clicked",
+                                  :value    0,
+                                  :success  "big-letter-click-first",
+                                  :fail     "big-letter-click-further"},
+             :big-letter-click-first
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:type "counter", :counter-id "big-letter-clicked", :counter-action "increase"}
+                                         {:id "normal", :type "state", :target "letter-big"}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
+                                         {:id "stage-repeat-all", :type "action"}]},
+             :big-letter-click-further
+                                 {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]},
+             :clear-instruction  {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},
+             :current-sound
+                                 {:type                          "sequence-data",
+                                  :data
+                                                                 [{:id "visible", :type "state", :target "letter-small"}
+                                                                  {:to {:x 1903, :y 557, :loop false, :duration 0.7}, :type "transition", :transition-id "mari"}
+                                                                  {:data
+                                                                         [{:to {:x 1146, :y 295, :loop false, :duration 2}, :type "transition", :transition-id "mari"}
+                                                                          {:to {:x 1025, :y 240, :loop false, :duration 2}, :type "transition", :transition-id "image"}],
+                                                                   :type "parallel"}
+                                                                  {:type "empty", :duration 1000}
+                                                                  {:id "mari-init-wand", :type "action"}
+                                                                  {:to {:x 1346, :y 295, :loop false, :duration 1.5}, :type "transition", :transition-id "mari"}
+                                                                  {:id "vaca-voice-listen", :type "action"}
+                                                                  {:id "vaca-voice-say-with-me", :type "action"}
+                                                                  {:type "empty", :duration 500}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-song"}]}
+                                                                  {:type "empty", :duration 500}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-song"}]}
+                                                                  {:type "empty", :duration 500}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-song"}]}
+                                                                  {:type "empty", :duration 500}],
+                                  :phrase                        "concept-sound",
+                                  :phrase-description            "Current sound",
+                                  :phrase-description-translated "Current sound"},
+             :finish-activity
+                                 {:type "sequence-data", :data [{:id "letter-intro", :type "finish-activity"} {:type "scene", :scene-id "map"}]},
+             :init-state
+                                 {:type "parallel",
+                                  :data
+                                        [{:type "set-variable", :var-name "small-letter-clicked", :var-value 0}
+                                         {:type "set-variable", :var-name "big-letter-clicked", :var-value 0}
+                                         {:type "set-variable", :var-name "vaca-click-available", :var-value 0}
+                                         {:id "hidden", :type "state", :target "letter-small"}
+                                         {:type      "set-attribute",
+                                          :target    "letter-small",
+                                          :from-var  [{:var-name "current-concept", :var-property "letter", :action-property "attr-value"}],
+                                          :attr-name "text"}
+                                         {:id "hidden", :type "state", :target "letter-big"}
+                                         {:type      "set-attribute",
+                                          :target    "letter-big",
+                                          :from-var  [{:var-name "current-concept", :var-property "letter-big", :action-property "attr-value"}],
+                                          :attr-name "text"}
+                                         {:id "hidden", :type "state", :target "word-1-first"}
+                                         {:type      "set-attribute",
+                                          :target    "word-1-first",
+                                          :from-var  [{:var-name "current-concept", :var-property "letter", :action-property "attr-value"}],
+                                          :attr-name "text"}
+                                         {:id "hidden", :type "state", :target "word-1-rest"}
+                                         {:type      "set-attribute",
+                                          :target    "word-1-rest",
+                                          :from-var  [{:var-name "current-concept", :var-property "concept-rest", :action-property "attr-value"}],
+                                          :attr-name "text"}
+                                         {:id "hidden", :type "state", :target "word-2-first"}
+                                         {:type      "set-attribute",
+                                          :target    "word-2-first",
+                                          :from-var  [{:var-name "current-concept", :var-property "letter-big", :action-property "attr-value"}],
+                                          :attr-name "text"}
+                                         {:id "hidden", :type "state", :target "word-2-rest"}
+                                         {:type      "set-attribute",
+                                          :target    "word-2-rest",
+                                          :from-var  [{:var-name "current-concept", :var-property "concept-rest", :action-property "attr-value"}],
+                                          :attr-name "text"}
+                                         {:id "init-position", :type "state", :target "image"}
+                                         {:type      "set-attribute",
+                                          :target    "image",
+                                          :from-var  [{:var-name "current-concept", :var-property "image-src", :action-property "attr-value"}],
+                                          :attr-name "src"}]},
+             :mari-init-wand     {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
+             :mari-voice-finish
+                                 {:type                          "animation-sequence",
+                                  :data                          [{:end 24.75, :anim "talk", :start 15.93}],
+                                  :phrase                        "finish",
+                                  :phrase-description            "Repeat or finish",
+                                  :phrase-description-translated "Repeat or finish",
+                                  :phrase-text                   "Touch Senora Vaca to hear the lesson once again, or touch the arrow to go to your next activity!",
+                                  :phrase-text-translated
+                                                                 "Touch Senora Vaca to hear the lesson once again, or touch the arrow to go to your next activity!",
+                                  :target                        "mari",
+                                  :audio                         "/upload/YMGPYAUPECIYISVM.m4a",
+                                  :start                         15.898,
+                                  :duration                      8.981,
+                                  :track                         1,
+                                  :offset                        22.481},
+             :mari-wand-hit
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:id "wand_hit", :type "animation", :track 2, :target "mari"}
+                                         {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}]},
+             :renew-concept
+                                 {:type "lesson-var-provider", :from "concepts-single", :provider-id "concepts", :variables ["current-concept"]},
+             :small-letter-click
+                                 {:type     "test-var-scalar",
+                                  :var-name "small-letter-clicked",
+                                  :value    0,
+                                  :success  "small-letter-click-first",
+                                  :fail     "small-letter-click-further"},
+             :small-letter-click-first
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:type "counter", :counter-id "small-letter-clicked", :counter-action "increase"}
+                                         {:id "normal", :type "state", :target "letter-small"}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
+                                         {:id "stage-big", :type "action"}
+                                         {:id "touch-big-letter", :type "action"}]},
+             :small-letter-click-further
+                                 {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]},
+             :stage-big
+                                 {:type                          "sequence-data",
+                                  :data
+                                                                 [{:id "visible", :type "state", :target "letter-big"}
+                                                                  {:id "big", :type "state", :target "letter-big"}
+                                                                  {:offset                 25.783,
+                                                                   :phrase-text            "This is another way to write the sound",
+                                                                   :start                  337.949,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               2.16,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "This is another way to write the sound",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 340.03, :anim "talk", :start 338.03}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
+                                                                  {:offset                 30.489,
+                                                                   :phrase-text            "This is the upper case letter ",
+                                                                   :start                  341.402,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.641,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "Esta es la",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 343.37, :anim "talk", :start 341.49}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}
+                                                                  {:offset                 32.143,
+                                                                   :phrase-text            "is big. The letter",
+                                                                   :start                  343.962,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.32,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "The uppercase letter",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 345.36, :anim "talk", :start 344.11}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}
+                                                                  {:offset                 34.409,
+                                                                   :phrase-text            "also makes the sound",
+                                                                   :start                  345.869,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.587,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "also makes the sound",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 347.61, :anim "talk", :start 345.91}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
+                                                                  {:id "visible", :type "state", :target "word-2-first"}
+                                                                  {:id "visible", :type "state", :target "word-2-rest"}
+                                                                  {:data
+                                                                         [{:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word-repeat"}]}
+                                                                          {:data
+                                                                                 [{:id "big", :type "state", :target "word-2-first"}
+                                                                                  {:type "empty", :duration 400}
+                                                                                  {:id "normal", :type "state", :target "word-2-first"}
+                                                                                  {:id "big", :type "state", :target "word-2-rest"}
+                                                                                  {:type "empty", :duration 500}
+                                                                                  {:id "normal", :type "state", :target "word-2-rest"}
+                                                                                  {:type "empty", :duration 500}
+                                                                                  {:id "big", :type "state", :target "word-2-first"}
+                                                                                  {:type "empty", :duration 400}
+                                                                                  {:id "normal", :type "state", :target "word-2-first"}
+                                                                                  {:id "big", :type "state", :target "word-2-rest"}
+                                                                                  {:type "empty", :duration 500}
+                                                                                  {:id "normal", :type "state", :target "word-2-rest"}],
+                                                                           :type "sequence-data"}],
+                                                                   :type "parallel"}
+                                                                  {:type "empty", :duration 700}],
+                                  :phrase                        "big-letter",
+                                  :phrase-description            "Big letter",
+                                  :phrase-description-translated "Big letter"},
+             :stage-finish
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:type "set-variable", :var-name "vaca-click-available", :var-value 1}
+                                         {:to {:x 1600, :y 635, :loop false, :duration 0.7}, :type "transition", :transition-id "mari"}
+                                         {:id "mari-voice-finish", :type "action"}]},
+             :stage-intro
+                                 {:type                          "sequence-data",
+                                  :data
+                                                                 [{:id "vaca-voice-welcome", :type "action"}
+                                                                  {:type "empty", :duration 700}
+                                                                  {:id "vaca-voice-give-word", :type "action"}
+                                                                  {:type "empty", :duration 600}],
+                                  :phrase                        "intro",
+                                  :phrase-description            "Let's begin",
+                                  :phrase-description-translated "Let's begin"},
+             :stage-other-words  {:type "empty", :duration 100, :description "Other words that starts with sound a"},
+             :stage-repeat-all
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:to {:x 1325, :y 500, :loop false, :duration 0.7}, :type "transition", :transition-id "mari"}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-song"}]}
+                                         {:to {:x 1325, :y 610, :loop false, :duration 0.7}, :type "transition", :transition-id "mari"}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-song"}]}
+                                         {:id "stage-finish", :type "action"}]},
+             :stage-small
+                                 {:type                          "sequence-data",
+                                  :data
+                                                                 [{:id "big", :type "state", :target "letter-small"}
+                                                                  {:offset                 1.286,
+                                                                   :phrase-text            "This letter",
+                                                                   :start                  1.286,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.521,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "Esta es la",
+                                                                   :track                  1,
+                                                                   :data
+                                                                                           [{:end 1.907, :anim "talk", :start 1.413, :duration 0.494}
+                                                                                            {:end 2.707, :anim "talk", :start 2.333, :duration 0.374}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}
+                                                                  {:offset                 3.193,
+                                                                   :phrase-text            "is small",
+                                                                   :start                  3.193,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.001,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "miniscula",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 3.946, :anim "talk", :start 3.347, :duration 0.599}]}
+                                                                  {:type "empty", :duration 500}
+                                                                  {:offset                 5.172,
+                                                                   :phrase-text            "The letter",
+                                                                   :start                  5.172,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.676,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "Esta letra",
+                                                                   :track                  1,
+                                                                   :data
+                                                                                           [{:end 5.746, :anim "talk", :start 5.28, :duration 0.466} {:end 6.653, :anim "talk", :start 6.053, :duration 0.6}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}
+                                                                  {:offset                 7.932,
+                                                                   :phrase-text            "makes the sound",
+                                                                   :start                  7.932,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.036,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "hace el sonido",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 8.8, :anim "talk", :start 8.026, :duration 0.774}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
+                                                                  {:type "empty", :duration 500}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
+                                                                  {:offset                 12.961,
+                                                                   :phrase-text            "is the first sound in the word",
+                                                                   :start                  12.961,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               2.568,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "es el primer sonido en la palabra",
+                                                                   :track                  1,
+                                                                   :data
+                                                                                           [{:end 14.453, :anim "talk", :start 13.053, :duration 1.4}
+                                                                                            {:end 15.466, :anim "talk", :start 14.773, :duration 0.693}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-sound"}]}
+                                                                  {:offset                 18.039,
+                                                                   :phrase-text            "is for",
+                                                                   :start                  18.039,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               0.667,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "es para",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 18.586, :anim "talk", :start 18.159, :duration 0.427}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}
+                                                                  {:id "visible", :type "state", :target "word-1-first"}
+                                                                  {:id "visible", :type "state", :target "word-1-rest"}
+                                                                  {:data
+                                                                         [{:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word-repeat"}]}
+                                                                          {:data
+                                                                                 [{:id "big", :type "state", :target "word-1-first"}
+                                                                                  {:type "empty", :duration 400}
+                                                                                  {:id "normal", :type "state", :target "word-1-first"}
+                                                                                  {:id "big", :type "state", :target "word-1-rest"}
+                                                                                  {:type "empty", :duration 500}
+                                                                                  {:id "normal", :type "state", :target "word-1-rest"}
+                                                                                  {:type "empty", :duration 500}
+                                                                                  {:id "big", :type "state", :target "word-1-first"}
+                                                                                  {:type "empty", :duration 400}
+                                                                                  {:id "normal", :type "state", :target "word-1-first"}
+                                                                                  {:id "big", :type "state", :target "word-1-rest"}
+                                                                                  {:type "empty", :duration 500}
+                                                                                  {:id "normal", :type "state", :target "word-1-rest"}],
+                                                                           :type "sequence-data"}],
+                                                                   :type "parallel"}
+                                                                  {:type "empty", :duration 1000}],
+                                  :phrase                        "small-letter",
+                                  :phrase-description            "Small letter",
+                                  :phrase-description-translated "Small letter"},
+             :stage-sound-start
+                                 {:type "sequence", :data ["current-sound" "vaca-voice-2-ways-write" "stage-small" "touch-small-letter"]},
+             :start-activity     {:type "start-activity", :id "letter-intro"},
+             :start-scene
+                                 {:type        "sequence",
+                                  :data        ["start-activity" "renew-concept" "init-state" "stage-intro" "stage-sound-start"],
+                                  :description "Initial action"},
+             :stop-activity      {:type "stop-activity", :id "letter-intro"},
+             :touch-big-letter
+                                 {:type                          "sequence-data",
+                                  :data
+                                                                 [{:id "mari-wand-hit", :type "action", :return-immediately true}
+                                                                  {:offset                 10.645,
+                                                                   :phrase-text            "Touch the big letter\nTranslated Text\n​\nToca la\n",
+                                                                   :start                  8.973,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.866,
+                                                                   :audio                  "/upload/YMGPYAUPECIYISVM.m4a",
+                                                                   :target                 "mari",
+                                                                   :phrase-text-translated "Touch the big letter",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 10.85, :anim "talk", :start 8.99}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter-mari"}]}
+                                                                  {:offset                 12.192,
+                                                                   :phrase-text            "to hear how it sounds.",
+                                                                   :start                  12.106,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.88,
+                                                                   :audio                  "/upload/YMGPYAUPECIYISVM.m4a",
+                                                                   :target                 "mari",
+                                                                   :phrase-text-translated "to hear how it sounds.",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 13.95, :anim "talk", :start 12.13}]}],
+                                  :phrase                        "touch-big-letter",
+                                  :phrase-description            "Touch big letter",
+                                  :phrase-description-translated "Touch the big letter"},
+             :touch-small-letter
+                                 {:type                          "sequence-data",
+                                  :data
+                                                                 [{:id "mari-wand-hit", :type "action", :return-immediately true}
+                                                                  {:offset                 1.414,
+                                                                   :phrase-text            "Touch the small letter",
+                                                                   :start                  1.933,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.933,
+                                                                   :audio                  "/upload/YMGPYAUPECIYISVM.m4a",
+                                                                   :target                 "mari",
+                                                                   :phrase-text-translated "Touch the small letter",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 4.03, :anim "talk", :start 2.1}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter-mari"}]}
+                                                                  {:offset                 2.681,
+                                                                   :phrase-text            "to hear how it sounds.",
+                                                                   :start                  4.946,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.974,
+                                                                   :audio                  "/upload/YMGPYAUPECIYISVM.m4a",
+                                                                   :target                 "mari",
+                                                                   :phrase-text-translated "to hear how it sounds.",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 6.92, :anim "talk", :start 4.946}]}],
+                                  :phrase                        "touch-small-letter",
+                                  :phrase-description            "Touch small letter",
+                                  :phrase-description-translated "Touch small letter"},
+             :vaca-click
+                                 {:type     "test-var-scalar",
+                                  :var-name "vaca-click-available",
+                                  :value    1,
+                                  :success  "vaca-click-success",
+                                  :fail     "vaca-click-fail"},
+             :vaca-click-fail    {:type "empty", :duration 100},
+             :vaca-click-success {:type "sequence", :data ["init-state" "stage-sound-start"]},
+             :vaca-voice-2-ways-write
+                                 {:type                          "sequence-data",
+                                  :data
+                                                                 [{:offset                 47.75,
+                                                                   :phrase-text            "Good! There are 2 ways to write this sound. You can write it with ",
+                                                                   :start                  285.655,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               4.681,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "Good! There are 2 ways to write this sound. You can write it with",
+                                                                   :track                  1,
+                                                                   :data
+                                                                                           [{:end 286.37, :anim "talk", :start 285.67}
+                                                                                            {:end 286.89, :anim "talk", :start 286.61}
+                                                                                            {:end 289.11, :anim "talk", :start 287.06}
+                                                                                            {:end 290.38, :anim "talk", :start 289.63}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}
+                                                                  {:offset                 54.723,
+                                                                   :phrase-text            "a small letter or",
+                                                                   :start                  54.723,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.843,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "miniscula o",
+                                                                   :track                  1,
+                                                                   :data
+                                                                                           [{:end 55.587, :anim "talk", :start 54.92, :duration 0.667}
+                                                                                            {:end 56.427, :anim "talk", :start 56.16, :duration 0.267}]}
+                                                                  {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}
+                                                                  {:offset                 57.19,
+                                                                   :phrase-text            "a big letter",
+                                                                   :start                  57.19,
+                                                                   :type                   "animation-sequence",
+                                                                   :duration               1.056,
+                                                                   :volume                 1.33,
+                                                                   :audio                  "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a",
+                                                                   :target                 "senoravaca",
+                                                                   :phrase-text-translated "mayuscula.",
+                                                                   :track                  1,
+                                                                   :data                   [{:end 58.094, :anim "talk", :start 57.32, :duration 0.774}]}],
+                                  :phrase                        "way-to-write",
+                                  :phrase-description            "Two ways to write",
+                                  :phrase-description-translated "Two ways to write"},
+             :vaca-voice-give-word
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:offset                 7.578,
+                                          :phrase-text            "Mari, can you give me a word that starts with the letter",
+                                          :start                  248.228,
+                                          :type                   "animation-sequence",
+                                          :duration               2.588,
+                                          :volume                 1.33,
+                                          :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                          :target                 "senoravaca",
+                                          :phrase-text-translated "Mari, can you give me a word that starts with the letter",
+                                          :track                  1,
+                                          :data                   [{:end 250.816, :anim "talk", :start 248.228}]}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}]},
+             :vaca-voice-listen
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:offset                 13.16,
+                                          :phrase-text            "Excellent! We have a",
+                                          :start                  252.669,
+                                          :type                   "animation-sequence",
+                                          :duration               1.106,
+                                          :volume                 1.33,
+                                          :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                          :target                 "senoravaca",
+                                          :phrase-text-translated "Excellent!",
+                                          :track                  1,
+                                          :data                   [{:end 253.67, :anim "talk", :start 252.79}]}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}
+                                         {:offset                 17.64,
+                                          :phrase-text            "Listen to the first sound in the word",
+                                          :start                  255.442,
+                                          :type                   "animation-sequence",
+                                          :duration               2.96,
+                                          :volume                 1.33,
+                                          :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                          :target                 "senoravaca",
+                                          :phrase-text-translated "Listen to the first sound in the word",
+                                          :track                  1,
+                                          :data                   [{:end 258.74, :anim "talk", :start 256.21}]}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word"}]}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-word-repeat"}]}
+                                         {:offset                 25.436,
+                                          :phrase-text            "Sing it with me like this",
+                                          :start                  264.268,
+                                          :type                   "animation-sequence",
+                                          :duration               1.88,
+                                          :volume                 1.33,
+                                          :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                          :target                 "senoravaca",
+                                          :phrase-text-translated "Sing it with me like this",
+                                          :track                  1,
+                                          :data                   [{:end 266.09, :anim "talk", :start 264.36}]}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-song"}]}]},
+             :vaca-voice-say-with-me
+                                 {:type                   "animation-sequence",
+                                  :data                   [{:end 272.67, :anim "talk", :start 270.9}],
+                                  :phrase-text            "Say it with me! Say it with me 3 times.",
+                                  :phrase-text-translated "Say it with me 3 times.",
+                                  :target                 "senoravaca",
+                                  :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                  :start                  270.788,
+                                  :duration               1.987,
+                                  :track                  1,
+                                  :offset                 31.527,
+                                  :volume                 1.33},
+             :vaca-voice-welcome
+                                 {:type "sequence-data",
+                                  :data
+                                        [{:offset                 1.108,
+                                          :phrase-text            "Hello little genius! Let’s learn some new letters! Let’s start with the letter",
+                                          :start                  240.708,
+                                          :type                   "animation-sequence",
+                                          :duration               5.188,
+                                          :volume                 1.33,
+                                          :audio                  "/upload/EFZEOADUFBVAJGNA.m4a",
+                                          :target                 "senoravaca",
+                                          :phrase-text-translated "Hello friend! Let’s learn some new letters! Let’s start with the letter ",
+                                          :track                  1,
+                                          :data                   [{:end 243.89, :anim "talk", :start 240.89} {:end 246.01, :anim "talk", :start 244.5}]}
+                                         {:type "action", :from-var [{:var-name "current-concept", :var-property "letter-intro-letter"}]}]}},
+ :triggers  {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :metadata  {:prev "map", :autostart true},
+ :audio
+            {:mari   "/raw/audio/l2/a2/L2_A2_Mari.m4a",
+             :vaca-1 "/raw/audio/l2/a2/L2_A2_Vaca_1.m4a",
+             :vaca-2 "/raw/audio/l2/a2/L2_A2_Vaca_2.m4a",
+             :vaca-3 "/raw/audio/l2/a2/L2_A2_Vaca_3.m4a"},
+ :variables {:status nil}}
