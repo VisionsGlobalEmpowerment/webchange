@@ -194,7 +194,7 @@
                   :x              220,
                   :y              150,
                   :width          200,
-                  :height         200,
+                  :height         500,
                   :font-family    "Comic Sans MS",
                   :font-size      180,
                   :shadow-blur    5,
