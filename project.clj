@@ -45,6 +45,7 @@
                  [clj-http "3.10.1"]
                  [clj-http-fake "1.0.3"]
                  [ring/ring-codec "1.1.2"]
+                 [com.cemerick/url "0.1.1"]
                  [org.clojure/data.csv "1.0.0"]
                  ]
 
