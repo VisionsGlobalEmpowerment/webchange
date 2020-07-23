@@ -173,6 +173,10 @@
    (fn [config args]
      (apply load-course config args))
 
+   "update-character-skins"
+   (fn [config args]
+     (apply core/update-character-skins config args))
+
    "save-scene"
    (fn [config args]
      (apply save-scene config args))

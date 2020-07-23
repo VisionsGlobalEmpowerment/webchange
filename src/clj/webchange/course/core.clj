@@ -2,11 +2,17 @@
   (:require [webchange.db.core :refer [*db*] :as db]
             [java-time :as jt]
             [clojure.tools.logging :as log]
+            [webchange.common.files :as f]
             [clojure.data.json :as json]
             [webchange.scene :as scene]
             [config.core :refer [env]]
+            [clojure.string :as string]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
+
+(def editor_asset_type_background "background")
+(def editor_asset_type_surface "surface")
+(def editor_asset_type_details "details")
 
 (def hardcoded (env :hardcoded-courses {"test" true}))
 
@@ -202,3 +208,43 @@
   [website-user-id]
   (->> (db/get-courses-by-website-user {:website_user_id website-user-id})
        (map ->website-course)))
+
+(defn read-character-data [dir]
+  (let [filename (str dir "/skeleton.json")
+        data (json/read-str (slurp filename) :key-fn keyword)
+        ]
+    (as-> {} character-data
+        (assoc character-data :name (last (string/split dir #"/")))
+        (assoc character-data :width (get-in data [:skeleton :width]))
+        (assoc character-data :height (get-in data [:skeleton :height]))
+        (if (vector? (:skins data))
+          (assoc character-data :skins (vec (map #(:name %) (:skins data))))
+          (assoc character-data :skins (vec (map #(name (get % 0)) (vec (:skins data))))))
+        (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data)) ))))))
+
+(defn find-all-character-skins []
+  (let [character-skins (db/find-character-skins)]
+    (map #(:data %) character-skins)))
+
+(defn read-character-skins [config]
+  (let [dir (or (:public-dir config) (:public-dir env))
+        anim-path (f/relative->absolute-path "/raw/anim" {:public-dir dir})]
+    (->> anim-path
+         clojure.java.io/file
+         file-seq
+         (filter #(.isDirectory %))
+         (filter #(.isFile (clojure.java.io/file (str % "/skeleton.json"))))
+         (map #(read-character-data (str %))))))
+
+(defn update-character-skins [config]
+  (let [character-skins (read-character-skins config)
+        _ (db/clear-character-skins!)]
+    (doseq [skin character-skins]
+      (db/create-character-skins! {:name (:name skin) :data skin}))))
+
+(defn editor-assets [tag type]
+  (let [assets (db/find-editor-assets {:tag tag :type type})]
+    assets ))
+
+(defn find-all-tags []
+  (db/find-all-tags))
