@@ -27,7 +27,7 @@
                                       :scale-x    0.25,
                                       :scale-y    0.25,
                                       :skin       "qwestion",
-                                      :speed      0.3,
+                                      :speed      1,
                                       :start      true},
                  :box2
                                      {:type       "transparent",
@@ -44,7 +44,7 @@
                                       :scale-x    0.25,
                                       :scale-y    0.25,
                                       :skin       "qwestion",
-                                      :speed      0.3,
+                                      :speed      1,
                                       :start      true},
                  :box3
                                      {:type       "transparent",
@@ -61,7 +61,7 @@
                                       :scale-x    0.25,
                                       :scale-y    0.25,
                                       :skin       "qwestion",
-                                      :speed      0.3,
+                                      :speed      1,
                                       :start      true},
                  :hat
                                      {:type       "animation",
@@ -76,7 +76,7 @@
                                       :name       "hat",
                                       :scale-x    1,
                                       :scale-y    1,
-                                      :speed      0.35,
+                                      :speed      1,
                                       :start      true},
                  :letter1
                                      {:type           "transparent",
@@ -133,10 +133,10 @@
                                       :name       "mari",
                                       :scale-x    0.5,
                                       :scale-y    0.5,
-                                      :speed      0.35,
+                                      :speed      1,
                                       :start      true}
                  },
- :scene-objects [["layered-background "] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3"] ["mari"]],
+ :scene-objects [["layered-background"] ["hat" "box1" "box2" "box3" "letter1" "letter2" "letter3"] ["mari"]],
  :actions
                 {
                  :box-jump-in
