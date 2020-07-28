@@ -2,6 +2,7 @@
   (:require [webchange.db.core :refer [*db*] :as db]
             [java-time :as jt]
             [clojure.tools.logging :as log]
+            [webchange.assets.core :as assets]
             [webchange.common.files :as f]
             [clojure.data.json :as json]
             [webchange.scene :as scene]
@@ -12,7 +13,9 @@
 
 (def editor_asset_type_background "background")
 (def editor_asset_type_surface "surface")
-(def editor_asset_type_details "details")
+(def editor_asset_type_decoration "decoration")
+
+(def editor_asset_types [editor_asset_type_background editor_asset_type_surface editor_asset_type_decoration])
 
 (def hardcoded (env :hardcoded-courses {"test" true}))
 
@@ -248,3 +251,53 @@
 
 (defn find-all-tags []
   (db/find-all-tags))
+
+(defn store-tag! [tag]
+  (db/create-asset-tags! {:name tag})
+  (db/find-editor-tag-by-name {:name tag}))
+
+(defn store-editor-assets! [path thumbnail type]
+  (db/create-or-update-editor-assets! {:path path :thumbnail_path thumbnail :type type})
+  (db/find-editor-assets-by-path  {:path path}))
+
+(defn remove-first-directory [string begin]
+  (let [string (clojure.string/replace-first string (re-pattern (str "^" begin))  "")
+        string (clojure.string/replace-first string #"^/"  "")]
+    string))
+
+(defn store-editor-asset [source-path target-path public-dir file]
+  (let [filename (.getName (java.io.File. file))
+        name (get (clojure.string/split filename #"\.") 0)
+        path-in-dir (remove-first-directory file source-path)
+        parts (clojure.string/split name #"_")
+        type (get parts 0)
+        tag (if (drop 0 parts) (clojure.string/capitalize (clojure.string/trim (clojure.string/join " " (drop 0 parts)))) "")
+        thumbnail-file (str target-path "/" path-in-dir)
+        file-public (remove-first-directory file public-dir)
+        thumbnail-file-public (remove-first-directory thumbnail-file public-dir)
+        ]
+    (when (.contains editor_asset_types type)
+      (let [
+            _ (clojure.java.io/make-parents thumbnail-file)
+            _ (assets/make-thumbnail file thumbnail-file 180)
+            created-tag (store-tag! tag)
+            created-editor-assets (store-editor-assets! file-public thumbnail-file-public type)
+            ]
+      (db/create-editor-asset-tag! {:tag_id (:id created-tag) :asset_id (:id created-editor-assets)})))))
+
+(defn clear-before-update []
+  (do
+    (db/truncate-editor-assets-tags!)
+    (db/truncate-editor-assets!)
+    (db/truncate-editor-tags!)))
+
+(defn update-editor-assets
+  ([config] (update-editor-assets config "clear" "clipart" "clipart-thumbs"))
+  ([config clear] (update-editor-assets config clear "clipart" "clipart-thumbs"))
+  ([config clear source] (update-editor-assets config clear source "clipart-thumbs"))
+  ([config clear source target]
+  (let [source-path (f/relative->absolute-path (str "/raw/" source) config)
+        target-path (f/relative->absolute-path (str "/raw/" target) config)]
+    (when (= clear "clear") (clear-before-update))
+    (doseq [file (filter (fn [f] (. f isFile)) (assets/files source-path))]
+      (store-editor-asset source-path target-path (config :public-dir) (. file getPath))))))

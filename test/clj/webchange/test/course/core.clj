@@ -47,3 +47,15 @@
                     f/teacher-logged-in)
         response (handler/dev-handler request)]
     (json/read-str (slurp (:body response)) :key-fn keyword)))
+
+(deftest can-update-course-bsckground-thumbnails
+  (let [_ (course/update-editor-assets {:public-dir "test/clj/webchange/resources"})]
+    (is (.exists (clojure.java.io/as-file "test/clj/webchange/resources/raw/clipart-thumbs/casa_cut/background_casa.png")))
+    (let [editor-asset (db/find-editor-assets-by-path {:path "raw/clipart/casa_cut/decoration_casa.png"})
+          editor-tag (db/find-editor-tag-by-name {:name "Decoration casa"})
+          editor-assets (db/find-editor-assets {:tag (:id editor-tag)})
+          ]
+      (is (= (:thumbnail-path editor-asset) "raw/clipart-thumbs/casa_cut/decoration_casa.png"))
+      (is (= (:type editor-asset) "decoration"))
+      (is editor-tag)
+      (is (= (:id (first editor-assets)) (:id editor-asset) )))))

@@ -3,11 +3,14 @@
             [clojure.java.io :as io]
             [webchange.common.files :as f]
             [config.core :refer [env]]
+            [mikera.image.core :as imagez]
             [clojure.string :refer [join]]
             [clojure.tools.logging :as log]))
 
 (import 'java.security.MessageDigest
         'java.math.BigInteger)
+
+
 
 (defn directories
   [config]
@@ -68,8 +71,7 @@
 
 (defn remove-file-with-hash! [asset-hash]
   (io/delete-file (f/relative->absolute-path (:path asset-hash)))
-  (db/remove-asset-hash! {:path_hash (:path-hash asset-hash)})
-  )
+  (db/remove-asset-hash! {:path_hash (:path-hash asset-hash)}))
 
 (defn save-file-from-uri [uri file]
   (with-open [in (io/input-stream uri)
@@ -86,3 +88,9 @@
       (log/debug (str "Stored " uri " to " file))
       (catch Exception e
         (log/error (str "Can not download " uri ", because " (:cause (Throwable->map e))))))))
+
+(defn make-thumbnail [source-file target-file width]
+  (let [image (imagez/load-image source-file)
+        image (imagez/resize image width)]
+    (imagez/save image target-file)
+    (store-asset-hash! target-file)))
