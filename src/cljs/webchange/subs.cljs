@@ -112,10 +112,14 @@
   (fn [db]
     (get-in db [:current-scene-data :scene-objects] [])))
 
+(defn scene-object
+  [db scene-id name]
+  (get-in db [:scenes scene-id :objects (keyword name)] {}))
+
 (re-frame/reg-sub
   ::scene-object
   (fn [db [_ scene-id name]]
-    (get-in db [:scenes scene-id :objects (keyword name)] {})))
+    (scene-object db scene-id name)))
 
 (re-frame/reg-sub
   ::scene-object-with-var

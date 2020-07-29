@@ -7,6 +7,7 @@
   [str]
   (if-not (nil? str)
     (-> str
+        name
         (->Camel_Snake_Case)
         (s/replace "_" " "))
     str))

@@ -12,10 +12,8 @@
   (fn [db]
     (get-in db [:editor :transform])))
 
-(re-frame/reg-sub
-  ::selected-object
-  (fn [db]
-    (get-in db [:editor :selected-object])))
+(defn selected-object [db] (get-in db [:editor :selected-object]))
+(re-frame/reg-sub ::selected-object selected-object)
 
 (re-frame/reg-sub
   ::selected-object-action

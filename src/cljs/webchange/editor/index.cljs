@@ -38,7 +38,8 @@
     [sodium.extensions :as nax]
     [soda-ash.core :as sa :refer [Grid
                                   GridColumn
-                                  GridRow]]))
+                                  GridRow]]
+    [webchange.editor-v2.scene.state.skin :as skin]))
 
 (declare background)
 (declare layered-background)
@@ -101,8 +102,7 @@
 
 (defn remove-transform
   []
-  (re-frame/dispatch [::events/reset-transform])
-  (reset-transform))
+  (re-frame/dispatch [::events/reset-object]))
 
 (defn transform
   [scene-id name target]
@@ -119,12 +119,14 @@
 
 (defn rect-params
   [scene-id name object]
-  (let [template? (:template? object)]
+  (let [selected-object @(re-frame/subscribe [::es/selected-object])
+        scale (or (get-in object [:scale :x]) (get object :scale-x) 1)
+        selected? (and (= scene-id (:scene-id selected-object)) (= name (:name selected-object)))]
     {:width        (:width object)
      :height       (:height object)
-     :stroke       (if template? "orange" "green")
-     :stroke-width 4
-     :on-click     (if template? #() (fn [e] (transform scene-id name (-> e .-target .getParent))))}))
+     :stroke       (if selected? "orange" "green")
+     :stroke-width (/ 8 scale)
+     :on-click     #(re-frame/dispatch [::events/select-object scene-id name])}))
 
 (defn path-params
   [object]
@@ -150,7 +152,7 @@
 (defn background
   [scene-id name object]
   [:> Group (object-params (dissoc object :x :y))
-   [:> Group {:on-click remove-transform}
+   [:> Group {:on-click #(re-frame/dispatch [::events/reset-object])}
     [kimage {:src (get-data-as-url (:src object))}]]])
 
 (defn layered-background
@@ -159,7 +161,7 @@
                                :src (get-data-as-url (get-in object [key :src]))})
                     [:background :surface :decoration])]
     [:> Group (object-params (dissoc object :x :y))
-     [:> Group {:on-click remove-transform}
+     [:> Group {:on-click #(re-frame/dispatch [::events/reset-object])}
       (for [{:keys [key src]} layers]
         (when src
           ^{:key key}
@@ -190,10 +192,22 @@
             :filters (get-filters object)}]
    [:> Rect (rect-params scene-id name object)]])
 
+(defn- state-by-type
+  [object type]
+  (->> (:states object)
+       (map second)
+       (filter #(= type (:type %)))
+       first))
+
 (defn transparent
   [scene-id name object]
-  [:> Group (object-params object)
-   [:> Rect (rect-params scene-id name object)]])
+  (let [animation-state (state-by-type object "animation")
+        image-state (state-by-type object "image")]
+    (cond
+      animation-state [animation scene-id name (merge object animation-state)]
+      image-state [image scene-id name (merge object image-state)]
+      :else [:> Group (object-params object)
+             [:> Rect (rect-params scene-id name object)]])))
 
 (defn update-group-rect
   [group rect]
@@ -244,7 +258,10 @@
   [scene-id name object]
   (let [params (object-params object)
         animation-name (or (:scene-name object) (:name object))]
-    [:> Group params
+    [:> Group (assoc params :draggable true
+                            :on-drag-end #(let [x (.. % -target -attrs -x)
+                                                y (.. % -target -attrs -y)]
+                                            (re-frame/dispatch [::skin/change-position x y])))
      [anim (-> object
                (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %]))
                (assoc :start false))]
