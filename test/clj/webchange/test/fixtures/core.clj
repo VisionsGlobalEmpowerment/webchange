@@ -757,13 +757,14 @@
      {:id id
       :name name}))
 
-(defn editor-asset-created [type]
-  (let [path "hello/example.png"
-        [{id :id}] (db/create-editor-assets! {:path path :type type})]
+(defn editor-asset-created
+  ([type] (editor-asset-created type "hello/example.png"))
+  ([type path]
+  (let [[{id :id}] (db/create-editor-assets! {:path path :thumbnail_path path :type type})]
     {:id id
      :path path
      :type type
-     }))
+     })))
 
 (defn link-editor-asset-tag [tag_id asset_id]
   (let [path "hello/example.png"]

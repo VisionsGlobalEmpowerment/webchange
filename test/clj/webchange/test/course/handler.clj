@@ -151,7 +151,7 @@
   (let [tag-china (f/editor-tag-created "China")
         tag-india (f/editor-tag-created "Idida")
         background (f/editor-asset-created course/editor_asset_type_background)
-        details (f/editor-asset-created course/editor_asset_type_details)
+        details (f/editor-asset-created course/editor_asset_type_decoration "hello/example1.png")
         _ (f/link-editor-asset-tag (:id tag-china) (:id background))
         _ (f/link-editor-asset-tag (:id tag-india) (:id background))
         _ (f/link-editor-asset-tag (:id tag-china) (:id details))
