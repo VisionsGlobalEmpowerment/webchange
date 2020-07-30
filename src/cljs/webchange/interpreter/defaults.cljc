@@ -33,6 +33,10 @@
                      {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/senoravaca/skeleton.png", :size 1, :type "anim-texture"}
                      {:url "/raw/anim/senoravaca/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton5.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton6.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}

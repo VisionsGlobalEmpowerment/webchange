@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.scene.state.background
   (:require
     [re-frame.core :as re-frame]
+    [ajax.core :refer [json-request-format json-response-format]]
     [webchange.editor-v2.scene.state.db :refer [path-to-db]]
     [webchange.subs :as subs]
     [webchange.editor.events :as edit-scene]))
@@ -65,33 +66,26 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db (path-to-db [:gallery :open?]) false)}))
 
-;; ToDo: implement images loading from back
-(def hardcoded-images (map (fn [src]
-                             {:src   src
-                              :thumb src})
-                           ["/raw/img/casa/background.jpg"
-                            "/raw/img/cinema/background.jpg"
-                            "/raw/img/feria/background.jpg"
-                            "/raw/img/ferris-wheel/background.jpg"
-                            "/raw/img/map/background.jpg"
-                            "/raw/img/park/background.jpg"
-                            "/raw/img/park/swings/background.jpg"
-                            "/raw/img/park/hide-n-seek/background.jpg"
-                            "/raw/img/park/main/background.jpg"
-                            "/raw/img/park/pinata/background.jpg"
-                            "/raw/img/park/sandbox/background.jpg"
-                            "/raw/img/park/see-saw/background.jpg"
-                            "/raw/img/park/slide/background.jpg"
-                            "/raw/img/cinema/background.jpg"]))
-
 (re-frame/reg-event-fx
   ::load-available-background
   (fn [{:keys [db]} [_]]
-    {:db (assoc-in db (path-to-db [:gallery])
-                   {:single-background hardcoded-images
-                    :background        hardcoded-images
-                    :decoration        hardcoded-images
-                    :surface           hardcoded-images})}))
+    {:db         (assoc-in db [:loading :load-available-background] true)
+     :http-xhrio {:method          :get
+                  :uri             (str "/api/courses/editor/assets")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::load-available-background-success]
+                  :on-failure      [:api-request-error :load-available-background]}}))
+
+(re-frame/reg-event-fx
+  ::load-available-background-success
+  (fn [{:keys [db]} [_ result]]
+    (let [->item (fn [asset] {:src (:path asset) :thumb (:thumbnail-path asset) :type (-> asset :type keyword)})
+          gallery (->> result
+                      (map ->item)
+                      (group-by :type))]
+      {:db         (assoc-in db (path-to-db [:gallery]) gallery)
+       :dispatch-n (list [:complete-request :load-available-background])})))
 
 (re-frame/reg-sub
   ::gallery

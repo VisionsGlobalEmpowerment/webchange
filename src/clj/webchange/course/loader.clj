@@ -180,8 +180,8 @@
 
    "update-editor-assets"
    (fn [config args]
-     (let [ config (merge env config)]
-     (apply core/update-editor-assets config args)))
+     (let [config (merge env config)]
+      (apply core/update-editor-assets config args)))
 
    "save-scene"
    (fn [config args]
