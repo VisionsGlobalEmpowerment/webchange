@@ -8,7 +8,7 @@
     [webchange.common.copybook :refer [copybook]]
     [webchange.common.svg-path :refer [svg-path]]
     [webchange.common.matrix :refer [matrix-objects-list]]
-    [webchange.common.anim :refer [anim animations init-spine-player]]
+    [webchange.common.anim :refer [anim animations init-spine-player prepare-anim-object-params]]
     [webchange.common.events :as ce]
     [webchange.common.core :refer [with-parent-origin
                                    with-origin-offset]]
@@ -256,7 +256,8 @@
 
 (defn animation
   [scene-id name object]
-  (let [params (object-params object)
+  (let [object (prepare-anim-object-params object)
+        params (object-params object)
         animation-name (or (:scene-name object) (:name object))]
     [:> Group (assoc params :draggable true
                             :on-drag-end #(let [x (.. % -target -attrs -x)

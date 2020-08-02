@@ -120,7 +120,7 @@
                                       :y       960,
                                       :width   351,
                                       :height  717,
-                                      :scale   {:x 1, :y 1},
+                                      :scale   {:x 3, :y 3},
                                       :actions {:click {:id "restart", :on "click", :type "action"}},
                                       :anim    "idle",
                                       :name    "senoravaca",
@@ -133,7 +133,7 @@
                               :y      960,
                               :width  380,
                               :height 537,
-                              :scale  {:x 1, :y 1},
+                              :scale  {:x 3, :y 3},
                               :anim   "idle",
                               :name   "vera",
                               :skin "01 Vera_1"

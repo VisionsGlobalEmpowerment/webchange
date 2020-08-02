@@ -12,7 +12,7 @@
     [webchange.common.colors-palette :refer [colors-palette]]
     [webchange.common.animated-svg-path :refer [animated-svg-path]]
     [webchange.common.matrix :refer [matrix-objects-list]]
-    [webchange.common.anim :refer [anim]]
+    [webchange.common.anim :refer [anim prepare-anim-object-params]]
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
     [webchange.common.scene-components.components :as components]
@@ -278,11 +278,12 @@
 
 (defn animation
   [scene-id name object]
-  (let [params (prepare-group-params object)
-        rect-params (prepare-anim-rect-params object)
-        animation-name (or (:scene-name object) (:name object))]
+  (let [anim-object (prepare-anim-object-params object)
+        params (prepare-group-params anim-object)
+        rect-params (prepare-anim-rect-params anim-object)
+        animation-name (or (:scene-name anim-object) (:name anim-object))]
     [:> Group params
-     [anim (-> object
+     [anim (-> anim-object
                (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %])))]
      [:> Rect rect-params]]))
 
