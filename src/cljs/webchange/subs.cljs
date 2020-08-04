@@ -1,6 +1,6 @@
 (ns webchange.subs
   (:require
-   [re-frame.core :as re-frame]))
+    [re-frame.core :as re-frame]))
 
 (re-frame/reg-sub
   ::name
@@ -72,11 +72,23 @@
   ::current-scene-data
   current-scene-data)
 
+(defn current-scene-objects
+  [db]
+  (let [current-scene-id (current-scene db)]
+    (get-in db [:scenes current-scene-id :objects] {})))
+
+(defn current-scene-background
+  [db]
+  (let [scene-objects (current-scene-objects db)]
+    (some (fn [[name {:keys [type] :as object}]]
+            (and (or (= type "background")
+                     (= type "layered-background"))
+                 (merge object
+                        {:name name}))) scene-objects)))
+
 (re-frame/reg-sub
   ::current-scene-objects
-  (fn [db [_]]
-    (let [current-scene-id (current-scene db)]
-      (get-in db [:scenes current-scene-id :objects] {}))))
+  current-scene-objects)
 
 (re-frame/reg-sub
   ::current-scene-back-button
@@ -100,10 +112,14 @@
   (fn [db]
     (get-in db [:current-scene-data :scene-objects] [])))
 
+(defn scene-object
+  [db scene-id name]
+  (get-in db [:scenes scene-id :objects (keyword name)] {}))
+
 (re-frame/reg-sub
   ::scene-object
   (fn [db [_ scene-id name]]
-    (get-in db [:scenes scene-id :objects (keyword name)] {})))
+    (scene-object db scene-id name)))
 
 (re-frame/reg-sub
   ::scene-object-with-var

@@ -12,7 +12,7 @@
     [webchange.common.colors-palette :refer [colors-palette]]
     [webchange.common.animated-svg-path :refer [animated-svg-path]]
     [webchange.common.matrix :refer [matrix-objects-list]]
-    [webchange.common.anim :refer [anim]]
+    [webchange.common.anim :refer [anim prepare-anim-object-params]]
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
     [webchange.common.scene-components.components :as components]
@@ -145,6 +145,7 @@
 (declare get-painting-area)
 (declare get-colors-palette)
 (declare background)
+(declare layered-background)
 (declare empty-component)
 
 (defn lock-object [o]
@@ -187,6 +188,7 @@
          o (if (contains? o :actions) o (assoc o :listening false))]
      (case type
        :background [background scene-id name o]
+       :layered-background [layered-background scene-id name o]
        :button [button scene-id name o]
        :image [image scene-id name o]
        :transparent [:> Group (prepare-group-params o)
@@ -261,13 +263,27 @@
                   :listening false}
                  (filter-params object))])
 
+(defn layered-background
+  [scene-id name object]
+  (let [layers (map (fn [key] {:key key
+                               :src (get-data-as-url (get-in object [key :src]))})
+                    [:background :surface :decoration])]
+    [:> Group {}
+     (for [{:keys [key src]} layers]
+       (when src
+         ^{:key key}
+         [kimage (merge {:src       src
+                         :listening false}
+                        (filter-params (first (:data object))))]))]))
+
 (defn animation
   [scene-id name object]
-  (let [params (prepare-group-params object)
-        rect-params (prepare-anim-rect-params object)
-        animation-name (or (:scene-name object) (:name object))]
+  (let [anim-object (prepare-anim-object-params object)
+        params (prepare-group-params anim-object)
+        rect-params (prepare-anim-rect-params anim-object)
+        animation-name (or (:scene-name anim-object) (:name anim-object))]
     [:> Group params
-     [anim (-> object
+     [anim (-> anim-object
                (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %])))]
      [:> Rect rect-params]]))
 

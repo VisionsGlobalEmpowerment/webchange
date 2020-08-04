@@ -18,11 +18,8 @@
   [relative-path]
    (if (clojure.string/starts-with? relative-path "/")
      (let [relative-path (clojure.string/replace-first relative-path "/" "")]
-       (str (:host-url (:secondary env)) (encode-path relative-path))
-       )
-     (str (:host-url (:secondary env)) (encode-path relative-path))
-   ))
-
+       (str (:host-url (:secondary env)) (encode-path relative-path)))
+     (str (:host-url (:secondary env)) (encode-path relative-path))))
 
 (defn file-exist?
   [file-path]

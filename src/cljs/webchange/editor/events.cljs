@@ -40,9 +40,19 @@
     {:db (update-in db [:scenes scene-id :objects (keyword target)] merge state)}))
 
 (re-frame/reg-event-fx
+  ::update-object
+  (fn [{:keys [db]} [_ {:keys [scene-id target state]}]]
+    {:db (assoc-in db [:scenes scene-id :objects (keyword target)] state)}))
+
+(re-frame/reg-event-fx
   ::edit-current-scene-object
   (fn [{:keys [db]} [_ {:keys [target state]}]]
     {:db (update-in db [:current-scene-data :objects (keyword target)] merge state)}))
+
+(re-frame/reg-event-fx
+  ::update-current-scene-object
+  (fn [{:keys [db]} [_ {:keys [target state]}]]
+    {:db (assoc-in db [:current-scene-data :objects (keyword target)] state)}))
 
 (re-frame/reg-event-fx
   ::remove-object

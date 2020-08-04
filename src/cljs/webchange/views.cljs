@@ -8,6 +8,7 @@
     [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
     [webchange.editor-v2.events :as ee2]
+    [webchange.editor-v2.scene.state.skin :as editor-skin]
     [webchange.editor-v2.views :refer [course-view scene-view concept-view add-concept-view lesson-view add-lesson-view]]
     [webchange.auth.views :refer [teacher-login student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
@@ -40,6 +41,7 @@
 (defn- editor-panel-v2-scene [course-id scene-id]
   (re-frame/dispatch [::ee2/init-editor course-id scene-id])
   (re-frame/dispatch [::ee/select-current-scene scene-id])
+  (re-frame/dispatch [::editor-skin/load-characters])
   [scene-view course-id scene-id])
 
 (defn- editor-panel-v2-concept [course-id concept-id]

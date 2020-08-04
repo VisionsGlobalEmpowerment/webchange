@@ -266,24 +266,25 @@
     string))
 
 (defn store-editor-asset [source-path target-path public-dir file]
-  (let [filename (.getName (java.io.File. file))
-        name (get (clojure.string/split filename #"\.") 0)
+  (let [parts (-> file java.io.File. .getName
+                  (clojure.string/split #"\.")
+                  first
+                  (clojure.string/split #"_"))
+        type (last parts)
+        tag (->> (drop-last parts)
+                 (clojure.string/join " ")
+                 (clojure.string/trim)
+                 (clojure.string/capitalize))
         path-in-dir (remove-first-directory file source-path)
-        parts (clojure.string/split name #"_")
-        type (get parts 0)
-        tag (if (drop 0 parts) (clojure.string/capitalize (clojure.string/trim (clojure.string/join " " (drop 0 parts)))) "")
         thumbnail-file (str target-path "/" path-in-dir)
-        file-public (remove-first-directory file public-dir)
-        thumbnail-file-public (remove-first-directory thumbnail-file public-dir)
-        ]
+        file-public (str "/" (remove-first-directory file public-dir))
+        thumbnail-file-public (str "/" (remove-first-directory thumbnail-file public-dir))]
     (when (.contains editor_asset_types type)
-      (let [
-            _ (clojure.java.io/make-parents thumbnail-file)
-            _ (assets/make-thumbnail file thumbnail-file 180)
-            created-tag (store-tag! tag)
-            created-editor-assets (store-editor-assets! file-public thumbnail-file-public type)
-            ]
-      (db/create-editor-asset-tag! {:tag_id (:id created-tag) :asset_id (:id created-editor-assets)})))))
+      (clojure.java.io/make-parents thumbnail-file)
+      (assets/make-thumbnail file thumbnail-file 180)
+      (let [created-tag (store-tag! tag)
+            created-editor-assets (store-editor-assets! file-public thumbnail-file-public type)]
+        (db/create-editor-asset-tag! {:tag_id (:id created-tag) :asset_id (:id created-editor-assets)})))))
 
 (defn clear-before-update []
   (do

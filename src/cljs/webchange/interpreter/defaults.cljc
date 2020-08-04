@@ -33,10 +33,18 @@
                      {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/senoravaca/skeleton.png", :size 1, :type "anim-texture"}
                      {:url "/raw/anim/senoravaca/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton5.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton6.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton5.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/vera-45/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera-45/skeleton.json", :size 1, :type "anim-text"}
@@ -63,6 +71,8 @@
                      {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/mari/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/mari/skeleton3.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
