@@ -3,7 +3,7 @@
     [cljs-idxdb.core :as idx]
     [webchange.service-worker.db.general :as general]
     [webchange.service-worker.db.core :as core]
-    [webchange.service-worker.wrappers :refer [promise-resolve then]]))
+    [webchange.service-worker.wrappers :refer [catch promise-resolve promise-reject then]]))
 
 (defonce db (atom {:course   ""
                    :instance nil}))
@@ -12,6 +12,8 @@
 (def events-store-name "events")
 (def endpoints-data-store-name "endpoints-data")
 (def state-store-name "state")
+
+;; Deleted:
 (def users-store-name "activated-users")
 
 (defn upgrade-db
@@ -27,7 +29,9 @@
     (-> (idx/create-store db endpoints-data-store-name {:keyPath "endpoint"})))
   (when (< old-version 5)
     (-> (idx/create-store db events-store-name {:keyPath "created"})
-        (idx/create-index "user" "user" {:unique false}))))
+        (idx/create-index "user" "user" {:unique false})))
+  (when (< old-version 6)
+    (-> (idx/delete-store db users-store-name))))
 
 (defn get-db
   []
@@ -40,5 +44,7 @@
                     (then (fn [db-instance]
                             (reset! db {:course   current-course
                                         :instance db-instance})
-                            (promise-resolve db-instance)))))))))
+                            (promise-resolve db-instance)))))))
+      (catch (fn [error]
+               (promise-reject (str "Can not get DB instance. " error))))))
 

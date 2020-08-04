@@ -1,23 +1,45 @@
 (ns webchange.service-worker.event-handlers.message
   (:require
-    [webchange.service-worker.controllers.worker-state :as worker-state]
     [webchange.service-worker.broadcast.core :as broadcast]
+    [webchange.service-worker.controllers.course-resources :as course-resources]
     [webchange.service-worker.controllers.game-resources :as game-resources]
+    [webchange.service-worker.controllers.worker-state :as worker-state]
     [webchange.service-worker.db.general :as general]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.wrappers :refer [then online?]]))
+    [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
+    [webchange.service-worker.wrappers :refer [catch online? promise-resolve then]]))
 
 (defn- send-current-state
   []
-  (-> (worker-state/get-current-state)
-      (then broadcast/send-current-state)))
+  (logger/debug "Send current state...")
+  (-> (current-progress/flush-current-progress)
+      (then worker-state/get-current-state)
+      (then broadcast/send-current-state)
+      (then #(broadcast/send-sync-status :synced))
+      (catch (fn [error]
+               (logger/error "Send current state failed:" error)))))
+
+(defn- set-current-course
+  [course]
+  (logger/debug "[Message] Set current course:" course)
+  (-> (general/set-current-course course)
+      (then (fn [] (course-resources/fetch-current-course-data)))
+      (then (fn [] (course-resources/remove-outdated-data)))
+      (then send-current-state)))
+
 
 (defn- handle-set-current-course
   [{:keys [course]}]
-  (-> (general/set-current-course course)
-      (then send-current-state)
-      (then (fn []
-              (broadcast/send-sync-status :activated)))))
+  (-> (general/get-current-course)
+      (then (fn [current-course]
+              (logger/debug (str "[Message] Change course: " current-course "->" course))
+              (if-not (= course current-course)
+                (set-current-course course)
+                (do (logger/debug "[Message] Course not changed")
+                    (send-current-state)))))
+      (catch (fn [error]
+               (logger/warn "[Message] Get current course failed:" error)
+               (set-current-course course)))))
 
 (defn- handle-cache-lessons
   [data]
@@ -29,7 +51,8 @@
         type (.-type message)
         data (-> (.-data message)
                  (js->clj :keywordize-keys true))]
-    (logger/debug "Get message" type data)
+    (logger/debug (str "[Message] Get message  <" type ">"))
+    (logger/debug-folded (str "[Message] <" type "> message data:") data)
     (case type
       "set-current-course" (handle-set-current-course data)
       "cache-lessons" (handle-cache-lessons data)

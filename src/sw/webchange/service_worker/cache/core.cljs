@@ -16,10 +16,9 @@
 
 (defn- get-version-info
   [cache-name]
-  (let [find-result (re-find #"-(\d*)-([A-Za-z0-9]*$)" cache-name)]
+  (let [find-result (re-find #"-(\d*)(?:-[A-Za-z]*)?$" cache-name)]
     (if-not (nil? find-result)
-      {:course  (get find-result 2)
-       :version (js/parseInt (get find-result 1))}
+      {:version (js/parseInt (get find-result 1))}
       nil)))
 
 (defn- filter-caches

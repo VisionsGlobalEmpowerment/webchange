@@ -44,4 +44,6 @@
   (logger/debug "Restore cached lessons data")
   (-> (db-state/get-cached-lessons)
       (then (fn [stored-lessons]
-              (cache-lessons stored-lessons)))))
+              (if-not (empty? stored-lessons)
+                (cache-lessons stored-lessons)
+                (promise-resolve))))))

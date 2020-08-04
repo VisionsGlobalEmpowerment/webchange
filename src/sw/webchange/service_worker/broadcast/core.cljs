@@ -11,7 +11,7 @@
 (defn- broadcast-message
   [key data]
   (let [type (get messages key)]
-    (logger/debug (str "Broadcast message: \"" type "\"") data)
+    (logger/debug-folded (str "[Broadcast] Send message: <" type ">") data)
     (-> (js/BroadcastChannel. broadcast-channel)
         (.postMessage (clj->js {:type type
                                 :data data})))))

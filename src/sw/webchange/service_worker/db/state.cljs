@@ -2,10 +2,10 @@
   (:require
     [webchange.service-worker.db.core :as core]
     [webchange.service-worker.db.db-course :as db-course]
-    [webchange.service-worker.wrappers :refer [promise-resolve then]]))
+    [webchange.service-worker.logger :as logger]
+    [webchange.service-worker.wrappers :refer [catch promise-resolve then]]))
 
 (def cached-lessons-key "cached-lessons")
-(def current-code-key "current-code")
 (def last-update-key "last-update")
 
 (defn- set-value
@@ -22,15 +22,11 @@
   (-> (db-course/get-db)
       (then (fn [db]
               (core/get-by-key db db-course/state-store-name key)))
-      (then #(:value %))))
-
-(defn get-current-code
-  []
-  (get-value current-code-key))
-
-(defn set-current-code
-  [code]
-  (set-value current-code-key code))
+      (then (fn [result]
+              (promise-resolve (:value result))))
+      (catch (fn [error]
+               (logger/warn (str "Can not get value of " key ":") error)
+               (promise-resolve nil)))))
 
 (defn get-last-update
   []
