@@ -76,11 +76,15 @@
   [course-slug scene-name scene-data owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         scene-id (get-or-create-scene! course-id scene-name)
-        created-at (jt/local-date-time)]
-    (db/save-scene! {:scene_id scene-id
-                     :data scene-data
-                     :owner_id owner-id
-                     :created_at created-at})
+        created-at (jt/local-date-time)
+        scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))
+        ]
+    (if (not (identical? scene-data-old scene-data))
+      (db/save-scene! {:scene_id scene-id
+                       :data scene-data
+                       :owner_id owner-id
+                       :created_at created-at}))
+
     [true {:id scene-id
            :name scene-name
            :created-at (str created-at)}]))
