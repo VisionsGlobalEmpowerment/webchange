@@ -382,17 +382,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "Ardilla!",
-       :data [{:end 0.87, :anim "talk", :start 0.3}]}
-      {:offset 20.851,
-       :phrase-text "Ardilla!",
-       :start 20.851,
-       :type "animation-sequence",
-       :duration 1.613,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "Ardilla!",
-       :data
-       [{:end 22.344, :anim "talk", :start 20.944, :duration 1.4}]}],
+       :data [{:end 0.87, :anim "talk", :start 0.3}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times "vaca-3-times-ardilla",
@@ -1051,17 +1041,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "bebé",
-       :data [{:end 30.12, :anim "talk", :start 29.52}]}
-      {:offset 57.053,
-       :phrase-text "bebé",
-       :start 57.053,
-       :type "animation-sequence",
-       :duration 0.68,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "bebé",
-       :data
-       [{:end 57.506, :anim "talk", :start 57.186, :duration 0.32}]}],
+       :data [{:end 30.12, :anim "talk", :start 29.52}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -1284,13 +1264,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 4.158,
+       :phrase-text
+       "Y aunque aún no tiene nombre\nme gusta llamarlo bebé,",
        :start 4.158,
        :type "animation-sequence",
        :duration 6.172,
        :audio "/raw/audio/l2/a3/poems-pro/bebe.mp3",
        :target "rock",
-       :phrase-text
-       "Y aunque aún no tiene nombre\nme gusta llamarlo bebé,",
        :track 1,
        :data
        [{:end 7.18, :anim "talk", :start 4.23}
@@ -1630,17 +1610,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "casa!",
-       :data [{:end 40.28, :anim "talk", :start 39.8}]}
-      {:offset 44.291,
-       :phrase-text "casa!",
-       :start 44.291,
-       :type "animation-sequence",
-       :duration 0.826,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "casa!",
-       :data
-       [{:end 44.944, :anim "talk", :start 44.424, :duration 0.52}]}],
+       :data [{:end 40.28, :anim "talk", :start 39.8}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -1787,8 +1757,7 @@
      :data
      [{:end 21.92, :anim "talk", :start 21.39}
       {:end 23.43, :anim "talk", :start 22.8}]},
-    :letter-path
-    "M147.23,92.35a37.51,37.51,0,1,0,0,39.27-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
+    :letter-path "M147.23,92.35a37.51,37.51,0,1,0,0,39.27",
     :letter-src "/raw/img/letters/c.png",
     :letter-tutorial-path
     "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
@@ -1856,13 +1825,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.454,
+       :phrase-text
+       "Un día mi amiga me invitó a su casa, Me sorprendió  su color, mostaza.",
        :start 0.454,
        :type "animation-sequence",
        :duration 8.199,
        :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
        :target "rock",
-       :phrase-text
-       "Un día mi amiga me invitó a su casa, Me sorprendió  su color, mostaza.",
        :track 1,
        :data [{:end 8.35, :anim "talk", :start 0.65}]}
       {:id "poem-pause", :type "action"}
@@ -1879,13 +1848,12 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 13.042,
+       :phrase-text "Yo le respondí: “¡qué linda la C C C de casa!”",
        :start 13.042,
        :type "animation-sequence",
        :duration 5.454,
        :audio "/raw/audio/l2/a3/poems-pro/casa.mp3",
        :target "rock",
-       :phrase-text
-       "Yo le respondí: “¡qué linda la C C C de casa!”",
        :track 1,
        :data
        [{:end 16.57, :anim "talk", :start 13.14}
@@ -2158,17 +2126,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "cepillo",
-       :data [{:end 23.49, :anim "talk", :start 22.57}]}
-      {:offset 44.773,
-       :phrase-text "cepillo",
-       :start 44.773,
-       :type "animation-sequence",
-       :duration 0.733,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "cepillo",
-       :data
-       [{:end 45.28, :anim "talk", :start 44.92, :duration 0.36}]}],
+       :data [{:end 23.49, :anim "talk", :start 22.57}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -2382,13 +2340,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.426,
+       :phrase-text
+       "Cepillo mi cabello con mi nuevo cepillo,\nEl cual es azul y amarillo.",
        :start 0.426,
        :type "animation-sequence",
        :duration 7.051,
        :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :phrase-text
-       "Cepillo mi cabello con mi nuevo cepillo,\nEl cual es azul y amarillo.",
        :track 1,
        :data
        [{:end 3.98, :anim "talk", :start 0.56}
@@ -2396,13 +2354,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 8.01,
+       :phrase-text
+       "Mi mamá lleva puesto su anillo\nQue tiene mucho brillo",
        :start 8.01,
        :type "animation-sequence",
        :duration 6.238,
        :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :phrase-text
-       "Mi mamá lleva puesto su anillo\nQue tiene mucho brillo",
        :track 1,
        :data
        [{:end 11.3, :anim "talk", :start 8.12}
@@ -2410,13 +2368,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 14.341,
+       :phrase-text
+       "Y también, su nuevo vestido\nQue es amarillo como mi nuevo cepillo.",
        :start 14.341,
        :type "animation-sequence",
        :duration 7.037,
        :audio "/raw/audio/l2/a3/poems-pro/cepillo.mp3",
        :target "rock",
-       :phrase-text
-       "Y también, su nuevo vestido\nQue es amarillo como mi nuevo cepillo.",
        :track 1,
        :data
        [{:end 17.08, :anim "talk", :start 14.57}
@@ -2577,7 +2535,7 @@
     {:data
      [{:id "default",
        :type "state",
-       :params {:text "c"},
+       :params {:text "ch"},
        :target "letter"}
       {:id "default",
        :type "state",
@@ -2661,17 +2619,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "chocolate",
-       :data [{:end 38.77, :anim "talk", :start 37.87}]}
-      {:offset 72.508,
-       :phrase-text "chocolate",
-       :start 72.508,
-       :type "animation-sequence",
-       :duration 1.027,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "chocolate",
-       :data
-       [{:end 73.348, :anim "talk", :start 72.628, :duration 0.72}]}],
+       :data [{:end 38.77, :anim "talk", :start 37.87}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -2885,13 +2833,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.28,
+       :phrase-text
+       "Me gusta practicar karate\ny después comer chocolate.",
        :start 0.28,
        :type "animation-sequence",
        :duration 6.546,
        :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :phrase-text
-       "Me gusta practicar karate\ny después comer chocolate.",
        :track 1,
        :data
        [{:end 2.26, :anim "talk", :start 0.41}
@@ -2901,13 +2849,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 7.039,
+       :phrase-text
+       "El otro día me caí sobre el zacate,\nmientras comía un rico chocolate",
        :start 7.039,
        :type "animation-sequence",
        :duration 7.439,
        :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :phrase-text
-       "El otro día me caí sobre el zacate,\nmientras comía un rico chocolate",
        :track 1,
        :data
        [{:end 10.87, :anim "talk", :start 7.35}
@@ -2915,13 +2863,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 14.758,
+       :phrase-text
+       "y mi mamá preparaba una salsa\nde cacahuates y chocolate.",
        :start 14.758,
        :type "animation-sequence",
        :duration 6.332,
        :audio "/raw/audio/l2/a3/poems-pro/chocolate.mp3",
        :target "rock",
-       :phrase-text
-       "y mi mamá preparaba una salsa\nde cacahuates y chocolate.",
        :track 1,
        :data
        [{:end 17.72, :anim "talk", :start 15.01}
@@ -3169,17 +3117,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "diamante",
-       :data [{:end 16.26, :anim "talk", :start 15.36}]}
-      {:offset 5.589,
-       :phrase-text "diamante",
-       :start 5.589,
-       :type "animation-sequence",
-       :duration 0.826,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "diamante",
-       :data
-       [{:end 6.242, :anim "talk", :start 5.762, :duration 0.48}]}],
+       :data [{:end 16.26, :anim "talk", :start 15.36}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -3322,7 +3260,7 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 24.08, :anim "talk", :start 22.14}]},
-    :letter-path "M147.23,91.88a37.5,37.5,0,1,0,0,39.28M147.23,0v14",
+    :letter-path "M147.23,91.88a37.5,37.5,0,1,0,0,39.28M147.23,0v150",
     :letter-src "/raw/img/letters/d.png",
     :letter-tutorial-path
     "M 49.50,45.46            C 42.02,29.93 19.63,32.26 9.46,43.61              1.11,52.89 -0.18,67.55 3.45,78.95              6.45,88.77 13.96,98.02 24.76,98.95M 49.50,0.00            C 49.50,0.00 49.50,102.00 49.50,102.00",
@@ -3389,13 +3327,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.44,
+       :phrase-text
+       "En la calle encontré un diamante,\nEra pequeño pero brillante.",
        :start 0.44,
        :type "animation-sequence",
        :duration 6.89,
        :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
        :target "rock",
-       :phrase-text
-       "En la calle encontré un diamante,\nEra pequeño pero brillante.",
        :track 1,
        :data
        [{:end 3.74, :anim "talk", :start 0.58}
@@ -3403,13 +3341,12 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 7.784,
+       :phrase-text "Un día me desperté Y mi diamante era gigante.\n",
        :start 7.784,
        :type "animation-sequence",
        :duration 6.051,
        :audio "/raw/audio/l2/a3/poems-pro/diamante.mp3",
        :target "rock",
-       :phrase-text
-       "Un día me desperté Y mi diamante era gigante.\n",
        :track 1,
        :data
        [{:end 9.85, :anim "talk", :start 7.9}
@@ -3665,17 +3602,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "elefante",
-       :data [{:end 1.94, :anim "talk", :start 0.57}]}
-      {:offset 6.267,
-       :phrase-text "elefante",
-       :start 6.267,
-       :type "animation-sequence",
-       :duration 0.84,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "elefante",
-       :data
-       [{:end 7.04, :anim "talk", :start 6.333, :duration 0.707}]}],
+       :data [{:end 1.94, :anim "talk", :start 0.57}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -3874,13 +3801,12 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.186,
+       :phrase-text "En el zoológico conocí\na un simpático elefante",
        :start 0.186,
        :type "animation-sequence",
        :duration 6.479,
        :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
        :target "rock",
-       :phrase-text
-       "En el zoológico conocí\na un simpático elefante",
        :track 1,
        :data
        [{:end 3.06, :anim "talk", :start 0.45}
@@ -3889,13 +3815,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 7.238,
+       :phrase-text
+       "Que era fuerte y gigante\nY siempre vestía muy elegante",
        :start 7.238,
        :type "animation-sequence",
        :duration 6.919,
        :audio "/raw/audio/l2/a3/poems-pro/elefante.mp3",
        :target "rock",
-       :phrase-text
-       "Que era fuerte y gigante\nY siempre vestía muy elegante",
        :track 1,
        :data
        [{:end 10.31, :anim "talk", :start 7.4}
@@ -4191,17 +4117,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "flor!",
-       :data [{:end 47.08, :anim "talk", :start 46.51}]}
-      {:offset 54.744,
-       :phrase-text "flor!",
-       :start 54.744,
-       :type "animation-sequence",
-       :duration 0.52,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "flor!",
-       :data
-       [{:end 55.064, :anim "talk", :start 54.837, :duration 0.227}]}],
+       :data [{:end 47.08, :anim "talk", :start 46.51}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -4417,25 +4333,24 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.32,
+       :phrase-text
+       "Caminando por la calle\nEncontré una linda flor,\nDe un hermoso color.",
        :start 0.32,
        :type "animation-sequence",
        :duration 7.453,
        :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
        :target "rock",
-       :phrase-text
-       "Caminando por la calle\nEncontré una linda flor,\nDe un hermoso color.",
        :track 1,
        :data [{:end 7.57, :anim "talk", :start 0.47}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 7.867,
+       :phrase-text "Entonces la olí\nY aún más hermoso era su olor",
        :start 7.867,
        :type "animation-sequence",
        :duration 5.894,
        :audio "/raw/audio/l2/a3/poems-pro/flor 2.mp3",
        :target "rock",
-       :phrase-text
-       "Entonces la olí\nY aún más hermoso era su olor",
        :track 1,
        :data
        [{:end 9.98, :anim "talk", :start 8.03}
@@ -4617,7 +4532,7 @@
     :word-2-skin "strawberry",
     :word-3-skin "fruits",
     :word-4-skin "arrow",
-    :word-image-1 "/raw/img/elements/flower.png",
+    :word-image-1 "/raw/img/elements/flute.png",
     :word-image-2 "/raw/img/elements/strawberry.png",
     :word-image-3 "/raw/img/elements/fruits.png",
     :word-image-4 "/raw/img/elements/arrow.png"}}
@@ -4711,17 +4626,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "gato!",
-       :data [{:end 54.08, :anim "talk", :start 53.56}]}
-      {:offset 69.863,
-       :phrase-text "gato!",
-       :start 69.863,
-       :type "animation-sequence",
-       :duration 0.8,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "gato!",
-       :data
-       [{:end 70.529, :anim "talk", :start 69.996, :duration 0.533}]}],
+       :data [{:end 54.08, :anim "talk", :start 53.56}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -4936,13 +4841,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.387,
+       :phrase-text
+       "Mi tío Amato tiene un gato\nQue se llama Garabato",
        :start 0.387,
        :type "animation-sequence",
        :duration 5.853,
        :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
        :target "rock",
-       :phrase-text
-       "Mi tío Amato tiene un gato\nQue se llama Garabato",
        :track 1,
        :data
        [{:end 0.81, :anim "talk", :start 0.48}
@@ -4950,13 +4855,12 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 6.48,
+       :phrase-text "Es pequeño y muy chato\nEl pobre G G G gato",
        :start 6.48,
        :type "animation-sequence",
        :duration 6.519,
        :audio "/raw/audio/l2/a3/poems-pro/gato.mp3",
        :target "rock",
-       :phrase-text
-       "Es pequeño y muy chato\nEl pobre G G G gato",
        :track 1,
        :data
        [{:end 9.15, :anim "talk", :start 6.67}
@@ -5086,11 +4990,10 @@
        :start 12.389,
        :type "animation-sequence",
        :duration 2.014,
-       :audio "/raw/audio/l1/a3/vera/gato.mp3",
+       :audio "/raw/audio/l1/a3/rock/Gato.m4a",
        :target "rock",
        :phrase-text-translated " Era una gata negra.",
-       :data
-       [{:end 14.096, :anim "talk", :start 12.616, :duration 1.48}]}
+       :data [{:end 14.23, :anim "talk", :start 12.6}]}
       {:offset 9.998,
        :phrase-text "En donde esta su gata? A donde se fue?",
        :start 9.998,
@@ -5246,7 +5149,7 @@
        :start 37.785,
        :type "animation-sequence",
        :duration 4.373,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "gemelo, gemelo, GEMELO!",
        :data
@@ -5265,17 +5168,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "gemelo",
-       :data [{:end 36.92, :anim "talk", :start 36.22}]}
-      {:offset 69.386,
-       :phrase-text "gemelo",
-       :start 69.386,
-       :type "animation-sequence",
-       :duration 0.64,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "gemelo",
-       :data
-       [{:end 69.826, :anim "talk", :start 69.519, :duration 0.307}]}],
+       :data [{:end 36.92, :anim "talk", :start 36.22}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -5296,15 +5189,15 @@
     {:offset 73.226,
      :scene-id "home",
      :phrase-text "Adios gemelo Adios!",
-     :start 73.226,
+     :start 73.133,
      :type "animation-sequence",
-     :duration 2.427,
+     :duration 2.586,
      :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
      :target "senoravaca",
      :phrase-text-translated "Adios gemelo Adios!",
      :data
-     [{:end 74.293, :anim "talk", :start 73.293, :duration 1}
-      {:end 75.399, :anim "talk", :start 75.013, :duration 0.386}]},
+     [{:end 74.46, :anim "talk", :start 73.27}
+      {:end 75.56, :anim "talk", :start 75}]},
     :home-vaca-question-action
     {:offset 67.626,
      :scene-id "home",
@@ -5487,13 +5380,12 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.226,
+       :phrase-text "Tengo un hermano gemelo,\nsu nombre es Carmelo.",
        :start 0.226,
        :type "animation-sequence",
        :duration 4.958,
        :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :phrase-text
-       "Tengo un hermano gemelo,\nsu nombre es Carmelo.",
        :track 1,
        :data
        [{:end 2.68, :anim "talk", :start 0.5}
@@ -5501,25 +5393,25 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 5.171,
+       :phrase-text
+       "y nos gusta el mismo caramelo.\nA mí me gusta mirar el cielo",
        :start 5.171,
        :type "animation-sequence",
        :duration 6.13,
        :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :phrase-text
-       "y nos gusta el mismo caramelo.\nA mí me gusta mirar el cielo",
        :track 1,
        :data [{:end 11.21, :anim "talk", :start 5.23}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 11.342,
+       :phrase-text
+       "y cuando él toca el hielo\nyo siento que me congelo.",
        :start 11.342,
        :type "animation-sequence",
        :duration 5.344,
        :audio "/raw/audio/l2/a3/poems-pro/gemelos 2.mp3",
        :target "rock",
-       :phrase-text
-       "y cuando él toca el hielo\nyo siento que me congelo.",
        :track 1,
        :data
        [{:end 13.9, :anim "talk", :start 11.48}
@@ -5594,8 +5486,8 @@
        :phrase-text-translated
        "Gemelos! Tú sabes que a los gemelos les gusta columpiarse?",
        :data
-       [{:end 1.44, :anim "talk", :start 0.774, :duration 0.666}
-        {:end 5.068, :anim "talk", :start 2.214, :duration 2.854}]}
+       [{:end 1.52, :anim "talk", :start 0.64}
+        {:end 5.04, :anim "talk", :start 2.18}]}
       {:offset 0.76,
        :phrase-text "Si, a los dos les gusta columpiarse.",
        :start 0.76,
@@ -5647,7 +5539,7 @@
        :start 9.188,
        :type "animation-sequence",
        :duration 3.746,
-       :audio "/raw/audio/l1/a3/rock/Gemelos.m4a",
+       :audio "/raw/audio/l1/a3/vera/gemelo.mp3",
        :target "vera",
        :phrase-text-translated
        "Gemelos se pueden ver iguales o diferentes?",
@@ -5672,7 +5564,7 @@
        :start 14.444,
        :type "animation-sequence",
        :duration 8.046,
-       :audio "/raw/audio/l1/a3/rock/Gemelos.m4a",
+       :audio "/raw/audio/l1/a3/vera/gemelo.mp3",
        :target "vera",
        :phrase-text-translated
        "Gemelos! Ha de ser divertido tener un gemelo y tener alguien con quien jugar siempre. Que bien!",
@@ -5802,17 +5694,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "hoja",
-       :data [{:end 75.64, :anim "talk", :start 75.08}]}
-      {:offset 95.581,
-       :phrase-text "hoja",
-       :start 95.581,
-       :type "animation-sequence",
-       :duration 0.854,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "hoja",
-       :data
-       [{:end 96.288, :anim "talk", :start 95.701, :duration 0.587}]}],
+       :data [{:end 75.64, :anim "talk", :start 75.08}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -5858,15 +5740,13 @@
     {:offset 77.676,
      :scene-id "home",
      :phrase-text "Esta es una hoja.",
-     :start 77.676,
+     :start 91.008,
      :type "animation-sequence",
-     :duration 2.439,
+     :duration 2.4,
      :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
      :target "senoravaca",
      :phrase-text-translated "Esta es una hoja.",
-     :data
-     [{:end 78.409, :anim "talk", :start 77.782, :duration 0.627}
-      {:end 79.875, :anim "talk", :start 78.622, :duration 1.253}]},
+     :data [{:end 93.39, :anim "talk", :start 91.18}]},
     :home-vaca-word-action
     {:offset 95.608,
      :scene-id "home",
@@ -6018,13 +5898,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.107,
+       :phrase-text
+       "En otoño caen las hojas de los árboles\nSon rojas y de varios colores",
        :start 0.107,
        :type "animation-sequence",
        :duration 7.678,
        :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
        :target "rock",
-       :phrase-text
-       "En otoño caen las hojas de los árboles\nSon rojas y de varios colores",
        :track 1,
        :data
        [{:end 1.29, :anim "talk", :start 0.31}
@@ -6033,13 +5913,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 7.997,
+       :phrase-text
+       "En primavera sus hojas serán verdes\nY crecerán más fuertes",
        :start 7.997,
        :type "animation-sequence",
        :duration 6.732,
        :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
        :target "rock",
-       :phrase-text
-       "En primavera sus hojas serán verdes\nY crecerán más fuertes",
        :track 1,
        :data
        [{:end 11.46, :anim "talk", :start 8.18}
@@ -6047,13 +5927,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 14.824,
+       :phrase-text
+       "Algunos árboles tendrán flores.\nHoy encontré una hoja y es roja.",
        :start 14.824,
        :type "animation-sequence",
        :duration 7.373,
        :audio "/raw/audio/l2/a3/poems-pro/hoja.mp3",
        :target "rock",
-       :phrase-text
-       "Algunos árboles tendrán flores.\nHoy encontré una hoja y es roja.",
        :track 1,
        :data
        [{:end 16.34, :anim "talk", :start 14.97}
@@ -6345,17 +6225,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "imán",
-       :data [{:end 12.78, :anim "talk", :start 12.21}]}
-      {:offset 14.627,
-       :phrase-text "imán",
-       :start 14.627,
-       :type "animation-sequence",
-       :duration 0.893,
-       :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
-       :target "senoravaca",
-       :phrase-text-translated "imán",
-       :data
-       [{:end 15.36, :anim "talk", :start 14.774, :duration 0.586}]}],
+       :data [{:end 12.78, :anim "talk", :start 12.21}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times "vaca-3-times-incendio",
@@ -6572,13 +6442,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.134,
+       :phrase-text
+       "Un día encontré un imán,\nY se lo enseñé a mi tío Germán.",
        :start 0.134,
        :type "animation-sequence",
        :duration 6.719,
        :audio "/raw/audio/l2/a3/poems-pro/iman.mp3",
        :target "rock",
-       :phrase-text
-       "Un día encontré un imán,\nY se lo enseñé a mi tío Germán.",
        :track 1,
        :data
        [{:end 3.02, :anim "talk", :start 0.22}
@@ -7102,17 +6972,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "jardín",
-       :data [{:end 31.15, :anim "talk", :start 30.32}]}
-      {:offset 58.588,
-       :phrase-text "jardín",
-       :start 58.588,
-       :type "animation-sequence",
-       :duration 0.746,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "jardín",
-       :data
-       [{:end 59.188, :anim "talk", :start 58.668, :duration 0.52}]}],
+       :data [{:end 31.15, :anim "talk", :start 30.32}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -7327,13 +7187,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.453,
+       :phrase-text
+       "Me gusta mucho mi jardín,\nPuedo ver las flores sin fin,",
        :start 0.453,
        :type "animation-sequence",
        :duration 6.053,
        :audio "/raw/audio/l2/a3/poems-pro/jardin.mp3",
        :target "rock",
-       :phrase-text
-       "Me gusta mucho mi jardín,\nPuedo ver las flores sin fin,",
        :track 1,
        :data
        [{:end 2.96, :anim "talk", :start 0.56}
@@ -7507,9 +7367,10 @@
      :audio "/raw/audio/l2/a1/L2_A1_Vaca_4.m4a",
      :target "senoravaca",
      :track 1,
-     :data [{:end 38.037, :anim "talk", :start 37.46}
-            {:end 39.123, :anim "talk", :start 38.422}
-            {:end 40.581, :anim "talk", :start 39.53}]},
+     :data
+     [{:end 38.037, :anim "talk", :start 37.46}
+      {:end 39.123, :anim "talk", :start 38.422}
+      {:end 40.581, :anim "talk", :start 39.53}]},
     :vaca-chanting-word
     {:offset 37.37,
      :phrase-text "Jardín",
@@ -7619,20 +7480,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "kimono",
-       :data [{:end 82.88, :anim "talk", :start 81.91}]}
-      {:offset 108.074,
-       :phrase-text "kimono",
-       :start 108.074,
-       :type "animation-sequence",
-       :duration 0.933,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "kimono",
-       :data
-       [{:end 108.821,
-         :anim "talk",
-         :start 108.194,
-         :duration 0.627}]}],
+       :data [{:end 82.88, :anim "talk", :start 81.91}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -7775,7 +7623,7 @@
      :target "senoravaca",
      :track 1,
      :data [{:end 26.37, :anim "talk", :start 24.43}]},
-    :letter-path "M112.5-.22v150M162.63,74.78l-48,29.06,61.55,45.94",
+    :letter-path "M112.5-0.22v150M162.63,74.78l-48,29.06l61.55,45.94",
     :letter-src "/raw/img/letters/k.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
@@ -7842,13 +7690,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.187,
+       :phrase-text
+       "En la selva conocí a un mono,\nVestido con un kimono,",
        :start 0.187,
        :type "animation-sequence",
        :duration 5.906,
        :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
        :target "rock",
-       :phrase-text
-       "En la selva conocí a un mono,\nVestido con un kimono,",
        :track 1,
        :data
        [{:end 3.18, :anim "talk", :start 0.28}
@@ -7867,13 +7715,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 9.471,
+       :phrase-text
+       "¡Que animal tan pesado\n el mono con el  K K K kimono!",
        :start 9.471,
        :type "animation-sequence",
        :duration 6.56,
        :audio "/raw/audio/l2/a3/poems-pro/kimono.mp3",
        :target "rock",
-       :phrase-text
-       "¡Que animal tan pesado\n el mono con el  K K K kimono!",
        :track 1,
        :data
        [{:end 11.7, :anim "talk", :start 9.67}
@@ -8128,17 +7976,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "león",
-       :data [{:end 8.27, :anim "talk", :start 7.67}]}
-      {:offset 20.054,
-       :phrase-text "león",
-       :start 20.054,
-       :type "animation-sequence",
-       :duration 0.8,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "león",
-       :data
-       [{:end 20.654, :anim "talk", :start 20.174, :duration 0.48}]}],
+       :data [{:end 8.27, :anim "talk", :start 7.67}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -8346,25 +8184,23 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.4,
+       :phrase-text "Yo conozco  a un león,\nCon colores de camaleón,",
        :start 0.4,
        :type "animation-sequence",
        :duration 4.958,
        :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
        :target "rock",
-       :phrase-text
-       "Yo conozco  a un león,\nCon colores de camaleón,",
        :track 1,
        :data [{:end 5.14, :anim "talk", :start 0.57}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 5.612,
+       :phrase-text "Su nombre es Napoleón\nY tiene camisa neón",
        :start 5.612,
        :type "animation-sequence",
        :duration 5.159,
        :audio "/raw/audio/l2/a3/poems-pro/leon.mp3",
        :target "rock",
-       :phrase-text
-       "Su nombre es Napoleón\nY tiene camisa neón",
        :track 1,
        :data
        [{:end 8.03, :anim "talk", :start 5.69}
@@ -8439,17 +8275,17 @@
      [{:offset 0.347,
        :phrase-text
        "Ruge, un león! Recuerdas lo que hablamos de los gatos",
-       :start 0.347,
+       :start 0.293,
        :type "animation-sequence",
-       :duration 5.6,
+       :duration 5.454,
        :audio "/raw/audio/l1/a3/rock/Leon.m4a",
        :target "rock",
        :phrase-text-translated
        "Ruge, un león! Recuerdas lo que hablamos de los gatos",
        :data
-       [{:end 1.133, :anim "talk", :start 0.52, :duration 0.613}
-        {:end 2.84, :anim "talk", :start 2.013, :duration 0.827}
-        {:end 5.587, :anim "talk", :start 3.56, :duration 2.027}]}
+       [{:end 1.23, :anim "talk", :start 0.46}
+        {:end 2.92, :anim "talk", :start 2.01}
+        {:end 5.63, :anim "talk", :start 3.54}]}
       {:offset 0.307,
        :phrase-text
        "Si, recuerdo que me dijo que su gato se fue por perseguir una rata!",
@@ -8483,7 +8319,7 @@
        :start 6.189,
        :type "animation-sequence",
        :duration 1.626,
-       :audio "/raw/audio/l1/a3/rock/Leon.m4a",
+       :audio "/raw/audio/l1/a3/vera/leon.mp3",
        :target "vera",
        :phrase-text-translated "Gatos grandes??!",
        :data [{:end 7.56, :anim "talk", :start 6.34}]}
@@ -8544,7 +8380,7 @@
     :word-image-1 "/raw/img/elements/lemon.png",
     :word-image-2 "/raw/img/elements/moon.png",
     :word-image-3 "/raw/img/elements/pencil.png",
-    :word-image-4 "/raw/img/elements/milk.png"}}
+    :word-image-4 "/raw/img/elements/lupa.png"}}
   {:name "llave",
    :data
    {:book-content-action
@@ -8634,17 +8470,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "llave",
-       :data [{:end 46.99, :anim "talk", :start 46.64}]}
-      {:offset 87.348,
-       :phrase-text "llave",
-       :start 87.348,
-       :type "animation-sequence",
-       :duration 0.667,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "llave",
-       :data
-       [{:end 87.828, :anim "talk", :start 87.442, :duration 0.386}]}],
+       :data [{:end 46.99, :anim "talk", :start 46.64}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -8853,13 +8679,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.16,
+       :phrase-text
+       "Esta gallina tiene una llave, donde la puso ella no sabe",
        :start 0.16,
        :type "animation-sequence",
        :duration 6.012,
        :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
        :target "rock",
-       :phrase-text
-       "Esta gallina tiene una llave, donde la puso ella no sabe",
        :track 1,
        :data
        [{:end 2.8, :anim "talk", :start 0.35}
@@ -8867,13 +8693,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 6.159,
+       :phrase-text
+       "Busca que busca en el gallinero\nSi pierde la llave, sería muy grave",
        :start 6.159,
        :type "animation-sequence",
        :duration 7.492,
        :audio "/raw/audio/l2/a3/poems-pro/llave.mp3",
        :target "rock",
-       :phrase-text
-       "Busca que busca en el gallinero\nSi pierde la llave, sería muy grave",
        :track 1,
        :data
        [{:end 7.95, :anim "talk", :start 6.21}
@@ -9131,16 +8957,7 @@
      :scene-id "home"},
     :home-group-word-action
     {:data
-     [{:offset 6.16,
-       :phrase-text "mano",
-       :start 6.16,
-       :type "animation-sequence",
-       :duration 0.667,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "mano",
-       :data [{:end 6.76, :anim "talk", :start 6.24, :duration 0.52}]}
-      {:offset 1.187,
+     [{:offset 1.187,
        :phrase-text "mano",
        :start 1.187,
        :type "animation-sequence",
@@ -9292,10 +9109,10 @@
      :track 1,
      :data [{:end 10, :anim "talk", :start 8.28}]},
     :letter-path
-    "M71.86,75v75M71.85,91.79C79.19,80,93.46,76.45,101.17,78.27c11.89,2.8,19.93,12.51,19.93,23.27V150M119.85,91.79c7.34-11.77,21.61-15.34,29.32-13.52,11.89,2.8,19.93,12.51,19.93,23.27V150",
+    "M71.86,75v75M71.85,91.79C79.19,80,93.46,76.45,101.17,78.27c11.89,2.8,19.93,12.51,19.93,23.27V150M119.85,91.79c7.34,-11.77,21.61,-15.34,29.32,-13.52c11.89,2.8,19.93,12.51,19.93,23.27V150",
     :letter-src "/raw/img/letters/m.png",
     :letter-tutorial-path
-    "M14.42,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.48-11.89C6.32.29,2.85,3.57.5,5.92\"/><path class=\"cls-1\" d=\"M28.43,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.49-11.89-3.65-.32-7.12,3-9.46,5.31",
+    "M14.42,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.48-11.89C6.32.29,2.85,3.57.5,5.92M28.43,22.17c0-3.22,0-6.45,0-9.67,0-3.77,1-11.41-4.49-11.89-3.65-.32-7.12,3-9.46,5.31",
     :mari-chant
     {:offset 26.185,
      :scene-id "magic-hat",
@@ -9355,13 +9172,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.56,
+       :phrase-text
+       "Tengo cinco dedos en mi mano,\nY con ellos toco el piano,",
        :start 0.56,
        :type "animation-sequence",
        :duration 6.134,
        :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
        :target "rock",
-       :phrase-text
-       "Tengo cinco dedos en mi mano,\nY con ellos toco el piano,",
        :track 1,
        :data
        [{:end 3.12, :anim "talk", :start 0.74}
@@ -9369,13 +9186,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 6.975,
+       :phrase-text
+       "También nado en el océano.\nComo Mario mi hermano.",
        :start 6.975,
        :type "animation-sequence",
        :duration 5.666,
        :audio "/raw/audio/l2/a3/poems-pro/mano.mp3",
        :target "rock",
-       :phrase-text
-       "También nado en el océano.\nComo Mario mi hermano.",
        :track 1,
        :data
        [{:end 9.72, :anim "talk", :start 7.06}
@@ -9659,17 +9476,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "niño",
-       :data [{:end 23.74, :anim "talk", :start 23.03}]}
-      {:offset 45.894,
-       :phrase-text "niño",
-       :start 45.894,
-       :type "animation-sequence",
-       :duration 0.68,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "niño",
-       :data
-       [{:end 46.374, :anim "talk", :start 46.041, :duration 0.333}]}],
+       :data [{:end 23.74, :anim "talk", :start 23.03}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -9736,7 +9543,7 @@
      :phrase-text-translated "niño",
      :data
      [{:end 46.481, :anim "talk", :start 46.001, :duration 0.48}]},
-    :image-src "/raw/img/elements/baby.png",
+    :image-src "/raw/img/elements/nino.png",
     :letter "n",
     :letter-big "N",
     :letter-intro-letter
@@ -9874,13 +9681,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 1.96,
+       :phrase-text
+       "Cuando era niño jugaba a saltar la cuerda\nAhora extraño ser pequeño",
        :start 1.96,
        :type "animation-sequence",
        :duration 7.104,
        :audio "/raw/audio/l2/a3/poems-pro/nino.mp3",
        :target "rock",
-       :phrase-text
-       "Cuando era niño jugaba a saltar la cuerda\nAhora extraño ser pequeño",
        :track 1,
        :data
        [{:end 5.68, :anim "talk", :start 2.05}
@@ -10180,17 +9987,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "oso!",
-       :data [{:end 6.82, :anim "talk", :start 6.38}]}
-      {:offset 16.428,
-       :phrase-text "oso!",
-       :start 16.428,
-       :type "animation-sequence",
-       :duration 1.307,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "oso!",
-       :data
-       [{:end 17.495, :anim "talk", :start 16.668, :duration 0.827}]}],
+       :data [{:end 6.82, :anim "talk", :start 6.38}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times "vaca-3-times-oso",
@@ -10404,25 +10201,23 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.227,
+       :phrase-text "Había una vez un oso,\nQue era muy cariñoso.",
        :start 0.227,
        :type "animation-sequence",
        :duration 5.067,
        :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :phrase-text
-       "Había una vez un oso,\nQue era muy cariñoso.",
        :track 1,
        :data [{:end 5.41, :anim "talk", :start 0.44}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 5.266,
+       :phrase-text "Un día se cayó a un pozo\nY eso fue muy doloroso",
        :start 5.266,
        :type "animation-sequence",
        :duration 6.079,
        :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :phrase-text
-       "Un día se cayó a un pozo\nY eso fue muy doloroso",
        :track 1,
        :data
        [{:end 8.2, :anim "talk", :start 5.41}
@@ -10430,13 +10225,12 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 11.298,
+       :phrase-text "Seguramente ese oso\nera muy perezoso O O O",
        :start 11.298,
        :type "animation-sequence",
        :duration 6.579,
        :audio "/raw/audio/l2/a3/poems-pro/oso 2.mp3",
        :target "rock",
-       :phrase-text
-       "Seguramente ese oso\nera muy perezoso O O O",
        :track 1,
        :data [{:end 17.74, :anim "talk", :start 11.52}]}
       {:id "poem-pause", :type "action"}],
@@ -10780,17 +10574,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "pelota",
-       :data [{:end 9.47, :anim "talk", :start 8.81}]}
-      {:offset 20.066,
-       :phrase-text "pelota",
-       :start 20.066,
-       :type "animation-sequence",
-       :duration 0.68,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "pelota",
-       :data
-       [{:end 20.613, :anim "talk", :start 20.173, :duration 0.44}]}],
+       :data [{:end 9.47, :anim "talk", :start 8.81}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -11004,13 +10788,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.786,
+       :phrase-text
+       "Juego mucho a la pelota,\nY más cuando es grandota,",
        :start 0.786,
        :type "animation-sequence",
        :duration 5.173,
        :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
        :target "rock",
-       :phrase-text
-       "Juego mucho a la pelota,\nY más cuando es grandota,",
        :track 1,
        :data
        [{:end 2.97, :anim "talk", :start 0.86}
@@ -11018,13 +10802,12 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 6.04,
+       :phrase-text "Me gusta cuando rebota\nAunque a veces  me agota",
        :start 6.04,
        :type "animation-sequence",
        :duration 5.039,
        :audio "/raw/audio/l2/a3/poems-pro/pelota.mp3",
        :target "rock",
-       :phrase-text
-       "Me gusta cuando rebota\nAunque a veces  me agota",
        :track 1,
        :data
        [{:end 8.21, :anim "talk", :start 6.15}
@@ -11214,7 +10997,7 @@
     :word-2-skin "duck",
     :word-3-skin "potatoes",
     :word-4-skin "fish",
-    :word-image-1 "/raw/img/elements/factory.png",
+    :word-image-1 "/raw/img/elements/flower.png",
     :word-image-2 "/raw/img/elements/duck.png",
     :word-image-3 "/raw/img/elements/potatoes.png",
     :word-image-4 "/raw/img/elements/fish.png"}}
@@ -11306,20 +11089,10 @@
        :start 51.104,
        :type "animation-sequence",
        :duration 0.907,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
+       :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "queso",
-       :data [{:end 51.88, :anim "talk", :start 51.23}]}
-      {:offset 95.399,
-       :phrase-text "queso",
-       :start 95.399,
-       :type "animation-sequence",
-       :duration 0.547,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "queso",
-       :data
-       [{:end 95.786, :anim "talk", :start 95.519, :duration 0.267}]}],
+       :data [{:end 51.88, :anim "talk", :start 51.23}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -11367,13 +11140,13 @@
      :phrase-text "Este es un queso.",
      :start 90.479,
      :type "animation-sequence",
-     :duration 2.307,
+     :duration 2.427,
      :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
      :target "senoravaca",
      :phrase-text-translated "Este es un queso.",
      :data
-     [{:end 91.119, :anim "talk", :start 90.546, :duration 0.573}
-      {:end 92.612, :anim "talk", :start 91.519, :duration 1.093}]},
+     [{:end 92.19, :anim "talk", :start 90.51}
+      {:end 92.75, :anim "talk", :start 92.33}]},
     :home-vaca-word-action
     {:offset 95.372,
      :scene-id "home",
@@ -11544,13 +11317,12 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 2.836,
+       :phrase-text "Para mi es delicioso,\nNo importa qué tipo sea",
        :start 2.836,
        :type "animation-sequence",
        :duration 4.839,
        :audio "/raw/audio/l2/a3/poems-pro/queso.mp3",
        :target "rock",
-       :phrase-text
-       "Para mi es delicioso,\nNo importa qué tipo sea",
        :track 1,
        :data
        [{:end 4.96, :anim "talk", :start 2.91}
@@ -11810,17 +11582,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "rana",
-       :data [{:end 15.96, :anim "talk", :start 15.25}]}
-      {:offset 32.387,
-       :phrase-text "rana",
-       :start 32.387,
-       :type "animation-sequence",
-       :duration 0.694,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "rana",
-       :data
-       [{:end 32.921, :anim "talk", :start 32.494, :duration 0.427}]}],
+       :data [{:end 15.96, :anim "talk", :start 15.25}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -12035,13 +11797,12 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.533,
+       :phrase-text "A Susana la rana,\nle gusta comer manzanas",
        :start 0.533,
        :type "animation-sequence",
        :duration 4.36,
        :audio "/raw/audio/l2/a3/poems-pro/rana.mp3",
        :target "rock",
-       :phrase-text
-       "A Susana la rana,\nle gusta comer manzanas",
        :track 1,
        :data [{:end 4.63, :anim "talk", :start 0.78}]}
       {:id "poem-pause", :type "action"}
@@ -12334,17 +12095,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "Serpiente!",
-       :data [{:end 26.14, :anim "talk", :start 24.85}]}
-      {:offset 18.839,
-       :phrase-text "Serpiente!",
-       :start 18.839,
-       :type "animation-sequence",
-       :duration 0.947,
-       :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
-       :target "senoravaca",
-       :phrase-text-translated "Serpiente!",
-       :data
-       [{:end 19.679, :anim "talk", :start 18.946, :duration 0.733}]}],
+       :data [{:end 26.14, :anim "talk", :start 24.85}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -12490,7 +12241,7 @@
      :track 1,
      :data [{:end 24.85, :anim "talk", :start 22.61}]},
     :letter-path
-    "M131.91,90.75c1.33-9.39-10.49-14.17-18.28-14.39A21.71,21.71,0,0,0,97.69,82.7a16.08,16.08,0,0,0-3.89,16c1.65,5.12,6.13,8.58,10.93,10.57,6.67,2.77,13.9,4,20.26,7.62,7,3.94,10.77,12.34,8,20.14-5.06,14.06-27.62,17.67-37.73,5.77a18.91,18.91,0,0,1-4.11-10.2",
+    "M131.91,90.75c1.33-9.39-10.49-14.17-18.28-14.39A21.71,21.71,0,0,0,97.69,82.7a16.08,16.08,0,0,0-3.89,16c1.65,5.12,6.13,8.58,10.93,10.57c6.67,2.77,13.9,4,20.26,7.62c7,3.94,10.77,12.34,8,20.14c-5.06,14.06-27.62,17.67-37.73,5.77a18.91,18.91,0,0,1-4.11-10.2",
     :letter-src "/raw/img/letters/s.png",
     :letter-tutorial-path
     "M13.51,4.75A10.2,10.2,0,0,0,6.8.52C3.77.23.48,2.84,1.21,6.08A6,6,0,0,0,3.35,9.31c1.8,1.5,4.15,2.2,6.14,3.41C12,14.24,13.83,17.06,12.33,20A5.76,5.76,0,0,1,8,22.89c-3.91.52-5.83-2.35-7.58-5.31",
@@ -12558,13 +12309,12 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.36,
+       :phrase-text "A la serpiente  Vicente\nun día por accidente",
        :start 0.36,
        :type "animation-sequence",
        :duration 5.385,
        :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :phrase-text
-       "A la serpiente  Vicente\nun día por accidente",
        :track 1,
        :data
        [{:end 2.53, :anim "talk", :start 0.61}
@@ -12572,13 +12322,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 5.919,
+       :phrase-text
+       "se le cayó un diente\ncuando mordió algo crujiente",
        :start 5.919,
        :type "animation-sequence",
        :duration 5.265,
        :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :phrase-text
-       "se le cayó un diente\ncuando mordió algo crujiente",
        :track 1,
        :data
        [{:end 7.95, :anim "talk", :start 6.09}
@@ -12586,13 +12336,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 11.317,
+       :phrase-text
+       "Pero siempre muy sonriente,\nestá Vicente  la S S S serpiente",
        :start 11.317,
        :type "animation-sequence",
        :duration 8.092,
        :audio "/raw/audio/l2/a3/poems-pro/serpiente.mp3",
        :target "rock",
-       :phrase-text
-       "Pero siempre muy sonriente,\nestá Vicente  la S S S serpiente",
        :track 1,
        :data
        [{:end 13.93, :anim "talk", :start 11.58}
@@ -12833,17 +12583,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "Tomate!",
-       :data [{:end 33.55, :anim "talk", :start 32.95}]}
-      {:offset 28.758,
-       :phrase-text "Tomate!",
-       :start 28.758,
-       :type "animation-sequence",
-       :duration 0.654,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "Tomate!",
-       :data
-       [{:end 29.265, :anim "talk", :start 28.878, :duration 0.387}]}],
+       :data [{:end 33.55, :anim "talk", :start 32.95}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -13058,13 +12798,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.026,
+       :phrase-text
+       "Me gusta mucho comer tomate,\nY también el aguacate.",
        :start 0.026,
        :type "animation-sequence",
        :duration 5.225,
        :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
        :target "rock",
-       :phrase-text
-       "Me gusta mucho comer tomate,\nY también el aguacate.",
        :track 1,
        :data
        [{:end 2.66, :anim "talk", :start 0.16}
@@ -13073,15 +12813,13 @@
       {:id "run-bubble-2", :type "action"}
       {:offset 6.678,
        :phrase-text "Por supuesto el chocolate",
-       :start 6.678,
+       :start 5.497,
        :type "animation-sequence",
        :duration 3.293,
        :audio "/raw/audio/l2/a3/poems-pro/tomate.mp3",
        :target "rock",
        :track 1,
-       :data
-       [{:end 8.33, :anim "talk", :start 6.95}
-        {:end 10.38, :anim "talk", :start 9.19}]}
+       :data [{:end 8.33, :anim "talk", :start 5.86}]}
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 9.069,
@@ -13367,17 +13105,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
        :target "vera",
        :phrase-text-translated "Uvas!",
-       :data [{:end 19.25, :anim "talk", :start 18.62}]}
-      {:offset 5.6,
-       :phrase-text "Uvas!",
-       :start 5.6,
-       :type "animation-sequence",
-       :duration 0.733,
-       :audio "/raw/audio/l1/a1/vera-casa-1.mp3",
-       :target "senoravaca",
-       :phrase-text-translated "Uvas!",
-       :data
-       [{:end 6.28, :anim "talk", :start 5.64, :duration 0.64}]}],
+       :data [{:end 19.25, :anim "talk", :start 18.62}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -13776,9 +13504,10 @@
      :audio "/raw/audio/l2/a1/L2_A1_Vaca_2.m4a",
      :target "senoravaca",
      :track 1,
-     :data [{:end 76.906, :anim "talk", :start 75.922}
-            {:end 78.039, :anim "talk", :start 77.145}
-            {:end 79.56, :anim "talk", :start 78.308}]},
+     :data
+     [{:end 76.906, :anim "talk", :start 75.922}
+      {:end 78.039, :anim "talk", :start 77.145}
+      {:end 79.56, :anim "talk", :start 78.308}]},
     :vaca-chanting-word
     {:offset 75.803,
      :phrase-text "Uvas",
@@ -13887,17 +13616,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-2.mp3",
        :target "vera",
        :phrase-text-translated "violín",
-       :data [{:end 44.57, :anim "talk", :start 43.51}]}
-      {:offset 82.173,
-       :phrase-text "violín",
-       :start 82.173,
-       :type "animation-sequence",
-       :duration 0.866,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "violín",
-       :data
-       [{:end 82.866, :anim "talk", :start 82.319, :duration 0.547}]}],
+       :data [{:end 44.57, :anim "talk", :start 43.51}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -14120,13 +13839,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 3.361,
+       :phrase-text
+       "Me gusta tocar el violín\ncomo mi amigo Valentín.",
        :start 3.361,
        :type "animation-sequence",
        :duration 5.68,
        :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
        :target "rock",
-       :phrase-text
-       "Me gusta tocar el violín\ncomo mi amigo Valentín.",
        :track 1,
        :data
        [{:end 5.67, :anim "talk", :start 3.48}
@@ -14134,13 +13853,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 9.366,
+       :phrase-text
+       "Cuando sea grande seré bailarín\nY daré conciertos de violín.",
        :start 9.366,
        :type "animation-sequence",
        :duration 6.826,
        :audio "/raw/audio/l2/a3/poems-pro/violin.mp3",
        :target "rock",
-       :phrase-text
-       "Cuando sea grande seré bailarín\nY daré conciertos de violín.",
        :track 1,
        :data
        [{:end 12.61, :anim "talk", :start 9.5}
@@ -14297,7 +14016,7 @@
     :word-image-1 "/raw/img/elements/cow.png",
     :word-image-2 "/raw/img/elements/baby_cow.png",
     :word-image-3 "/raw/img/elements/window.png",
-    :word-image-4 "/raw/img/elements/green.png"}}
+    :word-image-4 "/raw/img/elements/summer.png"}}
   {:name "web",
    :data
    {:book-content-action
@@ -14393,20 +14112,7 @@
        :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
        :target "vera",
        :phrase-text-translated "Sitio web",
-       :data [{:end 59.62, :anim "talk", :start 58.38}]}
-      {:offset 109.546,
-       :phrase-text "Sitio web",
-       :start 109.546,
-       :type "animation-sequence",
-       :duration 0.88,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "Sitio web",
-       :data
-       [{:end 110.266,
-         :anim "talk",
-         :start 109.626,
-         :duration 0.64}]}],
+       :data [{:end 59.62, :anim "talk", :start 58.38}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -14622,13 +14328,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.613,
+       :phrase-text
+       "El maestro Walter nos enseña\nMucho sobre Internet",
        :start 0.613,
        :type "animation-sequence",
        :duration 5.956,
        :audio "/raw/audio/l2/a3/poems-pro/web.mp3",
        :target "rock",
-       :phrase-text
-       "El maestro Walter nos enseña\nMucho sobre Internet",
        :track 1,
        :data
        [{:end 3.61, :anim "talk", :start 0.71}
@@ -14936,20 +14642,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "xilófono",
-       :data [{:end 69.76, :anim "talk", :start 68.59}]}
-      {:offset 127.069,
-       :phrase-text "xilófono",
-       :start 127.069,
-       :type "animation-sequence",
-       :duration 0.813,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "xilófono",
-       :data
-       [{:end 127.829,
-         :anim "talk",
-         :start 127.136,
-         :duration 0.693}]}],
+       :data [{:end 69.76, :anim "talk", :start 68.59}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -15186,13 +14879,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 7.33,
+       :phrase-text
+       "Y aunque los dos terminan en “ófono”\nLa música es del xilófono",
        :start 7.33,
        :type "animation-sequence",
        :duration 7.076,
        :audio "/raw/audio/l2/a3/poems-pro/xilofono.mp3",
        :target "rock",
-       :phrase-text
-       "Y aunque los dos terminan en “ófono”\nLa música es del xilófono",
        :track 1,
        :data
        [{:end 10.9, :anim "talk", :start 7.53}
@@ -15207,6 +14900,28 @@
      :duration 11.404,
      :scene-id "slide",
      :phrase-text "Riddle"},
+    :sandbox-long-letter-action
+    {:data
+     [{:end 66.423, :anim "talk", :start 66.263, :duration 0.16}
+      {:end 66.81, :anim "talk", :start 66.65, :duration 0.16}
+      {:end 67.276, :anim "talk", :start 67.116, :duration 0.16}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 66.103,
+     :offset 66.103,
+     :target "mari",
+     :duration 1.4,
+     :scene-id "sandbox"},
+    :sandbox-short-letter-action
+    {:data
+     [{:end 64.463, :anim "talk", :start 63.783, :duration 0.68}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a",
+     :start 63.676,
+     :offset 63.676,
+     :target "mari",
+     :duration 0.92,
+     :scene-id "sandbox"},
     :sandbox-state-word-1-action
     {:id "/raw/audio/l1/a4/game-voice-set-3.mp3",
      :type "audio",
@@ -15447,20 +15162,7 @@
        :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "yoyo",
-       :data [{:end 62.29, :anim "talk", :start 61.59}]}
-      {:offset 114.149,
-       :phrase-text "yoyo",
-       :start 114.149,
-       :type "animation-sequence",
-       :duration 0.6,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "yoyo",
-       :data
-       [{:end 114.642,
-         :anim "talk",
-         :start 114.229,
-         :duration 0.413}]}],
+       :data [{:end 62.29, :anim "talk", :start 61.59}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -15673,13 +15375,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.601,
+       :phrase-text
+       "Para mi cumpleaños en mayo,\nmi hermano me regaló un yoyo,",
        :start 0.601,
        :type "animation-sequence",
        :duration 6.055,
        :audio "/raw/audio/l2/a3/poems-pro/yoyo.mp3",
        :target "rock",
-       :phrase-text
-       "Para mi cumpleaños en mayo,\nmi hermano me regaló un yoyo,",
        :track 1,
        :data
        [{:end 2.69, :anim "talk", :start 0.77}
@@ -15955,23 +15657,10 @@
        :start 53.228,
        :type "animation-sequence",
        :duration 1.267,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
+       :audio "/raw/audio/l1/a1/vera-casa-3.mp3",
        :target "vera",
        :phrase-text-translated "zapato",
-       :data [{:end 54.41, :anim "talk", :start 53.35}]}
-      {:offset 101.015,
-       :phrase-text "zapato",
-       :start 101.015,
-       :type "animation-sequence",
-       :duration 0.92,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "zapato",
-       :data
-       [{:end 101.775,
-         :anim "talk",
-         :start 101.095,
-         :duration 0.68}]}],
+       :data [{:end 54.41, :anim "talk", :start 53.35}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -16038,7 +15727,7 @@
      :phrase-text-translated "zapato",
      :data
      [{:end 101.762, :anim "talk", :start 101.069, :duration 0.693}]},
-    :image-src "/raw/img/elements/boots.png",
+    :image-src "/raw/img/elements/boot.png",
     :letter "z",
     :letter-big "Z",
     :letter-intro-letter
@@ -16187,13 +15876,13 @@
     {:data
      [{:id "run-bubble-1", :type "action"}
       {:offset 0.533,
+       :phrase-text
+       "Mi amigo Renato es un pato,\nQue usa sólo un zapato",
        :start 0.533,
        :type "animation-sequence",
        :duration 6.415,
        :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
        :target "rock",
-       :phrase-text
-       "Mi amigo Renato es un pato,\nQue usa sólo un zapato",
        :track 1,
        :data
        [{:end 3.39, :anim "talk", :start 0.7}
@@ -16201,13 +15890,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 7.081,
+       :phrase-text
+       "Cuando fue a comprar un plato\nSe divirtió mucho el pato",
        :start 7.081,
        :type "animation-sequence",
        :duration 5.868,
        :audio "/raw/audio/l2/a3/poems-pro/zapato.mp3",
        :target "rock",
-       :phrase-text
-       "Cuando fue a comprar un plato\nSe divirtió mucho el pato",
        :track 1,
        :data
        [{:end 9.62, :anim "talk", :start 7.22}
@@ -16435,7 +16124,7 @@
      :start 0.055,
      :duration 7.761,
      :scene-id "book"},
-    :chanting-video-src "/raw/video/l2a1/letter-ñ.mp4",
+    :chanting-video-src "/raw/video/l2a1/letter-n.mp4",
     :concept-name "ñandu",
     :concept-rest "andu",
     :game-voice-action
@@ -16496,17 +16185,7 @@
        :target "vera",
        :phrase-text-translated "ñandu",
        :data
-       [{:end 36.481, :anim "talk", :start 35.974, :duration 0.507}]}
-      {:offset 82.662,
-       :phrase-text "ñandu",
-       :start 82.662,
-       :type "animation-sequence",
-       :duration 0.973,
-       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a",
-       :target "senoravaca",
-       :phrase-text-translated "ñandu",
-       :data
-       [{:end 83.395, :anim "talk", :start 82.769, :duration 0.626}]}],
+       [{:end 36.481, :anim "talk", :start 35.974, :duration 0.507}]}],
      :type "parallel",
      :scene-id "home"},
     :home-vaca-3-times-action
@@ -16650,7 +16329,7 @@
      :track 1,
      :data [{:end 10.54, :anim "talk", :start 8.68}]},
     :letter-path
-    "M82,74.83v75M82,92a32.36,32.36,0,0,1,60.9,15.23v42.65M86,48.06s4.12-11.83,13.63-7.88c3.71,1.54,7.49,2.94,11.29,4.27,10.27,3.6,22.52,2.17,28-8.67",
+    "M82,74.83v75M82,92a32.36,32.36,0,0,1,60.9,15.23v42.65M86,48.06s4.12-11.83,13.63-7.88c3.71,1.54,7.49,2.94,11.29,4.27c10.27,3.6,22.52,2.17,28-8.67",
     :letter-src "/raw/img/letters/ñ.png",
     :letter-tutorial-path
     "M116.3,132.5V215.5M183.7,215.5V167.5A33.7,33.7,0,0,0,150,133.8H150A33.7,33.7,0,0,0,116.3,167.5",
@@ -16731,13 +16410,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-2", :type "action"}
       {:offset 4.64,
+       :phrase-text
+       "Aprendí que es parecido al avestruz,\nEs una ave que no puede volar",
        :start 4.64,
        :type "animation-sequence",
        :duration 6.774,
        :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
        :target "rock",
-       :phrase-text
-       "Aprendí que es parecido al avestruz,\nEs una ave que no puede volar",
        :track 1,
        :data
        [{:end 8.14, :anim "talk", :start 4.71}
@@ -16745,13 +16424,13 @@
       {:id "poem-pause", :type "action"}
       {:id "run-bubble-3", :type "action"}
       {:offset 11.7,
+       :phrase-text
+       "pero si es capaz de correr y nadar. \nTiene dos patas con tres dedos.",
        :start 11.7,
        :type "animation-sequence",
        :duration 7.962,
        :audio "/raw/audio/l2/a3/poems-pro/nandu.mp3",
        :target "rock",
-       :phrase-text
-       "pero si es capaz de correr y nadar. \nTiene dos patas con tres dedos.",
        :track 1,
        :data
        [{:end 13.29, :anim "talk", :start 11.82}

@@ -216,7 +216,7 @@
                               :name   "vera",
                               :speed  0.3,
                               :start  true}},
- :scene-objects [["background"] ["swings"] ["tree-image"] ["vera" "mari" "rock"] ["box1" "box2" "box3"]],
+ :scene-objects [["background"] ["swings" "tree-image" "vera" "mari" "rock" "box1" "box2" "box3"]],
  :actions
                 {:audio-wrong             {:type "audio", :id "fw-try-again", :start 0.892, :duration 1.869, :offset 0.2},
                  :box-1-revert            {:type "transition", :to {:x 500, :y 550, :duration 2}, :transition-id "box1"},

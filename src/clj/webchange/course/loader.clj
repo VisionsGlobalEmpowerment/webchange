@@ -7,6 +7,7 @@
             [mount.core :as mount]
             [clojure.edn :as edn]
             [clojure.java.io :as io]
+            [config.core :refer [env]]
             [clojure.string :refer [join]]
             [camel-snake-kebab.core :refer [->snake_case_string]]))
 
@@ -172,6 +173,15 @@
    "load-course"
    (fn [config args]
      (apply load-course config args))
+
+   "update-character-skins"
+   (fn [config args]
+     (apply core/update-character-skins config args))
+
+   "update-editor-assets"
+   (fn [config args]
+     (let [config (merge env config)]
+      (apply core/update-editor-assets config args)))
 
    "save-scene"
    (fn [config args]

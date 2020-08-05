@@ -29,6 +29,7 @@
 (conman/bind-connection *db*
                         "sql/queries.sql" "sql/dataset.sql" "sql/class.sql"
                         "sql/progress.sql" "sql/assets.sql" "sql/secondary.sql"
+                        "sql/editor.sql"
                         )
 
 #_(def conn (conman/connect! {:jdbc-url (get (System/getenv) "DATABASE_URL")}))

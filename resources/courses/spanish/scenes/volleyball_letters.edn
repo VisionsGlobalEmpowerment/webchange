@@ -224,9 +224,8 @@
    :start true}},
  :scene-objects
  [["background"]
-  ["vera" "boy1" "girl2" "girl3"]
-  ["box1" "letter1" "box2" "letter2" "box3" "letter3" "box4" "letter4"]
-  ["display" "mari" "ball"]],
+  ["vera" "boy1" "girl2" "girl3" "box1" "letter1" "box2" "letter2" "box3" "letter3" "box4" "letter4" "display" ]
+  ["mari" "ball"]],
  :actions
  {:animate-catch-player1
   {:type "sequence-data",

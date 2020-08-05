@@ -110,7 +110,7 @@
 
 (defn load-base-asset
   ([asset]
-    (load-base-asset asset nil))
+   (load-base-asset asset nil))
   ([asset progress]
    (when (:url asset)
      (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
@@ -123,26 +123,26 @@
    (let [progress (atom 0)]
      (load-asset asset progress)))
   ([asset progress]
-    (case (-> asset :type keyword)
-    :anim-text (anim/load-anim-text asset progress)
-    :anim-texture (anim/load-anim-texture asset progress)
-    (load-base-asset asset progress))))
+   (case (-> asset :type keyword)
+     :anim-text (anim/load-anim-text asset progress)
+     :anim-texture (anim/load-anim-texture asset progress)
+     (load-base-asset asset progress))))
 
 (defn load-assets
   ([assets]
-    (load-assets assets #() #()))
+   (load-assets assets #() #()))
   ([assets on-asset-progress on-asset-complete]
-    (let [total (get-total-size assets)
-          current-progress (atom 0)]
-      (add-watch current-progress :inc
-                 (fn [_ _ _ n]
-                   (on-asset-progress (Math/round (* n (/ 100 total))))
-                   (if (>= n total)
-                     (on-asset-complete))))
-      (if (> total 0)
-        (doseq [asset assets]
-          (load-asset asset current-progress))
-        (on-asset-complete)))))
+   (let [total (get-total-size assets)
+         current-progress (atom 0)]
+     (add-watch current-progress :inc
+                (fn [_ _ _ n]
+                  (on-asset-progress (Math/round (* n (/ 100 total))))
+                  (if (>= n total)
+                    (on-asset-complete))))
+     (if (> total 0)
+       (doseq [asset assets]
+         (load-asset asset current-progress))
+       (on-asset-complete)))))
 
 (defn load-course
   [{:keys [course-id load-assets?]} cb]
@@ -292,10 +292,10 @@
 
 (defn animation-sequence->audio-action [{:keys [start duration audio] :as action}]
   (if audio
-    {:type "audio"
-    :id audio
-    :start start
-    :duration duration}))
+    {:type     "audio"
+     :id       audio
+     :start    start
+     :duration duration}))
 
 (defn chunk-transition-name [name index]
   (if index (str "chunk-" name "-" index)))

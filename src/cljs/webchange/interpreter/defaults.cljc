@@ -33,10 +33,18 @@
                      {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/senoravaca/skeleton.png", :size 1, :type "anim-texture"}
                      {:url "/raw/anim/senoravaca/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton5.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/senoravaca/skeleton6.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/vera/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton3.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton4.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/vera/skeleton5.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/vera-45/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/vera-45/skeleton.json", :size 1, :type "anim-text"}
@@ -63,6 +71,8 @@
                      {:url "/raw/anim/mari/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/mari/skeleton.json", :size 1, :type "anim-text"}
                      {:url "/raw/anim/mari/skeleton.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/mari/skeleton2.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/anim/mari/skeleton3.png", :size 1, :type "anim-texture"}
 
                      {:url "/raw/anim/boxes/skeleton.atlas", :size 1, :type "anim-text"}
                      {:url "/raw/anim/boxes/skeleton.json", :size 1, :type "anim-text"}
@@ -99,6 +109,7 @@
                      {:url "/raw/img/elements/bicycle.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/black.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/boat.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/img/elements/boot.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/boots.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/boy.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/broccoli.png", :size 1, :type "anim-texture"}
@@ -135,9 +146,11 @@
                      {:url "/raw/img/elements/factory.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/fifteen.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/finger.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/img/elements/fingernail.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/fire.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/fish.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/five.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/img/elements/fifth.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/flamingo.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/flower.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/flute.png", :size 1, :type "anim-texture"}
@@ -156,6 +169,7 @@
                      {:url "/raw/img/elements/green.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/guitar.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/hand.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/img/elements/hair_brush.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/hippopotamus.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/home.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/ice cream.png", :size 1, :type "anim-texture"}
@@ -181,6 +195,7 @@
                      {:url "/raw/img/elements/lemon.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/lion.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/loupe.png", :size 1, :type "anim-texture"}
+                     {:url "/raw/img/elements/lupa.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/magnet.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/mama.png", :size 1, :type "anim-texture"}
                      {:url "/raw/img/elements/mexico.png", :size 1, :type "anim-texture"}

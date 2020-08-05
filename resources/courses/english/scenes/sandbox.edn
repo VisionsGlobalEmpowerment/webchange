@@ -1,385 +1,497 @@
-{:assets        [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio" :alias "mari voice" :target "mari"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a", :size 5, :type "audio" :alias "game voice 1" :target "game-voice"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a", :size 5, :type "audio" :alias "game voice 2" :target "game-voice"}
-                 {:url "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a", :size 5, :type "audio" :alias "game voice 3" :target "game-voice"}
-
-                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio" :alias "letter 1" :target "mari"}
-                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio" :alias "letter 2" :target "mari"}
-                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio" :alias "letter 3" :target "mari"}
-
-                 {:url "/raw/img/park/sandbox/background.jpg", :size 10 :type "image"}
-                 {:url "/raw/img/casa/painting_canvas.png" :type "image"}],
- :objects       {:background {:type "background", :src "/raw/img/park/sandbox/background.jpg"},
-
-                 :mari       {:type    "animation" :scene-name "mari" :name "mari" :anim "idle"
-                              :start   true :speed 0.35
-                              :x       1535 :y 715 :width 473 :height 511
-                              :scale-y 0.5 :scale-x 0.5}
-
-                 :canvas     {:type    "image"
-                              :src     "/raw/img/casa/painting_canvas.png"
-                              :x       1120
-                              :y       500
-                              :width   287
-                              :height  430
-                              :scale-x 1
-                              :scale-y 1}
-
-                 :word       {:type   "transparent" :x 313 :y 91 :width 1200 :height 400
-                              :states {:default {:type "transparent"}
-                                       :show    {:type         "text" :width 1200 :height 400
-                                                 :align        "center" :vertical-align "middle"
-                                                 :font-family  "Luckiest Guy" :font-size 160
-                                                 :shadow-color "#1a1a1a" :shadow-offset {:x 5 :y 5} :shadow-blur 5 :shadow-opacity 0.5
-                                                 :fill         "white"}}}
-
-                 :letter     {:type           "text"
-                              :text           ""
-                              :x              1170
-                              :y              540
-                              :width          200
-                              :height         200
-                              :align          "center"
-                              :vertical-align "middle"
-                              :font-family    "Lexend Deca"
-                              :font-size      140
-                              :fill           "#ff8c41"}
-
-                 :box1       {:type       "animation" :x 304 :y 826 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
-                              :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
-                              :scene-name "box1" :transition "box1" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-1-start" :on "click"}}}
-
-                 :box2       {:type       "animation" :x 401 :y 696 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
-                              :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
-                              :scene-name "box2" :transition "box2" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-2-start" :on "click"}}}
-
-                 :box3       {:type       "animation" :x 600 :y 674 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
-                              :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
-                              :scene-name "box3" :transition "box3" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-3-start" :on "click"}}}
-
-                 :box4       {:type       "animation" :x 919 :y 741 :width 771 :height 1033 :anim-offset {:x 0 :y -300}
-                              :name       "boxes" :anim "idle2" :scale {:x 0.25 :y 0.25} :speed 0.3 :loop true :start false
-                              :scene-name "box4" :transition "box4" :skin "qwestion"
-                              :actions    {:click {:type "action" :id "box-4-start" :on "click"}}}
-
-                 },
+{:assets
+                [{:url "/raw/audio/l1/a4/game-voice-set-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
+                 {:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio", :alias "mari voice old"}
+                 {:url    "/upload/IECPRLHXWMIXTPRJ.m4a",
+                  :date   1588607760287,
+                  :size   256,
+                  :type   "audio",
+                  :alias  "Nora_letters",
+                  :target "box1"}
+                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio", :alias "letter 1"}
+                 {:url "/raw/audio/l1/a4/mari.mp4", :size 5, :type "audio", :alias "mari voice"}
+                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio", :alias "letter 3"}
+                 {:url "/raw/audio/l1/a4/game-voice-set-3.mp3", :size 5, :type "audio", :alias "game voice 3"}
+                 {:url "/raw/audio/l1/a4/game-voice-set-2.mp3", :size 5, :type "audio", :alias "game voice 2"}
+                 {:url "/upload/KGWIJCCTLZMRBTTF.m4a", :date 1588607901737, :size 559, :type "audio", :alias "Sounds", :target "mari"}
+                 {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_2.m4a", :size 5, :type "audio", :alias "letter 2"}
+                 {:url    "/upload/XHPBLDQDHUQAQHKG.m4a",
+                  :date   1587659562405,
+                  :size   241,
+                  :type   "audio",
+                  :alias  "Nora_English_L1_A4",
+                  :target "Mari"}
+                 {:url "/raw/img/park/sandbox/background.jpg", :size 10, :type "image"}
+                 {:url "/raw/img/casa/painting_canvas.png", :type "image"}
+                 {:url "/upload/FCVLFETNUDGJNRQO.m4a", :date 1590072613018, :size 899, :type "audio", :alias "Words", :target "Mari"}
+                 {:url    "/upload/AGZFHZOAGDSZPYKH.m4a",
+                  :date   1590072765679,
+                  :size   420,
+                  :type   "audio",
+                  :alias  "Words contd.",
+                  :target "Mari"}
+                 {:url "/upload/UMIXHXIXOYRVUCNK.mp3", :date 1590776704746, :size 127, :type "audio", :alias "Bethany a sounds"}
+                 {:url "/upload/ECULOLJMXEBTUNVI.mp3", :date 1591035714555, :size 116, :type "audio", :alias "Bethany s words"}
+                 {:url "/upload/LYZDLGYQRAJIXURU.mp3", :date 1591035731900, :size 109, :type "audio", :alias "Bethany m words"}
+                 {:url "/upload/XQRITEMJUPEDHBZJ.mp3", :date 1591035765405, :size 471, :type "audio", :alias "Bethany l-f words"}
+                 {:url "/upload/ZMSLEPEXBMAHESOW.mp3", :date 1591035835375, :size 778, :type "audio", :alias "Bethany ch-z words"}
+                 {:url "/upload/FWQWKZJFGUTRDYTN.mp3", :date 1591035867855, :size 963, :type "audio", :alias "Bethany u-ar words"}
+                 {:url "/upload/LUZNCBNWXEAHZEZI.mp3", :date 1591035880957, :size 169, :type "audio", :alias "Bethany r-d words"}
+                 {:url   "/upload/JGHZSFYTJGHLCZGK.mp3",
+                  :date  1591035901056,
+                  :size  155,
+                  :type  "audio",
+                  :alias "Bethany long e-t words"}],
+ :objects
+                {:background {:type "background", :src "/raw/img/park/sandbox/background.jpg"},
+                 :box1
+                             {:type        "animation",
+                              :x           304,
+                              :y           826,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.25, :y 0.25},
+                              :scene-name  "box1",
+                              :transition  "box1",
+                              :actions     {:click {:id "box-1-start", :on "click", :type "action", :unique-tag "box"}},
+                              :anim        "idle2",
+                              :anim-offset {:x 0, :y -300},
+                              :loop        true,
+                              :name        "boxes",
+                              :skin        "qwestion",
+                              :speed       0.3,
+                              :start       false},
+                 :box2
+                             {:type        "animation",
+                              :x           401,
+                              :y           696,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.25, :y 0.25},
+                              :scene-name  "box2",
+                              :transition  "box2",
+                              :actions     {:click {:id "box-2-start", :on "click", :type "action", :unique-tag "box"}},
+                              :anim        "idle2",
+                              :anim-offset {:x 0, :y -300},
+                              :loop        true,
+                              :name        "boxes",
+                              :skin        "qwestion",
+                              :speed       0.3,
+                              :start       false},
+                 :box3
+                             {:type        "animation",
+                              :x           600,
+                              :y           674,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.25, :y 0.25},
+                              :scene-name  "box3",
+                              :transition  "box3",
+                              :actions     {:click {:id "box-3-start", :on "click", :type "action", :unique-tag "box"}},
+                              :anim        "idle2",
+                              :anim-offset {:x 0, :y -300},
+                              :loop        true,
+                              :name        "boxes",
+                              :skin        "qwestion",
+                              :speed       0.3,
+                              :start       false},
+                 :box4
+                             {:type        "animation",
+                              :x           919,
+                              :y           741,
+                              :width       771,
+                              :height      1033,
+                              :scale       {:x 0.25, :y 0.25},
+                              :scene-name  "box4",
+                              :transition  "box4",
+                              :actions     {:click {:id "box-4-start", :on "click", :type "action", :unique-tag "box"}},
+                              :anim        "idle2",
+                              :anim-offset {:x 0, :y -300},
+                              :loop        true,
+                              :name        "boxes",
+                              :skin        "qwestion",
+                              :speed       0.3,
+                              :start       false},
+                 :canvas
+                             {:type    "image",
+                              :x       1120,
+                              :y       500,
+                              :width   287,
+                              :height  430,
+                              :scale-x 1,
+                              :scale-y 1,
+                              :src     "/raw/img/casa/painting_canvas.png"},
+                 :letter
+                             {:type           "text",
+                              :x              1170,
+                              :y              540,
+                              :width          200,
+                              :height         200,
+                              :align          "center",
+                              :fill           "#ff8c41",
+                              :font-family    "Lexend Deca",
+                              :font-size      140,
+                              :text           "",
+                              :vertical-align "middle"},
+                 :mari
+                             {:type       "animation",
+                              :x          1535,
+                              :y          715,
+                              :width      473,
+                              :height     511,
+                              :scene-name "mari",
+                              :anim       "idle",
+                              :name       "mari",
+                              :scale-x    0.5,
+                              :scale-y    0.5,
+                              :speed      0.35,
+                              :start      true},
+                 :word
+                             {:type   "transparent",
+                              :x      313,
+                              :y      91,
+                              :width  1200,
+                              :height 400,
+                              :states
+                                      {:show
+                                                {:shadow-offset  {:x 5, :y 5},
+                                                 :align          "center",
+                                                 :shadow-color   "#1a1a1a",
+                                                 :vertical-align "middle",
+                                                 :shadow-blur    5,
+                                                 :font-size      160,
+                                                 :fill           "white",
+                                                 :width          1200,
+                                                 :type           "text",
+                                                 :shadow-opacity 0.5,
+                                                 :font-family    "Luckiest Guy",
+                                                 :height         400},
+                                       :default {:type "transparent"}}}},
  :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]],
- :actions       {:mari-welcome-audio             {:type               "animation-sequence" :target "mari" :track 1 :offset 0.702
-                                                  :audio              "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a" :start 0.702, :duration 5.914
-                                                  :data               [{:start 0.775 :end 2.67 :anim "talk"}
-                                                                       {:start 3.189 :end 6.433 :anim "talk"}]
-                                                  :phrase             :welcome
-                                                  :phrase-description "Welcome"
-                                                  :phrase-text        "Welcome to the sandbox! Let’s learn some new words."}
-
-                 :mari-touch-audio               {:type  "animation-sequence" :target "mari" :track 1 :offset 35.155
-                                                  :audio "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 35.155, :duration 3.973
-                                                  :data  [{:start 35.31 :end 38.992 :anim "talk"}]}
-
-                 :mari-more-audio                {:type               "animation-sequence" :target "mari" :track 1 :offset 44.997
-                                                  :audio              "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :start 44.997, :duration 4.337
-                                                  :data               [{:start 45.352 :end 46.655 :anim "talk"}
-                                                                       {:start 47.101 :end 49.088 :anim "talk"}]
-                                                  :phrase             :more-words
-                                                  :phrase-description "More words"
-                                                  :phrase-text        "Excellent. Do you want to hear more words?"}
-
-                 :mari-one-more-audio            {:type "parallel"
-                                                  :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 225}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1307}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}
-                                                                 {:type "empty" :duration 550}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1069}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}]}]}
-
-                 :mari-good-job                  {:type "parallel"
-                                                  :data [{:type "audio", :id "teacher", :start 0.77, :duration 3.24}
-                                                         {:type "sequence-data"
-                                                          :data [{:type "empty" :duration 225}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1307}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}
-                                                                 {:type "empty" :duration 550}
-                                                                 {:type "animation" :target "mari" :id "talk" :track 1}
-                                                                 {:type "empty" :duration 1069}
-                                                                 {:type "animation" :target "mari" :id "empty" :track 1}]}]}
-
-                 :mari-letter-1                  {:type        "animation-sequence",
-                                                  :target      "mari",
-                                                  :track       1,
-                                                  :offset      14.48,
-                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start       14.48,
-                                                  :duration    1.746,
-                                                  :data        [{:start 14.552, :end 16.159, :duration 1.607, :anim "talk"}]
-                                                  :phrase-text "This is the letter"}
-
-                 :mari-letter-2                  {:type        "animation-sequence",
-                                                  :target      "mari",
-                                                  :track       1,
-                                                  :offset      17.239,
-                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start       17.239,
-                                                  :duration    1.347,
-                                                  :data        [{:start 17.333, :end 18.506, :duration 1.173, :anim "talk"}]
-                                                  :phrase-text "Did you know that the letter"}
-
-                 :mari-letter-3                  {:type        "animation-sequence",
-                                                  :target      "mari",
-                                                  :track       1,
-                                                  :offset      19.293,
-                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start       19.293,
-                                                  :duration    1.32,
-                                                  :data        [{:start 19.413, :end 20.413, :duration 1, :anim "talk"}]
-                                                  :phrase-text "makes the sound"}
-
-                 :mari-letter-4                  {:type        "animation-sequence",
-                                                  :target      "mari",
-                                                  :track       1,
-                                                  :offset      23.053,
-                                                  :audio       "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a",
-                                                  :start       23.053,
-                                                  :duration    6.173,
-                                                  :data        [{:start 23.133, :end 27.426, :duration 4.293, :anim "talk"}
-                                                                {:start 27.932, :end 29.066, :duration 1.134, :anim "talk"}]
-                                                  :phrase-text "Click on the pictures to hear more words that start with the sound"}
-
-                 :mari-short-letter-var          {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-short-letter-action"}]}
-                 :mari-long-letter-var           {:type "action" :from-var [{:var-name "current-word" :var-property "sandbox-long-letter-action"}]}
-
-                 :complete-word-1                {:type "set-variable" :var-name "word-1" :var-value true}
-                 :complete-word-2                {:type "set-variable" :var-name "word-2" :var-value true}
-                 :complete-word-3                {:type "set-variable" :var-name "word-3" :var-value true}
-                 :complete-word-4                {:type "set-variable" :var-name "word-4" :var-value true}
-
-                 :box-1-start-animation          {:type "start-animation" :target "box1"}
-                 :box-2-start-animation          {:type "start-animation" :target "box2"}
-                 :box-3-start-animation          {:type "start-animation" :target "box3"}
-                 :box-4-start-animation          {:type "start-animation" :target "box4"}
-
-                 :box-1-start                    {:type "sequence"
-                                                  :data ["complete-word-1"
-                                                         "word-1-state-var"
-                                                         "box-1-start-animation"
-                                                         "box-1-jump-in"
-                                                         "word-1-state-var"
-                                                         "box-1-jump-out"
-                                                         "word-1-state-var"
-                                                         "test-concept-complete"]}
-
-                 :word-1-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-1-action"}]
-                                                  :phrase             :word-1
-                                                  :phrase-description "Pair word 1"}
-                 :word-2-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-2-action"}]
-                                                  :phrase             :word-2
-                                                  :phrase-description "Pair word 2"}
-                 :word-3-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-3-action"}]
-                                                  :phrase             :word-3
-                                                  :phrase-description "Pair word 3"}
-                 :word-4-state-var               {:type               "action" :from-var [{:var-name "current-word" :var-property "sandbox-state-word-4-action"}]
-                                                  :phrase             :word-4
-                                                  :phrase-description "Pair word 4"}
-
-                 :box-1-jump-in                  {:type "sequence"
-                                                  :data ["box-1-jump-in-animation-jump"
-                                                         "box-1-jump-in-empty"
-                                                         "box-1-jump-in-transition"
-                                                         "box-1-jump-in-animation-idle"]}
-
-                 :box-1-jump-in-animation-jump   {:type "animation" :target "box1" :id "jump2"}
-                 :box-1-jump-in-empty            {:type "empty" :duration 500}
-                 :box-1-jump-in-transition       {:type "transition" :transition-id "box1" :to {:x 668 :y 798 :duration 0.7 :loop false}}
-                 :box-1-jump-in-animation-idle   {:type "add-animation" :target "box1" :id "idle2" :loop true}
-
-                 :box-1-jump-out                 {:type "sequence"
-                                                  :data ["box-1-jump-out-animation-jump"
-                                                         "box-1-jump-out-empty"
-                                                         "box-1-jump-out-transition"
-                                                         "box-1-jump-out-animation-idle"]}
-
-                 :box-1-jump-out-animation-jump  {:type "animation" :target "box1" :id "jump2"}
-                 :box-1-jump-out-empty           {:type "empty" :duration 500}
-                 :box-1-jump-out-transition      {:type "transition" :transition-id "box1" :to {:x 304 :y 826 :duration 0.7 :loop false}}
-                 :box-1-jump-out-animation-idle  {:type "add-animation" :target "box1" :id "idle2" :loop true}
-
-                 :box-2-start                    {:type "sequence"
-                                                  :data ["complete-word-2"
-                                                         "word-2-state-var"
-                                                         "box-2-start-animation"
-                                                         "box-2-jump-in"
-                                                         "word-2-state-var"
-                                                         "box-2-jump-out"
-                                                         "word-2-state-var"
-                                                         "test-concept-complete"]}
-
-                 :box-2-jump-in                  {:type "sequence"
-                                                  :data ["box-2-jump-in-animation-jump"
-                                                         "box-2-jump-in-empty"
-                                                         "box-2-jump-in-transition"
-                                                         "box-2-jump-in-animation-idle"]}
-
-                 :box-2-jump-in-animation-jump   {:type "animation" :target "box2" :id "jump2"}
-                 :box-2-jump-in-empty            {:type "empty" :duration 500}
-                 :box-2-jump-in-transition       {:type "transition" :transition-id "box2" :to {:x 668 :y 798 :duration 0.7 :loop false}}
-                 :box-2-jump-in-animation-idle   {:type "add-animation" :target "box2" :id "idle2" :loop true}
-
-                 :box-2-jump-out                 {:type "sequence"
-                                                  :data ["box-2-jump-out-animation-jump"
-                                                         "box-2-jump-out-empty"
-                                                         "box-2-jump-out-transition"
-                                                         "box-2-jump-out-animation-idle"]}
-
-                 :box-2-jump-out-animation-jump  {:type "animation" :target "box2" :id "jump2"}
-                 :box-2-jump-out-empty           {:type "empty" :duration 500}
-                 :box-2-jump-out-transition      {:type "transition" :transition-id "box2" :to {:x 401 :y 696 :duration 0.7 :loop false}}
-                 :box-2-jump-out-animation-idle  {:type "add-animation" :target "box2" :id "idle2" :loop true}
-
-                 :box-3-start                    {:type "sequence"
-                                                  :data ["complete-word-3"
-                                                         "word-3-state-var"
-                                                         "box-3-start-animation"
-                                                         "box-3-jump-in"
-                                                         "word-3-state-var"
-                                                         "box-3-jump-out"
-                                                         "word-3-state-var"
-                                                         "test-concept-complete"]}
-
-                 :box-3-jump-in                  {:type "sequence"
-                                                  :data ["box-3-jump-in-animation-jump"
-                                                         "box-3-jump-in-empty"
-                                                         "box-3-jump-in-transition"
-                                                         "box-3-jump-in-animation-idle"]}
-
-                 :box-3-jump-in-animation-jump   {:type "animation" :target "box3" :id "jump2"}
-                 :box-3-jump-in-empty            {:type "empty" :duration 500}
-                 :box-3-jump-in-transition       {:type "transition" :transition-id "box3" :to {:x 668 :y 798 :duration 0.7 :loop false}}
-                 :box-3-jump-in-animation-idle   {:type "add-animation" :target "box3" :id "idle2" :loop true}
-
-                 :box-3-jump-out                 {:type "sequence"
-                                                  :data ["box-3-jump-out-animation-jump"
-                                                         "box-3-jump-out-empty"
-                                                         "box-3-jump-out-transition"
-                                                         "box-3-jump-out-animation-idle"]}
-
-                 :box-3-jump-out-animation-jump  {:type "animation" :target "box3" :id "jump2"}
-                 :box-3-jump-out-empty           {:type "empty" :duration 500}
-                 :box-3-jump-out-transition      {:type "transition" :transition-id "box3" :to {:x 600 :y 674 :duration 0.7 :loop false}}
-                 :box-3-jump-out-animation-idle  {:type "add-animation" :target "box3" :id "idle2" :loop true}
-
-                 :box-4-start                    {:type "sequence"
-                                                  :data ["complete-word-4"
-                                                         "word-4-state-var"
-                                                         "box-4-start-animation"
-                                                         "box-4-jump-in"
-                                                         "word-4-state-var"
-                                                         "box-4-jump-out"
-                                                         "word-4-state-var"
-                                                         "test-concept-complete"]}
-
-                 :box-4-jump-in                  {:type "sequence"
-                                                  :data ["box-4-jump-in-animation-jump"
-                                                         "box-4-jump-in-empty"
-                                                         "box-4-jump-in-transition"
-                                                         "box-4-jump-in-animation-idle"]}
-
-                 :box-4-jump-in-animation-jump   {:type "animation" :target "box4" :id "jump2"}
-                 :box-4-jump-in-empty            {:type "empty" :duration 500}
-                 :box-4-jump-in-transition       {:type "transition" :transition-id "box4" :to {:x 668 :y 798 :duration 0.7 :loop false}}
-                 :box-4-jump-in-animation-idle   {:type "add-animation" :target "box4" :id "idle2" :loop true}
-
-                 :box-4-jump-out                 {:type "sequence"
-                                                  :data ["box-4-jump-out-animation-jump"
-                                                         "box-4-jump-out-empty"
-                                                         "box-4-jump-out-transition"
-                                                         "box-4-jump-out-animation-idle"]}
-
-                 :box-4-jump-out-animation-jump  {:type "animation" :target "box4" :id "jump2"}
-                 :box-4-jump-out-empty           {:type "empty" :duration 500}
-                 :box-4-jump-out-transition      {:type "transition" :transition-id "box4" :to {:x 919 :y 741 :duration 0.7 :loop false}}
-                 :box-4-jump-out-animation-idle  {:type "add-animation" :target "box4" :id "idle2" :loop true}
-
-                 :test-concept-complete          {:type      "test-var-list"
-                                                  :var-names ["word-1" "word-2" "word-3" "word-4"]
-                                                  :values    [true true true true]
-                                                  :success   "next-concept-workflow"}
-
-                 :hide-word                      {:type "state" :target "word" :id "default"}
-
-                 :renew-words                    {:type        "lesson-var-provider"
-                                                  :provider-id "words-set"
-                                                  :variables   ["item-1" "item-2" "item-3"]
-                                                  :shuffled    false
-                                                  :from        "concepts"}
-
-                 :renew-current-concept          {:type "parallel"
-                                                  :data [{:type "set-variable" :var-name "word-1" :var-value false}
-                                                         {:type "set-variable" :var-name "word-2" :var-value false}
-                                                         {:type "set-variable" :var-name "word-3" :var-value false}
-                                                         {:type "set-variable" :var-name "word-4" :var-value false}
-                                                         {:type        "vars-var-provider"
-                                                          :provider-id "current-word"
-                                                          :variables   ["current-word"]
-                                                          :from        ["item-1" "item-2" "item-3"]
-                                                          :shuffled    false
-                                                          :on-end      "finish-activity"}]}
-
-                 :show-letter                    {:type     "set-attribute" :target "letter" :attr-name "text"
-                                                  :from-var [{:var-name        "current-word"
-                                                              :var-property    "letter"
-                                                              :action-property "attr-value"}]}
-
-                 :renew-current-concept-workflow {:type "sequence"
-                                                  :data ["renew-current-concept"
-                                                         "box-1-change-skin"
-                                                         "box-2-change-skin"
-                                                         "box-3-change-skin"
-                                                         "box-4-change-skin"
-                                                         "show-letter"
-                                                         "letter-intro"]}
-
-                 :letter-intro                   {:type               "sequence"
-                                                  :data               ["mari-letter-1"
-                                                                       "mari-short-letter-var"
-                                                                       "mari-letter-2"
-                                                                       "mari-short-letter-var"
-                                                                       "mari-letter-3"
-                                                                       "mari-long-letter-var"
-                                                                       "mari-letter-4"
-                                                                       "mari-long-letter-var"]
-                                                  :phrase             :letter-intro
-                                                  :phrase-description "Learn concept sound"}
-
-                 :next-concept-workflow          {:type "sequence"
-                                                  :data ["mari-more-audio"
-                                                         "renew-current-concept-workflow"]}
-
-                 :box-1-change-skin              {:type "set-skin" :target "box1" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-1-skin"}]}
-                 :box-2-change-skin              {:type "set-skin" :target "box2" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-2-skin"}]}
-                 :box-3-change-skin              {:type "set-skin" :target "box3" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-3-skin"}]}
-                 :box-4-change-skin              {:type "set-skin" :target "box4" :from-var [{:var-name "current-word" :action-property "skin" :var-property "word-4-skin"}]}
-
-                 :clear-instruction              {:type "remove-flows" :flow-tag "instruction"}
-                 :start-scene                    {:type "sequence"
-                                                  :data ["start-activity"
-                                                         "clear-instruction"
-                                                         "renew-words"
-                                                         "mari-welcome-audio"
-                                                         "renew-current-concept-workflow"]}
-
-                 :start-activity                 {:type "start-activity" :id "sandbox"}
-                 :finish-activity                {:type "finish-activity" :id "sandbox"}}
- :audio         {:mari    "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a"
-                 :voice-1 "/raw/audio/l1/a4/L1_A4_GameVoice_Set_1.m4a"
-                 :voice-2 "/raw/audio/l1/a4/L1_A4_GameVoice_Set_2.m4a"
-                 :voice-3 "/raw/audio/l1/a4/L1_A4_GameVoice_Set_3.m4a"},
- :triggers      {:start {:on "start" :action "start-scene"}}
- :metadata      {:autostart true
-                 :prev      "park"}}
+ :actions
+                {:box-1-change-skin
+                                                {:type       "set-slot",
+                                                 :target     "box1",
+                                                 :from-var   [{:var-name "current-word", :var-property "word-image-1", :action-property "image"}],
+                                                 :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                                 :slot-name  "box1"},
+                 :box-1-jump-in
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-1-jump-in-animation-jump" "box-1-jump-in-empty" "box-1-jump-in-transition" "box-1-jump-in-animation-idle"]},
+                 :box-1-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box1", :loop true},
+                 :box-1-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box1"},
+                 :box-1-jump-in-empty           {:type "empty", :duration 500},
+                 :box-1-jump-in-transition
+                                                {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box1"},
+                 :box-1-jump-out
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-1-jump-out-animation-jump"
+                                                        "box-1-jump-out-empty"
+                                                        "box-1-jump-out-transition"
+                                                        "box-1-jump-out-animation-idle"]},
+                 :box-1-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box1", :loop true},
+                 :box-1-jump-out-animation-jump {:type "animation", :id "jump2", :target "box1"},
+                 :box-1-jump-out-empty          {:type "empty", :duration 500},
+                 :box-1-jump-out-transition
+                                                {:type "transition", :to {:x 304, :y 826, :loop false, :duration 0.7}, :transition-id "box1"},
+                 :box-1-start
+                                                {:type "sequence",
+                                                 :data
+                                                       ["complete-word-1"
+                                                        "word-1-state-var"
+                                                        "box-1-start-animation"
+                                                        "box-1-jump-in"
+                                                        "word-1-state-var"
+                                                        "box-1-jump-out"
+                                                        "word-1-state-var"
+                                                        "test-concept-complete"]},
+                 :box-1-start-animation         {:type "start-animation", :target "box1"},
+                 :box-2-change-skin
+                                                {:type       "set-slot",
+                                                 :target     "box2",
+                                                 :from-var   [{:var-name "current-word", :var-property "word-image-2", :action-property "image"}],
+                                                 :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                                 :slot-name  "box1"},
+                 :box-2-jump-in
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-2-jump-in-animation-jump" "box-2-jump-in-empty" "box-2-jump-in-transition" "box-2-jump-in-animation-idle"]},
+                 :box-2-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box2", :loop true},
+                 :box-2-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box2"},
+                 :box-2-jump-in-empty           {:type "empty", :duration 500},
+                 :box-2-jump-in-transition
+                                                {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box2"},
+                 :box-2-jump-out
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-2-jump-out-animation-jump"
+                                                        "box-2-jump-out-empty"
+                                                        "box-2-jump-out-transition"
+                                                        "box-2-jump-out-animation-idle"]},
+                 :box-2-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box2", :loop true},
+                 :box-2-jump-out-animation-jump {:type "animation", :id "jump2", :target "box2"},
+                 :box-2-jump-out-empty          {:type "empty", :duration 500},
+                 :box-2-jump-out-transition
+                                                {:type "transition", :to {:x 401, :y 696, :loop false, :duration 0.7}, :transition-id "box2"},
+                 :box-2-start
+                                                {:type "sequence",
+                                                 :data
+                                                       ["complete-word-2"
+                                                        "word-2-state-var"
+                                                        "box-2-start-animation"
+                                                        "box-2-jump-in"
+                                                        "word-2-state-var"
+                                                        "box-2-jump-out"
+                                                        "word-2-state-var"
+                                                        "test-concept-complete"]},
+                 :box-2-start-animation         {:type "start-animation", :target "box2"},
+                 :box-3-change-skin
+                                                {:type       "set-slot",
+                                                 :target     "box3",
+                                                 :from-var   [{:var-name "current-word", :var-property "word-image-3", :action-property "image"}],
+                                                 :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                                 :slot-name  "box1"},
+                 :box-3-jump-in
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-3-jump-in-animation-jump" "box-3-jump-in-empty" "box-3-jump-in-transition" "box-3-jump-in-animation-idle"]},
+                 :box-3-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box3", :loop true},
+                 :box-3-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box3"},
+                 :box-3-jump-in-empty           {:type "empty", :duration 500},
+                 :box-3-jump-in-transition
+                                                {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box3"},
+                 :box-3-jump-out
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-3-jump-out-animation-jump"
+                                                        "box-3-jump-out-empty"
+                                                        "box-3-jump-out-transition"
+                                                        "box-3-jump-out-animation-idle"]},
+                 :box-3-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box3", :loop true},
+                 :box-3-jump-out-animation-jump {:type "animation", :id "jump2", :target "box3"},
+                 :box-3-jump-out-empty          {:type "empty", :duration 500},
+                 :box-3-jump-out-transition
+                                                {:type "transition", :to {:x 600, :y 674, :loop false, :duration 0.7}, :transition-id "box3"},
+                 :box-3-start
+                                                {:type "sequence",
+                                                 :data
+                                                       ["complete-word-3"
+                                                        "word-3-state-var"
+                                                        "box-3-start-animation"
+                                                        "box-3-jump-in"
+                                                        "word-3-state-var"
+                                                        "box-3-jump-out"
+                                                        "word-3-state-var"
+                                                        "test-concept-complete"]},
+                 :box-3-start-animation         {:type "start-animation", :target "box3"},
+                 :box-4-change-skin
+                                                {:type       "set-slot",
+                                                 :target     "box4",
+                                                 :from-var   [{:var-name "current-word", :var-property "word-image-4", :action-property "image"}],
+                                                 :attachment {:x 40, :scale-x 4, :scale-y 4},
+                                                 :slot-name  "box1"},
+                 :box-4-jump-in
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-4-jump-in-animation-jump" "box-4-jump-in-empty" "box-4-jump-in-transition" "box-4-jump-in-animation-idle"]},
+                 :box-4-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box4", :loop true},
+                 :box-4-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box4"},
+                 :box-4-jump-in-empty           {:type "empty", :duration 500},
+                 :box-4-jump-in-transition
+                                                {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box4"},
+                 :box-4-jump-out
+                                                {:type "sequence",
+                                                 :data
+                                                       ["box-4-jump-out-animation-jump"
+                                                        "box-4-jump-out-empty"
+                                                        "box-4-jump-out-transition"
+                                                        "box-4-jump-out-animation-idle"]},
+                 :box-4-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box4", :loop true},
+                 :box-4-jump-out-animation-jump {:type "animation", :id "jump2", :target "box4"},
+                 :box-4-jump-out-empty          {:type "empty", :duration 500},
+                 :box-4-jump-out-transition
+                                                {:type "transition", :to {:x 919, :y 741, :loop false, :duration 0.7}, :transition-id "box4"},
+                 :box-4-start
+                                                {:type "sequence",
+                                                 :data
+                                                       ["complete-word-4"
+                                                        "word-4-state-var"
+                                                        "box-4-start-animation"
+                                                        "box-4-jump-in"
+                                                        "word-4-state-var"
+                                                        "box-4-jump-out"
+                                                        "word-4-state-var"
+                                                        "test-concept-complete"]},
+                 :box-4-start-animation         {:type "start-animation", :target "box4"},
+                 :clear-instruction             {:type "remove-flows", :flow-tag "instruction"},
+                 :complete-word-1               {:type "set-variable", :var-name "word-1", :var-value true},
+                 :complete-word-2               {:type "set-variable", :var-name "word-2", :var-value true},
+                 :complete-word-3               {:type "set-variable", :var-name "word-3", :var-value true},
+                 :complete-word-4               {:type "set-variable", :var-name "word-4", :var-value true},
+                 :finish-activity               {:type "finish-activity", :id "sandbox"},
+                 :hide-word                     {:type "state", :id "default", :target "word"},
+                 :letter-intro
+                                                {:type                          "sequence",
+                                                 :data
+                                                                                ["mari-letter-1"
+                                                                                 "mari-short-letter-var"
+                                                                                 "mari-letter-2"
+                                                                                 "mari-short-letter-var"
+                                                                                 "mari-letter-3"
+                                                                                 "mari-long-letter-var"
+                                                                                 "mari-letter-4"
+                                                                                 "mari-long-letter-var"],
+                                                 :phrase                        "letter-intro",
+                                                 :phrase-description            "Learn concept sound",
+                                                 :phrase-description-translated "Letter-sound concept"},
+                 :mari-letter-1
+                                                {:type                   "animation-sequence",
+                                                 :data                   [{:end 3.02, :anim "talk", :start 2.53} {:end 4, :anim "talk", :start 3.14}],
+                                                 :phrase-text            "Esta es la letra",
+                                                 :phrase-text-translated "This is the letter",
+                                                 :target                 "mari",
+                                                 :audio                  "/upload/LYZDLGYQRAJIXURU.mp3",
+                                                 :start                  2.506,
+                                                 :duration               1.56,
+                                                 :track                  1,
+                                                 :offset                 7.773},
+                 :mari-letter-2
+                                                {:type                   "animation-sequence",
+                                                 :data                   [{:end 9.132, :anim "talk", :start 7.266}],
+                                                 :phrase-text            "Sabias que la letra",
+                                                 :phrase-text-translated "Did you know that the letter",
+                                                 :target                 "mari",
+                                                 :audio                  "/upload/UMIXHXIXOYRVUCNK.mp3",
+                                                 :start                  7.266,
+                                                 :duration               1.866,
+                                                 :track                  1,
+                                                 :offset                 10.32},
+                 :mari-letter-3
+                                                {:type                   "animation-sequence",
+                                                 :data                   [{:end 10.79, :anim "talk", :start 9.95}],
+                                                 :phrase-text            "hace el sonido",
+                                                 :phrase-text-translated "makes the",
+                                                 :target                 "mari",
+                                                 :audio                  "/upload/UMIXHXIXOYRVUCNK.mp3",
+                                                 :start                  9.919,
+                                                 :duration               0.853,
+                                                 :track                  1,
+                                                 :offset                 16.374},
+                 :mari-letter-4
+                                                {:type                   "animation-sequence",
+                                                 :data                   [{:end 12.68, :anim "talk", :start 12.09} {:end 18.25, :anim "talk", :start 14.08}],
+                                                 :phrase-text            "Haz click en las imágenes para escuchar mas palabras que comienzan con el sonido",
+                                                 :phrase-text-translated "sound? Click on the pictures to hear more words that start with the sound",
+                                                 :target                 "mari",
+                                                 :audio                  "/upload/UMIXHXIXOYRVUCNK.mp3",
+                                                 :start                  12.047,
+                                                 :duration               6.119,
+                                                 :track                  1,
+                                                 :offset                 16.374},
+                 :mari-long-letter-var
+                                                {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-long-letter-action"}]},
+                 :mari-more-audio
+                                                {:type                   "animation-sequence",
+                                                 :data                   [{:end 29.46, :anim "talk", :start 26.56}],
+                                                 :phrase                 "more-words",
+                                                 :phrase-description     "More words",
+                                                 :phrase-text            "Excellente! Quieres escuchar mas palabras?",
+                                                 :phrase-text-translated "Excellent.  Do you want to hear more words?",
+                                                 :target                 "mari",
+                                                 :audio                  "/upload/XHPBLDQDHUQAQHKG.m4a",
+                                                 :start                  26.427,
+                                                 :duration               3.147,
+                                                 :track                  1,
+                                                 :offset                 33.04},
+                 :mari-short-letter-var
+                                                {:type "action", :from-var [{:var-name "current-word", :var-property "sandbox-short-letter-action"}]},
+                 :mari-welcome-audio
+                                                {:type                          "animation-sequence",
+                                                 :data                          [{:end 5.89, :anim "talk", :start 1.67}],
+                                                 :phrase                        "welcome",
+                                                 :phrase-description            "Welcome",
+                                                 :phrase-description-translated "Welcome",
+                                                 :phrase-text                   "Bienvendio al arenero! Aprendamos algunas palabras nuevas.",
+                                                 :phrase-text-translated        "Welcome to the sandbox! Let's learn some new words.",
+                                                 :target                        "mari",
+                                                 :audio                         "/upload/XHPBLDQDHUQAQHKG.m4a",
+                                                 :start                         1.622,
+                                                 :duration                      4.421,
+                                                 :track                         1,
+                                                 :offset                        1.195},
+                 :next-concept-workflow         {:type "sequence", :data ["mari-more-audio" "renew-current-concept-workflow"]},
+                 :nil                           {:data [{:end 4.23, :anim "talk", :start 3}]},
+                 :renew-current-concept
+                                                {:type "parallel",
+                                                 :data
+                                                       [{:type "set-variable", :var-name "word-1", :var-value false}
+                                                        {:type "set-variable", :var-name "word-2", :var-value false}
+                                                        {:type "set-variable", :var-name "word-3", :var-value false}
+                                                        {:type "set-variable", :var-name "word-4", :var-value false}
+                                                        {:from        ["item-1" "item-2" "item-3"],
+                                                         :type        "vars-var-provider",
+                                                         :on-end      "finish-activity",
+                                                         :shuffled    false,
+                                                         :variables   ["current-word"],
+                                                         :provider-id "current-word"}]},
+                 :renew-current-concept-workflow
+                                                {:type "sequence",
+                                                 :data
+                                                       ["renew-current-concept"
+                                                        "box-1-change-skin"
+                                                        "box-2-change-skin"
+                                                        "box-3-change-skin"
+                                                        "box-4-change-skin"
+                                                        "show-letter"
+                                                        "letter-intro"]},
+                 :renew-words
+                                                {:type        "lesson-var-provider",
+                                                 :from        "concepts",
+                                                 :provider-id "words-set",
+                                                 :shuffled    false,
+                                                 :variables   ["item-1" "item-2" "item-3"]},
+                 :show-letter
+                                                {:type      "set-attribute",
+                                                 :target    "letter",
+                                                 :from-var  [{:var-name "current-word", :var-property "letter", :action-property "attr-value"}],
+                                                 :attr-name "text"},
+                 :start-activity                {:type "start-activity", :id "sandbox"},
+                 :start-scene
+                                                {:type "sequence",
+                                                 :data ["start-activity" "clear-instruction" "renew-words" "mari-welcome-audio" "renew-current-concept-workflow"]},
+                 :stop-activity                 {:type "stop-activity", :id "sandbox"},
+                 :test-concept-complete
+                                                {:type      "test-var-list",
+                                                 :success   "next-concept-workflow",
+                                                 :values    [true true true true],
+                                                 :var-names ["word-1" "word-2" "word-3" "word-4"]},
+                 :word-1-state-var
+                                                {:type               "action",
+                                                 :phrase             "word-1",
+                                                 :phrase-description "Pair word 1",
+                                                 :from-var           [{:var-name "current-word", :var-property "sandbox-state-word-1-action"}]},
+                 :word-1-state-var-copy-3
+                                                {:type                          "action",
+                                                 :phrase                        "word-1",
+                                                 :phrase-description            "Pair word 1",
+                                                 :phrase-description-translated "Extra 'a' word 1",
+                                                 :from-var                      [{:var-name "current-word", :var-property "sandbox-state-word-1-action"}]},
+                 :word-2-state-var
+                                                {:type               "action",
+                                                 :phrase             "word-2",
+                                                 :phrase-description "Pair word 2",
+                                                 :from-var           [{:var-name "current-word", :var-property "sandbox-state-word-2-action"}]},
+                 :word-3-state-var
+                                                {:type               "action",
+                                                 :phrase             "word-3",
+                                                 :phrase-description "Pair word 3",
+                                                 :from-var           [{:var-name "current-word", :var-property "sandbox-state-word-3-action"}]},
+                 :word-4-state-var
+                                                {:type               "action",
+                                                 :phrase             "word-4",
+                                                 :phrase-description "Pair word 4",
+                                                 :from-var           [{:var-name "current-word", :var-property "sandbox-state-word-4-action"}]}},
+ :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
+ :metadata      {:prev "park", :autostart true},
+ :variables     {:status nil}}

@@ -12,7 +12,7 @@
     [webchange.common.colors-palette :refer [colors-palette]]
     [webchange.common.animated-svg-path :refer [animated-svg-path]]
     [webchange.common.matrix :refer [matrix-objects-list]]
-    [webchange.common.anim :refer [anim]]
+    [webchange.common.anim :refer [anim prepare-anim-object-params]]
     [webchange.common.text :refer [chunked-text]]
     [webchange.common.carousel :refer [carousel]]
     [webchange.common.scene-components.components :as components]
@@ -23,11 +23,9 @@
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right bottom-center]]
     [webchange.common.events :as ce]
-    [webchange.interpreter.executor :as e]
     [webchange.interpreter.screens.activity-finished :refer [activity-finished-screen]]
     [webchange.interpreter.screens.course-loading :refer [course-loading-screen]]
     [webchange.interpreter.screens.preloader :refer [preloader-screen]]
-    [webchange.interpreter.screens.score :refer [score-screen]]
     [webchange.interpreter.screens.settings :refer [settings-screen]]
     [webchange.interpreter.screens.state :as screens]
     [webchange.common.core :refer [prepare-anim-rect-params
@@ -39,10 +37,9 @@
                                    with-filter-transition]]
     [webchange.common.image-modifiers.animation-eager :refer [animation-eager]]
     [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
-    [webchange.logger :as logger]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
-    [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
-    [konva :as k]))
+    [konva :as k]
+    [webchange.interpreter.utils.i18n :refer [t]]))
 
 (defn empty-filter [] {:filters []})
 
@@ -76,18 +73,11 @@
       (with-highlight params)
       (with-pulsation params)))
 
-(defn score
-  []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        score-var (re-frame/subscribe [::vars.subs/variable @scene-id "score"])]
-    (if (:visible @score-var)
-      [score-screen])))
-
 (defn close-button
   [x y]
-  [:> Group {:x x :y y
+  [:> Group {:x        x :y y
              :on-click #(re-frame/dispatch [::ie/open-student-dashboard])
-             :on-tap #(re-frame/dispatch [::ie/open-student-dashboard])}
+             :on-tap   #(re-frame/dispatch [::ie/open-student-dashboard])}
    [kimage {:src (get-data-as-url "/raw/img/ui/close_button_01.png")}]])
 
 (defn back-button
@@ -97,13 +87,13 @@
                :on-click #(re-frame/dispatch [::ie/close-scene])
                :on-tap   #(re-frame/dispatch [::ie/close-scene])}
      [kimage (merge {:src (get-data-as-url "/raw/img/ui/back_button_01.png")}
-                    (filter-params back-button-state)) ]]))
+                    (filter-params back-button-state))]]))
 
 (defn settings-button
   [x y]
-  [:> Group {:x x :y y
+  [:> Group {:x        x :y y
              :on-click #(re-frame/dispatch [::ie/open-settings])
-             :on-tap #(re-frame/dispatch [::ie/open-settings])}
+             :on-tap   #(re-frame/dispatch [::ie/open-settings])}
    [kimage {:src (get-data-as-url "/raw/img/ui/settings_button_01.png")}]])
 
 (defn menu
@@ -128,7 +118,7 @@
                  :y        (- y 200)
                  :on-click #(re-frame/dispatch [::ce/skip])
                  :on-tap   #(re-frame/dispatch [::ce/skip])}
-       [components/button-interpreter {:text "Skip"}]])))
+       [components/button-interpreter {:text (t "skip")}]])))
 
 (defn scene-started
   [scene-data]
@@ -155,6 +145,7 @@
 (declare get-painting-area)
 (declare get-colors-palette)
 (declare background)
+(declare layered-background)
 (declare empty-component)
 
 (defn lock-object [o]
@@ -182,10 +173,10 @@
         activities (if (= navigation-mode :lesson) (get-lesson-based-open-activity) (get-activity-based-open-activity))
         scene-list @(re-frame/subscribe [::subs/scene-list])
         all-activities (set (flatten (map #(find-path scene-id % scene-list) activities)))
-        outs  (set (flatten (map #(:name %) (:outs ((keyword scene-id) scene-list)))))]
-     (if (contains? outs object-name)
-       (if (contains? all-activities object-name) o (lock-object o))
-        o )))
+        outs (set (flatten (map #(:name %) (:outs ((keyword scene-id) scene-list)))))]
+    (if (contains? outs object-name)
+      (if (contains? all-activities object-name) o (lock-object o))
+      o)))
 
 (defn draw-object
   ([scene-id name]
@@ -193,10 +184,11 @@
   ([scene-id name props]
    (let [o (merge @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]) props)
          type (keyword (:type o))
-         o (add-navigation-params scene-id name o)]
-
+         o (add-navigation-params scene-id name o)
+         o (if (contains? o :actions) o (assoc o :listening false))]
      (case type
        :background [background scene-id name o]
+       :layered-background [layered-background scene-id name o]
        :button [button scene-id name o]
        :image [image scene-id name o]
        :transparent [:> Group (prepare-group-params o)
@@ -229,10 +221,10 @@
 (defn text
   [scene-id name object]
   [:> Group (prepare-group-params object)
-    (if (:chunks object)
-      (let [on-mount #(re-frame/dispatch [::ie/register-text %])]
-        [chunked-text scene-id name (assoc object :on-mount on-mount)])
-      [:> Text (dissoc object :x :y)])])
+   (if (:chunks object)
+     (let [on-mount #(re-frame/dispatch [::ie/register-text %])]
+       [chunked-text scene-id name (assoc object :on-mount on-mount)])
+     [:> Text (dissoc object :x :y)])])
 
 (defn get-painting-area
   [_ _ params]
@@ -267,16 +259,31 @@
 
 (defn background
   [scene-id name object]
-  [kimage (merge {:src (get-data-as-url (:src object))}
+  [kimage (merge {:src       (get-data-as-url (:src object))
+                  :listening false}
                  (filter-params object))])
+
+(defn layered-background
+  [scene-id name object]
+  (let [layers (map (fn [key] {:key key
+                               :src (get-data-as-url (get-in object [key :src]))})
+                    [:background :surface :decoration])]
+    [:> Group {}
+     (for [{:keys [key src]} layers]
+       (when src
+         ^{:key key}
+         [kimage (merge {:src       src
+                         :listening false}
+                        (filter-params (first (:data object))))]))]))
 
 (defn animation
   [scene-id name object]
-  (let [params (prepare-group-params object)
-        rect-params (prepare-anim-rect-params object)
-        animation-name (or (:scene-name object) (:name object))]
+  (let [anim-object (prepare-anim-object-params object)
+        params (prepare-group-params anim-object)
+        rect-params (prepare-anim-rect-params anim-object)
+        animation-name (or (:scene-name anim-object) (:name anim-object))]
     [:> Group params
-     [anim (-> object
+     [anim (-> anim-object
                (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %])))]
      [:> Rect rect-params]]))
 
@@ -298,48 +305,75 @@
         (re-frame/dispatch [::vars.events/execute-set-variable {:var-name "status" :var-value :running}])
         (re-frame/dispatch [::ie/trigger :start])))))
 
-(defn scene
-  [scene-id]
-  (let [scene-objects (re-frame/subscribe [::subs/scene-objects scene-id])]
-    [:> Group
-      (for [layer @scene-objects
-            name layer]
-        ^{:key (str scene-id name)} [draw-object scene-id name])
-     [score]
-     [menu]
-     [skip-menu]
-     [triggers scene-id]
-     ]))
-
-(defn current-scene
-  []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        scene-ready (scene-ready @scene-id)]
-    (if scene-ready
-      [scene @scene-id]
-      [preloader-screen])))
-
-(defn overlay-screens
-  []
+(defn overlay
+  [{:keys [scene-id scene-ready?]}]
   (let [ui-screen @(re-frame/subscribe [::screens/ui-screen])]
     [:> Layer
+     (if-not scene-ready?
+       [preloader-screen]
        (case ui-screen
          :activity-finished [activity-finished-screen]
          :course-loading [course-loading-screen]
-         :preloader [preloader-screen]
-         :score [score-screen]
          :settings [settings-screen]
-         (when-not (nil? ui-screen)
-           (logger/error (str "Overlay screen '" ui-screen "' is not implemented"))))]))
+         [:> Group
+          [menu]
+          [skip-menu]
+          [triggers scene-id]]))]))
+
+(defn layer
+  [{:keys [scene-id layer-id layer background?]}]
+  (let [layer-params (if background?
+                       {:listening       false
+                        :clearBeforeDraw false}
+                       {})]
+    [:> Layer layer-params
+     (for [object layer
+           :let [object-id (str layer-id "-" object)]]
+       ^{:key object-id}
+       [draw-object scene-id object])]))
+
+(defn get-stage-params
+  [viewport]
+  (let [viewbox (get-viewbox viewport)]
+    {:x       (compute-x viewbox)
+     :y       (- (compute-y viewbox))
+     :width   (:width viewport)
+     :height  (:height viewport)
+     :scale-x (compute-scale viewport)
+     :scale-y (compute-scale viewport)}))
+
+(defn stage
+  [{:keys [viewport scene-id scene-objects scene-ready?]}]
+  [:> Stage (get-stage-params viewport)
+   (when scene-ready?
+     (for [[layer-number scene-layer] (map-indexed vector scene-objects)
+           :let [layer-id (str scene-id "-layer-" layer-number)]]
+       ^{:key layer-id}
+       [layer {:scene-id    scene-id
+               :layer-id    layer-id
+               :layer       scene-layer
+               :background? (= layer-number 0)}]))
+   ^{:key "overlay"}
+   [overlay {:scene-id     scene-id
+             :scene-ready? scene-ready?}]])
+
+(defn scene
+  [scene-id]
+  (let [viewport @(re-frame/subscribe [::subs/viewport])
+        scene-objects @(re-frame/subscribe [::subs/scene-objects scene-id])
+        scene-ready? (scene-ready scene-id)]
+    [stage {:viewport      viewport
+            :scene-id      scene-id
+            :scene-objects scene-objects
+            :scene-ready?  scene-ready?}]))
+
+(defn current-scene
+  []
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])]
+    [scene @scene-id]))
 
 (defn course
-  [course-id]
-  (fn [course-id]
-    (let [viewport (re-frame/subscribe [::subs/viewport])
-          viewbox (get-viewbox @viewport)]
-      [:div
-       [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-       [:> Stage {:width (:width @viewport) :height (:height @viewport) :x (compute-x viewbox) :y (- (compute-y viewbox))
-                  :scale-x (compute-scale @viewport) :scale-y (compute-scale @viewport)}
-        [:> Layer [current-scene]]
-        [overlay-screens]]])))
+  [_]
+  [:div
+   [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
+   [current-scene]])

@@ -18,4 +18,8 @@
 (.addEventListener js/self "fetch" fetch/handle)
 (.addEventListener js/self "message" message/handle)
 
-(aset (.-connection js/navigator) "onchange" (fn [] (when (online?) (vs/flush))))
+(aset (.-connection js/navigator) "onchange" (fn []
+                                               (if (online?)
+                                                 (do (broadcast/send-sync-status :synced)
+                                                     (vs/flush-state))
+                                                 (broadcast/send-sync-status :offline))))

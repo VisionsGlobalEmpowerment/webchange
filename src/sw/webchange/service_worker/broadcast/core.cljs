@@ -5,12 +5,13 @@
 (def broadcast-channel "sw-messages")
 (def messages {:current-state "current-state"
                :sync-status   "sync-status"
-               :error         "error"})
+               :error         "error"
+               :redirect      "redirect"})
 
 (defn- broadcast-message
   [key data]
   (let [type (get messages key)]
-    (logger/debug (str "Broadcast message: \"" type "\"") data)
+    (logger/debug-folded (str "[Broadcast] Send message: <" type ">") data)
     (-> (js/BroadcastChannel. broadcast-channel)
         (.postMessage (clj->js {:type type
                                 :data data})))))
@@ -27,3 +28,7 @@
   [message error]
   (broadcast-message :error {:message message
                              :error   error}))
+
+(defn redirect-to-login
+  []
+  (broadcast-message :redirect "login"))

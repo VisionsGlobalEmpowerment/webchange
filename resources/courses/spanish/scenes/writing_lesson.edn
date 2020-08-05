@@ -131,7 +131,7 @@
    :skin "vaca",
    :speed 0.3,
    :start true}},
- :scene-objects [["background"] ["canvas" "picture-box" "letter-image" "letter-path"] ["senora-vaca" "mari"]],
+ :scene-objects [["background"] ["canvas" "picture-box" "letter-image" "letter-path" "senora-vaca" "mari"]],
  :actions
  {:draw-letter
   {:type "sequence", :data ["letter-drawing-prepare" "mari-move-to-letter" "letter-drawing"]},

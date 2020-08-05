@@ -30,7 +30,7 @@
     "Request" (put-request entity)
     "Response" (put-response entity)))
 
-(defn take
+(defn take-response
   [request]
   (logger/debug "Take from responses store:" request)
   (-> (db-endpoints/get-endpoint (request-pathname request))

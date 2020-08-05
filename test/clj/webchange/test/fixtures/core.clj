@@ -18,6 +18,7 @@
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]
             [clj-http.client :as c]
             [clojure.data.json :as json]
+            [ring.util.codec :refer [url-encode]]
             [clojure.tools.logging :as log])
   (:import (org.eclipse.jetty.server HttpInputOverHTTP)))
 
@@ -40,7 +41,10 @@
   (db/clear-table :teachers)
   (db/clear-table :schools)
   (db/clear-table :asset_hashes)
-  (db/clear-table :users))
+  (db/clear-table :users)
+  (db/clear-table :editor_assets_tags)
+  (db/clear-table :editor_tags)
+  (db/clear-table :editor_assets))
 
 (defn clear-db-fixture [f]
   (clear-db)
@@ -53,6 +57,18 @@
 
 (def website-user-id 123)
 (def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last" :image "https://example.com/image.png"})
+
+(defn make-query-string [m]
+  (let [m (into {} (filter #(some? (get % 1)) m))]
+    (->> (for [[k v] m]
+           (str (url-encode (name k)) "=" (url-encode v)))
+         (interpose "&")
+         (apply str)
+
+         )))
+
+(defn build-url [url-base query-map]
+  (str url-base "?" (make-query-string query-map)))
 
 (defn website-user-created
   ([] (website-user-created {}))
@@ -735,3 +751,21 @@
                                               :data {:hello "world"}
                                              })
         ] {:id id :course_id (:id course) :user_id (:id user) :activity_id activity_id}))
+
+(defn editor-tag-created [name]
+   (let [[{id :id}] (db/create-editor-tag! {:name name})]
+     {:id id
+      :name name}))
+
+(defn editor-asset-created
+  ([type] (editor-asset-created type "hello/example.png"))
+  ([type path]
+  (let [[{id :id}] (db/create-editor-assets! {:path path :thumbnail_path path :type type})]
+    {:id id
+     :path path
+     :type type
+     })))
+
+(defn link-editor-asset-tag [tag_id asset_id]
+  (let [path "hello/example.png"]
+    (db/link-editor-asset-tag! {:tag_id tag_id :asset_id asset_id})))

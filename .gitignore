@@ -2,9 +2,10 @@
 /log/*
 /target
 /*-init.clj
-/resources/public/css/
+/resources/public/css/**
+!/resources/public/css/fonts.css
+!/resources/public/css/semantic.min.css
 /resources/public/raw/
-/resources/public/upload/
 /resources/public/js/compiled
 /.idea
 /.sass-cache

@@ -6,9 +6,10 @@
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.strategies :as strategy]
     [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers :refer [js-fetch promise-all request-pathname then catch]]))
+    [webchange.service-worker.wrappers :refer [js-fetch online? promise-all promise-reject request-pathname then catch]]))
 
-(def pages-paths ["/student-login"
+(def pages-paths ["/login"
+                  "/student-login"
                   "/courses"
                   "/dashboard"
                   "/student-dashboard"])
@@ -19,9 +20,9 @@
     (some #(starts-with? pathname %) paths)))
 
 (defn- serve-page-skeleton
-  [course-name]
+  []
   (strategy/network-or-cache {:request    "./page-skeleton"
-                              :cache-name (get-cache-name :static course-name)}))
+                              :cache-name (get-cache-name :static)}))
 
 (defn- serve-cache-asset
   [request cache-name]
@@ -29,29 +30,28 @@
                               :cache-name cache-name}))
 
 (defn- serve-rest-content
-  [request course-name]
-  (let [cache-names [(get-cache-name :static course-name)
-                     (get-cache-name :game course-name)]
-        match-promises (map #(serve-cache-asset request %) cache-names)]
-    (-> match-promises
-        (promise-all)
+  [request]
+  (if (online?)
+    (js-fetch request)
+    (-> (general/get-current-course)
+        (then (fn [current-course]
+                (promise-all (map #(serve-cache-asset request %)
+                                  [(get-cache-name :static current-course)
+                                   (get-cache-name :game current-course)]))))
         (then (fn [responses]
                 (let [response (some identity responses)]
                   (if response
                     response
-                    (do (logger/debug (str "Not matched: " (request-pathname request)))
-                        (js-fetch request))))))
-        (catch #(js-fetch request)))))
+                    (promise-reject (str "Response for " (request-pathname request) " is not cached"))))))
+        (catch (fn [error]
+                 (promise-reject (str "[Fetch] Serve rest content failed: " error)))))))
 
 (defn- get-response
   [request]
-  (-> (general/get-current-course)
-      (then (fn [course-name]
-              (cond
-                (vs/api-request? request) (vs/handle-request request course-name)
-                (belong-paths? request pages-paths) (serve-page-skeleton course-name)
-                :else (serve-rest-content request course-name))))
-      (catch #(js-fetch request))))
+  (cond
+    (vs/api-request? request) (vs/handle-request request)
+    (belong-paths? request pages-paths) (serve-page-skeleton)
+    :else (serve-rest-content request)))
 
 (defn handle
   [event]

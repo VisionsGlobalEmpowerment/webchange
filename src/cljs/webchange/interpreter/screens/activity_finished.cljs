@@ -9,7 +9,9 @@
     [webchange.interpreter.screens.state :as screens]
     [webchange.interpreter.screens.common.background :refer [background]]
     [webchange.interpreter.utils.position :refer [top-right]]
-    [webchange.student-dashboard.subs :as subs]))
+    [webchange.student-dashboard.subs :as subs]
+    [webchange.common.scene-components.components :as components]
+    [webchange.interpreter.utils.i18n :refer [t]]))
 
 (defn- title
   [{:keys [x y]}]
@@ -153,10 +155,8 @@
               :y        0
               :skin     "reload"
               :on-click on-restart-click}]
-     [button {:x        130
-              :y        0
-              :skin     "next"
-              :on-click on-next-click}]]))
+     [components/button-interpreter {:x 130 :on-click on-next-click
+                                     :text (t "next")}]]))
 
 (defn activity-finished-screen
   []

@@ -16,10 +16,9 @@
 
 (defn- get-version-info
   [cache-name]
-  (let [find-result (re-find #"-(\d*)-([A-Za-z0-9]*$)" cache-name)]
+  (let [find-result (re-find #"-(\d*)(?:-[A-Za-z]*)?$" cache-name)]
     (if-not (nil? find-result)
-      {:course  (get find-result 2)
-       :version (js/parseInt (get find-result 1))}
+      {:version (js/parseInt (get find-result 1))}
       nil)))
 
 (defn- filter-caches
@@ -76,5 +75,9 @@
       (then (fn [cache] (promise-all [(promise-resolve cache)
                                       (get-new-resources resources cache)])))
       (then (fn [[cache new-resources]]
-              (logger/debug-folded (str "Caching new resources into" cache-name " (" (count new-resources) ")") new-resources)
-              (cache-partially cache new-resources 50)))))
+              (let [debug-message (str "Caching new resources into " cache-name " (" (count new-resources) ")")
+                    result-promise (cache-partially cache new-resources 5)]
+                (logger/debug-folded debug-message new-resources)
+                (-> result-promise
+                    (then (fn [] (logger/debug (str debug-message " done")))))
+                result-promise)))))

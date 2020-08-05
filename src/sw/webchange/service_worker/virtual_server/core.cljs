@@ -3,20 +3,22 @@
     [clojure.data :refer [diff]]
     [clojure.string :refer [starts-with?]]
     [webchange.service-worker.config :refer [api-path]]
-    [webchange.service-worker.db.general :as general]
     [webchange.service-worker.virtual-server.cache :as cache]
     [webchange.service-worker.virtual-server.handlers.core :as handlers]
-    [webchange.service-worker.wrappers :refer [promise-all request-pathname then]]))
+    [webchange.service-worker.virtual-server.logger :as logger]
+    [webchange.service-worker.wrappers :refer [catch js-fetch promise-all promise-reject request-pathname then online?]]))
 
 (defn add-endpoints
   [endpoints]
+  (logger/debug-folded "Add endpoints" endpoints)
   (let [has-not? (fn [vector value] (->> vector (some #(= value %)) not))
         routes-to-prefetch (filter handlers/has-handler? endpoints)
         routes-to-cache (filter #(has-not? routes-to-prefetch %) endpoints)]
-    (-> (general/get-current-course)
-        (then (fn [course-name]
-                (promise-all [(cache/cache-all routes-to-cache course-name)
-                  (handlers/prefetch routes-to-prefetch)]))))))
+    (-> (promise-all [(cache/cache-all routes-to-cache)
+                      (handlers/prefetch routes-to-prefetch)])
+        (catch (fn [error]
+                 (logger/warn "Can not add endpoints" error)
+                 (promise-reject error))))))
 
 (defn api-request?
   [request]
@@ -24,11 +26,13 @@
     (starts-with? pathname api-path)))
 
 (defn handle-request
-  [request course-name]
+  [request]
   (if (handlers/has-handler? request)
-    (handlers/handle-request request course-name)
-    (cache/handle-request request course-name)))
+    (handlers/handle-request request)
+    (if (online?)
+      (js-fetch request)
+      (cache/handle-request request))))
 
-(defn flush
+(defn flush-state
   []
-  (handlers/flush))
+  (handlers/flush-state))

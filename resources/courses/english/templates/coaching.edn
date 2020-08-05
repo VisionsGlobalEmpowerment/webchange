@@ -1,0 +1,104 @@
+{:assets        [{:url "/raw/audio/l1/mari-coaching.mp4", :size 2, :type "audio" :alias "statements"}]
+ :actions       {:mari-audio-correct-1
+                 {:type "animation-sequence",
+                  :target "mari",
+                  :track 1,
+                  :offset 1.511,
+                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :start 1.511,
+                  :duration 1.837,
+                  :data [{:start 2.06, :end 3.12, :anim "talk"}]}
+
+                 :mari-audio-correct-2
+                 {:type "animation-sequence",
+                  :target "mari",
+                  :track 1,
+                  :offset 4.417,
+                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :start 4.417,
+                  :duration 1.358,
+                  :data [{:start 4.42, :end 5.66, :anim "talk"}]}
+
+                 :mari-audio-correct-3
+                 {:type "animation-sequence",
+                  :target "mari",
+                  :track 1,
+                  :offset 6.456,
+                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :start 6.456,
+                  :duration 1.345,
+                  :data [{:start 7.12, :end 8.04, :anim "talk"}]}
+
+                 :mari-audio-correct-4
+                 {:type "animation-sequence",
+                  :target "mari",
+                  :track 1,
+                  :offset 8.824,
+                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :start 8.824,
+                  :duration 1.627,
+                  :data [{:start 8.93, :end 10.45, :anim "talk"}]}
+
+                 :mari-audio-correct-5
+                 {:type "animation-sequence",
+                  :target "mari",
+                  :track 1,
+                  :offset 11.347,
+                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :start 11.347,
+                  :duration 2.294,
+                  :data [{:start 11.46, :end 13.59, :anim "talk"}]}
+
+                 :mari-audio-try-again-1
+                 {:type "animation-sequence",
+                  :target "mari",
+                  :track 1,
+                  :offset 15.988,
+                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :start 15.988,
+                  :duration 1.466,
+                  :data [{:start 16.09, :end 17.35, :anim "talk"}]}
+
+                 :mari-audio-try-again-2
+                 {:type "animation-sequence",
+                  :target "mari",
+                  :track 1,
+                  :offset 18.83,
+                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :start 18.83,
+                  :duration 3.491,
+                  :data
+                  [{:start 19.05, :end 19.9, :anim "talk"}
+                   {:start 20.04, :end 22.01, :anim "talk"}]}
+
+                 :init-audio-correct      {:type "parallel"
+                                           :data [{:type "set-variable" :var-name "audio-correct1" :var-value "mari-audio-correct-1"}
+                                                  {:type "set-variable" :var-name "audio-correct2" :var-value "mari-audio-correct-2"}
+                                                  {:type "set-variable" :var-name "audio-correct3" :var-value "mari-audio-correct-3"}
+                                                  {:type "set-variable" :var-name "audio-correct4" :var-value "mari-audio-correct-4"}
+                                                  {:type "set-variable" :var-name "audio-correct5" :var-value "mari-audio-correct-5"}]}
+
+                 :init-audio-try-again    {:type "parallel"
+                                           :data [{:type "set-variable" :var-name "audio-try-again1" :var-value "mari-audio-try-again-1"}
+                                                  {:type "set-variable" :var-name "audio-try-again2" :var-value "mari-audio-try-again-2"}]}
+
+                 :mari-correct {:type "sequence-data"
+                                :data [{:type "action" :id "init-audio-correct"}
+                                       {:type      "vars-var-provider"
+                                        :variables ["current-audio-correct"]
+                                        :from      ["audio-correct1" "audio-correct2" "audio-correct3" "audio-correct4" "audio-correct5"]
+                                        :shuffled  true}
+                                       {:type "action" :from-var [{:var-name "current-audio-correct" :action-property "id"}]}]
+                                :phrase             :correct
+                                :phrase-description "Correct answer"}
+
+                 :mari-wrong {:type "sequence-data"
+                              :data [{:type "action" :id "init-audio-try-again"}
+                                     {:type      "vars-var-provider"
+                                      :variables ["current-audio-try-again"]
+                                      :from      ["audio-try-again1" "audio-try-again2"]
+                                      :shuffled  true}
+                                     {:type "action" :from-var [{:var-name "current-audio-try-again" :action-property "id"}]}]
+                              :phrase             :pick-wrong
+                              :phrase-description "Wrong answer"}
+                 }}
