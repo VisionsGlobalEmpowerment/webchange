@@ -11,17 +11,7 @@
     [webchange.editor-v2.graph-builder.graph.data.sandbox.dialog--word-1 :as word-1]
     [webchange.editor-v2.graph-builder.graph.data.sandbox.dialog--word-2 :as word-2]
     [webchange.editor-v2.graph-builder.graph.data.sandbox.dialog--word-3 :as word-3]
-    [webchange.editor-v2.graph-builder.graph.data.sandbox.dialog--word-4 :as word-4]
-    [webchange.editor-v2.graph-builder.graph.data.sandbox.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--sandbox
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.sandbox.dialog--word-4 :as word-4]))
 
 (let [diagram-mode :translation
       scene-data source/data

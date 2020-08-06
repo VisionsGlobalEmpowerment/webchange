@@ -2,27 +2,28 @@
   (:require
     ["@projectstorm/react-diagrams" :refer [DiagramModel DiagramEngine]]
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-factory :refer [get-custom-factory]]
-    [webchange.editor-v2.diagram.diagram-model.items-factory.factory :refer [create-diagram-items]]
     [webchange.editor-v2.diagram.diagram-utils.utils :refer [reorder zoom-to-fit]]))
 
-(defn init-engine
+(defn- init-engine
   [diagram-mode]
   (let [engine (DiagramEngine.)]
     (.installDefaultFactories engine)
     (.registerNodeFactory engine (get-custom-factory diagram-mode))
     engine))
 
-(defn init-model
-  [engine graph]
-  (let [model (DiagramModel.)
-        [nodes links] (create-diagram-items graph)]
+(defn- init-model
+  [engine nodes links {:keys [locked?]}]
+  (let [model (DiagramModel.)]
     (.setDiagramModel engine model)
-    (doseq [node (vals nodes)] (.addNode model node))
+    (doseq [node nodes] (.addNode model node))
     (doseq [link links] (.addLink model link))
+    (when locked? (.setLocked model true))
     {:engine engine
-     :nodes  nodes}))
+     :model  model}))
 
 (defn init-diagram-model
-  [graph diagram-mode]
+  ([diagram-mode nodes links]
+   (init-diagram-model diagram-mode nodes links {}))
+  ([diagram-mode nodes links options]
   (-> (init-engine diagram-mode)
-      (init-model graph)))
+      (init-model nodes links options))))

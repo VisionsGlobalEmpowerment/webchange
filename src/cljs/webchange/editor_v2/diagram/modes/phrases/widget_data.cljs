@@ -21,10 +21,29 @@
 
 (defn- get-styles
   []
-  {:header-description {:margin      "0"
-                        :padding     "5px"
-                        :text-align  "center"
-                        :max-width  "200px"}})
+  {:header-description {:margin             "0"
+                        :padding            "5px"
+                        :text-align         "center"
+                        :max-width          "200px"
+                        :overflow           "hidden"
+                        :text-overflow      "ellipsis"
+                        :-webkit-line-clamp 2
+                        :-webkit-box-orient "vertical"
+                        :display            "-webkit-box"
+                        :height             "50px"}
+   :dialog-node        {:width            "180px"
+                        :height           "64px"
+                        :margin-top       "-12px"
+                        :background-color "#6BC784"}
+   :track-label        {:width            "100px"
+                        :height           "40px"
+                        :border-radius    "10px"
+                        :display          "flex"
+                        :flex-direction   "column"
+                        :justify-content  "center"
+                        :align-items      "center"
+                        :padding          "3px"
+                        :background-color "#156874"}})
 
 (defn- phrase-header
   [node-data]
@@ -55,10 +74,16 @@
 
 (defn wrapper
   [{:keys [node-data]}]
-  (let [this (r/current-component)]
-    (into [:div {:on-double-click #(re-frame/dispatch [::ee/show-translator-form node-data])
+  (let [this (r/current-component)
+        styles (get-styles)
+        node-style (if (= (:type node-data) "track")
+                     (:track-label styles)
+                     (:dialog-node styles))]
+    (into [:div {:on-double-click (fn []
+                                    (when-not (= (:type node-data) "track")
+                                      (re-frame/dispatch [::ee/show-translator-form node-data])))
                  :style           (merge custom-wrapper/node-style
-                                         {:background-color (get-node-color node-data)})}]
+                                         node-style)}]
           (r/children this))))
 
 (defn get-widget-data

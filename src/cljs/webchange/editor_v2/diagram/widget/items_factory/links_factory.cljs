@@ -1,6 +1,6 @@
-(ns webchange.editor-v2.diagram.diagram-model.items-factory.links-factory
+(ns webchange.editor-v2.diagram.widget.items-factory.links-factory
   (:require
-    [webchange.editor-v2.diagram.diagram-model.items-factory.utils :refer [get-node-connections]]))
+    [webchange.editor-v2.diagram.widget.items-factory.utils :refer [get-node-connections]]))
 
 (defn- show-undefined-node-error!
   [node-1 node-2 node-1-name node-2-name]

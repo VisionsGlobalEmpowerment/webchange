@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.diagram.diagram-model.items-factory.utils)
+(ns webchange.editor-v2.diagram.widget.items-factory.utils)
 
 ;; ToDo: move to graph node utils collection
 

@@ -6,17 +6,7 @@
     [webchange.editor-v2.graph-builder.graph.data.concept-sample :as concept]
     [webchange.editor-v2.graph-builder.graph.data.book.source :as source]
     [webchange.editor-v2.graph-builder.graph.data.book.dialog--read-page :as read-page]
-    [webchange.editor-v2.graph-builder.graph.data.book.dialog--read-title :as read-title]
-    [webchange.editor-v2.graph-builder.graph.data.book.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--book
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.book.dialog--read-title :as read-title]))
 
 (let [diagram-mode :translation
       scene-data source/data

@@ -2,11 +2,6 @@
   (:require
     [re-frame.core :as re-frame]))
 
-(re-frame/reg-sub
-  ::diagram-mode
-  (fn [db]
-    (get-in db [:editor-v2 :diagram-mode])))
-
 (defn course-concept
   [db]
   (->> (get-in db [:editor :course-datasets])

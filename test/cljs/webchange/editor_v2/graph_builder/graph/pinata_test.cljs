@@ -8,17 +8,7 @@
     [webchange.editor-v2.graph-builder.graph.data.pinata.dialog--chant :as chant]
     [webchange.editor-v2.graph-builder.graph.data.pinata.dialog--correct :as correct]
     [webchange.editor-v2.graph-builder.graph.data.pinata.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.pinata.dialog--wrong :as wrong]
-    [webchange.editor-v2.graph-builder.graph.data.pinata.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--pinata
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.pinata.dialog--wrong :as wrong]))
 
 (let [diagram-mode :translation
       scene-data source/data

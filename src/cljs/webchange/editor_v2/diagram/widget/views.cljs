@@ -7,6 +7,7 @@
     [webchange.editor-v2.diagram.diagram-model.init :refer [init-diagram-model]]
     [webchange.editor-v2.diagram.diagram-utils.utils :refer [reorder zoom-to-fit]]
     [webchange.editor-v2.utils :refer [keyword->caption]]
+    [webchange.editor-v2.diagram.widget.items-factory.factory :refer [create-diagram-items]]
     [webchange.editor-v2.diagram.widget.views-toolbar :refer [toolbar]]
     [webchange.editor-v2.diagram.widget.utils :refer [get-graph-changes]]))
 
@@ -70,7 +71,8 @@
                           [toolbar {:force-update force-update?
                                     :engine       nil} root-selector]
                           [empty-graph-placeholder]]
-                         (let [{:keys [engine nodes]} (init-diagram-model graph mode)]
+                         (let [{:keys [nodes links]} (create-diagram-items graph)
+                               {:keys [engine]} (init-diagram-model mode (vals nodes) links)]
                            (reset! diagram-engine engine)
                            (reset! diagram-nodes nodes)
                            [:div.diagram-container

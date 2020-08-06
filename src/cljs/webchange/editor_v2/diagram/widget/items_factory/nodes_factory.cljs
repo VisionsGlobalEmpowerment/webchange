@@ -1,7 +1,7 @@
-(ns webchange.editor-v2.diagram.diagram-model.items-factory.nodes-factory
+(ns webchange.editor-v2.diagram.widget.items-factory.nodes-factory
   (:require
     [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-model :refer [get-custom-model]]
-    [webchange.editor-v2.diagram.diagram-model.items-factory.utils :refer [get-node-outs]]))
+    [webchange.editor-v2.diagram.widget.items-factory.utils :refer [get-node-outs]]))
 
 (defn add-in-ports!
   [node ins]
@@ -19,7 +19,7 @@
   [name node-data]
   (get-custom-model (merge
                       node-data
-                      {:name  (clojure.core/name name)})))
+                      {:name (clojure.core/name name)})))
 
 (defn create-node
   [node-name node-data]

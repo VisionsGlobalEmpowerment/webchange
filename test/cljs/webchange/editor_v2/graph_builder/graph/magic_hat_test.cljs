@@ -9,17 +9,7 @@
     [webchange.editor-v2.graph-builder.graph.data.magic-hat.dialog--correct :as correct]
     [webchange.editor-v2.graph-builder.graph.data.magic-hat.dialog--sound :as sound]
     [webchange.editor-v2.graph-builder.graph.data.magic-hat.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.magic-hat.dialog--wrong :as wrong]
-    [webchange.editor-v2.graph-builder.graph.data.magic-hat.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--magic-hat
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.magic-hat.dialog--wrong :as wrong]))
 
 (let [diagram-mode :translation
       scene-data source/data

@@ -7,17 +7,7 @@
     [webchange.editor-v2.graph-builder.graph.data.library.source :as source]
     [webchange.editor-v2.graph-builder.graph.data.library.dialog--agree :as agree]
     [webchange.editor-v2.graph-builder.graph.data.library.dialog--start :as start]
-    [webchange.editor-v2.graph-builder.graph.data.library.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.library.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--library
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.library.dialog--welcome :as welcome]))
 
 (let [diagram-mode :translation
       scene-data source/data
