@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.scene-diagram.nodes-factory.nodes-factory
   (:require
     [clojure.string :refer [join]]
-    [webchange.editor-v2.diagram.diagram-model.custom-nodes.custom-model :refer [get-custom-model]]
+    [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-model :refer [get-custom-model]]
     [webchange.editor-v2.scene-diagram.scene-parser.actions-tracks :refer [default-track]]))
 
 (def coordinate-params {:x-offset 50
@@ -29,11 +29,10 @@
 
 (defn- create-action-node
   [scene-data action-path position]
-  (let [action-data (get-in scene-data (concat [:actions] action-path))
-        node (get-custom-model {:data action-data
-                                :path action-path})]
-    (.setPosition node (:x position) (:y position))
-    node))
+  (let [action-data (get-in scene-data (concat [:actions] action-path))]
+    (create-node {:data     {:data action-data
+                             :path action-path}
+                  :position position})))
 
 (defn- create-track-label-node
   [track-name track-index]

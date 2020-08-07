@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.diagram.widget.views :refer [diagram-widget]]
+    [webchange.editor-v2.translator.translator-form.diagram.views :refer [diagram]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]))
 
@@ -18,7 +18,7 @@
 
      :reagent-render
                    (fn [props]
-                     [diagram-widget (select-keys props [:graph :mode])])}))
+                     [diagram (select-keys props [:graph :mode])])}))
 
 (defn diagram-block
   []
