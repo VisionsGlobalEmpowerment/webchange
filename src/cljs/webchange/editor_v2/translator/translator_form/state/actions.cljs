@@ -5,7 +5,8 @@
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.config :refer [api-url]]))
 
 ;; Subs
 
@@ -142,7 +143,7 @@
   (fn [{:keys [db]} [_ audio-url start duration]]
     {:db         (assoc-in db [:loading :load-lip-sync-data] true)
      :http-xhrio {:method          :get
-                  :uri             (str "/api/actions/get-talk-animations")
+                  :uri             (api-url "/actions/get-talk-animations")
                   :url-params      {:file     audio-url
                                     :start    start
                                     :duration duration}

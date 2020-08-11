@@ -4,7 +4,8 @@
     [day8.re-frame.http-fx]
     [re-frame.core :as re-frame]
     [webchange.student-dashboard.toolbar.sync.state.db :as db]
-    [webchange.sw-utils.state.resources :as sw]))
+    [webchange.sw-utils.state.resources :as sw]
+    [webchange.config :refer [api-url]]))
 
 (defn- path-to-db
   [relative-path]
@@ -98,7 +99,7 @@
       (when (not= status :loading)
         {:dispatch   [::set-loading-status :loading]
          :http-xhrio {:method          :get
-                      :uri             (str "/api/resources/game-app/" current-course "/lessons")
+                      :uri             (api-url "/resources/game-app/" current-course "/lessons")
                       :format          (json-request-format)
                       :response-format (json-response-format {:keywords? true})
                       :on-success      [::load-course-lessons-success]

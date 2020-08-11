@@ -3,14 +3,15 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.editor-v2.events :as ee]))
+    [webchange.editor-v2.events :as ee]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-event-fx
   ::add-dataset-item
   (fn [{:keys [db]} [_ {:keys [name dataset-id data]}]]
     {:db (assoc-in db [:loading :add-dataset-item] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/dataset-items")
+                  :uri             (api-url "/dataset-items")
                   :params          {:dataset-id dataset-id :name name :data data}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -30,7 +31,7 @@
   (fn [{:keys [db]} [_ item-id {:keys [data name]}]]
     {:db (assoc-in db [:loading :edit-dataset-item] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/dataset-items/" item-id)
+                  :uri             (api-url "/dataset-items/" item-id)
                   :params          {:data data :name name}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -49,7 +50,7 @@
   (fn [{:keys [db]} [_ item-id]]
     {:db (assoc-in db [:loading :delete-dataset-item] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/dataset-items/" item-id)
+                  :uri             (api-url "/dataset-items/" item-id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::delete-dataset-item-success]
@@ -71,7 +72,7 @@
                       (.append "type" (name type)))]
       {:db (assoc-in db [:loading :upload-asset] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/assets/")
+                    :uri             (api-url "/assets/")
                     :body            form-data
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::upload-asset-success params]

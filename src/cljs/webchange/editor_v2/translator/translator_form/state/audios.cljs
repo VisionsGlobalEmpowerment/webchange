@@ -7,7 +7,8 @@
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.translator-form.state.audios-utils :refer [get-audio-assets-data
-                                                                               get-form-data]]))
+                                                                               get-form-data]]
+    [webchange.config :refer [api-url]]))
 
 ;; Subs
 
@@ -46,7 +47,7 @@
           asset-data {:date (.now js/Date)}]
       {:db         (assoc-in db [:loading :upload-audio] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/assets/")
+                    :uri             (api-url "/assets/")
                     :body            form-data
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::upload-audio-success (merge audio-props asset-data)]

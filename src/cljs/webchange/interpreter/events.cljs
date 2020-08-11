@@ -17,7 +17,8 @@
                                                            replace-object]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.state.lessons.subs :as lessons]
-    [webchange.sw-utils.state.status :as sw-status]))
+    [webchange.sw-utils.state.status :as sw-status]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-fx
   :execute-audio
@@ -568,7 +569,7 @@
                          (assoc-in [:loading :save-progress] true)
                          (dissoc :pending-events))
          :http-xhrio {:method          :post
-                      :uri             (str "/api/courses/" course-id "/current-progress")
+                      :uri             (api-url "/courses/" course-id "/current-progress")
                       :params          {:progress progress :events events}
                       :format          (json-request-format)
                       :response-format (json-response-format {:keywords? true})

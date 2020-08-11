@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
-    [ajax.core :refer [json-request-format json-response-format]]))
+    [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-event-fx
   ::load-schools
@@ -10,7 +11,7 @@
     {:db (-> db
              (assoc-in [:loading :schools] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/schools")
+                  :uri             (api-url "/schools")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-schools-success]
@@ -27,7 +28,7 @@
   (fn [{:keys [db]} [_ data]]
     {:db (assoc-in db [:loading :add-school] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/schools")
+                  :uri             (api-url "/schools")
                   :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -46,7 +47,7 @@
   (fn [{:keys [db]} [_ id data]]
     {:db (assoc-in db [:loading :edit-school] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/schools/" id)
+                  :uri             (api-url "/schools/" id)
                   :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -65,7 +66,7 @@
   (fn [{:keys [db]} [_ id]]
     {:db (assoc-in db [:loading :delete-school] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/schools/" id)
+                  :uri             (api-url "/schools/" id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::delete-school-success]
@@ -76,7 +77,7 @@
   (fn [{:keys [db]} [_ id]]
     {:db (assoc-in db [:loading :sync-school] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/school/sync/" id)
+                  :uri             (api-url "/school/sync/" id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::sync-school-success]

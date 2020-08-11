@@ -6,6 +6,7 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.events :as events]
     [webchange.interpreter.events :as ie]
+    [webchange.config :refer [api-url]]
     ))
 
 (re-frame/reg-event-fx
@@ -13,7 +14,7 @@
   (fn [{:keys [db]} [_ credentials]]
     {:db         (assoc-in db [:loading :login] true)
      :http-xhrio {:method          :post
-                  :uri             "/api/users/login"
+                  :uri             (api-url "/users/login")
                   :params          {:user credentials}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -46,7 +47,7 @@
   (fn [{:keys [db]} [_ user-data]]
     {:db         (assoc-in db [:loading :register-user] true)
      :http-xhrio {:method          :post
-                  :uri             "/api/users/register-user"
+                  :uri             (api-url "/users/register-user")
                   :params          {:user user-data}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -67,7 +68,7 @@
           credentials {:school-id current-school :access-code access-code}]
       {:db         (assoc-in db [:loading :student-login] true)
        :http-xhrio {:method          :post
-                    :uri             "/api/students/login"
+                    :uri             (api-url "/students/login")
                     :params          credentials
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})

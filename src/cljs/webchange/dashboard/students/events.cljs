@@ -4,7 +4,8 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.dashboard.events-utils :refer [when-valid clear-errors]]
-    [webchange.validation.specs.student :as spec]))
+    [webchange.validation.specs.student :as spec]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-event-fx
   ::load-students
@@ -12,7 +13,7 @@
     {:db (-> db
              (assoc-in [:loading :students] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/classes/" class-id "/students")
+                  :uri             (api-url "/classes/" class-id "/students")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-students-success]
@@ -30,7 +31,7 @@
     {:db (-> db
              (assoc-in [:loading :unassigned-students] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/unassigned-students")
+                  :uri             (api-url "/unassigned-students")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-unassigned-students-success]
@@ -48,7 +49,7 @@
     {:db (-> db
              (assoc-in [:loading :student] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/students/" id)
+                  :uri             (api-url "/students/" id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-student-success]
@@ -67,7 +68,7 @@
     (when-valid :student co-effects
                 {:db         (assoc-in db [:loading :add-student] true)
                  :http-xhrio {:method          :post
-                              :uri             (str "/api/students")
+                              :uri             (api-url "/students")
                               :params          data
                               :format          (json-request-format)
                               :response-format (json-response-format {:keywords? true})
@@ -109,7 +110,7 @@
   (fn [{:keys [db]} [_ class-id student-id]]
     {:db (assoc-in db [:loading :remove-student-from-class] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/students/" student-id "/class")
+                  :uri             (api-url "/students/" student-id "/class")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::remove-student-from-class-success class-id]
@@ -128,7 +129,7 @@
   (fn [{:keys [db]} [_ student-id]]
     {:db (assoc-in db [:loading :delete-student] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/students/" student-id)
+                  :uri             (api-url "/students/" student-id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::delete-student-success]
@@ -146,7 +147,7 @@
   (fn [{:keys [db]} [_ student-id course-name data]]
     {:db (assoc-in db [:loading :complete-student-progress] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/individual-profile/" student-id "/course/" course-name "/complete")
+                  :uri             (api-url "/individual-profile/" student-id "/course/" course-name "/complete")
                   :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -188,7 +189,7 @@
     (let []
       {:db (assoc-in db [:loading :generate-access-code] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/next-access-code")
+                    :uri             (api-url "/next-access-code")
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::generate-access-code-success]
@@ -222,7 +223,7 @@
     {:db (-> db
              (assoc-in [:loading :student-profile] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/individual-profile/" student-id "/course/" course-name)
+                  :uri             (api-url "/individual-profile/" student-id "/course/" course-name)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-student-profile-success]

@@ -5,7 +5,8 @@
     [webchange.interpreter.events :as ie]
     [webchange.editor-v2.translator.state.window :as translator.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.translator.text.views :as translator.text]))
+    [webchange.editor-v2.translator.text.views :as translator.text]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -21,7 +22,7 @@
     {:db (-> db
              (assoc-in [:loading :lesson-sets] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/courses/" course-id "/lesson-sets")
+                  :uri             (api-url "/courses/" course-id "/lesson-sets")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-lesson-sets-success]
@@ -59,7 +60,7 @@
     {:db (-> db
              (assoc-in [:loading :course-info] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/courses/" course-slug "/info")
+                  :uri             (api-url "/courses/" course-slug "/info")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-course-info-success]
@@ -78,7 +79,7 @@
       {:db (-> db
                (assoc-in [:loading :edit-course-info] true))
        :http-xhrio {:method          :put
-                    :uri             (str "/api/courses/" course-id "/info")
+                    :uri             (api-url "/courses/" course-id "/info")
                     :params            data
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})

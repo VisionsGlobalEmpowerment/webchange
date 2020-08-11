@@ -7,7 +7,8 @@
     [webchange.editor.core :as editor]
     [webchange.common.anim :refer [animations]]
     [webchange.editor.common.actions.events :as actions.events]
-    [webchange.interpreter.variables.events :as vars.events]))
+    [webchange.interpreter.variables.events :as vars.events]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -22,7 +23,7 @@
       {:db         (-> db
                        (assoc-in [:loading :datasets] true))
        :http-xhrio {:method          :get
-                    :uri             (str "/api/courses/" course-id "/datasets")
+                    :uri             (api-url "/courses/" course-id "/datasets")
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::load-datasets-success]
@@ -320,7 +321,7 @@
                      (assoc-in [:loading :save-scene] true)
                      (update-in [:scenes scene-id] merge data))
      :http-xhrio {:method          :post
-                  :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
+                  :uri             (api-url "/courses/" course-id "/scenes/" scene-id)
                   :params          {:scene data}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -351,7 +352,7 @@
     (let [course-id (:current-course db)]
       {:db         (assoc-in db [:loading :create-scene] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
+                    :uri             (api-url "/courses/" course-id "/scenes/" scene-id)
                     :params          {:scene {}}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
@@ -375,7 +376,7 @@
   (fn [{:keys [db]} [_ course-id data]]
     {:db         (assoc db :course-data data)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/courses/" course-id)
+                  :uri             (api-url "/courses/" course-id)
                   :params          {:course data}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -396,7 +397,7 @@
                        (assoc-in [:loading :course-versions] true)
                        (assoc-in [:editor :current-main-content] :course-versions))
        :http-xhrio {:method          :get
-                    :uri             (str "/api/courses/" course-id "/versions")
+                    :uri             (api-url "/courses/" course-id "/versions")
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::open-current-course-versions-success]
@@ -414,7 +415,7 @@
   (fn [{:keys [db]} [_ version-id]]
     {:db         (assoc-in db [:loading :restore-course-version] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/course-versions/" version-id "/restore")
+                  :uri             (api-url "/course-versions/" version-id "/restore")
                   :params          {:id version-id}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -437,7 +438,7 @@
                        (assoc-in [:loading :scene-versions] true)
                        (assoc-in [:editor :current-main-content] :scene-versions))
        :http-xhrio {:method          :get
-                    :uri             (str "/api/courses/" course-id "/scenes/" scene-id "/versions")
+                    :uri             (api-url "/courses/" course-id "/scenes/" scene-id "/versions")
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::open-current-scene-versions-success]
@@ -455,7 +456,7 @@
   (fn [{:keys [db]} [_ version-id]]
     {:db         (assoc-in db [:loading :restore-scene-version] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/scene-versions/" version-id "/restore")
+                  :uri             (api-url "/scene-versions/" version-id "/restore")
                   :params          {:id version-id}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -475,7 +476,7 @@
     (let [course-id (:current-course db)]
       {:db         (assoc-in db [:loading :add-dataset] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/datasets")
+                    :uri             (api-url "/datasets")
                     :params          {:course-slug course-id :name name :scheme {:fields fields}}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
@@ -494,7 +495,7 @@
   (fn [{:keys [db]} [_ dataset-id {:keys [fields]}]]
     {:db         (assoc-in db [:loading :edit-dataset] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/datasets/" dataset-id)
+                  :uri             (api-url "/datasets/" dataset-id)
                   :params          {:scheme {:fields fields}}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -528,7 +529,7 @@
       {:db         (-> db
                        (assoc-in [:loading :dataset-items] true))
        :http-xhrio {:method          :get
-                    :uri             (str "/api/datasets/" dataset-id "/items")
+                    :uri             (api-url "/datasets/" dataset-id "/items")
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::load-current-dataset-items-success]
@@ -551,7 +552,7 @@
     (let [dataset-id (get-in db [:editor :current-dataset-id])]
       {:db         (assoc-in db [:loading :add-dataset-item] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/dataset-items")
+                    :uri             (api-url "/dataset-items")
                     :params          {:dataset-id dataset-id :name name :data data}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
@@ -577,7 +578,7 @@
   (fn [{:keys [db]} [_ item-id {:keys [data name]}]]
     {:db         (assoc-in db [:loading :edit-dataset-item] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/dataset-items/" item-id)
+                  :uri             (api-url "/dataset-items/" item-id)
                   :params          {:data data :name name}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -598,7 +599,7 @@
           new-data (merge data data-patch)]
       {:db         (assoc-in db [:loading :update-dataset-item] true)
        :http-xhrio {:method          :put
-                    :uri             (str "/api/dataset-items/" id)
+                    :uri             (api-url "/dataset-items/" id)
                     :params          {:data new-data :name name}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
@@ -616,7 +617,7 @@
   (fn [{:keys [db]} [_ item-id]]
     {:db         (assoc-in db [:loading :delete-dataset-item] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/dataset-items/" item-id)
+                  :uri             (api-url "/dataset-items/" item-id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::delete-dataset-item-success]
@@ -636,7 +637,7 @@
       {:db         (-> db
                        (assoc-in [:loading :dataset-lessons] true))
        :http-xhrio {:method          :get
-                    :uri             (str "/api/datasets/" dataset-id "/lesson-sets")
+                    :uri             (api-url "/datasets/" dataset-id "/lesson-sets")
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::load-current-dataset-lessons-success]
@@ -660,7 +661,7 @@
     (let [dataset-id (get-in db [:editor :current-dataset-id])]
       {:db         (assoc-in db [:loading :add-dataset-lesson] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/lesson-sets")
+                    :uri             (api-url "/lesson-sets")
                     :params          {:dataset-id dataset-id :name name :data data}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
@@ -686,7 +687,7 @@
   (fn [{:keys [db]} [_ id {{items :items} :data}]]
     {:db         (assoc-in db [:loading :edit-dataset-lesson] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/lesson-sets/" id)
+                  :uri             (api-url "/lesson-sets/" id)
                   :params          {:data {:items items}}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -706,7 +707,7 @@
   (fn [{:keys [db]} [_ id]]
     {:db         (assoc-in db [:loading :delete-dataset-lesson] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/lesson-sets/" id)
+                  :uri             (api-url "/lesson-sets/" id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::delete-dataset-lesson-success]
@@ -727,7 +728,7 @@
                       (.append "file" js-file-value))]
       {:db         (assoc-in db [:loading :upload-asset] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/assets/")
+                    :uri             (api-url "/assets/")
                     :body            form-data
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::upload-asset-success scene-id props]
@@ -749,7 +750,7 @@
                       (.append "file" js-file-value))]
       {:db         (assoc-in db [:loading :upload-and-add-asset] true)
        :http-xhrio {:method          :post
-                    :uri             (str "/api/assets/")
+                    :uri             (api-url "/assets/")
                     :body            form-data
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::upload-and-add-asset-success params scene-id]
@@ -873,7 +874,7 @@
   (fn [{:keys [db]} [_ audio-action]]
     {:db         (assoc-in db [:loading :get-talk-animation] true)
      :http-xhrio {:method          :get
-                  :uri             (str "/api/actions/get-talk-animations")
+                  :uri             (api-url "/actions/get-talk-animations")
                   :params          {:file     (:audio audio-action)
                                     :start    (:start audio-action)
                                     :duration (:duration audio-action)}

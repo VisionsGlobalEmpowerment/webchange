@@ -5,6 +5,7 @@
    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [day8.re-frame.http-fx]
    [ajax.core :refer [json-request-format json-response-format]]
+   [webchange.config :refer [api-url]]
    ))
 
 (re-frame/reg-event-db
@@ -46,7 +47,7 @@
   (fn [{:keys [db]} [_ credentials]] ;; credentials = {:email ... :password ...}
      {:db         (assoc-in db [:loading :login] true)
      :http-xhrio {:method          :post
-                  :uri             "/api/users/login"
+                  :uri             (api-url "/users/login")
                   :params          {:user credentials}                      ;; {:user {:email ... :password ...}}
                   :format          (json-request-format)                    ;; make sure it's json
                   :response-format (json-response-format {:keywords? true}) ;; json response and all keys to keywords
@@ -59,16 +60,25 @@
              {:db (update-in db [:user] merge user)
               :dispatch-n (list [:complete-request :login])}))
 
+(re-frame/reg-event-db
+  ::track-slow-request
+  (fn [db [_ my-id xhrio]]
+    (print "my-id" my-id)
+    (print "xhrio-id" xhrio)))
+
 (re-frame/reg-event-fx
   ::init-current-school
   (fn [{:keys [db]} _]
     {:db         (assoc-in db [:loading :current-school] true)
      :http-xhrio {:method          :get
-                  :uri             "/api/schools/current"
+                  :uri             (api-url "/schools/current")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
+                  :on-request      [::track-slow-request "my-request"]
                   :on-success      [::init-current-school-success]
                   :on-failure      [:api-request-error :current-school]}}))
+
+
 
 (re-frame/reg-event-fx
   ::init-current-school-success
@@ -81,7 +91,7 @@
   (fn [{:keys [db]} _]
     {:db         (assoc-in db [:loading :current-user] true)
      :http-xhrio {:method          :get
-                  :uri             "/api/users/current"
+                  :uri             (api-url "/users/current")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::init-current-user-success]

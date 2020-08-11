@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
-    [ajax.core :refer [json-request-format json-response-format]]))
+    [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-event-fx
   ::load-classes
@@ -10,7 +11,7 @@
     {:db (-> db
              (assoc-in [:loading :classes] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/classes")
+                  :uri             (api-url "/classes")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-classes-success]
@@ -27,7 +28,7 @@
   (fn [{:keys [db]} [_ data]]
     {:db (assoc-in db [:loading :add-class] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/classes")
+                  :uri             (api-url "/classes")
                   :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -46,7 +47,7 @@
   (fn [{:keys [db]} [_ id data]]
     {:db (assoc-in db [:loading :edit-class] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/classes/" id)
+                  :uri             (api-url "/classes/" id)
                   :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -65,7 +66,7 @@
   (fn [{:keys [db]} [_ id]]
     {:db (assoc-in db [:loading :delete-class] true)
      :http-xhrio {:method          :delete
-                  :uri             (str "/api/classes/" id)
+                  :uri             (api-url "/classes/" id)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::delete-class-success]
@@ -112,7 +113,7 @@
     {:db (-> db
              (assoc-in [:loading :class-profile] true))
      :http-xhrio {:method          :get
-                  :uri             (str "/api/class-profile/" class-id "/course/" course-name)
+                  :uri             (api-url "/class-profile/" class-id "/course/" course-name)
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-class-profile-success]

@@ -4,7 +4,8 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.editor-v2.scene.state.db :refer [path-to-db]]
     [webchange.subs :as subs]
-    [webchange.editor.events :as edit-scene]))
+    [webchange.editor.events :as edit-scene]
+    [webchange.config :refer [api-url]]))
 
 (def default-dimension {:width  1920
                         :height 1080})
@@ -71,7 +72,7 @@
   (fn [{:keys [db]} [_]]
     {:db         (assoc-in db [:loading :load-available-background] true)
      :http-xhrio {:method          :get
-                  :uri             (str "/api/courses/editor/assets")
+                  :uri             (api-url "/courses/editor/assets")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-available-background-success]

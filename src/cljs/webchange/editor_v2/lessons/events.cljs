@@ -4,7 +4,8 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.editor-v2.events :as ee]
-    [webchange.editor-v2.lessons.subs :as lessons-subs]))
+    [webchange.editor-v2.lessons.subs :as lessons-subs]
+    [webchange.config :refer [api-url]]))
 
 (defn- first-dataset-id
   [db]
@@ -108,7 +109,7 @@
                (assoc-in [:loading :edit-lesson] true)
                (assoc :course-data course))
        :http-xhrio {:method          :post
-                    :uri             (str "/api/courses/" course-id)
+                    :uri             (api-url "/courses/" course-id)
                     :params          {:course course}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
@@ -128,7 +129,7 @@
                (assoc-in [:loading :edit-lesson] true)
                (assoc :course-data course))
        :http-xhrio {:method          :post
-                    :uri             (str "/api/courses/" course-id)
+                    :uri             (api-url "/courses/" course-id)
                     :params          {:course course}
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
@@ -147,7 +148,7 @@
   (fn [{:keys [db]} [_ id data]]
     {:db (assoc-in db [:loading :edit-lesson-set] true)
      :http-xhrio {:method          :put
-                  :uri             (str "/api/lesson-sets/" id)
+                  :uri             (api-url "/lesson-sets/" id)
                   :params          {:data data}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
@@ -165,7 +166,7 @@
   (fn [{:keys [db]} [_ dataset-id name data]]
     {:db (assoc-in db [:loading :add-lesson-set] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/lesson-sets")
+                  :uri             (api-url "/lesson-sets")
                   :params          {:dataset-id dataset-id :name name :data data}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})

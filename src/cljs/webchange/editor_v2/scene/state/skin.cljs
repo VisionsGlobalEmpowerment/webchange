@@ -5,14 +5,15 @@
     [webchange.editor-v2.scene.state.db :refer [path-to-db]]
     [webchange.subs :as subs]
     [webchange.editor.subs :as editor-subs]
-    [webchange.editor.events :as edit-scene]))
+    [webchange.editor.events :as edit-scene]
+    [webchange.config :refer [api-url]]))
 
 (re-frame/reg-event-fx
   ::load-characters
   (fn [{:keys [db]} [_]]
     {:db         (assoc-in db [:loading :load-characters] true)
      :http-xhrio {:method          :get
-                  :uri             (str "/api/courses/editor/character-skin")
+                  :uri             (api-url "/courses/editor/character-skin")
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-characters-success]
