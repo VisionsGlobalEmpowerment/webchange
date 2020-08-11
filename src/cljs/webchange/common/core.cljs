@@ -32,8 +32,7 @@
   [action]
   (let [type (:on action)]
     (if (= type "click")
-      {:on-click #(re-frame/dispatch [::ce/execute-action action])
-       :on-tap #(re-frame/dispatch [::ce/execute-action action])}
+      {:on-click #(re-frame/dispatch [::ce/execute-action action])}
       {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action (prepare-action-data action %)])})))
 
 (defn prepare-actions
@@ -65,9 +64,7 @@
 (defn with-transition
   [{:keys [transition] :as object}]
   (if transition
-    (let [component (r/atom nil)]
-      (re-frame/dispatch [::ie/register-transition transition component])
-      (assoc object :ref (fn [ref] (when ref (reset! component ref)))))
+    (assoc object :ref (fn [ref] (when ref (re-frame/dispatch [::ie/register-transition transition (atom ref)]))))
     object))
 
 (defn with-filter-transition
@@ -83,13 +80,21 @@
     (assoc object :draggable true)
     object))
 
+(defn- with-scale
+  [object]
+  (cond-> object
+    (contains? object :scale-x) (assoc-in [:scale :x] (:scale-x object))
+    (contains? object :scale-y) (assoc-in [:scale :y] (:scale-y object))))
+
 (defn prepare-group-params
   [object]
   (-> object
       prepare-actions
       with-origin-offset
       with-transition
-      with-draggable))
+      with-draggable
+      with-scale
+      ))
 
 (defn prepare-painting-area-params
   [object]

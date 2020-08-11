@@ -47,6 +47,7 @@
                  [clj-http "3.10.1"]
                  [clj-http-fake "1.0.3"]
                  [ring/ring-codec "1.1.2"]
+                 [cljsjs/pixi "5.1.3-0"]
                  ]
 
   ;:node-dependencies [[source-map-support "0.2.8"]]
@@ -143,6 +144,7 @@
                                            :pathfinding "^0.4.18"
                                            :paths-js "^0.4.10"
                                            :lodash "^4.17.15"
+                                           :pixi-spine "^2.1.9"
                                            "@projectstorm/react-diagrams" "^5.3.2"
                                            }
                     :foreign-libs [{:file "src/libs/dagre.js"
@@ -153,6 +155,9 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
+                                    :module-type :commonjs}
+                                   {:file "node_modules/pixi-filters/dist/pixi-filters.js"
+                                    :provides ["pixi-custom-filters"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
@@ -196,6 +201,7 @@
                                       :pathfinding "^0.4.18"
                                       :paths-js "^0.4.10"
                                       :lodash "^4.17.15"
+                                      :pixi-spine "^2.1.9"
                                       "@projectstorm/react-diagrams" "^5.3.2"
                                       }
                     :foreign-libs [{:file "src/libs/dagre.js"
@@ -206,6 +212,9 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
+                                    :module-type :commonjs}
+                                   {:file "node_modules/pixi-filters/dist/pixi-filters.js"
+                                    :provides ["pixi-custom-filters"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :language-in :ecmascript6}}
@@ -229,6 +238,7 @@
                                     :pathfinding "^0.4.18"
                                     :paths-js "^0.4.10"
                                     :lodash "^4.17.15"
+                                    :pixi-spine "^2.1.9"
                                     "@projectstorm/react-diagrams" "^5.3.2"
                                     }
                     :foreign-libs [{:file "src/libs/dagre.js"
@@ -239,6 +249,9 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
+                                    :module-type :commonjs}
+                                   {:file "node_modules/pixi-filters/dist/pixi-filters.js"
+                                    :provides ["pixi-custom-filters"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations :none}}

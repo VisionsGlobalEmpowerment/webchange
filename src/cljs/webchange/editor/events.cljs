@@ -5,7 +5,6 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
-    [webchange.common.anim :refer [animations]]
     [webchange.editor.common.actions.events :as actions.events]
     [webchange.interpreter.variables.events :as vars.events]))
 
@@ -814,18 +813,22 @@
 
 (re-frame/reg-event-fx
   ::add-animation-object-to-scene
+  ;; ToDo: Remove
   (fn [{:keys [db]} [_ {id :id x :offsetX y :offsetY}]]
-    (let [name (object-name db "animation")
-          animation (get animations (keyword id))
-          state {:type    :animation :scene-layer 5 :scene-name name :start true
-                 :x       x :y y :name id
-                 :width   (:width animation) :height (:height animation)
-                 :scale-x (:scale-x animation) :scale-y (:scale-y animation)
-                 :speed   (:speed animation)
-                 :anim    (-> animation :animations first)
-                 :skin    (-> animation :skins first)}]
-      {:db         (assoc-in db [:editor :new-object-defaults] state)
-       :dispatch-n (list [::show-form :add-object])})))
+  ;  (let [name (object-name db "animation")
+  ;        animation (get animations (keyword id))
+  ;        state {:type    :animation :scene-layer 5 :scene-name name :start true
+  ;               :x       x :y y :name id
+  ;               :width   (:width animation) :height (:height animation)
+  ;               :scale-x (:scale-x animation) :scale-y (:scale-y animation)
+  ;               :speed   (:speed animation)
+  ;               :anim    (-> animation :animations first)
+  ;               :skin    (-> animation :skins first)}]
+  ;    {:db         (assoc-in db [:editor :new-object-defaults] state)
+  ;     :dispatch-n (list [::show-form :add-object])})
+  ;
+    ))
+
 
 (re-frame/reg-event-fx
   ::add-audio-action-to-scene

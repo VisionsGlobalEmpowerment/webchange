@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.common.anim :refer [anim animations init-spine-player]]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.events :as ie]
     [webchange.editor.common.actions.action-forms.animation-sequence :refer [animation-sequence-panel]]
