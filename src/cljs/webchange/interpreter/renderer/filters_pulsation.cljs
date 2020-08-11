@@ -1,4 +1,4 @@
-(ns webchange.common.image-modifiers.animation-eager)
+(ns webchange.interpreter.renderer.filters-pulsation)
 
 (def intervals {:play 2 :pause 6})
 (def interval-duration 800)
@@ -56,16 +56,10 @@
 
 (defn- apply-transformation
   [object {:keys [scale rotation]}]
-  (let [{:keys [width height]} (js->clj (.getSize object) :keywordize-keys true)
-        shift-to-center (clj->js {:x (/ width 2) :y (/ height 2)})]
-    (.setOffset object shift-to-center)
-    (.setPosition object shift-to-center)
-
-    (when-not (nil? scale)
-      (.scale object (clj->js {:x scale :y scale})))
-
-    (when-not (nil? rotation)
-      (.setRotation object rotation))))
+  (when-not (nil? scale)
+      (-> (.-scale object) (.set scale)))
+  (when-not (nil? rotation)
+      (.setRotation object rotation)))
 
 (defn animation-eager
   [object frame state]

@@ -87,7 +87,7 @@
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
-  {:name "image-src", :type "image", :template nil}
+  {:name "image-src", :type "image", :template nil, :scenes ["volleyball"]}
   {:name "letter", :type "string"}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",
@@ -268,19 +268,19 @@
     :scene-id "cinema"}}
   {:name "word-image-1",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-2",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-3",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-4",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}],
  :items
  [{:name "ardilla",

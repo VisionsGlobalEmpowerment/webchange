@@ -3,7 +3,6 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
     [re-frame.core :as re-frame]
-    [webchange.common.anim :refer [start-animation set-slot]]
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
@@ -18,7 +17,8 @@
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.state.lessons.subs :as lessons]
-    [webchange.sw-utils.state.status :as sw-status]))
+    [webchange.sw-utils.state.status :as sw-status]
+    [webchange.interpreter.renderer.state.scene :as scene]))
 
 (re-frame/reg-fx
   :execute-audio
@@ -86,9 +86,10 @@
   :load-lessons
   (fn [[course-id load-assets?]]
     (i/load-lessons course-id load-assets?
-                    (fn [{:keys [items lesson-sets]}]
+                    (fn [{:keys [items lesson-sets datasets]}]
                       (re-frame/dispatch [:complete-request :load-lessons])
                       (re-frame/dispatch [::set-course-dataset-items items])
+                      (re-frame/dispatch [::set-course-datasets datasets])
                       (re-frame/dispatch [::set-course-lessons lesson-sets])
                       (re-frame/dispatch [::check-course-loaded]))
                     #(re-frame/dispatch [::set-dataset-loading-progress %])
@@ -109,44 +110,47 @@
   :switch-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      (.setAnimation (:animation-state state) track id loop))))
+      ((:set-animation state) track id loop))))
 
 (re-frame/reg-fx
   :add-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      (.addAnimation (:animation-state state) track id loop 0))))
+      ((:add-animation state) track id loop 0))))
 
 (re-frame/reg-fx
   :remove-animation
-  (fn [{:keys [state track] :or {track 0} :as action}]
-    (.setEmptyAnimation (:animation-state state) track 0.2)))
+  (fn [{:keys [state track] :or {track 0}}]
+    ((:remove-animation state) track 0.2)))
 
 (re-frame/reg-fx
   :start-animation
-  (fn [shape]
-    (start-animation shape)))
+  (fn [{:keys [state ] }]
+    ((:start-animation state))))
 
 (re-frame/reg-fx
   :set-slot
   (fn [{:keys [state slot-name slot-attachment-name image region attachment]}]
-    (let [skeleton (:skeleton state)]
-      (set-slot skeleton slot-name slot-attachment-name image region attachment))))
+    ((:set-slot state) slot-name image {:attachment-params    attachment
+                                        :slot-attachment-name slot-attachment-name
+                                        :region-params        region})))
 
 (re-frame/reg-fx
   :set-skin
   (fn [{:keys [state skin]}]
-    (let [skeleton (:skeleton state)]
-      (.setSkinByName skeleton skin)
-      (.setToSetupPose skeleton))))
+    ;(let [skeleton (:skeleton state)]
+    ;  (.setSkinByName skeleton skin)
+    ;  (.setToSetupPose skeleton))
+    ((:set-skin state) skin)))
 
 (re-frame/reg-fx
   :animation-props
-  (fn [{{skeleton :skeleton} :state {:keys [scaleX scaleY x y]} :props}]
-    (when scaleX (set! (.-scaleX skeleton) scaleX))
-    (when scaleY (set! (.-scaleY skeleton) scaleY))
-    (when x (set! (.-x skeleton) x))
-    (when y (set! (.-y skeleton) y))))
+  (fn [{component :state {:keys [scaleX scaleY x y]} :props}]
+    (let [position {:x x
+                    :y y}]
+      (when scaleX ((:set-scale-x component) scaleX))
+      (when scaleY ((:set-scale-y component) scaleY))
+      ((:set-position component) position))))
 
 (defn get-audio-key
   [db id]
@@ -377,7 +381,8 @@
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
           state (get states-with-aliases (keyword id))]
       {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge state params)
-       :dispatch (ce/success-event action)})))
+       :dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
+                         (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-set-attribute
@@ -823,6 +828,11 @@
     (let [prepared (into {} (map #(identity [(:id %) %]) data))]
       {:db (assoc db :dataset-items prepared)})))
 
+(re-frame/reg-event-fx
+  ::set-course-datasets
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :datasets data)}))
+
 (defn prepare-lesson [{data :data :as lesson}]
   (assoc lesson :item-ids (map #(:id %) (:items data))))
 
@@ -881,9 +891,12 @@
                                                    :active (and show-navigation?
                                                                 (= target (:object exit)))})))]
       {:dispatch-n (map (fn [{:keys [target active]}]
-                          [::execute-set-attribute {:target     target
-                                                    :attr-name  :eager
-                                                    :attr-value active}])
+                          (when active
+                            [::scene/change-scene-object target [[:add-filter {:name "pulsation"}]]])
+                          ;[::execute-set-attribute {:target     target
+                          ;                          :attr-name  :eager
+                          ;                          :attr-value active}]
+                          )
                         navigation-items)})))
 
 (re-frame/reg-event-fx

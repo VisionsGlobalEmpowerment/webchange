@@ -19,13 +19,13 @@
   (fn [db [_ name]]
     (get-lesson-set db name)))
 
-(defn- get-level
+(defn get-level
   [db level]
   (->> (get-in db [:course-data :levels])
        (filter #(= level (:level %)))
        first))
 
-(defn- get-lesson
+(defn get-lesson
   [level lesson]
   (->> (:lessons level)
        (filter #(= lesson (:lesson %)))

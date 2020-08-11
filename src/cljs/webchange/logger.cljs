@@ -1,5 +1,6 @@
 (ns webchange.logger
   (:require
+    [clojure.pprint :as p]
     [webchange.config :refer [log-level]]))
 
 (def current-level log-level)
@@ -42,5 +43,5 @@
   (when (allowed? :debug)
     (let [group-name (str prefix " [Debug] " title)]
       (js/console.groupCollapsed group-name)
-      (apply js/console.log args)
+      (apply js/console.log (p/pprint args))
       (js/console.groupEnd group-name))))

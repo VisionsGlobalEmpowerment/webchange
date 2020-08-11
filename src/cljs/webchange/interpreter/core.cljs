@@ -125,6 +125,7 @@
   ([asset progress]
    (case (-> asset :type keyword)
      :anim-text (anim/load-anim-text asset progress)
+     :animation (anim/load-anim-text asset progress)
      :anim-texture (anim/load-anim-texture asset progress)
      (load-base-asset asset progress))))
 
@@ -195,8 +196,9 @@
 
 (defn transition-duration
   [component to]
-  (let [cx (-> component (.-attrs) (.-x))
-        cy (-> component (.-attrs) (.-y))
+  (let [position ((:get-position component))
+        cx (:x position)
+        cy (:y position)
         {:keys [x y duration speed]} to]
     (cond
       (> duration 0) duration
@@ -227,40 +229,85 @@
     (when on-kill
       (on-kill))))
 
-(defn gsap-tween
-  [{:keys [id component to on-ended]}]
-  (let [duration (transition-duration @component to)
-        ease-params (or (:ease to) [0.1 0.4])
+(defn- get-tween-object-params
+  [object]
+  (-> ((:get-position object))
+      (clj->js)))
+
+(defn- set-tween-object-params
+  [object params]
+  (let [position (select-keys params [:x :y])]
+    ((:set-position object) position)))
+
+;; ToDo: Test :loop params
+;; ToDo: Test :from params
+;; ToDo: Test :skippable params
+(defn tween
+  [{:keys [id component to from on-ended skippable]}]
+
+  ;(print "--> tween")
+  ;(print "id" id)
+  ;(print "component" component)
+  ;(print "to" to)
+  ;(print "from" from)
+  ;(print "skippable" skippable)
+
+  (when from
+    (set-tween-object-params @component from))
+
+  (let [container (get-tween-object-params @component)
+        duration (transition-duration @component to)
+        ease-params (or (:ease to) [1 1])
         vars (-> to
                  (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
-                 (assoc :onComplete on-ended)
+                 (assoc :onUpdate (fn [] (set-tween-object-params @component (js->clj container :keywordize-keys true))))
+                 (assoc :onComplete (if (:loop to)
+                                      (fn [] (this-as t (.restart t)))
+                                      (fn [] (on-ended) (this-as t (.kill t)))))
                  clj->js)
-        tween (TweenMax.to @component duration vars)]
+        tween (TweenMax.to container duration vars)]
+
+    (when skippable
+      (ce/on-skip! #(.progress tween 1)))
+
     (register-transition! id #(.kill tween))))
 
-(defn konva-tween
-  [{:keys [id component to from on-ended skippable]}]
-  (let [duration (transition-duration @component to)
-        params (-> to
-                   (assoc :node @component)
-                   (assoc :duration duration)
-                   (assoc :onFinish (if (:loop to)
-                                      (fn [] (this-as t (.reset t) (.play t)))
-                                      (fn [] (on-ended) (this-as t (.destroy t)))))
-                   (assoc :easing (-> to :easing ->easing)))
-        tween (-> params clj->js Tween.)]
-    (when from
-      (.setAttrs @component (clj->js from)))
-    (when skippable
-      (ce/on-skip! #(.finish tween)))
-    (register-transition! id #(.destroy tween))
-    (.play tween)))
+;(defn gsap-tween
+;  [{:keys [id component to on-ended]}]
+;  (let [duration (transition-duration @component to)
+;        ease-params (or (:ease to) [0.1 0.4])
+;        vars (-> to
+;                 (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
+;                 (assoc :onComplete on-ended)
+;                 clj->js)
+;        tween (TweenMax.to @component duration vars)]
+;    (register-transition! id #(.kill tween))))
+
+;(defn konva-tween
+;  [{:keys [id component to from on-ended skippable]}]
+;  (let [duration (transition-duration @component to)
+;        params (-> to
+;                   (assoc :node @component)
+;                   (assoc :duration duration)
+;                   (assoc :onFinish (if (:loop to)
+;                                      (fn [] (this-as t (.reset t) (.play t)))
+;                                      (fn [] (on-ended) (this-as t (.destroy t)))))
+;                   (assoc :easing (-> to :easing ->easing)))
+;        tween (-> params clj->js Tween.)]
+;    (when from
+;      (.setAttrs @component (clj->js from)))
+;    (when skippable
+;      (ce/on-skip! #(.finish tween)))
+;    (register-transition! id #(.destroy tween))
+;    (.play tween)))
 
 (defn interpolate
-  [{:keys [to] :as p}]
-  (cond
-    (:bezier to) (gsap-tween p)
-    :else (konva-tween p)))
+  [p]
+  (tween p)
+  ;(cond
+  ;  (:bezier to) (gsap-tween p)
+  ;  :else (konva-tween p))
+  )
 
 (defn collide?
   [shape1 shape2]
@@ -281,13 +328,13 @@
 
 (defn animation-sequence->actions [{audio-start :start :keys [target track data skippable] :or {track 1}}]
   (into [] (map (fn [{:keys [start end anim]}]
-                  {:type "sequence-data"
-                   :data [{:type "empty" :duration (* (- start audio-start) 1000)}
-                          {:type "animation" :target target :track track :id anim}
-                          {:type "empty" :duration (* (- end start) 1000)}
-                          {:type "remove-animation" :target target :track track}]
+                  {:type      "sequence-data"
+                   :data      [{:type "empty" :duration (* (- start audio-start) 1000)}
+                               {:type "animation" :target target :track track :id anim}
+                               {:type "empty" :duration (* (- end start) 1000)}
+                               {:type "remove-animation" :target target :track track}]
                    :skippable skippable
-                   :on-skip #(re-frame/dispatch [::ce/execute-action {:type "remove-animation" :target target :track track}])})
+                   :on-skip   #(re-frame/dispatch [::ce/execute-action {:type "remove-animation" :target target :track track}])})
                 data)))
 
 (defn animation-sequence->audio-action [{:keys [start duration audio] :as action}]
