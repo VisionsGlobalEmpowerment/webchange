@@ -14,6 +14,16 @@
 (use-fixtures :once f/init)
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
 
+(deftest course-can-be-created
+  (let [name "My test Course"
+        course-data {:name name :lang "english" :concept-list-id 1}
+        saved-value (-> (f/create-course! course-data) :body slurp (json/read-str :key-fn keyword))
+        retrieved-value (-> (:slug saved-value) f/get-course :body slurp (json/read-str :key-fn keyword))]
+    (is (= name (:name saved-value)))
+    (is (not (nil? (:id saved-value))))
+    (is (not (nil? (:slug saved-value))))
+    (is (not (nil? (:scene-list retrieved-value))))))
+
 (deftest course-can-be-retrieved
          (let [course (f/course-created)
                response (f/get-course (:slug course))
@@ -190,3 +200,8 @@
     (assert (= (count skins) 2))
     ))
 
+(deftest skills-can-be-retrieved
+  (let [retrieved (-> (f/get-skills) :body slurp (json/read-str :key-fn keyword))]
+    (is (not (empty? (:strands retrieved))))
+    (is (not (empty? (:topics retrieved))))
+    (is (not (empty? (:skills retrieved))))))

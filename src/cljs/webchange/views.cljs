@@ -16,7 +16,8 @@
     [webchange.sw-utils.state.status :as sw]
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.views-login-switch :refer [login-switch]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui.theme :refer [get-in-theme]]
+    [webchange.editor-v2.wizard.views :as wizard]))
 
 (defn- get-styles
   []
@@ -106,6 +107,10 @@
     :student-dashboard [student-dashboard-page]
     :student-course-dashboard [student-dashboard-page]
     :finished-activities [student-dashboard-finished-page]
+
+    ;;wizard
+    :create-course [wizard/create-course-panel]
+    :create-activity [wizard/create-activity-panel (:course-id route-params)]
     [page-404]))
 
 (defn main-panel []

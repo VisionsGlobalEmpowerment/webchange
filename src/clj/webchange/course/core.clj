@@ -9,7 +9,7 @@
             [config.core :refer [env]]
             [clojure.string :as string]
             [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
+            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]))
 
 (def editor_asset_type_background "background")
 (def editor_asset_type_surface "surface")
@@ -306,3 +306,26 @@
     (when (= clear "clear") (clear-before-update))
     (doseq [file (filter (fn [f] (. f isFile)) (assets/files source-path))]
       (store-editor-asset source-path target-path (config :public-dir) (. file getPath))))))
+
+(defn create-course
+  [{:keys [name lang] :as data} owner-id]
+  (let [current-time (jt/local-date-time)
+        user (db/get-user {:id owner-id})
+        website-id (:website-id user)
+        new-course-data (merge data {:slug            (slug (->kebab-case name) lang)
+                                     :owner_id        owner-id
+                                     :website_user_id website-id
+                                     :image_src       nil
+                                     :status          "draft"})
+        [{new-course-id :id}] (db/create-course! new-course-data)
+        course-data {:initial-scene nil
+                     :navigation-mode :activity
+                     :scene-list {}
+                     :default-progress {}}]
+    (db/save-course! {:course_id new-course-id
+                      :data course-data
+                      :owner_id owner-id
+                      :created_at current-time})
+    [true (-> (transform-keys ->kebab-case-keyword new-course-data)
+              (assoc :id new-course-id)
+              (->website-course))]))

@@ -1,5 +1,5 @@
 (ns webchange.handler
-  (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
+  (:require [compojure.api.sweet :refer [api context GET POST PUT DELETE PATCH defroutes routes swagger-routes]]
             [compojure.route :refer [resources files not-found]]
             [ring.util.response :refer [resource-response response redirect]]
             [ring.middleware.reload :refer [wrap-reload]]
@@ -8,14 +8,15 @@
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.handler :refer [auth-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
-            [webchange.course.handler :refer [course-routes website-api-routes]]
+            [webchange.course.handler :refer [course-routes website-api-routes editor-api-routes courses-api-routes]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.school.handler :refer [school-routes]]
             [webchange.secondary.handler :refer [secondary-school-routes]]
             [webchange.progress.handler :refer [progress-routes]]
-            [webchange.dataset.handler :refer [dataset-routes]]
+            [webchange.dataset.handler :refer [dataset-routes dataset-api-routes]]
             [webchange.assets.handler :refer [asset-routes asset-maintainer-routes]]
             [webchange.resources.handler :refer [resources-routes]]
+            [webchange.templates.handler :refer [templates-api-routes]]
             [ring.middleware.session :refer [wrap-session]]
             [buddy.auth :refer [throw-unauthorized authenticated?]]
             [buddy.auth.backends.session :refer [session-backend]]
@@ -106,6 +107,9 @@
            (GET "/courses/:id/dashboard" request (authenticated-route request {:student-page true}))
            (GET "/courses/:id/dashboard/finished" request (authenticated-route request {:student-page true}))
 
+           ;; Wizard
+           (GET "/create-course" request (authenticated-route request))
+
            (files "/upload/" {:root (env :upload-dir)})
            (resources "/"))
 
@@ -147,7 +151,16 @@
 ;       (authorization-error request e backend)))
 
 (defroutes app
-           website-api-routes
+           (api
+             (swagger-routes {:ui   "/api-docs"
+                              :data {:info {:title "TabSchools API"}
+                                     :tags [{:name "dataset", :description "Dataset APIs"}
+                                            {:name "course", :description "Courses APIs"}]}})
+             website-api-routes
+             editor-api-routes
+             courses-api-routes
+             dataset-api-routes
+             templates-api-routes)
            pages-routes
            animation-routes
            auth-routes

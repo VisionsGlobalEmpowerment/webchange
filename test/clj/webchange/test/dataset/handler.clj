@@ -87,7 +87,7 @@
         retrieved (-> (f/get-lesson-set dataset-id name) :body slurp (json/read-str :key-fn keyword) :lesson-set)]
     (is (= updated-data (:data retrieved)))))
 
-(deftest leson-set-can-be-deleted
+(deftest lesson-set-can-be-deleted
   (let [{id :id name :name dataset-id :dataset-id} (f/lesson-set-created)
         _ (f/delete-lesson-set! id)
         status (-> (f/get-lesson-set dataset-id name) :status)]
@@ -111,3 +111,14 @@
         asset (-> retrieved :assets first)]
     (is (not (nil? (:url asset))))
     (is (not (nil? (:type asset))))))
+
+(deftest dataset-library-can-be-retrieved
+  (let [retrieved (-> (f/get-dataset-library) :body slurp (json/read-str :key-fn keyword))]
+    (is (= 2 (count retrieved)))))
+
+(deftest dataset-created-from-library-on-course-creation
+  (let [course-data {:name "test course" :lang "english" :concept-list-id 1}
+        {course-slug :slug} (-> (f/create-course! course-data) :body slurp (json/read-str :key-fn keyword))
+        retrieved (-> course-slug f/get-course-lessons :body slurp (json/read-str :key-fn keyword))]
+    (is (= 31 (count (:items retrieved))))
+    (is (not (nil? (-> retrieved :datasets first :scheme :fields))))))
