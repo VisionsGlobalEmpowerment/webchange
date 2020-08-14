@@ -11,6 +11,7 @@
 (def js-fold (str public-fold "js/compiled/"))
 (def css-fold (str public-fold "css/"))
 (def img-fold (str public-fold "images/"))
+(def fonts-fold (str public-fold "fonts/"))
 
 (defn- remove-prefix
   [s]
@@ -42,13 +43,8 @@
         (get-files-list (str js-fold "out/"))
         (get-files-list css-fold)
         (get-files-list img-fold)
-        (->> defaults/default-assets (map :url))
-        "https://fonts.googleapis.com/css?family=Luckiest+Guy"
-        "https://fonts.googleapis.com/css?family=Lexend+Deca"
-        "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
-        "https://fonts.gstatic.com/s/lato/v15/S6u9w4BMUTPHh6UVSwiPGQ.woff2"
-        "https://fonts.gstatic.com/s/lexenddeca/v1/K2F1fZFYk-dHSE0UPPuwQ5qnJy8.woff2"
-        "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"]
+        (get-files-list fonts-fold)
+        (->> defaults/default-assets (map :url))]
        (flatten)
        (remove nil?)
        (vec)))
