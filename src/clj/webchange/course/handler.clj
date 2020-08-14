@@ -14,7 +14,8 @@
             [spec-tools.data-spec :as ds]
             [schema.core :as s]
             [config.core :refer [env]]
-            [compojure.api.middleware :as mw]))
+            [compojure.api.middleware :as mw]
+            [webchange.templates.core :as templates]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
@@ -76,12 +77,23 @@
     (datasets-library/create-dataset! (-> course second :slug) (:concept-list-id data))
     (handle course)))
 
+(defn handle-create-activity
+  [course-slug data request]
+  (let [owner-id (current-user request)
+        activity (templates/activity-from-template data)]
+    (-> activity
+        (core/create-scene! course-slug (:name data) owner-id)
+        handle)))
+
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str)})
 (s/defschema CreateCourse {:name s/Str :lang s/Str :concept-list-id s/Int})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "background" "surface" "decoration")})
 (s/defschema CharacterSkin {:name s/Str :width s/Num :height s/Num :skins [s/Str] :animations [s/Str]})
+
+(s/defschema CreateActivity {:name s/Str :template-id s/Int})
+(s/defschema Activity {:id s/Int :name s/Str :scene-slug s/Str :course-slug s/Str})
 
 (s/defschema Topic {:name s/Str :strand s/Keyword})
 (s/defschema Skill {:id s/Int :name s/Str :grade s/Str :topic s/Keyword :tags [s/Str]})
@@ -140,7 +152,13 @@
       :return Course
       :body [course-data CreateCourse]
       :summary "Creates a new course"
-      (handle-create-course course-data request)))
+      (handle-create-course course-data request))
+    (POST "/:course-slug/create-activity" request
+      :path-params [course-slug :- s/Str]
+      :return Activity
+      :body [activity-data CreateActivity]
+      :summary "Creates a new course"
+      (handle-create-activity course-slug activity-data request)))
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills

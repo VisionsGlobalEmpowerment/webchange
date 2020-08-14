@@ -55,7 +55,7 @@
     [course-info]]])
 
 (defn- activity-info
-  [course-id]
+  [course-slug]
   (r/with-let [data (r/atom {})]
     (let [templates @(re-frame/subscribe [::state-activity/templates])
           skills @(re-frame/subscribe [::state-activity/skills])]
@@ -83,15 +83,15 @@
        [ui/card-actions
         [ui/button {:color    "secondary"
                     :style    {:margin-left "auto"}
-                    :on-click #(re-frame/dispatch [::state-activity/create-activity course-id @data])}
+                    :on-click #(re-frame/dispatch [::state-activity/create-activity course-slug @data])}
          "Save"]]])))
 
 (defn create-activity-panel
-  [course-id]
+  [course-slug]
   (re-frame/dispatch [::state-activity/load-templates])
   (re-frame/dispatch [::state-activity/load-skills])
   [layout {:title "Activity"}
    [:div {:style {:height         "100%"
                   :display        "flex"
                   :flex-direction "column"}}
-    [activity-info course-id]]]))
+    [activity-info course-slug]]])

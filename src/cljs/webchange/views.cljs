@@ -110,7 +110,7 @@
 
     ;;wizard
     :create-course [wizard/create-course-panel]
-    :create-activity [wizard/create-activity-panel (:course-id route-params)]
+    :create-activity [wizard/create-activity-panel (:course-slug route-params)]
     [page-404]))
 
 (defn main-panel []

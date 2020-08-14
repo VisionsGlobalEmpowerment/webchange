@@ -50,17 +50,18 @@
 
 (re-frame/reg-event-fx
   ::create-activity
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ course-slug data]]
     {:db         (assoc-in db [:loading :create-activity] true)
      :http-xhrio {:method          :post
-                  :uri             (str "/api/datasets-library")
+                  :uri             (str "/api/courses/" course-slug "/create-activity")
+                  :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::load-datasets-library-success]
+                  :on-success      [::create-activity-success]
                   :on-failure      [:api-request-error :create-course]}}))
 
 (re-frame/reg-event-fx
-  ::load-datasets-library-success
+  ::create-activity-success
   (fn [{:keys [db]} [_ result]]
-    {:db         (assoc-in db (path-to-db [:datasets-library]) result)
-     :dispatch-n (list [:complete-request :create-course])}))
+    {:dispatch-n (list [:complete-request :create-course])
+     :redirect [:course-editor-v2-scene :id (:course-slug result) :scene-id (:scene-slug result)]}))

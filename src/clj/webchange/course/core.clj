@@ -77,14 +77,12 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         scene-id (get-or-create-scene! course-id scene-name)
         created-at (jt/local-date-time)
-        scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))
-        ]
+        scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))]
     (if (not (identical? scene-data-old scene-data))
       (db/save-scene! {:scene_id scene-id
                        :data scene-data
                        :owner_id owner-id
                        :created_at created-at}))
-
     [true {:id scene-id
            :name scene-name
            :created-at (str created-at)}]))
@@ -329,3 +327,19 @@
     [true (-> (transform-keys ->kebab-case-keyword new-course-data)
               (assoc :id new-course-id)
               (->website-course))]))
+
+(defn create-scene!
+  [scene-data course-slug scene-name owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        {course-data :data} (db/get-latest-course-version {:course_id course-id})
+        scene-slug (->kebab-case scene-name)
+        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})
+        created-at (jt/local-date-time)]
+    (db/save-scene! {:scene_id scene-id
+                     :data scene-data
+                     :owner_id owner-id
+                     :created_at created-at})
+    (db/save-course! {:course_id course-id
+                      :data (assoc-in course-data [:scene-list (keyword scene-slug)] {:name scene-name})
+                      :owner_id owner-id
+                      :created_at created-at})))

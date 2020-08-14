@@ -32,7 +32,7 @@
   t)
 
 (core/register-template
-  (:name m)
+  (:id m)
   m
   (partial f t))
 

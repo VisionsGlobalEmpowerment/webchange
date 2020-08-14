@@ -42,4 +42,4 @@
   ::create-course-success
   (fn [{:keys [db]} [_ result]]
     {:dispatch-n (list [:complete-request :create-course])
-     :redirect [:course-editor-v2 :course-id (:id result)]}))
+     :redirect [:create-activity :course-slug (:slug result)]}))
