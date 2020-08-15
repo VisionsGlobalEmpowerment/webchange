@@ -6,7 +6,10 @@
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.requests.api :as api]
     [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers :refer [then promise-all promise-resolve]]))
+    [webchange.service-worker.wrappers :refer [then promise-all promise-resolve]]
+    [webchange.service-worker.config :as config]))
+
+(def skeleton-page (str "/page-skeleton?v=" config/release-number))
 
 (defn cache-app
   []
@@ -15,7 +18,7 @@
   (-> (api/get-web-app-resources)
       (then (fn [{:keys [resources endpoints]}]
               (logger/debug "[Cache App] Cache web app resources")
-              (promise-all [(web-app-cache/cache-resources resources)
+              (promise-all [(web-app-cache/cache-resources (conj resources skeleton-page))
                             (vs/add-endpoints endpoints)])))
       (then (fn []
               (logger/debug "[Cache App] Set Last update")

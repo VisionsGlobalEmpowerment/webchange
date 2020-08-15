@@ -1,12 +1,13 @@
 (ns webchange.service-worker.event-handlers.fetch
   (:require
     [clojure.string :refer [starts-with?]]
-    [webchange.service-worker.config :refer [get-cache-name]]
+    [webchange.service-worker.config :refer [get-cache-name release-number]]
     [webchange.service-worker.db.general :as general]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.strategies :as strategy]
     [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers :refer [js-fetch online? promise-all promise-reject request-pathname then catch]]))
+    [webchange.service-worker.wrappers :refer [js-fetch online? promise-all promise-reject request-pathname then catch]]
+    [webchange.service-worker.controllers.web-app-resources :as web-app-resources]))
 
 (def pages-paths ["/login"
                   "/student-login"
@@ -21,7 +22,7 @@
 
 (defn- serve-page-skeleton
   []
-  (strategy/network-or-cache {:request    "./page-skeleton"
+  (strategy/network-or-cache {:request    web-app-resources/skeleton-page
                               :cache-name (get-cache-name :static)}))
 
 (defn- serve-cache-asset

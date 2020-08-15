@@ -38,7 +38,6 @@
 (defn generate-app-resources
   []
   (->> ["/manifest.json"
-        "/page-skeleton"
         (get-files-list (str js-fold "app.js"))
         (get-files-list (str js-fold "out/"))
         (get-files-list css-fold)
