@@ -11,7 +11,7 @@
     [webchange.student-dashboard.toolbar.sync.icons.icon-unavailable :refer [icon-unavailable]]))
 
 (defn current-version-data
-  [{:keys [update-date-str version]}]
+  [{:keys [update-date-str version app-version]}]
   (let [update (js/Date. update-date-str)
         update-date (.toLocaleDateString update)
         update-time (.toLocaleTimeString update)]
@@ -19,12 +19,18 @@
      [:div {:style {:display   "flex"
                     :font-size 10
                     :height    15}}
-      [:div {:style {:width 50}} "Version:"]
+      [:div {:style {:width 60}} "App Version:"]
+      [:div
+       [:span {:style {:height 14}} app-version]]]
+     [:div {:style {:display   "flex"
+                    :font-size 10
+                    :height    15}}
+      [:div {:style {:width 60}} "SW Version:"]
       [:div
        [:span {:style {:height 14}} version]]]
      [:div {:style {:display   "flex"
                     :font-size 10}}
-      [:div {:style {:width 50}} "Updated:"]
+      [:div {:style {:width 60}} "Updated:"]
       [:div {:style {:display        "flex"
                      :flex-direction "column"}}
        [:span {:style {:height 14}} update-time]
@@ -33,10 +39,11 @@
 (defn current-version
   []
   (let [last-update @(re-frame/subscribe [::status/last-update])
-        version @(re-frame/subscribe [::status/version])]
+        version @(re-frame/subscribe [::status/version])
+        app-version @(re-frame/subscribe [:app-version])]
     [ui/menu-item
      {:disabled true
-      :style    {:height          50
+      :style    {:height          70
                  :justify-content "center"
                  :padding-top     0
                  :padding-bottom  0}}
@@ -44,7 +51,8 @@
        [ui/circular-progress
         {:size 24}]
        [current-version-data {:update-date-str last-update
-                              :version         version}])]))
+                              :version         version
+                              :app-version     app-version}])]))
 
 (defn- sync-status-icon
   [sync-status]

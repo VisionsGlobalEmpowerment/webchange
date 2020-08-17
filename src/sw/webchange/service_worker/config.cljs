@@ -3,7 +3,7 @@
     [clojure.string :refer [join]]))
 
 (def app-name "webchange")
-(def release-number 8)
+(def release-number 9)
 
 (def cache-names-prefix app-name)
 (def database-name app-name)
