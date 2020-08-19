@@ -12,17 +12,7 @@
     [webchange.editor-v2.graph-builder.graph.data.letter-intro.dialog--stage-small :as stage-small]
     [webchange.editor-v2.graph-builder.graph.data.letter-intro.dialog--touch-big :as touch-big]
     [webchange.editor-v2.graph-builder.graph.data.letter-intro.dialog--touch-small :as touch-small]
-    [webchange.editor-v2.graph-builder.graph.data.letter-intro.dialog--two-ways :as two-ways]
-    [webchange.editor-v2.graph-builder.graph.data.letter-intro.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--letter-intro
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.letter-intro.dialog--two-ways :as two-ways]))
 
 (let [diagram-mode :translation
       scene-data source/data

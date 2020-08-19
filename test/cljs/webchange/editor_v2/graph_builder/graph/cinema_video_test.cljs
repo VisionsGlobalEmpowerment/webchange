@@ -10,24 +10,7 @@
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--lets-watch :as lets-watch]
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--touch-to-play :as touch-to-play]
     [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--very-good :as very-good]
-    [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.cinema-video.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--cinema-video
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
-
-;current-dialog-action-name :vaca-voice-very-good
-;client.cljs?rel=1591782929345:39 current-dialog-action-name nil
-;client.cljs?rel=1591782929345:39 current-dialog-action-name :mari-voice-touch-again-1
-;client.cljs?rel=1591782929345:39 current-dialog-action-name nil
-;client.cljs?rel=1591782929345:39 current-dialog-action-name :mari-voice-touch-again-2
-;client.cljs?rel=1591782929345:39 current-dialog-action-name nil
+    [webchange.editor-v2.graph-builder.graph.data.cinema-video.dialog--welcome :as welcome]))
 
 (let [diagram-mode :translation
       scene-data source/data

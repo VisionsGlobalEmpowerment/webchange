@@ -173,7 +173,8 @@
                                                                          "empty-small"
                                                                          "group-3-times-var"],
                                                     :phrase             "concept-chant",
-                                                    :phrase-description "Chant concept"},
+                                                    :phrase-description "Chant concept",
+                                                    :dialog-track       "Concept"},
                  :concept-intro
                                                    {:type               "sequence",
                                                     :data
@@ -186,7 +187,8 @@
                                                                          "empty-small-1"
                                                                          "group-word-var"],
                                                     :phrase             "this-is-concept",
-                                                    :phrase-description "Introduce concept"},
+                                                    :phrase-description "Introduce concept",
+                                                    :dialog-track       "Concept"},
                  :empty-big                        {:type "empty", :duration 1000},
                  :empty-small                      {:type "empty", :duration 500},
                  :empty-small-1                    {:type "empty", :duration 500},
@@ -291,6 +293,7 @@
                                                     :phrase             "intro",
                                                     :phrase-description "Introduce activity",
                                                     :phrase-text        "Vamos a aprender nuevas palabras.",
+                                                    :dialog-track       "Intro",
                                                     :target             "senoravaca",
                                                     :audio              "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a",
                                                     :start              1.089,
@@ -307,8 +310,8 @@
                                                                          {:end 14.302, :anim "talk", :start 11.226}],
                                                     :phrase             "touch-first-box",
                                                     :phrase-description "Touch the first box",
-                                                    :phrase-text
-                                                                        "Mira esto! Que podria estar dentro de las cajas? Vamos a ver adentro! Toca la primera caja par ver que hay adentro.",
+                                                    :phrase-text        "Mira esto! Que podria estar dentro de las cajas? Vamos a ver adentro! Toca la primera caja par ver que hay adentro.",
+                                                    :dialog-track       "Intro",
                                                     :target             "senoravaca",
                                                     :audio              "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a",
                                                     :start              4.395,
@@ -418,6 +421,7 @@
                                                    {:type               "action",
                                                     :phrase             "concept-goodbye",
                                                     :phrase-description "Adios concepto",
+                                                    :dialog-track       "Concept",
                                                     :from-var           [{:var-name "current-word", :var-property "home-vaca-goodbye-action"}]},
                  :vaca-once-more
                                                    {:type        "animation-sequence",

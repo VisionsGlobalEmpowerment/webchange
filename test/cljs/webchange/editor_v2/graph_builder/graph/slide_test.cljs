@@ -9,17 +9,7 @@
     [webchange.editor-v2.graph-builder.graph.data.slide.dialog--riddle :as riddle]
     [webchange.editor-v2.graph-builder.graph.data.slide.dialog--try-another :as try-another]
     [webchange.editor-v2.graph-builder.graph.data.slide.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.slide.dialog--wrong :as wrong]
-    [webchange.editor-v2.graph-builder.graph.data.slide.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--slide
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.slide.dialog--wrong :as wrong]))
 
 (let [diagram-mode :translation
       scene-data source/data

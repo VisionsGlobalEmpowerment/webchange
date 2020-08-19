@@ -9,17 +9,7 @@
     [webchange.editor-v2.graph-builder.graph.data.cinema.dialog--finish :as finish]
     [webchange.editor-v2.graph-builder.graph.data.cinema.dialog--intro :as intro]
     [webchange.editor-v2.graph-builder.graph.data.cinema.dialog--next-photo :as next-photo]
-    [webchange.editor-v2.graph-builder.graph.data.cinema.dialog--one-more-round :as one-more-round]
-    [webchange.editor-v2.graph-builder.graph.data.cinema.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--cinema
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.cinema.dialog--one-more-round :as one-more-round]))
 
 (let [diagram-mode :translation
       scene-data source/data

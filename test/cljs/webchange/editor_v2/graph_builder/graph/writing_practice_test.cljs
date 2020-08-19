@@ -7,17 +7,7 @@
     [webchange.editor-v2.graph-builder.graph.data.writing-practice.source :as source]
     [webchange.editor-v2.graph-builder.graph.data.writing-practice.dialog--free-drawing :as free-drawing]
     [webchange.editor-v2.graph-builder.graph.data.writing-practice.dialog--go-next :as go-next]
-    [webchange.editor-v2.graph-builder.graph.data.writing-practice.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.writing-practice.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--writing-practice
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.writing-practice.dialog--welcome :as welcome]))
 
 (let [diagram-mode :translation
       scene-data source/data

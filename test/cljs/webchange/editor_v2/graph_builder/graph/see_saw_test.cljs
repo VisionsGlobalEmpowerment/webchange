@@ -9,17 +9,7 @@
     [webchange.editor-v2.graph-builder.graph.data.see-saw.dialog--introduce-concept :as introduce-concept]
     [webchange.editor-v2.graph-builder.graph.data.see-saw.dialog--move-to-start :as move-to-start]
     [webchange.editor-v2.graph-builder.graph.data.see-saw.dialog--try-another :as try-another]
-    [webchange.editor-v2.graph-builder.graph.data.see-saw.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.see-saw.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--see-saw
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.see-saw.dialog--welcome :as welcome]))
 
 (let [diagram-mode :translation
       scene-data source/data

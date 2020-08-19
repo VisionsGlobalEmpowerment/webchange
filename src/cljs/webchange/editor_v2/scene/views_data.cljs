@@ -8,7 +8,6 @@
     [webchange.interpreter.core :refer [load-course]]
     [webchange.editor-v2.scene.data.background.views-background :refer [change-background]]
     [webchange.editor-v2.scene.data.skin.views-skin :refer [change-skin]]
-    [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.events :as editor-events]
     [webchange.editor-v2.utils :refer [keyword->caption]]))
 
@@ -18,16 +17,6 @@
 (defn phrase-action-data?
   [action-data]
   (contains? action-data :phrase))
-
-(defn scene-data->phrases-list
-  [scene-data]
-  (->> (:actions scene-data)
-       (filter (fn [[_ action-data]]
-                 (phrase-action-data? action-data)))
-       (reduce (fn [result [action-name action-data]]
-                 (assoc result action-name {:data   action-data
-                                            :phrase (keyword->caption (:phrase action-data))}))
-               {})))
 
 (defn scene-data->objects-list
   [scene-data]
@@ -74,7 +63,6 @@
   (let [course-id (re-frame/subscribe [::subs/current-course])
         scene-id (re-frame/subscribe [::subs/current-scene])
         scenes (re-frame/subscribe [::subs/course-scenes])
-        diagram-mode (re-frame/subscribe [::editor-subs/diagram-mode])
         scene-data (re-frame/subscribe [::subs/scene @scene-id])]
     (let [objects (scene-data->objects-list @scene-data)
           scenes-options (get-scenes-options @scenes)]
@@ -89,21 +77,7 @@
            [ui/menu-item {:value    value
                           :disabled disabled
                           :style    {:text-transform "capitalize"}}
-            text])
-         ]]
-       [ui/form-control {:full-width true
-                         :margin     "normal"}
-        [ui/input-label "Diagram Mode"]
-        [ui/select {:value     (or @diagram-mode "")
-                    :on-change #(let [mode (-> %
-                                               (.. -target -value)
-                                               (keyword))]
-                                  (re-frame/dispatch [::editor-events/set-diagram-mode mode]))}
-         (for [[mode-value mode-text] (partition 2 diagram-modes)]
-           ^{:key (str mode-value)}
-           [ui/menu-item {:value mode-value}
-            mode-text])
-         ]]
+            text])]]
        [change-background]
        [change-skin]
        (when (not-empty objects)

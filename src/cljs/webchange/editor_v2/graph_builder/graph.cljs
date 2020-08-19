@@ -39,9 +39,6 @@
    (get-diagram-graph scene-data diagram-mode {}))
   ([scene-data diagram-mode params]
    (let [result (cond
-                  (= diagram-mode :phrases) (-> scene-data
-                                                (parse-scene (select-keys params [:start-node]))
-                                                (get-phrases-graph))
                   (= diagram-mode :translation) (let [graph (-> scene-data
                                                                 (parse-scene (select-keys params [:start-node :concept-data])))
                                                       translation-graph (get-translation-graph graph)

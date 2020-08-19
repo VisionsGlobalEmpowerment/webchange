@@ -6,7 +6,6 @@
             [webchange.editor.form-elements.controlled-input-test]
             [webchange.editor.form-elements.integer-test]
             [webchange.editor.form-elements.number-test]
-            [webchange.editor-v2.diagram.diagram-model.items-factory.utils-test]            
             [webchange.editor-v2.graph-builder.graph.book-test]
             [webchange.editor-v2.graph-builder.graph.cinema-test]
             [webchange.editor-v2.graph-builder.graph.cinema-video-test]
@@ -31,8 +30,6 @@
             [webchange.editor-v2.graph-builder.filters.phrases-test]
             [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test]
             [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test]
-            [webchange.editor-v2.graph-builder.scene-parser.scene-parser-test]
-            [webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data-test]
             [webchange.editor-v2.graph-builder.utils.merge-actions-test]
             [webchange.editor-v2.graph-builder.utils.counter-map-test]
             [webchange.editor-v2.graph-builder.utils.change-node-test]
@@ -42,6 +39,8 @@
             [webchange.editor-v2.graph-builder.utils.node-siblings-test]
             [webchange.editor-v2.graph-builder.utils.remove-sub-graph-test]
             [webchange.editor-v2.graph-builder.utils.root-nodes-test]
+            [webchange.editor-v2.scene-diagram.scene-parser.action-children-test]
+            [webchange.editor-v2.scene-diagram.scene-parser.scene-parser-test]
             [webchange.editor-v2.translator.translator-form.audio-assets.utils.test]
             [webchange.editor-v2.translator.translator-form.dialog.utils-test]
             [webchange.interpreter.events-test]
@@ -59,7 +58,6 @@
   'webchange.editor.form-elements.controlled-input-test
   'webchange.editor.form-elements.integer-test
   'webchange.editor.form-elements.number-test
-  'webchange.editor-v2.diagram.diagram-model.items-factory.utils-test
   'webchange.editor-v2.graph-builder.graph.book-test
   'webchange.editor-v2.graph-builder.graph.cinema-test
   'webchange.editor-v2.graph-builder.graph.cinema-video-test
@@ -84,8 +82,6 @@
   'webchange.editor-v2.graph-builder.filters.phrases-test
   'webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer-test
   'webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer-test
-  'webchange.editor-v2.graph-builder.scene-parser.scene-parser-test
-  'webchange.editor-v2.graph-builder.scene-parser.utils.get-action-data-test
   'webchange.editor-v2.graph-builder.utils.merge-actions-test
   'webchange.editor-v2.graph-builder.utils.counter-map-test
   'webchange.editor-v2.graph-builder.utils.change-node-test
@@ -95,6 +91,8 @@
   'webchange.editor-v2.graph-builder.utils.node-siblings-test
   'webchange.editor-v2.graph-builder.utils.remove-sub-graph-test
   'webchange.editor-v2.graph-builder.utils.root-nodes-test
+  'webchange.editor-v2.scene-diagram.scene-parser.action-children-test
+  'webchange.editor-v2.scene-diagram.scene-parser.scene-parser-test
   'webchange.editor-v2.translator.translator-form.audio-assets.utils.test
   'webchange.editor-v2.translator.translator-form.dialog.utils-test
   'webchange.interpreter.events-test

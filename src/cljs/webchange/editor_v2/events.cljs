@@ -12,8 +12,7 @@
   (fn [_ [_ course-id scene-id]]
     {:dispatch-n (list [::ie/start-course course-id scene-id]
                        [::load-lesson-sets course-id]
-                       [::load-course-info course-id]
-                       [::set-diagram-mode :phrases])})) ;; :full-scene / :phrases
+                       [::load-course-info course-id])}))
 
 (re-frame/reg-event-fx
   ::load-lesson-sets
@@ -35,11 +34,6 @@
              (assoc-in [:editor :course-dataset-items] (:items result))
              (assoc-in [:editor :course-lesson-sets] (:lesson-sets result)))
      :dispatch-n (list [:complete-request :lesson-sets])}))
-
-(re-frame/reg-event-fx
-  ::set-diagram-mode
-  (fn [{:keys [db]} [_ mode]]
-    {:db (assoc-in db [:editor-v2 :diagram-mode] mode)}))
 
 (re-frame/reg-event-fx
   ::show-translator-form

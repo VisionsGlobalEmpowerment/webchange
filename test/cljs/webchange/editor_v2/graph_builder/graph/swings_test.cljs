@@ -9,17 +9,7 @@
     [webchange.editor-v2.graph-builder.graph.data.swings.dialog--move-to-start :as move-to-start]
     [webchange.editor-v2.graph-builder.graph.data.swings.dialog--story :as story]
     [webchange.editor-v2.graph-builder.graph.data.swings.dialog--try-another :as try-another]
-    [webchange.editor-v2.graph-builder.graph.data.swings.dialog--welcome :as welcome]
-    [webchange.editor-v2.graph-builder.graph.data.swings.scene-translation :as full-scene]))
-
-(deftest test-get-diagram-graph--swings
-  (let [diagram-mode :phrases
-        scene-data source/data
-        params {:start-node nil}]
-    (compare-results (get-diagram-graph scene-data diagram-mode params)
-                     full-scene/data
-                     {:pick-data?   false
-                      :keep-phrase? false})))
+    [webchange.editor-v2.graph-builder.graph.data.swings.dialog--welcome :as welcome]))
 
 (let [diagram-mode :translation
       scene-data source/data
