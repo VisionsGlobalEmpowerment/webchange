@@ -263,6 +263,14 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn create-activity!
+  [course-slug data]
+  (let [url (str "/api/courses/" course-slug "/create-activity")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
 (defn save-course!
   [course-slug data]
   (let [course-url (str "/api/courses/" course-slug)

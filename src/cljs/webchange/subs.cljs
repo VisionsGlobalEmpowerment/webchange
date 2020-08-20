@@ -28,7 +28,9 @@
 (re-frame/reg-sub
   ::course-scenes
   (fn [db]
-    (-> db :course-data :scenes)))
+    (->> db :course-data :scene-list keys
+         (map name)
+         (into []))))
 
 (re-frame/reg-sub
   ::course-levels

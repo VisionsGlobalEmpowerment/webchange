@@ -38,6 +38,19 @@
                retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
            (is (= edited-value retrieved-value))))
 
+(deftest activity-can-be-created-from-template
+  (let [course (f/course-created)
+        name "Test Activity"
+        activity-data {:name name :template-id 1}
+        saved-value (-> (f/create-activity! (:slug course) activity-data) :body slurp (json/read-str :key-fn keyword))
+        retrieved-value (-> (f/get-scene (:course-slug saved-value) (:scene-slug saved-value)) :body slurp (json/read-str :key-fn keyword))]
+    (log/debug retrieved-value)
+    (is (= name (:name saved-value)))
+    (is (not (nil? (:id saved-value))))
+    (is (not (nil? (:course-slug saved-value))))
+    (is (not (nil? (:scene-slug saved-value))))
+    (is (not (nil? (:objects retrieved-value))))))
+
 (deftest scene-can-be-retrieved
          (let [scene (f/scene-created)
                response (f/get-scene (:course-slug scene) (:name scene))]
@@ -197,8 +210,7 @@
 (deftest can-retrieve-retrieve-editor-character-skin
   (let [ _ (course/update-character-skins {:public-dir "test/clj/webchange/resources"})
         skins (core/retrieve-editor-character-skin)]
-    (assert (= (count skins) 2))
-    ))
+    (assert (= (count skins) 2))))
 
 (deftest skills-can-be-retrieved
   (let [retrieved (-> (f/get-skills) :body slurp (json/read-str :key-fn keyword))]

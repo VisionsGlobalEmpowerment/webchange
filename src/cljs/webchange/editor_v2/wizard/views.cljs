@@ -33,8 +33,8 @@
                           :on-change     #(swap! data assoc :lang (-> % .-target .-value))}]]
          [ui/grid {:item true :xs 7}
           [ui/input-label "Concept list"]
-          [ui/select {:value (:dataset-id @data)
-                      :on-change #(swap! data assoc :dataset-id (-> % .-target .-value))
+          [ui/select {:value (:concept-list-id @data)
+                      :on-change #(swap! data assoc :concept-list-id (-> % .-target .-value))
                       :style     {:min-width "150px"}}
            (for [dataset datasets]
              ^{:key (:id dataset)}
