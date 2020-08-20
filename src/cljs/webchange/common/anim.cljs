@@ -22,9 +22,26 @@
   (let [text (.get spine-manager (str "/raw/anim/" name "/skeleton.atlas"))]
     (s/TextureAtlas. text (fn [path] (.get spine-manager (str "/raw/anim/" name "/" path))))))
 
+(def started-animations (atom {}))
+
+(defn- reset-animation!
+  [uuid]
+  (if-let [animation (get started-animations uuid)]
+    (do
+      (.stop animation)
+      (swap! started-animations dissoc uuid))))
+
 (defn start-animation
   [shape]
-  (let [animation (Animation. (fn [frame] (.setAttr shape "timeDiff" (/ (.-timeDiff frame) 1000))) (.getLayer shape))]
+  (let [uuid (random-uuid)
+        animation (Animation. (fn [frame]
+                                (if-let [layer (.getLayer shape)]
+                                  (.batchDraw layer)
+                                  (reset-animation! uuid))
+                                (if (> 15 (.-frameRate frame))
+                                  false
+                                  (.setAttr shape "timeDiff" (/ (.-timeDiff frame) 1000)))))]
+    (swap! started-animations assoc uuid animation)
     (.start animation)))
 
 (defonce renderers (atom {}))
