@@ -34,7 +34,7 @@
   (reset-viewport))
 
 (defn ^:export init []
-  #_(sw/setup config/use-cache "/service-worker.js")
+  (sw/setup config/use-cache "/service-worker.js")
   (routes/start!)
   (re-frame/dispatch-sync [::events/initialize-db])
   (re-frame/dispatch [::events/init-current-school])
