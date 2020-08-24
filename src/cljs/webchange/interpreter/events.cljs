@@ -216,7 +216,7 @@
                            (assoc :duration (get variable (-> action :duration keyword)))
                            (assoc :offset (get variable (-> action :offset keyword))))]
       {:execute-audio (-> audio-params
-                          (assoc :on-ended (ce/dispatch-success-fn action)))})))
+                          (assoc :on-ended #(ce/dispatch-success-fn action)))})))
 
 (defn execute-transition
   [db {:keys [transition-id transition-tag to from skippable] :as action}]
@@ -228,7 +228,7 @@
                     :component transition
                     :to        to
                     :from      from
-                    :on-ended  (ce/dispatch-success-fn action)
+                    :on-ended  #(ce/dispatch-success-fn action)
                     :skippable skippable}})))
 
 (defn point->transition
@@ -312,7 +312,7 @@
   (fn [{:keys [db]} {:keys [id audio] :as action}]
     {:execute-audio (-> action
                         (assoc :key (or audio (get-audio-key db id) id))
-                        (assoc :on-ended (ce/dispatch-success-fn action)))}))
+                        (assoc :on-ended #(ce/dispatch-success-fn action)))}))
 
 (re-frame/reg-event-fx
   ::execute-stop-audio
@@ -325,7 +325,7 @@
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [target src params flow-id] :as action}]
     (let [scene-id (:current-scene db)
-          on-end (ce/dispatch-success-fn action)
+          on-end #(ce/dispatch-success-fn action)
           video-state {:act    "play"
                        :src    src
                        :on-end on-end}]
@@ -345,7 +345,7 @@
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [target params state flow-id] :as action}]
     (let [scene-id (:current-scene db)
-          on-end (ce/dispatch-success-fn action)
+          on-end #(ce/dispatch-success-fn action)
           path-state {:animation state
                       :on-end    on-end}]
       {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)
@@ -647,6 +647,13 @@
         (merge-scene-data scene (map #(add-scene-tag % "template") templates)))
       scene)))
 
+(defn reset-scene-flows!
+  [scene-id]
+  (re-frame/dispatch [::vars.events/clear-vars])
+  (e/stop-all-audio!)
+  (ce/execute-remove-flows! {:flow-tag (str "scene-" scene-id)})
+  (ce/remove-timers!))
+
 (re-frame/reg-event-fx
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id load-assets?]]
@@ -654,22 +661,20 @@
           current-scene (:current-scene db)
           stored-scene (get-in db [:store-scenes scene-id])
           merged-scene (merge-with-templates db stored-scene)]
+      (reset-scene-flows! current-scene)
       {:db         (-> db
                        (assoc :current-scene scene-id)
                        (assoc-in [:scenes scene-id] merged-scene)
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
-       :dispatch-n (list [::reset-scene-flows current-scene]
-                         [::load-scene scene-id load-assets?])})))
+       :dispatch-n (list [::load-scene scene-id load-assets?])})))
 
 (re-frame/reg-event-fx
   ::reset-scene-flows
   (fn [_ [_ scene-id]]
-    {:dispatch-n (list [::vars.events/clear-vars]
-                       [::execute-stop-audio]
-                       [::ce/execute-remove-flows {:flow-tag (str "scene-" scene-id)}]
-                       [::ce/execute-remove-timers])}))
+    (reset-scene-flows! scene-id)
+    {}))
 
 (re-frame/reg-event-fx
   ::set-course-data
