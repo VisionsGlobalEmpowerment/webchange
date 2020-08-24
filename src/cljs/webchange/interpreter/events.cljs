@@ -16,6 +16,7 @@
     [webchange.interpreter.utils.propagate-objects :refer [get-propagated-objects
                                                            replace-object]]
     [webchange.interpreter.variables.events :as vars.events]
+    [webchange.interpreter.variables.core :as vars.core]
     [webchange.state.lessons.subs :as lessons]
     [webchange.sw-utils.state.status :as sw-status]))
 
@@ -490,9 +491,9 @@
 
 (defn activity-score
   [db]
-  {:correct   (vars.events/get-variable db :score-correct)
-   :incorrect (vars.events/get-variable db :score-incorrect)
-   :mistake   (vars.events/get-variable db :score-mistake)})
+  {:correct   (vars.core/get-variable :score-correct)
+   :incorrect (vars.core/get-variable :score-incorrect)
+   :mistake   (vars.core/get-variable :score-mistake)})
 
 (defn activity-score-percentage
   [db]
@@ -649,7 +650,7 @@
 
 (defn reset-scene-flows!
   [scene-id]
-  (re-frame/dispatch [::vars.events/clear-vars])
+  (vars.core/clear-vars! false)
   (e/stop-all-audio!)
   (ce/execute-remove-flows! {:flow-tag (str "scene-" scene-id)})
   (ce/remove-timers!))
@@ -927,11 +928,10 @@
   ::execute-pick-correct
   (fn [{:keys [db]} [_ {:keys [concept-name] :as action}]]
     (let [current-activity (:activity db)
-          counter-value (or (vars.events/get-variable db :score-correct) 0)]
-      {:db         (-> db
-                       (vars.events/set-variable :score-correct (inc counter-value))
-                       (vars.events/set-variable :score-first-attempt false))
-       :dispatch-n (list
+          counter-value (or (vars.core/get-variable :score-correct) 0)]
+      (vars.core/set-variable! :score-correct (inc counter-value))
+      (vars.core/set-variable! :score-first-attempt false)
+      {:dispatch-n (list
                      [::add-pending-event :concept-picked-correct (merge current-activity {:concept-name concept-name})]
                      (ce/success-event action))})))
 
@@ -939,14 +939,14 @@
   ::execute-pick-wrong
   (fn [{:keys [db]} [_ {:keys [concept-name option] :as action}]]
     (let [current-activity (:activity db)
-          counter-incorrect (or (vars.events/get-variable db :score-incorrect) 0)
-          counter-mistake (or (vars.events/get-variable db :score-mistake) 0)
-          first-attempt? (vars.events/get-variable db :score-first-attempt)]
-      {:db         (cond-> db
-                           first-attempt? (vars.events/set-variable :score-incorrect (inc counter-incorrect))
-                           :always (vars.events/set-variable :score-mistake (inc counter-mistake))
-                           :always (vars.events/set-variable :score-first-attempt false))
-       :dispatch-n (list
+          counter-incorrect (or (vars.core/get-variable :score-incorrect) 0)
+          counter-mistake (or (vars.core/get-variable :score-mistake) 0)
+          first-attempt? (vars.core/get-variable :score-first-attempt)]
+      (when first-attempt?
+        (vars.core/set-variable! :score-incorrect (inc counter-incorrect)))
+      (vars.core/set-variable! :score-mistake (inc counter-mistake))
+      (vars.core/set-variable! :score-first-attempt false)
+      {:dispatch-n (list
                      [::add-pending-event :concept-picked-wrong (merge current-activity {:concept-name concept-name
                                                                                          :option       option})]
                      (ce/success-event action))})))
@@ -954,8 +954,8 @@
 (re-frame/reg-event-fx
   ::execute-set-current-concept
   (fn [{:keys [db]} [_ {:keys [value] :as action}]]
-    {:db         (vars.events/set-variable db :score-first-attempt true)
-     :dispatch-n (list (ce/success-event action))}))
+    (vars.core/set-variable! :score-first-attempt true)
+    {:dispatch-n (list (ce/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-set-interval

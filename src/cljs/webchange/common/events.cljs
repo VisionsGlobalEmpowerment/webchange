@@ -2,7 +2,8 @@
   (:require
     [clojure.string :as s]
     [re-frame.core :as re-frame]
-    [day8.re-frame.tracing :refer-macros [fn-traced]]))
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
+    [webchange.interpreter.variables.core :refer [variables]]))
 
 (def executors (atom {}))
 (def flows (atom {}))
@@ -106,9 +107,9 @@
     value))
 
 (defn with-var-property
-  [db]
+  []
   (fn [action {:keys [var-name var-property var-key action-property template to-vector]}]
-    (let [var (get-in db [:scenes (:current-scene db) :variables var-name])
+    (let [var (get @variables var-name)
           value (cond->> var
                          var-property ((keyword var-property))
                          var-key (hash-map (keyword var-key))
@@ -120,9 +121,9 @@
         (assoc-in action (map keyword (s/split action-property #"\.")) value)))))
 
 (defn with-var-properties
-  [action db]
+  [action]
   (if-let [from-var (:from-var action)]
-    (reduce (with-var-property db) action from-var)
+    (reduce (with-var-property) action from-var)
     action))
 
 (defn with-param-property
@@ -151,7 +152,7 @@
 (defn with-var-object-property
   [db]
   (fn [action {:keys [var-name object-name-template object-property action-property offset]}]
-    (let [var (get-in db [:scenes (:current-scene db) :variables var-name])
+    (let [var (get @variables var-name)
           object (get-in db [:scenes (:current-scene db) :objects (keyword (from-template object-name-template var))])
           object-property-path (map keyword (clojure.string/split object-property "."))
           object-property-value (let [val (get-in object object-property-path)]
@@ -169,7 +170,7 @@
   [db action]
   (-> action
       (with-param-properties)
-      (with-var-properties db)
+      (with-var-properties)
       (with-progress-properties db)
       (with-var-object-properties db)))
 
