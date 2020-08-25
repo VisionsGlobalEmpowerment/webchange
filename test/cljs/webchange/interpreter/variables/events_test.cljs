@@ -1,7 +1,7 @@
 (ns webchange.interpreter.variables.events-test
   (:require
     [cljs.test :refer [deftest testing is]]
-    [webchange.interpreter.variables.events :refer [filter-property-values]]))
+    [webchange.interpreter.variables.core :refer [filter-property-values]]))
 
 (deftest dispatch-test
   (testing "should return filtered list"
