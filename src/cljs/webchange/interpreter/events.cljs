@@ -29,7 +29,7 @@
                  (when skippable
                    (ce/on-skip! #(.stop audio)))
                  audio))
-        (.then (fn [audio] (re-frame/dispatch [::ce/register-flow-remove-handler {:flow-id flow-id :handler (fn [] (.stop audio))}]))))))
+        (.then (fn [audio] (ce/register-flow-remove-handler! flow-id (fn [] (.stop audio))))))))
 
 (re-frame/reg-fx
   :stop-all-audio
@@ -330,8 +330,8 @@
           video-state {:act    "play"
                        :src    src
                        :on-end on-end}]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge video-state params)
-       :dispatch [::ce/register-flow-remove-handler {:flow-id flow-id :handler (fn [] (re-frame/dispatch [::stop-video {:target target}]))}]})))
+      (ce/register-flow-remove-handler! flow-id (fn [] (re-frame/dispatch [::stop-video {:target target}])))
+      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge video-state params)})))
 
 (re-frame/reg-event-fx
   ::stop-video
@@ -349,9 +349,8 @@
           on-end #(ce/dispatch-success-fn action)
           path-state {:animation state
                       :on-end    on-end}]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)
-       :dispatch [::ce/register-flow-remove-handler {:flow-id flow-id
-                                                     :handler (fn [] (re-frame/dispatch [::stop-path-animation {:target target}]))}]})))
+      (ce/register-flow-remove-handler! flow-id (fn [] (re-frame/dispatch [::stop-path-animation {:target target}])))
+      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)})))
 
 (re-frame/reg-event-fx
   ::stop-path-animation

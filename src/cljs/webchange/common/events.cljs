@@ -49,10 +49,6 @@
   [{:keys [flow-id action-id]}]
   (flow-success! flow-id action-id))
 
-(defn register-flow-tags-event
-  [{:keys [flow-id tags]}]
-  [::register-flow-tags flow-id tags])
-
 (defn get-action-tags
   [{:keys [tags unique-tag skippable]}]
   (cond-> tags
@@ -371,30 +367,6 @@
     {}))
 
 (re-frame/reg-event-fx
-  ::discard-flow
-  (fn [{:keys [db]} [_ flow-id]]
-    (discard-flow! flow-id)
-    {}))
-
-(re-frame/reg-event-fx
-  ::register-flow
-  (fn [{:keys [db]} [_ flow]]
-    (register-flow! flow)
-    {}))
-
-(re-frame/reg-event-fx
-  ::register-flow-remove-handler
-  (fn [{:keys [db]} [_ {:keys [flow-id handler]}]]
-    (register-flow-remove-handler! flow-id handler)
-    {}))
-
-(re-frame/reg-event-fx
-  ::register-flow-tags
-  (fn [{:keys [db]} [_ flow-id tags]]
-    (register-flow-tags! flow-id tags)
-    {}))
-
-(re-frame/reg-event-fx
   ::execute-remove-flow-tag
   (fn [{:keys [db]} [_ action]]
     (execute-remove-flow-tag! action)
@@ -404,12 +376,6 @@
   ::flow-success
   (fn [{:keys [db]} [_ flow-id action-id]]
     (flow-success! flow-id action-id)
-    {}))
-
-(re-frame/reg-event-fx
-  ::check-flow
-  (fn [{:keys [db]} [_ flow-id]]
-    (check-flow! flow-id)
     {}))
 
 (re-frame/reg-event-fx
