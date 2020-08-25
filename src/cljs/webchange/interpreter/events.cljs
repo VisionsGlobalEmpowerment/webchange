@@ -16,6 +16,7 @@
     [webchange.interpreter.utils.propagate-objects :refer [get-propagated-objects
                                                            replace-object]]
     [webchange.interpreter.variables.events :as vars.events]
+    [webchange.interpreter.variables.core :as vars.core]
     [webchange.state.lessons.subs :as lessons]
     [webchange.sw-utils.state.status :as sw-status]))
 
@@ -28,7 +29,7 @@
                  (when skippable
                    (ce/on-skip! #(.stop audio)))
                  audio))
-        (.then (fn [audio] (re-frame/dispatch [::ce/register-flow-remove-handler {:flow-id flow-id :handler (fn [] (.stop audio))}]))))))
+        (.then (fn [audio] (ce/register-flow-remove-handler! flow-id (fn [] (.stop audio))))))))
 
 (re-frame/reg-fx
   :stop-all-audio
@@ -216,7 +217,7 @@
                            (assoc :duration (get variable (-> action :duration keyword)))
                            (assoc :offset (get variable (-> action :offset keyword))))]
       {:execute-audio (-> audio-params
-                          (assoc :on-ended (ce/dispatch-success-fn action)))})))
+                          (assoc :on-ended #(ce/dispatch-success-fn action)))})))
 
 (defn execute-transition
   [db {:keys [transition-id transition-tag to from skippable] :as action}]
@@ -228,7 +229,7 @@
                     :component transition
                     :to        to
                     :from      from
-                    :on-ended  (ce/dispatch-success-fn action)
+                    :on-ended  #(ce/dispatch-success-fn action)
                     :skippable skippable}})))
 
 (defn point->transition
@@ -312,7 +313,7 @@
   (fn [{:keys [db]} {:keys [id audio] :as action}]
     {:execute-audio (-> action
                         (assoc :key (or audio (get-audio-key db id) id))
-                        (assoc :on-ended (ce/dispatch-success-fn action)))}))
+                        (assoc :on-ended #(ce/dispatch-success-fn action)))}))
 
 (re-frame/reg-event-fx
   ::execute-stop-audio
@@ -325,12 +326,12 @@
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [target src params flow-id] :as action}]
     (let [scene-id (:current-scene db)
-          on-end (ce/dispatch-success-fn action)
+          on-end #(ce/dispatch-success-fn action)
           video-state {:act    "play"
                        :src    src
                        :on-end on-end}]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge video-state params)
-       :dispatch [::ce/register-flow-remove-handler {:flow-id flow-id :handler (fn [] (re-frame/dispatch [::stop-video {:target target}]))}]})))
+      (ce/register-flow-remove-handler! flow-id (fn [] (re-frame/dispatch [::stop-video {:target target}])))
+      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge video-state params)})))
 
 (re-frame/reg-event-fx
   ::stop-video
@@ -345,12 +346,11 @@
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [target params state flow-id] :as action}]
     (let [scene-id (:current-scene db)
-          on-end (ce/dispatch-success-fn action)
+          on-end #(ce/dispatch-success-fn action)
           path-state {:animation state
                       :on-end    on-end}]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)
-       :dispatch [::ce/register-flow-remove-handler {:flow-id flow-id
-                                                     :handler (fn [] (re-frame/dispatch [::stop-path-animation {:target target}]))}]})))
+      (ce/register-flow-remove-handler! flow-id (fn [] (re-frame/dispatch [::stop-path-animation {:target target}])))
+      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)})))
 
 (re-frame/reg-event-fx
   ::stop-path-animation
@@ -490,9 +490,9 @@
 
 (defn activity-score
   [db]
-  {:correct   (vars.events/get-variable db :score-correct)
-   :incorrect (vars.events/get-variable db :score-incorrect)
-   :mistake   (vars.events/get-variable db :score-mistake)})
+  {:correct   (vars.core/get-variable :score-correct)
+   :incorrect (vars.core/get-variable :score-incorrect)
+   :mistake   (vars.core/get-variable :score-mistake)})
 
 (defn activity-score-percentage
   [db]
@@ -647,6 +647,13 @@
         (merge-scene-data scene (map #(add-scene-tag % "template") templates)))
       scene)))
 
+(defn reset-scene-flows!
+  [scene-id]
+  (vars.core/clear-vars! false)
+  (e/stop-all-audio!)
+  (ce/execute-remove-flows! {:flow-tag (str "scene-" scene-id)})
+  (ce/remove-timers!))
+
 (re-frame/reg-event-fx
   ::set-current-scene
   (fn [{:keys [db]} [_ scene-id load-assets?]]
@@ -654,22 +661,20 @@
           current-scene (:current-scene db)
           stored-scene (get-in db [:store-scenes scene-id])
           merged-scene (merge-with-templates db stored-scene)]
+      (reset-scene-flows! current-scene)
       {:db         (-> db
                        (assoc :current-scene scene-id)
                        (assoc-in [:scenes scene-id] merged-scene)
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
-       :dispatch-n (list [::reset-scene-flows current-scene]
-                         [::load-scene scene-id load-assets?])})))
+       :dispatch-n (list [::load-scene scene-id load-assets?])})))
 
 (re-frame/reg-event-fx
   ::reset-scene-flows
   (fn [_ [_ scene-id]]
-    {:dispatch-n (list [::vars.events/clear-vars]
-                       [::execute-stop-audio]
-                       [::ce/execute-remove-flows {:flow-tag (str "scene-" scene-id)}]
-                       [::ce/execute-remove-timers])}))
+    (reset-scene-flows! scene-id)
+    {}))
 
 (re-frame/reg-event-fx
   ::set-course-data
@@ -922,11 +927,10 @@
   ::execute-pick-correct
   (fn [{:keys [db]} [_ {:keys [concept-name] :as action}]]
     (let [current-activity (:activity db)
-          counter-value (or (vars.events/get-variable db :score-correct) 0)]
-      {:db         (-> db
-                       (vars.events/set-variable :score-correct (inc counter-value))
-                       (vars.events/set-variable :score-first-attempt false))
-       :dispatch-n (list
+          counter-value (or (vars.core/get-variable :score-correct) 0)]
+      (vars.core/set-variable! :score-correct (inc counter-value))
+      (vars.core/set-variable! :score-first-attempt false)
+      {:dispatch-n (list
                      [::add-pending-event :concept-picked-correct (merge current-activity {:concept-name concept-name})]
                      (ce/success-event action))})))
 
@@ -934,14 +938,14 @@
   ::execute-pick-wrong
   (fn [{:keys [db]} [_ {:keys [concept-name option] :as action}]]
     (let [current-activity (:activity db)
-          counter-incorrect (or (vars.events/get-variable db :score-incorrect) 0)
-          counter-mistake (or (vars.events/get-variable db :score-mistake) 0)
-          first-attempt? (vars.events/get-variable db :score-first-attempt)]
-      {:db         (cond-> db
-                           first-attempt? (vars.events/set-variable :score-incorrect (inc counter-incorrect))
-                           :always (vars.events/set-variable :score-mistake (inc counter-mistake))
-                           :always (vars.events/set-variable :score-first-attempt false))
-       :dispatch-n (list
+          counter-incorrect (or (vars.core/get-variable :score-incorrect) 0)
+          counter-mistake (or (vars.core/get-variable :score-mistake) 0)
+          first-attempt? (vars.core/get-variable :score-first-attempt)]
+      (when first-attempt?
+        (vars.core/set-variable! :score-incorrect (inc counter-incorrect)))
+      (vars.core/set-variable! :score-mistake (inc counter-mistake))
+      (vars.core/set-variable! :score-first-attempt false)
+      {:dispatch-n (list
                      [::add-pending-event :concept-picked-wrong (merge current-activity {:concept-name concept-name
                                                                                          :option       option})]
                      (ce/success-event action))})))
@@ -949,8 +953,8 @@
 (re-frame/reg-event-fx
   ::execute-set-current-concept
   (fn [{:keys [db]} [_ {:keys [value] :as action}]]
-    {:db         (vars.events/set-variable db :score-first-attempt true)
-     :dispatch-n (list (ce/success-event action))}))
+    (vars.core/set-variable! :score-first-attempt true)
+    {:dispatch-n (list (ce/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-set-interval

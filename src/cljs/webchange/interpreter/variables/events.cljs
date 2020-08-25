@@ -4,7 +4,8 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [webchange.common.events :as e]
-    [webchange.state.lessons.subs :as lessons]))
+    [webchange.state.lessons.subs :as lessons]
+    [webchange.interpreter.variables.core :as core]))
 
 (e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider)
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
@@ -22,162 +23,83 @@
 (e/reg-simple-executor :clear-vars ::execute-clear-vars)
 (e/reg-simple-executor :map-value ::execute-map-value)
 
-(defn get-variable
-  [db var-name]
-  (let [scene-id (:current-scene db)]
-    (get-in db [:scenes scene-id :variables var-name])))
-
-(defn set-variable
-  [db var-name value]
-  (let [scene-id (:current-scene db)]
-    (assoc-in db [:scenes scene-id :variables var-name] value)))
-
-(defn set-progress
-  [db var-name value]
-  (assoc-in db [:progress-data :variables (keyword var-name)] value))
-
-(defn set-variables
-  [db vars]
-  (reduce (fn [db [k v]] (set-variable db k v)) db vars))
-
-(defn get-processed
-  [db provider-id]
-  (let [scene-id (:current-scene db)]
-    (get-in db [:scenes scene-id :providers provider-id :processed])))
-
-(defn add-processed
-  [db provider-id processed]
-  (let [scene-id (:current-scene db)]
-    (update-in db [:scenes scene-id :providers provider-id :processed] union processed)))
-
-(defn unprocessed
-  [db items provider-id]
-  (let [processed (get-processed db provider-id)]
-    (->> items
-         (filter #(->> % :id (contains? processed) not)))))
-
-(defn filter-property-values
-  [exclude-property-values items]
-  (let [filter-map exclude-property-values
-        key (-> filter-map keys first)
-        filter-map-value (get filter-map key)
-        filter-values (if (sequential? filter-map-value) filter-map-value [filter-map-value])]
-    (filter (fn [item]
-              (not (some (fn [filter-value] (= filter-value (get item key))) filter-values))) items)))
-
-(defn provide
-  ([db items variables provider-id]
-   (provide db items variables provider-id {}))
-  ([db items variables provider-id params]
-   (let [new-items (cond->> (unprocessed db items provider-id)
-                            (:exclude-values params) (remove (into #{} (:exclude-values params)))
-                            (:exclude-property-values params) (filter-property-values (:exclude-property-values params))
-                            (:limit params) (take (:limit params))
-                            (:repeat params) (#(apply concat (repeat (:repeat params) %)))
-                            (:shuffled params) shuffle
-                            (:unique params) distinct
-                            :always (take (count variables)))
-         processed (->> new-items (map :id) (into #{}))
-         vars (zipmap variables new-items)]
-     (cond-> db
-             provider-id (add-processed provider-id processed)
-             :always (set-variables vars)))))
-
-(defn has-next
-  ([db items provider-id]
-   (has-next db items provider-id {}))
-  ([db items provider-id params]
-   (let [unprocessed (cond->> (unprocessed db items provider-id)
-                              (:exclude-values params) (remove (into #{} (:exclude-values params)))
-                              (:exclude-property-values params) (filter-property-values (:exclude-property-values params)))]
-     (->> unprocessed count (< 0)))))
-
 (re-frame/reg-event-fx
   ::execute-set-variable
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
-    {:db (set-variable db var-name var-value)
-     :dispatch (e/success-event action)}))
+    (core/set-variable! var-name var-value)
+    {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
   ::execute-set-progress
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
-    {:db (set-progress db var-name var-value)
+    {:db (core/set-progress db var-name var-value)
      :dispatch-n (list (e/success-event action) [:progress-data-changed])}))
 
 (re-frame/reg-event-fx
   ::execute-copy-variable
   (fn [{:keys [db]} [_ {:keys [var-name from] :as action}]]
-    (let [var-value (get-variable db from)]
-      {:db (set-variable db var-name var-value)
-       :dispatch (e/success-event action)})))
+    (let [var-value (core/get-variable from)]
+      (core/set-variable! var-name var-value)
+      {:dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-map-value
   (fn [{:keys [db]} [_ {:keys [var-name value from to] :as action}]]
     (let [var-value (get to (.indexOf from value))]
-      {:db (set-variable db var-name var-value)
-       :dispatch (e/success-event action)})))
+      (core/set-variable! var-name var-value)
+      {:dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
   ::clear-vars
   (fn [{:keys [db]} [_ {:keys [keep-running]}]]
-    (let [scene-id (:current-scene db)]
-      {:db (-> db
-               (update-in [:scenes scene-id] dissoc :variables)
-               (update-in [:scenes scene-id] dissoc :providers)
-               (assoc-in [:scenes scene-id :variables "status"] (if keep-running :running nil)))})))
+    (core/clear-vars! keep-running)))
 
 (re-frame/reg-event-fx
   ::execute-clear-vars
   (fn [{:keys [db]} [_ action]]
-    {:dispatch-n (list [::clear-vars {:keep-running true}] (e/success-event action))}))
+    (core/clear-vars! true)
+    {:dispatch-n (list (e/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
     (let [items (->> from
                      (map (fn [var-name]
-                            (cond-> (get-variable db var-name)
+                            (cond-> (core/get-variable var-name)
                                     provider-id (assoc :id var-name)))))
-          has-next (has-next db items provider-id)
+          has-next (core/has-next items provider-id)
           scene-id (:current-scene db)
           on-end-action (->> on-end
                              keyword
                              (vector :scenes scene-id :actions)
                              (get-in db))]
       (if has-next
-        {:db (provide db items variables provider-id action)
-         :dispatch (e/success-event action)}
+        (do
+          (core/provide! items variables provider-id action)
+          {:dispatch (e/success-event action)})
         {:dispatch [::e/execute-action on-end-action]}))))
-
-(re-frame/reg-event-fx
-  ::execute-dataset-var-provider
-  (fn [{:keys [db]} [_ {:keys [from variables provider-id] :as action}]]
-    (let [scene-id (:current-scene db)
-          items (-> (get-in db [:scenes scene-id :datasets (keyword from)]) vals)]
-      {:db (provide db items variables provider-id {:shuffled true})
-       :dispatch (e/success-event action)})))
 
 ;TODO: level get lessons from levels
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
     (let [items (lessons/lesson-dataset-items db from)
-          has-next (has-next db items provider-id action)
+          has-next (core/has-next items provider-id action)
           scene-id (:current-scene db)
           on-end-action (->> on-end
                              keyword
                              (vector :scenes scene-id :actions)
                              (get-in db))]
       (if has-next
-        {:db       (provide db items variables provider-id action)
-         :dispatch (e/success-event action)}
+        (do
+          (core/provide! items variables provider-id action)
+          {:dispatch (e/success-event action)})
         {:dispatch [::e/execute-action on-end-action]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-var
   (fn [{:keys [db]} [_ {:keys [var var-name property success fail] :as action}]]
-    (let [test (get-variable db var-name)
+    (let [test (core/get-variable var-name)
           key (keyword property)
           success (e/get-action success db action)
           fail (e/get-action fail db action)]
@@ -195,7 +117,7 @@
 (re-frame/reg-event-fx
   ::execute-test-var-scalar
   (fn [{:keys [db]} [_ {:keys [value var-name success fail] :as action}]]
-    (let [test (get-variable db var-name)]
+    (let [test (core/get-variable var-name)]
       (if (= value test)
         {:dispatch [::e/execute-action (cond-action db action success)]}
         {:dispatch [::e/execute-action (cond-action db action fail)]}))))
@@ -214,7 +136,7 @@
 (re-frame/reg-event-fx
   ::execute-test-var-list
   (fn-traced [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
-    (let [test (map #(get-variable db %) var-names)]
+    (let [test (map core/get-variable var-names)]
       (if (= values test)
         {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
 
@@ -239,9 +161,9 @@
                :decrease dec
                :reset (constantly counter-value))]
       {:db (->> counter-id
-               (get-variable db)
-               fn
-               (set-variable db counter-id))
+                (core/get-variable)
+                fn
+                (core/set-variable! counter-id))
        :dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
@@ -250,5 +172,5 @@
     (let [fn (case (keyword operation)
                :div-floor (comp Math/floor /)
                :div-ceil (comp Math/ceil /))]
-      {:db (set-variable db var-name (fn value-1 value-2))
-       :dispatch (e/success-event action)})))
+      (core/set-variable! var-name (fn value-1 value-2))
+      {:dispatch (e/success-event action)})))
