@@ -4,3 +4,4 @@
 
 (def set-position utils/set-position)
 (def set-scale utils/set-scale)
+(def set-visibility utils/set-visibility)

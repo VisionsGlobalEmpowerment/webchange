@@ -52,8 +52,8 @@
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))
 
-                         (create-group (.-stage app) {:name     "scene"
-                                                      :children objects})
+                         (create-group (.-stage app) {:object-name :scene
+                                                      :children    objects})
                          (create-navigation-menu {:parent   (.-stage app)
                                                   :viewport viewport})
 

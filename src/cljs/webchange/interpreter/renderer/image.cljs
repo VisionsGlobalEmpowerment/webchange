@@ -1,7 +1,6 @@
 (ns webchange.interpreter.renderer.image
   (:require
     [cljsjs.pixi]
-    [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.common-utils :refer [check-rest-props get-specific-params set-handler check-not-updated-props]]
@@ -18,7 +17,11 @@
    :y 0})
 
 (def sprite-params [:scale :name])
-(def sprite-container-params [:x :y :name
+(def sprite-container-params [:x :y :scale :name
+                              {:name    :visible
+                               :default true}
+                              {:name    :offset
+                               :default {:x 0 :y 0}}
                               {:name    :filters
                                :default []}])
 
@@ -41,12 +44,13 @@
     (utils/set-scale scale)))
 
 (defn- create-sprite-container
-  [{:keys [x y filters name]}]
-  (let [position {:x x
-                  :y y}]
+  [{:keys [x y offset visible scale filters name]}]
+  (let [position {:x (- x (* (:x offset) (:x scale)))
+                  :y (- y (* (:y offset) (:y scale)))}]
     (doto (Container.)
       (aset "name" (str name "-sprite-container"))
       (utils/set-position position)
+      (utils/set-visibility visible)
       (apply-filters filters))))
 
 (defn create-image
@@ -72,44 +76,3 @@
                         [:name :object-name :on-click :parent :ref :src])
 
       (re-frame/dispatch [::state/register-object wrapped-image]))))
-
-(defn- check-update-filters
-  [old-props new-props wrapper]
-  (let [list->map (fn [list] (reduce (fn [result {:keys [name] :as data}] (assoc result name data)) {} list))
-        prev-filters (list->map (:filters old-props))
-        new-filters (list->map (:filters new-props))
-        filters-to-add (-> (clojure.set/difference (set (keys new-filters))
-                                                   (set (keys prev-filters)))
-                           (vec))]
-    (when-not (= prev-filters new-filters)
-      (doseq [filter-name filters-to-add]
-        ((:add-filter wrapper) (get new-filters filter-name))))
-    [:filters]))
-
-(defn image
-  []
-  (let [parent-container (atom nil)
-        wrapper (atom nil)]
-    (r/create-class
-      {:display-name "web-gl-image"
-
-       :component-did-mount
-                     (fn [this]
-                       (let [props (merge default-image-props (r/props this))]
-                         (reset! wrapper (create-image @parent-container props))))
-
-       :should-component-update
-                     (fn [_ [_ old-props] [_ new-props]]
-                       (let [checked-props (concat [:ref :on-click :parent]
-                                                   (check-update-filters old-props new-props @wrapper))]
-                         (check-not-updated-props (get-name new-props)
-                                                  old-props
-                                                  new-props
-                                                  checked-props))
-                       false)
-
-       :reagent-render
-                     (fn [{:keys [parent] :as props}]
-                       (print "[image] :reagent-render" (:name props))
-                       (reset! parent-container parent)
-                       [:div])})))
