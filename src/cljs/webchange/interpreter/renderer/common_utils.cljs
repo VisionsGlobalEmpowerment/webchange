@@ -36,6 +36,10 @@
     (-> (.-scale spine-object)
         (.set x y))))
 
+(defn set-visibility
+  [spine-object visible?]
+  (aset spine-object "alpha" (if visible? 1 0)))
+
 (defn set-handler
   [object event-name event-handler]
   (let [synonyms {"click" ["click" "tap"]}]

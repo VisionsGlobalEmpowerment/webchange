@@ -6,9 +6,7 @@
 (defn init
   [loader-instance]
   (when (nil? @loader)
-    (print "RESET OLD LOADER"))
-
-  (reset! loader loader-instance))
+    (reset! loader loader-instance)))
 
 (defn- get-resources-store
   []

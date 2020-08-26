@@ -27,8 +27,9 @@
 (re-frame/reg-event-fx
   ::set-scene-object-state
   (fn [{:keys [db]} [_ object-name state]]
-    (let [available-actions {:set-position [:x :y]
-                             :set-scale    [:scale]}
+    (let [available-actions {:set-position   [:x :y]
+                             :set-scale      [:scale]
+                             :set-visibility [:visible]}
           execute-actions (->> available-actions
                                (reduce (fn [result [action params]]
                                          (assoc result action (select-keys state params)))
@@ -59,3 +60,8 @@
   :set-position
   (fn [[object-wrapper position]]
     ((:set-position object-wrapper) position)))
+
+(re-frame/reg-fx
+  :set-visibility
+  (fn [[object-wrapper {:keys [visible]}]]
+    ((:call object-wrapper) :set-visibility visible)))

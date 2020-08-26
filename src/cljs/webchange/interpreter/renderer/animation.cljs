@@ -81,39 +81,3 @@
                         [:name :object-name :on-click :on-mount :parent :ref])
 
       (re-frame/dispatch [::state/register-object wrapped-animation]))))
-
-(defn- check-update-position
-  [old-props new-props wrapper]
-  (let [prev-position (select-keys old-props [:x :y])
-        new-position (select-keys new-props [:x :y])]
-    (when-not (= prev-position new-position)
-      ((:set-position wrapper) new-position))
-    [:x :y]))
-
-(defn animation
-  []
-  (let [parent-container (atom nil)
-        wrapper (atom nil)]
-    (r/create-class
-      {:display-name "web-gl-animation"
-
-       :component-did-mount
-                     (fn [this]
-                       (print "[animation] :component-did-mount")
-                       (reset! wrapper (create-animation @parent-container (r/props this))))
-
-       :should-component-update
-                     (fn [_ [_ old-props] [_ new-props]]
-                       (let [checked-props (concat [:ref :on-click :on-mount :parent]
-                                                   (check-update-position old-props new-props @wrapper))]
-                         (check-not-updated-props (get-name new-props)
-                                                  old-props
-                                                  new-props
-                                                  checked-props))
-                       false)
-
-       :reagent-render
-                     (fn [{:keys [parent]}]
-                       (print "[animation] :reagent-render")
-                       (reset! parent-container parent)
-                       [:div])})))

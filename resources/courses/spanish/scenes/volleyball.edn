@@ -13,15 +13,16 @@
                  :ball
                              {:type "group", :x 1163, :y 941, :width 126, :height 126, :transition "ball-transition", :children ["ball-image"]},
                  :ball-image
-                             {:type    "transparent",
+                             {:type    "image",
                               :src     "/raw/img/stadium/volleyball/ball.png"
                               :width   126,
                               :height  126,
                               :origin  {:type "center-center"},
                               :scale-x 0.5,
                               :scale-y 0.5,
-                              :states  {:hidden  {:type "transparent"},
-                                        :visible {:type "image"}}},
+                              :visible false
+                              :states  {:hidden  {:visible false},
+                                        :visible {:visible true}}},
                  :box1
                              {:type        "animation",
                               :x           1304,

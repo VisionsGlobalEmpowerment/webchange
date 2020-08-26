@@ -385,7 +385,7 @@
                         {:object-name (keyword name)}
                         (prepare-group-params object)
                         (filter-params object))
-                 (filter-extra-props [:actions :brightness :filter :highlight :listening :states :transition :width :height :eager]))
+                 (filter-extra-props [:actions :brightness :filter :highlight :listening :states :transition :width :height :eager :origin :scale-x :scale-y]))
       ;:transparent [:> Group (prepare-group-params o)
       ;              [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
       :group (let [group-params (prepare-group-params object)
@@ -417,26 +417,6 @@
           nil)
       ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
       )))
-
-;(defn scene
-;  [scene-id]
-;  (let [viewport @(re-frame/subscribe [::subs/viewport])
-;        scene-objects @(re-frame/subscribe [::subs/scene-objects scene-id])
-;        scene-data @(re-frame/subscribe [::subs/scene scene-id])
-;        scene-ready? (scene-ready scene-id)]
-;    (print "----------------------------- scene " scene-id)
-;    (print "data" (prepare-scene-params scene-id))
-;    (print "---------- scene-objects" scene-objects)
-;    (print "---------- scene-ready?" scene-ready?)
-;
-;    [stage {:viewport        viewport
-;            :scene-id        scene-id
-;            :scene-objects   scene-objects
-;            :scene-ready?    scene-ready?
-;            :scene-resources (scene-parser/get-scene-resources scene-data)
-;
-;            }]
-;    ))
 
 (defn- get-layer-objects-data
   [scene-id layer-objects]

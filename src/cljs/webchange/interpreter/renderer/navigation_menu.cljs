@@ -52,7 +52,6 @@
                                               :horizontal "right"
                                               :object     close-button-size
                                               :padding    menu-padding}))]
-    (create-group parent {:name        "navigation-menu"
-                          :parent      parent
+    (create-group parent {:parent      parent
                           :object-name :navigation-menu
                           :children    [back-button settings-button close-button]})))
