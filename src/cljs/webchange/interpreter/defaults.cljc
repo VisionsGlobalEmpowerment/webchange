@@ -1,8 +1,24 @@
 (ns webchange.interpreter.defaults)
 
-(def default-game-assets [{:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}
+(def default-game-assets [
+                          ;; Common elements
+                          {:url "/raw/img/bg.jpg", :size 1, :type "image"}
                           {:url "/raw/img/ui/close_button_01.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/settings_button_01.png", :size 1, :type "image"}])
+
+                          ;; Navigation menu
+                          {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/settings_button_01.png", :size 1, :type "image"}
+
+                          ;; Settings
+                          {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/settings/music.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/settings/music_icon.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
+
+                          ;; Activity finished
+                          {:url "/raw/img/ui/vera_315x371.png", :size 1, :type "image"}
+                          ])
 
 (def default-assets (concat default-game-assets
                             [{:url "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
@@ -21,17 +37,10 @@
                              {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/reload_button_02.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/settings_button_02.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/settings/music.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/settings/music_icon.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/hand.png", :size 1, :type "image"}
 
-                             {:url "/raw/img/bg.jpg", :size 1, :type "image"}
+                             {:url "/raw/img/ui/hand.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/logo.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/next_button_01.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/vera_315x371.png", :size 1, :type "image"}
 
                              {:url "/raw/anim/senoravaca/skeleton.atlas", :size 1, :type "anim-text"}
                              {:url "/raw/anim/senoravaca/skeleton.json", :size 1, :type "animation"}

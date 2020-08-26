@@ -13,7 +13,8 @@
   :add-scene-object
   (fn [{:keys [scene-objects object-wrapper]}]
     (let [object-name (:name object-wrapper)]
-      (print ":add-scene-object" object-name)
+      (when (contains? @scene-objects object-name)
+        (-> (str "Object with name " object-name " already exists.") js/Error. throw))
       (swap! scene-objects assoc object-name object-wrapper))))
 
 (re-frame/reg-event-fx
@@ -65,3 +66,8 @@
   :set-visibility
   (fn [[object-wrapper {:keys [visible]}]]
     ((:call object-wrapper) :set-visibility visible)))
+
+(re-frame/reg-fx
+  :set-value
+  (fn [[object-wrapper value]]
+    ((:call object-wrapper) :set-value value)))

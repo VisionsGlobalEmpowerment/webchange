@@ -3,7 +3,7 @@
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.common-utils :refer [check-rest-props get-specific-params set-handler check-not-updated-props]]
+    [webchange.interpreter.renderer.common-utils :refer [check-rest-props get-specific-params set-handler]]
     [webchange.interpreter.renderer.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.image-utils :as utils]
     [webchange.interpreter.renderer.image-wrapper :refer [wrap]]

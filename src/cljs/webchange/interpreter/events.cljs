@@ -18,7 +18,8 @@
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.state.lessons.subs :as lessons]
     [webchange.sw-utils.state.status :as sw-status]
-    [webchange.interpreter.renderer.state.scene :as scene]))
+    [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.state.overlays :as overlays]))
 
 (re-frame/reg-fx
   :execute-audio
@@ -999,13 +1000,13 @@
 (re-frame/reg-event-fx
   ::open-settings
   (fn [_ _]
-    {:dispatch [::screens/show-settings]}))
+    {:dispatch [::overlays/open-settings]}))
 
 (re-frame/reg-event-fx
   ::close-settings
   (fn [_ _]
     {:dispatch-n (list [::save-settings]
-                       [::screens/reset-ui-screen])}))
+                       [::overlays/close-settings])}))
 
 (re-frame/reg-event-fx
   ::save-settings

@@ -2,7 +2,6 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.student-dashboard.subs :as student-dashboard-subs]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
@@ -26,9 +25,6 @@
     [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right bottom-center]]
     [webchange.common.events :as ce]
     [webchange.interpreter.screens.activity-finished :refer [activity-finished-screen]]
-    [webchange.interpreter.screens.course-loading :refer [course-loading-screen]]
-    [webchange.interpreter.screens.preloader :refer [preloader-screen]]
-    [webchange.interpreter.screens.settings :refer [settings-screen]]
     [webchange.interpreter.screens.state :as screens]
     [webchange.common.core :refer [prepare-anim-rect-params
                                    prepare-colors-palette-params
@@ -77,42 +73,6 @@
         (empty-filter))
       (with-highlight params)
       (with-pulsation params)))
-
-(defn close-button
-  [x y]
-  [:> Group {:x        x :y y
-             :on-click #(re-frame/dispatch [::ie/open-student-dashboard])
-             :on-tap   #(re-frame/dispatch [::ie/open-student-dashboard])}
-   [kimage {:src (get-data-as-url "/raw/img/ui/close_button_01.png")}]])
-
-(defn back-button
-  [x y]
-  (let [back-button-state @(re-frame/subscribe [::subs/current-scene-back-button])]
-    [:> Group {:x        x :y y
-               :on-click #(re-frame/dispatch [::ie/close-scene])
-               :on-tap   #(re-frame/dispatch [::ie/close-scene])}
-     [kimage (merge {:src (get-data-as-url "/raw/img/ui/back_button_01.png")}
-                    (filter-params back-button-state))]]))
-
-(defn settings-button
-  [x y]
-  [:> Group {:x        x :y y
-             :on-click #(re-frame/dispatch [::ie/open-settings])
-             :on-tap   #(re-frame/dispatch [::ie/open-settings])}
-   [kimage {:src (get-data-as-url "/raw/img/ui/settings_button_01.png")}]])
-
-(defn menu
-  []
-  (let [top-right (top-right)
-        top-left (top-left)]
-    [:> Group {}
-     [:> Group top-left
-      [back-button 20 20]]
-     [:> Group top-right
-      [settings-button (- 216) 20]
-      [close-button (- 108) 20]]
-     ]
-    ))
 
 (defn skip-menu
   []
@@ -297,15 +257,10 @@
   (let [ui-screen @(re-frame/subscribe [::screens/ui-screen])]
     [:> Layer
      (if-not scene-ready?
-       [preloader-screen]
        (case ui-screen
          :activity-finished [activity-finished-screen]
-         :course-loading [course-loading-screen]
-         :settings [settings-screen]
          [:> Group
-          [menu]
           [skip-menu]
-          ;[triggers scene-id]
           ]))]))
 
 (defn layer

@@ -7,7 +7,7 @@
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.animation-utils :as utils]
     [webchange.interpreter.renderer.animation-wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.common-utils :refer [get-specific-params check-rest-props set-handler check-not-updated-props]]
+    [webchange.interpreter.renderer.common-utils :refer [get-specific-params check-rest-props set-handler]]
     [webchange.interpreter.resources-manager.loader :as resources]))
 
 (def Container (.. js/PIXI -Container))
@@ -24,7 +24,9 @@
                               :alias :anim}
                              {:name  :position
                               :alias :anim-offset}])
-(def animation-container-params [:x :y])
+(def animation-container-params [:x :y
+                                 {:name    :visible
+                                  :default true}])
 
 (defn- get-spine-animation-params
   [props]
@@ -47,10 +49,11 @@
       (utils/set-animation-speed (if animation-start? speed 0)))))
 
 (defn- create-animation-container
-  [{:keys [x y]}]
+  [{:keys [x y visible]}]
   (let [position {:x x
                   :y y}]
     (doto (Container.)
+      (utils/set-visibility visible)
       (utils/set-position position))))
 
 (defn- get-name

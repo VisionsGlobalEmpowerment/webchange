@@ -4,3 +4,4 @@
 
 (def get-position utils/get-position)
 (def set-position utils/set-position)
+(def set-visibility utils/set-visibility)
