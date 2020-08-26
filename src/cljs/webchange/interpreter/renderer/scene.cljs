@@ -5,8 +5,7 @@
     [reagent.core :as r]
     [webchange.interpreter.renderer.group :refer [create-group]]
     [webchange.interpreter.renderer.state.scene :as state]
-
-    [webchange.interpreter.renderer.navigation-menu :refer [create-navigation-menu]]))
+    [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]))
 
 (def Application (.. js/PIXI -Application))
 
@@ -45,7 +44,6 @@
 
        :component-did-mount
                      (fn [this]
-                       (print "[Scene] :component-did-mount")
                        (re-frame/dispatch [::state/init])
 
                        (let [{:keys [on-ready viewport objects]} (r/props this)
@@ -54,9 +52,8 @@
 
                          (create-group (.-stage app) {:object-name :scene
                                                       :children    objects})
-                         (create-navigation-menu {:parent   (.-stage app)
-                                                  :viewport viewport})
-
+                         (create-overlays {:parent   (.-stage app)
+                                           :viewport viewport})
                          (on-ready)))
 
        :should-component-update
@@ -64,7 +61,6 @@
 
        :reagent-render
                      (fn [{:keys []}]
-                       (print "[Scene] :reagent-render")
                        [:div {:style {:width  "100%"
                                       :height "100%"}
                               :ref   #(when % (reset! container %))}])})))

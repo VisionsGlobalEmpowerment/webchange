@@ -33,6 +33,7 @@
 (def set-position utils/set-position)
 (def get-scale utils/get-scale)
 (def set-scale utils/set-scale)
+(def set-visibility utils/set-visibility)
 
 (defn create-region
   [texture custom-params]
