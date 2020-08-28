@@ -32,7 +32,7 @@
       (swap! started-animations dissoc uuid))))
 
 (defn start-animation
-  [shape]
+  [{:keys [animation-state skeleton shape]}]
   (let [uuid (random-uuid)
         animation (Animation. (fn [frame]
                                 (if-let [layer (.getLayer shape)]
@@ -40,7 +40,10 @@
                                   (reset-animation! uuid))
                                 (if (> 15 (.-frameRate frame))
                                   false
-                                  (.setAttr shape "timeDiff" (/ (.-timeDiff frame) 1000)))))]
+                                  (do
+                                    (.update animation-state (/ (.-timeDiff frame) 1000))
+                                    (.apply animation-state skeleton)
+                                    (.updateWorldTransform skeleton)))))]
     (swap! started-animations assoc uuid animation)
     (.start animation)))
 
@@ -52,7 +55,7 @@
   (get @renderers context))
 
 (defn set-slot
-  [skeleton slot-name slot-attachment-name image region-options attachment-options]
+  [skeleton animation-state slot-name slot-attachment-name image region-options attachment-options]
   (let [texture (.get spine-manager image)
         region (doto (s/TextureAtlasRegion.)
                  (set! -x (get region-options :x 0))
@@ -78,7 +81,9 @@
         new-skin (s/Skin. image)]
     (.setAttachment new-skin slot-index (or slot-attachment-name "boxes") attachment)
     (.setSkin skeleton new-skin)
-    (.setToSetupPose skeleton)))
+    (.setToSetupPose skeleton)
+    (.apply animation-state skeleton)
+    (.updateWorldTransform skeleton)))
 
 (defn anim
   [{:keys [name anim speed on-mount start mix skin anim-offset meshes]
@@ -96,11 +101,9 @@
                animation-state-data (doto (s/AnimationStateData. (.-data skeleton))
                                       (set! -defaultMix mix))
                animation-state (doto (s/AnimationState. animation-state-data)
-                                 (.setAnimation 0 anim true))
+                                 (.setAnimation 0 anim true)
+                                 (set! -timeScale speed))
                scene-fn (fn [context shape]
-                          (.update animation-state (* (.getAttr shape "timeDiff") speed))
-                          (.apply animation-state skeleton)
-                          (.updateWorldTransform skeleton)
                           (let [skeleton-renderer (get-renderer context)]
                             (set! (.-triangleRendering skeleton-renderer) meshes)
                             (.draw skeleton-renderer skeleton)))
@@ -108,9 +111,11 @@
                                   (.setStrokeHitEnabled ref false)
                                   (.shadowForStrokeEnabled ref false)
                                   (.perfectDrawEnabled ref false)
-                                  (when start (start-animation ref))
-                                  (on-mount {:animation-state animation-state :skeleton skeleton :shape ref})
-                                  ))]
+                                  (.apply animation-state skeleton)
+                                  (.updateWorldTransform skeleton)
+                                  (let [animation {:animation-state animation-state :skeleton skeleton :shape ref}]
+                                    (when start (start-animation animation))
+                                    (on-mount animation))))]
     [:> Shape {:time-diff  0
                :scene-func scene-fn
                :ref        ref-fn}]))
@@ -124,13 +129,13 @@
 (def animations {:vera       {:width  380,
                               :height 537,
                               :scale  {:x 1, :y 1},
-                              :speed  0.5
+                              :speed  1
                               :meshes true
                               :skin "01 Vera_1"}
                  :senoravaca {:width  351,
                               :height 717,
                               :scale  {:x 1, :y 1}
-                              :speed  0.5
+                              :speed  1
                               :meshes true
                               :skin   "vaca"}
                  :mari       {:width  910,
@@ -138,7 +143,8 @@
                               :scale  {:x 0.5, :y 0.5}
                               :speed  1
                               :meshes true
-                              :skin "01 mari"}})
+                              :skin "01 mari"}
+                 :boxes {:speed 1}})
 
 (defn prepare-anim-object-params
   "Overwrite animation properties. Set default skin if no skin provided."

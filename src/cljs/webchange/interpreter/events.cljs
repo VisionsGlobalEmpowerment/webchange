@@ -124,14 +124,15 @@
 
 (re-frame/reg-fx
   :start-animation
-  (fn [shape]
-    (start-animation shape)))
+  (fn [animation]
+    (start-animation animation)))
 
 (re-frame/reg-fx
   :set-slot
   (fn [{:keys [state slot-name slot-attachment-name image region attachment]}]
-    (let [skeleton (:skeleton state)]
-      (set-slot skeleton slot-name slot-attachment-name image region attachment))))
+    (let [skeleton (:skeleton state)
+          animation-state (:animation-state state)]
+      (set-slot skeleton animation-state slot-name slot-attachment-name image region attachment))))
 
 (re-frame/reg-fx
   :set-skin
@@ -423,7 +424,7 @@
   ::execute-start-animation
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
-      {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]) :shape)
+      {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]))
        :dispatch-n      (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
