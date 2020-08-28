@@ -92,7 +92,7 @@
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "background" "surface" "decoration")})
 (s/defschema CharacterSkin {:name s/Str :width s/Num :height s/Num :skins [s/Str] :animations [s/Str]})
 
-(s/defschema CreateActivity {:name s/Str :template-id s/Int})
+(s/defschema CreateActivity {:name s/Str :template-id s/Int :characters (s/maybe s/Any) :boxes (s/maybe s/Int)})
 (s/defschema Activity {:id s/Int :name s/Str :scene-slug s/Str :course-slug s/Str})
 
 (s/defschema Topic {:name s/Str :strand s/Keyword})

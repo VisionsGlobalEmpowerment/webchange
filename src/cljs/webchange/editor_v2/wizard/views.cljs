@@ -54,9 +54,11 @@
                   :flex-direction "column"}}
     [course-info]]])
 
+(def animation-names ["senoravaca" "vera" "mari"])
+
 (defn- activity-info
   [course-slug]
-  (r/with-let [data (r/atom {})]
+  (r/with-let [data (r/atom {:characters [{} {}] :boxes 1})]
     (let [templates @(re-frame/subscribe [::state-activity/templates])
           skills @(re-frame/subscribe [::state-activity/skills])]
       [ui/card {:style {:margin      "12px"
@@ -79,7 +81,34 @@
                       :style     {:min-width "150px"}}
            (for [template templates]
              ^{:key (:id template)}
-             [ui/menu-item {:value (:id template)} (:name template)])]]]]
+             [ui/menu-item {:value (:id template)} (:name template)])]]
+         [ui/grid {:item true :xs 7}
+          [ui/input-label "Characters"]
+          (for [[idx character] (map-indexed vector (:characters @data))]
+            ^{:key idx}
+            [ui/grid {:container true}
+             (js/console.log idx character)
+             [ui/grid {:item true}
+              [ui/text-field {:label         "Name"
+                              :variant       "outlined"
+                              :value (:name character)
+                              :on-change     #(swap! data assoc-in [:characters idx :name] (-> % .-target .-value))}]]
+             [ui/grid {:item true}
+              [ui/select {:value (:skeleton character)
+                          :on-change #(swap! data assoc-in [:characters idx :skeleton] (-> % .-target .-value))
+                          :style     {:min-width "150px"}}
+               (for [animation-name animation-names]
+                 ^{:key animation-name}
+                 [ui/menu-item {:value animation-name} animation-name])]]])]
+         [ui/grid {:item true :xs 7}
+          [ui/input-label "Boxes"]
+          [ui/select {:value (:boxes @data)
+                      :on-change #(swap! data assoc :boxes (-> % .-target .-value))
+                      :style     {:min-width "150px"}}
+           (for [idx (range 1 4)]
+             ^{:key idx}
+             [ui/menu-item {:value idx} idx])]]
+         ]]
        [ui/card-actions
         [ui/button {:color    "secondary"
                     :style    {:margin-left "auto"}

@@ -319,7 +319,12 @@
         course-data {:initial-scene    nil
                      :navigation-mode  :activity
                      :scene-list       {}
-                     :default-progress {}}]
+                     :default-progress {}
+                     :levels [{:level 1 :name "Level 1" :scheme {:lesson {:name "Lesson" :lesson-sets [:concepts]}}
+                               :lessons [{:lesson 1
+                                          :name "Lesson 1"
+                                          :type :lesson
+                                          :activities []}]}]}]
     (db/save-course! {:course_id  new-course-id
                       :data       course-data
                       :owner_id   owner-id
@@ -340,7 +345,9 @@
                      :owner_id   owner-id
                      :created_at created-at})
     (db/save-course! {:course_id  course-id
-                      :data       (assoc-in course-data [:scene-list (keyword scene-slug)] {:name scene-name})
+                      :data       (-> course-data
+                                      (assoc-in [:scene-list (keyword scene-slug)] {:name scene-name})
+                                      (assoc :initial-scene scene-slug))
                       :owner_id   owner-id
                       :created_at created-at})
     [true {:id          scene-id

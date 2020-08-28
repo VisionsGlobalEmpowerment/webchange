@@ -451,7 +451,8 @@
 (re-frame/reg-event-fx
   ::execute-start-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
-    (let [activity-action (lessons-activity/name->activity-action db activity-name)]
+    (let [activity-name (:current-scene db) ;(or activity-name (:current-scene db))
+          activity-action (lessons-activity/name->activity-action db activity-name)]
       {:db         (assoc db
                      :activity-started true
                      :activity-start-time (js/Date.)

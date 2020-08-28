@@ -6,7 +6,7 @@
     [webchange.templates.core :as core]
     [webchange.templates.library]))
 
-(s/defschema Template {:id s/Int :name s/Str :description s/Str})
+(s/defschema Template {:id s/Int :name s/Str :description s/Str :options s/Any})
 
 (defroutes templates-api-routes
   (context "/api/templates" []
