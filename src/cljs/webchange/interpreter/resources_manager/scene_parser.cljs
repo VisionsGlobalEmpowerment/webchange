@@ -49,7 +49,10 @@
        (filter (fn [{:keys [type]}]
                  (or (= type "image")
                      (= type "animation"))))
-       (map :url)))
+       (map :url)
+       ;; ToDo: Remove
+       (concat ["/images/dashboard/scene-preview/Casa_Room.jpg"])
+       ))
 
 (defn- parse-scene-assets
   [scene-data]
