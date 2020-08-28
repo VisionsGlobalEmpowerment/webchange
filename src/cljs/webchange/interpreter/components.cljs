@@ -24,7 +24,6 @@
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right bottom-center]]
     [webchange.common.events :as ce]
-    [webchange.interpreter.screens.activity-finished :refer [activity-finished-screen]]
     [webchange.interpreter.screens.state :as screens]
     [webchange.common.core :refer [prepare-anim-rect-params
                                    prepare-colors-palette-params
@@ -257,11 +256,9 @@
   (let [ui-screen @(re-frame/subscribe [::screens/ui-screen])]
     [:> Layer
      (if-not scene-ready?
-       (case ui-screen
-         :activity-finished [activity-finished-screen]
-         [:> Group
+       [:> Group
           [skip-menu]
-          ]))]))
+          ])]))
 
 (defn layer
   [{:keys [scene-id layer-id layer background?]}]

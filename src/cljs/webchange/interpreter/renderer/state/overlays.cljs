@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.state.overlays
   (:require
     [re-frame.core :as re-frame]
+    [webchange.student-dashboard.subs :as subs]
     [webchange.interpreter.renderer.state.scene :as scene]))
 
 (re-frame/reg-event-fx
@@ -16,3 +17,18 @@
   ::close-settings
   (fn []
     {:dispatch [::scene/change-scene-object :settings-overlay [[:set-visibility {:visible false}]]]}))
+
+(re-frame/reg-event-fx
+  ::open-activity-finished
+  (fn [{:keys [db]}]
+    (let [next-activity (subs/next-activity db)
+          lesson-progress (subs/lesson-progress db)]
+      {:dispatch-n (list [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]]
+                         [::scene/change-scene-object :overall-progress-bar [[:set-value lesson-progress]]]
+                         [::scene/change-scene-object :next-activity-card-image [[:set-src (:image next-activity)]]]
+                         [::scene/change-scene-object :next-activity-card-name [[:set-text (:name next-activity)]]])})))
+
+(re-frame/reg-event-fx
+  ::close-activity-finished
+  (fn []
+    {:dispatch [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible false}]]]}))

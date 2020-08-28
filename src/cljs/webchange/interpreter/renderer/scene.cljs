@@ -31,8 +31,9 @@
 (defn init-app
   [viewport]
   (let [{:keys [x y width height scale-x scale-y]} viewport]
-    (doto (Application. (clj->js {:width  width
-                                  :height height}))
+    (doto (Application. (clj->js {:antialias true
+                                  :width     width
+                                  :height    height}))
       (-> get-stage (set-scale scale-x scale-y))
       (-> get-stage (set-position x y)))))
 
@@ -46,12 +47,15 @@
                      (fn [this]
                        (re-frame/dispatch [::state/init])
 
+                       (print "INIT")
+
                        (let [{:keys [on-ready viewport objects]} (r/props this)
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))
 
                          (create-group (.-stage app) {:object-name :scene
                                                       :children    objects})
+
                          (create-overlays {:parent   (.-stage app)
                                            :viewport viewport})
                          (on-ready)))

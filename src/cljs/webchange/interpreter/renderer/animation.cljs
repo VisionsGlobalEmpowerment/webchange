@@ -2,7 +2,6 @@
   (:require
     [cljsjs.pixi]
     [pixi-spine]
-    [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.animation-utils :as utils]
@@ -56,10 +55,6 @@
       (utils/set-visibility visible)
       (utils/set-position position))))
 
-(defn- get-name
-  [props]
-  (str "Animation <" (:name props) ">"))
-
 (defn create-animation
   [parent props]
   (let [{:keys [name on-click on-mount ref] :as props} props
@@ -77,7 +72,7 @@
       (.addChild animation-container animation)
       (.addChild parent animation-container)
 
-      (check-rest-props (get-name props)
+      (check-rest-props (str "Animation <" (:object-name props) ">")
                         props
                         spine-animation-params
                         animation-container-params

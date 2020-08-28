@@ -18,6 +18,7 @@
 
                           ;; Activity finished
                           {:url "/raw/img/ui/vera_315x371.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}
                           ])
 
 (def default-assets (concat default-game-assets
@@ -34,7 +35,6 @@
                              {:url "/raw/img/ui/close_button_02.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/play_button_01.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/play_button_02.png", :size 1, :type "image"}
-                             {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/reload_button_02.png", :size 1, :type "image"}
                              {:url "/raw/img/ui/settings_button_02.png", :size 1, :type "image"}
 

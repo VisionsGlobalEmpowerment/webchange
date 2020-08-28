@@ -8,6 +8,7 @@
     [webchange.interpreter.core :as i]
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.screens.state :as screens]
+    [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
@@ -540,7 +541,7 @@
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
                          :always (conj (activity-finished-event db action))
                          :always (conj [::reset-navigation])
-                         :always (conj [::screens/show-activity-progress]))
+                         :always (conj [::overlays/open-activity-finished]))
           activity-started? (:activity-started db)]
       (if activity-started?
         {:db         (-> db

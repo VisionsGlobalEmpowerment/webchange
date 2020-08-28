@@ -55,15 +55,10 @@
                                  :default 0}
                      :max-value {:name    :max-value
                                  :default 100}})
-(defn- pick-params
-  [params-names]
-  (->> params-names
-       (select-keys default-params)
-       (map second)))
 
-(def container-params (pick-params [:x :y]))
-(def background-params (pick-params [:width :height :fill]))
-(def foreground-params (pick-params [:color :height]))
+(def container-params (utils/pick-params default-params [:x :y]))
+(def background-params (utils/pick-params default-params [:width :height :fill]))
+(def foreground-params (utils/pick-params default-params [:color :height]))
 
 (defn- create-container
   [{:keys [x y]}]
@@ -89,10 +84,6 @@
     (aset "height" height)
     (aset "tint" color)))
 
-(defn- get-name
-  [props]
-  (str "Slider <" (:name props) ">"))
-
 (defn create-slider
   [parent props]
   (let [{:keys [object-name value]} props]
@@ -102,7 +93,7 @@
                        :background nil
                        :foreground nil
                        :on-change  #()})
-          set-value (let [{:keys [min-value max-value on-change]} (utils/get-specific-params props (pick-params [:min-value :max-value :on-change]))]
+          set-value (let [{:keys [min-value max-value on-change]} (utils/get-specific-params props (utils/pick-params default-params [:min-value :max-value :on-change]))]
                       (swap! state assoc :on-change (fn [value] (on-change (+ min-value (* value (- max-value min-value))))))
                       (partial (fn [min-value max-value state value]
                                  (swap! state assoc :value (-> value
@@ -126,7 +117,7 @@
       (.addChild container foreground)
       (.addChild parent container)
 
-      (utils/check-rest-props (get-name props)
+      (utils/check-rest-props (str "Slider <" (:object-name props) ">")
                               props
                               container-params
                               background-params

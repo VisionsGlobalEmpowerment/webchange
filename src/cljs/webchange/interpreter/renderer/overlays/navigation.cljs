@@ -5,7 +5,7 @@
     [webchange.interpreter.renderer.group :refer [create-group]]
     [webchange.interpreter.renderer.overlays.utils :as utils]))
 
-(defn create-navigation
+(defn create-navigation-overlay
   [{:keys [parent viewport]}]
   (let [menu-padding {:x 20 :y 20}
         back-button-size {:width 97 :height 99}
