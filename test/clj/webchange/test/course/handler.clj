@@ -41,10 +41,9 @@
 (deftest activity-can-be-created-from-template
   (let [course (f/course-created)
         name "Test Activity"
-        activity-data {:name name :template-id 1}
+        activity-data {:name name :template-id 1 :characters [{:skeleton "vera" :name "vera"}] :boxes 3}
         saved-value (-> (f/create-activity! (:slug course) activity-data) :body slurp (json/read-str :key-fn keyword))
         retrieved-value (-> (f/get-scene (:course-slug saved-value) (:scene-slug saved-value)) :body slurp (json/read-str :key-fn keyword))]
-    (log/debug retrieved-value)
     (is (= name (:name saved-value)))
     (is (not (nil? (:id saved-value))))
     (is (not (nil? (:course-slug saved-value))))

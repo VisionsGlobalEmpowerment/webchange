@@ -333,23 +333,48 @@
               (assoc :id new-course-id)
               (->website-course))]))
 
-(defn create-scene!
-  [scene-data course-slug scene-name owner-id]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
-        {course-data :data} (db/get-latest-course-version {:course_id course-id})
-        scene-slug (->kebab-case scene-name)
-        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})
-        created-at (jt/local-date-time)]
+(defn- create-default-lesson!
+  [course-id name]
+  (let [items (db/get-course-items {:course_id course-id})
+        dataset-id (-> items first :dataset-id)
+        item-ids (map #(select-keys % [:id]) items)]
+    (db/create-lesson-set! {:name name :dataset_id dataset-id :data {:items item-ids}})))
+
+(defn- save-scene-on-create!
+  [course-id scene-slug scene-data owner-id]
+  (let [created-at (jt/local-date-time)
+        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
     (db/save-scene! {:scene_id   scene-id
                      :data       scene-data
                      :owner_id   owner-id
                      :created_at created-at})
+    {:scene-id scene-id}))
+
+(defn- save-course-on-create!
+  [course-id scene-slug scene-name owner-id]
+  (let [default-lesson-name "l1-ls1-1"
+        created-at (jt/local-date-time)
+        {course-data :data} (db/get-latest-course-version {:course_id course-id})
+        lesson-required? (nil? (get-in course-data [:levels 0 :lessons 0 :lesson-sets :concepts]))
+        initial-scene-required? (nil? (get course-data :initial-scene))
+        data (cond-> course-data
+                     :always (assoc-in [:scene-list (keyword scene-slug)] {:name scene-name})
+                     :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
+                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets :concepts] default-lesson-name)
+                     initial-scene-required? (assoc :initial-scene scene-slug))]
+    (when lesson-required?
+      (create-default-lesson! course-id default-lesson-name))
     (db/save-course! {:course_id  course-id
-                      :data       (-> course-data
-                                      (assoc-in [:scene-list (keyword scene-slug)] {:name scene-name})
-                                      (assoc :initial-scene scene-slug))
+                      :data       data
                       :owner_id   owner-id
-                      :created_at created-at})
+                      :created_at created-at})))
+
+(defn create-scene!
+  [scene-data course-slug scene-name owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scene-slug (->kebab-case scene-name)
+        {scene-id :scene-id} (save-scene-on-create! course-id scene-slug scene-data owner-id)]
+    (save-course-on-create! course-id scene-slug scene-name owner-id)
     [true {:id          scene-id
            :name        scene-name
            :scene-slug  scene-slug
