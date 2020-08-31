@@ -1,14 +1,8 @@
 (ns webchange.interpreter.renderer.scene.filters.filters
   (:require
-    ;[cljsjs.pixi]
-    ;[pixi-custom-filters]
+    [webchange.interpreter.renderer.pixi :refer [shared-ticker ColorMatrixFilter DropShadowFilter GlowFilter OutlineFilter]]
     [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager]]
     [webchange.logger :as logger]))
-
-(def ColorMatrixFilter (.. js/PIXI -filters -ColorMatrixFilter))
-(def DropShadowFilter (.. js/PIXI -filters -DropShadowFilter))
-(def GlowFilter (.. js/PIXI -filters -GlowFilter))
-(def OutlineFilter (.. js/PIXI -filters -OutlineFilter))
 
 (defn- init-filters
   [container]
@@ -64,9 +58,8 @@
 
 (defn- create-ticker
   [animate]
-  (let [ticker (.. js/PIXI -Ticker -shared)]
-    (.add ticker animate)
-    ticker))
+  (.add shared-ticker animate)
+  shared-ticker)
 
 (defn apply-pulsation-filter
   [container]

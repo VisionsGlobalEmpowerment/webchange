@@ -1,12 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.slider.component
   (:require
-    [cljsjs.pixi]
+    [webchange.interpreter.renderer.pixi :refer [Container Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.slider.wrapper :refer [wrap]]))
-
-(def Container (.. js/PIXI -Container))
-(def Sprite (.. js/PIXI -Sprite))
-(def WHITE (.. js/PIXI -Texture -WHITE))
 
 (defn- update-value
   [state]

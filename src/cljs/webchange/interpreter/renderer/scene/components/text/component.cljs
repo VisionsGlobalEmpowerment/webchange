@@ -1,11 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.text.component
   (:require
-    [cljsjs.pixi]
+    [webchange.interpreter.renderer.pixi :refer [Container Text]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.text.wrapper :refer [wrap]]))
-
-(def Container (.. js/PIXI -Container))
-(def Text (.. js/PIXI -Text))
 
 (def default-props {:x               {}
                     :y               {}

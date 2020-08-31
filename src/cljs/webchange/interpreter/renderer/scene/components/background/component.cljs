@@ -1,12 +1,9 @@
 (ns webchange.interpreter.renderer.scene.components.background.component
   (:require
-    [cljsjs.pixi]
+    [webchange.interpreter.renderer.pixi :refer [Container Sprite]]
     [webchange.interpreter.renderer.resources :as resources]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.scene.components.background.wrapper :refer [wrap]]))
-
-(def Container (.. js/PIXI -Container))
-(def Sprite (.. js/PIXI -Sprite))
 
 (def default-props {:name    {}
                     :src     {:default nil}

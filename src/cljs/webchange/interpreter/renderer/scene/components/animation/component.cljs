@@ -1,14 +1,10 @@
 (ns webchange.interpreter.renderer.scene.components.animation.component
   (:require
-    [cljsjs.pixi]
-    [pixi-spine]
+    [webchange.interpreter.renderer.pixi :refer [Container Spine]]
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
     [webchange.interpreter.renderer.scene.components.animation.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :refer [set-handler]]
     [webchange.interpreter.renderer.resources :as resources]))
-
-(def Container (.. js/PIXI -Container))
-(def Spine (.. js/PIXI -spine -Spine))
 
 (def default-props {:x                {}
                     :y                {}
