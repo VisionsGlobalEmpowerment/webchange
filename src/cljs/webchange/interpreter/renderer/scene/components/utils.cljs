@@ -1,7 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.utils
-  (:require
-    [clojure.data :refer [diff]]
-    [webchange.logger :as logger]))
+(ns webchange.interpreter.renderer.scene.components.utils)
 
 (defn remove-nil-fields [object]
   (apply merge (for [[k v] object :when (not (nil? v))] {k v})))
@@ -60,37 +57,3 @@
   [object]
   {:width  (.-width object)
    :height (.-height object)})
-
-(defn pick-params
-  [default-params params-names]
-  (->> params-names
-       (select-keys default-params)
-       (map second)))
-
-(defn get-specific-params
-  [props params]
-  (reduce (fn [result param]
-            (let [[param-name param-alias default-value] (if (map? param)
-                                                           [(:name param)
-                                                            (if (contains? param :alias) (:alias param) (:name param))
-                                                            (if (contains? param :default) (:default param) nil)]
-                                                           [param param nil])]
-              (assoc result param-name (get props param-alias default-value))))
-          {}
-          params))
-
-(defn check-rest-props
-  [entity-id props & known-params-list]
-  (let [rest-props (->> known-params-list
-                        (reduce (fn [rest-params ignore-params]
-                                  (let [ignore-aliases (map (fn [param]
-                                                              (if (map? param)
-                                                                (if (contains? param :alias) (:alias param) (:name param))
-                                                                param))
-                                                            ignore-params)]
-                                    (clojure.set/difference rest-params (set ignore-aliases))))
-                                (set (keys props)))
-                        (select-keys props))]
-    (when-not (empty? rest-props)
-      (logger/warn "There are extra props for" entity-id)
-      (logger/debug-folded (str entity-id " extra props") rest-props))))

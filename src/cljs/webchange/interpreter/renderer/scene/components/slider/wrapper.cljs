@@ -3,7 +3,7 @@
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 
 (defn wrap
-  [name set-value]
+  [type name set-value]
   (create-wrapper {:name name
-                   :type :slider
+                   :type type
                    :set-value set-value}))

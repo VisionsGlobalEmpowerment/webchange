@@ -4,9 +4,9 @@
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]))
 
 (defn wrap
-  [name container spine-object]
+  [type name container spine-object]
   (create-wrapper {:name             name
-                   :type             :animation
+                   :type             type
                    :get-position     (fn []
                                        (utils/get-position container))
                    :set-position     (fn [position]

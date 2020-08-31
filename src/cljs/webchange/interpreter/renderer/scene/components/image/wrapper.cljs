@@ -6,9 +6,9 @@
     [webchange.interpreter.renderer.resources :as resources]))
 
 (defn wrap
-  [name container sprite-object]
+  [type name container sprite-object]
   (create-wrapper {:name           name
-                   :type           :image
+                   :type           type
                    :set-src        (fn [src]
                                      (let [resource (resources/get-resource src)]
                                        (when (nil? resource)
