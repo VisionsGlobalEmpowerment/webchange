@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.group.group-utils
+(ns webchange.interpreter.renderer.scene.components.group.utils
   (:require
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 

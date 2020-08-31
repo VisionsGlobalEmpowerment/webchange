@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.button.button
+(ns webchange.interpreter.renderer.scene.components.button.component
   (:require
     [cljsjs.pixi]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
@@ -93,7 +93,9 @@
        (utils/pick-params default-props)
        (utils/get-specific-params current-props)))
 
-(defn create-button
+(def component-type "button")
+
+(defn create
   [parent {:keys [on-click] :as props}]
   (let [text (create-text (utils/get-specific-params props text-params))
         text-size (utils/get-size text)

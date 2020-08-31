@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.animation.animation-utils
+(ns webchange.interpreter.renderer.scene.components.animation.utils
   (:require
     [cljsjs.pixi]
     [pixi-spine]

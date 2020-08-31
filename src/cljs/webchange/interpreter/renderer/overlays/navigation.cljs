@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
-    [webchange.interpreter.renderer.scene.components.group.group :refer [create-group]]
+    [webchange.interpreter.renderer.scene.components.group.component :as group]
     [webchange.interpreter.renderer.overlays.utils :as utils]))
 
 (defn create-navigation-overlay
@@ -41,6 +41,6 @@
                                                     :horizontal "right"
                                                     :object     (get-in utils/common-elements [:close-button :size])
                                                     :padding    menu-padding}))]
-    (create-group parent {:parent      parent
+    (group/create parent {:parent      parent
                           :object-name :navigation-menu
                           :children    [back-button settings-button close-button]})))

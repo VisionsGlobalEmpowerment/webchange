@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.image.image-wrapper
+(ns webchange.interpreter.renderer.scene.components.image.wrapper
   (:require
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]

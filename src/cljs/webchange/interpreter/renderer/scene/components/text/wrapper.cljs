@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.text.text-wrapper
+(ns webchange.interpreter.renderer.scene.components.text.wrapper
   (:require
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 

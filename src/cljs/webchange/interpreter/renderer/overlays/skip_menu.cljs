@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.common.events :as ce]
-    [webchange.interpreter.renderer.scene.components.group.group :refer [create-group]]
+    [webchange.interpreter.renderer.scene.components.group.component :as group]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.utils.i18n :refer [t]]))
 
@@ -20,7 +20,7 @@
                                                    :horizontal "center"
                                                    :object     skip-button-size
                                                    :padding    menu-padding}))]
-    (create-group parent {:parent      parent
+    (group/create parent {:parent      parent
                           :object-name :skip-menu
                           :visible     false
                           :children    [skip-button]})))

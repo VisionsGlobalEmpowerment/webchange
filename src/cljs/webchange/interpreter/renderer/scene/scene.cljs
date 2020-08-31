@@ -3,7 +3,7 @@
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.renderer.scene.components.group.group :refer [create-group]]
+    [webchange.interpreter.renderer.scene.components.group.component :as group]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]))
 
@@ -52,7 +52,7 @@
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))
 
-                         (create-group (.-stage app) {:object-name :scene
+                         (group/create (.-stage app) {:object-name :scene
                                                       :children    objects})
 
                          (create-overlays {:parent   (.-stage app)
