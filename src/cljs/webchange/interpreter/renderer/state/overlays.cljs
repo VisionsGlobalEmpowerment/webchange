@@ -32,3 +32,13 @@
   ::close-activity-finished
   (fn []
     {:dispatch [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible false}]]]}))
+
+(re-frame/reg-event-fx
+  ::show-skip-menu
+  (fn [_]
+    {:dispatch [::scene/change-scene-object :skip-menu [[:set-visibility {:visible true}]]]}))
+
+(re-frame/reg-event-fx
+  ::hide-skip-menu
+  (fn [_]
+    {:dispatch [::scene/change-scene-object :skip-menu [[:set-visibility {:visible false}]]]}))

@@ -3,7 +3,8 @@
     [clojure.string :as s]
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [webchange.interpreter.variables.core :refer [variables]]))
+    [webchange.interpreter.variables.core :refer [variables]]
+    [webchange.interpreter.renderer.state.overlays :as overlays]))
 
 (def executors (atom {}))
 (def flows (atom {}))
@@ -410,7 +411,7 @@
 
       (when skippable?
         (on-skip! #(dispatch-success-fn current-action))
-        (re-frame/dispatch [::show-skip true]))
+        (re-frame/dispatch [::overlays/show-skip-menu]))
 
       (when sequence-skippable?
         (on-skip! (:on-skip action))
@@ -469,22 +470,17 @@
     {}))
 
 (re-frame/reg-event-fx
-  ::show-skip
-  (fn [{:keys [db]} [_ value]]
-    {:db (assoc db :show-skip value)}))
-
-(re-frame/reg-event-fx
   ::execute-hide-skip
   [event-as-action with-flow]
   (fn [{:keys [db]} action]
     (dispatch-success-fn action)
-    {:db (assoc db :show-skip false)}))
+    {:dispatch [::overlays/hide-skip-menu]}))
 
 (re-frame/reg-event-fx
   ::execute-reset-skip
   (fn [{:keys [db]} _]
     (reset! on-skip-handlers [])
-    {:db (assoc db :show-skip false)}))
+    {:dispatch [::overlays/hide-skip-menu]}))
 
 (re-frame/reg-event-fx
   ::skip
@@ -492,4 +488,4 @@
     (let [[on-skip-list _] (reset-vals! on-skip-handlers [])]
       (doseq [on-skip on-skip-list]
         (on-skip)))
-    {:db (assoc db :show-skip false)}))
+    {:dispatch [::overlays/hide-skip-menu]}))
