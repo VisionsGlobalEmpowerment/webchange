@@ -1,8 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.progress.component
   (:require
     [cljsjs.pixi]
-    [re-frame.core :as re-frame]
-    [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter]]
     [webchange.interpreter.renderer.scene.components.progress.wrapper :refer [wrap]]))
@@ -12,27 +10,16 @@
 (def Sprite (.. js/PIXI -Sprite))
 (def WHITE (.. js/PIXI -Texture -WHITE))
 
-(def default-params {:x                :x
-                     :y                :y
-                     :width            :width
-                     :height           {:name    :height
-                                        :default 25}
-                     :value            {:name    :value
-                                        :default 0.2}
-                     :background-color {:name    :background-color
-                                        :default 0xffffff}
-                     :foreground-color {:name    :foreground-color
-                                        :default 0x2c9600}
-                     :border-color     {:name    :border-color
-                                        :default 0x8a0f91}
-                     :border-width     {:name    :border-width
-                                        :default 1}
-                     :border-radius    {:name    :border-radius
-                                        :default 10}})
-
-(def background-params (utils/pick-params default-params [:width :height :background-color :border-width :border-color :border-radius]))
-(def foreground-params (utils/pick-params default-params [:width :height :foreground-color :value]))
-(def container-params (utils/pick-params default-params [:x :y]))
+(def default-props {:x                {}
+                    :y                {}
+                    :width            {}
+                    :height           {:default 25}
+                    :value            {:default 0.2}
+                    :background-color {:default 0xffffff}
+                    :foreground-color {:default 0x2c9600}
+                    :border-color     {:default 0x8a0f91}
+                    :border-width     {:default 1}
+                    :border-radius    {:default 10}})
 
 (defn- create-mask
   [{:keys [width height border-radius]}]
@@ -84,12 +71,11 @@
 (def component-type "progress")
 
 (defn create
-  [parent {:keys [object-name width] :as props}]
-  (let [container (create-container (utils/get-specific-params props container-params))
-        background (create-background (utils/get-specific-params props background-params))
-        foreground (create-foreground (merge {:background-mask (:mask background)}
-                                             (utils/get-specific-params props foreground-params)))
-        wrapped-progress-bar (wrap object-name {:set-value (fn [value]
+  [parent {:keys [type object-name width] :as props}]
+  (let [container (create-container props)
+        background (create-background props)
+        foreground (create-foreground (merge props {:background-mask (:mask background)}))
+        wrapped-progress-bar (wrap type object-name {:set-value (fn [value]
                                                              (aset (:sprite foreground) "width" (* value width)))})]
 
     (.addChild container (:mask background))
@@ -97,11 +83,4 @@
     (.addChild container (:sprite foreground))
     (.addChild parent container)
 
-    (utils/check-rest-props (str "ProgressBar <" (:object-name props) ">")
-                            props
-                            background-params
-                            foreground-params
-                            container-params
-                            [:object-name :parent])
-
-    (re-frame/dispatch [::state/register-object wrapped-progress-bar])))
+    wrapped-progress-bar))

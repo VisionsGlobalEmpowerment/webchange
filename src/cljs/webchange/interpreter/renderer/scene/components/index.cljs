@@ -9,11 +9,19 @@
     [webchange.interpreter.renderer.scene.components.slider.component :as slider]
     [webchange.interpreter.renderer.scene.components.text.component :as text]))
 
-(def components (apply hash-map [animation/component-type animation/create
-                                 background/component-type background/create
-                                 button/component-type button/create
-                                 image/component-type image/create
-                                 progress/component-type progress/create
-                                 rectangle/component-type rectangle/create
-                                 slider/component-type slider/create
-                                 text/component-type text/create]))
+(def components (apply hash-map [animation/component-type {:constructor   animation/create
+                                                           :default-props animation/default-props}
+                                 background/component-type {:constructor   background/create
+                                                            :default-props background/default-props}
+                                 button/component-type {:constructor   button/create
+                                                        :default-props button/default-props}
+                                 image/component-type {:constructor   image/create
+                                                       :default-props image/default-props}
+                                 progress/component-type {:constructor   progress/create
+                                                          :default-props progress/default-props}
+                                 rectangle/component-type {:constructor   rectangle/create
+                                                           :default-props rectangle/default-props}
+                                 slider/component-type {:constructor   slider/create
+                                                        :default-props slider/default-props}
+                                 text/component-type {:constructor   text/create
+                                                      :default-props text/default-props}]))

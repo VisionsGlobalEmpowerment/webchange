@@ -1,8 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.slider.component
   (:require
     [cljsjs.pixi]
-    [re-frame.core :as re-frame]
-    [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.slider.wrapper :refer [wrap]]))
 
@@ -41,24 +39,16 @@
   [state]
   (swap! state assoc :touched? false))
 
-(def default-params {:x         :x
-                     :y         :y
-                     :width     :width
-                     :height    {:name    :height
-                                 :default 24}
-                     :color     {:name    :color
-                                 :default 0x2c9600}
-                     :fill      {:name    :fill
-                                 :default 0xffffff}
-                     :on-change :on-change
-                     :min-value {:name    :min-value
-                                 :default 0}
-                     :max-value {:name    :max-value
-                                 :default 100}})
-
-(def container-params (utils/pick-params default-params [:x :y]))
-(def background-params (utils/pick-params default-params [:width :height :fill]))
-(def foreground-params (utils/pick-params default-params [:color :height]))
+(def default-props {:x         {}
+                    :y         {}
+                    :width     {}
+                    :on-change {}
+                    :value     {}
+                    :height    {:default 24}
+                    :color     {:default 0x2c9600}
+                    :fill      {:default 0xffffff}
+                    :min-value {:default 0}
+                    :max-value {:default 100}})
 
 (defn- create-container
   [{:keys [x y]}]
@@ -88,14 +78,14 @@
 
 (defn create
   [parent props]
-  (let [{:keys [object-name value]} props]
+  (let [{:keys [type object-name value]} props]
     (let [state (atom {:value      0
                        :touched?   false
                        :container  nil
                        :background nil
                        :foreground nil
                        :on-change  #()})
-          set-value (let [{:keys [min-value max-value on-change]} (utils/get-specific-params props (utils/pick-params default-params [:min-value :max-value :on-change]))]
+          set-value (let [{:keys [min-value max-value on-change]} props]
                       (swap! state assoc :on-change (fn [value] (on-change (+ min-value (* value (- max-value min-value))))))
                       (partial (fn [min-value max-value state value]
                                  (swap! state assoc :value (-> value
@@ -105,11 +95,11 @@
                                  (update-value state))
                                min-value max-value state))
 
-          container (create-container (utils/get-specific-params props container-params))
-          background (create-background (utils/get-specific-params props background-params) state)
-          foreground (create-foreground (utils/get-specific-params props foreground-params))
+          container (create-container props)
+          background (create-background props state)
+          foreground (create-foreground props)
 
-          wrapped-slider (wrap object-name set-value)]
+          wrapped-slider (wrap type object-name set-value)]
       (swap! state assoc :container container)
       (swap! state assoc :background background)
       (swap! state assoc :foreground foreground)
@@ -119,11 +109,4 @@
       (.addChild container foreground)
       (.addChild parent container)
 
-      (utils/check-rest-props (str "Slider <" (:object-name props) ">")
-                              props
-                              container-params
-                              background-params
-                              foreground-params
-                              [:object-name :parent :value :on-change :min-value :max-value])
-
-      (re-frame/dispatch [::state/register-object wrapped-slider]))))
+      wrapped-slider)))

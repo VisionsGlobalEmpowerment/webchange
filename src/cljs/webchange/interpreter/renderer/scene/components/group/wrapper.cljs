@@ -4,9 +4,9 @@
     [webchange.interpreter.renderer.scene.components.group.utils :as utils]))
 
 (defn wrap
-  [name container]
+  [type name container]
   (create-wrapper {:name           name
-                   :type           :group
+                   :type           type
                    :container      container
                    :get-position   (fn []
                                      (utils/get-position container))

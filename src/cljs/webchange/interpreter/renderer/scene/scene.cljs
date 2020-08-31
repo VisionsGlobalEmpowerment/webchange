@@ -46,8 +46,6 @@
                      (fn [this]
                        (re-frame/dispatch [::state/init])
 
-                       (print "INIT")
-
                        (let [{:keys [on-ready viewport objects]} (r/props this)
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))

@@ -1,9 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.image.component
   (:require
     [cljsjs.pixi]
-    [re-frame.core :as re-frame]
-    [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.scene.components.utils :as utils :refer [check-rest-props get-specific-params set-handler]]
+    [webchange.interpreter.renderer.scene.components.utils :as utils :refer [set-handler]]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.scene.components.image.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.resources :as resources]))
@@ -11,23 +9,18 @@
 (def Container (.. js/PIXI -Container))
 (def Sprite (.. js/PIXI -Sprite))
 
-(def default-params {:x       :x
-                     :y       :y
-                     :width   :width
-                     :height  :height
-                     :scale   :scale
-                     :name    :name
-                     :src     {:name    :src
-                               :default nil}
-                     :visible {:name    :visible
-                               :default true}
-                     :offset  {:name    :offset
-                               :default {:x 0 :y 0}}
-                     :filters {:name    :filters
-                               :default []}})
-
-(def sprite-params (utils/pick-params default-params [:src :scale :name :width :height]))
-(def sprite-container-params (utils/pick-params default-params [:x :y :scale :name :visible :offset :filters]))
+(def default-props {:x        {}
+                    :y        {}
+                    :width    {}
+                    :height   {}
+                    :scale    {}
+                    :name     {}
+                    :on-click {}
+                    :ref      {}
+                    :src      {:default nil}
+                    :visible  {:default true}
+                    :offset   {:default {:x 0 :y 0}}
+                    :filters  {:default []}})
 
 (defn- create-sprite
   [{:keys [src scale name width height]}]
@@ -57,10 +50,10 @@
 (def component-type "image")
 
 (defn create
-  [parent {:keys [on-click ref object-name] :as props}]
-  (let [image (create-sprite (utils/get-specific-params props sprite-params))
-        image-container (create-sprite-container (utils/get-specific-params props sprite-container-params))
-        wrapped-image (wrap object-name image-container image-container)]
+  [parent {:keys [type on-click ref object-name] :as props}]
+  (let [image (create-sprite props)
+        image-container (create-sprite-container props)
+        wrapped-image (wrap type object-name image-container image-container)]
 
     (when-not (nil? on-click) (set-handler image "click" on-click))
     (when-not (nil? ref) (ref wrapped-image))
@@ -68,10 +61,4 @@
     (.addChild image-container image)
     (.addChild parent image-container)
 
-    (check-rest-props (str "Image <" object-name ">")
-                      props
-                      sprite-params
-                      sprite-container-params
-                      [:name :object-name :on-click :parent :ref :src])
-
-    (re-frame/dispatch [::state/register-object wrapped-image])))
+    wrapped-image))

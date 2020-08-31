@@ -1,40 +1,24 @@
 (ns webchange.interpreter.renderer.scene.components.text.component
   (:require
     [cljsjs.pixi]
-    [re-frame.core :as re-frame]
-    [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.text.wrapper :refer [wrap]]))
 
 (def Container (.. js/PIXI -Container))
 (def Text (.. js/PIXI -Text))
 
-(def default-params {:x               :x
-                     :y               :y
-                     :text            :text
-                     :align           :align
-                     :font-family     :font-family
-                     :font-size       :font-size
-                     :font-weight     {:name    :font-weight
-                                       :default "normal"}
-                     :fill            :fill
-                     :shadow-color    :shadow-color
-                     :shadow-distance :shadow-distance
-                     :shadow-blur     :shadow-blur
-                     :shadow-opacity  :shadow-opacity})
-
-(def text-params (utils/pick-params default-params [:x
-                                                    :y
-                                                    :text
-                                                    :align
-                                                    :font-family
-                                                    :font-size
-                                                    :font-weight
-                                                    :fill
-                                                    :shadow-color
-                                                    :shadow-distance
-                                                    :shadow-blur
-                                                    :shadow-opacity]))
+(def default-props {:x               {}
+                    :y               {}
+                    :text            {}
+                    :align           {}
+                    :font-family     {}
+                    :font-size       {}
+                    :fill            {}
+                    :shadow-color    {}
+                    :shadow-distance {}
+                    :shadow-blur     {}
+                    :shadow-opacity  {}
+                    :font-weight     {:default "normal"}})
 
 (defn- create-text
   [{:keys [x y text align font-family font-size font-weight fill shadow-color shadow-distance shadow-blur shadow-opacity]}]
@@ -60,12 +44,8 @@
 (def component-type "text")
 
 (defn create
-  [parent {:keys [object-name] :as props}]
-  (let [text (create-text (utils/get-specific-params props text-params))
-        wrapped-text (wrap object-name text)]
+  [parent {:keys [type object-name] :as props}]
+  (let [text (create-text props)
+        wrapped-text (wrap type object-name text)]
     (.addChild parent text)
-    (utils/check-rest-props (str "Text <" (:object-name props) ">")
-                            props
-                            text-params
-                            [:object-name :parent])
-    (re-frame/dispatch [::state/register-object wrapped-text])))
+    wrapped-text))

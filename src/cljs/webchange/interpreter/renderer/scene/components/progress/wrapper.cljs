@@ -3,7 +3,7 @@
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 
 (defn wrap
-  [name {:keys [set-value]}]
+  [type name {:keys [set-value]}]
   (create-wrapper {:name      name
-                   :type      :progress-bar
+                   :type      type
                    :set-value set-value}))

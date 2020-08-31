@@ -2,38 +2,30 @@
   (:require
     [cljsjs.pixi]
     [pixi-spine]
-    [re-frame.core :as re-frame]
-    [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
     [webchange.interpreter.renderer.scene.components.animation.wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.scene.components.utils :refer [get-specific-params check-rest-props set-handler]]
+    [webchange.interpreter.renderer.scene.components.utils :refer [set-handler]]
     [webchange.interpreter.renderer.resources :as resources]))
 
 (def Container (.. js/PIXI -Container))
 (def Spine (.. js/PIXI -spine -Spine))
 
-(def spine-animation-params [:offset :scale
-                             {:name  :animation-start?
-                              :alias :start}
-                             {:name    :speed
-                              :default 1}
-                             {:name  :skin-name
-                              :alias :skin}
-                             {:name  :animation-name
-                              :alias :anim}
-                             {:name  :position
-                              :alias :anim-offset}])
-(def animation-container-params [:x :y
-                                 {:name    :visible
-                                  :default true}])
-
-(defn- get-spine-animation-params
-  [props]
-  (get-specific-params props spine-animation-params))
-
-(defn- get-animation-container-params
-  [props]
-  (get-specific-params props animation-container-params))
+(def default-props {:x                {}
+                    :y                {}
+                    :offset           {}
+                    :scale            {}
+                    :on-mount         {}
+                    :ref              {}
+                    :name             {}
+                    :start            {}
+                    :anim             {}
+                    :skin             {}
+                    :visible          {:default true}
+                    :animation-start? {:alias :start}
+                    :speed            {:default 1}
+                    :skin-name        {:alias :skin}
+                    :animation-name   {:alias :anim}
+                    :position         {:alias :anim-offset}})
 
 (defn- create-spine-animation
   [animation-resource {:keys [animation-start? speed offset position skin-name animation-name scale]}]
@@ -58,14 +50,13 @@
 (def component-type "animation")
 
 (defn create
-  [parent props]
-  (let [{:keys [name on-click on-mount ref] :as props} props
-        resource (resources/get-resource name)]
+  [parent {:keys [name on-click on-mount ref type] :as props}]
+  (let [resource (resources/get-resource name)]
     (when (nil? resource)
       (-> (str "Resource for animation <" name "> is not defined") js/Error. throw))
-    (let [animation (create-spine-animation resource (get-spine-animation-params props))
-          animation-container (create-animation-container (get-animation-container-params props))
-          wrapped-animation (wrap (:object-name props) animation-container animation)]
+    (let [animation (create-spine-animation resource props)
+          animation-container (create-animation-container props)
+          wrapped-animation (wrap type (:object-name props) animation-container animation)]
 
       (when-not (nil? on-click) (set-handler animation "click" on-click))
       (when-not (nil? on-mount) (on-mount wrapped-animation))
@@ -74,10 +65,4 @@
       (.addChild animation-container animation)
       (.addChild parent animation-container)
 
-      (check-rest-props (str "Animation <" (:object-name props) ">")
-                        props
-                        spine-animation-params
-                        animation-container-params
-                        [:name :object-name :on-click :on-mount :parent :ref])
-
-      (re-frame/dispatch [::state/register-object wrapped-animation]))))
+      wrapped-animation)))

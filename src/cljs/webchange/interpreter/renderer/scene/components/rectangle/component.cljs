@@ -3,27 +3,24 @@
     [cljsjs.pixi]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter
-                                                    apply-shadow-filter]]))
+                                                                  apply-shadow-filter]]
+    [webchange.interpreter.renderer.scene.components.rectangle.wrapper :refer [wrap]]))
 
 (def Container (.. js/PIXI -Container))
 (def Graphics (.. js/PIXI -Graphics))
 (def Sprite (.. js/PIXI -Sprite))
 (def WHITE (.. js/PIXI -Texture -WHITE))
 
-(def default-params {:x               :x
-                     :y               :y
-                     :width           :width
-                     :height          :height
-                     :fill            :fill
-                     :border-radius   :border-radius
-                     :border-width    :border-width
-                     :border-color    :border-color
-                     :shadow-color    :shadow-color
-                     :shadow-distance :shadow-distance})
-
-(def mask-params (utils/pick-params default-params [:width :height :border-radius]))
-(def sprite-params (utils/pick-params default-params [:fill :width :height :border-width :border-color :shadow-color :shadow-distance]))
-(def container-params (utils/pick-params default-params [:x :y]))
+(def default-props {:x               {}
+                    :y               {}
+                    :width           {}
+                    :height          {}
+                    :fill            {}
+                    :border-radius   {}
+                    :border-width    {}
+                    :border-color    {}
+                    :shadow-color    {}
+                    :shadow-distance {}})
 
 (defn- create-mask
   [{:keys [width height border-radius]}]
@@ -54,19 +51,14 @@
 (def component-type "rectangle")
 
 (defn create
-  [parent props]
-  (let [mask (create-mask (utils/get-specific-params props mask-params))
-        sprite (create-sprite (utils/get-specific-params props sprite-params))
-        container (create-container (utils/get-specific-params props container-params))]
+  [parent {:keys [type object-name] :as props}]
+  (let [mask (create-mask props)
+        sprite (create-sprite props)
+        container (create-container props)]
 
     (aset sprite "mask" mask)
     (.addChild container sprite)
     (.addChild container mask)
     (.addChild parent container)
 
-    (utils/check-rest-props (str "Rectangle <" (:object-name props) ">")
-                            props
-                            mask-params
-                            sprite-params
-                            container-params
-                            [:object-name :parent])))
+    (wrap type object-name)))

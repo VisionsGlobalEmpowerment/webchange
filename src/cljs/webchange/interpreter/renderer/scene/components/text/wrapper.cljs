@@ -3,8 +3,8 @@
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 
 (defn wrap
-  [name text]
+  [type name text]
   (create-wrapper {:name     name
-                   :type     :text
+                   :type     type
                    :set-text (fn [value]
                                (aset text "text" value))}))
