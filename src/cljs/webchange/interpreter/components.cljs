@@ -23,7 +23,6 @@
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.utils.position :refer [compute-x compute-y compute-scale get-viewbox top-left top-right bottom-center]]
-    [webchange.common.events :as ce]
     [webchange.interpreter.screens.state :as screens]
     [webchange.common.core :refer [prepare-anim-rect-params
                                    prepare-colors-palette-params
@@ -34,7 +33,6 @@
                                    with-filter-transition]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [konva :as k]
-    [webchange.interpreter.utils.i18n :refer [t]]
     [webchange.interpreter.resources-manager.scene-parser :refer [get-scene-resources]]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]))
@@ -72,17 +70,6 @@
         (empty-filter))
       (with-highlight params)
       (with-pulsation params)))
-
-(defn skip-menu
-  []
-  (let [show-skip @(re-frame/subscribe [::subs/show-skip])
-        {:keys [x y]} (bottom-center)]
-    (when show-skip
-      [:> Group {:x        (- x 150)
-                 :y        (- y 200)
-                 :on-click #(re-frame/dispatch [::ce/skip])
-                 :on-tap   #(re-frame/dispatch [::ce/skip])}
-       [components/button-interpreter {:text (t "skip")}]])))
 
 (declare group)
 (declare matrix-object)
@@ -251,14 +238,6 @@
       [:> Group (select-keys position [:x :y])
        [kimage {:src (get-data-as-url "/raw/img/ui/hand.png")}]])))
 
-(defn overlay
-  [{:keys [scene-id scene-ready?]}]
-  (let [ui-screen @(re-frame/subscribe [::screens/ui-screen])]
-    [:> Layer
-     (if-not scene-ready?
-       [:> Group
-          [skip-menu]
-          ])]))
 
 (defn layer
   [{:keys [scene-id layer-id layer background?]}]
