@@ -1,11 +1,11 @@
-(ns webchange.interpreter.renderer.progress-bar
+(ns webchange.interpreter.renderer.scene.components.progress.progress
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.common-utils :as utils]
-    [webchange.interpreter.renderer.filters :refer [apply-outline-filter]]
-    [webchange.interpreter.renderer.progress-bar-wrapper :refer [wrap]]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter]]
+    [webchange.interpreter.renderer.scene.components.progress.progress-wrapper :refer [wrap]]))
 
 (def Container (.. js/PIXI -Container))
 (def Graphics (.. js/PIXI -Graphics))

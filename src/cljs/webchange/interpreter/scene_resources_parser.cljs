@@ -1,19 +1,8 @@
-(ns webchange.interpreter.resources-manager.scene-parser
+(ns webchange.interpreter.scene-resources-parser
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.defaults :refer [default-game-assets]]
     [webchange.interpreter.subs :as subs]))
-
-;{:name word-image-4, :type image, :scenes [sandbox cycling volleyball], :template nil}
-
-
-;dev:cljs.user=> (-> @re-frame.db/app-db (get-in [:lessons "ls4"]))
-;{:id 319,
-; :name "ls4",
-; :dataset-id 4,
-; :data {:items [{:id 159} {:id 140} {:id 157}]},
-; :item-ids (159 140 157)}
-;dev:cljs.user=>
 
 (defn- get-concept-fields
   [scene-id dataset-fields]
@@ -49,10 +38,7 @@
        (filter (fn [{:keys [type]}]
                  (or (= type "image")
                      (= type "animation"))))
-       (map :url)
-       ;; ToDo: Remove
-       (concat ["/images/dashboard/scene-preview/Casa_Room.jpg"])
-       ))
+       (map :url)))
 
 (defn- parse-scene-assets
   [scene-data]

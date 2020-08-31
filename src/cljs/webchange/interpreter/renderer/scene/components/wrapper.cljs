@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.common-wrapper
+(ns webchange.interpreter.renderer.scene.components.wrapper
   (:require
     [webchange.logger :as logger]))
 

@@ -1,8 +1,8 @@
-(ns webchange.interpreter.renderer.filters
+(ns webchange.interpreter.renderer.scene.filters.filters
   (:require
     ;[cljsjs.pixi]
     ;[pixi-custom-filters]
-    [webchange.interpreter.renderer.filters-pulsation :refer [animation-eager]]
+    [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager]]
     [webchange.logger :as logger]))
 
 (def ColorMatrixFilter (.. js/PIXI -filters -ColorMatrixFilter))
@@ -91,4 +91,3 @@
       "pulsation" (apply-pulsation-filter container)
       "shadow" (apply-shadow-filter container filter-params)
       (logger/warn "[Filters]" (str "Filter with type <" name "> can not be drawn because it is not defined")))))
-

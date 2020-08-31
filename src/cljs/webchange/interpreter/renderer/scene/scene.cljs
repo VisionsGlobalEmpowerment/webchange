@@ -1,9 +1,9 @@
-(ns webchange.interpreter.renderer.scene
+(ns webchange.interpreter.renderer.scene.scene
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.renderer.group :refer [create-group]]
+    [webchange.interpreter.renderer.scene.components.group.group :refer [create-group]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]))
 
@@ -26,7 +26,6 @@
    (doto (.-scale stage)
      (aset "x" scale-x)
      (aset "y" scale-y))))
-
 
 (defn init-app
   [viewport]

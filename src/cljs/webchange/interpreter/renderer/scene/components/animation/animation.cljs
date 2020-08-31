@@ -1,13 +1,13 @@
-(ns webchange.interpreter.renderer.animation
+(ns webchange.interpreter.renderer.scene.components.animation.animation
   (:require
     [cljsjs.pixi]
     [pixi-spine]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.animation-utils :as utils]
-    [webchange.interpreter.renderer.animation-wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.common-utils :refer [get-specific-params check-rest-props set-handler]]
-    [webchange.interpreter.resources-manager.loader :as resources]))
+    [webchange.interpreter.renderer.scene.components.animation.animation-utils :as utils]
+    [webchange.interpreter.renderer.scene.components.animation.animation-wrapper :refer [wrap]]
+    [webchange.interpreter.renderer.scene.components.utils :refer [get-specific-params check-rest-props set-handler]]
+    [webchange.interpreter.renderer.resources :as resources]))
 
 (def Container (.. js/PIXI -Container))
 (def Spine (.. js/PIXI -spine -Spine))

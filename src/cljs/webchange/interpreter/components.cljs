@@ -33,7 +33,7 @@
                                    with-filter-transition]]
     [react-konva :refer [Stage Layer Group Rect Text Custom]]
     [konva :as k]
-    [webchange.interpreter.resources-manager.scene-parser :refer [get-scene-resources]]
+    [webchange.interpreter.scene-resources-parser :refer [get-scene-resources]]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]))
 

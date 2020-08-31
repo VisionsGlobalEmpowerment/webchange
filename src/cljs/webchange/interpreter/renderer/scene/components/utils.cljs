@@ -1,7 +1,6 @@
-(ns webchange.interpreter.renderer.common-utils
+(ns webchange.interpreter.renderer.scene.components.utils
   (:require
     [clojure.data :refer [diff]]
-    [clojure.pprint :as p]
     [webchange.logger :as logger]))
 
 (defn remove-nil-fields [object]

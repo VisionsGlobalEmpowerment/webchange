@@ -1,7 +1,7 @@
-(ns webchange.interpreter.renderer.animation-wrapper
+(ns webchange.interpreter.renderer.scene.components.animation.animation-wrapper
   (:require
-    [webchange.interpreter.renderer.common-wrapper :refer [create-wrapper]]
-    [webchange.interpreter.renderer.animation-utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
+    [webchange.interpreter.renderer.scene.components.animation.animation-utils :as utils]))
 
 (defn wrap
   [name container spine-object]

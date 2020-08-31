@@ -1,7 +1,7 @@
-(ns webchange.interpreter.renderer.group-wrapper
+(ns webchange.interpreter.renderer.scene.components.group.group-wrapper
   (:require
-    [webchange.interpreter.renderer.common-wrapper :refer [create-wrapper]]
-    [webchange.interpreter.renderer.group-utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
+    [webchange.interpreter.renderer.scene.components.group.group-utils :as utils]))
 
 (defn wrap
   [name container]

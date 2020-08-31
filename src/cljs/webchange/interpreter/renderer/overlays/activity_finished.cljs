@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.state.overlays :as overlays]
-    [webchange.interpreter.renderer.group :refer [create-group]]
+    [webchange.interpreter.renderer.scene.components.group.group :refer [create-group]]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.utils.i18n :refer [t]]))
 
