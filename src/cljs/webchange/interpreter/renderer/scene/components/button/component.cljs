@@ -1,14 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.button.component
   (:require
-    [cljsjs.pixi]
+    [webchange.interpreter.renderer.pixi :refer [Container Graphics Sprite WHITE Text]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.button.wrapper :refer [wrap]]))
-
-(def Container (.. js/PIXI -Container))
-(def Graphics (.. js/PIXI -Graphics))
-(def Sprite (.. js/PIXI -Sprite))
-(def WHITE (.. js/PIXI -Texture -WHITE))
-(def Text (.. js/PIXI -Text))
 
 (def default-props {:x                   {}
                     :y                   {}

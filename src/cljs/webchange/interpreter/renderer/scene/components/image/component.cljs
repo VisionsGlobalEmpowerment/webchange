@@ -1,13 +1,10 @@
 (ns webchange.interpreter.renderer.scene.components.image.component
   (:require
-    [cljsjs.pixi]
+    [webchange.interpreter.renderer.pixi :refer [Container Sprite]]
     [webchange.interpreter.renderer.scene.components.utils :as utils :refer [set-handler]]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.scene.components.image.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.resources :as resources]))
-
-(def Container (.. js/PIXI -Container))
-(def Sprite (.. js/PIXI -Sprite))
 
 (def default-props {:x        {}
                     :y        {}

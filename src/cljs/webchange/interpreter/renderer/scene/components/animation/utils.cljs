@@ -1,13 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.animation.utils
   (:require
-    [cljsjs.pixi]
-    [pixi-spine]
+    [webchange.interpreter.renderer.pixi :refer [RegionAttachment Skin TextureAtlasRegion]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.resources :as resources]))
-
-(def RegionAttachment (.. js/PIXI -spine -core -RegionAttachment))
-(def Skin (.. js/PIXI -spine -core -Skin))
-(def TextureAtlasRegion (.. js/PIXI -spine -core -TextureAtlasRegion))
 
 (def default-region-params
   {:x               0

@@ -1,14 +1,12 @@
 (ns webchange.interpreter.renderer.scene.components.group.component
   (:require
-    [cljsjs.pixi]
     [re-frame.core :as re-frame]
+    [webchange.interpreter.renderer.pixi :refer [Container]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.index :refer [components]]
     [webchange.interpreter.renderer.scene.components.group.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.props-utils :refer [get-props]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
-
-(def Container (.. js/PIXI -Container))
 
 (def default-props {:x        {}
                     :y        {}

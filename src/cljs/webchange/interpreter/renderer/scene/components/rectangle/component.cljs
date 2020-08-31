@@ -1,15 +1,10 @@
 (ns webchange.interpreter.renderer.scene.components.rectangle.component
   (:require
-    [cljsjs.pixi]
+    [webchange.interpreter.renderer.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter
                                                                   apply-shadow-filter]]
     [webchange.interpreter.renderer.scene.components.rectangle.wrapper :refer [wrap]]))
-
-(def Container (.. js/PIXI -Container))
-(def Graphics (.. js/PIXI -Graphics))
-(def Sprite (.. js/PIXI -Sprite))
-(def WHITE (.. js/PIXI -Texture -WHITE))
 
 (def default-props {:x               {}
                     :y               {}
