@@ -1,7 +1,7 @@
-(ns webchange.interpreter.renderer.button
+(ns webchange.interpreter.renderer.scene.components.button.button
   (:require
     [cljsjs.pixi]
-    [webchange.interpreter.renderer.common-utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
 (def Container (.. js/PIXI -Container))
 (def Graphics (.. js/PIXI -Graphics))

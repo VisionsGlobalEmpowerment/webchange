@@ -4,8 +4,8 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
-    [webchange.interpreter.renderer.scene :refer [scene]]
-    [webchange.interpreter.resources-manager.loader :as resources]
+    [webchange.interpreter.renderer.scene.scene :refer [scene]]
+    [webchange.interpreter.renderer.resources :as resources]
     [webchange.subs :as subs]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
 

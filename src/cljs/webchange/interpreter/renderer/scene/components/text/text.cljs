@@ -1,10 +1,10 @@
-(ns webchange.interpreter.renderer.text
+(ns webchange.interpreter.renderer.scene.components.text.text
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.common-utils :as utils]
-    [webchange.interpreter.renderer.text-wrapper :refer [wrap]]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.text.text-wrapper :refer [wrap]]))
 
 (def Container (.. js/PIXI -Container))
 (def Text (.. js/PIXI -Text))

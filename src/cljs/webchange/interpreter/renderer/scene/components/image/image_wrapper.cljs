@@ -1,9 +1,9 @@
-(ns webchange.interpreter.renderer.image-wrapper
+(ns webchange.interpreter.renderer.scene.components.image.image-wrapper
   (:require
-    [webchange.interpreter.renderer.common-wrapper :refer [create-wrapper]]
-    [webchange.interpreter.renderer.filters :refer [apply-filters]]
-    [webchange.interpreter.renderer.common-utils :as utils]
-    [webchange.interpreter.resources-manager.loader :as resources]))
+    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.resources :as resources]))
 
 (defn wrap
   [name container sprite-object]

@@ -1,6 +1,6 @@
-(ns webchange.interpreter.renderer.progress-bar-wrapper
+(ns webchange.interpreter.renderer.scene.components.progress.progress-wrapper
   (:require
-    [webchange.interpreter.renderer.common-wrapper :refer [create-wrapper]]))
+    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 
 (defn wrap
   [name {:keys [set-value]}]

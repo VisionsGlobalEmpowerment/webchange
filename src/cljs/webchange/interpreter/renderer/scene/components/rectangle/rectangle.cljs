@@ -1,8 +1,8 @@
-(ns webchange.interpreter.renderer.rectangle
+(ns webchange.interpreter.renderer.scene.components.rectangle.rectangle
   (:require
     [cljsjs.pixi]
-    [webchange.interpreter.renderer.common-utils :as utils]
-    [webchange.interpreter.renderer.filters :refer [apply-outline-filter
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter
                                                     apply-shadow-filter]]))
 
 (def Container (.. js/PIXI -Container))

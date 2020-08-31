@@ -1,12 +1,12 @@
-(ns webchange.interpreter.renderer.image
+(ns webchange.interpreter.renderer.scene.components.image.image
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.common-utils :as utils :refer [check-rest-props get-specific-params set-handler]]
-    [webchange.interpreter.renderer.filters :refer [apply-filters]]
-    [webchange.interpreter.renderer.image-wrapper :refer [wrap]]
-    [webchange.interpreter.resources-manager.loader :as resources]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils :refer [check-rest-props get-specific-params set-handler]]
+    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
+    [webchange.interpreter.renderer.scene.components.image.image-wrapper :refer [wrap]]
+    [webchange.interpreter.renderer.resources :as resources]))
 
 (def Container (.. js/PIXI -Container))
 (def Sprite (.. js/PIXI -Sprite))

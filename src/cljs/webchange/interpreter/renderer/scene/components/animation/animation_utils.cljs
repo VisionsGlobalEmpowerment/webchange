@@ -1,9 +1,9 @@
-(ns webchange.interpreter.renderer.animation-utils
+(ns webchange.interpreter.renderer.scene.components.animation.animation-utils
   (:require
     [cljsjs.pixi]
     [pixi-spine]
-    [webchange.interpreter.renderer.common-utils :as utils]
-    [webchange.interpreter.resources-manager.loader :as resources]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.resources :as resources]))
 
 (def RegionAttachment (.. js/PIXI -spine -core -RegionAttachment))
 (def Skin (.. js/PIXI -spine -core -Skin))

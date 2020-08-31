@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.filters-pulsation)
+(ns webchange.interpreter.renderer.scene.filters.filters-pulsation)
 
 (def intervals {:play 2 :pause 6})
 (def interval-duration 800)

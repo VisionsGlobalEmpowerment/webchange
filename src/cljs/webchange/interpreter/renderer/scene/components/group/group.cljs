@@ -1,17 +1,17 @@
-(ns webchange.interpreter.renderer.group
+(ns webchange.interpreter.renderer.scene.components.group.group
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.animation :refer [create-animation]]
-    [webchange.interpreter.renderer.button :refer [create-button]]
-    [webchange.interpreter.renderer.image :refer [create-image]]
-    [webchange.interpreter.renderer.progress-bar :refer [create-progress-bar]]
-    [webchange.interpreter.renderer.rectangle :refer [create-rectangle]]
-    [webchange.interpreter.renderer.slider :refer [create-slider]]
-    [webchange.interpreter.renderer.text :refer [create-text]]
-    [webchange.interpreter.renderer.group-wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.common-utils :as utils]
+    [webchange.interpreter.renderer.scene.components.animation.animation :refer [create-animation]]
+    [webchange.interpreter.renderer.scene.components.button.button :refer [create-button]]
+    [webchange.interpreter.renderer.scene.components.image.image :refer [create-image]]
+    [webchange.interpreter.renderer.scene.components.progress.progress :refer [create-progress-bar]]
+    [webchange.interpreter.renderer.scene.components.rectangle.rectangle :refer [create-rectangle]]
+    [webchange.interpreter.renderer.scene.components.slider.slider :refer [create-slider]]
+    [webchange.interpreter.renderer.scene.components.text.text :refer [create-text]]
+    [webchange.interpreter.renderer.scene.components.group.group-wrapper :refer [wrap]]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.logger :as logger]))
 
 (def Container (.. js/PIXI -Container))
