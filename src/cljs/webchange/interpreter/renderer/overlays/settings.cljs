@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
-    [webchange.interpreter.renderer.scene.components.group.group :refer [create-group]]
+    [webchange.interpreter.renderer.scene.components.group.component :as group]
     [webchange.interpreter.renderer.overlays.utils :as utils]))
 
 (defn- get-close-button
@@ -81,7 +81,7 @@
 
 (defn create-settings-overlay
   [{:keys [parent viewport]}]
-  (create-group parent {:parent      parent
+  (group/create parent {:parent      parent
                         :object-name :settings-overlay
                         :visible     false
                         :children    [{:type        "image"

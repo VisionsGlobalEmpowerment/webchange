@@ -1,10 +1,10 @@
-(ns webchange.interpreter.renderer.scene.components.text.text
+(ns webchange.interpreter.renderer.scene.components.text.component
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.text.text-wrapper :refer [wrap]]))
+    [webchange.interpreter.renderer.scene.components.text.wrapper :refer [wrap]]))
 
 (def Container (.. js/PIXI -Container))
 (def Text (.. js/PIXI -Text))
@@ -36,7 +36,7 @@
                                                     :shadow-blur
                                                     :shadow-opacity]))
 
-(defn- create-object
+(defn- create-text
   [{:keys [x y text align font-family font-size font-weight fill shadow-color shadow-distance shadow-blur shadow-opacity]}]
   (let [text (doto (Text. text (clj->js {:fontSize   font-size
                                          :fontFamily font-family
@@ -57,9 +57,11 @@
       "right" (aset (.-anchor text) "x" 1))
     text))
 
-(defn create-text
+(def component-type "text")
+
+(defn create
   [parent {:keys [object-name] :as props}]
-  (let [text (create-object (utils/get-specific-params props text-params))
+  (let [text (create-text (utils/get-specific-params props text-params))
         wrapped-text (wrap object-name text)]
     (.addChild parent text)
     (utils/check-rest-props (str "Text <" (:object-name props) ">")

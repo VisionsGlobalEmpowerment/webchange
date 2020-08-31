@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.progress.progress-wrapper
+(ns webchange.interpreter.renderer.scene.components.progress.wrapper
   (:require
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 

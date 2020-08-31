@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.state.overlays :as overlays]
-    [webchange.interpreter.renderer.scene.components.group.group :refer [create-group]]
+    [webchange.interpreter.renderer.scene.components.group.component :as group]
     [webchange.interpreter.renderer.overlays.utils :as utils]
     [webchange.interpreter.utils.i18n :refer [t]]))
 
@@ -87,7 +87,7 @@
                   :fill        0xffffff}
                  {:x           0
                   :y           80
-                  :type        "progress-bar"
+                  :type        "progress"
                   :object-name :overall-progress-bar
                   :width       width
                   :height      25
@@ -132,7 +132,7 @@
                     :fill        0x000000}]}))
 
 (defn- get-featured-content
-  [{:keys [x y  on-click]}]
+  [{:keys [x y on-click]}]
   {:type        "group"
    :object-name :featured-content-group
    :x           x
@@ -183,7 +183,7 @@
                                                       :horizontal "center"
                                                       :object     score-window-size})
         title-width 553]
-    (create-group parent {:parent      parent
+    (group/create parent {:parent      parent
                           :object-name :activity-finished-overlay
                           :visible     false
                           :children    [(get-background (merge score-window-position
@@ -201,11 +201,11 @@
                                         (get-overall-progress {:x     (+ (:x score-window-position) 65)
                                                                :y     (+ (:y score-window-position) 120)
                                                                :width (- (/ (:width score-window-size) 2) 130)})
-                                        (get-featured-content {:x             (+ (:x score-window-position)
-                                                                                 (/ (:width score-window-size) 2)
-                                                                                 65)
-                                                               :y             (+ (:y score-window-position) 120)
-                                                               :on-click      go-to-next-activity})
+                                        (get-featured-content {:x        (+ (:x score-window-position)
+                                                                            (/ (:width score-window-size) 2)
+                                                                            65)
+                                                               :y        (+ (:y score-window-position) 120)
+                                                               :on-click go-to-next-activity})
                                         (get-menu {:x                (+ (:x score-window-position) 20)
                                                    :y                (+ (:y score-window-position)
                                                                         (:height score-window-size) 10)

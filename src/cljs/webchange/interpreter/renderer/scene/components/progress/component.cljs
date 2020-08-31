@@ -1,11 +1,11 @@
-(ns webchange.interpreter.renderer.scene.components.progress.progress
+(ns webchange.interpreter.renderer.scene.components.progress.component
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter]]
-    [webchange.interpreter.renderer.scene.components.progress.progress-wrapper :refer [wrap]]))
+    [webchange.interpreter.renderer.scene.components.progress.wrapper :refer [wrap]]))
 
 (def Container (.. js/PIXI -Container))
 (def Graphics (.. js/PIXI -Graphics))
@@ -81,7 +81,9 @@
   (doto (Container.)
     (utils/set-position {:x x :y y})))
 
-(defn create-progress-bar
+(def component-type "progress")
+
+(defn create
   [parent {:keys [object-name width] :as props}]
   (let [container (create-container (utils/get-specific-params props container-params))
         background (create-background (utils/get-specific-params props background-params))

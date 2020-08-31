@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.scene.components.rectangle.rectangle
+(ns webchange.interpreter.renderer.scene.components.rectangle.component
   (:require
     [cljsjs.pixi]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
@@ -51,7 +51,9 @@
   (doto (Container.)
     (utils/set-position {:x x :y y})))
 
-(defn create-rectangle
+(def component-type "rectangle")
+
+(defn create
   [parent props]
   (let [mask (create-mask (utils/get-specific-params props mask-params))
         sprite (create-sprite (utils/get-specific-params props sprite-params))

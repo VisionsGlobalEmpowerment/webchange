@@ -1,11 +1,11 @@
-(ns webchange.interpreter.renderer.scene.components.animation.animation
+(ns webchange.interpreter.renderer.scene.components.animation.component
   (:require
     [cljsjs.pixi]
     [pixi-spine]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.scene.components.animation.animation-utils :as utils]
-    [webchange.interpreter.renderer.scene.components.animation.animation-wrapper :refer [wrap]]
+    [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.animation.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :refer [get-specific-params check-rest-props set-handler]]
     [webchange.interpreter.renderer.resources :as resources]))
 
@@ -55,7 +55,9 @@
       (utils/set-visibility visible)
       (utils/set-position position))))
 
-(defn create-animation
+(def component-type "animation")
+
+(defn create
   [parent props]
   (let [{:keys [name on-click on-mount ref] :as props} props
         resource (resources/get-resource name)]

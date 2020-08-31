@@ -1,10 +1,10 @@
-(ns webchange.interpreter.renderer.scene.components.slider.slider
+(ns webchange.interpreter.renderer.scene.components.slider.component
   (:require
     [cljsjs.pixi]
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.slider.slider-wrapper :refer [wrap]]))
+    [webchange.interpreter.renderer.scene.components.slider.wrapper :refer [wrap]]))
 
 (def Container (.. js/PIXI -Container))
 (def Sprite (.. js/PIXI -Sprite))
@@ -84,7 +84,9 @@
     (aset "height" height)
     (aset "tint" color)))
 
-(defn create-slider
+(def component-type "slider")
+
+(defn create
   [parent props]
   (let [{:keys [object-name value]} props]
     (let [state (atom {:value      0
