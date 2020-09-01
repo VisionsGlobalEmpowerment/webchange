@@ -1,10 +1,10 @@
-(ns webchange.templates.library.casa
+(ns webchange.templates.library.cycling
   (:require
     [webchange.templates.core :as core]))
 
-(def m {:id          1
-        :name        "casa"
-        :description "Some description of casa mechanics and covered skills"
+(def m {:id          2
+        :name        "cycling"
+        :description "Some description of cycling mechanics and covered skills"
         :options     {:characters {:label "Characters"
                                    :type  "characters"
                                    :max   3}
@@ -15,14 +15,14 @@
                                              {:name "3" :value 3}]}
                       }})
 
-(def t {:assets        [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
-                        {:url "/raw/img/casa/decoration_casa.png", :size 10, :type "image"}
-                        {:url "/raw/img/casa/surface_casa.png", :size 10, :type "image"}]
-        :objects       {:layered-background {:type       "layered-background"
-                                             :background {:src "/raw/img/casa/background_casa.png"}
-                                             :decoration {:src "/raw/img/casa/decoration_casa.png"}
-                                             :surface    {:src "/raw/img/casa/surface_casa.png"}}}
-        :scene-objects [["layered-background"]],
+(def t {:assets        [{:url "/raw/img/stadium/cycling/cycle_race_bg_01.jpg", :size 10, :type "image"}
+                        {:url "/raw/img/stadium/cycling/cycle_race_bg_02.jpg", :size 10, :type "image"}
+                        {:url "/raw/img/stadium/cycling/cycle_race_bg_03.jpg", :size 10, :type "image"}]
+        :objects       {:layered-background {:type  "carousel" :x 0 :y 0 :width 1920 :height 1080,
+                                             :first "/raw/img/stadium/cycling/cycle_race_bg_01.jpg"
+                                             :last  "/raw/img/stadium/cycling/cycle_race_bg_03.jpg"
+                                             :next  "/raw/img/stadium/cycling/cycle_race_bg_02.jpg"}}
+        :scene-objects [["background"]],
         :actions       {:dialog-1-before-boxes {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
@@ -67,23 +67,24 @@
                                                 :dialog-track       "4 Wrong box"}
                         :intro
                                                {:type "sequence-data",
-                                                :data [{:type "empty" :duration 2000}
-                                                       {:type "start-activity"}
-                                                       {:type "lesson-var-provider", :from "concepts", :provider-id "words-set", :variables ["box0" "box1" "box2"]}
-                                                       {:type "action" :id "dialog-1-before-boxes"}
+                                                :data
+                                                      [{:type "start-activity", :id "cycling"}
                                                        {:type "parallel",
                                                         :data
-                                                              [{:id "visible", :type "state", :target "box0"}
-                                                               {:id "visible", :type "state", :target "box1"}
-                                                               {:id "visible", :type "state", :target "box2"}]}
-                                                       {:type "empty" :duration 500}
-                                                       {:type "parallel",
-                                                        :data
-                                                              [{:id "idle_fly1", :loop true, :type "add-animation", :target "box0"}
-                                                               {:id "idle_fly2", :loop true, :type "add-animation", :target "box1"}
-                                                               {:id "idle_fly3", :loop true, :type "add-animation", :target "box2"}]}
-                                                       {:type "action" :id "dialog-2-after-boxes"}
-                                                       {:type "set-variable", :var-name "current-box", :var-value "box0"}]}
+                                                              [{:type "set-variable", :var-name "slot1", :var-value "box1"}
+                                                               {:type "set-variable", :var-name "slot2", :var-value "box2"}
+                                                               {:type "set-variable", :var-name "slot3", :var-value "box3"}]}
+                                                       {:type "set-variable", :var-name "current-line", :var-value "box2"},
+                                                       {:type        "lesson-var-provider",
+                                                        :from        "concepts",
+                                                        :limit       3,
+                                                        :provider-id "words-set",
+                                                        :repeat      4,
+                                                        :shuffled    true,
+                                                        :variables   ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8" "item-9" "item-10"]}
+                                                       {:type "action" :id "dialog-1-before-start"}
+                                                       "renew-current-concept"
+                                                       "voice-high-var"]}
                         :click-on-box          {:type        "test-value"
                                                 :from-params [{:action-property "value1" :param-property "target"}]
                                                 :from-var    [{:action-property "value2" :var-name "current-box"}]
