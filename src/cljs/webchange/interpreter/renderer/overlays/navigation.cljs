@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.scene.components.group.component :as group]
+    [webchange.interpreter.renderer.state.overlays :as state]
     [webchange.interpreter.renderer.overlays.utils :as utils]))
 
 (defn create-navigation-overlay
@@ -24,7 +25,7 @@
         settings-button (merge {:type        "image"
                                 :src         "/raw/img/ui/settings_button_01.png"
                                 :object-name :settings
-                                :on-click    #(re-frame/dispatch [::ie/open-settings])}
+                                :on-click    #(re-frame/dispatch [::state/show-settings])}
                                (utils/get-coordinates {:viewport   viewport
                                                        :vertical   "top"
                                                        :horizontal "right"

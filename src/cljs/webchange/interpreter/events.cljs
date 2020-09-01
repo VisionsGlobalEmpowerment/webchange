@@ -999,15 +999,10 @@
        :dispatch (ce/success-event action)})))
 
 (re-frame/reg-event-fx
-  ::open-settings
-  (fn [_ _]
-    {:dispatch [::overlays/open-settings]}))
-
-(re-frame/reg-event-fx
   ::close-settings
   (fn [_ _]
     {:dispatch-n (list [::save-settings]
-                       [::overlays/close-settings])}))
+                       [::overlays/hide-settings])}))
 
 (re-frame/reg-event-fx
   ::save-settings
