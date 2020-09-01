@@ -9,8 +9,7 @@
     [webchange.common.svg-path :refer [svg-path]]
     [webchange.common.matrix :refer [matrix-objects-list]]
     [webchange.common.events :as ce]
-    [webchange.common.core :refer [with-parent-origin
-                                   with-origin-offset]]
+    [webchange.common.core :refer [with-parent-origin]]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]
@@ -136,7 +135,7 @@
 
 (defn object-params
   [object]
-  (-> object with-origin-offset))
+  object)
 
 (defn draw-object
   ([scene-id name]

@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
-    [webchange.interpreter.renderer.scene.components.group.component :as group]
+    [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.overlays :as state]
     [webchange.interpreter.renderer.overlays.utils :as utils]))
 
@@ -42,6 +42,7 @@
                                                     :horizontal "right"
                                                     :object     (get-in utils/common-elements [:close-button :size])
                                                     :padding    menu-padding}))]
-    (group/create parent {:parent      parent
-                          :object-name :navigation-menu
-                          :children    [back-button settings-button close-button]})))
+    (create-component parent {:type        "group"
+                              :parent      parent
+                              :object-name :navigation-menu
+                              :children    [back-button settings-button close-button]})))

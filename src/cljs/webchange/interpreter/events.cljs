@@ -20,7 +20,12 @@
     [webchange.state.lessons.subs :as lessons]
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.state.overlays :as overlays]))
+    [webchange.interpreter.renderer.state.overlays :as overlays]
+
+    [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
+    [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
+
+    ))
 
 (re-frame/reg-fx
   :execute-audio
@@ -127,7 +132,7 @@
 
 (re-frame/reg-fx
   :start-animation
-  (fn [{:keys [state ] }]
+  (fn [{:keys [state]}]
     ((:start-animation state))))
 
 (re-frame/reg-fx
@@ -382,7 +387,7 @@
           states (get object :states)
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
           state (get states-with-aliases (keyword id))]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge state params)
+      {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge state params)
        :dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
                          (ce/success-event action))})))
 
@@ -712,18 +717,6 @@
     (let [default-progress (get-in db [:course-data :default-progress])]
       {:db (update-in db [:progress-data] merge default-progress)})))
 
-(re-frame/reg-event-db
-  ::register-transition
-  (fn [db [_ name component]]
-    (let [scene-id (:current-scene db)]
-      (assoc-in db [:transitions scene-id name] component))))
-
-(re-frame/reg-event-db
-  ::register-animation
-  (fn [db [_ name animation]]
-    (let [scene-id (:current-scene db)]
-      (assoc-in db [:scenes scene-id :animations name] animation))))
-
 (def default-triggers
   {:start [[::reset-navigation] [::ce/execute-reset-skip]]})
 
@@ -993,10 +986,12 @@
           object-data (get-in db [:scenes scene-id :objects (keyword object-to-propagate)])
           lesson-items (lessons/lesson-dataset-items db lesson-name)
           {:keys [objects scene-objects]} (get-propagated-objects object-data lesson-items)]
-      {:db       (-> db
-                     (update-in [:scenes scene-id :objects] merge objects)
-                     (update-in [:scenes scene-id :scene-objects] replace-object object-to-propagate scene-objects))
-       :dispatch (ce/success-event action)})))
+      (let [propagated-object-wrapper (->> (keyword object-to-propagate)
+                                           (scene/get-scene-object db))]
+        (doseq [object-name (map keyword scene-objects)]
+          (create-component (:container propagated-object-wrapper)
+                            (get-object-data scene-id object-name objects)))
+        {:dispatch (ce/success-event action)}))))
 
 (re-frame/reg-event-fx
   ::close-settings
