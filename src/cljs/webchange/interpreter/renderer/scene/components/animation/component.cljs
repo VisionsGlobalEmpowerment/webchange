@@ -16,6 +16,7 @@
                     :start            {}
                     :anim             {}
                     :skin             {}
+                    :on-click         {}
                     :visible          {:default true}
                     :animation-start? {:alias :start}
                     :speed            {:default 1}

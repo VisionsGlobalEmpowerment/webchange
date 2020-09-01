@@ -92,5 +92,7 @@
      [centered
       [logo]
       (if (:done loading)
-        [start-button {:on-click on-start-click}]
+        [start-button {:on-click (fn []
+                                   (.clear js/console)      ;; ToDo: Remove
+                                   (on-start-click))}]
         [progress-bar {:value (:progress loading)}])]]))
