@@ -1,6 +1,13 @@
 (ns webchange.interpreter.object-data.object-filters
   (:require
-    [webchange.common.core :refer [with-filter-transition]]))
+    [webchange.interpreter.object-data.with-transition :refer [with-transition]]))
+
+(defn- with-filter-transition
+  [{:keys [transition] :as object}]
+  (if transition
+    (let [filter-transition (str transition "-filter")]
+      (with-transition (assoc object :transition filter-transition)))
+    object))
 
 (defn- grayscale-filter
   []

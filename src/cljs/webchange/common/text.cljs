@@ -3,7 +3,7 @@
     [reagent.core :as r]
     [react-konva :refer [Shape Group Text Rect]]
     [konva :as k]
-    [webchange.common.core :refer [with-transition]]
+    [webchange.interpreter.object-data.with-transition :refer [with-transition]]
     ))
 
 (defonce dummy-context (-> (k/Util.createCanvasElement) (.getContext "2d")))

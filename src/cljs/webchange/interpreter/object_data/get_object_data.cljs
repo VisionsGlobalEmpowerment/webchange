@@ -26,10 +26,10 @@
 (ns webchange.interpreter.object-data.get-object-data
   (:require
     [re-frame.core :as re-frame]
-    [webchange.interpreter.events :as ie]
+    [webchange.interpreter.events-register :as ier]
     [webchange.subs :as subs]
     [webchange.common.anim :refer [prepare-anim-object-params]]
-    [webchange.common.core :refer [prepare-group-params]]
+    [webchange.interpreter.object-data.group-params :refer [with-group-params]]
 
     [webchange.interpreter.object-data.navigation-param :refer [with-navigation-params]]
     [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]))
@@ -43,11 +43,11 @@
           props
           extra-props-names))
 
-(defn get-object-data
-  [scene-id name]
-  (let [o @(re-frame/subscribe [::subs/scene-object-with-var scene-id name])
-        type (keyword (:type o))
-        object (with-navigation-params scene-id name o)]
+(defn prepare-object-data
+  [name scene-id get-data]
+  (let [object (->> (get-data name)
+                    (with-navigation-params scene-id name))
+        type (-> object :type keyword)]
     (case type
       :background (-> (merge object
                              {:object-name (keyword name)}
@@ -57,13 +57,15 @@
       ;:button [button scene-id name o]
       :image (-> (merge object
                         {:object-name (keyword name)}
-                        (prepare-group-params object)
+                        (with-group-params object)
                         (with-filter-params object))
                  (filter-extra-props [:actions :brightness :filter :highlight :listening :states :transition :width :height :eager :origin :scale-x :scale-y]))
       ;:transparent [:> Group (prepare-group-params o)
       ;              [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
-      :group (let [group-params (prepare-group-params object)
-                   children-params (map (fn [name] (get-object-data scene-id name)) (:children object))]
+      :group (let [group-params (with-group-params object)
+                   children-params (->> (:children object)
+                                        (map (fn [name] (prepare-object-data name scene-id get-data)))
+                                        (remove nil?))]
                (-> (merge object
                           group-params
                           {:object-name (keyword name)
@@ -73,9 +75,9 @@
       :animation (let [anim-object (prepare-anim-object-params object)
                        animation-name (or (:scene-name anim-object) (:name anim-object))]
                    (-> anim-object
-                       (merge (prepare-group-params anim-object))
+                       (merge (with-group-params anim-object))
                        (assoc :object-name (keyword name))
-                       (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %]))
+                       (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
                        (filter-extra-props [:actions :listening :scene-name :states :transition :width :height :origin :scale-x :scale-y :meshes])))
       ;:text [text scene-id name o]
       ;:carousel [carousel-object scene-id name o]
@@ -86,11 +88,19 @@
       ;:animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
       ;:svg-path [svg-path o]
       ;:matrix [matrix-object scene-id name o draw-object]
-      ;:propagate [empty-component]
+      :propagate (merge object
+                        {:type "group"
+                         :object-name (keyword name)})
       (do (.warn js/console "[PARAMS PREPARING]" (str "Object with type " type " can not be drawn because it is not defined"))
           nil)
       ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
       )))
+
+(defn get-object-data
+  ([scene-id name]
+   (prepare-object-data name scene-id (fn [name] @(re-frame/subscribe [::subs/scene-object-with-var scene-id name]))))
+  ([scene-id name objects-data]
+   (prepare-object-data name scene-id (fn [name] (get objects-data (keyword name))))))
 
 ;(declare group)
 ;(declare matrix-object)
@@ -107,6 +117,34 @@
 ;(declare empty-component)
 
 ;(defn empty-component [_] nil)
+
+;(defn prepare-anim-rect-params
+;  [params]
+;  (-> {:width   (:width params)
+;       :height  (:height params)
+;       :opacity 0
+;       :scale-y -1}
+;      (with-parent-origin params)
+;      (with-origin-offset)
+;      ))
+
+;(defn prepare-painting-area-params
+;  [object]
+;  (-> object
+;      (merge {:key (:var-name object)
+;              :on-change #(re-frame/dispatch [::vars.events/execute-set-progress {:var-name  (:var-name object)
+;                                                                                  :var-value %}])})))
+
+;(defn prepare-colors-palette-params
+;  [object]
+;  (-> object
+;      prepare-actions))
+
+;(defn prepare-animated-svg-path-params
+;  [object]
+;  (-> object
+;      (merge {:data (:path object)})
+;      (dissoc :path)))
 
 ;(defn placeholder
 ;  [scene-id name {item :var :as object}]

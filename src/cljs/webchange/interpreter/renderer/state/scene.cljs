@@ -23,6 +23,11 @@
     {:add-scene-object {:scene-objects  (get-in db (path-to-db [:objects]))
                         :object-wrapper object-wrapper}}))
 
+(defn get-scene-object
+  [db name]
+  (let [objects @(get-in db (path-to-db [:objects]))]
+    (get objects name)))
+
 ;; Change object events
 
 (re-frame/reg-event-fx

@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.interpreter.renderer.pixi :refer [Application]]
-    [webchange.interpreter.renderer.scene.components.group.component :as group]
+    [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]))
 
@@ -44,12 +44,15 @@
                      (fn [this]
                        (re-frame/dispatch [::state/init])
 
+                       (print "SCENE MOUNT")
+
                        (let [{:keys [on-ready viewport objects]} (r/props this)
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))
 
-                         (group/create (.-stage app) {:object-name :scene
-                                                      :children    objects})
+                         (create-component (.-stage app) {:type        "group"
+                                                          :object-name :scene
+                                                          :children    objects})
 
                          (create-overlays {:parent   (.-stage app)
                                            :viewport viewport})
