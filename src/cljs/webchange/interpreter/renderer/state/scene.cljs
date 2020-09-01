@@ -29,7 +29,7 @@
   ::set-scene-object-state
   (fn [{:keys [db]} [_ object-name state]]
     (let [available-actions {:set-position   [:x :y]
-                             :set-scale      [:scale]
+                             :set-scale      [:scale :scale-x :scale-y]
                              :set-visibility [:visible]}
           execute-actions (->> available-actions
                                (reduce (fn [result [action params]]
@@ -61,6 +61,16 @@
   :set-position
   (fn [[object-wrapper position]]
     ((:set-position object-wrapper) position)))
+
+(re-frame/reg-fx
+  :set-scale
+  (fn [[object-wrapper scale a b]]
+
+    (print ":set-scale" scale a b)
+
+    ;((:set-position object-wrapper) position)
+
+    ))
 
 (re-frame/reg-fx
   :set-visibility

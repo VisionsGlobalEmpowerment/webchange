@@ -9,7 +9,14 @@
 (defn- check-extra-props
   [entity-id current-props default-props]
   (let [current-names (-> current-props keys set)
-        default-names (-> default-props keys (concat skip-check-props) set)
+        default-names (->> default-props
+                           (reduce (fn [result [prop-name prop-data]]
+                                     (conj result (if (contains? prop-data :alias)
+                                                    (:alias prop-data)
+                                                    prop-name)))
+                                   [])
+                           (concat skip-check-props)
+                           (set))
         extra-props-names (difference current-names default-names)]
     (when-not (empty? extra-props-names)
       (logger/warn "There are extra props for" entity-id)
