@@ -51,6 +51,7 @@
      :text            "Nice Work!"
      :object-name     :overall-progress-title
      :align           "center"
+     :vertical-align  "top"
      :font-size       font-size
      :font-family     "Luckiest Guy"
      :fill            0xffffff
