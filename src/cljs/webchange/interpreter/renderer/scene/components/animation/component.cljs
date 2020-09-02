@@ -20,7 +20,7 @@
                     :visible          {:default true}
                     :animation-start? {:alias :start}
                     :speed            {:default 1}
-                    :skin-name        {:alias :skin}
+                    :skin-name        {:alias :skin :default "default"}
                     :animation-name   {:alias :anim}
                     :position         {:alias :anim-offset}})
 

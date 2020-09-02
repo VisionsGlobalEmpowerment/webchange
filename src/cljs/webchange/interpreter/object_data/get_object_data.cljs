@@ -53,15 +53,20 @@
                                              {:object-name (keyword name)}
                                              (with-filter-params object))
                                       (filter-extra-props [:brightness :filter :transition]))
-                      ;:layered-background [layered-background scene-id name o]
+                      :layered-background (-> (merge object
+                                     {:object-name (keyword name)}
+                                     (with-filter-params object))
+                              (filter-extra-props [:brightness :filter :transition]))
                       ;:button [button scene-id name o]
                       :image (-> (merge object
                                         {:object-name (keyword name)}
                                         (with-group-params object)
                                         (with-filter-params object))
                                  (filter-extra-props [:actions :brightness :filter :highlight :states :transition :width :height :eager :origin :scale-x :scale-y]))
-                      ;:transparent [:> Group (prepare-group-params o)
-                      ;              [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
+                      :transparent (-> (merge object
+                              {:object-name (keyword name)}
+                              (with-group-params object))
+                      (filter-extra-props [:actions]))
                       :group (let [group-params (with-group-params object)
                                    children-params (->> (:children object)
                                                         (map (fn [name] (prepare-object-data name scene-id get-data)))

@@ -11,6 +11,7 @@
                  {:url "/raw/img/casa/decoration_casa.png", :size 10, :type "image"}
                  {:url "/raw/img/casa/surface_casa.png", :size 10, :type "image"}
                  {:url "/raw/img/casa_door.png", :size 1, :type "image"}
+                 {:url "/raw/img/casa/door.png", :size 1, :type "image"}
                  {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio", :alias "vaca voice 1", :target "vaca"}
                  {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio", :alias "vaca voice 2", :target "vaca"}
                  {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio", :alias "vaca voice 3", :target "vaca"}
@@ -36,13 +37,13 @@
                   :target "vaca"}],
  :objects
                 {:layered-background {
-                                      :type "layered-background"
+                                      :type       "layered-background"
                                       :background {:src "/raw/img/casa/background_casa.png"}
                                       :decoration {:src "/raw/img/casa/decoration_casa.png"},
-                                      :surface {:src "/raw/img/casa/surface_casa.png"},
+                                      :surface    {:src "/raw/img/casa/surface_casa.png"},
                                       },
                  :box1
-                                     {:type       "transparent",
+                                     {:anim       "come", :loop false, :name "boxes", :skin "qwestion", :type "animation", :start true
                                       :x          505,
                                       :y          375,
                                       :width      772,
@@ -52,11 +53,11 @@
                                       :scene-name "box1",
                                       :transition "box1",
                                       :actions    {:click {:id "click-on-box1", :on "click", :type "action"}},
-                                      :states
-                                                  {:default {:type "transparent"},
-                                                   :visible {:anim "come", :loop false, :name "boxes", :skin "qwestion", :type "animation", :speed 0.3, :start true}}},
+                                      :visible    false
+                                      :states     {:default {:visible false},
+                                                   :visible {:visible true}}}
                  :box2
-                                     {:type       "transparent",
+                                     {:anim       "come", :loop false, :name "boxes", :skin "qwestion", :type "animation", :start true
                                       :x          955,
                                       :y          375,
                                       :width      772,
@@ -66,11 +67,11 @@
                                       :scene-name "box2",
                                       :transition "box2",
                                       :actions    {:click {:id "click-on-box2", :on "click", :type "action"}},
-                                      :states
-                                                  {:default {:type "transparent"},
-                                                   :visible {:anim "come", :loop false, :name "boxes", :skin "qwestion", :type "animation", :speed 0.3, :start true}}},
+                                      :visible    false
+                                      :states     {:default {:visible false},
+                                                   :visible {:visible true}}},
                  :box3
-                                     {:type       "transparent",
+                                     {:anim       "come", :loop false, :name "boxes", :skin "qwestion", :type "animation", :start true
                                       :x          1405,
                                       :y          375,
                                       :width      772,
@@ -80,9 +81,9 @@
                                       :scene-name "box3",
                                       :transition "box3",
                                       :actions    {:click {:id "click-on-box3", :on "click", :type "action"}},
-                                      :states
-                                                  {:default {:type "transparent"},
-                                                   :visible {:anim "come", :loop false, :name "boxes", :skin "qwestion", :type "animation", :speed 0.3, :start true}}},
+                                      :visible    false
+                                      :states     {:default {:visible false},
+                                                   :visible {:visible true}}}
                  :door
                                      {:type       "image",
                                       :x          1096,
@@ -112,7 +113,6 @@
                                       :name        "mari",
                                       :scale-x     0.5,
                                       :scale-y     0.5,
-                                      :speed       0.35,
                                       :start       true},
                  :senora-vaca
                                      {:type    "animation",
@@ -125,20 +125,18 @@
                                       :anim    "idle",
                                       :name    "senoravaca",
                                       :skin    "vaca",
-                                      :speed   0.3,
                                       :start   true},
                  :vera
-                             {:type   "animation",
-                              :x      1128,
-                              :y      960,
-                              :width  380,
-                              :height 537,
-                              :scale  {:x 3, :y 3},
-                              :anim   "idle",
-                              :name   "vera",
-                              :skin "01 Vera_1"
-                              :speed  0.3,
-                              :start  true}},
+                                     {:type   "animation",
+                                      :x      1128,
+                                      :y      960,
+                                      :width  380,
+                                      :height 537,
+                                      :scale  {:x 3, :y 3},
+                                      :anim   "idle",
+                                      :name   "vera",
+                                      :skin   "01 Vera_1"
+                                      :start  true}},
  :scene-objects [["layered-background" "door"] ["vera" "senora-vaca" "mari" "door-trigger" "box1" "box2" "box3"]],
  :actions
                 {:audio-correct                    {:type "audio", :id "/raw/audio/effects/correct.mp3", :start 0, :duration 1.71},
@@ -300,7 +298,7 @@
                                                     :duration           2.749,
                                                     :track              1,
                                                     :offset             1.089
-                                                    :skippable true},
+                                                    :skippable          true},
                  :senora-vaca-audio-2
                                                    {:type               "animation-sequence",
                                                     :data
@@ -318,7 +316,7 @@
                                                     :duration           10.042,
                                                     :track              1,
                                                     :offset             4.395
-                                                    :skippable true},
+                                                    :skippable          true},
                  :senora-vaca-audio-touch-second-box
                                                    {:type               "animation-sequence",
                                                     :data

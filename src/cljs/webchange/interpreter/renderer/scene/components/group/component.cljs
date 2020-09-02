@@ -9,14 +9,16 @@
                     :ref      {}
                     :on-click {}
                     :type     {:default "group"}
-                    :visible  {:default true}})
+                    :visible  {:default true}
+                    :rotation {}})
 
 (defn- create-container
-  [{:keys [x y visible]}]
+  [{:keys [x y visible rotation]}]
   (doto (Container.)
     (utils/set-visibility visible)
     (utils/set-position {:x x
-                         :y y})))
+                         :y y})
+    (utils/set-rotation rotation)))
 
 (def component-type "group")
 

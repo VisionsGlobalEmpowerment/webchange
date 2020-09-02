@@ -26,4 +26,6 @@
                                                                                          :loop?       loop?}))
                    :remove-animation (fn [track mix-duration]
                                        (utils/set-empty-animation spine-object {:track-index  track
-                                                                                :mix-duration mix-duration}))}))
+                                                                                :mix-duration mix-duration}))
+                   :set-visibility   (fn [visible?]
+                                       (utils/set-visibility container visible?))}))

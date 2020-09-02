@@ -61,7 +61,7 @@
                    "image" (conj result (:src object-data))
                    "animation" (let [animation-name (:name object-data)]
                                  (conj result [animation-name (get-animation-url animation-name)]))
-                   nil))
+                   result))
                [])))
 
 (defn get-scene-resources

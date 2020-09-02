@@ -70,3 +70,15 @@
   [object]
   {:width  (.-width object)
    :height (.-height object)})
+
+(defn set-size
+  [object {:keys [width height]}]
+  (when width
+    (set! (.-width object) width))
+  (when height
+    (set! (.-height object) height)))
+
+(defn set-rotation
+  [object rotation]
+  (when rotation
+    (set! (.-angle object) rotation)))

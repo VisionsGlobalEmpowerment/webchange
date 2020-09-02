@@ -14,18 +14,16 @@
 
 (defn- get-layer-objects-data
   [scene-id layer-objects]
-  (reduce (fn [result object-name]
-            (conj result (get-object-data scene-id object-name)))
-          []
-          layer-objects))
+  (->> layer-objects
+       (map #(get-object-data scene-id %))
+       (into [])))
 
 (defn- get-scene-objects-data
   [scene-id scene-layers]
   (->> scene-layers
-       (reduce (fn [scene-objects-data scene-layer]
-                 (concat scene-objects-data (get-layer-objects-data scene-id scene-layer)))
-               [])
-       (remove nil?)))
+       (mapcat #(get-layer-objects-data scene-id %))
+       (remove nil?)
+       (into [])))
 
 (defn- scene-started?
   [scene-id]
