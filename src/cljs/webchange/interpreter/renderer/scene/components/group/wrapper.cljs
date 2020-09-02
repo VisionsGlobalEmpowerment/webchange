@@ -9,7 +9,7 @@
                    :type           type
                    :container      container
                    :get-data       (fn []
-                                     (merge (utils/get-global-position container)))
+                                     (merge (utils/get-stage-position container)))
                    :get-position   (fn []
                                      (utils/get-position container))
                    :set-position   (fn [position]
