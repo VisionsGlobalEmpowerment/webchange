@@ -3,6 +3,7 @@
     [webchange.editor-v2.concepts.views :refer [delete-dataset-item-modal]]
     [webchange.editor-v2.layout.toolbar.views :refer [toolbar]]
     [webchange.editor-v2.translator.views-modal :refer [translator-modal]]
+    [webchange.editor-v2.dialog.views-modal :refer [dialog-modal]]
     [webchange.editor-v2.translator.text.views :refer [configuration-modal]]
     [reagent.core :as r]))
 
@@ -20,6 +21,7 @@
 (defn- modal-windows
   []
   [:div
+   [dialog-modal]
    [translator-modal]
    [configuration-modal]
    [delete-dataset-item-modal]])

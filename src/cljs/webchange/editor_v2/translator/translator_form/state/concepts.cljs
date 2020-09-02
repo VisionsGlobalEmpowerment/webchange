@@ -56,6 +56,10 @@
   [db]
   (get-in db (path-to-db [:concepts :data])))
 
+(defn current-dataset-concept
+  [db]
+  (get-in db (path-to-db [:current-dataset-concept])))
+
 (re-frame/reg-sub
   ::concepts-data
   concepts-data)
@@ -88,8 +92,11 @@
   ::init-state
   (fn [{:keys [db]} [_]]
     (let [concepts (editor-subs/course-dataset-items db)
+          dataset-concept (editor-subs/dataset-concept db)
           current-concept (->> concepts (vals) (sort-by :name) (first))]
-      {:db         (assoc-in db (path-to-db [:concepts :data]) concepts)
+      {:db         (-> db
+                       (assoc-in (path-to-db [:concepts :data]) concepts)
+                       (assoc-in (path-to-db [:current-dataset-concept]) dataset-concept))
        :dispatch-n (list [::set-current-concept (:id current-concept)]
                          [::set-edited-concepts []])})))
 

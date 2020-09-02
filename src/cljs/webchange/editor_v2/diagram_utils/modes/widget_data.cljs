@@ -2,7 +2,8 @@
   (:require
     [webchange.editor-v2.diagram-utils.modes.full-scene.widget-data :as full-scene]
     [webchange.editor-v2.diagram-utils.modes.phrases.widget-data :as phrases]
-    [webchange.editor-v2.diagram-utils.modes.translation.widget-data :as translation]))
+    [webchange.editor-v2.diagram-utils.modes.translation.widget-data :as translation]
+    [webchange.editor-v2.diagram-utils.modes.dialog.widget-data :as dialog]))
 
 (defn get-widget-data
   [diagram-mode]
@@ -13,4 +14,5 @@
              :full-scene (full-scene/get-widget-data)
              :phrases (phrases/get-widget-data)
              :translation (translation/get-widget-data)
+             :dialog (dialog/get-widget-data)
              {}))))

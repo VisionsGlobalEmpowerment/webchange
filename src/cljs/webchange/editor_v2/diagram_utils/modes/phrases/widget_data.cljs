@@ -81,7 +81,9 @@
                      (:dialog-node styles))]
     (into [:div {:on-double-click (fn []
                                     (when-not (= (:type node-data) "track")
-                                      (re-frame/dispatch [::ee/show-translator-form node-data])))
+                                      (if (= "dialog" (get-in node-data [:data :editor-type]))
+                                        (re-frame/dispatch [::ee/show-dialog-translator-form node-data])
+                                        (re-frame/dispatch [::ee/show-translator-form node-data]))))
                  :style           (merge custom-wrapper/node-style
                                          node-style)}]
           (r/children this))))
