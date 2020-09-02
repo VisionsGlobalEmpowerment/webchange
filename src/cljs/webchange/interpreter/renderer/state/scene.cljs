@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.logger :as logger]))
 
 (re-frame/reg-event-fx
@@ -60,18 +61,18 @@
 (re-frame/reg-fx
   :add-filter
   (fn [[object-wrapper filter-data]]
-    ((:add-filter object-wrapper) filter-data)))
+    (w/add-filter object-wrapper filter-data)))
 
 (re-frame/reg-fx
   :set-position
   (fn [[object-wrapper position]]
-    ((:set-position object-wrapper) position)))
+    (w/set-position object-wrapper position)))
 
 (re-frame/reg-fx
   :set-scale
   (fn [[object-wrapper scale a b]]
 
-    (print ":set-scale" scale a b)
+    (print "[!!!] :set-scale" scale a b)
 
     ;((:set-position object-wrapper) position)
 
@@ -80,9 +81,19 @@
 (re-frame/reg-fx
   :set-visibility
   (fn [[object-wrapper {:keys [visible]}]]
-    ((:call object-wrapper) :set-visibility visible)))
+    (w/set-visibility object-wrapper visible)))
 
 (re-frame/reg-fx
   :set-value
   (fn [[object-wrapper value]]
-    ((:call object-wrapper) :set-value value)))
+    (w/set-value object-wrapper value)))
+
+(re-frame/reg-fx
+  :set-text
+  (fn [[object-wrapper text]]
+    (w/set-text object-wrapper text)))
+
+(re-frame/reg-fx
+  :set-src
+  (fn [[object-wrapper src]]
+    (w/set-src object-wrapper src)))

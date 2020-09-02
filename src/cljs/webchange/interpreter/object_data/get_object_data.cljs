@@ -36,7 +36,7 @@
 
 ;; ----
 
-(defn- filter-extra-props
+(defn filter-extra-props
   [props extra-props-names]
   (reduce (fn [props prop-to-remove]
             (dissoc props prop-to-remove))
@@ -47,54 +47,61 @@
   [name scene-id get-data]
   (let [object (->> (get-data name)
                     (with-navigation-params scene-id name))
-        type (-> object :type keyword)]
-    (case type
-      :background (-> (merge object
-                             {:object-name (keyword name)}
-                             (with-filter-params object))
-                      (filter-extra-props [:brightness :filter :transition]))
-      ;:layered-background [layered-background scene-id name o]
-      ;:button [button scene-id name o]
-      :image (-> (merge object
-                        {:object-name (keyword name)}
-                        (with-group-params object)
-                        (with-filter-params object))
-                 (filter-extra-props [:actions :brightness :filter :highlight :listening :states :transition :width :height :eager :origin :scale-x :scale-y]))
-      ;:transparent [:> Group (prepare-group-params o)
-      ;              [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
-      :group (let [group-params (with-group-params object)
-                   children-params (->> (:children object)
-                                        (map (fn [name] (prepare-object-data name scene-id get-data)))
-                                        (remove nil?))]
-               (-> (merge object
-                          group-params
-                          {:object-name (keyword name)
-                           :children    children-params})
-                   (filter-extra-props [:transition :width :height])))
-      ;:placeholder [placeholder scene-id name o]
-      :animation (let [anim-object (prepare-anim-object-params object)
-                       animation-name (or (:scene-name anim-object) (:name anim-object))]
-                   (-> anim-object
-                       (merge (with-group-params anim-object))
-                       (assoc :object-name (keyword name))
-                       (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
-                       (filter-extra-props [:actions :listening :scene-name :states :transition :width :height :origin :scale-x :scale-y :meshes])))
-      ;:text [text scene-id name o]
-      ;:carousel [carousel-object scene-id name o]
-      ;:painting-area (get-painting-area scene-id name o)
-      ;:copybook [copybook o]
-      ;:colors-palette (get-colors-palette scene-id name o)
-      ;:video [video o]
-      ;:animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
-      ;:svg-path [svg-path o]
-      ;:matrix [matrix-object scene-id name o draw-object]
-      :propagate (merge object
-                        {:type "group"
-                         :object-name (keyword name)})
-      (do (.warn js/console "[PARAMS PREPARING]" (str "Object with type " type " can not be drawn because it is not defined"))
-          nil)
-      ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
-      )))
+        type (-> object :type keyword)
+        object-data (case type
+                      :background (-> (merge object
+                                             {:object-name (keyword name)}
+                                             (with-filter-params object))
+                                      (filter-extra-props [:brightness :filter :transition]))
+                      ;:layered-background [layered-background scene-id name o]
+                      ;:button [button scene-id name o]
+                      :image (-> (merge object
+                                        {:object-name (keyword name)}
+                                        (with-group-params object)
+                                        (with-filter-params object))
+                                 (filter-extra-props [:actions :brightness :filter :highlight :states :transition :width :height :eager :origin :scale-x :scale-y]))
+                      ;:transparent [:> Group (prepare-group-params o)
+                      ;              [:> Rect {:x 0 :width (:width o) :height (:height o)}]]
+                      :group (let [group-params (with-group-params object)
+                                   children-params (->> (:children object)
+                                                        (map (fn [name] (prepare-object-data name scene-id get-data)))
+                                                        (remove nil?))]
+                               (-> (merge object
+                                          group-params
+                                          {:object-name (keyword name)
+                                           :children    children-params})
+                                   (filter-extra-props [:transition :width :height])))
+                      ;:placeholder [placeholder scene-id name o]
+                      :animation (let [anim-object (prepare-anim-object-params object)
+                                       animation-name (or (:scene-name anim-object) (:name anim-object))]
+                                   (-> anim-object
+                                       (merge (with-group-params anim-object))
+                                       (assoc :object-name (keyword name))
+                                       (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
+                                       (filter-extra-props [:actions :scene-name :transition :width :height :origin :scale-x :scale-y :meshes])))
+                      :text (-> object
+                                (with-group-params)
+                                (merge {:object-name (keyword name)})
+                                (filter-extra-props []))
+                      ;:carousel [carousel-object scene-id name o]
+                      ;:painting-area (get-painting-area scene-id name o)
+                      ;:copybook [copybook o]
+                      ;:colors-palette (get-colors-palette scene-id name o)
+                      ;:video [video o]
+                      ;:animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
+                      ;:svg-path [svg-path o]
+                      ;:matrix [matrix-object scene-id name o draw-object]
+                      :propagate (-> object
+                                     (with-group-params)
+                                     (merge {:type        "group"
+                                             :object-name (keyword name)})
+                                     (filter-extra-props [:el-height :el :width :el-width :height]))
+                      (do (.warn js/console "[PARAMS PREPARING]" (str "Object with type " type " can not be drawn because it is not defined"))
+                          nil)
+                      ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
+                      )]
+    (-> object-data
+        (filter-extra-props [:actions :states]))))
 
 (defn get-object-data
   ([scene-id name]

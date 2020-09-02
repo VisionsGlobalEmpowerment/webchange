@@ -16,7 +16,7 @@
 (defn- brighten-filter
   [{:keys [brightness transition]}]
   (->
-    {:filters    [{:name  "brighten"
+    {:filters    [{:name  "brightness"
                    :value brightness}]
      :transition transition}
     with-filter-transition))

@@ -31,7 +31,7 @@
            (map prepare-action)
            (into {})
            (merge object))
-      (assoc object :listening false))))
+      object)))
 
 (defn- with-origin-offset
   [{:keys [width height origin] :as object}]

@@ -100,12 +100,10 @@
     (->> items
          (map-indexed
            (fn [index item]
-             (let [current-position {:x (+ (:x propagate-data)
-                                           (/ step-h 2)
+             (let [current-position {:x (+ (/ step-h 2)
                                            (* (:x (nth items-places index))
                                               (+ step-h (:el-width propagate-data))))
-                                     :y (+ (:y propagate-data)
-                                           (/ step-v 2)
+                                     :y (+ (/ step-v 2)
                                            (* (:y (nth items-places index))
                                               (+ step-v (:el-height propagate-data))))}]
                (->> (:el propagate-data)

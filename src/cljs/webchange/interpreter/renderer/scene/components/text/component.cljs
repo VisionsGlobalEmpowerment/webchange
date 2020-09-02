@@ -7,7 +7,6 @@
 (def default-props {:x               {}
                     :y               {}
                     :text            {}
-                    :align           {}
                     :font-family     {}
                     :font-size       {}
                     :fill            {}
@@ -15,10 +14,12 @@
                     :shadow-distance {}
                     :shadow-blur     {}
                     :shadow-opacity  {}
+                    :align           {:default "left"}
+                    :vertical-align  {:default "bottom"}
                     :font-weight     {:default "normal"}})
 
 (defn- create-text
-  [{:keys [x y text align font-family font-size font-weight fill shadow-color shadow-distance shadow-blur shadow-opacity]}]
+  [{:keys [x y text align vertical-align font-family font-size font-weight fill shadow-color shadow-distance shadow-blur shadow-opacity]}]
   (let [text (doto (Text. text (clj->js {:fontSize   font-size
                                          :fontFamily font-family
                                          :fontWeight font-weight
@@ -36,6 +37,11 @@
       "left" (aset (.-anchor text) "x" 0)
       "center" (aset (.-anchor text) "x" 0.5)
       "right" (aset (.-anchor text) "x" 1))
+
+    (case vertical-align
+      "top" (aset (.-anchor text) "y" 0)
+      "middle" (aset (.-anchor text) "y" 0.5)
+      "bottom" (aset (.-anchor text) "y" 1))
     text))
 
 (def component-type "text")
@@ -45,4 +51,5 @@
   (let [text (create-text props)
         wrapped-text (wrap type object-name text)]
     (.addChild parent text)
+
     wrapped-text))

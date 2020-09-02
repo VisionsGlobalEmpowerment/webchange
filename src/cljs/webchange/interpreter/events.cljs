@@ -24,7 +24,7 @@
 
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
-
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     ))
 
 (re-frame/reg-fx
@@ -117,30 +117,30 @@
   :switch-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      ((:set-animation state) track id loop))))
+      (w/set-animation state track id loop))))
 
 (re-frame/reg-fx
   :add-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      ((:add-animation state) track id loop 0))))
+      (w/add-animation state track id loop 0))))
 
 (re-frame/reg-fx
   :remove-animation
   (fn [{:keys [state track] :or {track 0}}]
-    ((:remove-animation state) track 0.2)))
+    (w/remove-animation state track 0.2)))
 
 (re-frame/reg-fx
   :start-animation
   (fn [{:keys [state]}]
-    ((:start-animation state))))
+    (w/start-animation state)))
 
 (re-frame/reg-fx
   :set-slot
   (fn [{:keys [state slot-name slot-attachment-name image region attachment]}]
-    ((:set-slot state) slot-name image {:attachment-params    attachment
-                                        :slot-attachment-name slot-attachment-name
-                                        :region-params        region})))
+    (w/set-slot state slot-name image {:attachment-params    attachment
+                                       :slot-attachment-name slot-attachment-name
+                                       :region-params        region})))
 
 (re-frame/reg-fx
   :set-skin
@@ -148,16 +148,16 @@
     ;(let [skeleton (:skeleton state)]
     ;  (.setSkinByName skeleton skin)
     ;  (.setToSetupPose skeleton))
-    ((:set-skin state) skin)))
+    (w/set-skin state skin)))
 
 (re-frame/reg-fx
   :animation-props
   (fn [{component :state {:keys [scaleX scaleY x y]} :props}]
     (let [position {:x x
                     :y y}]
-      (when scaleX ((:set-scale-x component) scaleX))
-      (when scaleY ((:set-scale-y component) scaleY))
-      ((:set-position component) position))))
+      (when scaleX (w/set-scale-x component scaleX))
+      (when scaleY (w/set-scale-y component scaleY))
+      (w/set-position component position))))
 
 (defn get-audio-key
   [db id]
@@ -230,18 +230,27 @@
       {:execute-audio (-> audio-params
                           (assoc :on-ended #(ce/dispatch-success-fn action)))})))
 
+(defn- without-params
+  [object params]
+  (reduce (fn [object param]
+            (dissoc object param))
+          object
+          params))
+
 (defn execute-transition
   [db {:keys [transition-id transition-tag to from skippable] :as action}]
   (let [scene-id (:current-scene db)
         transition (get-in db [:transitions scene-id transition-id])
         id (or transition-tag transition-id)]
     (when transition
-      {:transition {:id        id
-                    :component transition
-                    :to        to
-                    :from      from
-                    :on-ended  #(ce/dispatch-success-fn action)
-                    :skippable skippable}})))
+      (let [transition-params [:duration :easing :loop :yoyo]]
+        {:transition {:id        id
+                      :component transition
+                      :to        (without-params to transition-params)
+                      :from      from
+                      :params    (select-keys to transition-params)
+                      :on-ended  #(ce/dispatch-success-fn action)
+                      :skippable skippable}}))))
 
 (defn point->transition
   [to transition-id]

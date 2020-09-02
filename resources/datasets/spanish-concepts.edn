@@ -87,7 +87,10 @@
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
-  {:name "image-src", :type "image", :template nil, :scenes ["volleyball"]}
+  {:name "image-src",
+   :type "image",
+   :template nil,
+   :scenes ["cinema" "volleyball"]}
   {:name "letter", :type "string"}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",

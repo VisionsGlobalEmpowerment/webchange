@@ -14,6 +14,13 @@
     {:x (.-x position)
      :y (.-y position)}))
 
+(defn get-global-position
+  [spine-object]
+  ;; Performance can be improved by passing skip-update param
+  (let [position (.getGlobalPosition spine-object)]
+    {:x (.-x position)
+     :y (.-y position)}))
+
 (defn set-position
   [spine-object position]
   (let [{:keys [x y]} (merge (get-position spine-object)
