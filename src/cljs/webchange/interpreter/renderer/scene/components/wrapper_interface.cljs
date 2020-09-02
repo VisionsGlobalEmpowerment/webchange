@@ -29,3 +29,5 @@
 (defn set-value [wrapper & params] (execute wrapper :set-value params))
 (defn set-visibility [wrapper & params] (execute wrapper :set-visibility params))
 (defn start-animation [wrapper & params] (execute wrapper :start-animation params))
+(defn get-rotation [wrapper & params] (execute wrapper :get-rotation params))
+(defn set-rotation [wrapper & params] (execute wrapper :set-rotation params))

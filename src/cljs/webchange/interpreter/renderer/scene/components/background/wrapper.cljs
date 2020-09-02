@@ -3,6 +3,7 @@
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 
 (defn wrap
-  [type name]
+  [type name object]
   (create-wrapper {:name name
-                   :type type}))
+                   :type type
+                   :object object}))

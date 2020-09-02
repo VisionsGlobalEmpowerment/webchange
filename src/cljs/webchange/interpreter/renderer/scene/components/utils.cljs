@@ -78,6 +78,10 @@
   (when height
     (set! (.-height object) height)))
 
+(defn get-rotation
+  [object]
+  (.-angle object))
+
 (defn set-rotation
   [object rotation]
   (when rotation

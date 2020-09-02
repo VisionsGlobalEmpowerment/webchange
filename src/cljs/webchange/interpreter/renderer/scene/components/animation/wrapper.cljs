@@ -7,6 +7,7 @@
   [type name container spine-object]
   (create-wrapper {:name             name
                    :type             type
+                   :object           container
                    :get-position     (fn []
                                        (utils/get-position container))
                    :set-position     (fn [position]

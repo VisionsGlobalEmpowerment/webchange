@@ -11,6 +11,10 @@
                     :surface {:default nil}
                     :filters {:default []}})
 
+(defn- create-container
+  [{:keys [name]}]
+  (doto  (Container.)
+    (aset "name" (str name "-sprite-container"))))
 
 (defn- create-sprite
   [layer-name {:keys [filters] :as props}]
@@ -29,10 +33,12 @@
 
 (defn create
   [parent {:keys [type object-name] :as props}]
-  (if-let [background (create-sprite :background props)]
-    (.addChild parent background))
-  (if-let [background (create-sprite :surface props)]
-    (.addChild parent background))
-  (if-let [background (create-sprite :decoration props)]
-    (.addChild parent background))
-  (wrap type object-name))
+  (let [container (create-container props)]
+    (if-let [background (create-sprite :background props)]
+      (.addChild container background))
+    (if-let [background (create-sprite :surface props)]
+      (.addChild container background))
+    (if-let [background (create-sprite :decoration props)]
+      (.addChild container background))
+    (.addChild parent container)
+    (wrap type object-name container)))
