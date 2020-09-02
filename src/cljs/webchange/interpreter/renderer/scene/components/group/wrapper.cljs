@@ -14,5 +14,7 @@
                                      (utils/get-position container))
                    :set-position   (fn [position]
                                      (utils/set-position container position))
+                   :set-scale      (fn [scale]
+                                     (utils/set-scale container scale))
                    :set-visibility (fn [visible?]
                                      (utils/set-visibility container visible?))}))

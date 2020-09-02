@@ -36,11 +36,13 @@
 
 (defn set-scale
   [spine-object scale]
-  (let [{:keys [x y]} (merge (get-scale spine-object)
-                             (remove-nil-fields (if (number? scale)
-                                                  {:x scale
-                                                   :y scale}
-                                                  scale)))]
+  (let [prepared-scale (if (number? scale)
+                         {:x scale
+                          :y scale}
+                         {:x (or (:x scale) (:scale-x scale))
+                          :y (or (:y scale) (:scale-y scale))})
+        {:keys [x y]} (merge (get-scale spine-object)
+                             (remove-nil-fields prepared-scale))]
     (-> (.-scale spine-object)
         (.set x y))))
 

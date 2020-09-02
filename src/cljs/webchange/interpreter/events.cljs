@@ -1000,7 +1000,11 @@
         (doseq [object-name (map keyword scene-objects)]
           (create-component (:container propagated-object-wrapper)
                             (get-object-data scene-id object-name objects)))
-        {:dispatch (ce/success-event action)}))))
+        ;; Assigning propagated objects to db is needed for :execute-state work
+        {:db       (-> db
+                       (update-in [:scenes scene-id :objects] merge objects)
+                       (update-in [:scenes scene-id :scene-objects] replace-object object-to-propagate scene-objects))
+         :dispatch (ce/success-event action)}))))
 
 (re-frame/reg-event-fx
   ::close-settings

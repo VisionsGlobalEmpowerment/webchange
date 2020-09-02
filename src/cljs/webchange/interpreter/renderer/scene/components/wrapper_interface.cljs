@@ -1,8 +1,14 @@
-(ns webchange.interpreter.renderer.scene.components.wrapper-interface)
+(ns webchange.interpreter.renderer.scene.components.wrapper-interface
+  (:require
+    [webchange.logger :as logger]))
 
 (defn- execute
   [wrapper method params]
-  (apply (:call wrapper) (concat [method] params)))
+  (try
+    (apply (:call wrapper) (concat [method] params))
+    (catch js/Error e
+      (logger/error (str "[Wrapper Interface] Failed to execute <" method ">"))
+      (logger/error e))))
 
 (defn add-animation [wrapper & params] (execute wrapper :add-animation params))
 (defn add-filter [wrapper & params] (execute wrapper :add-filter params))
