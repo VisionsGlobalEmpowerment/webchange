@@ -9,7 +9,6 @@
     [webchange.subs :as subs]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
 
-
 (defn- init-scene
   [new-scene-data current-scene-data loading]
   (when (and (not (nil? new-scene-data))

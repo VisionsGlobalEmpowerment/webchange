@@ -50,7 +50,7 @@
   [parent {:keys [type on-click ref object-name] :as props}]
   (let [image (create-sprite props)
         image-container (create-sprite-container props)
-        wrapped-image (wrap type object-name image-container image-container)]
+        wrapped-image (wrap type object-name image-container image)]
 
     (when-not (nil? on-click) (set-handler image "click" on-click))
     (when-not (nil? ref) (ref wrapped-image))

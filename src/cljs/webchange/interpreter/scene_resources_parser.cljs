@@ -64,11 +64,17 @@
                    result))
                [])))
 
+(defn- parse-additional-resources
+  []
+  (let [next-activity @(re-frame/subscribe [::subs/next-activity])]
+    [(:preview next-activity)]))
+
 (defn get-scene-resources
   [scene-id scene-data]
   (->> (concat (parse-concept-resources scene-id)
                (parse-scene-assets scene-data)
                (parse-scene-objects scene-data)
-               (parse-default-assets default-game-assets))
+               (parse-default-assets default-game-assets)
+               (parse-additional-resources))
        (remove nil?)
        (distinct)))

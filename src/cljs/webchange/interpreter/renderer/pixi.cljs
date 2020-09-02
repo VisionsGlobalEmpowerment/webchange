@@ -11,6 +11,7 @@
 
 (def Container (.. js/PIXI -Container))
 (def Graphics (.. js/PIXI -Graphics))
+(def Rectangle (.. js/PIXI -Rectangle))
 (def RegionAttachment (.. js/PIXI -spine -core -RegionAttachment))
 (def Skin (.. js/PIXI -spine -core -Skin))
 (def Sprite (.. js/PIXI -Sprite))

@@ -122,14 +122,15 @@
                     :y           0
                     :width       image-width
                     :height      image-height}
-                   {:type        "text"
-                    :object-name :next-activity-card-name
-                    :x           text-padding
-                    :y           (+ image-height text-padding)
-                    :align       "left"
-                    :font-size   32
-                    :font-family "Lexend Deca"
-                    :fill        0x000000}]}))
+                   {:type           "text"
+                    :object-name    :next-activity-card-name
+                    :x              text-padding
+                    :y              (+ image-height text-padding)
+                    :align          "left"
+                    :vertical-align "top"
+                    :font-size      32
+                    :font-family    "Lexend Deca"
+                    :fill           0x000000}]}))
 
 (defn- get-featured-content
   [{:keys [x y on-click]}]

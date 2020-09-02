@@ -32,6 +32,14 @@
          (map second))))
 
 (re-frame/reg-sub
+  ::next-activity
+  (fn [db]
+    (let [scenes (get-in db [:course-data :scene-list])
+          {:keys [activity]} (get-in db [:progress-data :next])]
+      (->> (keyword activity)
+           (get scenes)))))
+
+(re-frame/reg-sub
   ::lesson-sets-data
   (fn [db [_ lesson-sets-ids]]
     (let [lesson-sets (get-in db [:lessons])]
