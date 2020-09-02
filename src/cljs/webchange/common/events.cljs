@@ -55,9 +55,9 @@
           unique-tag (conj unique-tag)
           skippable (conj "skip")))
 
-(defn flow-registered?
+(defn flow-not-registered?
   [tag]
-  (some #(contains? (:tags %) tag) (vals @flows)))
+  (not-any? #(contains? (:tags %) tag) (vals @flows)))
 
 (def event-as-action
   "Interceptor
@@ -70,15 +70,15 @@
 
 (defn ->with-flow
   [action]
-  (let [registered? (flow-registered? (:unique-tag action))
-        flow-id (:flow-id action)]
-    (if (or flow-id registered?)
+  (let [flow-id (:flow-id action)]
+    (if flow-id
       action
-      (do
-        (register-flow! {:flow-id (:flow-id action)
-                         :actions [(:action-id action)]
+      (let [flow-id (random-uuid)
+            action-id (random-uuid)]
+        (register-flow! {:flow-id flow-id
+                         :actions [action-id]
                          :type :all :tags (get-action-tags action)})
-        (assoc action :flow-id (random-uuid) :action-id (random-uuid))))))
+        (assoc action :flow-id flow-id :action-id action-id)))))
 
 (def with-flow
   "Interceptor
@@ -208,18 +208,17 @@
 (declare register-flow-tags!)
 
 (defn execute-action
-  [db action]
-  (let [{:keys [type return-immediately unique-tag flow-id tags] :as action} (->> action
-                                                                                  (->with-flow)
-                                                                                  (->with-vars db))]
-    (if (flow-registered? unique-tag)
-      (discard-flow! flow-id)
-      (let [handler (get @executors (keyword type))]
-        (when tags
-          (register-flow-tags! flow-id tags))
-        (handler {:db db :action action})
-        (when return-immediately
-          (dispatch-success-fn action))))))
+  [db {:keys [unique-tag] :as action}]
+  (when (flow-not-registered? unique-tag)
+    (let [{:keys [type return-immediately flow-id tags] :as action} (->> action
+                                                                         (->with-flow)
+                                                                         (->with-vars db))
+          handler (get @executors (keyword type))]
+      (when tags
+        (register-flow-tags! flow-id tags))
+      (handler {:db db :action action})
+      (when return-immediately
+        (dispatch-success-fn action)))))
 
 (re-frame/reg-event-fx
   ::execute-action
@@ -293,15 +292,13 @@
         (next)))))
 
 (defn register-flow!
-  [flow]
-  (let [scene-id (:current-scene flow)
-        flow-id (:flow-id flow)
-        current-flow (get @flows flow-id)
+  [{:keys [flow-id current-scene] :as flow}]
+  (let [current-flow (get @flows flow-id)
         original-tags (into #{} (:tags current-flow))
         flow-data (-> current-flow
                       (merge flow)
                       (update-in [:tags] #(into original-tags %))
-                      (update-in [:tags] conj (str "scene-" scene-id)))]
+                      (update-in [:tags] conj (str "scene-" current-scene)))]
     (swap! flows assoc flow-id flow-data)))
 
 (defn discard-flow!
