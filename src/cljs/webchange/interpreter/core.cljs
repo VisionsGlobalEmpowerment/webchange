@@ -2,10 +2,8 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
     [re-frame.core :as re-frame]
-    [webchange.subs :as subs]
     [webchange.events :as events]
     [react-spring :refer [Spring]]
-    [reagent.core :as r]
     [react-konva :refer [Stage, Layer, Group, Rect]]
     [konva :refer [Tween]]
     [webchange.common.anim :as anim]
@@ -14,9 +12,7 @@
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     [webchange.interpreter.defaults :as defaults]
-    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [konva :as k]
-    ))
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
 
 (def default-assets defaults/default-assets)
 
@@ -196,27 +192,26 @@
   (Math/sqrt (+ (Math/pow (- cx x) 2) (Math/pow (- cy y) 2))))
 
 (defn transition-duration
-  [component to]
+  [component {:keys [x y]} {:keys [duration speed]}]
   (let [position (w/get-position component)
         cx (:x position)
-        cy (:y position)
-        {:keys [x y duration speed]} to]
+        cy (:y position)]
     (cond
       (> duration 0) duration
       (> speed 0) (/ (length cx cy x y) speed)
       :else (/ (length cx cy x y) 100))))
 
-(defn ->easing
-  [easing]
-  (case easing
-    "ease-in" k/Easings.EaseIn
-    "ease-in-out" k/Easings.EaseInOut
-    "ease-out" k/Easings.EaseOut
-    "strong-ease-in" k/Easings.EaseIn
-    "strong-ease-in-out" k/Easings.EaseInOut
-    "strong-ease-out" k/Easings.EaseOut
-    "linear" k/Easings.Linear
-    k/Easings.Linear))
+;(defn ->easing
+;  [easing]
+;  (case easing
+;    "ease-in" k/Easings.EaseIn
+;    "ease-in-out" k/Easings.EaseInOut
+;    "ease-out" k/Easings.EaseOut
+;    "strong-ease-in" k/Easings.EaseIn
+;    "strong-ease-in-out" k/Easings.EaseInOut
+;    "strong-ease-out" k/Easings.EaseOut
+;    "linear" k/Easings.Linear
+;    k/Easings.Linear))
 
 (defonce transitions (atom {}))
 
@@ -246,64 +241,30 @@
   (when (contains? params :brightness)
     (w/set-filter-value object "brightness" (:brightness params))))
 
-;(defn gsap-tween
-;  [{:keys [id component to on-ended]}]
-;  (let [duration (transition-duration @component to)
-;        ease-params (or (:ease to) [0.1 0.4])
-;        vars (-> to
-;                 (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
-;                 (assoc :onComplete on-ended)
-;                 clj->js)
-;        tween (TweenMax.to @component duration vars)]
-;    (register-transition! id #(.kill tween))))
-
-;(defn konva-tween
-;  [{:keys [id component to from on-ended skippable]}]
-;  (let [duration (transition-duration @component to)
-;        params (-> to
-;                   (assoc :node @component)
-;                   (assoc :duration duration)
-;                   (assoc :onFinish (if (:loop to)
-;                                      (fn [] (this-as t (.reset t) (.play t)))
-;                                      (fn [] (on-ended) (this-as t (.destroy t)))))
-;                   (assoc :easing (-> to :easing ->easing)))
-;        tween (-> params clj->js Tween.)]
-;    (when from
-;      (.setAttrs @component (clj->js from)))
-;    (when skippable
-;      (ce/on-skip! #(.finish tween)))
-;    (register-transition! id #(.destroy tween))
-;    (.play tween)))
-
-
 ;; ToDo: Test :loop param
-;; ToDo: Test :from param
 ;; ToDo: Test :skippable param
-;; ToDo: Implement :yoyo param
+;; ToDo: Implement :ease param
 (defn interpolate
   [{:keys [id component to from params on-ended skippable]}]
-
-  ;(print "--> tween")
-  ;(print "id" id)
-  ;(print "from" from)
-  ;(print "to" to)
-  ;(print "params" params)
 
   (when from
     (set-tween-object-params @component from))
 
   (let [container (get-tween-object-params @component to)
-        duration (transition-duration @component to)
+        duration (transition-duration @component to params)
         ease-params (or (:ease params) [1 1])
-        vars (-> to
-                 (merge params)
-                 (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
-                 (assoc :onUpdate (fn [] (set-tween-object-params @component (js->clj container :keywordize-keys true))))
-                 (assoc :onComplete (if (:loop params)
-                                      (fn [] (this-as t (.restart t)))
-                                      (fn [] (on-ended) (this-as t (.kill t)))))
-                 clj->js)
-        tween (TweenMax.to container duration vars)]
+        vars (cond-> (-> to
+                         (merge params)
+                         (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
+                         (assoc :onUpdate (fn [] (set-tween-object-params @component (js->clj container :keywordize-keys true))))
+                         (assoc :onComplete (if (:loop params)
+                                              (fn [] (this-as t (.restart t)))
+                                              (fn []
+                                                (on-ended)
+                                                (this-as t (.kill t))))))
+                     (:yoyo params) (merge {:yoyo   true
+                                            :repeat -1}))
+        tween (TweenMax.to container duration (clj->js vars))]
 
     (when skippable
       (ce/on-skip! #(.progress tween 1)))
