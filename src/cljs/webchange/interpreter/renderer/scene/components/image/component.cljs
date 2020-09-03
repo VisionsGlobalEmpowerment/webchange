@@ -15,7 +15,6 @@
                     :on-click {}
                     :ref      {}
                     :src      {:default nil}
-                    :visible  {:default true}
                     :offset   {:default {:x 0 :y 0}}
                     :filters  {:default []}})
 
@@ -35,13 +34,12 @@
         (utils/set-scale scale)))))
 
 (defn- create-sprite-container
-  [{:keys [x y offset visible scale filters name]}]
+  [{:keys [x y offset scale filters name]}]
   (let [position {:x (- x (* (:x offset) (:x scale)))
                   :y (- y (* (:y offset) (:y scale)))}]
     (doto (Container.)
       (aset "name" (str name "-sprite-container"))
       (utils/set-position position)
-      (utils/set-visibility visible)
       (apply-filters filters))))
 
 (def component-type "image")

@@ -7,7 +7,7 @@
 (def skip-check-props [:object-name :parent :children :type])
 
 (defn- check-extra-props
-  [entity-id current-props default-props]
+  [entity-id current-props default-props exclude-prop-names]
   (let [current-names (-> current-props keys set)
         default-names (->> default-props
                            (reduce (fn [result [prop-name prop-data]]
@@ -15,7 +15,7 @@
                                                     (:alias prop-data)
                                                     prop-name)))
                                    [])
-                           (concat skip-check-props)
+                           (concat skip-check-props exclude-prop-names)
                            (set))
         extra-props-names (difference current-names default-names)]
     (when-not (empty? extra-props-names)
@@ -47,9 +47,9 @@
   (str (capitalize component-type) " <" (:object-name current-props) ">"))
 
 (defn get-props
-  [component-type current-props default-props]
+  [component-type current-props default-props {:keys [exclude-check]}]
   (-> (get-entity-id component-type current-props)
-      (check-extra-props current-props default-props))
+      (check-extra-props current-props default-props exclude-check))
   (get-processed-props current-props default-props))
 
 (defn get-object-props

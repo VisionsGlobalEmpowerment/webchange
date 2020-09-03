@@ -4,17 +4,21 @@
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.scene.components.index :refer [components]]
     [webchange.interpreter.renderer.scene.components.props-utils :refer [get-props get-object-props]]
-    [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]))
+    [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
 
-(def default-object-props {:draggable        {}
-                           :on-drag-end      {}})
+(def default-object-props {:draggable   {}
+                           :on-drag-end {}
+                           :visible     {:default true}})
 
 (defn- wrap!
   [{object :object :as wrapper} props props-to-exclude]
   (let [default-props (apply dissoc default-object-props props-to-exclude)
-        {:keys [draggable on-drag-end]} (get-object-props props default-props)]
+        {:keys [draggable on-drag-end visible]} (get-object-props props default-props)]
     (when draggable
-      (enable-drag! object on-drag-end)))
+      (enable-drag! object on-drag-end))
+    (when-not (nil? visible)
+      (w/set-visibility wrapper visible)))
   wrapper)
 
 (defn- get-component
@@ -29,7 +33,7 @@
 (defn create-component
   [parent {:keys [type] :as props}]
   (let [{:keys [constructor default-props]} (get-component type)
-        component-wrapper (constructor parent (get-props type props default-props))]
+        component-wrapper (constructor parent (get-props type props default-props {:exclude-check (keys default-object-props)}))]
     (wrap! component-wrapper props (keys default-props))
     (when (= type "group")
       (let [group-instance (:container component-wrapper)

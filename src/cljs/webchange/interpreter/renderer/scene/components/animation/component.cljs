@@ -17,7 +17,6 @@
                     :anim             {}
                     :skin             {}
                     :on-click         {}
-                    :visible          {:default true}
                     :animation-start? {:alias :start}
                     :speed            {:default 1}
                     :skin-name        {:alias :skin :default "default"}
@@ -37,11 +36,10 @@
       (utils/set-animation-speed (if animation-start? speed 0)))))
 
 (defn- create-animation-container
-  [{:keys [x y visible]}]
+  [{:keys [x y]}]
   (let [position {:x x
                   :y y}]
     (doto (Container.)
-      (utils/set-visibility visible)
       (utils/set-position position))))
 
 (def component-type "animation")
