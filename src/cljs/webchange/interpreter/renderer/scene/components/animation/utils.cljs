@@ -62,6 +62,14 @@
   [spine-object]
   (.-skeleton spine-object))
 
+(defn get-skeleton
+  [spine-object]
+  (.-skeleton spine-object))
+
+(defn get-animation-state
+  [spine-object]
+  (.-state spine-object))
+
 (defn has-animation?
   [spine-object animation-name]
   (-> (.. spine-object -state)
@@ -79,6 +87,7 @@
    (set-animation-slot image-src spine-object slot-name {}))
   ([image-src spine-object slot-name {:keys [region-params attachment-params slot-attachment-name]}]
    (let [skeleton (get-skeleton spine-object)
+         animation-state (get-animation-state spine-object)
          image-resource (resources/get-resource image-src)]
      (when (nil? image-resource)
        (-> (str "Can not set slot <" image-src ">: Resource was not found") js/Error. throw))
@@ -92,6 +101,8 @@
                       (.setAttachment slot-index attachment-name attachment))]
        (.setSkin skeleton new-skin)
        (.setSlotsToSetupPose skeleton)
+       (.apply animation-state skeleton)
+       (.updateWorldTransform skeleton)
        (.hackTextureBySlotIndex spine-object slot-index texture)))))
 
 (defn add-animation

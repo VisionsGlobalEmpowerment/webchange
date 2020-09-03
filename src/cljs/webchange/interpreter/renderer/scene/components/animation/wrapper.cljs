@@ -28,4 +28,6 @@
                                        (utils/set-empty-animation spine-object {:track-index  track
                                                                                 :mix-duration mix-duration}))
                    :set-visibility   (fn [visible?]
-                                       (utils/set-visibility container visible?))}))
+                                       (utils/set-visibility container visible?))
+                   ;:start-animation see webchange.common.anim/start-animation
+                   }))
