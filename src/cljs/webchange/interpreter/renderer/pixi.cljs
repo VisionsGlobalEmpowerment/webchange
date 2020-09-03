@@ -16,6 +16,8 @@
 (def Skin (.. js/PIXI -spine -core -Skin))
 (def Sprite (.. js/PIXI -Sprite))
 (def Text (.. js/PIXI -Text))
+(def TextStyle (.. js/PIXI -TextStyle))
+(def TextMetrics (.. js/PIXI -TextMetrics))
 (def Texture (.. js/PIXI -Texture))
 (def TextureAtlasRegion (.. js/PIXI -spine -core -TextureAtlasRegion))
 (def WHITE (.. js/PIXI -Texture -WHITE))
