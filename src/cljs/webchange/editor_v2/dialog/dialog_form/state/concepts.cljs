@@ -65,6 +65,31 @@
       {:db (assoc-in db current-dataset-concept-path dataset-concept)})))
 
 (re-frame/reg-event-fx
+  ::remove-concepts-schema-field
+  (fn [{:keys [db]} [_ name]]
+    (let [
+          current-dataset-concept-path (path-to-db [:current-dataset-concept])
+          dataset-concept (get-in db current-dataset-concept-path)
+          fields (->> (get-in dataset-concept [:scheme :fields])
+                      (filter (fn [field] (not= (:name field) name))))
+          dataset-concept (assoc-in dataset-concept [:scheme :fields] fields)
+          ]
+      {:db (assoc-in db current-dataset-concept-path dataset-concept)})))
+
+(re-frame/reg-event-fx
+  ::remove-var-from-concepts
+  (fn [{:keys [db]} [_ var-name]]
+    (let [concepts (->>
+                     (get-in db (path-to-db [:concepts :data]))
+                     (into {} (map (fn [[id concept]]
+                          [id  (assoc-in concept [:data] (dissoc (:data concept) (keyword var-name)))]))))
+          current-list (translator-form.concepts/edited-concepts db)
+          new-list (map (fn [[id concept]] id) concepts)
+          list-total (concat current-list new-list)]
+      {:db (assoc-in db (path-to-db [:concepts :data]) concepts)
+       :dispatch-n (list [::translator-form.concepts/set-edited-concepts list-total])})))
+
+(re-frame/reg-event-fx
   ::update-current-concept
   (fn [{:keys [db]} [_ action-path data-patch]]
     (let [current-concept (current-concept db)

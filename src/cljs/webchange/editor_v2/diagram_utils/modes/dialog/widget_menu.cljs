@@ -71,7 +71,7 @@
 (defn availavle-menu-items
   [node]
   (let [
-        {:keys [concept-action? base-action parent-action]} (dialog.au/get-concept-node-data node)
+        {:keys [concept-action? base-action parent-action item-position]} (dialog.au/get-concept-node-data node)
         concept-list-position (get-in node [:path 1])
         items (count (:data base-action))
         concept-items (if concept-action?
@@ -91,7 +91,11 @@
                         [:insert-concept-after :insert-after]
                         [])
         concept-delete (if concept-action?
-                  (if (and (not (dialog.au/node-parallel? parent-action)) (= 1 items))
+                  (if (and
+                        (or
+                          (and (dialog.au/node-parallel? parent-action) (= 0 item-position))
+                          (not (dialog.au/node-parallel? parent-action)))
+                        (= 1 items))
                      [:delete]
                      [:delete-inconcept-action])
                   [])]

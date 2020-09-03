@@ -68,8 +68,7 @@
                          {:type "parallel", :data [target-node action]})
           data-patch (-> base-action
                          (actions/replace-child list-to-path target-position)
-                         (select-keys [:data]))
-          ]
+                         (select-keys [:data]))]
       {:dispatch-n (list [::update-scene-action (actions/complete-path base-path) data-patch])})))
 
 (re-frame/reg-event-fx
@@ -107,7 +106,7 @@
 (re-frame/reg-event-fx
   ::delete-phrase-action
   (fn [{:keys [db]} [_ node]]
-    (let [{:keys [base-path parent-action base-action target-position item-position]} (actions/get-node-data node)]
+    (let [{:keys [concept-action? base-path parent-action base-action target-position item-position]} (actions/get-dialog-node-data node)]
       (if (and (actions/node-parallel? parent-action) (not= 0 item-position))
         (let [parent-action (assoc parent-action :data (vec (:data parent-action)))
               parallel-data (-> parent-action
@@ -120,7 +119,14 @@
         (let [data-patch (-> base-action
                              (au/delete-child-action target-position)
                              (select-keys [:data]))]
-          {:dispatch-n (list [::update-scene-action base-path data-patch])})))))
+          (if concept-action?
+            (let [
+                  var-name (get-in node [:action-node-data :data :from-var 0 :var-property])]
+              {:dispatch-n  (list
+                              [::dialog-form.concepts/remove-concepts-schema-field var-name]
+                              [::dialog-form.concepts/remove-var-from-concepts var-name]
+                              [::update-scene-action base-path data-patch])})
+            {:dispatch-n  (list [::update-scene-action base-path data-patch])}))))))
 
 
 (re-frame/reg-event-fx
