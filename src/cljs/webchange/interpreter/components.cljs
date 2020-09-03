@@ -7,6 +7,7 @@
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.variables.events :as vars.events]
+    [webchange.interpreter.variables.core :as vars.core]
     [webchange.interpreter.scene-resources-parser :refer [get-scene-resources]]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
@@ -55,10 +56,10 @@
 
 (defn- start-triggers
   [scene-id]
-  (let [status (re-frame/subscribe [::vars.subs/variable scene-id "status"])]
-    (if (not= @status :running)
+  (let [status (vars.core/get-variable "status")]
+    (if (not= status :running)
       (do
-        (re-frame/dispatch [::vars.events/execute-set-variable {:var-name "status" :var-value :running}])
+        (vars.core/set-variable! "status" :running)
         (re-frame/dispatch [::ie/trigger :start])))))
 
 (defn- stage-wrapper

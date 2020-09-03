@@ -132,8 +132,8 @@
 
 (re-frame/reg-fx
   :start-animation
-  (fn [{:keys [state]}]
-    (w/start-animation state)))
+  (fn [animation]
+    (w/start-animation (:state animation))))
 
 (re-frame/reg-fx
   :set-slot
@@ -444,7 +444,7 @@
   ::execute-start-animation
   (fn [{:keys [db]} [_ action]]
     (let [scene-id (:current-scene db)]
-      {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]) :shape)
+      {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]))
        :dispatch-n      (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
