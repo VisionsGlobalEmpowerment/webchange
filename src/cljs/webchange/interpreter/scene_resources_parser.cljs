@@ -8,7 +8,7 @@
   [scene-id dataset-fields]
   (->> dataset-fields
        (reduce (fn [result {:keys [name type scenes]}]
-                 (if (and (= type "image")
+                 (if (and (some #{type} ["image" "video"])
                           (some #{scene-id} scenes))
                    (conj result name)
                    result))

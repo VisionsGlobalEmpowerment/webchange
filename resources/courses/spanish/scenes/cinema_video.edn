@@ -50,12 +50,13 @@
  :objects
                 {:background {:type "background", :src "/raw/img/cinema/background.jpg"},
                  :letter-video
-                             {:type   "transparent",
+                             {:type   "video",
                               :x      342,
                               :y      111,
                               :width  1236,
                               :height 674,
-                              :states {:hidden {:type "transparent"}, :visible {:type "video"}}},
+                              :visible false,
+                              :states {:hidden {:visible false}, :visible {:visible true}}},
                  :mari
                              {:type       "animation",
                               :x          1613,
@@ -70,19 +71,18 @@
                               :speed      0.35,
                               :start      true},
                  :next-button
-                             {:type      "transparent",
+                             {:type      "button",
                               :x         400,
                               :y         0,
-                              :width     420
                               :text      "Próxima"
                               :font-size 76
+                              :visible   false,
                               :actions   {:click {:id "finish-activity", :on "click", :type "action"}},
-                              :states    {:hidden {:y 1000, :type "transparent"}, :visible {:y 0, :type "button"}}},
+                              :states    {:hidden {:y 1000, :visible false}, :visible {:y 0, :visible true}}},
                  :play-button
                              {:type      "button",
                               :x         0,
                               :y         0,
-                              :width     300
                               :text      "Ver"
                               :font-size 76
                               :actions   {:click {:id "play-video", :on "click", :type "action"}},
@@ -93,8 +93,9 @@
                               :y      109,
                               :width  1238,
                               :height 678,
+                              :visible true,
                               :src    "/raw/img/cinema/screen-off.png",
-                              :states {:hidden {:type "transparent"}, :visible {:type "image"}}},
+                              :states {:hidden {:visible false}, :visible {:visible true}}},
                  :senora-vaca
                              {:type    "animation",
                               :x       263,
@@ -109,14 +110,14 @@
                               :speed   0.3,
                               :start   true},
                  :video-controls
-                             {:type     "transparent",
+                             {:type     "group",
                               :x        616,
                               :y        400,
                               :width    730,
                               :height   100,
                               :children ["play-button" "next-button"],
-                              :actions {}
-                              :states   {:hidden {:type "transparent"}, :visible {:type "group"}}}},
+                              :visible  false,
+                              :states   {:hidden {:visible false}, :visible {:visible true}}}},
  :scene-objects [["background"] ["letter-video" "screen-overlay" "video-controls" "senora-vaca" "mari"]],
  :actions
                 {:clear-instruction {:type "remove-flows", :description "Remove flows", :flow-tag "instruction"},

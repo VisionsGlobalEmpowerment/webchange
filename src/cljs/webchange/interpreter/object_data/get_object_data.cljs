@@ -54,19 +54,22 @@
                                              (with-filter-params object))
                                       (filter-extra-props [:brightness :filter :transition]))
                       :layered-background (-> (merge object
-                                     {:object-name (keyword name)}
-                                     (with-filter-params object))
-                              (filter-extra-props [:brightness :filter :transition]))
-                      ;:button [button scene-id name o]
+                                                     {:object-name (keyword name)}
+                                                     (with-filter-params object))
+                                              (filter-extra-props [:brightness :filter :transition]))
+                      :button (-> (merge object
+                                         {:object-name (keyword name)}
+                                         (with-group-params object))
+                                  (filter-extra-props []))
                       :image (-> (merge object
                                         {:object-name (keyword name)}
                                         (with-group-params object)
                                         (with-filter-params object))
                                  (filter-extra-props [:actions :brightness :filter :highlight :states :transition :width :height :eager :origin :scale-x :scale-y]))
                       :transparent (-> (merge object
-                              {:object-name (keyword name)}
-                              (with-group-params object))
-                      (filter-extra-props [:actions]))
+                                              {:object-name (keyword name)}
+                                              (with-group-params object))
+                                       (filter-extra-props [:actions]))
                       :group (let [group-params (with-group-params object)
                                    children-params (->> (:children object)
                                                         (map (fn [name] (prepare-object-data name scene-id get-data)))
@@ -92,7 +95,10 @@
                       ;:painting-area (get-painting-area scene-id name o)
                       ;:copybook [copybook o]
                       ;:colors-palette (get-colors-palette scene-id name o)
-                      ;:video [video o]
+                      :video (-> (merge object
+                                        {:object-name (keyword name)}
+                                        (with-group-params object))
+                                 (filter-extra-props []))
                       ;:animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
                       ;:svg-path [svg-path o]
                       ;:matrix [matrix-object scene-id name o draw-object]
@@ -101,7 +107,7 @@
                                      (merge {:type        "group"
                                              :object-name (keyword name)})
                                      (filter-extra-props [:el-height :el :width :el-width :height]))
-                      (do (.warn js/console "[PARAMS PREPARING]" (str "Object with type " type " can not be drawn because it is not defined"))
+                      (do (.warn js/console "[PARAMS PREPARING]" (str "Object with type " type " can not be parsed because it is not defined"))
                           nil)
                       ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
                       )]

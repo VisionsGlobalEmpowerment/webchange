@@ -96,10 +96,15 @@
 
 (re-frame/reg-fx
   :set-src
-  (fn [[object-wrapper {:keys [src]}]]
-    (w/set-src object-wrapper src)))
+  (fn [[object-wrapper {:keys [src options]}]]
+    (w/set-src object-wrapper src options)))
 
 (re-frame/reg-fx
   :set-opacity
   (fn [[object-wrapper {:keys [opacity]}]]
     (w/set-opacity object-wrapper opacity)))
+
+(re-frame/reg-fx
+  :stop
+  (fn [[object-wrapper]]
+    (w/stop object-wrapper)))

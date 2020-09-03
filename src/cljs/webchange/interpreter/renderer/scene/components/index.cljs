@@ -10,7 +10,8 @@
     [webchange.interpreter.renderer.scene.components.rectangle.component :as rectangle]
     [webchange.interpreter.renderer.scene.components.slider.component :as slider]
     [webchange.interpreter.renderer.scene.components.text.component :as text]
-    [webchange.interpreter.renderer.scene.components.transparent.component :as transparent]))
+    [webchange.interpreter.renderer.scene.components.transparent.component :as transparent]
+    [webchange.interpreter.renderer.scene.components.video.component :as video]))
 
 (def components (apply hash-map [animation/component-type {:constructor   animation/create
                                                            :default-props animation/default-props}
@@ -33,4 +34,6 @@
                                  text/component-type {:constructor   text/create
                                                       :default-props text/default-props}
                                  transparent/component-type {:constructor   transparent/create
-                                                             :default-props transparent/default-props}]))
+                                                             :default-props transparent/default-props}
+                                 video/component-type {:constructor   video/create
+                                                       :default-props video/default-props}]))

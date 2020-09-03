@@ -1,8 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.transparent.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Sprite Rectangle]]
-    [webchange.interpreter.renderer.resources :as resources]
-    [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
+    [webchange.interpreter.renderer.pixi :refer [Container Rectangle]]
     [webchange.interpreter.renderer.scene.components.transparent.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 

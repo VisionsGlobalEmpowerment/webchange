@@ -26,7 +26,8 @@
   {:name "book-read-action",
    :type "action",
    :template {:type "audio", :scene-id "book"}}
-  {:name "chanting-video-src", :type "video", :template nil}
+  {:name "chanting-video-src", :type "video", :template nil
+   :scenes ["cinema-video"]}
   {:name "concept-name", :type "string"}
   {:name "concept-rest", :type "string"}
   {:name "game-voice-action",
