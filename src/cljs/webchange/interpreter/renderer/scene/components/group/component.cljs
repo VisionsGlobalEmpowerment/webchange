@@ -8,15 +8,13 @@
                     :y        {}
                     :ref      {}
                     :on-click {}
-                    :type     {:default "group"}
-                    :rotation {}})
+                    :type     {:default "group"}})
 
 (defn- create-container
-  [{:keys [x y rotation]}]
+  [{:keys [x y]}]
   (doto (Container.)
     (utils/set-position {:x x
-                         :y y})
-    (utils/set-rotation rotation)))
+                         :y y})))
 
 (def component-type "group")
 

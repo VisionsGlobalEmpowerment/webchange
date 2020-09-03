@@ -9,6 +9,10 @@
   (when (nil? (.-filters container))
     (aset container "filters" (clj->js []))))
 
+(defn- remove-all-filters
+  [container]
+  (aset container "filters" nil))
+
 (defn- add-filter
   [filter container]
   (init-filters container)
@@ -102,6 +106,18 @@
       "pulsation" (apply-pulsation-filter container)
       "shadow" (apply-shadow-filter container filter-params)
       (logger/warn "[Filters]" (str "Filter with type <" name "> can not be drawn because it is not defined")))))
+
+(defn set-filter
+  [container name params]
+  (case name
+    "brightness" (apply-brighten-filter container params)
+    "glow" (apply-glow-filter container)
+    "grayscale" (apply-grayscale-filter container)
+    "outline" (apply-outline-filter container params)
+    "pulsation" (apply-pulsation-filter container)
+    "shadow" (apply-shadow-filter container params)
+    "" (remove-all-filters container)
+    (logger/warn "[Filters]" (str "Filter with type <" name "> can not be set because it is not defined"))))
 
 (defn get-filter-value
   [container filter-name]

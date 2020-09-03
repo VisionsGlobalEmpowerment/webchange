@@ -131,11 +131,6 @@
     (w/remove-animation state track 0.2)))
 
 (re-frame/reg-fx
-  :start-animation
-  (fn [animation]
-    (w/start-animation (:state animation))))
-
-(re-frame/reg-fx
   :set-slot
   (fn [{:keys [state slot-name slot-attachment-name image region attachment]}]
     (w/set-slot state slot-name image {:attachment-params    attachment
@@ -392,18 +387,19 @@
           object (get-in scene [:objects (keyword target)])
           states (get object :states)
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
-          state (get states-with-aliases (keyword id))]
-      {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge state params)
+          state (merge (get states-with-aliases (keyword id)) params)]
+      {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge state)
        :dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
                          (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-set-attribute
-  (fn [{:keys [db]} [_ {:keys [target attr-name attr-value params] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [target attr-name attr-value] :as action}]]
     (let [scene-id (:current-scene db)
           patch (into {} [[(keyword attr-name) attr-value]])]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge patch params)
-       :dispatch (ce/success-event action)})))
+      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge patch)
+       :dispatch-n (list [::scene/set-scene-object-state (keyword target) patch]
+                         (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-empty
@@ -440,9 +436,10 @@
 (re-frame/reg-event-fx
   ::execute-start-animation
   (fn [{:keys [db]} [_ action]]
-    (let [scene-id (:current-scene db)]
-      {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]))
-       :dispatch-n      (list (ce/success-event action))})))
+    (let [scene-id (:current-scene db)
+          state (get-in db [:scenes scene-id :animations (:target action)])]
+      (w/start-animation state)
+      {:dispatch-n      (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-remove-animation

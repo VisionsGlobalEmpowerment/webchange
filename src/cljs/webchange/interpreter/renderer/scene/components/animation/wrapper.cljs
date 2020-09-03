@@ -20,5 +20,5 @@
                    :remove-animation (fn [track mix-duration]
                                        (utils/set-empty-animation spine-object {:track-index  track
                                                                                 :mix-duration mix-duration}))
-                   ;:start-animation see webchange.common.anim/start-animation
-                   }))
+                   :start-animation  (fn []
+                                       (utils/set-auto-update spine-object true))}))

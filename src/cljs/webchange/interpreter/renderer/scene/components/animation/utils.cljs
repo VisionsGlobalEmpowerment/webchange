@@ -62,10 +62,6 @@
   [spine-object]
   (.-skeleton spine-object))
 
-(defn get-skeleton
-  [spine-object]
-  (.-skeleton spine-object))
-
 (defn get-animation-state
   [spine-object]
   (.-state spine-object))
@@ -153,3 +149,7 @@
     (-> (str "Speed is not defined") js/Error. throw))
   (-> (.-state spine-object)
       (aset "timeScale" animation-speed)))
+
+(defn set-auto-update
+  [spine-object auto-update]
+  (set! (.-autoUpdate spine-object) auto-update))

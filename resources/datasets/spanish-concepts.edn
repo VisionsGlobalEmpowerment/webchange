@@ -21,7 +21,8 @@
       :params {:src "/raw/img/elements/tree.png", :filter "grayscale"},
       :target "image3"}],
     :type "parallel",
-    :scene-id "book"}}
+    :scene-id "book"}
+   :scenes ["book"]}
   {:name "book-read-action",
    :type "action",
    :template {:type "audio", :scene-id "book"}}

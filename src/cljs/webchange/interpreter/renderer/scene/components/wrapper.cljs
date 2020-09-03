@@ -64,18 +64,14 @@
             :get-filter-value (fn [filter-name]
                                 (filters/get-filter-value main-display-object filter-name))
             :set-filter-value (fn [filter-name value]
-                                (filters/set-filter-value main-display-object filter-name value))}
+                                (filters/set-filter-value main-display-object filter-name value))
+            :set-filter       (fn [filter-name params]
+                                (filters/set-filter main-display-object filter-name params))
+            :get-opacity      (fn []
+                                (utils/get-opacity main-display-object))
+            :set-opacity      (fn [value]
+                                (utils/set-opacity main-display-object value))}
            wrapper-object)))
-
-(defn- add-call-method
-  [wrapper]
-  (assoc wrapper
-    :call
-    (fn [method-name & params]
-      (let [method (get wrapper method-name)]
-        (if-not (nil? method)
-          (apply method params)
-          (logger/warn (str "Method " method-name " is not implemented for " (:type wrapper))))))))
 
 (defn create-wrapper
   [wrapper-object]
@@ -84,5 +80,4 @@
       (check-type-prop)
       (check-object-prop)
       (check-interface)
-      (add-default-methods)
-      (add-call-method)))
+      (add-default-methods)))
