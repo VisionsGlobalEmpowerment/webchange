@@ -155,8 +155,8 @@
   (fn [{component :state {:keys [scaleX scaleY x y]} :props}]
     (let [position {:x x
                     :y y}]
-      (when scaleX (w/set-scale-x component scaleX))
-      (when scaleY (w/set-scale-y component scaleY))
+      (w/set-scale component {:x scaleX
+                              :y scaleY})
       (w/set-position component position))))
 
 (defn get-audio-key

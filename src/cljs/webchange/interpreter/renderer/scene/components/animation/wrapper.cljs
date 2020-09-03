@@ -8,14 +8,6 @@
   (create-wrapper {:name             name
                    :type             type
                    :object           container
-                   :get-position     (fn []
-                                       (utils/get-position container))
-                   :set-position     (fn [position]
-                                       (utils/set-position container position))
-                   :set-scale-x      (fn [scale]
-                                       (utils/set-scale container {:x scale}))
-                   :set-scale-y      (fn [scale]
-                                       (utils/set-scale container {:y scale}))
                    :set-slot         (fn [slot-name image-src slot-params]
                                        (utils/set-animation-slot image-src spine-object slot-name slot-params))
                    :add-animation    (fn [track animation-name loop? delay]
@@ -28,7 +20,5 @@
                    :remove-animation (fn [track mix-duration]
                                        (utils/set-empty-animation spine-object {:track-index  track
                                                                                 :mix-duration mix-duration}))
-                   :set-visibility   (fn [visible?]
-                                       (utils/set-visibility container visible?))
                    ;:start-animation see webchange.common.anim/start-animation
                    }))

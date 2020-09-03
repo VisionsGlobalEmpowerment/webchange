@@ -20,8 +20,6 @@
 (defn set-filter-value [wrapper & params] (execute wrapper :set-filter-value params))
 (defn set-position [wrapper & params] (execute wrapper :set-position params))
 (defn set-scale [wrapper & params] (execute wrapper :set-scale params))
-(defn set-scale-x [wrapper & params] (execute wrapper :set-scale-x params))
-(defn set-scale-y [wrapper & params] (execute wrapper :set-scale-y params))
 (defn set-skin [wrapper & params] (execute wrapper :set-skin params))
 (defn set-slot [wrapper & params] (execute wrapper :set-slot params))
 (defn set-src [wrapper & params] (execute wrapper :set-src params))
