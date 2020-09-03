@@ -92,7 +92,7 @@
   {:name "image-src",
    :type "image",
    :template nil,
-   :scenes ["home" "see-saw" "swings" "cinema" "volleyball"]}
+   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "volleyball"]}
   {:name "letter", :type "string"}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",

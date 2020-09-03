@@ -34,9 +34,8 @@
                   :loop        true,
                   :name        "boxes",
                   :skin        "qwestion",
-                  :speed       0.3,
                   :start       true,
-                  :states      {:init {:type "transparent"}, :reset {:type "animation"}}},
+                  :states      {:init {:visible false}, :reset {:visible true}}},
                  :box2
                  {:type        "animation",
                   :x           2200,
@@ -52,9 +51,8 @@
                   :loop        true,
                   :name        "boxes",
                   :skin        "qwestion",
-                  :speed       0.3,
                   :start       true,
-                  :states      {:init {:type "transparent"}, :reset {:type "animation"}}},
+                  :states      {:init {:visible false}, :reset {:visible true}}},
                  :box3
                  {:type        "animation",
                   :x           2400,
@@ -70,9 +68,8 @@
                   :loop        true,
                   :name        "boxes",
                   :skin        "qwestion",
-                  :speed       0.3,
                   :start       true,
-                  :states      {:init {:type "transparent"}, :reset {:type "animation"}}},
+                  :states      {:init {:visible false}, :reset {:visible true}}},
                  :mari
                  {:type        "animation",
                   :x           1265,
@@ -86,7 +83,6 @@
                   :name        "mari",
                   :scale-x     0.5,
                   :scale-y     0.5,
-                  :speed       0.35,
                   :start       true},
                  :vera
                  {:type       "animation",

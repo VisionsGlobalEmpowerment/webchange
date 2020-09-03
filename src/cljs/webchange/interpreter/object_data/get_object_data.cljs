@@ -91,7 +91,9 @@
                                 (with-group-params)
                                 (merge {:object-name (keyword name)})
                                 (filter-extra-props []))
-                      ;:carousel [carousel-object scene-id name o]
+                      :carousel (-> object
+                                    (merge {:object-name (keyword name)})
+                                    (filter-extra-props []))
                       ;:painting-area (get-painting-area scene-id name o)
                       ;:copybook [copybook o]
                       ;:colors-palette (get-colors-palette scene-id name o)
