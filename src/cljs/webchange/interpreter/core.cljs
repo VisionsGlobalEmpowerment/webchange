@@ -227,12 +227,15 @@
 
 (defn- get-tween-object-params
   [object params]
-  (-> (cond-> object
-              (or (contains? params :x)
-                  (contains? params :y)) (merge (w/get-position object))
-              (contains? params :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
-              (contains? params :rotation) (assoc :rotation (w/get-rotation object)))
-      (clj->js)))
+  (let [params-to-animate (if (contains? params :bezier)
+                            (get-in params [:bezier 0])
+                            params)]
+    (-> (cond-> {}
+              (or (contains? params-to-animate :x)
+                  (contains? params-to-animate :y)) (merge (w/get-position object))
+              (contains? params-to-animate :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
+              (contains? params-to-animate :rotation) (assoc :rotation (w/get-rotation object)))
+      (clj->js))))
 
 (defn- set-tween-object-params
   [object params]
