@@ -86,3 +86,12 @@
   [object rotation]
   (when rotation
     (set! (.-angle object) rotation)))
+
+(defn get-opacity
+  [object]
+  (.-alpha object))
+
+(defn set-opacity
+  [object rotation]
+  (when rotation
+    (set! (.-alpha object) rotation)))

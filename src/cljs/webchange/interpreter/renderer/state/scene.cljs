@@ -36,11 +36,13 @@
   (fn [{:keys [_]} [_ object-name state]]
     (let [available-actions {:set-position   [:x :y]
                              :set-scale      [:scale :scale-x :scale-y]
-                             :set-visibility [:visible]}
+                             :set-visibility [:visible]
+                             :set-src        [:src]
+                             :set-text       [:text]
+                             :set-filter     [:filter :brightness]
+                             :set-opacity    [:opacity]}
           execute-actions (->> available-actions
-                               (reduce (fn [result [action params]]
-                                         (assoc result action (select-keys state params)))
-                                       {})
+                               (map (fn [[action params]] [action (select-keys state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
           not-handled-params (clojure.set/difference (->> state (keys) (set))
                                                      (->> available-actions (vals) (apply concat) (set)))]
@@ -53,15 +55,19 @@
   (fn [{:keys [db]} [_ object-name actions]]
     (let [objects (get-in db (path-to-db [:objects]))
           object-wrapper (get @objects object-name)]
-      (reduce (fn [result [action params]]
-                (assoc result action [object-wrapper params]))
-              {}
-              actions))))
+      (->> actions
+           (map (fn [[action params]] [action [object-wrapper params]]))
+           (into {})))))
 
 (re-frame/reg-fx
   :add-filter
   (fn [[object-wrapper filter-data]]
     (w/add-filter object-wrapper filter-data)))
+
+(re-frame/reg-fx
+  :set-filter
+  (fn [[object-wrapper {:keys [filter] :as params}]]
+    (w/set-filter object-wrapper filter params)))
 
 (re-frame/reg-fx
   :set-position
@@ -85,10 +91,15 @@
 
 (re-frame/reg-fx
   :set-text
-  (fn [[object-wrapper text]]
+  (fn [[object-wrapper {:keys [text]}]]
     (w/set-text object-wrapper text)))
 
 (re-frame/reg-fx
   :set-src
-  (fn [[object-wrapper src]]
+  (fn [[object-wrapper {:keys [src]}]]
     (w/set-src object-wrapper src)))
+
+(re-frame/reg-fx
+  :set-opacity
+  (fn [[object-wrapper {:keys [opacity]}]]
+    (w/set-opacity object-wrapper opacity)))

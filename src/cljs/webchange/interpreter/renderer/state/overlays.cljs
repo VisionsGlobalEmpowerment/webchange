@@ -38,8 +38,8 @@
       {:dispatch-n (list [::hide-navigation-menu]
                          [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]]
                          [::scene/change-scene-object :overall-progress-bar [[:set-value lesson-progress]]]
-                         [::scene/change-scene-object :next-activity-card-image [[:set-src (:image next-activity)]]]
-                         [::scene/change-scene-object :next-activity-card-name [[:set-text (:name next-activity)]]])})))
+                         [::scene/change-scene-object :next-activity-card-image [[:set-src {:src (:image next-activity)}]]]
+                         [::scene/change-scene-object :next-activity-card-name [[:set-text {:text (:name next-activity)}]]])})))
 
 (re-frame/reg-event-fx
   ::close-activity-finished

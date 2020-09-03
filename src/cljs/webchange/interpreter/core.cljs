@@ -231,11 +231,12 @@
                             (get-in params [:bezier 0])
                             params)]
     (-> (cond-> {}
-              (or (contains? params-to-animate :x)
-                  (contains? params-to-animate :y)) (merge (w/get-position object))
-              (contains? params-to-animate :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
-              (contains? params-to-animate :rotation) (assoc :rotation (w/get-rotation object)))
-      (clj->js))))
+                (or (contains? params-to-animate :x)
+                    (contains? params-to-animate :y)) (merge (w/get-position object))
+                (contains? params-to-animate :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
+                (contains? params-to-animate :rotation) (assoc :rotation (w/get-rotation object))
+                (contains? params-to-animate :opacity) (assoc :opacity (w/get-opacity object)))
+        (clj->js))))
 
 (defn- set-tween-object-params
   [object params]
@@ -245,7 +246,9 @@
   (when (contains? params :brightness)
     (w/set-filter-value object "brightness" (:brightness params)))
   (when (contains? params :rotation)
-    (w/set-rotation object (:rotation params))))
+    (w/set-rotation object (:rotation params)))
+  (when (contains? params :opacity)
+    (w/set-opacity object (:opacity params))))
 
 ;; ToDo: Test :loop param
 ;; ToDo: Test :skippable param

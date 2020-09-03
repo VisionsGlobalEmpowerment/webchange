@@ -9,7 +9,7 @@
                     :text            {}
                     :font-family     {}
                     :font-size       {}
-                    :fill            {}
+                    :fill            {:default "#000000"}
                     :shadow-color    {}
                     :shadow-distance {}
                     :shadow-blur     {}

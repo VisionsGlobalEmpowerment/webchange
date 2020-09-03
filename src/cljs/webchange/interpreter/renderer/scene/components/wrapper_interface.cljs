@@ -3,11 +3,14 @@
     [webchange.logger :as logger]))
 
 (defn- execute
-  [wrapper method params]
+  [wrapper method-name params]
   (try
-    (apply (:call wrapper) (concat [method] params))
+    (let [method (get wrapper method-name)]
+      (if-not (nil? method)
+        (apply method params)
+        (logger/warn (str "Method " method-name " is not implemented for " (:type wrapper)))))
     (catch js/Error e
-      (logger/error (str "[Wrapper Interface] Failed to execute <" method ">"))
+      (logger/error (str "[Wrapper Interface] Failed to execute <" method-name ">"))
       (logger/error e))))
 
 (defn add-animation [wrapper & params] (execute wrapper :add-animation params))
@@ -29,3 +32,6 @@
 (defn start-animation [wrapper & params] (execute wrapper :start-animation params))
 (defn get-rotation [wrapper & params] (execute wrapper :get-rotation params))
 (defn set-rotation [wrapper & params] (execute wrapper :set-rotation params))
+(defn set-filter [wrapper & params] (execute wrapper :set-filter params))
+(defn get-opacity [wrapper & params] (execute wrapper :get-opacity params))
+(defn set-opacity [wrapper & params] (execute wrapper :set-opacity params))

@@ -33,7 +33,8 @@
       (utils/set-animation animation-name)
       (utils/set-position coordinates)
       (utils/set-scale scale)
-      (utils/set-animation-speed (if animation-start? speed 0)))))
+      (utils/set-animation-speed speed)
+      (utils/set-auto-update animation-start?))))
 
 (defn- create-animation-container
   [{:keys [x y]}]
@@ -59,5 +60,8 @@
 
       (.addChild animation-container animation)
       (.addChild parent animation-container)
+
+      (-> animation
+          (.update 0))
 
       wrapped-animation)))
