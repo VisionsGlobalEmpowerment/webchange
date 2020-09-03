@@ -230,7 +230,8 @@
   (-> (cond-> object
               (or (contains? params :x)
                   (contains? params :y)) (merge (w/get-position object))
-              (contains? params :brightness) (assoc :brightness (w/get-filter-value object "brightness")))
+              (contains? params :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
+              (contains? params :rotation) (assoc :rotation (w/get-rotation object)))
       (clj->js)))
 
 (defn- set-tween-object-params
@@ -239,7 +240,9 @@
             (contains? params :y))
     (w/set-position object (select-keys params [:x :y])))
   (when (contains? params :brightness)
-    (w/set-filter-value object "brightness" (:brightness params))))
+    (w/set-filter-value object "brightness" (:brightness params)))
+  (when (contains? params :rotation)
+    (w/set-rotation object (:rotation params))))
 
 ;; ToDo: Test :loop param
 ;; ToDo: Test :skippable param
@@ -272,9 +275,9 @@
     (register-transition! id #(.kill tween))))
 
 (defn collide?
-  [shape1 shape2]
-  (let [r1 (.getClientRect @shape1)
-        r2 (.getClientRect @shape2)
+  [display-object1 display-object2]
+  (let [r1 (.getBounds display-object1)
+        r2 (.getBounds display-object2)
         r1x (.-x r1)
         r1y (.-y r1)
         r1width (.-width r1)

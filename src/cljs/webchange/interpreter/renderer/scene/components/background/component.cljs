@@ -28,4 +28,4 @@
   [parent {:keys [type object-name] :as props}]
   (let [image (create-sprite props)]
     (.addChild parent image)
-    (wrap type object-name)))
+    (wrap type object-name image)))

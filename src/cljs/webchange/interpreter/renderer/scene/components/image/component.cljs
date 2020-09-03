@@ -10,7 +10,7 @@
                     :y        {}
                     :width    {}
                     :height   {}
-                    :scale    {}
+                    :scale    {:default {:x 1 :y 1}}
                     :name     {}
                     :on-click {}
                     :ref      {}

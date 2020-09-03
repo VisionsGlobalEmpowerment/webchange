@@ -15,6 +15,12 @@
     (logger/warn "Wrapped object :type is not defined"))
   wrapper)
 
+(defn- check-object-prop
+  [wrapper]
+  (when (-> wrapper :object nil?)
+    (logger/warn "Wrapped object :object is not defined"))
+  wrapper)
+
 (defn- add-call-method
   [wrapper]
   (assoc wrapper
@@ -47,5 +53,6 @@
   (-> wrapper-object
       (check-name-prop)
       (check-type-prop)
+      (check-object-prop)
       (check-interface)
       (add-call-method)))

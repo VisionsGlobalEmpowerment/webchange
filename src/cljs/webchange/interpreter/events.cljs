@@ -232,10 +232,7 @@
 
 (defn- without-params
   [object params]
-  (reduce (fn [object param]
-            (dissoc object param))
-          object
-          params))
+  (apply dissoc object params))
 
 (defn execute-transition
   [db {:keys [transition-id transition-tag to from skippable] :as action}]
@@ -856,16 +853,14 @@
   (fn [db _]
     (assoc-in db [:loading :load-lessons-assets] false)))
 
-
 (re-frame/reg-event-fx
   ::execute-test-transitions-collide
   (fn [{:keys [db]} [_ {:keys [transition-1 transition-2 success fail] :as action}]]
-    (let [scene-id (:current-scene db)
-          transition-1-shape (get-in db [:transitions scene-id transition-1])
-          transition-2-shape (get-in db [:transitions scene-id transition-2])
+    (let [transition-1-wrapper (->> transition-1 keyword (scene/get-scene-object db))
+          transition-2-wrapper (->> transition-2 keyword (scene/get-scene-object db))
           success (ce/get-action success db action)
           fail (ce/get-action fail db action)]
-      (if (i/collide? transition-1-shape transition-2-shape)
+      (if (i/collide? (:object transition-1-wrapper) (:object transition-2-wrapper))
         {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
         {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))
 

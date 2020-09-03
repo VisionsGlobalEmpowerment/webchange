@@ -9,6 +9,7 @@
   [type name container sprite-object]
   (create-wrapper {:name             name
                    :type             type
+                   :object           container
                    :set-src          (fn [src]
                                        (let [resource (resources/get-resource src)]
                                          (when (nil? resource)

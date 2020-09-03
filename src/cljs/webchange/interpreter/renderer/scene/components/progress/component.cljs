@@ -70,8 +70,8 @@
   (let [container (create-container props)
         background (create-background props)
         foreground (create-foreground (merge props {:background-mask (:mask background)}))
-        wrapped-progress-bar (wrap type object-name {:set-value (fn [value]
-                                                             (aset (:sprite foreground) "width" (* value width)))})]
+        wrapped-progress-bar (wrap type object-name container {:set-value (fn [value]
+                                                                            (aset (:sprite foreground) "width" (* value width)))})]
 
     (.addChild container (:mask background))
     (.addChild container (:sprite background))

@@ -51,3 +51,7 @@
   (-> (get-entity-id component-type current-props)
       (check-extra-props current-props default-props))
   (get-processed-props current-props default-props))
+
+(defn get-object-props
+  [current-props default-props]
+  (get-processed-props current-props default-props))

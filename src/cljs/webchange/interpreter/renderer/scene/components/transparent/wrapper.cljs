@@ -7,6 +7,7 @@
   [type name container]
   (create-wrapper {:name         name
                    :type         type
+                   :object       container
                    :container    container
                    :set-position (fn [position]
                                    (utils/set-position container position))}))

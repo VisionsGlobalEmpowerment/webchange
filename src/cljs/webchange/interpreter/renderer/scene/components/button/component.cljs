@@ -81,4 +81,4 @@
     (.addChild container mask)
     (.addChild parent container)
 
-    (wrap type object-name)))
+    (wrap type object-name container)))

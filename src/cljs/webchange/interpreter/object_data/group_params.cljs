@@ -14,10 +14,7 @@
 
 (defn- prepare-action
   [action]
-  (let [type (:on action)]
-    (if (= type "click")
-      {:on-click #(re-frame/dispatch [::ce/execute-action action])}
-      {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action (prepare-action-data action %)])})))
+  {(keyword (str "on-" (:on action))) #(re-frame/dispatch [::ce/execute-action (prepare-action-data action %)])})
 
 (defn- prepare-actions
   [{:keys [actions] :as object}]

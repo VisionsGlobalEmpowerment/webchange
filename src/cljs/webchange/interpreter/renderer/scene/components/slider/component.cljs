@@ -95,7 +95,7 @@
           background (create-background props state)
           foreground (create-foreground props)
 
-          wrapped-slider (wrap type object-name set-value)]
+          wrapped-slider (wrap type object-name container set-value)]
       (swap! state assoc :container container)
       (swap! state assoc :background background)
       (swap! state assoc :foreground foreground)
