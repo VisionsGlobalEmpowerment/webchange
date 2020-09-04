@@ -154,14 +154,9 @@
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
                                     :module-type :commonjs}
-                                   {:file "src/libs/pixi.min.js"
-                                    :provides ["pixi"]}
-                                   {:file "src/libs/pixi-filters.js"
-                                    :provides ["pixi-filters"]
-                                    :requires ["pixi"]}
-                                   {:file "src/libs/pixi-spine.js"
-                                    :provides ["pixi-spine"]
-                                    :requires ["pixi"]}]
+                                   {:file "src/libs/pixi-build.js"
+                                    :provides ["pixi"]
+                                    :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
                     :language-in :ecmascript6
@@ -215,14 +210,9 @@
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
                                     :module-type :commonjs}
-                                   {:file "src/libs/pixi.min.js"
-                                    :provides ["pixi"]}
-                                   {:file "src/libs/pixi-filters.js"
-                                    :provides ["pixi-filters"]
-                                    :requires ["pixi"]}
-                                   {:file "src/libs/pixi-spine.js"
-                                    :provides ["pixi-spine"]
-                                    :requires ["pixi"]}]
+                                   {:file "src/libs/pixi-build.js"
+                                    :provides ["pixi"]
+                                    :module-type :commonjs}]
                     :install-deps true
                     :language-in :ecmascript6}}
 
@@ -256,14 +246,9 @@
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
                                     :module-type :commonjs}
-                                   {:file "src/libs/pixi.min.js"
-                                    :provides ["pixi"]}
-                                   {:file "src/libs/pixi-filters.js"
-                                    :provides ["pixi-filters"]
-                                    :requires ["pixi"]}
-                                   {:file "src/libs/pixi-spine.js"
-                                    :provides ["pixi-spine"]
-                                    :requires ["pixi"]}]
+                                   {:file "src/libs/pixi-build.js"
+                                    :provides ["pixi"]
+                                    :module-type :commonjs}]
                     :install-deps true
                     :optimizations :none}}
     ]}

@@ -1,7 +1,6 @@
 (ns webchange.interpreter.core
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
-    [pixi]
     [re-frame.core :as re-frame]
     [webchange.events :as events]
     [react-spring :refer [Spring]]
