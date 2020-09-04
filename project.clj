@@ -245,9 +245,6 @@
                                     :pathfinding "^0.4.18"
                                     :paths-js "^0.4.10"
                                     :lodash "^4.17.15"
-                                    :pixi.js "^5.3.3"
-                                    :pixi-spine "^2.1.9"
-                                    :pixi-filters "^3.1.1"
                                     "@projectstorm/react-diagrams" "^5.3.2"
                                     }
                     :foreign-libs [{:file "src/libs/dagre.js"
