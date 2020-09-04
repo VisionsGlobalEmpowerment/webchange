@@ -3,6 +3,7 @@
     [webchange.interpreter.renderer.scene.components.animation.component :as animation]
     [webchange.interpreter.renderer.scene.components.background.component :as background]
     [webchange.interpreter.renderer.scene.components.button.component :as button]
+    [webchange.interpreter.renderer.scene.components.carousel.component :as carousel]
     [webchange.interpreter.renderer.scene.components.group.component :as group]
     [webchange.interpreter.renderer.scene.components.image.component :as image]
     [webchange.interpreter.renderer.scene.components.layered-background.component :as layered-background]
@@ -19,6 +20,8 @@
                                                             :default-props background/default-props}
                                  button/component-type {:constructor   button/create
                                                         :default-props button/default-props}
+                                 carousel/component-type {:constructor   carousel/create
+                                                        :default-props carousel/default-props}
                                  group/component-type {:constructor   group/create
                                                        :default-props group/default-props}
                                  image/component-type {:constructor   image/create

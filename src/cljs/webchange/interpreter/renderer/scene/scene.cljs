@@ -5,7 +5,8 @@
     [webchange.interpreter.renderer.pixi :refer [Application]]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]))
+    [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]
+    [webchange.interpreter.renderer.scene.app :refer [register-app]]))
 
 (defn- get-stage
   [app]
@@ -32,7 +33,8 @@
                                   :width     width
                                   :height    height}))
       (-> get-stage (set-scale scale-x scale-y))
-      (-> get-stage (set-position x y)))))
+      (-> get-stage (set-position x y))
+      (register-app))))
 
 (defn scene
   [{:keys []}]

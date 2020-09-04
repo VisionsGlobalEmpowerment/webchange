@@ -12,7 +12,8 @@
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     [webchange.interpreter.defaults :as defaults]
-    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]))
 
 (def default-assets defaults/default-assets)
 
@@ -314,9 +315,6 @@
      :id       audio
      :start    start
      :duration duration}))
-
-(defn chunk-transition-name [name index]
-  (if index (str "chunk-" name "-" index)))
 
 (defn text-animation-sequence->actions [{:keys [target animation start data] :as action}]
   (into [] (map (fn [{:keys [at chunk]}]
