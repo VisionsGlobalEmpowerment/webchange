@@ -18,38 +18,57 @@
                     :shadow-distance {}
                     :shadow-blur     {}
                     :shadow-opacity  {}
+                    :scale           {:default {:x 1 :y 1}}
                     :align           {:default "left"}
                     :vertical-align  {:default "bottom"}
                     :font-weight     {:default "normal"}
                     :chunks          {}
-                    :width           {}
-                    :height          {}})
+                    :width           {:default 0}
+                    :height          {:default 0}})
+
+(defn- calculate-position
+  [{:keys [x y width height align vertical-align]}]
+  {:x (case align
+        "left" x
+        "center" (+ x (/ width 2))
+        "right" (+ x width))
+   :y (case vertical-align
+        "top" y
+        "middle" (+ y (/ height 2))
+        "bottom" (+ y height))})
+
+(defn- set-shadow
+  [text {:keys [shadow-color shadow-distance shadow-blur shadow-opacity]}]
+  (when-not (nil? shadow-color)
+    (aset (.-style text) "dropShadow" true)
+    (aset (.-style text) "dropShadowColor" shadow-color)
+    (aset (.-style text) "dropShadowDistance" shadow-distance)
+    (aset (.-style text) "dropShadowBlur" shadow-blur)
+    (aset (.-style text) "dropShadowAlpha" shadow-opacity)))
+
+(defn- set-align
+  [text {:keys [align vertical-align]}]
+  (case align
+    "left" (aset (.-anchor text) "x" 0)
+    "center" (aset (.-anchor text) "x" 0.5)
+    "right" (aset (.-anchor text) "x" 1))
+
+  (case vertical-align
+    "top" (aset (.-anchor text) "y" 0)
+    "middle" (aset (.-anchor text) "y" 0.5)
+    "bottom" (aset (.-anchor text) "y" 1)))
 
 (defn- create-text
-  [{:keys [x y text align vertical-align font-family font-size font-weight fill shadow-color shadow-distance shadow-blur shadow-opacity]}]
-  (let [text (doto (Text. text (clj->js {:fontSize   font-size
-                                         :fontFamily font-family
-                                         :fontWeight font-weight
-                                         :fill       fill}))
-               (utils/set-position {:x x
-                                    :y y}))]
-    (when-not (nil? shadow-color)
-      (aset (.-style text) "dropShadow" true)
-      (aset (.-style text) "dropShadowColor" shadow-color)
-      (aset (.-style text) "dropShadowDistance" shadow-distance)
-      (aset (.-style text) "dropShadowBlur" shadow-blur)
-      (aset (.-style text) "dropShadowAlpha" shadow-opacity))
-
-    (case align
-      "left" (aset (.-anchor text) "x" 0)
-      "center" (aset (.-anchor text) "x" 0.5)
-      "right" (aset (.-anchor text) "x" 1))
-
-    (case vertical-align
-      "top" (aset (.-anchor text) "y" 0)
-      "middle" (aset (.-anchor text) "y" 0.5)
-      "bottom" (aset (.-anchor text) "y" 1))
-    text))
+  [{:keys [text font-family font-size font-weight fill scale] :as props}]
+  (let [position (calculate-position props)]
+    (doto (Text. text (clj->js {:fontSize   font-size
+                                :fontFamily font-family
+                                :fontWeight font-weight
+                                :fill       fill}))
+      (utils/set-position position)
+      (utils/set-scale scale)
+      (set-shadow props)
+      (set-align props))))
 
 (defn- new-container
   [x y]
@@ -74,7 +93,7 @@
   (let [text-container (new-container x y)
         lines (lines-with-y props)]
     {:text-container text-container
-     :chunks (mapcat #(create-line % text-container props) lines)}))
+     :chunks         (mapcat #(create-line % text-container props) lines)}))
 
 (defn- register-chunk
   [{:keys [chunk text-object]} type object-name]
