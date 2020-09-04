@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.pixi
   (:require
-    [pixi.js]
+    [pixi]
     [pixi-spine]
     [pixi-filters]))
 

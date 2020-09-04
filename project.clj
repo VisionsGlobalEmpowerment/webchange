@@ -143,9 +143,6 @@
                                            :pathfinding "^0.4.18"
                                            :paths-js "^0.4.10"
                                            :lodash "^4.17.15"
-                                           :pixi.js "^5.3.3"
-                                           :pixi-spine "^2.1.9"
-                                           :pixi-filters "^3.1.1"
                                            "@projectstorm/react-diagrams" "^5.3.2"
                                            }
                     :foreign-libs [{:file "src/libs/dagre.js"
@@ -156,6 +153,15 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/pixi.min.js"
+                                    :provides ["pixi"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/pixi-filters.js"
+                                    :provides ["pixi-filters"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/pixi-spine.js"
+                                    :provides ["pixi-spine"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
@@ -199,9 +205,6 @@
                                       :pathfinding "^0.4.18"
                                       :paths-js "^0.4.10"
                                       :lodash "^4.17.15"
-                                      :pixi.js "^5.3.3"
-                                      :pixi-spine "^2.1.9"
-                                      :pixi-filters "^3.1.1"
                                       "@projectstorm/react-diagrams" "^5.3.2"
                                       }
                     :foreign-libs [{:file "src/libs/dagre.js"
@@ -212,6 +215,15 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/spine-player.js"
                                     :provides ["spine-player"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/pixi.min.js"
+                                    :provides ["pixi"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/pixi-filters.js"
+                                    :provides ["pixi-filters"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/pixi-spine.js"
+                                    :provides ["pixi-spine"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :language-in :ecmascript6}}
