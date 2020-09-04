@@ -79,14 +79,14 @@
                                                                 :children ["card-ardilla-image" "card-ardilla-text"]
                                                                 :states   {:normal  {:scale-x 1
                                                                                      :scale-y 1
-                                                                                     :x       601.5
-                                                                                     :y       378}
+                                                                                     :x       259.5
+                                                                                     :y       259}
                                                                            :pointed {:scale-x 1.3
                                                                                      :scale-y 1.3
-                                                                                     :x       586.5
-                                                                                     :y       353}}
-                                                                :x        601.5
-                                                                :y        378}
+                                                                                     :x       244.5
+                                                                                     :y       234}}
+                                                                :x        259.5
+                                                                :y        259}
                                            :card-ardilla-image {:y          50
                                                                 :transition "card-ardilla"
                                                                 :width      100
@@ -114,14 +114,14 @@
                                                                 :children ["card-oso-image" "card-oso-text"]
                                                                 :states   {:normal  {:scale-x 1
                                                                                      :scale-y 1
-                                                                                     :x       1220.5
-                                                                                     :y       378}
+                                                                                     :x       878.5
+                                                                                     :y       259}
                                                                            :pointed {:scale-x 1.3
                                                                                      :scale-y 1.3
-                                                                                     :x       1205.5
-                                                                                     :y       353}}
-                                                                :x        1220.5
-                                                                :y        378}
+                                                                                     :x       863.5
+                                                                                     :y       234}}
+                                                                :x        878.5
+                                                                :y        259}
                                            :card-oso-image     {:y          50
                                                                 :transition "card-oso"
                                                                 :width      100
