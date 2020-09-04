@@ -879,11 +879,8 @@
                                                                 (= target (:object exit)))})))]
       {:dispatch-n (map (fn [{:keys [target active]}]
                           (when active
-                            [::scene/change-scene-object target [[:add-filter {:name "pulsation"}]]])
-                          ;[::execute-set-attribute {:target     target
-                          ;                          :attr-name  :eager
-                          ;                          :attr-value active}]
-                          )
+                            [::scene/change-scene-object target [[:set-filter {:filter "pulsation"
+                                                                               :remove (not active)}]]]))
                         navigation-items)})))
 
 (re-frame/reg-event-fx
@@ -895,9 +892,8 @@
                                 (map :object)
                                 (remove nil?))]
       {:dispatch-n (map (fn [target]
-                          [::execute-set-attribute {:target     target
-                                                    :attr-name  :eager
-                                                    :attr-value false}])
+                          [::scene/change-scene-object (keyword target) [[:set-filter {:filter "pulsation"
+                                                                                       :remove true}]]])
                         navigation-items)})))
 
 (re-frame/reg-event-fx

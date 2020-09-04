@@ -83,17 +83,28 @@
   (.add shared-ticker animate)
   shared-ticker)
 
-(defn apply-pulsation-filter
-  [container]
-  (let [state (atom nil)]
-    ;; ToDo: prettify it:
-    (aset (.-pivot container) "x" (/ (.-width container) 2))
-    (aset container "x" (+ (aget container "x") (/ (.-width container) 2)))
-    (aset (.-pivot container) "y" (/ (.-height container) 2))
-    (aset container "y" (+ (aget container "y") (/ (.-height container) 2)))
+(defn- remove-ticker
+  [animate]
+  (.remove shared-ticker animate))
 
-    (create-ticker (fn []
-                     (animation-eager container {:time (.now js/Date)} state)))))
+(def pulsation-fns (atom {}))
+
+(defn apply-pulsation-filter
+  ([container]
+   (apply-pulsation-filter container {}))
+  ([container {:keys [remove]}]
+  (let [state (atom nil)]
+    (if remove
+      (remove-ticker (get @pulsation-fns container))
+      (do
+        (swap! pulsation-fns assoc container (fn [] (animation-eager container {:time (.now js/Date)} state)))
+        ;; ToDo: prettify it:
+        (aset (.-pivot container) "x" (/ (.-width container) 2))
+        (aset container "x" (+ (aget container "x") (/ (.-width container) 2)))
+        (aset (.-pivot container) "y" (/ (.-height container) 2))
+        (aset container "y" (+ (aget container "y") (/ (.-height container) 2)))
+
+        (create-ticker (get @pulsation-fns container)))))))
 
 (defn apply-filters
   [container filters]
@@ -114,7 +125,7 @@
     "glow" (apply-glow-filter container)
     "grayscale" (apply-grayscale-filter container)
     "outline" (apply-outline-filter container params)
-    "pulsation" (apply-pulsation-filter container)
+    "pulsation" (apply-pulsation-filter container params)
     "shadow" (apply-shadow-filter container params)
     "" (remove-all-filters container)
     (logger/warn "[Filters]" (str "Filter with type <" name "> can not be set because it is not defined"))))

@@ -39,7 +39,7 @@
                              :set-visibility [:visible]
                              :set-src        [:src]
                              :set-text       [:text]
-                             :set-filter     [:filter :brightness]
+                             :set-filter     [:filter :brightness :eager]
                              :set-opacity    [:opacity]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys state params)]))
@@ -47,7 +47,7 @@
           not-handled-params (clojure.set/difference (->> state (keys) (set))
                                                      (->> available-actions (vals) (apply concat) (set)))]
       (when-not (empty? not-handled-params)
-        (logger/warn "not-processed-params:" (clj->js not-handled-params)))
+        (logger/warn (str "[Set object state] Not-processed-params for <" object-name "> object:") (clj->js not-handled-params)))
       {:dispatch [::change-scene-object object-name execute-actions]})))
 
 (re-frame/reg-event-fx
