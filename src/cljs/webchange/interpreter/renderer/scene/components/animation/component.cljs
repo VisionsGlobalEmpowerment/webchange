@@ -9,7 +9,6 @@
 (def default-props {:x                {}
                     :y                {}
                     :offset           {}
-                    :scale            {}
                     :on-mount         {}
                     :ref              {}
                     :name             {}
@@ -17,6 +16,8 @@
                     :anim             {}
                     :skin             {}
                     :on-click         {}
+                    :scale            {:default {:x 1 :y 1}}
+                    :loop             {:default true}
                     :animation-start? {:alias :start}
                     :speed            {:default 1}
                     :skin-name        {:alias :skin :default "default"}
@@ -24,7 +25,7 @@
                     :position         {:alias :anim-offset}})
 
 (defn- create-spine-animation
-  [animation-resource {:keys [animation-start? speed offset position skin-name animation-name scale]}]
+  [animation-resource {:keys [animation-start? speed offset position skin-name animation-name scale loop]}]
   (let [spine-data (.-spineData animation-resource)
         coordinates {:x (* (- (:x position) (:x offset)) (:x scale))
                      :y (* (- (:y position) (:y offset)) (:y scale))}]
@@ -34,7 +35,8 @@
       (utils/set-position coordinates)
       (utils/set-scale scale)
       (utils/set-animation-speed speed)
-      (utils/set-auto-update animation-start?))))
+      (utils/set-auto-update animation-start?)
+      (utils/set-track-loop loop))))
 
 (defn- create-animation-container
   [{:keys [x y]}]

@@ -153,3 +153,11 @@
 (defn set-auto-update
   [spine-object auto-update]
   (set! (.-autoUpdate spine-object) auto-update))
+
+(defn set-track-loop
+  ([spine-object loop?]
+   (set-track-loop spine-object 0 loop?))
+  ([spine-object track-number loop?]
+   (let [tracks (.. spine-object -state -tracks)
+         track (aget tracks track-number)]
+     (set! (.-loop track) loop?))))
