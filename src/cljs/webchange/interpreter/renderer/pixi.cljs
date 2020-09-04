@@ -1,31 +1,29 @@
 (ns webchange.interpreter.renderer.pixi
   (:require
-    [pixi.js]
-    [pixi-spine]
-    [pixi-filters]))
+    [pixi]))
 
-(def Application (.. js/PIXI -Application))
-(def Loader (.. js/PIXI -Loader))
+(def Application (.. pixi -PIXI -Application))
+(def Loader (.. pixi -PIXI -Loader))
 
-(def Spine (.. js/PIXI -spine -Spine))
+(def Spine (.. pixi -PIXI -spine -Spine))
 
-(def Container (.. js/PIXI -Container))
-(def Graphics (.. js/PIXI -Graphics))
-(def Rectangle (.. js/PIXI -Rectangle))
-(def RegionAttachment (.. js/PIXI -spine -core -RegionAttachment))
-(def Skin (.. js/PIXI -spine -core -Skin))
-(def Sprite (.. js/PIXI -Sprite))
-(def Text (.. js/PIXI -Text))
-(def TextStyle (.. js/PIXI -TextStyle))
-(def TextMetrics (.. js/PIXI -TextMetrics))
-(def Texture (.. js/PIXI -Texture))
-(def TextureAtlasRegion (.. js/PIXI -spine -core -TextureAtlasRegion))
-(def TilingSprite (.. js/PIXI -TilingSprite))
-(def WHITE (.. js/PIXI -Texture -WHITE))
+(def Container (.. pixi -PIXI -Container))
+(def Graphics (.. pixi -PIXI -Graphics))
+(def Rectangle (.. pixi -PIXI -Rectangle))
+(def RegionAttachment (.. pixi -PIXI -spine -core -RegionAttachment))
+(def Skin (.. pixi -PIXI -spine -core -Skin))
+(def Sprite (.. pixi -PIXI -Sprite))
+(def Text (.. pixi -PIXI -Text))
+(def TextStyle (.. pixi -PIXI -TextStyle))
+(def TextMetrics (.. pixi -PIXI -TextMetrics))
+(def Texture (.. pixi -PIXI -Texture))
+(def TextureAtlasRegion (.. pixi -PIXI -spine -core -TextureAtlasRegion))
+(def TilingSprite (.. pixi -PIXI -TilingSprite))
+(def WHITE (.. pixi -PIXI -Texture -WHITE))
 
-(def ColorMatrixFilter (.. js/PIXI -filters -ColorMatrixFilter))
-(def DropShadowFilter (.. js/PIXI -filters -DropShadowFilter))
-(def GlowFilter (.. js/PIXI -filters -GlowFilter))
-(def OutlineFilter (.. js/PIXI -filters -OutlineFilter))
+(def ColorMatrixFilter (.. pixi -PIXI -filters -ColorMatrixFilter))
+(def DropShadowFilter (.. pixi -PIXI -filters -DropShadowFilter))
+(def GlowFilter (.. pixi -PIXI -filters -GlowFilter))
+(def OutlineFilter (.. pixi -PIXI -filters -OutlineFilter))
 
-(def shared-ticker (.. js/PIXI -Ticker -shared))
+(def shared-ticker (.. pixi -PIXI -Ticker -shared))
