@@ -50,9 +50,11 @@
 
 (defn- with-scale
   [object]
-  (cond-> object
-    (contains? object :scale-x) (assoc-in [:scale :x] (:scale-x object))
-    (contains? object :scale-y) (assoc-in [:scale :y] (:scale-y object))))
+  (-> (cond-> object
+              (contains? object :scale-x) (assoc-in [:scale :x] (:scale-x object))
+              (contains? object :scale-y) (assoc-in [:scale :y] (:scale-y object)))
+      (dissoc :scale-x)
+      (dissoc :scale-y)))
 
 (defn with-group-params
   [object]

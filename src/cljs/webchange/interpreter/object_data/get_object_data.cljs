@@ -65,11 +65,11 @@
                                         {:object-name (keyword name)}
                                         (with-group-params object)
                                         (with-filter-params object))
-                                 (filter-extra-props [:actions :brightness :filter :highlight :states :transition :width :height :eager :origin :scale-x :scale-y]))
-                      :transparent (-> (merge object
-                                              {:object-name (keyword name)}
-                                              (with-group-params object))
-                                       (filter-extra-props [:actions]))
+                                 (filter-extra-props [:actions :brightness :filter :highlight :states :transition :width :height :eager :origin]))
+                      :transparent (-> object
+                                       (with-group-params)
+                                       (assoc :object-name (keyword name))
+                                       (filter-extra-props [:actions :transition :scene-name]))
                       :group (let [group-params (with-group-params object)
                                    children-params (->> (:children object)
                                                         (map (fn [name] (prepare-object-data name scene-id get-data)))
@@ -83,17 +83,17 @@
                       :animation (let [anim-object (prepare-anim-object-params object)
                                        animation-name (or (:scene-name anim-object) (:name anim-object))]
                                    (-> anim-object
-                                       (merge (with-group-params anim-object))
+                                       (with-group-params)
                                        (assoc :object-name (keyword name))
                                        (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
-                                       (filter-extra-props [:actions :scene-name :transition :width :height :origin :scale-x :scale-y :meshes])))
+                                       (filter-extra-props [:actions :scene-name :transition :width :height :origin :meshes])))
                       :text (-> object
                                 (with-group-params)
                                 (merge {:object-name (keyword name)})
                                 (filter-extra-props []))
                       :carousel (-> object
                                     (merge {:object-name (keyword name)})
-                                    (filter-extra-props []))
+                                    (filter-extra-props [:transition]))
                       ;:painting-area (get-painting-area scene-id name o)
                       ;:copybook [copybook o]
                       ;:colors-palette (get-colors-palette scene-id name o)
