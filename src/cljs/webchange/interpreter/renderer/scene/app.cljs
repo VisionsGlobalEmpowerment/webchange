@@ -11,3 +11,7 @@
   (-> @pixi-app
       .-ticker
       (.add f)))
+
+(defn get-renderer
+  []
+  (.-renderer @pixi-app))

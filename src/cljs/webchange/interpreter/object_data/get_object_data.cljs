@@ -94,9 +94,15 @@
                       :carousel (-> object
                                     (merge {:object-name (keyword name)})
                                     (filter-extra-props [:transition]))
-                      ;:painting-area (get-painting-area scene-id name o)
+                      :painting-area (-> object
+                                         (with-group-params)
+                                         (assoc :object-name (keyword name))
+                                         (filter-extra-props []))
                       ;:copybook [copybook o]
-                      ;:colors-palette (get-colors-palette scene-id name o)
+                      :colors-palette (-> object
+                                          (with-group-params)
+                                          (assoc :object-name (keyword name))
+                                          (filter-extra-props []))
                       :video (-> (merge object
                                         {:object-name (keyword name)}
                                         (with-group-params object))

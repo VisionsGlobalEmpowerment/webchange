@@ -40,7 +40,9 @@
                              :set-src        [:src]
                              :set-text       [:text]
                              :set-filter     [:filter :brightness :eager]
-                             :set-opacity    [:opacity]}
+                             :set-opacity    [:opacity]
+                             :set-tool       [:tool]
+                             :set-color      [:color]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
@@ -103,6 +105,16 @@
   :set-opacity
   (fn [[object-wrapper {:keys [opacity]}]]
     (w/set-opacity object-wrapper opacity)))
+
+(re-frame/reg-fx
+  :set-tool
+  (fn [[object-wrapper {:keys [tool]}]]
+    (w/set-tool object-wrapper tool)))
+
+(re-frame/reg-fx
+  :set-color
+  (fn [[object-wrapper {:keys [color]}]]
+    (w/set-color object-wrapper color)))
 
 (re-frame/reg-fx
   :stop
