@@ -34,7 +34,15 @@
               (set! -strokeStyle stroke)
               (set! -lineWidth stroke-width)
               (set! -lineCap line-cap))
-        path (js/Path2D. data)]
+        path (js/Path2D. data)
+
+        path-element (doto
+                       (.createElementNS js/document "http://www.w3.org/2000/svg" "path")
+                       (.setAttribute "d" data))]
+
+    (js/console.log "total length" (.getTotalLength path-element))
+    (doall (map #(js/console.log (.getPointAtLength path-element %)) (range (js/Math.round (.getTotalLength path-element)))))
+
     (when dash
       (.setLineDash ctx (clj->js dash)))
     (.stroke ctx path)
