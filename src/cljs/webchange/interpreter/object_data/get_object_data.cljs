@@ -108,7 +108,10 @@
                                         (with-group-params object))
                                  (filter-extra-props []))
                       ;:animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
-                      ;:svg-path [svg-path o]
+                      :svg-path (-> object
+                                    (with-group-params)
+                                    (assoc :object-name (keyword name))
+                                    (filter-extra-props []))
                       ;:matrix [matrix-object scene-id name o draw-object]
                       :propagate (-> object
                                      (with-group-params)
