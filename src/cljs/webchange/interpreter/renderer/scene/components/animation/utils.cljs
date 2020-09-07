@@ -99,7 +99,8 @@
        (.setSlotsToSetupPose skeleton)
        (.apply animation-state skeleton)
        (.updateWorldTransform skeleton)
-       (.hackTextureBySlotIndex spine-object slot-index texture)))))
+       (.hackTextureBySlotIndex spine-object slot-index texture)
+       (.update spine-object 0)))))
 
 (defn add-animation
   ([spine-object animation-name]
