@@ -60,7 +60,6 @@
                             :y            25,
                             :width        225,
                             :height       225,
-                            :scene-name   "letter-path",
                             :animation    "stop",
                             :duration     5000,
                             :fill         "transparent",

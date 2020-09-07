@@ -56,7 +56,8 @@
                              :set-opacity    [:opacity]
                              :set-tool       [:tool]
                              :set-color      [:color]
-                             :set-data       [:data]}
+                             :set-data       [:data]
+                             :set-path       [:path]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
@@ -145,3 +146,8 @@
   :set-data
   (fn [[object-wrapper params]]
     (apply-to-wrapper w/set-data object-wrapper params)))
+
+(re-frame/reg-fx
+  :set-path
+  (fn [[object-wrapper {:keys [path]}]]
+    (apply-to-wrapper w/set-path object-wrapper path)))
