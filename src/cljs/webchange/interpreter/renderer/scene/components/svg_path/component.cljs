@@ -1,14 +1,14 @@
 (ns webchange.interpreter.renderer.scene.components.svg-path.component
   (:require
     [webchange.interpreter.renderer.pixi :refer [Container Graphics Sprite Texture]]
+    [webchange.interpreter.renderer.scene.components.svg-path.utils :as svg-utils]
     [webchange.interpreter.renderer.scene.components.svg-path.wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.common.svg-path.path-splitter :as ps]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
 (def default-props {:x            {}
                     :y            {}
-                    :width        {}
-                    :height       {}
+                    :width        {:default 100}
+                    :height       {:default 100}
                     :name         {}
                     :data         {}
                     :dash         {}
@@ -34,21 +34,22 @@
               (set! -strokeStyle stroke)
               (set! -lineWidth stroke-width)
               (set! -lineCap line-cap))
-        path (js/Path2D. data)]
-    (when dash
-      (.setLineDash ctx (clj->js dash)))
-    (.stroke ctx path)
-    (Sprite. (.from Texture canvas))))
+        texture (.from Texture canvas)]
+    (svg-utils/set-svg-path texture ctx {:data data
+                                         :dash dash})
+    {:sprite         (Sprite. texture)
+     :texture        texture
+     :canvas-context ctx}))
 
 (def component-type "svg-path")
 
 (defn create
   [parent {:keys [type object-name group-name] :as props}]
   (let [container (create-container props)
-        graphics (create-graphics props)
-        wrapped-container (wrap type object-name group-name container)]
+        {:keys [sprite texture canvas-context]} (create-graphics props)
+        wrapped-container (wrap type object-name group-name container texture canvas-context)]
 
-    (.addChild container graphics)
+    (.addChild container sprite)
     (.addChild parent container)
 
     wrapped-container))

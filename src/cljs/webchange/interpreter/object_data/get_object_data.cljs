@@ -101,7 +101,7 @@
                       :colors-palette (-> object
                                           (with-group-params)
                                           (assoc :object-name (keyword name))
-                                          (filter-extra-props []))
+                                          (filter-extra-props [:var :var-name]))
                       :video (-> (merge object
                                         {:object-name (keyword name)}
                                         (with-group-params object))

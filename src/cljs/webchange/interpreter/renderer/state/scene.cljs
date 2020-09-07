@@ -143,5 +143,5 @@
 
 (re-frame/reg-fx
   :set-data
-  (fn [[object-wrapper data]]
-    (apply-to-wrapper w/set-data object-wrapper data)))
+  (fn [[object-wrapper params]]
+    (apply-to-wrapper w/set-data object-wrapper params)))
