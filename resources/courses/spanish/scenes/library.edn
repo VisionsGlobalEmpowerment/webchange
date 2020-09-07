@@ -11,14 +11,7 @@
                  {:url "/raw/audio/l1/a6/L1_A6_Lion_Intro.m4a", :size 2, :type "audio", :alias "librarian books intro"}
                  {:url "/raw/audio/l1/a6/L1_A6_Vera.m4a", :size 2, :type "audio", :alias "vera books intro"}],
  :objects
- {:layered-background {
-    :type "layered-background"
-    :brightness -0.2
-    :filter "brighten"
-    :background {:src "/raw/img/library/room/background_library_room.png"}
-    :decoration {:src "/raw/img/library/room/decoration_library_room.png"},
-    :surface {:src "/raw/img/library/room/surface_library_room.png"},
-    }
+ {:background {:type "background", :brightness -0.2, :filter "brighten", :src "/raw/img/library/main/background.jpg"}
   :books
   {:type "image",
    :x 1292,
@@ -87,7 +80,7 @@
    :name "vera",
    :speed 0.3,
    :start true}},
- :scene-objects [["layered-background"] ["books" "easel" "hat" "tablet" "librarian" "vera"]],
+ :scene-objects [["background"] ["books" "easel" "hat" "tablet" "librarian" "vera"]],
  :actions
                 {:start-background-music {:type "audio", :id "background", :loop true},
                  :start-book-scene
