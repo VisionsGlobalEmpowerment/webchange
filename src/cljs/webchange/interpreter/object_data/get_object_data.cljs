@@ -61,15 +61,15 @@
                                          {:object-name (keyword name)}
                                          (with-group-params object))
                                   (filter-extra-props []))
-                      :image (-> (merge object
-                                        {:object-name (keyword name)}
-                                        (with-group-params object)
-                                        (with-filter-params object))
+                      :image (-> object
+                                 (assoc :object-name (keyword name))
+                                 (with-group-params)
+                                 (with-filter-params)
                                  (filter-extra-props [:actions :brightness :filter :highlight :states :transition :width :height :eager :origin]))
                       :transparent (-> object
                                        (with-group-params)
                                        (assoc :object-name (keyword name))
-                                       (filter-extra-props [:actions :transition :scene-name]))
+                                       (filter-extra-props [:actions :transition]))
                       :group (let [group-params (with-group-params object)
                                    children-params (->> (:children object)
                                                         (map (fn [name] (prepare-object-data name scene-id get-data)))
@@ -79,14 +79,13 @@
                                           {:object-name (keyword name)
                                            :children    children-params})
                                    (filter-extra-props [:transition :width :height])))
-                      ;:placeholder [placeholder scene-id name o]
                       :animation (let [anim-object (prepare-anim-object-params object)
                                        animation-name (or (:scene-name anim-object) (:name anim-object))]
                                    (-> anim-object
                                        (with-group-params)
                                        (assoc :object-name (keyword name))
                                        (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
-                                       (filter-extra-props [:actions :scene-name :transition :width :height :origin :meshes])))
+                                       (filter-extra-props [:actions :transition :width :height :origin :meshes])))
                       :text (-> object
                                 (with-group-params)
                                 (merge {:object-name (keyword name)})
@@ -112,7 +111,23 @@
                                     (with-group-params)
                                     (assoc :object-name (keyword name))
                                     (filter-extra-props []))
-                      ;:matrix [matrix-object scene-id name o draw-object]
+                      :matrix (let [children-params (let [{:keys [el width height dx dy max skip]} object
+                                                          skip-coordinates (partition 2 skip)]
+                                                      (->> (for [y (range (/ height dy)) x (range (/ width dx))] [x y])
+                                                           (filter (fn [coordinate] (not (some #(= coordinate %) skip-coordinates))))
+                                                           (take max)
+                                                           (map-indexed (fn [index [x y]]
+                                                                          (merge (prepare-object-data el scene-id get-data)
+                                                                                 {:x            (* x dx)
+                                                                                  :y            (* y dy)
+                                                                                  :object-name  (-> el (str "-" index) (keyword))
+                                                                                  :group-name  (keyword el)})))))]
+                                (-> object
+                                    (with-group-params)
+                                    (merge {:type        "group"
+                                            :object-name (keyword name)
+                                            :children    children-params})
+                                    (filter-extra-props [:el :dx :width :dy :max :height])))
                       :propagate (-> object
                                      (with-group-params)
                                      (merge {:type        "group"
@@ -123,7 +138,7 @@
                       ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
                       )]
     (-> object-data
-        (filter-extra-props [:actions :states]))))
+        (filter-extra-props [:actions :states :scene-name]))))
 
 (defn get-object-data
   ([scene-id name]

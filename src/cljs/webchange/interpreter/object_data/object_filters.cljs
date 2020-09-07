@@ -9,37 +9,38 @@
       (with-transition (assoc object :transition filter-transition)))
     object))
 
-(defn- grayscale-filter
-  []
-  {:filters [{:name "grayscale"}]})
+(defn- with-grayscale
+  [object-params]
+  (if (= (:filter object-params) "grayscale")
+    (update-in object-params [:filters] conj {:name "grayscale"})
+    object-params))
 
-(defn- brighten-filter
-  [{:keys [brightness transition]}]
-  (->
-    {:filters    [{:name  "brightness"
-                   :value brightness}]
-     :transition transition}
-    with-filter-transition))
+(defn- with-brighten
+  [object-params]
+  (if (= (:filter object-params) "brighten")
+    (update-in object-params [:filters] conj {:name  "brightness"
+                                              :value (:brightness object-params)})
+    object-params))
 
 (defn- with-highlight
-  [image-params object-params]
+  [object-params]
   (if (contains? object-params :highlight)
-    (update-in image-params [:filters] conj {:name "glow"})
-    image-params))
+    (update-in object-params [:filters] conj {:name "glow"})
+    object-params))
 
 (defn- with-pulsation
-  [image-params object-params]
+  [object-params]
   (if (:eager object-params)
-    (update-in image-params [:filters] conj {:name "pulsation"})
-    image-params))
+    (update-in object-params [:filters] conj {:name "pulsation"})
+    object-params))
 
 (defn- empty-filter [] {:filters []})
 
 (defn with-filter-params
-  [{:keys [filter] :as params}]
-  (-> (case filter
-        "grayscale" (grayscale-filter)
-        "brighten" (brighten-filter params)
-        (empty-filter))
-      (with-highlight params)
-      (with-pulsation params)))
+  [params]
+  (-> params
+      (with-grayscale)
+      (with-brighten)
+      (with-highlight)
+      (with-pulsation)
+      (with-filter-transition)))

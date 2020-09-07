@@ -8,26 +8,39 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [db]} [_]]
-    {:db (assoc-in db (path-to-db [:objects]) (atom {}))}))
+    {:db (-> db
+             (assoc-in (path-to-db [:objects]) (atom {}))
+             (assoc-in (path-to-db [:groups]) (atom {})))}))
 
 (re-frame/reg-fx
   :add-scene-object
-  (fn [{:keys [scene-objects object-wrapper]}]
-    (let [object-name (:name object-wrapper)]
-      (when (contains? @scene-objects object-name)
+  (fn [{:keys [objects groups object-wrapper]}]
+    (let [object-name (:name object-wrapper)
+          group-name (:group-name object-wrapper)]
+      (when (contains? @objects object-name)
         (-> (str "Object with name " object-name " already exists.") js/Error. throw))
-      (swap! scene-objects assoc object-name object-wrapper))))
+      (swap! objects assoc object-name object-wrapper)
+      (when-not (nil? group-name)
+        (swap! groups update group-name conj object-name)))))
 
 (re-frame/reg-event-fx
   ::register-object
   (fn [{:keys [db]} [_ object-wrapper]]
-    {:add-scene-object {:scene-objects  (get-in db (path-to-db [:objects]))
+    {:add-scene-object {:objects        (get-in db (path-to-db [:objects]))
+                        :groups         (get-in db (path-to-db [:groups]))
                         :object-wrapper object-wrapper}}))
 
 (defn get-scene-object
   [db name]
   (let [objects @(get-in db (path-to-db [:objects]))]
     (get objects name)))
+
+(defn get-scene-group
+  [db group-name]
+  (let [groups @(get-in db (path-to-db [:groups]))
+        group (get groups group-name)]
+    (when-not (nil? group)
+      (map #(get-scene-object db %) group))))
 
 ;; Change object events
 
@@ -42,7 +55,8 @@
                              :set-filter     [:filter :brightness :eager]
                              :set-opacity    [:opacity]
                              :set-tool       [:tool]
-                             :set-color      [:color]}
+                             :set-color      [:color]
+                             :set-data       [:data]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
@@ -55,68 +69,79 @@
 (re-frame/reg-event-fx
   ::change-scene-object
   (fn [{:keys [db]} [_ object-name actions]]
-    (let [objects (get-in db (path-to-db [:objects]))
-          object-wrapper (get @objects object-name)]
+    (let [wrappers (or (get-scene-object db object-name)
+                       (get-scene-group db object-name))]
       (->> actions
-           (map (fn [[action params]] [action [object-wrapper params]]))
+           (map (fn [[action params]] [action [wrappers params]]))
            (into {})))))
+
+(defn- apply-to-wrapper
+  [method target & params]
+  (let [targets (if (sequential? target) target [target])]
+    (doseq [wrapper targets]
+      (apply method (concat [wrapper] params)))))
 
 (re-frame/reg-fx
   :add-filter
   (fn [[object-wrapper filter-data]]
-    (w/add-filter object-wrapper filter-data)))
+    (apply-to-wrapper w/add-filter object-wrapper filter-data)))
 
 (re-frame/reg-fx
   :set-filter
   (fn [[object-wrapper {:keys [filter] :as params}]]
-    (w/set-filter object-wrapper filter params)))
+    (apply-to-wrapper w/set-filter object-wrapper filter params)))
 
 (re-frame/reg-fx
   :set-position
   (fn [[object-wrapper position]]
-    (w/set-position object-wrapper position)))
+    (apply-to-wrapper w/set-position object-wrapper position)))
 
 (re-frame/reg-fx
   :set-scale
   (fn [[object-wrapper scale]]
-    (w/set-scale object-wrapper scale)))
+    (apply-to-wrapper w/set-scale object-wrapper scale)))
 
 (re-frame/reg-fx
   :set-visibility
   (fn [[object-wrapper {:keys [visible]}]]
-    (w/set-visibility object-wrapper visible)))
+    (apply-to-wrapper w/set-visibility object-wrapper visible)))
 
 (re-frame/reg-fx
   :set-value
   (fn [[object-wrapper value]]
-    (w/set-value object-wrapper value)))
+    (apply-to-wrapper w/set-value object-wrapper value)))
 
 (re-frame/reg-fx
   :set-text
   (fn [[object-wrapper {:keys [text]}]]
-    (w/set-text object-wrapper text)))
+    (apply-to-wrapper w/set-text object-wrapper text)))
 
 (re-frame/reg-fx
   :set-src
   (fn [[object-wrapper {:keys [src options]}]]
-    (w/set-src object-wrapper src options)))
+    (apply-to-wrapper w/set-src object-wrapper src options)))
 
 (re-frame/reg-fx
   :set-opacity
   (fn [[object-wrapper {:keys [opacity]}]]
-    (w/set-opacity object-wrapper opacity)))
+    (apply-to-wrapper w/set-opacity object-wrapper opacity)))
 
 (re-frame/reg-fx
   :set-tool
   (fn [[object-wrapper {:keys [tool]}]]
-    (w/set-tool object-wrapper tool)))
+    (apply-to-wrapper w/set-tool object-wrapper tool)))
 
 (re-frame/reg-fx
   :set-color
   (fn [[object-wrapper {:keys [color]}]]
-    (w/set-color object-wrapper color)))
+    (apply-to-wrapper w/set-color object-wrapper color)))
 
 (re-frame/reg-fx
   :stop
   (fn [[object-wrapper]]
-    (w/stop object-wrapper)))
+    (apply-to-wrapper w/stop object-wrapper)))
+
+(re-frame/reg-fx
+  :set-data
+  (fn [[object-wrapper data]]
+    (apply-to-wrapper w/set-data object-wrapper data)))

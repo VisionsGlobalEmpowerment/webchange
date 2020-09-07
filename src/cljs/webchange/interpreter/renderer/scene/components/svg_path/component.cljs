@@ -43,10 +43,10 @@
 (def component-type "svg-path")
 
 (defn create
-  [parent {:keys [type object-name] :as props}]
+  [parent {:keys [type object-name group-name] :as props}]
   (let [container (create-container props)
         graphics (create-graphics props)
-        wrapped-container (wrap type object-name container)]
+        wrapped-container (wrap type object-name group-name container)]
 
     (.addChild container graphics)
     (.addChild parent container)

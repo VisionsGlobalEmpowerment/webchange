@@ -25,6 +25,7 @@
 (defn play [wrapper & params] (execute wrapper :play-video params))
 (defn remove-animation [wrapper & params] (execute wrapper :remove-animation params))
 (defn set-animation [wrapper & params] (execute wrapper :set-animation params))
+(defn set-data [wrapper & params] (execute wrapper :set-data params))
 (defn set-filter-value [wrapper & params] (execute wrapper :set-filter-value params))
 (defn set-opacity [wrapper & params] (execute wrapper :set-opacity params))
 (defn set-position [wrapper & params] (execute wrapper :set-position params))
