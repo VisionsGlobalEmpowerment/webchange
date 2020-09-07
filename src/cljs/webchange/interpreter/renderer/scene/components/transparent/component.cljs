@@ -11,13 +11,16 @@
                     :name     {}
                     :on-click {}
                     :ref      {}
+                    :offset   {:default {:x 0 :y 0}}
                     :scale    {:default {:x 1 :y 1}}})
 
 (defn- create-container
-  [{:keys [x y scale]}]
-  (doto (Container.)
-    (utils/set-position {:x x :y y})
-    (utils/set-scale scale)))
+  [{:keys [x y scale offset]}]
+  (let [position {:x (- x (* (:x offset) (:x scale)))
+                  :y (- y (* (:y offset) (:y scale)))}]
+    (doto (Container.)
+      (utils/set-position position)
+      (utils/set-scale scale))))
 
 (defn- create-sprite
   [{:keys [width height]}]
@@ -28,7 +31,7 @@
 (def component-type "transparent")
 
 (defn create
-  [parent {:keys [type object-name on-click ref  ] :as props}]
+  [parent {:keys [type object-name on-click ref] :as props}]
   (let [container (create-container props)
         sprite (create-sprite props)
         wrapped-container (wrap type object-name container)]

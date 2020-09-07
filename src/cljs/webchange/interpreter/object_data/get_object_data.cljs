@@ -69,7 +69,7 @@
                       :transparent (-> object
                                        (with-group-params)
                                        (assoc :object-name (keyword name))
-                                       (filter-extra-props [:actions :transition]))
+                                       (filter-extra-props [:actions :transition :origin]))
                       :group (let [group-params (with-group-params object)
                                    children-params (->> (:children object)
                                                         (map (fn [name] (prepare-object-data name scene-id get-data)))
