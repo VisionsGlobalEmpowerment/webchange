@@ -45,9 +45,7 @@
   [levels level lesson activity]
   (merge (get-in levels [level :lessons lesson :activities activity])
          {:level (get-in levels [level :level])
-         :lesson (get-in levels [level :lessons lesson :lesson])}
-    )
-  )
+         :lesson (get-in levels [level :lessons lesson :lesson])}))
 
 (defn- not-last?
   [coll index]
@@ -75,9 +73,16 @@
   (let [activities (get-in db [:progress-data :finished (num->keyword level) (num->keyword lesson)])]
     (some #(= activity %) activities)))
 
+(defn next-not-finished-for
+  [db activity]
+  (loop [next (next-for db activity)]
+    (if (finished? db next)
+      (recur (next-for db next))
+      next)))
+
 (defn finish
   [db {:keys [level lesson activity] :as finished}]
-  (let [next (next-for db finished)]
+  (let [next (next-not-finished-for db finished)]
     (-> db
         (update-in [:progress-data :finished (num->keyword level) (num->keyword lesson)] #(-> % set (conj activity)))
         (assoc-in [:progress-data :next] next))))

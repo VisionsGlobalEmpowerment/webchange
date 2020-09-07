@@ -11,6 +11,7 @@
 (def Graphics (.. pixi -PIXI -Graphics))
 (def Rectangle (.. pixi -PIXI -Rectangle))
 (def RegionAttachment (.. pixi -PIXI -spine -core -RegionAttachment))
+(def RenderTexture (.. pixi -PIXI -RenderTexture))
 (def Skin (.. pixi -PIXI -spine -core -Skin))
 (def Sprite (.. pixi -PIXI -Sprite))
 (def Text (.. pixi -PIXI -Text))
@@ -27,3 +28,6 @@
 (def OutlineFilter (.. pixi -PIXI -filters -OutlineFilter))
 
 (def shared-ticker (.. pixi -PIXI -Ticker -shared))
+
+(def blend-mode-erase (.. pixi -PIXI -BLEND_MODES.ERASE))
+(def string2hex (.. pixi -PIXI -utils -string2hex))
