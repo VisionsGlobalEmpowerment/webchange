@@ -193,9 +193,12 @@
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
     :scene-id "magic-hat"}}
-  {:name "poem-image-1", :type "image", :template nil}
-  {:name "poem-image-2", :type "image", :template nil}
-  {:name "poem-image-3", :type "image", :template nil}
+  {:name "poem-image-1", :type "image", :template nil,
+   :scenes ["park-poem"]}
+  {:name "poem-image-2", :type "image", :template nil,
+   :scenes ["park-poem"]}
+  {:name "poem-image-3", :type "image", :template nil,
+   :scenes ["park-poem"]}
   {:name "poem-story",
    :type "action",
    :template
