@@ -106,7 +106,10 @@
                                         {:object-name (keyword name)}
                                         (with-group-params object))
                                  (filter-extra-props []))
-                      ;:animated-svg-path [animated-svg-path (prepare-animated-svg-path-params o)]
+                      :animated-svg-path (-> object
+                                             (with-group-params)
+                                             (assoc :object-name (keyword name))
+                                             (filter-extra-props []))
                       :svg-path (-> object
                                     (with-group-params)
                                     (assoc :object-name (keyword name))

@@ -347,21 +347,23 @@
 (re-frame/reg-event-fx
   ::execute-path-animation
   [ce/event-as-action ce/with-flow]
-  (fn [{:keys [db]} {:keys [target params state flow-id] :as action}]
-    (let [scene-id (:current-scene db)
-          on-end #(ce/dispatch-success-fn action)
-          path-state {:animation state
-                      :on-end    on-end}]
-      (ce/register-flow-remove-handler! flow-id (fn [] (re-frame/dispatch [::stop-path-animation {:target target}])))
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)})))
+  (fn [{:keys [db]} {:keys [target state flow-id] :as action}]
+    (let [{:keys [animated-svg-path-start animated-svg-path-stop animated-svg-path-reset]} (scene/get-scene-object db (keyword target))
+          on-end #(ce/dispatch-success-fn action)]
+      (case state
+            "play" (animated-svg-path-start on-end)
+            "reset" (animated-svg-path-reset))
+
+      (ce/register-flow-remove-handler! flow-id animated-svg-path-stop)
+      {})))
 
 (re-frame/reg-event-fx
   ::stop-path-animation
   [ce/event-as-action]
-  (fn [{:keys [db]} {:keys [target params]}]
-    (let [scene-id (:current-scene db)
-          path-state {:animation "stop"}]
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)})))
+  (fn [{:keys [db]} {:keys [target]}]
+    (let [{:keys [animated-svg-path-stop]} (scene/get-scene-object db (keyword target))]
+      (animated-svg-path-stop)
+      {})))
 
 (re-frame/reg-event-fx
   ::execute-add-alias

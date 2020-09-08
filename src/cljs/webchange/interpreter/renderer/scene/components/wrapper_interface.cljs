@@ -42,3 +42,8 @@
 (defn stop [wrapper & params] (execute wrapper :stop-video params))
 (defn set-tool [wrapper & params] (execute wrapper :set-tool params))
 (defn set-color [wrapper & params] (execute wrapper :set-color params))
+
+(defn set-path [wrapper & params] (execute wrapper :set-path params))
+(defn animated-svg-path-start [wrapper & params] (execute wrapper :animated-svg-path-start params))
+(defn animated-svg-path-stop [wrapper & params] (execute wrapper :animated-svg-path-stop params))
+(defn animated-svg-path-reset [wrapper & params] (execute wrapper :animated-svg-path-reset params))

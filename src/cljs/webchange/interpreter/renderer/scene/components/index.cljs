@@ -1,5 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.index
   (:require
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as animated-svg-path]
     [webchange.interpreter.renderer.scene.components.animation.component :as animation]
     [webchange.interpreter.renderer.scene.components.background.component :as background]
     [webchange.interpreter.renderer.scene.components.button.component :as button]
@@ -17,7 +18,9 @@
     [webchange.interpreter.renderer.scene.components.transparent.component :as transparent]
     [webchange.interpreter.renderer.scene.components.video.component :as video]))
 
-(def components (apply hash-map [animation/component-type {:constructor   animation/create
+(def components (apply hash-map [animated-svg-path/component-type {:constructor   animated-svg-path/create
+                                                                   :default-props animated-svg-path/default-props}
+                                 animation/component-type {:constructor   animation/create
                                                            :default-props animation/default-props}
                                  background/component-type {:constructor   background/create
                                                             :default-props background/default-props}
