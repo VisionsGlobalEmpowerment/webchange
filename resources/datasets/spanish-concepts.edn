@@ -92,7 +92,7 @@
   {:name "image-src",
    :type "image",
    :template nil,
-   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "volleyball" "pinata" "writing-practice" "hide-n-seek"]}
+   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "volleyball" "pinata" "writing-lesson" "writing-practice" "hide-n-seek"]}
   {:name "letter", :type "string"}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",
@@ -151,7 +151,7 @@
     :scene-id "letter-intro"}}
   {:name "letter-path", :type "string"}
   {:name "letter-src", :type "image", :template nil,
-   :scenes ["writing-practice"]}
+   :scenes ["writing-lesson" "writing-practice"]}
   {:name "letter-tutorial-path", :type "string"}
   {:name "mari-chant",
    :type "action",
