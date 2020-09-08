@@ -32,7 +32,7 @@
                   :skin        "qwestion",
                   :speed       0.3,
                   :start       true,
-                  :states      {:init {:type "transparent"}, :reset {:x 2000, :type "animation"}}},
+                  :states      {:init {:visible false}, :reset {:x 2000, :visible true}}},
                  :box2
                  {:type        "animation",
                   :x           2200,
@@ -50,7 +50,7 @@
                   :skin        "qwestion",
                   :speed       0.3,
                   :start       true,
-                  :states      {:init {:type "transparent"}, :reset {:x 2200, :type "animation"}}},
+                  :states      {:init {:visible false}, :reset {:x 2200, :visible true}}},
                  :box3
                  {:type        "animation",
                   :x           2400,
@@ -68,10 +68,10 @@
                   :skin        "qwestion",
                   :speed       0.3,
                   :start       true,
-                  :states      {:init {:type "transparent"}, :reset {:x 2400, :type "animation"}}},
+                  :states      {:init {:visible false}, :reset {:x 2400, :visible true}}},
                  :letter1
                  {:type           "text",
-                  :x              1945,
+                  :x              2000,
                   :y              400,
                   :width          150,
                   :height         150,
@@ -82,14 +82,13 @@
                   :font-size      120,
                   :shadow-blur    5,
                   :shadow-color   "#1a1a1a",
-                  :shadow-offset  {:x 5, :y 5},
                   :shadow-opacity 0.5,
-                  :states         {:init {:type "transparent"}, :reset {:x 1945, :type "text"}},
+                  :states         {:init {:visible false}, :reset {:x 2000, :visible true}},
                   :text           "?",
                   :vertical-align "middle"},
                  :letter2
                  {:type           "text",
-                  :x              2145,
+                  :x              2200,
                   :y              506,
                   :width          150,
                   :height         150,
@@ -100,14 +99,13 @@
                   :font-size      120,
                   :shadow-blur    5,
                   :shadow-color   "#1a1a1a",
-                  :shadow-offset  {:x 5, :y 5},
                   :shadow-opacity 0.5,
-                  :states         {:init {:type "transparent"}, :reset {:x 2145, :type "text"}},
+                  :states         {:init {:visible false}, :reset {:x 2200, :visible true}},
                   :text           "?",
                   :vertical-align "middle"},
                  :letter3
                  {:type           "text",
-                  :x              2345,
+                  :x              2400,
                   :y              649,
                   :width          150,
                   :height         150,
@@ -118,9 +116,8 @@
                   :font-size      120,
                   :shadow-blur    5,
                   :shadow-color   "#1a1a1a",
-                  :shadow-offset  {:x 5, :y 5},
                   :shadow-opacity 0.5,
-                  :states         {:init {:type "transparent"}, :reset {:x 2345, :type "text"}},
+                  :states         {:init {:visible false}, :reset {:x 2400, :visible true}},
                   :text           "?",
                   :vertical-align "middle"},
                  :mari
@@ -386,9 +383,9 @@
                                                          [{:to {:x 1300, :duration 1}, :type "transition", :transition-id "box1"}
                                                           {:to {:x 1500, :duration 1}, :type "transition", :transition-id "box2"}
                                                           {:to {:x 1700, :duration 1}, :type "transition", :transition-id "box3"}
-                                                          {:to {:x 1245, :duration 1}, :type "transition", :transition-id "letter1"}
-                                                          {:to {:x 1445, :duration 1}, :type "transition", :transition-id "letter2"}
-                                                          {:to {:x 1645, :duration 1}, :type "transition", :transition-id "letter3"}],
+                                                          {:to {:x 1300, :duration 1}, :type "transition", :transition-id "letter1"}
+                                                          {:to {:x 1500, :duration 1}, :type "transition", :transition-id "letter2"}
+                                                          {:to {:x 1700, :duration 1}, :type "transition", :transition-id "letter3"}],
                                                    :type "parallel"}
                                                   {:type "remove-flow-tag" :tag "box"}
                                                   {:id "current-concept-chant", :type "action"}]},

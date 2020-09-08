@@ -25,7 +25,8 @@
                     :chunks          {}
                     :width           {:default 0}
                     :height          {:default 0}
-                    :on-click        {}})
+                    :on-click        {}
+                    :ref             {}})
 
 (defn- calculate-position
   [{:keys [x y width height align vertical-align]}]
@@ -105,7 +106,7 @@
 (def component-type "text")
 
 (defn create
-  [parent {:keys [type object-name chunks on-click] :as props}]
+  [parent {:keys [type object-name chunks on-click ref] :as props}]
   (if chunks
     (let [{:keys [text-container chunks]} (create-chunked-text props)
           wrapped-text (wrap type object-name text-container chunks)]
@@ -116,7 +117,10 @@
       wrapped-text)
     (let [text (create-text props)
           wrapped-text (wrap type object-name text nil)]
+
       (when-not (nil? on-click) (utils/set-handler text "click" on-click))
+      (when-not (nil? ref) (ref wrapped-text))
+
       (.addChild parent text)
 
       wrapped-text)))

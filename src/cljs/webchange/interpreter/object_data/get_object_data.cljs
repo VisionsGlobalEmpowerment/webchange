@@ -52,11 +52,11 @@
                       :background (-> (merge object
                                              {:object-name (keyword name)}
                                              (with-filter-params object))
-                                      (filter-extra-props [:brightness :filter :transition]))
+                                      (filter-extra-props [:brightness :filter]))
                       :layered-background (-> (merge object
                                                      {:object-name (keyword name)}
                                                      (with-filter-params object))
-                                              (filter-extra-props [:brightness :filter :transition]))
+                                              (filter-extra-props [:brightness :filter]))
                       :button (-> (merge object
                                          {:object-name (keyword name)}
                                          (with-group-params object))
@@ -65,11 +65,11 @@
                                  (assoc :object-name (keyword name))
                                  (with-group-params)
                                  (with-filter-params)
-                                 (filter-extra-props [:actions :brightness :filter :highlight :states :transition :width :height :eager :origin]))
+                                 (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager :origin]))
                       :transparent (-> object
                                        (with-group-params)
                                        (assoc :object-name (keyword name))
-                                       (filter-extra-props [:actions :transition :origin]))
+                                       (filter-extra-props [:actions :origin]))
                       :group (let [group-params (with-group-params object)
                                    children-params (->> (:children object)
                                                         (map (fn [name] (prepare-object-data name scene-id get-data)))
@@ -78,21 +78,21 @@
                                           group-params
                                           {:object-name (keyword name)
                                            :children    children-params})
-                                   (filter-extra-props [:transition :width :height])))
+                                   (filter-extra-props [:width :height])))
                       :animation (let [anim-object (prepare-anim-object-params object)
                                        animation-name (or (:scene-name anim-object) (:name anim-object))]
                                    (-> anim-object
                                        (with-group-params)
                                        (assoc :object-name (keyword name))
                                        (assoc :on-mount #(re-frame/dispatch [::ier/register-animation animation-name %]))
-                                       (filter-extra-props [:actions :transition :width :height :origin :meshes])))
+                                       (filter-extra-props [:actions :width :height :origin :meshes])))
                       :text (-> object
                                 (with-group-params)
                                 (merge {:object-name (keyword name)})
                                 (filter-extra-props []))
                       :carousel (-> object
                                     (merge {:object-name (keyword name)})
-                                    (filter-extra-props [:transition]))
+                                    (filter-extra-props []))
                       :painting-area (-> object
                                          (with-group-params)
                                          (assoc :object-name (keyword name))
@@ -141,7 +141,7 @@
                       ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
                       )]
     (-> object-data
-        (filter-extra-props [:actions :states :scene-name]))))
+        (filter-extra-props [:actions :states :scene-name :transition]))))
 
 (defn get-object-data
   ([scene-id name]
