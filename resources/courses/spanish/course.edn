@@ -112,7 +112,7 @@
                   :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
                  :letter-intro
                  {:name    "Letter Intro",
-                  :outs    [{:x 1457, :y 330, :name "map", :object "door"}],
+                  :outs    [],
                   :type    "non-scored",
                   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
                  :park

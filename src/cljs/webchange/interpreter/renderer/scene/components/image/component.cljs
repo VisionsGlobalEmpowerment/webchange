@@ -22,7 +22,8 @@
   [{:keys [src scale name width height]}]
   (let [resource (resources/get-resource src)]
     (when (and (-> resource nil?)
-               (-> src nil? not))
+               (-> src nil? not)
+               (-> src empty? not))
       (.log js/console (js/Error. (str "Resources for '" src "' were not loaded"))))
     (let [sprite (if (-> resource nil? not)
                    (Sprite. (.-texture resource))

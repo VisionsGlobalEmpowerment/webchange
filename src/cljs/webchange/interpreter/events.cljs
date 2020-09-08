@@ -881,9 +881,8 @@
                                                    :active (and show-navigation?
                                                                 (= target (:object exit)))})))]
       {:dispatch-n (map (fn [{:keys [target active]}]
-                          (when active
-                            [::scene/change-scene-object target [[:set-filter {:filter "pulsation"
-                                                                               :remove (not active)}]]]))
+                          [::scene/change-scene-object target [[:set-filter {:filter "pulsation"
+                                                                             :remove (not active)}]]])
                         navigation-items)})))
 
 (re-frame/reg-event-fx

@@ -76,5 +76,5 @@
                (parse-scene-objects scene-data)
                (parse-default-assets default-game-assets)
                (parse-additional-resources))
-       (remove nil?)
+       (remove #(or (nil? %) (empty? %)))
        (distinct)))

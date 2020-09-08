@@ -58,7 +58,8 @@
                              :set-color      [:color]
                              :set-stroke     [:stroke]
                              :set-data       [:data]
-                             :set-path       [:path]}
+                             :set-path       [:path]
+                             :set-font-size  [:font-size]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
@@ -117,6 +118,11 @@
   :set-text
   (fn [[object-wrapper {:keys [text]}]]
     (apply-to-wrapper w/set-text object-wrapper text)))
+
+(re-frame/reg-fx
+  :set-font-size
+  (fn [[object-wrapper {:keys [font-size]}]]
+    (apply-to-wrapper w/set-font-size object-wrapper font-size)))
 
 (re-frame/reg-fx
   :set-src
