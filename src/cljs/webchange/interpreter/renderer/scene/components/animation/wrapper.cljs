@@ -10,6 +10,8 @@
                    :object           container
                    :set-slot         (fn [slot-name image-src slot-params]
                                        (utils/set-animation-slot image-src spine-object slot-name slot-params))
+                   :set-skin         (fn [skin-name]
+                                       (utils/set-skin spine-object skin-name))
                    :add-animation    (fn [track animation-name loop? delay]
                                        (utils/add-animation spine-object animation-name {:track-index track
                                                                                          :delay       delay

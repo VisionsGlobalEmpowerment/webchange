@@ -140,9 +140,6 @@
 (re-frame/reg-fx
   :set-skin
   (fn [{:keys [state skin]}]
-    ;(let [skeleton (:skeleton state)]
-    ;  (.setSkinByName skeleton skin)
-    ;  (.setToSetupPose skeleton))
     (w/set-skin state skin)))
 
 (re-frame/reg-fx

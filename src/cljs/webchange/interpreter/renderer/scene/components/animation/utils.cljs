@@ -141,8 +141,12 @@
   [spine-object skin-name]
   (when-not (has-skin? spine-object skin-name)
     (-> (str "Can not set skin <" skin-name ">: Skin does not exist") js/Error. throw))
-  (-> (.-skeleton spine-object)
-      (.setSkinByName skin-name)))
+  (doto (.-skeleton spine-object)
+    (.setSkinByName skin-name)
+    (.setToSetupPose))
+  ;; ToDo:  Update animation skin after setting skin by name.
+  ;;        Currently update works but skin is probably spoiled by set-animation-slot method
+  (.update spine-object 0))
 
 (defn set-animation-speed
   [spine-object animation-speed]
