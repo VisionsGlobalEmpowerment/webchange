@@ -4,8 +4,8 @@
     [webchange.interpreter.renderer.scene.components.animated-svg-path.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.path :refer [paths]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.animation :as a]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.app :refer [add-ticker]]))
+    [webchange.interpreter.renderer.scene.components.animated-svg-path.utils :as a-svg-utils]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
 (def default-props {:x            {}
                     :y            {}
@@ -28,20 +28,21 @@
     (utils/set-scale scale)))
 
 (defn- create-state
-  [{:keys [path duration width height stroke stroke-width line-cap animation]}]
+  [{:keys [path duration width height stroke-width line-cap animation] :as props}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
                  (set! -width (* width 2))
                  (set! -height (* height 2)))
         ctx (doto
               (.getContext canvas "2d")
-              (set! -strokeStyle stroke)
               (set! -lineWidth stroke-width)
               (set! -lineCap line-cap))
 
-        texture (.from Texture canvas)]
-    (atom {:animation animation :ctx ctx :texture texture :paths (paths path duration)
-           :width (* width 2) :height (* height 2) :duration duration})))
+        texture (.from Texture canvas)
+        state (atom {:animation animation :ctx ctx :texture texture :paths (paths path duration)
+                     :width     (* width 2) :height (* height 2) :duration duration})]
+    (a-svg-utils/set-stroke state (select-keys props [:stroke]))
+    state))
 
 (def component-type "animated-svg-path")
 

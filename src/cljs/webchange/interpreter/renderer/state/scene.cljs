@@ -56,6 +56,7 @@
                              :set-opacity    [:opacity]
                              :set-tool       [:tool]
                              :set-color      [:color]
+                             :set-stroke     [:stroke]
                              :set-data       [:data]
                              :set-path       [:path]}
           execute-actions (->> available-actions
@@ -151,3 +152,8 @@
   :set-path
   (fn [[object-wrapper {:keys [path]}]]
     (apply-to-wrapper w/set-path object-wrapper path)))
+
+(re-frame/reg-fx
+  :set-stroke
+  (fn [[object-wrapper params]]
+    (apply-to-wrapper w/set-stroke object-wrapper params)))

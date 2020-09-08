@@ -7,11 +7,10 @@
   (reset! pixi-app app))
 
 (defn add-ticker
-  ([f] (add-ticker f {}))
-  ([f context]
-   (-> @pixi-app
-       .-ticker
-       (.add f context))))
+  [f]
+  (-> @pixi-app
+      .-ticker
+      (.add f)))
 
 (defn remove-ticker
   [f]

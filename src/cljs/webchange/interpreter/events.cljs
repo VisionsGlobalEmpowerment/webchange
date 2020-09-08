@@ -352,7 +352,8 @@
           on-end #(ce/dispatch-success-fn action)]
       (case state
             "play" (animated-svg-path-start on-end)
-            "reset" (animated-svg-path-reset))
+            "reset" (do (animated-svg-path-reset)
+                        (on-end)))
 
       (ce/register-flow-remove-handler! flow-id animated-svg-path-stop)
       {})))
