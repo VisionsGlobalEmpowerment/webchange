@@ -13,12 +13,11 @@
                                       :surface    {:src "/raw/img/library/magic-hat/surface_magic_hat.png"},
                                       },
                  :box1
-                                     {:type       "transparent",
+                                     {:type       "animation",
                                       :x          1270,
                                       :y          950,
                                       :width       771,
                                       :height      1033,
-                                      :anim-offset {:x 0, :y -300},
                                       :scene-name "box1",
                                       :transition "box1",
                                       :actions    {:click {:id "pick-box", :on "click", :type "action", :params {:target "box1"}, :unique-tag "click"}},
@@ -29,15 +28,15 @@
                                       :scale-y    0.25,
                                       :skin       "qwestion",
                                       :speed      0.5,
-                                      :start      true
-                                      :states {:animation {:type "animation"}}},
+                                      :start      true,
+                                      :visible    false,
+                                      :states     {:animation {:visible true}}},
                  :box2
-                                     {:type       "transparent",
+                                     {:type       "animation",
                                       :x          1460,
                                       :y          920,
                                       :width       771,
                                       :height      1033,
-                                      :anim-offset {:x 0, :y -300},
                                       :scene-name "box2",
                                       :transition "box2",
                                       :actions    {:click {:id "pick-box", :on "click", :type "action", :params {:target "box2"}, :unique-tag "click"}},
@@ -48,15 +47,15 @@
                                       :scale-y    0.25,
                                       :skin       "qwestion",
                                       :speed      0.5,
-                                      :start      true
-                                      :states {:animation {:type "animation"}}},
+                                      :start      true,
+                                      :visible    false,
+                                      :states {:animation {:visible true}}},
                  :box3
-                                     {:type       "transparent",
+                                     {:type       "animation",
                                       :x          1660,
                                       :y          940,
                                       :width       771,
                                       :height      1033,
-                                      :anim-offset {:x 0, :y -300},
                                       :scene-name "box3",
                                       :transition "box3",
                                       :actions    {:click {:id "pick-box", :on "click", :type "action", :params {:target "box3"}, :unique-tag "click"}},
@@ -67,8 +66,9 @@
                                       :scale-y    0.25,
                                       :skin       "qwestion",
                                       :speed      0.5,
-                                      :start      true
-                                      :states {:animation {:type "animation"}}},
+                                      :start      true,
+                                      :visible    false,
+                                      :states {:animation {:visible true}}},
                  :hat
                                      {:type       "animation",
                                       :x          625,
@@ -86,7 +86,7 @@
                                       :speed      1,
                                       :start      true},
                  :letter1
-                                     {:type           "transparent",
+                                     {:type           "text",
                                       :x              1175,
                                       :y              570,
                                       :width          200,
@@ -98,9 +98,10 @@
                                       :scale-x        1,
                                       :scale-y        1,
                                       :text           "",
-                                      :vertical-align "middle"},
+                                      :vertical-align "middle",
+                                      :visible        false},
                  :letter2
-                                     {:type           "transparent",
+                                     {:type           "text",
                                       :x              1365,
                                       :y              540,
                                       :width          200,
@@ -112,9 +113,10 @@
                                       :scale-x        1,
                                       :scale-y        1,
                                       :text           "",
-                                      :vertical-align "middle"},
+                                      :vertical-align "middle",
+                                      :visible        false},
                  :letter3
-                                     {:type           "transparent",
+                                     {:type           "text",
                                       :x              1565,
                                       :y              560,
                                       :width          200,
@@ -126,7 +128,8 @@
                                       :scale-x        1,
                                       :scale-y        1,
                                       :text           "",
-                                      :vertical-align "middle"},
+                                      :vertical-align "middle",
+                                      :visible        false},
                  :mari
                                      {:type       "animation",
                                       :x          1500,
@@ -166,9 +169,9 @@
                                            [{:skin "qwestion", :type "set-skin", :target "box1"}
                                             {:skin "qwestion", :type "set-skin", :target "box2"}
                                             {:skin "qwestion", :type "set-skin", :target "box3"}
-                                            {:type "set-attribute", :target "box1", :attr-name "type", :attr-value "transparent"}
-                                            {:type "set-attribute", :target "box2", :attr-name "type", :attr-value "transparent"}
-                                            {:type "set-attribute", :target "box3", :attr-name "type", :attr-value "transparent"}]},
+                                            {:type "set-attribute", :target "box1", :attr-name "visible", :attr-value false}
+                                            {:type "set-attribute", :target "box2", :attr-name "visible", :attr-value false}
+                                            {:type "set-attribute", :target "box3", :attr-name "visible", :attr-value false}]},
                  :boxes-jump-out
                                     {:type "sequence-data",
                                      :data
@@ -195,19 +198,19 @@
                                     {:type "parallel",
                                      :data
                                            [{:data
-                                                   [{:type "set-attribute", :target "box1", :attr-name "type", :attr-value "animation"}
+                                                   [{:type "set-attribute", :target "box1", :attr-name "visible", :attr-value true}
                                                     {:type "empty", :duration 200}
                                                     {:id "come2", :type "animation", :target "box1"}
                                                     {:id "idle2", :loop true, :type "add-animation", :target "box1"}],
                                              :type "sequence-data"}
                                             {:data
-                                                   [{:type "set-attribute", :target "box2", :attr-name "type", :attr-value "animation"}
+                                                   [{:type "set-attribute", :target "box2", :attr-name "visible", :attr-value true}
                                                     {:type "empty", :duration 200}
                                                     {:id "come2", :type "animation", :target "box2"}
                                                     {:id "idle2", :loop true, :type "add-animation", :target "box2"}],
                                              :type "sequence-data"}
                                             {:data
-                                                   [{:type "set-attribute", :target "box3", :attr-name "type", :attr-value "animation"}
+                                                   [{:type "set-attribute", :target "box3", :attr-name "visible", :attr-value true}
                                                     {:type "empty", :duration 200}
                                                     {:id "come2", :type "animation", :target "box3"}
                                                     {:id "idle2", :loop true, :type "add-animation", :target "box3"}],
@@ -275,15 +278,15 @@
                  :letters-hide
                                     {:type "parallel",
                                      :data
-                                           [{:type "set-attribute", :target "letter1", :attr-name "type", :attr-value "transparent"}
-                                            {:type "set-attribute", :target "letter2", :attr-name "type", :attr-value "transparent"}
-                                            {:type "set-attribute", :target "letter3", :attr-name "type", :attr-value "transparent"}]},
+                                           [{:type "set-attribute", :target "letter1", :attr-name "visible", :attr-value false}
+                                            {:type "set-attribute", :target "letter2", :attr-name "visible", :attr-value false}
+                                            {:type "set-attribute", :target "letter3", :attr-name "visible", :attr-value false}]},
                  :letters-show
                                     {:type "parallel",
                                      :data
-                                           [{:type "set-attribute", :target "letter1", :attr-name "type", :attr-value "text"}
-                                            {:type "set-attribute", :target "letter2", :attr-name "type", :attr-value "text"}
-                                            {:type "set-attribute", :target "letter3", :attr-name "type", :attr-value "text"}]},
+                                           [{:type "set-attribute", :target "letter1", :attr-name "visible", :attr-value true}
+                                            {:type "set-attribute", :target "letter2", :attr-name "visible", :attr-value true}
+                                            {:type "set-attribute", :target "letter3", :attr-name "visible", :attr-value true}]},
                  :mari-flies-to-hat {:type "transition", :to {:x 1075, :y 445, :loop false, :duration 1.5}, :transition-id "mari"},
                  :mari-init-wand    {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
                  :mari-says-correct-answer

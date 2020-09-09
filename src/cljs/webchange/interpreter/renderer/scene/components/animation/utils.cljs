@@ -99,8 +99,28 @@
        (.setSlotsToSetupPose skeleton)
        (.apply animation-state skeleton)
        (.updateWorldTransform skeleton)
-       (.hackTextureBySlotIndex spine-object slot-index texture)
+       (.hackTextureBySlotIndex spine-object slot-index texture) ;; ToDo: https://trello.com/c/zCet3flh
        (.update spine-object 0)))))
+
+(defn- reset-hacks
+  [skeleton]
+  (doseq [slot (.-slots skeleton)]
+    (aset slot "hackAttachment" (clj->js nil))
+    (aset slot "hackRegion" (clj->js nil))))
+
+(defn set-skin
+  [spine-object skin-name]
+  (when-not (has-skin? spine-object skin-name)
+    (-> (str "Can not set skin <" skin-name ">: Skin does not exist") js/Error. throw))
+
+  (doto (get-skeleton spine-object)
+    (reset-hacks) ;; ToDo: Remove it. See https://trello.com/c/zCet3flh
+    (.setSkinByName skin-name)
+    (.setSlotsToSetupPose))
+  ;; ToDo:  Update animation skin after setting skin by name.
+  ;;        Currently update works but skin is probably spoiled by set-animation-slot method
+  ;;        See https://trello.com/c/zCet3flh
+  (.update spine-object 0))
 
 (defn add-animation
   ([spine-object animation-name]
@@ -136,17 +156,6 @@
                                                    params)]
      (-> (.-state spine-object)
          (.setEmptyAnimation track-index mix-duration)))))
-
-(defn set-skin
-  [spine-object skin-name]
-  (when-not (has-skin? spine-object skin-name)
-    (-> (str "Can not set skin <" skin-name ">: Skin does not exist") js/Error. throw))
-  (doto (.-skeleton spine-object)
-    (.setSkinByName skin-name)
-    (.setToSetupPose))
-  ;; ToDo:  Update animation skin after setting skin by name.
-  ;;        Currently update works but skin is probably spoiled by set-animation-slot method
-  (.update spine-object 0))
 
 (defn set-animation-speed
   [spine-object animation-speed]

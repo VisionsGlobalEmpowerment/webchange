@@ -9,6 +9,11 @@
                    :type             type
                    :object           container
                    :set-slot         (fn [slot-name image-src slot-params]
+                                       ;; ToDo: Remove double set-animation-slot call
+                                       ;; Without this slot is not updated if new skin is created inside the method
+                                       ;; If do no crete new skin and hack current skin, then updated slot has incorrect size
+                                       ;; See https://trello.com/c/zCet3flh
+                                       (utils/set-animation-slot image-src spine-object slot-name slot-params)
                                        (utils/set-animation-slot image-src spine-object slot-name slot-params))
                    :set-skin         (fn [skin-name]
                                        (utils/set-skin spine-object skin-name))
