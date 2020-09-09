@@ -15,7 +15,7 @@
                     :font-size       {:default 12}
                     :fill            {:default "#000000"}
                     :shadow-color    {}
-                    :shadow-distance {}
+                    :shadow-distance {:default 5}
                     :shadow-blur     {}
                     :shadow-opacity  {}
                     :scale           {:default {:x 1 :y 1}}
