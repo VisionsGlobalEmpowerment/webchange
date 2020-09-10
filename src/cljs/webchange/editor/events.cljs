@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.subs :as subs]
     [webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
     [webchange.editor.common.actions.events :as actions.events]
@@ -133,6 +134,12 @@
   ::select-object
   (fn [{:keys [db]} [_ scene-id name]]
     {:db (assoc-in db [:editor :selected-object] {:scene-id scene-id :name name})}))
+
+(re-frame/reg-event-fx
+  ::select-current-scene-object
+  (fn [{:keys [db]} [_ name]]
+    (let [scene-id (subs/current-scene db)]
+     {:db (assoc-in db [:editor :selected-object] {:scene-id scene-id :name name})})))
 
 (re-frame/reg-event-fx
   ::reset-scene-action

@@ -25,7 +25,7 @@
 (def component-type "background")
 
 (defn create
-  [parent {:keys [type object-name] :as props}]
+  [{:keys [parent type object-name] :as props}]
   (let [image (create-sprite props)]
     (.addChild parent image)
     (wrap type object-name image)))

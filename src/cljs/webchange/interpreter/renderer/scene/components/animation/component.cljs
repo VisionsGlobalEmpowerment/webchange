@@ -48,7 +48,7 @@
 (def component-type "animation")
 
 (defn create
-  [parent {:keys [name on-click on-mount ref type] :as props}]
+  [{:keys [parent name on-click on-mount ref type] :as props}]
   (let [resource (resources/get-resource name)]
     (when (nil? resource)
       (-> (str "Resource for animation <" name "> is not defined") js/Error. throw))

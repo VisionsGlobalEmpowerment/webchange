@@ -44,7 +44,7 @@
 (def component-type "svg-path")
 
 (defn create
-  [parent {:keys [type object-name group-name] :as props}]
+  [{:keys [parent type object-name group-name] :as props}]
   (let [container (create-container props)
         {:keys [sprite texture canvas-context]} (create-graphics props)
         wrapped-container (wrap type object-name group-name container texture canvas-context)]

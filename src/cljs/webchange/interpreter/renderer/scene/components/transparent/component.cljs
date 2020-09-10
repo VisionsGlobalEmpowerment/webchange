@@ -31,7 +31,7 @@
 (def component-type "transparent")
 
 (defn create
-  [parent {:keys [type object-name on-click ref] :as props}]
+  [{:keys [parent type object-name on-click ref] :as props}]
   (let [container (create-container props)
         sprite (create-sprite props)
         wrapped-container (wrap type object-name container)]

@@ -45,15 +45,18 @@
        :component-did-mount
                      (fn [this]
                        (re-frame/dispatch [::state/init])
-                       (let [{:keys [on-ready viewport objects]} (r/props this)
+                       (let [{:keys [mode on-ready viewport objects]} (r/props this)
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))
-                         (create-component (.-stage app) {:type        "group"
-                                                          :object-name :scene
-                                                          :children    objects})
-                         (create-overlays {:parent   (.-stage app)
-                                           :viewport viewport})
-                         (on-ready)))
+                         (print "> Scene mode" mode)
+                         (create-component mode {:type        "group"
+                                                 :object-name :scene
+                                                 :parent      (.-stage app)
+                                                 :children    objects})
+                         (when-not (= mode "editor")
+                           (create-overlays {:parent   (.-stage app)
+                                             :viewport viewport})
+                           (on-ready))))
 
        :should-component-update
                      (fn [] false)

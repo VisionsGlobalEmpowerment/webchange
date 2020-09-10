@@ -15,7 +15,7 @@
                     :text-shadow         {:default 0xba4f02}
                     :text-shadow-offset  {:default 5}
                     :text-shadow-blur    {:default 5}
-                    :text-shadow-opacity { :default 0.8}
+                    :text-shadow-opacity {:default 0.8}
                     :background-color    {:default 0xff9000}
                     :border-radius       {:default 50}
                     :padding-top         {:default 8}
@@ -64,11 +64,11 @@
 (def component-type "button")
 
 (defn create
-  [parent {:keys [on-click padding-left padding-right padding-top padding-bottom object-name type] :as props}]
+  [{:keys [parent on-click padding-left padding-right padding-top padding-bottom object-name type] :as props}]
   (let [text (create-text props)
         text-size (utils/get-size text)
         button-size {:width  (+ padding-left (:width text-size) padding-right)
-                       :height (+ padding-top (:height text-size) padding-bottom)}
+                     :height (+ padding-top (:height text-size) padding-bottom)}
         mask (create-mask (merge button-size props))
         sprite (create-sprite (merge button-size props))
         container (create-container props)]

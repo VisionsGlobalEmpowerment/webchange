@@ -18,6 +18,7 @@
                    :left     0
                    :width    width
                    :height   height}}
-     [i/stage-wrapper {:scene-id      scene-id
+     [i/stage-wrapper {:mode          "editor"
+                       :scene-id      scene-id
                        :scene-data    scene-data
                        :dataset-items dataset-items}]]))

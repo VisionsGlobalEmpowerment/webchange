@@ -53,7 +53,8 @@
                   :skin       "qwestion",
                   :start      true,
                   :states     {:default {:visible false}, :visible {:visible true}},
-                  :visible    false},
+                  :visible    false,
+                  :editable?  true},
                  :box2
                  {:type       "animation",
                   :x          955,
@@ -71,7 +72,8 @@
                   :skin       "qwestion",
                   :start      true,
                   :states     {:default {:visible false}, :visible {:visible true}},
-                  :visible    false},
+                  :visible    false,
+                  :editable?  true},
                  :box3
                  {:type       "animation",
                   :x          1405,
@@ -89,7 +91,8 @@
                   :skin       "qwestion",
                   :start      true,
                   :states     {:default {:visible false}, :visible {:visible true}},
-                  :visible    false},
+                  :visible    false,
+                  :editable?  true},
                  :door
                  {:type       "image",
                   :x          1096,
@@ -136,7 +139,8 @@
                   :anim    "idle",
                   :name    "senoravaca",
                   :skin    "vaca",
-                  :start   true},
+                  :start   true,
+                  :editable? true},
                  :vera
                  {:type   "animation",
                   :x      1128,
@@ -147,7 +151,8 @@
                   :anim   "idle",
                   :name   "vera",
                   :skin   "01 Vera_1",
-                  :start  true}},
+                  :start  true,
+                  :editable? true}},
  :scene-objects [["layered-background" "door"] ["vera" "senora-vaca" "mari" "door-trigger" "box1" "box2" "box3"]],
  :actions
                 {:audio-correct                    {:type "audio", :id "/raw/audio/effects/correct.mp3", :start 0, :duration 1.71},

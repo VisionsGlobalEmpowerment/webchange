@@ -64,7 +64,7 @@
 (def component-type "painting-area")
 
 (defn create
-  [parent {:keys [type object-name tool color] :as props}]
+  [{:keys [parent type object-name tool color] :as props}]
   (let [container (create-container props)
         texture (create-render-texture props)
         color (atom color)

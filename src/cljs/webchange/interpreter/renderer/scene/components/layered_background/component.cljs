@@ -5,15 +5,15 @@
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.scene.components.layered-background.wrapper :refer [wrap]]))
 
-(def default-props {:name    {}
+(def default-props {:name       {}
                     :background {:default nil}
                     :decoration {:default nil}
-                    :surface {:default nil}
-                    :filters {:default []}})
+                    :surface    {:default nil}
+                    :filters    {:default []}})
 
 (defn- create-container
   [{:keys [name]}]
-  (doto  (Container.)
+  (doto (Container.)
     (aset "name" (str name "-sprite-container"))))
 
 (defn- create-sprite
@@ -32,7 +32,7 @@
 (def component-type "layered-background")
 
 (defn create
-  [parent {:keys [type object-name] :as props}]
+  [{:keys [parent type object-name] :as props}]
   (let [container (create-container props)]
     (if-let [background (create-sprite :background props)]
       (.addChild container background))

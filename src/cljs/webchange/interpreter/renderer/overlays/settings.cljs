@@ -81,13 +81,13 @@
 
 (defn create-settings-overlay
   [{:keys [parent viewport]}]
-  (create-component parent {:type        "group"
-                            :parent      parent
-                            :object-name :settings-overlay
-                            :visible     false
-                            :children    [{:type        "image"
-                                           :src         "/raw/img/bg.jpg"
-                                           :object-name :settings-background}
-                                          (get-close-button {:menu-padding {:x 20 :y 20}
-                                                             :viewport     viewport})
-                                          (get-settings-block {:x 580 :y 345})]}))
+  (create-component {:type        "group"
+                     :parent      parent
+                     :object-name :settings-overlay
+                     :visible     false
+                     :children    [{:type        "image"
+                                    :src         "/raw/img/bg.jpg"
+                                    :object-name :settings-background}
+                                   (get-close-button {:menu-padding {:x 20 :y 20}
+                                                      :viewport     viewport})
+                                   (get-settings-block {:x 580 :y 345})]}))

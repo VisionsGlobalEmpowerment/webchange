@@ -107,3 +107,15 @@ Set public and upload folders path in profiles `env`:
     # Example:
     $ lein run merge-scene-info spanish home-stored home actions
     ```
+
+### Resources
+
+- **Load skins**
+    ```
+    $ lein run update-character-skins
+    ```
+
+- **Load backgrounds** Background files should be placed in `/raw/clipart`
+    ```
+    $ lein run update-editor-assets
+    ```

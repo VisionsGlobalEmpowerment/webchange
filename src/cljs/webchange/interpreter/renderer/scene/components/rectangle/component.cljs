@@ -46,7 +46,7 @@
 (def component-type "rectangle")
 
 (defn create
-  [parent {:keys [type object-name] :as props}]
+  [{:keys [parent type object-name] :as props}]
   (let [mask (create-mask props)
         sprite (create-sprite props)
         container (create-container props)]

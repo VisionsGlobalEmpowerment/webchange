@@ -60,9 +60,10 @@
         (re-frame/dispatch [::ie/trigger :start])))))
 
 (defn stage-wrapper
-  [{:keys [scene-id scene-data dataset-items]}]
+  [{:keys [mode scene-id scene-data dataset-items]}]
   ^{:key scene-id}
-  [stage {:scene-data     (get-scene-data scene-id scene-data dataset-items)
+  [stage {:mode           mode
+          :scene-data     (get-scene-data scene-id scene-data dataset-items)
           :on-ready       start-triggers
           :on-start-click start-scene}])
 

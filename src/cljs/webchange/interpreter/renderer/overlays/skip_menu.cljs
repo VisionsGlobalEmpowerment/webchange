@@ -20,8 +20,8 @@
                                                    :horizontal "center"
                                                    :object     skip-button-size
                                                    :padding    menu-padding}))]
-    (create-component parent {:type        "group"
-                              :parent      parent
-                              :object-name :skip-menu
-                              :visible     false
-                              :children    [skip-button]})))
+    (create-component {:type        "group"
+                       :parent      parent
+                       :object-name :skip-menu
+                       :visible     false
+                       :children    [skip-button]})))

@@ -46,7 +46,7 @@
 (def component-type "image")
 
 (defn create
-  [parent {:keys [type on-click ref object-name] :as props}]
+  [{:keys [parent type on-click ref object-name] :as props}]
   (let [image (create-sprite props)
         image-container (create-sprite-container props)
         wrapped-image (wrap type object-name image-container image)]

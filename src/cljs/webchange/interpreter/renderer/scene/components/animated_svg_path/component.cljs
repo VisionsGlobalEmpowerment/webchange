@@ -47,7 +47,7 @@
 (def component-type "animated-svg-path")
 
 (defn create
-  [parent {:keys [type object-name group-name] :as props}]
+  [{:keys [parent type object-name group-name] :as props}]
   (let [container (create-container props)
         state (create-state props)
         wrapped-container (wrap type object-name group-name container state)]

@@ -19,7 +19,7 @@
 (def component-type "group")
 
 (defn create
-  [parent {:keys [type ref on-click] :as props}]
+  [{:keys [parent type ref on-click] :as props}]
   (let [group (create-container props)
         wrapped-group (wrap type (:object-name props) group)]
 

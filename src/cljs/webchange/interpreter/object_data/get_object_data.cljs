@@ -141,7 +141,7 @@
                       ;(throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined")))
                       )]
     (-> object-data
-        (filter-extra-props [:actions :states :scene-name :transition]))))
+        (filter-extra-props [:actions :states :scene-name :transition :filter-transition]))))
 
 (defn get-object-data
   ([scene-id name]

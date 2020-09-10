@@ -46,20 +46,23 @@
                        (let [{:keys [scene-data]} (r/props this)]
                          (init-scene scene-data current-scene-data loading)))
        :reagent-render
-                     (fn [{:keys [on-ready on-start-click]}]
+                     (fn [{:keys [mode on-ready on-start-click]}]
                        (let [viewport (-> (element->viewport @container)
                                           (get-stage-params))]
                          [:div {:ref   #(when % (reset! container (.-parentNode %)))
                                 :style {:width  "100%"
                                         :height "100%"}}
                           (when (and (:done @loading)
-                                     (:started? @current-scene-data))
-                            [scene {:objects  (:objects @current-scene-data)
+                                     (or (= mode "editor")
+                                         (:started? @current-scene-data)))
+                            [scene {:mode     mode
+                                    :objects  (:objects @current-scene-data)
                                     :viewport viewport
                                     :on-ready on-ready
                                     :started? (:started? @current-scene-data)}])
                           (when (or (not (:done @loading))
-                                    (not (:started? @current-scene-data)))
+                                    (and (not (:started? @current-scene-data))
+                                         (not= mode "editor")))
                             (let [scale-x (:scale-x viewport)
                                   scale-y (:scale-y viewport)
                                   translate-x (* -100 (- (/ 1 (* 2 scale-x)) 0.5))

@@ -348,9 +348,9 @@
     (let [{:keys [animated-svg-path-start animated-svg-path-stop animated-svg-path-reset]} (scene/get-scene-object db (keyword target))
           on-end #(ce/dispatch-success-fn action)]
       (case state
-            "play" (animated-svg-path-start on-end)
-            "reset" (do (animated-svg-path-reset)
-                        (on-end)))
+        "play" (animated-svg-path-start on-end)
+        "reset" (do (animated-svg-path-reset)
+                    (on-end)))
 
       (ce/register-flow-remove-handler! flow-id animated-svg-path-stop)
       {})))
@@ -976,8 +976,8 @@
       (let [propagated-object-wrapper (->> (keyword object-to-propagate)
                                            (scene/get-scene-object db))]
         (doseq [object-name (map keyword scene-objects)]
-          (create-component (:container propagated-object-wrapper)
-                            (get-object-data scene-id object-name objects)))
+          (create-component (merge (get-object-data scene-id object-name objects)
+                                   {:parent (:container propagated-object-wrapper)})))
         ;; Assigning propagated objects to db is needed for :execute-state work
         {:db       (-> db
                        (update-in [:scenes scene-id :objects] merge objects)

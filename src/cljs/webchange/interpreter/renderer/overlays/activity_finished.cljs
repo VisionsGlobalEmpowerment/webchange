@@ -185,32 +185,32 @@
                                                       :horizontal "center"
                                                       :object     score-window-size})
         title-width 553]
-    (create-component parent {:type        "group"
-                              :parent      parent
-                              :object-name :activity-finished-overlay
-                              :visible     false
-                              :children    [(get-background (merge score-window-position
-                                                                   score-window-size))
-                                            (get-top-menu {:viewport       viewport
-                                                           :on-close-click close-screen})
-                                            (get-title (merge {:y (:y score-window-position)}
-                                                              (utils/get-coordinates {:viewport   viewport
-                                                                                      :horizontal "center"
-                                                                                      :object     title-width})))
-                                            (get-vera {:x (+ (:x score-window-position)
-                                                             (/ (:width score-window-size) 4))
-                                                       :y (+ (:y score-window-position)
-                                                             (:height score-window-size))})
-                                            (get-overall-progress {:x     (+ (:x score-window-position) 65)
-                                                                   :y     (+ (:y score-window-position) 120)
-                                                                   :width (- (/ (:width score-window-size) 2) 130)})
-                                            (get-featured-content {:x        (+ (:x score-window-position)
-                                                                                (/ (:width score-window-size) 2)
-                                                                                65)
-                                                                   :y        (+ (:y score-window-position) 120)
-                                                                   :on-click go-to-next-activity})
-                                            (get-menu {:x                (+ (:x score-window-position) 20)
-                                                       :y                (+ (:y score-window-position)
-                                                                            (:height score-window-size) 10)
-                                                       :on-restart-click restart-activity
-                                                       :on-next-click    continue-playing})]})))
+    (create-component {:type        "group"
+                       :parent      parent
+                       :object-name :activity-finished-overlay
+                       :visible     false
+                       :children    [(get-background (merge score-window-position
+                                                            score-window-size))
+                                     (get-top-menu {:viewport       viewport
+                                                    :on-close-click close-screen})
+                                     (get-title (merge {:y (:y score-window-position)}
+                                                       (utils/get-coordinates {:viewport   viewport
+                                                                               :horizontal "center"
+                                                                               :object     title-width})))
+                                     (get-vera {:x (+ (:x score-window-position)
+                                                      (/ (:width score-window-size) 4))
+                                                :y (+ (:y score-window-position)
+                                                      (:height score-window-size))})
+                                     (get-overall-progress {:x     (+ (:x score-window-position) 65)
+                                                            :y     (+ (:y score-window-position) 120)
+                                                            :width (- (/ (:width score-window-size) 2) 130)})
+                                     (get-featured-content {:x        (+ (:x score-window-position)
+                                                                         (/ (:width score-window-size) 2)
+                                                                         65)
+                                                            :y        (+ (:y score-window-position) 120)
+                                                            :on-click go-to-next-activity})
+                                     (get-menu {:x                (+ (:x score-window-position) 20)
+                                                :y                (+ (:y score-window-position)
+                                                                     (:height score-window-size) 10)
+                                                :on-restart-click restart-activity
+                                                :on-next-click    continue-playing})]})))

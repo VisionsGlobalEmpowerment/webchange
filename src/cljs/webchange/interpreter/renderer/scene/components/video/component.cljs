@@ -28,7 +28,7 @@
 (def component-type "video")
 
 (defn create
-  [parent {:keys [type object-name] :as props}]
+  [{:keys [parent type object-name] :as props}]
   (let [sprite (create-sprite props)]
     (.addChild parent sprite)
     (wrap type object-name sprite)))

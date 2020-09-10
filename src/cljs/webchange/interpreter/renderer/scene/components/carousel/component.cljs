@@ -72,7 +72,7 @@
         nil))))
 
 (defn create
-  [parent {:keys [type object-name] :as props}]
+  [{:keys [parent type object-name] :as props}]
   (let [container (create-container props)
         first (create-sprite :first props)
         last (create-sprite :last props)

@@ -106,7 +106,7 @@
 (def component-type "text")
 
 (defn create
-  [parent {:keys [type object-name chunks on-click ref] :as props}]
+  [{:keys [parent type object-name chunks on-click ref] :as props}]
   (if chunks
     (let [{:keys [text-container chunks]} (create-chunked-text props)
           wrapped-text (wrap type object-name text-container chunks)]

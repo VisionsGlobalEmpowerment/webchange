@@ -42,7 +42,7 @@
                                                     :horizontal "right"
                                                     :object     (get-in utils/common-elements [:close-button :size])
                                                     :padding    menu-padding}))]
-    (create-component parent {:type        "group"
-                              :parent      parent
-                              :object-name :navigation-menu
-                              :children    [back-button settings-button close-button]})))
+    (create-component {:type        "group"
+                       :parent      parent
+                       :object-name :navigation-menu
+                       :children    [back-button settings-button close-button]})))

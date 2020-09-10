@@ -4,7 +4,7 @@
     [clojure.string :refer [capitalize]]
     [webchange.logger :as logger]))
 
-(def skip-check-props [:object-name :group-name :parent :children :type])
+(def skip-check-props [:object-name :group-name :parent :children :type :editable?])
 
 (defn- check-extra-props
   [entity-id current-props default-props exclude-prop-names]

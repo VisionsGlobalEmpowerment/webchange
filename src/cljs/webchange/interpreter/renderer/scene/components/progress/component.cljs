@@ -66,7 +66,7 @@
 (def component-type "progress")
 
 (defn create
-  [parent {:keys [type object-name width] :as props}]
+  [{:keys [parent type object-name width] :as props}]
   (let [container (create-container props)
         background (create-background props)
         foreground (create-foreground (merge props {:background-mask (:mask background)}))

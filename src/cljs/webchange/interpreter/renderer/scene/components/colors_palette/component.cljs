@@ -55,7 +55,7 @@
 (def component-type "colors-palette")
 
 (defn create
-  [parent {:keys [type object-name width height colors on-change] :as props}]
+  [{:keys [parent type object-name width height colors on-change] :as props}]
   (let [padding 10
         idx->params (fn [idx] {:x     0
                                :y     (* idx (+ width padding))

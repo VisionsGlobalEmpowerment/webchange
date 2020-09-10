@@ -73,36 +73,35 @@
 (def component-type "slider")
 
 (defn create
-  [parent props]
-  (let [{:keys [type object-name value]} props]
-    (let [state (atom {:value      0
-                       :touched?   false
-                       :container  nil
-                       :background nil
-                       :foreground nil
-                       :on-change  #()})
-          set-value (let [{:keys [min-value max-value on-change]} props]
-                      (swap! state assoc :on-change (fn [value] (on-change (+ min-value (* value (- max-value min-value))))))
-                      (partial (fn [min-value max-value state value]
-                                 (swap! state assoc :value (-> value
-                                                               (/ (- max-value min-value))
-                                                               (Math/min 1)
-                                                               (Math/max 0)))
-                                 (update-value state))
-                               min-value max-value state))
+  [{:keys [parent type object-name value] :as props}]
+  (let [state (atom {:value      0
+                     :touched?   false
+                     :container  nil
+                     :background nil
+                     :foreground nil
+                     :on-change  #()})
+        set-value (let [{:keys [min-value max-value on-change]} props]
+                    (swap! state assoc :on-change (fn [value] (on-change (+ min-value (* value (- max-value min-value))))))
+                    (partial (fn [min-value max-value state value]
+                               (swap! state assoc :value (-> value
+                                                             (/ (- max-value min-value))
+                                                             (Math/min 1)
+                                                             (Math/max 0)))
+                               (update-value state))
+                             min-value max-value state))
 
-          container (create-container props)
-          background (create-background props state)
-          foreground (create-foreground props)
+        container (create-container props)
+        background (create-background props state)
+        foreground (create-foreground props)
 
-          wrapped-slider (wrap type object-name container set-value)]
-      (swap! state assoc :container container)
-      (swap! state assoc :background background)
-      (swap! state assoc :foreground foreground)
-      (set-value value)
+        wrapped-slider (wrap type object-name container set-value)]
+    (swap! state assoc :container container)
+    (swap! state assoc :background background)
+    (swap! state assoc :foreground foreground)
+    (set-value value)
 
-      (.addChild container background)
-      (.addChild container foreground)
-      (.addChild parent container)
+    (.addChild container background)
+    (.addChild container foreground)
+    (.addChild parent container)
 
-      wrapped-slider)))
+    wrapped-slider))
