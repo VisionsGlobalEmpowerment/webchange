@@ -45,17 +45,12 @@
        :component-did-mount
                      (fn [this]
                        (re-frame/dispatch [::state/init])
-
-                       (print "SCENE MOUNT")
-
                        (let [{:keys [on-ready viewport objects]} (r/props this)
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))
-
                          (create-component (.-stage app) {:type        "group"
                                                           :object-name :scene
                                                           :children    objects})
-
                          (create-overlays {:parent   (.-stage app)
                                            :viewport viewport})
                          (on-ready)))

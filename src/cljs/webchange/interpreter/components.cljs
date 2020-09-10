@@ -35,14 +35,13 @@
 
 
 (defn- get-scene-data
-  [scene-id scene-data scene-objects dataset-items]
+  [scene-id scene-data dataset-items]
   (cond
     (nil? scene-id) nil
-    (empty? scene-objects) nil
     (empty? scene-data) nil
     (empty? dataset-items) nil                              ;; ToDo: actually do not stat scene until datasets are loaded
     :else {:scene-id  scene-id
-           :objects   (get-scene-objects-data scene-id scene-objects)
+           :objects   (get-scene-objects-data scene-id (:scene-objects scene-data))
            :resources (get-scene-resources scene-id scene-data)
            :started?  (scene-started? scene-id)}))
 
@@ -53,7 +52,7 @@
   (re-frame/dispatch [::ie/start-playing]))
 
 (defn- start-triggers
-  [scene-id]
+  []
   (let [status (vars.core/get-variable "status")]
     (if (not= status :running)
       (do
@@ -61,22 +60,23 @@
         (re-frame/dispatch [::ie/trigger :start])))))
 
 (defn stage-wrapper
-  [{:keys [scene-id]}]
-  (let [scene-data @(re-frame/subscribe [::subs/scene scene-id])
-        scene-objects @(re-frame/subscribe [::subs/scene-objects scene-id])
-        dataset-items @(re-frame/subscribe [::isubs/dataset-items])]
-    ^{:key scene-id}
-    [stage {:scene-data     (get-scene-data scene-id scene-data scene-objects dataset-items)
-            :on-ready       #(start-triggers scene-id)
-            :on-start-click start-scene}]))
+  [{:keys [scene-id scene-data dataset-items]}]
+  ^{:key scene-id}
+  [stage {:scene-data     (get-scene-data scene-id scene-data dataset-items)
+          :on-ready       start-triggers
+          :on-start-click start-scene}])
 
 (defn course
   [_]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
+  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+        scene-data @(re-frame/subscribe [::subs/scene scene-id])
+        dataset-items @(re-frame/subscribe [::isubs/dataset-items])]
     [:div {:style {:position "fixed"
                    :top      0
                    :left     0
                    :width    "100%"
                    :height   "100%"}}
      [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-     [stage-wrapper {:scene-id scene-id}]]))
+     [stage-wrapper {:scene-id      scene-id
+                     :scene-data    scene-data
+                     :dataset-items dataset-items}]]))

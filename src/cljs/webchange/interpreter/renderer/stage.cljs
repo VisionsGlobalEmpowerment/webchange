@@ -1,25 +1,20 @@
 (ns webchange.interpreter.renderer.stage
   (:require
-    [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.interpreter.renderer.pixi :refer [Loader]]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
     [webchange.interpreter.renderer.resources :as resources]
-    [webchange.subs :as subs]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
 
 (defn- init-scene
   [new-scene-data current-scene-data loading]
-  (print "Init scene")
-  (print "new-scene-data" new-scene-data)
-
   (when (and (not (nil? new-scene-data))
              (not= new-scene-data @current-scene-data))
     (reset! current-scene-data new-scene-data)
     (reset! loading {:done false :progress 0})
 
-    (print "Resources" (:resources @current-scene-data))
+    (print "> Init scene")
     (resources/load-resources (:resources @current-scene-data)
                               {:on-complete #(swap! loading assoc :done true)
                                :on-progress #(swap! loading assoc :progress %)})))
