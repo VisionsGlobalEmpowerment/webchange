@@ -20,7 +20,9 @@
                      :padding-bottom "30px"}
    :data-container  {:flex-grow 0
                      :width     "300px"}
-   :scene-container {:flex-grow 1}})
+   :scene-container {:flex-grow       1
+                     :display         "flex"
+                     :justify-content "center"}})
 
 (defn scenes-list
   []
@@ -37,7 +39,7 @@
          [ui/list-item-text {:primary (:text scene)}]
          [ui/list-item-secondary-action
           [ui/icon-button {:aria-label "Edit"
-                           :on-click #(redirect-to :course-editor-v2-scene :id course :scene-id (:value scene)) }
+                           :on-click   #(redirect-to :course-editor-v2-scene :id course :scene-id (:value scene))}
            [ic/edit {:style (:action-icon list-styles)}]]]])]]))
 
 (defn scene-translate

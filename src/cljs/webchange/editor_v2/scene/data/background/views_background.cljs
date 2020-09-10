@@ -43,17 +43,9 @@
 (defn change-background
   []
   (let [handle-click (fn [] (re-frame/dispatch [::background/open-window]))]
-    [:<>
-     [ui/form-control {:full-width true
+    [ui/form-control {:full-width true
                       :margin     "normal"}
      [ui/button
       {:on-click handle-click}
       "Change Background"]
-     [change-background-window]]
-     [ui/form-control {:full-width true
-                      :margin     "normal"}
-     [ui/button
-      {:on-click handle-click}
-      "Change Background"]
-     [change-background-window]]]
-    ))
+     [change-background-window]]))

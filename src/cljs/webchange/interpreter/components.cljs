@@ -5,8 +5,6 @@
     [webchange.subs :as subs]
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.events :as ie]
-    [webchange.interpreter.variables.subs :as vars.subs]
-    [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.interpreter.scene-resources-parser :refer [get-scene-resources]]
     [webchange.interpreter.renderer.stage :refer [stage]]
@@ -62,7 +60,7 @@
         (vars.core/set-variable! "status" :running)
         (re-frame/dispatch [::ie/trigger :start])))))
 
-(defn- stage-wrapper
+(defn stage-wrapper
   [{:keys [scene-id]}]
   (let [scene-data @(re-frame/subscribe [::subs/scene scene-id])
         scene-objects @(re-frame/subscribe [::subs/scene-objects scene-id])
@@ -75,4 +73,10 @@
 (defn course
   [_]
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])]
-    [stage-wrapper {:scene-id scene-id}]))
+    [:div {:style {:position "fixed"
+                   :top      0
+                   :left     0
+                   :width    "100%"
+                   :height   "100%"}}
+     [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
+     [stage-wrapper {:scene-id scene-id}]]))
