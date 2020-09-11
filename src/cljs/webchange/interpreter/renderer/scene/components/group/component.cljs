@@ -23,9 +23,9 @@
   (let [group (create-container props)
         wrapped-group (wrap type (:object-name props) group)]
 
+    (.addChild parent group)
+
     (when-not (nil? on-click) (utils/set-handler group "click" on-click))
     (when-not (nil? ref) (ref wrapped-group))
-
-    (.addChild parent group)
 
     wrapped-group))

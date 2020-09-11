@@ -51,10 +51,10 @@
         image-container (create-sprite-container props)
         wrapped-image (wrap type object-name image-container image)]
 
-    (when-not (nil? on-click) (set-handler image "click" on-click))
-    (when-not (nil? ref) (ref wrapped-image))
-
     (.addChild image-container image)
     (.addChild parent image-container)
+
+    (when-not (nil? on-click) (set-handler image "click" on-click))
+    (when-not (nil? ref) (ref wrapped-image))
 
     wrapped-image))

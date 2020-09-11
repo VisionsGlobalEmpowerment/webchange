@@ -56,12 +56,12 @@
           animation-container (create-animation-container props)
           wrapped-animation (wrap type (:object-name props) animation-container animation)]
 
+      (.addChild animation-container animation)
+      (.addChild parent animation-container)
+
       (when-not (nil? on-click) (set-handler animation "click" on-click))
       (when-not (nil? on-mount) (on-mount wrapped-animation))
       (when-not (nil? ref) (ref wrapped-animation))
-
-      (.addChild animation-container animation)
-      (.addChild parent animation-container)
 
       (-> animation
           (.update 0))

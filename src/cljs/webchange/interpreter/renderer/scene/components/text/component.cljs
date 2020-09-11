@@ -118,9 +118,9 @@
     (let [text (create-text props)
           wrapped-text (wrap type object-name text nil)]
 
+      (.addChild parent text)
+
       (when-not (nil? on-click) (utils/set-handler text "click" on-click))
       (when-not (nil? ref) (ref wrapped-text))
-
-      (.addChild parent text)
 
       wrapped-text)))
