@@ -32,8 +32,10 @@
 
 (defn get-scene-object
   [db name]
-  (let [objects @(get-in db (path-to-db [:objects]))]
-    (get objects name)))
+  (if-not (nil? name)
+    (let [objects @(get-in db (path-to-db [:objects]))]
+      (get objects name))
+    nil))
 
 (defn get-scene-group
   [db group-name]

@@ -6,6 +6,7 @@
     [webchange.subs :as subs]
     ;[webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
+    [webchange.interpreter.renderer.state.editor :as scene]
     [webchange.editor.common.actions.events :as actions.events]
     [webchange.interpreter.variables.events :as vars.events]))
 
@@ -139,8 +140,10 @@
 (re-frame/reg-event-fx
   ::select-current-scene-object
   (fn [{:keys [db]} [_ name]]
-    (let [scene-id (subs/current-scene db)]
-     {:db (assoc-in db [:editor :selected-object] {:scene-id scene-id :name name})})))
+    (let [scene-id (subs/current-scene db)
+          current-object (get-in db [:editor :selected-object :name])]
+      {:db       (assoc-in db [:editor :selected-object] {:scene-id scene-id :name name})
+       :dispatch [::scene/select-object current-object name]})))
 
 (re-frame/reg-event-fx
   ::reset-scene-action
