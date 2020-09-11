@@ -115,7 +115,7 @@ Set public and upload folders path in profiles `env`:
     $ lein run update-character-skins
     ```
 
-- **Load backgrounds** Background files should be placed in `/raw/clipart`
+- **Load backgrounds** Background files should be placed in `resources/public/raw/clipart`
     ```
     $ lein run update-editor-assets
     ```

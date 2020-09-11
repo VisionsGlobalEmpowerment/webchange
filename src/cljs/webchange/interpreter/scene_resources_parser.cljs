@@ -57,7 +57,7 @@
                    "background" (conj result (:src object-data))
                    "layered-background" (concat result [(get-in object-data [:background :src])
                                                         (get-in object-data [:decoration :src])
-                                                        (get-in object-data [:decoration :src])])
+                                                        (get-in object-data [:surface :src])])
                    "image" (conj result (:src object-data))
                    "animation" (let [animation-name (:name object-data)]
                                  (conj result [animation-name (get-animation-url animation-name)]))
