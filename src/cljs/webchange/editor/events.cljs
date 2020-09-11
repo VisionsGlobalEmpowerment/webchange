@@ -4,7 +4,7 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.subs :as subs]
-    [webchange.interpreter.events :as ie]
+    ;[webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
     [webchange.editor.common.actions.events :as actions.events]
     [webchange.interpreter.variables.events :as vars.events]))
@@ -12,8 +12,9 @@
 (re-frame/reg-event-fx
   ::init-editor
   (fn [_ [_ course-id scene-id]]
-    {:dispatch-n (list [::ie/start-course course-id scene-id]
-                       [::load-datasets])}))
+    {:dispatch-n (list
+                   ;[::ie/start-course course-id scene-id]
+                   [::load-datasets])}))
 
 (re-frame/reg-event-fx
   ::load-datasets
@@ -865,12 +866,13 @@
   ::select-current-scene
   (fn [{:keys [db]} [_ scene-id]]
     (if-not (nil? scene-id)
-      {:dispatch-n (list [::ie/set-current-scene scene-id]
-                         [::reset-asset]
-                         [::reset-object]
-                         [::reset-scene-action]
-                         [::reset-shown-form]
-                         [::set-main-content :editor])}
+      {:dispatch-n (list
+                     ;[::ie/set-current-scene scene-id]
+                     [::reset-asset]
+                     [::reset-object]
+                     [::reset-scene-action]
+                     [::reset-shown-form]
+                     [::set-main-content :editor])}
       {})))
 
 (re-frame/reg-event-fx

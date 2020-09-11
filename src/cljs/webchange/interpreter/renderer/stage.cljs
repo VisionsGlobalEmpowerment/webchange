@@ -13,8 +13,6 @@
              (not= new-scene-data @current-scene-data))
     (reset! current-scene-data new-scene-data)
     (reset! loading {:done false :progress 0})
-
-    (print "> Init scene")
     (resources/load-resources (:resources @current-scene-data)
                               {:on-complete #(swap! loading assoc :done true)
                                :on-progress #(swap! loading assoc :progress %)})))

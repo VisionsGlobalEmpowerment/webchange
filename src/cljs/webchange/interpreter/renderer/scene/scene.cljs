@@ -48,7 +48,6 @@
                        (let [{:keys [mode on-ready viewport objects]} (r/props this)
                              app (init-app viewport)]
                          (.appendChild @container (.-view app))
-                         (print "> Scene mode" mode)
                          (create-component mode {:type        "group"
                                                  :object-name :scene
                                                  :parent      (.-stage app)
