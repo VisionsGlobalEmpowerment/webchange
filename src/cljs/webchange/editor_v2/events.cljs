@@ -5,11 +5,13 @@
     [webchange.interpreter.events :as ie]
     [webchange.editor-v2.translator.state.window :as translator.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.translator.text.views :as translator.text]))
+    [webchange.editor-v2.translator.text.views :as translator.text]
+    [webchange.interpreter.renderer.resources :as resources]))
 
 (re-frame/reg-event-fx
   ::init-editor
   (fn [_ [_ course-id scene-id]]
+    (resources/reset-loader!)
     {:dispatch-n (list [::ie/start-course course-id scene-id]
                        [::load-lesson-sets course-id]
                        [::load-course-info course-id])}))

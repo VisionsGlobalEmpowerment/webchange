@@ -54,3 +54,8 @@
                       loader)))
                 @loader)
         (.load))))
+
+(defn reset-loader!
+  []
+  (when @loader
+    (.reset @loader)))
