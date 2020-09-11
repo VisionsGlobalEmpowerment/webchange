@@ -17,3 +17,7 @@
   [{id :template-id :as data}]
   (let [template (get-in @templates [id :template])]
     (template data)))
+
+(defn metadata-from-template
+  [{id :template-id}]
+  (get-in @templates [id :metadata]))

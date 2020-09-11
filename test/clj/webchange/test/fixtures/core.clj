@@ -34,6 +34,7 @@
   (db/clear-table :lesson_sets)
   (db/clear-table :dataset_items)
   (db/clear-table :datasets)
+  (db/clear-table :scene_skills)
   (db/clear-table :scene_versions)
   (db/clear-table :scenes)
   (db/clear-table :course_versions)

@@ -33,7 +33,7 @@
                           :on-change     #(swap! data assoc :lang (-> % .-target .-value))}]]
          [ui/grid {:item true :xs 7}
           [ui/input-label "Concept list"]
-          [ui/select {:value (:concept-list-id @data)
+          [ui/select {:value     (:concept-list-id @data)
                       :on-change #(swap! data assoc :concept-list-id (-> % .-target .-value))
                       :style     {:min-width "150px"}}
            (for [dataset datasets]
@@ -56,11 +56,91 @@
 
 (def animation-names ["senoravaca" "vera" "mari"])
 
+(defn- lookup
+  [key option data]
+  [ui/grid {:item true :xs 7}
+   [ui/input-label (:label option)]
+   [ui/select {:value     (get @data key)
+               :on-change #(swap! data assoc key (-> % .-target .-value))
+               :style     {:min-width "150px"}}
+    (for [{:keys [name value]} (:options option)]
+      ^{:key value}
+      [ui/menu-item {:value value} name])]])
+
+(defn- characters
+  [key option data]
+  (let [values (get @data key)]
+    (when (nil? values)
+      (swap! data assoc key []))
+    [ui/grid {:item true :xs 7}
+     [ui/input-label (:label option)]
+     (for [idx (range (:max option))]
+       (let [character (get values idx {})]
+         ^{:key idx}
+         [ui/grid {:container true}
+          [ui/grid {:item true}
+           [ui/text-field {:label     "Name"
+                           :variant   "outlined"
+                           :value     (:name character)
+                           :on-change #(swap! data assoc-in [key idx :name] (-> % .-target .-value))}]]
+          [ui/grid {:item true}
+           [ui/select {:value     (:skeleton character)
+                       :on-change #(swap! data assoc-in [key idx :skeleton] (-> % .-target .-value))
+                       :style     {:min-width "150px"}}
+            (for [animation-name animation-names]
+              ^{:key animation-name}
+              [ui/menu-item {:value animation-name} animation-name])]]]))]))
+
+(defn- option-info
+  [key option data]
+  (case (:type option)
+    "characters" [characters key option data]
+    "lookup" [lookup key option data]))
+
+(defn- template-info
+  [template data]
+  [ui/grid {:container   true
+            :justify     "space-between"
+            :spacing     24
+            :align-items "center"}
+   (for [[key option] (:options template)]
+     [option-info key option data])])
+
+(defn- render-selected
+  [selected]
+  (let [skills (->> @(re-frame/subscribe [::state-activity/skills])
+                    :skills
+                    (map (juxt :id identity))
+                    (into {}))
+        values (->> selected
+                    vals
+                    (map #(get skills %)))]
+    [ui/list
+     (for [value values]
+       [ui/list-item {:key (:id value)}
+        [ui/list-item-text {:primary (:name value)}]])]))
+
+(def react-render-selected (r/reactify-component render-selected))
+
+(defn- activity-skill-info
+  [data]
+  (let [skills (-> @(re-frame/subscribe [::state-activity/skills]) :skills)]
+    [ui/grid {:item true :xs 7}
+     [ui/input-label "Skills"]
+     [ui/select {:multiple true
+                 :render-value #(r/create-element react-render-selected %)
+                 :value     (:skills @data)
+                 :on-change #(swap! data assoc :skills (->> % .-target .-value))
+                 :style     {:min-width "150px"}}
+      (for [skill skills]
+        ^{:key (:id skill)}
+        [ui/menu-item {:value (:id skill)} (:name skill)])]]))
+
 (defn- activity-info
   [course-slug]
-  (r/with-let [data (r/atom {:characters [{} {}] :boxes 1})]
+  (r/with-let [data (r/atom {:skills []})]
     (let [templates @(re-frame/subscribe [::state-activity/templates])
-          skills @(re-frame/subscribe [::state-activity/skills])]
+          current-template (->> templates (filter #(= (:template-id @data) (:id %))) first)]
       [ui/card {:style {:margin      "12px"
                         :flex-shrink "0"}}
        [ui/card-content
@@ -74,40 +154,16 @@
                           :variant       "outlined"
                           :default-value (:name @data)
                           :on-change     #(swap! data assoc :name (-> % .-target .-value))}]]
+         [activity-skill-info data]
          [ui/grid {:item true :xs 7}
           [ui/input-label "Template"]
-          [ui/select {:value (:template-id @data)
+          [ui/select {:value     (or (:template-id @data) "")
                       :on-change #(swap! data assoc :template-id (-> % .-target .-value))
                       :style     {:min-width "150px"}}
            (for [template templates]
              ^{:key (:id template)}
              [ui/menu-item {:value (:id template)} (:name template)])]]
-         [ui/grid {:item true :xs 7}
-          [ui/input-label "Characters"]
-          (for [[idx character] (map-indexed vector (:characters @data))]
-            ^{:key idx}
-            [ui/grid {:container true}
-             (js/console.log idx character)
-             [ui/grid {:item true}
-              [ui/text-field {:label         "Name"
-                              :variant       "outlined"
-                              :value (:name character)
-                              :on-change     #(swap! data assoc-in [:characters idx :name] (-> % .-target .-value))}]]
-             [ui/grid {:item true}
-              [ui/select {:value (:skeleton character)
-                          :on-change #(swap! data assoc-in [:characters idx :skeleton] (-> % .-target .-value))
-                          :style     {:min-width "150px"}}
-               (for [animation-name animation-names]
-                 ^{:key animation-name}
-                 [ui/menu-item {:value animation-name} animation-name])]]])]
-         [ui/grid {:item true :xs 7}
-          [ui/input-label "Boxes"]
-          [ui/select {:value (:boxes @data)
-                      :on-change #(swap! data assoc :boxes (-> % .-target .-value))
-                      :style     {:min-width "150px"}}
-           (for [idx (range 1 4)]
-             ^{:key idx}
-             [ui/menu-item {:value idx} idx])]]
+         [template-info current-template data]
          ]]
        [ui/card-actions
         [ui/button {:color    "secondary"

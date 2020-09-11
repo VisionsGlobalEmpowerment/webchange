@@ -12,5 +12,5 @@
 
 (deftest templates-library-can-be-retrieved
   (let [retrieved (-> (f/get-template-library) :body slurp (json/read-str :key-fn keyword))]
-    (is (= 1 (count retrieved)))
+    (is (= 2 (count retrieved)))
     (is (some #(= "casa" (:name %)) retrieved))))

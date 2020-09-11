@@ -80,9 +80,9 @@
 (defn handle-create-activity
   [course-slug data request]
   (let [owner-id (current-user request)
-        activity (templates/activity-from-template data)]
-    (-> activity
-        (core/create-scene! course-slug (:name data) owner-id)
+        activity (templates/activity-from-template data)
+        metadata (templates/metadata-from-template data)]
+    (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) owner-id)
         handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str)})
@@ -92,7 +92,7 @@
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "background" "surface" "decoration")})
 (s/defschema CharacterSkin {:name s/Str :width s/Num :height s/Num :skins [s/Str] :animations [s/Str]})
 
-(s/defschema CreateActivity {:name s/Str :template-id s/Int :characters (s/maybe s/Any) :boxes (s/maybe s/Int)})
+(s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})
 (s/defschema Activity {:id s/Int :name s/Str :scene-slug s/Str :course-slug s/Str})
 
 (s/defschema Topic {:name s/Str :strand s/Keyword})

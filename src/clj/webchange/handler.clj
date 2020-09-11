@@ -189,6 +189,12 @@
                  (muuntaja.middleware/wrap-format)
                  (muuntaja.middleware/wrap-exception)))
 
-(def dev-handler (-> #'handler
+(def dev-handler (-> #'app
                      wrap-reload
-                     ))
+                     (wrap-authorization auth-backend)
+                     (wrap-authentication auth-backend)
+                     (wrap-session {:store dev-store})
+                     wrap-body-as-string
+                     (muuntaja.middleware/wrap-params)
+                     (muuntaja.middleware/wrap-format)
+                     (muuntaja.middleware/wrap-exception)))

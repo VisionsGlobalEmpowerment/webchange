@@ -8,7 +8,8 @@
             [webchange.test.course.core :as core]
             [webchange.course.core :as course]
             [webchange.db.core :refer [*db*] :as db]
-            [config.core :refer [env]])
+            [config.core :refer [env]]
+            [ring.swagger.json-schema :as js])
   (:use clj-http.fake))
 
 (use-fixtures :once f/init)
@@ -41,14 +42,19 @@
 (deftest activity-can-be-created-from-template
   (let [course (f/course-created)
         name "Test Activity"
-        activity-data {:name name :template-id 1 :characters [{:skeleton "vera" :name "vera"}] :boxes 3}
-        saved-value (-> (f/create-activity! (:slug course) activity-data) :body slurp (json/read-str :key-fn keyword))
-        retrieved-value (-> (f/get-scene (:course-slug saved-value) (:scene-slug saved-value)) :body slurp (json/read-str :key-fn keyword))]
-    (is (= name (:name saved-value)))
-    (is (not (nil? (:id saved-value))))
-    (is (not (nil? (:course-slug saved-value))))
-    (is (not (nil? (:scene-slug saved-value))))
-    (is (not (nil? (:objects retrieved-value))))))
+        activity-data {:name name :template-id 1 :characters [{:skeleton "vera" :name "vera"}] :boxes 3 :skills [2]}
+        saved-response (f/create-activity! (:slug course) activity-data)
+        saved-value (-> saved-response :body slurp (json/read-str :key-fn keyword))
+        retrieved-response (f/get-scene (:course-slug saved-value) (:scene-slug saved-value))
+        retrieved-value (-> retrieved-response :body slurp (json/read-str :key-fn keyword))]
+    (testing "Activity can be created from template"
+      (is (= 200 (:status saved-response)))
+      (is (= 200 (:status retrieved-response)))
+      (is (= name (:name saved-value)))
+      (is (not (nil? (:id saved-value))))
+      (is (not (nil? (:course-slug saved-value))))
+      (is (not (nil? (:scene-slug saved-value))))
+      (is (not (nil? (:objects retrieved-value)))))))
 
 (deftest scene-can-be-retrieved
          (let [scene (f/scene-created)

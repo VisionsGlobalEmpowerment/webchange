@@ -333,12 +333,14 @@
               (assoc :id new-course-id)
               (->website-course))]))
 
+(def default-lesson-name "l1-ls1-1")
+
 (defn- create-default-lesson!
-  [course-id name]
+  [course-id]
   (let [items (db/get-course-items {:course_id course-id})
         dataset-id (-> items first :dataset-id)
         item-ids (map #(select-keys % [:id]) items)]
-    (db/create-lesson-set! {:name name :dataset_id dataset-id :data {:items item-ids}})))
+    (db/create-lesson-set! {:name default-lesson-name :dataset_id dataset-id :data {:items item-ids}})))
 
 (defn- save-scene-on-create!
   [course-id scene-slug scene-data owner-id]
@@ -350,10 +352,52 @@
                      :created_at created-at})
     {:scene-id scene-id}))
 
-(defn- save-course-on-create!
+(defn- name-in-list? [{name :name} names]
+  (let [s (into #{} names)]
+    (contains? s name)))
+
+(defn- add-field-scene
+  [field scene-slug]
+  (if (nil? (:scenes field))
+    (assoc field :scenes [scene-slug])
+    (update field :scenes conj scene-slug)))
+
+(defn- merge-fields
+  [original fields scene-slug]
+  (let [existing-names (->> original
+                            (map :name)
+                            (into #{}))
+        existing-fields (->> original
+                             (filter #(contains? existing-names %))
+                             (map #(add-field-scene % scene-slug)))
+        new-fields (->> fields
+                       (remove #(contains? existing-names %))
+                       (map #(add-field-scene % scene-slug)))]
+    (->> original
+         (remove #(contains? existing-names %))
+         (concat existing-fields new-fields)
+         (sort-by :name)
+         (into []))))
+
+(defn- save-skills-on-create!
+  [scene-id skills]
+  (db/delete-scene-skills! {:scene_id scene-id})
+  (doall (map #(db/create-scene-skill! {:scene_id scene-id :skill_id %}) skills)))
+
+(defn save-dataset-on-create!
+  [course-id scene-slug {:keys [fields]}]
+  (let [course-lessons (db/get-course-lessons {:course_id course-id})]
+    (when (seq course-lessons)
+      (create-default-lesson! course-id)))
+  (let [datasets (db/get-datasets-by-course {:course_id course-id})]
+    (doall (for [{:keys [id scheme]} datasets]
+             (db/update-dataset! {:id     id
+                                  :scheme (-> scheme
+                                              (update :fields #(merge-fields % fields scene-slug)))})))))
+
+(defn save-course-on-create!
   [course-id scene-slug scene-name owner-id]
-  (let [default-lesson-name "l1-ls1-1"
-        created-at (jt/local-date-time)
+  (let [created-at (jt/local-date-time)
         {course-data :data} (db/get-latest-course-version {:course_id course-id})
         lesson-required? (nil? (get-in course-data [:levels 0 :lessons 0 :lesson-sets :concepts]))
         initial-scene-required? (nil? (get course-data :initial-scene))
@@ -362,18 +406,18 @@
                      :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
                      lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets :concepts] default-lesson-name)
                      initial-scene-required? (assoc :initial-scene scene-slug))]
-    (when lesson-required?
-      (create-default-lesson! course-id default-lesson-name))
     (db/save-course! {:course_id  course-id
                       :data       data
                       :owner_id   owner-id
                       :created_at created-at})))
 
 (defn create-scene!
-  [scene-data course-slug scene-name owner-id]
+  [scene-data metadata course-slug scene-name skills owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         scene-slug (->kebab-case scene-name)
         {scene-id :scene-id} (save-scene-on-create! course-id scene-slug scene-data owner-id)]
+    (save-skills-on-create! scene-id skills)
+    (save-dataset-on-create! course-id scene-slug metadata)
     (save-course-on-create! course-id scene-slug scene-name owner-id)
     [true {:id          scene-id
            :name        scene-name
