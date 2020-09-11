@@ -21,11 +21,13 @@
       :params {:src "/raw/img/elements/tree.png", :filter "grayscale"},
       :target "image3"}],
     :type "parallel",
-    :scene-id "book"}}
+    :scene-id "book"}
+   :scenes ["book"]}
   {:name "book-read-action",
    :type "action",
    :template {:type "audio", :scene-id "book"}}
-  {:name "chanting-video-src", :type "video", :template nil}
+  {:name "chanting-video-src", :type "video", :template nil
+   :scenes ["cinema-video"]}
   {:name "concept-name", :type "string"}
   {:name "concept-rest", :type "string"}
   {:name "game-voice-action",
@@ -87,7 +89,10 @@
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
-  {:name "image-src", :type "image", :template nil}
+  {:name "image-src",
+   :type "image",
+   :template nil,
+   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "cycling-letters" "volleyball" "volleyball-letters" "pinata" "writing-lesson" "writing-practice" "hide-n-seek" "running" "slide" "magic-hat"]}
   {:name "letter", :type "string"}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",
@@ -145,7 +150,8 @@
     :target "senoravaca",
     :scene-id "letter-intro"}}
   {:name "letter-path", :type "string"}
-  {:name "letter-src", :type "image", :template nil}
+  {:name "letter-src", :type "image", :template nil,
+   :scenes ["writing-lesson" "writing-practice"]}
   {:name "letter-tutorial-path", :type "string"}
   {:name "mari-chant",
    :type "action",
@@ -187,9 +193,12 @@
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
     :scene-id "magic-hat"}}
-  {:name "poem-image-1", :type "image", :template nil}
-  {:name "poem-image-2", :type "image", :template nil}
-  {:name "poem-image-3", :type "image", :template nil}
+  {:name "poem-image-1", :type "image", :template nil,
+   :scenes ["park-poem"]}
+  {:name "poem-image-2", :type "image", :template nil,
+   :scenes ["park-poem"]}
+  {:name "poem-image-3", :type "image", :template nil,
+   :scenes ["park-poem"]}
   {:name "poem-story",
    :type "action",
    :template
@@ -268,22 +277,22 @@
     :scene-id "cinema"}}
   {:name "word-image-1",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-2",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-3",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-4",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}],
  :items
- [{:name "(a) ardilla",
+ [{:name "(a) ant",
    :data
    {:book-content-action
     {:data
@@ -322,8 +331,8 @@
       {:end 307.61, :anim "talk", :start 306.72}
       {:end 309.87, :anim "talk", :start 307.84}]},
     :chanting-video-src "/raw/video/l2a1/letter-a.mp4",
-    :concept-name "ardilla",
-    :concept-rest "rdilla",
+    :concept-name "ant",
+    :concept-rest "nt",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -959,8 +968,8 @@
     :word-image-1 "/raw/img/elements/apple.png",
     :word-image-2 "/raw/img/elements/arrow.png",
     :word-image-3 "/raw/img/elements/cat.png",
-    :word-image-4 "/raw/img/elements/apple.png"}}
-  {:name "(b) bebe",
+    :word-image-4 "/raw/img/elements/axe.png"}}
+  {:name "(b) baby",
    :data
    {:book-content-action
     {:data
@@ -1002,8 +1011,8 @@
       {:end 344.17, :anim "talk", :start 343.29}
       {:end 345.23, :anim "talk", :start 344.43}]},
     :chanting-video-src "/raw/video/l2a1/letter-b.mp4",
-    :concept-name "bebé",
-    :concept-rest "ebé",
+    :concept-name "baby",
+    :concept-rest "aby",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -1601,7 +1610,7 @@
     :word-image-2 "/raw/img/elements/bear.png",
     :word-image-3 "/raw/img/elements/bed.png",
     :word-image-4 "/raw/img/elements/boat.png"}}
-  {:name "(c) casa",
+  {:name "(c) cat",
    :data
    {:book-content-action
     {:data
@@ -1640,8 +1649,8 @@
       {:end 162.49, :anim "talk", :start 161.51}
       {:end 163.5, :anim "talk", :start 162.99}]},
     :chanting-video-src "/raw/video/l2a1/letter-c.mp4",
-    :concept-name "casa",
-    :concept-rest "asa",
+    :concept-name "cat",
+    :concept-rest "at",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -2722,7 +2731,7 @@
     :word-image-2 "/raw/img/elements/boy.png",
     :word-image-3 "/raw/img/elements/chair.png",
     :word-image-4 "/raw/img/elements/chalk.png"}}
-  {:name "(d) diamante",
+  {:name "(d) diamond",
    :data
    {:book-content-action
     {:data
@@ -2762,8 +2771,8 @@
       {:end 117.38, :anim "talk", :start 116.33}
       {:end 120.67, :anim "talk", :start 117.75}]},
     :chanting-video-src "/raw/video/l2a1/letter-d.mp4",
-    :concept-name "diamante",
-    :concept-rest "iamante",
+    :concept-name "diamond",
+    :concept-rest "iamond",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -3271,9 +3280,9 @@
     :word-4-skin "dino",
     :word-image-1 "/raw/img/elements/deer.png",
     :word-image-2 "/raw/img/elements/duck.png",
-    :word-image-3 "/raw/img/elements/duck.png",
+    :word-image-3 "/raw/img/elements/door.png",
     :word-image-4 "/raw/img/elements/dragon.png"}}
-  {:name "(e) elefante",
+  {:name "(e) elephant",
    :data
    {:book-content-action
     {:data
@@ -3315,8 +3324,8 @@
       {:end 331.97, :anim "talk", :start 331}
       {:end 334.32, :anim "talk", :start 332.38}]},
     :chanting-video-src "/raw/video/l2a1/letter-e.mp4",
-    :concept-name "elefante",
-    :concept-rest "lefante",
+    :concept-name "elephant",
+    :concept-rest "lephant",
     :game-voice-action
     {:scene-id "see-saw",
      :phrase-text "elefante, elefante, ELEFANTE!",
@@ -3870,10 +3879,10 @@
     :word-3-skin "star",
     :word-4-skin "nurse",
     :word-image-1 "/raw/img/elements/egg.png",
-    :word-image-2 "/raw/img/elements/building.png",
-    :word-image-3 "/raw/img/elements/nurse.png",
-    :word-image-4 "/raw/img/elements/nurse.png"}}
-  {:name "(f) flor",
+    :word-image-2 "/raw/img/elements/eggplant.png",
+    :word-image-3 "/raw/img/elements/envelope.png",
+    :word-image-4 "/raw/img/elements/elbow.png"}}
+  {:name "(f) frog",
    :data
    {:book-content-action
     {:data
@@ -3913,8 +3922,8 @@
       {:end 192.92, :anim "talk", :start 190.81}
       {:end 195.02, :anim "talk", :start 193.47}]},
     :chanting-video-src "/raw/video/l2a1/letter-f.mp4",
-    :concept-name "flor",
-    :concept-rest "lor",
+    :concept-name "frog",
+    :concept-rest "rog",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -4437,8 +4446,8 @@
     :word-image-1 "/raw/img/elements/finger.png",
     :word-image-2 "/raw/img/elements/flower.png",
     :word-image-3 "/raw/img/elements/fish.png",
-    :word-image-4 "/raw/img/elements/fish.png"}}
-  {:name "(g) gato",
+    :word-image-4 "/raw/img/elements/flag.png"}}
+  {:name "(g) garden",
    :data
    {:book-content-action
     {:data
@@ -4477,8 +4486,8 @@
       {:end 232.76, :anim "talk", :start 231.74}
       {:end 235.2, :anim "talk", :start 232.9}]},
     :chanting-video-src "/raw/video/l2a1/letter-g.mp4",
-    :concept-name "gato",
-    :concept-rest "ato",
+    :concept-name "garden",
+    :concept-rest "arden",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -4985,11 +4994,11 @@
     :word-2-skin "earth",
     :word-3-skin "chicken",
     :word-4-skin "glove",
-    :word-image-1 "/raw/img/elements/grass.png",
+    :word-image-1 "/raw/img/elements/goat.png",
     :word-image-2 "/raw/img/elements/grass.png",
     :word-image-3 "/raw/img/elements/girl.png",
     :word-image-4 "/raw/img/elements/guitar.png"}}
-  {:name "(h) hoja",
+  {:name "(h) house",
    :data
    {:book-content-action
     {:data
@@ -5027,8 +5036,8 @@
      [{:end 252.97, :anim "talk", :start 248.81}
       {:end 255.39, :anim "talk", :start 253.47}]},
     :chanting-video-src "/raw/video/l2a1/letter-h.mp4",
-    :concept-name "hoja",
-    :concept-rest "oja",
+    :concept-name "house",
+    :concept-rest "ouse",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -5544,10 +5553,10 @@
     :word-3-skin "ant",
     :word-4-skin "egg",
     :word-image-1 "/raw/img/elements/hand.png",
-    :word-image-2 "/raw/img/elements/ice cream.png",
-    :word-image-3 "/raw/img/elements/ant.png",
-    :word-image-4 "/raw/img/elements/ant.png"}}
-  {:name "(i) iman",
+    :word-image-2 "/raw/img/elements/hat.png",
+    :word-image-3 "/raw/img/elements/hammer.png",
+    :word-image-4 "/raw/img/elements/heart.png"}}
+  {:name "(i) insect",
    :data
    {:book-content-action
     {:data
@@ -5589,8 +5598,8 @@
       {:end 129.01, :anim "talk", :start 128.23}
       {:end 130.17, :anim "talk", :start 129.18}]},
     :chanting-video-src "/raw/video/l2a1/letter-i.mp4",
-    :concept-name "iman",
-    :concept-rest "man",
+    :concept-name "insect",
+    :concept-rest "nsect",
     :game-voice-action
     {:scene-id "cycling",
      :phrase-text "Imán, Imán, IMÁN!",
@@ -6188,10 +6197,10 @@
     :word-3-skin "insect",
     :word-4-skin "island",
     :word-image-1 "/raw/img/elements/iguana.png",
-    :word-image-2 "/raw/img/elements/fire.png",
-    :word-image-3 "/raw/img/elements/insect.png",
-    :word-image-4 "/raw/img/elements/island.png"}}
-  {:name "(j) jardín",
+    :word-image-2 "/raw/img/elements/igloo.png",
+    :word-image-3 "/raw/img/elements/ink.png",
+    :word-image-4 "/raw/img/elements/inside.png"}}
+  {:name "(j) jacket",
    :data
    {:book-content-action
     {:data
@@ -6229,8 +6238,8 @@
      [{:end 397.59, :anim "talk", :start 393.83}
       {:end 400.26, :anim "talk", :start 397.99}]},
     :chanting-video-src "/raw/video/l2a1/letter-j.mp4",
-    :concept-name "jardín",
-    :concept-rest "ardín",
+    :concept-name "jacket",
+    :concept-rest "acket",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -6782,10 +6791,10 @@
     :word-3-skin "jamon",
     :word-4-skin "giraffe",
     :word-image-1 "/raw/img/elements/juice.png",
-    :word-image-2 "/raw/img/elements/toys.png",
-    :word-image-3 "/raw/img/elements/jamon.png",
-    :word-image-4 "/raw/img/elements/toys.png"}}
-  {:name "(k) kimono",
+    :word-image-2 "/raw/img/elements/jaw.png",
+    :word-image-3 "/raw/img/elements/jump.png",
+    :word-image-4 "/raw/img/elements/jet.png"}}
+  {:name "(k) key",
    :data
    {:book-content-action
     {:data
@@ -6826,8 +6835,8 @@
       {:end 263.43, :anim "talk", :start 262.27}
       {:end 265.78, :anim "talk", :start 264.11}]},
     :chanting-video-src "/raw/video/l2a1/letter-k.mp4",
-    :concept-name "kimono",
-    :concept-rest "imono",
+    :concept-name "key",
+    :concept-rest "ey",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -7346,7 +7355,7 @@
     :word-image-2 "/raw/img/elements/ketchup.png",
     :word-image-3 "/raw/img/elements/kiwi.png",
     :word-image-4 "/raw/img/elements/kayak.png"}}
-  {:name "(l) leon",
+  {:name "(l) lion",
    :data
    {:book-content-action
     {:data
@@ -7385,8 +7394,8 @@
       {:end 213.42, :anim "talk", :start 210.33}
       {:end 215.64, :anim "talk", :start 213.73}]},
     :chanting-video-src "/raw/video/l2a1/letter-l.mp4",
-    :concept-name "leon",
-    :concept-rest "eon",
+    :concept-name "lion",
+    :concept-rest "ion",
     :game-voice-action
     {:id "/upload/SNKMEKRLGFFMESUK.m4a",
      :type "audio",
@@ -7904,9 +7913,9 @@
     :word-4-skin "milk",
     :word-image-1 "/raw/img/elements/lemon.png",
     :word-image-2 "/raw/img/elements/leaf.png",
-    :word-image-3 "/raw/img/elements/leaf.png",
-    :word-image-4 "/raw/img/elements/lemon.png"}}
-  {:name "(long a) ñandu",
+    :word-image-3 "/raw/img/elements/leg.png",
+    :word-image-4 "/raw/img/elements/log.png"}}
+  {:name "(long a) acorn",
    :data
    {:book-content-action
     {:data
@@ -7945,8 +7954,8 @@
       {:end 244.79, :anim "talk", :start 240.22}
       {:end 245.92, :anim "talk", :start 245.17}]},
     :chanting-video-src "/raw/video/l2a1/letter-ñ.mp4",
-    :concept-name "ñandu",
-    :concept-rest "andu",
+    :concept-name "acorn",
+    :concept-rest "corn",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -8080,9 +8089,9 @@
      :target "senoravaca",
      :phrase-text-translated "Acorn!",
      :data []},
-    :image-src "/raw/img/elements/grapes.png",
-    :letter "ñ",
-    :letter-big "ñ",
+    :image-src "/raw/img/elements/acorn.png",
+    :letter "a",
+    :letter-big "A",
     :letter-intro-letter
     {:offset 0.733,
      :scene-id "letter-intro",
@@ -8162,7 +8171,7 @@
       {:end 172.14, :anim "talk", :start 170.87}]},
     :letter-path
     "M82,74.83v75M82,92a32.36,32.36,0,0,1,60.9,15.23v42.65M86,48.06s4.12-11.83,13.63-7.88c3.71,1.54,7.49,2.94,11.29,4.27,10.27,3.6,22.52,2.17,28-8.67",
-    :letter-src "/raw/img/letters/ñ.png",
+    :letter-src "/raw/img/letters/a.png",
     :letter-tutorial-path
     "M116.3,132.5V215.5M183.7,215.5V167.5A33.7,33.7,0,0,0,150,133.8H150A33.7,33.7,0,0,0,116.3,167.5",
     :mari-chant
@@ -8486,9 +8495,9 @@
     :word-4-skin "pepper",
     :word-image-1 "/raw/img/elements/grapes.png",
     :word-image-2 "/raw/img/elements/airplane.png",
-    :word-image-3 "/raw/img/elements/gnocchi.png",
-    :word-image-4 "/raw/img/elements/airplane.png"}}
-  {:name "(long e) cepillo",
+    :word-image-3 "/raw/img/elements/ape.png",
+    :word-image-4 "/raw/img/elements/cake.png"}}
+  {:name "(long e) bee",
    :data
    {:book-content-action
     {:data
@@ -8529,8 +8538,8 @@
       {:end 84.58, :anim "talk", :start 83.59}
       {:end 86.95, :anim "talk", :start 84.98}]},
     :chanting-video-src "/raw/video/l2a1/letter-c.mp4",
-    :concept-name "cepillo",
-    :concept-rest "epillo",
+    :concept-name "bee",
+    :concept-rest "ee",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -8673,8 +8682,8 @@
      :phrase-text-translated "Bee!",
      :data []},
     :image-src "/raw/img/elements/bee.png",
-    :letter "c",
-    :letter-big "C",
+    :letter "e",
+    :letter-big "E",
     :letter-intro-letter
     {:offset 27.358,
      :scene-id "letter-intro",
@@ -8753,7 +8762,7 @@
      [{:end 73.16, :anim "talk", :start 71.59}
       {:end 75.03, :anim "talk", :start 73.85}]},
     :letter-path "M147.23,92.35a37.51,37.51,0,1,0,0,39.27",
-    :letter-src "/raw/img/letters/c.png",
+    :letter-src "/raw/img/letters/e.png",
     :letter-tutorial-path
     "M15.46,5.3C14.1,2.72,11.55.53,8.52.5S2.77,3,1.56,5.74C-.77,11,.63,18.79,7,20.2a8.1,8.1,0,0,0,9.28-5.12",
     :mari-chant
@@ -9049,11 +9058,11 @@
     :word-2-skin "eyebrow",
     :word-3-skin "onion",
     :word-4-skin "five",
-    :word-image-1 "/raw/img/elements/pig.png",
-    :word-image-2 "/raw/img/elements/eyebrow.png",
-    :word-image-3 "/raw/img/elements/onion.png",
-    :word-image-4 "/raw/img/elements/five.png"}}
-  {:name "(long o) llave",
+    :word-image-1 "/raw/img/elements/eat.png",
+    :word-image-2 "/raw/img/elements/see.png",
+    :word-image-3 "/raw/img/elements/we.png",
+    :word-image-4 "/raw/img/elements/feet.png"}}
+  {:name "(long o) oval",
    :data
    {:book-content-action
     {:data
@@ -9094,8 +9103,8 @@
       {:end 276.75, :anim "talk", :start 275.52}
       {:end 278.03, :anim "talk", :start 277.39}]},
     :chanting-video-src "/raw/video/l2a1/letter-ll.mp4",
-    :concept-name "llave",
-    :concept-rest "ave",
+    :concept-name "oval",
+    :concept-rest "val",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -9234,9 +9243,9 @@
      :target "senoravaca",
      :phrase-text-translated "Oval!",
      :data [{:end 32.59, :anim "talk", :start 31.86}]},
-    :image-src "/raw/img/elements/orange.png",
-    :letter "ll",
-    :letter-big "Ll",
+    :image-src "/raw/img/elements/oval.png",
+    :letter "o",
+    :letter-big "O",
     :letter-intro-letter
     {:offset 0.68,
      :scene-id "letter-intro",
@@ -9315,7 +9324,7 @@
      [{:end 7.46, :anim "talk", :start 6.36}
       {:end 9.12, :anim "talk", :start 7.88}]},
     :letter-path "M84.5 0.19v150M140.5 0.19v150",
-    :letter-src "/raw/img/letters/ll.png",
+    :letter-src "/raw/img/letters/o.png",
     :letter-tutorial-path
     "M.5,5.52S8.31-1.42,12.19,1,14.81,8.64,15,21.89",
     :mari-chant
@@ -9633,11 +9642,11 @@
     :word-2-skin "rain",
     :word-3-skin "lama",
     :word-4-skin "cry",
-    :word-image-1 "/raw/img/elements/call.png",
-    :word-image-2 "/raw/img/elements/lama.png",
+    :word-image-1 "/raw/img/elements/show.png",
+    :word-image-2 "/raw/img/elements/nose.png",
     :word-image-3 "/raw/img/elements/rose.png",
-    :word-image-4 "/raw/img/elements/cry.png"}}
-  {:name "(m) mano",
+    :word-image-4 "/raw/img/elements/toe.png"}}
+  {:name "(m) mat",
    :data
    {:book-content-action
     {:data
@@ -9678,8 +9687,8 @@
       {:end 50.89, :anim "talk", :start 49.39}
       {:end 53.56, :anim "talk", :start 51.22}]},
     :chanting-video-src "/raw/video/l2a1/letter-m.mp4",
-    :concept-name "mano",
-    :concept-rest "ano",
+    :concept-name "mat",
+    :concept-rest "at",
     :game-voice-action
     {:id "/raw/audio/l1/a2/game-voice-3.mp3",
      :type "audio",
@@ -9819,7 +9828,7 @@
      :target "senoravaca",
      :phrase-text-translated "Mat!",
      :data [{:end 6.693, :anim "talk", :start 6.24, :duration 0.453}]},
-    :image-src "/raw/img/elements/hand.png",
+    :image-src "/raw/img/elements/mat.png",
     :letter "m",
     :letter-big "M",
     :letter-intro-letter
@@ -10220,7 +10229,7 @@
     :word-image-2 "/raw/img/elements/monkey.png",
     :word-image-3 "/raw/img/elements/moon.png",
     :word-image-4 "/raw/img/elements/mouse.png"}}
-  {:name "(n) niño",
+  {:name "(n) nut",
    :data
    {:book-content-action
     {:data
@@ -10258,8 +10267,8 @@
      [{:end 179.55, :anim "talk", :start 178.15}
       {:end 185.43, :anim "talk", :start 180.13}]},
     :chanting-video-src "/raw/video/l2a1/letter-n.mp4",
-    :concept-name "niño",
-    :concept-rest "iño",
+    :concept-name "nut",
+    :concept-rest "ut",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -10398,7 +10407,7 @@
      :target "senoravaca",
      :phrase-text-translated "Nut!",
      :data [{:end 69.62, :anim "talk", :start 69.04}]},
-    :image-src "/raw/img/elements/boy.png",
+    :image-src "/raw/img/elements/nut.png",
     :letter "n",
     :letter-big "N",
     :letter-intro-letter
@@ -10799,8 +10808,8 @@
     :word-image-1 "/raw/img/elements/nail.png",
     :word-image-2 "/raw/img/elements/nest.png",
     :word-image-3 "/raw/img/elements/nurse.png",
-    :word-image-4 "/raw/img/elements/orange.png"}}
-  {:name "(o) oso",
+    :word-image-4 "/raw/img/elements/neck.png"}}
+  {:name "(o) octopus",
    :data
    {:book-content-action
     {:data
@@ -10839,8 +10848,8 @@
       {:end 173.34, :anim "talk", :start 172.26}
       {:end 175.41, :anim "talk", :start 173.7}]},
     :chanting-video-src "/raw/video/l2a1/letter-o.mp4",
-    :concept-name "oso",
-    :concept-rest "so",
+    :concept-name "octopus",
+    :concept-rest "ctopus",
     :game-voice-action
     {:scene-id "cycling",
      :phrase-text "Oso, oso, OSO!",
@@ -10988,7 +10997,7 @@
      :target "senoravaca",
      :phrase-text-translated "Octopus!",
      :data []},
-    :image-src "/raw/img/elements/bear.png",
+    :image-src "/raw/img/elements/octopus.png",
     :letter "o",
     :letter-big "O",
     :letter-intro-letter
@@ -11421,11 +11430,11 @@
     :word-2-skin "ear",
     :word-3-skin "sheep",
     :word-4-skin "eyes",
-    :word-image-1 "/raw/img/elements/8.png",
-    :word-image-2 "/raw/img/elements/ear.png",
-    :word-image-3 "/raw/img/elements/sheep.png",
-    :word-image-4 "/raw/img/elements/eyes.png"}}
-  {:name "(p) pelota",
+    :word-image-1 "/raw/img/elements/onion.png",
+    :word-image-2 "/raw/img/elements/ostrich.png",
+    :word-image-3 "/raw/img/elements/ox.png",
+    :word-image-4 "/raw/img/elements/olive.png"}}
+  {:name "(p) pig",
    :data
    {:book-content-action
     {:data
@@ -11465,8 +11474,8 @@
       {:end 294.29, :anim "talk", :start 293.86}
       {:end 299.58, :anim "talk", :start 294.71}]},
     :chanting-video-src "/raw/video/l2a1/letter-p.mp4",
-    :concept-name "pelota",
-    :concept-rest "elota",
+    :concept-name "pig",
+    :concept-rest "ig",
     :game-voice-action
     {:scene-id "see-saw",
      :phrase-text "pelota, pelota, PELOTA!",
@@ -12010,10 +12019,10 @@
     :word-3-skin "potatoes",
     :word-4-skin "fish",
     :word-image-1 "/raw/img/elements/pencil.png",
-    :word-image-2 "/raw/img/elements/duck.png",
-    :word-image-3 "/raw/img/elements/potatoes.png",
+    :word-image-2 "/raw/img/elements/pan.png",
+    :word-image-3 "/raw/img/elements/plant.png",
     :word-image-4 "/raw/img/elements/potatoes.png"}}
-  {:name "(qu) queso",
+  {:name "(qu) queen",
    :data
    {:book-content-action
     {:data
@@ -12046,8 +12055,8 @@
      :scene-id "book",
      :phrase-text "La ‘Qu’ es para Queso, Quinto, quince"},
     :chanting-video-src "/raw/video/l2a1/letter-q.mp4",
-    :concept-name "queso",
-    :concept-rest "eso",
+    :concept-name "queen",
+    :concept-rest "een",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -12579,11 +12588,11 @@
     :word-2-skin "five",
     :word-3-skin "fifteen",
     :word-4-skin "jaw",
-    :word-image-1 "/raw/img/elements/quesadilla.png",
-    :word-image-2 "/raw/img/elements/five.png",
-    :word-image-3 "/raw/img/elements/fifteen.png",
-    :word-image-4 "/raw/img/elements/jaw.png"}}
-  {:name "(r) rana",
+    :word-image-1 "/raw/img/elements/quick.png",
+    :word-image-2 "/raw/img/elements/quiet.png",
+    :word-image-3 "/raw/img/elements/question.png",
+    :word-image-4 "/raw/img/elements/quilt.png"}}
+  {:name "(r) rabbit",
    :data
    {:book-content-action
     {:data
@@ -12622,8 +12631,8 @@
       {:end 102.65, :anim "talk", :start 101.67}
       {:end 106, :anim "talk", :start 102.94}]},
     :chanting-video-src "/raw/video/l2a1/letter-r.mp4",
-    :concept-name "rana",
-    :concept-rest "ana",
+    :concept-name "rabbit",
+    :concept-rest "abbit",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -12762,7 +12771,7 @@
      :target "senoravaca",
      :phrase-text-translated "Rabbit!",
      :data [{:end 45.29, :anim "talk", :start 44.71}]},
-    :image-src "/raw/img/elements/frog.png",
+    :image-src "/raw/img/elements/rabbit.png",
     :letter "r",
     :letter-big "R",
     :letter-intro-letter
@@ -13161,9 +13170,9 @@
     :word-4-skin "queen",
     :word-image-1 "/raw/img/elements/rain.png",
     :word-image-2 "/raw/img/elements/rock.png",
-    :word-image-3 "/raw/img/elements/rose.png",
-    :word-image-4 "/raw/img/elements/queen.png"}}
-  {:name "(s) serpiente",
+    :word-image-3 "/raw/img/elements/red.png",
+    :word-image-4 "/raw/img/elements/rat.png"}}
+  {:name "(s) snake",
    :data
    {:book-content-action
     {:data
@@ -13202,8 +13211,8 @@
       {:end 62.59, :anim "talk", :start 60.22}
       {:end 63.76, :anim "talk", :start 62.85}]},
     :chanting-video-src "/raw/video/l2a1/letter-s.mp4",
-    :concept-name "serpiente",
-    :concept-rest "erpiente",
+    :concept-name "snake",
+    :concept-rest "nake",
     :game-voice-action
     {:scene-id "see-saw",
      :phrase-text "Serpiente, serpiente, SERPIENTE!",
@@ -13704,11 +13713,11 @@
     :word-2-skin "sun",
     :word-3-skin "watermelon",
     :word-4-skin "soup",
-    :word-image-1 "/raw/img/elements/chair.png",
+    :word-image-1 "/raw/img/elements/soap.png",
     :word-image-2 "/raw/img/elements/spider.png",
     :word-image-3 "/raw/img/elements/star.png",
-    :word-image-4 "/raw/img/elements/spider.png"}}
-  {:name "(t) tomate",
+    :word-image-4 "/raw/img/elements/sock.png"}}
+  {:name "(t) tomato",
    :data
    {:book-content-action
     {:data
@@ -13748,8 +13757,8 @@
       {:end 93.04, :anim "talk", :start 91.86}
       {:end 96.37, :anim "talk", :start 93.22}]},
     :chanting-video-src "/raw/video/l2a1/letter-t.mp4",
-    :concept-name "tomate",
-    :concept-rest "omate",
+    :concept-name "tomato",
+    :concept-rest "omato",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -14284,9 +14293,9 @@
     :word-4-skin "shark",
     :word-image-1 "/raw/img/elements/train.png",
     :word-image-2 "/raw/img/elements/turtle.png",
-    :word-image-3 "/raw/img/elements/train.png",
+    :word-image-3 "/raw/img/elements/toy.png",
     :word-image-4 "/raw/img/elements/teeth.png"}}
-  {:name "(th) gemelo",
+  {:name "(th) thumb",
    :data
    {:book-content-action
     {:data
@@ -14329,8 +14338,8 @@
       {:end 152.33, :anim "talk", :start 151.42}
       {:end 153.16, :anim "talk", :start 152.49}]},
     :chanting-video-src "/raw/video/l2a1/letter-g.mp4",
-    :concept-name "gemelo",
-    :concept-rest "emelo",
+    :concept-name "thumb",
+    :concept-rest "umb",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -14471,9 +14480,9 @@
      :target "senoravaca",
      :phrase-text-translated "Thumb!",
      :data [{:end 51.51, :anim "talk", :start 50.68}]},
-    :image-src "/raw/img/elements/twins.png",
-    :letter "g",
-    :letter-big "G",
+    :image-src "/raw/img/elements/thumb.png",
+    :letter "th",
+    :letter-big "Th",
     :letter-intro-letter
     {:offset 43.009,
      :scene-id "letter-intro",
@@ -14555,7 +14564,7 @@
       {:end 195.33, :anim "talk", :start 193.93}]},
     :letter-path
     "M147.23,92.62a37.5,37.5,0,1,0,0,39.28M147.23,74.86V181a34.73,34.73,0,0,1-67.65,11.09",
-    :letter-src "/raw/img/letters/g.png",
+    :letter-src "/raw/img/letters/th.png",
     :letter-tutorial-path
     "M6,13.85S-1.32,20.6,6,20.6c2.34,0,4.69,0,7,.06a9.25,9.25,0,0,1,4.32.94,4.34,4.34,0,0,1,2.4,3.73c0,2.87-3.15,4.59-5.52,5.4a18.06,18.06,0,0,1-8.79.58c-3.64-.62-6.36-2.75-4.2-6.54",
     :mari-chant
@@ -14843,11 +14852,11 @@
     :word-2-skin "sunflower",
     :word-3-skin "gemstone",
     :word-4-skin "chalk",
-    :word-image-1 "/raw/img/elements/giant.png",
-    :word-image-2 "/raw/img/elements/sunflower.png",
-    :word-image-3 "/raw/img/elements/gemstone.png",
-    :word-image-4 "/raw/img/elements/chalk.png"}}
-  {:name "(u) uvas",
+    :word-image-1 "/raw/img/elements/father.png",
+    :word-image-2 "/raw/img/elements/thunder.png",
+    :word-image-3 "/raw/img/elements/thigh.png",
+    :word-image-4 "/raw/img/elements/three.png"}}
+  {:name "(u) umbrella",
    :data
    {:book-content-action
     {:data
@@ -14887,8 +14896,8 @@
       {:end 205.17, :anim "talk", :start 204.3}
       {:end 206.44, :anim "talk", :start 205.48}]},
     :chanting-video-src "/raw/video/l2a1/letter-u.mp4",
-    :concept-name "uvas",
-    :concept-rest "vas",
+    :concept-name "umbrella",
+    :concept-rest "mbrella",
     :game-voice-action
     {:scene-id "see-saw",
      :phrase-text "Uvas, uvas, UVAS!",
@@ -15029,7 +15038,7 @@
      :target "senoravaca",
      :phrase-text-translated "Umbrella!",
      :data []},
-    :image-src "/raw/img/elements/grapes.png",
+    :image-src "/raw/img/elements/umbrella.png",
     :letter "u",
     :letter-big "U",
     :letter-intro-letter
@@ -15402,10 +15411,10 @@
     :word-2-skin "nail",
     :word-3-skin "unicorn",
     :word-4-skin "uniform",
-    :word-image-1 "/raw/img/elements/one.png",
-    :word-image-2 "/raw/img/elements/nail.png",
-    :word-image-3 "/raw/img/elements/unicorn.png",
-    :word-image-4 "/raw/img/elements/uniform.png"}}
+    :word-image-1 "/raw/img/elements/bug.png",
+    :word-image-2 "/raw/img/elements/mug.png",
+    :word-image-3 "/raw/img/elements/run.png",
+    :word-image-4 "/raw/img/elements/sun.png"}}
   {:name "(v) violin",
    :data
    {:book-content-action
@@ -15977,10 +15986,10 @@
     :word-2-skin "baby_cow",
     :word-3-skin "window",
     :word-4-skin "green",
-    :word-image-1 "/raw/img/elements/cow.png",
-    :word-image-2 "/raw/img/elements/baby_cow.png",
-    :word-image-3 "/raw/img/elements/window.png",
-    :word-image-4 "/raw/img/elements/green.png"}}
+    :word-image-1 "/raw/img/elements/van.png",
+    :word-image-2 "/raw/img/elements/vegetables.png",
+    :word-image-3 "/raw/img/elements/vine.png",
+    :word-image-4 "/raw/img/elements/volcano.png"}}
   {:name "(w) web",
    :data
    {:book-content-action
@@ -16170,7 +16179,7 @@
      :target "senoravaca",
      :phrase-text-translated "Web!",
      :data [{:end 96.12, :anim "talk", :start 95.56}]},
-    :image-src "/raw/img/elements/website.png",
+    :image-src "/raw/img/elements/spider_web.png",
     :letter "w",
     :letter-big "W",
     :letter-intro-letter
@@ -16551,11 +16560,11 @@
     :word-2-skin "boy",
     :word-3-skin "girl",
     :word-4-skin "waffles",
-    :word-image-1 "/raw/img/elements/deer.png",
-    :word-image-2 "/raw/img/elements/boy.png",
-    :word-image-3 "/raw/img/elements/girl.png",
+    :word-image-1 "/raw/img/elements/water.png",
+    :word-image-2 "/raw/img/elements/watermelon.png",
+    :word-image-3 "/raw/img/elements/window.png",
     :word-image-4 "/raw/img/elements/waffles.png"}}
-  {:name "(x) xilofono",
+  {:name "(x) fox",
    :data
    {:book-content-action
     {:data
@@ -16588,8 +16597,8 @@
      :scene-id "book",
      :phrase-text "La ‘X’ esta en Xilofono, Saxophone, taxi"},
     :chanting-video-src "/raw/video/l2a1/letter-x.mp4",
-    :concept-name "xilofono",
-    :concept-rest "ilofono",
+    :concept-name "fox",
+    :concept-rest "fo",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -16733,7 +16742,7 @@
      :target "senoravaca",
      :phrase-text-translated "Fox!",
      :data [{:end 60.52, :anim "talk", :start 59.73}]},
-    :image-src "/raw/img/elements/xylophone.png",
+    :image-src "/raw/img/elements/fox.png",
     :letter "x",
     :letter-big "X",
     :letter-intro-letter
@@ -17086,10 +17095,10 @@
     :word-2-skin "mexico",
     :word-3-skin "taxi",
     :word-4-skin "texto",
-    :word-image-1 "/raw/img/elements/taxi.png",
-    :word-image-2 "/raw/img/elements/mexico.png",
-    :word-image-3 "/raw/img/elements/taxi.png",
-    :word-image-4 "/raw/img/elements/text.png"}}
+    :word-image-1 "/raw/img/elements/x_ray.png",
+    :word-image-2 "/raw/img/elements/six.png",
+    :word-image-3 "/raw/img/elements/wax.png",
+    :word-image-4 "/raw/img/elements/box.png"}}
   {:name "(y) yoyo",
    :data
    {:book-content-action
@@ -17656,7 +17665,7 @@
     :word-image-2 "/raw/img/elements/yogurt.png",
     :word-image-3 "/raw/img/elements/yak.png",
     :word-image-4 "/raw/img/elements/egg_yolk.png"}}
-  {:name "(z) zapato",
+  {:name "(z) zebra",
    :data
    {:book-content-action
     {:data
@@ -17688,8 +17697,8 @@
      :scene-id "book",
      :phrase-text "La ‘Z’ es para Zapato, Zorro, Zanahoria"},
     :chanting-video-src "/raw/video/l2a1/letter-z.mp4",
-    :concept-name "zapato",
-    :concept-rest "apato",
+    :concept-name "zebra",
+    :concept-rest "ebra",
     :game-voice-action
     {:description "Game Voice High",
      :scene-id "cycling",
@@ -18238,10 +18247,10 @@
     :word-2-skin "fox",
     :word-3-skin "carrot",
     :word-4-skin "skunk",
-    :word-image-1 "/raw/img/elements/zebra.png",
-    :word-image-2 "/raw/img/elements/fox.png",
-    :word-image-3 "/raw/img/elements/carrot.png",
-    :word-image-4 "/raw/img/elements/skunk.png"}}
+    :word-image-1 "/raw/img/elements/zipper.png",
+    :word-image-2 "/raw/img/elements/zig_zag.png",
+    :word-image-3 "/raw/img/elements/zero.png",
+    :word-image-4 "/raw/img/elements/zoo.png"}}
   {:name "incendio",
    :data
    {:chanting-video-src "/raw/video/l2a1/letter-i.mp4",
@@ -18404,366 +18413,352 @@
  [{:name "assessment1",
    :data
    {:items
-    [{:name "(a) ardilla"}
-     {:name "(s) serpiente"}
-     {:name "(m) mano"}
-     {:name "(b) bebe"}
-     {:name "(t) tomate"}
-     {:name "(r) rana"}
-     {:name "(d) diamante"}
-     {:name "(i) iman"}
-     {:name "(th) gemelo"}]}}
+    [{:name "(a) ant"}
+     {:name "(s) snake"}
+     {:name "(m) mat"}
+     {:name "(b) baby"}
+     {:name "(t) tomato"}
+     {:name "(r) rabbit"}
+     {:name "(d) diamond"}
+     {:name "(i) insect"}
+     {:name "(th) thumb"}]}}
   {:name "assessment2",
    :data
    {:items
-    [{:name "(a) ardilla"}
-     {:name "(m) mano"}
-     {:name "(s) serpiente"}
-     {:name "(b) bebe"}
-     {:name "(t) tomate"}
-     {:name "(r) rana"}
-     {:name "(d) diamante"}
-     {:name "(i) iman"}
-     {:name "(th) gemelo"}
-     {:name "(c) casa"}
-     {:name "(o) oso"}
-     {:name "(n) niño"}
-     {:name "(f) flor"}
-     {:name "(u) uvas"}
-     {:name "(l) leon"}
+    [{:name "(a) ant"}
+     {:name "(m) mat"}
+     {:name "(s) snake"}
+     {:name "(b) baby"}
+     {:name "(t) tomato"}
+     {:name "(r) rabbit"}
+     {:name "(d) diamond"}
+     {:name "(i) insect"}
+     {:name "(th) thumb"}
+     {:name "(c) cat"}
+     {:name "(o) octopus"}
+     {:name "(n) nut"}
+     {:name "(f) frog"}
+     {:name "(u) umbrella"}
+     {:name "(l) lion"}
      {:name "(w) web"}
-     {:name "(g) gato"}
-     {:name "(long a) ñandu"}
-     {:name "(h) hoja"}
-     {:name "(k) kimono"}
-     {:name "(long o) llave"}]}}
+     {:name "(g) garden"}
+     {:name "(long a) acorn"}
+     {:name "(h) house"}
+     {:name "(k) key"}
+     {:name "(long o) oval"}]}}
   {:name "assessment3",
    :data
    {:items
-    [{:name "(a) ardilla"}
-     {:name "(m) mano"}
-     {:name "(s) serpiente"}
-     {:name "(b) bebe"}
-     {:name "(t) tomate"}
-     {:name "(r) rana"}
-     {:name "(d) diamante"}
-     {:name "(i) iman"}
-     {:name "(c) casa"}
-     {:name "(th) gemelo"}
-     {:name "(o) oso"}
-     {:name "(n) niño"}
-     {:name "(f) flor"}
-     {:name "(u) uvas"}
-     {:name "(l) leon"}
+    [{:name "(a) ant"}
+     {:name "(m) mat"}
+     {:name "(s) snake"}
+     {:name "(b) baby"}
+     {:name "(t) tomato"}
+     {:name "(r) rabbit"}
+     {:name "(d) diamond"}
+     {:name "(i) insect"}
+     {:name "(c) cat"}
+     {:name "(th) thumb"}
+     {:name "(o) octopus"}
+     {:name "(n) nut"}
+     {:name "(f) frog"}
+     {:name "(u) umbrella"}
+     {:name "(l) lion"}
      {:name "(w) web"}
-     {:name "(g) gato"}
-     {:name "(long a) ñandu"}
-     {:name "(h) hoja"}
-     {:name "(k) kimono"}
-     {:name "(long o) llave"}
+     {:name "(g) garden"}
+     {:name "(long a) acorn"}
+     {:name "(h) house"}
+     {:name "(k) key"}
+     {:name "(long o) oval"}
      {:name "(v) violin"}
-     {:name "(p) pelota"}
+     {:name "(p) pig"}
      {:name "(ch) chocolate"}
-     {:name "(e) elefante"}
+     {:name "(e) elephant"}
      {:name "(y) yoyo"}
-     {:name "(j) jardín"}
-     {:name "(qu) queso"}
-     {:name "(x) xilofono"}
-     {:name "(z) zapato"}]}}
+     {:name "(j) jacket"}
+     {:name "(qu) queen"}
+     {:name "(x) fox"}
+     {:name "(z) zebra"}]}}
   {:name "assessment4",
    :data
    {:items
-    [{:name "(a) ardilla"}
-     {:name "(i) iman"}
-     {:name "(o) oso"}
-     {:name "(u) uvas"}
-     {:name "(e) elefante"}
-     {:name "(m) mano"}
-     {:name "(s) serpiente"}
-     {:name "(p) pelota"}
-     {:name "(l) leon"}]}}
+    [{:name "(a) ant"}
+     {:name "(i) insect"}
+     {:name "(o) octopus"}
+     {:name "(u) umbrella"}
+     {:name "(e) elephant"}
+     {:name "(m) mat"}
+     {:name "(s) snake"}
+     {:name "(p) pig"}
+     {:name "(l) lion"}]}}
   {:name "assessment5",
    :data
    {:items
-    [{:name "(t) tomate"}
-     {:name "(d) diamante"}
-     {:name "(r) rana"}
-     {:name "(c) casa"}
-     {:name "(long e) cepillo"}
-     {:name "(n) niño"}
-     {:name "(f) flor"}
-     {:name "(b) bebe"}
-     {:name "(j) jardín"}
-     {:name "(g) gato"}
-     {:name "(th) gemelo"}
+    [{:name "(t) tomato"}
+     {:name "(d) diamond"}
+     {:name "(r) rabbit"}
+     {:name "(c) cat"}
+     {:name "(long e) bee"}
+     {:name "(n) nut"}
+     {:name "(f) frog"}
+     {:name "(b) baby"}
+     {:name "(j) jacket"}
+     {:name "(g) garden"}
+     {:name "(th) thumb"}
      {:name "(ch) chocolate"}]}}
   {:name "assessment6",
    :data
    {:items
-    [{:name "(long a) ñandu"}
+    [{:name "(long a) acorn"}
      {:name "(v) violin"}
-     {:name "(long o) llave"}
-     {:name "(h) hoja"}
-     {:name "(qu) queso"}
-     {:name "(z) zapato"}
-     {:name "(k) kimono"}
+     {:name "(long o) oval"}
+     {:name "(h) house"}
+     {:name "(qu) queen"}
+     {:name "(z) zebra"}
+     {:name "(k) key"}
      {:name "(w) web"}
      {:name "(y) yoyo"}
-     {:name "(x) xilofono"}]}}
+     {:name "(x) fox"}]}}
   {:name "concepts-all",
    :data
    {:items
-    [{:name "(a) ardilla"}
-     {:name "(b) bebe"}
-     {:name "(c) casa"}
-     {:name "(long e) cepillo"}
+    [{:name "(a) ant"}
+     {:name "(b) baby"}
+     {:name "(c) cat"}
+     {:name "(long e) bee"}
      {:name "(ch) chocolate"}
-     {:name "(d) diamante"}
-     {:name "(e) elefante"}
-     {:name "(f) flor"}
-     {:name "(g) gato"}
-     {:name "(th) gemelo"}
-     {:name "(h) hoja"}
-     {:name "(i) iman"}
-     {:name "(j) jardín"}
-     {:name "(k) kimono"}
-     {:name "(l) leon"}
-     {:name "(long o) llave"}
-     {:name "(m) mano"}
-     {:name "(n) niño"}
-     {:name "(o) oso"}
-     {:name "(p) pelota"}
-     {:name "(qu) queso"}
-     {:name "(r) rana"}
-     {:name "(s) serpiente"}
-     {:name "(t) tomate"}
-     {:name "(u) uvas"}
+     {:name "(d) diamond"}
+     {:name "(e) elephant"}
+     {:name "(f) frog"}
+     {:name "(g) garden"}
+     {:name "(th) thumb"}
+     {:name "(h) house"}
+     {:name "(i) insect"}
+     {:name "(j) jacket"}
+     {:name "(k) key"}
+     {:name "(l) lion"}
+     {:name "(long o) oval"}
+     {:name "(m) mat"}
+     {:name "(n) nut"}
+     {:name "(o) octopus"}
+     {:name "(p) pig"}
+     {:name "(qu) queen"}
+     {:name "(r) rabbit"}
+     {:name "(s) snake"}
+     {:name "(t) tomato"}
+     {:name "(u) umbrella"}
      {:name "(v) violin"}
      {:name "(w) web"}
-     {:name "(x) xilofono"}
+     {:name "(x) fox"}
      {:name "(y) yoyo"}
-     {:name "(z) zapato"}
-     {:name "(long a) ñandu"}]}}
-  {:name "l2-ls1-1", :data {:items [{:name "(a) ardilla"}]}}
+     {:name "(z) zebra"}
+     {:name "(long a) acorn"}]}}
+  {:name "l2-ls1-1", :data {:items [{:name "(a) ant"}]}}
   {:name "l2-ls1-3",
    :data
    {:items
-    [{:name "(a) ardilla"} {:name "(o) oso"} {:name "(i) iman"}]}}
-  {:name "l2-ls10-1", :data {:items [{:name "(t) tomate"}]}}
+    [{:name "(a) ant"} {:name "(o) octopus"} {:name "(i) insect"}]}}
+  {:name "l2-ls10-1", :data {:items [{:name "(t) tomato"}]}}
   {:name "l2-ls10-3",
    :data
    {:items
-    [{:name "(t) tomate"} {:name "(d) diamante"} {:name "(r) rana"}]}}
-  {:name "l2-ls11-1", :data {:items [{:name "(d) diamante"}]}}
+    [{:name "(t) tomato"} {:name "(d) diamond"} {:name "(r) rabbit"}]}}
+  {:name "l2-ls11-1", :data {:items [{:name "(d) diamond"}]}}
   {:name "l2-ls11-3",
    :data
    {:items
-    [{:name "(t) tomate"} {:name "(d) diamante"} {:name "(r) rana"}]}}
-  {:name "l2-ls12-1", :data {:items [{:name "(r) rana"}]}}
+    [{:name "(t) tomato"} {:name "(d) diamond"} {:name "(r) rabbit"}]}}
+  {:name "l2-ls12-1", :data {:items [{:name "(r) rabbit"}]}}
   {:name "l2-ls12-3",
    :data
    {:items
-    [{:name "(t) tomate"} {:name "(r) rana"} {:name "(c) casa"}]}}
-  {:name "l2-ls13-1", :data {:items [{:name "(c) casa"}]}}
+    [{:name "(t) tomato"} {:name "(r) rabbit"} {:name "(c) cat"}]}}
+  {:name "l2-ls13-1", :data {:items [{:name "(c) cat"}]}}
   {:name "l2-ls13-3",
    :data
-   {:items [{:name "(c) casa"} {:name "(n) niño"} {:name "(r) rana"}]}}
-  {:name "l2-ls14-1", :data {:items [{:name "(long e) cepillo"}]}}
+   {:items [{:name "(c) cat"} {:name "(n) nut"} {:name "(r) rabbit"}]}}
+  {:name "l2-ls14-1", :data {:items [{:name "(long e) bee"}]}}
   {:name "l2-ls14-3",
    :data
    {:items
-    [{:name "(long e) cepillo"}
-     {:name "(n) niño"}
-     {:name "(f) flor"}]}}
-  {:name "l2-ls15-1", :data {:items [{:name "(n) niño"}]}}
+    [{:name "(long e) bee"} {:name "(n) nut"} {:name "(f) frog"}]}}
+  {:name "l2-ls15-1", :data {:items [{:name "(n) nut"}]}}
   {:name "l2-ls15-3",
    :data
    {:items
-    [{:name "(long e) cepillo"}
-     {:name "(n) niño"}
-     {:name "(b) bebe"}]}}
-  {:name "l2-ls16-1", :data {:items [{:name "(f) flor"}]}}
+    [{:name "(long e) bee"} {:name "(n) nut"} {:name "(b) baby"}]}}
+  {:name "l2-ls16-1", :data {:items [{:name "(f) frog"}]}}
   {:name "l2-ls16-3",
    :data
    {:items
-    [{:name "(f) flor"} {:name "(b) bebe"} {:name "(j) jardín"}]}}
-  {:name "l2-ls17-1", :data {:items [{:name "(b) bebe"}]}}
+    [{:name "(f) frog"} {:name "(b) baby"} {:name "(j) jacket"}]}}
+  {:name "l2-ls17-1", :data {:items [{:name "(b) baby"}]}}
   {:name "l2-ls17-3",
    :data
    {:items
-    [{:name "(f) flor"} {:name "(b) bebe"} {:name "(j) jardín"}]}}
-  {:name "l2-ls18-1", :data {:items [{:name "(j) jardín"}]}}
+    [{:name "(f) frog"} {:name "(b) baby"} {:name "(j) jacket"}]}}
+  {:name "l2-ls18-1", :data {:items [{:name "(j) jacket"}]}}
   {:name "l2-ls18-3",
    :data
    {:items
-    [{:name "(f) flor"} {:name "(j) jardín"} {:name "(g) gato"}]}}
-  {:name "l2-ls19-1", :data {:items [{:name "(g) gato"}]}}
+    [{:name "(f) frog"} {:name "(j) jacket"} {:name "(g) garden"}]}}
+  {:name "l2-ls19-1", :data {:items [{:name "(g) garden"}]}}
   {:name "l2-ls19-3",
    :data
    {:items
-    [{:name "(g) gato"}
+    [{:name "(g) garden"}
      {:name "(ch) chocolate"}
-     {:name "(j) jardín"}]}}
-  {:name "l2-ls2-1", :data {:items [{:name "(o) oso"}]}}
+     {:name "(j) jacket"}]}}
+  {:name "l2-ls2-1", :data {:items [{:name "(o) octopus"}]}}
   {:name "l2-ls2-3",
    :data
    {:items
-    [{:name "(a) ardilla"} {:name "(o) oso"} {:name "(i) iman"}]}}
-  {:name "l2-ls20-1", :data {:items [{:name "(th) gemelo"}]}}
+    [{:name "(a) ant"} {:name "(o) octopus"} {:name "(i) insect"}]}}
+  {:name "l2-ls20-1", :data {:items [{:name "(th) thumb"}]}}
   {:name "l2-ls20-3",
    :data
    {:items
-    [{:name "(th) gemelo"}
+    [{:name "(th) thumb"}
      {:name "(ch) chocolate"}
-     {:name "(long a) ñandu"}]}}
+     {:name "(long a) acorn"}]}}
   {:name "l2-ls21-1", :data {:items [{:name "(ch) chocolate"}]}}
   {:name "l2-ls21-3",
    :data
    {:items
-    [{:name "(th) gemelo"}
+    [{:name "(th) thumb"}
      {:name "(ch) chocolate"}
      {:name "(v) violin"}]}}
-  {:name "l2-ls22-1", :data {:items [{:name "(long a) ñandu"}]}}
+  {:name "l2-ls22-1", :data {:items [{:name "(long a) acorn"}]}}
   {:name "l2-ls22-3",
    :data
    {:items
-    [{:name "(long a) ñandu"}
+    [{:name "(long a) acorn"}
      {:name "(v) violin"}
-     {:name "(long o) llave"}]}}
+     {:name "(long o) oval"}]}}
   {:name "l2-ls23-1", :data {:items [{:name "(v) violin"}]}}
   {:name "l2-ls23-3",
    :data
    {:items
-    [{:name "(long a) ñandu"}
+    [{:name "(long a) acorn"}
      {:name "(v) violin"}
-     {:name "(long o) llave"}]}}
-  {:name "l2-ls24-1", :data {:items [{:name "(long o) llave"}]}}
+     {:name "(long o) oval"}]}}
+  {:name "l2-ls24-1", :data {:items [{:name "(long o) oval"}]}}
   {:name "l2-ls24-3",
    :data
    {:items
-    [{:name "(long a) ñandu"}
+    [{:name "(long a) acorn"}
      {:name "(v) violin"}
-     {:name "(long o) llave"}]}}
-  {:name "l2-ls25-1", :data {:items [{:name "(h) hoja"}]}}
+     {:name "(long o) oval"}]}}
+  {:name "l2-ls25-1", :data {:items [{:name "(h) house"}]}}
   {:name "l2-ls25-3",
    :data
    {:items
-    [{:name "(h) hoja"} {:name "(qu) queso"} {:name "(z) zapato"}]}}
-  {:name "l2-ls26-1", :data {:items [{:name "(qu) queso"}]}}
+    [{:name "(h) house"} {:name "(qu) queen"} {:name "(z) zebra"}]}}
+  {:name "l2-ls26-1", :data {:items [{:name "(qu) queen"}]}}
   {:name "l2-ls26-3",
    :data
    {:items
-    [{:name "(h) hoja"} {:name "(qu) queso"} {:name "(z) zapato"}]}}
-  {:name "l2-ls27-1", :data {:items [{:name "(z) zapato"}]}}
+    [{:name "(h) house"} {:name "(qu) queen"} {:name "(z) zebra"}]}}
+  {:name "l2-ls27-1", :data {:items [{:name "(z) zebra"}]}}
   {:name "l2-ls27-3",
    :data
    {:items
-    [{:name "(h) hoja"} {:name "(qu) queso"} {:name "(z) zapato"}]}}
-  {:name "l2-ls28-1", :data {:items [{:name "(k) kimono"}]}}
+    [{:name "(h) house"} {:name "(qu) queen"} {:name "(z) zebra"}]}}
+  {:name "l2-ls28-1", :data {:items [{:name "(k) key"}]}}
   {:name "l2-ls28-3",
    :data
    {:items
-    [{:name "(k) kimono"} {:name "(z) zapato"} {:name "(v) violin"}]}}
+    [{:name "(k) key"} {:name "(z) zebra"} {:name "(v) violin"}]}}
   {:name "l2-ls29-1", :data {:items [{:name "(w) web"}]}}
   {:name "l2-ls29-3",
    :data
    {:items
-    [{:name "(w) web"} {:name "(k) kimono"} {:name "(long o) llave"}]}}
-  {:name "l2-ls3-1", :data {:items [{:name "(i) iman"}]}}
+    [{:name "(w) web"} {:name "(k) key"} {:name "(long o) oval"}]}}
+  {:name "l2-ls3-1", :data {:items [{:name "(i) insect"}]}}
   {:name "l2-ls3-3",
    :data
    {:items
-    [{:name "(a) ardilla"} {:name "(o) oso"} {:name "(i) iman"}]}}
+    [{:name "(a) ant"} {:name "(o) octopus"} {:name "(i) insect"}]}}
   {:name "l2-ls30-1", :data {:items [{:name "(y) yoyo"}]}}
   {:name "l2-ls30-3",
    :data
-   {:items [{:name "(y) yoyo"} {:name "(w) web"} {:name "(h) hoja"}]}}
-  {:name "l2-ls31-1", :data {:items [{:name "(x) xilofono"}]}}
+   {:items [{:name "(y) yoyo"} {:name "(w) web"} {:name "(h) house"}]}}
+  {:name "l2-ls31-1", :data {:items [{:name "(x) fox"}]}}
   {:name "l2-ls31-3",
    :data
    {:items
-    [{:name "(x) xilofono"} {:name "(y) yoyo"} {:name "(qu) queso"}]}}
-  {:name "l2-ls4-1", :data {:items [{:name "(u) uvas"}]}}
+    [{:name "(x) fox"} {:name "(y) yoyo"} {:name "(qu) queen"}]}}
+  {:name "l2-ls4-1", :data {:items [{:name "(u) umbrella"}]}}
   {:name "l2-ls4-3",
    :data
    {:items
-    [{:name "(u) uvas"} {:name "(e) elefante"} {:name "(m) mano"}]}}
-  {:name "l2-ls5-1", :data {:items [{:name "(e) elefante"}]}}
+    [{:name "(u) umbrella"} {:name "(e) elephant"} {:name "(m) mat"}]}}
+  {:name "l2-ls5-1", :data {:items [{:name "(e) elephant"}]}}
   {:name "l2-ls5-3",
    :data
    {:items
-    [{:name "(u) uvas"} {:name "(e) elefante"} {:name "(m) mano"}]}}
-  {:name "l2-ls6-1", :data {:items [{:name "(m) mano"}]}}
+    [{:name "(u) umbrella"} {:name "(e) elephant"} {:name "(m) mat"}]}}
+  {:name "l2-ls6-1", :data {:items [{:name "(m) mat"}]}}
   {:name "l2-ls6-3",
    :data
    {:items
-    [{:name "(u) uvas"} {:name "(e) elefante"} {:name "(m) mano"}]}}
-  {:name "l2-ls7-1", :data {:items [{:name "(s) serpiente"}]}}
+    [{:name "(u) umbrella"} {:name "(e) elephant"} {:name "(m) mat"}]}}
+  {:name "l2-ls7-1", :data {:items [{:name "(s) snake"}]}}
   {:name "l2-ls7-3",
    :data
-   {:items
-    [{:name "(s) serpiente"} {:name "(p) pelota"} {:name "(l) leon"}]}}
-  {:name "l2-ls8-1", :data {:items [{:name "(p) pelota"}]}}
+   {:items [{:name "(s) snake"} {:name "(p) pig"} {:name "(l) lion"}]}}
+  {:name "l2-ls8-1", :data {:items [{:name "(p) pig"}]}}
   {:name "l2-ls8-3",
    :data
-   {:items
-    [{:name "(s) serpiente"} {:name "(p) pelota"} {:name "(l) leon"}]}}
-  {:name "l2-ls9-1", :data {:items [{:name "(l) leon"}]}}
+   {:items [{:name "(s) snake"} {:name "(p) pig"} {:name "(l) lion"}]}}
+  {:name "l2-ls9-1", :data {:items [{:name "(l) lion"}]}}
   {:name "l2-ls9-3",
    :data
-   {:items
-    [{:name "(s) serpiente"} {:name "(p) pelota"} {:name "(l) leon"}]}}
+   {:items [{:name "(s) snake"} {:name "(p) pig"} {:name "(l) lion"}]}}
   {:name "ls1",
    :data
-   {:items
-    [{:name "(a) ardilla"}
-     {:name "(m) mano"}
-     {:name "(s) serpiente"}]}}
+   {:items [{:name "(a) ant"} {:name "(m) mat"} {:name "(s) snake"}]}}
   {:name "ls10",
    :data
    {:items
-    [{:name "(j) jardín"}
-     {:name "(qu) queso"}
-     {:name "(x) xilofono"}]}}
+    [{:name "(j) jacket"} {:name "(qu) queen"} {:name "(x) fox"}]}}
   {:name "ls11",
    :data
    {:items
-    [{:name "(z) zapato"}
-     {:name "(i) iman"}
-     {:name "(long a) ñandu"}]}}
+    [{:name "(z) zebra"}
+     {:name "(i) insect"}
+     {:name "(long a) acorn"}]}}
   {:name "ls2",
    :data
    {:items
-    [{:name "(long e) cepillo"}
-     {:name "(t) tomate"}
-     {:name "(r) rana"}]}}
+    [{:name "(long e) bee"}
+     {:name "(t) tomato"}
+     {:name "(r) rabbit"}]}}
   {:name "ls3",
    :data
    {:items
-    [{:name "(d) diamante"} {:name "(i) iman"} {:name "(m) mano"}]}}
+    [{:name "(d) diamond"} {:name "(i) insect"} {:name "(m) mat"}]}}
   {:name "ls4",
    :data
-   {:items [{:name "(c) casa"} {:name "(o) oso"} {:name "(n) niño"}]}}
+   {:items
+    [{:name "(c) cat"} {:name "(o) octopus"} {:name "(n) nut"}]}}
   {:name "ls5",
    :data
-   {:items [{:name "(f) flor"} {:name "(u) uvas"} {:name "(l) leon"}]}}
+   {:items
+    [{:name "(f) frog"} {:name "(u) umbrella"} {:name "(l) lion"}]}}
   {:name "ls6",
    :data
    {:items
-    [{:name "(w) web"} {:name "(g) gato"} {:name "(long a) ñandu"}]}}
+    [{:name "(w) web"} {:name "(g) garden"} {:name "(long a) acorn"}]}}
   {:name "ls7",
    :data
    {:items
-    [{:name "(h) hoja"}
-     {:name "(k) kimono"}
-     {:name "(long o) llave"}]}}
+    [{:name "(h) house"} {:name "(k) key"} {:name "(long o) oval"}]}}
   {:name "ls8",
    :data
    {:items
-    [{:name "(v) violin"}
-     {:name "(p) pelota"}
-     {:name "(ch) chocolate"}]}}
+    [{:name "(v) violin"} {:name "(p) pig"} {:name "(ch) chocolate"}]}}
   {:name "ls9",
    :data
    {:items
-    [{:name "(e) elefante"} {:name "(b) bebe"} {:name "(y) yoyo"}]}}]}
+    [{:name "(e) elephant"} {:name "(b) baby"} {:name "(y) yoyo"}]}}]}

@@ -122,14 +122,12 @@
                               :src     "/raw/img/casa/painting_canvas.png"},
                  :letter
                              {:type           "text",
-                              :x              1170,
-                              :y              540,
-                              :width          200,
-                              :height         200,
+                              :x              1270,
+                              :y              620,
                               :align          "center",
                               :fill           "#ff8c41",
                               :font-family    "Lexend Deca",
-                              :font-size      140,
+                              :font-size      200,
                               :text           "",
                               :vertical-align "middle"},
                  :mari
@@ -143,7 +141,6 @@
                               :name       "mari",
                               :scale-x    0.5,
                               :scale-y    0.5,
-                              :speed      0.35,
                               :start      true},
                  :word
                              {:type   "transparent",
@@ -166,7 +163,7 @@
                                                  :font-family    "Luckiest Guy",
                                                  :height         400},
                                        :default {:type "transparent"}}}},
- :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter"] ["mari"]],
+ :scene-objects [["background"] ["canvas" "box3" "box4" "box2" "box1" "word" "letter" "mari"]],
  :actions
                 {:box-1-change-skin
                                                 {:type       "set-slot",
