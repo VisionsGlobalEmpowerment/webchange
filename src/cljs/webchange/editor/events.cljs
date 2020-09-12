@@ -4,7 +4,7 @@
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.subs :as subs]
-    ;[webchange.interpreter.events :as ie]
+    [webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
     [webchange.interpreter.renderer.state.editor :as scene]
     [webchange.editor.common.actions.events :as actions.events]
@@ -870,7 +870,7 @@
   (fn [{:keys [db]} [_ scene-id]]
     (if-not (nil? scene-id)
       {:dispatch-n (list
-                     ;[::ie/set-current-scene scene-id]
+                     [::ie/set-current-scene scene-id]
                      [::reset-asset]
                      [::reset-object]
                      [::reset-scene-action]

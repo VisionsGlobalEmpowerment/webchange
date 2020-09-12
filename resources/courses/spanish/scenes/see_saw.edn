@@ -7,7 +7,13 @@
                  {:url "/raw/img/park/see-saw/background.jpg", :size 10, :type "image"}
                  {:url "/raw/img/park/see-saw/saw_01.png", :size 1, :type "image"}
                  {:url "/raw/img/park/see-saw/saw_02.png", :size 1, :type "image"}
-                 {:url "/raw/img/park/see-saw/saw_03.png", :size 1, :type "image"}],
+                 {:url "/raw/img/park/see-saw/saw_03.png", :size 1, :type "image"}
+                 {:url    "/upload/NDYJBQCOAILFYRBF.m4a",
+                  :date   1596043737151,
+                  :size   155,
+                  :type   "audio",
+                  :alias  "Mari intro",
+                  :target nil}],
  :objects
                 {:background    {:type "background", :src "/raw/img/park/see-saw/background.jpg"},
                  :box-ph
@@ -300,39 +306,46 @@
                                            :phrase-description "Juega de nuevo o pasa a la siguiente actividad"},
                  :mari-init-wand          {:type "add-animation", :id "wand_idle", :target "mari", :track 2, :loop true},
                  :mari-move-to-start
-                                          {:type               "parallel",
+                                          {:type                          "parallel",
                                            :data
-                                                               [{:data
-                                                                       [{:id "wand_hit", :type "animation", :track 2, :target "mari"}
-                                                                        {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}],
-                                                                 :type "sequence-data"}
-                                                                {:skippable   true,
-                                                                 :offset      11.643,
-                                                                 :phrase-text "Coloca esta foto sobre el sube y baja para empezar el juego!",
-                                                                 :start       11.643,
-                                                                 :type        "animation-sequence",
-                                                                 :duration    5.822,
-                                                                 :audio       "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a",
-                                                                 :target      "mari",
-                                                                 :track       1,
-                                                                 :data        [{:end 17.268, :anim "talk", :start 11.722}]}],
-                                           :phrase             "move-to-start",
-                                           :phrase-description "Mover imagen para comenzar",
-                                           :skippable          true},
+                                                                          [{:data
+                                                                                  [{:id "wand_hit", :type "animation", :track 2, :target "mari"}
+                                                                                   {:id "wand_idle", :loop true, :type "add-animation", :track 2, :target "mari"}],
+                                                                            :type "sequence-data"}
+                                                                           {:skippable   true,
+                                                                            :offset      11.643,
+                                                                            :phrase-text "Coloca esta foto sobre el sube y baja para empezar el juego!",
+                                                                            :start       4.149,
+                                                                            :type        "animation-sequence",
+                                                                            :duration    10.462,
+                                                                            :audio       "/upload/NDYJBQCOAILFYRBF.m4a",
+                                                                            :target      "mari",
+                                                                            :phrase-text-translated
+                                                                                         "Lleva las fotos al sube y baja, una por una para empezar el juego. Presióname si necesitas ayuda durante el juego. ",
+                                                                            :track       1,
+                                                                            :data
+                                                                                         [{:end 6.7, :anim "talk", :start 4.84}
+                                                                                          {:end 9.78, :anim "talk", :start 7.11}
+                                                                                          {:end 14.54, :anim "talk", :start 10.47}]}],
+                                           :phrase                        "move-to-start",
+                                           :phrase-description            "Mover imagen para comenzar",
+                                           :phrase-description-translated "Mari Instructions",
+                                           :skippable                     true},
                  :mari-welcome-audio
-                                          {:type               "animation-sequence",
-                                           :data               [{:end 3.914, :anim "talk", :start 1.062} {:end 10.167, :anim "talk", :start 4.897}],
-                                           :phrase             "welcome",
-                                           :phrase-description "Discurso de bienvenida",
+                                          {:type                   "animation-sequence",
+                                           :data                   [{:end 3.556, :anim "talk", :start 1.28}],
+                                           :phrase                 "welcome",
+                                           :phrase-description     "Discurso de bienvenida",
                                            :phrase-text
-                                                               "Bienvenido al parque mi amigo!\n                                                                              Vamos a repasar unas palabras mientras juegas en el sube y baja.",
-                                           :target             "mari",
-                                           :audio              "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a",
-                                           :start              0.787,
-                                           :duration           9.716,
-                                           :track              1,
-                                           :offset             0.787,
-                                           :skippable          true},
+                                                                   "Bienvenido al parque mi amigo!\n                                                                              Vamos a repasar unas palabras mientras juegas en el sube y baja.",
+                                           :phrase-text-translated "Bienvenidos al parque!",
+                                           :target                 "mari",
+                                           :audio                  "/upload/NDYJBQCOAILFYRBF.m4a",
+                                           :start                  1.28,
+                                           :duration               2.276,
+                                           :track                  1,
+                                           :offset                 0.787,
+                                           :skippable              true},
                  :pick-wrong              {:type "sequence", :data ["audio-wrong"]},
                  :renew-words
                                           {:type "lesson-var-provider", :from "concepts", :provider-id "words-set", :variables ["item-1" "item-2" "item-3"]},
@@ -421,21 +434,23 @@
                                                   {:id "idle_fly2", :loop true, :type "add-animation", :target "box2"}
                                                   {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
                  :try-another
-                                          {:type               "animation-sequence",
+                                          {:type                          "animation-sequence",
                                            :data
-                                                               [{:end 22.367, :anim "talk", :start 21.275}
-                                                                {:end 23.989, :anim "talk", :start 22.588}
-                                                                {:end 26.92, :anim "talk", :start 24.747}],
-                                           :phrase             "try-another",
-                                           :phrase-description "Prueba la siguiente foto",
-                                           :phrase-text        "Wiiiiiiiii! Te estas divirtiendo? Hay que intentar otra foto.",
-                                           :target             "mari",
-                                           :audio              "/raw/audio/l1/a2/Mari_Level1_Activity2.m4a",
-                                           :start              21.162,
-                                           :duration           5.979,
-                                           :track              1,
-                                           :offset             21.162,
-                                           :skippable          true},
+                                                                          [{:end 17.34, :anim "talk", :start 16.06}
+                                                                           {:end 19.05, :anim "talk", :start 17.59}
+                                                                           {:end 21.35, :anim "talk", :start 19.66}],
+                                           :phrase                        "try-another",
+                                           :phrase-description            "Prueba la siguiente foto",
+                                           :phrase-description-translated "Mari Transition to 2nd photo",
+                                           :phrase-text                   "Wiiiiiiiii! Te estas divirtiendo? Hay que intentar otra foto.",
+                                           :phrase-text-translated        "Wiiiiiii, ¿te estás divirtiendo? Intentemos otra foto.",
+                                           :target                        "mari",
+                                           :audio                         "/upload/NDYJBQCOAILFYRBF.m4a",
+                                           :start                         15.962,
+                                           :duration                      5.552,
+                                           :track                         1,
+                                           :offset                        21.162,
+                                           :skippable                     true},
                  :wait-for-box-animations {:type "empty", :duration 500}},
  :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
  :metadata      {:prev "park", :autostart true},

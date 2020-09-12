@@ -479,7 +479,7 @@
     (update-scene! scenes))
   (if-let [scene-versions (:scene-versions data)]
     (update-scene-versions! scene-versions))
-  (let [
+  #_(let [
         courses (db/get-courses)
         course-versions (get-course-versions)
         datasets (db/get-datasets)
@@ -496,13 +496,13 @@
         scenes-guid (guid/guids-from-entries (:scenes data) guid/guid-is-id)
         scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)
         ]
-    (delete-not-in-guid-list course-versions-guid course-versions :id db/delete-course-version-by-id!)
-    (delete-not-in-guid-list courses-guid courses :id db/delete-course-by-id!)
+    (delete-not-in-guid-list lesson-sets-guid lesson-sets :id db/delete-lesson-set-by-id!)
     (delete-not-in-guid-list dataset-items-guid dataset-items :id db/delete-dataset-item-by-id!)
     (delete-not-in-guid-list datasets-guid datasets :id db/delete-dataset-by-id!)
-    (delete-not-in-guid-list lesson-sets-guid lesson-sets :id db/delete-lesson-set-by-id!)
     (delete-not-in-guid-list scene-versions-guid scene-versions :id db/delete-scene-version-by-id!)
     (delete-not-in-guid-list scenes-guid scenes :id db/delete-scene-by-id!)
+    (delete-not-in-guid-list course-versions-guid course-versions :id db/delete-course-version-by-id!)
+    (delete-not-in-guid-list courses-guid courses :id db/delete-course-by-id!)
     )
   )
 

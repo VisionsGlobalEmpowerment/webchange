@@ -86,7 +86,7 @@
                               :name   "vera",
                               :speed  0.3,
                               :start  true}},
- :scene-objects [["background" "see-saw" "swings" "sandbox" "slide" "pinata" "hide-n-seek"] ["vera"]],
+ :scene-objects [["background"] ["see-saw" "swings" "sandbox" "slide" "pinata" "hide-n-seek" "vera"]],
  :actions       {:start-background-music {:type "audio", :id "/raw/audio/background/Parque.mp3", :loop true}},
  :triggers      {:music {:on "start", :action "start-background-music"}},
  :metadata      {:prev "map", :autostart true}}

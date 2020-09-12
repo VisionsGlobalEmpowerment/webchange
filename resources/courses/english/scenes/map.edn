@@ -103,7 +103,7 @@
                                            :init-cinema  {:x 1627, :y 672},
                                            :init-library {:x 299, :y 576},
                                            :init-stadium {:x 1488, :y 399}}}},
- :scene-objects [["background" "home" "feria" "park" "library" "stadium" "cinema"] ["vera"]],
+ :scene-objects [["background"] ["home" "feria" "park" "library" "stadium" "cinema" "vera"]],
  :actions
                 {:init
                                          {:type "sequence-data",

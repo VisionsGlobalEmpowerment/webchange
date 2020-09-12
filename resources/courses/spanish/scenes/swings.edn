@@ -68,7 +68,13 @@
                  {:url "/raw/audio/l1/a3/vera/yoyo.mp3", :size 2, :type "audio", :alias "vera-yoyo"}
                  {:url "/raw/audio/l1/a3/rock/Yoyo.m4a", :size 2, :type "audio", :alias "rock-yoyo"}
                  {:url "/raw/audio/l1/a3/vera/zapatos.mp3", :size 2, :type "audio", :alias "vera-zapatos"}
-                 {:url "/raw/audio/l1/a3/rock/Zapatos.m4a", :size 2, :type "audio", :alias "rock-zapatos"}],
+                 {:url "/raw/audio/l1/a3/rock/Zapatos.m4a", :size 2, :type "audio", :alias "rock-zapatos"}
+                 {:url    "/upload/BSOGMLNLRVJBZKHZ.m4a",
+                  :date   1596054006788,
+                  :size   95,
+                  :type   "audio",
+                  :alias  "Mari instructions",
+                  :target nil}],
  :objects
                 {:background {:type "background", :src "/raw/img/park/swings/background.jpg"},
                  :box-ph
@@ -364,41 +370,42 @@
                                            :skippable          true},
                  :mari-welcome-audio-2
                                           {:type      "animation-sequence",
-                                           :data
-                                                      [{:end 7.64, :anim "talk", :start 0.79}
-                                                       {:end 9.26, :anim "talk", :start 7.82}
-                                                       {:end 12.21, :anim "talk", :start 9.66}],
+                                           :data      [{:end 13.173, :anim "talk", :start 0.92}],
                                            :phrase-text
                                                       " Si! Vamos a jugar el los columpios! Nuestros amigos quieren ir a jugar en los columpios! Vamos a darles un turno a cada uno.",
+                                           :phrase-text-translated
+                                                      "¡Si! ¡Vamos a jugar en los columpios! Nuestros amigos quieren subirse a los columpios también! Dale a cada uno su turno llevándolo al columpio.",
                                            :target    "mari",
-                                           :audio     "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
-                                           :start     0.787,
-                                           :duration  11.679,
+                                           :audio     "/upload/BSOGMLNLRVJBZKHZ.m4a",
+                                           :start     0.92,
+                                           :duration  12.253,
                                            :track     1,
                                            :offset    0.787,
                                            :skippable true},
                  :mari-welcome-audio-4
-                                          {:type        "animation-sequence",
-                                           :data        [{:end 17.78, :anim "talk", :start 15.05}],
-                                           :phrase-text "Muy bien! Buen trabajo!",
-                                           :target      "mari",
-                                           :audio       "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
-                                           :start       14.999,
-                                           :duration    2.933,
-                                           :track       1,
-                                           :offset      14.999,
-                                           :skippable   true},
+                                          {:type                   "animation-sequence",
+                                           :data                   [{:end 15.86, :anim "talk", :start 14.39}],
+                                           :phrase-text            "Muy bien! Buen trabajo!",
+                                           :phrase-text-translated "Maravilloso!",
+                                           :target                 "mari",
+                                           :audio                  "/upload/BSOGMLNLRVJBZKHZ.m4a",
+                                           :start                  14.239,
+                                           :duration               1.453,
+                                           :track                  1,
+                                           :offset                 14.999,
+                                           :skippable              true},
                  :mari-welcome-audio-5
-                                          {:type        "animation-sequence",
-                                           :data        [{:end 30.94, :anim "talk", :start 29.25} {:end 32.62, :anim "talk", :start 31.17}],
-                                           :phrase-text "Ok pequeno genio! Vamos a comenzar!",
-                                           :target      "mari",
-                                           :audio       "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
-                                           :start       29.012,
-                                           :duration    3.786,
-                                           :track       1,
-                                           :offset      29.012,
-                                           :skippable   true},
+                                          {:type                   "animation-sequence",
+                                           :data                   [{:end 18.59, :anim "talk", :start 17.97} {:end 20.54, :anim "talk", :start 19.05}],
+                                           :phrase-text            "Ok pequeno genio! Vamos a comenzar!",
+                                           :phrase-text-translated "OK, vamos a comenzar.",
+                                           :target                 "mari",
+                                           :audio                  "/upload/BSOGMLNLRVJBZKHZ.m4a",
+                                           :start                  17.859,
+                                           :duration               2.82,
+                                           :track                  1,
+                                           :offset                 29.012,
+                                           :skippable              true},
                  :pick-wrong              {:type "sequence", :data ["audio-wrong"]},
                  :prepare-swing           {:type "transition", :to {:loop false, :duration 1, :rotation -15}, :transition-id "swings"},
                  :renew-words
@@ -493,22 +500,20 @@
                                                   {:id "idle_fly2", :loop true, :type "add-animation", :target "box2"}
                                                   {:id "idle_fly3", :loop true, :type "add-animation", :target "box3"}]},
                  :try-another
-                                          {:type               "animation-sequence",
-                                           :data
-                                                               [{:end 43.225, :anim "talk", :start 41.155}
-                                                                {:end 45.534, :anim "talk", :start 43.725}
-                                                                {:end 48.759, :anim "talk", :start 46.32}],
-                                           :phrase             "try-another",
-                                           :phrase-description "Prueba otra foto",
+                                          {:type                   "animation-sequence",
+                                           :data                   [{:end 23.33, :anim "talk", :start 22.03} {:end 25.59, :anim "talk", :start 23.72}],
+                                           :phrase                 "try-another",
+                                           :phrase-description     "Prueba otra foto",
                                            :phrase-text
-                                                               "Buen trabajo pequeno genio!\n                                                                              Vamos a intentarlo de nuevo!\n                                                                              Mueve la foto sobre los columpios. ",
-                                           :target             "mari",
-                                           :audio              "/raw/audio/l1/a3/Mari_Level1_Activity3.m4a",
-                                           :start              40.476,
-                                           :duration           8.509,
-                                           :track              1,
-                                           :offset             40.476,
-                                           :skippable          true},
+                                                                   "Buen trabajo pequeno genio!\n                                                                              Vamos a intentarlo de nuevo!\n                                                                              Mueve la foto sobre los columpios. ",
+                                           :phrase-text-translated "¡Buen trabajo! Intentemos otra foto.",
+                                           :target                 "mari",
+                                           :audio                  "/upload/BSOGMLNLRVJBZKHZ.m4a",
+                                           :start                  21.958,
+                                           :duration               3.88,
+                                           :track                  1,
+                                           :offset                 40.476,
+                                           :skippable              true},
                  :vera-welcome-audio-1
                                           {:type        "animation-sequence",
                                            :data

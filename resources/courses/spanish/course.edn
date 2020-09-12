@@ -1,5 +1,4 @@
 {:initial-scene "map",
- :navigation-mode :activity, ; possible values :activity, :lesson
  :scene-list
                 {:home
                  {:name    "Casa",
@@ -112,7 +111,7 @@
                   :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
                  :letter-intro
                  {:name    "Letter Intro",
-                  :outs    [],
+                  :outs    [{:x 1457, :y 330, :name "map", :object "door"}],
                   :type    "non-scored",
                   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
                  :park
@@ -822,4 +821,5 @@
                            :activities  [{:scored true, :activity "pinata", :time-expected 300, :expected-score-percentage 90}],
                            :lesson-sets {:assessment "assessment6"}}]}],
  :default-progress
-                {:next {:level 1, :lesson 1, :activity "home"}, :finished {:1 {:1 []}}, :variables {:last-location "home"}}}
+                {:next {:level 1, :lesson 1, :activity "home"}, :finished {:1 {:1 []}}, :variables {:last-location "home"}},
+ :navigation-mode "activity"}

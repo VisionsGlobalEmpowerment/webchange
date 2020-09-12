@@ -2544,7 +2544,7 @@
     {:data
      [{:id "default",
        :type "state",
-       :params {:text "ch"},
+       :params {:text "c"},
        :target "letter"}
       {:id "default",
        :type "state",
