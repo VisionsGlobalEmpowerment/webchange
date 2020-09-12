@@ -140,10 +140,8 @@
 (re-frame/reg-event-fx
   ::select-current-scene-object
   (fn [{:keys [db]} [_ name]]
-    (let [scene-id (subs/current-scene db)
-          current-object (get-in db [:editor :selected-object :name])]
-      {:db       (assoc-in db [:editor :selected-object] {:scene-id scene-id :name name})
-       :dispatch [::scene/select-object current-object name]})))
+    (let [scene-id (subs/current-scene db)]
+      {:db       (assoc-in db [:editor :selected-object] {:scene-id scene-id :name name})})))
 
 (re-frame/reg-event-fx
   ::reset-scene-action

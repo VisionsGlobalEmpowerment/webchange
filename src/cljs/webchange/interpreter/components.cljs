@@ -9,7 +9,9 @@
     [webchange.interpreter.scene-resources-parser :refer [get-scene-resources]]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
-    [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]))
+    [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
+
+    [webchange.interpreter.renderer.scene.components.group.propagate]))
 
 (defn- get-layer-objects-data
   [scene-id layer-objects]

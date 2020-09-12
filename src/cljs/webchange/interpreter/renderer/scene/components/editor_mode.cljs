@@ -1,7 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.editor-mode
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor.events :as events]
     [webchange.editor-v2.scene.state.skin :as skin]
     [webchange.interpreter.renderer.pixi :refer [Container Graphics Rectangle Sprite WHITE]]
     [webchange.interpreter.renderer.state.editor :as editor]
@@ -14,7 +13,7 @@
 
 (defn- handle-frame-click
   [component]
-  (re-frame/dispatch [::events/select-current-scene-object (:object-name component)]))
+  (re-frame/dispatch [::editor/select-object (:object-name component)]))
 
 (defn- handle-drag
   [container]
