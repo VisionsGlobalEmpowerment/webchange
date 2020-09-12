@@ -479,7 +479,7 @@
     (update-scene! scenes))
   (if-let [scene-versions (:scene-versions data)]
     (update-scene-versions! scene-versions))
-  #_(let [
+  (let [
         courses (db/get-courses)
         course-versions (get-course-versions)
         datasets (db/get-datasets)
