@@ -8,12 +8,8 @@
     [webchange.common.copybook :refer [copybook]]
     [webchange.common.svg-path :refer [svg-path]]
     [webchange.common.matrix :refer [matrix-objects-list]]
-    [webchange.common.anim :refer [anim animations init-spine-player prepare-anim-object-params]]
     [webchange.common.events :as ce]
-    [webchange.common.core :refer [with-parent-origin
-                                   with-origin-offset]]
-    [webchange.common.image-modifiers.filter-outlined :refer [filter-outlined]]
-    [webchange.common.scene-components.components :as components]
+    [webchange.common.core :refer [with-parent-origin]]
     [webchange.interpreter.variables.subs :as vars.subs]
     [webchange.interpreter.core :refer [get-data-as-url]]
     [webchange.interpreter.components :refer [scene] :rename {scene play-scene}]
@@ -139,7 +135,7 @@
 
 (defn object-params
   [object]
-  (-> object with-origin-offset))
+  object)
 
 (defn draw-object
   ([scene-id name]
@@ -177,19 +173,13 @@
 
 (defn button
   [scene-id name object]
-  (with-editor-wrapper components/button-editor scene-id name object))
-
-(defn- get-filters
-  [params]
-  (if (contains? params :highlight)
-    [filter-outlined]
-    []))
+  ;(with-editor-wrapper components/button-editor scene-id name object)
+  )
 
 (defn image
   [scene-id name object]
   [:> Group (object-params object)
-   [kimage {:src     (get-data-as-url (:src object))
-            :filters (get-filters object)}]
+   [kimage {:src     (get-data-as-url (:src object))}]
    [:> Rect (rect-params scene-id name object)]])
 
 (defn- state-by-type
@@ -256,19 +246,23 @@
 
 (defn animation
   [scene-id name object]
-  (let [object (prepare-anim-object-params object)
-        params (object-params object)
-        animation-name (or (:scene-name object) (:name object))]
-    [:> Group (assoc params :draggable true
-                            :on-drag-end #(let [x (.. % -target -attrs -x)
-                                                y (.. % -target -attrs -y)]
-                                            (re-frame/dispatch [::skin/change-position x y])))
-     [anim (-> object
-               (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %]))
-               (assoc :start false))]
-     [:> Rect (-> (rect-params scene-id name object)
-                  (with-parent-origin object "center-bottom")
-                  with-origin-offset)]]))
+  ;(let [object (prepare-anim-object-params object)
+  ;      params (object-params object)
+  ;      animation-name (or (:scene-name object) (:name object))]
+  ;  [:> Group (assoc params :draggable true
+  ;                          :on-drag-end #(let [x (.. % -target -attrs -x)
+  ;                                              y (.. % -target -attrs -y)]
+  ;                                          (re-frame/dispatch [::skin/change-position x y])))
+  ;   [anim (-> object
+  ;             (assoc :on-mount #(re-frame/dispatch [::ie/register-animation animation-name %]))
+  ;             (assoc :start false))]
+  ;   [:> Rect (-> (rect-params scene-id name object)
+  ;                (with-parent-origin object "center-bottom")
+  ;                with-origin-offset)
+  ;
+  ;    ]])
+
+  )
 
 (defn text
   [scene-id name object]
@@ -745,7 +739,7 @@
     ^{:key (str @ui-screen)}
     (if @loaded
       (case @ui-screen
-        :play-scene [with-stage [play-scene @scene-id] scene-id]
+        ;:play-scene [with-stage [play-scene @scene-id] scene-id]
         :actions (with-stage [draw-actions] {:draggable true} scene-id)
         :triggers (with-stage [draw-triggers] {:draggable true} scene-id)
         :scene-source [scene-source @scene-id]

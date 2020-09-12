@@ -2,10 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
-    [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.interpreter.events :as ie]
-    [webchange.editor.core :as editor]
-    [webchange.common.anim :refer [animations]]))
+    [ajax.core :refer [json-request-format json-response-format]]))
 
 (re-frame/reg-event-fx
   ::reset-form-data

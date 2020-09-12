@@ -160,11 +160,11 @@
                :increase inc
                :decrease dec
                :reset (constantly counter-value))]
-      {:db (->> counter-id
-                (core/get-variable)
-                fn
-                (core/set-variable! counter-id))
-       :dispatch (e/success-event action)})))
+      (->> counter-id
+           (core/get-variable)
+           fn
+           (core/set-variable! counter-id))
+      {:dispatch (e/success-event action)})))
 
 (re-frame/reg-event-fx
   ::execute-calc

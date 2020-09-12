@@ -4,7 +4,7 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.editor-v2.scene.state.db :refer [path-to-db]]
     [webchange.subs :as subs]
-    [webchange.editor.subs :as editor-subs]
+    [webchange.interpreter.renderer.state.editor :as editor-renderer-state]
     [webchange.editor.events :as edit-scene]))
 
 (re-frame/reg-event-fx
@@ -28,26 +28,25 @@
 (re-frame/reg-sub
   ::animation-selected?
   (fn [db]
-    (let [{:keys [scene-id name]} (editor-subs/selected-object db)
-          o (subs/scene-object db scene-id name)]
-      (->> o
-           :states
-           (map :type)
-           (into #{(:type o)})
-           (some #{"animation"})))))
+    (let [name (editor-renderer-state/selected-object db)
+          current-scene (subs/current-scene db)
+          o (subs/scene-object db current-scene name)]
+      (= "animation" (:type o)))))
 
 (re-frame/reg-sub
   ::current-skin
   (fn [db]
-    (let [{:keys [scene-id name]} (editor-subs/selected-object db)
-          o (subs/scene-object db scene-id name)]
+    (let [name (editor-renderer-state/selected-object db)
+          current-scene (subs/current-scene db)
+          o (subs/scene-object db current-scene name)]
       (:skin o))))
 
 (re-frame/reg-sub
   ::available-skins
   (fn [db]
-    (let [{:keys [scene-id name]} (editor-subs/selected-object db)
-          o (subs/scene-object db scene-id name)
+    (let [name (editor-renderer-state/selected-object db)
+          current-scene (subs/current-scene db)
+          o (subs/scene-object db current-scene name)
           animation-name (:name o)
           characters (get-in db (path-to-db [:characters]) [])]
       (->> characters
@@ -58,10 +57,10 @@
 (re-frame/reg-event-fx
   ::change-position
   (fn [{:keys [db]} [_ x y]]
-    (let [{:keys [scene-id name]} (editor-subs/selected-object db)
-          state (-> (subs/scene-object db scene-id name)
-                    (assoc :x x :y y))
-          current-scene (subs/current-scene db)]
+    (let [name (editor-renderer-state/selected-object db)
+          current-scene (subs/current-scene db)
+          state (-> (subs/scene-object db current-scene name)
+                    (assoc :x x :y y))]
       {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
                                                       :target   name
                                                       :state    state}]
@@ -72,12 +71,13 @@
 (re-frame/reg-event-fx
   ::change-skin
   (fn [{:keys [db]} [_ skin]]
-    (let [{:keys [scene-id name]} (editor-subs/selected-object db)
-          state (-> (subs/scene-object db scene-id name)
+    (let [name (editor-renderer-state/selected-object db)
+          current-scene (subs/current-scene db)
+          state (-> (subs/scene-object db current-scene name)
                     (assoc :skin skin))
           current-scene (subs/current-scene db)
           animation-name (or (:scene-name state) (:name state))]
-      {:set-skin {:state (get-in db [:scenes scene-id :animations animation-name])
+      {:set-skin {:state (get-in db [:scenes current-scene :animations animation-name])
                   :skin skin}
        :dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
                                                       :target   name

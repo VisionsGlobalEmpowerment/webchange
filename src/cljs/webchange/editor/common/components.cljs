@@ -1,6 +1,5 @@
 (ns webchange.editor.common.components
   (:require
-    [webchange.common.anim :refer [animations]]
     [webchange.editor.common.properties_form_animation :refer [properties-form-animation]]
     [webchange.editor.common.properties_form_common :refer [properties-form-common]]
     [webchange.editor.events :as events]

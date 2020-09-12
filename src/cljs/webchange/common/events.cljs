@@ -3,7 +3,10 @@
     [clojure.string :as s]
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
-    [webchange.interpreter.variables.core :refer [variables]]))
+    [webchange.interpreter.variables.core :refer [variables]]
+    [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.state.overlays :as overlays]
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
 
 (def executors (atom {}))
 (def flows (atom {}))
@@ -63,8 +66,8 @@
   "Interceptor
   Transform event arguments to action-data"
   (re-frame/->interceptor
-    :before  (fn [context]
-               (update-in context [:coeffects :event] #(second %)))))
+    :before (fn [context]
+              (update-in context [:coeffects :event] #(second %)))))
 
 (declare register-flow!)
 
@@ -77,18 +80,19 @@
             action-id (random-uuid)]
         (register-flow! {:flow-id flow-id
                          :actions [action-id]
-                         :type :all :tags (get-action-tags action)})
+                         :type    :all
+                         :tags    (get-action-tags action)})
         (assoc action :flow-id flow-id :action-id action-id)))))
 
 (def with-flow
   "Interceptor
   Add and register flow if it is not defined"
   (re-frame/->interceptor
-    :before  (fn [context]
-               (let [action (-> context
-                                (get-in [:coeffects :event])
-                                ->with-flow)]
-                 (assoc-in context [:coeffects :event] action)))))
+    :before (fn [context]
+              (let [action (-> context
+                               (get-in [:coeffects :event])
+                               ->with-flow)]
+                (assoc-in context [:coeffects :event] action)))))
 
 (defn with-prev
   [action prev]
@@ -124,8 +128,8 @@
 
 (defn with-param-property
   [action {:keys [param-property action-property template]}]
-    (let [value (get-in action [:params (keyword param-property)])]
-      (assoc action (keyword action-property) (from-template template value))))
+  (let [value (get-in action [:params (keyword param-property)])]
+    (assoc action (keyword action-property) (from-template template value))))
 
 (defn with-param-properties
   [action]
@@ -149,12 +153,23 @@
   [db]
   (fn [action {:keys [var-name object-name-template object-property action-property offset]}]
     (let [var (get @variables var-name)
-          object (get-in db [:scenes (:current-scene db) :objects (keyword (from-template object-name-template var))])
-          object-property-path (map keyword (clojure.string/split object-property "."))
-          object-property-value (let [val (get-in object object-property-path)]
-                                  (if offset (+ val offset) val))
-          action-property-path (map keyword (clojure.string/split action-property "."))]
-      (assoc-in action action-property-path object-property-value))))
+          object-name (from-template object-name-template var)
+          object (->> (keyword object-name)
+                      (scene/get-scene-object db))]
+
+      (when (nil? object)
+        (-> (str "Object with name <" object-name "> was not found") js/Error. throw))
+
+      (let [object-data (w/get-data object)
+            object-property-path (map keyword (clojure.string/split object-property "."))
+            object-property-value (let [val (get-in object-data object-property-path)]
+                                    (if offset (+ val offset) val))
+            action-property-path (map keyword (clojure.string/split action-property "."))]
+
+        (when (nil? object-property-value)
+          (-> (str "Object <" object-name "> doesn't have property <" object-property-path ">") js/Error. throw))
+
+        (assoc-in action action-property-path object-property-value)))))
 
 (defn with-var-object-properties
   [action db]
@@ -172,14 +187,14 @@
 
 (def with-vars
   (re-frame/->interceptor
-    :before  (fn [context]
-               (let [{:keys [db event]} (:coeffects context)
-                     action (->with-vars db event)]
-                 (assoc-in context [:coeffects :event] action)))))
+    :before (fn [context]
+              (let [{:keys [db event]} (:coeffects context)
+                    action (->with-vars db event)]
+                (assoc-in context [:coeffects :event] action)))))
 
 (defn get-action
   ([id db]
-    (get-action id db {}))
+   (get-action id db {}))
   ([id db prev]
    (let [action (get-in db [:scenes (:current-scene db) :actions (keyword id)])]
      (if-not (nil? action)
@@ -224,8 +239,8 @@
   ::execute-action
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-    (execute-action db action)
-    {}))
+             (execute-action db action)
+             {}))
 
 (defn remove-tag
   [flow tag]
@@ -379,10 +394,10 @@
   ::execute-sequence
   [event-as-action with-vars]
   (fn-traced [{:keys [db]} action]
-    (let [data (->> (:data action)
-                    (map #(get-action % db action))
-                    (into []))]
-      {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
+             (let [data (->> (:data action)
+                             (map #(get-action % db action))
+                             (into []))]
+               {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
 (defn execute-sequence-data!
   [db action]
@@ -397,7 +412,7 @@
           flow-id (random-uuid)
           action-id (random-uuid)
           current-scene (:current-scene db)
-          flow-data {:flow-id flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
+          flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
                      :current-scene current-scene}
           current-action (-> current
                              (assoc :flow-id flow-id)
@@ -407,7 +422,7 @@
 
       (when skippable?
         (on-skip! #(dispatch-success-fn current-action))
-        (re-frame/dispatch [::show-skip true]))
+        (re-frame/dispatch [::overlays/show-skip-menu]))
 
       (when sequence-skippable?
         (on-skip! (:on-skip action))
@@ -419,8 +434,8 @@
   ::execute-sequence-data
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-    (execute-sequence-data! db action)
-    {}))
+             (execute-sequence-data! db action)
+             {}))
 
 (defn execute-parallel!
   [db action]
@@ -432,9 +447,9 @@
                      (map (fn [v] (with-prev v action))))
         action-ids (map #(get % :action-id) actions)
         current-scene (:current-scene db)
-        flow-data {:flow-id flow-id :actions action-ids :type :all
-                   :parent (:flow-id action) :tags (get-action-tags action)
-                   :next #(dispatch-success-fn action)
+        flow-data {:flow-id       flow-id :actions action-ids :type :all
+                   :parent        (:flow-id action) :tags (get-action-tags action)
+                   :next          #(dispatch-success-fn action)
                    :current-scene current-scene}]
     (register-flow! flow-data)
 
@@ -448,8 +463,8 @@
   ::execute-parallel
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-    (execute-parallel! db action)
-    {}))
+             (execute-parallel! db action)
+             {}))
 
 (defn execute-callback!
   [{:keys [callback] :as action}]
@@ -466,22 +481,17 @@
     {}))
 
 (re-frame/reg-event-fx
-  ::show-skip
-  (fn [{:keys [db]} [_ value]]
-    {:db (assoc db :show-skip value)}))
-
-(re-frame/reg-event-fx
   ::execute-hide-skip
   [event-as-action with-flow]
   (fn [{:keys [db]} action]
     (dispatch-success-fn action)
-    {:db (assoc db :show-skip false)}))
+    {:dispatch [::overlays/hide-skip-menu]}))
 
 (re-frame/reg-event-fx
   ::execute-reset-skip
   (fn [{:keys [db]} _]
     (reset! on-skip-handlers [])
-    {:db (assoc db :show-skip false)}))
+    {:dispatch [::overlays/hide-skip-menu]}))
 
 (re-frame/reg-event-fx
   ::skip
@@ -489,4 +499,4 @@
     (let [[on-skip-list _] (reset-vals! on-skip-handlers [])]
       (doseq [on-skip on-skip-list]
         (on-skip)))
-    {:db (assoc db :show-skip false)}))
+    {:dispatch [::overlays/hide-skip-menu]}))

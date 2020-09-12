@@ -156,15 +156,16 @@
                   :name        "book",
                   :scale-x     1,
                   :scale-y     1,
-                  :speed       0.3,
+                  :skin        "default"
                   :start       false},
                  :content
-                 {:type       "transparent",
+                 {:type       "group",
                   :x          209,
                   :y          89,
                   :transition "content",
                   :children   ["letter" "image" "image2" "image3"],
-                  :states     {:hidden {:type "transparent"}, :visible {:type "group", :opacity 0}}},
+                  :visible    false
+                  :states     {:hidden {:visible false}, :visible {:visible true, :opacity 0}}},
                  :image
                  {:type       "image",
                   :x          220,
@@ -199,14 +200,9 @@
                  {:type           "text",
                   :x              220,
                   :y              150,
-                  :width          200,
-                  :height         200,
                   :font-family    "Comic Sans MS",
-                  :font-size      180,
-                  :shadow-blur    5,
-                  :shadow-color   "#1a1a1a",
-                  :shadow-offset  {:x 5, :y 5},
-                  :shadow-opacity 0.5,
+                  :font-size      280,
+                  :vertical-align "middle"
                   :states         {:default {}}},
                  :next-page-arrow
                  {:type    "image",
@@ -243,7 +239,7 @@
                   :shadow-color   "#1a1a1a",
                   :shadow-offset  {:x 5, :y 5},
                   :shadow-opacity 0.5,
-                  :states         {:hidden {:type "transparent"}, :visible {:type "text"}},
+                  :states         {:hidden {:visible false}, :visible {:visible true}},
                   :text           "El libro de mis primeras palabras",
                   :vertical-align "middle"}},
  :scene-objects [["background"] ["book"] ["title-text" "content" "next-page-arrow"]],

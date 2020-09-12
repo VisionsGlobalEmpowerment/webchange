@@ -21,11 +21,13 @@
       :params {:src "/raw/img/elements/tree.png", :filter "grayscale"},
       :target "image3"}],
     :type "parallel",
-    :scene-id "book"}}
+    :scene-id "book"}
+   :scenes ["book"]}
   {:name "book-read-action",
    :type "action",
    :template {:type "audio", :scene-id "book"}}
-  {:name "chanting-video-src", :type "video", :template nil}
+  {:name "chanting-video-src", :type "video", :template nil
+   :scenes ["cinema-video"]}
   {:name "concept-name", :type "string"}
   {:name "concept-rest", :type "string"}
   {:name "game-voice-action",
@@ -87,7 +89,10 @@
    {:type "animation-sequence",
     :target "senoravaca",
     :scene-id "home"}}
-  {:name "image-src", :type "image", :template nil}
+  {:name "image-src",
+   :type "image",
+   :template nil,
+   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "cycling-letters" "volleyball" "volleyball-letters" "pinata" "writing-lesson" "writing-practice" "hide-n-seek" "running" "slide" "magic-hat"]}
   {:name "letter", :type "string"}
   {:name "letter-big", :type "string"}
   {:name "letter-intro-letter",
@@ -145,7 +150,8 @@
     :target "senoravaca",
     :scene-id "letter-intro"}}
   {:name "letter-path", :type "string"}
-  {:name "letter-src", :type "image", :template nil}
+  {:name "letter-src", :type "image", :template nil,
+   :scenes ["writing-lesson" "writing-practice"]}
   {:name "letter-tutorial-path", :type "string"}
   {:name "mari-chant",
    :type "action",
@@ -187,9 +193,12 @@
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
     :scene-id "magic-hat"}}
-  {:name "poem-image-1", :type "image", :template nil}
-  {:name "poem-image-2", :type "image", :template nil}
-  {:name "poem-image-3", :type "image", :template nil}
+  {:name "poem-image-1", :type "image", :template nil,
+   :scenes ["park-poem"]}
+  {:name "poem-image-2", :type "image", :template nil,
+   :scenes ["park-poem"]}
+  {:name "poem-image-3", :type "image", :template nil,
+   :scenes ["park-poem"]}
   {:name "poem-story",
    :type "action",
    :template
@@ -268,19 +277,19 @@
     :scene-id "cinema"}}
   {:name "word-image-1",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-2",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-3",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}
   {:name "word-image-4",
    :type "image",
-   :scenes ["sandbox" "cycling"],
+   :scenes ["sandbox" "cycling" "volleyball"],
    :template nil}],
  :items
  [{:name "ardilla",
@@ -2535,7 +2544,7 @@
     {:data
      [{:id "default",
        :type "state",
-       :params {:text "ch"},
+       :params {:text "c"},
        :target "letter"}
       {:id "default",
        :type "state",

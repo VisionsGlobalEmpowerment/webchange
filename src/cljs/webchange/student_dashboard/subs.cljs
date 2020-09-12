@@ -28,12 +28,15 @@
            (map #(merge % (scene-name->scene (:activity %) scenes)))
            (map #(assoc % :completed true))))))
 
+(defn next-activity
+  [db]
+  (let [scenes (get-in db [:course-data :scene-list])
+          next (get-in db [:progress-data :next])]
+      (merge next (scene-name->scene (:activity next) scenes))))
+
 (re-frame/reg-sub
   ::next-activity
-  (fn [db]
-    (let [scenes (get-in db [:course-data :scene-list])
-          next (get-in db [:progress-data :next])]
-      (merge next (scene-name->scene (:activity next) scenes)))))
+  next-activity)
 
 (re-frame/reg-sub
   ::assessments
@@ -70,19 +73,20 @@
           ]
       finished-activities)))
 
+(defn lesson-progress
+  [db]
+  (let [progress-data (get-in db [:progress-data :finished])
+        last-level (last-level-done progress-data)
+        last-lesson (last-lesson-done progress-data last-level)
+
+        finished-activities ((keyword (str last-lesson)) ((keyword (str last-level)) progress-data))
+        activities (lessons-activity/get-activities db last-level last-lesson)]
+    (/ (count finished-activities)
+       (count activities))))
+
 (re-frame/reg-sub
   ::lesson-progress
-  (fn [db]
-    (let [
-          progress-data (get-in db [:progress-data :finished])
-          last-level (last-level-done progress-data)
-          last-lesson (last-lesson-done progress-data last-level)
-
-          finished-activities ((keyword (str last-lesson))  ((keyword (str last-level)) progress-data))
-          activities (lessons-activity/get-activities db last-level last-lesson)
-          ]
-      (/ (count finished-activities)
-         (count activities)))))
+  lesson-progress)
 
 (re-frame/reg-sub
   ::overall-progress

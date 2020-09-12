@@ -5,13 +5,14 @@
  :objects
             {:background {:type "background", :src "/raw/img/park/pinata/background.jpg"},
              :box1
-                         {:type       "transparent",
+                         {:type       "animation",
                           :x          205,
                           :y          930,
                           :width      671,
                           :height     633,
                           :scene-name "box1",
                           :transition "box1",
+                          :visible    false,
                           :actions    {:drag-end {:id "check-box-drop", :on "drag-end", :type "action", :params {:target "box1"}}},
                           :anim       "idle2",
                           :draggable  {:var-name "drag-box-1"},
@@ -33,13 +34,14 @@
                           :scale-x    1,
                           :scale-y    1},
              :box2
-                         {:type       "transparent",
+                         {:type       "animation",
                           :x          410,
                           :y          985,
                           :width      671,
                           :height     633,
                           :scene-name "box2",
                           :transition "box2",
+                          :visible    false,
                           :actions    {:drag-end {:id "check-box-drop", :on "drag-end", :type "action", :params {:target "box2"}}},
                           :anim       "idle2",
                           :draggable  {:var-name "drag-box-2"},
@@ -61,13 +63,14 @@
                           :scale-x    1,
                           :scale-y    1},
              :box3
-                         {:type       "transparent",
+                         {:type       "animation",
                           :x          610,
                           :y          955,
                           :width      671,
                           :height     633,
                           :scene-name "box3",
                           :transition "box3",
+                          :visible    false,
                           :actions    {:drag-end {:id "check-box-drop", :on "drag-end", :type "action", :params {:target "box3"}}},
                           :anim       "idle2",
                           :draggable  {:var-name "drag-box-3"},
@@ -170,9 +173,9 @@
                                     [{:skin "qwestion", :type "set-skin", :target "box1"}
                                      {:skin "qwestion", :type "set-skin", :target "box2"}
                                      {:skin "qwestion", :type "set-skin", :target "box3"}
-                                     {:type "set-attribute", :target "box1", :attr-name "type", :attr-value "transparent"}
-                                     {:type "set-attribute", :target "box2", :attr-name "type", :attr-value "transparent"}
-                                     {:type "set-attribute", :target "box3", :attr-name "type", :attr-value "transparent"}]},
+                                     {:type "set-attribute", :target "box1", :attr-name "visible", :attr-value false}
+                                     {:type "set-attribute", :target "box2", :attr-name "visible", :attr-value false}
+                                     {:type "set-attribute", :target "box3", :attr-name "visible", :attr-value false}]},
              :boxes-jump-out
                              {:type "sequence-data",
                               :data
@@ -198,19 +201,19 @@
                              {:type "parallel",
                               :data
                                     [{:data
-                                            [{:type "set-attribute", :target "box1", :attr-name "type", :attr-value "animation"}
+                                            [{:type "set-attribute", :target "box1", :attr-name "visible", :attr-value true}
                                              {:type "empty", :duration 100}
                                              {:id "come2", :type "animation", :target "box1"}
                                              {:id "idle2", :loop true, :type "add-animation", :target "box1"}],
                                       :type "sequence-data"}
                                      {:data
-                                            [{:type "set-attribute", :target "box2", :attr-name "type", :attr-value "animation"}
+                                            [{:type "set-attribute", :target "box2", :attr-name "visible", :attr-value true}
                                              {:type "empty", :duration 100}
                                              {:id "come2", :type "animation", :target "box2"}
                                              {:id "idle2", :loop true, :type "add-animation", :target "box2"}],
                                       :type "sequence-data"}
                                      {:data
-                                            [{:type "set-attribute", :target "box3", :attr-name "type", :attr-value "animation"}
+                                            [{:type "set-attribute", :target "box3", :attr-name "visible", :attr-value true}
                                              {:type "empty", :duration 100}
                                              {:id "come2", :type "animation", :target "box3"}
                                              {:id "idle2", :loop true, :type "add-animation", :target "box3"}],

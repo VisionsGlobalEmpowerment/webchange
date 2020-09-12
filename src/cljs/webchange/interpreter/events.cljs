@@ -3,22 +3,24 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
     [re-frame.core :as re-frame]
-    [webchange.common.anim :refer [start-animation set-slot]]
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.screens.state :as screens]
+    [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.executor :as e]
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
-    [webchange.interpreter.utils.propagate-objects :refer [get-propagated-objects
-                                                           replace-object]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.variables.core :as vars.core]
-    [webchange.state.lessons.subs :as lessons]
-    [webchange.sw-utils.state.status :as sw-status]))
+    [webchange.sw-utils.state.status :as sw-status]
+    [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.state.overlays :as overlays]
+
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    ))
 
 (re-frame/reg-fx
   :execute-audio
@@ -86,9 +88,10 @@
   :load-lessons
   (fn [[course-id load-assets?]]
     (i/load-lessons course-id load-assets?
-                    (fn [{:keys [items lesson-sets]}]
+                    (fn [{:keys [items lesson-sets datasets]}]
                       (re-frame/dispatch [:complete-request :load-lessons])
                       (re-frame/dispatch [::set-course-dataset-items items])
+                      (re-frame/dispatch [::set-course-datasets datasets])
                       (re-frame/dispatch [::set-course-lessons lesson-sets])
                       (re-frame/dispatch [::check-course-loaded]))
                     #(re-frame/dispatch [::set-dataset-loading-progress %])
@@ -109,45 +112,39 @@
   :switch-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      (.setAnimation (:animation-state state) track id loop))))
+      (w/set-animation state track id loop))))
 
 (re-frame/reg-fx
   :add-animation
   (fn [{:keys [state id track] :or {track 0} :as action}]
     (let [loop (if (contains? action :loop) (:loop action) true)]
-      (.addAnimation (:animation-state state) track id loop 0))))
+      (w/add-animation state track id loop 0))))
 
 (re-frame/reg-fx
   :remove-animation
-  (fn [{:keys [state track] :or {track 0} :as action}]
-    (.setEmptyAnimation (:animation-state state) track 0.2)))
-
-(re-frame/reg-fx
-  :start-animation
-  (fn [animation]
-    (start-animation animation)))
+  (fn [{:keys [state track] :or {track 0}}]
+    (w/remove-animation state track 0.2)))
 
 (re-frame/reg-fx
   :set-slot
   (fn [{:keys [state slot-name slot-attachment-name image region attachment]}]
-    (let [skeleton (:skeleton state)
-          animation-state (:animation-state state)]
-      (set-slot skeleton animation-state slot-name slot-attachment-name image region attachment))))
+    (w/set-slot state slot-name image {:attachment-params    attachment
+                                       :slot-attachment-name slot-attachment-name
+                                       :region-params        region})))
 
 (re-frame/reg-fx
   :set-skin
   (fn [{:keys [state skin]}]
-    (let [skeleton (:skeleton state)]
-      (.setSkinByName skeleton skin)
-      (.setToSetupPose skeleton))))
+    (w/set-skin state skin)))
 
 (re-frame/reg-fx
   :animation-props
-  (fn [{{skeleton :skeleton} :state {:keys [scaleX scaleY x y]} :props}]
-    (when scaleX (set! (.-scaleX skeleton) scaleX))
-    (when scaleY (set! (.-scaleY skeleton) scaleY))
-    (when x (set! (.-x skeleton) x))
-    (when y (set! (.-y skeleton) y))))
+  (fn [{component :state {:keys [scaleX scaleY x y]} :props}]
+    (let [position {:x x
+                    :y y}]
+      (w/set-scale component {:x scaleX
+                              :y scaleY})
+      (w/set-position component position))))
 
 (defn get-audio-key
   [db id]
@@ -174,7 +171,7 @@
     (:level current-action)))
 
 (ce/reg-simple-executor :audio ::execute-audio)
-(ce/reg-simple-executor :play-video ::play-video)
+(ce/reg-simple-executor :play-video ::execute-play-video)
 (ce/reg-simple-executor :path-animation ::execute-path-animation)
 (ce/reg-simple-executor :state ::execute-state)
 (ce/reg-simple-executor :set-attribute ::execute-set-attribute)
@@ -204,7 +201,6 @@
 (ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
 (ce/reg-simple-executor :set-interval ::execute-set-interval)
 (ce/reg-simple-executor :remove-interval ::execute-remove-interval)
-(ce/reg-simple-executor :propagate-objects ::execute-propagate-objects)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -220,18 +216,24 @@
       {:execute-audio (-> audio-params
                           (assoc :on-ended #(ce/dispatch-success-fn action)))})))
 
+(defn- without-params
+  [object params]
+  (apply dissoc object params))
+
 (defn execute-transition
   [db {:keys [transition-id transition-tag to from skippable] :as action}]
   (let [scene-id (:current-scene db)
         transition (get-in db [:transitions scene-id transition-id])
         id (or transition-tag transition-id)]
     (when transition
-      {:transition {:id        id
-                    :component transition
-                    :to        to
-                    :from      from
-                    :on-ended  #(ce/dispatch-success-fn action)
-                    :skippable skippable}})))
+      (let [transition-params [:duration :easing :loop :yoyo]]
+        {:transition {:id        id
+                      :component transition
+                      :to        (without-params to transition-params)
+                      :from      from
+                      :params    (select-keys to transition-params)
+                      :on-ended  #(ce/dispatch-success-fn action)
+                      :skippable skippable}}))))
 
 (defn point->transition
   [to transition-id]
@@ -323,43 +325,37 @@
     {:stop-all-audio nil}))
 
 (re-frame/reg-event-fx
-  ::play-video
+  ::execute-play-video
   [ce/event-as-action ce/with-flow]
-  (fn [{:keys [db]} {:keys [target src params flow-id] :as action}]
-    (let [scene-id (:current-scene db)
-          on-end #(ce/dispatch-success-fn action)
-          video-state {:act    "play"
-                       :src    src
-                       :on-end on-end}]
-      (ce/register-flow-remove-handler! flow-id (fn [] (re-frame/dispatch [::stop-video {:target target}])))
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge video-state params)})))
-
-(re-frame/reg-event-fx
-  ::stop-video
-  [ce/event-as-action]
-  (fn [{:keys [db]} {:keys [target params]}]
-    (let [scene-id (:current-scene db)
-          video-state {:act "pause"}]
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge video-state params)})))
+  (fn [{:keys [_]} {:keys [target src flow-id] :as action}]
+    (let [target (keyword target)]
+      (ce/register-flow-remove-handler! flow-id (fn []
+                                                  (re-frame/dispatch [::scene/change-scene-object target [[:stop]]])))
+      {:dispatch [::scene/change-scene-object target [[:set-src {:src     src
+                                                                 :options {:play   true
+                                                                           :on-end #(ce/dispatch-success-fn action)}}]]]})))
 
 (re-frame/reg-event-fx
   ::execute-path-animation
   [ce/event-as-action ce/with-flow]
-  (fn [{:keys [db]} {:keys [target params state flow-id] :as action}]
-    (let [scene-id (:current-scene db)
-          on-end #(ce/dispatch-success-fn action)
-          path-state {:animation state
-                      :on-end    on-end}]
-      (ce/register-flow-remove-handler! flow-id (fn [] (re-frame/dispatch [::stop-path-animation {:target target}])))
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)})))
+  (fn [{:keys [db]} {:keys [target state flow-id] :as action}]
+    (let [{:keys [animated-svg-path-start animated-svg-path-stop animated-svg-path-reset]} (scene/get-scene-object db (keyword target))
+          on-end #(ce/dispatch-success-fn action)]
+      (case state
+        "play" (animated-svg-path-start on-end)
+        "reset" (do (animated-svg-path-reset)
+                    (on-end)))
+
+      (ce/register-flow-remove-handler! flow-id animated-svg-path-stop)
+      {})))
 
 (re-frame/reg-event-fx
   ::stop-path-animation
   [ce/event-as-action]
-  (fn [{:keys [db]} {:keys [target params]}]
-    (let [scene-id (:current-scene db)
-          path-state {:animation "stop"}]
-      {:db (update-in db [:scenes scene-id :objects (keyword target)] merge path-state params)})))
+  (fn [{:keys [db]} {:keys [target]}]
+    (let [{:keys [animated-svg-path-stop]} (scene/get-scene-object db (keyword target))]
+      (animated-svg-path-stop)
+      {})))
 
 (re-frame/reg-event-fx
   ::execute-add-alias
@@ -376,17 +372,19 @@
           object (get-in scene [:objects (keyword target)])
           states (get object :states)
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
-          state (get states-with-aliases (keyword id))]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge state params)
-       :dispatch (ce/success-event action)})))
+          state (merge (get states-with-aliases (keyword id)) params)]
+      {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge state)
+       :dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
+                         (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-set-attribute
-  (fn [{:keys [db]} [_ {:keys [target attr-name attr-value params] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [target attr-name attr-value] :as action}]]
     (let [scene-id (:current-scene db)
           patch (into {} [[(keyword attr-name) attr-value]])]
-      {:db       (update-in db [:scenes scene-id :objects (keyword target)] merge patch params)
-       :dispatch (ce/success-event action)})))
+      {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge patch)
+       :dispatch-n (list [::scene/set-scene-object-state (keyword target) patch]
+                         (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-empty
@@ -423,9 +421,10 @@
 (re-frame/reg-event-fx
   ::execute-start-animation
   (fn [{:keys [db]} [_ action]]
-    (let [scene-id (:current-scene db)]
-      {:start-animation (-> db (get-in [:scenes scene-id :animations (:target action)]))
-       :dispatch-n      (list (ce/success-event action))})))
+    (let [scene-id (:current-scene db)
+          state (get-in db [:scenes scene-id :animations (:target action)])]
+      (w/start-animation state)
+      {:dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-remove-animation
@@ -535,7 +534,7 @@
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
                          :always (conj (activity-finished-event db action))
                          :always (conj [::reset-navigation])
-                         :always (conj [::screens/show-activity-progress]))
+                         :always (conj [::overlays/open-activity-finished]))
           activity-started? (:activity-started db)]
       (if activity-started?
         {:db         (-> db
@@ -706,18 +705,6 @@
     (let [default-progress (get-in db [:course-data :default-progress])]
       {:db (update-in db [:progress-data] merge default-progress)})))
 
-(re-frame/reg-event-db
-  ::register-transition
-  (fn [db [_ name component]]
-    (let [scene-id (:current-scene db)]
-      (assoc-in db [:transitions scene-id name] component))))
-
-(re-frame/reg-event-db
-  ::register-animation
-  (fn [db [_ name animation]]
-    (let [scene-id (:current-scene db)]
-      (assoc-in db [:scenes scene-id :animations name] animation))))
-
 (def default-triggers
   {:start [[::reset-navigation] [::ce/execute-reset-skip]]})
 
@@ -824,6 +811,11 @@
     (let [prepared (into {} (map #(identity [(:id %) %]) data))]
       {:db (assoc db :dataset-items prepared)})))
 
+(re-frame/reg-event-fx
+  ::set-course-datasets
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :datasets data)}))
+
 (defn prepare-lesson [{data :data :as lesson}]
   (assoc lesson :item-ids (map #(:id %) (:items data))))
 
@@ -843,16 +835,14 @@
   (fn [db _]
     (assoc-in db [:loading :load-lessons-assets] false)))
 
-
 (re-frame/reg-event-fx
   ::execute-test-transitions-collide
   (fn [{:keys [db]} [_ {:keys [transition-1 transition-2 success fail] :as action}]]
-    (let [scene-id (:current-scene db)
-          transition-1-shape (get-in db [:transitions scene-id transition-1])
-          transition-2-shape (get-in db [:transitions scene-id transition-2])
+    (let [transition-1-wrapper (->> transition-1 keyword (scene/get-scene-object db))
+          transition-2-wrapper (->> transition-2 keyword (scene/get-scene-object db))
           success (ce/get-action success db action)
           fail (ce/get-action fail db action)]
-      (if (i/collide? transition-1-shape transition-2-shape)
+      (if (i/collide? (:object transition-1-wrapper) (:object transition-2-wrapper))
         {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
         {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))
 
@@ -882,9 +872,8 @@
                                                    :active (and show-navigation?
                                                                 (= target (:object exit)))})))]
       {:dispatch-n (map (fn [{:keys [target active]}]
-                          [::execute-set-attribute {:target     target
-                                                    :attr-name  :eager
-                                                    :attr-value active}])
+                          [::scene/change-scene-object target [[:set-filter {:filter "pulsation"
+                                                                             :remove (not active)}]]])
                         navigation-items)})))
 
 (re-frame/reg-event-fx
@@ -896,9 +885,8 @@
                                 (map :object)
                                 (remove nil?))]
       {:dispatch-n (map (fn [target]
-                          [::execute-set-attribute {:target     target
-                                                    :attr-name  :eager
-                                                    :attr-value false}])
+                          [::scene/change-scene-object (keyword target) [[:set-filter {:filter "pulsation"
+                                                                                       :remove true}]]])
                         navigation-items)})))
 
 (re-frame/reg-event-fx
@@ -973,27 +961,10 @@
                        (ce/success-event action))}))
 
 (re-frame/reg-event-fx
-  ::execute-propagate-objects
-  (fn [{:keys [db]} [_ {object-to-propagate :id lesson-name :from :as action}]]
-    (let [scene-id (:current-scene db)
-          object-data (get-in db [:scenes scene-id :objects (keyword object-to-propagate)])
-          lesson-items (lessons/lesson-dataset-items db lesson-name)
-          {:keys [objects scene-objects]} (get-propagated-objects object-data lesson-items)]
-      {:db       (-> db
-                     (update-in [:scenes scene-id :objects] merge objects)
-                     (update-in [:scenes scene-id :scene-objects] replace-object object-to-propagate scene-objects))
-       :dispatch (ce/success-event action)})))
-
-(re-frame/reg-event-fx
-  ::open-settings
-  (fn [_ _]
-    {:dispatch [::screens/show-settings]}))
-
-(re-frame/reg-event-fx
   ::close-settings
   (fn [_ _]
     {:dispatch-n (list [::save-settings]
-                       [::screens/reset-ui-screen])}))
+                       [::overlays/hide-settings])}))
 
 (re-frame/reg-event-fx
   ::save-settings

@@ -48,7 +48,7 @@
                                                      :y (->> track-number index->coordinate-y)}))
        (->> actions-paths
             (sort-by (fn [action-path]
-                       (->> action-path (map name) (join "-"))))
+                       (->> action-path (map #(if (keyword? %) (name %) %)) (join "-"))))
             (map-indexed (fn [index item] [index item])))))
 
 (defn- get-track-data

@@ -219,11 +219,6 @@
     (:navigation db)))
 
 (re-frame/reg-sub
-  ::show-skip
-  (fn [db]
-    (:show-skip db)))
-
-(re-frame/reg-sub
   :app-version
   (fn [db]
     (:app-version db)))

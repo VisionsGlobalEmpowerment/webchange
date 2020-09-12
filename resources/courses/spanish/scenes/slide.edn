@@ -54,7 +54,7 @@
                               :skin       "qwestion",
                               :speed      0.3,
                               :start      true,
-                              :states     {:hidden {:type "transparent"}, :visible {:type "animation"}, :init-position {:x 810, :y 216}}},
+                              :states     {:hidden {:visible false}, :visible {:visible true}, :init-position {:x 810, :y 216}}},
                  :box2
                              {:type       "animation",
                               :x          500,
@@ -71,7 +71,7 @@
                               :skin       "qwestion",
                               :speed      0.3,
                               :start      true,
-                              :states     {:hidden {:type "transparent"}, :visible {:type "animation"}, :init-position {:x 500, :y 287}}},
+                              :states     {:hidden {:visible false}, :visible {:visible true}, :init-position {:x 500, :y 287}}},
                  :box3
                              {:type       "animation",
                               :x          655,
@@ -88,7 +88,7 @@
                               :skin       "qwestion",
                               :speed      0.3,
                               :start      true,
-                              :states     {:hidden {:type "transparent"}, :visible {:type "animation"}, :init-position {:x 655, :y 212}}},
+                              :states     {:hidden {:visible false}, :visible {:visible true}, :init-position {:x 655, :y 212}}},
                  :mari
                              {:type       "animation",
                               :x          1600,
