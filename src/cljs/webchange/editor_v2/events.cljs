@@ -4,6 +4,7 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.interpreter.events :as ie]
     [webchange.editor-v2.translator.state.window :as translator.window]
+    [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.text.views :as translator.text]))
 
@@ -83,3 +84,9 @@
   ::edit-course-info-success
   (fn [{:keys [db]} _]
     {:dispatch-n (list [:complete-request :edit-course-info])}))
+
+(re-frame/reg-event-fx
+  ::show-dialog-translator-form
+  (fn [{:keys [_]} [_ action-node]]
+    {:dispatch-n (list [::translator-form.actions/set-current-dialog-action action-node]
+                       [::dialog.window/open])}))
