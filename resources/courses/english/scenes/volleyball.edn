@@ -348,13 +348,7 @@
                                                                                     :possible-values ["mari-audio-try-again-1" "mari-audio-try-again-2"]}]}],
                                            :phrase                        "wrong",
                                            :phrase-description            "Wrong answer",
-                                           :phrase-description-translated "Wrong answer",
-                                           :                              {:from ["audio-try-again1" "audio-try-again2"], :type "vars-var-provider", :shuffled true, :variables ["current-audio-try-again"]}
-                                           {:type "action",
-                                            :from-var
-                                                  [{:var-name        "current-audio-try-again",
-                                                    :action-property "id",
-                                                    :possible-values ["mari-audio-try-again-1" "mari-audio-try-again-2"]}]}},
+                                           :phrase-description-translated "Wrong answer"},
                  :mari-welcome-audio-1
                                           {:type                          "animation-sequence",
                                            :data                          [{:end 8.439, :anim "talk", :start 1.08}],
