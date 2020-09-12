@@ -19,5 +19,5 @@
    :service-worker         {:sync-status      :not-started
                             :last-update      nil
                             :version          nil}
-   :app-version            3
+   :app-version            4
    })
