@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.resources)
+(ns webchange.resources.manager)
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
 (defonce loader (atom nil))
@@ -43,6 +43,7 @@
   ([resources]
    (load-resources resources {}))
   ([resources callbacks]
+   (print "load-resources" resources)
    (set-callbacks @loader callbacks)
    (->> resources
         (reduce (fn [loader resource]

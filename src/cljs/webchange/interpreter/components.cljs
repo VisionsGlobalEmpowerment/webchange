@@ -3,10 +3,10 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
-    [webchange.interpreter.executor :as e]
+    [webchange.interpreter.sound :as sound]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.core :as vars.core]
-    [webchange.interpreter.scene-resources-parser :refer [get-scene-resources]]
+    [webchange.resources.scene-parser :refer [get-scene-resources]]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
@@ -50,7 +50,7 @@
 
 (defn- start-scene
   []
-  (e/init)
+  (sound/init)
   (re-frame/dispatch [::ie/start-playing]))
 
 (defn- start-triggers

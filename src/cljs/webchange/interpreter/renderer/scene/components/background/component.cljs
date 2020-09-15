@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.background.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Sprite]]
-    [webchange.interpreter.renderer.resources :as resources]
+    [webchange.interpreter.pixi :refer [Container Sprite]]
+    [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.scene.components.background.wrapper :refer [wrap]]))
 

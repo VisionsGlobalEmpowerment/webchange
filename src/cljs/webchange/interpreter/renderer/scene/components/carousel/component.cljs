@@ -1,9 +1,9 @@
 (ns webchange.interpreter.renderer.scene.components.carousel.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Sprite TilingSprite]]
+    [webchange.interpreter.pixi :refer [Container Sprite TilingSprite]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.carousel.wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.resources :as resources]
+    [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.scene.app :as app]))
 
 (def default-props {:x      {}

@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.text.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Text]]
+    [webchange.interpreter.pixi :refer [Container Text]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.text.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [lines-with-y chunks-with-x chunk-transition-name]]

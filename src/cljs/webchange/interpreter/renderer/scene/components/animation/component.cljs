@@ -1,10 +1,10 @@
 (ns webchange.interpreter.renderer.scene.components.animation.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Spine]]
+    [webchange.interpreter.pixi :refer [Container Spine]]
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
     [webchange.interpreter.renderer.scene.components.animation.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :refer [set-handler]]
-    [webchange.interpreter.renderer.resources :as resources]))
+    [webchange.resources.manager :as resources]))
 
 (def default-props {:x                {}
                     :y                {}

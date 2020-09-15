@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.video.utils
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Texture]]))
+    [webchange.interpreter.pixi :refer [Texture]]))
 
 (defn- ->video
   [sprite]

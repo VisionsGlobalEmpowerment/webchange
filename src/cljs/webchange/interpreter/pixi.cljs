@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.pixi
+(ns webchange.interpreter.pixi
   (:require
     [pixi]))
 
@@ -31,3 +31,6 @@
 
 (def blend-mode-erase (.. pixi -PIXI -BLEND_MODES.ERASE))
 (def string2hex (.. pixi -PIXI -utils -string2hex))
+
+(def sound (.. pixi -PIXI -sound))
+(def SoundFilter (.. pixi -PIXI -sound -filters -Filter))

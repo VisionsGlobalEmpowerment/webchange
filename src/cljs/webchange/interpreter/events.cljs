@@ -9,7 +9,7 @@
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.screens.state :as screens]
     [webchange.interpreter.renderer.state.overlays :as overlays]
-    [webchange.interpreter.executor :as e]
+    [webchange.interpreter.sound :as sound]
     [webchange.interpreter.utils :refer [add-scene-tag
                                          merge-scene-data]]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
@@ -25,8 +25,8 @@
 (re-frame/reg-fx
   :execute-audio
   (fn [{:keys [flow-id skippable] :as params}]
-    (e/init)
-    (-> (e/execute-audio params)
+    (sound/init)
+    (-> (sound/play-audio params)
         (.then (fn [audio]
                  (when skippable
                    (ce/on-skip! #(.stop audio)))
@@ -36,18 +36,18 @@
 (re-frame/reg-fx
   :stop-all-audio
   (fn []
-    (e/stop-all-audio!)))
+    (sound/stop-all-audio!)))
 
 (re-frame/reg-fx
   :music-volume
   (fn [value]
-    (e/init)
-    (e/music-volume (/ value 100))))
+    (sound/init)
+    (sound/music-volume (/ value 100))))
 
 (re-frame/reg-fx
   :effects-volume
   (fn [value]
-    (e/effects-volume (/ value 100))))
+    (sound/effects-volume (/ value 100))))
 
 (re-frame/reg-fx
   :load-course
@@ -650,7 +650,7 @@
 (defn reset-scene-flows!
   [scene-id]
   (vars.core/clear-vars! false)
-  (e/stop-all-audio!)
+  (sound/stop-all-audio!)
   (ce/execute-remove-flows! {:flow-tag (str "scene-" scene-id)})
   (ce/remove-timers!))
 

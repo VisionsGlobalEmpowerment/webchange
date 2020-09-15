@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.painting-area.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Sprite Texture RenderTexture]]
+    [webchange.interpreter.pixi :refer [Container Sprite Texture RenderTexture]]
     [webchange.interpreter.renderer.scene.components.painting-area.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.painting-area.graphics :refer [create-tool]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]

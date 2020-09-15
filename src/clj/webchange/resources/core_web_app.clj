@@ -3,8 +3,7 @@
     [clojure.edn :as edn]
     [clojure.java.io :as io]
     [clojure.string :as s]
-    [config.core :refer [env]]
-    [webchange.interpreter.defaults :as defaults]))
+    [config.core :refer [env]]))
 
 (def prefix "resources/")
 (def public-fold "public/")
@@ -42,8 +41,7 @@
         (get-files-list (str js-fold "out/"))
         (get-files-list css-fold)
         (get-files-list img-fold)
-        (get-files-list fonts-fold)
-        (->> defaults/default-assets (map :url))]
+        (get-files-list fonts-fold)]
        (flatten)
        (remove nil?)
        (vec)))

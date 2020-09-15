@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.image.wrapper
   (:require
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
-    [webchange.interpreter.renderer.resources :as resources]))
+    [webchange.resources.manager :as resources]))
 
 (defn wrap
   [type name container sprite-object]

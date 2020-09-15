@@ -1,10 +1,10 @@
 (ns webchange.interpreter.renderer.stage
   (:require
     [reagent.core :as r]
-    [webchange.interpreter.renderer.pixi :refer [Loader]]
+    [webchange.interpreter.pixi :refer [Loader]]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
-    [webchange.interpreter.renderer.resources :as resources]
+    [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
 
 (defn- init-scene

@@ -1,7 +1,7 @@
-(ns webchange.interpreter.scene-resources-parser
+(ns webchange.resources.scene-parser
   (:require
     [re-frame.core :as re-frame]
-    [webchange.interpreter.defaults :refer [default-game-assets]]
+    [webchange.resources.default-resources :refer [default-game-assets]]
     [webchange.interpreter.subs :as subs]))
 
 (defn- get-concept-fields

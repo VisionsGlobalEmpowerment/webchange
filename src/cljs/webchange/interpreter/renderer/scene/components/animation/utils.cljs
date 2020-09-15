@@ -1,8 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.animation.utils
   (:require
-    [webchange.interpreter.renderer.pixi :refer [RegionAttachment Skin TextureAtlasRegion]]
+    [webchange.interpreter.pixi :refer [RegionAttachment Skin TextureAtlasRegion]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.resources :as resources]))
+    [webchange.resources.manager :as resources]))
 
 (def default-region-params
   {:x               0

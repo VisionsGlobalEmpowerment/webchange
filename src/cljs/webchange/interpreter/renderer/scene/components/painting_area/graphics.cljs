@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.painting-area.graphics
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Graphics blend-mode-erase string2hex]]))
+    [webchange.interpreter.pixi :refer [Graphics blend-mode-erase string2hex]]))
 
 (defn- create-brush
   [color]

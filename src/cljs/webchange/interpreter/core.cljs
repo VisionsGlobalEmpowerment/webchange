@@ -11,11 +11,8 @@
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
-    [webchange.interpreter.defaults :as defaults]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]))
-
-(def default-assets defaults/default-assets)
 
 (def assets (atom {}))
 
@@ -156,7 +153,7 @@
   (go (let [scene-response (<! (get-scene course-id scene-id))
             scene (:body scene-response)]
         (when load-assets?
-          (load-assets (concat default-assets (:assets scene))
+          (load-assets (:assets scene)
                        #(re-frame/dispatch [::events/set-loading-progress scene-id %])
                        #(re-frame/dispatch [::events/set-scene-loaded scene-id true])))
         (cb scene))))
@@ -309,12 +306,11 @@
                    :on-skip   #(re-frame/dispatch [::ce/execute-action {:type "remove-animation" :target target :track track}])})
                 data)))
 
-(defn animation-sequence->audio-action [{:keys [start duration audio] :as action}]
+(defn animation-sequence->audio-action [{:keys [audio] :as action}]
   (if audio
-    {:type     "audio"
-     :id       audio
-     :start    start
-     :duration duration}))
+    (merge {:type "audio"
+            :id   audio}
+           (select-keys action [:duration :start :volume]))))
 
 (defn text-animation-sequence->actions [{:keys [target animation start data] :as action}]
   (into [] (map (fn [{:keys [at chunk]}]

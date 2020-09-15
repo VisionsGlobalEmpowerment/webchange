@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.text.chunks
   (:require
-    [webchange.interpreter.renderer.pixi :refer [TextMetrics TextStyle]]))
+    [webchange.interpreter.pixi :refer [TextMetrics TextStyle]]))
 
 (defn- measure-width
   [text {:keys [font-weight font-size font-family]}]

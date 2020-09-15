@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.transparent.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Sprite Texture]]
+    [webchange.interpreter.pixi :refer [Container Sprite Texture]]
     [webchange.interpreter.renderer.scene.components.transparent.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 

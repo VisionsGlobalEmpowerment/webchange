@@ -7,7 +7,7 @@
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.text.views :as translator.text]
-    [webchange.interpreter.renderer.resources :as resources]))
+    [webchange.resources.manager :as resources]))
 
 (re-frame/reg-event-fx
   ::init-editor
