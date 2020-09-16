@@ -7,7 +7,6 @@
 ;[webchange.common.colors-palette :refer [colors-palette]]
 ;[webchange.common.animated-svg-path :refer [animated-svg-path]]
 ;[webchange.common.matrix :refer [matrix-objects-list]]
-;[webchange.common.anim :refer [anim]]
 ;[webchange.common.text :refer [chunked-text]]
 ;[webchange.common.carousel :refer [carousel]]
 ;[webchange.interpreter.components.video :refer [video]]
@@ -28,13 +27,39 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.events-register :as ier]
     [webchange.subs :as subs]
-    [webchange.common.anim :refer [prepare-anim-object-params]]
     [webchange.interpreter.object-data.group-params :refer [with-group-params]]
 
     [webchange.interpreter.object-data.navigation-param :refer [with-navigation-params]]
     [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]))
 
 ;; ----
+
+(def animations {:vera       {:width  380,
+                              :height 537,
+                              :scale  {:x 1, :y 1},
+                              :speed  1
+                              :meshes true
+                              :skin "01 Vera_1"}
+                 :senoravaca {:width  351,
+                              :height 717,
+                              :scale  {:x 1, :y 1}
+                              :speed  1
+                              :meshes true
+                              :skin   "vaca"}
+                 :mari       {:width  910,
+                              :height 601,
+                              :scale  {:x 0.5, :y 0.5}
+                              :speed  1
+                              :meshes true
+                              :skin "01 mari"}
+                 :boxes {:speed 1}})
+
+(defn prepare-anim-object-params
+  "Overwrite animation properties. Set default skin if no skin provided."
+  [object]
+  (if-let [anim-data (get animations (-> object :name keyword))]
+    (merge object anim-data (select-keys object [:skin]))
+    object))
 
 (defn filter-extra-props
   [props extra-props-names]

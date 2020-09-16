@@ -6,7 +6,6 @@
     [react-spring :refer [Spring]]
     [react-konva :refer [Stage, Layer, Group, Rect]]
     [konva :refer [Tween]]
-    [webchange.common.anim :as anim]
     [webchange.common.events :as ce]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
@@ -103,27 +102,6 @@
        (map :size)
        (reduce +)))
 
-(defn load-base-asset
-  ([asset]
-   (load-base-asset asset nil))
-  ([asset progress]
-   (when (:url asset)
-     (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
-           (put-data (:body response) (:url asset))
-           (when-not (nil? progress)
-             (swap! progress + (:size asset))))))))
-
-(defn load-asset
-  ([asset]
-   (let [progress (atom 0)]
-     (load-asset asset progress)))
-  ([asset progress]
-   (case (-> asset :type keyword)
-     :anim-text (anim/load-anim-text asset progress)
-     :animation (anim/load-anim-text asset progress)
-     :anim-texture (anim/load-anim-texture asset progress)
-     (load-base-asset asset progress))))
-
 (defn load-course
   [{:keys [course-id]} cb]
   (go (let [course-response (<! (get-course course-id))
@@ -152,7 +130,7 @@
 (defn get-data-as-url
   [key]
   (if-not (has-data key)
-    (do (load-base-asset {:url key}) key)
+    (do)
     (let [object-url-key (create-tagged-key "object-url" key)]
       (when-not (has-data object-url-key)
         (-> key
