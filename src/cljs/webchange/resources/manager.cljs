@@ -43,7 +43,6 @@
   ([resources]
    (load-resources resources {}))
   ([resources callbacks]
-   (print "load-resources" resources)
    (set-callbacks @loader callbacks)
    (->> resources
         (reduce (fn [loader resource]

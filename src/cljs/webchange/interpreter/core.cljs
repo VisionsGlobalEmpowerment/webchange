@@ -124,38 +124,16 @@
      :anim-texture (anim/load-anim-texture asset progress)
      (load-base-asset asset progress))))
 
-(defn load-assets
-  ([assets]
-   (load-assets assets #() #()))
-  ([assets on-asset-progress on-asset-complete]
-   (let [total (get-total-size assets)
-         current-progress (atom 0)]
-     (add-watch current-progress :inc
-                (fn [_ _ _ n]
-                  (on-asset-progress (Math/round (* n (/ 100 total))))
-                  (if (>= n total)
-                    (on-asset-complete))))
-     (if (> total 0)
-       (doseq [asset assets]
-         (load-asset asset current-progress))
-       (on-asset-complete)))))
-
 (defn load-course
-  [{:keys [course-id load-assets?]} cb]
+  [{:keys [course-id]} cb]
   (go (let [course-response (<! (get-course course-id))
             course (:body course-response)]
-        (when load-assets?
-          (load-assets (->> course :templates vals (map :assets) (apply concat))))
         (cb course))))
 
 (defn load-scene
-  [{:keys [course-id scene-id load-assets?]} cb]
+  [{:keys [course-id scene-id]} cb]
   (go (let [scene-response (<! (get-scene course-id scene-id))
             scene (:body scene-response)]
-        (when load-assets?
-          (load-assets (:assets scene)
-                       #(re-frame/dispatch [::events/set-loading-progress scene-id %])
-                       #(re-frame/dispatch [::events/set-scene-loaded scene-id true])))
         (cb scene))))
 
 (defn load-progress
@@ -165,12 +143,10 @@
         (cb result))))
 
 (defn load-lessons
-  [course-id load-assets? cb on-asset-progress on-asset-complete]
+  [{:keys [course-id cb on-asset-complete]}]
   (go (let [response (<! (get-lessons course-id))
             result (-> response :body)]
-        (if load-assets?
-          (load-assets (:assets result) on-asset-progress on-asset-complete)
-          (on-asset-complete))
+        (on-asset-complete)
         (cb result))))
 
 (defn get-data-as-url
