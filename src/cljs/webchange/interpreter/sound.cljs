@@ -84,9 +84,7 @@
 
 (defn- wrap-audio
   [resource]
-  (clj->js {:stop (fn []
-                    (print "stop wrapped audio")
-                    (stop resource))}))
+  (clj->js {:stop (fn [] (stop resource))}))
 
 (defn play-audio
   [{:keys [key] :as params}]

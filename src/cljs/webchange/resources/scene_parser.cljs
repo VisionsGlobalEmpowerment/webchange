@@ -7,13 +7,29 @@
 (defn- get-concept-fields
   [scene-id dataset-fields]
   (->> dataset-fields
-       (reduce (fn [result {:keys [name type scenes]}]
-                 (if (and (some #{type} ["image" "video"])
-                          (some #{scene-id} scenes))
-                   (conj result name)
-                   result))
-               [])
-       (map keyword)))
+       (map (fn [{:keys [name type scenes]}]
+              (when (some #{scene-id} scenes)
+                [(keyword name) type])))
+       (remove nil?)))
+
+(defn- get-action-resources
+  [{:keys [type] :as action}]
+  (cond
+    (= type "audio") [(:id action)]
+    (= type "animation-sequence") [(or (:id action) (:audio action))]
+    (or (= type "sequence-data")
+        (= type "parallel")) (->> (:data action)
+                                  (map get-action-resources)
+                                  (flatten))
+    :else []))
+
+(defn- parse-concept-field
+  [type data]
+  (case type
+    "image" data
+    "video" data
+    "action" (get-action-resources data)
+    nil))
 
 (defn- parse-concept-resources
   [scene-id]
@@ -24,9 +40,10 @@
                    (let [dataset @(re-frame/subscribe [::subs/course-dataset dataset-id])
                          concept-fields (get-concept-fields scene-id (get-in dataset [:scheme :fields]))]
                      (concat resources (reduce (fn [result dataset-id]
-                                                 (let [dataset @(re-frame/subscribe [::subs/dataset-item dataset-id])
-                                                       dataset-fields (select-keys (:data dataset) concept-fields)]
-                                                   (concat result (map second dataset-fields))))
+                                                 (let [dataset @(re-frame/subscribe [::subs/dataset-item dataset-id])]
+                                                   (concat result (map (fn [[field-name field-type]]
+                                                                         (parse-concept-field field-type (get-in dataset [:data field-name])))
+                                                                       concept-fields))))
                                                []
                                                item-ids))))
                  [])
