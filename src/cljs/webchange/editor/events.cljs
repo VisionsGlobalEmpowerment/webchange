@@ -6,7 +6,6 @@
     [webchange.subs :as subs]
     [webchange.interpreter.events :as ie]
     [webchange.editor.core :as editor]
-    [webchange.interpreter.renderer.state.editor :as scene]
     [webchange.editor.common.actions.events :as actions.events]
     [webchange.interpreter.variables.events :as vars.events]))
 

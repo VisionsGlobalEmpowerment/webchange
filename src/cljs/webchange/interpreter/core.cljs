@@ -2,10 +2,6 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
     [re-frame.core :as re-frame]
-    [webchange.events :as events]
-    [react-spring :refer [Spring]]
-    [react-konva :refer [Stage, Layer, Group, Rect]]
-    [konva :refer [Tween]]
     [webchange.common.events :as ce]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]

@@ -131,11 +131,9 @@
                     :external-config      {:devtools/config {:features-to-install :all}}
                     :npm-deps
                                           {
-                                           :konva "2.5.0"
                                            :react "16.6.0"
                                            :react-dom "16.6.0"
                                            :react-spring "5.8.0"
-                                           :react-konva "16.6.0"
                                            :gsap "2.1.2"
                                            :wavesurfer.js "2.2.1"
                                            :svg-arc-to-cubic-bezier "3.2.0"
@@ -187,11 +185,9 @@
                     :pretty-print    false
                     :npm-deps
                                      {
-                                      :konva "2.5.0"
                                       :react "16.6.0"
                                       :react-dom "16.6.0"
                                       :react-spring "5.8.0"
-                                      :react-konva "16.6.0"
                                       :gsap "2.1.2"
                                       :wavesurfer.js "2.2.1"
                                       :svg-arc-to-cubic-bezier "3.2.0"
@@ -223,11 +219,9 @@
                     :output-dir    "resources/public/js/compiled/test/out"
                     :npm-deps
                                    {
-                                    :konva "2.5.0"
                                     :react "16.6.0"
                                     :react-dom "16.6.0"
                                     :react-spring "5.8.0"
-                                    :react-konva "16.6.0"
                                     :gsap "2.1.2"
                                     :wavesurfer.js "2.2.1"
                                     :svg-arc-to-cubic-bezier "3.2.0"

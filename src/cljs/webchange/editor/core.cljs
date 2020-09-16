@@ -1,10 +1,4 @@
-(ns webchange.editor.core
-  (:require
-    [re-frame.core :as re-frame]
-    [webchange.subs :as subs]
-    [webchange.events :as events]
-    [reagent.core :as r]
-    ))
+(ns webchange.editor.core)
 
 (defn to-action [id]
   {:type "action" :id (name id)})
