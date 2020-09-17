@@ -117,12 +117,13 @@
                     :border-color  0xffffff
                     :border-width  1
                     :border-radius border-radius}
-                   {:type        "image"
-                    :object-name :next-activity-card-image
-                    :x           0
-                    :y           0
-                    :width       image-width
-                    :height      image-height}
+                   {:type          "image"
+                    :object-name   :next-activity-card-image
+                    :x             0
+                    :y             0
+                    :width         image-width
+                    :height        image-height
+                    :border-radius [(- border-radius 5) (- border-radius 5) 0 0]}
                    {:type           "text"
                     :object-name    :next-activity-card-name
                     :x              text-padding
