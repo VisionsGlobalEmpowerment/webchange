@@ -1,4 +1,6 @@
-(ns webchange.resources.manager)
+(ns webchange.resources.manager
+  (:require
+    [webchange.interpreter.pixi :refer [clear-texture-cache]]))
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
 (defonce loader (atom nil))
@@ -58,4 +60,5 @@
 (defn reset-loader!
   []
   (when @loader
+    (clear-texture-cache)
     (.reset @loader)))

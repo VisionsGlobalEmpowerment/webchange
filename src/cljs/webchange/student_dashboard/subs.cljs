@@ -31,8 +31,8 @@
 (defn next-activity
   [db]
   (let [scenes (get-in db [:course-data :scene-list])
-          next (get-in db [:progress-data :next])]
-      (merge next (scene-name->scene (:activity next) scenes))))
+        next (get-in db [:progress-data :next])]
+    (merge next (scene-name->scene (:activity next) scenes))))
 
 (re-frame/reg-sub
   ::next-activity
