@@ -1,22 +1,45 @@
 (ns webchange.auth.views
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.auth.views-teacher-login :as teacher-login]
+    [reagent.core :as r]
     [webchange.auth.events :as auth.events]
-    [soda-ash.core :as sa]
-    [sodium.core :as na]
-    [reagent.core :as r]))
+    [webchange.auth.views-teacher-login :as teacher-login]))
 
 (defn- get-styles
   []
-  {:student-access-form {:background-image "url(/images/dashboard/bg_02.jpg)"
+  {:title               {:color          "#ffffff"
+                         :font-size      "40pt"
+                         :font-family    "Roboto"
+                         :user-select    "none"
+                         :text-transform "uppercase"}
+   :student-access-form {:background-image "url(/images/dashboard/bg_02.jpg)"
                          :height           "100%"
                          :display          "flex"
                          :flex-direction   "column"
                          :justify-content  "space-between"
                          :padding          "40px"
                          :align-items      "center"}
-   :num-pad             {:width "370px"}})
+   :button              {:padding          "30px"
+                         :width            "101px"
+                         :height           "101px"
+                         :background-image "url(/images/auth/form.png)"
+                         :font-size        "40pt"
+                         :font-family      "Roboto"
+                         :user-select      "none"
+                         :display          "inline-block"
+                         :line-height      "38px"}
+   :button-container    {:padding    "15px"
+                         :text-align "center"}
+   :code-item           {:margin         "14px 30px"
+                         :vertical-align "bottom"
+                         :padding-bottom "14px"
+                         :width          "38px"
+                         :height         "38px"
+                         :display        "inline-block"
+                         :font-size      "40pt"
+                         :line-height    "23px"}
+   :num-pad             {:width "400px"}})
 
 (defn teacher-login
   [& args]
@@ -26,24 +49,21 @@
   [:div {:on-click on-click :style {:width "101px" :height "101px" :background-image "url(/images/auth/form.png)"}}
    [:div {:style {:width "101px" :height "101px" :background (str "url(/images/auth/" image ") no-repeat center center")}}]])
 
-(defn number-form [value on-click]
-  [:div {:on-click on-click :style {:padding          "38px"
-                                    :width            "101px"
-                                    :height           "101px"
-                                    :background-image "url(/images/auth/form.png)"
-                                    :font-size        "40pt"
-                                    :font-family      "Roboto"
-                                    :user-select      "none"}}
-   value])
+(defn number-form
+  [value on-click]
+  (let [styles (get-styles)]
+    [:div {:on-click on-click
+           :style    (:button styles)}
+     value]))
 
 (defn is-number-code? [c] (re-matches #"\d" c))
 
 (defn show-code-value [c]
-  (if (is-number-code? c)
-    [:div {:style {:margin "14px 30px" :vertical-align "bottom" :padding-bottom "14px" :width "38px" :height "38px" :display "inline-block" :font-size "40pt"}} c]
-    [:div {:style {:margin "14px 30px" :width "38px" :height "38px" :display "inline-block"
-                   :background (str "no-repeat center/30px url(/images/auth/animal-" c ".png)")}}]
-    ))
+  (let [styles (get-styles)]
+    (if (is-number-code? c)
+      [:div {:style (:code-item styles)} c]
+      [:div {:style (merge (:code-item styles)
+                           {:background (str "no-repeat center/30px url(/images/auth/animal-" c ".png)")})}])))
 
 (defn show-code-ph []
   [:div {:style {:margin "14px 30px" :width "38px" :height "38px" :background-image "url(/images/auth/asset-11.png" :display "inline-block"}}])
@@ -55,7 +75,7 @@
 
 (defn code-form [code]
   (let [[c1 c2 c3 c4] code]
-    [:div {:style {:width "490px" :height "78px"  :margin "0 auto" :padding-left "48px" :padding-top "8px"
+    [:div {:style {:width            "490px" :height "78px" :margin "0 auto" :padding-left "48px" :padding-top "8px"
                    :background-image "url(/images/auth/asset-12.png"}}
      [show-code c1]
      [show-code c2]
@@ -74,37 +94,26 @@
                     errors @(re-frame/subscribe [:errors])
                     styles (get-styles)]
                 (cond
-                  (:init-current-school loading) [sa/Loader {:active true :inline "centered"}]
-                  (:student-login loading) [sa/Loader {:active true :inline "centered"}]
+                  (:init-current-school loading) [ui/circular-progress]
+                  (:student-login loading) [ui/circular-progress]
                   :else
                   [:div {:style (:student-access-form styles)}
                    [:div
-                    [na/header {:as         "h2"
-                                :text-align "center"
-                                :style      {:color       "#ffffff"
-                                             :font-size   "40pt"
-                                             :font-family "Roboto"
-                                             :user-select "none"}
-                                :content    "STUDENT ACCESS"}]
+                    [ui/typography {:variant "h2"
+                                    :style   (:title styles)}
+                     "Student Access"]
                     (when (:student-login errors)
-                      [:div [sa/Message {:negative true :compact true} [:p (-> errors :student-login :form)]]])]
+                      [ui/chip {:color "secondary"
+                                :label (-> errors :student-login :form)}])]
 
                    [:div
                     [code-form @code]]
 
                    [:div {:style (:num-pad styles)}
-                    [na/grid {}
-                     [na/grid-row {:columns 3 :centered? true}
-                      [na/grid-column {} [number-form "1" #(enter-code code "1")]]
-                      [na/grid-column {} [number-form "2" #(enter-code code "2")]]
-                      [na/grid-column {} [number-form "3" #(enter-code code "3")]]]
-                     [na/grid-row {:columns 3 :centered? true}
-                      [na/grid-column {} [number-form "4" #(enter-code code "4")]]
-                      [na/grid-column {} [number-form "5" #(enter-code code "5")]]
-                      [na/grid-column {} [number-form "6" #(enter-code code "6")]]]
-                     [na/grid-row {:columns 3 :centered? true}
-                      [na/grid-column {} [number-form "7" #(enter-code code "7")]]
-                      [na/grid-column {} [number-form "8" #(enter-code code "8")]]
-                      [na/grid-column {} [number-form "9" #(enter-code code "9")]]]
-                     [na/grid-row {:columns 3 :centered? true}
-                      [na/grid-column {} [number-form "0" #(enter-code code "0")]]]]]]))))
+                    [ui/grid {:container     true
+                              :align-content "center"
+                              :align-items   "center"}
+                     (for [number ["1" "2" "3" "4" "5" "6" "7" "8" "9"]]
+                       ^{:key number}
+                       [ui/grid {:item true :xs 4 :style (:button-container styles)} [number-form number #(enter-code code number)]])
+                     [ui/grid {:item true :xs 12 :style (:button-container styles)} [number-form "0" #(enter-code code "0")]]]]]))))

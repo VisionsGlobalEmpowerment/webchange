@@ -2,5 +2,4 @@
 
 - [Reagent](https://github.com/reagent-project/reagent) - simple ClojureScript interface to React.
 - [re-frame](https://github.com/Day8/re-frame) - is a pattern for writing SPAs in ClojureScript, using Reagent.
-- [Semantic-UI-React](https://github.com/Semantic-Org/Semantic-UI-React) - is a UI framework designed for theming (official Semantic-UI-React integration).
 - [Open-vpn](https://github.com/angristan/openvpn-install) Install openvpn and create clients
