@@ -1,13 +1,25 @@
 (ns webchange.editor-v2.translator.translator-form.state.concepts
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor.subs :as subs]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.concepts-utils :refer [get-concepts-audio-assets]]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 ;; Subs
+
+(re-frame/reg-sub
+  ::scene-versions
+  (fn [db]
+    (get-in db [:editor :scene-versions])))
+
+(defn course-datasets
+  [db]
+  (get-in db [:editor :course-datasets]))
+
+(re-frame/reg-sub
+  ::course-datasets
+  course-datasets)
 
 (defn- get-concept-scheme
   [course-datasets]
@@ -18,13 +30,13 @@
 
 (defn concept-scheme
   [db]
-  (let [course-datasets (subs/course-datasets db)]
+  (let [course-datasets (course-datasets db)]
     (get-concept-scheme course-datasets)))
 
 (re-frame/reg-sub
   ::concept-scheme
   (fn []
-    [(re-frame/subscribe [::subs/course-datasets])])
+    [(re-frame/subscribe [::course-datasets])])
   (fn [[course-datasets]]
     (get-concept-scheme course-datasets)))
 
