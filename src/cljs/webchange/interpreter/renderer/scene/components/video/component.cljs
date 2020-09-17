@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.video.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Sprite]]
-    [webchange.interpreter.renderer.resources :as resources]
+    [webchange.interpreter.pixi :refer [Sprite]]
+    [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.scene.components.video.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 

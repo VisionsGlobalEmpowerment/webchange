@@ -3,7 +3,7 @@
     ["wavesurfer.js/dist/plugin/wavesurfer.regions.js" :as RegionsPlugin]
     ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]
     [wavesurfer.js :as WaveSurfer]
-    [webchange.interpreter.core :refer [wait-data-as-blob]]
+    [webchange.editor-v2.components.audio-wave-form.audio-loader :as loader]
     [webchange.ui.theme :refer [get-in-theme]]))
 
 (def audio-color "rgba(0, 0, 0, 0.1)")
@@ -42,7 +42,7 @@
                                                                  (.create TimelinePlugin (clj->js {:container          timeline-div
                                                                                                    :primaryFontColor   font-color
                                                                                                    :secondaryFontColor font-color}))]}))]
-     (wait-data-as-blob key (fn [blob] (.loadBlob wavesurfer blob)))
+     (loader/get-audio-blob key #(.loadBlob wavesurfer %))
      wavesurfer)))
 
 (defn- set-audio-region!

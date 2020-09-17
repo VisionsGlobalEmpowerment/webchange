@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.group.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container]]
+    [webchange.interpreter.pixi :refer [Container]]
     [webchange.interpreter.renderer.scene.components.group.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 

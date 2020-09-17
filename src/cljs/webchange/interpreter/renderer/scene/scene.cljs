@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.renderer.pixi :refer [Application]]
+    [webchange.interpreter.pixi :refer [Application]]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]

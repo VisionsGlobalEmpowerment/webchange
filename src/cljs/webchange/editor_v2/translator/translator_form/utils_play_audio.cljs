@@ -2,21 +2,13 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.common.events :as ce]
-    [webchange.interpreter.core :refer [load-assets]]))
+    [webchange.resources.manager :as resources]))
 
 (defn- audios->sources
   [audios-list]
   (->> audios-list
        (map :src)
        (filter #(not (= % "empty")))))
-
-(defn- sources->assets
-  [urls]
-  (map (fn [url]
-         {:type "audio"
-          :size 1
-          :url  url})
-       urls))
 
 (defn- audio->action
   [{:keys [src start duration]}]
@@ -48,7 +40,7 @@
          on-playing (or (:on-playing callbacks) #())
          on-finish (or (:on-finish callbacks) #())
          action (get-audios-sequence-action audios-list on-finish)]
-     (load-assets (-> audios-list audios->sources sources->assets)
-                  #(on-loading %)
-                  #(do (on-playing)
-                       (re-frame/dispatch [::ce/execute-action action]))))))
+     (resources/load-resources (-> audios-list audios->sources)
+                               {:on-progress #(on-loading %)
+                                :on-complete #(do (on-playing)
+                                                  (re-frame/dispatch [::ce/execute-action action]))}))))

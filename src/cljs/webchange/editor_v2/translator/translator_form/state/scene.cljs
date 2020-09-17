@@ -96,23 +96,20 @@
 (re-frame/reg-event-fx
   ::set-changes
   (fn [{:keys [db]} [_ asset-data]]
-    {:db           (assoc-in db (path-to-db [:scene :changed]) true)
-     :reload-asset asset-data}))
+    {:db (assoc-in db (path-to-db [:scene :changed]) true)}))
 
 (re-frame/reg-event-fx
   ::add-asset
   (fn [{:keys [db]} [_ asset-data]]
-    {:db           (update-in db (path-to-db [:scene :data :assets]) conj asset-data)
-     :dispatch-n   (list [::set-changes])
-     :reload-asset asset-data}))
+    {:db         (update-in db (path-to-db [:scene :data :assets]) conj asset-data)
+     :dispatch-n (list [::set-changes])}))
 
 (re-frame/reg-event-fx
   ::add-asset-if-not-exist
   (fn [{:keys [db]} [_ asset-url asset-data]]
     (let [assets (assets-data db)]
-      {:db           (assoc-in db (path-to-db [:scene :data :assets]) (add-if-not-exist assets :url asset-url asset-data))
-       :dispatch-n   (list [::set-changes])
-       :reload-asset asset-data})))
+      {:db         (assoc-in db (path-to-db [:scene :data :assets]) (add-if-not-exist assets :url asset-url asset-data))
+       :dispatch-n (list [::set-changes])})))
 
 (re-frame/reg-event-fx
   ::update-asset

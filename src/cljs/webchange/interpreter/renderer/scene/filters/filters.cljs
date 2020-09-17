@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.filters.filters
   (:require
-    [webchange.interpreter.renderer.pixi :refer [shared-ticker ColorMatrixFilter DropShadowFilter GlowFilter OutlineFilter]]
+    [webchange.interpreter.pixi :refer [shared-ticker ColorMatrixFilter DropShadowFilter GlowFilter OutlineFilter]]
     [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager]]
     [webchange.logger :as logger]))
 

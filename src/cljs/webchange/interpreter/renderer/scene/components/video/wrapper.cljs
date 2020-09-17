@@ -2,7 +2,7 @@
   (:require
     [webchange.interpreter.renderer.scene.components.video.utils :as v-utils]
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
-    [webchange.interpreter.renderer.resources :as resources]))
+    [webchange.resources.manager :as resources]))
 
 (defn wrap
   [type name sprite-object]

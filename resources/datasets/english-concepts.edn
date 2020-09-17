@@ -21,28 +21,32 @@
       :params {:src "/raw/img/elements/tree.png", :filter "grayscale"},
       :target "image3"}],
     :type "parallel",
-    :scene-id "book"}
+    :scene-id "book"},
    :scenes ["book"]}
   {:name "book-read-action",
    :type "action",
-   :template {:type "audio", :scene-id "book"}}
+   :template {:type "audio", :scene-id "book"},
+   :scenes ["book"]}
   {:name "chanting-video-src", :type "video", :template nil
    :scenes ["cinema-video"]}
-  {:name "concept-name", :type "string"}
-  {:name "concept-rest", :type "string"}
+  {:name "concept-name", :type "string", :scenes ["cycling-letters" "hide-n-seek" "magic-hat" "running" "slide" "volleyball" "volleyball-letters" "writing-practice"]}
+  {:name "concept-rest", :type "string", :scenes ["letter-intro"]}
   {:name "game-voice-action",
    :type "action",
    :template
    {:type "audio",
     :scene-id "cycling",
-    :description "Game Voice High"}}
+    :description "Game Voice High"},
+   :scenes ["cycling" "see-saw" "volleyball"]}
   {:name "game-voice-action-low",
    :type "action",
-   :template {:type "audio", :scene-id "see-saw"}}
+   :template {:type "audio", :scene-id "see-saw"},
+   :scenes ["see-saw"]}
   {:name "game-voice-chanting",
    :type "action",
-   :template {:type "audio", :scene-id "running"}}
-  {:name "hide-n-seek-current-concept-audio", :type "action"}
+   :template {:type "audio", :scene-id "running"},
+   :scenes ["running"]}
+  {:name "hide-n-seek-current-concept-audio", :type "action", :scenes ["hide-n-seek"]}
   {:name "home-group-3-times-action",
    :type "action",
    :template
@@ -50,7 +54,8 @@
     [{:type "animation-sequence", :target "vera"}
      {:type "animation-sequence", :target "senoravaca"}],
     :type "parallel",
-    :scene-id "home"}}
+    :scene-id "home"},
+   :scenes ["home"]}
   {:name "home-group-word-action",
    :type "action",
    :template
@@ -58,43 +63,49 @@
     [{:type "animation-sequence", :target "vera"}
      {:type "animation-sequence", :target "senoravaca"}],
     :type "parallel",
-    :scene-id "home"}}
+    :scene-id "home"},
+   :scenes ["home"]}
   {:name "home-vaca-3-times-action",
    :type "action",
    :template
    {:type "animation-sequence",
     :target "senoravaca",
-    :scene-id "home"}}
+    :scene-id "home"},
+   :scenes ["home"]}
   {:name "home-vaca-goodbye-action",
    :type "action",
    :template
    {:type "animation-sequence",
     :target "senoravaca",
-    :scene-id "home"}}
+    :scene-id "home"},
+   :scenes ["home"]}
   {:name "home-vaca-question-action",
    :type "action",
    :template
    {:type "animation-sequence",
     :target "senoravaca",
-    :scene-id "home"}}
+    :scene-id "home"},
+   :scenes ["home"]}
   {:name "home-vaca-this-is-action",
    :type "action",
    :template
    {:type "animation-sequence",
     :target "senoravaca",
-    :scene-id "home"}}
+    :scene-id "home"},
+   :scenes ["home"]}
   {:name "home-vaca-word-action",
    :type "action",
    :template
    {:type "animation-sequence",
     :target "senoravaca",
-    :scene-id "home"}}
+    :scene-id "home"},
+   :scenes ["home"]}
   {:name "image-src",
    :type "image",
    :template nil,
-   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "cycling-letters" "volleyball" "volleyball-letters" "pinata" "writing-lesson" "writing-practice" "hide-n-seek" "running" "slide" "magic-hat"]}
-  {:name "letter", :type "string"}
-  {:name "letter-big", :type "string"}
+   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "cycling-letters" "volleyball" "volleyball-letters" "pinata" "writing-lesson" "writing-practice" "hide-n-seek" "running" "slide" "magic-hat" "letter-intro" "park-poem"]}
+  {:name "letter", :type "string", :scenes ["cinema" "cycling-letters" "letter-intro" "magic-hat" "pinata" "running" "sandbox" "volleyball-letters"]}
+  {:name "letter-big", :type "string", :scenes ["letter-intro"]}
   {:name "letter-intro-letter",
    :type "action",
    :template
@@ -103,7 +114,8 @@
     :audio "",
     :track 1,
     :target "senoravaca",
-    :scene-id "letter-intro"}}
+    :scene-id "letter-intro"},
+   :scenes ["cinema-video" "letter-intro" "writing-lesson"]}
   {:name "letter-intro-letter-mari",
    :type "action",
    :template
@@ -112,7 +124,8 @@
     :audio "",
     :track 1,
     :target "mari",
-    :scene-id "letter-intro"}}
+    :scene-id "letter-intro"},
+   :scenes ["letter-intro"]}
   {:name "letter-intro-song",
    :type "action",
    :template
@@ -121,7 +134,8 @@
     :audio "",
     :track 1,
     :target "senoravaca",
-    :scene-id "letter-intro"}}
+    :scene-id "letter-intro"},
+   :scenes ["letter-intro"]}
   {:name "letter-intro-sound",
    :type "action",
    :template
@@ -130,7 +144,8 @@
     :audio "",
     :track 1,
     :target "senoravaca",
-    :scene-id "letter-intro"}}
+    :scene-id "letter-intro"},
+   :scenes ["letter-intro" "writing-lesson"]}
   {:name "letter-intro-word",
    :type "action",
    :template
@@ -139,7 +154,8 @@
     :audio "",
     :track 1,
     :target "senoravaca",
-    :scene-id "letter-intro"}}
+    :scene-id "letter-intro"},
+   :scenes ["letter-intro" "writing-lesson"]}
   {:name "letter-intro-word-repeat",
    :type "action",
    :template
@@ -148,11 +164,12 @@
     :audio "",
     :track 1,
     :target "senoravaca",
-    :scene-id "letter-intro"}}
-  {:name "letter-path", :type "string"}
+    :scene-id "letter-intro"},
+   :scenes ["letter-intro"]}
+  {:name "letter-path", :type "string", :scenes ["writing-lesson" "writing-practice"]}
   {:name "letter-src", :type "image", :template nil,
-   :scenes ["writing-lesson" "writing-practice"]}
-  {:name "letter-tutorial-path", :type "string"}
+   :scenes ["writing-lesson" "writing-practice" "park-poem"]}
+  {:name "letter-tutorial-path", :type "string", :scenes ["writing-practice"]}
   {:name "mari-chant",
    :type "action",
    :template
@@ -160,7 +177,8 @@
     :type "animation-sequence",
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
-    :scene-id "magic-hat"}}
+    :scene-id "magic-hat"},
+   :scenes ["magic-hat"]}
   {:name "mari-letter",
    :type "action",
    :template
@@ -168,7 +186,8 @@
     :type "animation-sequence",
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
-    :scene-id "magic-hat"}}
+    :scene-id "magic-hat"},
+   :scenes ["pinata"]}
   {:name "mari-sound",
    :type "action",
    :template
@@ -176,7 +195,8 @@
     :type "animation-sequence",
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
-    :scene-id "magic-hat"}}
+    :scene-id "magic-hat"},
+   :scenes ["magic-hat"]}
   {:name "mari-sound-3",
    :type "action",
    :template
@@ -184,7 +204,8 @@
     :type "animation-sequence",
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
-    :scene-id "magic-hat"}}
+    :scene-id "magic-hat"},
+   :scenes ["cycling-letters" "magic-hat" "volleyball-letters"]}
   {:name "mari-word",
    :type "action",
    :template
@@ -192,7 +213,8 @@
     :type "animation-sequence",
     :audio "/raw/audio/l2/mari-chants.m4a",
     :target "mari",
-    :scene-id "magic-hat"}}
+    :scene-id "magic-hat"},
+   :scenes ["magic-hat" "slide"]}
   {:name "poem-image-1", :type "image", :template nil,
    :scenes ["park-poem"]}
   {:name "poem-image-2", :type "image", :template nil,
@@ -225,30 +247,38 @@
       :target "rock"}
      {:id "poem-pause", :type "action"}],
     :type "sequence-data",
-    :scene-id "park-poem"}}
+    :scene-id "park-poem"},
+   :scenes ["park-poem"]}
   {:name "riddle",
    :type "action",
-   :template {:type "audio", :scene-id "slide"}}
+   :template {:type "audio", :scene-id "slide"},
+   :scenes ["slide"]}
   {:name "sandbox-long-letter-action",
    :type "action",
    :template
-   {:type "animation-sequence", :target "mari", :scene-id "sandbox"}}
+   {:type "animation-sequence", :target "mari", :scene-id "sandbox"},
+   :scenes ["sandbox"]}
   {:name "sandbox-short-letter-action",
    :type "action",
    :template
-   {:type "animation-sequence", :target "mari", :scene-id "sandbox"}}
+   {:type "animation-sequence", :target "mari", :scene-id "sandbox"},
+   :scenes ["sandbox"]}
   {:name "sandbox-state-word-1-action",
    :type "action",
-   :template {:type "audio", :scene-id "sandbox"}}
+   :template {:type "audio", :scene-id "sandbox"},
+   :scenes ["sandbox"]}
   {:name "sandbox-state-word-2-action",
    :type "action",
-   :template {:type "audio", :scene-id "sandbox"}}
+   :template {:type "audio", :scene-id "sandbox"},
+   :scenes ["sandbox"]}
   {:name "sandbox-state-word-3-action",
    :type "action",
-   :template {:type "audio", :scene-id "sandbox"}}
+   :template {:type "audio", :scene-id "sandbox"},
+   :scenes ["sandbox"]}
   {:name "sandbox-state-word-4-action",
    :type "action",
-   :template {:type "audio", :scene-id "sandbox"}}
+   :template {:type "audio", :scene-id "sandbox"},
+   :scenes ["sandbox"]}
   {:name "swings-dialog-action",
    :type "action",
    :template
@@ -256,7 +286,8 @@
     [{:type "animation-sequence", :target "rock"}
      {:type "animation-sequence", :target "vera"}],
     :type "sequence-data",
-    :scene-id "swings"}}
+    :scene-id "swings"},
+   :scenes ["swings"]}
   {:name "vaca-chanting-song",
    :type "action",
    :template
@@ -265,7 +296,8 @@
     :audio "",
     :track 1,
     :target "senoravaca",
-    :scene-id "cinema"}}
+    :scene-id "cinema"},
+   :scenes ["cinema"]}
   {:name "vaca-chanting-word",
    :type "action",
    :template
@@ -274,7 +306,8 @@
     :audio "",
     :track 1,
     :target "senoravaca",
-    :scene-id "cinema"}}
+    :scene-id "cinema"},
+   :scenes ["cinema"]}
   {:name "word-image-1",
    :type "image",
    :scenes ["sandbox" "cycling" "volleyball"],

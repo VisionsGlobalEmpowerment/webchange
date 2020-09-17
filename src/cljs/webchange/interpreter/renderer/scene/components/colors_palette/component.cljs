@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.colors-palette.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Graphics string2hex]]
+    [webchange.interpreter.pixi :refer [Container Graphics string2hex]]
     [webchange.interpreter.renderer.scene.components.colors-palette.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 

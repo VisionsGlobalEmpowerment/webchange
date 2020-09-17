@@ -242,15 +242,13 @@
           assets (-> db
                      (get-in [:scenes scene-id :assets] [])
                      (conj asset))]
-      {:db           (assoc-in db [:scenes scene-id :assets] assets)
-       :reload-asset state})))
+      {:db (assoc-in db [:scenes scene-id :assets] assets)})))
 
 (re-frame/reg-event-fx
   ::edit-asset
   (fn [{:keys [db]} [_ {:keys [scene-id id state]}]]
     (let [asset (-> (get-in db [:scenes scene-id :assets id]) (merge state))]
-      {:db           (assoc-in db [:scenes scene-id :assets id] asset)
-       :reload-asset asset})))
+      {:db (assoc-in db [:scenes scene-id :assets id] asset)})))
 
 (re-frame/reg-event-fx
   ::reset-scene-assets

@@ -1,4 +1,4 @@
-(ns webchange.interpreter.renderer.resources)
+(ns webchange.resources.manager)
 
 ;; PIXI.Loader: https://pixijs.download/dev/docs/PIXI.Loader.html
 (defonce loader (atom nil))

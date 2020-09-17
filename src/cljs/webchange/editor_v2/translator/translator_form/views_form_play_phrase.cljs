@@ -8,7 +8,7 @@
     [webchange.editor-v2.graph-builder.utils.graph-to-nodes-seq :refer [graph-to-nodes-seq]]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
     [webchange.editor-v2.translator.translator-form.utils :refer [audios->assets]]
-    [webchange.interpreter.core :refer [load-assets]]))
+    [webchange.resources.manager :as resources]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 
@@ -70,11 +70,11 @@
                                                    (let [action (get-phrase-actions-sequence graph #(reset! state "pause"))
                                                          audios-list (action->audios-list action)]
                                                      (reset! state "loading")
-                                                     (load-assets (audios->assets audios-list)
-                                                                  #(reset! loading-progress %)
-                                                                  #(do (reset! loading-progress nil)
-                                                                       (reset! state "playing")
-                                                                       (re-frame/dispatch [::ce/execute-action action])))))})
+                                                     (resources/load-resources audios-list
+                                                                               {:on-progress #(reset! loading-progress %)
+                                                                                :on-complete #(do (reset! loading-progress nil)
+                                                                                                  (reset! state "playing")
+                                                                                                  (re-frame/dispatch [::ce/execute-action action]))})))})
 
                            [ic/play-arrow]]
                   "playing" [fab (merge common-button-params

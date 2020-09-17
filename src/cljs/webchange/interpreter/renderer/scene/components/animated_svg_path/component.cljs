@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.animated-svg-path.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Graphics Sprite Texture]]
+    [webchange.interpreter.pixi :refer [Container Graphics Sprite Texture]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.path :refer [paths]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.animation :as a]

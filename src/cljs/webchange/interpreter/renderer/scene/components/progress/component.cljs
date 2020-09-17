@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.progress.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Graphics Sprite WHITE]]
+    [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter]]
     [webchange.interpreter.renderer.scene.components.progress.wrapper :refer [wrap]]))

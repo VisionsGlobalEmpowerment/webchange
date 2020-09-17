@@ -8,9 +8,11 @@ Main `index.js` file:
 ```js
 import * as PIXI from "pixi.js";
 import * as spine from "pixi-spine";
+import * as sound from "pixi-sound";
 import * as filters from "pixi-filters";
 
 Object.assign(PIXI.filters, filters);
+PIXI.sound = sound.default;
 
 export {PIXI};
 ```
@@ -61,6 +63,7 @@ Package.json:
   "dependencies": {
     "pixi-filters": "^3.1.1",
     "pixi-spine": "^2.1.9",
+    "pixi-sound": "^3.0.5",
     "pixi.js": "^5.3.3",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",

@@ -6,16 +6,12 @@
     [react-spring :refer [Spring]]
     [react-konva :refer [Stage, Layer, Group, Rect]]
     [konva :refer [Tween]]
-    [webchange.common.anim :as anim]
     [webchange.common.events :as ce]
     [cljs-http.client :as http]
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
-    [webchange.interpreter.defaults :as defaults]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]))
-
-(def default-assets defaults/default-assets)
 
 (def assets (atom {}))
 
@@ -106,59 +102,16 @@
        (map :size)
        (reduce +)))
 
-(defn load-base-asset
-  ([asset]
-   (load-base-asset asset nil))
-  ([asset progress]
-   (when (:url asset)
-     (go (let [response (<! (http/get (str resources (:url asset)) {:response-type :array-buffer :with-credentials? false}))]
-           (put-data (:body response) (:url asset))
-           (when-not (nil? progress)
-             (swap! progress + (:size asset))))))))
-
-(defn load-asset
-  ([asset]
-   (let [progress (atom 0)]
-     (load-asset asset progress)))
-  ([asset progress]
-   (case (-> asset :type keyword)
-     :anim-text (anim/load-anim-text asset progress)
-     :animation (anim/load-anim-text asset progress)
-     :anim-texture (anim/load-anim-texture asset progress)
-     (load-base-asset asset progress))))
-
-(defn load-assets
-  ([assets]
-   (load-assets assets #() #()))
-  ([assets on-asset-progress on-asset-complete]
-   (let [total (get-total-size assets)
-         current-progress (atom 0)]
-     (add-watch current-progress :inc
-                (fn [_ _ _ n]
-                  (on-asset-progress (Math/round (* n (/ 100 total))))
-                  (if (>= n total)
-                    (on-asset-complete))))
-     (if (> total 0)
-       (doseq [asset assets]
-         (load-asset asset current-progress))
-       (on-asset-complete)))))
-
 (defn load-course
-  [{:keys [course-id load-assets?]} cb]
+  [{:keys [course-id]} cb]
   (go (let [course-response (<! (get-course course-id))
             course (:body course-response)]
-        (when load-assets?
-          (load-assets (->> course :templates vals (map :assets) (apply concat))))
         (cb course))))
 
 (defn load-scene
-  [{:keys [course-id scene-id load-assets?]} cb]
+  [{:keys [course-id scene-id]} cb]
   (go (let [scene-response (<! (get-scene course-id scene-id))
             scene (:body scene-response)]
-        (when load-assets?
-          (load-assets (concat default-assets (:assets scene))
-                       #(re-frame/dispatch [::events/set-loading-progress scene-id %])
-                       #(re-frame/dispatch [::events/set-scene-loaded scene-id true])))
         (cb scene))))
 
 (defn load-progress
@@ -168,18 +121,16 @@
         (cb result))))
 
 (defn load-lessons
-  [course-id load-assets? cb on-asset-progress on-asset-complete]
+  [{:keys [course-id cb on-asset-complete]}]
   (go (let [response (<! (get-lessons course-id))
             result (-> response :body)]
-        (if load-assets?
-          (load-assets (:assets result) on-asset-progress on-asset-complete)
-          (on-asset-complete))
+        (on-asset-complete)
         (cb result))))
 
 (defn get-data-as-url
   [key]
   (if-not (has-data key)
-    (do (load-base-asset {:url key}) key)
+    (do)
     (let [object-url-key (create-tagged-key "object-url" key)]
       (when-not (has-data object-url-key)
         (-> key
@@ -309,12 +260,11 @@
                    :on-skip   #(re-frame/dispatch [::ce/execute-action {:type "remove-animation" :target target :track track}])})
                 data)))
 
-(defn animation-sequence->audio-action [{:keys [start duration audio] :as action}]
+(defn animation-sequence->audio-action [{:keys [audio] :as action}]
   (if audio
-    {:type     "audio"
-     :id       audio
-     :start    start
-     :duration duration}))
+    (merge {:type "audio"
+            :id   audio}
+           (select-keys action [:duration :start :volume]))))
 
 (defn text-animation-sequence->actions [{:keys [target animation start data] :as action}]
   (into [] (map (fn [{:keys [at chunk]}]

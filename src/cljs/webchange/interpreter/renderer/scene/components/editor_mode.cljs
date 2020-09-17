@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.scene.state.skin :as skin]
-    [webchange.interpreter.renderer.pixi :refer [Container Graphics Rectangle Sprite WHITE]]
+    [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE]]
     [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))

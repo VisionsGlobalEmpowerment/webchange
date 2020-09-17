@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.slider.component
   (:require
-    [webchange.interpreter.renderer.pixi :refer [Container Sprite WHITE]]
+    [webchange.interpreter.pixi :refer [Container Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.components.slider.wrapper :refer [wrap]]))
 
