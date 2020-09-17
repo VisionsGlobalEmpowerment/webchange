@@ -9,10 +9,9 @@
     [webchange.editor-v2.dialog.dialog-form.views-form-concepts :refer [concepts-block]]
     [webchange.editor-v2.translator.translator-form.views-form-description :refer [description-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-diagram :refer [diagram-block]]
-    [webchange.editor-v2.translator.translator-form.views-form-phrase :refer [phrase-block]]
-    [webchange.editor-v2.dialog.dialog-form.views-form-phrase :refer [node-options]]
+    [webchange.editor-v2.dialog.dialog-form.views-form-phrase :refer [node-options phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
-    [webchange.editor-v2.translator.translator-form.views-form-target :refer [target-block]]
+    [webchange.editor-v2.dialog.dialog-form.views-form-target :refer [target-block]]
     [webchange.editor-v2.translator.text.chunks :refer [text-chunks-modal]]
     [webchange.ui.theme :refer [get-in-theme]]))
 

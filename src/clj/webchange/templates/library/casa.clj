@@ -5,6 +5,9 @@
 (def m {:id          1
         :name        "casa"
         :description "Some description of casa mechanics and covered skills"
+        :lesson-sets ["concepts"]
+        :fields      [{:name "image-src",
+                       :type "image"}]
         :options     {:characters {:label "Characters"
                                    :type  "characters"
                                    :max   3}

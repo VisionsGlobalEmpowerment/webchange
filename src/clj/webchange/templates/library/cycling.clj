@@ -5,7 +5,10 @@
 (def m {:id          2
         :name        "cycling"
         :description "Some description of cycling mechanics and covered skills"
-        :fields [{:name "word-image-1",
+        :lesson-sets ["concepts"]
+        :fields [{:name "image-src",
+                  :type "image"}
+                 {:name "word-image-1",
                   :type "image"}
                  {:name "word-image-2",
                   :type "image"}

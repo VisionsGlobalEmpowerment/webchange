@@ -320,7 +320,7 @@
                      :navigation-mode  :activity
                      :scene-list       {}
                      :default-progress {}
-                     :levels [{:level 1 :name "Level 1" :scheme {:lesson {:name "Lesson" :lesson-sets [:concepts]}}
+                     :levels [{:level 1 :name "Level 1" :scheme {:lesson {:name "Lesson" :lesson-sets []}}
                                :lessons [{:lesson 1
                                           :name "Lesson 1"
                                           :type :lesson
@@ -333,14 +333,17 @@
               (assoc :id new-course-id)
               (->website-course))]))
 
-(def default-lesson-name "l1-ls1-1")
+(defn default-lesson-name
+  [lesson-set-name]
+  (str lesson-set-name "-l1-ls1"))
 
 (defn- create-default-lesson!
-  [course-id]
+  [course-id lesson-sets]
   (let [items (db/get-course-items {:course_id course-id})
         dataset-id (-> items first :dataset-id)
         item-ids (map #(select-keys % [:id]) items)]
-    (db/create-lesson-set! {:name default-lesson-name :dataset_id dataset-id :data {:items item-ids}})))
+    (doall (for [lesson-name lesson-sets]
+             (db/create-lesson-set! {:name (default-lesson-name lesson-name) :dataset_id dataset-id :data {:items item-ids}})))))
 
 (defn- save-scene-on-create!
   [course-id scene-slug scene-data owner-id]
@@ -385,26 +388,36 @@
   (doall (map #(db/create-scene-skill! {:scene_id scene-id :skill_id %}) skills)))
 
 (defn save-dataset-on-create!
-  [course-id scene-slug {:keys [fields]}]
+  [course-id scene-slug {:keys [fields lesson-sets]}]
   (let [course-lessons (db/get-course-lessons {:course_id course-id})]
-    (when (seq course-lessons)
-      (create-default-lesson! course-id)))
+    (when (empty? course-lessons)
+      (create-default-lesson! course-id lesson-sets)))
   (let [datasets (db/get-datasets-by-course {:course_id course-id})]
     (doall (for [{:keys [id scheme]} datasets]
              (db/update-dataset! {:id     id
                                   :scheme (-> scheme
                                               (update :fields #(merge-fields % fields scene-slug)))})))))
 
+(defn- merge-lesson-sets
+  [original new]
+  (->> original
+       (concat new)
+       (distinct)
+       (into [])))
+
 (defn save-course-on-create!
-  [course-id scene-slug scene-name owner-id]
+  [course-id scene-slug {:keys [lesson-sets]} scene-name owner-id]
   (let [created-at (jt/local-date-time)
         {course-data :data} (db/get-latest-course-version {:course_id course-id})
-        lesson-required? (nil? (get-in course-data [:levels 0 :lessons 0 :lesson-sets :concepts]))
+        lesson-required? (empty? (get-in course-data [:levels 0 :scheme :lesson :lesson-sets]))
+        lesson-sets-scheme (->> lesson-sets (map keyword) (into []))
+        lesson-sets-lessons (->> lesson-sets (map (juxt keyword default-lesson-name)) (into {}))
         initial-scene-required? (nil? (get course-data :initial-scene))
         data (cond-> course-data
                      :always (assoc-in [:scene-list (keyword scene-slug)] {:name scene-name})
                      :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
-                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets :concepts] default-lesson-name)
+                     :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
+                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
                      initial-scene-required? (assoc :initial-scene scene-slug))]
     (db/save-course! {:course_id  course-id
                       :data       data
@@ -418,7 +431,7 @@
         {scene-id :scene-id} (save-scene-on-create! course-id scene-slug scene-data owner-id)]
     (save-skills-on-create! scene-id skills)
     (save-dataset-on-create! course-id scene-slug metadata)
-    (save-course-on-create! course-id scene-slug scene-name owner-id)
+    (save-course-on-create! course-id scene-slug metadata scene-name owner-id)
     [true {:id          scene-id
            :name        scene-name
            :scene-slug  scene-slug
