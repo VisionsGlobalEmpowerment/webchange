@@ -119,3 +119,9 @@ Set public and upload folders path in profiles `env`:
     ```
     $ lein run update-editor-assets
     ```
+
+- **Upload resources**. e.g. audios:
+    ```
+    $ lein run upload-local-files /raw/audio
+    ```
+    Before start make sure keys `:api-key` and `:secondary` are defined in `profiles.clj`

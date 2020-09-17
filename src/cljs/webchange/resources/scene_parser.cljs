@@ -88,7 +88,7 @@
 
 (defn- parse-additional-resources
   []
-  (let [next-activity @(re-frame/subscribe [::subs/next-activity])]
+  (let [next-activity @(re-frame/subscribe [::subs/after-current-activity])]
     [(:preview next-activity)]))
 
 (defn get-scene-resources

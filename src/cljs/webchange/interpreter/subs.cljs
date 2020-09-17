@@ -1,7 +1,8 @@
 (ns webchange.interpreter.subs
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.lessons.subs :as lessons]))
+    [webchange.editor-v2.lessons.subs :as lessons]
+    [webchange.interpreter.lessons.activity :as activity]))
 
 (re-frame/reg-sub
   ::course-datasets
@@ -32,11 +33,13 @@
          (map second))))
 
 (re-frame/reg-sub
-  ::next-activity
+  ::after-current-activity
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          {:keys [activity]} (get-in db [:progress-data :next])]
-      (->> (keyword activity)
+          next (->> (get-in db [:progress-data :next])
+                    (activity/next-not-finished-for db))]
+      (->> (:activity next)
+           (keyword)
            (get scenes)))))
 
 (re-frame/reg-sub
