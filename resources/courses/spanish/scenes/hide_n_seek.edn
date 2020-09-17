@@ -1,7 +1,7 @@
 {:assets
  [{:url "/raw/img/park/hide-n-seek/background.jpg", :size 14, :type "image", :alias nil, :width 1920, :height 1080}
   {:url "/raw/img/park/hide-n-seek/front-objects.png", :size 37, :type "image", :alias nil, :width 1920, :height 1080}
-  {:url "/raw/audio/l1/assessment1/mari.mp4", :size 5, :type "audio", :alias "mari voice"}
+  {:url "/raw/audio/l1/assessment1/mari.m4a", :size 5, :type "audio", :alias "mari voice"}
   {:url "/raw/audio/l1/assessment1/game-voice-set-main.mp3", :size 5, :type "audio", :alias "words"}
   {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio" :alias "statements"}],
  :objects
@@ -467,7 +467,7 @@
    :phrase-description "Welcome speech",
    :phrase-text "Hola! Vamos a jugar el juego de las escondidas! Encuentra las fotos que se esconden en el parque!",
    :target "mari",
-   :audio "/raw/audio/l1/assessment1/mari.mp4",
+   :audio "/raw/audio/l1/assessment1/mari.m4a",
    :start 1.288,
    :duration 8.111,
    :track 1,

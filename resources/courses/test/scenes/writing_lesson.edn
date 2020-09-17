@@ -1,7 +1,7 @@
 {:assets        [{:url "/raw/img/library/room2/background.jpg" :type "image"}
                  {:url "/raw/img/library/room2/canvas.png" :type "image"}
-                 {:url "/raw/audio/l2/a6/mari.mp4" :type "audio" :alias "mari voice"}
-                 {:url "/raw/audio/l2/a6/vaca.mp4" :type "audio" :alias "vaca voice"}
+                 {:url "/raw/audio/l2/a6/mari.m4a" :type "audio" :alias "mari voice"}
+                 {:url "/raw/audio/l2/a6/vaca.m4a" :type "audio" :alias "vaca voice"}
                  {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a", :size 2, :type "audio" :alias "vaca insertions 1"}
                  {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_2.m4a", :size 2, :type "audio" :alias "vaca insertions 2"}
                  {:url "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_3.m4a", :size 2, :type "audio" :alias "vaca insertions 3"}
@@ -161,7 +161,7 @@
                                                                           :start 86.226,
                                                                           :type "animation-sequence",
                                                                           :duration 5.494,
-                                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                                           :target "senoravaca",
                                                                           :track 1,
                                                                           :data
@@ -178,7 +178,7 @@
                                                           :start 93.533,
                                                           :type "animation-sequence",
                                                           :duration 15.907,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data
@@ -227,7 +227,7 @@
                                                           :start 58.826,
                                                           :type "animation-sequence",
                                                           :duration 2.4,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data
@@ -243,7 +243,7 @@
                                                           :start 62.786,
                                                           :type "animation-sequence",
                                                           :duration 0.88,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data [{:start 62.89, :end 64.22, :anim "talk"}]}
@@ -256,7 +256,7 @@
                                                           :start 64.413,
                                                           :type "animation-sequence",
                                                           :duration 1.76,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data [{:start 64.61, :end 66.37, :anim "talk"}]}
@@ -269,7 +269,7 @@
                                                           :start 68.426,
                                                           :type "animation-sequence",
                                                           :duration 3.64,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data [{:start 68.67, :end 71.87, :anim "talk"}]}
@@ -297,7 +297,7 @@
                                                           :start 29.76,
                                                           :type "animation-sequence",
                                                           :duration 9.573,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data
@@ -325,7 +325,7 @@
                                                           :start 42.493,
                                                           :type "animation-sequence",
                                                           :duration 2.507,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data [{:start 42.74, :end 45.69, :anim "talk"}]}
@@ -347,7 +347,7 @@
                                                           :start 79.88,
                                                           :type "animation-sequence",
                                                           :duration 4.2,
-                                                          :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                          :audio "/raw/audio/l2/a6/vaca.m4a",
                                                           :target "senoravaca",
                                                           :track 1,
                                                           :data
@@ -364,7 +364,7 @@
                                                   :start 1.826,
                                                   :type "animation-sequence",
                                                   :duration 27.1,
-                                                  :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                  :audio "/raw/audio/l2/a6/vaca.m4a",
                                                   :target "senoravaca",
                                                   :track 1,
                                                   :data
@@ -388,14 +388,14 @@
                                                    :start 0.88,
                                                    :type "animation-sequence",
                                                    :duration 1.107,
-                                                   :audio "/raw/audio/l2/a6/mari.mp4",
+                                                   :audio "/raw/audio/l2/a6/mari.m4a",
                                                    :target "mari",
                                                    :track 1,
                                                    :data [{:start 1.06, :end 1.77, :anim "talk"}]}
 
                  :vaca-voice-pay-attention       {:type "animation-sequence" :target "senoravaca" :track 1 :offset 1.541
                                                   :description "Ahora, pongan atencion amigos. Sabian que cada foto empieza con el sonido"
-                                                  :id "/raw/audio/l2/a6/vaca.mp4" :start 1.541 :duration 6.905
+                                                  :id "/raw/audio/l2/a6/vaca.m4a" :start 1.541 :duration 6.905
                                                   :data [{:start 1.753 :end 2.249 :anim "talk"}
                                                          {:start 2.587 :end 4.054 :anim "talk"}
                                                          {:start 5.036 :end 6.704 :anim "talk"}
@@ -406,7 +406,7 @@
                                                   :start 9.432,
                                                   :type "animation-sequence",
                                                   :duration 1.44,
-                                                  :audio "/raw/audio/l2/a6/mari.mp4",
+                                                  :audio "/raw/audio/l2/a6/mari.m4a",
                                                   :target "mari",
                                                   :track 1,
                                                   :data [{:start 9.69, :end 10.71, :anim "talk"}]}
@@ -422,7 +422,7 @@
                                                           :start 16.506,
                                                           :type "animation-sequence",
                                                           :duration 5.506,
-                                                          :audio "/raw/audio/l2/a6/mari.mp4",
+                                                          :audio "/raw/audio/l2/a6/mari.m4a",
                                                           :target "mari",
                                                           :track 1,
                                                           :data [{:start 16.73, :end 21.68, :anim "talk"}]}]}
@@ -432,7 +432,7 @@
                                                   :start 53.826,
                                                   :type "animation-sequence",
                                                   :duration 3.774,
-                                                  :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                  :audio "/raw/audio/l2/a6/vaca.m4a",
                                                   :target "senoravaca",
                                                   :track 1,
                                                   :data
@@ -447,7 +447,7 @@
                                                   :start 110.413,
                                                   :type "animation-sequence",
                                                   :duration 19.266,
-                                                  :audio "/raw/audio/l2/a6/vaca.mp4",
+                                                  :audio "/raw/audio/l2/a6/vaca.m4a",
                                                   :target "senoravaca",
                                                   :track 1,
                                                   :data

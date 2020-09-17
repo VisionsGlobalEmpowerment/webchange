@@ -1,6 +1,6 @@
 {:assets
                 [{:url "/raw/audio/l1/a4/Mari_Level1_Activity4.m4a", :size 5, :type "audio", :alias "mari voice old"}
-                 {:url "/raw/audio/l1/a4/mari.mp4", :size 5, :type "audio", :alias "mari voice"}
+                 {:url "/raw/audio/l1/a4/mari.m4a", :size 5, :type "audio", :alias "mari voice"}
                  {:url "/raw/audio/l1/a4/game-voice-set-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
                  {:url "/raw/audio/l1/a4/game-voice-set-2.mp3", :size 5, :type "audio", :alias "game voice 2"}
                  {:url "/raw/audio/l1/a4/game-voice-set-3.mp3", :size 5, :type "audio", :alias "game voice 3"}
@@ -315,7 +315,7 @@
                                                  :data        [{:end 9.4, :anim "talk", :start 8.07}],
                                                  :phrase-text "Esta es la letra",
                                                  :target      "mari",
-                                                 :audio       "/raw/audio/l1/a4/mari.mp4",
+                                                 :audio       "/raw/audio/l1/a4/mari.m4a",
                                                  :start       7.773,
                                                  :duration    1.56,
                                                  :track       1,
@@ -325,7 +325,7 @@
                                                  :data        [{:end 12.99, :anim "talk", :start 10.46}],
                                                  :phrase-text "Sabias que la letra",
                                                  :target      "mari",
-                                                 :audio       "/raw/audio/l1/a4/mari.mp4",
+                                                 :audio       "/raw/audio/l1/a4/mari.m4a",
                                                  :start       10.32,
                                                  :duration    1.72,
                                                  :track       1,
@@ -335,7 +335,7 @@
                                                  :data        [{:end 14.11, :anim "talk", :start 12.99}],
                                                  :phrase-text "hace el sonido",
                                                  :target      "mari",
-                                                 :audio       "/raw/audio/l1/a4/mari.mp4",
+                                                 :audio       "/raw/audio/l1/a4/mari.m4a",
                                                  :start       12.92,
                                                  :duration    1.174,
                                                  :track       1,
@@ -345,7 +345,7 @@
                                                  :data        [{:end 22.62, :anim "talk", :start 16.54}],
                                                  :phrase-text "Haz click en las imágenes para escuchar mas palabras que comienzan con el sonido",
                                                  :target      "mari",
-                                                 :audio       "/raw/audio/l1/a4/mari.mp4",
+                                                 :audio       "/raw/audio/l1/a4/mari.m4a",
                                                  :start       16.374,
                                                  :duration    6.386,
                                                  :track       1,
@@ -359,7 +359,7 @@
                                                  :phrase-description "More words",
                                                  :phrase-text        "Excellente! Quieres escuchar mas palabras?",
                                                  :target             "mari",
-                                                 :audio              "/raw/audio/l1/a4/mari.mp4",
+                                                 :audio              "/raw/audio/l1/a4/mari.m4a",
                                                  :start              33.04,
                                                  :duration           3.734,
                                                  :track              1,
@@ -373,7 +373,7 @@
                                                  :phrase-description "Welcome",
                                                  :phrase-text        "Bienvendio al arenero! Aprendamos algunas palabras nuevas.",
                                                  :target             "mari",
-                                                 :audio              "/raw/audio/l1/a4/mari.mp4",
+                                                 :audio              "/raw/audio/l1/a4/mari.m4a",
                                                  :start              1.195,
                                                  :duration           5.381,
                                                  :track              1,

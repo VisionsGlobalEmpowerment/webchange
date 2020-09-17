@@ -1,4 +1,4 @@
-{:initial-scene "map",
+{:initial-scene "sandbox",
  :scene-list
                 {:home
                  {:name    "Casa",

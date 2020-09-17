@@ -81,6 +81,11 @@
                    result))
                [])))
 
+(defn- parse-scene-audio
+  [scene-data]
+  (->> (:audio scene-data)
+       (vals)))
+
 (defn- parse-additional-resources
   []
   (let [next-activity @(re-frame/subscribe [::subs/next-activity])]
@@ -91,6 +96,7 @@
   (->> (concat (parse-concept-resources scene-id)
                (parse-scene-assets scene-data)
                (parse-scene-objects scene-data)
+               (parse-scene-audio scene-data)
                (parse-default-assets default-game-assets)
                (parse-additional-resources))
        (remove #(or (nil? %) (empty? %)))

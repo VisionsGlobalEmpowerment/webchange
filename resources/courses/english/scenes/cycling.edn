@@ -3,7 +3,7 @@
                  {:url "/raw/img/stadium/cycling/cycle_race_bg_02.jpg", :size 10, :type "image"}
                  {:url "/raw/img/stadium/cycling/cycle_race_bg_03.jpg", :size 10, :type "image"}
                  {:url "/raw/audio/l1/a8/Mari_L1_A8.m4a", :size 2, :type "audio", :alias "mari old"}
-                 {:url "/raw/audio/l1/a8/mari.mp4", :size 2, :type "audio", :alias "mari"}
+                 {:url "/raw/audio/l1/a8/mari.m4a", :size 2, :type "audio", :alias "mari"}
                  {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
                  {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio", :alias "game voice 1 redo"}
                  {:url "/raw/audio/l1/a2/game-voice-2.mp3", :size 5, :type "audio", :alias "game voice 2"}
