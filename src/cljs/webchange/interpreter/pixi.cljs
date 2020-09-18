@@ -9,10 +9,13 @@
 (def Loader (.. PIXI -Loader))
 (def shared-ticker (.. PIXI -Ticker -shared))
 (def clear-texture-cache (.. PIXI -utils -clearTextureCache))
+(def rgb2hex (.. PIXI -utils -rgb2hex))
+(def hex2rgb (.. PIXI -utils -hex2rgb))
 (def string2hex (.. PIXI -utils -string2hex))
 
 (def Spine (.. PIXI -spine -Spine))
 
+(def Circle (.. PIXI -Circle))
 (def Container (.. PIXI -Container))
 (def Graphics (.. PIXI -Graphics))
 (def Rectangle (.. PIXI -Rectangle))
