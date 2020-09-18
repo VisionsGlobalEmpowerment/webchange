@@ -5,7 +5,6 @@
     [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
-    [webchange.editor.index :refer [editor]]
     [webchange.editor.events :as ee]
     [webchange.editor-v2.events :as ee2]
     [webchange.editor-v2.scene.state.skin :as editor-skin]
@@ -29,10 +28,6 @@
     (if init-value
       (.parseInt js/Number (re-find #"\d+" init-value))
       nil)))
-
-(defn- editor-panel [course-id]
-  (re-frame/dispatch [::ee/init-editor course-id])
-  [editor])
 
 (defn- editor-panel-v2 [course-id]
   (re-frame/dispatch [::ee2/init-editor course-id])
@@ -91,7 +86,6 @@
     :register-user [teacher-login :sign-up]
     :course [course (:id route-params)]
     ;; editor
-    :course-editor [editor-panel (:id route-params)]
     :course-editor-v2 [editor-panel-v2 (:id route-params)]
     :course-editor-v2-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
     :course-editor-v2-concept [editor-panel-v2-concept (:course-id route-params) (-> route-params :concept-id js/parseInt)]

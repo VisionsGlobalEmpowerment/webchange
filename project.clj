@@ -22,9 +22,7 @@
                  [reanimated "0.6.1"]
                  [cljs-http "0.1.45"]
                  [clj-http "3.10.1"]
-                 [soda-ash "0.83.0"]
                  [tupelo "0.9.185"]
-                 [com.degel/sodium "0.12.0"]
                  [day8.re-frame/test "0.1.5"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [environ "1.1.0"]
@@ -131,11 +129,8 @@
                     :external-config      {:devtools/config {:features-to-install :all}}
                     :npm-deps
                                           {
-                                           :konva "2.5.0"
                                            :react "16.6.0"
                                            :react-dom "16.6.0"
-                                           :react-spring "5.8.0"
-                                           :react-konva "16.6.0"
                                            :gsap "2.1.2"
                                            :wavesurfer.js "2.2.1"
                                            :svg-arc-to-cubic-bezier "3.2.0"
@@ -187,11 +182,8 @@
                     :pretty-print    false
                     :npm-deps
                                      {
-                                      :konva "2.5.0"
                                       :react "16.6.0"
                                       :react-dom "16.6.0"
-                                      :react-spring "5.8.0"
-                                      :react-konva "16.6.0"
                                       :gsap "2.1.2"
                                       :wavesurfer.js "2.2.1"
                                       :svg-arc-to-cubic-bezier "3.2.0"
@@ -223,11 +215,8 @@
                     :output-dir    "resources/public/js/compiled/test/out"
                     :npm-deps
                                    {
-                                    :konva "2.5.0"
                                     :react "16.6.0"
                                     :react-dom "16.6.0"
-                                    :react-spring "5.8.0"
-                                    :react-konva "16.6.0"
                                     :gsap "2.1.2"
                                     :wavesurfer.js "2.2.1"
                                     :svg-arc-to-cubic-bezier "3.2.0"

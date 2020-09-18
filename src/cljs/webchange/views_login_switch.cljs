@@ -1,48 +1,68 @@
 (ns webchange.views-login-switch
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [soda-ash.core :as sa]
+    [reagent.core :as r]
     [webchange.events :as events]
-    [webchange.interpreter.events :as ie]))
+    [webchange.interpreter.events :as ie]
+    [webchange.ui.theme :refer [get-in-theme]]))
 
 (def courses
   [{:key :spanish :value "spanish" :text "Español"}
    {:key :english :value "english" :text "English"}])
 
+(defn- get-styles
+  []
+  {:card             {:width    "450px"
+                      :margin   "auto"
+                      :position "relative"
+                      :top      "30%"}
+   :title            {:padding "20px 20px 30px 20px"}
+   :main-content     {:margin-bottom "30px"}
+   :divider          {:width        "50%"
+                      :height       "100%"
+                      :border-right "solid 1px"
+                      :border-color (get-in-theme [:palette :border :default])}
+   :button-container {:text-align "center"}
+   :course-label     {:margin-right "15px"}
+   :course-selector  {:width "120px"}
+   :footer-row       {:text-align "center"
+                      :padding    "10px"}})
+
 (defn login-switch
   []
-  [sa/Grid {:centered       true
-            :columns        2
-            :container      true
-            :vertical-align "middle"}
-   [sa/GridRow {}
-    [sa/GridColumn {}
-     [sa/Segment {:placeholder true}
-      [sa/Grid {:centered       true
-                :vertical-align "middle"}
-       [sa/GridRow {}
-        [sa/GridColumn {:text-align "center"}
-         [sa/Header {:as "h1" :content "Login as"}]]]
-       [sa/GridRow {}
-        [sa/GridColumn {}
-         [sa/Grid {:stackable  true
-                   :text-align "center"}
-          [sa/Divider {:vertical true}
-           "Or"]
-          [sa/GridRow {:columns        2
-                       :vertical-align "middle"}
-           [sa/GridColumn {}
-            [sa/Button {:basic    true
-                        :on-click #(re-frame/dispatch [::events/redirect :login])}
-             "Teacher"]]
-           [sa/GridColumn {}
-            [sa/Button {:basic    true
-                        :on-click #(re-frame/dispatch [::events/redirect :student-login])}
-             "Student"]]]]]]
-       [sa/GridRow {}
-        [sa/GridColumn {:text-align "center"}
-           [sa/FormDropdown {:label "Course " :options courses :inline true :default-value "spanish"
-                             :on-change #(re-frame/dispatch [::ie/set-current-course (.-value %2)])}]]]
-       [sa/GridRow {}
-        [sa/GridColumn {:text-align "center"}
-         [:a {:href "/courses/english/editor-v2"} "Translation Module"]]]]]]]])
+  (r/with-let [current-course (r/atom "spanish")]
+              (let [translation-module-url (str "/courses/" @current-course "/editor-v2")
+                    styles (get-styles)]
+                [ui/card {:style (:card styles)}
+                 [ui/card-content
+                  [ui/typography {:variant "h2"
+                                  :align   "center"
+                                  :style   (:title styles)}
+                   "Login as"]
+                  [ui/grid {:container true
+                            :style     (:main-content styles)}
+                   [ui/grid {:item true :xs 5 :style (:button-container styles)}
+                    [ui/button {:on-click #(re-frame/dispatch [::events/redirect :login])} "Teacher"]]
+                   [ui/grid {:item true :xs 2}
+                    [:div {:style (:divider styles)}]]
+                   [ui/grid {:item true :xs 5 :style (:button-container styles)}
+                    [ui/button {:on-click #(re-frame/dispatch [::events/redirect :student-login])} "Student"]]]
+                  [ui/grid {:container true}
+                   [ui/grid {:item true :xs 12 :style (:footer-row styles)}
+                    [ui/typography {:variant "subtitle1"
+                                    :inline  true
+                                    :style   (:course-label styles)}
+                     "Course"]
+                    [ui/select {:value     @current-course
+                                :on-change (fn [event]
+                                             (let [selected-course (->> event .-target .-value)]
+                                               (reset! current-course selected-course)
+                                               (re-frame/dispatch [::ie/set-current-course selected-course])))
+                                :style     (:course-selector styles)}
+                     (for [{:keys [key value text]} courses]
+                       ^{:key key}
+                       [ui/menu-item {:value value} text])]]
+                   [ui/grid {:item true :xs 12 :style (:footer-row styles)}
+                    [ui/button {:href translation-module-url}
+                     "Translation Module"]]]]])))
