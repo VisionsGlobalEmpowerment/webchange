@@ -7,7 +7,7 @@
 
 (defn create-overlays
   [props]
+  (create-skip-menu-overlay props)
   (create-navigation-overlay props)
   (create-activity-finished-overlay props)
-  (create-settings-overlay props)
-  (create-skip-menu-overlay props))
+  (create-settings-overlay props))

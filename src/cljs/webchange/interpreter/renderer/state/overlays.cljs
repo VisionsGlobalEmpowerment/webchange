@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.student-dashboard.subs :as subs]
-    [webchange.interpreter.renderer.state.scene :as scene]))
+    [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
 
 (re-frame/reg-event-fx
   ::show-navigation-menu
@@ -14,11 +15,18 @@
   (fn [_]
     {:dispatch [::scene/change-scene-object :navigation-menu [[:set-visibility {:visible false}]]]}))
 
+(defn- set-scene-interactive
+  [db interactive?]
+  (-> db
+      (scene/get-scene-object :scene)
+      (w/set-interactive interactive?)))
+
 (re-frame/reg-event-fx
   ::show-settings
   (fn [{:keys [db]}]
     (let [music-volume (get-in db [:settings :music-volume])
           effects-volume (get-in db [:settings :effects-volume])]
+      (set-scene-interactive db false)
       {:dispatch-n (list [::hide-navigation-menu]
                          [::scene/change-scene-object :settings-overlay [[:set-visibility {:visible true}]]]
                          [::scene/change-scene-object :music-slider [[:set-value music-volume]]]
@@ -26,7 +34,8 @@
 
 (re-frame/reg-event-fx
   ::hide-settings
-  (fn []
+  (fn [{:keys [db]}]
+    (set-scene-interactive db true)
     {:dispatch-n (list [::show-navigation-menu]
                        [::scene/change-scene-object :settings-overlay [[:set-visibility {:visible false}]]])}))
 
@@ -35,6 +44,7 @@
   (fn [{:keys [db]}]
     (let [next-activity (subs/next-activity db)
           lesson-progress (subs/lesson-progress db)]
+      (set-scene-interactive db false)
       {:dispatch-n (list [::hide-navigation-menu]
                          [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]]
                          [::scene/change-scene-object :overall-progress-bar [[:set-value lesson-progress]]]
@@ -43,7 +53,8 @@
 
 (re-frame/reg-event-fx
   ::close-activity-finished
-  (fn []
+  (fn [{:keys [db]}]
+    (set-scene-interactive db true)
     {:dispatch-n (list [::show-navigation-menu]
                        [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible false}]]])}))
 
