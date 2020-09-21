@@ -179,7 +179,9 @@
                   {:dialog-1-welcome {:type               "sequence-data",
                                       :editor-type        "dialog",
                                       :concept-var        "current-slot",
-                                      :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                      :data               [{:type "sequence-data"
+                                                            :data [{:type "empty" :duration 0}
+                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                       :phrase             "welcome",
                                       :phrase-description "Welcome",
                                       :dialog-track       "1 Intro"}
@@ -187,7 +189,9 @@
                                      {:type               "sequence-data",
                                       :editor-type        "dialog",
                                       :concept-var        "current-slot",
-                                      :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                      :data               [{:type "sequence-data"
+                                                            :data [{:type "empty" :duration 0}
+                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                       :phrase             "task",
                                       :phrase-description "Task",
                                       :dialog-track       "2 Task"},
@@ -195,7 +199,9 @@
                                      {:type               "sequence-data",
                                       :editor-type        "dialog",
                                       :concept-var        "current-slot",
-                                      :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                      :data               [{:type "sequence-data"
+                                                            :data [{:type "empty" :duration 0}
+                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                       :phrase             "finish",
                                       :phrase-description "Finish",
                                       :dialog-track       "3 Finish"},
@@ -203,7 +209,9 @@
                                      {:type               "sequence-data",
                                       :editor-type        "dialog",
                                       :concept-var        "current-slot",
-                                      :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                      :data               [{:type "sequence-data"
+                                                            :data [{:type "empty" :duration 0}
+                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                       :phrase             "wrong",
                                       :phrase-description "wrong",
                                       :dialog-track       "4 Wrong"},
@@ -211,7 +219,9 @@
                                      {:type               "sequence-data",
                                       :editor-type        "dialog",
                                       :concept-var        "current-slot",
-                                      :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                      :data               [{:type "sequence-data"
+                                                            :data [{:type "empty" :duration 0}
+                                                                   {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                       :phrase             "correct",
                                       :phrase-description "Correct",
                                       :dialog-track       "5 Correct"},

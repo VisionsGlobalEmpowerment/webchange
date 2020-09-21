@@ -29,42 +29,54 @@
         :actions       {:dialog-1-before-boxes {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
-                                                :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                :data               [{:type "sequence-data"
+                                                                      :data [{:type "empty" :duration 0}
+                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "before-boxes",
                                                 :phrase-description "Before boxes appear",
                                                 :dialog-track       "1 Intro"}
                         :dialog-2-after-boxes  {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
-                                                :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                :data               [{:type "sequence-data"
+                                                                      :data [{:type "empty" :duration 0}
+                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "after-boxes",
                                                 :phrase-description "After boxes appear",
                                                 :dialog-track       "1 Intro"}
                         :dialog-3-before-open  {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
-                                                :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                :data               [{:type "sequence-data"
+                                                                      :data [{:type "empty" :duration 0}
+                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "before-open",
                                                 :phrase-description "Before box opens",
                                                 :dialog-track       "2 Concept"}
                         :dialog-4-after-open   {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
-                                                :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                :data               [{:type "sequence-data"
+                                                                      :data [{:type "empty" :duration 0}
+                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "after-open",
                                                 :phrase-description "After box opens",
                                                 :dialog-track       "2 Concept"}
                         :dialog-5-after-hide   {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
-                                                :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                :data               [{:type "sequence-data"
+                                                                      :data [{:type "empty" :duration 0}
+                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "after-hide",
                                                 :phrase-description "After box flies off",
                                                 :dialog-track       "2 Concept"}
                         :dialog-6-pick-wrong   {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
-                                                :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                :data               [{:type "sequence-data"
+                                                                      :data [{:type "empty" :duration 0}
+                                                                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "pick-wrong",
                                                 :phrase-description "Wrong box picket",
                                                 :dialog-track       "4 Wrong box"}
@@ -129,7 +141,9 @@
       :dialog-after-box0 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
-                          :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                          :data               [{:type "sequence-data"
+                                                :data [{:type "empty" :duration 0}
+                                                       {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box0",
                           :phrase-description "After first box",
                           :dialog-track       "3 Dialog after box"}}
@@ -144,14 +158,18 @@
       :dialog-after-box0 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
-                          :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                          :data               [{:type "sequence-data"
+                                                :data [{:type "empty" :duration 0}
+                                                       {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box0",
                           :phrase-description "After first box",
                           :dialog-track       "3 Dialog after box"}
       :dialog-after-box1 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
-                          :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                          :data               [{:type "sequence-data"
+                                                :data [{:type "empty" :duration 0}
+                                                       {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box1",
                           :phrase-description "After second box",
                           :dialog-track       "3 Dialog after box"}}
@@ -169,21 +187,27 @@
       :dialog-after-box0 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
-                          :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                          :data               [{:type "sequence-data"
+                                                :data [{:type "empty" :duration 0}
+                                                       {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box0",
                           :phrase-description "After first box",
                           :dialog-track       "3"}
       :dialog-after-box1 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
-                          :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                          :data               [{:type "sequence-data"
+                                                :data [{:type "empty" :duration 0}
+                                                       {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box1",
                           :phrase-description "After second box",
                           :dialog-track       "3"}
       :dialog-after-box2 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
-                          :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                          :data               [{:type "sequence-data"
+                                                :data [{:type "empty" :duration 0}
+                                                       {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box2",
                           :phrase-description "After third box",
                           :dialog-track       "3"}}})

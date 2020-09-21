@@ -117,28 +117,36 @@
         :actions       {:dialog-1-before-start   {:type               "sequence-data",
                                                   :editor-type        "dialog",
                                                   :concept-var        "current-concept",
-                                                  :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                   :phrase             "before-boxes",
                                                   :phrase-description "Before start",
                                                   :dialog-track       "1 Intro"}
                         :dialog-2-boxes          {:type               "sequence-data",
                                                   :editor-type        "dialog",
                                                   :concept-var        "current-word",
-                                                  :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                   :phrase             "after-boxes",
                                                   :phrase-description "After boxes appear",
                                                   :dialog-track       "2 Concept"}
                         :dialog-3-pick-correct   {:type               "sequence-data",
                                                   :editor-type        "dialog",
                                                   :concept-var        "current-word",
-                                                  :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                   :phrase             "pick-correct",
                                                   :phrase-description "Pick correct",
                                                   :dialog-track       "3 Correct"}
                         :dialog-4-pick-wrong     {:type               "sequence-data",
                                                   :editor-type        "dialog",
                                                   :concept-var        "current-word",
-                                                  :data               [{:type "animation-sequence", :phrase-text "New action", :audio nil}],
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                   :phrase             "pick-wrong",
                                                   :phrase-description "Pick wrong",
                                                   :dialog-track       "4 Wrong"}
