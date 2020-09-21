@@ -952,8 +952,7 @@
 (re-frame/reg-event-fx
   ::close-settings
   (fn [_ _]
-    {:dispatch-n (list [::save-settings]
-                       [::overlays/hide-settings])}))
+    {:dispatch [::overlays/hide-settings]}))
 
 (re-frame/reg-event-fx
   ::save-settings

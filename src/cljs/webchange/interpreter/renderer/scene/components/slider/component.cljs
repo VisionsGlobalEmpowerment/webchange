@@ -13,11 +13,11 @@
 
 (defn- set-value
   [state value]
-  (let [{:keys [on-change]} @state
+  (let [{:keys [on-slide]} @state
         fixed-value (->> value (Math/min 1) (Math/max 0))]
     (swap! state assoc :value fixed-value)
     (update-value state)
-    (on-change fixed-value)))
+    (on-slide fixed-value)))
 
 (defn- handle-pointer-move
   [state event]
@@ -33,7 +33,9 @@
 
 (defn- handle-pointer-up
   [state]
-  (swap! state assoc :touched? false))
+  (swap! state assoc :touched? false)
+  (let [{:keys [on-change value]} @state]
+    (on-change value)))
 
 (defn- set-handlers
   [display-object state]
@@ -47,6 +49,7 @@
                     :y             {}
                     :width         {}
                     :on-change     {}
+                    :on-slide      {}
                     :value         {}
                     :height        {:default 24}
                     :color         {:default 0x2c9600}
@@ -109,6 +112,12 @@
     (.drawRoundedRect 0 0 width height border-radius)
     (.endFill 0x000000)))
 
+(defn- scale-value
+  [value min-value max-value]
+  (->> (- max-value min-value)
+       (* value)
+       (+ min-value)))
+
 (def component-type "slider")
 
 (defn create
@@ -119,9 +128,11 @@
                      :background nil
                      :foreground nil
                      :control    nil
-                     :on-change  #()})
-        set-value (let [{:keys [min-value max-value on-change]} props]
-                    (swap! state assoc :on-change (fn [value] (on-change (+ min-value (* value (- max-value min-value))))))
+                     :on-change  #()
+                     :on-slide   #()})
+        set-value (let [{:keys [min-value max-value on-change on-slide]} props]
+                    (swap! state assoc :on-change (fn [value] (on-change (scale-value value min-value max-value))))
+                    (swap! state assoc :on-slide (fn [value] (on-slide (scale-value value min-value max-value))))
                     (partial (fn [min-value max-value state value]
                                (swap! state assoc :value (-> value
                                                              (/ (- max-value min-value))
