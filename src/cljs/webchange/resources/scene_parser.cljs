@@ -31,10 +31,9 @@
     "action" (get-action-resources data)
     nil))
 
-(defn- parse-concept-resources
-  [scene-id]
-  (let [lesson-sets @(re-frame/subscribe [::subs/current-lesson-sets])
-        lesson-sets-data @(re-frame/subscribe [::subs/lesson-sets-data lesson-sets])]
+(defn- parse-lesson-sets-resources
+  [scene-id lesson-sets]
+  (let [lesson-sets-data @(re-frame/subscribe [::subs/lesson-sets-data lesson-sets])]
     (->> lesson-sets-data
          (reduce (fn [resources {:keys [dataset-id item-ids]}]
                    (let [dataset @(re-frame/subscribe [::subs/course-dataset dataset-id])
@@ -48,6 +47,14 @@
                                                item-ids))))
                  [])
          (flatten))))
+
+(defn parse-concept-resources
+  [scene-id]
+  (let [loaded-lesson-sets @(re-frame/subscribe [::subs/loaded-lesson-sets])
+        next-lesson-sets @(re-frame/subscribe [::subs/next-lesson-sets])]
+    (if-not (empty? loaded-lesson-sets)
+      (parse-lesson-sets-resources scene-id loaded-lesson-sets)
+      (parse-lesson-sets-resources scene-id next-lesson-sets))))
 
 (defn- parse-default-assets
   [default-assets]

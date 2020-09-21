@@ -17,17 +17,33 @@
     (some (fn [{:keys [id] :as dataset}] (and (= id dataset-id) dataset)) datasets)))
 
 (re-frame/reg-sub
-  ::current-lesson
+  ::next-activity
   (fn [db]
-    (let [{:keys [level lesson]} (get-in db [:progress-data :next])] ;; ToDo get level and lesson from other place
+    (let [{:keys [level lesson]} (get-in db [:progress-data :next])]
       (-> db
           (lessons/get-level level)
           (lessons/get-lesson lesson)))))
 
 (re-frame/reg-sub
-  ::current-lesson-sets
+  ::loaded-activity
+  (fn [db]
+    (let [{:keys [level lesson]} (get-in db [:loaded-activity])]
+      (-> db
+          (lessons/get-level level)
+          (lessons/get-lesson lesson)))))
+
+(re-frame/reg-sub
+  ::next-lesson-sets
   (fn []
-    [(re-frame/subscribe [::current-lesson])])
+    [(re-frame/subscribe [::next-activity])])
+  (fn [[current-lesson]]
+    (->> (:lesson-sets current-lesson)
+         (map second))))
+
+(re-frame/reg-sub
+  ::loaded-lesson-sets
+  (fn []
+    [(re-frame/subscribe [::loaded-activity])])
   (fn [[current-lesson]]
     (->> (:lesson-sets current-lesson)
          (map second))))
