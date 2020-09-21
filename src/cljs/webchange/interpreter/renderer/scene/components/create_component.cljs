@@ -6,7 +6,7 @@
     [webchange.interpreter.renderer.scene.components.props-utils :refer [get-props get-object-props]]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [webchange.interpreter.renderer.scene.components.editor-mode :as editor-mode]))
+    [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (def default-object-props {:draggable   {}
                            :on-drag-end {}
@@ -37,18 +37,12 @@
       (-> (str "Default props for <" type "> are not defined") js/Error. throw))
     component))
 
-(defn- enable-mode
-  [mode props]
-  (case mode
-    "editor" (editor-mode/enable props)
-    props))
-
 (defn create-component
   ([props]
-   (create-component "play" props))
+   (create-component ::modes/game props))
   ([mode {:keys [type] :as props}]
    (let [{:keys [constructor default-props]} (get-component type)
-         modified-props (enable-mode mode props)
+         modified-props (modes/enable-mode mode props)
          component-wrapper (->> (get-props type modified-props default-props {:exclude-check (keys default-object-props)})
                                 (constructor))]
      (init-display-object! component-wrapper modified-props (keys default-props))

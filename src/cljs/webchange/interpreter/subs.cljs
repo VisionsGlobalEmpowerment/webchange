@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.lessons.subs :as lessons]
+    [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.lessons.activity :as activity]))
 
 (re-frame/reg-sub
@@ -63,6 +64,22 @@
   (fn [db [_ lesson-sets-ids]]
     (let [lesson-sets (get-in db [:lessons])]
       (map #(get lesson-sets %) lesson-sets-ids))))
+
+(re-frame/reg-sub
+  ::current-lesson-sets-data
+  (fn [db]
+    (let [activity-name (:current-scene db)
+          {:keys [level lesson]} (lessons-activity/name->activity-action db activity-name)
+          lesson-sets (-> (get-in db [:course-data :levels])
+                          (lessons-activity/get-level level)
+                          :lessons
+                          (lessons-activity/get-lesson lesson)
+                          :lesson-sets)
+          lessons (get-in db [:lessons])
+          loaded-lessons (get-in db [:sandbox :loaded-lessons])
+          get-lesson (fn [[name id]] (or (get loaded-lessons name)
+                                         (get lessons id)))]
+      (map get-lesson lesson-sets))))
 
 (re-frame/reg-sub
   ::dataset-items

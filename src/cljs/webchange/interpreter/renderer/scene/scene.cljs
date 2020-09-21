@@ -6,7 +6,8 @@
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]
-    [webchange.interpreter.renderer.scene.app :refer [register-app]]))
+    [webchange.interpreter.renderer.scene.app :refer [register-app]]
+    [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn- get-stage
   [app]
@@ -52,9 +53,11 @@
                                                  :object-name :scene
                                                  :parent      (.-stage app)
                                                  :children    objects})
-                         (when-not (= mode "editor")
+                         (when (modes/show-overlays? mode)
                            (create-overlays {:parent   (.-stage app)
-                                             :viewport viewport})
+                                             :viewport viewport}))
+
+                         (when (modes/start-on-ready? mode)
                            (on-ready))))
 
        :should-component-update

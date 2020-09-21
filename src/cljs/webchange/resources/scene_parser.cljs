@@ -5,12 +5,14 @@
     [webchange.interpreter.subs :as subs]))
 
 (defn- get-concept-fields
-  [scene-id dataset-fields]
-  (->> dataset-fields
-       (map (fn [{:keys [name type scenes]}]
-              (when (some #{scene-id} scenes)
-                [(keyword name) type])))
-       (remove nil?)))
+  [scene-id dataset-id]
+  (let [dataset-fields (-> @(re-frame/subscribe [::subs/course-dataset dataset-id])
+                           (get-in [:scheme :fields]))]
+    (->> dataset-fields
+         (map (fn [{:keys [name type scenes]}]
+                (when (some #{scene-id} scenes)
+                  [(keyword name) type])))
+         (remove nil?))))
 
 (defn- get-action-resources
   [{:keys [type] :as action}]
@@ -26,35 +28,21 @@
 (defn- parse-concept-field
   [type data]
   (case type
-    "image" data
-    "video" data
+    "image" [data]
+    "video" [data]
     "action" (get-action-resources data)
     nil))
 
-(defn- parse-lesson-sets-resources
-  [scene-id lesson-sets]
-  (let [lesson-sets-data @(re-frame/subscribe [::subs/lesson-sets-data lesson-sets])]
-    (->> lesson-sets-data
-         (reduce (fn [resources {:keys [dataset-id item-ids]}]
-                   (let [dataset @(re-frame/subscribe [::subs/course-dataset dataset-id])
-                         concept-fields (get-concept-fields scene-id (get-in dataset [:scheme :fields]))]
-                     (concat resources (reduce (fn [result dataset-id]
-                                                 (let [dataset @(re-frame/subscribe [::subs/dataset-item dataset-id])]
-                                                   (concat result (map (fn [[field-name field-type]]
-                                                                         (parse-concept-field field-type (get-in dataset [:data field-name])))
-                                                                       concept-fields))))
-                                               []
-                                               item-ids))))
-                 [])
-         (flatten))))
-
-(defn parse-concept-resources
+(defn- parse-concept-resources
   [scene-id]
-  (let [loaded-lesson-sets @(re-frame/subscribe [::subs/loaded-lesson-sets])
-        next-lesson-sets @(re-frame/subscribe [::subs/next-lesson-sets])]
-    (if-not (empty? loaded-lesson-sets)
-      (parse-lesson-sets-resources scene-id loaded-lesson-sets)
-      (parse-lesson-sets-resources scene-id next-lesson-sets))))
+  (let [lesson-sets-data @(re-frame/subscribe [::subs/current-lesson-sets-data])]
+    (->> lesson-sets-data
+         (mapcat (fn [{:keys [item-ids dataset-id]}]
+                   (for [item-id item-ids
+                         [field-name field-type] (get-concept-fields scene-id dataset-id)]
+                     (let [item @(re-frame/subscribe [::subs/dataset-item item-id])]
+                       (parse-concept-field field-type (get-in item [:data field-name]))))))
+         (flatten))))
 
 (defn- parse-default-assets
   [default-assets]

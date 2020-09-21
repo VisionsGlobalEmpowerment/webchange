@@ -8,6 +8,7 @@
     [webchange.interpreter.core :refer [load-course]]
     [webchange.editor-v2.scene.data.background.views-background :refer [change-background]]
     [webchange.editor-v2.scene.data.skin.views-skin :refer [change-skin]]
+    [webchange.editor-v2.sandbox.views-modal :as share]
     [webchange.editor-v2.events :as editor-events]
     [webchange.editor-v2.utils :refer [keyword->caption]]))
 
@@ -89,4 +90,5 @@
                                     (re-frame/dispatch [::editor-events/show-configure-object-form {:path [object-id]}]))}
            (for [[object-id {:keys [type]}] objects]
              ^{:key (name object-id)}
-             [ui/menu-item {:value object-id} (str (name object-id) " (" type ")")])]])])))
+             [ui/menu-item {:value object-id} (str (name object-id) " (" type ")")])]])
+       [share/share-button]])))

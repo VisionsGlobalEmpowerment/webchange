@@ -5,7 +5,8 @@
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
     [webchange.resources.manager :as resources]
-    [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
+    [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
+    [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn- init-scene
   [{:keys [scene-id resources]} current-scene-id loading]
@@ -51,7 +52,7 @@
                                 :style {:width  "100%"
                                         :height "100%"}}
                           (when (and (:done @loading)
-                                     (or (= mode "editor")
+                                     (or (= mode ::modes/editor)
                                          (:started? scene-data)))
                             [scene {:mode     mode
                                     :objects  (:objects scene-data)
@@ -60,7 +61,7 @@
                                     :started? (:started? scene-data)}])
                           (when (or (not (:done @loading))
                                     (and (not (:started? scene-data))
-                                         (not= mode "editor")))
+                                         (not= mode ::modes/editor)))
                             (let [scale-x (:scale-x viewport)
                                   scale-y (:scale-y viewport)
                                   translate-x (* -100 (- (/ 1 (* 2 scale-x)) 0.5))

@@ -87,6 +87,9 @@
            (GET "/student-login" [] (public-route))
            (GET "/register" [] (public-route))
 
+           (GET "/s/:course-id/:scene-id" [] (public-route))
+           (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
+
            (GET "/courses/:id" request (authenticated-route request))
            (GET "/courses/:id/editor" request (authenticated-route request))
            (GET "/courses/:id/editor-v2" request (authenticated-route request))

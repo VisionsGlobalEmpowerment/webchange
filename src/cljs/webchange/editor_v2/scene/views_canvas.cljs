@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
     [webchange.interpreter.components :as i]
-    [webchange.interpreter.subs :as isubs]))
+    [webchange.interpreter.subs :as isubs]
+    [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn scene-canvas
   []
@@ -18,7 +19,7 @@
                    :left     0
                    :width    width
                    :height   height}}
-     [i/stage-wrapper {:mode          "editor"
+     [i/stage-wrapper {:mode          ::modes/editor
                        :scene-id      scene-id
                        :scene-data    scene-data
                        :dataset-items dataset-items}]]))

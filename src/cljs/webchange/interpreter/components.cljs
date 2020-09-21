@@ -10,6 +10,7 @@
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
+    [webchange.interpreter.renderer.scene.scene :as scene-renderer]
 
     [webchange.interpreter.renderer.scene.components.group.propagate]))
 
@@ -70,7 +71,7 @@
           :on-start-click start-scene}])
 
 (defn course
-  [_]
+  [{:keys [mode]}]
   (let [scene-id @(re-frame/subscribe [::subs/current-scene])
         scene-data @(re-frame/subscribe [::subs/scene scene-id])
         dataset-items @(re-frame/subscribe [::isubs/dataset-items])]
@@ -80,6 +81,7 @@
                    :width    "100%"
                    :height   "100%"}}
      [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-     [stage-wrapper {:scene-id      scene-id
+     [stage-wrapper {:mode          mode
+                     :scene-id      scene-id
                      :scene-data    scene-data
                      :dataset-items dataset-items}]]))
