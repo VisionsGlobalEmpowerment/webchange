@@ -23,8 +23,8 @@
     (let [bound-rect (.getBoundingClientRect el)]
       {:width  (.-width bound-rect)
        :height (.-height bound-rect)})
-    {:width  100
-     :height 100}))
+    {:width  1920
+     :height 1080}))
 
 (defn stage
   []
@@ -67,7 +67,8 @@
                                   translate-y (* -100 (- (/ 1 (* 2 scale-y)) 0.5))]
                               [:div {:style {:position  "absolute"
                                              :transform (str "scale(" scale-x ", " scale-y ")"
-                                                             "translate(" translate-x "%, " translate-y "%)")
+                                                             "translate(" translate-x "%, " translate-y "%)"
+                                                             "translate(" (:x viewport) "px, " (:y viewport) "px)")
                                              :width     (:display-width viewport)
                                              :height    (:display-height viewport)}}
                                [loader-screen {:on-start-click on-start-click
