@@ -39,7 +39,8 @@
                   :y           40
                   :width       352
                   :value       0
-                  :on-change   #(re-frame/dispatch [::ie/set-music-volume (Math/round %)])}]})
+                  :on-slide    #(re-frame/dispatch [::ie/set-music-volume (Math/round %)])
+                  :on-change   #(re-frame/dispatch [::ie/save-settings])}]})
 
 (defn- get-sound-settings
   [{:keys [x y]}]
@@ -63,7 +64,8 @@
                   :y           25
                   :width       352
                   :value       00
-                  :on-change   #(re-frame/dispatch [::ie/set-effects-volume (Math/round %)])}]})
+                  :on-slide    #(re-frame/dispatch [::ie/set-effects-volume (Math/round %)])
+                  :on-change   #(re-frame/dispatch [::ie/save-settings])}]})
 
 (defn- get-settings-block
   [{:keys [x y]}]

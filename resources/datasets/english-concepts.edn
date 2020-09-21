@@ -9552,7 +9552,7 @@
        :start 0.467,
        :type "animation-sequence",
        :duration 7.44,
-       :audio "/raw/audio/l1/a3/rock/Llaves.mp4",
+       :audio "/raw/audio/l1/a3/rock/Llaves.m4a",
        :target "rock",
        :phrase-text-translated
        "Something smells very sweet and delicious!",
@@ -9577,7 +9577,7 @@
        :start 8.894,
        :type "animation-sequence",
        :duration 2.6,
-       :audio "/raw/audio/l1/a3/rock/Llaves.mp4",
+       :audio "/raw/audio/l1/a3/rock/Llaves.m4a",
        :target "rock",
        :phrase-text-translated
        "Oh, I bet you’re right! I love the smell of oranges.",
@@ -9601,7 +9601,7 @@
        :start 12.294,
        :type "animation-sequence",
        :duration 5.214,
-       :audio "/raw/audio/l1/a3/rock/Llaves.mp4",
+       :audio "/raw/audio/l1/a3/rock/Llaves.m4a",
        :target "rock",
        :phrase-text-translated
        "Oranges are a very healthy snack, too, because they’re a type of fruit.",

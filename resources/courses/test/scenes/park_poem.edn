@@ -39,7 +39,7 @@
                  {:url "/raw/audio/l2/a3/poems-pro/zapato.mp3" :type "audio" :alias "zapato"}
 
                  {:url "/raw/audio/l2/a3/L2_A3_Mari.m4a" :size 5 :type "audio" :alias "mari voice"}
-                 {:url "/raw/audio/l2/a3/mari-instructions.mp4" :size 5 :type "audio" :alias "mari instructions"}]
+                 {:url "/raw/audio/l2/a3/mari-instructions.m4a" :size 5 :type "audio" :alias "mari instructions"}]
  :audio         {:mari "/raw/audio/l2/a3/L2_A3_Mari.m4a"}
  :objects       {:background    {:type "background"
                                  :src  "/raw/img/park/sandbox/background.jpg"}
@@ -370,7 +370,7 @@
                                           :start 1.248,
                                           :type "animation-sequence",
                                           :duration 3.86,
-                                          :audio "/raw/audio/l2/a3/mari-instructions.mp4",
+                                          :audio "/raw/audio/l2/a3/mari-instructions.m4a",
                                           :target "mari",
                                           :track 1,
                                           :data [{:start 1.5, :end 4.71, :anim "talk"}]}
@@ -393,7 +393,7 @@
                                    :start 6.251,
                                    :type "animation-sequence",
                                    :duration 4.268,
-                                   :audio "/raw/audio/l2/a3/mari-instructions.mp4",
+                                   :audio "/raw/audio/l2/a3/mari-instructions.m4a",
                                    :target "mari",
                                    :track 1,
                                    :data [{:start 6.42, :end 10.34, :anim "talk"}]}

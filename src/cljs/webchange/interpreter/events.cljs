@@ -523,8 +523,7 @@
     (let [events (cond-> (list (ce/success-event action))
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
                          :always (conj (activity-finished-event db action))
-                         :always (conj [::reset-navigation])
-                         :always (conj [::overlays/open-activity-finished]))
+                         :always (conj [::reset-navigation]))
           activity-started? (:activity-started db)]
       (if activity-started?
         {:db         (-> db
@@ -543,6 +542,7 @@
     (let [finished (get-in db [:progress-data :next])]
       {:db         (lessons-activity/finish db finished)
        :dispatch-n (list (activity-progress-event db)
+                         [::overlays/open-activity-finished]
                          [::reset-navigation])})))
 
 (re-frame/reg-event-fx
@@ -952,8 +952,7 @@
 (re-frame/reg-event-fx
   ::close-settings
   (fn [_ _]
-    {:dispatch-n (list [::save-settings]
-                       [::overlays/hide-settings])}))
+    {:dispatch [::overlays/hide-settings]}))
 
 (re-frame/reg-event-fx
   ::save-settings

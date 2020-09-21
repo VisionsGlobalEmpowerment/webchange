@@ -14,7 +14,7 @@
                  {:url "/upload/EGYCQTNFKVOVGQVD.m4a", :date 1586442149111, :size 226, :type "audio", :alias "Good", :target "Vaca"}
                  {:url "/raw/audio/effects/correct.mp3", :size 1, :type "audio", :alias "alias not defied"}
                  {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio", :alias "vaca voice 3", :target "vaca"}
-                 {:url "/raw/audio/l1/a1/mari.mp4", :size 1, :type "audio", :alias "mari", :target "mari"}
+                 {:url "/raw/audio/l1/a1/mari.m4a", :size 1, :type "audio", :alias "mari", :target "mari"}
                  {:url "/raw/audio/effects/box-appear.mp3", :size 1, :type "audio", :alias "alias not defied"}
                  {:url    "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a",
                   :size   2,
@@ -297,7 +297,7 @@
                                                                                      :start    0.745,
                                                                                      :type     "animation-sequence",
                                                                                      :duration 22.05,
-                                                                                     :audio    "/raw/audio/l1/a1/mari.mp4",
+                                                                                     :audio    "/raw/audio/l1/a1/mari.m4a",
                                                                                      :target   "mari",
                                                                                      :phrase-text-translated
                                                                                                "Great job, friend!  Do you want to see what’s inside the boxes again?  Touch Senora Vaca to look inside again.  Otherwise, touch the door to go to the park for your next activity.",

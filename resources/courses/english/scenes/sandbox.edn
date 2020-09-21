@@ -8,7 +8,7 @@
                   :alias  "Nora_letters",
                   :target "box1"}
                  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_1.m4a", :size 5, :type "audio", :alias "letter 1"}
-                 {:url "/raw/audio/l1/a4/mari.mp4", :size 5, :type "audio", :alias "mari voice"}
+                 {:url "/raw/audio/l1/a4/mari.m4a", :size 5, :type "audio", :alias "mari voice"}
                  {:url "/raw/audio/l1/a4/Mari_L1_A4_Letter_3.m4a", :size 5, :type "audio", :alias "letter 3"}
                  {:url "/raw/audio/l1/a4/game-voice-set-3.mp3", :size 5, :type "audio", :alias "game voice 3"}
                  {:url "/raw/audio/l1/a4/game-voice-set-2.mp3", :size 5, :type "audio", :alias "game voice 2"}

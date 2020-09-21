@@ -1,7 +1,8 @@
 (ns webchange.interpreter.subs
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.lessons.subs :as lessons]))
+    [webchange.editor-v2.lessons.subs :as lessons]
+    [webchange.interpreter.lessons.activity :as activity]))
 
 (re-frame/reg-sub
   ::course-datasets
@@ -16,27 +17,45 @@
     (some (fn [{:keys [id] :as dataset}] (and (= id dataset-id) dataset)) datasets)))
 
 (re-frame/reg-sub
-  ::current-lesson
+  ::next-activity
   (fn [db]
-    (let [{:keys [level lesson]} (get-in db [:progress-data :next])] ;; ToDo get level and lesson from other place
+    (let [{:keys [level lesson]} (get-in db [:progress-data :next])]
       (-> db
           (lessons/get-level level)
           (lessons/get-lesson lesson)))))
 
 (re-frame/reg-sub
-  ::current-lesson-sets
+  ::loaded-activity
+  (fn [db]
+    (let [{:keys [level lesson]} (get-in db [:loaded-activity])]
+      (-> db
+          (lessons/get-level level)
+          (lessons/get-lesson lesson)))))
+
+(re-frame/reg-sub
+  ::next-lesson-sets
   (fn []
-    [(re-frame/subscribe [::current-lesson])])
+    [(re-frame/subscribe [::next-activity])])
   (fn [[current-lesson]]
     (->> (:lesson-sets current-lesson)
          (map second))))
 
 (re-frame/reg-sub
-  ::next-activity
+  ::loaded-lesson-sets
+  (fn []
+    [(re-frame/subscribe [::loaded-activity])])
+  (fn [[current-lesson]]
+    (->> (:lesson-sets current-lesson)
+         (map second))))
+
+(re-frame/reg-sub
+  ::after-current-activity
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          {:keys [activity]} (get-in db [:progress-data :next])]
-      (->> (keyword activity)
+          next (->> (get-in db [:progress-data :next])
+                    (activity/next-not-finished-for db))]
+      (->> (:activity next)
+           (keyword)
            (get scenes)))))
 
 (re-frame/reg-sub

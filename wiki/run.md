@@ -30,8 +30,10 @@
     2.2. Load datasets:
     
     ```
-    $ lein run load-dataset-force test concepts
+    $ lein run load-dataset-force spanish concepts
     $ lein run load-dataset-force english concepts
+    $ lein run update-character-skins
+    $ lein run update-editor-assets
     ```
    
 1. Download raw data from google disk store to `resources/public/raw/`

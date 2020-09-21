@@ -27,5 +27,5 @@
     (let [course (:current-course db)
           activity (select-keys activity [:level :lesson :activity])]
       {:db (lessons-activity/add-loaded-activity db activity)
-       :dispatch-n (list [::events/redirect (str "/courses/" course)]
-                         [::ie/set-current-scene (:activity activity)])})))
+       :dispatch-n (list [::ie/set-current-scene (:activity activity)]
+                         [::events/redirect (str "/courses/" course)])})))

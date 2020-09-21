@@ -1,7 +1,7 @@
 {:assets
                 [{:url "/raw/audio/l1/a5/Mari_Level1_Activity5.m4a", :size 2, :type "audio", :alias "mari old"}
                  {:url "/raw/audio/l1/a5/Mari_Coaching_statements.m4a", :size 2, :type "audio", :alias "mari old"}
-                 {:url "/raw/audio/l1/a5/mari.mp4", :size 2, :type "audio", :alias "mari"}
+                 {:url "/raw/audio/l1/a5/mari.m4a", :size 2, :type "audio", :alias "mari"}
                  {:url "/raw/audio/l1/a2/game-voice-1.mp3", :size 5, :type "audio", :alias "game voice 1"}
                  {:url "/raw/audio/l1/a2/game-voice-1-redo.mp3", :size 5, :type "audio", :alias "game voice 1 redo"}
                  {:url "/raw/audio/l1/a2/game-voice-2.mp3", :size 5, :type "audio", :alias "game voice 2"}
@@ -337,7 +337,7 @@
                                            :phrase-description "Welcome speech",
                                            :phrase-text        "Hola! Quieres jugar volleyball con nosotros? Haz click en  la foto que quisieras escuchar.",
                                            :target             "mari",
-                                           :audio              "/raw/audio/l1/a5/mari.mp4",
+                                           :audio              "/raw/audio/l1/a5/mari.m4a",
                                            :start              1.274,
                                            :duration           8.325,
                                            :track              1,

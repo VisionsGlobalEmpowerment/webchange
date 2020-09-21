@@ -43,6 +43,7 @@
 (defn stop [wrapper & params] (execute wrapper :stop-video params))
 (defn set-tool [wrapper & params] (execute wrapper :set-tool params))
 (defn set-color [wrapper & params] (execute wrapper :set-color params))
+(defn set-interactive [wrapper & params] (execute wrapper :set-interactive params))
 
 (defn set-path [wrapper & params] (execute wrapper :set-path params))
 (defn set-stroke [wrapper & params] (execute wrapper :set-stroke params))

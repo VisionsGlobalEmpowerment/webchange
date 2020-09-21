@@ -1,7 +1,7 @@
 {:assets
            [{:url "/raw/img/park/hide-n-seek/background.jpg", :size 14, :type "image", :alias nil, :width 1920, :height 1080}
             {:url "/raw/img/park/hide-n-seek/front-objects.png", :size 37, :type "image", :alias nil, :width 1920, :height 1080}
-            {:url "/raw/audio/l1/assessment1/mari.mp4", :size 5, :type "audio", :alias "mari voice"}
+            {:url "/raw/audio/l1/assessment1/mari.m4a", :size 5, :type "audio", :alias "mari voice"}
             {:url "/raw/audio/l1/assessment1/game-voice-set-main.mp3", :size 5, :type "audio", :alias "words"}
             {:url    "/upload/KFRHMZAUGAMMESQB.m4a",
              :date   1588863465994,

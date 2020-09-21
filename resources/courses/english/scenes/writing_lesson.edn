@@ -1,8 +1,8 @@
 {:assets
                 [{:url "/raw/img/library/room2/background.jpg", :type "image"}
                  {:url "/raw/img/library/room2/canvas.png", :type "image"}
-                 {:url "/raw/audio/l2/a6/mari.mp4", :type "audio", :alias "mari voice"}
-                 {:url "/raw/audio/l2/a6/vaca.mp4", :type "audio", :alias "vaca voice"}
+                 {:url "/raw/audio/l2/a6/mari.m4a", :type "audio", :alias "mari voice"}
+                 {:url "/raw/audio/l2/a6/vaca.m4a", :type "audio", :alias "vaca voice"}
                  {:url   "/raw/audio/l2/a2/L2_A2_Vaca_Insertions/L2_A2_Insertions_1.m4a",
                   :size  2,
                   :type  "audio",
@@ -295,7 +295,7 @@
                                        :phrase-text            "Sure, of course!",
                                        :phrase-text-translated "Claro que si!",
                                        :target                 "mari",
-                                       :audio                  "/raw/audio/l2/a6/mari.mp4",
+                                       :audio                  "/raw/audio/l2/a6/mari.m4a",
                                        :start                  9.432,
                                        :duration               1.44,
                                        :track                  1,
@@ -319,7 +319,7 @@
                                                :start                  58.826,
                                                :type                   "animation-sequence",
                                                :duration               2.4,
-                                               :audio                  "/raw/audio/l2/a6/vaca.mp4",
+                                               :audio                  "/raw/audio/l2/a6/vaca.m4a",
                                                :target                 "senoravaca",
                                                :phrase-text-translated "Esta es la letra",
                                                :track                  1,
@@ -331,7 +331,7 @@
                                                :start                  62.786,
                                                :type                   "animation-sequence",
                                                :duration               0.88,
-                                               :audio                  "/raw/audio/l2/a6/vaca.mp4",
+                                               :audio                  "/raw/audio/l2/a6/vaca.m4a",
                                                :target                 "senoravaca",
                                                :phrase-text-translated "La letra",
                                                :track                  1,
@@ -342,7 +342,7 @@
                                                :start                  64.413,
                                                :type                   "animation-sequence",
                                                :duration               1.76,
-                                               :audio                  "/raw/audio/l2/a6/vaca.mp4",
+                                               :audio                  "/raw/audio/l2/a6/vaca.m4a",
                                                :target                 "senoravaca",
                                                :phrase-text-translated "hace el sonido",
                                                :track                  1,
@@ -354,7 +354,7 @@
                                                :start                  68.426,
                                                :type                   "animation-sequence",
                                                :duration               3.64,
-                                               :audio                  "/raw/audio/l2/a6/vaca.mp4",
+                                               :audio                  "/raw/audio/l2/a6/vaca.m4a",
                                                :target                 "senoravaca",
                                                :phrase-text-translated "Puedes decirlo conmigo 3 veces?",
                                                :track                  1,
@@ -455,7 +455,7 @@
                                        :phrase-text            "This is what the sound looks like.",
                                        :phrase-text-translated "Asi es como se ve este sonido.",
                                        :target                 "senoravaca",
-                                       :audio                  "/raw/audio/l2/a6/vaca.mp4",
+                                       :audio                  "/raw/audio/l2/a6/vaca.m4a",
                                        :start                  53.826,
                                        :duration               3.774,
                                        :track                  1,

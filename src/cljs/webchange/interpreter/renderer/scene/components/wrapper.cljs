@@ -70,7 +70,10 @@
             :get-opacity      (fn []
                                 (utils/get-opacity main-display-object))
             :set-opacity      (fn [value]
-                                (utils/set-opacity main-display-object value))}
+                                (utils/set-opacity main-display-object value))
+            :set-interactive  (fn [interactive?]
+                                (set! main-display-object -interactive interactive?)
+                                (set! main-display-object -interactiveChildren interactive?))}
            wrapper-object)))
 
 (defn create-wrapper

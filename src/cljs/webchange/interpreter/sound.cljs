@@ -90,6 +90,7 @@
   [{:keys [key] :as params}]
   (let [resource (resources/get-resource key)]
     (when (nil? resource) (-> (str "Resource for audio <" key "> is not defined") js/Error. throw))
+    (when (nil? (.-sound resource)) (-> (str "Sound for audio <" key "> is not defined") js/Error. throw))
     (play resource params)
     (->> (wrap-audio resource)
          (register-audio!)

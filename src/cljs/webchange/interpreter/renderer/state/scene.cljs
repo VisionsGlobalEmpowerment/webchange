@@ -46,10 +46,17 @@
 
 ;; Change object events
 
+(defn- filter-extra-props
+  [props extra-props-names]
+  (->> props
+       (filter (fn [[prop-name]] (not (some #{prop-name} extra-props-names))))
+       (into {})))
+
 (re-frame/reg-event-fx
   ::set-scene-object-state
   (fn [{:keys [_]} [_ object-name state]]
-    (let [available-actions {:set-position   [:x :y]
+    (let [filtered-state (filter-extra-props state [:start :revert :target])
+          available-actions {:set-position   [:x :y]
                              :set-scale      [:scale :scale-x :scale-y]
                              :set-visibility [:visible]
                              :set-src        [:src]
@@ -63,9 +70,9 @@
                              :set-path       [:path]
                              :set-font-size  [:font-size]}
           execute-actions (->> available-actions
-                               (map (fn [[action params]] [action (select-keys state params)]))
+                               (map (fn [[action params]] [action (select-keys filtered-state params)]))
                                (filter (fn [[_ params]] (-> params empty? not))))
-          not-handled-params (clojure.set/difference (->> state (keys) (set))
+          not-handled-params (clojure.set/difference (->> filtered-state (keys) (set))
                                                      (->> available-actions (vals) (apply concat) (set)))]
       (when-not (empty? not-handled-params)
         (logger/warn (str "[Set object state] Not-processed-params for <" object-name "> object:") (clj->js not-handled-params)))

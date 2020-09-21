@@ -55,8 +55,7 @@
       (set! -scaleX (:scale-x params))
       (set! -scaleY (:scale-y params))
       (set! -width (:width params))
-      (set! -height (:height params))
-      (.updateOffset))))
+      (set! -height (:height params)))))
 
 (defn get-skeleton
   [spine-object]
@@ -69,7 +68,7 @@
 (defn has-animation?
   [spine-object animation-name]
   (-> (.. spine-object -state)
-      (.hasAnimationByName animation-name)))
+      (.hasAnimation animation-name)))
 
 (defn has-skin?
   [spine-object skin-name]

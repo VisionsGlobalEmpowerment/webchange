@@ -36,7 +36,7 @@
                  {:url "/raw/audio/l1/a3/vera/leon.mp3", :size 2, :type "audio", :alias "vera-leon"}
                  {:url "/raw/audio/l1/a3/rock/Leon.m4a", :size 2, :type "audio", :alias "rock-leon"}
                  {:url "/raw/audio/l1/a3/rock/Leon_roar.m4a", :size 2, :type "audio", :alias "rock-leon-roar"}
-                 {:url "/raw/audio/l1/a3/rock/Llaves.mp4", :size 2, :type "audio", :alias "rock-llave"}
+                 {:url "/raw/audio/l1/a3/rock/Llaves.m4a", :size 2, :type "audio", :alias "rock-llave"}
                  {:url "/raw/audio/l1/a3/vera/llaves.mp3", :size 2, :type "audio", :alias "vera-llave"}
                  {:url "/raw/audio/l1/a3/vera/mano.mp3", :size 2, :type "audio", :alias "vera-mano"}
                  {:url "/raw/audio/l1/a3/rock/Manos.m4a", :size 2, :type "audio", :alias "rock-mano"}

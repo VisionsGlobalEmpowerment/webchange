@@ -31,10 +31,9 @@
     "action" (get-action-resources data)
     nil))
 
-(defn- parse-concept-resources
-  [scene-id]
-  (let [lesson-sets @(re-frame/subscribe [::subs/current-lesson-sets])
-        lesson-sets-data @(re-frame/subscribe [::subs/lesson-sets-data lesson-sets])]
+(defn- parse-lesson-sets-resources
+  [scene-id lesson-sets]
+  (let [lesson-sets-data @(re-frame/subscribe [::subs/lesson-sets-data lesson-sets])]
     (->> lesson-sets-data
          (reduce (fn [resources {:keys [dataset-id item-ids]}]
                    (let [dataset @(re-frame/subscribe [::subs/course-dataset dataset-id])
@@ -48,6 +47,14 @@
                                                item-ids))))
                  [])
          (flatten))))
+
+(defn parse-concept-resources
+  [scene-id]
+  (let [loaded-lesson-sets @(re-frame/subscribe [::subs/loaded-lesson-sets])
+        next-lesson-sets @(re-frame/subscribe [::subs/next-lesson-sets])]
+    (if-not (empty? loaded-lesson-sets)
+      (parse-lesson-sets-resources scene-id loaded-lesson-sets)
+      (parse-lesson-sets-resources scene-id next-lesson-sets))))
 
 (defn- parse-default-assets
   [default-assets]
@@ -81,9 +88,14 @@
                    result))
                [])))
 
+(defn- parse-scene-audio
+  [scene-data]
+  (->> (:audio scene-data)
+       (vals)))
+
 (defn- parse-additional-resources
   []
-  (let [next-activity @(re-frame/subscribe [::subs/next-activity])]
+  (let [next-activity @(re-frame/subscribe [::subs/after-current-activity])]
     [(:preview next-activity)]))
 
 (defn get-scene-resources
@@ -91,6 +103,7 @@
   (->> (concat (parse-concept-resources scene-id)
                (parse-scene-assets scene-data)
                (parse-scene-objects scene-data)
+               (parse-scene-audio scene-data)
                (parse-default-assets default-game-assets)
                (parse-additional-resources))
        (remove #(or (nil? %) (empty? %)))

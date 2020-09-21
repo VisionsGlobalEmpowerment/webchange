@@ -1,10 +1,10 @@
-{:assets        [{:url "/raw/audio/l1/mari-coaching.mp4", :size 2, :type "audio" :alias "statements"}]
+{:assets        [{:url "/raw/audio/l1/mari-coaching.m4a", :size 2, :type "audio" :alias "statements"}]
  :actions       {:mari-audio-correct-1
                  {:type "animation-sequence",
                   :target "mari",
                   :track 1,
                   :offset 1.511,
-                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :audio "/raw/audio/l1/mari-coaching.m4a",
                   :start 1.511,
                   :duration 1.837,
                   :data [{:start 2.06, :end 3.12, :anim "talk"}]}
@@ -14,7 +14,7 @@
                   :target "mari",
                   :track 1,
                   :offset 4.417,
-                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :audio "/raw/audio/l1/mari-coaching.m4a",
                   :start 4.417,
                   :duration 1.358,
                   :data [{:start 4.42, :end 5.66, :anim "talk"}]}
@@ -24,7 +24,7 @@
                   :target "mari",
                   :track 1,
                   :offset 6.456,
-                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :audio "/raw/audio/l1/mari-coaching.m4a",
                   :start 6.456,
                   :duration 1.345,
                   :data [{:start 7.12, :end 8.04, :anim "talk"}]}
@@ -34,7 +34,7 @@
                   :target "mari",
                   :track 1,
                   :offset 8.824,
-                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :audio "/raw/audio/l1/mari-coaching.m4a",
                   :start 8.824,
                   :duration 1.627,
                   :data [{:start 8.93, :end 10.45, :anim "talk"}]}
@@ -44,7 +44,7 @@
                   :target "mari",
                   :track 1,
                   :offset 11.347,
-                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :audio "/raw/audio/l1/mari-coaching.m4a",
                   :start 11.347,
                   :duration 2.294,
                   :data [{:start 11.46, :end 13.59, :anim "talk"}]}
@@ -54,7 +54,7 @@
                   :target "mari",
                   :track 1,
                   :offset 15.988,
-                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :audio "/raw/audio/l1/mari-coaching.m4a",
                   :start 15.988,
                   :duration 1.466,
                   :data [{:start 16.09, :end 17.35, :anim "talk"}]}
@@ -64,7 +64,7 @@
                   :target "mari",
                   :track 1,
                   :offset 18.83,
-                  :audio "/raw/audio/l1/mari-coaching.mp4",
+                  :audio "/raw/audio/l1/mari-coaching.m4a",
                   :start 18.83,
                   :duration 3.491,
                   :data
