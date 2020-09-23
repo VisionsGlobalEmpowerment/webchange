@@ -32,4 +32,5 @@
          (fn [result [_ {:keys [connections]}]]
            (concat result connections))
          [])
+       (concat (-> scene-data :actions keys))
        (map (fn [action] [action]))))

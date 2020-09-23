@@ -18,7 +18,36 @@
                     :src           {:default nil}
                     :offset        {:default {:x 0 :y 0}}
                     :filters       {:default []}
-                    :border-radius {}})
+                    :border-radius {}
+                    :origin        {}
+                    :max-width     {}
+                    :max-height    {}})
+
+(defn- apply-boundaries
+  [container {:keys [max-width max-height]}]
+  (when (and max-width (< max-width (.-width container)))
+    (let [ratio (/ max-width (.-width container))]
+      (set! (.-width container) (* ratio (.-width container)))
+      (set! (.-height container) (* ratio (.-height container)))))
+  (when (and max-height (< max-height (.-height container)))
+    (let [ratio (/ max-height (.-height container))]
+      (set! (.-width container) (* ratio (.-width container)))
+      (set! (.-height container) (* ratio (.-height container))))))
+
+(defn- apply-origin
+  [container {{origin :type } :origin {x :x y :x} :offset}]
+  (when (and origin (= 0 (int x)) (= 0 (int y)))
+    (let [[h v] (clojure.string/split origin #"-")
+          pivot (.-pivot container)]
+      (case h
+        "left" (set! (.-x pivot) 0)
+        "center" (set! (.-x pivot) (/ (.-width container) 2))
+        "right" (set! (.-x pivot) (.-width container))
+        )
+      (case v
+        "top" (set! (.-y pivot) 0)
+        "center" (set! (.-y pivot) (/ (.-height container) 2))
+        "bottom" (set! (.-y pivot) (.-height container))))))
 
 (defn- create-sprite
   [{:keys [src scale object-name width height]}]
@@ -40,8 +69,7 @@
 (defn- create-sprite-mask
   [{:keys [border-radius width height]}]
   (when (some? border-radius)
-    (let [[lt rt rb lb] border-radius
-          ]
+    (let [[lt rt rb lb] border-radius]
       (doto (Graphics.)
         (.beginFill 0x000000)
         (.moveTo lt 0)
@@ -82,5 +110,8 @@
 
     (when-not (nil? on-click) (set-handler image "click" on-click))
     (when-not (nil? ref) (ref wrapped-image))
+
+    (apply-origin image-container props)
+    (apply-boundaries image-container props)
 
     wrapped-image))

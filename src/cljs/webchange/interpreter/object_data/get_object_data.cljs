@@ -63,7 +63,7 @@
                                  (assoc :object-name (keyword name))
                                  (with-group-params)
                                  (with-filter-params)
-                                 (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager :origin]))
+                                 (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
                       :transparent (-> object
                                        (with-group-params)
                                        (assoc :object-name (keyword name))

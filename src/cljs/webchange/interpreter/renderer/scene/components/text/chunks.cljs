@@ -38,7 +38,9 @@
        (map (fn [chunk] (prepare-chunk chunk props)))))
 
 (defn- empty-chunk? [chunk]
-  (-> chunk :text clojure.string/trim empty?))
+  (if (get chunk :text)
+    (-> chunk :text clojure.string/trim empty?)
+    true))
 
 (defn- trim-left-chunks [chunks]
   (let [left (first chunks)]
@@ -88,7 +90,7 @@
           new-width (+ current-width (line-width word))]
       (cond
         (nil? word) (new-line line-chunks words-to-process)
-        (< width new-width) (new-line line-chunks words-to-process)
+        (and (seq line-chunks) (< width new-width)) (new-line line-chunks words-to-process)
         :default (recur tail new-width (concat line-chunks word))))))
 
 (defn- get-lines [{:keys [width] :as props}]

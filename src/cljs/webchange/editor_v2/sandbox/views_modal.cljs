@@ -17,15 +17,16 @@
         (get-in modal-state-path)
         boolean)))
 
-;{:concepts {:item-ids [188 196 208], :dataset-id 4}}
-
 (re-frame/reg-sub
   ::link
   (fn [db]
     (let [course-slug (:current-course db)
           scene-slug (:current-scene db)
-          encoded-lessons (-> {} clj->js js/JSON.stringify js/btoa js/encodeURIComponent)]
-      (str js/location.protocol "//" js/location.host "/s/" course-slug "/" scene-slug "/" encoded-lessons))))
+          lessons {} ;{:concepts {:item-ids [188 196 208], :dataset-id 4}}
+          encoded-lessons (-> lessons clj->js js/JSON.stringify js/btoa js/encodeURIComponent)]
+      (if (seq lessons)
+        (str js/location.protocol "//" js/location.host "/s/" course-slug "/" scene-slug "/" encoded-lessons)
+        (str js/location.protocol "//" js/location.host "/s/" course-slug "/" scene-slug)))))
 
 ;; Events
 
