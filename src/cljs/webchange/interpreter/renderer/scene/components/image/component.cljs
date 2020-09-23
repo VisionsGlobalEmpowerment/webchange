@@ -96,7 +96,6 @@
 
 (defn create
   [{:keys [parent type on-click ref object-name] :as props}]
-  (js/console.log "create image" props)
   (let [image (create-sprite props)
         image-mask (create-sprite-mask props)
         image-container (create-sprite-container props)

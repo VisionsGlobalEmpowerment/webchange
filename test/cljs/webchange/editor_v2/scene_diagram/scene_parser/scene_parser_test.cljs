@@ -8,9 +8,10 @@
 (deftest test-get-action-children__with-id
   (let [scene-data source/data]
     (let [actual-result (scene-data->actions-tracks scene-data)
-          expected-result {"Intro"   [[:senora-vaca-audio-2] [:senora-vaca-audio-1]]
-                           "Etc"     [[:senora-vaca-audio-touch-third-box] [:senora-vaca-audio-touch-second-box] [:mari-finish]]
-                           "Concept" [[:vaca-goodbye-var] [:concept-chant] [:concept-intro]]}]
-      (when-not (= actual-result expected-result)
-        (print-maps-comparison actual-result expected-result))
-      (is (= actual-result expected-result)))))
+          expected-result {"Intro"   [[:senora-vaca-audio-1] [:senora-vaca-audio-2]]
+                           "Etc"     [[:senora-vaca-audio-touch-third-box] [:mari-finish] [:senora-vaca-audio-touch-second-box]]
+                           "Concept" [[:concept-chant] [:vaca-goodbye-var] [:concept-intro]]}]
+      (testing "Action tracks can be retrieved (order should not matter)"
+        (when-not (= actual-result expected-result)
+          (print-maps-comparison actual-result expected-result))
+        (is (= actual-result expected-result))))))

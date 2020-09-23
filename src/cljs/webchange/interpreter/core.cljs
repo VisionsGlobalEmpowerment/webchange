@@ -181,8 +181,6 @@
     (-> (cond-> {}
                 (or (contains? params-to-animate :x)
                     (contains? params-to-animate :y)) (merge (w/get-position object))
-                (or (contains? params-to-animate :relative-x)
-                    (contains? params-to-animate :relative-xy)) {:relative-x 0 :relative-y 0}
                 (contains? params-to-animate :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
                 (contains? params-to-animate :rotation) (assoc :rotation (w/get-rotation object))
                 (contains? params-to-animate :opacity) (assoc :opacity (w/get-opacity object)))
@@ -193,12 +191,6 @@
   (when (or (contains? params :x)
             (contains? params :y))
     (w/set-position object (select-keys params [:x :y])))
-  (when (or (contains? params :relative-x)
-            (contains? params :relative-y))
-    (let [{:keys [x y]} (w/get-position object)
-          new-pos {:x (+ x (:relative-x params))
-                   :y (+ y (:relative-y params))}]
-      (w/set-position object new-pos)))
   (when (contains? params :brightness)
     (w/set-filter-value object "brightness" (:brightness params)))
   (when (contains? params :rotation)

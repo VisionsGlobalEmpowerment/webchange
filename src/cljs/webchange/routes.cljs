@@ -12,7 +12,8 @@
                   "student-login"     :student-login
                   "register"          :register-user
                   "create-course"     :create-course
-                  "s"                 {["/" :course-id "/" :scene-id "/" [#".+" :encoded-items]] :sandbox}
+                  "s"                 {["/" :course-id "/" :scene-id] :sandbox
+                                       ["/" :course-id "/" :scene-id "/" [#".+" :encoded-items]] :sandbox}
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor
                                        ["/" :id "/editor-v2"] :course-editor-v2
