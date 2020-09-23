@@ -6,7 +6,9 @@
     [reagent.core :as r]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.editor-v2.wizard.state.course :as state-course]
-    [webchange.editor-v2.wizard.state.activity :as state-activity]))
+    [webchange.editor-v2.wizard.state.activity :as state-activity]
+    [webchange.editor-v2.components.file-input.views :as file-input]
+    [webchange.editor-v2.concepts.events :as concepts-events]))
 
 (defn- course-info
   []
@@ -56,7 +58,15 @@
 
 (def animation-names ["senoravaca" "vera" "mari"])
 
-(defn- lookup
+(defn- string-option
+  [key option data]
+  [ui/grid {:item true :xs 7}
+   [ui/text-field {:label  (:label option)
+                   :variant   "outlined"
+                   :value     (get @data key)
+                   :on-change #(swap! data assoc key (-> % .-target .-value))}]])
+
+(defn- lookup-option
   [key option data]
   [ui/grid {:item true :xs 7}
    [ui/input-label (:label option)]
@@ -67,7 +77,7 @@
       ^{:key value}
       [ui/menu-item {:value value} name])]])
 
-(defn- characters
+(defn- characters-option
   [key option data]
   (let [values (get @data key)]
     (when (nil? values)
@@ -91,11 +101,56 @@
               ^{:key animation-name}
               [ui/menu-item {:value animation-name} animation-name])]]]))]))
 
+(defn- select-file-form
+  [type uploading-atom on-change]
+  (let [on-finish (fn [result]
+                    (on-change (:url result))
+                    (reset! uploading-atom false))
+        on-change (fn [js-file]
+                    (reset! uploading-atom true)
+                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish}]))]
+    [file-input/select-file-form {:on-change on-change}]))
+
+(defn- image-field
+  [value on-change]
+  (r/with-let [uploading (r/atom false)]
+    [ui/grid {:container true :justify "flex-start" :align-items "flex-end"}
+     (if value
+       [ui/avatar {:style {:width 60 :height 60} :src value}]
+       [ui/avatar {:style {:width 60 :height 60}} [ic/image]])
+     [ui/text-field {:style {:width "50%"} :value (str value) :on-change #(on-change (-> % .-target .-value))}]
+     [select-file-form :image uploading on-change]
+     (when @uploading
+       [ui/circular-progress])]))
+
+(defn- pages-option
+  [key option data]
+  (let [values (get @data key)]
+    (when (nil? values)
+      (swap! data assoc key []))
+    [ui/grid {:item true :xs 12}
+     [ui/input-label (:label option)]
+     (for [idx (range (:max option))]
+       (let [page (get values idx {})]
+         ^{:key idx}
+         [ui/grid {:container true}
+          [ui/grid {:item true}
+           [ui/text-field {:label     "Text"
+                           :variant   "outlined"
+                           :value     (:name page)
+                           :on-change #(swap! data assoc-in [key idx :text] (-> % .-target .-value))
+                           :style {:min-width "500px"}}]]
+          [ui/grid {:item true}
+           [image-field (:img page) #(swap! data assoc-in [key idx :img] %)]]]))]))
+
 (defn- option-info
   [key option data]
   (case (:type option)
-    "characters" [characters key option data]
-    "lookup" [lookup key option data]))
+    "characters" [characters-option key option data]
+    "lookup" [lookup-option key option data]
+    "string" [string-option key option data]
+    "pages" [pages-option key option data]
+    nil))
 
 (defn- template-info
   [template data]
