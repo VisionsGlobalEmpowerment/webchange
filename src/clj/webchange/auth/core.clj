@@ -101,11 +101,6 @@
       (assoc :id user-id)
       db/update-student-user!))
 
-(defn website-user-resource
-  [website-user-id]
-  (let [website-host (env :website-host)]
-    (str "http://" website-host "/api/user/" website-user-id)))
-
 (defn- website->platform-user
   [{:keys [id first_name last_name email] :as response}]
   {:first_name first_name

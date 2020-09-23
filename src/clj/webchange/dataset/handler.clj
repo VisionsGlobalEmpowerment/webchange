@@ -1,19 +1,21 @@
 (ns webchange.dataset.handler
-  (:require [compojure.core :refer [GET POST PUT PATCH DELETE defroutes routes]]
+  (:require [compojure.api.sweet :refer [api context GET POST PUT DELETE PATCH defroutes routes swagger-routes]]
             [compojure.route :refer [resources not-found]]
             [ring.util.response :refer [resource-response response redirect]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
             [webchange.common.handler :refer [handle current-user]]
             [webchange.auth.core :as auth]
-            [webchange.dataset.core :as core]))
+            [webchange.dataset.core :as core]
+            [webchange.dataset.library :as library]
+            [schema.core :as s]))
 
 (defn handle-create-dataset
   [request]
   (let [owner-id (current-user request)
-        data (-> request :body)]
-    (-> (core/create-dataset! data)
-        handle)))
+        data (-> request :body)
+        {id :id} (core/create-dataset! data)]
+    (handle [true {:id id}])))
 
 (defn handle-update-dataset
   [dataset-id request]
@@ -74,6 +76,16 @@
   (let [owner-id (current-user request)]
     (-> (core/delete-lesson-set! (Integer/parseInt id))
         handle)))
+
+(s/defschema LibraryDataset {:id s/Int :name s/Str})
+
+(defroutes dataset-api-routes
+  (context "/api" []
+    :tags ["dataset"]
+    (GET "/datasets-library" []
+      :summary "Return list of available datasets"
+      :return [LibraryDataset]
+      (-> (library/get-datasets) response))))
 
 (defroutes dataset-routes
            (GET "/api/datasets/:id" [id] (-> id Integer/parseInt core/get-dataset response))

@@ -10,11 +10,13 @@
     [webchange.editor-v2.diagram-utils.modes.translation.widget-config-button :refer [config-button]]
     [webchange.editor-v2.diagram-utils.modes.translation.widget-loop-icon :refer [loop-icon]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node? get-node-type]]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.dialog.dialog-form.state.actions :refer [get-inner-action]]))
 
-(defn get-node-sppech
+(defn get-node-speech
   [node-data]
-  {:data (get-in node-data [:data :data 1])})
+  (let [action-data (:data node-data)]
+    {:data (get-inner-action action-data)}))
 
 (defn effect-action?
   [node-data]
@@ -23,11 +25,10 @@
 
 (defn get-node-color
   [node-data]
-  (let [speech (get-node-sppech node-data)
+  (let [speech (get-node-speech node-data)
         is-speech-node? (speech-node? speech)
         is-effect-action? (effect-action? speech)
-        is-concept-action-node? (concept-action-node? node-data)
-        ]
+        is-concept-action-node? (concept-action-node? node-data)]
     (if is-speech-node?
       (if is-concept-action-node?
         "#FFDF82"
@@ -36,11 +37,8 @@
       (if is-effect-action?
         (if is-concept-action-node?
           "#FFAF52"
-          "#9BC784"
-          )
-        (:default colors))))
-    )
-
+          "#9BC784")
+        (:default colors)))))
 
 (defn- get-styles
   [node-data]

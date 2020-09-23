@@ -138,3 +138,12 @@ WHERE scene_id = :scene_id ORDER BY created_at DESC LIMIT 1;
 -- :doc retrieve all versions of given scene
 SELECT * from scene_versions
 WHERE scene_id = :scene_id ORDER BY created_at DESC LIMIT 30;
+
+-- :name delete-scene-skills! :! :n
+-- :doc deletes all scene skills
+DELETE FROM scene_skills
+WHERE scene_id = :scene_id;
+
+-- :name create-scene-skill! :! :n
+-- :doc creates a new scene-skill link
+INSERT INTO scene_skills (scene_id, skill_id) VALUES (:scene_id, :skill_id);

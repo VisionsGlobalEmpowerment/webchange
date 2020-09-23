@@ -1,11 +1,8 @@
 (ns webchange.editor-v2.diagram-utils.modes.dialog.widget-phrase
   (:require
     [clojure.string :refer [capitalize]]
-    [webchange.editor-v2.translator.translator-form.utils :refer [node-data->phrase-data]]))
-
-(defn get-node-sppech
-  [node-data]
-  {:data (get-in node-data [:data :data 1])})
+    [webchange.editor-v2.translator.translator-form.utils :refer [node-data->phrase-data]]
+    [webchange.editor-v2.dialog.dialog-form.state.actions :refer [get-inner-action]]))
 
 (defn- get-styles
   []
@@ -24,11 +21,11 @@
 
 (defn phrase
   [node]
-  (let [
-        action? (= "action" (get-in node [:data :data 1 :type]))
-        action-id (get-in node [:data :data 1 :id])
+  (let [inner-action (-> node :data get-inner-action)
+        action? (= "action" (get get-inner-action :type))
+        action-id (get get-inner-action :id)
         action-name (if (:name node) (:name node) (if action? action-id))
-        phrase-data (node-data->phrase-data node)
+        phrase-data (node-data->phrase-data {:data inner-action})
         phrase-target (when-not (nil? (:target phrase-data))
                         (-> (:target phrase-data) (capitalize) (str ":")))
         phrase-text (or (:phrase-text-translated phrase-data)

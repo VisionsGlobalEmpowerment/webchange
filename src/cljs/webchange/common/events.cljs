@@ -457,7 +457,9 @@
       (on-skip! (:on-skip action))
       (on-skip! #(execute-remove-flows! {:flow-tag "skip"})))
 
-    (doall (map #(execute-action db %) actions))))
+    (if (seq actions)
+      (doall (map #(execute-action db %) actions))
+      (dispatch-success-fn action))))
 
 (re-frame/reg-event-fx
   ::execute-parallel

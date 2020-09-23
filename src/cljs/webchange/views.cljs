@@ -16,7 +16,9 @@
     [webchange.sw-utils.state.status :as sw]
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.views-login-switch :refer [login-switch]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui.theme :refer [get-in-theme]]
+    [webchange.editor-v2.wizard.views :as wizard]
+    [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn- get-styles
   []
@@ -84,7 +86,9 @@
     :home [login-switch]
     :login [teacher-login :sign-in]
     :register-user [teacher-login :sign-up]
-    :course [course (:id route-params)]
+    :course [course {:mode ::modes/game}]
+    ;; sandbox
+    :sandbox [course {:mode ::modes/sandbox}]
     ;; editor
     :course-editor-v2 [editor-panel-v2 (:id route-params)]
     :course-editor-v2-scene [editor-panel-v2-scene (:id route-params) (:scene-id route-params)]
@@ -106,6 +110,10 @@
     :student-dashboard [student-dashboard-page]
     :student-course-dashboard [student-dashboard-page]
     :finished-activities [student-dashboard-finished-page]
+
+    ;;wizard
+    :create-course [wizard/create-course-panel]
+    :create-activity [wizard/create-activity-panel (:course-slug route-params)]
     [page-404]))
 
 (defn main-panel []

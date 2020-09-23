@@ -100,9 +100,10 @@
 ;TODO: level what if scene is not available in current level/lesson?
 (defn name->activity-action
   [db scene-name]
-  (let [current (get-in db [:loaded-activity])
+  (let [default {:level 1 :lesson 1}
+        current (get-in db [:loaded-activity])
         next (get-in db [:progress-data :next])]
-    (merge next current {:activity scene-name})))
+    (merge default next current {:activity scene-name})))
 
 (defn clear-loaded-activity
   [db]

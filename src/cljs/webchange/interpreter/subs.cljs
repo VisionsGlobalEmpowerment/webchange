@@ -1,7 +1,6 @@
 (ns webchange.interpreter.subs
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.lessons.subs :as lessons]
     [webchange.interpreter.lessons.activity :as activity]))
 
 (re-frame/reg-sub
@@ -17,38 +16,6 @@
     (some (fn [{:keys [id] :as dataset}] (and (= id dataset-id) dataset)) datasets)))
 
 (re-frame/reg-sub
-  ::next-activity
-  (fn [db]
-    (let [{:keys [level lesson]} (get-in db [:progress-data :next])]
-      (-> db
-          (lessons/get-level level)
-          (lessons/get-lesson lesson)))))
-
-(re-frame/reg-sub
-  ::loaded-activity
-  (fn [db]
-    (let [{:keys [level lesson]} (get-in db [:loaded-activity])]
-      (-> db
-          (lessons/get-level level)
-          (lessons/get-lesson lesson)))))
-
-(re-frame/reg-sub
-  ::next-lesson-sets
-  (fn []
-    [(re-frame/subscribe [::next-activity])])
-  (fn [[current-lesson]]
-    (->> (:lesson-sets current-lesson)
-         (map second))))
-
-(re-frame/reg-sub
-  ::loaded-lesson-sets
-  (fn []
-    [(re-frame/subscribe [::loaded-activity])])
-  (fn [[current-lesson]]
-    (->> (:lesson-sets current-lesson)
-         (map second))))
-
-(re-frame/reg-sub
   ::after-current-activity
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
@@ -59,10 +26,20 @@
            (get scenes)))))
 
 (re-frame/reg-sub
-  ::lesson-sets-data
-  (fn [db [_ lesson-sets-ids]]
-    (let [lesson-sets (get-in db [:lessons])]
-      (map #(get lesson-sets %) lesson-sets-ids))))
+  ::current-lesson-sets-data
+  (fn [db]
+    (let [activity-name (:current-scene db)
+          {:keys [level lesson]} (activity/name->activity-action db activity-name)
+          lesson-sets (-> (get-in db [:course-data :levels])
+                          (activity/get-level level)
+                          :lessons
+                          (activity/get-lesson lesson)
+                          :lesson-sets)
+          lessons (get-in db [:lessons])
+          loaded-lessons (get-in db [:sandbox :loaded-lessons])
+          get-lesson (fn [[name id]] (or (get loaded-lessons name)
+                                         (get lessons id)))]
+      (map get-lesson lesson-sets))))
 
 (re-frame/reg-sub
   ::dataset-items

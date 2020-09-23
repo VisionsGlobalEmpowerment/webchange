@@ -9,7 +9,7 @@
             [config.core :refer [env]]
             [clojure.string :as string]
             [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword]]))
+            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]))
 
 (def editor_asset_type_background "background")
 (def editor_asset_type_surface "surface")
@@ -23,7 +23,7 @@
   [course-slug]
   (if (contains? hardcoded course-slug)
     (scene/get-templates course-slug)
-    (scene/get-templates course-slug) ;; "Getting templates for not-hardcoded courses is not implemented"
+    (scene/get-templates course-slug)                       ;; "Getting templates for not-hardcoded courses is not implemented"
     ))
 
 (defn get-course-info
@@ -32,10 +32,10 @@
 
 (defn save-course-info!
   [id {:keys [name slug lang image-src]}]
-  (db/save-course-info! {:id id
-                         :name name
-                         :slug slug
-                         :lang lang
+  (db/save-course-info! {:id        id
+                         :name      name
+                         :slug      slug
+                         :lang      lang
                          :image_src image-src})
   [true {:id id}])
 
@@ -77,35 +77,33 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         scene-id (get-or-create-scene! course-id scene-name)
         created-at (jt/local-date-time)
-        scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))
-        ]
+        scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))]
     (if (not (identical? scene-data-old scene-data))
-      (db/save-scene! {:scene_id scene-id
-                       :data scene-data
-                       :owner_id owner-id
+      (db/save-scene! {:scene_id   scene-id
+                       :data       scene-data
+                       :owner_id   owner-id
                        :created_at created-at}))
-
-    [true {:id scene-id
-           :name scene-name
+    [true {:id         scene-id
+           :name       scene-name
            :created-at (str created-at)}]))
 
 (defn save-course!
   [course-slug data owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         created-at (jt/local-date-time)]
-    (db/save-course! {:course_id course-id
-                     :data data
-                     :owner_id owner-id
-                     :created_at created-at})
+    (db/save-course! {:course_id  course-id
+                      :data       data
+                      :owner_id   owner-id
+                      :created_at created-at})
     [true {:created-at (str created-at)}]))
 
 (defn restore-course-version!
   [version-id owner-id]
   (let [{data :data course-id :course-id} (db/get-course-version {:id version-id})
         created-at (jt/local-date-time)]
-    (db/save-course! {:course_id course-id
-                      :data data
-                      :owner_id owner-id
+    (db/save-course! {:course_id  course-id
+                      :data       data
+                      :owner_id   owner-id
                       :created_at created-at})
     [true {:created-at (str created-at)}]))
 
@@ -113,9 +111,9 @@
   [version-id owner-id]
   (let [{data :data scene-id :scene-id} (db/get-scene-version {:id version-id})
         created-at (jt/local-date-time)]
-    (db/save-scene! {:scene_id scene-id
-                     :data data
-                     :owner_id owner-id
+    (db/save-scene! {:scene_id   scene-id
+                     :data       data
+                     :owner_id   owner-id
                      :created_at created-at})
     [true {:created-at (str created-at)}]))
 
@@ -177,30 +175,30 @@
   [course-id {:keys [lang owner-id website-user-id]}]
   (let [current-time (jt/local-date-time)
         {course-name :name course-slug :slug image :image-src} (db/get-course-by-id {:id course-id})
-        localized-course-data {:name course-name
-                               :slug (slug course-slug lang)
-                               :lang lang
-                               :owner_id owner-id
-                               :image_src image
+        localized-course-data {:name            course-name
+                               :slug            (slug course-slug lang)
+                               :lang            lang
+                               :owner_id        owner-id
+                               :image_src       image
                                :website_user_id website-user-id
-                               :status "draft"}
+                               :status          "draft"}
         [{new-course-id :id}] (db/create-course! localized-course-data)
         course-data (:data (db/get-latest-course-version {:course_id course-id}))
         scenes (->> course-data
                     :scene-list
                     keys
                     (map name))]
-    (db/save-course! {:course_id new-course-id
-                      :data course-data
-                      :owner_id owner-id
+    (db/save-course! {:course_id  new-course-id
+                      :data       course-data
+                      :owner_id   owner-id
                       :created_at current-time})
     (doseq [scene-name scenes]
       (let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
             scene-data (:data (db/get-latest-scene-version {:scene_id scene-id}))
             scene-id (get-or-create-scene! new-course-id scene-name)]
-        (db/save-scene! {:scene_id scene-id
-                         :data scene-data
-                         :owner_id owner-id
+        (db/save-scene! {:scene_id   scene-id
+                         :data       scene-data
+                         :owner_id   owner-id
                          :created_at current-time})))
     [true (-> (transform-keys ->kebab-case-keyword localized-course-data)
               (assoc :id new-course-id)
@@ -221,13 +219,13 @@
         data (json/read-str (slurp filename) :key-fn keyword)
         ]
     (as-> {} character-data
-        (assoc character-data :name (last (string/split dir #"/")))
-        (assoc character-data :width (get-in data [:skeleton :width]))
-        (assoc character-data :height (get-in data [:skeleton :height]))
-        (if (vector? (:skins data))
-          (assoc character-data :skins (vec (map #(:name %) (:skins data))))
-          (assoc character-data :skins (vec (map #(name (get % 0)) (vec (:skins data))))))
-        (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data)) ))))))
+          (assoc character-data :name (last (string/split dir #"/")))
+          (assoc character-data :width (get-in data [:skeleton :width]))
+          (assoc character-data :height (get-in data [:skeleton :height]))
+          (if (vector? (:skins data))
+            (assoc character-data :skins (vec (map #(:name %) (:skins data))))
+            (assoc character-data :skins (vec (map #(name (get % 0)) (vec (:skins data))))))
+          (assoc character-data :animations (vec (map #(name (get % 0)) (vec (:animations data))))))))
 
 (defn find-all-character-skins []
   (let [character-skins (db/find-character-skins)]
@@ -251,7 +249,7 @@
 
 (defn editor-assets [tag type]
   (let [assets (db/find-editor-assets {:tag tag :type type})]
-    assets ))
+    assets))
 
 (defn find-all-tags []
   (db/find-all-tags))
@@ -262,11 +260,11 @@
 
 (defn store-editor-assets! [path thumbnail type]
   (db/create-or-update-editor-assets! {:path path :thumbnail_path thumbnail :type type})
-  (db/find-editor-assets-by-path  {:path path}))
+  (db/find-editor-assets-by-path {:path path}))
 
 (defn remove-first-directory [string begin]
-  (let [string (clojure.string/replace-first string (re-pattern (str "^" begin))  "")
-        string (clojure.string/replace-first string #"^/"  "")]
+  (let [string (clojure.string/replace-first string (re-pattern (str "^" begin)) "")
+        string (clojure.string/replace-first string #"^/" "")]
     string))
 
 (defn store-editor-asset [source-path target-path public-dir file]
@@ -301,8 +299,140 @@
   ([config clear] (update-editor-assets config clear "clipart" "clipart-thumbs"))
   ([config clear source] (update-editor-assets config clear source "clipart-thumbs"))
   ([config clear source target]
-  (let [source-path (f/relative->absolute-path (str "/raw/" source) config)
-        target-path (f/relative->absolute-path (str "/raw/" target) config)]
-    (when (= clear "clear") (clear-before-update))
-    (doseq [file (filter (fn [f] (. f isFile)) (assets/files source-path))]
-      (store-editor-asset source-path target-path (config :public-dir) (. file getPath))))))
+   (let [source-path (f/relative->absolute-path (str "/raw/" source) config)
+         target-path (f/relative->absolute-path (str "/raw/" target) config)]
+     (when (= clear "clear") (clear-before-update))
+     (doseq [file (filter (fn [f] (. f isFile)) (assets/files source-path))]
+       (store-editor-asset source-path target-path (config :public-dir) (. file getPath))))))
+
+(defn create-course
+  [{:keys [name lang] :as data} owner-id]
+  (let [current-time (jt/local-date-time)
+        user (db/get-user {:id owner-id})
+        website-id (:website-id user)
+        new-course-data (merge data {:slug            (slug (->kebab-case name) lang)
+                                     :owner_id        owner-id
+                                     :website_user_id website-id
+                                     :image_src       nil
+                                     :status          "draft"})
+        [{new-course-id :id}] (db/create-course! new-course-data)
+        course-data {:initial-scene    nil
+                     :navigation-mode  :activity
+                     :scene-list       {}
+                     :default-progress {}
+                     :levels [{:level 1 :name "Level 1" :scheme {:lesson {:name "Lesson" :lesson-sets []}}
+                               :lessons [{:lesson 1
+                                          :name "Lesson 1"
+                                          :type :lesson
+                                          :activities []}]}]}]
+    (db/save-course! {:course_id  new-course-id
+                      :data       course-data
+                      :owner_id   owner-id
+                      :created_at current-time})
+    [true (-> (transform-keys ->kebab-case-keyword new-course-data)
+              (assoc :id new-course-id)
+              (->website-course))]))
+
+(defn default-lesson-name
+  [lesson-set-name]
+  (str lesson-set-name "-l1-ls1"))
+
+(defn- create-default-lesson!
+  [course-id lesson-sets]
+  (let [items (db/get-course-items {:course_id course-id})
+        dataset-id (-> items first :dataset-id)
+        item-ids (map #(select-keys % [:id]) items)]
+    (doall (for [lesson-name lesson-sets]
+             (db/create-lesson-set! {:name (default-lesson-name lesson-name) :dataset_id dataset-id :data {:items item-ids}})))))
+
+(defn- save-scene-on-create!
+  [course-id scene-slug scene-data owner-id]
+  (let [created-at (jt/local-date-time)
+        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
+    (db/save-scene! {:scene_id   scene-id
+                     :data       scene-data
+                     :owner_id   owner-id
+                     :created_at created-at})
+    {:scene-id scene-id}))
+
+(defn- name-in-list? [{name :name} names]
+  (let [s (into #{} names)]
+    (contains? s name)))
+
+(defn- add-field-scene
+  [field scene-slug]
+  (if (nil? (:scenes field))
+    (assoc field :scenes [scene-slug])
+    (update field :scenes conj scene-slug)))
+
+(defn- merge-fields
+  [original fields scene-slug]
+  (let [existing-names (->> original
+                            (map :name)
+                            (into #{}))
+        existing-fields (->> original
+                             (filter #(contains? existing-names %))
+                             (map #(add-field-scene % scene-slug)))
+        new-fields (->> fields
+                       (remove #(contains? existing-names %))
+                       (map #(add-field-scene % scene-slug)))]
+    (->> original
+         (remove #(contains? existing-names %))
+         (concat existing-fields new-fields)
+         (sort-by :name)
+         (into []))))
+
+(defn- save-skills-on-create!
+  [scene-id skills]
+  (db/delete-scene-skills! {:scene_id scene-id})
+  (doall (map #(db/create-scene-skill! {:scene_id scene-id :skill_id %}) skills)))
+
+(defn save-dataset-on-create!
+  [course-id scene-slug {:keys [fields lesson-sets]}]
+  (let [course-lessons (db/get-course-lessons {:course_id course-id})]
+    (when (empty? course-lessons)
+      (create-default-lesson! course-id lesson-sets)))
+  (let [datasets (db/get-datasets-by-course {:course_id course-id})]
+    (doall (for [{:keys [id scheme]} datasets]
+             (db/update-dataset! {:id     id
+                                  :scheme (-> scheme
+                                              (update :fields #(merge-fields % fields scene-slug)))})))))
+
+(defn- merge-lesson-sets
+  [original new]
+  (->> original
+       (concat new)
+       (distinct)
+       (into [])))
+
+(defn save-course-on-create!
+  [course-id scene-slug {:keys [lesson-sets]} scene-name owner-id]
+  (let [created-at (jt/local-date-time)
+        {course-data :data} (db/get-latest-course-version {:course_id course-id})
+        lesson-required? (empty? (get-in course-data [:levels 0 :scheme :lesson :lesson-sets]))
+        lesson-sets-scheme (->> lesson-sets (map keyword) (into []))
+        lesson-sets-lessons (->> lesson-sets (map (juxt keyword default-lesson-name)) (into {}))
+        initial-scene-required? (nil? (get course-data :initial-scene))
+        data (cond-> course-data
+                     :always (assoc-in [:scene-list (keyword scene-slug)] {:name scene-name})
+                     :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
+                     :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
+                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
+                     initial-scene-required? (assoc :initial-scene scene-slug))]
+    (db/save-course! {:course_id  course-id
+                      :data       data
+                      :owner_id   owner-id
+                      :created_at created-at})))
+
+(defn create-scene!
+  [scene-data metadata course-slug scene-name skills owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scene-slug (->kebab-case scene-name)
+        {scene-id :scene-id} (save-scene-on-create! course-id scene-slug scene-data owner-id)]
+    (save-skills-on-create! scene-id skills)
+    (save-dataset-on-create! course-id scene-slug metadata)
+    (save-course-on-create! course-id scene-slug metadata scene-name owner-id)
+    [true {:id          scene-id
+           :name        scene-name
+           :scene-slug  scene-slug
+           :course-slug course-slug}]))

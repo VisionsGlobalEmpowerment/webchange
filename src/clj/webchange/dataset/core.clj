@@ -30,7 +30,7 @@
                           (assoc :course-id course-id)
                           (#(transform-keys ->snake_case_keyword %)))
         [{id :id}] (db/create-dataset! prepared-data)]
-    [true {:id id}]))
+    {:id id}))
 
 (defn update-dataset!
   [dataset-id data]

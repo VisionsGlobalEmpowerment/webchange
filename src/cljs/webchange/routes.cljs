@@ -11,9 +11,12 @@
                   "login"             :login
                   "student-login"     :student-login
                   "register"          :register-user
+                  "create-course"     :create-course
+                  "s"                 {["/" :course-id "/" :scene-id "/" [#".+" :encoded-items]] :sandbox}
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor
                                        ["/" :id "/editor-v2"] :course-editor-v2
+                                       ["/" :course-slug "/create-activity"] :create-activity
                                        ["/" :course-id "/editor-v2/concepts/" :concept-id] :course-editor-v2-concept
                                        ["/" :course-id "/editor-v2/add-concept"] :course-editor-v2-add-concept
                                        ["/" :course-id "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson
@@ -37,6 +40,7 @@
     (re-frame/dispatch [::events/set-active-route params])
     (case handler
       :course (re-frame/dispatch [::ie/start-course (:id route-params)])
+      :sandbox (re-frame/dispatch [::ie/start-sandbox (:course-id route-params) (:scene-id route-params) (:encoded-items route-params)])
 
       :dashboard-class-profile (re-frame/dispatch [::dashboard-events/open-class-profile (:class-id route-params) current-course])
       :dashboard-student-profile (re-frame/dispatch [::dashboard-events/open-student-profile (:student-id route-params) current-course])

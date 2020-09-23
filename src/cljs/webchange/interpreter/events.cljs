@@ -451,7 +451,8 @@
 (re-frame/reg-event-fx
   ::execute-start-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
-    (let [activity-action (lessons-activity/name->activity-action db activity-name)]
+    (let [activity-name (or activity-name (:current-scene db))
+          activity-action (lessons-activity/name->activity-action db activity-name)]
       {:db         (assoc db
                      :activity-started true
                      :activity-start-time (js/Date.)
@@ -593,7 +594,7 @@
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
              (if (not= course-id (:loaded-course db))
                {:dispatch-n (list [::screens/show-course-loading]
-                                  [::load-course course-id scene-id true])})))
+                                  [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::load-course
@@ -968,3 +969,12 @@
       {:db         (update db :settings merge settings)
        :dispatch-n (list [::set-music-volume music-volume]
                          [::set-effects-volume effects-volume])})))
+
+(re-frame/reg-event-fx
+  ::start-sandbox
+  (fn [{:keys [db]} [_ course-id scene-id encoded-lessons]]
+    (let [lessons (some-> encoded-lessons js/decodeURIComponent js/atob js/JSON.parse (js->clj :keywordize-keys true))]
+      {:db (cond-> db
+                   (seq lessons) (assoc-in [:sandbox :loaded-lessons] lessons))
+       :dispatch-n (list [::screens/show-course-loading]
+                         [::load-course course-id scene-id])})))

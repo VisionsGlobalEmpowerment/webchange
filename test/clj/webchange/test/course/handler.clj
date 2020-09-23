@@ -8,11 +8,22 @@
             [webchange.test.course.core :as core]
             [webchange.course.core :as course]
             [webchange.db.core :refer [*db*] :as db]
-            [config.core :refer [env]])
+            [config.core :refer [env]]
+            [ring.swagger.json-schema :as js])
   (:use clj-http.fake))
 
 (use-fixtures :once f/init)
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
+
+(deftest course-can-be-created
+  (let [name "My test Course"
+        course-data {:name name :lang "english" :concept-list-id 1}
+        saved-value (-> (f/create-course! course-data) :body slurp (json/read-str :key-fn keyword))
+        retrieved-value (-> (:slug saved-value) f/get-course :body slurp (json/read-str :key-fn keyword))]
+    (is (= name (:name saved-value)))
+    (is (not (nil? (:id saved-value))))
+    (is (not (nil? (:slug saved-value))))
+    (is (not (nil? (:scene-list retrieved-value))))))
 
 (deftest course-can-be-retrieved
          (let [course (f/course-created)
@@ -27,6 +38,23 @@
                _ (f/save-course! (:slug course) {:course {:initial-scene edited-value}})
                retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
            (is (= edited-value retrieved-value))))
+
+(deftest activity-can-be-created-from-template
+  (let [course (f/course-created)
+        name "Test Activity"
+        activity-data {:name name :template-id 1 :characters [{:skeleton "vera" :name "vera"}] :boxes 3 :skills [2]}
+        saved-response (f/create-activity! (:slug course) activity-data)
+        saved-value (-> saved-response :body slurp (json/read-str :key-fn keyword))
+        retrieved-response (f/get-scene (:course-slug saved-value) (:scene-slug saved-value))
+        retrieved-value (-> retrieved-response :body slurp (json/read-str :key-fn keyword))]
+    (testing "Activity can be created from template"
+      (is (= 200 (:status saved-response)))
+      (is (= 200 (:status retrieved-response)))
+      (is (= name (:name saved-value)))
+      (is (not (nil? (:id saved-value))))
+      (is (not (nil? (:course-slug saved-value))))
+      (is (not (nil? (:scene-slug saved-value))))
+      (is (not (nil? (:objects retrieved-value)))))))
 
 (deftest scene-can-be-retrieved
          (let [scene (f/scene-created)
@@ -187,6 +215,10 @@
 (deftest can-retrieve-retrieve-editor-character-skin
   (let [ _ (course/update-character-skins {:public-dir "test/clj/webchange/resources"})
         skins (core/retrieve-editor-character-skin)]
-    (assert (= (count skins) 2))
-    ))
+    (assert (= (count skins) 2))))
 
+(deftest skills-can-be-retrieved
+  (let [retrieved (-> (f/get-skills) :body slurp (json/read-str :key-fn keyword))]
+    (is (not (empty? (:strands retrieved))))
+    (is (not (empty? (:topics retrieved))))
+    (is (not (empty? (:skills retrieved))))))

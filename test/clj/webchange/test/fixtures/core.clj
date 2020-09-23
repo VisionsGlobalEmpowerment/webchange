@@ -34,6 +34,7 @@
   (db/clear-table :lesson_sets)
   (db/clear-table :dataset_items)
   (db/clear-table :datasets)
+  (db/clear-table :scene_skills)
   (db/clear-table :scene_versions)
   (db/clear-table :scenes)
   (db/clear-table :course_versions)
@@ -255,6 +256,22 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn create-course!
+  [data]
+  (let [course-url (str "/api/courses")
+        request (-> (mock/request :post course-url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn create-activity!
+  [course-slug data]
+  (let [url (str "/api/courses/" course-slug "/create-activity")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
 (defn save-course!
   [course-slug data]
   (let [course-url (str "/api/courses/" course-slug)
@@ -270,7 +287,6 @@
                     (mock/content-type "application/json")
                     (mock/body (json/write-str data))
                     teacher-logged-in)]
-    #_(course-handler/website-api-routes request)
     (handler/dev-handler request)))
 
 (defn get-courses-by-website-user
@@ -356,9 +372,23 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn get-dataset-library
+  []
+  (let [url (str "/api/datasets-library")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
 (defn get-dataset
   [dataset-id]
   (let [url (str "/api/datasets/" dataset-id)
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-dataset-items
+  [dataset-id]
+  (let [url (str "/api/datasets/" dataset-id "/items")
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
@@ -769,3 +799,17 @@
 (defn link-editor-asset-tag [tag_id asset_id]
   (let [path "hello/example.png"]
     (db/link-editor-asset-tag! {:tag_id tag_id :asset_id asset_id})))
+
+(defn get-template-library
+  []
+  (let [url (str "/api/templates")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-skills
+  []
+  (let [url (str "/api/skills")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))

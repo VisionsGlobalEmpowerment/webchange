@@ -10,13 +10,24 @@
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
+(def empty-action-position 0)
+(def inner-action-position 1)
+
 (def default-action {:type "sequence-data"
                      :data [{:type "empty" :duration 0}
                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]})
 
+(defn get-empty-action
+  [action]
+  (get-in action [:data empty-action-position]))
+
+(defn get-inner-action
+  [action]
+  (get-in action [:data inner-action-position]))
+
 (defn get-action [name]
   {:type "sequence-data"
-   :data [{:type "empty"
+   :data [{:type     "empty"
            :duration 0}
           {:type "action" :id name}]})
 
@@ -202,3 +213,18 @@
                                   :anim  "talk"}]]
       {:dispatch-n (list [:api-request-error :load-lip-sync-data]
                          [::update-dialog-audio-action :phrase {:data default-lip-sync-data}])})))
+
+(re-frame/reg-event-fx
+  ::set-phrase-action-phrase
+  (fn [{:keys [_]} [_ text]]
+    {:dispatch-n (list [::update-inner-action {:phrase-text text} 1])}))
+
+(re-frame/reg-event-fx
+  ::set-phrase-action-phrase-translated
+  (fn [{:keys [_]} [_ text]]
+    {:dispatch-n (list [::update-inner-action {:phrase-text-translated text} 1])}))
+
+(re-frame/reg-event-fx
+  ::set-phrase-action-target
+  (fn [{:keys [_]} [_ target]]
+    {:dispatch-n (list [::update-inner-action {:target target} 1])}))
