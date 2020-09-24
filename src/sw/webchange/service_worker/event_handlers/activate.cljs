@@ -9,7 +9,6 @@
   []
   (logger/debug "Activate...")
   (broadcast/send-sync-status :activating)
-
   (course-resources/remove-outdated-data))
 
 (defn- activated

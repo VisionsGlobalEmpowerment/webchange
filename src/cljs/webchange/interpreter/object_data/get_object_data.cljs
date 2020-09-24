@@ -5,32 +5,13 @@
     [webchange.subs :as subs]
     [webchange.interpreter.object-data.group-params :refer [with-group-params]]
     [webchange.interpreter.object-data.navigation-param :refer [with-navigation-params]]
-    [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]))
-
-(def animations {:vera       {:width  380,
-                              :height 537,
-                              :scale  {:x 1, :y 1},
-                              :speed  1
-                              :meshes true
-                              :skin "01 Vera_1"}
-                 :senoravaca {:width  351,
-                              :height 717,
-                              :scale  {:x 1, :y 1}
-                              :speed  1
-                              :meshes true
-                              :skin   "vaca"}
-                 :mari       {:width  910,
-                              :height 601,
-                              :scale  {:x 0.5, :y 0.5}
-                              :speed  1
-                              :meshes true
-                              :skin "01 mari"}
-                 :boxes {:speed 1}})
+    [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]
+    [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]))
 
 (defn prepare-anim-object-params
   "Overwrite animation properties. Set default skin if no skin provided."
   [object]
-  (if-let [anim-data (get animations (-> object :name keyword))]
+  (if-let [anim-data (get animations-params (-> object :name keyword))]
     (merge object anim-data (select-keys object [:skin]))
     object))
 

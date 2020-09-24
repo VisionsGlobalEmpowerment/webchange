@@ -15,18 +15,12 @@
        (then (fn [current-course]
                (let [base-url (case key
                                 :web-app-resources "/api/resources/web-app"
-                                :current-progress (str "/api/courses/" current-course "/current-progress")
-                                :game-resources (str "/api/resources/game-app/" current-course "/lessons-resources"))]
+                                :current-progress (str "/api/courses/" current-course "/current-progress"))]
                  (str base-url (core/get-params-str params)))))
        (catch (fn [error]
                 (logger/warn (str "Can not get URL for key " key) error)
                 (promise-reject error))))))
 
-(defn get-game-resources
-  [lessons]
-  (-> (get-url :game-resources {:lessons (join "," lessons)})
-      (then (fn [url]
-              (core/http-get url)))))
 
 (defn get-web-app-resources
   []

@@ -16,14 +16,21 @@
     (some (fn [{:keys [id] :as dataset}] (and (= id dataset-id) dataset)) datasets)))
 
 (re-frame/reg-sub
+  ::course-scenes
+  (fn [db]
+    (get-in db [:course-data :scene-list])))
+
+(re-frame/reg-sub
   ::after-current-activity
   (fn [db]
-    (let [scenes (get-in db [:course-data :scene-list])
-          next (->> (get-in db [:progress-data :next])
-                    (activity/next-not-finished-for db))]
-      (->> (:activity next)
-           (keyword)
-           (get scenes)))))
+    (->> (get-in db [:progress-data :next])
+         (activity/next-not-finished-for db))))
+
+(re-frame/reg-sub
+  ::lesson-sets-data
+  (fn [db [_ lesson-sets-ids]]
+    (let [lesson-sets (get-in db [:lessons])]
+      (map #(get lesson-sets %) lesson-sets-ids))))
 
 (re-frame/reg-sub
   ::current-lesson-sets-data

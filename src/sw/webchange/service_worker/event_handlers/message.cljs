@@ -41,9 +41,9 @@
                (logger/warn "[Message] Get current course failed:" error)
                (set-current-course course)))))
 
-(defn- handle-cache-lessons
+(defn- handle-cache-resources
   [data]
-  (game-resources/update-cached-lessons data))
+  (game-resources/update-cached-resources data))
 
 (defn handle
   [event]
@@ -55,6 +55,6 @@
     (logger/debug-folded (str "[Message] <" type "> message data:") data)
     (case type
       "set-current-course" (handle-set-current-course data)
-      "cache-lessons" (handle-cache-lessons data)
+      "cache-resources" (handle-cache-resources data)
       "get-current-state" (send-current-state)
       (logger/warn "Unhandled message type:" type))))

@@ -4,11 +4,28 @@
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.sw-utils.state.status :as status]
-    [webchange.student-dashboard.toolbar.sync.state.sync-list :as sync-list]
-    [webchange.student-dashboard.toolbar.sync.views-sync-list :refer [sync-list-modal]]
+    [webchange.student-dashboard.toolbar.sync.sync-list.state.window :as window]
+    [webchange.student-dashboard.toolbar.sync.sync-list.views-sync-window :refer [sync-list-modal]]
     [webchange.student-dashboard.toolbar.sync.icons.icon-ready :refer [icon-ready]]
     [webchange.student-dashboard.toolbar.sync.icons.icon-syncing :refer [icon-syncing]]
     [webchange.student-dashboard.toolbar.sync.icons.icon-unavailable :refer [icon-unavailable]]))
+
+(defn- get-styles
+  []
+  {:progress-container {:width           117
+                        :height          62
+                        :justify-content "center"
+                        :padding-top     0
+                        :padding-bottom  0}
+   :progress-value     {:position    "absolute"
+                        :top         "50%"
+                        :left        "50%"
+                        :margin-top  "-14px"
+                        :margin-left "-11px"
+                        :font-size   "12px"
+                        :display     "block"
+                        :width       "22px"
+                        :text-align  "center"}})
 
 (defn current-version-data
   [{:keys [update-date-str version app-version]}]
@@ -36,6 +53,27 @@
        [:span {:style {:height 14}} update-time]
        [:span {:style {:height 14}} update-date]]]]))
 
+(defn- progress-bar
+  []
+  (let [progress (->> @(re-frame/subscribe [::status/caching-progress])
+                      (* 100)
+                      (Math/round))
+        params {:size      36
+                :thickness 5}
+        styles (get-styles)]
+    [ui/menu-item
+     {:disabled true
+      :style    (:progress-container styles)}
+     (if (some? progress)
+       [:div
+        [ui/circular-progress
+         (merge params
+                {:variant "determinate"
+                 :value   progress})]
+        [:span {:style (:progress-value styles)} progress]]
+       [ui/circular-progress
+        params])]))
+
 (defn current-version
   []
   (let [last-update @(re-frame/subscribe [::status/last-update])
@@ -47,12 +85,9 @@
                  :justify-content "center"
                  :padding-top     0
                  :padding-bottom  0}}
-     (if (nil? last-update)
-       [ui/circular-progress
-        {:size 24}]
-       [current-version-data {:update-date-str last-update
-                              :version         version
-                              :app-version     app-version}])]))
+     [current-version-data {:update-date-str last-update
+                            :version         version
+                            :app-version     app-version}]]))
 
 (defn- sync-status-icon
   [sync-status]
@@ -77,7 +112,7 @@
               (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
                     sync-status @(re-frame/subscribe [::status/sync-status])
                     handle-select-resources-click #(do (reset! menu-anchor nil)
-                                                       (re-frame/dispatch [::sync-list/open]))]
+                                                       (re-frame/dispatch [::window/open]))]
                 [:div
                  [ui/tooltip {:title (name sync-status)}
                   [ui/icon-button
@@ -89,9 +124,12 @@
                    :open                    (boolean @menu-anchor)
                    :disable-auto-focus-item true
                    :on-close                #(reset! menu-anchor nil)}
-                  [ui/menu-item
-                   {:on-click handle-select-resources-click}
-                   "Select Resources"]
-                  [ui/divider]
-                  [current-version]]
+                  (if (= sync-status :syncing)
+                    [progress-bar]
+                    [:div
+                     [ui/menu-item
+                      {:on-click handle-select-resources-click}
+                      "Select Resources"]
+                     [ui/divider]
+                     [current-version]])]
                  [sync-list-modal]])))

@@ -18,11 +18,6 @@
     (assoc db :viewport value)))
 
 (re-frame/reg-event-db
-  ::set-scene
-  (fn [db [_ [scene-id scene]]]
-    (assoc-in db [:scenes scene-id] scene)))
-
-(re-frame/reg-event-db
   ::set-loading-progress
   (fn [db [_ scene-id value]]
     (assoc-in db [:scene-loading-progress scene-id] value)))

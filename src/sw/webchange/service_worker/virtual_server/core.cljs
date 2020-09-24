@@ -20,6 +20,10 @@
                  (logger/warn "Can not add endpoints" error)
                  (promise-reject error))))))
 
+(defn get-endpoints
+  []
+  (cache/get-cached))
+
 (defn api-request?
   [request]
   (let [pathname (request-pathname request)]

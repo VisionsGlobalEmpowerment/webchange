@@ -5,45 +5,40 @@
     [webchange.service-worker.cache.game :as game-cache]
     [webchange.service-worker.db.state :as db-state]
     [webchange.service-worker.logger :as logger]
-    [webchange.service-worker.requests.api :as api]
     [webchange.service-worker.virtual-server.core :as vs]
     [webchange.service-worker.wrappers :refer [promise-all promise-resolve then]]))
 
-(defn- cache-lessons
-  [lessons-list]
-  (logger/debug "Cache lessons" lessons-list)
+(defn- cache-resources
+  [resources endpoints]
+  (logger/debug-folded "Resources to cache" resources)
+  (logger/debug-folded "Endpoints to cache" endpoints)
   (broadcast/send-sync-status :syncing)
-  (-> (api/get-game-resources lessons-list)
-      (then (fn [{:keys [resources endpoints]}]
-              (logger/debug-folded "Lessons resources to cache" resources)
-              (logger/debug-folded "Lessons endpoints to cache" endpoints)
-              (promise-all [(game-cache/cache-resources resources)
-                            (vs/add-endpoints endpoints)])))
+  (-> (promise-all [(game-cache/reset-resources resources
+                                                {:on-progress #(broadcast/send-current-state {:caching-progress %})})
+                    (vs/add-endpoints endpoints)])
       (then (fn []
-              (promise-all [(db-state/set-cached-lessons lessons-list)
+              (promise-all [
+                            ;(db-state/set-cached-resources {:resources resources
+                            ;                                :endpoints endpoints})
                             (db-state/set-last-update)])))
-      (then (fn [[new-lessons-list last-update]]
-              (broadcast/send-current-state {:cached-lessons new-lessons-list
-                                             :last-update    last-update})
+      (then (fn [[last-update]]
+              (broadcast/send-current-state {:cached-resources {:resources resources
+                                                                :endpoints endpoints}
+                                             :last-update      last-update})
               (broadcast/send-sync-status :synced)
-              (promise-resolve lessons-list)))))
+              (promise-resolve))))
+  )
 
-(defn update-cached-lessons
-  [update-lessons-data]
-  (logger/debug "Update cached lessons data" update-lessons-data)
-  (-> (db-state/get-cached-lessons)
-      (then (fn [stored-lessons]
-              (let [new-lessons-list (-> (set stored-lessons)
-                                         (union (set (:add update-lessons-data)))
-                                         (difference (set (:remove update-lessons-data)))
-                                         (vec))]
-                (cache-lessons new-lessons-list))))))
+(defn update-cached-resources
+  [update-resources-data]
+  (logger/debug "Update cached resources" update-resources-data)
+  (cache-resources (get-in update-resources-data [:resources] [])
+                   (get-in update-resources-data [:endpoints] [])))
 
-(defn restore-cached-lessons
+(defn get-cached-resources
   []
-  (logger/debug "Restore cached lessons data")
-  (-> (db-state/get-cached-lessons)
-      (then (fn [stored-lessons]
-              (if-not (empty? stored-lessons)
-                (cache-lessons stored-lessons)
-                (promise-resolve))))))
+  (-> (promise-all [(game-cache/get-cached-resources)
+                    (vs/get-endpoints)])
+      (then (fn [[resources endpoints]]
+              {:resources resources
+               :endpoints endpoints}))))

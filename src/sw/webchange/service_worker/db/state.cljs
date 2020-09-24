@@ -5,7 +5,7 @@
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.wrappers :refer [catch promise-resolve then]]))
 
-(def cached-lessons-key "cached-lessons")
+(def cached-resources-key "cached-resources")
 (def last-update-key "last-update")
 
 (defn- set-value
@@ -37,12 +37,13 @@
   (let [date (-> (js/Date.) (.toString))]
     (set-value last-update-key date)))
 
-(defn get-cached-lessons
+(defn get-cached-resources
   []
-  (-> (get-value cached-lessons-key)
-      (then (fn [lessons]
-              (or lessons [])))))
+  (-> (get-value cached-resources-key)
+      (then (fn [resources]
+              (or resources {:resources []
+                             :endpoints []})))))
 
-(defn set-cached-lessons
-  [lessons]
-  (set-value cached-lessons-key lessons))
+(defn set-cached-resources
+  [resources]
+  (set-value cached-resources-key resources))
