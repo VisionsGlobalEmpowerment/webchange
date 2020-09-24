@@ -23,6 +23,10 @@
   []
   (let [open? @(re-frame/subscribe [::window/open?])
         lessons @(re-frame/subscribe [::resources/lessons])
+        selected-lessons-count (->> lessons
+                                    (map :selected?)
+                                    (filter true?)
+                                    (count))
         loading? @(re-frame/subscribe [::resources/loading])
         handle-save #(re-frame/dispatch [::window/save])
         handle-close #(re-frame/dispatch [::window/close])
@@ -39,6 +43,9 @@
      [ui/dialog-content
       [ui/dialog-content-text
        "Select levels/scenes to be available offline."]
+      (when (= selected-lessons-count 0)
+        [ui/dialog-content-text {:style {:color "#ff9f21"}}
+         "No lesson selected"])
       [ui/divider {:style {:margin "15px 0px"}}]
       (if loading?
         [loading-block]
