@@ -31,14 +31,15 @@
   (doseq [school (:schools (school-core/get-schools))]
     (core/load-full! school)))
 
+(defn update-assets! [config]
+  (println "Update assets....")
+  (core/update-assets!))
+
 (defn download-course-data! [config school-id]
   (println "Update course data....")
   (core/update-course-data! school-id)
-  (println "Update assets....")
-  (core/update-assets!)
-  (println "Done!")
-  )
-
+  (update-assets! config)
+  (println "Done!"))
 
 (defn upload-local-files!
   [config path]
@@ -73,6 +74,9 @@
    "download-course-data"
    (fn [config args]
      (apply download-course-data! config args))
+   "update-assets"
+   (fn [config args]
+     (apply update-assets! config args))
    "upload-local-files"
    (fn [config args]
      (apply upload-local-files! env args))
