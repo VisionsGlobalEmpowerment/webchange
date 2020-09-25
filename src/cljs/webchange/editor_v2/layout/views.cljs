@@ -9,14 +9,17 @@
 
 (defn- get-styles
   []
-  {:main-container    {:height         "100%"
-                       :display        "flex"
-                       :flex-direction "column"}
-   :toolbar-container {:height    "64px"
-                       :flex-grow 0}
-   :content-container {:padding   "32px"
-                       :flex-grow 1
-                       :overflow  "auto"}})
+  {:main-container             {:height         "100%"
+                                :display        "flex"
+                                :flex-direction "column"}
+   :toolbar-container          {:height    "64px"
+                                :flex-grow 0}
+   :content-container          {:padding   "32px"
+                                :flex-grow 1
+                                :overflow  "auto"}
+   :content-container-centered {:display         "flex"
+                                :justify-content "center"
+                                :align-items     "start"}})
 
 (defn- modal-windows
   []
@@ -27,12 +30,15 @@
    [delete-dataset-item-modal]])
 
 (defn layout
-  []
+  [{:keys [align]
+    :or   {align "left"}}]
   (let [this (r/current-component)
-        styles (get-styles)]
+        styles (get-styles)
+        content-styles (cond-> (:content-container styles)
+                               (= align "center") (merge (:content-container-centered styles)))]
     [:div {:style (:main-container styles)}
      [:div {:style (:toolbar-container styles)}
       [toolbar (select-keys (r/props this) [:title :breadcrumbs])]]
-     (into [:div {:style (:content-container styles)}]
+     (into [:div {:style content-styles}]
            (r/children this))
      [modal-windows]]))
