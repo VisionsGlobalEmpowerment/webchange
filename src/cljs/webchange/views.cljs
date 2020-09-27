@@ -112,6 +112,7 @@
     :finished-activities [student-dashboard-finished-page]
 
     ;;wizard
+    :game-changer [wizard/game-changer-panel]
     :create-course [wizard/create-course-panel]
     :create-activity [wizard/create-activity-panel (:course-slug route-params)]
     [page-404]))

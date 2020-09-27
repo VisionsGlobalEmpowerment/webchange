@@ -76,7 +76,6 @@
 (defn- modify-common-props
   [props]
   (-> props
-      (assoc :visible true)
       (dissoc :filters)
       (dissoc :on-click)))
 
