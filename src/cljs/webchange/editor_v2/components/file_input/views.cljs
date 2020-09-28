@@ -58,6 +58,7 @@
                              :on-drag-leave #(do (.preventDefault %)
                                                  (reset! drag-over? false))
                              :on-drop       #(do (.preventDefault %)
+                                                 (reset! drag-over? false)
                                                  (-> % drop-event->file on-change))
                              :style         (if @drag-over?
                                               (:button-drag-over styles)
