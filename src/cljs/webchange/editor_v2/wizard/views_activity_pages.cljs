@@ -58,7 +58,6 @@
                                         (reset! add-tooltip-open? true)))]
                 (when (nil? values)
                   (swap! data assoc key []))
-
                 [ui/grid {:container   true
                           :justify     "center"
                           :spacing     16
@@ -90,7 +89,7 @@
                        [ui/form-control {:full-width true}
                         [ui/text-field {:label     "Text"
                                         :variant   "outlined"
-                                        :value     (:name page)
+                                        :value     (get page :text "")
                                         :on-change #(swap! data assoc-in [key idx :text] (-> % .-target .-value))
                                         :style     {:min-width "500px"}}]]]
                       [ui/grid {:item true :xs 12}
