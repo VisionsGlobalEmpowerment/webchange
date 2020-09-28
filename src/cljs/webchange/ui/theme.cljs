@@ -50,9 +50,13 @@
                                                       :flat      {:background-color (get-in color-themes [theme :palette :flat-button :background-color])
                                                                   :padding          "6px 40px"
                                                                   :border-radius    "15px"}}
-                                   :MuiOutlinedInput {:input {:padding "11.5px 14px"}}
+                                   :MuiOutlinedInput {:input {:padding "10px 19px"}}
                                    :MuiInputLabel    {:formControl {:transform "translate(20px, 28px)"}
-                                                      :outlined {:transform "translate(14px, 14px)"}}
+                                                      :outlined    {:transform "translate(20px, 12px)"}
+                                                      :shrink      {:background-color (get-in color-themes [theme :palette :background :paper])
+                                                                    :padding          "0 5px"
+                                                                    :transform        "translate(13px, 10.5px) scale(0.75)"
+                                                                    :z-index          1}}
                                    :MuiList          {:root {:background-color (get-in color-themes [theme :palette :background :paper])
                                                              :padding          "8px"}}
                                    :MuiMenu          {:paper {:margin-top  "-2px"
@@ -67,6 +71,7 @@
                                                                    :padding       "10px 19px"
                                                                    :text-align    "start"
                                                                    :&:focus       {:border-radius "6px"}}
+                                                      :select     {:&:focus {:background-color (get-in color-themes [theme :palette :background :paper])}}
                                                       :icon       {:right "9px"
                                                                    :color (get-in color-themes [theme :palette :border :default])}}}}]
     (create-mui-theme (deep-merge common-theme color-theme))))
