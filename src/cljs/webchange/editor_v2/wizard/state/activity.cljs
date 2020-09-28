@@ -58,10 +58,28 @@
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::create-activity-success]
-                  :on-failure      [:api-request-error :create-course]}}))
+                  :on-failure      [:api-request-error :create-activity]}}))
 
 (re-frame/reg-event-fx
   ::create-activity-success
   (fn [{:keys [db]} [_ result]]
     {:dispatch-n (list [:complete-request :create-course])
      :redirect [:course-editor-v2-scene :id (:course-slug result) :scene-id (:scene-slug result)]}))
+
+(re-frame/reg-event-fx
+  ::create-simple-activity
+  (fn [{:keys [db]} [_ data]]
+    (let [course-data (select-keys data [:name :lang])]
+      {:db         (assoc-in db [:loading :create-course] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/courses")
+                    :params          course-data
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::create-simple-activity-success data]
+                    :on-failure      [:api-request-error :create-course]}})))
+
+(re-frame/reg-event-fx
+  ::create-simple-activity-success
+  (fn [{:keys [db]} [_ data result]]
+    {:dispatch-n (list [:complete-request :create-course] [::create-activity (:slug result) data])}))

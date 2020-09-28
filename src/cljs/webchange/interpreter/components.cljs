@@ -42,7 +42,7 @@
   (cond
     (nil? scene-id) nil
     (empty? scene-data) nil
-    (empty? dataset-items) nil                              ;; ToDo: actually do not stat scene until datasets are loaded
+    (nil? dataset-items) nil   ;; ToDo: actually do not start scene until datasets are loaded, there might be no datasets at all
     :else {:scene-id  scene-id
            :objects   (get-scene-objects-data scene-id (:scene-objects scene-data))
            :resources (get-scene-resources scene-id scene-data)

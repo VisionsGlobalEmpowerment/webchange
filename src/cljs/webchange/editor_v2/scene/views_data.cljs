@@ -8,6 +8,7 @@
     [webchange.interpreter.core :refer [load-course]]
     [webchange.editor-v2.scene.data.background.views-background :refer [change-background]]
     [webchange.editor-v2.scene.data.skin.views-skin :refer [change-skin]]
+    [webchange.editor-v2.scene.data.stage.views :refer [select-stage]]
     [webchange.editor-v2.sandbox.views-modal :as share]
     [webchange.editor-v2.events :as editor-events]
     [webchange.editor-v2.utils :refer [keyword->caption]]))
@@ -68,7 +69,7 @@
     (let [objects (scene-data->objects-list @scene-data)
           scenes-options (get-scenes-options @scenes)]
       [:div.data-selector
-       [ui/form-control {:full-width true
+       #_[ui/form-control {:full-width true
                          :margin     "normal"}
         [ui/input-label "Scene"]
         [ui/select {:value     (or @scene-id "")
@@ -80,6 +81,7 @@
                           :style    {:text-transform "capitalize"}}
             text])]]
        [change-background]
+       [share/share-button]
        [change-skin]
        (when (not-empty objects)
          [ui/form-control {:full-width true
@@ -91,4 +93,4 @@
            (for [[object-id {:keys [type]}] objects]
              ^{:key (name object-id)}
              [ui/menu-item {:value object-id} (str (name object-id) " (" type ")")])]])
-       [share/share-button]])))
+       [select-stage]])))

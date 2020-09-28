@@ -4,7 +4,8 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.editor-v2.scene.state.db :refer [path-to-db]]
     [webchange.subs :as subs]
-    [webchange.editor.events :as edit-scene]))
+    [webchange.editor.events :as edit-scene]
+    [webchange.editor-v2.scene.state.stage :as stage-state]))
 
 (def default-dimension {:width  1920
                         :height 1080})
@@ -198,4 +199,5 @@
                                                      :state    background-state}]
                          [::edit-scene/update-current-scene-object {:target (:name background)
                                                                    :state  background-state}]
-                         [::edit-scene/save-current-scene current-scene])})))
+                         [::edit-scene/save-current-scene current-scene]
+                         [::stage-state/reset-stage])})))

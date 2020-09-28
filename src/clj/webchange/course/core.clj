@@ -11,11 +11,12 @@
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]))
 
+(def editor_asset_type_single-background "single-background")
 (def editor_asset_type_background "background")
 (def editor_asset_type_surface "surface")
 (def editor_asset_type_decoration "decoration")
 
-(def editor_asset_types [editor_asset_type_background editor_asset_type_surface editor_asset_type_decoration])
+(def editor_asset_types [editor_asset_type_single-background editor_asset_type_background editor_asset_type_surface editor_asset_type_decoration])
 
 (def hardcoded (env :hardcoded-courses {"test" true}))
 

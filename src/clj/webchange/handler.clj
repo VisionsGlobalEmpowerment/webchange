@@ -111,6 +111,7 @@
            (GET "/courses/:id/dashboard/finished" request (authenticated-route request {:student-page true}))
 
            ;; Wizard
+           (GET "/game-changer" request (authenticated-route request))
            (GET "/create-course" request (authenticated-route request))
            (GET "/courses/:course-slug/create-activity" request (authenticated-route request))
 

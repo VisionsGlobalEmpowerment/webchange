@@ -74,7 +74,8 @@
   [data request]
   (let [owner-id (current-user request)
         course (core/create-course data owner-id)]
-    (datasets-library/create-dataset! (-> course second :slug) (:concept-list-id data))
+    (when (:concept-list-id data)
+      (datasets-library/create-dataset! (-> course second :slug) (:concept-list-id data)))
     (handle course)))
 
 (defn handle-create-activity
@@ -86,10 +87,10 @@
         handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str)})
-(s/defschema CreateCourse {:name s/Str :lang s/Str :concept-list-id s/Int})
+(s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :concept-list-id) s/Int})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
-(s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "background" "surface" "decoration")})
+(s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration")})
 (s/defschema CharacterSkin {:name s/Str :width s/Num :height s/Num :skins [s/Str] :animations [s/Str]})
 
 (s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})

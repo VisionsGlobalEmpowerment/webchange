@@ -7,28 +7,28 @@
         :name        "book"
         :description "Simple book"
         :options     {:title {:label "Title"
-                              :type "string"}
+                              :type  "string"}
                       :pages {:label "Pages"
                               :type  "pages"
                               :max   10}}})
 
-(def t {:assets        [{:url "/raw/img/book/books_02.jpg", :size 10, :type "image"}
-                        {:url "/raw/img/ui/back_button_01.png" :size 1 :type "image"}
-                        {:url "/raw/img/demo/book1/2-fawn-running.jpg" :size 5 :type "image"}
-                        {:url "/raw/img/demo/book1/3-fawn-and-rabbit-running.jpg" :size 5 :type "image"}
-                        {:url "/raw/img/demo/book1/4-fawn-and-elephant-running.jpg" :size 5 :type "image"}
-                        {:url "/raw/img/demo/book1/5-fawn-leaping-across-stream.jpg" :size 5 :type "image"}]
+(def t {:assets        [{:url "/raw/clipart/book/books_02_single-background.png", :size 10, :type "image"}
+                        {:url "/raw/img/ui/back_button_01.png" :size 1 :type "image"}]
         :objects       {:background      {:type "background"
-                                          :src  "/raw/img/book/books_02.jpg"}
+                                          :src  "/raw/clipart/book/books_02_single-background.png"}
                         :next-page-arrow {:type    "image",
-                                          :x 1770
-                                          :y 500
+                                          :x       1770
+                                          :y       500
                                           :width   97,
                                           :height  99,
                                           :actions {:click {:id "next-page", :on "click", :type "action"}},
                                           :scale-x -1,
-                                          :src     "/raw/img/ui/back_button_01.png"},}
-        :scene-objects [["background" "next-page-arrow"]],
+                                          :src     "/raw/img/ui/back_button_01.png"}
+                        :group-0         {:type "group" :children ["title"] :x 370 :y 400}
+                        :title           {:type "text" :width 1180 :align "center" :vertical-align "top" :font-family "Lexend Deca" :font-size 120
+                                          :text nil :chunks nil}
+                        }
+        :scene-objects [["background" "next-page-arrow" "group-0"]],
         :actions       {:dialog-1-title {:type               "sequence-data",
                                          :concept-var        "current-word",
                                          :data               [{:type "sequence-data"
@@ -40,7 +40,7 @@
                                                                        :animation   "bounce",
                                                                        :phrase-text nil}]}],
                                          :phrase             "dialog-title",
-                                         :phrase-description "Dialog title",
+                                         :phrase-description "Title",
                                          :dialog-track       "1 Title"}
 
                         :next-page      {:type "sequence-data"
@@ -59,7 +59,9 @@
                                                 {:type "empty" :duration 1000}
                                                 {:type "action" :id "dialog-1-title"}]}}
         :triggers
-                       {:start {:on "start", :action "intro"}}})
+                       {:start {:on "start", :action "intro"}}
+        :metadata      {:stages [{:name    "Title"
+                                  :objects ["background" "next-page-arrow" "group-0"]}]}})
 
 (defn- group-name
   [idx]
@@ -93,9 +95,9 @@
   (let [group-name (group-name idx)
         image-name (str "image-" idx)
         text-name (str "text-" idx)]
-    {(keyword group-name) {:type "group" :children [image-name text-name] :visible false :x 370 :y 130 }
+    {(keyword group-name) {:type "group" :children [image-name text-name] :visible false :x 370 :y 130}
      (keyword image-name) {:type "image" :src img :x 590 :y 320 :origin {:type "center-center"} :max-width 1180 :max-height 640}
-     (keyword text-name)  {:type "text" :x 0 :y 670 :width 1180 :vertical-align "top" :font-family "Lexend Deca" :font-size 80
+     (keyword text-name)  {:type "text" :x 0 :y 640 :width 1180 :vertical-align "top" :font-family "Lexend Deca" :font-size 80
                            :text text :chunks (text->chunks text)}}))
 
 (defn- create-page-dialog
@@ -111,10 +113,20 @@
                                               :animation   "bounce",
                                               :phrase-text text}]}],
                 :phrase             (str "dialog-page-" idx),
-                :phrase-description (str "Page dialog " idx),
+                :phrase-description (str "Page " idx),
                 :dialog-track       "2 Pages"}
         name (str "dialog-" idx "-page")]
     {(keyword name) dialog}))
+
+(defn- create-page-stage
+  [idx]
+  (let [group-name (group-name idx)]
+    {:name    (str "Page " idx)
+     :objects ["background" "next-page-arrow" group-name]}))
+
+(defn- create-asset
+  [{img :img}]
+  {:url img :size 1 :type "image"})
 
 (defn- add-pages
   [t pages]
@@ -124,23 +136,24 @@
         dialog-container (->> pages
                               (map-indexed (fn [idx p] (create-page-dialog (inc idx) p)))
                               (reduce merge))
-        group-names (->> (count pages) (range) (map inc) (map group-name) (into []))]
+        assets (map create-asset pages)
+        group-names (->> (count pages) (range) (map inc) (map group-name) (into []))
+        stages (->> (count pages) (range) (map inc) (map create-page-stage) (into []))]
     (-> t
+        (update :assets concat assets)
+        (update :assets vec)
         (update :objects merge page-container)
+        (update :scene-objects conj group-names)
         (update :actions merge dialog-container)
-        (update :scene-objects conj group-names))))
+        (update-in [:metadata :stages] concat stages)
+        (update-in [:metadata :stages] vec))))
 
 (defn- add-title
   [t title]
-  (let [title-name "title"
-        group-object {:type "group" :children [title-name] :x 370 :y 400}
-        text-object {:type "text" :width 1180 :align "center":vertical-align "top" :font-family "Lexend Deca" :font-size 120
-                     :text title :chunks (text->chunks title)}]
-    (-> t
-        (assoc-in [:objects :group-0] group-object)
-        (assoc-in [:objects :title] text-object)
-        (assoc-in [:actions :dialog-1-title :data 0 :data 1 :phrase-text] title)
-        (update :scene-objects conj ["group-0"]))))
+  (-> t
+      (assoc-in [:objects :title :text] title)
+      (assoc-in [:objects :title :chunks] (text->chunks title))
+      (assoc-in [:actions :dialog-1-title :data 0 :data 1 :phrase-text] title)))
 
 (defn f
   [args]
