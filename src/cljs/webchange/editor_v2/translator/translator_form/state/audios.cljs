@@ -2,7 +2,6 @@
   (:require
     [ajax.core :refer [json-response-format]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.state.select-method :as add-audio.select-method]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
@@ -35,9 +34,9 @@
   ::init-state
   (fn [{:keys [db]} [_]]
     (let [concept-audios (translator-form.concepts/concepts-audios db)]
-      {:dispatch-n (->> concept-audios
-                        (map (fn [{:keys [url] :as data}] [::translator-form.scene/add-asset-if-not-exist url data]))
-                        (concat (list [::add-audio.select-method/init-state])))})))
+      {:dispatch-n (map (fn [{:keys [url] :as data}]
+                          [::translator-form.scene/add-asset-if-not-exist url data])
+                        concept-audios)})))
 
 (re-frame/reg-event-fx
   ::upload-audio
