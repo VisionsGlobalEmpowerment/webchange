@@ -80,16 +80,34 @@
   [data]
   (let [skills (-> @(re-frame/subscribe [::state-activity/skills]) :skills)
         styles (get-styles)]
-    [ui/form-control {:style (:control-container styles)}
-     [ui/input-label "Skills"]
-     [ui/select {:multiple     true
-                 :render-value #(r/create-element react-render-selected %)
-                 :value        (:skills @data)
-                 :on-change    #(swap! data assoc :skills (->> % .-target .-value))
-                 :style        (:control styles)}
-      (for [skill skills]
-        ^{:key (:id skill)}
-        [ui/menu-item {:value (:id skill)} (:name skill)])]]))
+    (if (some? skills)
+      [ui/form-control {:style (:control-container styles)}
+       [ui/input-label "Skills"]
+       [ui/select {:multiple     true
+                   :render-value #(r/create-element react-render-selected %)
+                   :value        (:skills @data)
+                   :on-change    #(swap! data assoc :skills (->> % .-target .-value))
+                   :style        (:control styles)}
+        (for [skill skills]
+          ^{:key (:id skill)}
+          [ui/menu-item {:value (:id skill)} (:name skill)])]]
+      [ui/circular-progress])))
+
+(defn- activity-template
+  [{:keys [data templates on-change validator]}]
+  (let [styles (get-styles)
+        {:keys [error-message]} validator]
+    (if (some? templates)
+      [ui/form-control {:style (:control-container styles)}
+       [ui/input-label "Template"]
+       [ui/select {:value     (or (:template-id @data) "")
+                   :on-change #(on-change (-> % .-target .-value))
+                   :style     (:control styles)}
+        (for [template templates]
+          ^{:key (:id template)}
+          [ui/menu-item {:value (:id template)} (:name template)])]
+       [error-message {:field-name :template-id}]]
+      [ui/circular-progress])))
 
 (defn- activity-info
   [{:keys [data validator]}]
@@ -117,15 +135,10 @@
       [activity-skill-info data]
       [error-message {:field-name :skills}]]
      [ui/grid {:item true :xs 12}
-      [ui/form-control {:style (:control-container styles)}
-       [ui/input-label "Template"]
-       [ui/select {:value     (or (:template-id @data) "")
-                   :on-change #(handle-change-template (-> % .-target .-value))
-                   :style     (:control styles)}
-        (for [template templates]
-          ^{:key (:id template)}
-          [ui/menu-item {:value (:id template)} (:name template)])]
-       [error-message {:field-name :template-id}]]]
+      [activity-template {:data      data
+                          :templates templates
+                          :on-change handle-change-template
+                          :validator validator}]]
      (when (some? current-template)
        [ui/grid {:item true :xs 12} [ui/divider]])
      (when (some? current-template)
