@@ -3,7 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]))
 
 (defn string-option
-  [key option data]
+  [{:keys [key option data]}]
   [ui/grid {:container   true
             :justify     "center"
             :spacing     16

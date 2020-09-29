@@ -49,7 +49,7 @@
                                   :on-change #(on-change (-> % .-target .-value))}]]])))
 
 (defn pages-option
-  [key option data]
+  [{:keys [key option data]}]
   (r/with-let [add-tooltip-open? (r/atom false)]
               (let [values (get @data key)
                     handle-add-page (fn []

@@ -5,8 +5,29 @@
 
 (def animation-names ["senoravaca" "vera" "mari"])
 
+(defn- character-option
+  [{:keys [idx key character data]}]
+  [ui/grid {:container true
+            :spacing   16
+            :style     {:margin-top "-16px"}}
+   [ui/grid {:item true :xs 6}
+    [ui/form-control {:full-width true}
+     [ui/text-field {:label     "Name"
+                     :variant   "outlined"
+                     :value     (get character :name "")
+                     :style     {:margin-top "16px"}
+                     :on-change #(swap! data assoc-in [key idx :name] (-> % .-target .-value))}]]]
+   [ui/grid {:item true :xs 6}
+    [ui/form-control {:full-width true}
+     [ui/input-label "Character"]
+     [ui/select {:value     (get character :skeleton "")
+                 :on-change #(swap! data assoc-in [key idx :skeleton] (-> % .-target .-value))}
+      (for [animation-name animation-names]
+        ^{:key animation-name}
+        [ui/menu-item {:value animation-name} animation-name])]]]])
+
 (defn characters-option
-  [key option data]
+  [{:keys [key option data]}]
   (r/with-let [add-tooltip-open? (r/atom false)]
               (let [values (get @data key)
                     handle-add-option (fn []
@@ -39,21 +60,7 @@
                  (for [[idx character] (map-indexed list values)]
                    ^{:key idx}
                    [ui/grid {:item true :xs 12}
-                    [ui/grid {:container true
-                              :spacing   16
-                              :style     {:margin-top "-16px"}}
-                     [ui/grid {:item true :xs 6}
-                      [ui/form-control {:full-width true}
-                       [ui/text-field {:label     "Name"
-                                       :variant   "outlined"
-                                       :value     (get character :name "")
-                                       :style     {:margin-top "16px"}
-                                       :on-change #(swap! data assoc-in [key idx :name] (-> % .-target .-value))}]]]
-                     [ui/grid {:item true :xs 6}
-                      [ui/form-control {:full-width true}
-                       [ui/input-label "Character"]
-                       [ui/select {:value     (get character :skeleton "")
-                                   :on-change #(swap! data assoc-in [key idx :skeleton] (-> % .-target .-value))}
-                        (for [animation-name animation-names]
-                          ^{:key animation-name}
-                          [ui/menu-item {:value animation-name} animation-name])]]]]])])))
+                    [character-option {:idx       idx
+                                       :key       key
+                                       :character character
+                                       :data      data}]])])))
