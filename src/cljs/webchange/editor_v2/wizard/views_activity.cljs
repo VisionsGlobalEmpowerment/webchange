@@ -63,7 +63,7 @@
     nil))
 
 (defn template-info
-  [{:keys [template data]}]
+  [{:keys [template data validator]}]
   [ui/grid {:container   true
             :justify     "space-between"
             :spacing     24
@@ -71,9 +71,10 @@
    (for [[key option] (:options template)]
      ^{:key key}
      [ui/grid {:item true :xs 12}
-      [option-info {:key    key
-                    :option option
-                    :data   data}]])])
+      [option-info {:key       key
+                    :option    option
+                    :data      data
+                    :validator validator}]])])
 
 (defn activity-skill-info
   [data]
@@ -134,35 +135,35 @@
          (:description current-template)]])
      (when (some? current-template)
        [ui/grid {:item true :xs 12}
-        [template-info {:template current-template
-                        :data     data}]])]))
+        [template-info {:template  current-template
+                        :data      data
+                        :validator validator}]])]))
 
 (defn create-activity-panel
   [course-slug]
   (re-frame/dispatch [::state-activity/load-templates])
   (re-frame/dispatch [::state-activity/load-skills])
   (r/with-let [data (r/atom {:skills []})
-               validation-data (r/atom {})]
-              (let [{:keys [valid?] :as validator} (validator/init data validation-data validation-map)
-                    handle-save (fn []
-                                  (when (valid?)
-                                    (re-frame/dispatch [::state-activity/create-activity course-slug @data])))
-                    styles (get-styles)]
-                [layout {:title "Activity"
-                         :align "center"}
-                 [ui/card {:style (:card styles)}
-                  [ui/dialog-title
-                   "Create Activity"]
-                  [ui/card-content
-                   [ui/grid {:container   true
-                             :justify     "center"
-                             :spacing     24
-                             :align-items "center"}
-                    [ui/grid {:item true :xs 12}
-                     [activity-info {:data      data
-                                     :validator validator}]]]]
-                  [ui/card-actions {:style (:actions styles)}
-                   [ui/button {:color    "secondary"
-                               :style    (:save-button styles)
-                               :on-click handle-save}
-                    "Save"]]]])))
+               {:keys [valid?] :as validator} (validator/init data validation-map)]
+    (let [handle-save (fn []
+                        (when (valid?)
+                          (re-frame/dispatch [::state-activity/create-activity course-slug @data])))
+          styles (get-styles)]
+      [layout {:title "Activity"
+               :align "center"}
+       [ui/card {:style (:card styles)}
+        [ui/dialog-title
+         "Create Activity"]
+        [ui/card-content
+         [ui/grid {:container   true
+                   :justify     "center"
+                   :spacing     24
+                   :align-items "center"}
+          [ui/grid {:item true :xs 12}
+           [activity-info {:data      data
+                           :validator validator}]]]]
+        [ui/card-actions {:style (:actions styles)}
+         [ui/button {:color    "secondary"
+                     :style    (:save-button styles)
+                     :on-click handle-save}
+          "Save"]]]])))
