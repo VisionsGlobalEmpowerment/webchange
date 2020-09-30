@@ -3,8 +3,16 @@
     [webchange.service-worker.cache.core :as core]
     [webchange.service-worker.wrappers :refer [then]]))
 
-(defn cache-resources
-  [resources]
+(defn reset-resources
+  ([resources]
+   (reset-resources resources {}))
+  ([resources options]
   (-> (core/get-cache-name :game)
       (then (fn [cache-name]
-              (core/cache-resources cache-name resources)))))
+              (core/reset-resources cache-name resources options))))))
+
+(defn get-cached-resources
+  []
+  (-> (core/get-cache-name :game)
+      (then (fn [cache-name]
+              (core/get-cached-resources cache-name)))))

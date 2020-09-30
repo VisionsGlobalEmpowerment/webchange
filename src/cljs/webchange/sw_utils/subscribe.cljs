@@ -13,8 +13,11 @@
   (if-let [last-update (:last-update data)]
     (re-frame/dispatch [::status/set-last-update last-update]))
 
-  (if-let [cached-lessons (:cached-lessons data)]
-    (re-frame/dispatch [::resources/set-cached-lessons cached-lessons])))
+  (if-let [caching-progress (:caching-progress data)]
+    (re-frame/dispatch [::status/set-caching-progress caching-progress]))
+
+  (if-let [cached-resources (:cached-resources data)]
+    (re-frame/dispatch [::resources/set-cached-resources cached-resources])))
 
 (defn- set-sync-status
   [value]

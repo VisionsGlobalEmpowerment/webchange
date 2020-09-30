@@ -33,7 +33,7 @@
   (post-message {:type (:set-current-course config/messages)
                  :data {:course course-id}}))
 
-(defn cache-lessons
-  [lessons]
-  (post-message {:type (:cache-lessons config/messages)
-                 :data lessons}))
+(defn cache-resources
+  [data]
+  (post-message {:type (:cache-resources config/messages)
+                 :data data}))

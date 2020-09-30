@@ -2,7 +2,6 @@
   (:require
     [webchange.service-worker.cache.core :as cache]
     [webchange.service-worker.config :as config]
-    [webchange.service-worker.controllers.game-resources :as game]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.controllers.web-app-resources :as web-app]
     [webchange.service-worker.wrappers :refer [then]]))
@@ -10,8 +9,7 @@
 (defn fetch-current-course-data
   []
   (logger/debug "[Course controller] Fetch current course data..")
-  (-> (web-app/cache-app)
-      (then game/restore-cached-lessons)))
+  (web-app/cache-app))
 
 (defn remove-outdated-data
   []

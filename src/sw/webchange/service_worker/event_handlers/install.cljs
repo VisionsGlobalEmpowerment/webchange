@@ -9,7 +9,6 @@
   []
   (logger/debug "Install...")
   (broadcast/send-sync-status :installing)
-
   (-> (course-resources/fetch-current-course-data)
       (catch (fn [error]
                (logger/warn "Install: resources caching skipped." error)

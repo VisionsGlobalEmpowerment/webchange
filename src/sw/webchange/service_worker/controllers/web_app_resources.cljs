@@ -18,7 +18,8 @@
   (-> (api/get-web-app-resources)
       (then (fn [{:keys [resources endpoints]}]
               (logger/debug "[Cache App] Cache web app resources")
-              (promise-all [(web-app-cache/cache-resources (conj resources skeleton-page))
+              (promise-all [(web-app-cache/cache-resources (conj resources skeleton-page)
+                                                           {:on-progress #(broadcast/send-current-state {:caching-progress %})})
                             (vs/add-endpoints endpoints)])))
       (then (fn []
               (logger/debug "[Cache App] Set Last update")

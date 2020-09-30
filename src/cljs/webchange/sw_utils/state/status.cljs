@@ -79,6 +79,16 @@
   (fn [{:keys [db]} [_ date-str]]
     {:db (assoc-in db (path-to-db [:last-update]) date-str)}))
 
+(re-frame/reg-sub
+  ::caching-progress
+  (fn [db]
+    (get-in db (path-to-db [:caching-progress]))))
+
+(re-frame/reg-event-fx
+  ::set-caching-progress
+  (fn [{:keys [db]} [_ progress]]
+    {:db (assoc-in db (path-to-db [:caching-progress]) progress)}))
+
 ;; Version
 
 (re-frame/reg-sub
