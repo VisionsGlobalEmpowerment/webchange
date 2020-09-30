@@ -9,7 +9,7 @@
     [webchange.service-worker.requests.api :as api]
     [webchange.service-worker.wrappers :refer [request-clone js-fetch promise-all promise-resolve promise-reject body-json require-status-ok! then catch data->response]]))
 
-(defn store-current-progress!
+(defn- store-current-progress!
   [{progress :progress events :events offline :offline}]
   (-> (db-users/get-current-user)
       (then (fn [user]
@@ -19,7 +19,8 @@
                       (doseq [event events] (db-events/save-event event user))))
                 (logger/warn "Progress can not be stored: user is not defined."))))))
 
-(defn get-current-progress
+(defn- get-current-progress
+  "Get current progress. Will redirect to student-login page if no user is stored in cache"
   []
   (-> (db-users/get-current-user)
       (then (fn [current-user]
@@ -29,7 +30,17 @@
                 (do (logger/warn "Can not get current progress: current user is not defined")
                     (bc/redirect-to-login)))))))
 
-(defn store-body!
+(defn- offline?
+  "Return if offline mode is enabled in cache.
+  If no cache available will return nil. Which is essentially no offline mode"
+  []
+  (-> (db-users/get-current-user)
+      (then #(if %
+               (db-progress/get-progress %)
+               nil))
+      (then #(get % :offline))))
+
+(defn- store-body!
   [request offline]
   (let [cloned (request-clone request)]
     (-> (body-json cloned)
@@ -42,24 +53,23 @@
                  (logger/error "Store current progress failed:" error))))
     (promise-resolve request)))
 
-(defn get-offline
+(defn- get-offline
   [request]
   (logger/debug "[current-progress] [GET] [offline]")
   (-> (get-current-progress)
       (then data->response)))
 
-(defn post-offline
+(defn- post-offline
   [request]
   (logger/debug "[current-progress] [POST] [offline]")
   (store-body! request true)
   (data->response {}))
 
-(defn get-online
+(defn- get-online
   [request]
   (logger/debug "[current-progress] [GET] [online]")
   (let [cloned (request-clone request)]
-    (p/let [stored-progress (get-current-progress)
-            offline (:offline stored-progress)]
+    (p/let [offline (offline?)]
            (if offline
              (get-offline request)
              (-> (api/get-current-progress {:raw? true})
@@ -68,7 +78,7 @@
                           (logger/warn "[current-progress] [GET] [online]" error)
                           (get-offline cloned))))))))
 
-(defn post-online
+(defn- post-online
   [request]
   (logger/debug "[current-progress] [POST] [online]")
   (let [cloned (request-clone request)]
