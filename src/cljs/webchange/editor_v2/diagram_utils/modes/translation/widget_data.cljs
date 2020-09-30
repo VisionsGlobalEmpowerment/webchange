@@ -42,7 +42,7 @@
                                   (:node styles))}
            [play-button node-data]
            [loop-icon node-data]
-           [config-button node-data]]
+           [config-button {:node-data node-data}]]
           (r/children this))))
 
 (defn get-widget-data
