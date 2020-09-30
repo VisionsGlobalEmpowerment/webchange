@@ -39,7 +39,8 @@
                         ^{:key (:id template)}
                         [ui/menu-item {:value (:id template)} (:name template)])]]]
                    [ui/grid {:item true :xs 10}
-                    [template-info current-template data]]]]
+                    [template-info {:template current-template
+                                    :data     data}]]]]
                  [ui/card-actions
                   [ui/button {:color    "secondary"
                               :style    {:margin-left "auto"}
