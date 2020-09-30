@@ -7,6 +7,7 @@
             [webchange.dataset.loader :as datasets]
             [webchange.secondary.loader :as secondary]
             [webchange.assets.loader :as assets]
+            [webchange.hackathon.loader :as hackathon]
             [webchange.course.loader :as courses])
   (:gen-class))
 
@@ -24,6 +25,10 @@
     (assets/command? args)
     (do
       (assets/execute args env)
+      (System/exit 0))
+    (hackathon/command? args)
+    (do
+      (hackathon/execute args {})
       (System/exit 0))
     (courses/command? args)
     (do
