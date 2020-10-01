@@ -12,7 +12,7 @@
     [webchange.editor-v2.dialog.dialog-form.views-form-phrase :refer [node-options phrase-block]]
     [webchange.editor-v2.translator.translator-form.views-form-play-phrase :refer [play-phrase-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-target :refer [target-block]]
-    [webchange.editor-v2.translator.text.chunks :refer [text-chunks-modal]]
+    [webchange.editor-v2.translator.text.views-text-animation-editor :refer [text-chunks-modal]]
     [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn- get-styles

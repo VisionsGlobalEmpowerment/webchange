@@ -6,7 +6,7 @@
     [webchange.editor-v2.translator.state.window :as translator.window]
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.translator.text.views :as translator.text]))
+    [webchange.editor-v2.translator.text.views-text-chunks-editor :as translator.text]))
 
 (re-frame/reg-event-fx
   ::init-editor

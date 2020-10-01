@@ -1,14 +1,13 @@
-(ns webchange.editor-v2.translator.text.chunks
+(ns webchange.editor-v2.translator.text.views-text-animation-editor
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.text.core :refer [chunks->parts]]
+    [webchange.editor-v2.translator.text.views-text-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
-    [webchange.ui.components.message :refer [message]]
-    [webchange.ui.theme :refer [get-in-theme]]))
+    [webchange.ui.components.message :refer [message]]))
 
 (def modal-state-path [:editor-v2 :translator :text :chunks-modal-state])
 (def selected-chunk-path [:editor-v2 :translator :text :chunks :selected])
@@ -112,18 +111,7 @@
 
 (defn- get-styles
   []
-  {:audio-container {:padding "16px"}
-   :text-chunk      {:color       (get-in-theme [:palette :text :primary])
-                     :margin-left "8px"}})
-
-(defn- text-chunk
-  [{:keys [text selected? on-click]}]
-  (let [styles (get-styles)]
-    [ui/chip {:label    text
-              :variant  "outlined"
-              :color    (if selected? "primary" "secondary")
-              :on-click on-click
-              :style    (:text-chunk styles)}]))
+  {:audio-container {:padding "16px"}})
 
 (defn- text-chunks-form
   []
@@ -157,11 +145,9 @@
             ^{:key object-name}
             [ui/menu-item {:value object-name} text])]]]
        [ui/grid {:item true :xs 12}
-        (for [[index part] (map-indexed vector parts)]
-          ^{:key index}
-          [text-chunk {:text      part
-                       :selected? (= index selected-chunk)
-                       :on-click  #(re-frame/dispatch [::select-chunk index])}])]])))
+        [text-chunks {:parts              parts
+                      :selected-chunk-idx selected-chunk
+                      :on-click           #(re-frame/dispatch [::select-chunk %])}]]])))
 
 (defn text-chunks-modal
   []

@@ -1,9 +1,9 @@
-(ns webchange.editor-v2.translator.text.views
+(ns webchange.editor-v2.translator.text.views-text-chunks-editor
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.editor-v2.components.confirm-dialog.views :refer [confirm-dialog]]
+    [webchange.editor-v2.translator.text.views-text-chunks :refer [text-chunks]]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.text.core :refer [parts->chunks chunks->parts]]))
@@ -94,28 +94,26 @@
 (defn configuration-form
   []
   (let [current-dialog-text @(re-frame/subscribe [::current-dialog-text])
-        origin-text (:text current-dialog-text)
+        origin-text (get current-dialog-text :text "")
         parts (chunks->parts origin-text (:chunks current-dialog-text))
         set-text #(re-frame/dispatch [::set-text (.. % -target -value)])
         set-parts #(re-frame/dispatch [::set-parts (.. % -target -value)])]
-    [:div
-     [ui/grid {:container true
-               :spacing   16
-               :justify   "space-between"}
-      [ui/grid {:item true :xs 8}
-       [ui/text-field (merge text-input-params
-                             {:label     "Origin"
-                              :value     origin-text
-                              :on-change set-text})]]
-      [ui/grid {:item true :xs 8}
-       (for [part parts]
-         [ui/chip {:label part}])]
-      [ui/grid {:item true :xs 8}
-       [ui/text-field (merge text-input-params
-                             {:label           "Parts"
-                              :value           (clojure.string/join " " parts)
-                              :on-change       set-parts
-                              :helper-text "Use space to divide text into chunks"})]]]]))
+    [ui/grid {:container true
+              :spacing   16
+              :justify   "space-between"}
+     [ui/grid {:item true :xs 12}
+      [ui/text-field (merge text-input-params
+                            {:label     "Origin"
+                             :value     origin-text
+                             :on-change set-text})]]
+     [ui/grid {:item true :xs 12}
+      [text-chunks {:parts parts}]]
+     [ui/grid {:item true :xs 12}
+      [ui/text-field (merge text-input-params
+                            {:label       "Parts"
+                             :value       (clojure.string/join " " parts)
+                             :on-change   set-parts
+                             :helper-text "Use space to divide text into chunks"})]]]))
 
 (defn configuration-modal
   []

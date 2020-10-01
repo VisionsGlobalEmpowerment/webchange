@@ -4,7 +4,7 @@
     [webchange.editor-v2.layout.toolbar.views :refer [toolbar]]
     [webchange.editor-v2.translator.views-modal :refer [translator-modal]]
     [webchange.editor-v2.dialog.views-modal :refer [dialog-modal]]
-    [webchange.editor-v2.translator.text.views :refer [configuration-modal]]
+    [webchange.editor-v2.translator.text.views-text-chunks-editor :refer [configuration-modal]]
     [reagent.core :as r]))
 
 (defn- get-styles

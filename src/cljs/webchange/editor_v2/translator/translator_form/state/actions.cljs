@@ -112,12 +112,14 @@
 (re-frame/reg-event-fx
   ::set-text-animation-target
   (fn [{:keys [db]} [_ object-name]]
-    (let [target-text (-> (translator-form.scene/objects-data db)
-                          (get-in [(keyword object-name) :text]))
-          parts (clojure.string/split target-text #" ")
-          chunks (parts->chunks target-text parts)]
-      {:dispatch-n (list [::update-action :phrase {:target object-name}]
-                         [::translator-form.scene/update-object [object-name] {:chunks chunks}])})))
+    (let [target-data (-> (translator-form.scene/objects-data db)
+                          (get (keyword object-name)))]
+      (if (contains? target-data :chunks)
+        {:dispatch [::update-action :phrase {:target object-name}]}
+        (let [parts (clojure.string/split (:text target-data) #" ")
+              chunks (parts->chunks (:text target-data) parts)]
+          {:dispatch-n (list [::update-action :phrase {:target object-name}]
+                             [::translator-form.scene/update-object [(keyword object-name)] {:chunks chunks}])})))))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-phrase
