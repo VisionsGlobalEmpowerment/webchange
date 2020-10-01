@@ -311,7 +311,7 @@
   (let [current-time (jt/local-date-time)
         user (db/get-user {:id owner-id})
         website-id (:website-id user)
-        new-course-data (merge data {:slug            (slug (->kebab-case name) lang)
+        new-course-data (merge data {:slug            (slug (->kebab-case name) (->kebab-case lang))
                                      :owner_id        owner-id
                                      :website_user_id website-id
                                      :image_src       nil
