@@ -35,8 +35,8 @@
   (fn []
     [(re-frame/subscribe [::translator-form.actions/current-phrase-action])
      (re-frame/subscribe [::translator-form.scene/objects-data])])
-  (fn [[{:keys [target] :as current-phrase-action} objects]]
-    (get objects (keyword target))))
+  (fn [[{:keys [target]} objects]]
+    [target (get objects (keyword target))]))
 
 (re-frame/reg-sub
   ::selected-chunk
@@ -127,10 +127,11 @@
 
 (defn- text-chunks-form
   []
-  (let [text-object @(re-frame/subscribe [::text-object])
+  (let [[text-object-name text-object-data] @(re-frame/subscribe [::text-object])
+        available-text-objects @(re-frame/subscribe [::translator-form.scene/text-objects])
         selected-chunk @(re-frame/subscribe [::selected-chunk])
         selected-audio @(re-frame/subscribe [::selected-audio])
-        parts (chunks->parts (:text text-object) (:chunks text-object))
+        parts (chunks->parts (:text text-object-data) (:chunks text-object-data))
         styles (get-styles)]
     (if (or (nil? selected-audio)
             (nil? (:start selected-audio))
@@ -146,6 +147,15 @@
                                  {:height         96
                                   :on-change      #(re-frame/dispatch [::select-audio %])
                                   :show-controls? true})]]]
+       [ui/grid {:item true :xs 12}
+        [ui/form-control {:full-width true
+                          :style      (:control-container styles)}
+         [ui/input-label "Target text"]
+         [ui/select {:value     text-object-name
+                     :on-change #(re-frame/dispatch [::translator-form.actions/set-text-animation-target (-> % .-target .-value)])}
+          (for [[object-name {:keys [text]}] available-text-objects]
+            ^{:key object-name}
+            [ui/menu-item {:value object-name} text])]]]
        [ui/grid {:item true :xs 12}
         (for [[index part] (map-indexed vector parts)]
           ^{:key index}

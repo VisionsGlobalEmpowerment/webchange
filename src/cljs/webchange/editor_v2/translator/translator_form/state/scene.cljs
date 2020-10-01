@@ -72,6 +72,15 @@
     (:objects scene-data)))
 
 (re-frame/reg-sub
+  ::text-objects
+  (fn []
+    [(re-frame/subscribe [::objects-data])])
+  (fn [[objects-data]]
+    (filter (fn [[_ {:keys [type]}]]
+              (= type "text"))
+            objects-data)))
+
+(re-frame/reg-sub
   ::available-animation-targets
   (fn []
     [(re-frame/subscribe [::objects-data])])

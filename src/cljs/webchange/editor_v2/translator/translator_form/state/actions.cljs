@@ -2,6 +2,7 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.translator.text.core :refer [parts->chunks]]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
@@ -107,6 +108,16 @@
     (let [phrase-action-info (current-phrase-action-info db)]
       (when (nil? phrase-action-info)
         {:dispatch-n (list [::set-current-phrase-action action-node])}))))
+
+(re-frame/reg-event-fx
+  ::set-text-animation-target
+  (fn [{:keys [db]} [_ object-name]]
+    (let [target-text (-> (translator-form.scene/objects-data db)
+                          (get-in [(keyword object-name) :text]))
+          parts (clojure.string/split target-text #" ")
+          chunks (parts->chunks target-text parts)]
+      {:dispatch-n (list [::update-action :phrase {:target object-name}]
+                         [::translator-form.scene/update-object [object-name] {:chunks chunks}])})))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-phrase
