@@ -6,7 +6,9 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.text.core :refer [chunks->parts]]
-    [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]))
+    [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
+    [webchange.ui.components.message :refer [message]]
+    [webchange.ui.theme :refer [get-in-theme]]))
 
 (def modal-state-path [:editor-v2 :translator :text :chunks-modal-state])
 (def selected-chunk-path [:editor-v2 :translator :text :chunks :selected])
@@ -33,7 +35,7 @@
   (fn []
     [(re-frame/subscribe [::translator-form.actions/current-phrase-action])
      (re-frame/subscribe [::translator-form.scene/objects-data])])
-  (fn [[{:keys [target]} objects]]
+  (fn [[{:keys [target] :as current-phrase-action} objects]]
     (get objects (keyword target))))
 
 (re-frame/reg-sub
@@ -49,9 +51,17 @@
           data (get-in db data-path)
           bounds (get-in db bounds-path)
           {:keys [start end]} (->> data (filter #(= index (:chunk %))) first)]
-      {:url   audio
-       :start (bound bounds start)
-       :end   (bound bounds end)})))
+      (when (some? audio)
+        {:url   audio
+         :start (bound bounds start)
+         :end   (bound bounds end)}))))
+
+(re-frame/reg-sub
+  ::form-available?
+  (fn []
+    [(re-frame/subscribe [::selected-audio])])
+  (fn [[selected-audio]]
+    (some? selected-audio)))
 
 (re-frame/reg-event-fx
   ::open
@@ -100,34 +110,55 @@
                        (sort-by :chunk c))]
       {:db (assoc-in db data-path chunks)})))
 
-(defn text-chunks-form
+(defn- get-styles
+  []
+  {:audio-container {:padding "16px"}
+   :text-chunk      {:color       (get-in-theme [:palette :text :primary])
+                     :margin-left "8px"}})
+
+(defn- text-chunk
+  [{:keys [text selected? on-click]}]
+  (let [styles (get-styles)]
+    [ui/chip {:label    text
+              :variant  "outlined"
+              :color    (if selected? "primary" "secondary")
+              :on-click on-click
+              :style    (:text-chunk styles)}]))
+
+(defn- text-chunks-form
   []
   (let [text-object @(re-frame/subscribe [::text-object])
         selected-chunk @(re-frame/subscribe [::selected-chunk])
         selected-audio @(re-frame/subscribe [::selected-audio])
-        parts (chunks->parts (:text text-object) (:chunks text-object))]
-    [:div
-     [ui/grid {:container true
-               :spacing   16
-               :justify   "space-between"}
-      [ui/grid {:item true :xs 12}
-       [ui/card-content
-        [audio-wave-form (merge selected-audio
-                                {:height         96
-                                 :on-change      #(re-frame/dispatch [::select-audio %])
-                                 :show-controls? true})]]]
-      [ui/grid {:item true :xs 8}
-       (for [[index part] (map-indexed vector parts)]
-         [ui/chip {:key      index
-                   :label    part
-                   :color    (if (= index selected-chunk) "primary" "secondary")
-                   :on-click #(re-frame/dispatch [::select-chunk index])}])]]]))
+        parts (chunks->parts (:text text-object) (:chunks text-object))
+        styles (get-styles)]
+    (if (or (nil? selected-audio)
+            (nil? (:start selected-audio))
+            (nil? (:end selected-audio)))
+      [message {:type    "warn"
+                :message "Select audio region in translation dialog to configure text animation"}]
+      [ui/grid {:container true
+                :spacing   16
+                :justify   "space-between"}
+       [ui/grid {:item true :xs 12}
+        [ui/paper {:style (:audio-container styles)}
+         [audio-wave-form (merge selected-audio
+                                 {:height         96
+                                  :on-change      #(re-frame/dispatch [::select-audio %])
+                                  :show-controls? true})]]]
+       [ui/grid {:item true :xs 12}
+        (for [[index part] (map-indexed vector parts)]
+          ^{:key index}
+          [text-chunk {:text      part
+                       :selected? (= index selected-chunk)
+                       :on-click  #(re-frame/dispatch [::select-chunk index])}])]])))
 
 (defn text-chunks-modal
   []
   (let [open? @(re-frame/subscribe [::modal-state])
         cancel #(re-frame/dispatch [::cancel])
-        apply #(re-frame/dispatch [::apply])]
+        apply #(re-frame/dispatch [::apply])
+        form-available? @(re-frame/subscribe [::form-available?])]
     (when open?
       [ui/dialog
        {:open       true
@@ -141,8 +172,8 @@
        [ui/dialog-actions
         [ui/button {:on-click cancel}
          "Cancel"]
-        [:div {:style {:position "relative"}}
-         [ui/button {:color    "secondary"
-                     :variant  "contained"
-                     :on-click apply}
-          "Apply"]]]])))
+        [ui/button {:color    "secondary"
+                    :variant  "contained"
+                    :disabled (not form-available?)
+                    :on-click apply}
+         "Apply"]]])))
