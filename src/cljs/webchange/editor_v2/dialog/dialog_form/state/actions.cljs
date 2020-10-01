@@ -17,6 +17,10 @@
                      :data [{:type "empty" :duration 0}
                             {:type "animation-sequence", :phrase-text "New action", :audio nil}]})
 
+(def text-animation-action {:type "sequence-data"
+                            :data [{:type "empty" :duration 0}
+                                   {:type "text-animation", :phrase-text "New text animation", :audio nil}]})
+
 (defn get-empty-action
   [action]
   (get-in action [:data empty-action-position]))
@@ -50,9 +54,9 @@
           concept-action {:type "sequence-data",
                           :data [default-action]}
 
-          concept-scema {:name field-name
-                         :type "action"
-                         :template concept-action}
+          concept-schema {:name     field-name
+                          :type     "action"
+                          :template concept-action}
 
           list-to-path (if (actions/node-parallel? parent-action)
                          {:type "parallel",
@@ -61,13 +65,11 @@
 
           data-patch (-> base-action
                          (actions/replace-child list-to-path target-position)
-                         (select-keys [:data]))
-          ]
+                         (select-keys [:data]))]
       {:dispatch-n (list
-                     [::dialog-form.concepts/add-concepts-schema-fields concept-scema]
+                     [::dialog-form.concepts/add-concepts-schema-fields concept-schema]
                      [::translator-form.concepts/update-current-concept [(keyword field-name)] concept-action]
-                     [::update-scene-action base-path data-patch])}
-      )))
+                     [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx
   ::add-new-phrase-parallel-action
@@ -100,19 +102,17 @@
           empty-action {:type "action", :from-var [{:var-name concept-var, :var-property field-name}]}
           concept-action {:type "sequence-data",
                           :data [default-action]},
-          concept-scema {:name field-name
-                         :type "action"
-                         :template concept-action}
+          concept-schema {:name     field-name
+                          :type     "action"
+                          :template concept-action}
 
           data-patch (-> base-action
                          (au/insert-child-action empty-action target-position relative-position)
-                         (select-keys [:data]))
-          ]
+                         (select-keys [:data]))]
       {:dispatch-n (list
-                     [::dialog-form.concepts/add-concepts-schema-fields concept-scema]
+                     [::dialog-form.concepts/add-concepts-schema-fields concept-schema]
                      [::translator-form.concepts/update-current-concept [(keyword field-name)] concept-action]
-                     [::update-scene-action base-path data-patch])}
-      )))
+                     [::update-scene-action base-path data-patch])})))
 
 (re-frame/reg-event-fx
   ::delete-phrase-action
@@ -131,13 +131,12 @@
                              (au/delete-child-action target-position)
                              (select-keys [:data]))]
           (if concept-action?
-            (let [
-                  var-name (get-in node [:action-node-data :data :from-var 0 :var-property])]
-              {:dispatch-n  (list
-                              [::dialog-form.concepts/remove-concepts-schema-field var-name]
-                              [::dialog-form.concepts/remove-var-from-concepts var-name]
-                              [::update-scene-action base-path data-patch])})
-            {:dispatch-n  (list [::update-scene-action base-path data-patch])}))))))
+            (let [var-name (get-in node [:action-node-data :data :from-var 0 :var-property])]
+              {:dispatch-n (list
+                             [::dialog-form.concepts/remove-concepts-schema-field var-name]
+                             [::dialog-form.concepts/remove-var-from-concepts var-name]
+                             [::update-scene-action base-path data-patch])})
+            {:dispatch-n (list [::update-scene-action base-path data-patch])}))))))
 
 
 (re-frame/reg-event-fx
@@ -152,7 +151,7 @@
 (re-frame/reg-event-fx
   ::set-phrase-action-offset
   (fn [{:keys [_]} [_ offset]]
-    {:dispatch-n (list [::update-inner-action {:duration  (int offset)} 0])}))
+    {:dispatch-n (list [::update-inner-action {:duration (int offset)} 0])}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-volume

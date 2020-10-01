@@ -127,7 +127,7 @@
         :full-width true
         :max-width  "xl"}
        [ui/dialog-title
-        "Configure text"]
+        "Edit text chunks"]
        [ui/dialog-content {:class-name "translation-form"}
         [configuration-form]]
        [ui/dialog-actions

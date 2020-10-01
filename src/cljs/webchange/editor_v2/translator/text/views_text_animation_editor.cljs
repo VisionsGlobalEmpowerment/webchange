@@ -139,7 +139,7 @@
         [ui/form-control {:full-width true
                           :style      (:control-container styles)}
          [ui/input-label "Target text"]
-         [ui/select {:value     text-object-name
+         [ui/select {:value     (or text-object-name "")
                      :on-change #(re-frame/dispatch [::translator-form.actions/set-text-animation-target (-> % .-target .-value)])}
           (for [[object-name {:keys [text]}] available-text-objects]
             ^{:key object-name}
@@ -162,7 +162,7 @@
         :full-width true
         :max-width  "xl"}
        [ui/dialog-title
-        "Configure text"]
+        "Edit text animation chunks"]
        [ui/dialog-content {:class-name "translation-form"}
         [text-chunks-form]]
        [ui/dialog-actions

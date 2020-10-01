@@ -6,7 +6,8 @@
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
-    [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as dialog.au]))
+    [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as dialog.au]
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 
 (defn complete-path
@@ -54,6 +55,10 @@
                                      :handler (partial add-concept-action :before)}
    :insert-concept-after            {:text    "Add concept after"
                                      :handler (partial add-concept-action :after)}
+   :insert-text-animation-before    {:text    "Add text animation before"
+                                     :handler (partial add-action dialog-form.actions/text-animation-action :before)}
+   :insert-text-animation-after     {:text    "Add text animation after"
+                                     :handler (partial add-action dialog-form.actions/text-animation-action :after)}
    :delete                          {:text    "Delete"
                                      :handler (partial delete-action)}
 
@@ -68,6 +73,7 @@
 (defn- available-menu-items
   [node]
   (let [{:keys [concept-action? base-action parent-action item-position]} (dialog.au/get-concept-node-data node)
+        scene-contains-texts? (->> @(re-frame/subscribe [::translator-form.scene/text-objects]) (empty?) (not))
         concept-list-position (get-in node [:path 1])
         items (count (:data base-action))
         concept-items (if concept-action?
@@ -80,6 +86,10 @@
                              :insert-concept-before :insert-concept-after
                              :insert-before :insert-after]
                             [])
+        text-animation-items (if scene-contains-texts?
+                               [:insert-text-animation-before
+                                :insert-text-animation-after]
+                               [])
         margin-before (if (and concept-action? (or (= 1 items) (= 0 concept-list-position)))
                         [:insert-concept-before :insert-before]
                         [])
@@ -95,7 +105,7 @@
                            [:delete]
                            [:delete-in-concept-action])
                          [])]
-    (concat margin-before non-concept-items concept-items margin-after concept-delete)))
+    (concat margin-before non-concept-items text-animation-items concept-items margin-after concept-delete)))
 
 (defn available-actions-menu
   [node]
