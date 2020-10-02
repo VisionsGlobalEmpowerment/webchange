@@ -4,13 +4,15 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.wizard.common-styles :as styles]
+    [webchange.editor-v2.wizard.views-activity-skills :as activity-skills]
+    [webchange.editor-v2.wizard.activity-template.views :as activity-template]
     [webchange.editor-v2.wizard.state.activity :as state-activity]
-    [webchange.editor-v2.wizard.views-activity-characters :refer [characters-option]]
-    [webchange.editor-v2.wizard.views-activity-lookup :refer [lookup-option]]
-    [webchange.editor-v2.wizard.views-activity-pages :refer [pages-option]]
-    [webchange.editor-v2.wizard.views-activity-string :refer [string-option]]
     [webchange.editor-v2.wizard.validator :as validator]
     [webchange.ui.theme :refer [get-in-theme]]))
+
+(def activity-skills-info activity-skills/skills)
+(def template-info activity-template/template)
 
 (def validation-map {:name        [(fn [value] (when (empty? value) "Name is required"))]
                      :skills      [(fn [value] (when (empty? value) "Skills are required"))]
@@ -18,80 +20,18 @@
 
 (defn- get-styles
   []
-  {:card                 {:margin      "12px"
-                          :flex-shrink "0"
-                          :max-width   "1280px"}
-   :control-container    {:margin-top "-8px"}
-   :control              {:min-width "500px"}
-   :skills-list          {:padding 0}
-   :skills-list-item     {:padding-left 0
-                          :white-space  "normal"}
-   :template-description {:border           "solid 1px"
-                          :border-color     "rgba(0,0,0,0)"
-                          :background-color (get-in-theme [:palette :background :darken])
-                          :color            (get-in-theme [:palette :text :secondary])
-                          :padding          "12px 18px"
-                          :border-radius    "10px"}
-   :actions              {:padding "24px"}
-   :save-button          {:margin-left "auto"}})
-
-(defn- render-selected
-  [selected]
-  (let [skills (->> @(re-frame/subscribe [::state-activity/skills])
-                    :skills
-                    (map (juxt :id identity))
-                    (into {}))
-        values (->> selected
-                    vals
-                    (map #(get skills %)))
-        styles (get-styles)]
-    [ui/list {:style (:skills-list styles)}
-     (for [value values]
-       [ui/list-item {:key   (:id value)
-                      :style (:skills-list-item styles)}
-        (:name value)])]))
-
-(def react-render-selected (r/reactify-component render-selected))
-
-(defn- option-info
-  [{:keys [option] :as props}]
-  (case (:type option)
-    "characters" [characters-option props]
-    "lookup" [lookup-option props]
-    "pages" [pages-option props]
-    "string" [string-option props]
-    nil))
-
-(defn template-info
-  [{:keys [template data validator]}]
-  [ui/grid {:container   true
-            :justify     "space-between"
-            :spacing     24
-            :align-items "center"}
-   (for [[key option] (:options template)]
-     ^{:key key}
-     [ui/grid {:item true :xs 12}
-      [option-info {:key       key
-                    :option    option
-                    :data      data
-                    :validator validator}]])])
-
-(defn activity-skill-info
-  [data]
-  (let [skills (-> @(re-frame/subscribe [::state-activity/skills]) :skills)
-        styles (get-styles)]
-    (if (some? skills)
-      [ui/form-control {:style (:control-container styles)}
-       [ui/input-label "Skills"]
-       [ui/select {:multiple     true
-                   :render-value #(r/create-element react-render-selected %)
-                   :value        (:skills @data)
-                   :on-change    #(swap! data assoc :skills (->> % .-target .-value))
-                   :style        (:control styles)}
-        (for [skill skills]
-          ^{:key (:id skill)}
-          [ui/menu-item {:value (:id skill)} (:name skill)])]]
-      [ui/circular-progress])))
+  (merge (styles/activity)
+         {:card                 {:margin      "12px"
+                                 :flex-shrink "0"
+                                 :max-width   "1280px"}
+          :template-description {:border           "solid 1px"
+                                 :border-color     "rgba(0,0,0,0)"
+                                 :background-color (get-in-theme [:palette :background :darken])
+                                 :color            (get-in-theme [:palette :text :secondary])
+                                 :padding          "12px 18px"
+                                 :border-radius    "10px"}
+          :actions              {:padding "24px"}
+          :save-button          {:margin-left "auto"}}))
 
 (defn- activity-template
   [{:keys [data templates on-change validator]}]
@@ -132,7 +72,7 @@
                       :on-change #(swap! data assoc :name (-> % .-target .-value))}]
       [error-message {:field-name :name}]]
      [ui/grid {:item true :xs 12}
-      [activity-skill-info data]
+      [activity-skills-info data]
       [error-message {:field-name :skills}]]
      [ui/grid {:item true :xs 12}
       [activity-template {:data      data

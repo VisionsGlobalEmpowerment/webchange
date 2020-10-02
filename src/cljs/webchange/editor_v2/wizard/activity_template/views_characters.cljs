@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.wizard.views-activity-characters
+(ns webchange.editor-v2.wizard.activity-template.views-characters
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]

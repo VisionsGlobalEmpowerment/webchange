@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.wizard.views-activity-lookup
+(ns webchange.editor-v2.wizard.activity-template.views-lookup
   (:require
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
