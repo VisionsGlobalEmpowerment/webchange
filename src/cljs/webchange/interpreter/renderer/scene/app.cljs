@@ -4,6 +4,10 @@
 
 (def pixi-app (atom nil))
 
+(defn exists-app [] (not (nil? @pixi-app)))
+
+(defn get-app [] @pixi-app)
+
 (defn register-app
   [app]
   (reset! pixi-app app))

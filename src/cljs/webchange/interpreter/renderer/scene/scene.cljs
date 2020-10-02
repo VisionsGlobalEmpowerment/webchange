@@ -6,7 +6,7 @@
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]
-    [webchange.interpreter.renderer.scene.app :refer [register-app destroy-app]]
+    [webchange.interpreter.renderer.scene.app :refer [register-app exists-app get-app destroy-app]]
     [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn- get-stage
@@ -29,13 +29,15 @@
 
 (defn init-app
   [viewport]
-  (let [{:keys [x y width height scale-x scale-y]} viewport]
-    (doto (Application. (clj->js {:antialias true
-                                  :width     width
-                                  :height    height}))
-      (-> get-stage (set-scale scale-x scale-y))
-      (-> get-stage (set-position x y))
-      (register-app))))
+  (if (exists-app)
+      (get-app)
+    (let [{:keys [x y width height scale-x scale-y]} viewport]
+      (doto (Application. (clj->js {:antialias true
+                                    :width     width
+                                    :height    height}))
+        (-> get-stage (set-scale scale-x scale-y))
+        (-> get-stage (set-position x y))
+        (register-app)))))
 
 (defn scene
   [{:keys []}]
@@ -63,9 +65,8 @@
        :should-component-update
                      (fn [] false)
 
-       :component-will-unmount
-                     (fn []
-                       (destroy-app))
+       ;:component-will-unmount
+       ;              (fn [] (destroy-app))
 
        :reagent-render
                      (fn [{:keys []}]
