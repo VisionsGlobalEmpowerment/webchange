@@ -7,7 +7,7 @@
     [webchange.service-worker.event-handlers.message :as message]
     [webchange.service-worker.logger :as logger]
     [webchange.service-worker.virtual-server.core :as vs]
-    [webchange.service-worker.wrappers :refer [online?]]))
+    [webchange.service-worker.wrappers :as w]))
 
 (.addEventListener js/self "unhandledrejection" (fn [error]
                                                   (logger/error "Unhandled Rejection" error)
@@ -18,8 +18,15 @@
 (.addEventListener js/self "fetch" fetch/handle)
 (.addEventListener js/self "message" message/handle)
 
+(defonce last-online? (atom true))
+
 (aset (.-connection js/navigator) "onchange" (fn []
-                                               (if (online?)
-                                                 (do (broadcast/send-sync-status :synced)
-                                                     (vs/flush-state))
-                                                 (broadcast/send-sync-status :offline))))
+                                               (let [online (w/online?)]
+                                                 (when-not (= online @last-online?)
+                                                   (reset! last-online? online)
+                                                   (if online
+                                                     (do (logger/debug "Now online")
+                                                         (broadcast/send-sync-status :synced)
+                                                         (vs/flush-state))
+                                                     (do (logger/debug "Now offline")
+                                                         (broadcast/send-sync-status :offline)))))))

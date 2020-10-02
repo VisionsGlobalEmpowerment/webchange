@@ -8,13 +8,14 @@
 (defn- activate
   []
   (logger/debug "Activate...")
-  (broadcast/send-sync-status :activating)
-  (course-resources/remove-outdated-data))
+  ;(broadcast/send-sync-status :activating)
+  ;(course-resources/remove-outdated-data)
+  (promise-resolve))
 
 (defn- activated
   []
   (logger/log "Activation done.")
-  (broadcast/send-sync-status :activated)
+  ;(broadcast/send-sync-status :activated)
   (.claim (.-clients js/self)))
 
 (defn- activation-failed

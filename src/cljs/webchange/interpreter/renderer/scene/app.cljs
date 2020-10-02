@@ -1,10 +1,20 @@
-(ns webchange.interpreter.renderer.scene.app)
+(ns webchange.interpreter.renderer.scene.app
+  (:require
+    [webchange.interpreter.renderer.scene.filters.filters :as filters]))
 
 (def pixi-app (atom nil))
 
 (defn register-app
   [app]
   (reset! pixi-app app))
+
+(defn destroy-app
+  []
+  (filters/destroy)
+  (.destroy @pixi-app true (clj->js {:children    true
+                                     :texture     true
+                                     :baseTexture true}))
+  (reset! pixi-app nil))
 
 (defn add-ticker
   [f]

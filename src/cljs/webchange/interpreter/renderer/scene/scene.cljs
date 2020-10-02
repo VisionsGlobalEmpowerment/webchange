@@ -6,7 +6,7 @@
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]
-    [webchange.interpreter.renderer.scene.app :refer [register-app]]
+    [webchange.interpreter.renderer.scene.app :refer [register-app destroy-app]]
     [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn- get-stage
@@ -62,6 +62,10 @@
 
        :should-component-update
                      (fn [] false)
+
+       :component-will-unmount
+                     (fn []
+                       (destroy-app))
 
        :reagent-render
                      (fn [{:keys []}]
