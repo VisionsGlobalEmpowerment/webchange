@@ -89,6 +89,11 @@
 
 (def pulsation-fns (atom {}))
 
+(defn destroy
+  []
+  (doseq [[_ fn] @pulsation-fns]
+    (remove-ticker fn)))
+
 (defn apply-pulsation-filter
   ([container]
    (apply-pulsation-filter container {}))
