@@ -1,7 +1,7 @@
 (ns webchange.service-worker.virtual-server.handlers.core
   (:require
     [bidi.bidi :as bidi]
-    [webchange.service-worker.logger :as logger]
+    [webchange.service-worker.virtual-server.logger :as logger]
     [webchange.service-worker.virtual-server.handlers.current-progress :as current-progress]
     [webchange.service-worker.virtual-server.handlers.login :as login]
     [webchange.service-worker.virtual-server.handlers.current-user :as current-user]
@@ -53,6 +53,7 @@
 
 (defn flush-state
   []
+  (logger/debug "Flush state")
   (doseq [handlers (vals handlers)]
     (when (contains? handlers :flush)
       ((:flush handlers)))))

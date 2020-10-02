@@ -177,7 +177,7 @@
   [response]
   (when (or (not (.-ok response))
             (.-redirected response))
-    (let [message (str "Response is required to be OK!" (.-url response))]
+    (let [message (str "Response is required to be OK! " (.-url response))]
       (logger/warn message)
       (-> message js/Error. throw)))
   (promise-resolve response))
