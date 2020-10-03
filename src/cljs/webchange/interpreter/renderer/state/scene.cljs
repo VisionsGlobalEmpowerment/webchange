@@ -8,9 +8,13 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [db]} [_]]
-    {:db (-> db
-             (assoc-in (path-to-db [:objects]) (atom {}))
-             (assoc-in (path-to-db [:groups]) (atom {})))}))
+    (let [objects (get-in db (path-to-db [:objects]) (atom {}))
+          groups (get-in db (path-to-db [:groups]) (atom {}))]
+      (reset! objects {})
+      (reset! groups {})
+      {:db (-> db
+               (assoc-in (path-to-db [:objects]) objects)
+               (assoc-in (path-to-db [:groups]) groups))})))
 
 (re-frame/reg-fx
   :add-scene-object

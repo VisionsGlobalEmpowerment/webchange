@@ -4,15 +4,18 @@
     [webchange.interpreter.pixi :refer [Loader]]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
+    [webchange.interpreter.renderer.scene.app :refer [reset-app!]]
     [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]))
+    [webchange.interpreter.renderer.scene.components.modes :as modes]
+    [webchange.interpreter.renderer.scene.filters.filters :as filters]))
 
 (defn- init-scene
   [{:keys [scene-id resources]} current-scene-id loading]
   (when-not (= scene-id @current-scene-id)
     (reset! current-scene-id scene-id)
     (reset! loading {:done false :progress 0})
+    (reset-app!)
     (resources/reset-loader!)
     (resources/load-resources resources
                               {:on-complete #(swap! loading assoc :done true)
@@ -37,7 +40,7 @@
       {:display-name "web-gl-scene"
        :component-did-mount
                      (fn [this]
-                       (resources/init (Loader.))
+                       (resources/init (.-shared Loader))
                        (let [{:keys [scene-data]} (r/props this)]
                          (init-scene scene-data current-scene-id loading)))
        :component-did-update

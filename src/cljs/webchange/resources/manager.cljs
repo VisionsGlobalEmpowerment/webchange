@@ -59,6 +59,6 @@
 
 (defn reset-loader!
   []
-  (when @loader
+  (when (not (nil? @loader))
     (clear-texture-cache)
     (.reset @loader)))

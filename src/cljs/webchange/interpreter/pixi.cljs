@@ -9,6 +9,7 @@
 (def Loader (.. PIXI -Loader))
 (def shared-ticker (.. PIXI -Ticker -shared))
 (def clear-texture-cache (.. PIXI -utils -clearTextureCache))
+(def destroy-texture-cache (.. PIXI -utils -destroyTextureCache))
 (def rgb2hex (.. PIXI -utils -rgb2hex))
 (def hex2rgb (.. PIXI -utils -hex2rgb))
 (def string2hex (.. PIXI -utils -string2hex))
