@@ -47,6 +47,7 @@
 (re-frame/reg-fx
   :effects-volume
   (fn [value]
+    (sound/init)
     (sound/effects-volume (/ value 100))))
 
 (re-frame/reg-fx
