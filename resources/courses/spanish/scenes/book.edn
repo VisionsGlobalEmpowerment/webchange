@@ -353,5 +353,5 @@
                                          {:type "sequence", :data ["start-activity" "clear-instruction" "renew-words" "init-next-page" "read-title"]},
                  :stop-activity          {:type "stop-activity", :id "book"}},
  :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata      {:prev "map", :autostart true},
+ :metadata      {:prev "library", :autostart true},
  :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"}}
