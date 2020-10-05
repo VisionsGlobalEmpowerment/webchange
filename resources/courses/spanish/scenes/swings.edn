@@ -329,8 +329,7 @@
                  :mari-finish
                                           {:type               "sequence-data",
                                            :data
-                                                               [{:to {:x 244, :y 300, :duration 1.3}, :type "transition", :transition-id "mari"}
-                                                                {:offset   49.103,
+                                                               [{:offset   49.103,
                                                                  :phrase-text
                                                                            "Parece que cada foto tuvo un turno en el columpio.\n                                                                                                        Buen trabajo pequeno genio!\n                                                                                                        Puedes jugar este juego de nuevo o hacer clic sobre esta flecha para empezar tu proximo juego.",
                                                                  :start    65.984,
