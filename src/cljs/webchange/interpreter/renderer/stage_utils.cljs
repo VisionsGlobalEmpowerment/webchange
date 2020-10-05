@@ -27,7 +27,8 @@
 
 (defn get-stage-params
   [viewport]
-  (let [display-size {:display-width  1920
+  (when (some? viewport)
+    (let [display-size {:display-width  1920
                       :display-height 1080}
         viewbox (get-viewbox viewport display-size)]
     (merge display-size
@@ -36,4 +37,4 @@
             :width   (:width viewport)
             :height  (:height viewport)
             :scale-x (compute-scale viewport display-size)
-            :scale-y (compute-scale viewport display-size)})))
+            :scale-y (compute-scale viewport display-size)}))))
