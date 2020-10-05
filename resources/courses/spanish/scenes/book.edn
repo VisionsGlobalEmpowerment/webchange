@@ -240,7 +240,7 @@
  :actions
                 {:clear-instruction      {:type "remove-flows", :flow-tag "instruction"},
                  :finish-activity
-                                         {:type "sequence-data", :data [{:id "book", :type "finish-activity"} {:type "scene", :scene-id "library"}]},
+                                         {:type "sequence-data", :data [{:id "book", :type "finish-activity"}]},
                  :init-next-page         {:type "set-variable", :var-name "next-page-action", :var-value "open-book"},
                  :next-page
                                          {:type     "action",
