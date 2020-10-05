@@ -7,7 +7,8 @@
     [webchange.interpreter.renderer.state.scene :as state]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]
     [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app]]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]))
+    [webchange.interpreter.renderer.scene.components.modes :as modes]
+    [webchange.interpreter.renderer.scene.full-screen :refer [lock-screen]]))
 
 (defn- get-stage
   [app]
@@ -27,7 +28,7 @@
      (aset "x" scale-x)
      (aset "y" scale-y))))
 
-(defn init-app
+(defn- init-app
   [viewport]
   (if (app-exists?)
     (get-app)
@@ -58,6 +59,8 @@
                          (when (modes/show-overlays? mode)
                            (create-overlays {:parent   (.-stage app)
                                              :viewport viewport}))
+                         (when (modes/fullscreen? mode)
+                           (lock-screen))
 
                          (when (modes/start-on-ready? mode)
                            (on-ready))))

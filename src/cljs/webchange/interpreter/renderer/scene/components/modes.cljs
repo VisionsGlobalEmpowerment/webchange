@@ -17,3 +17,7 @@
 (defn start-on-ready?
   [mode]
   (some #{mode} [::game ::sandbox]))
+
+(defn fullscreen?
+  [mode]
+  (some #{mode} [::game]))
