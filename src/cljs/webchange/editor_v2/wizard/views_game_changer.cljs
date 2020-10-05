@@ -5,7 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.editor-v2.wizard.state.activity :as state-activity]
-    [webchange.editor-v2.wizard.views-activity :refer [activity-skill-info template-info]]))
+    [webchange.editor-v2.wizard.views-activity :refer [activity-skills-info template-info]]))
 
 (defn- simple-activity-info
   []
@@ -28,7 +28,7 @@
                                     :default-value (:name @data)
                                     :on-change     #(swap! data assoc :name (-> % .-target .-value))}]]
                    [ui/grid {:item true :xs 10}
-                    [activity-skill-info data]]
+                    [activity-skills-info data]]
                    [ui/grid {:item true :xs 10}
                     [ui/form-control {:style {:margin-top "-8px"}}
                      [ui/input-label "Template"]

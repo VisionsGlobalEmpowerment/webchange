@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.wizard.views-activity-string
+(ns webchange.editor-v2.wizard.activity-template.views-string
   (:require
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
