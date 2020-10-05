@@ -23,12 +23,10 @@
 
 (defn- element->viewport
   [el]
-  (if-not (nil? el)
+  (when-not (nil? el)
     (let [bound-rect (.getBoundingClientRect el)]
       {:width  (.-width bound-rect)
-       :height (.-height bound-rect)})
-    {:width  1920
-     :height 1080}))
+       :height (.-height bound-rect)})))
 
 (defn stage
   []
@@ -54,7 +52,8 @@
                          [:div {:ref   #(when % (reset! container (.-parentNode %)))
                                 :style {:width  "100%"
                                         :height "100%"}}
-                          (when (and (:done @loading)
+                          (when (and (some? viewport)
+                                     (:done @loading)
                                      (or (= mode ::modes/editor)
                                          (:started? scene-data)))
                             [scene {:mode     mode
@@ -62,9 +61,10 @@
                                     :viewport viewport
                                     :on-ready on-ready
                                     :started? (:started? scene-data)}])
-                          (when (or (not (:done @loading))
-                                    (and (not (:started? scene-data))
-                                         (not= mode ::modes/editor)))
+                          (when (and (some? viewport)
+                                     (or (not (:done @loading))
+                                         (and (not (:started? scene-data))
+                                              (not= mode ::modes/editor))))
                             (let [scale-x (:scale-x viewport)
                                   scale-y (:scale-y viewport)
                                   translate-x (* -100 (- (/ 1 (* 2 scale-x)) 0.5))
