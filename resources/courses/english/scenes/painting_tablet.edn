@@ -89,4 +89,4 @@
                                      :description "Initial action"},
                  :start-activity    {:type "start-activity", :id "painting-tablet"}},
  :triggers      {:start {:on "start", :action "start"}, :finish {:on "back", :action "finish-activity"}},
- :metadata      {:prev "map", :autostart true}}
+ :metadata      {:prev "library", :autostart true}}
