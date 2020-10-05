@@ -95,14 +95,15 @@
    :name "vera-45",
    :skin "vera",
    :speed 1,
+   :visible false,
    :start true,
    :states
-   {:init-home {:x 1000, :y 620},
-    :init-park {:x 1325, :y 960},
-    :init-feria {:x 590, :y 960},
-    :init-cinema {:x 1627, :y 672},
-    :init-library {:x 299, :y 576},
-    :init-stadium {:x 1488, :y 399}}}},
+   {:init-home {:x 1000, :y 620, :visible true},
+    :init-park {:x 1325, :y 960, :visible true},
+    :init-feria {:x 590, :y 960, :visible true},
+    :init-cinema {:x 1627, :y 672, :visible true},
+    :init-library {:x 299, :y 576, :visible true},
+    :init-stadium {:x 1488, :y 399}, :visible true}}},
  :scene-objects [["background"] ["home" "feria" "park" "library" "stadium" "cinema" "vera"]],
  :actions
  {:init
