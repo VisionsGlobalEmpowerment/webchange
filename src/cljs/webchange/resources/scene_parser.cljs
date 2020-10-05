@@ -117,7 +117,7 @@
          previews (->> course-scenes
                        (map (fn [[scene-name {:keys [preview]}]]
                               [scene-name preview]))
-                       (remove (fn [_ preview] (nil? preview)))
+                       (remove (fn [[_ preview]] (nil? preview)))
                        (into {}))]
      (if (some? scene)
        (get previews scene)
