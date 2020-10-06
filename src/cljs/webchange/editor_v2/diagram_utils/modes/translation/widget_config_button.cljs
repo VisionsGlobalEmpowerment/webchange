@@ -4,7 +4,8 @@
     [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.translator.text.chunks :as chunks]))
+    [webchange.editor-v2.translator.text.views-text-animation-editor :as chunks]
+    [webchange.ui.utils :refer [deep-merge]]))
 
 (def fab (r/adapt-react-class (aget js/MaterialUI "Fab")))
 
@@ -18,15 +19,19 @@
                    :height   "36px"}})
 
 (defn config-button
-  [node-data]
-  (let [action-data (:data node-data)
-        type (-> action-data :type keyword)
-        styles (get-styles)]
-    (when (= :text-animation type)
+  [{:keys [node-data get-target-node styles]
+    :or   {get-target-node identity
+           styles          {}}}]
+  (let [node (get-target-node node-data)
+        action-data (:data node)
+        action-type (-> action-data :type keyword)
+        styles (-> (get-styles)
+                   (deep-merge styles))]
+    (when (= :text-animation action-type)
       [fab {:style    (:config-button styles)
             :size     "small"
             :on-click (fn [event]
                         (.stopPropagation event)
-                        (re-frame/dispatch [::translator-form.actions/set-current-phrase-action node-data])
+                        (re-frame/dispatch [::translator-form.actions/set-current-phrase-action node])
                         (re-frame/dispatch [::chunks/open action-data]))}
        [ic/settings]])))

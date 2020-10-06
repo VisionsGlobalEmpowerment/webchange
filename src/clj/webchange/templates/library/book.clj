@@ -30,6 +30,7 @@
                         }
         :scene-objects [["background" "next-page-arrow" "group-0"]],
         :actions       {:dialog-1-title {:type               "sequence-data",
+                                         :editor-type        "dialog",
                                          :concept-var        "current-word",
                                          :data               [{:type "sequence-data"
                                                                :data [{:type "empty" :duration 0}
@@ -73,7 +74,7 @@
         end (+ start (count part))]
     {:start start :end end}))
 
-(defn parts->chunks
+(defn- parts->chunks
   [phrase parts]
   (loop [idx 0
          tail parts
@@ -87,7 +88,6 @@
 
 (defn- text->chunks
   [text]
-  []
   (parts->chunks text (clojure.string/split text #" ")))
 
 (defn- create-page
@@ -104,14 +104,15 @@
   [idx {:keys [text]}]
   (let [dialog {:type               "sequence-data",
                 :concept-var        "current-word",
-                :data               [{:type "sequence-data"
-                                      :data [{:type "empty" :duration 0}
-                                             {:data        [],
-                                              :type        "text-animation",
-                                              :audio       nil,
-                                              :target      (str "text-" idx),
-                                              :animation   "bounce",
-                                              :phrase-text text}]}],
+                :data               [{:type        "sequence-data"
+                                      :editor-type "dialog",
+                                      :data        [{:type "empty" :duration 0}
+                                                    {:data        [],
+                                                     :type        "text-animation",
+                                                     :audio       nil,
+                                                     :target      (str "text-" idx),
+                                                     :animation   "bounce",
+                                                     :phrase-text text}]}],
                 :phrase             (str "dialog-page-" idx),
                 :phrase-description (str "Page " idx),
                 :dialog-track       "2 Pages"}
@@ -162,7 +163,4 @@
       (add-pages (:pages args))))
 
 (core/register-template
-  (:id m)
-  m
-  f)
-
+  (:id m) m f)

@@ -53,6 +53,16 @@
      [phrase node]
      [menu node]]))
 
+(defn- get-target-node
+  [node-data]
+  (let [empty-action-pair-node? (and (->> node-data :data :type (= "sequence-data"))
+                                     (->> node-data :data :data count (= 2))
+                                     (->> node-data :data :data first :type (= "empty")))]
+    (if empty-action-pair-node?
+      (->> {:data (-> node-data :data :data second)
+            :path (-> node-data :path (concat [1]))})
+      (->> (str "Dialog node data not supported") js/Error. throw))))
+
 (defn- wrapper
   [{:keys [node-data]}]
   (let [this (r/current-component)
@@ -62,7 +72,10 @@
                                   (:node styles))}
            [play-button node-data]
            [loop-icon node-data]
-           [config-button node-data]]
+           [config-button {:node-data       node-data
+                           :get-target-node get-target-node
+                           :styles          {:config-button {:top    nil
+                                                             :bottom 0}}}]]
           (r/children this))))
 
 (defn get-widget-data

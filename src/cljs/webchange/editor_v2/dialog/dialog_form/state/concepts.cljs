@@ -107,7 +107,7 @@
       {:dispatch-n (vec (map (fn [name] [::update-current-concept [name] (:template (get-schema-template-by-name db name))]) to-add) )})))
 
 (re-frame/reg-event-fx
-  ::add-new-phrase-inconcept-action
+  ::add-new-phrase-in-concept-action
   (fn [{:keys [db]} [_ action node relative-position]]
     (let [{:keys [concept-action? base-action base-path target-position]} (actions/get-node-data node)
           data-patch (-> base-action
@@ -117,7 +117,7 @@
         {:dispatch-n (list [::translator-form.concepts/update-current-concept base-path data-patch])}))))
 
 (re-frame/reg-event-fx
-  ::delete-phrase-inconcept-action
+  ::delete-phrase-in-concept-action
   (fn [{:keys [db]} [_ node]]
     (let [{:keys [concept-action? parent-action base-path item-position base-action target-position]} (actions/get-node-data node)]
       (if (and (actions/node-parallel? parent-action) (not= item-position 0))
@@ -136,7 +136,7 @@
             {:dispatch-n (list [::translator-form.concepts/update-current-concept base-path data-patch])}))))))
 
 (re-frame/reg-event-fx
-  ::add-inconcept-parallel-action
+  ::add-in-concept-parallel-action
   (fn [{:keys [db]} [_ action node]]
     (let [
           {:keys [concept-action? parent-action base-path base-action target-position]} (actions/get-node-data node)

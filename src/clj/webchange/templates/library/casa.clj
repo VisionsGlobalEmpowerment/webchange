@@ -273,7 +273,7 @@
                 (map-indexed (fn [idx c] (merge c (get character-positions idx))))
                 (map (fn [c] [(-> c :name keyword) (create-character c)]))
                 (into {}))
-        names (->> cs keys (map name) (into []))]
+        names (->> cs keys (map name) (map clojure.string/lower-case) (into []))]
     (-> t
         (update :objects merge cs)
         (update :scene-objects conj names))))
