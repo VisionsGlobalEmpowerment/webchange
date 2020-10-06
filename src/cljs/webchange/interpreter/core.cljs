@@ -135,19 +135,28 @@
             (put-data object-url-key)))
       (get-data object-url-key))))
 
-(defn length
-  [cx cy x y]
-  (Math/sqrt (+ (Math/pow (- cx x) 2) (Math/pow (- cy y) 2))))
+(defn- length
+  [p1 p2]
+  (Math/sqrt (+ (Math/pow (- (:x p1) (:x p2)) 2)
+                (Math/pow (- (:y p1) (:y p2)) 2))))
+
+(defn- bezier-length
+  [p1 p2 p3 p4]
+  (->> [[p1 p2] [p2 p3] [p3 p4]]
+       (map (fn [points-pair] (apply length points-pair)))
+       (apply +)))
 
 (defn transition-duration
-  [component {:keys [x y]} {:keys [duration speed]}]
+  [component {:keys [x y bezier]} {:keys [duration speed]}]
   (let [position (w/get-position component)
         cx (:x position)
         cy (:y position)]
     (cond
       (> duration 0) duration
-      (> speed 0) (/ (length cx cy x y) speed)
-      :else (/ (length cx cy x y) 100))))
+      (> speed 0) (if (some? bezier)
+                    (/ (apply bezier-length (concat [{:x cx :y cy}] bezier)) speed)
+                    (/ (length {:x cx :y cy} {:x x :y y}) speed))
+      :else (/ (length {:x cx :y cy} {:x x :y y}) 100))))
 
 ;(defn ->easing
 ;  [easing]
