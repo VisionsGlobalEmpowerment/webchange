@@ -173,6 +173,11 @@
     (when on-kill
       (on-kill))))
 
+(defn kill-transitions!
+  []
+  (doseq [on-kill (vals @transitions)]
+    (when on-kill (on-kill))))
+
 (defn- get-tween-object-params
   [object params]
   (let [params-to-animate (if (contains? params :bezier)

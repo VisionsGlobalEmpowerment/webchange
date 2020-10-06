@@ -1,5 +1,6 @@
 (ns webchange.interpreter.renderer.scene.app
   (:require
+    [webchange.interpreter.core :refer [kill-transitions!]]
     [webchange.interpreter.renderer.scene.filters.filters :as filters]
     [webchange.interpreter.pixi :refer [clear-texture-cache destroy-texture-cache sound]]))
 
@@ -31,6 +32,7 @@
 (defn reset-app!
   []
   (when (app-exists?)
+    (kill-transitions!)
     (remove-all-tickers)
     (let [stage (.-stage @pixi-app)
           children (.removeChildren stage)]
