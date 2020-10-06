@@ -744,37 +744,34 @@
                                           {:type "sequence-data",
                                            :data
                                                  [{:id "default", :type "state", :target "box1"}
-                                                  {:id "visible", :type "state", :target "box-ph"}
-                                                  {:type "empty", :duration 500}
                                                   {:type       "set-slot",
                                                    :target     "box-ph",
                                                    :from-var   [{:var-name "item-1", :var-property "image-src", :action-property "image"}],
                                                    :slot-name  "box1",
                                                    :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:id "visible", :type "state", :target "box-ph"}
                                                   {:from "item-1", :type "copy-variable", :var-name "current-word"}]},
                  :show-box-2-ph
                                           {:type "sequence-data",
                                            :data
                                                  [{:id "default", :type "state", :target "box2"}
-                                                  {:id "visible", :type "state", :target "box-ph"}
-                                                  {:type "empty", :duration 500}
                                                   {:type       "set-slot",
                                                    :target     "box-ph",
                                                    :from-var   [{:var-name "item-2", :var-property "image-src", :action-property "image"}],
                                                    :slot-name  "box1",
                                                    :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:id "visible", :type "state", :target "box-ph"}
                                                   {:from "item-2", :type "copy-variable", :var-name "current-word"}]},
                  :show-box-3-ph
                                           {:type "sequence-data",
                                            :data
                                                  [{:id "default", :type "state", :target "box3"}
-                                                  {:id "visible", :type "state", :target "box-ph"}
-                                                  {:type "empty", :duration 500}
                                                   {:type       "set-slot",
                                                    :target     "box-ph",
                                                    :from-var   [{:var-name "item-3", :var-property "image-src", :action-property "image"}],
                                                    :slot-name  "box1",
                                                    :attachment {:x 40, :scale-x 4, :scale-y 4}}
+                                                  {:id "visible", :type "state", :target "box-ph"}
                                                   {:from "item-3", :type "copy-variable", :var-name "current-word"}]},
                  :show-boxes
                                           {:type "parallel",
@@ -799,9 +796,10 @@
                                                   "mari-move-to-start"]},
                  :start-swings            {:type "sequence", :data ["prepare-swing" "swing"], :tags ["swings"]},
                  :stop-activity           {:type "stop-activity", :id "swings"},
-                 :stop-swings             {:type "sequence", :data ["stop-swings-1" "stop-swings-2"]},
-                 :stop-swings-1           {:type "remove-flows", :flow-tag "swings"},
-                 :stop-swings-2           {:type "transition", :to {:loop false, :duration 0.5, :rotation 0}, :transition-id "swings"},
+                 :stop-swings             {:type "sequence-data"
+                                           :data [{:type "remove-flows", :flow-tag "swings"}
+                                                  {:type "stop-transition" :id "swings"}
+                                                  {:type "transition", :to {:loop false, :duration 0.5, :rotation 0}, :transition-id "swings"}]},
                  :swing                   {:type "sequence", :data ["swing-right" "swing-left" "swing"], :return-immediately true, :tags ["swings"]},
                  :swing-left              {:type "transition", :to {:loop false, :duration 2, :rotation -15}, :transition-id "swings"},
                  :swing-right             {:type "transition", :to {:loop false, :duration 2, :rotation 15}, :transition-id "swings"},
