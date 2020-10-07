@@ -133,7 +133,9 @@
                             {:x 181, :y 419, :name "library", :object "library"}
                             {:x 1581, :y 269, :name "stadium", :object "stadium"}
                             {:x 881, :y 490, :name "home", :object "home"}
-                            {:x 881, :y 490, :name "cinema", :object "cinema"}],
+                            {:x 881, :y 490, :name "cinema", :object "cinema"}
+                            {:x 520, :y 200, :name "music-hall", :object "music-hall"}
+                            {:x 1120, :y 190, :name "shopping-mall", :object "shopping-mall"}],
                   :type    "non-scored",
                   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
                  :volleyball-letters

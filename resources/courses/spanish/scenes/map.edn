@@ -1,16 +1,14 @@
 {:assets
  [{:url "/raw/audio/background/Map.mp3", :size 10, :type "audio"}
   {:url "/raw/img/map/background.jpg", :size 10, :type "image"}
-  {:url "/raw/img/map/casa_01.png", :size 1, :type "image"}
-  {:url "/raw/img/map/casa_02.png", :size 1, :type "image"}
-  {:url "/raw/img/map/feria_01.png", :size 1, :type "image"}
-  {:url "/raw/img/map/feria_02.png", :size 1, :type "image"}
-  {:url "/raw/img/map/feria_03.png", :size 1, :type "image"}
+  {:url "/raw/img/map/home.png", :size 1, :type "image"}
   {:url "/raw/img/map/feria_locked.png", :size 1, :type "image"}
-  {:url "/raw/img/map/Biblioteca_Enabled.png", :size 1, :type "image"}
-  {:url "/raw/img/map/Cine_Enabled.png", :size 1, :type "image"}
-  {:url "/raw/img/map/Estadio_Enabled.png", :size 1, :type "image"}
-  {:url "/raw/img/map/Parque_Enabled.png", :size 1, :type "image"}],
+  {:url "/raw/img/map/library.png", :size 1, :type "image"}
+  {:url "/raw/img/map/shopping_mall.png", :size 1, :type "image"}
+  {:url "/raw/img/map/cinema.png", :size 1, :type "image"}
+  {:url "/raw/img/map/stadium.png", :size 1, :type "image"}
+  {:url "/raw/img/map/music_hall.png", :size 1, :type "image"}
+  {:url "/raw/img/map/park.png", :size 1, :type "image"}],
  :objects
  {:background {:type "background", :brightness -0.15, :filter "brighten", :src "/raw/img/map/background.jpg"},
   :cinema
@@ -24,7 +22,7 @@
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "cinema"}}},
    :filter "brighten",
    :highlight true,
-   :src "/raw/img/map/Cine_Enabled.png"},
+   :src "/raw/img/map/cinema.png"},
   :feria
   {:type "image",
    :x 216,
@@ -45,10 +43,7 @@
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "home"}}},
    :filter "brighten",
    :highlight true,
-   :src "/raw/img/map/casa_01.png",
-   :states
-   {:hover {:src "/raw/img/map/casa_02.png", :type "image"},
-    :default {:src "/raw/img/map/casa_01.png", :type "image"}}},
+   :src "/raw/img/map/home.png"},
   :library
   {:type "image",
    :x 91,
@@ -59,7 +54,7 @@
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "library"}}},
    :filter "brighten",
    :highlight true,
-   :src "/raw/img/map/Biblioteca_Enabled.png"},
+   :src "/raw/img/map/library.png"},
   :park
   {:type "image",
    :x 1337,
@@ -70,7 +65,7 @@
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "park"}}},
    :filter "brighten",
    :highlight true,
-   :src "/raw/img/map/Parque_Enabled.png"},
+   :src "/raw/img/map/park.png"},
   :stadium
   {:type "image",
    :x 1481,
@@ -81,7 +76,31 @@
    :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "stadium"}}},
    :filter "brighten",
    :highlight true,
-   :src "/raw/img/map/Estadio_Enabled.png"},
+   :src "/raw/img/map/stadium.png"},
+  :music-hall
+  {:type "image",
+   :x 420,
+   :y 100,
+   :width 230,
+   :height 210,
+   :scale {:x 1, :y 1},
+   :transition "cinema",
+   :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "music-hall"}}},
+   :filter "brighten",
+   :highlight true,
+   :src "/raw/img/map/music_hall.png"},
+  :shopping-mall
+  {:type "image",
+   :x 1020,
+   :y 90,
+   :width 230,
+   :height 210,
+   :scale {:x 1, :y 1},
+   :transition "cinema",
+   :actions {:click {:id "navigate-to-scene", :on "click", :type "action", :params {:scene-id "shopping-mall"}}},
+   :filter "brighten",
+   :highlight true,
+   :src "/raw/img/map/shopping_mall.png"},
   :vera
   {:type "animation",
    :x 1070,
@@ -104,7 +123,7 @@
     :init-cinema {:x 1627, :y 672, :visible true},
     :init-library {:x 299, :y 576, :visible true},
     :init-stadium {:x 1488, :y 399}, :visible true}}},
- :scene-objects [["background"] ["home" "feria" "park" "library" "stadium" "cinema" "vera"]],
+ :scene-objects [["background"] ["home" "feria" "park" "library" "music-hall" "shopping-mall" "stadium" "cinema"] ["vera"]],
  :actions
  {:init
   {:type "sequence-data",
