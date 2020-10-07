@@ -177,7 +177,7 @@
                                                        ["box-1-jump-in-animation-jump" "box-1-jump-in-empty" "box-1-jump-in-transition" "box-1-jump-in-animation-idle"]},
                  :box-1-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box1", :loop true},
                  :box-1-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box1"},
-                 :box-1-jump-in-empty           {:type "empty", :duration 500},
+                 :box-1-jump-in-empty           {:type "empty", :duration 150},
                  :box-1-jump-in-transition
                                                 {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box1"},
                  :box-1-jump-out
@@ -189,7 +189,7 @@
                                                         "box-1-jump-out-animation-idle"]},
                  :box-1-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box1", :loop true},
                  :box-1-jump-out-animation-jump {:type "animation", :id "jump2", :target "box1"},
-                 :box-1-jump-out-empty          {:type "empty", :duration 500},
+                 :box-1-jump-out-empty          {:type "empty", :duration 150},
                  :box-1-jump-out-transition
                                                 {:type "transition", :to {:x 304, :y 826, :loop false, :duration 0.7}, :transition-id "box1"},
                  :box-1-start
@@ -216,7 +216,7 @@
                                                        ["box-2-jump-in-animation-jump" "box-2-jump-in-empty" "box-2-jump-in-transition" "box-2-jump-in-animation-idle"]},
                  :box-2-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box2", :loop true},
                  :box-2-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box2"},
-                 :box-2-jump-in-empty           {:type "empty", :duration 500},
+                 :box-2-jump-in-empty           {:type "empty", :duration 150},
                  :box-2-jump-in-transition
                                                 {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box2"},
                  :box-2-jump-out
@@ -228,7 +228,7 @@
                                                         "box-2-jump-out-animation-idle"]},
                  :box-2-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box2", :loop true},
                  :box-2-jump-out-animation-jump {:type "animation", :id "jump2", :target "box2"},
-                 :box-2-jump-out-empty          {:type "empty", :duration 500},
+                 :box-2-jump-out-empty          {:type "empty", :duration 150},
                  :box-2-jump-out-transition
                                                 {:type "transition", :to {:x 401, :y 696, :loop false, :duration 0.7}, :transition-id "box2"},
                  :box-2-start
@@ -255,7 +255,7 @@
                                                        ["box-3-jump-in-animation-jump" "box-3-jump-in-empty" "box-3-jump-in-transition" "box-3-jump-in-animation-idle"]},
                  :box-3-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box3", :loop true},
                  :box-3-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box3"},
-                 :box-3-jump-in-empty           {:type "empty", :duration 500},
+                 :box-3-jump-in-empty           {:type "empty", :duration 150},
                  :box-3-jump-in-transition
                                                 {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box3"},
                  :box-3-jump-out
@@ -267,7 +267,7 @@
                                                         "box-3-jump-out-animation-idle"]},
                  :box-3-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box3", :loop true},
                  :box-3-jump-out-animation-jump {:type "animation", :id "jump2", :target "box3"},
-                 :box-3-jump-out-empty          {:type "empty", :duration 500},
+                 :box-3-jump-out-empty          {:type "empty", :duration 150},
                  :box-3-jump-out-transition
                                                 {:type "transition", :to {:x 600, :y 674, :loop false, :duration 0.7}, :transition-id "box3"},
                  :box-3-start
@@ -294,7 +294,7 @@
                                                        ["box-4-jump-in-animation-jump" "box-4-jump-in-empty" "box-4-jump-in-transition" "box-4-jump-in-animation-idle"]},
                  :box-4-jump-in-animation-idle  {:type "add-animation", :id "idle2", :target "box4", :loop true},
                  :box-4-jump-in-animation-jump  {:type "animation", :id "jump2", :target "box4"},
-                 :box-4-jump-in-empty           {:type "empty", :duration 500},
+                 :box-4-jump-in-empty           {:type "empty", :duration 150},
                  :box-4-jump-in-transition
                                                 {:type "transition", :to {:x 668, :y 798, :loop false, :duration 0.7}, :transition-id "box4"},
                  :box-4-jump-out
@@ -306,7 +306,7 @@
                                                         "box-4-jump-out-animation-idle"]},
                  :box-4-jump-out-animation-idle {:type "add-animation", :id "idle2", :target "box4", :loop true},
                  :box-4-jump-out-animation-jump {:type "animation", :id "jump2", :target "box4"},
-                 :box-4-jump-out-empty          {:type "empty", :duration 500},
+                 :box-4-jump-out-empty          {:type "empty", :duration 150},
                  :box-4-jump-out-transition
                                                 {:type "transition", :to {:x 919, :y 741, :loop false, :duration 0.7}, :transition-id "box4"},
                  :box-4-start
