@@ -149,9 +149,15 @@
   ::execute-case
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [value options] :as action}]
-    (let [success (get options (keyword value))]
-      (if value
-        {:dispatch-n (list [::e/execute-action success] (e/success-event action))}))))
+    (let [success (get options (keyword value))
+          default (get options :default)
+          ]
+      (if default
+        (if success
+          {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
+          {:dispatch-n (list [::e/execute-action default] (e/success-event action))})
+        (if value
+          {:dispatch-n (list [::e/execute-action success] (e/success-event action))})))))
 
 (re-frame/reg-event-fx
   ::execute-counter

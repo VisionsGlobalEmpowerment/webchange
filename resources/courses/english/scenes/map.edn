@@ -120,7 +120,8 @@
                                                              :cinema     {:id "init-cinema", :type "state", :target "vera"},
                                                              :library    {:id "init-library", :type "state", :target "vera"},
                                                              :stadium    {:id "init-stadium", :type "state", :target "vera"},
-                                                             :volleyball {:id "init-stadium", :type "state", :target "vera"}},
+                                                             :volleyball {:id "init-stadium", :type "state", :target "vera"},
+                                                             :default {:id "init-home", :type "state", :target "vera"}},
                                                   :from-var [{:var-name "last-location", :action-property "value"}]}]},
                  :move
                                          {:type               "move",
