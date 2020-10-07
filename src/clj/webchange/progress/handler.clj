@@ -52,5 +52,4 @@
            (POST "/api/courses/:course-slug/current-progress" [course-slug :as request]
              (handle-save-course-progress course-slug request))
            (PUT "/api/individual-profile/:student-id/course/:course-slug/complete" [student-id course-slug :as request]
-             (handle-complete-progress student-id course-slug request))
-           )
+             (handle-complete-progress student-id course-slug request)))

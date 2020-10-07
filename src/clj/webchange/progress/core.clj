@@ -4,6 +4,7 @@
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword]]
             [webchange.auth.core :as auth]
+            [webchange.progress.activity :as activity]
             [webchange.events :as events]
             [webchange.class.core :as class]
             [webchange.course.core :as course]
@@ -165,14 +166,25 @@
           filtered-levels))
       prepared)))
 
+(defn next-not-finished
+  [levels finished]
+  (let [[level-num level] (apply max-key key finished)
+        [lesson-num _] (apply max-key key level)
+        level (first (filter #(= level-num (:level %)) levels))
+        lesson (first (filter #(= lesson-num (:lesson %)) (:lessons level)))
+        activity (:activity (last (:activities lesson)))]
+    (activity/next-for levels {:level level-num :lesson lesson-num :activity activity})))
+
 (defn complete-individual-progress! [course-slug student-id {lesson :lesson level :level}]
   (let [{user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:slug course-slug})
-        finished (-> (course/get-course-data course-slug)
-                     :levels
+        levels (-> (course/get-course-data course-slug) :levels)
+        finished (-> levels
                      (levels->finished level lesson))
+        next (next-not-finished levels finished)
         progress (->
                    (db/get-progress {:user_id user-id :course_id course-id})
                    :data
-                   (assoc :finished finished))]
+                   (assoc :finished finished)
+                   (assoc :next next))]
     (save-progress! user-id course-slug {:progress progress})))
