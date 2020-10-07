@@ -73,7 +73,7 @@
                                              :transform (str "scale(" scale-x ", " scale-y ")"
                                                              "translate(" translate-x "%, " translate-y "%)"
                                                              "translate(" (:x viewport) "px, " (:y viewport) "px)")
-                                             :width     (:display-width viewport)
-                                             :height    (:display-height viewport)}}
+                                             :width     (:target-width viewport)
+                                             :height    (:target-height viewport)}}
                                [loader-screen {:on-start-click on-start-click
                                                :loading        @loading}]]))]))})))
