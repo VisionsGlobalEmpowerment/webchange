@@ -83,40 +83,7 @@
  :scene-objects [["background"] ["book" "writing-lesson" "magic-hat" "painting-tablet" "librarian" "vera"]],
  :actions
                 {:start-background-music {:type "audio", :id "background", :loop true},
-                 :start-book-scene
-                                         {:type "sequence-data",
-                                          :data
-                                                [{:data     [{:end 2.73, :anim "talk", :start 0.41} {:end 5.32, :anim "talk", :start 3.89}],
-                                                  :type     "animation-sequence",
-                                                  :audio    "/raw/audio/l1/a6/lion/2Bienvenidos a nuestra biblioteca.mp3",
-                                                  :start    0.28,
-                                                  :track    1,
-                                                  :offset   0.28,
-                                                  :target   "librarian",
-                                                  :duration 5.234}
-                                                 {:data
-                                                            [{:end 2.073, :anim "talk", :start 0.504, :duration 1.569}
-                                                             {:end 4.562, :anim "talk", :start 2.611, :duration 1.951}],
-                                                  :type     "animation-sequence",
-                                                  :audio    "/raw/audio/l1/a6/L1_A6_Vera.m4a",
-                                                  :start    0.465,
-                                                  :track    1,
-                                                  :offset   0.465,
-                                                  :target   "vera",
-                                                  :duration 4.184}
-                                                 {:data
-                                                            [{:end 1.02, :anim "talk", :start 0.56}
-                                                             {:end 1.92, :anim "talk", :start 1.03}
-                                                             {:end 3.78, :anim "talk", :start 2.48}
-                                                             {:end 5.81, :anim "talk", :start 4.23}],
-                                                  :type     "animation-sequence",
-                                                  :audio    "/raw/audio/l1/a6/lion/2Si te gustan los libros.mp3",
-                                                  :start    0.315,
-                                                  :track    1,
-                                                  :offset   0.315,
-                                                  :target   "librarian",
-                                                  :duration 5.737}
-                                                 {:type "scene", :scene-id "book"}]}},
+                 :start-book-scene {:type "scene", :scene-id "book"}},
  :triggers      {:music {:on "start", :action "start-background-music"}},
  :metadata      {:prev "map", :autostart true},
  :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"}}

@@ -85,55 +85,8 @@
                               :speed  0.3,
                               :start  true}},
  :scene-objects [["background" "book" "writing-lesson" "magic-hat" "painting-tablet"] ["librarian" "vera"]],
- :actions
-                {:go-to-book-scene       {:type "scene", :scene-id "book"},
-                 :start-background-music {:type "audio", :id "background", :loop true},
-                 :start-book-scene       {:type "sequence", :data ["welcome" "vera-agree" "start-reading" "go-to-book-scene"]},
-                 :start-reading
-                                         {:type                          "animation-sequence",
-                                          :data                          [{:end 11.19, :anim "talk", :start 8.49}],
-                                          :phrase                        "start-reading",
-                                          :phrase-description            "Read book",
-                                          :phrase-description-translated "Place for books",
-                                          :phrase-text                   "Si te gustan los libros, estas en el lugar adecuado! Aqui tenemos muchos!",
-                                          :phrase-text-translated        "You are in the right place if you like books. ",
-                                          :target                        "librarian",
-                                          :audio                         "/upload/JIYLCZMSNOSYYKMI.mp3",
-                                          :start                         8.382,
-                                          :duration                      3.167,
-                                          :track                         1,
-                                          :offset                        9.249},
-                 :vera-agree
-                                         {:type               "animation-sequence",
-                                          :data
-                                                              [{:end 2.073, :anim "talk", :start 0.504, :duration 1.569}
-                                                               {:end 4.562, :anim "talk", :start 2.611, :duration 1.951}],
-                                          :phrase             "vera-agree",
-                                          :phrase-description "Vera agree",
-                                          :phrase-text        "Oh, si por favor! Me gustan mucho los libros!",
-                                          :target             "vera",
-                                          :audio              "/raw/audio/l1/a6/L1_A6_Vera.m4a",
-                                          :start              0.465,
-                                          :duration           4.184,
-                                          :track              1,
-                                          :offset             0.465},
-                 :welcome
-                                         {:type                          "animation-sequence",
-                                          :data
-                                                                         [{:end 3.18, :anim "talk", :start 1.41}
-                                                                          {:end 3.42, :anim "talk", :start 3.3}
-                                                                          {:end 5.29, :anim "talk", :start 3.97}],
-                                          :phrase                        "welcome",
-                                          :phrase-description            "Welcome speech",
-                                          :phrase-description-translated "Welcome",
-                                          :phrase-text                   "Bienvenidos a nuestra biblioteca! Te gustaria leer un libro?",
-                                          :phrase-text-translated        "Welcome to our library!  Would you like to read a book?",
-                                          :target                        "librarian",
-                                          :audio                         "/upload/JIYLCZMSNOSYYKMI.mp3",
-                                          :start                         1.289,
-                                          :duration                      4.274,
-                                          :track                         1,
-                                          :offset                        2.249}},
+ :actions       {:start-background-music {:type "audio", :id "background", :loop true},
+                 :start-book-scene       {:type "scene", :scene-id "book"}},
  :triggers      {:music {:on "start", :action "start-background-music"}},
  :metadata      {:prev "map", :autostart true},
  :audio         {:background "/raw/audio/background/POL-daily-special-short.mp3"}}
