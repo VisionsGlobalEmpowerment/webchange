@@ -1,7 +1,5 @@
 (ns webchange.student-dashboard.history.views-history-list
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.student-dashboard.events :as sde]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.student-dashboard.history.views-history-list-item :refer [history-list-item]]
     [webchange.ui.theme :refer [get-in-theme]]))
@@ -17,7 +15,7 @@
    :list            {:background-color (get-in-theme [:palette :background :default])}
    :list-item       {:border-bottom-style "solid"
                      :border-bottom-width "1px"
-                     :border-bottom-color (get-in-theme [:palette :text :secondary])}})
+                     :border-bottom-color (get-in-theme [:palette :border :default])}})
 
 (defn- last?
   [item list]
@@ -34,22 +32,17 @@
 (defn history-list
   [{:keys [data max-count on-click]}]
   (let [styles (get-styles)
-        history-list (if-not (nil? max-count)
-                       (take-last max-count data)
-                       data)]
+        history-list (->> (if-not (nil? max-count)
+                            (take-last max-count data)
+                            data)
+                          (reverse))]
     (if (< 0 (count history-list))
       [ui/list {:style (:list styles)}
-       (for [{:keys [level lesson activity] :as item} (reverse history-list)]
-         (let [style (when-not (last? item data)
+       (for [{:keys [level lesson activity] :as item} history-list]
+         (let [style (when-not (last? item history-list)
                        (:list-item styles))]
            ^{:key (str level "-" lesson "-" activity)}
            [history-list-item (merge (prepare-data item)
                                      {:on-click on-click
-                                      :style    style})]))
-       [ui/list-item {:button   true
-                      :on-click #(re-frame/dispatch [::sde/show-more])
-                      :style    (:block styles)}
-        [ui/button {:color    "primary"
-                    :on-click #(re-frame/dispatch [::sde/show-more])}
-         "Show More"]]]
+                                      :style    style})]))]
       [empty-list-placeholder])))

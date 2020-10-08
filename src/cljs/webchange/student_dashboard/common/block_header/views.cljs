@@ -5,17 +5,22 @@
 
 (defn- get-styles
   []
-  {:container {:display "flex"
-               :padding "24px 6px"}
-   :icon      {:margin-right "14px"}
-   :text      {:display         "flex"
-               :flex-direction  "column"
-               :justify-content "center"}})
+  {:container      {:display     "flex"
+                    :align-items "center"
+                    :padding     "24px 6px"}
+   :action-wrapper {:margin-right "16px"}
+   :icon           {:margin-right "14px"}
+   :text           {:display         "flex"
+                    :flex-direction  "column"
+                    :justify-content "center"}})
 
 (defn block-header
-  [{:keys [icon text]}]
+  [{:keys [icon text action]}]
   (let [styles (get-styles)]
     [:div {:style (:container styles)}
+     (when (some? action)
+       [:div {:style (:action-wrapper styles)}
+        action])
      [icon {:color (get-in-theme [:palette :primary :main])
             :style (:icon styles)}]
      [ui/typography {:variant "h2"
