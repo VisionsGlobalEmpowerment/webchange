@@ -904,6 +904,11 @@
      :dispatch [::add-pending-event :course-started]}))
 
 (re-frame/reg-event-fx
+  ::stop-playing
+  (fn [{:keys [db]} _]
+    {:db (assoc db :playing false)}))
+
+(re-frame/reg-event-fx
   ::execute-pick-correct
   (fn [{:keys [db]} [_ {:keys [concept-name] :as action}]]
     (let [current-activity (:activity db)

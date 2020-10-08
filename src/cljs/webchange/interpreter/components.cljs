@@ -2,7 +2,9 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.subs :as subs]
+    [webchange.interpreter.renderer.scene.full-screen :refer [request-fullscreen exit-fullscreen lock-screen-orientation]]
     [webchange.interpreter.sound :as sound]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.variables.core :as vars.core]
@@ -10,8 +12,6 @@
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
-    [webchange.interpreter.renderer.scene.scene :as scene-renderer]
-
     [webchange.interpreter.renderer.scene.components.group.propagate]))
 
 (defn- get-layer-objects-data
@@ -42,17 +42,18 @@
   (cond
     (nil? scene-id) nil
     (empty? scene-data) nil
-    (nil? dataset-items) nil   ;; ToDo: actually do not start scene until datasets are loaded, there might be no datasets at all
+    (nil? dataset-items) nil                                ;; ToDo: actually do not start scene until datasets are loaded, there might be no datasets at all
     :else {:scene-id  scene-id
            :objects   (get-scene-objects-data scene-id (:scene-objects scene-data))
            :resources (get-scene-resources scene-id scene-data)
            :started?  (scene-started? scene-id)}))
 
-
 (defn- start-scene
   []
   (sound/init)
-  (re-frame/dispatch [::ie/start-playing]))
+  (re-frame/dispatch [::ie/start-playing])
+  (-> (request-fullscreen)
+      (.then lock-screen-orientation)))
 
 (defn- start-triggers
   []
@@ -70,18 +71,25 @@
           :on-ready       start-triggers
           :on-start-click start-scene}])
 
+(defn- component-will-unmount
+  []
+  (re-frame/dispatch [::ie/stop-playing])
+  (exit-fullscreen))
+
 (defn course
   [{:keys [mode]}]
-  (let [scene-id @(re-frame/subscribe [::subs/current-scene])
-        scene-data @(re-frame/subscribe [::subs/scene scene-id])
-        dataset-items @(re-frame/subscribe [::isubs/dataset-items])]
-    [:div {:style {:position "fixed"
-                   :top      0
-                   :left     0
-                   :width    "100%"
-                   :height   "100%"}}
-     [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
-     [stage-wrapper {:mode          mode
-                     :scene-id      scene-id
-                     :scene-data    scene-data
-                     :dataset-items dataset-items}]]))
+  (r/with-let []
+    (let [scene-id @(re-frame/subscribe [::subs/current-scene])
+          scene-data @(re-frame/subscribe [::subs/scene scene-id])
+          dataset-items @(re-frame/subscribe [::isubs/dataset-items])]
+      [:div {:style {:position "fixed"
+                     :top      0
+                     :left     0
+                     :width    "100%"
+                     :height   "100%"}}
+       [:style "html, body {margin: 0; max-width: 100%; overflow: hidden;}"]
+       [stage-wrapper {:mode          mode
+                       :scene-id      scene-id
+                       :scene-data    scene-data
+                       :dataset-items dataset-items}]])
+    (finally (component-will-unmount))))

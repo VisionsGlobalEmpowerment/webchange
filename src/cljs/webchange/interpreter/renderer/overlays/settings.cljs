@@ -3,19 +3,28 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
-    [webchange.interpreter.renderer.overlays.utils :as utils]))
+    [webchange.interpreter.renderer.overlays.utils :as utils]
+    [webchange.interpreter.renderer.state.scene :as scene]))
+
+(def menu-padding {:x 20 :y 20})
+
+(def close-button-name :close-settings)
+
+(defn- get-close-button-position
+  [viewport]
+  (utils/get-coordinates {:viewport   viewport
+                          :vertical   "top"
+                          :horizontal "right"
+                          :object     (get-in utils/common-elements [:close-button :size])
+                          :padding    menu-padding}))
 
 (defn- get-close-button
-  [{:keys [viewport menu-padding]}]
+  [{:keys [viewport]}]
   (merge {:type        "image"
           :src         (get-in utils/common-elements [:close-button :src])
-          :object-name :close-settings
+          :object-name close-button-name
           :on-click    #(re-frame/dispatch [::ie/close-settings])}
-         (utils/get-coordinates {:viewport   viewport
-                                 :vertical   "top"
-                                 :horizontal "right"
-                                 :object     (get-in utils/common-elements [:close-button :size])
-                                 :padding    menu-padding})))
+         (get-close-button-position viewport)))
 
 (defn- get-music-setting
   [{:keys [x y]}]
@@ -81,15 +90,17 @@
                  (get-music-setting {:x 96 :y 171})
                  (get-sound-settings {:x 1 :y 302})]})
 
-(defn create-settings-overlay
-  [{:keys [parent viewport]}]
-  (create-component {:type        "group"
-                     :parent      parent
-                     :object-name :settings-overlay
-                     :visible     false
-                     :children    [{:type        "image"
-                                    :src         "/raw/img/bg.jpg"
-                                    :object-name :settings-background}
-                                   (get-close-button {:menu-padding {:x 20 :y 20}
-                                                      :viewport     viewport})
-                                   (get-settings-block {:x 580 :y 345})]}))
+(defn create
+  [{:keys [viewport]}]
+  {:type        "group"
+   :object-name :settings-overlay
+   :visible     false
+   :children    [{:type        "image"
+                  :src         "/raw/img/bg.jpg"
+                  :object-name :settings-background}
+                 (get-close-button {:viewport viewport})
+                 (get-settings-block {:x 580 :y 345})]})
+
+(defn update-viewport
+  [{:keys [viewport]}]
+  (re-frame/dispatch [::scene/change-scene-object close-button-name [[:set-position (get-close-button-position viewport)]]]))

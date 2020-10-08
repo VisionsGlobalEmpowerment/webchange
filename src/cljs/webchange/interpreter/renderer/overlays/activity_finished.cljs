@@ -5,48 +5,53 @@
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.overlays.utils :as utils]
+    [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.utils.i18n :refer [t]]))
 
 (def menu-padding {:x 20 :y 20})
 
+(def top-menu-name :close-overall-progress)
+(defn- get-top-menu-position
+  [viewport]
+  (utils/get-coordinates {:viewport   viewport
+                          :vertical   "top"
+                          :horizontal "right"
+                          :object     (get-in utils/common-elements [:close-button :size])
+                          :padding    menu-padding}))
+
+(def score-window-name :score-window)
+
+(def score-window-size {:width  1200
+                        :height 660})
+
+(defn- get-score-window-position
+  [viewport]
+  (utils/get-coordinates {:viewport   viewport
+                          :vertical   "center"
+                          :horizontal "center"
+                          :object     score-window-size}))
+
 (defn- get-background
-  [{:keys [x y width height]}]
-  (let [border-width 10]
-    {:type        "group"
-     :object-name :activity-finished-background-group
-     :children    [{:type        "image"
-                    :src         "/raw/img/bg.jpg"
-                    :object-name :activity-finished-background}
-                   {:type            "rectangle"
-                    :object-name     :activity-finished-frame
-                    :x               x
-                    :y               y
-                    :width           width
-                    :height          height
-                    :border-color    0xbd13c7
-                    :border-width    border-width
-                    :border-radius   56
-                    :fill            0xda12ea
-                    :shadow-color    0x75016e
-                    :shadow-distance 15}]}))
+  []
+  {:type        "group"
+   :object-name :activity-finished-background-group
+   :children    [{:type        "image"
+                  :src         "/raw/img/bg.jpg"
+                  :object-name :activity-finished-background}]})
 
 (defn- get-top-menu
   [{:keys [viewport on-close-click]}]
   (merge {:type        "image"
           :src         (get-in utils/common-elements [:close-button :src])
-          :object-name :close-overall-progress
+          :object-name top-menu-name
           :on-click    on-close-click}
-         (utils/get-coordinates {:viewport   viewport
-                                 :vertical   "top"
-                                 :horizontal "right"
-                                 :object     (get-in utils/common-elements [:close-button :size])
-                                 :padding    menu-padding})))
+         (get-top-menu-position viewport)))
 
 (defn- get-title
-  [{:keys [x y]}]
+  []
   (let [font-size 102]
-    {:x               x
-     :y               (- y (/ font-size 1.5))
+    {:x               (/ (:width score-window-size) 2)
+     :y               (/ font-size -1.5)
      :type            "text"
      :text            "Nice Work!"
      :object-name     :overall-progress-title
@@ -173,45 +178,52 @@
                     :on-click    on-next-click
                     :text        (t "next")}]}))
 
-(defn create-activity-finished-overlay
-  [{:keys [parent viewport]}]
+(defn- get-score-window
+  [viewport]
   (let [go-to-next-activity #(re-frame/dispatch [::ie/run-next-activity])
         restart-activity #(re-frame/dispatch [::ie/restart-scene])
         continue-playing #(re-frame/dispatch [::ie/next-scene])
-        close-screen #(re-frame/dispatch [::overlays/close-activity-finished])
-        score-window-size {:width  1200
-                           :height 660}
-        score-window-position (utils/get-coordinates {:viewport   viewport
-                                                      :vertical   "center"
-                                                      :horizontal "center"
-                                                      :object     score-window-size})
-        title-width 553]
-    (create-component {:type        "group"
-                       :parent      parent
-                       :object-name :activity-finished-overlay
-                       :visible     false
-                       :children    [(get-background (merge score-window-position
-                                                            score-window-size))
-                                     (get-top-menu {:viewport       viewport
-                                                    :on-close-click close-screen})
-                                     (get-title (merge {:y (:y score-window-position)}
-                                                       (utils/get-coordinates {:viewport   viewport
-                                                                               :horizontal "center"
-                                                                               :object     title-width})))
-                                     (get-vera {:x (+ (:x score-window-position)
-                                                      (/ (:width score-window-size) 4))
-                                                :y (+ (:y score-window-position)
-                                                      (:height score-window-size))})
-                                     (get-overall-progress {:x     (+ (:x score-window-position) 65)
-                                                            :y     (+ (:y score-window-position) 120)
-                                                            :width (- (/ (:width score-window-size) 2) 130)})
-                                     (get-featured-content {:x        (+ (:x score-window-position)
-                                                                         (/ (:width score-window-size) 2)
-                                                                         65)
-                                                            :y        (+ (:y score-window-position) 120)
-                                                            :on-click go-to-next-activity})
-                                     (get-menu {:x                (+ (:x score-window-position) 20)
-                                                :y                (+ (:y score-window-position)
-                                                                     (:height score-window-size) 10)
-                                                :on-restart-click restart-activity
-                                                :on-next-click    continue-playing})]})))
+        border-width 10]
+    (merge
+      {:type        "group"
+       :object-name score-window-name
+       :children    [(merge
+                       {:type            "rectangle"
+                        :object-name     :activity-finished-frame
+                        :border-color    0xbd13c7
+                        :border-width    border-width
+                        :border-radius   56
+                        :fill            0xda12ea
+                        :shadow-color    0x75016e
+                        :shadow-distance 15}
+                       score-window-size)
+                     (get-title)
+                     (get-vera {:x (/ (:width score-window-size) 4)
+                                :y (:height score-window-size)})
+                     (get-overall-progress {:x     65
+                                            :y     120
+                                            :width (- (/ (:width score-window-size) 2) 130)})
+                     (get-featured-content {:x        (+ (/ (:width score-window-size) 2) 65)
+                                            :y        120
+                                            :on-click go-to-next-activity})
+                     (get-menu {:x                20
+                                :y                (+ (:height score-window-size) 10)
+                                :on-restart-click restart-activity
+                                :on-next-click    continue-playing})]}
+      (get-score-window-position viewport))))
+
+(defn create
+  [{:keys [viewport]}]
+  (let [close-screen #(re-frame/dispatch [::overlays/close-activity-finished])]
+    {:type        "group"
+     :object-name :activity-finished-overlay
+     :visible     false
+     :children    [(get-background)
+                   (get-top-menu {:viewport       viewport
+                                  :on-close-click close-screen})
+                   (get-score-window viewport)]}))
+
+(defn update-viewport
+  [{:keys [viewport]}]
+  (re-frame/dispatch [::scene/change-scene-object top-menu-name [[:set-position (get-top-menu-position viewport)]]])
+  (re-frame/dispatch [::scene/change-scene-object score-window-name [[:set-position (get-score-window-position viewport)]]]))

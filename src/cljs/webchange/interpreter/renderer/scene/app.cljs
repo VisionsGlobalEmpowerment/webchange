@@ -57,3 +57,23 @@
 (defn get-renderer
   []
   (.-renderer @pixi-app))
+
+(defn get-stage
+  ([]
+   (get-stage (get-app)))
+  ([app]
+   (.-stage app)))
+
+(defn resize-app!
+  [viewport]
+  (when (app-exists?)
+    (let [{:keys [x y width height scale-x scale-y]} viewport
+          stage (-> (get-app) (get-stage))
+          renderer (get-renderer)
+          position (.-position stage)
+          scale (.-scale stage)]
+      (aset position "x" x)
+      (aset position "y" y)
+      (aset scale "x" scale-x)
+      (aset scale "y" scale-y)
+      (.resize renderer width height))))

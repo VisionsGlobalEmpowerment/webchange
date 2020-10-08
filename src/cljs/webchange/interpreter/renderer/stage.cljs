@@ -4,7 +4,7 @@
     [webchange.interpreter.pixi :refer [Loader]]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
-    [webchange.interpreter.renderer.scene.app :refer [reset-app!]]
+    [webchange.interpreter.renderer.scene.app :refer [reset-app! resize-app!]]
     [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
     [webchange.interpreter.renderer.scene.components.modes :as modes]
@@ -28,19 +28,34 @@
       {:width  (.-width bound-rect)
        :height (.-height bound-rect)})))
 
+(defn- handle-screen-resize
+  [container]
+  (let [viewport (-> (element->viewport @container)
+                     (get-stage-params))]
+    (resize-app! viewport)))
+
+(defn- get-handler
+  [f & args]
+  (apply partial (concat [f] args)))
+
 (defn stage
   []
   (let [container (r/atom nil)
         loading (r/atom {:done     false
                          :progress 0})
-        current-scene-id (r/atom nil)]
+        current-scene-id (r/atom nil)
+        handle-resize (get-handler handle-screen-resize container)]
     (r/create-class
       {:display-name "web-gl-scene"
        :component-did-mount
                      (fn [this]
+                       (.addEventListener js/window "resize" handle-resize)
                        (resources/init (.-shared Loader))
                        (let [{:keys [scene-data]} (r/props this)]
                          (init-scene scene-data current-scene-id loading)))
+       :component-will-unmount
+                     (fn []
+                       (.removeEventListener js/window "resize" handle-resize))
        :component-did-update
                      (fn [this]
                        (let [{:keys [scene-data]} (r/props this)]
