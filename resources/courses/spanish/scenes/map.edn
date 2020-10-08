@@ -122,7 +122,7 @@
     :init-feria {:x 590, :y 960, :visible true},
     :init-cinema {:x 1627, :y 672, :visible true},
     :init-library {:x 299, :y 576, :visible true},
-    :init-stadium {:x 1488, :y 399}, :visible true}}},
+    :init-stadium {:x 1488, :y 399, :visible true}}}},
  :scene-objects [["background"] ["home" "feria" "park" "library" "music-hall" "shopping-mall" "stadium" "cinema"] ["vera"]],
  :actions
  {:init
