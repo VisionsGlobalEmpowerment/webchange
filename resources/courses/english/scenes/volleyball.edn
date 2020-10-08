@@ -72,7 +72,7 @@
                               :skin        "empty"},
                  :box3
                              {:type        "animation",
-                              :x           309,
+                              :x           409,
                               :y           831,
                               :width       771,
                               :height      1033,
@@ -86,7 +86,7 @@
                               :skin        "empty"},
                  :box4
                              {:type        "animation",
-                              :x           629,
+                              :x           729,
                               :y           666,
                               :width       771,
                               :height      1033,
@@ -113,7 +113,7 @@
                               :start      true},
                  :girl2
                              {:type       "animation",
-                              :x          197,
+                              :x          297,
                               :y          1010,
                               :width      758,
                               :height     1130,
@@ -126,7 +126,7 @@
                               :start      true},
                  :girl3
                              {:type       "animation",
-                              :x          512,
+                              :x          612,
                               :y          871,
                               :width      758,
                               :height     1130,
@@ -504,11 +504,11 @@
                                            :transition-id "ball-transition"},
                  :throw-player1-player3
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 785, :y 342} {:x 595, :y 342} {:x 214, :y 942}], :duration 1.4},
+                                           :to            {:bezier [{:x 825, :y 342} {:x 655, :y 342} {:x 314, :y 942}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player1-player4
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 911, :y 342} {:x 783, :y 203} {:x 528, :y 803}], :duration 1.4},
+                                           :to            {:bezier [{:x 951, :y 342} {:x 843, :y 203} {:x 628, :y 803}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player2-player1
                                           {:type          "transition",
@@ -516,35 +516,35 @@
                                            :transition-id "ball-transition"},
                  :throw-player2-player3
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 1010, :y 203} {:x 744, :y 342} {:x 214, :y 942}], :duration 1.4},
+                                           :to            {:bezier [{:x 1050, :y 203} {:x 804, :y 342} {:x 314, :y 942}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player2-player4
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 1136, :y 203} {:x 933, :y 203} {:x 528, :y 803}], :duration 1.4},
+                                           :to            {:bezier [{:x 1175, :y 203} {:x 993, :y 203} {:x 628, :y 803}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player3-player1
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 595, :y 342} {:x 785, :y 342} {:x 1166, :y 942}], :duration 1.4},
+                                           :to            {:bezier [{:x 655, :y 342} {:x 825, :y 342} {:x 1166, :y 942}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player3-player2
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 744, :y 342} {:x 1010, :y 203} {:x 1540, :y 803}], :duration 1.4},
+                                           :to            {:bezier [{:x 804, :y 342} {:x 1050, :y 203} {:x 1540, :y 803}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player3-player4
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 340, :y 342} {:x 402, :y 203} {:x 528, :y 803}], :duration 1.4},
+                                           :to            {:bezier [{:x 440, :y 342} {:x 502, :y 203} {:x 628, :y 803}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player4-player1
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 783, :y 203} {:x 911, :y 342} {:x 1166, :y 942}], :duration 1.4},
+                                           :to            {:bezier [{:x 843, :y 203} {:x 951, :y 342} {:x 1166, :y 942}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player4-player2
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 933, :y 203} {:x 1136, :y 203} {:x 1540, :y 803}], :duration 1.4},
+                                           :to            {:bezier [{:x 993, :y 203} {:x 1175, :y 203} {:x 1540, :y 803}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :throw-player4-player3
                                           {:type          "transition",
-                                           :to            {:bezier [{:x 402, :y 203} {:x 340, :y 342} {:x 214, :y 942}], :duration 1.4},
+                                           :to            {:bezier [{:x 502, :y 203} {:x 440, :y 342} {:x 314, :y 942}], :duration 1.4},
                                            :transition-id "ball-transition"},
                  :voice-high-var
                                           {:type                          "action",
