@@ -1,6 +1,7 @@
 (ns webchange.interpreter.subs
   (:require
     [re-frame.core :as re-frame]
+    [webchange.progress.activity :as common.activity]
     [webchange.interpreter.lessons.activity :as activity]))
 
 (re-frame/reg-sub
@@ -38,9 +39,9 @@
     (let [activity-name (:current-scene db)
           {:keys [level lesson]} (activity/name->activity-action db activity-name)
           lesson-sets (-> (get-in db [:course-data :levels])
-                          (activity/get-level level)
+                          (common.activity/get-level level)
                           :lessons
-                          (activity/get-lesson lesson)
+                          (common.activity/get-lesson lesson)
                           :lesson-sets)
           lessons (get-in db [:lessons])
           loaded-lessons (get-in db [:sandbox :loaded-lessons])
