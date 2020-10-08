@@ -24,7 +24,7 @@
 
 (defn- get-styles
   []
-  {:block        {:padding "16px 0"}
+  {:block        {:padding "8px 0"}
    :img          {:width  "64px"
                   :height "64px"}
    :text         {:padding "0 24px"}

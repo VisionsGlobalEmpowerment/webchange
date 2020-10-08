@@ -605,8 +605,8 @@
                                  (assoc :loaded-course course-id)
                                  (assoc :current-course course-id)
                                  (assoc-in [:loading :load-course] true))
-                :load-course {:course-id    course-id
-                              :scene-id     scene-id}})))
+                :load-course {:course-id course-id
+                              :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
   ::set-current-course
@@ -975,7 +975,17 @@
   ::start-sandbox
   (fn [{:keys [db]} [_ course-id scene-id encoded-lessons]]
     (let [lessons (some-> encoded-lessons js/decodeURIComponent js/atob js/JSON.parse (js->clj :keywordize-keys true))]
-      {:db (cond-> db
-                   (seq lessons) (assoc-in [:sandbox :loaded-lessons] lessons))
+      {:db         (cond-> db
+                           (seq lessons) (assoc-in [:sandbox :loaded-lessons] lessons))
        :dispatch-n (list [::screens/show-course-loading]
                          [::load-course course-id scene-id])})))
+
+(re-frame/reg-event-fx
+  ::history-back
+  (fn [{:keys [_]} [_]]
+    {:history-back true}))
+
+(re-frame/reg-fx
+  :history-back
+  (fn [_]
+    (.back (.-history js/window))))

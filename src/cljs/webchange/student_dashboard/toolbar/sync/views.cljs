@@ -94,62 +94,63 @@
 (defn- sync-status-button
   [{:keys [menu-anchor status cache-empty? disabled?]}]
   (r/with-let [tooltip-touched? (r/atom false)]
-              [ui/tooltip
-               {:title     (r/as-element [:span {:style {:color "#ff9f21"}} "No lesson selected"])
-                :open      (and cache-empty?
-                                (= status :synced)
-                                (not @tooltip-touched?))
-                :placement "bottom-start"
-                :onOpen    #(reset! tooltip-touched? true)}
-               [ui/icon-button
-                {:disabled disabled?
-                 :on-click #(reset! menu-anchor (.-currentTarget %))}
-                (case status
-                  ;; preparing
-                  :installing [icon-syncing]
-                  :installed [icon-syncing]
-                  :activating [icon-syncing]
-                  :syncing [icon-syncing]
-                  ;; ready to work
-                  :activated [icon-ready]
-                  :synced [icon-ready {:color (if cache-empty? "#ff9f21" "#1373e6")}]
-                  :offline [icon-ready {:color "#278600"}]
-                  ;; not available
-                  :disabled [icon-unavailable {:color "#cccccc"}]
-                  :broken [icon-unavailable {:color "#ff2121"}]
-                  [icon-unavailable {:color "#cccccc"}])]]))
+    [ui/tooltip
+     {:title     (r/as-element [:span {:style {:color "#ff9f21"}} "No lesson selected"])
+      :open      (and cache-empty?
+                      (= status :synced)
+                      (not @tooltip-touched?))
+      :placement "bottom-start"
+      :onOpen    #(reset! tooltip-touched? true)}
+     [:div
+      [ui/icon-button
+       {:disabled disabled?
+        :on-click #(reset! menu-anchor (.-currentTarget %))}
+       (case status
+         ;; preparing
+         :installing [icon-syncing]
+         :installed [icon-syncing]
+         :activating [icon-syncing]
+         :syncing [icon-syncing]
+         ;; ready to work
+         :activated [icon-ready]
+         :synced [icon-ready {:color (if cache-empty? "#ff9f21" "#1373e6")}]
+         :offline [icon-ready {:color "#278600"}]
+         ;; not available
+         :disabled [icon-unavailable {:color "#cccccc"}]
+         :broken [icon-unavailable {:color "#ff2121"}]
+         [icon-unavailable {:color "#cccccc"}])]]]))
 
 (defn sync
   []
   (r/with-let [menu-anchor (r/atom nil)]
-              (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
-                    sync-status @(re-frame/subscribe [::status/sync-status])
-                    cached-resources @(re-frame/subscribe [::sw/cached-resources])
-                    cache-empty? (or (empty? (:resources cached-resources))
-                                     (empty? (:endpoints cached-resources)))
-                    handle-select-resources-click #(do (reset! menu-anchor nil)
-                                                       (re-frame/dispatch [::window/open]))]
-                [:div
-                 [sync-status-button {:menu-anchor  menu-anchor
-                                      :status       sync-status
-                                      :cache-empty? cache-empty?
-                                      :disabled?    disabled?}]
-                 [ui/menu
-                  {:anchor-el               @menu-anchor
-                   :open                    (boolean @menu-anchor)
-                   :disable-auto-focus-item true
-                   :on-close                #(reset! menu-anchor nil)}
-                  (if (= sync-status :syncing)
-                    [progress-bar]
-                    [:div
-                     [ui/menu-item
-                      {:on-click handle-select-resources-click}
-                      "Select Resources"
-                      (when cache-empty?
-                        [ic/report {:style {:color       "#ff9f21"
-                                            :margin-left "10px"
-                                            :margin-top  "2px"
-                                            :font-size   "20px"}}])]
-                     [ui/divider]
-                     [current-version]])]
-                 [sync-list-modal]])))
+    (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
+          sync-status @(re-frame/subscribe [::status/sync-status])
+          cached-resources @(re-frame/subscribe [::sw/cached-resources])
+          cache-empty? (or (empty? (:resources cached-resources))
+                           (empty? (:endpoints cached-resources)))
+          handle-select-resources-click #(do (reset! menu-anchor nil)
+                                             (re-frame/dispatch [::window/open]))]
+      [:div
+       [sync-status-button {:menu-anchor  menu-anchor
+                            :status       sync-status
+                            :cache-empty? cache-empty?
+                            :disabled?    disabled?}]
+       [ui/menu
+        {:anchor-el               @menu-anchor
+         :open                    (boolean @menu-anchor)
+         :disable-auto-focus-item true
+         :on-close                #(reset! menu-anchor nil)}
+        (if (= sync-status :syncing)
+          [progress-bar]
+          [:div
+           [ui/menu-item
+            {:on-click handle-select-resources-click}
+            "Select Resources"
+            (when cache-empty?
+              [ic/report {:style {:color       "#ff9f21"
+                                  :margin-left "10px"
+                                  :margin-top  "2px"
+                                  :font-size   "20px"}}])]
+           [ui/divider]
+           [current-version]])]
+       [sync-list-modal]])))

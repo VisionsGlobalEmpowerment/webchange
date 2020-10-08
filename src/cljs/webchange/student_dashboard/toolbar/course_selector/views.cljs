@@ -3,9 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as ie]
-    [webchange.subs :as subs]
-    [webchange.student-dashboard.toolbar.course-selector.flags.flag-en :as flag-en]
-    [webchange.student-dashboard.toolbar.course-selector.flags.flag-es :as flag-es]))
+    [webchange.subs :as subs]))
 
 ;; ToDo: get courses list from API
 (def courses
@@ -16,24 +14,33 @@
   []
   {:main {:width  "150px"
           :margin "0 20px"}
-   :icon {:position "relative"
-          :top      "2px"}})
+   :icon {:background-size     "cover"
+          :background-repeat   "no-repeat"
+          :background-position "center"
+          :border-radius       "3px"
+          :display             "inline-block"
+          :height              "14px"
+          :margin-right        "16px"
+          :position            "relative"
+          :top                 "2px"
+          :width               "18px"}})
 
 (defn- flag
   [name]
-  (case name
-    "en" [flag-en/get-shape]
-    "es" [flag-es/get-shape]))
+  (let [src (case name
+              "en" "/icons/flags/us.svg"
+              "es" "/icons/flags/es.svg")
+        styles (get-styles)]
+    [:div {:style (merge (:icon styles)
+                         {:background-image (str "url(" src ")")})}]))
 
 (defn- menu-item
   [{:keys [key value text]}]
-  (let [styles (get-styles)]
-    [ui/menu-item {:key value :value value}
-     [ui/list-item-icon {:style (:icon styles)}
-      [flag key]]
-     [ui/typography {:inline  true
-                     :variant "inherit"}
-      text]]))
+  [ui/menu-item {:key value :value value}
+   [flag key]
+   [ui/typography {:inline  true
+                   :variant "inherit"}
+    text]])
 
 (defn course-selector
   []
