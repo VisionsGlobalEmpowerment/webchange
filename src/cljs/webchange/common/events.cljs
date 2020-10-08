@@ -80,6 +80,7 @@
             action-id (random-uuid)]
         (register-flow! {:flow-id flow-id
                          :actions [action-id]
+                         :current-scene (:current-scene action)
                          :type    :all
                          :tags    (get-action-tags action)})
         (assoc action :flow-id flow-id :action-id action-id)))))
@@ -91,6 +92,7 @@
     :before (fn [context]
               (let [action (-> context
                                (get-in [:coeffects :event])
+                               (assoc :current-scene (get-in context [:coeffects :db :current-scene]))
                                ->with-flow)]
                 (assoc-in context [:coeffects :event] action)))))
 
@@ -225,9 +227,10 @@
 (defn execute-action
   [db {:keys [unique-tag] :as action}]
   (when (flow-not-registered? unique-tag)
-    (let [{:keys [type return-immediately flow-id tags] :as action} (->> action
-                                                                         (->with-flow)
-                                                                         (->with-vars db))
+    (let [{:keys [type return-immediately flow-id tags] :as action} (as-> action a
+                                                                         (assoc a :current-scene (:current-scene db))
+                                                                         (->with-flow a)
+                                                                         (->with-vars db a))
           handler (get @executors (keyword type))]
       (when tags
         (register-flow-tags! flow-id tags))
@@ -469,8 +472,10 @@
              {}))
 
 (defn execute-callback!
-  [{:keys [callback] :as action}]
-  (let [action (->with-flow action)]
+  [db {:keys [callback] :as action}]
+  (let [action (-> action
+                   (assoc :current-scene (:current-scene db ))
+                   (->with-flow))]
     (when-not (nil? callback)
       (callback))
     (dispatch-success-fn action)))
@@ -478,8 +483,8 @@
 (re-frame/reg-event-fx
   ::execute-callback
   [event-as-action]
-  (fn [_ action]
-    (execute-callback! action)
+  (fn [{:keys [db]} action]
+    (execute-callback! db action)
     {}))
 
 (re-frame/reg-event-fx
