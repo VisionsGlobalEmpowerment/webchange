@@ -5,14 +5,10 @@
     [webchange.interpreter.pixi :refer [Application clear-texture-cache]]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.overlays.index :refer [create-overlays]]
-    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app]]
+    [webchange.interpreter.renderer.overlays.index :refer [create-overlays update-viewport]]
+    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app get-renderer get-stage]]
     [webchange.interpreter.renderer.scene.components.modes :as modes]
-    [webchange.interpreter.renderer.scene.full-screen :refer [lock-screen]]))
-
-(defn- get-stage
-  [app]
-  (.-stage app))
+    [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
 
 (defn- set-position
   [stage x y]
@@ -40,6 +36,12 @@
         (-> get-stage (set-position x y))
         (register-app)))))
 
+(defn- handle-renderer-resize
+  [new-width new-height]
+  (let [viewport (get-stage-params {:width  new-width
+                                    :height new-height})]
+    (update-viewport viewport)))
+
 (defn scene
   [{:keys []}]
   (let [container (atom nil)]
@@ -57,13 +59,17 @@
                                                  :parent      (.-stage app)
                                                  :children    objects})
                          (when (modes/show-overlays? mode)
-                           (create-overlays {:parent   (.-stage app)
+                           (-> (get-renderer)
+                               (.on "resize" handle-renderer-resize))
+                           (create-overlays {:parent   (get-stage)
                                              :viewport viewport}))
-                         (when (modes/fullscreen? mode)
-                           (lock-screen))
-
                          (when (modes/start-on-ready? mode)
                            (on-ready))))
+
+       :component-will-unmount
+                     (fn []
+                       (-> (get-renderer)
+                           (.off "resize" handle-renderer-resize)))
 
        :should-component-update
                      (fn [] false)
