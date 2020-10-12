@@ -40,7 +40,7 @@
                        [::scene/change-scene-object :settings-overlay [[:set-visibility {:visible false}]]])}))
 
 (re-frame/reg-event-fx
-  ::open-activity-finished
+  ::show-activity-finished
   (fn [{:keys [db]}]
     (let [next-activity (subs/next-activity db)
           lesson-progress (subs/lesson-progress db)]
@@ -52,7 +52,7 @@
                          [::scene/change-scene-object :next-activity-card-name [[:set-text {:text (:name next-activity)}]]])})))
 
 (re-frame/reg-event-fx
-  ::close-activity-finished
+  ::hide-activity-finished
   (fn [{:keys [db]}]
     (set-scene-interactive db true)
     {:dispatch-n (list [::show-navigation-menu]

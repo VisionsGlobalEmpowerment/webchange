@@ -2,8 +2,17 @@
   (:require
     [clojure.set :refer [union]]))
 
+(def global-variables (atom {}))
 (def variables (atom {}))
 (def providers (atom {}))
+
+(defn get-global-variable
+  [var-name]
+  (get @global-variables var-name))
+
+(defn set-global-variable!
+  [var-name value]
+  (swap! global-variables assoc var-name value))
 
 (defn get-variable
   [var-name]
