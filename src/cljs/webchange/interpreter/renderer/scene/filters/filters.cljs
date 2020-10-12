@@ -2,6 +2,7 @@
   (:require
     [webchange.interpreter.pixi :refer [shared-ticker ColorMatrixFilter DropShadowFilter GlowFilter OutlineFilter]]
     [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager]]
+    [webchange.interpreter.renderer.scene.filters.utils :as utils]
     [webchange.logger :as logger]))
 
 (defn- init-filters
@@ -94,22 +95,30 @@
   (doseq [[_ fn] @pulsation-fns]
     (remove-ticker fn)))
 
+(defn- move-pivot-to-center
+  [container]
+  (let [half-width (/ (.-width container) 2)
+        half-height (/ (.-height container) 2)
+        pivot (utils/get-pivot container)]
+    (let [position (utils/get-position container)
+          dx (- half-width (:x pivot))
+          dy (- half-height (:y pivot))]
+      (utils/set-pivot container {:x half-width
+                                  :y half-height})
+      (utils/set-position container {:x (+ (:x position) dx)
+                                     :y (+ (:y position) dy)}))))
+
 (defn apply-pulsation-filter
   ([container]
    (apply-pulsation-filter container {}))
   ([container {:keys [remove]}]
-  (let [state (atom nil)]
-    (if remove
-      (remove-ticker (get @pulsation-fns container))
-      (do
-        (swap! pulsation-fns assoc container (fn [] (animation-eager container {:time (.now js/Date)} state)))
-        ;; ToDo: prettify it:
-        (aset (.-pivot container) "x" (/ (.-width container) 2))
-        (aset container "x" (+ (aget container "x") (/ (.-width container) 2)))
-        (aset (.-pivot container) "y" (/ (.-height container) 2))
-        (aset container "y" (+ (aget container "y") (/ (.-height container) 2)))
-
-        (create-ticker (get @pulsation-fns container)))))))
+   (let [state (atom nil)]
+     (if remove
+       (remove-ticker (get @pulsation-fns container))
+       (do
+         (move-pivot-to-center container)
+         (swap! pulsation-fns assoc container (fn [] (animation-eager container {:time (.now js/Date)} state)))
+         (create-ticker (get @pulsation-fns container)))))))
 
 (defn apply-filters
   [container filters]
