@@ -22,9 +22,9 @@
 (defn phrase
   [node]
   (let [inner-action (-> node :data get-inner-action)
-        action? (= "action" (get get-inner-action :type))
-        action-id (get get-inner-action :id)
-        action-name (if (:name node) (:name node) (if action? action-id))
+        action? (= "action" (get inner-action :type))
+        action-id (get inner-action :id)
+        action-name (if (not (nil? (:name node))) (:name node) (if action? action-id))
         phrase-data (node-data->phrase-data {:data inner-action})
         phrase-target (when-not (nil? (:target phrase-data))
                         (-> (:target phrase-data) (capitalize) (str ":")))
@@ -37,5 +37,6 @@
          [:span {:style (:title-target styles)} phrase-target])
        [:span phrase-text]]
       [:div {:style (:title styles)}
+       (if-not action-name
        [:p "New action"]
-       [:p action-name]])))
+       [:p action-name])])))
