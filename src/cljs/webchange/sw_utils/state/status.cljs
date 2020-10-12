@@ -43,6 +43,14 @@
   ::sync-disabled?
   sync-disabled?)
 
+(defn sync-offline?
+  [db]
+  (-> (sync-status db) (= :offline)))
+
+(re-frame/reg-sub
+  ::sync-offline?
+  sync-offline?)
+
 (re-frame/reg-event-db
   ::set-sync-status
   (fn [db [_ status]]
