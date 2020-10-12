@@ -124,6 +124,7 @@
   []
   (r/with-let [menu-anchor (r/atom nil)]
     (let [disabled? @(re-frame/subscribe [::status/sync-disabled?])
+          offline? @(re-frame/subscribe [::status/sync-offline?])
           sync-status @(re-frame/subscribe [::status/sync-status])
           cached-resources @(re-frame/subscribe [::sw/cached-resources])
           cache-empty? (or (empty? (:resources cached-resources))
@@ -143,14 +144,16 @@
         (if (= sync-status :syncing)
           [progress-bar]
           [:div
-           [ui/menu-item
-            {:on-click handle-select-resources-click}
-            "Select Resources"
-            (when cache-empty?
-              [ic/report {:style {:color       "#ff9f21"
-                                  :margin-left "10px"
-                                  :margin-top  "2px"
-                                  :font-size   "20px"}}])]
-           [ui/divider]
+           (when-not offline?
+             [ui/menu-item
+              {:on-click handle-select-resources-click}
+              "Select Resources"
+              (when cache-empty?
+                [ic/report {:style {:color       "#ff9f21"
+                                    :margin-left "10px"
+                                    :margin-top  "2px"
+                                    :font-size   "20px"}}])])
+           (when-not offline?
+             [ui/divider])
            [current-version]])]
        [sync-list-modal]])))
