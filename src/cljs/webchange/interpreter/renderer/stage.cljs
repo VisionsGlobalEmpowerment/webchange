@@ -8,11 +8,13 @@
     [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
     [webchange.interpreter.renderer.scene.components.modes :as modes]
-    [webchange.interpreter.renderer.scene.filters.filters :as filters]))
+    [webchange.interpreter.variables.core :as vars.core]))
 
 (defn- init-scene
   [{:keys [scene-id resources]} current-scene-id loading]
-  (when-not (= scene-id @current-scene-id)
+  (when (or (vars.core/get-global-variable :force-scene-update)
+            (not= scene-id @current-scene-id))
+    (vars.core/set-global-variable! :force-scene-update false)
     (reset! current-scene-id scene-id)
     (reset! loading {:done false :progress 0})
     (reset-app!)

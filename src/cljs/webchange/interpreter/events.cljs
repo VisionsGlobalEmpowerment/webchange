@@ -7,20 +7,15 @@
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
     [webchange.interpreter.lessons.activity :as lessons-activity]
-    [webchange.interpreter.screens.state :as screens]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.sound :as sound]
-    [webchange.interpreter.utils :refer [add-scene-tag
-                                         merge-scene-data]]
+    [webchange.interpreter.utils :refer [add-scene-tag merge-scene-data]]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.state.overlays :as overlays]
-
-    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    ))
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
 
 (re-frame/reg-fx
   :execute-audio
@@ -78,8 +73,7 @@
                                  (if progress
                                    (re-frame/dispatch [::set-progress-data progress])
                                    (re-frame/dispatch [::init-default-progress]))
-                                 (re-frame/dispatch [::progress-loaded])
-                                 (re-frame/dispatch [::check-course-loaded])))))
+                                 (re-frame/dispatch [::progress-loaded])))))
 
 (re-frame/reg-fx
   :load-lessons
@@ -89,10 +83,8 @@
                                           (re-frame/dispatch [:complete-request :load-lessons])
                                           (re-frame/dispatch [::set-course-dataset-items items])
                                           (re-frame/dispatch [::set-course-datasets datasets])
-                                          (re-frame/dispatch [::set-course-lessons lesson-sets])
-                                          (re-frame/dispatch [::check-course-loaded]))
-                     :on-asset-complete #(do (re-frame/dispatch [::set-dataset-loaded])
-                                             (re-frame/dispatch [::check-course-loaded]))})))
+                                          (re-frame/dispatch [::set-course-lessons lesson-sets]))
+                     :on-asset-complete #(do (re-frame/dispatch [::set-dataset-loaded]))})))
 
 (re-frame/reg-fx
   :transition
@@ -544,7 +536,7 @@
     (let [finished (get-in db [:progress-data :next])]
       {:db         (lessons-activity/finish db finished)
        :dispatch-n (list (activity-progress-event db)
-                         [::overlays/open-activity-finished]
+                         [::overlays/show-activity-finished]
                          [::reset-navigation])})))
 
 (re-frame/reg-event-fx
@@ -594,8 +586,7 @@
   ::start-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
              (if (not= course-id (:loaded-course db))
-               {:dispatch-n (list [::screens/show-course-loading]
-                                  [::load-course course-id scene-id])})))
+               {:dispatch-n (list [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::load-course
@@ -734,22 +725,21 @@
   ::next-scene
   (fn [{:keys [db]} [_ _]]
     (let [next-scene-id (-> db next-scene-location)]
-      {:dispatch-n (list [::set-current-scene next-scene-id]
-                         [::screens/reset-ui-screen])})))
+      {:dispatch-n (list [::set-current-scene next-scene-id])})))
 
 (re-frame/reg-event-fx
   ::run-next-activity
   (fn [{:keys [db]} [_ _]]
     (let [next-activity (get-in db [:progress-data :next :activity])]
-      {:dispatch-n (list [::set-current-scene next-activity]
-                         [::screens/reset-ui-screen])})))
+      {:dispatch-n (list [::set-current-scene next-activity])})))
 
 (re-frame/reg-event-fx
   ::restart-scene
   (fn [{:keys [db]} [_ _]]
     (let [scene-id (:current-scene db)]
-      {:dispatch-n (list [::screens/reset-ui-screen]
-                         [::reset-scene-flows scene-id])})))
+      (vars.core/set-global-variable! :force-scene-update true)
+      {:dispatch-n (list [::overlays/hide-activity-finished]
+                         [::set-current-scene scene-id])})))
 
 (re-frame/reg-event-fx
   ::close-scene
@@ -787,14 +777,6 @@
                        (assoc-in [:loading :load-lessons] true)
                        (assoc-in [:loading :load-lessons-assets] true))
      :load-lessons [course-id]}))
-
-(re-frame/reg-event-fx
-  ::check-course-loaded
-  (fn [{:keys [db]} _]
-    (let [loading (:loading db)]
-      (if (some #(get loading %) [:load-course :load-progress :load-lessons :load-lessons-assets])
-        {:dispatch [::screens/show-course-loading]}
-        {:dispatch [::screens/reset-ui-screen]}))))
 
 (re-frame/reg-event-fx
   ::set-course-dataset-items
@@ -982,8 +964,7 @@
     (let [lessons (some-> encoded-lessons js/decodeURIComponent js/atob js/JSON.parse (js->clj :keywordize-keys true))]
       {:db         (cond-> db
                            (seq lessons) (assoc-in [:sandbox :loaded-lessons] lessons))
-       :dispatch-n (list [::screens/show-course-loading]
-                         [::load-course course-id scene-id])})))
+       :dispatch-n (list [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::history-back

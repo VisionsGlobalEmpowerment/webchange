@@ -214,7 +214,7 @@
 
 (defn create
   [{:keys [viewport]}]
-  (let [close-screen #(re-frame/dispatch [::overlays/close-activity-finished])]
+  (let [close-screen #(re-frame/dispatch [::overlays/hide-activity-finished])]
     {:type        "group"
      :object-name :activity-finished-overlay
      :visible     false
