@@ -227,10 +227,12 @@
                       :skippable skippable}}))))
 
 (defn point->transition
-  [to transition-id]
-  {:type          "transition"
-   :transition-id transition-id
-   :to            to})
+  ([to transition-id]
+   {:type          "transition"
+    :transition-id transition-id
+    :to            to})
+  ([to transition-id move-speed]
+    (point->transition (assoc to :speed move-speed) transition-id)))
 
 (defn execute-transitions-sequence
   [transitions {:keys [transition-id] :as action}]
@@ -251,23 +253,23 @@
     {:dispatch (ce/success-event action)}))
 
 (defn insert-move-rotations
-  [[head & tail] {:keys [animation-target transition-id]}]
+  [[head & tail] {:keys [animation-target transition-id]} move-speed]
   (reduce (fn [tx tr]
             (let [last-x (-> tx last :to :x)]
               (if (< last-x (:x tr))
-                (concat tx [{:type "animation-props" :target animation-target :props {:scaleX -1}} (point->transition tr transition-id)])
-                (concat tx [{:type "animation-props" :target animation-target :props {:scaleX 1}} (point->transition tr transition-id)]))))
-          [(point->transition head transition-id)] tail))
+                (concat tx [{:type "animation-props" :target animation-target :props {:scaleX -1}} (point->transition tr transition-id move-speed)])
+                (concat tx [{:type "animation-props" :target animation-target :props {:scaleX 1}} (point->transition tr transition-id move-speed)]))))
+          [(point->transition head transition-id move-speed)] tail))
 
 (re-frame/reg-event-fx
   ::execute-move
-  (fn [{:keys [db]} [_ {:keys [from to graph animation-target animation-on-start animation-on-stop default-position] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [from to graph animation-target animation-on-start animation-on-stop default-position move-speed] :as action}]]
     (let [from (if (i/nav-node-exists? graph from) from default-position)
           path-names (i/find-nav-path from to graph)
           path (map #(-> (get graph (keyword %)) (select-keys [:x :y])) path-names)
           data (concat
                  [{:type "animation" :target animation-target :id animation-on-start}]
-                 (insert-move-rotations path action)
+                 (insert-move-rotations path action move-speed)
                  [{:type "animation" :target animation-target :id animation-on-stop}])]
       {:dispatch [::ce/execute-sequence-data (merge action {:data data})]})))
 
