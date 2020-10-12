@@ -53,7 +53,8 @@
   (sound/init)
   (re-frame/dispatch [::ie/start-playing])
   (-> (request-fullscreen)
-      (.then lock-screen-orientation)))
+      (.then lock-screen-orientation)
+      (.catch #())))
 
 (defn- start-triggers
   []
@@ -74,7 +75,8 @@
 (defn- component-will-unmount
   []
   (re-frame/dispatch [::ie/stop-playing])
-  (exit-fullscreen))
+  (-> (exit-fullscreen)
+      (.catch #())))
 
 (defn course
   [{:keys [mode]}]
