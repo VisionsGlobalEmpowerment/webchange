@@ -10,7 +10,7 @@
 (e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider)
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
 (e/reg-simple-executor :vars-var-provider ::execute-vars-var-provider)
-(e/reg-simple-executor :test-var ::execute-test-var)
+(e/reg-simple-executor :test-var ::execute-test-var)        ;; Not used
 (e/reg-simple-executor :test-var-scalar ::execute-test-var-scalar)
 (e/reg-simple-executor :test-var-list ::execute-test-var-list)
 (e/reg-simple-executor :test-value ::execute-test-value)
@@ -32,7 +32,7 @@
 (re-frame/reg-event-fx
   ::execute-set-progress
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
-    {:db (core/set-progress db var-name var-value)
+    {:db         (core/set-progress db var-name var-value)
      :dispatch-n (list (e/success-event action) [:progress-data-changed])}))
 
 (re-frame/reg-event-fx
@@ -117,15 +117,50 @@
 (re-frame/reg-event-fx
   ::execute-test-var-scalar
   (fn [{:keys [db]} [_ {:keys [value var-name success fail] :as action}]]
+    "Execute `test-var-scalar` action - compare variable value with test value.
+
+    Action params:
+    :var-name - variable name that we want to test.
+    :value - value to compare with.
+    :success - action to execute if the comparison is successful. Can be represented as an action name (string) or action data.
+    :fail- action to execute if the comparison is failed. Can be represented as an action name (string) or action data.
+
+    Example:
+    {:type     'test-var-scalar',
+     :var-name 'current-box',
+     :value    'box1',
+     :success  'first-word',
+     :fail     'pick-wrong'}"
     (let [test (core/get-variable var-name)]
       (if (= value test)
         {:dispatch [::e/execute-action (cond-action db action success)]}
         {:dispatch [::e/execute-action (cond-action db action fail)]}))))
 
+{:type        'test-value'
+ :from-params [{:action-property 'value1' :param-property 'target'}]
+ :from-var    [{:action-property 'value2' :var-name 'current-box'}]
+ :success     'pick-correct'
+ :fail        'dialog-6-pick-wrong'}
+
 (re-frame/reg-event-fx
   ::execute-test-value
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [value1 value2 success fail] :as action}]
+    "Execute `test-value` action - compare two values.
+    Could be useful for comparing some value with the parameter's value. Use `:from-params` in this case.
+
+    Action params:
+    :value1 - the first value to compare.
+    :value2 - the second value to compare.
+    :success - action to execute if the comparison is successful. Can be represented as an action name (string) or action data.
+    :fail- action to execute if the comparison is failed. Can be represented as an action name (string) or action data.
+    
+    Example:
+    {:type        'test-value'
+     :from-params [{:action-property 'value1' :param-property 'target'}]
+     :from-var    [{:action-property 'value2' :var-name 'current-box'}]
+     :success     'pick-correct'
+     :fail        'pick-wrong'}"
     (if (= value1 value2)
       {:dispatch-n (list [::e/execute-action (cond-action db action success)])}
       (if fail
@@ -136,14 +171,26 @@
 (re-frame/reg-event-fx
   ::execute-test-var-list
   (fn-traced [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
+    "Execute `test-var-list` action - compare variables list value with test values list.
+    Variables are compared with values according to their positions in the list.
+
+    Action params:
+    :var-names - list of variables names that we want to test.
+    :values - list values to compare with.
+    :success - action name to execute if the comparison is successful.
+    :fail - action name to execute if the comparison is failed.
+
+    Example:
+    {:type      'test-var-list',
+     :success   'mari-voice-finish',
+     :values    [true true true],
+     :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
     (let [test (map core/get-variable var-names)]
       (if (= values test)
         {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
-
         (if fail
           {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
-          {:dispatch-n (list (e/success-event action))}
-          )))))
+          {:dispatch-n (list (e/success-event action))})))))
 
 (re-frame/reg-event-fx
   ::execute-case
