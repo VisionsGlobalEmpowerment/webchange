@@ -47,3 +47,7 @@ If none of the listed below actions fits your intention, you can [create your ow
 Specific actions:
 
 - [`:propagate-objects`](/src/cljs/webchange/interpreter/renderer/scene/components/group/propagate.cljs)
+
+---
+
+[← Back to index](../../index.md)

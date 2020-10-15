@@ -36,3 +36,7 @@ Calling the action from an activity code will look like this:
 
 If the action is not related logically with any specific component, then you can define it in `webchange.interpreter.events` namespace.
 The rest of the process for defining an action will be the same as described above.
+
+---
+
+[← Back to index](../../index.md)

@@ -19,3 +19,7 @@ All currently implemented components can be found in the [folder `/components/`]
 - [`animated-svg-path`](/src/cljs/webchange/interpreter/renderer/scene/components/animated_svg_path/component.cljs) - renders svg animation,
 - [`painting-area`](/src/cljs/webchange/interpreter/renderer/scene/components/painting_area/component.cljs) - lets user to paint,
 - [`colors-palette`](/src/cljs/webchange/interpreter/renderer/scene/components/colors_palette/component.cljs) - set color to painting tool.
+
+---
+
+[← Back to index](../../index.md)
