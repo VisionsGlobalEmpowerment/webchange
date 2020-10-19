@@ -8,6 +8,7 @@
             [webchange.secondary.loader :as secondary]
             [webchange.assets.loader :as assets]
             [webchange.hackathon.loader :as hackathon]
+            [webchange.migrations.kitkit.loader :as kitkit-book-import]
             [webchange.course.loader :as courses])
   (:gen-class))
 
@@ -25,6 +26,10 @@
     (assets/command? args)
     (do
       (assets/execute args env)
+      (System/exit 0))
+    (kitkit-book-import/command? args)
+    (do
+      (kitkit-book-import/execute args env)
       (System/exit 0))
     (hackathon/command? args)
     (do

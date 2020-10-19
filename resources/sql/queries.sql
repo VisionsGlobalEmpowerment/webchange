@@ -105,6 +105,11 @@ WHERE course_id = :course_id ORDER BY created_at DESC LIMIT 30;
 -- :doc retrieve a course record given the name
 SELECT * from courses;
 
+
+-- :name find-courses-by-name :? :*
+-- :doc retrieve a course record given the name
+SELECT * from courses where name=:name;
+
 -- :name create-scene! :<!
 -- :doc creates a new scene record
 INSERT INTO scenes (course_id, name) VALUES (:course_id, :name) RETURNING id
