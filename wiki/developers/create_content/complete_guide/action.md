@@ -62,8 +62,6 @@ Add a new method to the interface.
 (defn set-traffic-light [wrapper & params] (execute wrapper :set-traffic-light params))
 ```
 
-И наконец перейдем во враппер нашего компонента и добавим нужный нам метод set-traffic-light
-
 And finally, let's go to our component wrapper and add the `set-traffic-light` method we need:
 
 ```
@@ -81,6 +79,92 @@ And finally, let's go to our component wrapper and add the `set-traffic-light` m
 ```
 
 ## Traffic light change implementation
+
+Let's add a function to create a shining traffic light:
+
+```
+(defn- create-light
+  [{:keys [src scale mask-y mask-height]}]
+  (let [resource (resources/get-resource src)
+        sprite (doto (Sprite. (.-texture resource))
+                 (utils/set-scale scale)
+                 (utils/set-position {:x 10 :y 0}))
+        mask (doto (Graphics.)
+               (.beginFill 0x000000)
+               (.drawRect 0 mask-y 300 mask-height)
+               (.endFill 0x000000))
+        container (doto (Container.)
+                    (utils/set-position {:x 0 :y 0}))]
+    (aset sprite "mask" mask)
+    (.addChild container sprite)
+    (.addChild container mask)
+
+    (utils/set-visibility container false)                  ;; Make invisible by default
+
+    container))
+```
+
+Update the component creation function:
+
+- create objects of shining light of each color,
+- add them to the container of our component,
+- pass them to the wrapper
+
+```
+(defn create
+  [{:keys [parent type object-name scale] :as props}]
+  (let [src "/images/demo/traffic-light.png"
+        sprite (create-sprite "/images/demo/traffic-light.png" props)
+        mask (create-mask {:width 380 :height 830})
+        container (create-container props)
+
+        red-light (create-light {:src         src
+                                 :scale       scale
+                                 :mask-y      30
+                                 :mask-height 240})
+        yellow-light (create-light {:src         src
+                                    :scale       scale
+                                    :mask-y      270
+                                    :mask-height 240})
+        green-light (create-light {:src         src
+                                   :scale       scale
+                                   :mask-y      510
+                                   :mask-height 240})]
+
+    (aset sprite "mask" mask)
+    (.addChild container sprite)
+    (.addChild container mask)
+    (.addChild parent container)
+
+    (.addChild container red-light)
+    (.addChild container yellow-light)
+    (.addChild container green-light)
+
+    (wrap type object-name container {:red    red-light
+                                      :yellow yellow-light
+                                      :green  green-light})))
+```
+
+Update the wrapper method:
+
+```
+(ns webchange.interpreter.renderer.scene.components.traffic-light.wrapper
+  (:require
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
+
+(defn wrap
+  [type name container lights]
+  (create-wrapper {:name   name
+                   :type   type
+                   :object container
+                   :set-traffic-light (fn [color]
+                                        (doseq [[light-name light-container] lights]
+                                          (utils/set-visibility light-container (= (keyword color) light-name))))}))
+```
+
+The traffic light component and the turn on the needed light action are now complete.
+Now we can proceed to creating an activity template.
 
 ---
 
