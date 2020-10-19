@@ -99,9 +99,9 @@
                                                            (take max)
                                                            (map-indexed (fn [index [x y]]
                                                                           (merge (prepare-object-data el scene-id get-data)
-                                                                                 {:x            (* x dx)
-                                                                                  :y            (* y dy)
-                                                                                  :object-name  (-> el (str "-" index) (keyword))
+                                                                                 {:x           (* x dx)
+                                                                                  :y           (* y dy)
+                                                                                  :object-name (-> el (str "-" index) (keyword))
                                                                                   :group-name  (keyword el)})))))]
                                 (-> object
                                     (with-group-params)
@@ -114,6 +114,11 @@
                                      (merge {:type        "group"
                                              :object-name (keyword name)})
                                      (filter-extra-props [:el-height :el :width :el-width :height]))
+                      :traffic-light (-> object
+                                         (assoc :object-name (keyword name))
+                                         (with-group-params)
+                                         (with-filter-params)
+                                         (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
                       (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined"))))]
     (-> object-data
         (filter-extra-props [:actions :states :scene-name :transition :filter-transition]))))
