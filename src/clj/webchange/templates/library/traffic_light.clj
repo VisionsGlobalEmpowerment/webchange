@@ -1,10 +1,3 @@
-# Create Template
-
-Создадим файл темплэта src/clj/webchange/templates/library/traffic_light.clj
-
-У него будет следующее состояние
-
-```
 (ns webchange.templates.library.traffic-light
   (:require
     [webchange.templates.core :as core]))
@@ -136,25 +129,3 @@
   (:id metadata)
   metadata
   (partial create template))
-
-```
-
-Файл resources/courses/spanish/scenes/map.edn вернем в исходное состояние.
-
-
-
-Добавляем наш темплэйт в библиотеку
-
-src/clj/webchange/templates/library.clj
-
-ёёё
-(ns webchange.templates.library
-  (:require
-    ...
-    [webchange.templates.library.book]
-    [webchange.templates.library.traffic-light]))
-ёёё
-
----
-
-[← Back to index](../../index.md) | [Guide main page](index.md) | [Create activity →](activity.md)

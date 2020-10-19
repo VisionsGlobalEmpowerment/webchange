@@ -9,4 +9,5 @@
     [webchange.templates.library.magic_hat]
     [webchange.templates.library.volleyball]
     [webchange.templates.library.swings]
-    [webchange.templates.library.book]))
+    [webchange.templates.library.book]
+    [webchange.templates.library.traffic-light]))
