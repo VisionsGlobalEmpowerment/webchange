@@ -6,4 +6,6 @@
   [type name container]
   (create-wrapper {:name   name
                    :type   type
-                   :object container}))
+                   :object container
+                   :set-traffic-light (fn [color]
+                                        (print ":set-traffic-light" color))}))

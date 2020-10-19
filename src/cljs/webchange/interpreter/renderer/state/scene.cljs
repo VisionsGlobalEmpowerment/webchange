@@ -176,3 +176,9 @@
   :set-stroke
   (fn [[object-wrapper params]]
     (apply-to-wrapper w/set-stroke object-wrapper params)))
+
+(re-frame/reg-event-fx
+  ::set-traffic-light
+  (fn [{:keys [db]} [_ object-name color]]
+    (let [wrapper (get-scene-object db object-name)]
+      (apply-to-wrapper w/set-traffic-light wrapper color))))

@@ -48,6 +48,7 @@
 (ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
 (ce/reg-simple-executor :set-interval ::execute-set-interval)
 (ce/reg-simple-executor :remove-interval ::execute-remove-interval)
+(ce/reg-simple-executor :set-traffic-light ::execute-set-traffic-light)
 
 (re-frame/reg-fx
   :execute-audio
@@ -931,6 +932,12 @@
   ::execute-remove-interval
   (fn [{:keys [db]} [_ {:keys [id] :as action}]]
     {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
+                       (ce/success-event action))}))
+
+(re-frame/reg-event-fx
+  ::execute-set-traffic-light
+  (fn [{:keys [_]} [_ {:keys [target value] :as action}]]
+    {:dispatch-n (list [::scene/set-traffic-light (keyword target) value]
                        (ce/success-event action))}))
 
 (re-frame/reg-event-fx
