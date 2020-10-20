@@ -1,23 +1,27 @@
 # Create Activity
 
-Переходим по адресу /create-course
+Now, through a wizard, we will create an activity from the template we just created.
+To do this, go to the address */create-course*.
 
-Указываем название курса, язык, список концептов. В нашем случае концепты не используются, но указать все равно придется.
-картинка
-Нажимаем Сохранить.
+In the course creation form, enter the course name, language, list of concepts. 
+In our case, the concepts are not used, but you still have to specify it.
 
+![create course](activity_course.png)
 
-Попадаем на страницу создание активити для только что созданного курса.
-Указываем название активити, strands -> topics -> skills, которые тренирует активити.
-Темплэйт выбираем "Traffic light"
+Click **"Save"**.
 
+Then we get to the page for creating an activity for our course.
+Enter the name of the activity, strands -> topics -> skills, which the activity trains.
+Select the template "Traffic light".
 
-Рядом с заголовком Teacher жмем кнопку Адд
-В появившейся снизу форме указываем имя нашего учителя и персонажа из выпадающего списка.
-картинка
-Нажимаем Сохранить
+Next to the "Teacher" title, click the "Add" button.
+In the form that appears below, enter the name of our virtual teacher and the character from the drop-down list.
 
-Затем попадаем на страницу редактирования активити.
+![create activity](activity_activity.png)
+
+Click **"Save"**.
+
+Then we will get to the page for editing the activity.
 
 ---
 
