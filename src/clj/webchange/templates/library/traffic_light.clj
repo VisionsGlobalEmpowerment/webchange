@@ -112,7 +112,10 @@
 
 (defn- add-teacher
   [template teachers]
-  (let [teachers-names (map :name teachers)
+  (let [teachers-names (->> teachers
+                            (map :name)
+                            (map clojure.string/lower-case)
+                            (into []))
         teachers-data (->> teachers
                            (map (fn [{:keys [name skeleton]}]
                                   [(keyword name) (get available-teachers (keyword skeleton))]))
