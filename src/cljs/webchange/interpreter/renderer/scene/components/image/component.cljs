@@ -35,7 +35,7 @@
       (set! (.-height container) (* ratio (.-height container))))))
 
 (defn- apply-origin
-  [container {{origin :type } :origin {x :x y :x} :offset}]
+  [container {{origin :type} :origin {x :x y :x} :offset}]
   (when (and origin (= 0 (int x)) (= 0 (int y)))
     (let [[h v] (clojure.string/split origin #"-")
           pivot (.-pivot container)]
@@ -55,7 +55,7 @@
     (when (and (-> resource nil?)
                (-> src nil? not)
                (-> src empty? not))
-      (logger/warn (js/Error. (str "Resources for '" src "' were not loaded"))))
+      (logger/warn (js/Error. (str "Resources for " src " were not loaded"))))
     (let [sprite (if (-> resource nil? not)
                    (Sprite. (.-texture resource))
                    (Sprite.))]
@@ -95,6 +95,24 @@
 (def component-type "image")
 
 (defn create
+  "Create `image` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :width - image width.
+  :height - image height.
+  :scale - image scale. Default: {:x 1 :y 1}.
+  :name - component name that will be set to sprite and container with corresponding suffixes.
+  :on-click - on click event handler.
+  :ref - callback function that must be called with component wrapper.
+  :src - image src. Default: nil.
+  :offset - container position offset. Default: {:x 0 :y 0}.
+  :filters - filters params to be applied to sprite. Default: [].
+  :border-radius - make rounded corners. Radius in pixels. Default: 0.
+  :origin - where image pivot will be set. Can be '(left|center|right)-(top|center|bottom)'. Default: 'left-top'.
+  :max-width - max image width.
+  :max-height - max image height."
   [{:keys [parent type on-click ref object-name] :as props}]
   (let [image (create-sprite props)
         image-mask (create-sprite-mask props)
