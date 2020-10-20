@@ -94,8 +94,6 @@ Consists of the following fields:
 - :actions - all scene actions,
 - :triggers - events and corresponding actions.
 
-For more details see page [Basic activity template](basic-activity-template.md)
-
 ## `create`
 
 This is the function to which the above `template` is passed as the first parameter,

@@ -4,7 +4,6 @@
 
 - [Templates](create_content/templates/index.md)
   - [Create template](create_content/templates/create-template.md)
-    - [Basic activity template](create_content/templates/basic-activity-template.md)
   - [Create activity](create_content/templates/create-activity.md)
   - [Create dialog](create_content/templates/create-dialog.md)
 - [Components](create_content/components/index.md)
