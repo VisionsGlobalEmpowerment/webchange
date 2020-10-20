@@ -1,8 +1,74 @@
 # Create Template
 
-Создадим файл темплэта src/clj/webchange/templates/library/traffic_light.clj
+Let's create a template file `src/clj/webchange/templates/library/traffic_light.clj`.
 
-У него будет следующее состояние
+Declare an object with template metadata.
+Template ID must be unique among other templates (one more than the maximum one already available).
+
+When creating an activity from the template, we will let the user choose a character who will act as a teacher.
+To do this, add the `:options` field to the metadata.
+It will describe the parameter `:teacher` with type `"characters"`.
+Only one character can be selected:
+
+```
+(def metadata {:id          11
+               :name        "Traffic light"
+               :description "Teaches children how to use traffic lights"
+               :lesson-sets []
+               :options     {:teacher {:label "Teacher"
+                                       :type  "characters"
+                                       :max   1}}})
+```
+
+Then we will declare the template of the activity itself.
+
+In `:assets`, you need to enter the addresses of the images for the background and traffic light so that the loader will download them.
+In the `:objects` field, there will be characteristics of the background and traffic light. The light source will have the "traffic-light" type declared by us.
+`:scene-objects` contains lists of object names to be rendered.
+Field `:metadata {:autostart true}` means that the scene will run as soon as it is loaded.
+In `:triggers` we describe the global event handlers: start the `start-scene` action when the scene is ready to start,
+`stop-activity` - when the player leaves the activity.
+
+The `:actions` contains the actions themselves that will be executed by the interpreter.
+The main events develop due to the sequential call of the next actions:
+
+Calling the action we created to switch the color of the traffic light:
+```
+{:type   "set-traffic-light"
+ :value  "red"
+ :target "tl"}
+```
+
+Action call `:red-light-state` which is declared separately:
+```
+{:type "action"
+ :id   "red-light-state"}
+```
+
+Dialog action template that will be editable from the translator window:
+```
+:red-light-state {:type               "sequence-data",
+                  :editor-type        "dialog",
+                  :data               [{:type "sequence-data"
+                                        :data [{:type "empty" :duration 0}
+                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                  :phrase             "Red light",
+                  :phrase-description "Explain the red traffic light"}
+```
+
+Half second pause:
+```
+{:type     "empty"
+ :duration 500} 
+```
+
+Similar actions for yellow and green color.
+
+
+The next is declarations of functions for creating a template and registering the template in the library.
+More details can be found [page about creating templates](../templates/create-template.md).
+
+Below is full template content:
 
 ```
 (ns webchange.templates.library.traffic-light
@@ -142,23 +208,19 @@
 
 ```
 
-Файл resources/courses/spanish/scenes/map.edn вернем в исходное состояние.
+If you edited the file [`map.edn`](/resources/courses/spanish/scenes/map.edn), revert it to its original state.
 
+Next, add our template to the [`library`](/src/clj/webchange/templates/library.clj):
 
-
-Добавляем наш темплэйт в библиотеку
-
-src/clj/webchange/templates/library.clj
-
-ёёё
+```
 (ns webchange.templates.library
   (:require
     ...
     [webchange.templates.library.book]
     [webchange.templates.library.traffic-light]))
-ёёё
+```
 
-Дальше можно переходить к созданию активити.
+Now you can proceed to creating an activity.
 
 ---
 
