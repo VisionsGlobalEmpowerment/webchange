@@ -1,6 +1,7 @@
-(ns webchange.migrations.kitkit.book-vertical
+(ns webchange.migrations.kitkit.book-horizontal-page
   (:require
     [webchange.templates.core :as core]
+    [webchange.migrations.kitkit.book-vertical-page :as bvp]
     [clojure.string :refer [index-of]]))
 
 (def m {:id          5
@@ -24,7 +25,7 @@
                                           :actions {:click {:id "next-page", :on "click", :type "action"}},
                                           :scale-x -1,
                                           :src     "/raw/img/ui/back_button_01.png"}
-                        :group-0         {:type "group" :children ["title" "title-image"] :x 370 :y 130}
+                        :group-0         {:type "group" :children ["title", "title-image"] :x 370 :y 130}
                         :title           {:type "text" :width 1180 :align "center" :vertical-align "top" :font-family "Lexend Deca" :font-size 120
                                           :text nil :chunks nil :x 0 :y 640}
                         :title-image {:type "image" :src "" :x 590 :y 320 :origin {:type "center-center"} :max-width 1180 :max-height 640}
@@ -96,31 +97,12 @@
   (let [group-name (group-name idx)
         image-name (str "image-" idx)
         text-name (str "text-" idx)]
-    {(keyword group-name) {:type "group" :children [image-name text-name] :visible false :x 60 :y 130}
-     (keyword image-name) {:type "image" :src img :x 590 :y 350 :origin {:type "center-center"} :max-width 500 :max-height 800}
-     (keyword text-name)  {:type "text" :x 950 :y 0 :width 550 :vertical-align "top"
-                           :font-family "Lexend Deca" :font-size (if (> (count text) 100) 60 80)
+    {(keyword group-name) {:type "group" :children [image-name text-name] :visible false :x 370 :y 130}
+     (keyword image-name) {:type "image" :src img :x 590 :y 300 :origin {:type "center-center"} :max-width 1180 :max-height 640}
+     (keyword text-name)  {:type "text" :x 0 :y 560 :width 1180 :vertical-align "top"
+                           :font-family "Lexend Deca" :font-size (if (> (count text) 60) 60 80)
                            :text text :chunks (text->chunks text)}}))
 
-(defn- create-page-dialog
-  [idx {:keys [text audio anim]}]
-  (let [anim (if anim anim [])
-        dialog {:type               "sequence-data",
-                :concept-var        "current-word",
-                :data               [{:type        "sequence-data"
-                                      :editor-type "dialog",
-                                      :data        [{:type "empty" :duration 0}
-                                                    {:data        anim,
-                                                     :type        "text-animation",
-                                                     :audio       audio,
-                                                     :target      (str "text-" idx),
-                                                     :animation   "bounce",
-                                                     :phrase-text text}]}],
-                :phrase             (str "dialog-page-" idx),
-                :phrase-description (str "Page " idx),
-                :dialog-track       "2 Pages"}
-        name (str "dialog-" idx "-page")]
-    {(keyword name) dialog}))
 
 (defn- create-page-stage
   [idx]
@@ -142,10 +124,10 @@
                             (map-indexed (fn [idx p] (create-page (inc idx) p)))
                             (reduce merge))
         dialog-container (->> pages
-                              (map-indexed (fn [idx p] (create-page-dialog (inc idx) p)))
+                              (map-indexed (fn [idx p] (bvp/create-page-dialog (inc idx) p)))
                               (reduce merge))
         assets (map create-asset pages)
-        audios (map create-audio (filter (fn [{audio :audio}] audio) pages))
+        audios (flatten (map (fn [p] (map create-audio (:audios p))) pages))
         group-names (->> (count pages) (range) (map inc) (map group-name) (into []))
         stages (->> (count pages) (range) (map inc) (map create-page-stage) (into []))]
     (-> t
@@ -167,8 +149,8 @@
 (defn- add-title-audio
   [t audio]
   (-> t
-      (assoc-in [:actions :dialog-1-title :data 0 :data 1 :audio] audio)
-      (assoc :assets (conj (:assets t) (create-audio {:audio audio})))))
+   (assoc-in [:actions :dialog-1-title :data 0 :data 1 :audio] audio)
+   (assoc :assets (conj (:assets t) (create-audio {:audio audio})))))
 
 (defn- add-title-image
   [t image]
@@ -185,5 +167,6 @@
       (add-title-image (:image args))
       ))
 
-#_(core/register-template
+(core/register-template
   (:id m) m f)
+

@@ -23,8 +23,8 @@
      (-> source-dir
          (book-import/read-book-info)
          (book-import/import-assets-book-info source-dir target-dir public-dir)
-         (book-import/prepare-book-info-by-sentence)
-         (book-import/import-book-info-by-sentence owner-id name))))
+         (book-import/prepare-book-info)
+         (book-import/import-book-info owner-id name))))
   )
 
 
