@@ -82,9 +82,13 @@
      @instance)))
 
 (defn connect-data
-  [parent-data path]
-  (let [data (r/atom (get-in @parent-data path))]
+  ([parent-data path]
+   (connect-data parent-data path {}))
+  ([parent-data path default-data]
+  (let [fixed-path (if (sequential? path) path [path])
+        data (r/atom (get-in @parent-data fixed-path default-data))]
+    (swap! parent-data assoc-in fixed-path @data)
     (add-watch data :connect-data
                (fn [_ _ _ new-state]
-                 (swap! parent-data assoc-in path new-state)))
-    data))
+                 (swap! parent-data assoc-in fixed-path new-state)))
+    data)))

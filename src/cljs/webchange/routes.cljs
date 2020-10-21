@@ -12,6 +12,7 @@
                   "student-login"     :student-login
                   "register"          :register-user
                   "create-course"     :create-course
+                  "wizard"            :wizard
                   "game-changer"      :game-changer
                   "s"                 {["/" :course-id "/" :scene-id] :sandbox
                                        ["/" :course-id "/" :scene-id "/" [#".+" :encoded-items]] :sandbox}
