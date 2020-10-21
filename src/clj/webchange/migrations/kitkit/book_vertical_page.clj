@@ -151,7 +151,6 @@
         audios (flatten (map (fn [p] (map create-audio (:audios p))) pages))
         group-names (->> (count pages) (range) (map inc) (map group-name) (into []))
         stages (->> (count pages) (range) (map inc) (map create-page-stage) (into []))]
-    (println audios)
     (-> t
         (update :assets concat (concat assets audios))
         (update :assets vec)

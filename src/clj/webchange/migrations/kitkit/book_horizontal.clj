@@ -98,7 +98,8 @@
         text-name (str "text-" idx)]
     {(keyword group-name) {:type "group" :children [image-name text-name] :visible false :x 370 :y 130}
      (keyword image-name) {:type "image" :src img :x 590 :y 320 :origin {:type "center-center"} :max-width 1180 :max-height 640}
-     (keyword text-name)  {:type "text" :x 0 :y 640 :width 1180 :vertical-align "top" :font-family "Lexend Deca" :font-size 80
+     (keyword text-name)  {:type "text" :x 0 :y 640 :width 1180 :vertical-align "top"
+                           :font-family "Lexend Deca" :font-size (if (> (count text) 60) 60 80)
                            :text text :chunks (text->chunks text)}}))
 
 (defn- create-page-dialog

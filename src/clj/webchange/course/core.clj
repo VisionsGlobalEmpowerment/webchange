@@ -86,6 +86,7 @@
                        :created_at created-at}))
     [true {:id         scene-id
            :name       scene-name
+           :course-slug course-slug
            :created-at (str created-at)}]))
 
 (defn save-course!
