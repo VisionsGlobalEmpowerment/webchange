@@ -4,6 +4,7 @@
             [clojure.edn :as edn]
             [webchange.db.core :refer [*db*] :as db]
             [webchange.course.core :as core]
+            [camel-snake-kebab.core :refer [->kebab-case]]
             [webchange.migrations.kitkit.book-horizontal :as horizontal-template]
             [webchange.migrations.kitkit.book-vertical :as vertical-template]
             [webchange.migrations.kitkit.book-vertical-page :as book-vertical-page]
@@ -144,7 +145,8 @@
 
 (defn endWithFun
   [arg1 arg2]
-  (= (subs arg1 (- (count arg1) (count arg2)) (count arg1)) arg2))
+  (if (< (count arg1) (count arg2)) false
+  (= (subs arg1 (- (count arg1) (count arg2)) (count arg1)) arg2)))
 
 (defn prepare-filename
   [file extension]
@@ -221,16 +223,18 @@
 
 (defn import-book-info-by-sentence
   [book-info owner-id name]
-  (let [data {:name name
+  (let [data {:name (->kebab-case name)
               :lang "En"
               :skills [1]}
         [course] (db/find-courses-by-name {:name course-name})
         course (if course course (second (core/create-course (assoc data :name course-name)  owner-id)))
         metadata (if (= (:orientation book-info) "portrait") vertical-template/m horizontal-template/m)
         activity (if (= (:orientation book-info) "portrait")  (vertical-template/f book-info) (horizontal-template/f book-info))
-        [_ scene] (core/create-scene! activity metadata  (-> course :slug) (:name data) (:skills data) owner-id)
+        scene (if (core/get-scene-data (-> course :slug) (:name data))
+                (second (core/save-scene! (-> course :slug) (:name data) activity owner-id))
+                (second (core/create-scene! activity metadata  (-> course :slug) (:name data) (:skills data) owner-id)))
         ]
-    (println (str "/s/" (:course-slug scene) "/" (:scene-slug scene)))))
+    (println (str "/s/" (:course-slug scene) "/" (:name scene)))))
 
 (defn import-book-info
   [book-info name]

@@ -1,4 +1,4 @@
-(ns webchange.migrations.kitkit.book-vertical
+(ns webchange.migrations.onebillion.book-horizontal
   (:require
     [webchange.templates.core :as core]
     [clojure.string :refer [index-of]]))
@@ -24,7 +24,7 @@
                                           :actions {:click {:id "next-page", :on "click", :type "action"}},
                                           :scale-x -1,
                                           :src     "/raw/img/ui/back_button_01.png"}
-                        :group-0         {:type "group" :children ["title" "title-image"] :x 370 :y 130}
+                        :group-0         {:type "group" :children ["title", "title-image"] :x 370 :y 130}
                         :title           {:type "text" :width 1180 :align "center" :vertical-align "top" :font-family "Lexend Deca" :font-size 120
                                           :text nil :chunks nil :x 0 :y 640}
                         :title-image {:type "image" :src "" :x 590 :y 320 :origin {:type "center-center"} :max-width 1180 :max-height 640}
@@ -96,10 +96,10 @@
   (let [group-name (group-name idx)
         image-name (str "image-" idx)
         text-name (str "text-" idx)]
-    {(keyword group-name) {:type "group" :children [image-name text-name] :visible false :x 60 :y 130}
-     (keyword image-name) {:type "image" :src img :x 590 :y 350 :origin {:type "center-center"} :max-width 500 :max-height 800}
-     (keyword text-name)  {:type "text" :x 950 :y 0 :width 550 :vertical-align "top"
-                           :font-family "Lexend Deca" :font-size (if (> (count text) 100) 60 80)
+    {(keyword group-name) {:type "group" :children [image-name text-name] :visible false :x 370 :y 130}
+     (keyword image-name) {:type "image" :src img :x 590 :y 320 :origin {:type "center-center"} :max-width 1180 :max-height 640}
+     (keyword text-name)  {:type "text" :x 0 :y 640 :width 1180 :vertical-align "top"
+                           :font-family "Lexend Deca" :font-size (if (> (count text) 50) 60 80)
                            :text text :chunks (text->chunks text)}}))
 
 (defn- create-page-dialog
@@ -165,10 +165,11 @@
       (assoc-in [:actions :dialog-1-title :data 0 :data 1 :phrase-text] title)))
 
 (defn- add-title-audio
-  [t audio]
+  [t {:keys [audio anim]}]
   (-> t
-      (assoc-in [:actions :dialog-1-title :data 0 :data 1 :audio] audio)
-      (assoc :assets (conj (:assets t) (create-audio {:audio audio})))))
+   (assoc-in [:actions :dialog-1-title :data 0 :data 1 :audio] audio)
+   (assoc-in [:actions :dialog-1-title :data 0 :data 1 :data] (if anim anim []))
+   (assoc :assets (conj (:assets t) (create-audio {:audio audio})))))
 
 (defn- add-title-image
   [t image]
@@ -180,11 +181,11 @@
   [args]
   (-> t
       (add-title (:title args))
-      (add-title-audio (:audio args))
       (add-pages (:pages args))
-      (add-title-audio (:audio args))
+      (add-title-audio args)
       (add-title-image (:image args))
       ))
 
 (core/register-template
   (:id m) m f)
+

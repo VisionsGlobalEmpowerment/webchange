@@ -9,6 +9,7 @@
             [webchange.assets.loader :as assets]
             [webchange.hackathon.loader :as hackathon]
             [webchange.migrations.kitkit.loader :as kitkit-book-import]
+            [webchange.migrations.onebillion.loader :as onebillion-book-import]
             [webchange.course.loader :as courses])
   (:gen-class))
 
@@ -30,6 +31,10 @@
     (kitkit-book-import/command? args)
     (do
       (kitkit-book-import/execute args env)
+      (System/exit 0))
+    (onebillion-book-import/command? args)
+    (do
+      (onebillion-book-import/execute args env)
       (System/exit 0))
     (hackathon/command? args)
     (do
