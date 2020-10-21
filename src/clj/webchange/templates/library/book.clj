@@ -5,6 +5,7 @@
 
 (def m {:id          5
         :name        "book"
+        :tags        ["Book Creator"]
         :description "Simple book"
         :options     {:title {:label "Title"
                               :type  "string"}

@@ -49,6 +49,8 @@
         (get-error validation-data field-name)]])))
 
 (defn init
+  ([data]
+   (init data {} nil))
   ([data validation-map]
    (init data validation-map nil))
   ([data validation-map parent-validator]

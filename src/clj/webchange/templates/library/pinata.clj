@@ -4,6 +4,7 @@
 
 (def m {:id          3
         :name        "pinata"
+        :tags        ["Direct Instruction - Animated Instructor"]
         :description "Some description of pinata mechanics and covered skills"
         :lesson-sets ["assessment"]
         :fields      [{:name "image-src",

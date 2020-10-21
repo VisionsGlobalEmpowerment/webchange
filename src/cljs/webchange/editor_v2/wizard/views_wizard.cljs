@@ -3,8 +3,9 @@
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.layout.views :refer [layout]]
-    [webchange.editor-v2.wizard.steps.test :as test]
-    [webchange.editor-v2.wizard.steps.final-step :as final-step]))
+    [webchange.editor-v2.wizard.steps.choose-template :as choose-template]
+    [webchange.editor-v2.wizard.steps.final-step :as final-step]
+    [webchange.editor-v2.wizard.validator :as validator]))
 
 (defn- get-styles
   []
@@ -12,28 +13,29 @@
 
 (defn- get-steps
   []
-  (->> [:test]
+  (->> [:choose-template]
        (map-indexed vector)))
 
 (defn- get-step-content
-  [steps step-index data]
+  [steps step-index step-component-props]
   (if (< step-index (count steps))
     (case (->> step-index (nth steps) (second))
-      :test (test/get-step {:data data}))
-    (final-step/get-step {:data data})))
+      :choose-template (choose-template/get-step step-component-props))
+    (final-step/get-step step-component-props)))
 
 (defn wizard
   []
   (r/with-let [data (r/atom {})
                steps (get-steps)
                current-step-idx (r/atom 0)
+               {:keys [valid?] :as validator} (validator/init data)
                handle-back (fn [] (reset! current-step-idx (dec @current-step-idx)))
-               handle-next (fn [] (reset! current-step-idx (inc @current-step-idx)))
-               handle-finish (fn []
-                               (reset! current-step-idx (inc @current-step-idx))
-                               (print @data))
+               handle-next (fn []
+                             (when (valid?)
+                               (reset! current-step-idx (inc @current-step-idx))))
                styles (get-styles)]
-    (let [current-step (get-step-content steps @current-step-idx data)
+    (let [current-step (get-step-content steps @current-step-idx {:data      data
+                                                                  :validator validator})
           first-step? (= @current-step-idx 0)
           last-step? (->> (count steps) (dec) (= @current-step-idx))
           finished? (= @current-step-idx (count steps))]
@@ -46,7 +48,8 @@
           (map (fn [[idx]]
                  ^{:key idx}
                  [ui/step
-                  [ui/step-label (:label (get-step-content steps idx data))]])
+                  [ui/step-label (:label (get-step-content steps idx {:data      data
+                                                                      :validator validator}))]])
                steps)]]
         [ui/grid {:item true :xs 9}
          [ui/card
@@ -58,6 +61,6 @@
             [ui/card-actions
              (when-not first-step?
                [ui/button {:on-click handle-back} "Back"])
-             (if last-step?
-               [ui/button {:on-click handle-finish :style (:next-button styles)} "Finish"]
-               [ui/button {:on-click handle-next :style (:next-button styles)} "Next"])])]]]])))
+             [ui/button {:on-click handle-next
+                         :style    (:next-button styles)}
+              (if last-step? "Finish" "Next")]])]]]])))

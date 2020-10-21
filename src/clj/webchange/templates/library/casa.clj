@@ -4,6 +4,7 @@
 
 (def m {:id          1
         :name        "casa"
+        :tags        ["Direct Instruction - Animated Instructor"]
         :description "Some description of casa mechanics and covered skills"
         :lesson-sets ["concepts"]
         :fields      [{:name "image-src",
