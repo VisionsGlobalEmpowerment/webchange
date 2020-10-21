@@ -45,6 +45,7 @@
                  [clj-http "3.10.1"]
                  [clj-http-fake "1.0.3"]
                  [ring/ring-codec "1.1.2"]
+                 [org.clojure/data.csv "1.0.0"]
                  ]
 
   ;:node-dependencies [[source-map-support "0.2.8"]]
