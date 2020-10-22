@@ -28,7 +28,7 @@
                                         (swap! data assoc :template-id template-id))
                handle-tag-click (fn [tag]
                                   (reset! current-tag tag))
-               {:keys [error-message]} (validator/init data validation-map validator)
+               {:keys [error-message destroy]} (validator/init data validation-map validator)
                styles (get-styles)]
     (let [templates @(re-frame/subscribe [::state-activity/templates])
           filtered-templates (filter (fn [{:keys [tags]}]
@@ -87,7 +87,9 @@
                        ^{:key tag}
                        [ui/chip {:label   tag
                                  :variant "outlined"}])]]))]
-         [error-message {:field-name :template-id}]]]])))
+         [error-message {:field-name :template-id}]]]])
+    (finally
+      (destroy))))
 
 (defn get-step
   [{:keys [data validator]}]

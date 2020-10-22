@@ -4,30 +4,40 @@
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.editor-v2.wizard.steps.choose-template :as choose-template]
+    [webchange.editor-v2.wizard.steps.fill-template :as fill-template]
     [webchange.editor-v2.wizard.steps.final-step :as final-step]
+    [webchange.editor-v2.wizard.steps.name-activity :as name-activity]
+    [webchange.editor-v2.wizard.steps.skills :as skills]
     [webchange.editor-v2.wizard.validator :as validator]))
 
 (defn- get-styles
   []
-  {:next-button {:margin-left "auto"}})
+  {:actions     {:padding "12px"}
+   :next-button {:margin-left "auto"}})
 
 (defn- get-steps
   []
-  (->> [:choose-template]
+  (->> [:choose-template
+        :name-activity
+        :skills
+        :fill-template]
        (map-indexed vector)))
 
 (defn- get-step-content
   [steps step-index step-component-props]
   (if (< step-index (count steps))
     (case (->> step-index (nth steps) (second))
-      :choose-template (choose-template/get-step step-component-props))
+      :choose-template (choose-template/get-step step-component-props)
+      :fill-template (fill-template/get-step step-component-props)
+      :name-activity (name-activity/get-step step-component-props)
+      :skills (skills/get-step step-component-props))
     (final-step/get-step step-component-props)))
 
 (defn wizard
   []
   (r/with-let [data (r/atom {})
                steps (get-steps)
-               current-step-idx (r/atom 0)
+               current-step-idx (r/atom 1)
                {:keys [valid?] :as validator} (validator/init data)
                handle-back (fn [] (reset! current-step-idx (dec @current-step-idx)))
                handle-next (fn []
@@ -58,9 +68,10 @@
           [ui/card-content
            (:content current-step)]
           (when-not finished?
-            [ui/card-actions
+            [ui/card-actions {:style (:actions styles)}
              (when-not first-step?
                [ui/button {:on-click handle-back} "Back"])
              [ui/button {:on-click handle-next
+                         :color    "primary"
                          :style    (:next-button styles)}
               (if last-step? "Finish" "Next")]])]]]])))
