@@ -24,31 +24,40 @@
        (map-indexed vector)))
 
 (defn- get-step-content
-  [steps step-index step-component-props]
+  [steps step-index data validator]
   (if (< step-index (count steps))
     (let [step-key (->> step-index (nth steps) (second))
-          component-props (merge step-component-props
-                                 {:data-key step-key})]
+          component-props {:data      data
+                           :validator validator}]
       (case step-key
-        :choose-template (choose-template/get-step component-props)
-        :fill-template (fill-template/get-step component-props)
-        :name-activity (name-activity/get-step component-props)
-        :skills (skills/get-step component-props)))
-    (final-step/get-step step-component-props)))
+        :choose-template (->> {:data-key :template-id}
+                              (merge component-props)
+                              (choose-template/get-step))
+        :fill-template (->> {:data-key    :template-data
+                             :template-id (get-in @data [:template-id])}
+                            (merge component-props)
+                            (fill-template/get-step))
+        :name-activity (->> {:data-key :activity-data}
+                            (merge component-props)
+                            (name-activity/get-step))
+        :skills (->> {:data-key :skills}
+                     (merge component-props)
+                     (skills/get-step))))
+    (final-step/get-step {:data      data
+                          :validator validator})))
 
 (defn wizard
   []
   (r/with-let [data (r/atom {})
                steps (get-steps)
-               current-step-idx (r/atom 2)
+               current-step-idx (r/atom 0)
                {:keys [valid?] :as validator} (validator/init data)
                handle-back (fn [] (reset! current-step-idx (dec @current-step-idx)))
                handle-next (fn []
                              (when (valid?)
                                (reset! current-step-idx (inc @current-step-idx))))
                styles (get-styles)]
-    (let [current-step (get-step-content steps @current-step-idx {:data      data
-                                                                  :validator validator})
+    (let [current-step (get-step-content steps @current-step-idx data validator)
           first-step? (= @current-step-idx 0)
           last-step? (->> (count steps) (dec) (= @current-step-idx))
           finished? (= @current-step-idx (count steps))]
@@ -61,8 +70,7 @@
           (map (fn [[idx]]
                  ^{:key idx}
                  [ui/step
-                  [ui/step-label (:label (get-step-content steps idx {:data      data
-                                                                      :validator validator}))]])
+                  [ui/step-label (:label (get-step-content steps idx data validator))]])
                steps)]]
         [ui/grid {:item true :xs 9}
          [ui/card

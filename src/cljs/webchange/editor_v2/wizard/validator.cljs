@@ -87,10 +87,14 @@
   ([parent-data path]
    (connect-data parent-data path {}))
   ([parent-data path default-data]
-  (let [fixed-path (if (sequential? path) path [path])
-        data (r/atom (get-in @parent-data fixed-path default-data))]
-    (swap! parent-data assoc-in fixed-path @data)
-    (add-watch data :connect-data
-               (fn [_ _ _ new-state]
-                 (swap! parent-data assoc-in fixed-path new-state)))
-    data)))
+   (connect-data parent-data path default-data nil))
+  ([parent-data path default-data persistent-data]
+   (let [fixed-path (if (sequential? path) path [path])
+         data (r/atom (if (some? persistent-data)
+                        persistent-data
+                        (get-in @parent-data fixed-path default-data)))]
+     (swap! parent-data assoc-in fixed-path @data)
+     (add-watch data :connect-data
+                (fn [_ _ _ new-state]
+                  (swap! parent-data assoc-in fixed-path new-state)))
+     data)))

@@ -51,9 +51,12 @@
 (defn characters-option
   [{:keys [key option data validator]}]
   (r/with-let [add-tooltip-open? (r/atom false)
-               characters-data (connect-data data [key])
+               characters-data (connect-data data [key] [])
                {:keys [error-message] :as validator} (v/init characters-data characters-validation-map validator)]
+    (print "characters-data" @characters-data)
     (let [handle-add-option (fn []
+                              (print "handle-add-option")
+                              (print ":max" (:max option))
                               (if (< (count @characters-data) (:max option))
                                 (swap! characters-data conj {})
                                 (reset! add-tooltip-open? true)))

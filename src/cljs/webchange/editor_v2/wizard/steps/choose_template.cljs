@@ -16,15 +16,15 @@
                            :display         "flex"
                            :justify-content "space-between"}}))
 
-(def validation-map {:template-id [(fn [value] (when (nil? value) "Template is required"))]})
+(def validation-map {:root [(fn [value] (when (= "" value) "Template is required"))]})
 
 (defn form
   [{:keys [data-key parent-data validator]}]
   (r/with-let [_ (re-frame/dispatch [::state-activity/load-templates])
-               data (connect-data parent-data data-key)
+               data (connect-data parent-data data-key "")
                current-tag (r/atom nil)
                handle-change-template (fn [template-id]
-                                        (swap! data assoc :template-id template-id))
+                                        (reset! data template-id))
                handle-tag-click (fn [tag]
                                   (reset! current-tag tag))
                {:keys [error-message destroy]} (validator/init data validation-map validator)
@@ -65,7 +65,7 @@
             [ui/form-control {:full-width true
                               :style      (:control-container styles)}
              [ui/input-label "Template"]
-             [ui/select {:value        (or (:template-id @data) "")
+             [ui/select {:value        (or @data "")
                          :on-change    #(handle-change-template (-> % .-target .-value))
                          :render-value (fn [value]
                                          (->> (fn []
@@ -86,7 +86,7 @@
                            ^{:key tag}
                            [ui/chip {:label   tag
                                      :variant "outlined"}])]]))]
-             [error-message {:field-name :template-id}]]]])
+             [error-message {:field-name :root}]]]])
         [progress-block]))
     (finally
       (destroy))))

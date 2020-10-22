@@ -88,7 +88,7 @@
 (defn pages-option
   [{:keys [key option data validator]}]
   (r/with-let [add-tooltip-open? (r/atom false)
-               pages-data (connect-data data [key])
+               pages-data (connect-data data [key] [])
                {:keys [error-message] :as validator} (v/init pages-data pages-validation-map validator)]
     (let [handle-add-page (fn []
                             (if (< (count @pages-data) (:max option))

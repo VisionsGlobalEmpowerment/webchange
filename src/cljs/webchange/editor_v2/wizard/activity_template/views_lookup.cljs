@@ -4,11 +4,11 @@
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
-(def lookup-validation-map {:root [(fn [value] (when (nil? value) "Required field"))]})
+(def lookup-validation-map {:root [(fn [value] (when (= value "") "Required field"))]})
 
 (defn lookup-option
   [{:keys [key option data validator]}]
-  (r/with-let [lookup-data (connect-data data [key])
+  (r/with-let [lookup-data (connect-data data [key] "")
                {:keys [error-message]} (v/init lookup-data lookup-validation-map validator)]
     [ui/grid {:container   true
               :justify     "center"
@@ -21,7 +21,7 @@
        (:label option)]
       [ui/form-control {:style {:margin-top "-18px"}}
        [ui/input-label "Value"]
-       [ui/select {:value     (or @lookup-data "")
+       [ui/select {:value     @lookup-data
                    :on-change #(reset! lookup-data (-> % .-target .-value))
                    :style     {:min-width "150px"}}
         (for [{:keys [name value]} (:options option)]

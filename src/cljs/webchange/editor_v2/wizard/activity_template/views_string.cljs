@@ -4,11 +4,11 @@
     [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
-(def string-validation-map {:root [(fn [value] (when (nil? value) "Required field"))]})
+(def string-validation-map {:root [(fn [value] (when (= value "") "Required field"))]})
 
 (defn string-option
   [{:keys [key option data validator]}]
-  (r/with-let [string-data (connect-data data [key])
+  (r/with-let [string-data (connect-data data [key] "")
                {:keys [error-message]} (v/init string-data string-validation-map validator)]
     [ui/grid {:container   true
               :justify     "center"
@@ -21,7 +21,7 @@
        (:label option)]
       [ui/text-field {:label     "Value"
                       :variant   "outlined"
-                      :value     (or @string-data "")
+                      :value     @string-data
                       :style     {:min-width "300px"}
                       :on-change #(reset! string-data (-> % .-target .-value))}]
       [error-message {:field-name :root}]]]))
