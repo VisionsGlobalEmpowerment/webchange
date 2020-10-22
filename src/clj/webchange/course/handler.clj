@@ -98,7 +98,7 @@
 
 (s/defschema Topic {:name s/Str :strand s/Keyword})
 (s/defschema Skill {:id s/Int :name s/Str :grade s/Str :topic s/Keyword :tags [s/Str]})
-(s/defschema Skills {:skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
+(s/defschema Skills {:levels {s/Keyword s/Str} :subjects {s/Keyword s/Str} :skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
 
 (defn character-skins []
   (response (core/find-all-character-skins)))

@@ -2,23 +2,21 @@
   (:require
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
+    [webchange.editor-v2.wizard.steps.common :as common]
     [webchange.editor-v2.wizard.validator :refer [connect-data]]
     [webchange.editor-v2.wizard.validator :as validator :refer [connect-data]]))
 
 (defn- get-styles
   []
-  {:form              {:padding-bottom "16px"}
-   :text-input        {:margin-top "16px"}
-   :control-container {:margin-top "8px"}
-   :input-description {:margin-bottom "8px"}})
+  (common/get-styles))
 
 (def validation-map {:language [(fn [value] (when (nil? value) "Language is required"))]
-                     :name [(fn [value] (when (nil? value) "Activity name is required"))]
-                     :course [(fn [value] (when (nil? value) "Course name is required"))]})
+                     :name     [(fn [value] (when (nil? value) "Activity name is required"))]
+                     :course   [(fn [value] (when (nil? value) "Course name is required"))]})
 
 (defn form
-  [{:keys [parent-data validator]}]
-  (r/with-let [data (connect-data parent-data :activity-name)
+  [{:keys [data-key parent-data validator]}]
+  (r/with-let [data (connect-data parent-data data-key)
                {:keys [error-message destroy]} (validator/init data validation-map validator)
                styles (get-styles)]
     [ui/grid {:container   true
@@ -57,9 +55,10 @@
       (destroy))))
 
 (defn get-step
-  [{:keys [data validator]}]
+  [{:keys [data data-key validator]}]
   {:label      "Name Activity"
    :header     "Name Your Activity & Course"
    :sub-header "Create new activity"
-   :content    [form {:parent-data data
+   :content    [form {:data-key    data-key
+                      :parent-data data
                       :validator   validator}]})

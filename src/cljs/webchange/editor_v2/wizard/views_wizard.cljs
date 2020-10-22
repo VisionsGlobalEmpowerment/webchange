@@ -26,18 +26,21 @@
 (defn- get-step-content
   [steps step-index step-component-props]
   (if (< step-index (count steps))
-    (case (->> step-index (nth steps) (second))
-      :choose-template (choose-template/get-step step-component-props)
-      :fill-template (fill-template/get-step step-component-props)
-      :name-activity (name-activity/get-step step-component-props)
-      :skills (skills/get-step step-component-props))
+    (let [step-key (->> step-index (nth steps) (second))
+          component-props (merge step-component-props
+                                 {:data-key step-key})]
+      (case step-key
+        :choose-template (choose-template/get-step component-props)
+        :fill-template (fill-template/get-step component-props)
+        :name-activity (name-activity/get-step component-props)
+        :skills (skills/get-step component-props)))
     (final-step/get-step step-component-props)))
 
 (defn wizard
   []
   (r/with-let [data (r/atom {})
                steps (get-steps)
-               current-step-idx (r/atom 1)
+               current-step-idx (r/atom 2)
                {:keys [valid?] :as validator} (validator/init data)
                handle-back (fn [] (reset! current-step-idx (dec @current-step-idx)))
                handle-next (fn []
