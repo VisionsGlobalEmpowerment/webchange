@@ -333,5 +333,5 @@
                  :start-activity    {:type "start-activity", :id "slide"},
                  :stop-activity     {:type "stop-activity", :id "slide"}},
  :triggers      {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata      {:prev "park", :autostart true},
+ :metadata      {:autostart true},
  :audio         {:mari "/raw/audio/l2/a5/L2_A5_Mari.m4a"}}
