@@ -112,8 +112,6 @@
 
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request))
-           (GET "/create-course" request (authenticated-route request))
-           (GET "/courses/:course-slug/create-activity" request (authenticated-route request))
            (GET "/wizard" request (authenticated-route request))
 
            (files "/upload/" {:root (env :upload-dir)})

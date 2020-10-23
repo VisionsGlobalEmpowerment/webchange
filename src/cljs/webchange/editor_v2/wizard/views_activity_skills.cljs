@@ -17,7 +17,9 @@
   [{:keys [values options]}]
   (let [value->option (fn [current-value]
                         (some (fn [{:keys [value] :as option}] (and (= value current-value) option)) options))
-        selected-items (map value->option values)
+        selected-items (->> values
+                            (map value->option)
+                            (remove nil?))
         styles (get-styles)]
     [ui/list {:style (:skills-list styles)}
      (for [{:keys [value text]} selected-items]
