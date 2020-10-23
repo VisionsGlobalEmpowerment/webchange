@@ -455,5 +455,5 @@
              :start-activity {:type "start-activity", :id "pinata"},
              :stop-activity  {:type "stop-activity", :id "pinata"}},
  :triggers  {:stop {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata  {:prev "park", :autostart true},
+ :metadata  {:autostart true},
  :templates ["coaching"]}

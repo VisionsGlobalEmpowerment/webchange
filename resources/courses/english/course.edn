@@ -2,7 +2,8 @@
  :scene-list
  {:home
   {:name "Casa",
-   :outs [{:x 1457, :y 630, :name "map", :object "door"}],
+   :outs [{:x 1457, :y 630, :name "map", :object "door"},
+          {:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
   :cinema

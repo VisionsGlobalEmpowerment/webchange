@@ -49,7 +49,7 @@
   (let [back-button (merge {:type        "image"
                             :src         "/raw/img/ui/back_button_01.png"
                             :object-name back-button-name
-                            :on-click    #(re-frame/dispatch [::ie/close-scene])}
+                            :on-click    #(re-frame/dispatch [::ie/back-scene])}
                            (get-back-button-position viewport))
         settings-button (merge {:type        "image"
                                 :src         "/raw/img/ui/settings_button_01.png"

@@ -169,6 +169,7 @@
 (ce/reg-simple-executor :animation-props ::execute-set-animation-props)
 (ce/reg-simple-executor :animation-sequence ::execute-animation-sequence)
 (ce/reg-simple-executor :scene ::execute-scene)
+(ce/reg-simple-executor :scene-exit ::execute-scene-exit)
 (ce/reg-simple-executor :location ::execute-location)
 (ce/reg-simple-executor :transition ::execute-transition)
 (ce/reg-simple-executor :stop-transition ::execute-stop-transition)
@@ -290,6 +291,24 @@
   ::execute-scene
   (fn [{:keys [db]} [_ {:keys [scene-id] :as action}]]
     {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))}))
+
+(re-frame/reg-event-fx
+  ::execute-scene-exit
+  (fn [{:keys [db]} [_ {:keys [exit-point] :as action}]]
+    (let [current-scene (get-in db [:current-scene])
+          scene (get-in db [:course-data :scene-list (keyword current-scene)])
+          out-scene-id (->> scene
+                       :outs
+                       (filter #(= (:object %) exit-point))
+                        first
+                        :name
+                       )
+          current-course (:current-course db)
+          ]
+      (if out-scene-id
+        {:dispatch-n (list [::set-current-scene out-scene-id] (ce/success-event action))}
+        {:dispatch-n (list [::open-student-course-dashboard current-course])}
+        ))))
 
 ;; audio action
 ;; First try to get audio url from :audio field
@@ -744,14 +763,9 @@
                          [::set-current-scene scene-id])})))
 
 (re-frame/reg-event-fx
-  ::close-scene
+  ::back-scene
   (fn [{:keys [db]} [_ _]]
-    (let [scene-id (:current-scene db)
-          scene (get-in db [:scenes scene-id])
-          prev (get-in scene [:metadata :prev] nil)]
-      (if prev
-        {:dispatch-n (list [::trigger :back] [::set-current-scene prev])}
-        {:dispatch [::open-student-dashboard]}))))
+        {:dispatch-n (list [::execute-scene-exit {:exit-point "back"}])}))
 
 (re-frame/reg-event-fx
   ::open-student-dashboard
