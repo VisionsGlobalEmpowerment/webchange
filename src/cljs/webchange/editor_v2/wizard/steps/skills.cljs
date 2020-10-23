@@ -14,8 +14,6 @@
 
 (def validation-map {:level   [(fn [value] (when (nil? value) "Level is required"))]
                      :subject [(fn [value] (when (nil? value) "Subject is required"))]
-                     :strands [(fn [value] (when (empty? value) "Strands are required"))]
-                     :topics  [(fn [value] (when (empty? value) "Topics are required"))]
                      :skills  [(fn [value] (when (empty? value) "Skills are required"))]
                      :concept [(fn [value] (when (nil? value) "Concept is required"))]})
 
@@ -28,8 +26,13 @@
 
                handle-level-changed (fn [level-id] (swap! data assoc :level level-id))
                handle-subject-changed (fn [subject-id] (swap! data assoc :subject subject-id))
-               handle-strands-changed (fn [strands-ids] (swap! data assoc :strands strands-ids))
-               handle-topics-changed (fn [topics-ids] (swap! data assoc :topics topics-ids))
+               handle-strands-changed (fn [strands-ids]
+                                        (swap! data assoc :skills [])
+                                        (swap! data assoc :topics [])
+                                        (swap! data assoc :strands strands-ids))
+               handle-topics-changed (fn [topics-ids]
+                                       (swap! data assoc :skills [])
+                                       (swap! data assoc :topics topics-ids))
                handle-skills-changed (fn [skills-ids] (swap! data assoc :skills skills-ids))
                handle-concept-changed (fn [concept-id] (swap! data assoc :concept concept-id))
 
