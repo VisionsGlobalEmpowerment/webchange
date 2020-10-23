@@ -158,7 +158,7 @@
 
 (defn- ->website-course
   [course]
-  (-> (select-keys course [:id :name :language :slug :image-src :lang])
+  (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject])
       (with-course-page)
       (with-default-image)
       (with-host-name :image-src)))

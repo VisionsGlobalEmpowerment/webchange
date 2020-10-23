@@ -86,8 +86,8 @@
     (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) owner-id)
         handle)))
 
-(s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str)})
-(s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :concept-list-id) s/Int})
+(s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
+(s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration")})

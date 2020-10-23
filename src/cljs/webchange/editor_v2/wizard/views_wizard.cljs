@@ -64,25 +64,13 @@
                 component (get step :component)]
             (-> step
                 (dissoc :component)
-                (assoc :content [component {:data (atom {:template-id   1
-                                                         :activity-data {:language "English"
-                                                                         :name     "Home practice"
-                                                                         :course   "Test Course"}
-                                                         :skills        {:level   "pre-k"
-                                                                         :subject "english-second"
-                                                                         :strands ["foundational-literacy"]
-                                                                         :topics  ["punctuation"]
-                                                                         :skills  [5]
-                                                                         :concept 1}
-                                                         :template-data {:characters [{:name     "Ruby"
-                                                                                       :skeleton "vera"}]
-                                                                         :boxes      2}})}])))))
+                (assoc :content [component {:data data}])))))
 
 (defn wizard
   []
   (r/with-let [data (r/atom {})
                steps (get-steps)
-               current-step-idx (r/atom 4)
+               current-step-idx (r/atom -1)
                {:keys [valid?] :as validator} (validator/init data)
                handle-back (fn [] (reset! current-step-idx (dec @current-step-idx)))
                handle-next (fn []

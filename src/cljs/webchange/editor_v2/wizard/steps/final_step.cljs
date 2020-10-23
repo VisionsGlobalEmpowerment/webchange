@@ -31,13 +31,13 @@
   [data]
   {:name            (get-in data [:activity-data :course])
    :lang            (get-in data [:activity-data :language])
-   :concept-list-id (get-in data [:skills :concept])})
+   :concept-list-id (get-in data [:skills :concept])
+   :level           (get-in data [:skills :level])
+   :subject         (get-in data [:skills :subject])})
 
 (defn- get-activity-data
   [data]
   (merge {:name        (get-in data [:activity-data :name])
-          :level       (get-in data [:skills :level])
-          :subject     (get-in data [:skills :subject])
           :skills      (get-in data [:skills :skills])
           :template-id (get-in data [:template-id])}
          (get-in data [:template-data])))
@@ -58,6 +58,7 @@
         activity-data (get-activity-data data)]
     (-> (save-course course-data)
         (.then (fn [new-course]
+                 (print "new-course" new-course)
                  (save-activity activity-data (:slug new-course))))
         (.then callback))))
 
