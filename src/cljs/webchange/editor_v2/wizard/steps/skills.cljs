@@ -20,11 +20,11 @@
                      :concept [(fn [value] (when (nil? value) "Concept is required"))]})
 
 (defn form
-  [{:keys [data-key parent-data validator]}]
+  [{:keys [data data-key validator]}]
   (r/with-let [_ (re-frame/dispatch [::state-activity/load-skills])
                _ (re-frame/dispatch [::state-course/load-datasets-library])
 
-               data (connect-data parent-data data-key)
+               data (connect-data data data-key)
 
                handle-level-changed (fn [level-id] (swap! data assoc :level level-id))
                handle-subject-changed (fn [subject-id] (swap! data assoc :subject subject-id))
@@ -125,11 +125,8 @@
     (finally
       (destroy))))
 
-(defn get-step
-  [{:keys [data data-key validator]}]
-  {:label      "Skills"
-   :header     "Skills"
+(def data
+  {:label      "Select Skills"
+   :header     "Select Skills"
    :sub-header "Decide what you will teach"
-   :content    [form {:data-key    data-key
-                      :parent-data data
-                      :validator   validator}]})
+   :component  form})

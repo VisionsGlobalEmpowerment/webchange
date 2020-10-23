@@ -19,9 +19,9 @@
 (def validation-map {:root [(fn [value] (when (= "" value) "Template is required"))]})
 
 (defn form
-  [{:keys [data-key parent-data validator]}]
+  [{:keys [data data-key validator]}]
   (r/with-let [_ (re-frame/dispatch [::state-activity/load-templates])
-               data (connect-data parent-data data-key "")
+               data (connect-data data data-key "")
                current-tag (r/atom nil)
                handle-change-template (fn [template-id]
                                         (reset! data template-id))
@@ -91,10 +91,7 @@
     (finally
       (destroy))))
 
-(defn get-step
-  [{:keys [data data-key validator]}]
-  {:label   "Template"
-   :header  "Choose your template"
-   :content [form {:data-key    data-key
-                   :parent-data data
-                   :validator   validator}]})
+(def data
+  {:label     "Choose Template"
+   :header    "Choose your template"
+   :component form})

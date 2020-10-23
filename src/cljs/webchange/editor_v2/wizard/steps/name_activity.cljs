@@ -10,13 +10,13 @@
   []
   (common/get-styles))
 
-(def validation-map {:language [(fn [value] (when (nil? value) "Language is required"))]
-                     :name     [(fn [value] (when (nil? value) "Activity name is required"))]
-                     :course   [(fn [value] (when (nil? value) "Course name is required"))]})
+(def validation-map {:language [(fn [value] (when (or (nil? value) (= value "")) "Language is required"))]
+                     :name     [(fn [value] (when (or (nil? value) (= value "")) "Activity name is required"))]
+                     :course   [(fn [value] (when (or (nil? value) (= value "")) "Course name required"))]})
 
 (defn form
-  [{:keys [data-key parent-data validator]}]
-  (r/with-let [data (connect-data parent-data data-key)
+  [{:keys [data data-key validator]}]
+  (r/with-let [data (connect-data data data-key)
                {:keys [error-message destroy]} (validator/init data validation-map validator)
                styles (get-styles)]
     [ui/grid {:container   true
@@ -54,11 +54,8 @@
     (finally
       (destroy))))
 
-(defn get-step
-  [{:keys [data data-key validator]}]
+(def data
   {:label      "Name Activity"
    :header     "Name Your Activity & Course"
    :sub-header "Create new activity"
-   :content    [form {:data-key    data-key
-                      :parent-data data
-                      :validator   validator}]})
+   :component  form})

@@ -83,8 +83,7 @@
                       :style    (:button styles)}
            "Edit dialogs"]]]))))
 
-(defn get-step
-  [{:keys [data]}]
+(def data
   {:header     "Finish"
    :sub-header "Activity creation completed"
-   :content    [final-form {:data data}]})
+   :component  final-form})

@@ -25,8 +25,7 @@
                      :validator validator}])
         [progress-block]))))
 
-(defn get-step
-  [props]
-  {:label   "Fill Template"
-   :header  "Start Your Activity Creation"
-   :content [form props]})
+(def data
+  {:label     "Fill Template"
+   :header    "Start Your Activity Creation"
+   :component form})
