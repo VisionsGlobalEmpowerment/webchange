@@ -5,7 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.wizard.state.activity :as state-activity]
     [webchange.editor-v2.wizard.state.course :as state-course]
-    [webchange.editor-v2.wizard.steps.common :as common :refer [progress-block select-control with-empty-item]]
+    [webchange.editor-v2.wizard.steps.common :as common :refer [progress-block select-control]]
     [webchange.editor-v2.wizard.validator :as validator :refer [connect-data]]))
 
 (defn- get-styles

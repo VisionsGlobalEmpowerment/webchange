@@ -1,7 +1,8 @@
 (ns webchange.editor-v2.wizard.steps.common
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [reagent.core :as r]))
+    [reagent.core :as r]
+    [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn get-styles
   []
@@ -12,16 +13,20 @@
    :input-description            {:margin-bottom "8px"}
    :options-list                 {:padding 0}
    :options-list-item            {:padding "0 0 8px 0"}
-   :options-list-item-last-child {:padding 0}})
+   :options-list-item-last-child {:padding 0}
+   :progress-title               {:color (get-in-theme [:palette :text :secondary])}})
 
 (defn progress-block
-  []
-  [ui/grid {:container true
-            :spacing   24}
-   [ui/grid {:item  true
-             :xs    12
-             :style {:text-align "center"}}
-    [ui/circular-progress]]])
+  [{:keys [title]}]
+  (let [styles (get-styles)]
+    [ui/grid {:container true
+              :spacing   24}
+     [ui/grid {:item  true
+               :xs    12
+               :style {:text-align "center"}}
+      [ui/circular-progress]
+      (when (some? title)
+        [ui/typography {:style (:progress-title styles)} title])]]))
 
 (defn- last?
   [list item]
@@ -42,10 +47,6 @@
                                       (:options-list-item-last-child styles)
                                       {}))}
         text])]))
-
-(defn with-empty-item
-  [empty-text options]
-  (conj options {}))
 
 (defn select-control
   [{:keys [label description value options multiple? on-change error-message]

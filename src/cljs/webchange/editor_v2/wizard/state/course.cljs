@@ -28,18 +28,24 @@
 
 (re-frame/reg-event-fx
   ::create-course
-  (fn [{:keys [db]} [_ data]]
+  (fn [{:keys [db]} [_ data callback]]
     {:db         (assoc-in db [:loading :create-course] true)
      :http-xhrio {:method          :post
                   :uri             (str "/api/courses")
                   :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::create-course-success]
+                  :on-success      [::create-course-success callback]
                   :on-failure      [:api-request-error :create-course]}}))
 
 (re-frame/reg-event-fx
   ::create-course-success
-  (fn [{:keys [db]} [_ result]]
-    {:dispatch-n (list [:complete-request :create-course])
-     :redirect [:create-activity :course-slug (:slug result)]}))
+  (fn [{:keys [db]} [_ callback result]]
+    (when (some? callback)
+      (callback result))
+    {:dispatch-n (list [:complete-request :create-course])}))
+
+(re-frame/reg-event-fx
+  ::redirect-to-editor
+  (fn [{:keys [db]} [_ course-slug scene-slug]]
+    {:redirect [:course-editor-v2-scene :id course-slug :scene-id scene-slug]}))

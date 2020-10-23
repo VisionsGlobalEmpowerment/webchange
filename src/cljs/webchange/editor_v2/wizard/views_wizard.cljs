@@ -67,11 +67,12 @@
         [ui/grid {:item true :xs 3}
          [ui/stepper {:active-step @current-step-idx
                       :orientation "vertical"}
-          (map (fn [[idx]]
-                 ^{:key idx}
-                 [ui/step
-                  [ui/step-label (:label (get-step-content steps idx data validator))]])
-               steps)]]
+          (->> steps
+               (map (fn [[idx]]
+                      ^{:key idx}
+                      [ui/step
+                       [ui/step-label (:label (get-step-content steps idx data validator))]]))
+               (doall))]]
         [ui/grid {:item true :xs 9}
          [ui/card
           [ui/card-header {:title     (:header current-step)
