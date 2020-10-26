@@ -173,5 +173,5 @@
       (add-title (:title args))
       (add-pages (:pages args))))
 
-(core/register-template
+#_(core/register-template
   (:id m) m f)

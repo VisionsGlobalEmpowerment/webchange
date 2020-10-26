@@ -186,5 +186,5 @@
       (add-title-image (:image args))
       ))
 
-(core/register-template
+#_(core/register-template
   (:id m) m f)
