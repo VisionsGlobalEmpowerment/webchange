@@ -49,6 +49,8 @@
         (get-error validation-data field-name)]])))
 
 (defn init
+  ([data]
+   (init data {} nil))
   ([data validation-map]
    (init data validation-map nil))
   ([data validation-map parent-validator]
@@ -82,9 +84,17 @@
      @instance)))
 
 (defn connect-data
-  [parent-data path]
-  (let [data (r/atom (get-in @parent-data path))]
-    (add-watch data :connect-data
-               (fn [_ _ _ new-state]
-                 (swap! parent-data assoc-in path new-state)))
-    data))
+  ([parent-data path]
+   (connect-data parent-data path {}))
+  ([parent-data path default-data]
+   (connect-data parent-data path default-data nil))
+  ([parent-data path default-data persistent-data]
+   (let [fixed-path (if (sequential? path) path [path])
+         data (r/atom (if (some? persistent-data)
+                        persistent-data
+                        (get-in @parent-data fixed-path default-data)))]
+     (swap! parent-data assoc-in fixed-path @data)
+     (add-watch data :connect-data
+                (fn [_ _ _ new-state]
+                  (swap! parent-data assoc-in fixed-path new-state)))
+     data)))

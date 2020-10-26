@@ -86,8 +86,8 @@
     (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) owner-id)
         handle)))
 
-(s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str)})
-(s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :concept-list-id) s/Int})
+(s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
+(s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration")})
@@ -98,7 +98,7 @@
 
 (s/defschema Topic {:name s/Str :strand s/Keyword})
 (s/defschema Skill {:id s/Int :name s/Str :grade s/Str :topic s/Keyword :tags [s/Str]})
-(s/defschema Skills {:skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
+(s/defschema Skills {:levels {s/Keyword s/Str} :subjects {s/Keyword s/Str} :skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
 
 (defn character-skins []
   (response (core/find-all-character-skins)))

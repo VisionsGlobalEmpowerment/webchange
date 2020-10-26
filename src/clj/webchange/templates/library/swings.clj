@@ -4,6 +4,7 @@
 
 (def m {:id          8
         :name        "Swings"
+        :tags        ["Direct Instruction - Animated Instructor"]
         :description "Some description of swings mechanics and covered skills"
         :lesson-sets ["concepts"]
         :fields      [{:name "image-src",

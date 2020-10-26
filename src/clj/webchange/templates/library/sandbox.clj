@@ -4,6 +4,7 @@
 
 (def m {:id          7
         :name        "Sandbox"
+        :tags        ["Direct Instruction - Animated Instructor"]
         :description "Some description of Sandbox mechanics and covered skills"
         :lesson-sets ["concepts"]
         :fields      [

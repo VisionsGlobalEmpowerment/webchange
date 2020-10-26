@@ -4,6 +4,7 @@
 
 (def m {:id          10
         :name        "Magic hat"
+        :tags        ["Direct Instruction - Animated Instructor"]
         :description "Some description of magic hat mechanics and covered skills"
         :lesson-sets ["concepts-single", "concepts-all"]
         :fields      [

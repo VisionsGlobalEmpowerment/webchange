@@ -4,6 +4,7 @@
 
 (def m {:id          6
         :name        "See saw"
+        :tags        ["Guided Practice"]
         :description "Some description of see saw mechanics and covered skills"
         :lesson-sets ["concepts"]
         :fields      [{:name "image-src",

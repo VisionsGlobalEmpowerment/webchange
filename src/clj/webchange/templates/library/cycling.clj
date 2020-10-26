@@ -4,6 +4,7 @@
 
 (def m {:id          2
         :name        "cycling"
+        :tags        ["Independent Practice"]
         :description "Some description of cycling mechanics and covered skills"
         :lesson-sets ["concepts"]
         :fields [{:name "image-src",

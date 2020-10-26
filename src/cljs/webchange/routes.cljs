@@ -11,14 +11,13 @@
                   "login"             :login
                   "student-login"     :student-login
                   "register"          :register-user
-                  "create-course"     :create-course
+                  "wizard"            :wizard
                   "game-changer"      :game-changer
                   "s"                 {["/" :course-id "/" :scene-id] :sandbox
                                        ["/" :course-id "/" :scene-id "/" [#".+" :encoded-items]] :sandbox}
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor
                                        ["/" :id "/editor-v2"] :course-editor-v2
-                                       ["/" :course-slug "/create-activity"] :create-activity
                                        ["/" :course-id "/editor-v2/concepts/" :concept-id] :course-editor-v2-concept
                                        ["/" :course-id "/editor-v2/add-concept"] :course-editor-v2-add-concept
                                        ["/" :course-id "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson

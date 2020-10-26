@@ -4,6 +4,7 @@
 
 (def m {:id          4
         :name        "dialog"
+        :tags        ["Direct Instruction - Educational Video"]
         :description "Simple dialog"
         :options     {:characters {:label "Characters"
                                    :type  "characters"

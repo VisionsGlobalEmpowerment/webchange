@@ -4,6 +4,7 @@
 
 (def m {:id          9
         :name        "Volleyball"
+        :tags        ["Independent Practice"]
         :description "Some description of volleyball mechanics and covered skills"
         :lesson-sets ["concepts"]
         :fields      [
