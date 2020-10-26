@@ -235,7 +235,7 @@
                               :name   "mari"
                               :skin   "01 mari"}})
 
-(def box {:type       "transparent",
+(def box {:type       "animation",
           :width      772,
           :height     1032,
           :scale      {:x 0.3, :y 0.3},
@@ -249,9 +249,9 @@
           :name       "boxes"
           :skin       "qwestion"
           :start      true
-          :states
-                      {:default {:type "transparent"},
-                       :visible {:type "animation"}}})
+          :states     {:default {:visible false}, :visible {:visible true}}
+          :visible    false,
+          :editable?  true})
 
 (defn- create-character
   [character]

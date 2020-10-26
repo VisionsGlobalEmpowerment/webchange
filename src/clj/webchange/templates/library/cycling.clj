@@ -62,7 +62,7 @@
                                      :skin        "qwestion",
                                      :speed       0.3,
                                      :start       true,
-                                     :states      {:init {:type "transparent"}, :reset {:type "animation"}}},
+                                     :states      {:init {:visible false}, :reset {:visible true}}},
                         :box2
                                     {:type        "animation",
                                      :x           2200,
@@ -80,7 +80,7 @@
                                      :skin        "qwestion",
                                      :speed       0.3,
                                      :start       true,
-                                     :states      {:init {:type "transparent"}, :reset {:type "animation"}}},
+                                     :states      {:init {:visible false}, :reset {:visible true}}},
                         :box3
                                     {:type        "animation",
                                      :x           2400,
@@ -98,7 +98,7 @@
                                      :skin        "qwestion",
                                      :speed       0.3,
                                      :start       true,
-                                     :states      {:init {:type "transparent"}, :reset {:type "animation"}}},
+                                     :states      {:init {:visible false}, :reset {:visible true}}},
                         :mari
                                     {:type        "animation",
                                      :x           1265,
