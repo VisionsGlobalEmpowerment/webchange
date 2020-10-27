@@ -13,7 +13,7 @@
                           {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
 
                           ;; Activity finished
-                          {:url "/raw/img/ui/vera_315x371.png", :size 1, :type "image"}
+                          {:url "/raw/img/ui/ts_287x385.png", :size 1, :type "image"}
                           {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}])
 
 ;(def default-assets (concat default-game-assets

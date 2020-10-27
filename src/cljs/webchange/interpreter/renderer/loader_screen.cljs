@@ -46,7 +46,7 @@
                             :height          "100%"
                             :align-items     "center"
                             :justify-content "center"}
-   :button                 {:background-color "#ffa301"
+   :button                 {:background-color "#ff9000"
                             :border-radius    "48px"
                             :border-width     "0px"
                             :padding          "23px 68px"
