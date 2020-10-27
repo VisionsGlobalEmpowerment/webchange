@@ -71,7 +71,7 @@
                     :height 385}]
     {:type        "image"
      :src         "/raw/img/ui/ts_287x385.png"
-     :object-name :activity-finished-vera
+     :object-name :activity-finished-ts
      :x           (- x (/ (:width image-size) 2))
      :y           (- y (:height image-size))}))
 

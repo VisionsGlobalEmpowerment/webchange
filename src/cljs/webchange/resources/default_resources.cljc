@@ -14,7 +14,10 @@
 
                           ;; Activity finished
                           {:url "/raw/img/ui/ts_287x385.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}])
+                          {:url "/raw/img/ui/reload_button_01.png", :size 1, :type "image"}
+
+                          ;; Goodbye
+                          {:url "/raw/img/ui/ts_321x350.png", :size 1, :type "image"}])
 
 ;(def default-assets (concat default-game-assets
 ;                            [{:url "/raw/audio/background/POL-daily-special-short.mp3" :size 10 :type "audio"}
