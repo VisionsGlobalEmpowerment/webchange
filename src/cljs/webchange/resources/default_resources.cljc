@@ -1,7 +1,7 @@
 (ns webchange.resources.default-resources)
 
 (def default-game-assets [;; Common elements
-                          {:url "/raw/img/bg.jpg", :size 1, :type "image"}
+                          {:url "/raw/img/bg.png", :size 1, :type "image"}
                           {:url "/raw/img/ui/close_button_01.png", :size 1, :type "image"}
 
                           ;; Navigation menu

@@ -36,7 +36,7 @@
   {:type        "group"
    :object-name :activity-finished-background-group
    :children    [{:type        "image"
-                  :src         "/raw/img/bg.jpg"
+                  :src         "/raw/img/bg.png"
                   :object-name :activity-finished-background}]})
 
 (defn- get-top-menu

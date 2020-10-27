@@ -96,7 +96,7 @@
    :object-name :settings-overlay
    :visible     false
    :children    [{:type        "image"
-                  :src         "/raw/img/bg.jpg"
+                  :src         "/raw/img/bg.png"
                   :object-name :settings-background}
                  (get-close-button {:viewport viewport})
                  (get-settings-block {:x 580 :y 345})]})
