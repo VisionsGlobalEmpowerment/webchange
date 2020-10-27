@@ -11,7 +11,7 @@
                     :height           {:default 25}
                     :value            {:default 0.2}
                     :background-color {:default 0xffffff}
-                    :foreground-color {:default 0x2c9600}
+                    :foreground-color {:default 0x00c3ff}
                     :border-color     {:default 0x8a0f91}
                     :border-width     {:default 1}
                     :border-radius    {:default 10}})

@@ -27,7 +27,7 @@
          (get-close-button-position viewport)))
 
 (defn- get-music-setting
-  [{:keys [x y]}]
+  [{:keys [x y font-size]}]
   {:type        "group"
    :object-name :music-settings
    :x           x
@@ -37,11 +37,16 @@
                   :object-name :music-icon
                   :x           0
                   :y           0}
-                 {:type        "image"
-                  :src         "/raw/img/ui/settings/music.png"
-                  :object-name :music-title
-                  :x           88
-                  :y           12}
+                 {:x              100
+                  :y              15
+                  :type           "text"
+                  :text           "MUSIC"
+                  :object-name    :music-title
+                  :align          "left"
+                  :vertical-align "top"
+                  :font-size      font-size
+                  :font-family    "Luckiest Guy"
+                  :fill           0xffffff}
                  {:type        "slider"
                   :object-name :music-slider
                   :x           303
@@ -52,7 +57,7 @@
                   :on-change   #(re-frame/dispatch [::ie/save-settings])}]})
 
 (defn- get-sound-settings
-  [{:keys [x y]}]
+  [{:keys [x y font-size]}]
   {:type        "group"
    :object-name :sound-settings
    :x           x
@@ -62,11 +67,16 @@
                   :object-name :sound-icon
                   :x           0
                   :y           0}
-                 {:type        "image"
-                  :src         "/raw/img/ui/settings/sound_fx.png"
-                  :object-name :sound-title
-                  :x           88
-                  :y           -2}
+                 {:x              100
+                  :y              0
+                  :type           "text"
+                  :text           "SOUND FX"
+                  :object-name    :sound-title
+                  :align          "left"
+                  :vertical-align "top"
+                  :font-size      font-size
+                  :font-family    "Luckiest Guy"
+                  :fill           0xffffff}
                  {:type        "slider"
                   :object-name :effects-slider
                   :x           398
@@ -78,17 +88,24 @@
 
 (defn- get-settings-block
   [{:keys [x y]}]
-  {:type        "group"
-   :object-name :settings-block
-   :x           x
-   :y           y
-   :children    [{:type        "image"
-                  :src         "/raw/img/ui/settings/settings.png"
-                  :object-name :settings-title
-                  :x           199
-                  :y           0}
-                 (get-music-setting {:x 96 :y 171})
-                 (get-sound-settings {:x 1 :y 302})]})
+  (let [title-font-size 80
+        label-font-size 60]
+    {:type        "group"
+     :object-name :settings-block
+     :x           x
+     :y           y
+     :children    [{:x              210
+                    :y              0
+                    :type           "text"
+                    :text           "SETTINGS"
+                    :object-name    :settings-title
+                    :align          "left"
+                    :vertical-align "top"
+                    :font-size      title-font-size
+                    :font-family    "Luckiest Guy"
+                    :fill           0xffffff}
+                   (get-music-setting {:x 96 :y 171 :font-size label-font-size})
+                   (get-sound-settings {:x 1 :y 302 :font-size label-font-size})]}))
 
 (defn create
   [{:keys [viewport]}]

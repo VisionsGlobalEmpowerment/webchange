@@ -9,10 +9,7 @@
                           {:url "/raw/img/ui/settings_button_01.png", :size 1, :type "image"}
 
                           ;; Settings
-                          {:url "/raw/img/ui/settings/settings.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/settings/music.png", :size 1, :type "image"}
                           {:url "/raw/img/ui/settings/music_icon.png", :size 1, :type "image"}
-                          {:url "/raw/img/ui/settings/sound_fx.png", :size 1, :type "image"}
                           {:url "/raw/img/ui/settings/sound_fx_icon.png", :size 1, :type "image"}
 
                           ;; Activity finished

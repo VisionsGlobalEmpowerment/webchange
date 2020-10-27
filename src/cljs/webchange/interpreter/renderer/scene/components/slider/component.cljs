@@ -52,7 +52,7 @@
                     :on-slide      {}
                     :value         {}
                     :height        {:default 24}
-                    :color         {:default 0x2c9600}
+                    :color         {:default 0x00c3ff}
                     :fill          {:default 0xffffff}
                     :min-value     {:default 0}
                     :max-value     {:default 100}
@@ -82,7 +82,7 @@
   [{:keys [color height]} state]
   (let [size (* height 1.5)
         position-shift (/ (- size height) 2)
-        color (->> (hex2rgb color) (js->clj) (map #(* 1.1 %)) (clj->js) (rgb2hex))
+        color (->> (hex2rgb color) (js->clj) (map #(* 0.9 %)) (clj->js) (rgb2hex))
         sprite (doto (Sprite. WHITE)
                  (aset "width" size)
                  (aset "height" size)
