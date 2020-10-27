@@ -18,7 +18,7 @@
 (defn progress-created
   ([] (progress-created {}))
   ([options]
-   (let [{user-id :id} (f/student-user-created)
+   (let [{user-id :user-id} (f/student-created)
          {course-slug :slug course-id :id} (f/course-created)
          defaults {:user-id user-id :course-id course-id :data {:test "test"}}
          data (->> options

@@ -1,5 +1,6 @@
-(ns webchange.progress.activity)
-
+(ns webchange.progress.activity
+  (:require
+    [webchange.progress.tags :as tags]))
 
 (defn activity-data-by-index
   [levels level lesson activity]
@@ -32,11 +33,22 @@
   (first-by-key lessons :lesson lesson))
 
 (defn next-for
-  [levels {:keys [level lesson activity]}]
+  [current-tags levels {:keys [level lesson activity]}]
   (let [level-index (index-by-key levels :level level)
         lessons (-> (get-level levels level) :lessons)
         lesson-index (index-by-key lessons :lesson lesson)
         activities (-> (get-lesson lessons lesson) :activities)
+        activity-index (index-by-key activities :activity activity)
+        levels (assoc-in levels [level-index :lessons lesson-index :activities]
+                          (vec (filter some? (map-indexed
+                                          (fn [idx act]
+                                            (if (<= idx activity-index)
+                                              act
+                                              (if (:only act)
+                                                (if (tags/has-one-from current-tags (:only act)) act nil)
+                                                act)
+                                            )) activities))))
+        activities (get-in levels [level-index :lessons lesson-index :activities])
         activity-index (index-by-key activities :activity activity)]
     (cond
       (not-last? activities activity-index) (activity-data-by-index levels level-index lesson-index (inc activity-index))

@@ -6,13 +6,30 @@
             [webchange.auth.core :as auth]
             [webchange.progress.activity :as activity]
             [webchange.events :as events]
+            [webchange.progress.tags :as tags]
             [webchange.class.core :as class]
             [webchange.course.core :as course]
             [java-time :as jt]))
 
+(defn update-default-tags
+  [user-id progress]
+  (let [
+        current-tags (get-in progress [:data :current-tags])
+        {date-of-birth :date-of-birth} (db/get-student-by-user {:user_id user-id})
+        now (jt/local-date)
+        age (jt/time-between  date-of-birth now :years)
+        age-tag (if (<= 4 age) [tags/age-above-or-equal-4]  [tags/age-less-4])
+        level-tag (if (not (tags/has-one-from tags/learning-level-tags current-tags)) [tags/advanced] [])
+        current-tags (-> current-tags
+                       (tags/remove-tags tags/age-tags)
+                       (concat age-tag)
+                       (concat level-tag))]
+    (assoc-in progress [:data :current-tags] current-tags)))
+
 (defn get-current-progress [course-slug student-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
-        progress (db/get-progress {:user_id student-id :course_id course-id})]
+        progress (->> (db/get-progress {:user_id student-id :course_id course-id})
+                      (update-default-tags student-id))]
     [true {:progress (:data progress)}]))
 
 (defn get-class-profile [course-slug class-id]
@@ -167,13 +184,13 @@
       prepared)))
 
 (defn next-not-finished
-  [levels finished]
+  [current-tags levels finished]
   (let [[level-num level] (apply max-key key finished)
         [lesson-num _] (apply max-key key level)
         level (first (filter #(= level-num (:level %)) levels))
         lesson (first (filter #(= lesson-num (:lesson %)) (:lessons level)))
         activity (:activity (last (:activities lesson)))]
-    (activity/next-for levels {:level level-num :lesson lesson-num :activity activity})))
+    (activity/next-for current-tags levels {:level level-num :lesson lesson-num :activity activity})))
 
 (defn complete-individual-progress! [course-slug student-id {lesson :lesson level :level}]
   (let [{user-id :user-id} (db/get-student {:id student-id})
@@ -181,7 +198,11 @@
         levels (-> (course/get-course-data course-slug) :levels)
         finished (-> levels
                      (levels->finished level lesson))
-        next (next-not-finished levels finished)
+        current-tags (->
+                   (db/get-progress {:user_id user-id :course_id course-id})
+                   :data
+                   :current-tags)
+        next (next-not-finished current-tags levels finished)
         progress (->
                    (db/get-progress {:user_id user-id :course_id course-id})
                    :data

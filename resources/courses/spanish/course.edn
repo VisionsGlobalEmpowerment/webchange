@@ -192,12 +192,14 @@
                            :lesson      1,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                          :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls1"}}
                           {:name        "Lesson 2",
@@ -205,12 +207,14 @@
                            :lesson      2,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls2"}}
                           {:name        "Lesson 3",
@@ -218,12 +222,14 @@
                            :lesson      3,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls3"}}
                           {:name        "Assessment 1",
@@ -236,12 +242,14 @@
                            :lesson      5,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls4"}}
                           {:name        "Lesson 5",
@@ -249,12 +257,14 @@
                            :lesson      6,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls5"}}
                           {:name        "Lesson 6",
@@ -262,12 +272,14 @@
                            :lesson      7,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls6"}}
                           {:name        "Lesson 7",
@@ -275,12 +287,14 @@
                            :lesson      8,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls7"}}
                           {:name        "Assessment 2",
@@ -293,12 +307,14 @@
                            :lesson      10,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls8"}}
                           {:name        "Lesson 9",
@@ -306,12 +322,14 @@
                            :lesson      11,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls9"}}
                           {:name        "Lesson 10",
@@ -319,12 +337,14 @@
                            :lesson      12,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls10"}}
                           {:name        "Lesson 11",
@@ -332,12 +352,14 @@
                            :lesson      13,
                            :activities
                                         [{:activity "home", :time-expected 300}
-                                         {:activity "see-saw", :time-expected 300}
+                                         {:activity "see-saw", :time-expected 300, :only [:beginner]}
                                          {:activity "swings", :time-expected 300}
                                          {:activity "sandbox", :time-expected 300}
-                                         {:scored true, :activity "volleyball", :time-expected 300}
+                                         {:scored true, :activity "volleyball", :time-expected 300,
+                                         :tags-by-score {:intermediate (0 75), :advanced (75 101)}}
                                          {:activity "book", :time-expected 300}
-                                         {:scored true, :activity "cycling", :time-expected 300}
+                                         {:scored true, :activity "cycling", :time-expected 300, :only [:intermediate]
+                                          :tags-by-score {:beginner (0 75), :intermediate (75 101)}}
                                          {:activity "painting-tablet", :time-expected 300}],
                            :lesson-sets {:concepts "ls11"}}
                           {:name        "Assessment 3",
