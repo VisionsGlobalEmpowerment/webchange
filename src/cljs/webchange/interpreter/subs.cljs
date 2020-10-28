@@ -4,10 +4,13 @@
     [webchange.progress.activity :as common.activity]
     [webchange.interpreter.lessons.activity :as activity]))
 
+(defn course-datasets
+  [db]
+  (get-in db [:datasets]))
+
 (re-frame/reg-sub
   ::course-datasets
-  (fn [db]
-    (get-in db [:datasets])))
+  course-datasets)
 
 (re-frame/reg-sub
   ::course-dataset

@@ -13,16 +13,23 @@
   ::course-concept
   course-concept)
 
+(defn course-datasets
+  [db]
+  (get-in db [:editor :course-datasets]))
+
+(re-frame/reg-sub
+  ::course-datasets
+  course-datasets)
+
 (defn course-dataset-items
   [db]
   (get-in db [:dataset-items]))
 
 (defn dataset-concept
   [db]
-  (->> (get-in db [:editor :course-datasets])
+  (->> (course-datasets db)
        (filter #(= "concepts" (:name %)))
        first))
-
 
 (re-frame/reg-sub
   ::course-dataset-items
@@ -32,3 +39,4 @@
   ::course-info
   (fn [db]
     (get-in db [:editor :course-info])))
+
