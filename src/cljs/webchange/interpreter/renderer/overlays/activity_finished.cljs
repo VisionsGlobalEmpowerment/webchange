@@ -36,7 +36,7 @@
   {:type        "group"
    :object-name :activity-finished-background-group
    :children    [{:type        "image"
-                  :src         "/raw/img/bg.jpg"
+                  :src         "/raw/img/bg.png"
                   :object-name :activity-finished-background}]})
 
 (defn- get-top-menu
@@ -53,7 +53,7 @@
     {:x               (/ (:width score-window-size) 2)
      :y               (/ font-size -1.5)
      :type            "text"
-     :text            "Nice Work!"
+     :text            "Clear!"
      :object-name     :overall-progress-title
      :align           "center"
      :vertical-align  "top"
@@ -65,13 +65,13 @@
      :shadow-blur     10
      :shadow-opacity  0.5}))
 
-(defn- get-vera
+(defn- get-character
   [{:keys [x y]}]
-  (let [image-size {:width  315
-                    :height 371}]
+  (let [image-size {:width  287
+                    :height 385}]
     {:type        "image"
-     :src         "/raw/img/ui/vera_315x371.png"
-     :object-name :activity-finished-vera
+     :src         "/raw/img/ui/ts_287x385.png"
+     :object-name :activity-finished-ts
      :x           (- x (/ (:width image-size) 2))
      :y           (- y (:height image-size))}))
 
@@ -82,7 +82,7 @@
    :x           x
    :y           y
    :children    [{:x           0
-                  :y           0
+                  :y           50
                   :type        "text"
                   :text        "Overall Progress"
                   :object-name :overall-progress-text
@@ -146,7 +146,7 @@
    :x           x
    :y           y
    :children    [{:x           0
-                  :y           0
+                  :y           50
                   :type        "text"
                   :text        "Featured Content"
                   :object-name :featured-content-text
@@ -182,24 +182,19 @@
   [viewport]
   (let [go-to-next-activity #(re-frame/dispatch [::ie/run-next-activity])
         restart-activity #(re-frame/dispatch [::ie/restart-scene])
-        continue-playing #(re-frame/dispatch [::ie/next-scene])
-        border-width 10]
+        continue-playing #(re-frame/dispatch [::ie/next-scene])]
     (merge
       {:type        "group"
        :object-name score-window-name
        :children    [(merge
-                       {:type            "rectangle"
-                        :object-name     :activity-finished-frame
-                        :border-color    0xbd13c7
-                        :border-width    border-width
-                        :border-radius   56
-                        :fill            0xda12ea
-                        :shadow-color    0x75016e
-                        :shadow-distance 15}
+                       {:type          "rectangle"
+                        :object-name   :activity-finished-frame
+                        :border-radius 56
+                        :fill          0x2d0e7a}
                        score-window-size)
                      (get-title)
-                     (get-vera {:x (/ (:width score-window-size) 4)
-                                :y (:height score-window-size)})
+                     (get-character {:x (/ (:width score-window-size) 4)
+                                     :y (:height score-window-size)})
                      (get-overall-progress {:x     65
                                             :y     120
                                             :width (- (/ (:width score-window-size) 2) 130)})

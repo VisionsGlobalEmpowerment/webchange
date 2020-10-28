@@ -12,7 +12,7 @@
                     :font-size           {:default 68}
                     :font-family         {:default "Luckiest Guy"}
                     :font-weight         {:default "normal"}
-                    :text-shadow         {:default 0xba4f02}
+                    :text-shadow         {}
                     :text-shadow-offset  {:default 5}
                     :text-shadow-blur    {:default 5}
                     :text-shadow-opacity {:default 0.8}

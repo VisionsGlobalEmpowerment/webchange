@@ -133,7 +133,7 @@
 
 (defn- parse-additional-resources
   []
-  ["/raw/img/bg.jpg"
+  ["/raw/img/bg.png"
    "/raw/img/ui/logo.png"])
 
 (defn- cleanup-resources

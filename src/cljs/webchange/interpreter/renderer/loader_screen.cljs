@@ -5,7 +5,7 @@
 
 (defn get-styles
   []
-  {:background             {:background-image    "url(/raw/img/bg.jpg) "
+  {:background             {:background-image    "url(/raw/img/bg.png)"
                             :width               "100%"
                             :height              "100%"
                             :position            "absolute"
@@ -24,8 +24,8 @@
                             :align-items    "center"
                             :height         "520px"}
    :logo                   {:position      "relative"
-                            :width         "664px"
-                            :height        "359px"
+                            :width         "627px"
+                            :height        "123px"
                             :margin-bottom "60px"}
    :progress-bar-container {:display         "flex"
                             :width           "100%"
@@ -37,14 +37,19 @@
                             :width            "460px"
                             :height           "24px"
                             :overflow         "hidden"}
-   :progress-bar-value     {:background-color "#2c9600"
+   :progress-bar-value     {:background-color "#00C3FF"
                             :height           "100%"
                             :transition       "width 1s"
                             :width            "1%"}
+   :button-container       {:display         "flex"
+                            :width           "100%"
+                            :height          "100%"
+                            :align-items     "center"
+                            :justify-content "center"}
    :button                 {:background-color "#ff9000"
                             :border-radius    "48px"
                             :border-width     "0px"
-                            :padding          "20px 68px"
+                            :padding          "23px 68px"
                             :height           "96px"
                             :cursor           "pointer"
                             :color            "#ffffff"
@@ -52,7 +57,6 @@
                             :font-family      "Luckiest Guy"
                             :font-weight      "normal"
                             :text-align       "center"
-                            :text-shadow      "rgba(186, 79, 2, 0.8) 5px 5px 6px"
                             :outline          "none"}})
 
 (defn- centered
@@ -72,9 +76,10 @@
 (defn- start-button
   [{:keys [on-click]}]
   (let [styles (get-styles)]
-    [:button {:on-click on-click
-              :style    (:button styles)}
-     (t "play")]))
+    [:div {:style (:button-container styles)}
+     [:button {:on-click on-click
+               :style    (:button styles)}
+      (t "play")]]))
 
 (defn- progress-bar
   [{:keys [value]}]
