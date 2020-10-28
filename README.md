@@ -2,6 +2,8 @@
 
 ### Table of Contents
 
+
+- [Developers documentation](wiki/developers/index.md)
 - [Installation](wiki/installation.md)
 - [Run development environment](wiki/run.md)
 - [Run autotests](wiki/tests.md)

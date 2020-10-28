@@ -16,7 +16,8 @@
     [webchange.interpreter.renderer.scene.components.svg-path.component :as svg-path]
     [webchange.interpreter.renderer.scene.components.text.component :as text]
     [webchange.interpreter.renderer.scene.components.transparent.component :as transparent]
-    [webchange.interpreter.renderer.scene.components.video.component :as video]))
+    [webchange.interpreter.renderer.scene.components.video.component :as video]
+    [webchange.interpreter.renderer.scene.components.traffic-light.component :as traffic-light]))
 
 (def components (apply hash-map [animated-svg-path/component-type {:constructor   animated-svg-path/create
                                                                    :default-props animated-svg-path/default-props}
@@ -36,7 +37,7 @@
                                                        :default-props image/default-props}
                                  layered-background/component-type {:constructor   layered-background/create
                                                                     :default-props layered-background/default-props}
-                                 painting-area/component-type {:constructor painting-area/create
+                                 painting-area/component-type {:constructor   painting-area/create
                                                                :default-props painting-area/default-props}
                                  progress/component-type {:constructor   progress/create
                                                           :default-props progress/default-props}
@@ -51,4 +52,6 @@
                                  transparent/component-type {:constructor   transparent/create
                                                              :default-props transparent/default-props}
                                  video/component-type {:constructor   video/create
-                                                       :default-props video/default-props}]))
+                                                       :default-props video/default-props}
+                                 traffic-light/component-type {:constructor   traffic-light/create
+                                                               :default-props traffic-light/default-props}]))

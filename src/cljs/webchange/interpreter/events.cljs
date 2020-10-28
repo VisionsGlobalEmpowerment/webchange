@@ -17,6 +17,39 @@
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
 
+(ce/reg-simple-executor :audio ::execute-audio)
+(ce/reg-simple-executor :play-video ::execute-play-video)
+(ce/reg-simple-executor :path-animation ::execute-path-animation)
+(ce/reg-simple-executor :state ::execute-state)
+(ce/reg-simple-executor :set-attribute ::execute-set-attribute)
+(ce/reg-simple-executor :add-alias ::execute-add-alias)
+(ce/reg-simple-executor :empty ::execute-empty)
+(ce/reg-simple-executor :animation ::execute-animation)
+(ce/reg-simple-executor :add-animation ::execute-add-animation)
+(ce/reg-simple-executor :start-animation ::execute-start-animation)
+(ce/reg-simple-executor :remove-animation ::execute-remove-animation)
+(ce/reg-simple-executor :set-skin ::execute-set-skin)
+(ce/reg-simple-executor :set-slot ::execute-set-slot)
+(ce/reg-simple-executor :animation-props ::execute-set-animation-props)
+(ce/reg-simple-executor :animation-sequence ::execute-animation-sequence)
+(ce/reg-simple-executor :scene ::execute-scene)
+(ce/reg-simple-executor :location ::execute-location)
+(ce/reg-simple-executor :transition ::execute-transition)
+(ce/reg-simple-executor :stop-transition ::execute-stop-transition)
+(ce/reg-simple-executor :move ::execute-move)
+(ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
+(ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
+(ce/reg-simple-executor :start-activity ::execute-start-activity)
+(ce/reg-simple-executor :stop-activity ::execute-stop-activity)
+(ce/reg-simple-executor :finish-activity ::execute-finish-activity)
+(ce/reg-simple-executor :text-animation ::execute-text-animation)
+(ce/reg-simple-executor :pick-correct ::execute-pick-correct)
+(ce/reg-simple-executor :pick-wrong ::execute-pick-wrong)
+(ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
+(ce/reg-simple-executor :set-interval ::execute-set-interval)
+(ce/reg-simple-executor :remove-interval ::execute-remove-interval)
+(ce/reg-simple-executor :set-traffic-light ::execute-set-traffic-light)
+
 (re-frame/reg-fx
   :execute-audio
   (fn [{:keys [flow-id skippable] :as params}]
@@ -140,50 +173,11 @@
          (filter #(= id (:id %)))
          first)))
 
-(defn first-nonfinished-action [db]
-  (let [workflow-actions (get-in db [:course-data :workflow-actions])
-        finished-actions (set (get-in db [:progress-data :finished-workflow-actions]))]
-    (->> workflow-actions
-         (remove #(contains? finished-actions (:id %)))
-         first)))
-
 (defn current-level
   [db]
   (let [current-workflow-action (get-in db [:progress-data :current-workflow-action])
         current-action (workflow-action db current-workflow-action)]
     (:level current-action)))
-
-(ce/reg-simple-executor :audio ::execute-audio)
-(ce/reg-simple-executor :play-video ::execute-play-video)
-(ce/reg-simple-executor :path-animation ::execute-path-animation)
-(ce/reg-simple-executor :state ::execute-state)
-(ce/reg-simple-executor :set-attribute ::execute-set-attribute)
-(ce/reg-simple-executor :add-alias ::execute-add-alias)
-(ce/reg-simple-executor :empty ::execute-empty)
-(ce/reg-simple-executor :animation ::execute-animation)
-(ce/reg-simple-executor :add-animation ::execute-add-animation)
-(ce/reg-simple-executor :start-animation ::execute-start-animation)
-(ce/reg-simple-executor :remove-animation ::execute-remove-animation)
-(ce/reg-simple-executor :set-skin ::execute-set-skin)
-(ce/reg-simple-executor :set-slot ::execute-set-slot)
-(ce/reg-simple-executor :animation-props ::execute-set-animation-props)
-(ce/reg-simple-executor :animation-sequence ::execute-animation-sequence)
-(ce/reg-simple-executor :scene ::execute-scene)
-(ce/reg-simple-executor :location ::execute-location)
-(ce/reg-simple-executor :transition ::execute-transition)
-(ce/reg-simple-executor :stop-transition ::execute-stop-transition)
-(ce/reg-simple-executor :move ::execute-move)
-(ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
-(ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
-(ce/reg-simple-executor :start-activity ::execute-start-activity)
-(ce/reg-simple-executor :stop-activity ::execute-stop-activity)
-(ce/reg-simple-executor :finish-activity ::execute-finish-activity)
-(ce/reg-simple-executor :text-animation ::execute-text-animation)
-(ce/reg-simple-executor :pick-correct ::execute-pick-correct)
-(ce/reg-simple-executor :pick-wrong ::execute-pick-wrong)
-(ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
-(ce/reg-simple-executor :set-interval ::execute-set-interval)
-(ce/reg-simple-executor :remove-interval ::execute-remove-interval)
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -938,6 +932,12 @@
   ::execute-remove-interval
   (fn [{:keys [db]} [_ {:keys [id] :as action}]]
     {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
+                       (ce/success-event action))}))
+
+(re-frame/reg-event-fx
+  ::execute-set-traffic-light
+  (fn [{:keys [_]} [_ {:keys [target value] :as action}]]
+    {:dispatch-n (list [::scene/set-traffic-light (keyword target) value]
                        (ce/success-event action))}))
 
 (re-frame/reg-event-fx

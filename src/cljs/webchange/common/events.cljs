@@ -12,16 +12,12 @@
 (def flows (atom {}))
 (def timers (atom {}))
 
-(def on-skip-handlers
-  "A list of functions to invoke on skip actions.
-  Is used to cancel current action (e.g. stop audio, finish transition) and continue the flow (success event)."
-  (atom []))
+(declare get-action)
+(declare execute-action)
 
-(defn on-skip!
-  "Register function to invoke on skip action"
-  [handler]
-  (when handler
-    (swap! on-skip-handlers conj handler)))
+(defn reg-executor
+  [id executor]
+  (swap! executors assoc id executor))
 
 (defn prepare-params
   [action params from-params]
@@ -33,14 +29,37 @@
       (prepare-params params from-params)
       (prepare-params var from-var)))
 
-(defn reg-executor
-  [id executor]
-  (swap! executors assoc id executor))
-
 (defn reg-simple-executor
   [id event-name]
   (let [handler (fn [{:keys [action]}] (re-frame/dispatch [event-name (prepare-action action)]))]
     (reg-executor id handler)))
+
+(reg-executor :action (fn [{:keys [db action]}]
+                        (execute-action db (-> action
+                                               :id
+                                               (get-action db action)
+                                               (assoc :flow-id (:flow-id action))
+                                               (assoc :action-id (:action-id action))))))
+
+(reg-simple-executor :sequence ::execute-sequence)
+(reg-simple-executor :sequence-data ::execute-sequence-data)
+(reg-simple-executor :parallel ::execute-parallel)
+(reg-simple-executor :remove-flows ::execute-remove-flows)
+(reg-simple-executor :remove-flow-tag ::execute-remove-flow-tag)
+(reg-simple-executor :callback ::execute-callback)
+(reg-simple-executor :hide-skip ::execute-hide-skip)
+
+
+(def on-skip-handlers
+  "A list of functions to invoke on skip actions.
+  Is used to cancel current action (e.g. stop audio, finish transition) and continue the flow (success event)."
+  (atom []))
+
+(defn on-skip!
+  "Register function to invoke on skip action"
+  [handler]
+  (when handler
+    (swap! on-skip-handlers conj handler)))
 
 (defn success-event
   [{:keys [flow-id action-id]}]
@@ -203,23 +222,6 @@
        (-> action
            (with-prev prev))
        (-> (str "Action '" id "' was not found") js/Error. throw)))))
-
-(declare execute-action)
-
-(reg-executor :action (fn [{:keys [db action]}]
-                        (execute-action db (-> action
-                                               :id
-                                               (get-action db action)
-                                               (assoc :flow-id (:flow-id action))
-                                               (assoc :action-id (:action-id action))))))
-
-(reg-simple-executor :sequence ::execute-sequence)
-(reg-simple-executor :sequence-data ::execute-sequence-data)
-(reg-simple-executor :parallel ::execute-parallel)
-(reg-simple-executor :remove-flows ::execute-remove-flows)
-(reg-simple-executor :remove-flow-tag ::execute-remove-flow-tag)
-(reg-simple-executor :callback ::execute-callback)
-(reg-simple-executor :hide-skip ::execute-hide-skip)
 
 (declare discard-flow!)
 (declare register-flow-tags!)

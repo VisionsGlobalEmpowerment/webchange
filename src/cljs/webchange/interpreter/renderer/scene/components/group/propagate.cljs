@@ -10,6 +10,7 @@
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]))
 
 (ce/reg-simple-executor :propagate-objects ::execute-propagate-objects)
+
 (re-frame/reg-event-fx
   ::execute-propagate-objects
   (fn [{:keys [db]} [_ {object-to-propagate :id lesson-name :from :as action}]]

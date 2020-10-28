@@ -50,3 +50,4 @@
 (defn animated-svg-path-start [wrapper & params] (execute wrapper :animated-svg-path-start params))
 (defn animated-svg-path-stop [wrapper & params] (execute wrapper :animated-svg-path-stop params))
 (defn animated-svg-path-reset [wrapper & params] (execute wrapper :animated-svg-path-reset params))
+(defn set-traffic-light [wrapper & params] (execute wrapper :set-traffic-light params))
