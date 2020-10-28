@@ -5,6 +5,7 @@
 (def metadata {:id          11
                :name        "Traffic light"
                :description "Teaches children how to use traffic lights"
+               :tags        ["Direct Instruction - Educational Video"]
                :lesson-sets []
                :options     {:teacher {:label "Teacher"
                                        :type  "characters"
