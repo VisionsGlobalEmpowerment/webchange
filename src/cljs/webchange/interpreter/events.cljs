@@ -182,6 +182,13 @@
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
   (fn [{:keys [db]} [_ {:keys [var-name] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
           variable (get-in scene [:variables var-name])
@@ -228,6 +235,13 @@
 (re-frame/reg-event-fx
   ::execute-transition
   (fn [{:keys [db]} [_ {:keys [to] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (if (:path to)
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
@@ -235,6 +249,13 @@
 (re-frame/reg-event-fx
   ::execute-stop-transition
   (fn [{:keys [db]} [_ {:keys [id] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (i/kill-transition! id)
     {:dispatch (ce/success-event action)}))
 
@@ -250,6 +271,13 @@
 (re-frame/reg-event-fx
   ::execute-move
   (fn [{:keys [db]} [_ {:keys [from to graph animation-target animation-on-start animation-on-stop default-position move-speed] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [from (if (i/nav-node-exists? graph from) from default-position)
           path-names (i/find-nav-path from to graph)
           path (map #(-> (get graph (keyword %)) (select-keys [:x :y])) path-names)
@@ -273,6 +301,13 @@
 (re-frame/reg-event-fx
   ::execute-location
   (fn [{:keys [db]} [_ {:keys [location-id] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [location-key (keyword location-id)
           locations (get-in db [:course-data :locations])
           scene-id (if (contains? locations location-key)
@@ -283,6 +318,13 @@
 (re-frame/reg-event-fx
   ::execute-scene
   (fn [{:keys [db]} [_ {:keys [scene-id] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))}))
 
 ;; audio action
@@ -293,6 +335,13 @@
   ::execute-audio
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [id audio] :as action}]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     {:execute-audio (-> action
                         (assoc :key (or audio (get-audio-key db id) id))
                         (assoc :on-ended #(ce/dispatch-success-fn action)))}))
@@ -307,6 +356,13 @@
   ::execute-play-video
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [_]} {:keys [target src flow-id] :as action}]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [target (keyword target)]
       (ce/register-flow-remove-handler! flow-id (fn []
                                                   (re-frame/dispatch [::scene/change-scene-object target [[:stop]]])))
@@ -318,6 +374,13 @@
   ::execute-path-animation
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [target state flow-id] :as action}]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [{:keys [animated-svg-path-start animated-svg-path-stop animated-svg-path-reset]} (scene/get-scene-object db (keyword target))
           on-end #(ce/dispatch-success-fn action)]
       (case state
@@ -339,6 +402,13 @@
 (re-frame/reg-event-fx
   ::execute-add-alias
   (fn [{:keys [db]} [_ {:keys [target alias state] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)]
       {:db       (assoc-in db [:scenes scene-id :objects (keyword target) :states-aliases (keyword alias)] state)
        :dispatch (ce/success-event action)})))
@@ -346,6 +416,13 @@
 (re-frame/reg-event-fx
   ::execute-state
   (fn [{:keys [db]} [_ {:keys [target id params] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
           object (get-in scene [:objects (keyword target)])
@@ -359,6 +436,13 @@
 (re-frame/reg-event-fx
   ::execute-set-attribute
   (fn [{:keys [db]} [_ {:keys [target attr-name attr-value] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)
           patch (into {} [[(keyword attr-name) attr-value]])]
       {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge patch)
@@ -368,11 +452,25 @@
 (re-frame/reg-event-fx
   ::execute-empty
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     {:dispatch-later [{:ms (:duration action) :dispatch (ce/success-event action)}]}))
 
 (re-frame/reg-event-fx
   ::execute-animation
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)]
       {:switch-animation (-> action
                              (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -381,6 +479,13 @@
 (re-frame/reg-event-fx
   ::execute-animation-sequence
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [animation-actions (i/animation-sequence->actions action)
           audio-action (i/animation-sequence->audio-action action)]
       (if audio-action
@@ -392,6 +497,13 @@
 (re-frame/reg-event-fx
   ::execute-add-animation
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)]
       {:add-animation (-> action
                           (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -400,6 +512,13 @@
 (re-frame/reg-event-fx
   ::execute-start-animation
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)
           state (get-in db [:scenes scene-id :animations (:target action)])]
       (w/start-animation state)
@@ -408,6 +527,13 @@
 (re-frame/reg-event-fx
   ::execute-remove-animation
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)]
       {:remove-animation (-> action
                              (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -416,6 +542,13 @@
 (re-frame/reg-event-fx
   ::execute-set-skin
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)]
       {:set-skin   (-> action
                        (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -424,6 +557,13 @@
 (re-frame/reg-event-fx
   ::execute-set-slot
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)]
       {:set-slot   (-> action
                        (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -432,6 +572,13 @@
 (re-frame/reg-event-fx
   ::execute-set-animation-props
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [scene-id (:current-scene db)]
       {:animation-props (-> action
                             (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -440,6 +587,13 @@
 (re-frame/reg-event-fx
   ::execute-start-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [activity-name (or activity-name (:current-scene db))
           activity-action (lessons-activity/name->activity-action db activity-name)]
       {:db         (assoc db
@@ -455,6 +609,13 @@
 (re-frame/reg-event-fx
   ::execute-stop-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [activity-action (lessons-activity/name->activity-action db activity-name)
           start-time (get db :activity-start-time)
           time-spent (if start-time
@@ -510,6 +671,13 @@
 (re-frame/reg-event-fx
   ::execute-finish-activity
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [events (cond-> (list (ce/success-event action))
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
                          :always (conj (activity-finished-event db action))
@@ -807,6 +975,13 @@
 (re-frame/reg-event-fx
   ::execute-test-transitions-collide
   (fn [{:keys [db]} [_ {:keys [transition-1 transition-2 success fail] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [transition-1-wrapper (->> transition-1 keyword (scene/get-scene-object db))
           transition-2-wrapper (->> transition-2 keyword (scene/get-scene-object db))
           success (ce/get-action success db action)
@@ -818,6 +993,13 @@
 (re-frame/reg-event-fx
   ::execute-text-animation
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [animation-actions (i/text-animation-sequence->actions action)
           audio-action (i/animation-sequence->audio-action action)]
       (if audio-action
@@ -889,6 +1071,13 @@
 (re-frame/reg-event-fx
   ::execute-pick-correct
   (fn [{:keys [db]} [_ {:keys [concept-name] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [current-activity (:activity db)
           counter-value (or (vars.core/get-variable :score-correct) 0)]
       (vars.core/set-variable! :score-correct (inc counter-value))
@@ -900,6 +1089,13 @@
 (re-frame/reg-event-fx
   ::execute-pick-wrong
   (fn [{:keys [db]} [_ {:keys [concept-name option] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [current-activity (:activity db)
           counter-incorrect (or (vars.core/get-variable :score-incorrect) 0)
           counter-mistake (or (vars.core/get-variable :score-mistake) 0)
@@ -916,12 +1112,26 @@
 (re-frame/reg-event-fx
   ::execute-set-current-concept
   (fn [{:keys [db]} [_ {:keys [value] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (vars.core/set-variable! :score-first-attempt true)
     {:dispatch-n (list (ce/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-set-interval
   (fn [{:keys [db]} [_ {:keys [id interval action] :as main-action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action (ce/get-action action db)])) interval)]
       {:dispatch-n (list [::ce/execute-register-timer {:name id
                                                        :id   interval-id
@@ -931,12 +1141,26 @@
 (re-frame/reg-event-fx
   ::execute-remove-interval
   (fn [{:keys [db]} [_ {:keys [id] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
                        (ce/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-set-traffic-light
   (fn [{:keys [_]} [_ {:keys [target value] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     {:dispatch-n (list [::scene/set-traffic-light (keyword target) value]
                        (ce/success-event action))}))
 

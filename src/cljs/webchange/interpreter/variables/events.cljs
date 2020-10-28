@@ -7,7 +7,7 @@
     [webchange.state.lessons.subs :as lessons]
     [webchange.interpreter.variables.core :as core]))
 
-(e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider)
+(e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider) ;; ???
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
 (e/reg-simple-executor :vars-var-provider ::execute-vars-var-provider)
 (e/reg-simple-executor :test-var ::execute-test-var)        ;; Not used
@@ -26,18 +26,39 @@
 (re-frame/reg-event-fx
   ::execute-set-variable
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (core/set-variable! var-name var-value)
     {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
   ::execute-set-progress
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     {:db         (core/set-progress db var-name var-value)
      :dispatch-n (list (e/success-event action) [:progress-data-changed])}))
 
 (re-frame/reg-event-fx
   ::execute-copy-variable
   (fn [{:keys [db]} [_ {:keys [var-name from] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [var-value (core/get-variable from)]
       (core/set-variable! var-name var-value)
       {:dispatch (e/success-event action)})))
@@ -45,6 +66,13 @@
 (re-frame/reg-event-fx
   ::execute-map-value
   (fn [{:keys [db]} [_ {:keys [var-name value from to] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [var-value (get to (.indexOf from value))]
       (core/set-variable! var-name var-value)
       {:dispatch (e/success-event action)})))
@@ -57,12 +85,26 @@
 (re-frame/reg-event-fx
   ::execute-clear-vars
   (fn [{:keys [db]} [_ action]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (core/clear-vars! true)
     {:dispatch-n (list (e/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [items (->> from
                      (map (fn [var-name]
                             (cond-> (core/get-variable var-name)
@@ -83,6 +125,13 @@
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [items (lessons/lesson-dataset-items db from)
           has-next (core/has-next items provider-id action)
           scene-id (:current-scene db)
@@ -99,6 +148,13 @@
 (re-frame/reg-event-fx
   ::execute-test-var
   (fn [{:keys [db]} [_ {:keys [var var-name property success fail] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [test (core/get-variable var-name)
           key (keyword property)
           success (e/get-action success db action)
@@ -196,6 +252,13 @@
   ::execute-case
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [value options] :as action}]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [success (get options (keyword value))
           default (get options :default)
           ]
@@ -209,6 +272,13 @@
 (re-frame/reg-event-fx
   ::execute-counter
   (fn [{:keys [db]} [_ {:keys [counter-action counter-value counter-id] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [fn (case (keyword counter-action)
                :increase inc
                :decrease dec
@@ -222,6 +292,13 @@
 (re-frame/reg-event-fx
   ::execute-calc
   (fn [{:keys [db]} [_ {:keys [var-name operation value-1 value-2] :as action}]]
+    "Execute `` action - .
+
+    Action params:
+    : - .
+
+    Example:
+    "
     (let [fn (case (keyword operation)
                :div-floor (comp Math/floor /)
                :div-ceil (comp Math/ceil /))]

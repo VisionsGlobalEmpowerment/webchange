@@ -8,14 +8,14 @@ If none of the listed below actions fits your intention, you can [create your ow
 
 [`webchange.common.events`](/src/cljs/webchange/common/events.cljs)
 
-- [ ] `:action` - run specific action by its name
-- [ ] `:sequence` - run a sequence of actions by their names
-- [ ] `:sequence-data` - run a sequence of actions by their data
-- [ ] `:parallel` - run multiple actions by their data in parallel
-- [ ] `:remove-flows` - 
-- [ ] `:remove-flow-tag` - 
-- [ ] `:callback` - 
-- [ ] `:hide-skip` - 
+- [x] `:action` - call another action by its name;
+- [x] `:sequence` - run a sequence of actions defined by their names;
+- [x] `:sequence-data` - run a sequence of actions defined by their data;
+- [x] `:parallel` - run multiple actions by their data in parallel;
+- [x] `:remove-flows` - terminate execution of actions marked with passed tag;
+- [x] `:remove-flow-tag` - remove a tag from an action;
+- [x] `:callback` - call external function;
+- [x] `:hide-skip` - hide user interface button for actions flow skipping (technical).
 
 [`webchange.interpreter.events`](/src/cljs/webchange/interpreter/events.cljs)
  
