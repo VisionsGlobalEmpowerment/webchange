@@ -121,6 +121,22 @@
 (def component-type "slider")
 
 (defn create
+  "Create `slider` component.
+
+    Props params:
+    :x - component x-position.
+    :y - component y-position.
+    :width - image width.
+    :height - image height.
+    :on-change - on change event handler.
+    :on-slide - on slide event handler.
+    :value - current slider value. Between :min-value and :max-value.
+    :min-value - minimum slider value. Default 0.
+    :max-value - maximum slider value. Default 100.
+    :border-radius - make rounded corners. Radius in pixels. Default 10.
+    :fill - background color of empty part. Default 0xffffff
+    :color - color of slider. Default 0x2c9600
+    "
   [{:keys [parent type object-name value] :as props}]
   (let [state (atom {:value      0
                      :touched?   false

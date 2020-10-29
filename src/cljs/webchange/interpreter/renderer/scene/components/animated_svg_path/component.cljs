@@ -17,7 +17,6 @@
                     :stroke       {:default "#000000"}
                     :stroke-width {}
                     :line-cap     {:default "round"}
-                    :animation    {}
                     :duration     {}
                     :scale        {:default {:x 1 :y 1}}})
 
@@ -28,7 +27,7 @@
     (utils/set-scale scale)))
 
 (defn- create-state
-  [{:keys [path duration width height stroke-width line-cap animation] :as props}]
+  [{:keys [path duration width height stroke-width line-cap] :as props}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
                  (set! -width (* width 2))
@@ -39,7 +38,7 @@
               (set! -lineCap line-cap))
 
         texture (.from Texture canvas)
-        state (atom {:animation animation :ctx ctx :texture texture :paths (paths path duration)
+        state (atom {:ctx ctx :texture texture :paths (paths path duration)
                      :width     (* width 2) :height (* height 2) :duration duration})]
     (a-svg-utils/set-stroke state (select-keys props [:stroke]))
     state))
@@ -47,6 +46,37 @@
 (def component-type "animated-svg-path")
 
 (defn create
+  "Create `animated-svg-path` component.
+
+    Props params:
+    :x - component x-position.
+    :y - component y-position.
+    :width - image width.
+    :height - image height.
+    :scale - image scale. Default: {:x 1 :y 1}.
+    :name - component name that will be set to sprite and container with corresponding suffixes.
+    :path - svg data
+    :dash - An Array of numbers that specify distances to alternately draw a line and a gap (in coordinate space units).
+            If the number of elements in the array is odd, the elements of the array get copied and concatenated.
+            For example, [5, 15, 25] will become [5, 15, 25, 5, 15, 25]. If the array is empty, the line dash list is
+            cleared and line strokes return to being solid.
+    :stroke - line color. default #000000.
+    :stroke-width - A number specifying the line width, in coordinate space units.
+    :line-cap - determines the shape used to draw the end points of lines.
+                'butt' The ends of lines are squared off at the endpoints.
+                'round' The ends of lines are rounded.
+                'square' The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness.
+
+    :on-click - on click event handler.
+    :ref - callback function that must be called with component wrapper.
+    :src - image src. Default: nil.
+    :offset - container position offset. Default: {:x 0 :y 0}.
+    :filters - filters params to be applied to sprite. Default: [].
+    :border-radius - make rounded corners. Radius in pixels. Default: 0.
+    :origin - where image pivot will be set. Can be '(left|center|right)-(top|center|bottom)'. Default: 'left-top'.
+    :max-width - max image width.
+    :max-height - max image height.
+    :duration - animation duration in seconds"
   [{:keys [parent type object-name group-name] :as props}]
   (let [container (create-container props)
         state (create-state props)

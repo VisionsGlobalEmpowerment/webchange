@@ -55,6 +55,17 @@
 (def component-type "colors-palette")
 
 (defn create
+  "Create `colors-palette` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :width - image width.
+  :height - image height.
+  :scale - image scale. Default: {:x 1 :y 1}.
+  :name - component name that will be set to sprite and container with corresponding suffixes.
+  :on-change - on change event handler.
+  :colors - array of colors in palette."
   [{:keys [parent type object-name width height colors on-change] :as props}]
   (let [padding 10
         idx->params (fn [idx] {:x     0

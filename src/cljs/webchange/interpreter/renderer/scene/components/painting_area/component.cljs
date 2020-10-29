@@ -64,6 +64,19 @@
 (def component-type "painting-area")
 
 (defn create
+  "Create `painting-area` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :width - image width.
+  :height - image height.
+  :scale - image scale. Default: {:x 1 :y 1}.
+  :name - component name that will be set to sprite and container with corresponding suffixes.
+  :on-click - on click event handler.
+  :ref - callback function that must be called with component wrapper.
+  :tool - tool which will be used for painting. Default brush. Possible options brush, felt-tip, pencil, eraser
+  :color - drawing color. Default 0xffffff"
   [{:keys [parent type object-name tool color] :as props}]
   (let [container (create-container props)
         texture (create-render-texture props)
