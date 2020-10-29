@@ -225,7 +225,7 @@
     :transition-id transition-id
     :to            to})
   ([to transition-id move-speed]
-    (point->transition (assoc to :speed move-speed) transition-id)))
+   (point->transition (assoc to :speed move-speed) transition-id)))
 
 (defn execute-transitions-sequence
   [transitions {:keys [transition-id] :as action}]
@@ -327,21 +327,48 @@
     "
     {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))}))
 
-;; audio action
-;; First try to get audio url from :audio field
-;; Second try to get audio url from :id field and scene :audios map
-;; Last return :id as audio url
 (re-frame/reg-event-fx
   ::execute-audio
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [id audio] :as action}]
-    "Execute `` action - .
+    "Execute `audio` action - play audio file.
+    First trying to get audio url from `:audio`.
+    Then trying to get url by audio id from scene `:audios` section.
+    Lastly getting `:id` as audio url.
 
     Action params:
-    : - .
+    :id - (one of id or audio is required).
+    :audio - (one of id or audio is required).
+    :loop - boolean flag indicating whether to repeat audio or not.
+    :start - time in sec when to start
+    :duration - audio interval duration in sec
+    :volume - audio volume ([0..1])
 
-    Example:
-    "
+    Example 1: audio src defined in `:id` key
+    {:type 'audio',
+     :id   '/raw/audio/background/Parque.mp3',
+     :loop true}
+
+    Example 2: play defined interval of audio
+    {:type     'audio',
+     :id       '/raw/audio/l2/a7/L2_A7_Mari.m4a',
+     :start    52.432,
+     :duration 3.228,
+     :volume   0.2}
+
+    Example 3: play audio by its id
+    {:type 'audio',
+     :id   'background',
+     :loop true}
+
+    In this case, the scene must have an `:audio` section with a `:background` key defined in it:
+    {...
+     :audio {:background '/raw/audio/background/POL-daily-special-short.mp3'}
+     ...}
+
+    Example 4: audio src defined in `:audio` key
+    {:type  'audio',
+     :audio '/upload/OOUGTOFOCYKRPXPD.m4a'}"
     {:execute-audio (-> action
                         (assoc :key (or audio (get-audio-key db id) id))
                         (assoc :on-ended #(ce/dispatch-success-fn action)))}))
@@ -356,13 +383,16 @@
   ::execute-play-video
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [_]} {:keys [target src flow-id] :as action}]
-    "Execute `` action - .
+    "Execute `play-video` action - play video file.
 
     Action params:
-    : - .
+    :target - name of video object (component).
+    :src - video file url.
 
     Example:
-    "
+    {:type   'play-video',
+     :target 'letter-video',
+     :src    '/raw/video/l2a1/letter-a.mp4'}"
     (let [target (keyword target)]
       (ce/register-flow-remove-handler! flow-id (fn []
                                                   (re-frame/dispatch [::scene/change-scene-object target [[:stop]]])))
@@ -374,13 +404,17 @@
   ::execute-path-animation
   [ce/event-as-action ce/with-flow]
   (fn [{:keys [db]} {:keys [target state flow-id] :as action}]
-    "Execute `` action - .
+    "Execute `path-animation` action - run svg path animation.
 
     Action params:
-    : - .
+    :target - name of `animated-svg-path` component.
+    :state - 'play' for start playing or
+             'reset' for reset `animated-svg-path` component state
 
     Example:
-    "
+    {:type   'path-animation',
+     :target 'letter-tutorial-path',
+     :state  'play'}"
     (let [{:keys [animated-svg-path-start animated-svg-path-stop animated-svg-path-reset]} (scene/get-scene-object db (keyword target))
           on-end #(ce/dispatch-success-fn action)]
       (case state
@@ -402,13 +436,18 @@
 (re-frame/reg-event-fx
   ::execute-add-alias
   (fn [{:keys [db]} [_ {:keys [target alias state] :as action}]]
-    "Execute `` action - .
+    "Execute `add-alias` action - add state alias to component.
 
     Action params:
-    : - .
+    :target - component name.
+    :alias - state alias name.
+    :state - state object.
 
     Example:
-    "
+    {:type   'add-alias',
+     :target 'bubble-1',
+     :alias  'hidden'
+     :state  {:visible false}}"
     (let [scene-id (:current-scene db)]
       {:db       (assoc-in db [:scenes scene-id :objects (keyword target) :states-aliases (keyword alias)] state)
        :dispatch (ce/success-event action)})))
@@ -416,13 +455,16 @@
 (re-frame/reg-event-fx
   ::execute-state
   (fn [{:keys [db]} [_ {:keys [target id params] :as action}]]
-    "Execute `` action - .
+    "Execute `state` action - apply component state.
 
     Action params:
-    : - .
+    :target - component name.
+    :id - state name.
 
     Example:
-    "
+    {:type   'state',
+     :target 'bubble-1',
+     :id     'hidden'}"
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
           object (get-in scene [:objects (keyword target)])
@@ -436,13 +478,18 @@
 (re-frame/reg-event-fx
   ::execute-set-attribute
   (fn [{:keys [db]} [_ {:keys [target attr-name attr-value] :as action}]]
-    "Execute `` action - .
+    "Execute `set-attribute` action - set component attribute value.
 
     Action params:
-    : - .
+    :target - component name.
+    :attr-name - attribute name.
+    :attr-value - attribute value.
 
     Example:
-    "
+    {:type       'set-attribute'
+     :target     'letter-path'
+     :attr-name  'x'
+     :attr-value 0}"
     (let [scene-id (:current-scene db)
           patch (into {} [[(keyword attr-name) attr-value]])]
       {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge patch)
@@ -451,26 +498,39 @@
 
 (re-frame/reg-event-fx
   ::execute-empty
-  (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+  (fn [{:keys [_]} [_ action]]
+    "Execute `empty` action - delay in ms.
 
     Action params:
-    : - .
+    :duration - delay duration in ms.
 
     Example:
-    "
+    {:type     'empty',
+     :duration 700}"
     {:dispatch-later [{:ms (:duration action) :dispatch (ce/success-event action)}]}))
 
 (re-frame/reg-event-fx
   ::execute-animation
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `animation` action - immediately run animation of `animation` component.
 
     Action params:
-    : - .
+    :target - `animation` component name.
+    :id - animation name.
+    :track - (optional) track number. Animations on different tracks are played simultaneously. Default 0.
+    :loop - (optional) repeat animation or not.
 
-    Example:
-    "
+    Example 1:
+    {:type   'animation',
+     :target 'vera',
+     :id     'volley_call'}
+
+    Example 2:
+    {:type   'animation',
+     :target 'mari',
+     :id     'wand_hit',
+     :track  2
+     :loop   true}"
     (let [scene-id (:current-scene db)]
       {:switch-animation (-> action
                              (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -493,17 +553,22 @@
         {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})
       )))
 
-
 (re-frame/reg-event-fx
   ::execute-add-animation
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `add-animation` action - add animation to animations que.
 
     Action params:
-    : - .
+    :target - `animation` component name.
+    :id - animation name.
+    :loop - (optional) repeat animation or not.
+    :track - (optional) track number. Animations on different tracks are played simultaneously. Default 0.
 
     Example:
-    "
+    {:type   'add-animation',
+     :target 'box1',
+     :id     'idle2',
+     :loop   true}"
     (let [scene-id (:current-scene db)]
       {:add-animation (-> action
                           (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -512,13 +577,15 @@
 (re-frame/reg-event-fx
   ::execute-start-animation
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `start-animation` action - start animation of `animation` component.
+    Used when `animation` component was initialized with parameter `:start false`
 
     Action params:
-    : - .
+    :target - `animation` component name.
 
     Example:
-    "
+    {:type   'start-animation',
+     :target 'book'}"
     (let [scene-id (:current-scene db)
           state (get-in db [:scenes scene-id :animations (:target action)])]
       (w/start-animation state)
@@ -527,13 +594,15 @@
 (re-frame/reg-event-fx
   ::execute-remove-animation
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `remove-animation` action - remove animations from `animation` component.
 
     Action params:
-    : - .
+    :target - `animation` component name.
+    :track - (optional) track number. Default 0.
 
     Example:
-    "
+    {:type   'remove-animation'
+     :target 'book'}"
     (let [scene-id (:current-scene db)]
       {:remove-animation (-> action
                              (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -542,13 +611,16 @@
 (re-frame/reg-event-fx
   ::execute-set-skin
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `set-skin` action - set character appearance.
 
     Action params:
-    : - .
+    :target - `animation` component name.
+    :skin - skin name. Available skin can be found in `skeleton.json` of animation in `resources/public/raw/anim/` folder.
 
     Example:
-    "
+    {:type   'set-skin',
+     :target 'senoravaca'
+     :skin   'idle'}"
     (let [scene-id (:current-scene db)]
       {:set-skin   (-> action
                        (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -557,13 +629,20 @@
 (re-frame/reg-event-fx
   ::execute-set-slot
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `set-slot` action - set image to the front side of a box.
 
     Action params:
-    : - .
+    :target - `animation component name`. Must be `boxes` animation.
+    :slot - slot name. For `boxes` only 'box1' slt is available.
+    :image - url of image to set.
+    :attachment - image position params.
 
     Example:
-    "
+    {:type       'set-slot',
+     :target     'box4',
+     :slot-name  'box1',
+     :image      '/raw/img/elements/axe.png'
+     :attachment {:x 40, :scale-x 4, :scale-y 4}}"
     (let [scene-id (:current-scene db)]
       {:set-slot   (-> action
                        (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -749,19 +828,19 @@
 (re-frame/reg-event-fx
   ::start-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-             (if (not= course-id (:loaded-course db))
-               {:dispatch-n (list [::load-course course-id scene-id])})))
+    (if (not= course-id (:loaded-course db))
+      {:dispatch-n (list [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::load-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-             (if (not= course-id (:loaded-course db))
-               {:db          (-> db
-                                 (assoc :loaded-course course-id)
-                                 (assoc :current-course course-id)
-                                 (assoc-in [:loading :load-course] true))
-                :load-course {:course-id course-id
-                              :scene-id  scene-id}})))
+    (if (not= course-id (:loaded-course db))
+      {:db          (-> db
+                        (assoc :loaded-course course-id)
+                        (assoc :current-course course-id)
+                        (assoc-in [:loading :load-course] true))
+       :load-course {:course-id course-id
+                     :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
   ::set-current-course

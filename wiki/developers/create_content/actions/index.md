@@ -19,19 +19,19 @@ If none of the listed below actions fits your intention, you can [create your ow
 
 [`webchange.interpreter.events`](/src/cljs/webchange/interpreter/events.cljs)
  
-- [ ] `:audio` - run audio file
-- [ ] `:play-video` - start "video" component
-- [ ] `:path-animation` - 
-- [ ] `:state` - 
-- [ ] `:set-attribute` - set component attribute (prop)
-- [ ] `:add-alias` - 
-- [ ] `:empty` - delay in ms
-- [ ] `:animation` - 
-- [ ] `:add-animation` - add animation to que
-- [ ] `:start-animation` - 
-- [ ] `:remove-animation` - 
-- [ ] `:set-skin` - set character appearance
-- [ ] `:set-slot` - set image to the front side of a box
+- [x] `:audio` - run audio file;
+- [x] `:play-video` - play video file;
+- [x] `:path-animation` - run svg path animation;
+- [x] `:state` - apply component state;
+- [x] `:set-attribute` - set component attribute value;
+- [x] `:add-alias` - add state alias to component;
+- [x] `:empty` - delay in ms;
+- [x] `:animation` - immediately run animation of `animation` component;
+- [x] `:add-animation` - add animation to animations que.
+- [x] `:start-animation` - start animation of `animation` component;
+- [x] `:remove-animation` - remove animations from `animation` component;
+- [x] `:set-skin` - set character appearance;
+- [x] `:set-slot` - set image to the front side of a box;
 - [ ] `:animation-props` - 
 - [ ] `:animation-sequence` - run audio and character talking animation
 - [ ] `:scene` - 
