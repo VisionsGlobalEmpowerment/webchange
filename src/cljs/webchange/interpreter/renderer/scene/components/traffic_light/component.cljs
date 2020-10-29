@@ -53,6 +53,12 @@
 (def component-type "traffic-light")
 
 (defn create
+  "Create `traffic-light` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :scale - image scale. Default: {:x 1 :y 1}."
   [{:keys [parent type object-name scale] :as props}]
   (let [src "/images/demo/traffic-light.png"
         sprite (create-sprite "/images/demo/traffic-light.png" props)

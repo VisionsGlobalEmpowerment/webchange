@@ -72,6 +72,18 @@
         nil))))
 
 (defn create
+  "Create `carousel` component.
+   Props params:
+   :x - component x-position.
+   :y - component y-position.
+   :width - image width
+   :height - image height.
+   :name - component name that will be set to sprite and container with corresponding suffixes.
+   :first - first image src.
+   :last - last image src.
+   :next - tiling image src. This image will be repeated multiple times, to cover scene.
+   :speed - speed of tile movement {:default 8}
+    "
   [{:keys [parent type object-name] :as props}]
   (let [container (create-container props)
         first (create-sprite :first props)

@@ -106,6 +106,32 @@
 (def component-type "text")
 
 (defn create
+  "Create `text` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :scale - image scale. Default: {:x 1 :y 1}.
+  :text - text string.
+  :font-family - specify font family. Default: Liberation Sans.
+  :font-size - font size. Default 12.
+  :fill - fill color. Default #000000
+  :shadow-color - color of text shadow
+  :shadow-distance - distance shadow. Default 5
+  :shadow-blur - blur of shadow to make it more smooth.
+  :shadow-opacity - opacity of text shadows.
+  :align -  horizontally positioning of text element. Default left
+  :vertical-align -  vertical positioning of text element. Default bottom.
+  :font-weight - sets the weight (or boldness) of the font. Default normal
+  :chunks - array of chunks. This is usually margins of words, may be used in text animation component to show what part of text should be animated.
+            Every chunk has start and end
+     :start - number of symbol where curent chunk starts
+     :end - number of symbol where curent chunk starts
+  :width - text block width. Default 0
+  :height - text block height. Default 0
+  :on-click - on click event handler.
+  :ref - callback function that must be called with component wrapper.
+  "
   [{:keys [parent type object-name chunks on-click ref] :as props}]
   (if chunks
     (let [{:keys [text-container chunks]} (create-chunked-text props)

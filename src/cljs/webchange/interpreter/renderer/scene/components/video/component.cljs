@@ -28,6 +28,14 @@
 (def component-type "video")
 
 (defn create
+  "Create `video` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :width - image width.
+  :height - image height.
+  :src - image src. Default: nil."
   [{:keys [parent type object-name] :as props}]
   (let [sprite (create-sprite props)]
     (.addChild parent sprite)

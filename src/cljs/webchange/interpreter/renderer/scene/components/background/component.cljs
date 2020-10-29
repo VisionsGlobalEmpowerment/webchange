@@ -25,6 +25,10 @@
 (def component-type "background")
 
 (defn create
+  "Create `background` component.
+  Props params:
+  :src - image src. Default: nil.
+  :filters - filters params to be applied to sprite. Default: []."
   [{:keys [parent type object-name] :as props}]
   (let [image (create-sprite props)]
     (.addChild parent image)

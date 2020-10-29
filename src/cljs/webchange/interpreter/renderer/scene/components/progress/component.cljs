@@ -66,6 +66,19 @@
 (def component-type "progress")
 
 (defn create
+  "Create `progress` component. Shows a progress bar
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :width - image width.
+  :height - image height.
+  :value - value of progress bar. Default 0.2
+  :background-color - background color of progress bar. Default 0xffffff
+  :foreground-color - progress color. Default 0x2c9600
+  :border-color - color of border. Default 0x8a0f91
+  :border-width - width of border. Default 1
+  :border-radius - make rounded corners. Radius in pixels. Default 10"
   [{:keys [parent type object-name width] :as props}]
   (let [container (create-container props)
         background (create-background props)

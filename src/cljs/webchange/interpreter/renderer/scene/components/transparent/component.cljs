@@ -31,6 +31,18 @@
 (def component-type "transparent")
 
 (defn create
+  "Create `transparent` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :width - image width.
+  :height - image height.
+  :name - component name that will be set to sprite and container with corresponding suffixes.
+  :on-click - on click event handler.
+  :ref - callback function that must be called with component wrapper.
+  :offset - container position offset. Default: {:x 0 :y 0}.
+  :scale - image scale. Default: {:x 1 :y 1}."
   [{:keys [parent type object-name on-click ref] :as props}]
   (let [container (create-container props)
         sprite (create-sprite props)

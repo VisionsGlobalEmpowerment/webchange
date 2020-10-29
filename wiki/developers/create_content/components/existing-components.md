@@ -1,3 +1,13 @@
+# Common component properties
+- :scene-name - used in actions when you need to specify object, and in common case should be like object name. Must be unique in scene.
+- :transition - used in transitions when you need to specify object, and in common case should be like object name. Must be unique in scene.
+- :states - map of maps with object properties. Each map determines list of properties which will be set to object.
+    > :states     {:hidden {:visible false}, :visible {:visible true}, :init-position {:x 655, :y 212}}}
+
+    you could switch states, using "state" action. See example bellow:
+    > {:id "hidden", :type "state", :target "box2"} 
+- :actions - map of actions which may be triggered on event of corresponding object. 
+
 # Existing Components
 
 All currently implemented components can be found in the [folder `/components/`](/src/cljs/webchange/interpreter/renderer/scene/components) of the scene renderer.

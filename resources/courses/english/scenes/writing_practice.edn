@@ -60,7 +60,6 @@
                             :y            25,
                             :width        225,
                             :height       225,
-                            :animation    "stop",
                             :duration     5000,
                             :fill         "transparent",
                             :line-cap     "round",

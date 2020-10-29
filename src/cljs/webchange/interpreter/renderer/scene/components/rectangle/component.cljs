@@ -46,6 +46,19 @@
 (def component-type "rectangle")
 
 (defn create
+  "Create `rectangle` component.
+
+  Props params:
+  :x - component x-position.
+  :y - component y-position.
+  :width - image width.
+  :height - image height.
+  :fill - color of internal area of rectangle.
+  :border-radius - make rounded corners. Radius in pixels. Default: 0.
+  :border-width - width of of border in pixels
+  :border-color - color of border
+  :shadow-color - color of shadow. E.g. 0x75016e
+  :shadow-distance - width of shadow."
   [{:keys [parent type object-name] :as props}]
   (let [mask (create-mask props)
         sprite (create-sprite props)

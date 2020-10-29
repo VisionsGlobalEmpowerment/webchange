@@ -19,6 +19,16 @@
 (def component-type "group")
 
 (defn create
+  "Create `group` component.
+
+    Props params:
+    :x - component x-position.
+    :y - component y-position.
+    :on-click - on click event handler.
+    :ref - callback function that must be called with component wrapper.
+    :children - vector og object names to group"
+
+  ;:type     {:default "group"}
   [{:keys [parent type ref on-click] :as props}]
   (let [group (create-container props)
         wrapped-group (wrap type (:object-name props) group)]

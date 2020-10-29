@@ -48,6 +48,28 @@
 (def component-type "animation")
 
 (defn create
+  "Create `animation` component. This component play animation from skeleton file for corresponding object.
+
+  Props params:
+  :x - component x-position. This is container position.
+  :y - component y-position. This is container position.
+  :offset - This is offset for animation position inside container.
+  :position - This is position for animation position inside container.
+  :scale - scale of animation. Default: {:x 1 :y 1}.
+  Three previous props connected with coordinates in following order: (position.x - offset.x) * scale.x, (position.y - offset.y) * scale.y
+  :name - component name that will be set to sprite and container with corresponding suffixes.
+  :on-click - on click event handler.
+  :start - if animation should start automatically
+  :loop - Should animation start after end in loop. Default true
+  :animation-start? - Alias for :start
+  :ref - callback function that must be called with component wrapper.
+  :anim - animation name
+  :animation-name - Alias for :anim
+  :on-mount - on mount event handler.
+  :skin - object skin which should be used.
+  :speed - animation speed
+  :skin-name - alias for :skin. Default default
+  "
   [{:keys [parent name on-click on-mount ref type] :as props}]
   (let [resource (resources/get-resource name)]
     (when (nil? resource)
