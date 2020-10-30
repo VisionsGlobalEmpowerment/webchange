@@ -5,9 +5,10 @@
             [webchange.db.core :refer [*db*] :as db]
             [webchange.course.core :as core]
             [camel-snake-kebab.core :refer [->kebab-case]]
-            [webchange.migrations.kitkit.book-horizontal :as horizontal-template]
+            [webchange.migrations.kitkit.book-horizontal-page :as horizontal-template]
             [webchange.migrations.kitkit.book-vertical :as vertical-template]
             [webchange.migrations.kitkit.book-vertical-page :as book-vertical-page]
+            [webchange.migrations.kitkit.book-horizontal-page :as book-horizontal-page]
   ))
 
 (def course-name "kitkit-book")
@@ -140,6 +141,9 @@
                           )
                         (:pages book-info)))
    :title (:title book-info)
+   :audio (:audio book-info)
+   :image (:image book-info)
+   :orientation (:orientation book-info)
    }
   )
 
@@ -221,32 +225,17 @@
         )))
 
 
-(defn import-book-info-by-sentence
+(defn import-book-info
   [book-info owner-id name]
   (let [data {:name (->kebab-case name)
               :lang "En"
               :skills [1]}
         [course] (db/find-courses-by-name {:name course-name})
         course (if course course (second (core/create-course (assoc data :name course-name)  owner-id)))
-        metadata (if (= (:orientation book-info) "portrait") vertical-template/m horizontal-template/m)
-        activity (if (= (:orientation book-info) "portrait")  (vertical-template/f book-info) (horizontal-template/f book-info))
+        metadata (if (= (:orientation book-info) "portrait") book-vertical-page/m book-horizontal-page/m)
+        activity (if (= (:orientation book-info) "portrait")  (book-vertical-page/f book-info) (book-horizontal-page/f book-info))
         scene (if (core/get-scene-data (-> course :slug) (:name data))
                 (second (core/save-scene! (-> course :slug) (:name data) activity owner-id))
                 (second (core/create-scene! activity metadata  (-> course :slug) (:name data) (:skills data) owner-id)))
         ]
     (println (str "/s/" (:course-slug scene) "/" (:name scene)))))
-
-(defn import-book-info
-  [book-info name]
-  (let [activity (book-vertical-page/f book-info)
-        data {:name course-name
-              :lang "en"
-              :skills [1]
-              }
-        owner-id 1
-        course (core/create-course data owner-id)
-        metadata book-vertical-page/m]
-    (core/create-scene! activity metadata  (-> course second :slug) (:name data) (:skills data) owner-id)
-    )
-  )
-
