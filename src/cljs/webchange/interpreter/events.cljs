@@ -182,13 +182,14 @@
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
   (fn [{:keys [db]} [_ {:keys [var-name] :as action}]]
-    "Execute `` action - .
+    "Execute `placeholder-audio` action - play audio with params from variable. Deprecated.
 
     Action params:
-    : - .
-
-    Example:
-    "
+    :var-name - variable name.
+    :id - variable field name to get audio id.
+    :start - variable field name to get audio start time.
+    :duration - variable field name to get audio duration time.
+    :offset - variable field name to get audio offset."
     (let [scene-id (:current-scene db)
           scene (get-in db [:scenes scene-id])
           variable (get-in scene [:variables var-name])
@@ -235,13 +236,40 @@
 (re-frame/reg-event-fx
   ::execute-transition
   (fn [{:keys [db]} [_ {:keys [to] :as action}]]
-    "Execute `` action - .
+    "Execute `transition` action - object motion animation.
 
     Action params:
-    : - .
+    :transition-id - name of transition. Must match the field `:transition` of component we want to move.
+    :to - motion parameters:
+        :duration - duration of animation in sec
+        :loop - (optional) Repeat motion as 'yo-yo' animation when `true`. Default `false`.
 
-    Example:
-    "
+        If you want to change some component params linearly, define their end value, like `:x 100` to move component horizontally.
+        If you want to move the component along a cubic bezier curve, define `:bezier` param with vector of 3 points.
+        When drawing a curve, the first point will be the current position of the component.
+
+    Example 1: simple transition
+    {:type          'transition',
+     :transition-id 'mari',
+     :to            {:x        1403,
+                     :y        657,
+                     :duration 1.3}}
+
+    Example 2: repeating animation
+    {:type          'transition',
+     :transition-id 'box1',
+     :to            {:x        668,
+                     :y        798,
+                     :loop     false,
+                     :duration 0.7}}
+
+    Example 3: bezier motion
+    {:type          'transition',
+     :transition-id 'ball-transition',
+     :to            {:bezier   [{:x 825, :y 342},
+                                {:x 655, :y 342},
+                                {:x 314, :y 942}],
+                     :duration 1.4}}"
     (if (:path to)
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
@@ -249,13 +277,14 @@
 (re-frame/reg-event-fx
   ::execute-stop-transition
   (fn [{:keys [db]} [_ {:keys [id] :as action}]]
-    "Execute `` action - .
+    "Execute `stop-transition` action - abort running transition.
 
     Action params:
-    : - .
+    :id - name of transition. Must match the field `:transition` of component is being moved.
 
     Example:
-    "
+    {:type 'stop-transition'
+     :id   'swings'}"
     (i/kill-transition! id)
     {:dispatch (ce/success-event action)}))
 
@@ -271,13 +300,33 @@
 (re-frame/reg-event-fx
   ::execute-move
   (fn [{:keys [db]} [_ {:keys [from to graph animation-target animation-on-start animation-on-stop default-position move-speed] :as action}]]
-    "Execute `` action - .
+    "Execute `move` action - animation of moving a component along the graph.
 
     Action params:
-    : - .
+    :transition-id - name of transition. Must match the field `:transition` of component we want to move.
+    :to - name of destination graph node.
+    :from - name of start graph node.
+    :default-position - name of start graph node if `:from` is not defined.
+    :animation-on-start - animation name for component when start moving.
+    :animation-on-stop - animation name for component when stop moving.
+    :animation-target - animation name for component when moving is going.
+    :move-speed - moving speed.
+    :graph - description of graph nodes. Each node is described by its coordinates and `:links` field - node connections.
 
     Example:
-    "
+    {:type               'move',
+     :transition-id      'vera-transition',
+     :to                 'park',
+     :from               'home',
+     :default-position   'crossroads',
+     :animation-on-start 'go_front',
+     :animation-on-stop  'idle',
+     :animation-target   'vera-go',
+     :move-speed         160,
+     :graph              {:home       {:x 1000, :y 620, :links ['crossroads']},
+                          :feria      {:x 590, :y 960, :links ['crossroads']},
+                          :park       {:x 1325, :y 960, :links ['crossroads']},
+                          :crossroads {:x 1070, :y 665, :links ['home' 'feria' 'park']}}}"
     (let [from (if (i/nav-node-exists? graph from) from default-position)
           path-names (i/find-nav-path from to graph)
           path (map #(-> (get graph (keyword %)) (select-keys [:x :y])) path-names)
@@ -301,13 +350,16 @@
 (re-frame/reg-event-fx
   ::execute-location
   (fn [{:keys [db]} [_ {:keys [location-id] :as action}]]
-    "Execute `` action - .
+    "Execute `location` action - change current scene by location name.
+    Used when the same location can be resolved with different scene id depending on the current level.
+    Locations are defined in course data.
 
     Action params:
-    : - .
+    :location-id - location name.
 
     Example:
-    "
+    {:type        'location',
+     :location-id 'painting-tablet'}"
     (let [location-key (keyword location-id)
           locations (get-in db [:course-data :locations])
           scene-id (if (contains? locations location-key)
@@ -318,13 +370,14 @@
 (re-frame/reg-event-fx
   ::execute-scene
   (fn [{:keys [db]} [_ {:keys [scene-id] :as action}]]
-    "Execute `` action - .
+    "Execute `scene` action - change current scene.
 
     Action params:
-    : - .
+    :scene-id - next scene name.
 
     Example:
-    "
+    {:type     'scene',
+     :scene-id 'map'}"
     {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))}))
 
 (re-frame/reg-event-fx
@@ -539,19 +592,34 @@
 (re-frame/reg-event-fx
   ::execute-animation-sequence
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `animation-sequence` action - play audio file and speaking animation simultaneously.
 
     Action params:
-    : - .
+    :target - `animation` component name.
+    :audio - audio file url.
+    :start - start of audio interval in sec.
+    :duration - duration of audio interval in sec.
+    :data - speaking animation timing. A vector of all animation fragments. Each fragment consists of:
+            :anim - speaking animation name. Currently, only 'talk' is available.
+            :start - time of start animation
+            :end - time of end animation
+    :track - track number. Animations on different tracks are played simultaneously.
+             For this reason, the track should be different from the tracks of other animations.
 
     Example:
-    "
+    {:type     'animation-sequence',
+     :target   'mari',
+     :audio    '/upload/PPHETAQQKJEPPXTD.m4a',
+     :start    21.156,
+     :duration 2.746,
+     :data     [{:anim 'talk', :start 21.28, :end 22.02}
+                {:anim 'talk', :start 22.32, :end 23.51}],
+     :track    1}"
     (let [animation-actions (i/animation-sequence->actions action)
           audio-action (i/animation-sequence->audio-action action)]
       (if audio-action
         {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
-        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})
-      )))
+        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
 
 (re-frame/reg-event-fx
   ::execute-add-animation
@@ -651,13 +719,7 @@
 (re-frame/reg-event-fx
   ::execute-set-animation-props
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
-
-    Action params:
-    : - .
-
-    Example:
-    "
+    "Execute `animation-props` action - set properties of `animation` component. Deprecated. Use `set-attribute` instead."
     (let [scene-id (:current-scene db)]
       {:animation-props (-> action
                             (assoc :state (get-in db [:scenes scene-id :animations (:target action)])))
@@ -666,13 +728,14 @@
 (re-frame/reg-event-fx
   ::execute-start-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
-    "Execute `` action - .
+    "Execute `start-activity` action - set activity as started.
 
     Action params:
-    : - .
+    :id - activity name.
 
     Example:
-    "
+    {:type 'start-activity'
+     :id   'pinata'}"
     (let [activity-name (or activity-name (:current-scene db))
           activity-action (lessons-activity/name->activity-action db activity-name)]
       {:db         (assoc db
@@ -688,13 +751,14 @@
 (re-frame/reg-event-fx
   ::execute-stop-activity
   (fn [{:keys [db]} [_ {activity-name :id :as action}]]
-    "Execute `` action - .
+    "Execute `stop-activity` action - stop activity when the user exits without completing it;.
 
     Action params:
-    : - .
+    :id - activity name.
 
     Example:
-    "
+    {:type 'stop-activity'
+     :id   'pinata'}"
     (let [activity-action (lessons-activity/name->activity-action db activity-name)
           start-time (get db :activity-start-time)
           time-spent (if start-time
@@ -750,13 +814,14 @@
 (re-frame/reg-event-fx
   ::execute-finish-activity
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `finish-activity` action - set activity as finished.
 
     Action params:
-    : - .
+    :id - activity name.
 
     Example:
-    "
+    {:type 'finish-activity',
+     :id   'cinema'}"
     (let [events (cond-> (list (ce/success-event action))
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
                          :always (conj (activity-finished-event db action))
@@ -1054,13 +1119,20 @@
 (re-frame/reg-event-fx
   ::execute-test-transitions-collide
   (fn [{:keys [db]} [_ {:keys [transition-1 transition-2 success fail] :as action}]]
-    "Execute `` action - .
+    "Execute `transitions-collide` action - check if components intersect.
 
     Action params:
-    : - .
+    :success - name of action to call if components intersect.
+    :fail - name of action to call if components don't intersect.
+    :transition-1 - transition name of the first component.
+    :transition-2 - transition name of the second component.
 
     Example:
-    "
+    {:type         'test-transitions-collide',
+     :success      'check-box3',
+     :fail         'box-3-revert',
+     :transition-1 'box3',
+     :transition-2 'box-ph'}"
     (let [transition-1-wrapper (->> transition-1 keyword (scene/get-scene-object db))
           transition-2-wrapper (->> transition-2 keyword (scene/get-scene-object db))
           success (ce/get-action success db action)
@@ -1072,19 +1144,28 @@
 (re-frame/reg-event-fx
   ::execute-text-animation
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
+    "Execute `text-animation` action - play audio file and text chunks animation simultaneously.
 
     Action params:
-    : - .
+    :target - `text` component name. The component must contain `:chunks` property.
+    :audio - audio file url.
+    :start - start time in sec.
+    :duration - audio interval duration in sec.
+    :data - data defining the animation time for each chunk.
 
     Example:
-    "
+    {:type      'text-animation',
+     :target    'title-text',
+     :audio     '/raw/audio/l1/a6/lion/2Mis_primeras_palabras.mp3',
+     :start     2.693,
+     :duration  2.999,
+     :data      [{:at 2.826, :chunk 0}
+                 {:at 3.092, :chunk 1}]}"
     (let [animation-actions (i/text-animation-sequence->actions action)
           audio-action (i/animation-sequence->audio-action action)]
       (if audio-action
         {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
-        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})
-      )))
+        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
 
 (re-frame/reg-event-fx
   ::reset-navigation
@@ -1150,13 +1231,14 @@
 (re-frame/reg-event-fx
   ::execute-pick-correct
   (fn [{:keys [db]} [_ {:keys [concept-name] :as action}]]
-    "Execute `` action - .
+    "Execute `pick-correct` action - send to back that user has chosen the correct concept.
 
     Action params:
-    : - .
+    :concept-name - concept name.
 
     Example:
-    "
+    {:type         'pick-correct',
+     :concept-name 'ardilla'}"
     (let [current-activity (:activity db)
           counter-value (or (vars.core/get-variable :score-correct) 0)]
       (vars.core/set-variable! :score-correct (inc counter-value))
@@ -1168,13 +1250,16 @@
 (re-frame/reg-event-fx
   ::execute-pick-wrong
   (fn [{:keys [db]} [_ {:keys [concept-name option] :as action}]]
-    "Execute `` action - .
+    "Execute `pick-wrong` action - send to back that user has chosen the wrong concept.
 
     Action params:
-    : - .
+    :concept-name - concept name.
+    :option - additional data.
 
     Example:
-    "
+    {:type         'pick-wrong',
+     :concept-name 'ardilla'
+     :option       'oso'}"
     (let [current-activity (:activity db)
           counter-incorrect (or (vars.core/get-variable :score-incorrect) 0)
           counter-mistake (or (vars.core/get-variable :score-mistake) 0)
@@ -1191,26 +1276,32 @@
 (re-frame/reg-event-fx
   ::execute-set-current-concept
   (fn [{:keys [db]} [_ {:keys [value] :as action}]]
-    "Execute `` action - .
+    "Execute `set-current-concept` action - set current concept.
 
     Action params:
-    : - .
+    :value - concept name.
 
     Example:
-    "
+    {:type  'set-current-concept',
+     :value 'ardilla'}"
     (vars.core/set-variable! :score-first-attempt true)
     {:dispatch-n (list (ce/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-set-interval
   (fn [{:keys [db]} [_ {:keys [id interval action] :as main-action}]]
-    "Execute `` action - .
+    "Execute `set-interval` action - set a periodically repeating action.
 
     Action params:
-    : - .
+    :id - id of interval.
+    :action - action name to execute.
+    :interval - interval in ms.
 
     Example:
-    "
+    {:type     'set-interval'
+     :id       'reminder'
+     :interval 17000
+     :action   'show-click-reminder'}"
     (let [interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action (ce/get-action action db)])) interval)]
       {:dispatch-n (list [::ce/execute-register-timer {:name id
                                                        :id   interval-id
@@ -1220,13 +1311,14 @@
 (re-frame/reg-event-fx
   ::execute-remove-interval
   (fn [{:keys [db]} [_ {:keys [id] :as action}]]
-    "Execute `` action - .
+    "Execute `remove-interval` action - reset a periodically repeating action.
 
     Action params:
-    : - .
+    :id - id of interval.
 
     Example:
-    "
+    {:type 'remove-interval'
+     :id   'reminder'}"
     {:dispatch-n (list [::ce/execute-remove-timer {:name id}]
                        (ce/success-event action))}))
 

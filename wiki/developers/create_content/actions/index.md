@@ -32,25 +32,24 @@ If none of the listed below actions fits your intention, you can [create your ow
 - [x] `:remove-animation` - remove animations from `animation` component;
 - [x] `:set-skin` - set character appearance;
 - [x] `:set-slot` - set image to the front side of a box;
-- [ ] `:animation-props` - 
-- [ ] `:animation-sequence` - run audio and character talking animation
-- [ ] `:scene` - 
-- [ ] `:location` - 
-- [ ] `:transition` - object motion animation
-- [ ] `:stop-transition` - stop running transition
-- [ ] `:move` - 
-- [ ] `:placeholder-audio` - 
-- [ ] `:test-transitions-collide` - 
-- [ ] `:start-activity` - set current activity as started
-- [ ] `:stop-activity` - stop activity when the user exits without completing it
-- [ ] `:finish-activity` - set current activity as finished
-- [ ] `:text-animation` - 
-- [ ] `:pick-correct` - 
-- [ ] `:pick-wrong` - 
-- [ ] `:set-current-concept` - 
-- [ ] `:set-interval` - 
-- [ ] `:remove-interval` - 
-- [ ] `:set-traffic-light` - 
+- [x] `:animation-props` - set properties of `animation` component. Deprecated. Use `set-attribute` instead;
+- [x] `:animation-sequence` - play audio file and speaking animation simultaneously;
+- [x] `:scene` - change current scene;
+- [x] `:location` - change current scene by location name;
+- [x] `:transition` - object motion animation;
+- [x] `:stop-transition` - abort running transition;
+- [x] `:move` - animation of moving a component along the graph;
+- [x] `:placeholder-audio` - play audio with params from variable. Deprecated;
+- [x] `:test-transitions-collide` - check if components intersect;
+- [x] `:start-activity` - set activity as started;
+- [x] `:stop-activity` - stop activity when the user exits without completing it;
+- [x] `:finish-activity` - set activity as finished;
+- [x] `:text-animation` - play audio file and text chunks animation simultaneously;
+- [x] `:pick-correct` - send to back that user has chosen the correct concept;
+- [x] `:pick-wrong` - send to back that user has chosen the wrong concept;
+- [x] `:set-current-concept` - set current concept;
+- [x] `:set-interval` - set a periodically repeating action;
+- [x] `:remove-interval` - reset a periodically repeating action
 
 [`webchange.interpreter.variables.events`](/src/cljs/webchange/interpreter/variables/events.cljs)
 
