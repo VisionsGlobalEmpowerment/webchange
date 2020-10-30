@@ -184,6 +184,3 @@
       (add-title-audio (:audio args))
       (add-title-image (:image args))
       ))
-
-#_(core/register-template
-  (:id m) m f)
