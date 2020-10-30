@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.wizard.views-activity-skills
+(ns webchange.editor-v2.wizard.views-game-changer-skills
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
@@ -10,7 +10,7 @@
   []
   (merge (styles/activity)
          {:skills-list      {:padding 0}
-          :skills-list-item {:padding-left 0
+          :skills-list-item {:padding "8px 0"
                              :white-space  "normal"}}))
 
 (defn- render-selected
@@ -28,13 +28,31 @@
         text])]))
 
 (defn- select-control
-  [{:keys [label value options multiple? on-change on-close]
-    :or   {label     "Label"
-           options   []
-           multiple? false
-           on-change #()
-           on-close  #()}}]
-  (r/with-let [open? (r/atom false)]
+  [{:keys [label value options multiple? close-on-change? on-change on-close]
+    :or   {label            "Label"
+           options          []
+           multiple?        false
+           close-on-change? false
+           on-change        #()
+           on-close         #()}}]
+  (r/with-let [open? (r/atom false)
+               just-selected? (r/atom false)
+               handle-open (fn []
+                             (reset! open? true))
+               handle-close (fn []
+                              (reset! open? false)
+                              (reset! just-selected? true)
+                              (on-close))
+               handle-focus (fn []
+                              (if @just-selected?
+                                (reset! just-selected? false)
+                                (handle-open)))
+               handle-change (fn [event]
+                               (let [value (-> event .-target .-value js->clj)]
+                                 (on-change value)
+                                 (reset! just-selected? true)
+                                 (when close-on-change?
+                                   (handle-close))))]
     (let [styles (get-styles)]
       [ui/form-control {:full-width true
                         :style      (:control-container styles)}
@@ -49,10 +67,10 @@
                                         (r/reactify-component)
                                         (r/create-element)))
                    :open         @open?
-                   :on-open      #(reset! open? true)
-                   :on-close     #(do (reset! open? false)
-                                      (on-close))
-                   :on-change    #(on-change (js->clj (-> % .-target .-value)))}
+                   :on-focus     handle-focus
+                   :on-open      handle-open
+                   :on-close     handle-close
+                   :on-change    handle-change}
         (for [{:keys [value text]} options]
           ^{:key value}
           [ui/menu-item {:value value} text])]])))
@@ -84,7 +102,8 @@
           skills-options (->> skills
                               (filter (fn [{:keys [topic]}]
                                         (some #{topic} @current-topics)))
-                              (map (fn [{:keys [id name]}] {:value id :text name}))
+                              (map (fn [{:keys [id name abbr]}] {:value id
+                                                            :text (str name "  (" abbr ")")}))
                               (doall))
           handle-skills-changed (fn [skills] (swap! data assoc :skills skills))]
       (if (some? skills-data)
@@ -92,27 +111,29 @@
          [ui/expansion-panel {:expanded  (get @panels-expanded :strands)
                               :on-change #(swap! panels-expanded update :strands not)}
           [ui/expansion-panel-summary
-           [ui/typography "Strand"]]
+           [ui/typography {:style {:margin 0}} "Strands"]]
           [ui/expansion-panel-details
-           [select-control {:label     "Select Strands"
-                            :value     @current-strands
-                            :options   strands-options
-                            :multiple? true
-                            :on-change handle-strand-changed
-                            :on-close  #(do (swap! panels-expanded assoc :strands false)
-                                            (swap! panels-expanded assoc :topics true))}]]]
+           [select-control {:label            "Select Strands"
+                            :value            @current-strands
+                            :options          strands-options
+                            :multiple?        true
+                            :close-on-change? true
+                            :on-change        handle-strand-changed
+                            :on-close         #(do (swap! panels-expanded assoc :strands false)
+                                                   (swap! panels-expanded assoc :topics true))}]]]
          [ui/expansion-panel {:expanded  (get @panels-expanded :topics)
                               :on-change #(swap! panels-expanded update :topics not)}
           [ui/expansion-panel-summary
-           [ui/typography "Topic"]]
+           [ui/typography "Topics"]]
           [ui/expansion-panel-details
-           [select-control {:label     "Select Topics"
-                            :value     @current-topics
-                            :options   topics-options
-                            :multiple? true
-                            :on-change handle-topic-changed
-                            :on-close  #(do (swap! panels-expanded assoc :topics false)
-                                            (swap! panels-expanded assoc :skills true))}]]]
+           [select-control {:label            "Select Topics"
+                            :value            @current-topics
+                            :options          topics-options
+                            :multiple?        true
+                            :close-on-change? true
+                            :on-change        handle-topic-changed
+                            :on-close         #(do (swap! panels-expanded assoc :topics false)
+                                                   (swap! panels-expanded assoc :skills true))}]]]
          [ui/expansion-panel {:expanded  (get @panels-expanded :skills)
                               :on-change #(swap! panels-expanded update :skills not)}
           [ui/expansion-panel-summary
