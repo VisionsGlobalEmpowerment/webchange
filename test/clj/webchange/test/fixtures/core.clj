@@ -580,7 +580,7 @@
 
 (defn get-current-school []
   (let [url (str "/api/schools/current")
-        request (mock/request :get url)]
+        request (-> (mock/request :get url))]
     (handler/dev-handler request)))
 
 (defn with-default-school [f]
@@ -704,7 +704,7 @@
                     (mock/header :content-type "application/json")
                     (mock/header :body-encoding "UTF-8")
                     (mock/header :accept "application/json")
-                    (assoc :body (json/write-str data))
+                    (mock/body (json/write-str data))
                     teacher-logged-in)
         response (handler/dev-handler request)
         ]

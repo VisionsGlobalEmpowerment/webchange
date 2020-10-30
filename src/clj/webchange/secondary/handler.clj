@@ -10,7 +10,9 @@
             [webchange.db.core :refer [*db*] :as db]
             [webchange.validation.validate :refer [validate]]
             [clojure.data.json :as json]
-            [webchange.validation.specs.student :as student-specs]))
+            [webchange.common.hmac-sha256 :as sign]
+            [webchange.validation.specs.student :as student-specs]
+            [webchange.common.hmac-sha256 :as sign]))
 
 (defn handle-dump-full [id request]
       (response (core/get-dump-by-school id)))
@@ -40,5 +42,4 @@
            (GET "/api/school/update/:id" [id :as request] (handle-get-school-update id request))
            (PUT "/api/school/update/:id" [id :as request] (handle-load-school-update id request))
            (POST "/api/school/sync/:id" [id :as request] (handle-load-school-sync id request))
-           (POST "/api/school/asset/difference/" request (handle-asset-difference request))
-           )
+           (POST "/api/school/asset/difference/" request (handle-asset-difference request)))

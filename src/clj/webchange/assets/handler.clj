@@ -8,6 +8,7 @@
             [mikera.image.core :as imagez]
             [webchange.assets.core :as core]
             [config.core :refer [env]]
+            [webchange.common.hmac-sha256 :as sign]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.common.audio-parser.converter :refer [convert-to-mp3 get-changed-extension]]
             [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
@@ -105,6 +106,8 @@
 
 (defroutes asset-maintainer-routes
            (POST "/api/assets/by-path/" request
-             (wrap-multipart-params
-               (fn [request]
-                (-> request :multipart-params upload-asset-by-path response)))))
+             (-> (fn [request]
+                   (-> request :multipart-params upload-asset-by-path response))
+                 (wrap-multipart-params)
+                 (sign/wrap-api-with-signature)
+               )))
