@@ -6,6 +6,28 @@ Below are some of them. You can find a complete list of actions and their descri
 
 If none of the listed below actions fits your intention, you can [create your own action](create-action.md).
 
+## Common action properties
+### Interceptors
+In some cases we need to add to action some information from environment of current scene. In that case we have interceptors
+
+ - :from-params - this interceptors allow to copy data from params to action before execution.
+   `:from-params [{:param-property 'scene-id', :action-property 'var-value'}]`
+    - :param-property - params property name which will be used as source
+    - :action-property - object property name to save value 
+    - :template - if template is set value will be constructed by replacing every "%" sign with value, if not value will be set as is.
+
+ - :from-var - this interceptors allow to copy data from variables to action before execution.
+   `:from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]`
+    - :var-name - name of variable which will be used as source
+    - :var-property - property of variable if only one property is needed
+    - :var-key - if this property exist data will be converted to hash-map with var-key as key and value, as property value
+    - :template - if template is set value will be constructed by replacing every "%" sign with value, if not value will be set as is.
+    - :to-vector - boolean property, if true value will be added to vector
+    - :action-property - property which will be used to place value to action, if it is not set data will be merged to action on root level.
+    
+        
+
+
 [`webchange.common.events`](/src/cljs/webchange/common/events.cljs)
 
 - [x] `:action` - call another action by its name;
@@ -53,21 +75,20 @@ If none of the listed below actions fits your intention, you can [create your ow
 
 [`webchange.interpreter.variables.events`](/src/cljs/webchange/interpreter/variables/events.cljs)
 
-- [ ] `:dataset-var-provider` - 
-- [ ] `:lesson-var-provider` - provides one concept from a lesson set for each call
-- [ ] `:vars-var-provider` - provides one concept from variables list for each call
-- [ ] `:test-var` - check if a variable is equal to the specific value
-- [ ] `:test-var-scalar` - 
-- [ ] `:test-var-list` - 
-- [ ] `:test-value` - 
-- [ ] `:case` - check if a variable is equal to one of the set of values
-- [ ] `:counter` - increase or decrease declared counter
-- [ ] `:calc` - 
-- [ ] `:set-variable` - set variable value
-- [ ] `:set-progress` - 
-- [ ] `:copy-variable` - 
-- [ ] `:clear-vars` - 
-- [ ] `:map-value` - 
+- [x] `:lesson-var-provider` - provides one concept from a lesson set for each call
+- [x] `:vars-var-provider` - provides one concept from variables list for each call
+- [x] `:test-var` - check if a current object is equal to the specific value
+- [x] `:test-var-scalar`  - compare variable value with test value. 
+- [x] `:test-var-list`  - compare variables list value with test values list. Variables are compared with values according to their positions in the list.
+- [x] `:test-value` - compare two values. 
+- [x] `:case` - check if a variable is equal to one of the set of values
+- [x] `:counter` - increase or decrease declared counter
+- [x] `:calc` - allow to perform simple calculations.
+- [x] `:set-variable` - allow to set value to corresponding variable.
+- [x] `:set-progress` - allow to set variables to student progress data. 
+- [x] `:copy-variable` - allow to copy one variable value to another.
+- [x] `:clear-vars` - allow to drop all variables and providers.
+- [x] `:map-value` - This method find index of element in 'from' array with 'value', then takes element from to array with the same index and store that information in variable with name `var-name`.
 
 Specific actions:
 
