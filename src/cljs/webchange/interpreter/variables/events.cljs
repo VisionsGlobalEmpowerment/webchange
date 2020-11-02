@@ -7,7 +7,6 @@
     [webchange.state.lessons.subs :as lessons]
     [webchange.interpreter.variables.core :as core]))
 
-(e/reg-simple-executor :dataset-var-provider ::execute-dataset-var-provider) ;; ???
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
 (e/reg-simple-executor :vars-var-provider ::execute-vars-var-provider)
 (e/reg-simple-executor :test-var ::execute-test-var)        ;; Not used
@@ -26,39 +25,48 @@
 (re-frame/reg-event-fx
   ::execute-set-variable
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
-    "Execute `` action - .
+    "Execute `set-variable` action - allow to set value to corresponding variable.
 
     Action params:
-    : - .
+    :var-name - variable name to set.
+    :var-value - value to set.
 
     Example:
-    "
+    {:type 'set-variable'
+     :var-name 'answer-clickable'
+     :var-value false}"
     (core/set-variable! var-name var-value)
     {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
   ::execute-set-progress
   (fn [{:keys [db]} [_ {:keys [var-name var-value] :as action}]]
-    "Execute `` action - .
+    "Execute `set-progress` action - allow to set variables to student progress data.
 
     Action params:
-    : - .
+    :var-name - which will be set.
+    :var-value - value to set.
 
     Example:
-    "
+    {:type 'set-progress',
+     :var-name 'last-location',
+     :from-params [{:param-property 'scene-id', :action-property 'var-value'}]}"
     {:db         (core/set-progress db var-name var-value)
      :dispatch-n (list (e/success-event action) [:progress-data-changed])}))
 
 (re-frame/reg-event-fx
   ::execute-copy-variable
   (fn [{:keys [db]} [_ {:keys [var-name from] :as action}]]
-    "Execute `` action - .
+    "Execute `copy-variable` action - allow to copy one variable value to another.
 
     Action params:
-    : - .
+    :from - source variable name
+    :var-name - target variable name
 
     Example:
-    "
+    {:type 'copy-variable'
+     :var-name 'current-word'
+     :from 'item-2'}"
     (let [var-value (core/get-variable from)]
       (core/set-variable! var-name var-value)
       {:dispatch (e/success-event action)})))
@@ -66,13 +74,21 @@
 (re-frame/reg-event-fx
   ::execute-map-value
   (fn [{:keys [db]} [_ {:keys [var-name value from to] :as action}]]
-    "Execute `` action - .
+    "Execute `map-value` action - This method find index of element in 'from' array with 'value',
+    then takes element from to array with the same index and store that information in variable with name `var-name`.
 
     Action params:
-    : - .
+    :to - target array of variable, which will be used as source
+    :from - source array of variable names, where values will be searched
+    :var-name - variable name where data will be stored
+    :value - will be used to compare with elements of from array
 
     Example:
-    "
+    {:to ['letter1' 'letter2' 'letter3' 'letter4'],
+     :from ['player1' 'player2' 'player3' 'player4'],
+     :type 'map-value',
+     :from-var [{:var-name 'pair-target-3', :action-property 'value'}],
+     :var-name 'target-letter'}"
     (let [var-value (get to (.indexOf from value))]
       (core/set-variable! var-name var-value)
       {:dispatch (e/success-event action)})))
@@ -85,12 +101,10 @@
 (re-frame/reg-event-fx
   ::execute-clear-vars
   (fn [{:keys [db]} [_ action]]
-    "Execute `` action - .
-
-    Action params:
-    : - .
+    "Execute `clear-vars` action - allow to drop all variables and providers.
 
     Example:
+    {:type 'clear-vars'}
     "
     (core/clear-vars! true)
     {:dispatch-n (list (e/success-event action))}))
@@ -98,12 +112,20 @@
 (re-frame/reg-event-fx
   ::execute-vars-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
-    "Execute `` action - .
+    "Execute `vars-var-provider` action - provides one concept from variables list for each call.
 
     Action params:
-    : - .
+    :from - array of variables names which will be copied to target variables
+    :shuffled - if true return a random permutation of values.
+    :variables - array target variables which will be assigned
+    :provider-id - variable name where extracted data will be stored.
+    :on-end - on end event handler. Will be executed when no additional items to assign to variable.
 
     Example:
+    {:type 'vars-var-provider',
+     :from ['vaca-voice-next-picture-1' 'vaca-voice-next-picture-2' 'vaca-voice-next-picture-3' 'vaca-voice-next-picture-4'],
+     :shuffled  true,
+     :variables ['current-vaca-voice-next']}
     "
     (let [items (->> from
                      (map (fn [var-name]
@@ -125,13 +147,21 @@
 (re-frame/reg-event-fx
   ::execute-lesson-var-provider
   (fn [{:keys [db]} [_ {:keys [from variables provider-id on-end] :as action}]]
-    "Execute `` action - .
+    "Execute `lesson-var-provider` action - provides one concept from a lesson set for each call
 
     Action params:
-    : - .
+    :from - lesson set, which will be source variable
+    :provider-id - variable name where extracted data will be stored.
+    :shuffled - if true return a random permutation of values.
+    :variables - list variable to assign
+    :on-end - on end event handler. Will be executed when no additional items to assign to variable.
 
     Example:
-    "
+    {:type 'lesson-var-provider',
+     :from 'concepts',
+     :provider-id 'words-set',
+     :shuffled  false,
+     :variables   ['item-1' 'item-2' 'item-3']}"
     (let [items (lessons/lesson-dataset-items db from)
           has-next (core/has-next items provider-id action)
           scene-id (:current-scene db)
@@ -148,13 +178,21 @@
 (re-frame/reg-event-fx
   ::execute-test-var
   (fn [{:keys [db]} [_ {:keys [var var-name property success fail] :as action}]]
-    "Execute `` action - .
+    "Execute `test-var` action - check if a variable is equal to the specific value.
 
     Action params:
-    : - .
+    :success - action to execute if the comparison is successful. Can be represented as an action name (string) or action data.
+    :fail- action to execute if the comparison is failed. Can be represented as an action name (string) or action data.
+    :var-name - variable name that we want to test.
+    :var - object to compare
+    :property - property to check in variable, the same property will be used for both comparable objects
 
     Example:
-    "
+    {:fail 'pick-wrong',
+     :type 'test-var',
+     :success 'pick-correct',
+     :property 'id',
+     :var-name 'current-word'}"
     (let [test (core/get-variable var-name)
           key (keyword property)
           success (e/get-action success db action)
@@ -191,12 +229,6 @@
       (if (= value test)
         {:dispatch [::e/execute-action (cond-action db action success)]}
         {:dispatch [::e/execute-action (cond-action db action fail)]}))))
-
-{:type        'test-value'
- :from-params [{:action-property 'value1' :param-property 'target'}]
- :from-var    [{:action-property 'value2' :var-name 'current-box'}]
- :success     'pick-correct'
- :fail        'dialog-6-pick-wrong'}
 
 (re-frame/reg-event-fx
   ::execute-test-value
@@ -252,13 +284,18 @@
   ::execute-case
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [value options] :as action}]
-    "Execute `` action - .
+    "Execute `case` action - action when variable value equal one of option key value.
 
     Action params:
-    : - .
+    :options - map of keys and actions. Keys will be used to compare with variable value. If value is equal action will be executed.
+    :value - parameter which will be used to compare
 
     Example:
-    "
+    {:type 'case',
+     :options {:box1 {:id 'go-to-box2-line-down', :type 'action'},
+               :box2 {:id 'stay-on-line', :type 'action'},
+               :box3 {:id 'go-to-box2-line-up', :type 'action'}},
+     :from-var [{:var-name 'current-line', :action-property 'value'}]}"
     (let [success (get options (keyword value))
           default (get options :default)
           ]
@@ -275,9 +312,14 @@
     "Execute `` action - .
 
     Action params:
-    : - .
+    :counter-action - action which should be applied to counter variable. Available options: 'increase', 'decrease', 'reset '.
+    :counter-id - name of counter variable
+    :counter-value - used for reset option. This value will be set to counter.
 
     Example:
+    {:type 'counter'
+     :counter-action 'increase'
+     :counter-id 'current-stage'}
     "
     (let [fn (case (keyword counter-action)
                :increase inc
@@ -292,13 +334,21 @@
 (re-frame/reg-event-fx
   ::execute-calc
   (fn [{:keys [db]} [_ {:keys [var-name operation value-1 value-2] :as action}]]
-    "Execute `` action - .
+    "Execute `calc` action - allow to perform simple calculations.
 
     Action params:
-    : - .
+    :operation - operation which will be applied to operands. Availble operations: 'div-ceil', 'div-floor'
+    :value-1 - first operand.
+    :value-2 - second operand.
+    :var-name - variable name to store operation result
 
     Example:
-    "
+    {:type 'calc',
+     :value-1 30,
+     :value-2 13,
+     :var-name 'pages-number',
+     :operation 'div-ceil'
+     }"
     (let [fn (case (keyword operation)
                :div-floor (comp Math/floor /)
                :div-ceil (comp Math/ceil /))]
