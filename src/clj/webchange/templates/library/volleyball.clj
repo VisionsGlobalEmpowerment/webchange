@@ -7,8 +7,7 @@
         :tags        ["Independent Practice"]
         :description "Some description of volleyball mechanics and covered skills"
         :lesson-sets ["concepts"]
-        :fields      [
-                      {:name "image-src",
+        :fields      [{:name "image-src",
                        :type "image"}
                       {:name "word-image-1",
                        :type "image"}
@@ -17,9 +16,7 @@
                       {:name "word-image-3",
                        :type "image"}
                       {:name "word-image-4",
-                       :type "image"}
-
-                      ]})
+                       :type "image"}]})
 
 
 (def t {:assets
