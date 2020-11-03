@@ -34,12 +34,37 @@
   (let [handler (fn [{:keys [action]}] (re-frame/dispatch [event-name (prepare-action action)]))]
     (reg-executor id handler)))
 
-(reg-executor :action (fn [{:keys [db action]}]
-                        (execute-action db (-> action
-                                               :id
-                                               (get-action db action)
-                                               (assoc :flow-id (:flow-id action))
-                                               (assoc :action-id (:action-id action))))))
+(reg-executor :action
+              (fn [{:keys [db action]}]
+                "Execute `action` action - call another action by its name.
+
+                Action params:
+                :id - callable action name.
+
+                Example 1: simple action call
+                {:type 'action',
+                 :id   'init-audio-correct'}
+
+                Example 2: call concepts action
+                {:type     'action',
+                 :from-var [{:var-name     'current-concept',
+                             :var-property 'mari-word'}
+
+                Example 3: call action with params
+                {:type   'action',
+                 :id     'set-current-tool',
+                 :params {:tool 'felt-tip'}}
+
+                Example 4: call action by name from variable
+                {:type     'action'
+                 :from-var [{:action-property 'id',
+                             :var-name        'current-audio-correct',
+                             :possible-values [:mari-audio-correct-1 :mari-audio-correct-2]}]}"
+                (execute-action db (-> action
+                                       :id
+                                       (get-action db action)
+                                       (assoc :flow-id (:flow-id action))
+                                       (assoc :action-id (:action-id action))))))
 
 (reg-simple-executor :sequence ::execute-sequence)
 (reg-simple-executor :sequence-data ::execute-sequence-data)
@@ -97,11 +122,11 @@
       action
       (let [flow-id (random-uuid)
             action-id (random-uuid)]
-        (register-flow! {:flow-id flow-id
-                         :actions [action-id]
+        (register-flow! {:flow-id       flow-id
+                         :actions       [action-id]
                          :current-scene (:current-scene action)
-                         :type    :all
-                         :tags    (get-action-tags action)})
+                         :type          :all
+                         :tags          (get-action-tags action)})
         (assoc action :flow-id flow-id :action-id action-id)))))
 
 (def with-flow
@@ -230,9 +255,9 @@
   [db {:keys [unique-tag] :as action}]
   (when (flow-not-registered? unique-tag)
     (let [{:keys [type return-immediately flow-id tags] :as action} (as-> action a
-                                                                         (assoc a :current-scene (:current-scene db))
-                                                                         (->with-flow a)
-                                                                         (->with-vars db a))
+                                                                          (assoc a :current-scene (:current-scene db))
+                                                                          (->with-flow a)
+                                                                          (->with-vars db a))
           handler (get @executors (keyword type))]
       (when tags
         (register-flow-tags! flow-id tags))
@@ -244,8 +269,8 @@
   ::execute-action
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-             (execute-action db action)
-             {}))
+    (execute-action db action)
+    {}))
 
 (defn remove-tag
   [flow tag]
@@ -348,8 +373,7 @@
 
 (defn execute-remove-flow-tag!
   [{:keys [flow-id tag] :as action}]
-  (let [
-        flow-ancestors (->> (flow-ancestors flow-id)
+  (let [flow-ancestors (->> (flow-ancestors flow-id)
                             (map #(remove-tag % tag))
                             (map (juxt :flow-id identity))
                             (into {}))]
@@ -380,12 +404,33 @@
 (re-frame/reg-event-fx
   ::execute-remove-flows
   (fn [{:keys [db]} [_ action]]
+    "Execute `remove-flows` action - terminate execution of actions marked with passed tag.
+    Action supposed to be terminated should contain parameter `:tags`:
+    {:type     'action',
+     :tags     ['instruction']
+     :from-var [{:var-name 'current-concept', :var-property 'game-voice-action'}]}
+
+    Action params:
+    :flow-tag - tag name.
+
+    Example:
+    {:type     'remove-flows',
+     :flow-tag 'instruction'}"
     (execute-remove-flows! action)
     {}))
 
 (re-frame/reg-event-fx
   ::execute-remove-flow-tag
   (fn [{:keys [db]} [_ action]]
+    "Execute `remove-flow-tag` action - remove a tag from an action.
+    Can be useful in case of `:unique-tag` parameter using. Only one action with specific `:unique-tag` can be run at the same time.
+
+    Action params:
+    :tag - tag name.
+
+    Example:
+    {:type 'remove-flow-tag',
+     :tag  'clickable'}"
     (execute-remove-flow-tag! action)
     {}))
 
@@ -399,10 +444,18 @@
   ::execute-sequence
   [event-as-action with-vars]
   (fn-traced [{:keys [db]} action]
-             (let [data (->> (:data action)
-                             (map #(get-action % db action))
-                             (into []))]
-               {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
+    "Execute `sequence` action - run a sequence of actions defined by their names.
+
+    Action params:
+    :data - actions names vector.
+
+    Example:
+    {:type        'sequence',
+     :data        ['start-activity' 'clear-instruction' 'reset-tools' 'init-current-tool']}"
+    (let [data (->> (:data action)
+                    (map #(get-action % db action))
+                    (into []))]
+      {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
 (defn execute-sequence-data!
   [db action]
@@ -439,8 +492,17 @@
   ::execute-sequence-data
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-             (execute-sequence-data! db action)
-             {}))
+    "Execute `sequence-data` action - run a sequence of actions defined by their data.
+
+    Action params:
+    :data - actions data vector.
+
+    Example:
+    {:type 'sequence-data',
+     :data [{:type 'animation', :id 'volley_call', :target 'vera'}
+            {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
+    (execute-sequence-data! db action)
+    {}))
 
 (defn execute-parallel!
   [db action]
@@ -470,13 +532,22 @@
   ::execute-parallel
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-             (execute-parallel! db action)
-             {}))
+    "Execute `parallel` action - run in parallel several actions defined by their data.
+
+    Action params:
+    :data - actions data vector.
+
+    Example:
+    {:type 'parallel',
+     :data [{:type 'state', :id 'hidden', :target 'letter-trace'}
+            {:type 'state', :id 'hidden', :target 'letter-tutorial-path'}]}"
+    (execute-parallel! db action)
+    {}))
 
 (defn execute-callback!
   [db {:keys [callback] :as action}]
   (let [action (-> action
-                   (assoc :current-scene (:current-scene db ))
+                   (assoc :current-scene (:current-scene db))
                    (->with-flow))]
     (when-not (nil? callback)
       (callback))
@@ -486,6 +557,15 @@
   ::execute-callback
   [event-as-action]
   (fn [{:keys [db]} action]
+    "Execute `callback` action - call external function.
+    This action is used when it is generated from cljs code.
+
+    Action params:
+    :callback - a function to be called.
+
+    Example:
+    {:type     'callback'
+     :callback [object Function]}"
     (execute-callback! db action)
     {}))
 
@@ -493,6 +573,11 @@
   ::execute-hide-skip
   [event-as-action with-flow]
   (fn [{:keys [db]} action]
+    "Execute `hide-skip` action - hide user interface button for actions flow skipping.
+    A technical function used for `:skippable` action parameter.
+
+    Example:
+    {:type 'hide-skip'}"
     (dispatch-success-fn action)
     {:dispatch [::overlays/hide-skip-menu]}))
 

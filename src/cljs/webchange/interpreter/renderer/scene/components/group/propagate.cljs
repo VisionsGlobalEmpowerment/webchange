@@ -14,6 +14,16 @@
 (re-frame/reg-event-fx
   ::execute-propagate-objects
   (fn [{:keys [db]} [_ {object-to-propagate :id lesson-name :from :as action}]]
+    "Execute `propagate-objects` action - propagate component with concepts data.
+
+    Action params:
+    :id - name of 'propagate' component.
+    :from - dataset name.
+
+    Example:
+    {:type 'propagate-objects'
+     :id   'cards'
+     :from 'concepts-all'}"
     (let [scene-id (:current-scene db)
           object-data (get-in db [:scenes scene-id :objects (keyword object-to-propagate)])
           lesson-items (lessons/lesson-dataset-items db lesson-name)
