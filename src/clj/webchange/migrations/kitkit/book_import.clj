@@ -5,7 +5,6 @@
             [webchange.db.core :refer [*db*] :as db]
             [webchange.course.core :as core]
             [camel-snake-kebab.core :refer [->kebab-case]]
-            [webchange.migrations.kitkit.book-horizontal-page :as horizontal-template]
             [webchange.migrations.kitkit.book-vertical :as vertical-template]
             [webchange.migrations.kitkit.book-vertical-page :as book-vertical-page]
             [webchange.migrations.kitkit.book-horizontal-page :as book-horizontal-page]
