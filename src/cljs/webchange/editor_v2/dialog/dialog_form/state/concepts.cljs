@@ -3,8 +3,9 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.concepts-utils :refer [get-concepts-audio-assets]]
-        [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
+    [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as actions]
+    [webchange.editor-v2.dialog.dialog-form.state.concepts-utils :as utils]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as au]))
 
 (defn current-concept
@@ -16,52 +17,19 @@
   [db]
   (get-in db (path-to-db [:current-dataset-concept])))
 
-(defn process-action
-  [action]
-  (if action
-    (case (:type action)
-      "action" (get-in action [:from-var 0 :var-property])
-      "parallel" (map (fn [value] (process-action value)) (:data action) )
-      "sequence-data" (map (fn [value] (process-action value)) (:data action))
-      []) []))
-
-(defn exctract-concept-vars [actions]
-  (map keyword (filter #(not-empty %) (flatten (map (fn [[name action]] (process-action action)) actions)))))
-
 (defn get-schema-template-by-name [db var-name]
-  (first (filter (fn [field] (= (keyword (:name field)) var-name))  (get-in (current-dataset-concept db) [:scheme :fields]))))
-
-
-
-(defn get-scene-action-vars
-  [db]
-  (exctract-concept-vars (get-in db (path-to-db (concat [:scene :data] [:actions])))))
+  (first (filter (fn [field] (= (keyword (:name field)) var-name)) (get-in (current-dataset-concept db) [:scheme :fields]))))
 
 ;; Subs
-(re-frame/reg-sub
-  ::incomplete-concepts
-  (fn [db]
-    (let [concepts (vals (get-in db (path-to-db [:concepts :data] )))
-          actions-vars (get-scene-action-vars db)
-          incomplete (map (fn [concept]
-                            (if (not= 0 (count (clojure.set/difference (set actions-vars) (set (keys (:data concept))))))
-                              (:name concept)
-                              )
-                            ) concepts)
-          ]
-      (filter not-empty incomplete)
-      )))
 
 (re-frame/reg-event-fx
   ::add-concepts-schema-fields
   (fn [{:keys [db]} [_ data]]
-    (let [
-          current-dataset-concept-path (path-to-db [:current-dataset-concept])
+    (let [current-dataset-concept-path (path-to-db [:current-dataset-concept])
           dataset-concept (get-in db current-dataset-concept-path)
           fields (get-in dataset-concept [:scheme :fields])
           fields (concat fields [data])
-          dataset-concept (assoc-in dataset-concept [:scheme :fields] fields)
-          ]
+          dataset-concept (assoc-in dataset-concept [:scheme :fields] fields)]
       {:db (assoc-in db current-dataset-concept-path dataset-concept)})))
 
 (re-frame/reg-event-fx
@@ -82,11 +50,11 @@
     (let [concepts (->>
                      (get-in db (path-to-db [:concepts :data]))
                      (into {} (map (fn [[id concept]]
-                          [id  (assoc-in concept [:data] (dissoc (:data concept) (keyword var-name)))]))))
+                                     [id (assoc-in concept [:data] (dissoc (:data concept) (keyword var-name)))]))))
           current-list (translator-form.concepts/edited-concepts db)
           new-list (map (fn [[id concept]] id) concepts)
           list-total (concat current-list new-list)]
-      {:db (assoc-in db (path-to-db [:concepts :data]) concepts)
+      {:db         (assoc-in db (path-to-db [:concepts :data]) concepts)
        :dispatch-n (list [::translator-form.concepts/set-edited-concepts list-total])})))
 
 (re-frame/reg-event-fx
@@ -95,16 +63,16 @@
     (let [current-concept (current-concept db)
           action-data (get-in current-concept (concat [:data] action-path))
           updated-data (merge action-data data-patch)]
-      {:db (assoc-in db (path-to-db (concat [:concepts :data] [(:id current-concept) :data] action-path)) updated-data)
+      {:db         (assoc-in db (path-to-db (concat [:concepts :data] [(:id current-concept) :data] action-path)) updated-data)
        :dispatch-n (list [::translator-form.concepts/add-edited-concepts (:id current-concept)])})))
 
 (re-frame/reg-event-fx
   ::prepare-concept
   (fn [{:keys [db]} [_ concept-id]]
-    (let [actions-vars (get-scene-action-vars db)
-          concept-vars (keys (get-in db (path-to-db (concat [:concepts :data] [concept-id :data] ))))
+    (let [actions-vars (utils/get-scene-action-vars db)
+          concept-vars (keys (get-in db (path-to-db (concat [:concepts :data] [concept-id :data]))))
           to-add (clojure.set/difference (set actions-vars) (set concept-vars))]
-      {:dispatch-n (vec (map (fn [name] [::update-current-concept [name] (:template (get-schema-template-by-name db name))]) to-add) )})))
+      {:dispatch-n (vec (map (fn [name] [::update-current-concept [name] (:template (get-schema-template-by-name db name))]) to-add))})))
 
 (re-frame/reg-event-fx
   ::add-new-phrase-in-concept-action

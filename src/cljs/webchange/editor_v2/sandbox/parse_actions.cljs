@@ -3,7 +3,10 @@
 (defn- props-overlap?
   [data props-filter]
   (every? (fn [[prop-name possible-values]]
-            (some #{(get data prop-name)} possible-values))
+            (let [prop-value (get data prop-name)]
+              (if (fn? possible-values)
+                (possible-values prop-value)
+                (some #{prop-value} possible-values))))
           props-filter))
 
 (defn- get-case-action-child-nodes

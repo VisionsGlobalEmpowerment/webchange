@@ -7,17 +7,24 @@
   (fn [db]
     (get-in db [:editor :course-datasets])))
 
+(defn dataset
+  [db id]
+  (->> (get-in db [:editor :course-datasets])
+         (filter #(= id (:id %)))
+         first))
+
 (re-frame/reg-sub
   ::dataset
   (fn [db [_ id]]
-    (->> (get-in db [:editor :course-datasets])
-         (filter #(= id (:id %)))
-         first)))
+    (dataset db id)))
+
+(defn dataset-items
+  [db]
+  (get-in db [:editor :course-dataset-items]))
 
 (re-frame/reg-sub
   ::dataset-items
-  (fn [db]
-    (get-in db [:editor :course-dataset-items])))
+  dataset-items)
 
 (defn get-item
   [db id]

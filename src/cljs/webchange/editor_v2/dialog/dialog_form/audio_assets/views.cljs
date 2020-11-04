@@ -1,11 +1,16 @@
 (ns webchange.editor-v2.dialog.dialog-form.audio-assets.views
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
+    [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views :refer [add-audio-form]]
     [webchange.editor-v2.translator.translator-form.audio-assets.audios-filter.views :refer [audios-filter]]
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.dialog.dialog-form.audio-assets.audios-list.views :refer [audios-list]]
-    [webchange.editor-v2.dialog.dialog-form.state.audios :as dialog-form.audios]))
+    [webchange.editor-v2.dialog.dialog-form.state.audios :as dialog-form.audios]
+    [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn- filter-audios
   [filter-params audios-list]
@@ -18,14 +23,27 @@
                     filter-params))
           audios-list))
 
+(defn- warning-block
+  []
+  (let [current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])]
+    (when-not (validate/phrase-audio-defined? current-phrase-action)
+      [:div {:style {:display     "flex"
+                     :align-items "center"}}
+       [warning-icon]
+       [ui/typography {:style {:color       (get-in-theme [:palette :warning :default])
+                               :font-size   "14px"
+                               :margin-left "8px"}}
+        "Audio region is not selected"]])))
+
 (defn audios-block
   []
   (r/with-let [current-filter (r/atom nil)]
-              (let [audios (->> @(re-frame/subscribe [::dialog-form.audios/audios-list])
-                                (filter-audios @current-filter)
-                                (sort-by :date >))
-                    handle-filter-change (fn [filter] (reset! current-filter filter))]
-                [:div
-                 [audios-filter {:on-change handle-filter-change}]
-                 [audios-list {:audios audios}]
-                 [add-audio-form]])))
+    (let [audios (->> @(re-frame/subscribe [::dialog-form.audios/audios-list])
+                      (filter-audios @current-filter)
+                      (sort-by :date >))
+          handle-filter-change (fn [filter] (reset! current-filter filter))]
+      [:div
+       [warning-block]
+       [audios-filter {:on-change handle-filter-change}]
+       [audios-list {:audios audios}]
+       [add-audio-form]])))

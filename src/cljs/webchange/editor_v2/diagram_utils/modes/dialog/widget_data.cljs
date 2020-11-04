@@ -2,6 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.editor-v2.creation-progress.translation-progress.validate-action :refer [validate-phrase-action]]
+    [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]
     [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-widget.colors :refer [colors]]
     [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]
     [webchange.editor-v2.diagram-utils.modes.dialog.widget-menu :refer [menu]]
@@ -11,7 +13,7 @@
     [webchange.editor-v2.diagram-utils.modes.translation.widget-loop-icon :refer [loop-icon]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node? get-node-type]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.dialog.dialog-form.state.actions :refer [get-inner-action]]))
+    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]))
 
 (defn get-node-speech
   [node-data]
@@ -65,7 +67,8 @@
 
 (defn- wrapper
   [{:keys [node-data]}]
-  (let [this (r/current-component)
+  (let [valid-node? (validate-phrase-action (:data node-data))
+        this (r/current-component)
         styles (get-styles node-data)]
     (into [:div {:on-click #(re-frame/dispatch [::translator-form.actions/set-current-phrase-action node-data])
                  :style    (merge custom-wrapper/node-style
@@ -75,7 +78,10 @@
            [config-button {:node-data       node-data
                            :get-target-node get-target-node
                            :styles          {:config-button {:top    nil
-                                                             :bottom 0}}}]]
+                                                             :bottom 0}}}]
+           (when-not valid-node?
+             [warning-icon {:styles {:main {:position "absolute"
+                                            :bottom   "2px"}}}])]
           (r/children this))))
 
 (defn get-widget-data

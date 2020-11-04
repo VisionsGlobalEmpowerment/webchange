@@ -6,7 +6,8 @@
     [webchange.editor-v2.translator.state.window :as translator.window]
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.translator.text.views-text-chunks-editor :as translator.text]))
+    [webchange.editor-v2.translator.text.views-text-chunks-editor :as translator.text]
+    [webchange.subs :as subs]))
 
 (re-frame/reg-event-fx
   ::init-editor
@@ -18,8 +19,8 @@
 (re-frame/reg-event-fx
   ::load-lesson-sets
   (fn [{:keys [db]} [_ course-id]]
-    {:db (-> db
-             (assoc-in [:loading :lesson-sets] true))
+    {:db         (-> db
+                     (assoc-in [:loading :lesson-sets] true))
      :http-xhrio {:method          :get
                   :uri             (str "/api/courses/" course-id "/lesson-sets")
                   :format          (json-request-format)
@@ -30,10 +31,10 @@
 (re-frame/reg-event-fx
   ::load-lesson-sets-success
   (fn [{:keys [db]} [_ result]]
-    {:db (-> db
-             (assoc-in [:editor :course-datasets] (:datasets result))
-             (assoc-in [:editor :course-dataset-items] (:items result))
-             (assoc-in [:editor :course-lesson-sets] (:lesson-sets result)))
+    {:db         (-> db
+                     (assoc-in [:editor :course-datasets] (:datasets result))
+                     (assoc-in [:editor :course-dataset-items] (:items result))
+                     (assoc-in [:editor :course-lesson-sets] (:lesson-sets result)))
      :dispatch-n (list [:complete-request :lesson-sets])}))
 
 (re-frame/reg-event-fx
@@ -51,8 +52,8 @@
 (re-frame/reg-event-fx
   ::load-course-info
   (fn [{:keys [db]} [_ course-slug]]
-    {:db (-> db
-             (assoc-in [:loading :course-info] true))
+    {:db         (-> db
+                     (assoc-in [:loading :course-info] true))
      :http-xhrio {:method          :get
                   :uri             (str "/api/courses/" course-slug "/info")
                   :format          (json-request-format)
@@ -63,18 +64,18 @@
 (re-frame/reg-event-fx
   ::load-course-info-success
   (fn [{:keys [db]} [_ result]]
-    {:db  (assoc-in db [:editor :course-info] result)
+    {:db         (assoc-in db [:editor :course-info] result)
      :dispatch-n (list [:complete-request :course-info])}))
 
 (re-frame/reg-event-fx
   ::edit-course-info
   (fn [{:keys [db]} [_ data]]
     (let [course-id (get-in db [:editor :course-info :id])]
-      {:db (-> db
-               (assoc-in [:loading :edit-course-info] true))
+      {:db         (-> db
+                       (assoc-in [:loading :edit-course-info] true))
        :http-xhrio {:method          :put
                     :uri             (str "/api/courses/" course-id "/info")
-                    :params            data
+                    :params          data
                     :format          (json-request-format)
                     :response-format (json-response-format {:keywords? true})
                     :on-success      [::edit-course-info-success]
@@ -90,3 +91,13 @@
   (fn [{:keys [_]} [_ action-node]]
     {:dispatch-n (list [::translator-form.actions/set-current-dialog-action action-node]
                        [::dialog.window/open])}))
+
+(re-frame/reg-event-fx
+  ::show-translator-form-by-id
+  (fn [{:keys [db]} [_ action-id]]
+    (let [action-data (subs/current-scene-action db action-id)
+          node-data {:data action-data
+                     :path [action-id]}]
+      (if (= "dialog" (get-in node-data [:data :editor-type]))
+        {:dispatch [::show-dialog-translator-form node-data]}
+        {:dispatch [::show-translator-form node-data]}))))

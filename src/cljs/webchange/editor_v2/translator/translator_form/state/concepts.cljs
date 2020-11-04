@@ -1,6 +1,8 @@
 (ns webchange.editor-v2.translator.translator-form.state.concepts
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
+    [webchange.editor-v2.dialog.dialog-form.state.concepts-utils :as concepts-utils]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.concepts-utils :refer [get-concepts-audio-assets]]
@@ -84,12 +86,26 @@
   [db]
   (-> db concepts-data get-concepts-list))
 
+(defn validate-concepts
+  [concepts-list actions-vars]
+  (map (fn [concept]
+         (let [concept-complete? (every? (fn [field-name]
+                                           (let [field-data (get-in concept [:data (keyword field-name)])]
+                                             (if (= "action" (:type field-data))
+                                               (validate/validate-phrase-action field-data)
+                                               (some? field-data))))
+                                         actions-vars)]
+           (assoc concept :complete? concept-complete?)))
+       concepts-list))
+
 (re-frame/reg-sub
   ::concepts-list
   (fn []
-    [(re-frame/subscribe [::concepts-data])])
-  (fn [[concepts-data]]
-    (get-concepts-list concepts-data)))
+    [(re-frame/subscribe [::concepts-data])
+     (re-frame/subscribe [::concepts-utils/actions-vars])])
+  (fn [[concepts-data actions-vars]]
+    (-> (get-concepts-list concepts-data)
+        (validate-concepts actions-vars))))
 
 (defn concepts-audios
   [db]
@@ -142,5 +158,5 @@
     (let [current-concept (current-concept db)
           action-data (get-in current-concept (concat [:data] action-path))
           updated-data (merge action-data data-patch)]
-      {:db (assoc-in db (path-to-db (concat [:concepts :data] [(:id current-concept) :data] action-path)) updated-data)
+      {:db         (assoc-in db (path-to-db (concat [:concepts :data] [(:id current-concept) :data] action-path)) updated-data)
        :dispatch-n (list [::add-edited-concepts (:id current-concept)])})))
