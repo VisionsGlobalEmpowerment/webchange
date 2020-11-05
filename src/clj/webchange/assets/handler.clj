@@ -109,5 +109,5 @@
              (-> (fn [request]
                    (-> request :multipart-params upload-asset-by-path response))
                  (wrap-multipart-params)
-                 (sign/wrap-api-with-signature)
+                 (sign/wrap-api-with-signature true)
                )))
