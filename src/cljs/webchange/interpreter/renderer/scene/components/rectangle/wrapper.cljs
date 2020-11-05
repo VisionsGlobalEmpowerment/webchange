@@ -3,7 +3,8 @@
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
 
 (defn wrap
-  [type name object]
+  [type name object sprite]
   (create-wrapper {:name name
                    :type type
+                   :set-fill #(aset sprite "tint" %)
                    :object object}))

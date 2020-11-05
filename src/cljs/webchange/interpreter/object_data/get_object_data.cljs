@@ -69,6 +69,10 @@
                                 (with-group-params)
                                 (merge {:object-name (keyword name)})
                                 (filter-extra-props []))
+                      :rectangle (-> object
+                                (with-group-params)
+                                (merge {:object-name (keyword name)})
+                                (filter-extra-props []))
                       :carousel (-> object
                                     (merge {:object-name (keyword name)})
                                     (filter-extra-props []))

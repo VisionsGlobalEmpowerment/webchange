@@ -59,7 +59,7 @@
   :border-color - color of border
   :shadow-color - color of shadow. E.g. 0x75016e
   :shadow-distance - width of shadow."
-  [{:keys [parent type object-name] :as props}]
+  [{:keys [parent type object-name fill] :as props}]
   (let [mask (create-mask props)
         sprite (create-sprite props)
         container (create-container props)]
@@ -69,4 +69,4 @@
     (.addChild container mask)
     (.addChild parent container)
 
-    (wrap type object-name container)))
+    (wrap type object-name container sprite)))

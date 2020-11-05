@@ -10,6 +10,7 @@
     [webchange.templates.library.volleyball]
     [webchange.templates.library.swings]
     [webchange.templates.library.book]
+    [webchange.templates.library.i-spy]
     [webchange.templates.library.traffic-light]
     [webchange.templates.library.painting-tablet]
     [webchange.templates.library.park-poem]
