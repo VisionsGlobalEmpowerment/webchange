@@ -8,9 +8,25 @@
 (deftest test-get-action-children__with-id
   (let [scene-data source/data]
     (let [actual-result (scene-data->actions-tracks scene-data)
-          expected-result {"Intro"   [[:senora-vaca-audio-1] [:senora-vaca-audio-2]]
-                           "Etc"     [[:senora-vaca-audio-touch-third-box] [:mari-finish] [:senora-vaca-audio-touch-second-box]]
-                           "Concept" [[:concept-chant] [:vaca-goodbye-var] [:concept-intro]]}]
+          expected-result [{:title "Etc"
+                            :nodes [{:type      "dialog"
+                                     :action-id :senora-vaca-audio-touch-third-box}
+                                    {:type      "dialog"
+                                     :action-id :mari-finish}
+                                    {:type      "dialog"
+                                     :action-id :senora-vaca-audio-touch-second-box}]}
+                           {:title "Concept"
+                            :nodes [{:type      "dialog"
+                                     :action-id :concept-chant}
+                                    {:type      "dialog"
+                                     :action-id :vaca-goodbye-var}
+                                    {:type      "dialog"
+                                     :action-id :concept-intro}]}
+                           {:title "Intro"
+                            :nodes [{:type      "dialog"
+                                     :action-id :senora-vaca-audio-1}
+                                    {:type      "dialog"
+                                     :action-id :senora-vaca-audio-2}]}]]
       (testing "Action tracks can be retrieved (order should not matter)"
         (when-not (= actual-result expected-result)
           (print-maps-comparison actual-result expected-result))
