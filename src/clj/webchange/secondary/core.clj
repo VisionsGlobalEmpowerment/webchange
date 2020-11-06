@@ -55,7 +55,8 @@
 (defn update-users! [users]
   (let [users (prepare-users users)]
     (doseq [user users]
-      (db/create-or-update-user! (transform-keys ->snake_case_keyword user)))))
+      (db/create-or-update-user! (transform-keys ->snake_case_keyword user)))
+    (db/reset-users-seq!)))
 
 (defn update-teachers!
   [teachers]
@@ -75,12 +76,15 @@
   [classes]
   (let [classes (prepare-classes classes)]
     (doseq [class classes]
-      (db/create-or-update-class! (transform-keys ->snake_case_keyword class)))))
+      (db/create-or-update-class! (transform-keys ->snake_case_keyword class)))
+    (db/reset-classes-seq!)
+    ))
 
 (defn update-courses!
   [courses]
   (doseq [course courses]
-    (db/create-or-update-courses! (transform-keys ->snake_case_keyword course))))
+    (db/create-or-update-courses! (transform-keys ->snake_case_keyword course)))
+  (db/reset-courses-seq!))
 
 (defn update-course-stat!
   [course-stats]
@@ -90,12 +94,15 @@
 (defn update-course-versions!
   [course-versions]
   (doseq [version course-versions]
-    (-> version
-        (assoc :created-at (dt/iso-str2date-time (:created-at version)))
-        (#(transform-keys ->snake_case_keyword %))
-        (db/create-or-update-course-versions!)
-        )
-    ))
+    (let [current-latest (db/get-latest-course-version {:course_id (:course-id version)})
+          version (-> version
+              (assoc :created-at (dt/iso-str2date-time (:created-at version))))]
+      (if-not (.equals (:data version) (:data current-latest))
+        (-> version
+            (#(transform-keys ->snake_case_keyword %))
+            (db/save-course!)))))
+  (db/reset-course-versions-seq!))
+
 
 (defn update-progress!
   [course-progresses]
@@ -116,32 +123,39 @@
 (defn update-dataset!
   [datasets]
   (doseq [dataset datasets]
-    (db/create-or-update-dataset! (transform-keys ->snake_case_keyword dataset))))
+    (db/create-or-update-dataset! (transform-keys ->snake_case_keyword dataset)))
+  (db/reset-dataset-seq!))
 
 (defn update-dataset-item-with-id!
   [dataset-items]
   (doseq [dataset-item dataset-items]
-    (db/create-or-update-dataset-item-with-id! (transform-keys ->snake_case_keyword dataset-item))))
+    (db/create-or-update-dataset-item-with-id! (transform-keys ->snake_case_keyword dataset-item))
+    (db/reset-dataset-items-seq!)))
 
 (defn update-lesson-set!
   [lesson-sets]
   (doseq [lesson-set lesson-sets]
-    (db/create-or-update-lesson-set! (transform-keys ->snake_case_keyword lesson-set))))
+    (db/create-or-update-lesson-set! (transform-keys ->snake_case_keyword lesson-set)))
+  (db/reset-lesson-sets-seq!))
 
 (defn update-scene!
   [scenes]
   (doseq [scene scenes]
-    (db/create-or-update-scene! (transform-keys ->snake_case_keyword scene))))
-
+    (db/create-or-update-scene! (transform-keys ->snake_case_keyword scene)))
+  (db/reset-scenes-seq!))
 
 (defn update-scene-versions!
   [scene-versions]
   (doseq [scene-version scene-versions]
-    (-> scene-version
-        (assoc :created-at (dt/iso-str2date-time (:created-at scene-version)))
-        (#(db-core/transform-keys-one-level ->snake_case_keyword %))
-        (db/create-or-update-scene-version!)
-        )))
+    (let [current-latest (db/get-latest-scene-version {:scene_id (:scene-id scene-version)})
+          scene-version (-> scene-version
+                      (assoc :created-at (dt/iso-str2date-time (:created-at scene-version))))]
+      (if-not (= (:data scene-version) (:data current-latest))
+        (-> scene-version
+            (#(transform-keys ->snake_case_keyword %))
+            (assoc :data (:data scene-version))
+            (db/save-scene!))))
+    (db/reset-scene-versions-seq!)))
 
 (defn update-activity-stats!
   [activity-stats]
@@ -221,9 +235,7 @@
   (mapv #(let [created-at (dt/date-time2iso-str (:created-at %))]
            (-> %
                (assoc :created-at created-at)))
-        (db/get-course-versions-by-school)
-        )
-  )
+        (db/get-course-versions-by-school)))
 
 (defn get-course-events-by-school [id]
   (mapv #(let [created-at (dt/date-time2iso-str (:created-at %))]
@@ -409,8 +421,7 @@
 (defn delete-not-in-guid-list [guids entries extract-guid delete-entry]
   (doseq [entry entries]
     (if-not (contains? (set guids) (extract-guid entry))
-      (delete-entry entry)
-      nil)))
+        (delete-entry entry) nil)))
 
 (defn delete-teacher [teacher]
   (db/delete-teacher-by-id! {:id (:id teacher)}))
@@ -470,6 +481,16 @@
         (delete-not-in-guid-list activity-stats-guid activity-stats guid/guid-from-activity-stats delete-activity-stats)
         ))))
 
+(defn delete-course-by-id!
+  [{:keys [id]}]
+  (db/delete-course-version-by-course-id! {:course_id id})
+  (db/delete-course-by-id! {:id id}))
+
+(defn delete-scene-by-id!
+  [{:keys [id]}]
+  (db/delete-scene-version-by-scene-id! {:scene_id id})
+  (db/delete-scene-by-id! {:id id}))
+
 (defn import-primary-data! [data]
   (if-let [school (:school data)]
     (update-school! school))
@@ -482,22 +503,18 @@
   (if-let [dataset-items (:dataset-items data)]
     (do
       (db/clear-dataset-items!)
-      (update-dataset-item-with-id! dataset-items)
-      ))
+      (update-dataset-item-with-id! dataset-items)))
   (if-let [lesson-sets (:lesson-sets data)]
     (update-lesson-set! lesson-sets))
   (if-let [scenes (:scenes data)]
     (update-scene! scenes))
   (if-let [scene-versions (:scene-versions data)]
     (update-scene-versions! scene-versions))
-  (let [
-        courses (db/get-courses)
-        course-versions (get-course-versions)
+  (let [courses (db/get-courses)
         datasets (db/get-datasets)
         dataset-items (db/get-dataset-items-by-school)
         lesson-sets (db/get-lesson-sets)
         scenes (db/get-scenes)
-        scene-versions (get-scene-versions)
 
         courses-guid (guid/guids-from-entries (:courses data) guid/guid-is-id)
         course-versions-guid (guid/guids-from-entries (:course-versions data) guid/guid-is-id)
@@ -505,15 +522,14 @@
         dataset-items-guid (guid/guids-from-entries (:dataset-items data) guid/guid-is-id)
         lesson-sets-guid (guid/guids-from-entries (:lesson-sets data) guid/guid-is-id)
         scenes-guid (guid/guids-from-entries (:scenes data) guid/guid-is-id)
-        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)
-        ]
+        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)]
     (delete-not-in-guid-list lesson-sets-guid lesson-sets :id db/delete-lesson-set-by-id!)
     (delete-not-in-guid-list dataset-items-guid dataset-items :id db/delete-dataset-item-by-id!)
     (delete-not-in-guid-list datasets-guid datasets :id db/delete-dataset-by-id!)
-    (delete-not-in-guid-list scene-versions-guid scene-versions :id db/delete-scene-version-by-id!)
-    (delete-not-in-guid-list scenes-guid scenes :id db/delete-scene-by-id!)
-    (delete-not-in-guid-list course-versions-guid course-versions :id db/delete-course-version-by-id!)
-    (delete-not-in-guid-list courses-guid courses :id db/delete-course-by-id!)
+    ;(delete-not-in-guid-list scene-versions-guid scene-versions :id db/delete-scene-version-by-id!)
+    (delete-not-in-guid-list scenes-guid scenes :id delete-scene-by-id!)
+    ;(delete-not-in-guid-list course-versions-guid course-versions :id db/delete-course-version-by-id!)
+    (delete-not-in-guid-list courses-guid courses :id delete-course-by-id!)
     )
   )
 
@@ -574,11 +590,13 @@
         ]
     {:remove remove :download download}))
 
-(defn update-assets! []
+(defn update-assets!
+  ([] (update-assets! true))
+  ([remove-files?]
   (let [{remove :remove download :download} (get-difference-data)]
-    (doseq [item remove]
-      (assets/remove-file-with-hash! item))
-    (download-files download)))
+    (if remove-files? (doseq [item remove]
+      (assets/remove-file-with-hash! item)))
+    (download-files download))))
 
 (defn calc-upload-assets []
   (let [{remove :remove download :download} (get-difference-data)]
@@ -590,6 +608,4 @@
     (client/with-additional-middleware [#'sign/wrap-apikey]
                                        (client/post url {:headers   {:api-key (:api-key env)}
                                                          :multipart [{:name "target-path" :content path}
-                                                                     {:name "file" :content (clojure.java.io/file file-path)}]})
-                                       )
-    ))
+                                                                     {:name "file" :content (clojure.java.io/file file-path)}]}))))

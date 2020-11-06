@@ -7,6 +7,9 @@ ON CONFLICT ON CONSTRAINT users_pkey
 DO UPDATE SET first_name=:first_name, last_name=:last_name, email=:email, password=:password,
 active=:active, created_at=:created_at, last_login=:last_login WHERE users.guid=:guid
 
+-- :name reset-users-seq! :? :1
+SELECT pg_catalog.setval('public.users_id_seq', (SELECT MAX(id) FROM public.users), true);
+
 -- :name create-or-update-user-by-guid! :! :n
 -- :doc creates a new user record
 INSERT INTO users
@@ -46,6 +49,9 @@ VALUES (:id, :name, :school_id, :guid)
 ON CONFLICT ON CONSTRAINT classes_pkey
 DO UPDATE SET name=:name, school_id=:school_id WHERE classes.id=:id
 
+-- :name reset-classes-seq! :? :1
+SELECT pg_catalog.setval('public.classes_id_seq', (SELECT MAX(id) FROM public.classes), true);
+
 -- :name create-or-update-class-by-guid! :! :n
 -- :doc creates a new student record
 INSERT INTO classes
@@ -63,6 +69,9 @@ DO UPDATE SET name=:name, slug=:slug, lang=:lang, image_src=:image_src, status=:
 owner_id=:owner_id, website_user_id=:website_user_id
 WHERE courses.id=:id
 
+-- :name reset-courses-seq! :? :1
+SELECT pg_catalog.setval('public.courses_id_seq', (SELECT MAX(id) FROM public.courses), true);
+
 -- :name create-or-update-course-versions! :! :n
 -- :doc creates a new student record
 INSERT INTO course_versions
@@ -71,6 +80,9 @@ VALUES (:id, :course_id, :data, :owner_id, :created_at)
 ON CONFLICT ON CONSTRAINT course_versions_pkey
 DO UPDATE SET course_id=:course_id, data=:data,
 owner_id=:owner_id, created_at=:created_at WHERE course_versions.id=:id
+
+-- :name reset-course-versions-seq! :? :1
+SELECT pg_catalog.setval('public.course_versions_id_seq', (SELECT MAX(id) FROM public.course_versions), true);
 
 -- :name get-course-versions-by-school :? :*
 -- :doc retrieve course version by id
@@ -119,6 +131,10 @@ ON CONFLICT ON CONSTRAINT datasets_pkey
 DO UPDATE SET course_id=:course_id, name=:name, scheme=:scheme
 WHERE datasets.id=:id
 
+-- :name reset-dataset-seq! :? :1
+-- :doc retrieves a user record given the id
+SELECT pg_catalog.setval('public.datasets_id_seq', (SELECT MAX(id) FROM public.datasets), true);
+
 -- :name clear-dataset-items! :! :<!
 -- :doc truncate table
 TRUNCATE TABLE dataset_items;
@@ -130,6 +146,9 @@ ON CONFLICT ON CONSTRAINT dataset_items_pkey
 DO UPDATE SET dataset_id=:dataset_id, name=:name, data=:data
 WHERE dataset_items.id=:id
 
+-- :name reset-dataset-items-seq! :? :1
+SELECT pg_catalog.setval('public.dataset_items_id_seq', (SELECT MAX(id) FROM public.dataset_items), true);
+
 -- :name create-or-update-lesson-set! :! :n
 -- :doc creates a new lesson set item record
 INSERT INTO lesson_sets
@@ -139,12 +158,18 @@ ON CONFLICT ON CONSTRAINT lesson_sets_pkey
 DO UPDATE SET dataset_id=:dataset_id, name=:name, data=:data
 WHERE lesson_sets.id=:id
 
+-- :name reset-lesson-sets-seq! :? :1
+SELECT pg_catalog.setval('public.lesson_sets_id_seq', (SELECT MAX(id) FROM public.lesson_sets), true);
+
 -- :name create-or-update-scene! :! :n
 -- :doc creates a new scene record
 INSERT INTO scenes (id, course_id, name) VALUES (:id, :course_id, :name)
 ON CONFLICT ON CONSTRAINT scenes_pkey
 DO UPDATE SET course_id=:course_id, name=:name
 WHERE scenes.id=:id
+
+-- :name reset-scenes-seq! :? :1
+SELECT pg_catalog.setval('public.scenes_id_seq', (SELECT MAX(id) FROM public.scenes), true);
 
 -- :name create-or-update-scene-version! :! :n
 -- :doc creates a new course version record
@@ -154,6 +179,9 @@ VALUES (:id, :scene_id, :data, :owner_id, :created_at)
 ON CONFLICT ON CONSTRAINT scene_versions_pkey
 DO UPDATE SET scene_id=:scene_id, data=:data, owner_id=:owner_id, created_at=:created_at
 WHERE scene_versions.id=:id
+
+-- :name reset-scene-versions-seq! :? :1
+SELECT pg_catalog.setval('public.scene_versions_id_seq', (SELECT MAX(id) FROM public.scene_versions), true);
 
 -- :name get-scene-versions-by-school :? :*
 -- :doc retrieve scene version by id
@@ -232,6 +260,9 @@ WHERE id = :id
 -- :doc deletes teacher by id
 DELETE from teachers WHERE id=:id;
 
+-- :name delete-course-version-by-course-id! :! :n
+-- :doc deletes course versions by course id
+DELETE from course_versions WHERE course_id=:course_id;
 
 -- :name delete-course-by-id! :! :n
 -- :doc deletes courses by id
@@ -261,3 +292,6 @@ DELETE from scenes WHERE id=:id;
 -- :doc deletes scene-version by id
 DELETE from scene_versions WHERE id=:id;
 
+-- :name delete-scene-version-by-scene-id! :! :n
+-- :doc deletes scene versions by scene id
+DELETE from scene_versions WHERE scene_id=:scene_id;

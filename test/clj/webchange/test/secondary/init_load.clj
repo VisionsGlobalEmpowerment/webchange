@@ -65,9 +65,9 @@
     (f/with-default-school #())
     (core/process-data dump)
     (let [course-new (db/get-course {:slug (:slug course)})
-          course-version-new (db/get-course-version {:id (:version-id course)})]
+          course-version-new (db/get-latest-course-version {:course_id (:id course)})]
       (assert (= course-old course-new))
-      (assert (= course-version-old course-version-new))
+      (assert (= (dissoc course-version-old :id) (dissoc course-version-new :id)))
       (assert (not (nil? course-old)))
       (assert (not (nil? course-version-old)))
       )))
@@ -161,11 +161,11 @@
     (f/with-default-school #())
     (core/process-data dump)
     (let [scene-new (db/get-scene {:course_id (:course-id scene-data) :name (:name scene-data)})
-          scene-version-new (db/get-scene-version {:id (:version-id scene-data)})]
+          scene-version-new (db/get-latest-scene-version {:scene_id (:id scene-data)})]
       (assert (not (nil? scene-old)))
       (assert (not (nil? scene-version-old)))
       (assert (= scene-old scene-new))
-      (assert (= scene-version-old scene-version-new))
+      (assert (= (dissoc scene-version-old :id) (dissoc  scene-version-new :id)))
       )))
 
 (deftest can-import-activity-stats

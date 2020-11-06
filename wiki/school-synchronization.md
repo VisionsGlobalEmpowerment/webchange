@@ -41,3 +41,15 @@ This should be used for development purposes. You should specify schoold id like
 lein run download-course-data school-id
 ```
 This will update all course data and download all assets.
+
+## Course files download 
+This should be used for development purposes. This command will download all files from remote server. This command only download files.
+```
+lein run download-files
+```
+
+## Course files update 
+This should be used for development purposes. This command will download all files from remote server, and remove files which is absent on server.
+```
+lein run update-files
+```
