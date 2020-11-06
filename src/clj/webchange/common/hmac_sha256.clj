@@ -100,9 +100,11 @@
   (:api-key env))
 
 (defn wrap-api-with-signature
-  [handler]
+  ([handler]
+   (wrap-api-with-signature handler false))
+  ([handler force]
   (fn [{{apiauth-signature "apiauth-signature"} :headers :as request}]
-    (if (api-auth-enabled?)
+    (if (or force (api-auth-enabled?))
       (let [api-key (get-api-key)
             _ (.reset (:raw-body request))
             body (slurp-bytes (:raw-body request))
@@ -117,7 +119,7 @@
            :body {:errors [{:message "Api Unauthorized"}]}}
           ))
       (handler request)
-    )))
+    ))))
 
 (defn wrap-body-as-byte-array
   [handler]
