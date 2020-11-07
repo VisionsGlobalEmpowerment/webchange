@@ -57,7 +57,7 @@
       (handler request)
       (catch Exception e
         (log/error e)
-        {:status 400 :body (str "Invalid data" e)}))))
+        {:status 400 :body (str "Invalid data!!!!!!" e)}))))
 
 (defn handle-parse-audio-animation
   [request]
