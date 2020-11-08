@@ -1,6 +1,9 @@
 (ns webchange.templates.library.volleyball
   (:require
-    [webchange.templates.core :as core]))
+    [webchange.templates.core :as core]
+    ; [clojure.string :refer [index-of]]
+    )
+  )
 
 (def m {:id          9
         :name        "Volleyball"
@@ -18,10 +21,12 @@
                       {:name "word-image-4",
                        :type "image"}]})
 
-
 (def t {:assets
                        [{:url "/raw/img/stadium/volleyball/background.jpg", :size 10, :type "image"}
-                        {:url "/raw/img/stadium/volleyball/ball.png", :size 1, :type "image"}],
+                        {:url "/raw/img/stadium/volleyball/ball.png", :size 1, :type "image"}
+                        {:url "/raw/img/stadium/volleyball/ball.png", :size 1, :type "image"}
+                        ; I added it.
+                        {:url "/raw/img/stadium/volleyball/image-test.png", :size 1, :type "image"}],
         :objects
                        {:background {:type "background", :src "/raw/img/stadium/volleyball/background.jpg"},
                         :ball
@@ -36,7 +41,21 @@
                                      :origin  {:type "center-center"},
                                      :scale-x 0.55,
                                      :scale-y 0.55,
-                                     :visible false
+                                     :visible true
+                                     :states  {:hidden  {:visible false},
+                                               :visible {:visible true}}},
+                        ; I added it.
+                        :image-test
+                                    {:type    "image",
+                                     :src     "/raw/img/stadium/volleyball/image-test.png"
+                                     :x       200
+                                     :y       200
+                                     :width   100,
+                                     :height  100,
+                                     :origin  {:type "center-center"},
+                                     :scale-x 0.55,
+                                     :scale-y 0.55,
+                                     :visible true
                                      :states  {:hidden  {:visible false},
                                                :visible {:visible true}}},
                         :box1
@@ -162,7 +181,7 @@
                                      :skin       "vera",
                                      :speed      0.8,
                                      :start      true}},
-        :scene-objects [["background"] ["vera" "boy1" "girl2" "girl3" "box1" "box2" "box3" "box4"] ["ball" "mari"]],
+        :scene-objects [["background"] [ "image-test" ] ["vera" "boy1" "girl2" "girl3" "box1" "box2" "box3" "box4"] ["ball" "mari"]],
         :actions
                        {:animate-catch-player1
                                                  {:type "sequence-data",
@@ -535,7 +554,8 @@
 
 (defn f
   [t args]
-  t)
+  t
+  )
 
 (core/register-template
   (:id m)
