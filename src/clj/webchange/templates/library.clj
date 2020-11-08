@@ -15,4 +15,5 @@
     [webchange.templates.library.park-poem]
     [webchange.templates.library.slide]
     [webchange.templates.library.writing-lesson]
-    [webchange.templates.library.running]))
+    [webchange.templates.library.running]
+    [webchange.templates.library.mall_main]))
