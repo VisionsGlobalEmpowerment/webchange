@@ -139,6 +139,12 @@
      :course-id course-id
      :version-id version-id})))
 
+(defn scene-skills-created
+  ([scene-id skill-id]
+   (let [_ (db/create-scene-skill!{:scene_id scene-id :skill_id skill-id})]
+     {:scene-id scene-id
+      :skill-id skill-id})))
+
 (defn dataset-created
   ([]
    (let [{course-id :id} (course-created)]

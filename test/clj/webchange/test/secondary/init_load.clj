@@ -180,3 +180,16 @@
       (assert (not (nil? activity-stat-old)))
       (assert (= activity-stat-old activity-stat-new))
       )))
+
+
+(deftest can-import-scene-skills
+  (let [skill-id 1
+        scene-data (f/scene-created)
+        _ (f/scene-skills-created (:id scene-data) skill-id)
+        dump (f/get-school-dump f/default-school-id)]
+    (f/clear-db-fixture #())
+    (f/with-default-school #())
+    (core/process-data dump)
+    (let [[scene-skill] (db/get-scene-skills-by-scene {:scene_id (:id scene-data)})]
+      (assert (not (nil? scene-skill)))
+      (assert (= skill-id (:skill-id scene-skill))))))

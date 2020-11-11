@@ -61,7 +61,7 @@ ON CONFLICT ON CONSTRAINT class_unique
 DO UPDATE SET name=:name, school_id=:school_id WHERE classes.guid=:guid
 
 -- :name create-or-update-courses! :! :n
--- :doc creates a new student record
+-- :doc creates a new course record
 INSERT INTO courses (id, name, slug, lang, image_src, status, owner_id, website_user_id)
 VALUES (:id, :name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id)
 ON CONFLICT ON CONSTRAINT courses_pkey
@@ -71,6 +71,12 @@ WHERE courses.id=:id
 
 -- :name reset-courses-seq! :? :1
 SELECT pg_catalog.setval('public.courses_id_seq', (SELECT MAX(id) FROM public.courses), true);
+
+-- :name create-or-update-scene-skills!  :! :n
+INSERT INTO scene_skills (scene_id, skill_id)
+VALUES (:scene_id, :skill_id)
+ON CONFLICT ON CONSTRAINT scene_skill_pkey
+DO NOTHING;
 
 -- :name create-or-update-course-versions! :! :n
 -- :doc creates a new student record
@@ -222,6 +228,10 @@ DELETE from course_events where user_id=:user_id;
 -- :doc deletes course events
 DELETE from course_events where id=:id;
 
+-- :name delete-course-events-by-course-id! :! :n
+-- :doc deletes course events
+DELETE from course_events where course_id=:course_id;
+
 -- :name delete-course-progresses-by-user-id! :! :n
 -- :doc deletes course progresses
 DELETE from course_progresses where user_id=:user_id;
@@ -241,6 +251,11 @@ DELETE from course_stats where user_id=:user_id;
 -- :name delete-course-stats-by-id! :! :n
 -- :doc deletes course progresses
 DELETE from course_stats where id=:id;
+
+-- :name delete-course-stats-by-course-id! :! :n
+-- :doc deletes course progresses
+DELETE from course_stats where course_id=:course_id;
+
 
 -- :name delete-teachers-by-user-id! :! :n
 -- :doc deletes teachers
@@ -263,6 +278,10 @@ DELETE from teachers WHERE id=:id;
 -- :name delete-course-version-by-course-id! :! :n
 -- :doc deletes course versions by course id
 DELETE from course_versions WHERE course_id=:course_id;
+
+-- :name delete-course-progresses-by-course-id! :! :n
+-- :doc deletes course progresses
+DELETE from course_progresses where course_id=:course_id;
 
 -- :name delete-course-by-id! :! :n
 -- :doc deletes courses by id
@@ -295,3 +314,8 @@ DELETE from scene_versions WHERE id=:id;
 -- :name delete-scene-version-by-scene-id! :! :n
 -- :doc deletes scene versions by scene id
 DELETE from scene_versions WHERE scene_id=:scene_id;
+
+-- :name delete-scene-skills-by-scene-skill! :! :n
+-- :doc deletes all scene skills
+DELETE FROM scene_skills
+WHERE scene_id = :scene_id and skill_id = :skill_id;
