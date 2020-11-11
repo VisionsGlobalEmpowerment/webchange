@@ -72,6 +72,7 @@
                              :set-stroke     [:stroke]
                              :set-data       [:data]
                              :set-path       [:path]
+                             :set-fill       [:fill]
                              :set-font-size  [:font-size]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys filtered-state params)]))
@@ -171,6 +172,11 @@
   :set-path
   (fn [[object-wrapper {:keys [path]}]]
     (apply-to-wrapper w/set-path object-wrapper path)))
+
+(re-frame/reg-fx
+  :set-fill
+  (fn [[object-wrapper {:keys [fill]}]]
+    (apply-to-wrapper w/set-fill object-wrapper fill)))
 
 (re-frame/reg-fx
   :set-stroke

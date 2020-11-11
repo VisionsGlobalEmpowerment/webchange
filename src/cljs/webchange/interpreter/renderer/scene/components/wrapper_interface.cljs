@@ -45,6 +45,8 @@
 (defn set-color [wrapper & params] (execute wrapper :set-color params))
 (defn set-interactive [wrapper & params] (execute wrapper :set-interactive params))
 
+(defn set-fill [wrapper & params] (execute wrapper :set-fill params))
+
 (defn set-path [wrapper & params] (execute wrapper :set-path params))
 (defn set-stroke [wrapper & params] (execute wrapper :set-stroke params))
 (defn animated-svg-path-start [wrapper & params] (execute wrapper :animated-svg-path-start params))
