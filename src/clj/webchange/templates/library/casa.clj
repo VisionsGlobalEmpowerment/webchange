@@ -34,8 +34,7 @@
                                                                       :data [{:type "empty" :duration 0}
                                                                              {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "before-boxes",
-                                                :phrase-description "Before boxes appear",
-                                                :dialog-track       "1 Intro"}
+                                                :phrase-description "Before boxes appear"}
                         :dialog-2-after-boxes  {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
@@ -43,8 +42,7 @@
                                                                       :data [{:type "empty" :duration 0}
                                                                              {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "after-boxes",
-                                                :phrase-description "After boxes appear",
-                                                :dialog-track       "1 Intro"}
+                                                :phrase-description "After boxes appear"}
                         :dialog-3-before-open  {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
@@ -52,8 +50,7 @@
                                                                       :data [{:type "empty" :duration 0}
                                                                              {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "before-open",
-                                                :phrase-description "Before box opens",
-                                                :dialog-track       "2 Concept"}
+                                                :phrase-description "Before box opens"}
                         :dialog-4-after-open   {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
@@ -61,8 +58,7 @@
                                                                       :data [{:type "empty" :duration 0}
                                                                              {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "after-open",
-                                                :phrase-description "After box opens",
-                                                :dialog-track       "2 Concept"}
+                                                :phrase-description "After box opens"}
                         :dialog-5-after-hide   {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
@@ -70,8 +66,7 @@
                                                                       :data [{:type "empty" :duration 0}
                                                                              {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                                 :phrase             "after-hide",
-                                                :phrase-description "After box flies off",
-                                                :dialog-track       "2 Concept"}
+                                                :phrase-description "After box flies off"}
                         :dialog-6-pick-wrong   {:type               "sequence-data",
                                                 :editor-type        "dialog",
                                                 :concept-var        "current-word",
@@ -133,7 +128,25 @@
                                                              {:type "action" :id "advance-progress"}],
                                                 :unique-tag "box"}}
         :triggers
-                       {:start {:on "start", :action "intro"}}})
+                       {:start {:on "start", :action "intro"}}
+        :metadata      {:tracks [{:title "1 Intro"
+                                  :nodes [{:type      "dialog"
+                                           :action-id :dialog-1-before-boxes}
+                                          {:type "prompt"
+                                           :text "Boxes appear"}
+                                          {:type      "dialog"
+                                           :action-id :dialog-2-after-boxes}]}
+                                 {:title "2 Concept"
+                                  :nodes [{:type      "dialog"
+                                           :action-id :dialog-3-before-open}
+                                          {:type "prompt"
+                                           :text "Box opens"}
+                                          {:type      "dialog"
+                                           :action-id :dialog-4-after-open}
+                                          {:type "prompt"
+                                           :text "Box flies off"}
+                                          {:type      "dialog"
+                                           :action-id :dialog-5-after-hide}]}]}})
 
 (def boxes-variations
   {1 {:advance-progress  {:type "sequence-data",
@@ -146,8 +159,7 @@
                                                 :data [{:type "empty" :duration 0}
                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box0",
-                          :phrase-description "After first box",
-                          :dialog-track       "3 Dialog after box"}}
+                          :phrase-description "After first box"}}
    2 {:advance-progress  {:type     "case"
                           :options  {"box0" {:type "sequence-data",
                                              :data [{:type "set-variable", :var-name "current-box", :var-value "box1"}
@@ -163,8 +175,7 @@
                                                 :data [{:type "empty" :duration 0}
                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box0",
-                          :phrase-description "After first box",
-                          :dialog-track       "3 Dialog after box"}
+                          :phrase-description "After first box"}
       :dialog-after-box1 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
@@ -172,8 +183,7 @@
                                                 :data [{:type "empty" :duration 0}
                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box1",
-                          :phrase-description "After second box",
-                          :dialog-track       "3 Dialog after box"}}
+                          :phrase-description "After second box"}}
    3 {:advance-progress  {:type     "case"
                           :options  {"box0" {:type "sequence-data",
                                              :data [{:type "set-variable", :var-name "current-box", :var-value "box1"}
@@ -192,8 +202,7 @@
                                                 :data [{:type "empty" :duration 0}
                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box0",
-                          :phrase-description "After first box",
-                          :dialog-track       "3"}
+                          :phrase-description "After first box"}
       :dialog-after-box1 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
@@ -201,8 +210,7 @@
                                                 :data [{:type "empty" :duration 0}
                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box1",
-                          :phrase-description "After second box",
-                          :dialog-track       "3"}
+                          :phrase-description "After second box"}
       :dialog-after-box2 {:type               "sequence-data",
                           :editor-type        "dialog",
                           :concept-var        "current-word",
@@ -210,8 +218,36 @@
                                                 :data [{:type "empty" :duration 0}
                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                           :phrase             "after-box2",
-                          :phrase-description "After third box",
-                          :dialog-track       "3"}}})
+                          :phrase-description "After third box"}}})
+
+(def tracks-variations
+  {1 {:title "3 Dialog after box"
+      :nodes [{:type "prompt"
+               :text "1st box"}
+              {:type      "dialog"
+               :action-id :dialog-after-box0}]}
+   2 {:title "3 Dialog after box"
+      :nodes [{:type "prompt"
+               :text "1st box"}
+              {:type      "dialog"
+               :action-id :dialog-after-box0}
+              {:type "prompt"
+               :text "2nd box"}
+              {:type      "dialog"
+               :action-id :dialog-after-box1}]}
+   3 {:title "3 Dialog after box"
+      :nodes [{:type "prompt"
+               :text "1st box"}
+              {:type      "dialog"
+               :action-id :dialog-after-box0}
+              {:type "prompt"
+               :text "2nd box"}
+              {:type      "dialog"
+               :action-id :dialog-after-box1}
+              {:type "prompt"
+               :text "3rd box"}
+              {:type      "dialog"
+               :action-id :dialog-after-box2}]}})
 
 (def animations {:vera       {:width  380,
                               :height 537,
@@ -307,7 +343,8 @@
     (-> t
         (update :objects merge bs)
         (update :scene-objects conj names)
-        (update :actions merge (get boxes-variations boxes)))))
+        (update :actions merge (get boxes-variations boxes))
+        (update-in [:metadata :tracks] conj (get tracks-variations boxes)))))
 
 (defn f
   [t args]

@@ -22,49 +22,63 @@
   (index->coordinate index (:y-offset coordinate-params) (:y-step coordinate-params)))
 
 (defn- create-node
-  [{:keys [data position]}]
-  (let [node (get-custom-model data)]
+  [{:keys [type data position]}]
+  (let [node (get-custom-model (merge data {:type type}))]
     (.setPosition node (:x position) (:y position))
     node))
 
-(defn- create-action-node
-  [scene-data action-path position]
-  (let [action-data (get-in scene-data (concat [:actions] action-path))]
-    (create-node {:data     {:data action-data
-                             :path action-path}
+(defn- create-dialog-node
+  [scene-data {:keys [action-id]} position]
+  (let [action-id (keyword action-id)
+        action-data (get-in scene-data [:actions action-id])]
+    (create-node {:type     "dialog"
+                  :data     {:data action-data
+                             :path [action-id]}
                   :position position})))
+
+(defn- create-prompt-node
+  [node position]
+  (create-node {:type     "prompt"
+                :data     node
+                :position position}))
+
+(defn- create-empty-node
+  [_ position]
+  (create-node {:type     "empty"
+                :position position}))
+
+(defn- create-action-node
+  [scene-data {:keys [type] :as node} position]
+  (case type
+    "dialog" (create-dialog-node scene-data node position)
+    "prompt" (create-prompt-node node position)
+    (create-empty-node node position)))
 
 (defn- create-track-label-node
   [track-name track-index]
-  (create-node {:data     {:name track-name
-                           :type "track"}
+  (create-node {:type     "track"
+                :data     {:name track-name}
                 :position {:x (index->coordinate-x 0)
                            :y (index->coordinate-y track-index)}}))
 
 (defn- get-track-nodes
-  [scene-data actions-paths track-number]
-  (map (fn [[index action-path]]
-         (create-action-node scene-data action-path {:x (->> index inc index->coordinate-x)
-                                                     :y (->> track-number index->coordinate-y)}))
-       (->> actions-paths
-            (sort-by (fn [action-path]
-                       (->> action-path (map #(if (keyword? %) (name %) %)) (join "-"))))
-            (map-indexed (fn [index item] [index item])))))
+  [scene-data nodes track-number]
+  (->> nodes
+       (map-indexed (fn [index node]
+                      (create-action-node scene-data node {:x (->> index inc index->coordinate-x)
+                                                           :y (->> track-number index->coordinate-y)})))))
 
 (defn- get-track-data
-  [track-name track-index scene-data actions-paths]
+  [track-name track-index scene-data nodes]
   {:track track-name
    :nodes (concat [(create-track-label-node track-name track-index)]
-                  (get-track-nodes scene-data actions-paths track-index))})
+                  (get-track-nodes scene-data nodes track-index))})
 
 (defn get-diagram-items
   [scene-data actions-tracks]
-  (let [tracks (reduce (fn [result [track-index [track-name actions-paths]]]
-                         (conj result (get-track-data track-name track-index scene-data actions-paths)))
-                       []
-                       (->> (dissoc actions-tracks default-track)
-                            (sort-by first)
-                            (map-indexed (fn [index item] [index item]))))
+  (let [tracks (->> actions-tracks
+                    (map-indexed (fn [track-index {:keys [title nodes]}]
+                                   (get-track-data title track-index scene-data nodes))))
         {:keys [nodes]} (reduce (fn [result {:keys [nodes]}]
                                   (update-in result [:nodes] concat nodes))
                                 {:nodes []}

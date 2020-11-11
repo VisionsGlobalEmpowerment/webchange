@@ -16,21 +16,9 @@
 
 (defn- get-dialog-actions
   [scene-data]
-  (loop [que (get-entry-actions scene-data)
-         used-map {}
-         result []]
-    (if-not (empty? que)
-      (let [[current-path & rest-que] que
-            current-data (get-action-data scene-data current-path)]
-        (if-not (contains? used-map current-path)
-          (recur (concat rest-que (get-action-children {:action-path current-path
-                                                        :action-data current-data}))
-                 (assoc used-map current-path true)
-                 (if (dialog-action? current-data)
-                   (conj result current-path)
-                   result))
-          (recur rest-que used-map result)))
-      result)))
+  (->> (:actions scene-data)
+       (filter (fn [[_ action-data]] (dialog-action? action-data)))
+       (map first)))
 
 (defn scene-data->actions-tracks
   [scene-data]

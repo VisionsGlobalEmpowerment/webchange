@@ -34,16 +34,33 @@
    :dialog-node        {:width            "180px"
                         :height           "64px"
                         :margin-top       "-12px"
-                        :background-color "#6BC784"}
-   :track-label        {:width            "100px"
-                        :height           "40px"
-                        :border-radius    "10px"
+                        :background-color "#6BC784"
+                        :cursor           "pointer"}
+   :track-label        {:height           "40px"
+                        :border-radius    "0"
                         :display          "flex"
                         :flex-direction   "column"
                         :justify-content  "center"
                         :align-items      "center"
                         :padding          "3px"
-                        :background-color "#156874"}})
+                        :background-color "#156874"
+                        :white-space      "nowrap"}
+   :prompt             {:width         "180px"
+                        :top           "-20px"
+                        :border        "none"
+                        :border-radius "20px"
+                        :cursor        "default"}
+   :prompt-text        {:margin          "5px"
+                        :height          "66px"
+                        :overflow        "auto"
+                        :text-align      "center"
+                        :font-size       "18px"
+                        :font-style      "italic"
+                        :color           "#404040"
+                        :display         "flex"
+                        :align-items     "center"
+                        :justify-content "center"
+                        :padding-bottom  "5px"}})
 
 (defn- phrase-header
   [node-data]
@@ -72,21 +89,43 @@
     [phrase-header node-data]
     [not-phrase-header node-data]))
 
+(defn- dialog-wrapper
+  [{:keys [node-data this]}]
+  (let [styles (get-styles)]
+    (into [:div {:on-double-click (fn []
+                                    (if (= "dialog" (get-in node-data [:data :editor-type]))
+                                      (re-frame/dispatch [::ee/show-dialog-translator-form node-data])
+                                      (re-frame/dispatch [::ee/show-translator-form node-data])))
+                 :style           (merge custom-wrapper/node-style
+                                         (:dialog-node styles))}]
+          (r/children this))))
+
+(defn- track-wrapper
+  [{:keys [this]}]
+  (let [styles (get-styles)]
+    (into [:div {:style (merge custom-wrapper/node-style
+                               (:track-label styles))}]
+          (r/children this))))
+
+(defn- prompt-wrapper
+  [{:keys [node-data]}]
+  (let [styles (get-styles)]
+    [:div {:style (merge custom-wrapper/node-style
+                         (:prompt styles))}
+     [:style
+      "body ::-webkit-scrollbar {-webkit-appearance: none;  width: 6px;  height: 10px;}"]
+     [:div {:style (:prompt-text styles)}
+      (:text node-data)]]))
+
 (defn wrapper
   [{:keys [node-data]}]
-  (let [this (r/current-component)
-        styles (get-styles)
-        node-style (if (= (:type node-data) "track")
-                     (:track-label styles)
-                     (:dialog-node styles))]
-    (into [:div {:on-double-click (fn []
-                                    (when-not (= (:type node-data) "track")
-                                      (if (= "dialog" (get-in node-data [:data :editor-type]))
-                                        (re-frame/dispatch [::ee/show-dialog-translator-form node-data])
-                                        (re-frame/dispatch [::ee/show-translator-form node-data]))))
-                 :style           (merge custom-wrapper/node-style
-                                         node-style)}]
-          (r/children this))))
+  (let [this (r/current-component)]
+    (case (:type node-data)
+      "dialog" [dialog-wrapper {:node-data node-data
+                                :this      this}]
+      "track" [track-wrapper {:this this}]
+      "prompt" [prompt-wrapper {:node-data node-data}]
+      [:div "Unhandled type"])))
 
 (defn get-widget-data
   []
