@@ -11,7 +11,8 @@
 
 (defn init-secondary!
   [config school-id email password]
-  (let [[{school-id :id}] (db/create-school! {:id (Integer/parseInt school-id) :name "default"})
+  (let [
+        [{school-id :id}] (db/create-school! {:id (Integer/parseInt school-id) :name "default"})
         [{user-id :id}] (auth-core/create-user-with-credentials! {:email email
                                                          :password password})
         [{teacher-id :id}] (db/create-teacher! {:user_id user-id
@@ -40,6 +41,10 @@
   (core/update-course-data! school-id)
   (update-assets! config)
   (println "Done!"))
+
+(defn download-assets! [config]
+  (println "Update assets....")
+  (core/update-assets! false))
 
 (defn upload-local-files!
   [config path]
@@ -77,6 +82,9 @@
    "update-assets"
    (fn [config args]
      (apply update-assets! config args))
+   "download-assets"
+   (fn [config args]
+     (apply download-assets! config args))
    "upload-local-files"
    (fn [config args]
      (apply upload-local-files! env args))

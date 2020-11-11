@@ -5,6 +5,7 @@
             [webchange.handler :as handler]
             [webchange.db.core :refer [*db*] :as db]
             [webchange.common.date-time :as dt]
+            [java-time :as jt]
             [mount.core :as mount]
             [clojure.data.json :as json]
             [webchange.secondary.core :as core]
@@ -64,13 +65,13 @@
                                                (assoc :name name))])
                       (assoc stat :course-versions [(-> course-version-old
                                                         (assoc :data data)
-                                                        (assoc :created-at (dt/date-time2iso-str (:created-at course-version-old)))
+                                                        (assoc :created-at (dt/date-time2iso-str (jt/local-date-time)))
                                                         )])
                       )
          ]
     (core/import-primary-data! update)
     (let [course-updated (db/get-course {:slug (:slug course-created)})
-          course-version-updated (db/get-course-version {:id (:version-id course-created)})]
+          course-version-updated (db/get-latest-course-version {:course_id (:id course-created)})]
       (assert (= name (:name course-updated)))
       (assert (= data (:data course-version-updated)))
       )
@@ -111,13 +112,13 @@
                                                  (assoc :name name))])
                       (assoc stat :scene-versions  [(-> scene-version-old
                                                        (assoc :data data)
-                                                        (assoc :created-at (dt/date-time2iso-str (:created-at scene-version-old)))
+                                                        (assoc :created-at (dt/date-time2iso-str (jt/local-date-time)))
                                                        )])
                       )
          ]
     (core/import-primary-data! update)
     (let [scene-updated (db/get-scene {:course_id (:course-id scene-created) :name name})
-          scene-version-updated (db/get-scene-version {:id (:version-id scene-created)})]
+          scene-version-updated (db/get-latest-scene-version {:scene_id (:id scene-created)})]
       (assert (= name (:name scene-updated)))
       (assert (= data (:data scene-version-updated)))
       )
