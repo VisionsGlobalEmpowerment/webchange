@@ -5,7 +5,8 @@
     [webchange.editor-v2.scene.state.background :as background]
     [webchange.editor-v2.scene.data.background.views-image-selector :refer [image-selector]]
     [webchange.editor-v2.scene.data.background.views-preview :refer [preview]]
-    [webchange.editor-v2.scene.data.background.views-type-selector :refer [type-selector]]))
+    [webchange.editor-v2.scene.data.background.views-type-selector :refer [type-selector]]
+    [webchange.editor-v2.scene.translation-steps :as translation-steps]))
 
 (defn- get-styles
   []
@@ -42,10 +43,14 @@
 
 (defn change-background
   []
-  (let [handle-click (fn [] (re-frame/dispatch [::background/open-window]))]
-    [ui/form-control {:full-width true
-                      :margin     "normal"}
-     [ui/button
-      {:on-click handle-click}
-      "Change Background"]
-     [change-background-window]]))
+  (let [handle-click (fn []
+                       (translation-steps/set-change-background-complete)
+                       (re-frame/dispatch [::background/open-window]))]
+    [:div
+     [translation-steps/change-background]
+     [ui/form-control {:full-width true
+                       :margin     "normal"}
+      [ui/button
+       {:on-click handle-click}
+       "Change Background"]
+      [change-background-window]]]))

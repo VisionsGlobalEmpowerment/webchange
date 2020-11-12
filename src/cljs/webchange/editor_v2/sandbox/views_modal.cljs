@@ -22,13 +22,6 @@
         boolean)))
 
 (re-frame/reg-sub
-  ::modal-state
-  (fn [db]
-    (-> db
-        (get-in modal-state-path)
-        boolean)))
-
-(re-frame/reg-sub
   ::lesson-set-data
   (fn [db]
     (get-in db modal-share-link-state {})))

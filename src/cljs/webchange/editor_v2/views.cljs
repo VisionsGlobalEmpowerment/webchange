@@ -17,7 +17,6 @@
     [webchange.editor-v2.layout.card.views :refer [list-card]]
     [webchange.editor-v2.scene.views :refer [scenes-list
                                              scene-translate]]
-    [webchange.editor-v2.scene.views-data :refer [get-scenes-options]]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.routes :refer [redirect-to]]))
 

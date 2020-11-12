@@ -89,6 +89,23 @@
            :course-slug course-slug
            :created-at (str created-at)}]))
 
+(defn update-scene!
+  [course-slug scene-name scene-data owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scene-id (get-or-create-scene! course-id scene-name)
+        created-at (jt/local-date-time)
+        scene-data-old (:data (db/get-latest-scene-version {:scene_id scene-id}))
+        new-scene-data (merge scene-data-old scene-data)]
+    (if (not (identical? scene-data-old new-scene-data))
+      (db/save-scene! {:scene_id   scene-id
+                       :data       new-scene-data
+                       :owner_id   owner-id
+                       :created_at created-at}))
+    [true {:id         scene-id
+           :name       scene-name
+           :course-slug course-slug
+           :created-at (str created-at)}]))
+
 (defn save-course!
   [course-slug data owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
