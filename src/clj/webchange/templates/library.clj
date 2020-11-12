@@ -15,5 +15,6 @@
     [webchange.templates.library.painting-tablet]
     [webchange.templates.library.park-poem]
     [webchange.templates.library.slide]
+    [webchange.templates.library.categorize]
     [webchange.templates.library.writing-lesson]
     [webchange.templates.library.running]))
