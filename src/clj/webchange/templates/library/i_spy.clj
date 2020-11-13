@@ -2,7 +2,7 @@
   (:require
     [webchange.templates.core :as core]))
 
-(def m {:id          12
+(def m {:id          18
         :name        "I spy"
         :tags        ["Direct Instruction"]
         :description "Some description of i spy mechanics and covered skills"
