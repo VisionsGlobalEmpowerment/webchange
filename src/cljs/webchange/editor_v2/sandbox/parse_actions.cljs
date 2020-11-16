@@ -56,6 +56,17 @@
     []))
 
 (defn find-all-actions
+  "Returns actions in format
+  [[action-name action-data]
+   [action-name action-data]]
+
+   where action-name might be keyword or a list of keyword and indexes
+   :action-name or (:action-name 0 0)
+
+   e.g.
+  [[:action-name action-data]
+   [(:action-name1 1) action-data]
+   [(:action-name2 0 2) action-data]]"
   [scene-data props-filter]
   (loop [result []
          [current-node & rest-nodes] (:actions scene-data)]

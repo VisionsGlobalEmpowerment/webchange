@@ -47,15 +47,14 @@
                                           (let [field-data (get-in dataset-item [:data field-name])
                                                 field-type (get-field-type-group field-name scheme-fields)]
                                             (when (empty-field? field-name field-data scheme-fields)
-                                              (let [dialog-action-name (->> (find-all-actions scene-data {:from-var (fn [property-value]
-                                                                                                                      (and (sequential? property-value)
-                                                                                                                           (some (fn [item]
-                                                                                                                                   (= (:var-property item) (clojure.core/name field-name)))
-                                                                                                                                 property-value)))})
-                                                                            first first first)
+                                              (let [dialog-actions (find-all-actions scene-data {:from-var (fn [property-value]
+                                                                                                             (and (sequential? property-value)
+                                                                                                                  (some (fn [item]
+                                                                                                                          (= (:var-property item) (clojure.core/name field-name)))
+                                                                                                                        property-value)))})
+                                                    dialog-action-path (-> dialog-actions first first)
+                                                    dialog-action-name (if (coll? dialog-action-path) (first dialog-action-path) dialog-action-path)
                                                     dialog-action-data (get-in scene-data [:actions dialog-action-name])]
-
-
                                                 {:name   field-name
                                                  :type   field-type
                                                  :action {:id    dialog-action-name
