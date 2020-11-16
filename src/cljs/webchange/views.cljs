@@ -83,6 +83,7 @@
 
 (defn- panels
   [panel-name route-params]
+  (println panel-name route-params)
   (case panel-name
     :home [login-switch]
     :login [teacher-login :sign-in]

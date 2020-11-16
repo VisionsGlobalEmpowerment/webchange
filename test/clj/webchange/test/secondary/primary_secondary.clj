@@ -192,3 +192,24 @@
     (core/import-primary-data! update)
     (let [lesson-set-updated (db/get-lesson-set-by-name {:dataset_id (:dataset-id lesson-set-created) :name (:name lesson-set-created)})]
       (assert (= nil lesson-set-updated)) )))
+
+(deftest can-add-scene-skills
+  (let  [skill-id 1
+         scene-created (f/scene-created)
+         update (as-> (core/get-course-update (str f/default-school-id)) stat
+                      (assoc stat :scene-skills [{:scene-id (:id scene-created) :skill-id skill-id}]))]
+    (core/import-primary-data! update)
+    (let [[scene-skill] (db/get-scene-skills-by-scene {:scene_id (:id scene-created)})]
+      (assert (not (nil? scene-skill)))
+      (assert (= skill-id (:skill-id scene-skill))))))
+
+
+(deftest can-remove-scene-skills
+  (let  [skill-id 1
+         scene-created (f/scene-created)
+         scene-created (f/scene-skills-created (:id scene-created) skill-id)
+         update (as-> (core/get-course-update (str f/default-school-id)) stat
+                      (assoc stat :scene-skills []))]
+    (core/import-primary-data! update)
+    (let [scene-skills (db/get-scene-skills-by-scene {:scene_id (:id scene-created)})]
+      (assert (= 0 (count scene-skills))))))

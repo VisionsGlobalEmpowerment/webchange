@@ -126,7 +126,7 @@ SELECT * from scenes
 WHERE course_id = :course_id AND name = :name;
 
 -- :name get-scenes :? :*
--- :doc retrieve a scene record given the course id and the name
+-- :doc retrieve all scene records
 SELECT * from scenes;
 
 -- :name get-scene-version :? :1
@@ -152,3 +152,12 @@ WHERE scene_id = :scene_id;
 -- :name create-scene-skill! :! :n
 -- :doc creates a new scene-skill link
 INSERT INTO scene_skills (scene_id, skill_id) VALUES (:scene_id, :skill_id);
+
+-- :name get-scene-skills :? :*
+-- :doc retrieve all scene skill records
+SELECT * FROM scene_skills;
+
+-- :name get-scene-skills-by-scene :? :*
+-- :doc retrieve all scene skill records
+SELECT * FROM scene_skills WHERE scene_id=:scene_id;
+

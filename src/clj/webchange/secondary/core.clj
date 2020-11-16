@@ -86,6 +86,11 @@
     (db/create-or-update-courses! (transform-keys ->snake_case_keyword course)))
   (db/reset-courses-seq!))
 
+(defn update-scene-skills!
+  [scene-skills]
+  (doseq [scene-skill scene-skills]
+    (db/create-or-update-scene-skills! (transform-keys ->snake_case_keyword scene-skill))))
+
 (defn update-course-stat!
   [course-stats]
   (doseq [stat course-stats]
@@ -193,6 +198,8 @@
     (update-scene! scenes))
   (if-let [scene-versions (:scene-versions data)]
     (update-scene-versions! scene-versions))
+  (if-let [scene-skills (:scene-skills data)]
+    (update-scene-skills! scene-skills))
   (if-let [activity-stats (:activity-stats data)]
     (update-activity-stats! activity-stats))
   )
@@ -261,6 +268,7 @@
         users (get-users-by-school id)
         teachers (db/get-teacher-by-school {:school_id id})
         students (get-students-by-school id)
+        scene-skills (db/get-scene-skills)
         classes (get-classes id)
         courses (db/get-courses)
         course-versions (get-course-versions)
@@ -278,6 +286,7 @@
      :school            school
      :users             users
      :teachers          teachers
+     :scene-skills      scene-skills
      :students          students
      :classes           classes
      :courses           courses
@@ -298,6 +307,7 @@
   (let [id (Integer/parseInt id)
         school (db/get-school {:id id})
         courses (db/get-courses)
+        scene-skills (db/get-scene-skills)
         course-versions (get-course-versions)
         datasets (db/get-datasets)
         dataset-items (db/get-dataset-items-by-school)
@@ -308,6 +318,7 @@
     {
      :school          school
      :courses         courses
+     :scene-skills    scene-skills
      :course-versions course-versions
      :datasets        datasets
      :dataset-items   dataset-items
@@ -421,7 +432,8 @@
 (defn delete-not-in-guid-list [guids entries extract-guid delete-entry]
   (doseq [entry entries]
     (if-not (contains? (set guids) (extract-guid entry))
-        (delete-entry entry) nil)))
+        (delete-entry (transform-keys ->snake_case_keyword entry))
+      nil)))
 
 (defn delete-teacher [teacher]
   (db/delete-teacher-by-id! {:id (:id teacher)}))
@@ -483,6 +495,9 @@
 
 (defn delete-course-by-id!
   [{:keys [id]}]
+  (db/delete-course-stats-by-course-id! {:course_id id})
+  (db/delete-course-progresses-by-course-id! {:course_id id})
+  (db/delete-course-events-by-course-id! {:course_id id})
   (db/delete-course-version-by-course-id! {:course_id id})
   (db/delete-course-by-id! {:id id}))
 
@@ -494,6 +509,10 @@
 (defn import-primary-data! [data]
   (if-let [school (:school data)]
     (update-school! school))
+  (if-let [courses (:courses data)]
+    (update-courses! courses))
+  (if-let [scene-skills (:scene-skills data)]
+    (update-scene-skills! scene-skills))
   (if-let [courses (:courses data)]
     (update-courses! courses))
   (if-let [course-versions (:course-versions data)]
@@ -515,6 +534,7 @@
         dataset-items (db/get-dataset-items-by-school)
         lesson-sets (db/get-lesson-sets)
         scenes (db/get-scenes)
+        scene-skills (db/get-scene-skills)
 
         courses-guid (guid/guids-from-entries (:courses data) guid/guid-is-id)
         course-versions-guid (guid/guids-from-entries (:course-versions data) guid/guid-is-id)
@@ -522,11 +542,13 @@
         dataset-items-guid (guid/guids-from-entries (:dataset-items data) guid/guid-is-id)
         lesson-sets-guid (guid/guids-from-entries (:lesson-sets data) guid/guid-is-id)
         scenes-guid (guid/guids-from-entries (:scenes data) guid/guid-is-id)
-        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)]
+        scene-versions-guid (guid/guids-from-entries (:scene-versions data) guid/guid-is-id)scene-skills-guid (guid/guids-from-entries (:scene-skills data) guid/guid-from-scene-skill)
+        ]
     (delete-not-in-guid-list lesson-sets-guid lesson-sets :id db/delete-lesson-set-by-id!)
     (delete-not-in-guid-list dataset-items-guid dataset-items :id db/delete-dataset-item-by-id!)
     (delete-not-in-guid-list datasets-guid datasets :id db/delete-dataset-by-id!)
-    ;(delete-not-in-guid-list scene-versions-guid scene-versions :id db/delete-scene-version-by-id!)
+    (delete-not-in-guid-list scene-skills-guid scene-skills guid/guid-from-scene-skill db/delete-scene-skills-by-scene-skill!)
+    ;    (delete-not-in-guid-list scene-versions-guid scene-versions :id db/delete-scene-version-by-id!)
     (delete-not-in-guid-list scenes-guid scenes :id delete-scene-by-id!)
     ;(delete-not-in-guid-list course-versions-guid course-versions :id db/delete-course-version-by-id!)
     (delete-not-in-guid-list courses-guid courses :id delete-course-by-id!)
