@@ -43,11 +43,14 @@
         "left" (set! (.-x pivot) 0)
         "center" (set! (.-x pivot) (/ (.-width container) 2))
         "right" (set! (.-x pivot) (.-width container))
-        )
+        (do (logger/warn (str "Wrong horizontal align option <" h ">. 'Left' will be used."))
+            (set! (.-x pivot) 0)))
       (case v
         "top" (set! (.-y pivot) 0)
         "center" (set! (.-y pivot) (/ (.-height container) 2))
-        "bottom" (set! (.-y pivot) (.-height container))))))
+        "bottom" (set! (.-y pivot) (.-height container))
+        (do (logger/warn (str "Wrong vertical align option <" v ">. 'Top' will be used."))
+            (set! (.-y pivot) 0))))))
 
 (defn- create-sprite
   [{:keys [src scale object-name width height]}]
