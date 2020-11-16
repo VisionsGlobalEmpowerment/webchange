@@ -32,7 +32,7 @@
     [:div (:wrapper styles)
      [ui/typography {:variant "h6"
                      :style   (:title styles)}
-      "Phrase teller:"]
+      "Character:"]
      [ui/select {:value         (or current-target "")
                  :display-empty true
                  :on-change     #(re-frame/dispatch [::dialog-form.actions/set-phrase-action-target (->> % .-target .-value)])
