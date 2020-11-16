@@ -28,7 +28,6 @@
 (defn dataset-concept
   [db]
   (->> (course-datasets db)
-       (filter #(= "concepts" (:name %)))
        first))
 
 (re-frame/reg-sub

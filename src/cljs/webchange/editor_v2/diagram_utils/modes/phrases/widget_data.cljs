@@ -3,6 +3,8 @@
     [camel-snake-kebab.core :refer [->Camel_Snake_Case]]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.editor-v2.creation-progress.translation-progress.validate-action :refer [validate-dialog-action]]
+    [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]
     [webchange.editor-v2.events :as ee]
     [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-widget.colors :refer [colors]]
     [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-widget.widget-wrapper :as custom-wrapper]
@@ -91,13 +93,17 @@
 
 (defn- dialog-wrapper
   [{:keys [node-data this]}]
-  (let [styles (get-styles)]
+  (let [valid-node? (validate-dialog-action (:data node-data))
+        styles (get-styles)]
     (into [:div {:on-double-click (fn []
                                     (if (= "dialog" (get-in node-data [:data :editor-type]))
                                       (re-frame/dispatch [::ee/show-dialog-translator-form node-data])
                                       (re-frame/dispatch [::ee/show-translator-form node-data])))
                  :style           (merge custom-wrapper/node-style
-                                         (:dialog-node styles))}]
+                                         (:dialog-node styles))}
+           (when-not valid-node?
+             [warning-icon {:styles {:main {:position "absolute"
+                                            :bottom   "2px"}}}])]
           (r/children this))))
 
 (defn- track-wrapper

@@ -33,6 +33,11 @@
                      :text        {:secondary "#555555"}
                      :flat-button {:background-color "#f2f2f7"}}}})
 
+;.MuiDialog-paperScrollPaper-10693 {
+;    flex: 0 1 auto;
+;   ;
+;}
+
 (defn mui-theme
   [type]
   (reset! current-theme type)
@@ -74,7 +79,8 @@
                                                                    :&:focus       {:border-radius "6px"}}
                                                       :select     {:&:focus {:background-color (get-in color-themes [theme :palette :background :paper])}}
                                                       :icon       {:right "9px"
-                                                                   :color (get-in color-themes [theme :palette :border :default])}}}}]
+                                                                   :color (get-in color-themes [theme :palette :border :default])}}
+                                   :MuiDialog        {:paperScrollPaper {:max-height "calc(100% - 150px)"}}}}]
     (create-mui-theme (deep-merge common-theme color-theme))))
 
 (defn get-in-theme

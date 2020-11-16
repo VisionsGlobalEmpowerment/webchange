@@ -6,6 +6,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
+    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as actions-defaults]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as dialog.au]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
@@ -46,28 +47,28 @@
 
 (def actions
   {:insert-before                   {:text    "Add activity before"
-                                     :handler (partial add-action dialog-form.actions/default-action :before)}
+                                     :handler (partial add-action actions-defaults/default-action :before)}
    :insert-after                    {:text    "Add activity after"
-                                     :handler (partial add-action dialog-form.actions/default-action :after)}
+                                     :handler (partial add-action actions-defaults/default-action :after)}
    :add-parallel-activity           {:text    "Add parallel activity"
-                                     :handler (partial add-parallel-action dialog-form.actions/default-action)}
+                                     :handler (partial add-parallel-action actions-defaults/default-action)}
    :insert-concept-before           {:text    "Add concept before"
                                      :handler (partial add-concept-action :before)}
    :insert-concept-after            {:text    "Add concept after"
                                      :handler (partial add-concept-action :after)}
    :insert-text-animation-before    {:text    "Add text animation before"
-                                     :handler (partial add-action dialog-form.actions/text-animation-action :before)}
+                                     :handler (partial add-action actions-defaults/text-animation-action :before)}
    :insert-text-animation-after     {:text    "Add text animation after"
-                                     :handler (partial add-action dialog-form.actions/text-animation-action :after)}
+                                     :handler (partial add-action actions-defaults/text-animation-action :after)}
    :delete                          {:text    "Delete"
                                      :handler (partial delete-action)}
 
    :insert-in-concept-action-after  {:text    "Add in-concept action after"
-                                     :handler (partial add-in-concept-action dialog-form.actions/default-action :after)}
+                                     :handler (partial add-in-concept-action actions-defaults/default-action :after)}
    :insert-in-concept-action-before {:text    "Add in-concept action before"
-                                     :handler (partial add-in-concept-action dialog-form.actions/default-action :before)}
+                                     :handler (partial add-in-concept-action actions-defaults/default-action :before)}
    :add-in-concept-parallel-action  {:text    "Add in-concept parallel action"
-                                     :handler (partial add-new-phrase-in-concept-parallel-action dialog-form.actions/default-action)}
+                                     :handler (partial add-new-phrase-in-concept-parallel-action actions-defaults/default-action)}
    :delete-in-concept-action        {:text    "Delete in-concept action"
                                      :handler (partial delete-in-concept-action)}})
 (defn- available-menu-items
@@ -116,8 +117,8 @@
                                                  {:key     (keyword (str "insert-" activity "-" pos))
                                                   :text    (str "Add effect " activity " " pos)
                                                   :handler (if concept-action?
-                                                             (partial add-in-concept-action (dialog-form.actions/get-action activity) (keyword pos))
-                                                             (partial add-action (dialog-form.actions/get-action activity) (keyword pos))
+                                                             (partial add-in-concept-action (actions-defaults/get-action activity) (keyword pos))
+                                                             (partial add-action (actions-defaults/get-action activity) (keyword pos))
                                                              )}])
                                       ["before", "after"]))
                                available-activities))
@@ -125,8 +126,8 @@
                         {:key     (keyword (str "insert-" activity "-parallel"))
                          :text    (str "Add effect " activity " parallel")
                          :handler (if concept-action?
-                                    (partial add-new-phrase-in-concept-parallel-action (dialog-form.actions/get-action activity))
-                                    (partial add-parallel-action (dialog-form.actions/get-action activity)))})
+                                    (partial add-new-phrase-in-concept-parallel-action (actions-defaults/get-action activity))
+                                    (partial add-parallel-action (actions-defaults/get-action activity)))})
                       available-activities))
          (map (fn [item] [(:key item) item]))
          (into {}))))

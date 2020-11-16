@@ -2,7 +2,7 @@
   (:require
     [clojure.string :refer [capitalize]]
     [webchange.editor-v2.translator.translator-form.utils :refer [node-data->phrase-data]]
-    [webchange.editor-v2.dialog.dialog-form.state.actions :refer [get-inner-action]]))
+    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]))
 
 (defn- get-styles
   []

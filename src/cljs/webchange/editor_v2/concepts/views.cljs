@@ -33,7 +33,7 @@
                            :aria-label "Delete"}
            [ic/delete {:style (:action-icon styles)}]]]])]]))
 
-(defn- visible?
+(defn resource-type?
   [type]
   (some #(= type %) ["string" "audio" "image" "video"]))
 
@@ -47,7 +47,7 @@
        [ui/table-cell "Value"]]]
      [ui/table-body
       (doall (for [{:keys [name type template]} (get-in dataset [:scheme :fields])]
-               (when (visible? type)
+               (when (resource-type? type)
                  ^{:key (str name)}
                  [ui/table-row {:key (str name)}
                   [ui/table-cell {:align "right" :style {:width "20%"}} name]

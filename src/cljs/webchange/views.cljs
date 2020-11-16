@@ -5,6 +5,7 @@
     [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.interpreter.components :refer [course]]
+    [webchange.editor-v2.creation-progress.views :refer [progress-panel]]
     [webchange.editor.events :as ee]
     [webchange.editor-v2.events :as ee2]
     [webchange.editor-v2.scene.state.skin :as editor-skin]
@@ -121,4 +122,5 @@
     [:div
      [ui/css-baseline]
      [panels handler route-params]
-     [error-message]]))
+     [error-message]
+     [progress-panel]]))

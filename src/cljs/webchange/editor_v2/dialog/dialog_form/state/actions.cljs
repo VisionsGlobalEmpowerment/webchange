@@ -3,39 +3,13 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
+    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as defaults]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as au]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
-
-(def empty-action-position 0)
-(def inner-action-position 1)
-
-(def default-action {:type "sequence-data"
-                     :data [{:type "empty" :duration 0}
-                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]})
-
-(def text-animation-action {:type "sequence-data"
-                            :data [{:type "empty" :duration 0}
-                                   {:type "text-animation", :phrase-text "New text animation", :audio nil}]})
-
-(defn get-empty-action
-  [action]
-  (get-in action [:data empty-action-position]))
-
-(defn get-inner-action
-  [action]
-  (get-in action [:data inner-action-position]))
-
-(defn get-action [name]
-  {:type "sequence-data"
-   :data [{:type     "empty"
-           :duration 0}
-          {:type "action" :id name}]})
-
-;; Subs
 
 ;; Evenst
 (re-frame/reg-event-fx
@@ -52,7 +26,7 @@
           empty-action {:type "action", :from-var [{:var-name concept-var, :var-property field-name}]}
 
           concept-action {:type "sequence-data",
-                          :data [default-action]}
+                          :data [defaults/default-action]}
 
           concept-schema {:name     field-name
                           :type     "action"
@@ -101,7 +75,7 @@
           field-name (actions/unique-var-name)
           empty-action {:type "action", :from-var [{:var-name concept-var, :var-property field-name}]}
           concept-action {:type "sequence-data",
-                          :data [default-action]},
+                          :data [defaults/default-action]},
           concept-schema {:name     field-name
                           :type     "action"
                           :template concept-action}

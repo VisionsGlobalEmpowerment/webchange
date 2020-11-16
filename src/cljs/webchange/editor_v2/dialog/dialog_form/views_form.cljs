@@ -23,8 +23,7 @@
   []
   (let [current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
         concept-required? @(re-frame/subscribe [::translator-form.graph/concept-required])
-        action? (= "action" (get-in current-phrase-action [:data 1 :type]))
-        ]
+        action? (= "action" (get-in current-phrase-action [:data 1 :type]))]
     [:div
      [description-block]
      (when concept-required?
@@ -33,18 +32,14 @@
      [diagram-block]
      [play-phrase-block]
      (if-not action?
-      [target-block]
-     )
+      [target-block])
      (if-not (nil? current-phrase-action)
        [:div
         [node-options]
         (if-not action?
           [:div
             [phrase-block]
-            [audios-block]
-           ]
-        )
-        ]
+            [audios-block]])]
        [ui/typography {:variant "subtitle1"}
         "Select action on diagram"])
      [text-chunks-modal]]))

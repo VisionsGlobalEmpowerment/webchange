@@ -4,19 +4,18 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.text.core :refer [parts->chunks]]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
+    [webchange.editor-v2.translator.translator-form.state.actions-shared :as actions-shared]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 ;; Subs
 
-(defn current-dialog-action-info
-  [db]
-  (get-in db (path-to-db [:current-dialog-action])))
+(def current-dialog-action-info actions-shared/current-dialog-action-info)
 
 (re-frame/reg-sub
   ::current-dialog-action-info
-  current-dialog-action-info)
+  actions-shared/current-dialog-action-info)
 
 (re-frame/reg-sub
   ::current-dialog-action
@@ -179,14 +178,15 @@
       {:dispatch-n (list [:api-request-error :load-lip-sync-data]
                          [::update-action :phrase {:data default-lip-sync-data}])})))
 
+(def empty-action {:type        "animation-sequence"
+                   :phrase-text "New action"
+                   :audio       nil})
+
 (re-frame/reg-event-fx
   ::add-new-phrase-action
   (fn [{:keys [db]} [_ node relative-position]]
     (let [current-concept (translator-form.concepts/current-concept db)
           {:keys [concept-action? parent-action parent-path target-position]} (actions/get-node-data node current-concept)
-          empty-action {:type        "animation-sequence"
-                        :phrase-text "New action"
-                        :audio       nil}
           data-patch (-> parent-action
                          (actions/insert-child-action empty-action target-position relative-position)
                          (select-keys [:data]))]

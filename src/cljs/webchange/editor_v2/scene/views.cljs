@@ -3,10 +3,12 @@
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.editor-v2.creation-progress.state :as progress-state]
     [webchange.editor-v2.layout.card.views :refer [list-card] :as card]
+    [webchange.editor-v2.scene-diagram.views-diagram :refer [dialogs-diagram]]
     [webchange.editor-v2.scene.views-canvas :refer [scene-canvas]]
     [webchange.editor-v2.scene.views-data :refer [data get-scenes-options]]
-    [webchange.editor-v2.scene.views-diagram :refer [diagram]]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
 
@@ -44,11 +46,13 @@
 
 (defn scene-translate
   []
-  (let [styles (get-styles)]
-    [:div {:style (:main-container styles)}
-     [:div {:style (:top-panel styles)}
-      [:div {:style (:data-container styles)}
-       [data]]
-      [:div {:style (:scene-container styles)}
-       [scene-canvas]]]
-     [diagram]]))
+  (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])]
+    (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
+          styles (get-styles)]
+      [:div {:style (:main-container styles)}
+       [:div {:style (:top-panel styles)}
+        [:div {:style (:data-container styles)}
+         [data]]
+        [:div {:style (:scene-container styles)}
+         [scene-canvas]]]
+       [dialogs-diagram {:scene-data scene-data}]])))

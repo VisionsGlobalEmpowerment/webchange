@@ -4,7 +4,8 @@
     [cljs-react-material-ui.reagent :as ui]
     [clojure.string :refer [capitalize]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
-    [webchange.editor-v2.dialog.dialog-form.state.actions :refer [get-inner-action] :as dialog-form.actions]
+    [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]
+    [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 (defn- get-styles

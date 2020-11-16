@@ -92,6 +92,16 @@
   ::current-scene-objects
   current-scene-objects)
 
+(defn- current-scene-actions
+  [db]
+  (let [current-scene-id (current-scene db)]
+    (get-in db [:scenes current-scene-id :actions] {})))
+
+(defn current-scene-action
+  [db action-id]
+  (-> (current-scene-actions db)
+      (get action-id)))
+
 (re-frame/reg-sub
   ::current-scene-back-button
   (fn []
