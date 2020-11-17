@@ -8,7 +8,8 @@
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn- get-styles
   []
@@ -26,7 +27,10 @@
                             :justify-content "space-between"
                             :width           "100%"}
    :form-button            {:margin-left "8px"
-                            :padding     "10px"}
+                            :padding     "8px"}
+   :form-button-save       {:margin-left "8px"
+                            :padding     "6px"
+                            :background-color (get-in-theme [:palette :secondary :main])}
    :alias-form             {:width "170px"}
    :target-form            {:margin-right "16px"}
    :target-form-label      {:top "-16px"}
@@ -68,11 +72,12 @@
         [ui/tooltip {:title "Cancel" :placement "top"}
          [ui/icon-button
           {:style    (:form-button styles)
+           :color    "primary"
            :on-click on-cancel}
           [ic/clear {:style (:menu-item-icon styles)}]]]
         [ui/tooltip {:title "Save" :placement "top"}
          [ui/icon-button
-          {:style    (:form-button styles)
+          {:style    (:form-button-save styles)
            :on-click #(on-save @current-data)}
           [ic/done {:style (:menu-item-icon styles)}]]]]])))
 
