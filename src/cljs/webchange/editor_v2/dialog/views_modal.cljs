@@ -17,14 +17,15 @@
 
 (defn dialog-modal
   []
-  (r/with-let [confirm-open? (r/atom false)]
+  (r/with-let [confirm-close? (r/atom false)
+               confirm-save? (r/atom false)]
     (let [open? @(re-frame/subscribe [::translator.window/modal-state])
           has-changes? @(re-frame/subscribe [::translator-form.form/has-changes])
           handle-save #(do (save-edited-data!)
-                           (close-window!))
+                           (reset! confirm-save? true))
           handle-close #(if-not has-changes?
                           (close-window!)
-                          (reset! confirm-open? true))
+                          (reset! confirm-close? true))
           styles (get-styles)]
       [ui/dialog
        {:open       open?
@@ -36,13 +37,20 @@
        [ui/dialog-content {:class-name "translation-form"}
         (when open?
           [translator-form])
-        [confirm-dialog {:open?       confirm-open?
+        [confirm-dialog {:open?       confirm-close?
                          :on-confirm  handle-save
                          :on-cancel   #(close-window!)
                          :title       "Save changes?"
                          :description "You are going to close translation window without changes saving."
                          :save-text   "Save"
-                         :cancel-text "Discard"}]]
+                         :cancel-text "Discard"}]
+        [confirm-dialog {:open?       confirm-save?
+                         :on-confirm  #(reset! confirm-save? false)
+                         :on-cancel   #(close-window!)
+                         :title       "Changes Saved"
+                         :description "Do you want to continue work or close dialogue window?"
+                         :save-text   "Continue"
+                         :cancel-text "Close"}]]
        [ui/dialog-actions
         [ui/button {:on-click handle-close}
          "Cancel"]
