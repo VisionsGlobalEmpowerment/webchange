@@ -1,14 +1,12 @@
-(ns webchange.editor-v2.dialog.dialog-form.audio-assets.audios-list.audios-list-item.views
+(ns webchange.editor-v2.dialog.dialog-form.audio-assets.views-audios-list
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
-    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
@@ -176,3 +174,10 @@
                               {:height         64
                                :on-change      handle-change-region
                                :show-controls? selected?})]]]))
+
+(defn audios-list
+  [{:keys [audios]}]
+  [:div
+   (for [audio-data audios]
+     ^{:key (:url audio-data)}
+     [audios-list-item audio-data])])

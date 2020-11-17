@@ -1,9 +1,8 @@
 (ns webchange.editor-v2.translator.translator-form.audio-assets.views
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views :refer [add-audio-form]]
-    [webchange.editor-v2.translator.translator-form.audio-assets.audios-filter.views :refer [audios-filter]]
+    [webchange.editor-v2.dialog.dialog-form.audio-assets.views-filter :refer [audios-filter] :as filter]
     [webchange.editor-v2.translator.translator-form.audio-assets.audios-list.views :refer [audios-list]]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]))
 
@@ -20,12 +19,12 @@
 
 (defn audios-block
   []
-  (r/with-let [current-filter (r/atom nil)]
-              (let [audios (->> @(re-frame/subscribe [::translator-form.audios/audios-list])
-                                (filter-audios @current-filter)
-                                (sort-by :date >))
-                    handle-filter-change (fn [filter] (reset! current-filter filter))]
-                [:div
-                 [audios-filter {:on-change handle-filter-change}]
-                 [audios-list {:audios audios}]
-                 [add-audio-form]])))
+  (let [current-filter @(re-frame/subscribe [::filter/current-audios-filter])
+        audios (->> @(re-frame/subscribe [::translator-form.audios/audios-list])
+                    (filter-audios current-filter)
+                    (sort-by :date >))
+        handle-filter-change (fn [filter] (reset! current-filter filter))]
+    [:div
+     [audios-filter {:on-change handle-filter-change}]
+     [audios-list {:audios audios}]
+     [add-audio-form]]))
