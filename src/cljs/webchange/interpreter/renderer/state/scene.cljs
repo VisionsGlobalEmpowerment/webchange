@@ -73,6 +73,7 @@
                              :set-data       [:data]
                              :set-path       [:path]
                              :set-fill       [:fill]
+                             :set-highlight  [:highlight]
                              :set-font-size  [:font-size]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys filtered-state params)]))
@@ -142,6 +143,11 @@
   :set-src
   (fn [[object-wrapper {:keys [src options]}]]
     (apply-to-wrapper w/set-src object-wrapper src options)))
+
+(re-frame/reg-fx
+  :set-highlight
+  (fn [[object-wrapper {:keys [highlight options]}]]
+    (apply-to-wrapper w/set-highlight object-wrapper highlight options)))
 
 (re-frame/reg-fx
   :set-opacity

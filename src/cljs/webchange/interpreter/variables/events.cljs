@@ -11,6 +11,8 @@
 (e/reg-simple-executor :vars-var-provider ::execute-vars-var-provider)
 (e/reg-simple-executor :test-var ::execute-test-var)        ;; Not used
 (e/reg-simple-executor :test-var-scalar ::execute-test-var-scalar)
+(e/reg-simple-executor :test-var-inequality ::execute-test-var-inequality)
+(e/reg-simple-executor :test-var-list-at-least-one-true ::execute-test-var-list-at-least-one-true)
 (e/reg-simple-executor :test-var-list ::execute-test-var-list)
 (e/reg-simple-executor :test-value ::execute-test-value)
 (e/reg-simple-executor :case ::execute-case)
@@ -231,6 +233,33 @@
         {:dispatch [::e/execute-action (cond-action db action fail)]}))))
 
 (re-frame/reg-event-fx
+  ::execute-test-var-inequality
+  (fn [{:keys [db]} [_ {:keys [value var-name success fail inequality] :as action}]]
+    "Execute `test-var-scalar` action - compare variable value with test value.
+
+    Action params:
+    :var-name - variable name that we want to test.
+    :value - value to compare with.
+    :inequality - type of inequality e.g. <= >=
+    :success - action to execute if the comparison is successful. Can be represented as an action name (string) or action data.
+    :fail- action to execute if the comparison is failed. Can be represented as an action name (string) or action data.
+
+    Example:
+    {:type     'test-var-inequality',
+     :var-name 'current-box',
+     :value    5,
+     :inequality '<=',
+     :success  'first-word',
+     :fail     'pick-wrong'}"
+    (let [test (core/get-variable var-name)]
+      (if (case (keyword inequality)
+            :<= (<= test value)
+            :>= (>= test value))
+        {:dispatch [::e/execute-action (cond-action db action success)]}
+        {:dispatch [::e/execute-action (cond-action db action fail)]}))))
+
+
+(re-frame/reg-event-fx
   ::execute-test-value
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [value1 value2 success fail] :as action}]
@@ -279,6 +308,27 @@
         (if fail
           {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
           {:dispatch-n (list (e/success-event action))})))))
+
+(re-frame/reg-event-fx
+  ::execute-test-var-list-at-least-one-true
+  (fn [{:keys [db]} [_ {:keys [var-names success fail] :as action}]]
+             "Execute `test-var-list-or` action - check that at least one variable from list are true.
+
+             Action params:
+             :var-names - list of variables names that we want to test.
+             :success - action name to execute if the comparison is successful.
+             :fail - action name to execute if the comparison is failed.
+
+             Example:
+             {:type      'test-var-list-at-least-one-true',
+              :success   'mari-voice-finish',
+              :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
+             (let [count (count (filter #(= true %) (map core/get-variable var-names)))]
+               (if (not (= count 0))
+                 {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
+                 (if fail
+                   {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
+                   {:dispatch-n (list (e/success-event action))})))))
 
 (re-frame/reg-event-fx
   ::execute-case

@@ -14,50 +14,52 @@
                         ],
         :objects       {:background      {:type "background", :src "/raw/img/categorize/background.png"},
                         :yellow-box
-                                         {:type   "image",
-                                          :x      240,
-                                          :y      664,
-                                          :width  428,
-                                          :height 549,
-                                          :src    "/raw/img/categorize/yellow_box.png"
+                                         {:type       "image",
+                                          :x          240,
+                                          :y          664,
+                                          :width      428,
+                                          :height     549,
+                                          :src        "/raw/img/categorize/yellow_box.png",
+                                          :transition "yellow-box",
+                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
                                           },
-                        :blue-box        {:type   "image",
-                                          :x      746,
-                                          :y      664,
-                                          :width  428,
-                                          :height 549,
-                                          :src    "/raw/img/categorize/blue_box.png"}
-                        :red-box         {:type   "image",
-                                          :x      1252,
-                                          :y      664,
-                                          :width  428,
-                                          :height 549,
-                                          :src    "/raw/img/categorize/red_box.png"}
-                        :blue-crayen-1   {
+                        :blue-box        {:type       "image",
+                                          :x          746,
+                                          :y          664,
+                                          :width      428,
+                                          :height     549,
+                                          :transition "blue-box",
+                                          :src        "/raw/img/categorize/blue_box.png",
+                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                          }
+                        :red-box         {:type       "image",
+                                          :x          1252,
+                                          :y          664,
+                                          :width      428,
+                                          :height     549,
+                                          :transition "red-box",
+                                          :src        "/raw/img/categorize/red_box.png",
+                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                          }
+                        :blue-crayon-1   {
                                           :type       "image",
                                           :x          184,
                                           :y          228,
                                           :width      65,
                                           :height     635,
                                           :rotation   -53,
-                                          :src        "/raw/img/categorize/blue_crayens.png",
-                                          :transition "blue-crayen-1",
+                                          :src        "/raw/img/categorize/blue_crayons.png",
+                                          :transition "blue-crayon-1",
                                           :draggable  true,
-                                          :actions
-                                                      {:on-pointer-enter {
-                                                                          :on     "on-pointer-enter"
-                                                                          :id     "hide",
-                                                                          :type   "state",
-                                                                          :target "blue-crayen-1"
-                                                                          }
+                                          :actions    {
                                                        :drag-end
-                                                                         {:id     "drag-crayen",
-                                                                          :on     "drag-end",
-                                                                          :type   "action",
-                                                                          :params {:target        "blue-crayen-1"
-                                                                                   :init-position {:x 184, :y 228, :duration 1}
-                                                                                   :color         "blue"
-                                                                                   }}},
+                                                       {:id     "drag-crayon",
+                                                        :on     "drag-end",
+                                                        :type   "action",
+                                                        :params {:target        "blue-crayon-1"
+                                                                 :init-position {:x 184, :y 228, :duration 1}
+                                                                 :color         "blue"
+                                                                 }}},
                                           :states     {:hide {:visible false}},
                                           }
                         :yellow-crayon-1 {
@@ -71,13 +73,12 @@
                                           :transition "yellow-crayon-1",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
                                                         :params {:target        "yellow-crayon-1"
                                                                  :init-position {:x 145, :y 521, :duration 1}
-                                                                 :color         "yellow"
-                                                                 }}},
+                                                                 :color         "yellow"}}},
                                           :states     {:hide {:visible false}}
                                           }
                         :red-crayon-1    {
@@ -91,7 +92,7 @@
                                           :transition "red-crayon-1",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
                                                         :params {:target        "red-crayon-1"
@@ -101,21 +102,21 @@
                                           :states     {:hide {:visible false}}
                                           }
 
-                        :blue-crayen-2   {
+                        :blue-crayon-2   {
                                           :type       "image",
                                           :x          1406,
                                           :y          456,
                                           :width      65,
                                           :height     635,
                                           :rotation   125,
-                                          :src        "/raw/img/categorize/blue_crayens.png",
-                                          :transition "blue-crayen-2",
+                                          :src        "/raw/img/categorize/blue_crayons.png",
+                                          :transition "blue-crayon-2",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
-                                                        :params {:target        "blue-crayen-2"
+                                                        :params {:target        "blue-crayon-2"
                                                                  :init-position {:x 1406, :y 456, :duration 1}
                                                                  :color         "blue"
                                                                  }}},
@@ -132,7 +133,7 @@
                                           :transition "yellow-crayon-2",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
                                                         :params {:target        "yellow-crayon-2"
@@ -152,7 +153,7 @@
                                           :transition "red-crayon-2",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
                                                         :params {:target        "red-crayon-2"
@@ -161,21 +162,21 @@
                                                                  }}},
                                           :states     {:hide {:visible false}}
                                           }
-                        :blue-crayen-3   {
+                        :blue-crayon-3   {
                                           :type       "image",
                                           :x          1753,
                                           :y          144,
                                           :width      65,
                                           :height     635,
                                           :rotation   45,
-                                          :src        "/raw/img/categorize/blue_crayens.png",
-                                          :transition "blue-crayen-3",
+                                          :src        "/raw/img/categorize/blue_crayons.png",
+                                          :transition "blue-crayon-3",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
-                                                        :params {:target        "blue-crayen-3"
+                                                        :params {:target        "blue-crayon-3"
                                                                  :init-position {:x 1753, :y 144, :duration 1}
                                                                  :color         "blue"
                                                                  }}},
@@ -192,7 +193,7 @@
                                           :transition "yellow-crayon-3",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
                                                         :params {:target        "yellow-crayon-3"
@@ -212,7 +213,7 @@
                                           :transition "red-crayon-3",
                                           :draggable  true,
                                           :actions    {:drag-end
-                                                       {:id     "drag-crayen",
+                                                       {:id     "drag-crayon",
                                                         :on     "drag-end",
                                                         :type   "action",
                                                         :params {:target        "red-crayon-3"
@@ -222,12 +223,15 @@
                                           :states     {:hide {:visible false}}
                                           }
                         },
-        :scene-objects [["background"] ["yellow-box" "blue-box" "red-box"]
-                        ["blue-crayen-1" "yellow-crayon-1" "red-crayon-1"]
-                        ["red-crayon-2" "blue-crayen-2" "yellow-crayon-2"]
-                        ["yellow-crayon-3" "red-crayon-3" "blue-crayen-3"]
+        :scene-objects [["background"]
+                        ["yellow-box" "blue-box" "red-box"]
+                        ["blue-crayon-1" "yellow-crayon-1" "red-crayon-1"]
+                        ["red-crayon-2" "blue-crayon-2" "yellow-crayon-2"]
+                        ["yellow-crayon-3" "red-crayon-3" "blue-crayon-3"]
+
                         ],
         :actions       {
+
                         :crayon-in-right-box {:id          "hide",
                                               :type        "state",
                                               :from-params [{:action-property "target" :param-property "target"}]},
@@ -235,20 +239,96 @@
                                               :from-params [{:action-property "transition-id" :param-property "target"}
                                                             {:action-property "to" :param-property "init-position"}]
                                               }
-                        :wrong-option {:type               "sequence-data",
-                                       :data               [{:id "crayon-revert", :type   "action"}
-                                                            {:id "wrong-answer", :type   "action"}],}
+                        :wrong-option        {:type "sequence-data",
+                                              :data [{:id "crayon-revert", :type "action"}
+                                                     {:id "wrong-answer", :type "action"}],}
 
-                        :correct-option {:type               "sequence-data",
-                                       :data               [{:id "crayon-in-right-box", :type   "action"}
-                                                            {:id "correct-answer", :type  "action"}]}
-                        :drag-crayen
-                                             {:type        "test-transitions-collide",
-                                              :success     "correct-option",
-                                              :fail        "wrong-option",
-                                              :from-params [{:template "%-box", :param-property "color", :action-property "transition-2"}
-                                                            {:param-property "target", :action-property "transition-1"}]
-                                              },
+                        :correct-option      {:type "sequence-data",
+                                              :data [{:type "counter" :counter-action "increase" :counter-id "sorted-crayons"}
+                                                     {:id "crayon-in-right-box", :type "action"}
+                                                     {:id "correct-answer", :type "action"}
+                                                     {:type       "test-var-inequality"
+                                                      :var-name   "sorted-crayons",
+                                                      :value      9,
+                                                      :inequality ">=",
+                                                      :success    "finish-scene",
+                                                      :fail       "continue-sorting"
+                                                      }
+                                                     ]}
+                        :check-option        {:type      "test-var-list-at-least-one-true"
+                                              :var-names ["yellow-box-selected" "blue-box-selected" "red-box-selected"]
+                                              :success   "wrong-option",
+                                              :fail      "crayon-revert"
+                                              }
+                        :drag-crayon         {:type "sequence-data"
+                                              :data [
+                                                     {:type        "test-var-scalar",
+                                                      :success     "correct-option",
+                                                      :fail        "check-option",
+                                                      :value       true,
+                                                      :from-params [{:template "%-box-selected", :param-property "color", :action-property "var-name"}]
+                                                      }
+                                                     ]
+                                              }
+                        :highlight           {:type "sequence-data"
+                                              :data [{:type        "set-variable",
+                                                      :var-value   true
+                                                      :from-params [{:template "%-selected", :action-property "var-name" :param-property "target"}]
+                                                      }
+                                                     {:type        "state"
+                                                      :id          "highlighted"
+                                                      :from-params [{:action-property "target" :param-property "target"}]
+                                                      }]
+                                              }
+                        :unhighlight         {:type "sequence-data"
+                                              :data [{:type        "set-variable",
+                                                      :var-value   false
+                                                      :from-params [{:template "%-selected", :action-property "var-name" :param-property "target"}]
+                                                      }
+                                                     {:type        "state"
+                                                      :id          "not-highlighted"
+                                                      :from-params [{:action-property "target" :param-property "target"}]}
+                                                     ]
+                                              }
+                        :check-collide       {:type "sequence-data"
+                                              :data [
+                                                     {:type       "test-transition-and-pointer-collide",
+                                                      :success    "highlight",
+                                                      :fail       "unhighlight",
+                                                      :transition "yellow-box",
+                                                      :params     {:target "yellow-box"}
+                                                      }
+                                                     {:type       "test-transition-and-pointer-collide",
+                                                      :success    "highlight",
+                                                      :fail       "unhighlight",
+                                                      :transition "blue-box"
+                                                      :params     {:target "blue-box"}
+                                                      }
+                                                     {:type       "test-transition-and-pointer-collide",
+                                                      :success    "highlight",
+                                                      :fail       "unhighlight",
+                                                      :transition "red-box"
+                                                      :params     {:target "red-box"}
+                                                      }
+                                                     ]
+
+                                              }
+
+                        :init-activity       {:type "sequence-data"
+                                              :data [
+
+                                                     {:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-crayons"}
+                                                     {:type "set-variable", :var-name "yellow-box-selected", :var-value false}
+                                                     {:type "set-variable", :var-name "blue-box-selected", :var-value false}
+                                                     {:type "set-variable", :var-name "red-box-selected", :var-value false}
+                                                     {:type     "set-interval"
+                                                      :id       "check-collide"
+                                                      :interval 500
+                                                      :action   "check-collide"}
+                                                     {:type "action" :id "intro"}
+                                                     ]
+
+                                              }
                         :intro               {:type               "sequence-data",
                                               :editor-type        "dialog",
                                               :data               [{:type "sequence-data"
@@ -256,34 +336,46 @@
                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                               :phrase             "intro",
                                               :phrase-description "Introduce task"}
-                        :correct-answer     {:type               "sequence-data",
+                        :correct-answer      {:type               "sequence-data",
                                               :editor-type        "dialog",
                                               :data               [{:type "sequence-data"
                                                                     :data [{:type "empty" :duration 0}
                                                                            {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
                                               :phrase             "correct-answer",
                                               :phrase-description "correct answer"}
-                        :wrong-answer     {:type               "sequence-data",
-                                             :editor-type        "dialog",
-                                             :data               [{:type "sequence-data"
-                                                                   :data [{:type "empty" :duration 0}
-                                                                          {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "wrong-answer",
-                                             :phrase-description "wrong answer"}
-                        :finish-dialog     {:type               "sequence-data",
-                                           :editor-type        "dialog",
-                                           :data               [{:type "sequence-data"
-                                                                 :data [{:type "empty" :duration 0}
-                                                                        {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                           :phrase             "finish-dialog",
-                                           :phrase-description "finish dialog"}
-                        :stop-activity      {:type "stop-activity", :id "categorize"},
+                        :wrong-answer        {:type               "sequence-data",
+                                              :editor-type        "dialog",
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                              :phrase             "wrong-answer",
+                                              :phrase-description "wrong answer"}
+                        :finish-scene        {:type "sequence-data",
+                                              :data [{:type "action" :id "finish-dialog"}
+                                                     {:type "stop-activity", :id "categorize"}
+                                                     ],
+                                              }
+                        :finish-dialog       {:type               "sequence-data",
+                                              :editor-type        "dialog",
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                              :phrase             "finish-dialog",
+                                              :phrase-description "finish dialog"}
+                        :continue-sorting    {:type               "sequence-data",
+                                              :editor-type        "dialog",
+                                              :data               [{:type "sequence-data"
+                                                                    :data [{:type "empty" :duration 0}
+                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                              :phrase             "continue-sorting",
+                                              :phrase-description "Continue sorting"}
+                        :stop-activity       {:type "stop-activity", :id "categorize"},
 
                         },
 
         :triggers
                        {:back  {:on "back", :action "stop-activity"},
-                        :start {:on "start", :action "intro"}},
+                        :start {:on "start", :action "init-activity"}},
         :metadata      {:autostart true},
         })
 
