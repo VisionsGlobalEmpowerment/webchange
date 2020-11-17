@@ -2,13 +2,8 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]))
-
-(def text-input-params {:placeholder "Enter description text"
-                        :variant     "outlined"
-                        :margin      "normal"
-                        :multiline   true
-                        :full-width  true})
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.ui.theme :refer [get-in-theme]]))
 
 (defn description-block
   []
@@ -22,14 +17,20 @@
               :spacing   16
               :justify   "space-between"}
      [ui/grid {:item true :xs 6}
-      [ui/text-field (merge text-input-params
-                            {:label    "Origin Description"
-                             :value    (or origin-text "")
-                             :disabled true})]]
-     [ui/grid {:item true :xs 6}
-      [ui/text-field (merge text-input-params
-                            {:label           "Translated Description"
-                             :value   (or translated-text "")
-                             :on-change       handle-change
-                             :InputLabelProps {:shrink  true
-                                               :focused true}})]]]))
+      [ui/text-field {:label           "Name of Script Segment"
+                      :value           (or translated-text "")
+                      :on-change       handle-change
+                      :placeholder     "Enter translated text"
+                      :variant         "outlined"
+                      :margin          "normal"
+                      :multiline       true
+                      :full-width      true
+                      :InputLabelProps {:shrink true}}]]
+     [ui/grid {:item  true :xs 6
+               :style {:display      "flex"
+                       :align-items  "center"
+                       :padding-left "16px"
+                       :color        (get-in-theme [:palette :text :secondary])}}
+      [ui/typography {:variant "body2"
+                      :style   {:margin-right "8px"}} "Previous:"]
+      [ui/typography {:variant "body1"} origin-text]]]))
