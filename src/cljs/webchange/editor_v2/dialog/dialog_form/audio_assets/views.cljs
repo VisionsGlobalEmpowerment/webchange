@@ -44,6 +44,6 @@
           handle-filter-change (fn [filter] (reset! current-filter filter))]
       [:div
        [warning-block]
+       [add-audio-form]
        [audios-filter {:on-change handle-filter-change}]
-       [audios-list {:audios audios}]
-       [add-audio-form]])))
+       [audios-list {:audios audios}]])))

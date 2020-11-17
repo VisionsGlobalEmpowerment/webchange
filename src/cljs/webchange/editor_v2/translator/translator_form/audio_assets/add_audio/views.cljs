@@ -1,8 +1,8 @@
 (ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views :refer [audio-record-panel]]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.upload.views :refer [audio-upload-panel]]))
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views-record :refer [audio-record-panel]]
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views-upload :refer [audio-upload-panel]]))
 
 (defn- get-styles
   []

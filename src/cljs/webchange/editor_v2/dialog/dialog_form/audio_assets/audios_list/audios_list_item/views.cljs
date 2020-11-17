@@ -43,104 +43,104 @@
                        :padding "0"}}])
    [ui/typography {:variant "subtitle2"
                    :color   "default"
-                   :style   {:display "inline-block"}} alias]])
+                   :style   {:display "inline-block"}}
+    (or alias "Name is not defined")]])
 
 (defn- audio-info-form
   [{:keys [alias target on-save on-cancel]}]
   (r/with-let [current-data (r/atom {:alias  alias
                                      :target target})]
-              (let [styles (get-styles)]
-                [:div {:style (:info-form styles)}
-                 [:div
-                  [ui/form-control {:style (:target-form styles)}
-                   [ui/input-label {:html-for "target"
-                                    :style    (:target-form-label styles)}
-                    "Target"]
-                   [audio-target-selector {:default-value            (or (:target @current-data) "")
-                                           :styles                   {:control (:target-form-input styles)}
-                                           :on-change                #(swap! current-data assoc :target %)
-                                           :custom-option-available? true}]]
-                  [ui/form-control {:style (:alias-form styles)}
-                   [ui/text-field {:label     "Alias"
-                                   :value     (or (:alias @current-data) "")
-                                   :on-change #(swap! current-data assoc :alias (-> % .-target .-value))
-                                   :variant   "outlined"}]]]
-                 [:div
-                  [ui/tooltip {:title "Cancel" :placement "top"}
-                   [ui/icon-button
-                    {:style    (:form-button styles)
-                     :on-click on-cancel}
-                    [ic/clear {:style (:menu-item-icon styles)}]]]
-                  [ui/tooltip {:title "Save" :placement "top"}
-                   [ui/icon-button
-                    {:style    (:form-button styles)
-                     :on-click #(on-save @current-data)}
-                    [ic/done {:style (:menu-item-icon styles)}]]]]])))
+    (let [styles (get-styles)]
+      [:div {:style (:info-form styles)}
+       [:div
+        [ui/form-control {:style (:target-form styles)}
+         [ui/input-label {:html-for "target"
+                          :style    (:target-form-label styles)}
+          "Character"]
+         [audio-target-selector {:default-value            (or (:target @current-data) "")
+                                 :styles                   {:control (:target-form-input styles)}
+                                 :on-change                #(swap! current-data assoc :target %)
+                                 :custom-option-available? true}]]
+        [ui/form-control {:style (:alias-form styles)}
+         [ui/text-field {:label     "File Name"
+                         :value     (or (:alias @current-data) "")
+                         :on-change #(swap! current-data assoc :alias (-> % .-target .-value))
+                         :variant   "outlined"}]]]
+       [:div
+        [ui/tooltip {:title "Cancel" :placement "top"}
+         [ui/icon-button
+          {:style    (:form-button styles)
+           :on-click on-cancel}
+          [ic/clear {:style (:menu-item-icon styles)}]]]
+        [ui/tooltip {:title "Save" :placement "top"}
+         [ui/icon-button
+          {:style    (:form-button styles)
+           :on-click #(on-save @current-data)}
+          [ic/done {:style (:menu-item-icon styles)}]]]]])))
 
 (defn- audio-menu
   [{:keys [on-edit on-delete on-bring-to-top on-clear-selection]}]
   (r/with-let [menu-anchor (r/atom nil)]
-              (let [handle-edit #(do (reset! menu-anchor nil) (on-edit))
-                    handle-bring-to-top #(do (reset! menu-anchor nil) (on-bring-to-top))
-                    handle-delete #(do (reset! menu-anchor nil) (on-delete))
-                    handle-cancel #(reset! menu-anchor nil)
-                    handle-clear-selection #(do (reset! menu-anchor nil) (on-clear-selection))
-                    styles (get-styles)]
-                [:div
-                 [ui/icon-button
-                  {:style    (:menu-button styles)
-                   :on-click #(reset! menu-anchor (.-currentTarget %))}
-                  [ic/more-horiz {:style (:menu-item-icon styles)}]]
-                 [ui/menu
-                  {:anchor-el @menu-anchor
-                   :open      (boolean @menu-anchor)
-                   :on-close  #(reset! menu-anchor nil)}
-                  [ui/menu-item {:on-click handle-bring-to-top}
-                   [ui/list-item-icon
-                    [ic/vertical-align-top {:style (:menu-item-icon styles)}]]
-                   "Bring To Top"]
-                  [ui/menu-item {:on-click handle-edit}
-                   [ui/list-item-icon
-                    [ic/edit {:style (:menu-item-icon styles)}]]
-                   "Edit Data"]
-                  [ui/menu-item {:on-click handle-clear-selection}
-                   [ui/list-item-icon
-                    [ic/edit {:style (:menu-item-icon styles)}]]
-                   "Clear selection"]
-                  [with-confirmation {:message    "Remove audio asset from scene?"
-                                      :on-confirm handle-delete
-                                      :on-cancel  handle-cancel}
-                   [ui/menu-item
-                    [ui/list-item-icon
-                     [ic/delete {:style (:menu-item-icon styles)}]]
-                    "Delete"]]]])))
+    (let [handle-edit #(do (reset! menu-anchor nil) (on-edit))
+          handle-bring-to-top #(do (reset! menu-anchor nil) (on-bring-to-top))
+          handle-delete #(do (reset! menu-anchor nil) (on-delete))
+          handle-cancel #(reset! menu-anchor nil)
+          handle-clear-selection #(do (reset! menu-anchor nil) (on-clear-selection))
+          styles (get-styles)]
+      [:div
+       [ui/icon-button
+        {:style    (:menu-button styles)
+         :on-click #(reset! menu-anchor (.-currentTarget %))}
+        [ic/more-horiz {:style (:menu-item-icon styles)}]]
+       [ui/menu
+        {:anchor-el @menu-anchor
+         :open      (boolean @menu-anchor)
+         :on-close  #(reset! menu-anchor nil)}
+        [ui/menu-item {:on-click handle-bring-to-top}
+         [ui/list-item-icon
+          [ic/vertical-align-top {:style (:menu-item-icon styles)}]]
+         "Bring To Top"]
+        [ui/menu-item {:on-click handle-edit}
+         [ui/list-item-icon
+          [ic/edit {:style (:menu-item-icon styles)}]]
+         "Edit Data"]
+        [ui/menu-item {:on-click handle-clear-selection}
+         [ui/list-item-icon
+          [ic/edit {:style (:menu-item-icon styles)}]]
+         "Clear selection"]
+        [with-confirmation {:message    "Remove audio asset from scene?"
+                            :on-confirm handle-delete
+                            :on-cancel  handle-cancel}
+         [ui/menu-item
+          [ui/list-item-icon
+           [ic/delete {:style (:menu-item-icon styles)}]]
+          "Delete"]]]])))
 
 (defn- header
   [{:keys [alias target selected? on-change-data on-bring-to-top on-delete on-clear-selection]}]
   (r/with-let [edit-state? (r/atom false)]
-              (let [styles (get-styles)
-                    handle-edit #(reset! edit-state? true)
-                    handle-save #(do (reset! edit-state? false)
-                                     (on-change-data %))
-                    handle-cancel #(reset! edit-state? false)
-                    handle-bring-to-top #(on-bring-to-top)
-                    handle-delete on-delete
-                    handle-clear-selection on-clear-selection
-                    ]
-                [:div {:style (:block-header styles)}
-                 (if @edit-state?
-                   [audio-info-form {:alias     alias
-                                     :target    target
-                                     :on-save   handle-save
-                                     :on-cancel handle-cancel}]
-                   [audio-info {:alias  alias
-                                :target target}])
-                 (when (and selected?
-                            (not @edit-state?))
-                   [audio-menu {:on-edit         handle-edit
-                                :on-bring-to-top handle-bring-to-top
-                                :on-clear-selection handle-clear-selection
-                                :on-delete       handle-delete}])])))
+    (let [styles (get-styles)
+          handle-edit #(reset! edit-state? true)
+          handle-save #(do (reset! edit-state? false)
+                           (on-change-data %))
+          handle-cancel #(reset! edit-state? false)
+          handle-bring-to-top #(on-bring-to-top)
+          handle-delete on-delete
+          handle-clear-selection on-clear-selection]
+      [:div {:style (:block-header styles)}
+       (if @edit-state?
+         [audio-info-form {:alias     alias
+                           :target    target
+                           :on-save   handle-save
+                           :on-cancel handle-cancel}]
+         [audio-info {:alias  alias
+                      :target target}])
+       (when (and selected?
+                  (not @edit-state?))
+         [audio-menu {:on-edit            handle-edit
+                      :on-bring-to-top    handle-bring-to-top
+                      :on-clear-selection handle-clear-selection
+                      :on-delete          handle-delete}])])))
 
 (defn audios-list-item
   [audio-data]
@@ -165,13 +165,13 @@
                           (:block-wrapper-selected styles)
                           (:block-wrapper styles))}
      [ui/card-content
-      [header {:alias           (or alias "alias not defined")
-               :target          target
-               :selected?       selected?
-               :on-change-data  handle-change-data
-               :on-bring-to-top handle-bring-to-top
+      [header {:alias              alias
+               :target             target
+               :selected?          selected?
+               :on-change-data     handle-change-data
+               :on-bring-to-top    handle-bring-to-top
                :on-clear-selection handle-clear-selection
-               :on-delete       handle-delete}]
+               :on-delete          handle-delete}]
       [audio-wave-form (merge audio-data
                               {:height         64
                                :on-change      handle-change-region

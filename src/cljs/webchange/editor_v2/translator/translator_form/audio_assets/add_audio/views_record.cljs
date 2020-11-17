@@ -1,15 +1,15 @@
-(ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.views
+(ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views-record
   (:require
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.utils-recorder :as recorder]
+    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.recorder :as recorder]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]))
 
 (defn- get-styles
   []
-  {:start-record-button {:padding       "36px"
+  {:start-record-button {:padding       "26px"
                          :border-radius "50%"}
    :start-record-icon   {:font-size "48px"}
    :stop-record-button  {:padding       "11px"
