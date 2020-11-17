@@ -4,13 +4,14 @@
     [cljs-react-material-ui.reagent :as ui]
     [clojure.string :refer [capitalize]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.dialog.dialog-form.audio-assets.views-filter :refer [audios-filter]]
     [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
 
 (defn- get-styles
   []
-  {:wrapper {:style {:margin-bottom "15px"}}
+  {:wrapper {:margin-bottom "15px"}
    :title   {:display "inline-block"
              :margin  "5px 0"}
    :control {:margin "0 10px"
@@ -21,7 +22,7 @@
   {:text  (capitalize value)
    :value value})
 
-(defn target-block
+(defn- character-selector
   []
   (let [targets (->> @(re-frame/subscribe [::translator-form.scene/available-animation-targets])
                      (map value->option))
@@ -29,14 +30,28 @@
                             get-inner-action
                             :target)
         styles (get-styles)]
-    [:div (:wrapper styles)
-     [ui/typography {:variant "h6"
-                     :style   (:title styles)}
-      "Character:"]
-     [ui/select {:value         (or current-target "")
-                 :display-empty true
-                 :on-change     #(re-frame/dispatch [::dialog-form.actions/set-phrase-action-target (->> % .-target .-value)])
-                 :style         (:control styles)}
-      (for [{:keys [text value]} targets]
-        ^{:key value}
-        [ui/menu-item {:value value} text])]]))
+    [ui/select {:value         (or current-target "")
+                :display-empty true
+                :on-change     #(re-frame/dispatch [::dialog-form.actions/set-phrase-action-target (->> % .-target .-value)])
+                :style         (:control styles)}
+     (for [{:keys [text value]} targets]
+       ^{:key value}
+       [ui/menu-item {:value value} text])]))
+
+(defn target-block
+  []
+  (let [current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
+        styles (get-styles)]
+    [ui/grid {:container true
+              :spacing   16
+              :style     (:wrapper styles)}
+     [ui/grid {:item true
+               :xs   6}
+      [ui/typography {:variant "h6"
+                      :style   (:title styles)}
+       "Character:"]
+      [character-selector]]
+     [ui/grid {:item true
+               :xs   6}
+      (when (some? current-phrase-action)
+        [audios-filter])]]))

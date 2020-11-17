@@ -5,7 +5,7 @@
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
     [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]
     [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views :refer [add-audio-form]]
-    [webchange.editor-v2.dialog.dialog-form.audio-assets.views-filter :refer [audios-filter] :as filter]
+    [webchange.editor-v2.dialog.dialog-form.audio-assets.views-filter :as filter]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.dialog.dialog-form.audio-assets.views-audios-list :refer [audios-list]]
     [webchange.editor-v2.dialog.dialog-form.state.audios :as dialog-form.audios]
@@ -43,5 +43,4 @@
     [:div
      [warning-block]
      [add-audio-form]
-     [audios-filter]
      [audios-list {:audios audios}]]))
