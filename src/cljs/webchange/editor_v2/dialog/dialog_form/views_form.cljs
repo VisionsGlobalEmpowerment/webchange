@@ -29,15 +29,14 @@
        [concepts-block])
      [diagram-block]
      [play-phrase-block]
-     (if-not action?
-      [target-block])
      (if-not (nil? current-phrase-action)
        [:div
         [node-options]
         (if-not action?
           [:div
-            [phrase-block]
-            [audios-block]])]
+           [phrase-block]
+           [target-block]
+           [audios-block]])]
        [ui/typography {:variant "subtitle1"}
         "Select action on diagram"])
      [text-chunks-modal]]))
