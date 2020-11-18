@@ -11,6 +11,11 @@
 (def t {:assets        [
                         {:url "/raw/img/categorize/background.png", :size 10, :type "image"}
                         {:url "/raw/img/categorize/yellow_box.png", :size 10, :type "image"}
+                        {:url "/raw/img/categorize/blue_box.png", :size 10, :type "image"}
+                        {:url "/raw/img/categorize/red_box.png", :size 10, :type "image"}
+                        {:url "/raw/img/categorize/blue_crayons.png", :size 10, :type "image"}
+                        {:url "/raw/img/categorize/red_crayons.png", :size 10, :type "image"}
+                        {:url "/raw/img/categorize/yellow_crayons.png", :size 10, :type "image"}
                         ],
         :objects       {:background      {:type "background", :src "/raw/img/categorize/background.png"},
                         :yellow-box
@@ -323,7 +328,7 @@
                                                      {:type "set-variable", :var-name "red-box-selected", :var-value false}
                                                      {:type     "set-interval"
                                                       :id       "check-collide"
-                                                      :interval 500
+                                                      :interval 100
                                                       :action   "check-collide"}
                                                      {:type "action" :id "intro"}
                                                      ]
