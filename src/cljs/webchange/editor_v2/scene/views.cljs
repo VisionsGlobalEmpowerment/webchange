@@ -11,6 +11,7 @@
     [webchange.editor-v2.scene.translation-steps :as translation-steps]
     [webchange.editor-v2.scene.views-canvas :refer [scene-canvas]]
     [webchange.editor-v2.scene.views-data :refer [data]]
+    [webchange.editor-v2.state :as state]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
 
@@ -57,9 +58,11 @@
   []
   (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])]
     (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
+          fullscreen? @(re-frame/subscribe [::state/diagram-fullscreen?])
           styles (get-styles)]
       [:div {:style (:main-container styles)}
-       [:div {:style (:top-panel styles)}
+       [:div {:style (merge (:top-panel styles)
+                            (if fullscreen? {:display "none"} {}))}
         [:div {:style (:data-container styles)}
          [data]]
         [:div {:style (:scene-container styles)}
