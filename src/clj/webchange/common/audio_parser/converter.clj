@@ -27,7 +27,7 @@
                                    mono? (concat ["-ac" (str 1)]))]
     (when-not (f/file-exist? converted-file-path)
       (let [result (apply sh (vec (concat ["ffmpeg" "-i" origin-path] additional-options [target-path])))]
-        (if (= (:exit result) 1)
+        (if (not= (:exit result) 0)
           (throw (Exception. (:err result)))
           (when remove-origin?
             (delete-file origin-path)))))

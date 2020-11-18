@@ -7,6 +7,7 @@
 (def styles {:logo {:display      "flex"
                     :flex-grow    0
                     :line-height  "20px"
+                    :margin-left "24px"
                     :margin-right "48px"}})
 
 (defn logo

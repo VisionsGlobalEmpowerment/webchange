@@ -43,4 +43,8 @@
            (GET "/api/users/current" request (handle-current-user request))
            (POST "/api/users/register-user" request
              (-> request :body :user core/register-user! handle))
+
+           (GET "/user/profile" [] (redirect (website/website-profile-page)))
+           (GET "/user/courses" [] (redirect (website/website-courses-page)))
+           (GET "/user/login" [] (redirect (website/website-login-page)))
            )

@@ -5,7 +5,8 @@
     [webchange.editor-v2.course-dashboard.views-course-info :refer [course-info]]
     [webchange.editor-v2.course-dashboard.views-lessons :refer [lessons-list]]
     [webchange.editor-v2.course-dashboard.views-scenes :refer [scenes-list]]
-    [webchange.editor-v2.layout.views :refer [layout]]))
+    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.layout.breadcrumbs :refer [root-breadcrumbs]]))
 
 (defn- get-styles
   []
@@ -19,7 +20,7 @@
 (defn course-dashboard
   []
   (let [styles (get-styles)]
-    [layout {:title "Course"}
+    [layout {:breadcrumbs (root-breadcrumbs "Course")}
      [:div {:style (:content-wrapper styles)}
       [course-info {:title "Step 2: Choose Your Topic"}]
       [ui/grid {:container true

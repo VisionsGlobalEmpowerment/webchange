@@ -9,7 +9,8 @@
     [webchange.editor-v2.wizard.steps.name-activity :as name-activity]
     [webchange.editor-v2.wizard.steps.skills :as skills]
     [webchange.editor-v2.wizard.steps.welcome :as welcome]
-    [webchange.editor-v2.wizard.validator :as validator :refer [connect-data]]))
+    [webchange.editor-v2.wizard.validator :as validator :refer [connect-data]]
+    [webchange.editor-v2.layout.breadcrumbs :refer [root-breadcrumbs]]))
 
 (defn- get-styles
   []
@@ -82,7 +83,7 @@
           last-step? (->> (count steps) (dec) (= @current-step-idx))
           started? (> @current-step-idx -1)
           finished? (= @current-step-idx (count steps))]
-      [layout {:title "Create Activity Wizard"}
+      [layout {:breadcrumbs (root-breadcrumbs "Create Activity Wizard")}
        [ui/grid {:container true
                  :spacing   32}
         [ui/grid {:item true :xs 2}
