@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.scene.views-data
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
@@ -26,60 +25,12 @@
        (filter (fn [[_ object-data]] (= "text" (:type object-data))))
        (filter (fn [[_ object-data]] (not (nil? (:chunks object-data)))))))
 
-(defn get-scenes-options
-  [scenes-list]
-  (let [prepared-scenes ["home"
-                         "sandbox"
-                         "see-saw"
-                         "swings"
-                         "volleyball"
-                         "library"
-                         "book"
-                         "hide-n-seek"
-                         "cycling"
-                         "cinema"
-                         "cinema-video"
-                         "letter-intro"
-                         "park-poem"
-                         "running"
-                         "slide"
-                         "writing-lesson"
-                         "writing-practice"
-                         "magic-hat"
-                         "cycling-letters"
-                         "volleyball-letters"
-                         "pinata"]]
-    (->> scenes-list
-         (map (fn [scene-id]
-                {:value    scene-id
-                 :text     (s/replace scene-id #"-" " ")
-                 :disabled (->> prepared-scenes
-                                (some #{scene-id})
-                                (not))}))
-         (sort-by (fn [{:keys [value]}]
-                    (let [index (.indexOf prepared-scenes value)]
-                      (if (= index -1) 999 index)))))))
-
 (defn data
   []
-  (let [course-id (re-frame/subscribe [::subs/current-course])
-        scene-id (re-frame/subscribe [::subs/current-scene])
-        scenes (re-frame/subscribe [::subs/course-scenes])
+  (let [scene-id (re-frame/subscribe [::subs/current-scene])
         scene-data (re-frame/subscribe [::subs/scene @scene-id])]
-    (let [objects (scene-data->objects-list @scene-data)
-          scenes-options (get-scenes-options @scenes)]
+    (let [objects (scene-data->objects-list @scene-data)]
       [:div.data-selector
-       #_[ui/form-control {:full-width true
-                         :margin     "normal"}
-        [ui/input-label "Scene"]
-        [ui/select {:value     (or @scene-id "")
-                    :on-change #(redirect-to :course-editor-v2-scene :id @course-id :scene-id (.. % -target -value))}
-         (for [{:keys [value text disabled]} scenes-options]
-           ^{:key (str value)}
-           [ui/menu-item {:value    value
-                          :disabled disabled
-                          :style    {:text-transform "capitalize"}}
-            text])]]
        [change-background]
        [share/share-button]
        [change-skin]

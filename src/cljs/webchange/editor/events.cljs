@@ -128,6 +128,31 @@
   (fn [_ _]
     {:dispatch-n (list [:complete-request :save-scene])}))
 
+(defn update-scene
+  [db course-id scene-id scene-data-patch]
+  (let [data (dissoc scene-data-patch :animations)]
+    {:db         (-> db
+                     (assoc-in [:loading :update-scene] true)
+                     (update-in [:scenes scene-id] merge data))
+     :http-xhrio {:method          :put
+                  :uri             (str "/api/courses/" course-id "/scenes/" scene-id)
+                  :params          {:scene data}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::update-scene-success]
+                  :on-failure      [:api-request-error :update-scene]}}))
+
+(re-frame/reg-event-fx
+  ::update-scene
+  (fn [{:keys [db]} [_ scene-id scene-data-patch]]
+    (let [course-id (:current-course db)]
+      (update-scene db course-id scene-id scene-data-patch))))
+
+(re-frame/reg-event-fx
+  ::update-scene-success
+  (fn [_ _]
+    {:dispatch-n (list [:complete-request :update-scene])}))
+
 (re-frame/reg-event-fx
   ::edit-dataset
   (fn [{:keys [db]} [_ dataset-id {:keys [fields]}]]

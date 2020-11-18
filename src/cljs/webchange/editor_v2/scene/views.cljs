@@ -2,13 +2,15 @@
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.creation-progress.state :as progress-state]
     [webchange.editor-v2.layout.card.views :refer [list-card] :as card]
     [webchange.editor-v2.scene-diagram.views-diagram :refer [dialogs-diagram]]
+    [webchange.editor-v2.scene.translation-steps :as translation-steps]
     [webchange.editor-v2.scene.views-canvas :refer [scene-canvas]]
-    [webchange.editor-v2.scene.views-data :refer [data get-scenes-options]]
+    [webchange.editor-v2.scene.views-data :refer [data]]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
 
@@ -25,6 +27,13 @@
    :scene-container {:flex-grow       1
                      :display         "flex"
                      :justify-content "center"}})
+
+(defn get-scenes-options
+  [scenes-list]
+  (map (fn [scene-id]
+         {:value scene-id
+          :text  (s/replace scene-id #"-" " ")})
+       scenes-list))
 
 (defn scenes-list
   []
@@ -55,4 +64,6 @@
          [data]]
         [:div {:style (:scene-container styles)}
          [scene-canvas]]]
+       [:div {:style {:margin-bottom "16px"}}
+        [translation-steps/fill-dialogs]]
        [dialogs-diagram {:scene-data scene-data}]])))
