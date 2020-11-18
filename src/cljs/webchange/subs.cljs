@@ -97,6 +97,10 @@
   (let [current-scene-id (current-scene db)]
     (get-in db [:scenes current-scene-id :actions] {})))
 
+(re-frame/reg-sub
+  ::current-scene-actions
+  current-scene-actions)
+
 (defn current-scene-action
   [db action-id]
   (-> (current-scene-actions db)

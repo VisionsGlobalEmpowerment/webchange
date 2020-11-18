@@ -7,7 +7,8 @@
     [webchange.editor-v2.translator.translator-form.state.actions-shared :as actions-shared]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.subs :as subs]))
 
 ;; Subs
 
@@ -16,6 +17,14 @@
 (re-frame/reg-sub
   ::current-dialog-action-info
   actions-shared/current-dialog-action-info)
+
+(re-frame/reg-sub
+  ::current-dialog-action-data
+  (fn []
+    [(re-frame/subscribe [::current-dialog-action-info])
+     (re-frame/subscribe [::subs/current-scene-actions])])
+  (fn [[{:keys [path]} actions]]
+    (get-in actions path)))
 
 (re-frame/reg-sub
   ::current-dialog-action
