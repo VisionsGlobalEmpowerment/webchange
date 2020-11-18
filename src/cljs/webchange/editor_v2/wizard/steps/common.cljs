@@ -49,13 +49,19 @@
         text])]))
 
 (defn select-control
-  [{:keys [label description value options multiple? on-change error-message]
-    :or   {label       "Label"
-           description "Description"
-           options     []
-           multiple?   false
-           on-change   #()}}]
-  (let [styles (get-styles)]
+  [{:keys [label description value options multiple? close-on-change? on-change error-message]
+    :or   {label            "Label"
+           description      "Description"
+           options          []
+           multiple?        false
+           close-on-change? true
+           on-change        #()}}]
+  (r/with-let [open? (r/atom false)
+               handle-open #(reset! open? true)
+               handle-close #(reset! open? false)
+               handle-change #(do (when close-on-change? (handle-close))
+                                  (on-change (js->clj (-> % .-target .-value))))
+               styles (get-styles)]
     [ui/grid {:item true :xs 12}
      [ui/typography {:variant "body1"
                      :style   (:input-description styles)}
@@ -72,7 +78,10 @@
                                                              :options options}]))
                                        (r/reactify-component)
                                        (r/create-element)))
-                  :on-change    #(on-change (js->clj (-> % .-target .-value)))}
+                  :open         @open?
+                  :on-close     handle-close
+                  :on-open      handle-open
+                  :on-change    handle-change}
        (for [{:keys [value text]} options]
          ^{:key value}
          [ui/menu-item {:value value} text])]
