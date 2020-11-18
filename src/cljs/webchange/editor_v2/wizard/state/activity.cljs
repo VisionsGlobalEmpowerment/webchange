@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.editor-v2.wizard.state.db :refer [path-to-db]]))
+    [webchange.editor-v2.wizard.state.db :refer [path-to-db]]
+    [webchange.routes :refer [redirect-to]]))
 
 (re-frame/reg-event-fx
   ::load-templates
@@ -83,4 +84,6 @@
 (re-frame/reg-event-fx
   ::create-simple-activity-success
   (fn [{:keys [db]} [_ data result]]
-    {:dispatch-n (list [:complete-request :create-course] [::create-activity (:slug result) data])}))
+    (let [redirect #(redirect-to :course-editor-v2-scene :id (:course-slug %) :scene-id (:scene-slug %))]
+      {:dispatch-n (list [:complete-request :create-course]
+                         [::create-activity (:slug result) data redirect])})))
