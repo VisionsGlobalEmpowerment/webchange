@@ -155,8 +155,7 @@
                editor-api-routes
                courses-api-routes
                dataset-api-routes
-               templates-api-routes
-             )
+               templates-api-routes)
            pages-routes
            animation-routes
            auth-routes
@@ -176,21 +175,24 @@
 
 
 (def handler
-  (-> (routes
-    (-> #'app
-        (wrap-authorization auth-backend)
-        (wrap-authentication auth-backend)
-        (wrap-session {:store dev-store})
-        wrap-body-as-string
-        (muuntaja.middleware/wrap-params)
-        (muuntaja.middleware/wrap-format)
-        (muuntaja.middleware/wrap-exception)
-        ))
-      (sign/wrap-body-as-byte-array)
-      )
-  )
+  (-> #'app
+      (wrap-authorization auth-backend)
+      (wrap-authentication auth-backend)
+      (wrap-session {:store dev-store})
+      wrap-body-as-string
+      (muuntaja.middleware/wrap-params)
+      (muuntaja.middleware/wrap-format)
+      (muuntaja.middleware/wrap-exception)
+      (sign/wrap-body-as-byte-array)))
 
-
-(def dev-handler (-> #'handler
-                     wrap-reload
-                     ))
+(def dev-handler
+  (-> #'app
+      wrap-reload
+      (wrap-authorization auth-backend)
+      (wrap-authentication auth-backend)
+      (wrap-session {:store dev-store})
+      wrap-body-as-string
+      (muuntaja.middleware/wrap-params)
+      (muuntaja.middleware/wrap-format)
+      (muuntaja.middleware/wrap-exception)
+      (sign/wrap-body-as-byte-array)))

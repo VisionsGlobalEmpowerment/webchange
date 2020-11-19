@@ -168,22 +168,7 @@
       :return [Course]
       :summary "Returns courses by website user id"
       (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
-          sign/wrap-api-with-signature
-      )
-      ))))
-
-
-(def website-api-protected-routes
-  (api
-    (swagger-routes {:ui   "/api-docs"
-                     :data {:info     {:title       "TabSchools API"}
-                            :tags     [{:name "course", :description "Course APIs"}]}})
-    (context "/api/courses" []
-      :tags ["course"]
-      ;should go before general "/api/courses/:course-slug" to be accessible
-
-  )))
-
+          sign/wrap-api-with-signature)))))
 
 (defroutes courses-api-routes
   (context "/api/courses" []

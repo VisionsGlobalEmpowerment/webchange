@@ -16,8 +16,14 @@
 (deftest current-progress-can-be-retrieved
   (let [{user-id :user-id course-slug :course-slug data :data} (fp/progress-created)
         retrieved (-> (fp/get-current-progress user-id course-slug) :body slurp (json/read-str :key-fn keyword) :progress
-                      (dissoc :current-tags)
-                      )]
+                      (dissoc :current-tags))]
+    (is (= data retrieved))))
+
+(deftest current-progress-can-be-retrieved-for-user-without-dob
+  (let [{user-id :user-id} (f/student-created {:date-of-birth nil})
+        {course-slug :course-slug data :data} (fp/progress-created {:user-id user-id})
+        retrieved (-> (fp/get-current-progress user-id course-slug) :body slurp (json/read-str :key-fn keyword) :progress
+                      (dissoc :current-tags))]
     (is (= data retrieved))))
 
 (deftest progress-can-be-created

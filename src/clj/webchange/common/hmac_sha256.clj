@@ -11,8 +11,7 @@
            (java.util Base64)
            (org.apache.http.entity ByteArrayEntity StringEntity)
            (javax.crypto.spec SecretKeySpec)
-  (org.apache.http HttpEntity))
-  )
+  (org.apache.http HttpEntity)))
 
 (defn base64-encode [to-encode]
   (.encodeToString (Base64/getEncoder) (.getBytes to-encode)))
@@ -33,10 +32,7 @@
   (let [sign-str (clojure.string/join "|" [method uri query body nonce])]
       (log/debug (str "String to sign " sign-str))
       (-> (apply str (map #(format "%02x" %) (hmac api-key sign-str)))
-          base64-encode
-
-          )))
-
+          base64-encode)))
 
 (defn signature-from-request [request key body]
   (let [method (clojure.string/upper-case (name (:request-method request)))
@@ -112,7 +108,6 @@
             body-str (slurp body)
             signature (signature-from-request request api-key body-str)
         ]
-        (log/debug (str "Apiauth-signature and our signature " apiauth-signature " | " signature))
         (if (= apiauth-signature signature)
           (handler request)
           {:status 403,
@@ -128,9 +123,7 @@
       (let [body (if (:body request) (slurp-bytes (:body request)) (.getBytes ""))
             request (-> request
                         (assoc :raw-body (java.io.ByteArrayInputStream. body))
-                        (assoc :body (java.io.ByteArrayInputStream. body))
-                        )
+                        (assoc :body (java.io.ByteArrayInputStream. body)))
             response (handler request)]
         response)
-      (handler request)
-      )))
+      (handler request))))

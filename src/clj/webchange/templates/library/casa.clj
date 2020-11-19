@@ -293,7 +293,7 @@
   [character]
   (if-let [c (get animations (-> character :skeleton keyword))]
     (merge c
-           {:type "animation" :anim "idle" :start true :scene-name (-> character :name)}
+           {:type "animation" :anim "idle" :start true :scene-name (-> character :name) :editable? true}
            (select-keys character [:x :y]))))
 
 (def character-positions
