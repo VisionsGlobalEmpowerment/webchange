@@ -213,7 +213,8 @@
                  :empty-small                      {:type "empty", :duration 500},
                  :empty-small-1                    {:type "empty", :duration 500},
                  :empty-small-2                    {:type "empty", :duration 500},
-                 :exit                             {:type "sequence-data", :data [{:id "stop-activity", :type "action"} {:type "scene", :scene-id "map"}]},
+                 :exit                             {:type "sequence-data", :data [{:id "stop-activity", :type "action"}
+                                                                                  {:type "scene-exit", :exit-point "door"}]},
                  :finish-activity                  {:type "finish-activity", :id "home"},
                  :first-word
                                                    {:type       "sequence",

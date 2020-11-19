@@ -568,4 +568,4 @@
    :description "Initial action"},
   :stop-activity {:type "stop-activity", :id "hide-n-seek"}},
  :triggers {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata {:prev "park", :autostart true}}
+ :metadata {:autostart true}}

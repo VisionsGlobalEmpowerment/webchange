@@ -445,4 +445,4 @@
                                                  :phrase-description "Pair word 4",
                                                  :from-var           [{:var-name "current-word", :var-property "sandbox-state-word-4-action"}]}},
  :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata      {:prev "park", :autostart true}}
+ :metadata      {:autostart true}}

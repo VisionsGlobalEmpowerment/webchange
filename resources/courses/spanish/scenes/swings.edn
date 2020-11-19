@@ -548,7 +548,7 @@
                                            :phrase-description "Diálogo de bienvenida entre Vera, Mari y Rock",
                                            :skippable          true}},
  :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
- :metadata      {:prev "park", :autostart true},
+ :metadata      {:autostart true},
  :audio
                 {:rock-oso     "/raw/audio/l1/a3/rock/Oso.m4a",
                  :vera-oso     "/raw/audio/l1/a3/vera/oso.m4a",
