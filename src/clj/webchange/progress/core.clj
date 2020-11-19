@@ -17,7 +17,9 @@
         current-tags (get-in progress [:data :current-tags])
         {date-of-birth :date-of-birth} (db/get-student-by-user {:user_id user-id})
         now (jt/local-date)
-        age (jt/time-between  date-of-birth now :years)
+        age (if date-of-birth
+              (jt/time-between date-of-birth now :years)
+              0)
         age-tag (if (<= 4 age) [tags/age-above-or-equal-4]  [tags/age-less-4])
         level-tag (if (not (tags/has-one-from tags/learning-level-tags current-tags)) [tags/advanced] [])
         current-tags (-> current-tags

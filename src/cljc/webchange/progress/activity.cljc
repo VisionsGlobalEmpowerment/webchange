@@ -34,9 +34,9 @@
 
 (defn next-for
   [current-tags levels {:keys [level lesson activity]}]
-  (let [level-index (index-by-key levels :level level)
+  (let [level-index (or (index-by-key levels :level level) 0)
         lessons (-> (get-level levels level) :lessons)
-        lesson-index (index-by-key lessons :lesson lesson)
+        lesson-index (or (index-by-key lessons :lesson lesson) 0)
         activities (-> (get-lesson lessons lesson) :activities)
         activity-index (index-by-key activities :activity activity)
         levels (assoc-in levels [level-index :lessons lesson-index :activities]

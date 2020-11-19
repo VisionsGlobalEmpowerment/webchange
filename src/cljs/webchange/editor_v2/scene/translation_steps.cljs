@@ -60,10 +60,10 @@
      :on-going-icon   icon-style}))
 
 (defn- step-icon
-  [{:keys [state]}]
+  [{:keys [state on-click]}]
   (let [styles (get-styles)]
     (case state
-      :current [ic/all-out {:style (:current-icon styles)}]
+      :current [ic/all-out {:style (:current-icon styles) :on-click on-click}]
       :passed [ic/check-circle {:style (:complete-icon styles)}]
       [ic/panorama-fish-eye {:style (:on-going-icon styles)}])))
 
@@ -72,7 +72,7 @@
   (let [step-state (get-step-state step)
         styles (get-styles)]
     [:div {:style (:message-wrapper styles)}
-     [step-icon {:state step-state}]
+     [step-icon {:state step-state :on-click #(set-step-complete step)}]
      [ui/typography {:style (if (= step-state :current)
                               (:current-message styles)
                               (:message styles))}
