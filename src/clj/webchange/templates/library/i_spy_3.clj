@@ -1,108 +1,142 @@
-(ns webchange.templates.library.i-spy
+(ns webchange.templates.library.i-spy-3
   (:require
     [webchange.templates.core :as core]))
 
-(def m {:id          18
-        :name        "I spy"
+(def m {:id          21
+        :name        "I spy 3"
         :tags        ["Direct Instruction"]
         :description "Some description of i spy mechanics and covered skills"
         :fields      []
         :options     {}})
 
 (def t {:assets
-                       [{:url "/raw/img/i-spy/background.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy/decoration.png", :size 10, :type "image"}
-                        {:url "/raw/img/i-spy/surface.png", :size 10, :type "image"}],
+                       [{:url "/raw/img/i-spy-2/background.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/decoration.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/surface.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-1.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-2.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-3.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-4.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-5.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-6.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-7.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-8.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-9.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/img-10.png", :size 10, :type "image"}
+                        {:url "/raw/img/i-spy-2/icons/22.png", :size 10, :type "image"}
+                        ],
         :objects       {:layered-background
                                       {:type       "layered-background",
-                                       :background {:src "/raw/img/i-spy/background.png"},
-                                       :decoration {:src "/raw/img/i-spy/decoration.png"},
-                                       :surface    {:src "/raw/img/i-spy/surface.png"}
+                                       :background {:src "/raw/img/i-spy-3/background.png"},
+                                       :decoration {:src "/raw/img/i-spy-3/decoration.png"},
+                                       :surface    {:src "/raw/img/i-spy-3/surface.png"}
                                        }
-                        :cap
+                        :schedule
                                       {:type           "text",
-                                       :x              1555,
-                                       :y              520,
-                                       :width          200,
-                                       :height         130,
+                                       :x              1121,
+                                       :y              623,
+                                       :width          108,
+                                       :height         73,
                                        :align          "center",
-                                       :fill           "#ff3857",
-                                       :font-family    "Pacifico",
+                                       :fill           "#FFFFFF",
+                                       :font-family    "Staatliches",
                                        :font-size      32,
                                        :scale-x        1,
                                        :scale-y        1,
-                                       :text           "Wombats",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
-                                       },
-                        :newspaper
-                                      {:type           "text",
-                                       :x              210,
-                                       :y              917,
-                                       :width          235,
-                                       :height         32,
-                                       :align          "center",
-                                       :fill           "#000000",
-                                       :font-family    "AbrilFatface",
-                                       :font-size      24,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "The Wordbury Times",
-                                       :vertical-align "middle",
-                                       :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
-                                       },
-                        :fire-station
-                                      {:type           "text",
-                                       :x              1102,
-                                       :y              346,
-                                       :width          219,
-                                       :height         63,
-                                       :align          "center",
-                                       :fill           "#CC001B",
-                                       :font-family    "Staatliches",
-                                       :font-size      50,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "FIRE STATION",
-                                       :vertical-align "middle",
-                                       :visible        true,
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
-                                       },
-                        :bakery
-                                      {:type           "text",
-                                       :x              392,
-                                       :y              243,
-                                       :width          181,
-                                       :height         102,
-                                       :align          "center",
-                                       :fill           "#FFFFFF",
-                                       :font-family    "Pacifico",
-                                       :font-size      58,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "Bakery",
+                                       :text           "    OPEN \n8AM-8PM",
                                        :vertical-align "middle",
                                        :visible        true
                                        :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "1"}}},
                                        },
-                        :plate
+
+                        :menu
                                       {:type           "text",
-                                       :x              759,
-                                       :y              730,
-                                       :width          104,
-                                       :height         43,
+                                       :x              65,
+                                       :y              858,
+                                       :width          169,
+                                       :height         62,
                                        :align          "center",
-                                       :fill           "#000000",
-                                       :font-family    "Staatliches",
-                                       :font-size      34,
+                                       :fill           "#B90000",
+                                       :font-family    "AbrilFatface",
+                                       :font-size      56,
                                        :scale-x        1,
                                        :scale-y        1,
-                                       :text           "6TRJ244",
+                                       :text           "MENU",
+                                       :vertical-align "middle",
+                                       :visible        true,
+                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
+                                       },
+                        :park-name
+                                      {:type           "text",
+                                       :x              619,
+                                       :y              249,
+                                       :width          459,
+                                       :height         82,
+                                       :align          "center",
+                                       :fill           "#333333",
+                                       :font-family    "AbrilFatface",
+                                       :font-size      60,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "Wordbury Park",
+                                       :vertical-align "middle",
+                                       :visible        true,
+                                       },
+                        :monument
+                                      {:type    "image",
+                                       :x       620,
+                                       :y       455,
+                                       :width   100,
+                                       :height  100,
+                                       :scale-x 2,
+                                       :scale-y 3,
+                                       :filter  "brighten",
+                                       :src     "/raw/img/i-spy-3/icons/22.png",
+                                       :actions {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "3"}}},
+                                       },
+                        :trash-bin-1
+                                      {:type           "text",
+                                       :x              1579,
+                                       :y              718,
+                                       :width          76,
+                                       :height         24,
+                                       :align          "center",
+                                       :fill           "#FFFFFF",
+                                       :font-family    "Staatliches",
+                                       :font-size      24,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "TRASH",
                                        :vertical-align "middle",
                                        :visible        true
-                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "2"}}},
+                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
+                                       },
+                        :trash-bin-2
+                                      {:type           "text",
+                                       :x              1692,
+                                       :y              718,
+                                       :width          76,
+                                       :height         24,
+                                       :align          "center",
+                                       :fill           "#FFFFFF",
+                                       :font-family    "Staatliches",
+                                       :font-size      24,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "RECYCLE",
+                                       :vertical-align "middle",
+                                       :visible        true
+                                       :actions        {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "4"}}},
+                                       },
+                        :house-sign
+                                      {:type    "image",
+                                       :x       1330,
+                                       :y       235,
+                                       :width   100,
+                                       :height  100,
+                                       :filter  "brighten",
+                                       :src     "/raw/img/i-spy-3/icons/22.png",
+                                       :actions {:click {:id "check-and-set-item", :on "click", :type "action", :params {:target "5"}}},
                                        },
                         :bar          {:type          "rectangle",
                                        :x             672,
@@ -164,44 +198,44 @@
                                        :height     72,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/bakery_02.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-2.png"}
                         :icon-2       {:type       "image",
                                        :x          812,
-                                       :y          960,
+                                       :y          941,
                                        :width      72,
-                                       :height     32.62,
+                                       :height     69,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/car_plate_02.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-4.png"}
                         :icon-3       {:type       "image",
-                                       :x          924,
-                                       :y          957,
-                                       :width      72,
-                                       :height     38.04,
+                                       :x          930,
+                                       :y          940,
+                                       :width      61,
+                                       :height     72,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/hat_02.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-6.png"}
                         :icon-4       {:type       "image",
                                        :x          1036,
-                                       :y          966,
+                                       :y          940,
                                        :width      72,
-                                       :height     19.36,
+                                       :height     72,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/fire_station_02.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-10.png"}
                         :icon-5       {:type       "image",
                                        :x          1148,
                                        :y          942,
                                        :width      72,
-                                       :height     67.62,
+                                       :height     69,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/newspaper_02.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-8.png"}
                         :icon-br-1    {:type     "group",
                                        :x        0,
                                        :y        0,
                                        :actions  {},
-                                       :children ["icon-br-im-1" "bakery-1"],
+                                       :children ["icon-br-im-1" "schedule-1"],
                                        :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
                         :icon-br-im-1 {:type       "image",
@@ -211,153 +245,138 @@
                                        :height     72,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/bakery_01.png"
+                                       :src        "/raw/img/i-spy-3/icons/img-1.png"
                                        }
-                        :bakery-1
+                        :schedule-1
                                       {:type           "text",
-                                       :x              708,
+                                       :x              717,
                                        :y              958,
-                                       :width          53,
-                                       :height         30,
+                                       :width          37,
+                                       :height         23,
                                        :align          "center",
                                        :fill           "#FFFFFF",
-                                       :font-family    "Pacifico",
-                                       :font-size      17,
+                                       :font-family    "Staatliches",
+                                       :font-size      12,
                                        :scale-x        1,
                                        :scale-y        1,
-                                       :text           "Bakery",
+                                       :text           "    OPEN \n8AM-8PM",
                                        :vertical-align "middle",
                                        :visible        true},
                         :icon-br-2    {:type     "group",
                                        :x        0,
                                        :y        0,
                                        :actions  {},
-                                       :children ["icon-br-im-2" "plate-2"],
+                                       :children ["icon-br-im-2" "menu-2"],
                                        :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
-                        :plate-2
+                        :menu-2
                                       {:type           "text",
-                                       :x              819,
-                                       :y              964.31,
-                                       :width          58,
-                                       :height         24,
+                                       :x              822,
+                                       :y              946,
+                                       :width          49,
+                                       :height         17,
                                        :align          "center",
-                                       :fill           "#000000",
+                                       :fill           "#B90000",
                                        :font-family    "Staatliches",
                                        :font-size      19,
                                        :scale-x        1,
                                        :scale-y        1,
-                                       :text           "6TRJ244",
+                                       :text           "MENU",
                                        :vertical-align "middle",
                                        :visible        true
-
                                        },
                         :icon-br-im-2 {:type       "image",
-                                       :x          812,
-                                       :y          960,
+                                       :x          810,
+                                       :y          941,
                                        :width      72,
-                                       :height     32.62,
+                                       :height     69,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/car_plate_01.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-3.png"}
                         :icon-br-3    {:type     "group",
                                        :x        0,
                                        :y        0,
                                        :actions  {},
-                                       :children ["icon-br-im-3" "cap-3"],
+                                       :children ["icon-br-im-3"],
                                        :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
-                        :cap-3
-                                      {:type           "text",
-                                       :x              947,
-                                       :y              964,
-                                       :width          38,
-                                       :height         16,
-                                       :align          "center",
-                                       :fill           "#ff3857",
-                                       :font-family    "Pacifico",
-                                       :font-size      9,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "Wombats",
-                                       :vertical-align "middle",
-                                       :visible        true},
+
 
                         :icon-br-im-3 {:type       "image",
-                                       :x          924,
-                                       :y          957,
-                                       :width      72,
-                                       :height     38.04,
+                                       :x          930,
+                                       :y          940,
+                                       :width      61,
+                                       :height     72,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/hat_01.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-5.png"}
 
                         :icon-br-4    {:type     "group",
                                        :x        0,
                                        :y        0,
                                        :actions  {},
-                                       :children ["icon-br-im-4" "fire-station-4"],
+                                       :children ["icon-br-im-4" "trash-bin-4" "trash-bin-5"],
                                        :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
 
 
-                        :fire-station-4
+                        :trash-bin-4
                                       {:type           "text",
-                                       :x              1045.5,
-                                       :y              968.5,
-                                       :width          53,
-                                       :height         15,
+                                       :x              1048,
+                                       :y              985,
+                                       :width          19,
+                                       :height         9,
                                        :align          "center",
-                                       :fill           "#CC001B",
+                                       :fill           "#FFFFFF",
                                        :font-family    "Staatliches",
-                                       :font-size      12,
+                                       :font-size      7,
                                        :scale-x        1,
                                        :scale-y        1,
-                                       :text           "FIRE STATION",
+                                       :text           "TRASH",
+                                       :vertical-align "middle",
+                                       :visible        true}
+                        :trash-bin-5
+                                      {:type           "text",
+                                       :x              1075,
+                                       :y              985,
+                                       :width          23,
+                                       :height         9,
+                                       :align          "center",
+                                       :fill           "#FFFFFF",
+                                       :font-family    "Staatliches",
+                                       :font-size      7,
+                                       :scale-x        1,
+                                       :scale-y        1,
+                                       :text           "TRASH",
                                        :vertical-align "middle",
                                        :visible        true}
 
                         :icon-br-im-4 {:type       "image",
                                        :x          1036,
-                                       :y          966,
+                                       :y          940,
                                        :width      72,
                                        :height     19.36,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/fire_station_01.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-9.png"}
                         :icon-br-5    {:type     "group",
                                        :x        0,
                                        :y        0,
                                        :actions  {},
-                                       :children ["icon-br-im-5" "newspaper-5"],
+                                       :children ["icon-br-im-5"],
                                        :visible  false,
                                        :states   {:show {:visible true}, :hide {:visible false}}},
-                        :newspaper-5
-                                      {:type           "text",
-                                       :x              1168,
-                                       :y              959,
-                                       :width          44,
-                                       :height         6,
-                                       :align          "center",
-                                       :fill           "#000000",
-                                       :font-family    "AbrilFatface",
-                                       :font-size      4.5,
-                                       :scale-x        1,
-                                       :scale-y        1,
-                                       :text           "The Wordbury Times",
-                                       :vertical-align "middle",
-                                       :visible        true},
 
                         :icon-br-im-5 {:type       "image",
-                                       :x          1148,
-                                       :y          942,
+                                       :x          1147,
+                                       :y          940,
                                        :width      72,
-                                       :height     67.62,
+                                       :height     69,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy/icons/newspaper_01.png"}
+                                       :src        "/raw/img/i-spy-3/icons/img-7.png"}
                         },
-        :scene-objects [["layered-background"] ["cap" "newspaper" "fire-station" "bakery" "plate"]
+        :scene-objects [["layered-background"] ["schedule" "menu" "park-name" "house-sign" "trash-bin-1" "trash-bin-2" "monument"]
                         ["bar" "rectangle-1" "rectangle-2" "rectangle-3" "rectangle-4" "rectangle-5"]
                         ["icon-1" "icon-2" "icon-3" "icon-4" "icon-5"]
                         ["icon-br-1" "icon-br-2" "icon-br-3" "icon-br-4" "icon-br-5"]
@@ -397,36 +416,36 @@
                                              :data               [{:type "sequence-data"
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "bakery-dialog",
-                                             :phrase-description "Bakery description"}
+                                             :phrase             "schedule-dialog",
+                                             :phrase-description "schedule description"}
                         :item-2-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "plate-dialog",
-                                             :phrase-description "Car plate description"}
+                                             :phrase             "menu-dialog",
+                                             :phrase-description "menu description"}
                         :item-3-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "cap-dialog",
-                                             :phrase-description "cap description"}
+                                             :phrase             "monument-dialog",
+                                             :phrase-description "Monument description"}
                         :item-4-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "fire-station-dialog",
-                                             :phrase-description "Fire station description"}
+                                             :phrase             "trash-bin-dialog",
+                                             :phrase-description "Trash bin description"}
                         :item-5-dialog      {:type               "sequence-data",
                                              :editor-type        "dialog",
                                              :data               [{:type "sequence-data"
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "newspaper-dialog",
-                                             :phrase-description "Newspaper description"}
+                                             :phrase             "house-plate-dialog",
+                                             :phrase-description "House plate description"}
 
                         :check-and-set-item {:type       "sequence-data",
                                              :data       [
@@ -478,15 +497,13 @@
                                              :data               [{:type "sequence-data"
                                                                    :data [{:type "empty" :duration 0}
                                                                           {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                             :phrase             "Introduce",
+                                             :phrase             "intro",
                                              :phrase-description "Introduce task"}
                         },
         :triggers
                        {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "intro"}},
-        :metadata      {:autostart true}}
-
-  )
+        :metadata      {:autostart true}})
 
 
 (defn f

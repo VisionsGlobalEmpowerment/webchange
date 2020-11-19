@@ -11,6 +11,8 @@
     [webchange.templates.library.swings]
     [webchange.templates.library.book]
     [webchange.templates.library.i-spy]
+    [webchange.templates.library.i-spy-2]
+    [webchange.templates.library.i-spy-3]
     [webchange.templates.library.traffic-light]
     [webchange.templates.library.painting-tablet]
     [webchange.templates.library.park-poem]
