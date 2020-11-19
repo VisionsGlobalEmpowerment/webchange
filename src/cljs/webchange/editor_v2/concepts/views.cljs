@@ -1,6 +1,5 @@
 (ns webchange.editor-v2.concepts.views
   (:require
-    [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
@@ -8,31 +7,7 @@
     [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.concepts.subs :as concepts-subs]
     [webchange.editor-v2.concepts.utils :refer [resource-type?]]
-    [webchange.editor-v2.layout.card.views :refer [list-card get-styles]]
-    [webchange.routes :refer [redirect-to]]
-    [webchange.subs :as subs]))
-
-(defn concepts-list
-  []
-  (let [course @(re-frame/subscribe [::subs/current-course])
-        concepts (->> @(re-frame/subscribe [::concepts-subs/dataset-items]) (sort-by :name))
-        styles (get-styles)]
-    [list-card {:title        "Concepts"
-                :full-height  true
-                :on-add-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
-     [ui/list {:style (:list-full-height styles)}
-      (for [concept concepts]
-        ^{:key (:id concept)}
-        [ui/list-item
-         [ui/list-item-text {:primary (:name concept)}]
-         [ui/list-item-secondary-action
-          [ui/icon-button {:aria-label "Edit"
-                           :size       "small"
-                           :on-click   #(redirect-to :course-editor-v2-concept :course-id course :concept-id (:id concept))}
-           [ic/edit {:style (:action-icon styles)}]]
-          [ui/icon-button {:on-click   #(re-frame/dispatch [::concepts-events/open-delete-dataset-item-modal concept])
-                           :aria-label "Delete"}
-           [ic/delete {:style (:action-icon styles)}]]]])]]))
+    [webchange.routes :refer [redirect-to]]))
 
 (defn- dataset-item-fields-panel
   [dataset-id data-atom]
