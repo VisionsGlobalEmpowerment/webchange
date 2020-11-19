@@ -5,7 +5,6 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.graph :as translator-form.graph]
     [webchange.editor-v2.dialog.dialog-form.audio-assets.views :refer [audios-block]]
-    [webchange.editor-v2.translator.translator-form.dialog.views :refer [dialog-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-concepts :refer [concepts-block]]
     [webchange.editor-v2.translator.translator-form.views-form-description :refer [description-block]]
     [webchange.editor-v2.dialog.dialog-form.views-form-diagram :refer [diagram-block]]
@@ -28,18 +27,16 @@
      [description-block]
      (when concept-required?
        [concepts-block])
-     [dialog-block]
      [diagram-block]
      [play-phrase-block]
-     (if-not action?
-      [target-block])
      (if-not (nil? current-phrase-action)
        [:div
         [node-options]
         (if-not action?
           [:div
-            [phrase-block]
-            [audios-block]])]
+           [phrase-block]
+           [target-block]
+           [audios-block]])]
        [ui/typography {:variant "subtitle1"}
         "Select action on diagram"])
      [text-chunks-modal]]))

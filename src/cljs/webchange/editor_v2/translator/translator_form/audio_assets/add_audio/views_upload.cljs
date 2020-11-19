@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.upload.views
+(ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.views-upload
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
@@ -7,7 +7,7 @@
 
 (defn- get-styles
   []
-  (let [height "150px"]
+  (let [height "100px"]
     {:wrapper          {:width "100%"}
      :button           {:width  "100%"
                         :height height}

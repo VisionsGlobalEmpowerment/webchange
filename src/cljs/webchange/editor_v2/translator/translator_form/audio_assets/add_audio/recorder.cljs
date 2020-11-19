@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.record.utils-recorder)
+(ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.recorder)
 
 (def stream (atom nil))
 (def recorder (atom nil))

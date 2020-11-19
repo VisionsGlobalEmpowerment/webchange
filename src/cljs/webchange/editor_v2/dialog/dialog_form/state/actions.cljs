@@ -7,6 +7,7 @@
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as au]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
@@ -125,12 +126,12 @@
 (re-frame/reg-event-fx
   ::set-phrase-action-offset
   (fn [{:keys [_]} [_ offset]]
-    {:dispatch-n (list [::update-inner-action {:duration (int offset)} 0])}))
+    {:dispatch-n (list [::update-inner-action {:duration (float offset)} 0])}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-volume
   (fn [{:keys [_]} [_ volume]]
-    {:dispatch-n (list [::update-inner-action {:volume (int volume)} 1])}))
+    {:dispatch-n (list [::update-inner-action {:volume (float volume)} 1])}))
 
 (re-frame/reg-event-fx
   ::update-dialog-audio-action
@@ -200,4 +201,5 @@
 (re-frame/reg-event-fx
   ::set-phrase-action-target
   (fn [{:keys [_]} [_ target]]
-    {:dispatch-n (list [::update-inner-action {:target target} 1])}))
+    {:dispatch-n (list [::update-inner-action {:target target} 1]
+                       [::translator-form.audios/set-current-target target])}))

@@ -2,6 +2,7 @@
   (:require
     [ajax.core :refer [json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
@@ -56,4 +57,19 @@
   (fn [_ [_ audio-props data]]
     (let [asset-data (merge audio-props data)]
       {:dispatch-n (list [:complete-request :upload-audio]
-                         [::translator-form.scene/add-asset asset-data])})))
+                         [::translator-form.scene/add-asset asset-data]
+                         [::set-default-target asset-data])})))
+
+(re-frame/reg-event-fx
+  ::set-current-target
+  (fn [{:keys [db]} [_ current-target]]
+    {:db (assoc-in db [:current-target] current-target)}))
+
+(re-frame/reg-event-fx
+  ::set-default-target
+  (fn [{:keys [db]} [_ asset-data]]
+    (let [asset-url (:url asset-data)
+          current-target (get-in db [:current-target])]
+      (if (some? current-target)
+        {:dispatch [::translator-form.scene/update-asset asset-url {:target current-target}]}
+        {}))))

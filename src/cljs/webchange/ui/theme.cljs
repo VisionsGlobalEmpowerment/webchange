@@ -33,11 +33,6 @@
                      :text        {:secondary "#555555"}
                      :flat-button {:background-color "#f2f2f7"}}}})
 
-;.MuiDialog-paperScrollPaper-10693 {
-;    flex: 0 1 auto;
-;   ;
-;}
-
 (defn mui-theme
   [type]
   (reset! current-theme type)

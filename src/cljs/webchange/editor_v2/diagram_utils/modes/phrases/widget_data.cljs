@@ -1,6 +1,8 @@
 (ns webchange.editor-v2.diagram-utils.modes.phrases.widget-data
   (:require
     [camel-snake-kebab.core :refer [->Camel_Snake_Case]]
+    [cljs-react-material-ui.reagent :as ui]
+    [clojure.string :refer [join]]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :refer [validate-dialog-action]]
@@ -11,7 +13,10 @@
     [webchange.editor-v2.graph-builder.utils.node-data :refer [object-node?
                                                                phrase-node?
                                                                trigger-node?]]
-    [webchange.editor-v2.utils :refer [str->caption]]))
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.utils :refer [str->caption]]
+    [webchange.editor-v2.dialog.state.window :as dialog-window]
+    [webchange.editor-v2.translator.state.window :as translator-window]))
 
 (defn get-node-color
   [node-data]
@@ -91,20 +96,55 @@
     [phrase-header node-data]
     [not-phrase-header node-data]))
 
+(defn- get-dialog-texts
+  [node-data]
+  (->> (:data node-data)
+       (map (fn [{:keys [type phrase-text] :as data}]
+              (case type
+                "action" "**Concept Text**"
+                "sequence-data" (get-dialog-texts data)
+                "animation-sequence" phrase-text
+                nil)))
+       (flatten)
+       (remove nil?)))
+
+(defn- dialog-wrapper-tooltip
+  [{:keys [node open?]}]
+  (let [this (r/current-component)
+        dialog-text (get-dialog-texts (:data node))
+        translator-open? @(re-frame/subscribe [::translator-window/modal-state])
+        dialog-open? @(re-frame/subscribe [::dialog-window/modal-state])]
+    (into [ui/tooltip {:open      (and open?
+                                       (not (or translator-open? dialog-open?)))
+                       :placement "left"
+                       :title     (r/as-element [:ul {:style {:padding-left 0
+                                                              :list-style   "none"
+                                                              :font-size    "14px"}}
+                                                 (for [[idx text] (map-indexed vector dialog-text)]
+                                                   ^{:key idx}
+                                                   [:li {:style {:margin-bottom "8px"}} text])])}]
+          (r/children this))))
+
 (defn- dialog-wrapper
   [{:keys [node-data this]}]
   (let [valid-node? (validate-dialog-action (:data node-data))
+        current-node? (->> @(re-frame/subscribe [::translator-form.actions/current-dialog-action-data])
+                           (= (:data node-data)))
         styles (get-styles)]
-    (into [:div {:on-double-click (fn []
-                                    (if (= "dialog" (get-in node-data [:data :editor-type]))
-                                      (re-frame/dispatch [::ee/show-dialog-translator-form node-data])
-                                      (re-frame/dispatch [::ee/show-translator-form node-data])))
-                 :style           (merge custom-wrapper/node-style
-                                         (:dialog-node styles))}
-           (when-not valid-node?
-             [warning-icon {:styles {:main {:position "absolute"
-                                            :bottom   "2px"}}}])]
-          (r/children this))))
+    [dialog-wrapper-tooltip {:open? current-node?
+                             :node  node-data}
+     [:div {:on-click        (fn []
+                               (re-frame/dispatch [::translator-form.actions/set-current-dialog-action (if current-node? nil node-data)]))
+            :on-double-click (fn []
+                               (if (= "dialog" (get-in node-data [:data :editor-type]))
+                                 (re-frame/dispatch [::ee/show-dialog-translator-form node-data])
+                                 (re-frame/dispatch [::ee/show-translator-form node-data])))
+            :style           (merge custom-wrapper/node-style
+                                    (:dialog-node styles))}
+      (when-not valid-node?
+        [warning-icon {:styles {:main {:position "absolute"
+                                       :bottom   "2px"}}}])
+      (into [:div] (r/children this))]]))
 
 (defn- track-wrapper
   [{:keys [this]}]
