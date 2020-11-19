@@ -9,28 +9,26 @@
 
 (defn- get-styles
   []
-  {:main-content {:height "100%"
-                  :margin "0"
-                  :width  "100%"}})
+  {:content-wrapper {:height         "100%"
+                     :display        "flex"
+                     :flex-direction "column"}
+   :main-content    {:height "100%"
+                     :margin "0"
+                     :width  "100%"}})
 
 (defn course-dashboard
   []
   (let [styles (get-styles)]
     [layout {:title "Course"}
-     [:div {:style {:height         "100%"
-                    :display        "flex"
-                    :flex-direction "column"}}
-      [course-info]
+     [:div {:style (:content-wrapper styles)}
+      [course-info {:title "Step 2: Choose Your Topic"}]
       [ui/grid {:container true
                 :justify   "space-between"
                 :spacing   24
                 :style     (:main-content styles)}
-       [ui/grid {:item true
-                 :xs   4}
-        [concepts-list]]
-       [ui/grid {:item true
-                 :xs   4}
-        [scenes-list]]
-       [ui/grid {:item true
-                 :xs   4}
-        [lessons-list]]]]]))
+       [ui/grid {:item true :xs 4}
+        [scenes-list {:title "Step 1: Activities"}]]
+       [ui/grid {:item true :xs 4}
+        [concepts-list {:title "Step 3: Core Images"}]]
+       [ui/grid {:item true :xs 4}
+        [lessons-list {:title "Step 4: Game Sequencing"}]]]]]))

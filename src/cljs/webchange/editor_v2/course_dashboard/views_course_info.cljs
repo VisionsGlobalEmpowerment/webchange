@@ -21,7 +21,7 @@
                        :on-change start-upload}]))
 
 (defn course-info
-  []
+  [{:keys [title]}]
   (let [loading @(re-frame/subscribe [:loading])]
     (if (:course-info loading)
       [ui/circular-progress]
@@ -31,6 +31,11 @@
         [ui/card {:style {:margin      "12px"
                           :flex-shrink "0"}}
          [ui/card-content
+          [ui/typography {:variant "h5"
+                          :style   {:margin-bottom   "12px"
+                                    :display         "flex"
+                                    :justify-content "space-between"}}
+           title]
           [ui/grid {:container   true
                     :justify     "space-between"
                     :spacing     24

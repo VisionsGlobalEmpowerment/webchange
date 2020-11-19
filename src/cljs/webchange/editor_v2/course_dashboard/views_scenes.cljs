@@ -16,12 +16,12 @@
        scenes-list))
 
 (defn scenes-list
-  []
+  [{:keys [title]}]
   (let [course @(re-frame/subscribe [::subs/current-course])
         scenes @(re-frame/subscribe [::subs/course-scenes])
         scenes-options (get-scenes-options scenes)
         list-styles (card/get-styles)]
-    [list-card {:title       "Scenes"
+    [list-card {:title       title
                 :full-height true}
      [ui/list {:style (:list-full-height list-styles)}
       (for [scene scenes-options]

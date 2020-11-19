@@ -10,11 +10,11 @@
     [webchange.subs :as subs]))
 
 (defn concepts-list
-  []
+  [{:keys [title]}]
   (let [course @(re-frame/subscribe [::subs/current-course])
         concepts (->> @(re-frame/subscribe [::concepts-subs/dataset-items]) (sort-by :name))
         styles (get-styles)]
-    [list-card {:title        "Concepts"
+    [list-card {:title        title
                 :full-height  true
                 :on-add-click #(redirect-to :course-editor-v2-add-concept :course-id course)}
      [ui/list {:style (:list-full-height styles)}

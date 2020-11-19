@@ -34,14 +34,10 @@
                          [ic/edit {:style (:action-icon list-styles)}]]]])])])))
 
 (defn lessons-list
-  []
+  [{:keys [title]}]
   (let [levels @(re-frame/subscribe [::subs/course-levels])]
-    [:div {:style {:height   "100%"
-                   :position "relative"}}
-     [:div {:style {:position "absolute"
-                    :width    "100%"
-                    :height   "100%"
-                    :overflow "auto"}}
-      (for [level levels]
+    [list-card {:title title
+                :full-height  true}
+     (for [level levels]
         ^{:key (:level level)}
-        [level-item level])]]))
+        [level-item level])]))
