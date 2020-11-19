@@ -9,6 +9,7 @@
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.sound :as sound]
+    [webchange.progress.tags :as tags]
     [webchange.interpreter.utils :refer [add-scene-tag merge-scene-data]]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
     [webchange.interpreter.variables.events :as vars.events]
@@ -834,6 +835,24 @@
                         true)]
     (and current-activity? score-passed?)))
 
+
+(defn get-lesson-activity-tags
+  [db {activity-name :id}]
+  (let [activity-action (lessons-activity/name->activity-action db activity-name)
+        tags-by-score (-> (lessons-activity/workflow-action db activity-action) :tags-by-score)
+        current-tags (get-in db [:progress-data :current-tags] [])]
+    (if tags-by-score
+      (let [
+          current-tags (if (nil? current-tags) [] current-tags)
+          current-tags (tags/remove-tags current-tags tags/learning-level-tags)
+          score (activity-score-percentage db)
+          tags-to-add (map (fn [[tag [minm maxm]]]
+                             (if (and (<= minm score) (> maxm score)) (name tag))) tags-by-score)
+          new-tags (filter #(some? %) (concat tags-to-add current-tags))
+          ]
+      new-tags)
+      current-tags)))
+
 (re-frame/reg-event-fx
   ::execute-finish-activity
   (fn [{:keys [db]} [_ action]]
@@ -849,11 +868,14 @@
                          (lesson-activity-finished? db action) (conj [::finish-next-activity])
                          :always (conj (activity-finished-event db action))
                          :always (conj [::reset-navigation]))
-          activity-started? (:activity-started db)]
+          activity-started? (:activity-started db)
+          lesson-activity-tags (get-lesson-activity-tags db action)
+          ]
       (if activity-started?
         {:db         (-> db
                          lessons-activity/clear-loaded-activity
-                         (assoc :activity-started false))
+                         (assoc :activity-started false)
+                         (assoc-in [:progress-data :current-tags] lesson-activity-tags))
          :dispatch-n events}
         {:dispatch (ce/success-event action)}))))
 

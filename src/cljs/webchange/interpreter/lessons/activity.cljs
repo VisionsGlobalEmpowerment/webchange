@@ -33,10 +33,11 @@
 
 (defn next-not-finished-for
   [db activity]
-  (let [levels (get-in db [:course-data :levels])]
-    (loop [next (activity/next-for levels activity)]
+  (let [levels (get-in db [:course-data :levels])
+        current-tags (get-in db [:progress-data :current-tags] [])]
+    (loop [next (activity/next-for current-tags levels activity)]
       (if (finished? db next)
-        (recur (activity/next-for levels next))
+        (recur (activity/next-for current-tags levels next))
         next))))
 
 (defn finish
