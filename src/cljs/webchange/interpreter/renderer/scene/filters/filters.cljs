@@ -27,6 +27,10 @@
                (and (= (.-name filter) filter-name)
                     filter)))))
 
+(defn has-filter-by-name
+  [container filter-name]
+  (not (nil? (get-filter-by-name container filter-name))))
+
 (defn- set-brightness
   [filter value]
   (doto filter

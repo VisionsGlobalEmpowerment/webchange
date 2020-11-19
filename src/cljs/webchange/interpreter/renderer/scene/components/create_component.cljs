@@ -10,6 +10,7 @@
 
 (def default-object-props {:draggable   {}
                            :on-drag-end {}
+                           :on-drag-start {}
                            :visible     {:default true}
                            :rotation    {:default 0}
                            :opacity     {}})
@@ -17,10 +18,10 @@
 (defn- init-display-object!
   [{object :object :as wrapper} props props-to-exclude]
   (let [default-props (apply dissoc default-object-props props-to-exclude)
-        {:keys [draggable on-drag-end visible rotation opacity]} (get-object-props props default-props)]
+        {:keys [draggable on-drag-end on-drag-start visible rotation opacity]} (get-object-props props default-props)]
     (when (some? draggable)
       (when draggable
-        (enable-drag! object on-drag-end)))
+        (enable-drag! object on-drag-end on-drag-start)))
     (when (some? visible)
       (w/set-visibility wrapper visible))
     (when (some? rotation)

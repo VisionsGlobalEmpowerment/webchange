@@ -34,6 +34,7 @@
 (defn set-skin [wrapper & params] (execute wrapper :set-skin params))
 (defn set-slot [wrapper & params] (execute wrapper :set-slot params))
 (defn set-src [wrapper & params] (execute wrapper :set-src params))
+(defn set-highlight [wrapper & params] (execute wrapper :set-highlight params))
 (defn set-text [wrapper & params] (execute wrapper :set-text params))
 (defn set-font-size [wrapper & params] (execute wrapper :set-font-size params))
 (defn set-value [wrapper & params] (execute wrapper :set-value params))

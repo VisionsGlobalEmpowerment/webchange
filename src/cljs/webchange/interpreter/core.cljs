@@ -259,6 +259,20 @@
              (> r2y (+ r1y r1height))
              (< (+ r2y r2height) r1y)))))
 
+(defn collide-with-coords?
+  [display-object1 coords]
+  (let [r1 (.getBounds display-object1)
+        r1x (.-x r1)
+        r1y (.-y r1)
+        r1width (.-width r1)
+        r1height (.-height r1)
+        r2x (:x coords)
+        r2y (:y coords)]
+    (and (< r2x (+ r1x r1width))
+             (> r2x r1x)
+             (< r2y (+ r1y r1height))
+             (> r2y r1y))))
+
 (defn animation-sequence->actions [{audio-start :start :keys [target track data skippable] :or {track 1}}]
   (into [] (map (fn [{:keys [start end anim]}]
                   {:type      "sequence-data"

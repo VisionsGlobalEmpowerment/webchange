@@ -6,6 +6,7 @@
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
     [webchange.interpreter.core :as i]
+    [webchange.interpreter.renderer.scene.components.dragging :as dg]
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.sound :as sound]
@@ -41,6 +42,7 @@
 (ce/reg-simple-executor :scene-exit ::execute-scene-exit)
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
 (ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
+(ce/reg-simple-executor :test-transition-and-pointer-collide ::execute-test-transition-and-pointer-collide)
 (ce/reg-simple-executor :start-activity ::execute-start-activity)
 (ce/reg-simple-executor :stop-activity ::execute-stop-activity)
 (ce/reg-simple-executor :finish-activity ::execute-finish-activity)
@@ -1178,6 +1180,30 @@
           success (ce/get-action success db action)
           fail (ce/get-action fail db action)]
       (if (i/collide? (:object transition-1-wrapper) (:object transition-2-wrapper))
+        {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
+        {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))
+
+
+(re-frame/reg-event-fx
+  ::execute-test-transition-and-pointer-collide
+  (fn [{:keys [db]} [_ {:keys [transition success fail] :as action}]]
+    "Execute `transition-and-pointer-collide` action - if mouse and component intersect.
+
+    Action params:
+    :success - name of action to call if components intersect.
+    :fail - name of action to call if components don't intersect.
+    :transition-1 - transition name of the first component.
+    :transition-2 - transition name of the second component.
+
+    Example:
+    {:type         'test-transition-and-pointer-collide',
+     :success      'check-box3',
+     :fail         'box-3-revert',
+     :transition   'box3'}"
+    (let [transition-wrapper (->> transition keyword (scene/get-scene-object db))
+          success (ce/get-action success db action)
+          fail (ce/get-action fail db action)]
+      (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
         {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
         {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))
 

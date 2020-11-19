@@ -16,5 +16,6 @@
     [webchange.templates.library.park-poem]
     [webchange.templates.library.slide]
     [webchange.templates.library.categorize]
+    [webchange.templates.library.categorize-hard]
     [webchange.templates.library.writing-lesson]
     [webchange.templates.library.running]))
