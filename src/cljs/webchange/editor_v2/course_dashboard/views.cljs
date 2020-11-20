@@ -29,6 +29,6 @@
        [ui/grid {:item true :xs 4}
         [scenes-list {:title "Step 1: Activities"}]]
        [ui/grid {:item true :xs 4}
-        [concepts-list {:title "Step 3: Core Images"}]]
+        [concepts-list {:title "Step 3: Concepts"}]]
        [ui/grid {:item true :xs 4}
         [lessons-list {:title "Step 4: Game Sequencing"}]]]]]))
