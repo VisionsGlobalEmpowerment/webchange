@@ -9,7 +9,8 @@
             [config.core :refer [env]]
             [clojure.string :as string]
             [camel-snake-kebab.extras :refer [transform-keys]]
-            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]))
+            [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]
+            [webchange.course.skills :refer [skills]]))
 
 (def editor_asset_type_single-background "single-background")
 (def editor_asset_type_background "background")
@@ -58,8 +59,14 @@
   [course-slug scene-name]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
-        latest-version (db/get-latest-scene-version {:scene_id scene-id})]
-    (:data latest-version)))
+        latest-version (db/get-latest-scene-version {:scene_id scene-id})
+        scene-skills (->> (db/get-scene-skills-by-scene {:scene_id scene-id})
+                          (map (fn [{:keys [skill-id]}]
+                                 (some (fn [skill]
+                                         (and (= (:id skill) skill-id) skill))
+                                       skills))))]
+    (merge (:data latest-version)
+           {:skills scene-skills})))
 
 (defn get-scene-data
   [course-slug scene-name]
