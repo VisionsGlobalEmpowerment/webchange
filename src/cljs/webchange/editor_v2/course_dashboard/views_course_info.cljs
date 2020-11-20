@@ -9,16 +9,59 @@
     [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.subs :as editor-subs]))
 
-(defn- upload-image-form
-  [uploading-atom on-change]
-  (let [on-finish (fn [result]
-                    (on-change (:url result))
-                    (reset! uploading-atom false))
-        start-upload (fn [js-file]
-                       (reset! uploading-atom true)
-                       (re-frame/dispatch [::concepts-events/upload-asset js-file {:type :image :on-finish on-finish}]))]
-    [select-file-form {:size      "normal"
-                       :on-change start-upload}]))
+(defn- get-styles
+  []
+  (let [image-size 60
+        image-style {:height       image-size
+                     :margin-right "15px"
+                     :width        image-size}]
+    {:file-input      {:display "none"}
+     :image           image-style
+     :image-clickable (merge image-style
+                             {:cursor "pointer"})
+     :image-label     {:margin-right "16px"}}))
+
+(defn- image
+  [{:keys [src loading? on-click]}]
+  (let [styles (get-styles)]
+    (if loading?
+      [ui/avatar {:style (:image styles)}
+       [ui/circular-progress]]
+      [ui/tooltip {:title     "Click to change course image"
+                   :placement "top"}
+       [ui/avatar (merge {:on-click on-click
+                          :style    (:image-clickable styles)}
+                         (if (some? src) {:src src} {}))
+        (when (nil? src) [ic/image])]])))
+
+(defn- course-image
+  [{:keys [data]}]
+  (r/with-let [uploading (r/atom false)
+               file-input (atom nil)
+
+               handle-image-click #(.click @file-input)
+               handle-finish-upload (fn [result]
+                                      (reset! uploading false)
+                                      (swap! data assoc :image-src (:url result)))
+               handle-start-upload (fn [js-file]
+                                     (reset! uploading true)
+                                     (re-frame/dispatch [::concepts-events/upload-asset js-file {:type      :image
+                                                                                                 :on-finish handle-finish-upload}]))
+               handle-input-change #(-> % (.. -target -files) (.item 0) handle-start-upload)
+               styles (get-styles)]
+    [ui/grid {:container   true
+              :justify     "flex-start"
+              :align-items "center"}
+     [ui/typography {:variant "body1"
+                     :style   (:image-label styles)}
+      "Course Image"]
+     [image {:src      (:image-src @data)
+             :loading? @uploading
+             :on-click handle-image-click}]
+     [:input {:type      "file"
+              :ref       #(reset! file-input %)
+              :on-change handle-input-change
+              :style     (:file-input styles)}]]))
 
 (defn course-info
   [{:keys [title]}]
@@ -26,8 +69,7 @@
     (if (:course-info loading)
       [ui/circular-progress]
       (r/with-let [info @(re-frame/subscribe [::editor-subs/course-info])
-                   data (r/atom info)
-                   uploading (r/atom false)]
+                   data (r/atom info)]
         [ui/card {:style {:margin      "12px"
                           :flex-shrink "0"}}
          [ui/card-content
@@ -53,25 +95,7 @@
                             :default-value (:lang @data)
                             :on-change     #(swap! data assoc :lang (-> % .-target .-value))}]]
            [ui/grid {:item true :xs 4}
-            [ui/grid {:container   true
-                      :justify     "flex-start"
-                      :align-items "center"}
-             (if (:image-src @data)
-               [ui/avatar {:style {:width        60
-                                   :height       60
-                                   :margin-right "15px"}
-                           :src   (:image-src @data)}]
-               [ui/avatar {:style {:width        60
-                                   :height       60
-                                   :margin-right "15px"}}
-                [ic/image]])
-             [ui/text-field {:style     {:display "none"
-                                         :width   "50%"}
-                             :value     (str (:image-src @data))
-                             :on-change #(swap! data assoc :image-src (-> % .-target .-value))}]
-             [upload-image-form uploading #(swap! data assoc :image-src %)]
-             (when @uploading
-               [ui/circular-progress])]]]]
+            [course-image {:data data}]]]]
          [ui/card-actions
           [ui/button {:color    "secondary"
                       :style    {:margin-left "auto"}
