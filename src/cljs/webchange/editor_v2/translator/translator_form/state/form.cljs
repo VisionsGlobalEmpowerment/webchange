@@ -5,7 +5,8 @@
     [webchange.editor-v2.translator.translator-form.state.db :as db]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.editor-v2.translator.translator-form.state.window-confirmation]))
 
 ;; Subs
 
@@ -44,11 +45,12 @@
           actions (translator-form.scene/actions-data db)
           assets (translator-form.scene/assets-data db)
           objects (translator-form.scene/objects-data db)]
-      {:dispatch-n (->> edited-concepts
-                        (map (fn [[id {:keys [data]}]] [::editor/update-dataset-item id data]))
-                        (concat (list [::editor/reset-scene-actions scene-id actions]
-                                      [::editor/reset-scene-assets scene-id assets]
-                                      [::editor/reset-scene-objects scene-id objects]
-                                      [::editor/save-current-scene scene-id]
-                                      [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])]
-                                      )))})))
+      {:dispatch-n         (->> edited-concepts
+                                (map (fn [[id {:keys [data]}]] [::editor/update-dataset-item id data]))
+                                (concat (list [::editor/reset-scene-actions scene-id actions]
+                                              [::editor/reset-scene-assets scene-id assets]
+                                              [::editor/reset-scene-objects scene-id objects]
+                                              [::editor/save-current-scene scene-id]
+                                              [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])]
+                                              )))
+       :reset-before-leave true})))

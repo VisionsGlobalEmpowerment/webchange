@@ -7,7 +7,8 @@
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.concepts-utils :refer [get-concepts-audio-assets]]
-    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+    [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
+    [webchange.editor-v2.translator.translator-form.state.window-confirmation :as confirm]))
 
 ;; Subs
 
@@ -151,7 +152,8 @@
           updated-list (-> current-list
                            (conj concept-id)
                            (distinct))]
-      {:dispatch-n (list [::set-edited-concepts updated-list])})))
+      {:dispatch-n       (list [::set-edited-concepts updated-list])
+       :set-before-leave confirm/unsaved-changes-message})))
 
 (re-frame/reg-event-fx
   ::update-current-concept

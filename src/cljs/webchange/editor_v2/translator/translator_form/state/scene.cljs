@@ -5,6 +5,7 @@
     [webchange.editor-v2.translator.translator-form.state.scene-utils :refer [add-if-not-exist
                                                                               remove-by-key
                                                                               update-by-key]]
+    [webchange.editor-v2.translator.translator-form.state.window-confirmation :as confirm]
     [webchange.subs :as subs]))
 
 ;; Subs
@@ -105,7 +106,8 @@
 (re-frame/reg-event-fx
   ::set-changes
   (fn [{:keys [db]} [_ asset-data]]
-    {:db (assoc-in db (path-to-db [:scene :changed]) true)}))
+    {:db               (assoc-in db (path-to-db [:scene :changed]) true)
+     :set-before-leave confirm/unsaved-changes-message}))
 
 (re-frame/reg-event-fx
   ::add-asset
