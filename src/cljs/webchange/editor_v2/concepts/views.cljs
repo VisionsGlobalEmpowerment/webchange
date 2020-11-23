@@ -7,6 +7,7 @@
     [webchange.editor-v2.concepts.fields :refer [dataset-item-control]]
     [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.concepts.subs :as concepts-subs]
+    [webchange.editor-v2.concepts.utils :refer [resource-type?]]
     [webchange.editor-v2.layout.card.views :refer [list-card get-styles]]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
@@ -32,10 +33,6 @@
           [ui/icon-button {:on-click   #(re-frame/dispatch [::concepts-events/open-delete-dataset-item-modal concept])
                            :aria-label "Delete"}
            [ic/delete {:style (:action-icon styles)}]]]])]]))
-
-(defn resource-type?
-  [type]
-  (some #(= type %) ["string" "audio" "image" "video"]))
 
 (defn- dataset-item-fields-panel
   [dataset-id data-atom]

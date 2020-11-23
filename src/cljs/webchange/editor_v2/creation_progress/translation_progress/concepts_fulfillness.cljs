@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.creation-progress.translation-progress.concepts-fulfillness
   (:require
-    [webchange.editor-v2.concepts.views :refer [resource-type?]]
+    [webchange.editor-v2.concepts.utils :refer [resource-type?]]
     [webchange.editor-v2.sandbox.parse-actions :refer [find-all-actions]]))
 
 (defn- empty-field?
