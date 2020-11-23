@@ -36,10 +36,13 @@
 
 (defn- validate-concept-phrase-action
   [action-data]
-  (let [dataset-items (map second@(re-frame/subscribe [::editor-subs/course-dataset-items]))
+  (let [dataset-items (map second @(re-frame/subscribe [::editor-subs/course-dataset-items]))
         item-field (->> action-data :from-var first :var-property keyword)]
     (every? (fn [dataset-item]
-              (validate-activity-phrase-action (get-in dataset-item [:data item-field])))
+              (let [action-data (-> dataset-item
+                                    (get-in [:data item-field])
+                                    (get-in [:data 0]))]
+                (validate-activity-phrase-action action-data)))
             dataset-items)))
 
 (defn validate-phrase-action

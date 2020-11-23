@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.translator.translator-form.state.concepts
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.concepts.utils :refer [resource-type?]]
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
     [webchange.editor-v2.dialog.dialog-form.state.concepts-utils :as concepts-utils]
     [webchange.editor-v2.subs :as editor-subs]
@@ -91,9 +92,9 @@
   (map (fn [concept]
          (let [concept-complete? (every? (fn [field-name]
                                            (let [field-data (get-in concept [:data (keyword field-name)])]
-                                             (if (= "action" (:type field-data))
-                                               (validate/validate-phrase-action field-data)
-                                               (some? field-data))))
+                                             (if (resource-type? (:type field-data))
+                                               (some? field-data)
+                                               (validate/validate-phrase-action (get-in field-data [:data 0])))))
                                          actions-vars)]
            (assoc concept :complete? concept-complete?)))
        concepts-list))

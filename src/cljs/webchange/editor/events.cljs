@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.interpreter.events :as ie]))
+    [webchange.interpreter.events :as ie]
+    [webchange.editor-v2.concepts.subs :as concepts-subs]))
 
 (re-frame/reg-event-fx
   ::load-datasets
@@ -232,7 +233,19 @@
   ::update-dataset-item-success
   (fn [{:keys [db]} [_ {:keys [id data]}]]
     {:db         (assoc-in db [:dataset-items id] data)
-     :dispatch-n (list [:complete-request :update-dataset-item])}))
+     :dispatch-n (list [:complete-request :update-dataset-item]
+                       [::update-course-dataset-item-data id data])}))
+
+(re-frame/reg-event-fx
+  ::update-course-dataset-item-data
+  (fn [{:keys [db]} [_ id data]]
+    (let [dataset-items (concepts-subs/dataset-items db)
+          item-index (->> dataset-items
+                          (map-indexed vector)
+                          (some (fn [[idx dataset-item]]
+                                  (and (= (:id dataset-item) id)
+                                       idx))))]
+      {:db (update-in db [:editor :course-dataset-items item-index] merge data)})))
 
 (re-frame/reg-event-fx
   ::select-current-scene
