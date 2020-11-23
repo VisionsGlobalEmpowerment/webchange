@@ -8,7 +8,7 @@
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.handler :refer [auth-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
-            [webchange.course.handler :refer [course-routes website-api-routes editor-api-routes courses-api-routes]]
+            [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.school.handler :refer [school-routes]]
             [webchange.secondary.handler :refer [secondary-school-routes]]
@@ -101,16 +101,7 @@
            (GET "/s/:course-id/:scene-id" [] (public-route))
            (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
 
-           (GET "/courses/:id" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/editor" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/editor-v2" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/editor-v2/:scene-id" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/editor-v2/concepts/:concept-id" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/editor-v2/add-concept" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/editor-v2/levels/:level-id/lessons/:lesson-id" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/editor-v2/levels/:level-id/add-lesson" request (authenticated-route request {:role :educator}))
-           (GET "/courses/:id/table" request (authenticated-route request))
-
+           ;; teacher routes
            (GET "/dashboard" request (teachers-route request))
            (GET "/dashboard/classes" request (teachers-route request))
            (GET "/dashboard/schools" request (teachers-route request))
@@ -118,7 +109,8 @@
            (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
 
-           ;; student dashboard
+           ;; student routes
+           (GET "/courses/:id" request (authenticated-route request {:role :student}))
            (GET "/courses/:id/dashboard" request (authenticated-route request {:role :student}))
            (GET "/courses/:id/dashboard/finished" request (authenticated-route request {:role :student}))
 
@@ -167,6 +159,7 @@
            pages-routes
            animation-routes
            auth-routes
+           course-pages-routes
            course-routes
            class-routes
            school-routes

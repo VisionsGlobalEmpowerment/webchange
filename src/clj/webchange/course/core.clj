@@ -21,6 +21,15 @@
 
 (def hardcoded (env :hardcoded-courses {"test" true}))
 
+(defn collaborator?
+  [user-id course-slug]
+  (log/debug "collaborator?" user-id course-slug)
+  true
+  #_(let [{course-id :id owner-id :owner-id} (db/get-course {:slug course-slug})
+        owner? (= owner-id user-id)
+        {collaborator? :result} (db/is-collaborator? {:course_id course-id :user_id user-id})]
+    (or owner? collaborator?)))
+
 (defn get-course-templates
   [course-slug]
   (if (contains? hardcoded course-slug)

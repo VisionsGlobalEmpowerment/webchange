@@ -161,3 +161,10 @@ SELECT * FROM scene_skills;
 -- :doc retrieve all scene skill records
 SELECT * FROM scene_skills WHERE scene_id=:scene_id;
 
+-- :name add-collaborator! :! :n
+-- :doc creates a new course-collaborator link
+INSERT INTO collaborators (course_id, user_id) VALUES (:course_id, :user_id);
+
+-- :name is-collaborator? :? :1
+-- :doc check if user is collaborator on given course
+SELECT true as result from collaborators WHERE course_id = :course_id AND user_id = :user_id

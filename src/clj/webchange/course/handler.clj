@@ -221,6 +221,24 @@
     :summary "Returns list of skills with strands and topics"
     (-> (skills/get-skills) response)))
 
+
+(defn collaborator-route
+  [{{course-slug :course-slug} :route-params :as request}]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator? user-id course-slug)
+      (throw-unauthorized {:role :educator})))
+  (resource-response "index.html" {:root "public"}))
+
+(defroutes course-pages-routes
+  (GET "/courses/:course-slug/editor" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/:scene-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/concepts/:concept-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/add-concept" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/levels/:level-id/lessons/:lesson-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/levels/:level-id/add-lesson" request (collaborator-route request))
+  (GET "/courses/:course-slug/table" request (collaborator-route request)))
+
 (defroutes course-routes
   (GET "/api/courses/:course-slug" [course-slug] (-> course-slug core/get-course-data response))
 
