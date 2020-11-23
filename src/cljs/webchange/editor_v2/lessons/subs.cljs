@@ -46,7 +46,8 @@
          :items
          (map :id)
          (map #(concepts-subs/get-item db %))
-         (map #(select-keys % [:id :name])))))
+         (map #(select-keys % [:id :name]))
+         (remove empty?))))
 
 (re-frame/reg-sub
   ::lesson-with-items
@@ -55,7 +56,11 @@
           lesson (get-lesson level lesson-id)
           lesson-sets (:lesson-sets lesson)]
       (if lesson
-        (assoc lesson :lesson-sets (zipmap (keys lesson-sets) (map (fn [name] {:name name :items (get-items db name)}) (vals lesson-sets))))))))
+        (assoc lesson :lesson-sets (->> (vals lesson-sets)
+                                        (map (fn [name]
+                                               {:name  name
+                                                :items (get-items db name)}))
+                                        (zipmap (keys lesson-sets))))))))
 
 (re-frame/reg-sub
   ::level-activities
