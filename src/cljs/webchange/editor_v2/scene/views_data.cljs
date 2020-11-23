@@ -22,8 +22,7 @@
 (defn scene-data->objects-list
   [scene-data]
   (->> (:objects scene-data)
-       (filter (fn [[_ object-data]] (= "text" (:type object-data))))
-       (filter (fn [[_ object-data]] (not (nil? (:chunks object-data)))))))
+       (filter (fn [[_ object-data]] (= "text" (:type object-data))))))
 
 (defn data
   []

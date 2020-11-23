@@ -140,6 +140,8 @@
 
       (doall (map #(register-chunk % type object-name) chunks))
 
+      (when-not (nil? on-click) (utils/set-handler text-container "click" on-click))
+
       wrapped-text)
     (let [text (create-text props)
           wrapped-text (wrap type object-name text nil)]
