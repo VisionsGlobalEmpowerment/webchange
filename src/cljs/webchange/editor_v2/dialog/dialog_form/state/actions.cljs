@@ -155,13 +155,11 @@
     (let [region-data {:audio    audio-url
                        :start    start
                        :duration duration}]
-      {:dispatch-n (list [::update-dialog-audio-action :phrase region-data]
-                         [::load-lip-sync-data audio-url start duration])})))
-
+      {:dispatch [::load-lip-sync-data audio-url start duration region-data]})))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data
-  (fn [{:keys [db]} [_ audio-url start duration]]
+  (fn [{:keys [db]} [_ audio-url start duration rest-data]]
     {:db         (assoc-in db [:loading :load-lip-sync-data] true)
      :http-xhrio {:method          :get
                   :uri             (str "/api/actions/get-talk-animations")
@@ -170,23 +168,23 @@
                                     :duration duration}
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [::load-lip-sync-data-success]
-                  :on-failure      [::load-lip-sync-data-failure start duration]}}))
+                  :on-success      [::load-lip-sync-data-success rest-data]
+                  :on-failure      [::load-lip-sync-data-failure start duration rest-data]}}))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data-success
-  (fn [{:keys [_]} [_ lip-sync-data]]
+  (fn [{:keys [_]} [_ rest-data lip-sync-data]]
     {:dispatch-n (list [:complete-request :load-lip-sync-data]
-                       [::update-dialog-audio-action :phrase {:data lip-sync-data}])}))
+                       [::update-dialog-audio-action :phrase (merge rest-data {:data lip-sync-data})])}))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data-failure
-  (fn [{:keys [_]} [_ start duration]]
+  (fn [{:keys [_]} [_ rest-data start duration]]
     (let [default-lip-sync-data [{:start start
                                   :end   (+ start duration)
                                   :anim  "talk"}]]
       {:dispatch-n (list [:api-request-error :load-lip-sync-data]
-                         [::update-dialog-audio-action :phrase {:data default-lip-sync-data}])})))
+                         [::update-dialog-audio-action :phrase (merge rest-data {:data default-lip-sync-data})])})))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-phrase
