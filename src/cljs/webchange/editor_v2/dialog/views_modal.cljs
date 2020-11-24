@@ -5,12 +5,14 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.confirm-dialog.views :refer [confirm-dialog]]
     [webchange.editor-v2.dialog.state.window :as translator.window]
+    [webchange.editor-v2.history.views :refer [history-controls]]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]
     [webchange.editor-v2.dialog.dialog-form.views-form :refer [translator-form]]))
 
 (defn- get-styles
   []
-  {:save-button-wrapper {:position "relative"}})
+  {:save-button-wrapper {:margin-left "16px"
+                         :position    "relative"}})
 
 (def save-edited-data! #(re-frame/dispatch [::translator-form.form/save-changes]))
 (def close-window! #(re-frame/dispatch [::translator.window/close]))
@@ -51,11 +53,13 @@
                          :description "Do you want to continue work or close dialogue window?"
                          :save-text   "Continue"
                          :cancel-text "Close"}]]
-       [ui/dialog-actions
-        [ui/button {:on-click handle-close}
-         "Cancel"]
-        [:div {:style (:save-button-wrapper styles)}
-         [ui/button {:color    "secondary"
-                     :variant  "contained"
-                     :on-click handle-save}
-          "Save"]]]])))
+       [ui/dialog-actions {:style {:justify-content "space-between"}}
+        [history-controls]
+        [:div {:style {:display "flex"}}
+         [ui/button {:on-click handle-close}
+          "Cancel"]
+         [:div {:style (:save-button-wrapper styles)}
+          [ui/button {:color    "secondary"
+                      :variant  "contained"
+                      :on-click handle-save}
+           "Save"]]]]])))

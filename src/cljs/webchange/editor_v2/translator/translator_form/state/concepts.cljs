@@ -4,6 +4,7 @@
     [webchange.editor-v2.concepts.utils :refer [resource-type?]]
     [webchange.editor-v2.creation-progress.translation-progress.validate-action :as validate]
     [webchange.editor-v2.dialog.dialog-form.state.concepts-utils :as concepts-utils]
+    [webchange.editor-v2.history.state :as history]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.concepts-utils :refer [get-concepts-audio-assets]]
@@ -44,10 +45,18 @@
   (fn [[course-datasets]]
     (get-concept-scheme course-datasets)))
 
+(defn- get-concept-by-id
+  [db concept-id]
+  (get-in db (path-to-db [:concepts :data concept-id])))
+
+(defn- current-concept-id
+  [db]
+  (get-in db (path-to-db [:concepts :current-concept])))
+
 (defn current-concept
   [db]
-  (let [current-concept-id (get-in db (path-to-db [:concepts :current-concept]))]
-    (get-in db (path-to-db [:concepts :data current-concept-id]))))
+  (->> (current-concept-id db)
+       (get-concept-by-id db)))
 
 (re-frame/reg-sub
   ::current-concept
@@ -158,8 +167,21 @@
 (re-frame/reg-event-fx
   ::update-current-concept
   (fn [{:keys [db]} [_ action-path data-patch]]
-    (let [current-concept (current-concept db)
-          action-data (get-in current-concept (concat [:data] action-path))
+    (let [concept-id (current-concept-id db)]
+      {:dispatch [::update-concept concept-id action-path data-patch]})))
+
+(re-frame/reg-event-fx
+  ::update-concept
+  (fn [{:keys [db]} [_ concept-id action-path data-patch {:keys [suppress-history?]}]]
+    (let [concept (get-concept-by-id db concept-id)
+          action-data (get-in concept (concat [:data] action-path))
           updated-data (merge action-data data-patch)]
-      {:db         (assoc-in db (path-to-db (concat [:concepts :data] [(:id current-concept) :data] action-path)) updated-data)
-       :dispatch-n (list [::add-edited-concepts (:id current-concept)])})))
+      {:db         (assoc-in db (path-to-db (concat [:concepts :data] [concept-id :data] action-path)) updated-data)
+       :dispatch-n (->> (list [::add-edited-concepts concept-id]
+                              (when-not suppress-history?
+                                [::history/add-history-event {:type       :concept-action
+                                                              :concept-id concept-id
+                                                              :path       action-path
+                                                              :from       (->> data-patch (keys) (select-keys action-data))
+                                                              :to         data-patch}]))
+                        (remove nil?))})))

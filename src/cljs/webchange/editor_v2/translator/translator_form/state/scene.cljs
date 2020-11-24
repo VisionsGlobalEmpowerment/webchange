@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.translator.translator-form.state.scene
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.history.state :as history]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.scene-utils :refer [add-if-not-exist
                                                                               remove-by-key
@@ -143,12 +144,18 @@
 
 (re-frame/reg-event-fx
   ::update-action
-  (fn [{:keys [db]} [_ action-path data-patch]]
+  (fn [{:keys [db]} [_ action-path data-patch {:keys [suppress-history?]}]]
     (let [actions-data (actions-data db)
           action-data (get-in actions-data action-path)
           updated-data (merge action-data data-patch)]
       {:db         (assoc-in db (path-to-db (concat [:scene :data :actions] action-path)) updated-data)
-       :dispatch-n (list [::set-changes])})))
+       :dispatch-n (->> (list [::set-changes]
+                              (when-not suppress-history?
+                                [::history/add-history-event {:type :scene-action
+                                                              :path action-path
+                                                              :from (->> data-patch (keys) (select-keys action-data))
+                                                              :to   data-patch}]))
+                        (remove nil?))})))
 
 (re-frame/reg-event-fx
   ::update-object
