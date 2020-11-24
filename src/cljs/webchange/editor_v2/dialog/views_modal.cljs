@@ -5,7 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.confirm-dialog.views :refer [confirm-dialog]]
     [webchange.editor-v2.dialog.state.window :as translator.window]
-    [webchange.editor-v2.history.views :refer [history-controls]]
+    [webchange.editor-v2.history.views :as history]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]
     [webchange.editor-v2.dialog.dialog-form.views-form :refer [translator-form]]))
 
@@ -13,6 +13,21 @@
   []
   {:save-button-wrapper {:margin-left "16px"
                          :position    "relative"}})
+
+(defn- event-handler
+  [event]
+  (let [z-key 90]
+    (when (and (= (.-which event) z-key)
+               (.-ctrlKey event))
+      (history/undo))))
+
+(defn- enable-hot-keys
+  []
+  (.addEventListener js/document "keyup" event-handler))
+
+(defn- disable-hot-keys
+  []
+  (.removeEventListener js/document "keyup" event-handler))
 
 (def save-edited-data! #(re-frame/dispatch [::translator-form.form/save-changes]))
 (def close-window! #(re-frame/dispatch [::translator.window/close]))
@@ -32,6 +47,8 @@
       [ui/dialog
        {:open       open?
         :on-close   handle-close
+        :on-enter   #(enable-hot-keys)
+        :on-exit    #(disable-hot-keys)
         :full-width true
         :max-width  "xl"}
        [ui/dialog-title
@@ -54,7 +71,7 @@
                          :save-text   "Continue"
                          :cancel-text "Close"}]]
        [ui/dialog-actions {:style {:justify-content "space-between"}}
-        [history-controls]
+        [history/controls]
         [:div {:style {:display "flex"}}
          [ui/button {:on-click handle-close}
           "Cancel"]

@@ -5,11 +5,15 @@
     [webchange.editor-v2.history.state :as state]
     [webchange.editor-v2.history.state-undo :as undo]))
 
-(defn history-controls
+(defn undo
+  []
+  (re-frame/dispatch [::undo/apply-undo]))
+
+(defn controls
   []
   (let [has-history? @(re-frame/subscribe [::state/has-history])]
     [:div {:style {:padding "8px"}}
      (when has-history?
        [ui/button {:color    "secondary"
-                   :on-click #(re-frame/dispatch [::undo/apply-undo])}
+                   :on-click #(undo)}
         "Undo"])]))
