@@ -174,7 +174,7 @@
                                        :height     72,
                                        :transition "door",
                                        :filter     "brighten",
-                                       :src        "/raw/img/i-spy-2/icons/img-10.png"}
+                                       :src        "/raw/img/i-spy-2/icons/img-2.png"}
                         :icon-2       {:type       "image",
                                        :x          812,
                                        :y          947,
