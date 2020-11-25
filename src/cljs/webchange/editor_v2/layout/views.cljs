@@ -12,8 +12,9 @@
   {:main-container             {:height         "100%"
                                 :display        "flex"
                                 :flex-direction "column"}
-   :toolbar-container          {:height    "64px"
-                                :flex-grow 0}
+   :toolbar-container          {:height      "64px"
+                                :flex-grow   0
+                                :flex-shrink 0}
    :content-container          {:padding   "32px"
                                 :flex-grow 1
                                 :overflow  "auto"}

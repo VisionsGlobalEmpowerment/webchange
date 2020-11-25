@@ -102,6 +102,7 @@
            (GET "/courses/:id/editor-v2/add-concept" request (authenticated-route request))
            (GET "/courses/:id/editor-v2/levels/:level-id/lessons/:lesson-id" request (authenticated-route request))
            (GET "/courses/:id/editor-v2/levels/:level-id/add-lesson" request (authenticated-route request))
+           (GET "/courses/:id/table" request (authenticated-route request))
 
            (GET "/dashboard" request (teachers-route request))
            (GET "/dashboard/classes" request (teachers-route request))

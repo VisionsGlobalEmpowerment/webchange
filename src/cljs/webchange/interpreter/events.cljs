@@ -94,6 +94,12 @@
                                     (re-frame/dispatch [::set-current-scene (or scene-id (:initial-scene course))]))))))
 
 (re-frame/reg-fx
+  :load-course-data
+  (fn [{:keys [course-id]}]
+    (i/load-course {:course-id course-id}
+                   (fn [course] (re-frame/dispatch [::set-course-data course])))))
+
+(re-frame/reg-fx
   :load-scene
   (fn [{:keys [course-id scene-id]}]
     (i/load-scene {:course-id course-id
@@ -953,6 +959,12 @@
                         (assoc-in [:loading :load-course] true))
        :load-course {:course-id course-id
                      :scene-id  scene-id}})))
+
+(re-frame/reg-event-fx
+  ::load-course-data
+  (fn-traced [{:keys [db]} [_ course-id]]
+    (if (not= course-id (:loaded-course db))
+      {:load-course-data {:course-id course-id}})))
 
 (re-frame/reg-event-fx
   ::set-current-course

@@ -7,6 +7,7 @@
     [webchange.interpreter.components :refer [course]]
     [webchange.editor-v2.creation-progress.views :refer [progress-panel]]
     [webchange.editor.events :as ee]
+    [webchange.editor-v2.course-table.views :refer [course-table]]
     [webchange.editor-v2.events :as ee2]
     [webchange.editor-v2.scene.state.skin :as editor-skin]
     [webchange.editor-v2.views :refer [course-view scene-view concept-view add-concept-view lesson-view add-lesson-view]]
@@ -97,6 +98,9 @@
     :course-editor-v2-add-concept [editor-panel-v2-add-concept (:course-id route-params)]
     :course-editor-v2-lesson [editor-panel-v2-lesson (:course-id route-params) (-> route-params :level-id js/parseInt) (-> route-params :lesson-id js/parseInt)]
     :course-editor-v2-add-lesson [editor-panel-v2-add-lesson (:course-id route-params) (-> route-params :level-id js/parseInt)]
+
+    ;;table
+    :course-table [course-table {:course-id (:course-id route-params)}]
 
     ;; teacher dashboard
     :dashboard [dashboard-panel :dashboard route-params]
