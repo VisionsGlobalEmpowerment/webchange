@@ -24,6 +24,11 @@
      :end      end
      :duration (round (- end start))}))
 
+(defn- disable-default-scroll-handler
+  [parent]
+  (let [wave (.querySelector parent "wave")]
+    (.addEventListener wave "scroll" (fn [event] (.preventDefault event)))))
+
 (defn create-wavesurfer
   ([element key]
    (create-wavesurfer element key {:height 256}))
@@ -42,6 +47,7 @@
                                                                  (.create TimelinePlugin (clj->js {:container          timeline-div
                                                                                                    :primaryFontColor   font-color
                                                                                                    :secondaryFontColor font-color}))]}))]
+     (disable-default-scroll-handler ws-div)
      (loader/get-audio-blob key #(.loadBlob wavesurfer %))
      wavesurfer)))
 

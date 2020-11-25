@@ -54,6 +54,7 @@
      :complete-icon   icon-style
      :current-icon    (merge icon-style
                              {:color        (get-in-theme [:palette :primary :main])
+                              :cursor       "pointer"
                               :font-size    "21px"
                               :margin-left  "-4px"
                               :margin-right "4px"})
@@ -63,7 +64,10 @@
   [{:keys [state on-click]}]
   (let [styles (get-styles)]
     (case state
-      :current [ic/all-out {:style (:current-icon styles) :on-click on-click}]
+      :current [ui/tooltip {:title     "Click to finish the step manually"
+                            :placement "top"}
+                [ic/all-out {:style    (:current-icon styles)
+                             :on-click on-click}]]
       :passed [ic/check-circle {:style (:complete-icon styles)}]
       [ic/panorama-fish-eye {:style (:on-going-icon styles)}])))
 
@@ -72,7 +76,8 @@
   (let [step-state (get-step-state step)
         styles (get-styles)]
     [:div {:style (:message-wrapper styles)}
-     [step-icon {:state step-state :on-click #(set-step-complete step)}]
+     [step-icon {:state    step-state
+                 :on-click #(set-step-complete step)}]
      [ui/typography {:style (if (= step-state :current)
                               (:current-message styles)
                               (:message styles))}

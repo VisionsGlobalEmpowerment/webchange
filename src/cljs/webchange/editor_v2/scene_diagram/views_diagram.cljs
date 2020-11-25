@@ -16,12 +16,12 @@
                      :flex-grow 1
                      :position  "relative"}
    :toolbar         {:background-color "rgba(0,0,0,0)"
-                     :left             "0"
+                     :right            "0"
                      :padding          "8px"
                      :position         "absolute"
                      :text-align       "right"
                      :top              "0"
-                     :width            "100%"
+                     :width            "64px"
                      :z-index          "10"}})
 
 (defn- expand-diagram-button
