@@ -38,43 +38,51 @@
       [ui/table-cell {:style {:width width}} title])]])
 
 (defn- levels-count
-  [data level-id]
+  [data current-idx level-id]
   (->> data
-       (filter (fn [{:keys [level]}]
-                 (= level level-id)))
+       (filter (fn [{:keys [idx level]}]
+                 (and (>= idx current-idx)
+                      (= level level-id))))
        (count)))
 
 (defn- lessons-count
-  [data level-id lesson-id]
+  [data current-idx level-id lesson-id]
   (->> data
-       (filter (fn [{:keys [level lesson]}]
-                 (and (= level level-id)
+       (filter (fn [{:keys [idx level lesson]}]
+                 (and (>= idx current-idx)
+                      (= level level-id)
                       (= lesson lesson-id))))
        (count)))
 
 (defn- body
-  [{:keys [data columns]}]
-  (r/with-let [_ (keyboard/enable {:enter           #(print "enter")
+  [{:keys [data columns rows-count]}]
+  (r/with-let [rows-skip (r/atom 10)
+               _ (keyboard/enable {:enter           #(print "enter")
                                    :move-selection  #(move-selection data (:data @(re-frame/subscribe [::selection-state/selection])) % columns)
                                    :reset-selection #(print "reset-selection")})]
     (let [handle-cell-click (fn [event]
-                              (print "handle-cell-click")
                               (let [data (-> event (.-target) (cell->cell-data))]
-                                (re-frame/dispatch [::selection-state/set-selection :cell data])))]
-      (into [ui/table-body {:on-click handle-cell-click}]
-            (loop [[activity & rest-activities] data
+                                (re-frame/dispatch [::selection-state/set-selection :cell data])))
+          handle-scroll (fn [event]
+                          (let [delta (if (> (.-deltaY event) 0) 1 -1)
+                                new-skip (-> (+ @rows-skip delta)
+                                             (Math/max 0)
+                                             (Math/min (- (count data) rows-count)))]
+                            (reset! rows-skip new-skip)))]
+      (into [ui/table-body {:on-click handle-cell-click
+                            :on-wheel handle-scroll}]
+            (loop [[activity & rest-activities] (->> data (drop @rows-skip) (take rows-count))
                    rows []
                    current-level nil
                    current-lesson nil]
               (if (some? activity)
-                (let [level-id (:level activity)
-                      lesson-id (:lesson activity)
+                (let [{:keys [idx level lesson]} activity
                       span-columns (cond-> {}
-                                           (not= level-id current-level) (assoc :level (levels-count data level-id))
-                                           (not= lesson-id current-lesson) (assoc :lesson (lessons-count data level-id lesson-id)))
+                                           (not= level current-level) (assoc :level (levels-count data idx level))
+                                           (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson)))
                       skip-columns (cond-> {}
-                                           (= level-id current-level) (assoc :level true)
-                                           (= lesson-id current-lesson) (assoc :lesson true))]
+                                           (= level current-level) (assoc :level true)
+                                           (= lesson current-lesson) (assoc :lesson true))]
                   (recur rest-activities
                          (conj rows
                                ^{:key (get-row-id activity)}
@@ -88,16 +96,46 @@
     (finally
       (keyboard/disable))))
 
+(defn- get-element-height
+  ([el]
+   (get-element-height el {}))
+  ([el {:keys [without-padding]
+        :or   {without-padding false}}]
+   (let [style (.getComputedStyle js/window el nil)
+         ->int #(.parseInt js/Number %)
+         get-prop #(.getPropertyValue style %)]
+     (cond-> (-> "height" get-prop ->int)
+             without-padding (-> (- (-> "padding-top" get-prop ->int))
+                                 (- (-> "padding-bottom" get-prop ->int)))))))
+
+(defn- get-rows-count
+  [content-el]
+  (let [header (.querySelector content-el "thead")
+        content-row (.querySelector content-el "tbody > tr")]
+    (when (and (some? header)
+               (some? content-row))
+      (let [content-height (get-element-height content-el {:without-padding true})
+            header-height (get-element-height header)
+            content-row-height (get-element-height content-row)]
+        (-> (- content-height header-height)
+            (/ content-row-height)
+            (Math/floor))))))
+
 (defn course-table
   [{:keys [course-id]}]
-  (r/with-let [_ (re-frame/dispatch [::data-state/init course-id])]
+  (r/with-let [_ (re-frame/dispatch [::data-state/init course-id])
+               rows-count (r/atom 1)
+               ref-handler (fn [content-el]
+                             (when (some? content-el) (reset! rows-count (get-rows-count content-el))))]
     (let [data @(re-frame/subscribe [::data-state/table-data])]
       [layout {:breadcrumbs [{:text     "Course"
                               :on-click #(redirect-to :course-editor-v2 :id course-id)}
-                             {:text "Table"}]}
+                             {:text "Table"}]
+               :content-ref ref-handler}
        [ui/paper
         [ui/table
          [col-group {:columns header-data}]
          [header {:columns header-data}]
-         [body {:data    data
-                :columns header-data}]]]])))
+         [body {:data       data
+                :columns    header-data
+                :rows-count @rows-count}]]]])))

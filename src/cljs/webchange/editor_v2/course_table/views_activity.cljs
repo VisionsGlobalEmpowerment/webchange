@@ -12,7 +12,7 @@
   []
   (let [shadow-color (get-in-theme [:palette :primary :main])]
     {:cell                {:cursor     "pointer"
-                           :transition "all 0.3s ease-out"}
+                           :transition "box-shadow 0.2s ease-out"}
      :selected-table-item {:box-shadow (str "inset 0 0 5px 1px " shadow-color)}}))
 
 (defn- cell-selected?

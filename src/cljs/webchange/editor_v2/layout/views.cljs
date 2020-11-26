@@ -31,8 +31,9 @@
    [delete-dataset-item-modal]])
 
 (defn layout
-  [{:keys [align]
-    :or   {align "left"}}]
+  [{:keys [align content-ref]
+    :or   {align       "left"
+           content-ref #()}}]
   (let [this (r/current-component)
         styles (get-styles)
         content-styles (cond-> (:content-container styles)
@@ -40,6 +41,7 @@
     [:div {:style (:main-container styles)}
      [:div {:style (:toolbar-container styles)}
       [toolbar (select-keys (r/props this) [:title :breadcrumbs])]]
-     (into [:div {:style content-styles}]
+     (into [:div {:style content-styles
+                  :ref   content-ref}]
            (r/children this))
      [modal-windows]]))
