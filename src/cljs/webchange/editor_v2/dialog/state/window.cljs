@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
-    [webchange.editor-v2.translator.translator-form.state.window-confirmation]))
+    [webchange.editor-v2.translator.translator-form.state.window-confirmation]
+    [webchange.editor-v2.history.state :as history]))
 
 ;; Subs
 
@@ -19,8 +20,9 @@
 (re-frame/reg-event-fx
   ::open
   (fn [{:keys [db]} [_]]
-    {:db       (assoc-in db (path-to-db [:translator-dialog-modal-state]) true)
-     :dispatch [::translator-form/init-state]}))
+    {:db         (assoc-in db (path-to-db [:translator-dialog-modal-state]) true)
+     :dispatch-n (list [::translator-form/init-state]
+                       [::history/init-history])}))
 
 (re-frame/reg-event-fx
   ::close
