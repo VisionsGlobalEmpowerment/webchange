@@ -15,6 +15,26 @@
 (use-fixtures :once f/init)
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
 
+(deftest course-editor-page-can-be-opened-by-owner
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        response (f/open-course-editor-page (:slug course) user-id)]
+    (is (= 200 (:status response)))))
+
+(deftest course-editor-page-can-be-opened-by-collaborator
+  (let [{course-id :id :as course} (f/course-created)
+        {user-id :id} (f/website-user-created)
+        _ (f/add-collaborator {:course-id course-id :user-id user-id})
+        response (f/open-course-editor-page (:slug course) user-id)]
+    (is (= 200 (:status response)))))
+
+(deftest course-editor-page-cannot-be-opened-by-non-collaborator
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        {random-user-id :id} (f/website-user-created {:id 321 :email "random@example.com"})
+        response (f/open-course-editor-page (:slug course) random-user-id)]
+    (is (= 403 (:status response)))))
+
 (deftest course-can-be-created
   (let [name "My test Course"
         course-data {:name name :lang "english" :concept-list-id 1}
@@ -33,17 +53,19 @@
            (is (= (get-in course [:data :initial-scene]) (:initial-scene body)))))
 
 (deftest course-can-be-saved
-         (let [course (f/course-created)
-               edited-value "test-scene-edited"
-               _ (f/save-course! (:slug course) {:course {:initial-scene edited-value}})
-               retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
-           (is (= edited-value retrieved-value))))
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        edited-value "test-scene-edited"
+        _ (f/save-course! (:slug course) user-id {:course {:initial-scene edited-value}})
+        retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
+    (is (= edited-value retrieved-value))))
 
 (deftest activity-can-be-created-from-template
-  (let [course (f/course-created)
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
         name "Test Activity"
         activity-data {:name name :template-id 1 :characters [{:skeleton "vera" :name "vera"}] :boxes 3 :skills [2]}
-        saved-response (f/create-activity! (:slug course) activity-data)
+        saved-response (f/create-activity! (:slug course) user-id activity-data)
         saved-value (-> saved-response :body slurp (json/read-str :key-fn keyword))
         retrieved-response (f/get-scene (:course-slug saved-value) (:scene-slug saved-value))
         retrieved-value (-> retrieved-response :body slurp (json/read-str :key-fn keyword))]
@@ -63,9 +85,11 @@
            (is (= (get-in scene [:data :test]) (-> response :body slurp (json/read-str :key-fn keyword) :test)))))
 
 (deftest scene-can-be-saved
-         (let [scene (f/scene-created)
+         (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
+               scene (f/scene-created course)
                edited-value "test-edited"
-               _ (f/save-scene! (:course-slug scene) (:name scene) {:scene {:test edited-value}})
+               _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test edited-value}})
                retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
                                    :body
                                    slurp
@@ -74,22 +98,26 @@
            (is (= edited-value retrieved-value))))
 
 (deftest course-versions-can-be-retrieved
-         (let [course (f/course-created)
-               _ (f/save-course! (:slug course) {:course {:initial-scene "edited-value"}})
+         (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
+               _ (f/save-course! (:slug course) user-id {:course {:initial-scene "edited-value"}})
                versions (-> (:slug course) f/get-course-versions :body slurp (json/read-str :key-fn keyword) :versions)]
            (is (= 2 (count versions)))))
 
 (deftest course-version-can-be-restored
-         (let [course (f/course-created)
+         (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
                original-value (-> course :data :initial-scene)
-               _ (f/save-course! (:slug course) {:course {:initial-scene "edited-value"}})
-               _ (f/restore-course-version! (:version-id course))
+               _ (f/save-course! (:slug course) user-id {:course {:initial-scene "edited-value"}})
+               _ (f/restore-course-version! (:version-id course) user-id)
                retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
            (is (= original-value retrieved-value))))
 
 (deftest scene-versions-can-be-retrieved
-         (let [scene (f/scene-created)
-               _ (f/save-scene! (:course-slug scene) (:name scene) {:scene {:test "edited-value"}})
+         (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
+               scene (f/scene-created course)
+               _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test "edited-value"}})
                versions (-> (f/get-scene-versions (:course-slug scene) (:name scene))
                             :body
                             slurp
@@ -98,10 +126,12 @@
            (is (= 2 (count versions)))))
 
 (deftest scene-version-can-be-restored
-         (let [scene (f/scene-created)
+         (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
+               scene (f/scene-created course)
                original-value (-> scene :data :test)
-               _ (f/save-scene! (:course-slug scene) (:name scene) {:scene {:test "edited-value"}})
-               _ (f/restore-scene-version! (:version-id scene))
+               _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test "edited-value"}})
+               _ (f/restore-scene-version! (:version-id scene) user-id)
                retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
                                    :body
                                    slurp
@@ -118,12 +148,13 @@
     (is (= (select-keys course keys) (select-keys body keys)))))
 
 (deftest course-info-can-be-saved
-  (let [course (f/course-created)
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
         name "name-edited"
         slug "slug-edited"
         lang "lang-edited"
         image-src "image-src-edited"
-        _ (f/save-course-info! (:id course) {:name name :slug slug :lang lang :image-src image-src})
+        _ (f/save-course-info! (:id course) user-id {:name name :slug slug :lang lang :image-src image-src})
         retrieved (-> slug f/get-course-info :body slurp (json/read-str :key-fn keyword))]
     (is (= name (:name retrieved)))
     (is (= slug (:slug retrieved)))
@@ -172,26 +203,26 @@
     (is (clojure.string/includes? (:image-src course) course/hostname))))
 
 (deftest scene-version-do-not-create-same
-  (let [scene (f/scene-created)
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
         data (-> scene :data)
-        _ (f/save-scene! (:course-slug scene) (:name scene) {:scene data})
-        scene-new  (db/get-latest-scene-version {:scene_id (:id scene)})
-        ]
+        _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene data})
+        scene-new  (db/get-latest-scene-version {:scene_id (:id scene)})]
     (is (:version-id scene) (:id scene-new))))
 
-
 (deftest scene-version-do-create-new
-  (let [scene (f/scene-created)
-        _ (f/save-scene! (:course-slug scene) (:name scene) {:scene {:test "edited-value"}})
-        scene-new  (db/get-latest-scene-version {:scene_id (:id scene)})
-        ]
-
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test "edited-value"}})
+        scene-new  (db/get-latest-scene-version {:scene_id (:id scene)})]
     (is (not= (:version-id scene) (:id scene-new)))))
 
 (deftest can-retrieve-editor-tags
   (let [tag (f/editor-tag-created "China")
-        tag-retirved (first (core/retrieve-editor-tags))]
-    (assert (= tag tag-retirved))))
+        tag-retrieved (first (core/retrieve-editor-tags))]
+    (assert (= tag tag-retrieved))))
 
 (deftest can-retrieve-editor-assets
   (let [tag-china (f/editor-tag-created "China")
@@ -204,13 +235,11 @@
         china-assets (core/retrieve-editor-assets (:id tag-china) nil)
         india-assets (core/retrieve-editor-assets (:id tag-india) nil)
         background-assets (core/retrieve-editor-assets nil course/editor_asset_type_background)
-        background-china-assets (core/retrieve-editor-assets (:id tag-china) course/editor_asset_type_background)
-        ]
+        background-china-assets (core/retrieve-editor-assets (:id tag-china) course/editor_asset_type_background)]
     (assert (= (count china-assets) 2))
     (assert (= (count india-assets) 1))
     (assert (= (count background-assets) 1))
     (assert (= (count background-china-assets) 1))))
-
 
 (deftest can-retrieve-retrieve-editor-character-skin
   (let [ _ (course/update-character-skins {:public-dir "test/clj/webchange/resources"})

@@ -38,9 +38,3 @@
   (let [request (mock/request :get "/courses/test/editor")
         response (handler/dev-handler request)]
     (is (= 302 (:status response)))))
-
-(deftest logged-in-user-can-access-editor
-  (let [request (-> (mock/request :get "/courses/test/editor")
-                    f/teacher-logged-in)
-        response (handler/dev-handler request)]
-    (is (= 200 (:status response)))))

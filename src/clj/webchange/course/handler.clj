@@ -12,7 +12,6 @@
             [webchange.auth.core :as auth]
             [webchange.auth.website :as website]
             [spec-tools.data-spec :as ds]
-            [webchange.db.core :refer [*db*] :as db]
             [schema.core :as s]
             [config.core :refer [env]]
             [webchange.common.hmac-sha256 :as sign]
@@ -21,8 +20,10 @@
 
 (defn handle-save-scene
   [course-slug scene-name request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/save-scene! course-slug scene-name data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/save-scene! course-slug scene-name data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :scene
@@ -31,8 +32,10 @@
 
 (defn handle-update-scene
   [course-slug scene-name request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/update-scene! course-slug scene-name data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/update-scene! course-slug scene-name data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :scene
@@ -51,8 +54,10 @@
 
 (defn handle-save-course
   [course-slug request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/save-course! course-slug data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/save-course! course-slug data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :course
@@ -61,8 +66,11 @@
 
 (defn handle-save-course-info
   [course-id request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/save-course-info! (Integer/parseInt course-id) data))]
+  (let [course-id (Integer/parseInt course-id)
+        user-id (current-user request)
+        save (fn [data] (core/save-course-info! course-id data))]
+    (when-not (core/collaborator-by-course-id? user-id course-id)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         save
@@ -70,14 +78,20 @@
 
 (defn handle-restore-course-version
   [version-id request]
-  (let [owner-id (current-user request)]
-    (-> (core/restore-course-version! (Integer/parseInt version-id) owner-id)
+  (let [version-id (Integer/parseInt version-id)
+        user-id (current-user request)]
+    (when-not (core/collaborator-by-course-version? user-id version-id)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/restore-course-version! version-id user-id)
         handle)))
 
 (defn handle-restore-scene-version
   [version-id request]
-  (let [owner-id (current-user request)]
-    (-> (core/restore-scene-version! (Integer/parseInt version-id) owner-id)
+  (let [version-id (Integer/parseInt version-id)
+        user-id (current-user request)]
+    (when-not (core/collaborator-by-scene-version? user-id version-id)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/restore-scene-version! version-id user-id)
         handle)))
 
 (defn handle-localize-course
@@ -102,10 +116,12 @@
 
 (defn handle-create-activity
   [course-slug data request]
-  (let [owner-id (current-user request)
+  (let [user-id (current-user request)
         activity (templates/activity-from-template data)
         metadata (templates/metadata-from-template data)]
-    (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) owner-id)
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) user-id)
         handle)))
 
 (defn handle-update-activity
@@ -221,11 +237,10 @@
     :summary "Returns list of skills with strands and topics"
     (-> (skills/get-skills) response)))
 
-
 (defn collaborator-route
   [{{course-slug :course-slug} :route-params :as request}]
   (let [user-id (current-user request)]
-    (when-not (core/collaborator? user-id course-slug)
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator})))
   (resource-response "index.html" {:root "public"}))
 
@@ -243,7 +258,8 @@
   (GET "/api/courses/:course-slug" [course-slug] (-> course-slug core/get-course-data response))
 
   ;; Scenes
-  (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name] (-> (core/get-scene-data course-slug scene-name) response))
+  (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name]
+    (-> (core/get-scene-data course-slug scene-name) response))
   (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
     (handle-save-scene course-slug scene-name request))
   (PUT "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
@@ -260,7 +276,8 @@
     (handle-save-course-info course-id request))
 
   (GET "/api/courses/:course-slug/versions" [course-slug] (-> course-slug core/get-course-versions response))
-  (GET "/api/courses/:course-slug/scenes/:scene-name/versions" [course-slug scene-name] (-> (core/get-scene-versions course-slug scene-name) response))
+  (GET "/api/courses/:course-slug/scenes/:scene-name/versions" [course-slug scene-name]
+    (-> (core/get-scene-versions course-slug scene-name) response))
   (POST "/api/course-versions/:version-id/restore" [version-id :as request]
     (handle-restore-course-version version-id request))
   (POST "/api/scene-versions/:version-id/restore" [version-id :as request]

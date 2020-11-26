@@ -25,6 +25,7 @@
 (def default-school-id 1)
 
 (defn clear-db []
+  (db/clear-table :collaborators)
   (db/clear-table :activity_stats)
   (db/clear-table :course_stats)
   (db/clear-table :course_events)
@@ -262,6 +263,13 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn open-course-editor-page
+  [course-slug user-id]
+  (let [course-url (str "/courses/" course-slug "/editor-v2")
+        request (-> (mock/request :get course-url)
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
 (defn create-course!
   [data]
   (let [course-url (str "/api/courses")
@@ -271,19 +279,19 @@
     (handler/dev-handler request)))
 
 (defn create-activity!
-  [course-slug data]
+  [course-slug user-id data]
   (let [url (str "/api/courses/" course-slug "/create-activity")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn save-course!
-  [course-slug data]
+  [course-slug user-id data]
   (let [course-url (str "/api/courses/" course-slug)
         request (-> (mock/request :post course-url (json/write-str data))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn localize-course!
@@ -319,19 +327,19 @@
     (handler/dev-handler request)))
 
 (defn save-course-info!
-  [course-id data]
+  [course-id user-id data]
   (let [course-url (str "/api/courses/" course-id "/info")
         request (-> (mock/request :put course-url (json/write-str data))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn restore-course-version!
-  [version-id]
+  [version-id user-id]
   (let [url (str "/api/course-versions/" version-id "/restore")
         request (-> (mock/request :post url (json/write-str {:id version-id}))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn get-course-versions
@@ -349,19 +357,19 @@
     (handler/dev-handler request)))
 
 (defn save-scene!
-  [course-slug scene-name data]
+  [course-slug scene-name user-id data]
   (let [url (str "/api/courses/" course-slug "/scenes/" scene-name)
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn restore-scene-version!
-  [version-id]
+  [version-id user-id]
   (let [url (str "/api/scene-versions/" version-id "/restore")
         request (-> (mock/request :post url (json/write-str {:id version-id}))
                     (mock/header :content-type "application/json")
-                    teacher-logged-in)]
+                    (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
 (defn get-scene-versions
@@ -819,3 +827,7 @@
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
+
+(defn add-collaborator
+  [{:keys [course-id user-id]}]
+  (db/add-collaborator! {:course_id course-id :user_id user-id}))

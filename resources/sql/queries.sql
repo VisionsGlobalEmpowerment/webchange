@@ -125,6 +125,11 @@ VALUES (:scene_id, :data, :owner_id, :created_at) RETURNING id
 SELECT * from scenes
 WHERE course_id = :course_id AND name = :name;
 
+-- :name get-scene-by-id :? :1
+-- :doc retrieve a scene record given the id
+SELECT * from scenes
+WHERE id = :id;
+
 -- :name get-scenes :? :*
 -- :doc retrieve all scene records
 SELECT * from scenes;

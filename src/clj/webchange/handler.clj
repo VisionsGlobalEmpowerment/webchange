@@ -1,7 +1,7 @@
 (ns webchange.handler
   (:require [compojure.api.sweet :refer [api context ANY GET POST PUT DELETE PATCH defroutes routes swagger-routes]]
             [compojure.route :refer [resources files not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
+            [ring.util.response :refer [resource-response response redirect status]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.middleware.params :refer [wrap-params]]
@@ -50,7 +50,7 @@
       {:status 401
        :body   {:errors [{:message "Unauthenticated"}]}})
     (if (authenticated? request)
-      (resource-response "error403.html" {:root "public"})
+      (-> (resource-response "error403.html" {:root "public"}) (status 403))
       (redirect (login-resource metadata (:uri request))))))
 
 (def auth-backend
