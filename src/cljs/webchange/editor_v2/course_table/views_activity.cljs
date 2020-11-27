@@ -91,13 +91,13 @@
     default-component))
 
 (defn activity-row
-  [{:keys [data columns span-columns skip-columns]}]
+  [{:keys [data columns span-columns skip-columns ref]}]
   (let [filtered-columns (->> columns
                               (filter (fn [{:keys [id]}]
                                         (-> skip-columns
                                             (contains? id)
                                             (not)))))]
-    [ui/table-row
+    [ui/table-row {:ref ref}
      (for [{:keys [id]} filtered-columns]
        ^{:key id}
        [(get-component id) {:data  data

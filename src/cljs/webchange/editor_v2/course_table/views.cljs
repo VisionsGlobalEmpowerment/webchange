@@ -5,6 +5,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.keyboard-control :as keyboard]
     [webchange.editor-v2.course-table.state.data :as data-state]
+    [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
     [webchange.editor-v2.course-table.views-activity :refer [activity-row]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
@@ -55,26 +56,26 @@
        (count)))
 
 (defn- body
-  [{:keys [data columns rows-count]}]
-  (r/with-let [rows-skip (r/atom 10)
-               _ (keyboard/enable {:enter           #(print "enter")
+  [{:keys [data columns ref]}]
+  (r/with-let [_ (keyboard/enable {:enter           #(print "enter")
                                    :move-selection  #(move-selection data (:data @(re-frame/subscribe [::selection-state/selection])) % columns)
                                    :reset-selection #(print "reset-selection")})]
-    (let [handle-cell-click (fn [event]
+    (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
+          rows-count @(re-frame/subscribe [::pagination-state/page-rows])
+
+          handle-cell-click (fn [event]
                               (let [data (-> event (.-target) (cell->cell-data))]
                                 (re-frame/dispatch [::selection-state/set-selection :cell data])))
           handle-scroll (fn [event]
-                          (let [delta (if (> (.-deltaY event) 0) 1 -1)
-                                new-skip (-> (+ @rows-skip delta)
-                                             (Math/max 0)
-                                             (Math/min (- (count data) rows-count)))]
-                            (reset! rows-skip new-skip)))]
+                          (let [delta (if (> (.-deltaY event) 0) 1 -1)]
+                            (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
       (into [ui/table-body {:on-click handle-cell-click
                             :on-wheel handle-scroll}]
-            (loop [[activity & rest-activities] (->> data (drop @rows-skip) (take rows-count))
+            (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
                    rows []
                    current-level nil
-                   current-lesson nil]
+                   current-lesson nil
+                   counter 0]
               (if (some? activity)
                 (let [{:keys [idx level lesson]} activity
                       span-columns (cond-> {}
@@ -86,12 +87,15 @@
                   (recur rest-activities
                          (conj rows
                                ^{:key (get-row-id activity)}
-                               [activity-row {:data         activity
-                                              :columns      columns
-                                              :span-columns span-columns
-                                              :skip-columns skip-columns}])
+                               [activity-row (merge {:data         activity
+                                                     :columns      columns
+                                                     :span-columns span-columns
+                                                     :skip-columns skip-columns}
+                                                    (if (= counter 0)
+                                                      {:ref ref} {}))])
                          (:level activity)
-                         (:lesson activity)))
+                         (:lesson activity)
+                         (inc counter)))
                 rows))))
     (finally
       (keyboard/disable))))
@@ -122,20 +126,35 @@
             (Math/floor))))))
 
 (defn course-table
-  [{:keys [course-id]}]
-  (r/with-let [_ (re-frame/dispatch [::data-state/init course-id])
-               rows-count (r/atom 1)
-               ref-handler (fn [content-el]
-                             (when (some? content-el) (reset! rows-count (get-rows-count content-el))))]
-    (let [data @(re-frame/subscribe [::data-state/table-data])]
-      [layout {:breadcrumbs [{:text     "Course"
-                              :on-click #(redirect-to :course-editor-v2 :id course-id)}
-                             {:text "Table"}]
-               :content-ref ref-handler}
-       [ui/paper
-        [ui/table
-         [col-group {:columns header-data}]
-         [header {:columns header-data}]
-         [body {:data       data
-                :columns    header-data
-                :rows-count @rows-count}]]]])))
+  []
+  (let [container (atom nil)
+        handle-container-ref (fn [content-el]
+                               (when (some? content-el)
+                                 (reset! container content-el)))
+        handle-row-ref (fn [el]
+                         (when (and (some? @container) (some? el))
+                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])
+                           (reset! container nil)))]
+    (r/create-class
+      {:display-name "course-table"
+
+       :component-did-mount
+                     (fn [this]
+                       (let [{:keys [course-id]} (r/props this)]
+                         (re-frame/dispatch [::data-state/init course-id])))
+
+       :reagent-render
+                     (fn [{:keys [course-id]}]
+
+                       (let [data @(re-frame/subscribe [::data-state/table-data])]
+                         [layout {:breadcrumbs [{:text     "Course"
+                                                 :on-click #(redirect-to :course-editor-v2 :id course-id)}
+                                                {:text "Table"}]
+                                  :content-ref handle-container-ref}
+                          [ui/paper
+                           [ui/table
+                            [col-group {:columns header-data}]
+                            [header {:columns header-data}]
+                            [body {:data    data
+                                   :columns header-data
+                                   :ref     handle-row-ref}]]]]))})))
