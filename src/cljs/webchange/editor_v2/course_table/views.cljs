@@ -17,8 +17,8 @@
                   {:id :lesson :title "Lesson" :width 0}
                   {:id :idx :title "#" :width 0}
                   ;{:id :concepts  :title "Concept"}
-                  {:id :activity :title "Activities" :width 100}
-                  ;{:id :abbr-global :title "Global Standard Abbreviation"}
+                  {:id :activity :title "Activities" :width 80}
+                  {:id :abbr-global :title "Global Standard Abbreviation" :width 20}
                   ;{:title "TabSchool Reference"}
                   ;{:title "Standard/Competency"}
                   ])

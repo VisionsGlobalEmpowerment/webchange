@@ -97,7 +97,10 @@
   :load-course-data
   (fn [{:keys [course-id]}]
     (i/load-course {:course-id course-id}
-                   (fn [course] (re-frame/dispatch [::set-course-data course])))))
+                   (fn [course]
+                     (let [scenes-names (->> (:scene-list course) (vals) (map :name))]
+                       (re-frame/dispatch [::set-course-data course])
+                       (re-frame/dispatch [::load-scenes-data course-id scenes-names]))))))
 
 (re-frame/reg-fx
   :load-scene
@@ -107,6 +110,20 @@
                   (fn [scene]
                     (re-frame/dispatch [::set-scene scene-id scene])
                     (re-frame/dispatch [::store-scene scene-id scene])))))
+
+(re-frame/reg-fx
+  :load-scenes-data
+  (fn [{:keys [course-id scenes-ids]}]
+    (let [loads-left (atom (count scenes-ids))
+          scenes-data (atom {})]
+      (doseq [scene-id scenes-ids]
+        (i/load-scene {:course-id course-id
+                       :scene-id  scene-id}
+                      (fn [scene-data scene-id]
+                        (swap! scenes-data assoc scene-id scene-data)
+                        (swap! loads-left dec)
+                        (when (= @loads-left 0)
+                          (re-frame/dispatch [::set-scenes-data @scenes-data]))))))))
 
 (re-frame/reg-fx
   :load-progress
@@ -396,11 +413,11 @@
     (let [current-scene (get-in db [:current-scene])
           scene (get-in db [:course-data :scene-list (keyword current-scene)])
           out-scene-id (->> scene
-                       :outs
-                       (filter #(= (:object %) exit-point))
-                        first
-                        :name
-                       )
+                            :outs
+                            (filter #(= (:object %) exit-point))
+                            first
+                            :name
+                            )
           current-course (:current-course db)
           ]
       (if out-scene-id
@@ -851,14 +868,14 @@
         current-tags (get-in db [:progress-data :current-tags] [])]
     (if tags-by-score
       (let [
-          current-tags (if (nil? current-tags) [] current-tags)
-          current-tags (tags/remove-tags current-tags tags/learning-level-tags)
-          score (activity-score-percentage db)
-          tags-to-add (map (fn [[tag [minm maxm]]]
-                             (if (and (<= minm score) (> maxm score)) (name tag))) tags-by-score)
-          new-tags (filter #(some? %) (concat tags-to-add current-tags))
-          ]
-      new-tags)
+            current-tags (if (nil? current-tags) [] current-tags)
+            current-tags (tags/remove-tags current-tags tags/learning-level-tags)
+            score (activity-score-percentage db)
+            tags-to-add (map (fn [[tag [minm maxm]]]
+                               (if (and (<= minm score) (> maxm score)) (name tag))) tags-by-score)
+            new-tags (filter #(some? %) (concat tags-to-add current-tags))
+            ]
+        new-tags)
       current-tags)))
 
 (re-frame/reg-event-fx
@@ -967,6 +984,12 @@
       {:load-course-data {:course-id course-id}})))
 
 (re-frame/reg-event-fx
+  ::load-scenes-data
+  (fn-traced [{:keys [_]} [_ course-id scenes-ids]]
+    {:load-scenes-data {:course-id  course-id
+                        :scenes-ids scenes-ids}}))
+
+(re-frame/reg-event-fx
   ::set-current-course
   (fn [{:keys [db]} [_ course-name]]
     {:db (assoc db :current-course course-name)}))
@@ -1037,6 +1060,15 @@
           merged-scene (merge-with-templates db scene)]
       {:db (cond-> (assoc-in db [:scenes scene-id] merged-scene)
                    (= current-scene scene-id) (assoc :current-scene-data merged-scene))})))
+
+(re-frame/reg-event-fx
+  ::set-scenes-data
+  (fn [{:keys [db]} [_ scenes-data]]
+    (let [processed-scenes (->> scenes-data
+                                (map (fn [[scene-name scene-data]]
+                                       [scene-name (merge-with-templates db scene-data)]))
+                                (into {}))]
+      {:db (update-in db [:scenes] merge processed-scenes)})))
 
 (re-frame/reg-event-fx
   ::store-scene
@@ -1111,7 +1143,7 @@
 (re-frame/reg-event-fx
   ::back-scene
   (fn [{:keys [db]} [_ _]]
-        {:dispatch-n (list [::execute-scene-exit {:exit-point "back"}])}))
+    {:dispatch-n (list [::execute-scene-exit {:exit-point "back"}])}))
 
 (re-frame/reg-event-fx
   ::open-student-dashboard

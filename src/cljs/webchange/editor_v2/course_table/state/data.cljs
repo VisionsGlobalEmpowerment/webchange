@@ -21,6 +21,7 @@
 (re-frame/reg-sub
   ::table-data
   (fn []
-    [(re-frame/subscribe [::subs/course-data])])
-  (fn [[course-data]]
-    (prepare-course-data course-data)))
+    [(re-frame/subscribe [::subs/course-data])
+     (re-frame/subscribe [::subs/scenes-data [:skills]])])
+  (fn [[course-data scenes-data]]
+    (prepare-course-data course-data scenes-data)))

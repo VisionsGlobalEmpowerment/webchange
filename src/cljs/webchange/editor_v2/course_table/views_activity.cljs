@@ -67,6 +67,17 @@
     [cell props
      (:level data)]))
 
+(defn- skills-global
+  [{:keys [data span field]}]
+  (let [props (cond-> {:activity data
+                       :field    field}
+                      (some? span) (assoc :row-span span))]
+    [cell props
+     [:ul {:style {:padding 0}}
+      (for [{:keys [abbr]} (:skills data)]
+        ^{:key abbr}
+        [:li abbr])]]))
+
 (defn- default-component
   [{:keys [field]}]
   (let [color (get-in-theme [:palette :warning :default])]
@@ -78,11 +89,12 @@
                            :margin-right "8px"}}]
       [ui/typography {:style {:color color}} (str "<" field ">")]]]))
 
-(def components {:level    level
-                 :lesson   lesson
-                 :idx      index
-                 :concepts concepts
-                 :activity activity})
+(def components {:level       level
+                 :lesson      lesson
+                 :idx         index
+                 :concepts    concepts
+                 :activity    activity
+                 :abbr-global skills-global})
 
 (defn- get-component
   [id]
