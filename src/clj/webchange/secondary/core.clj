@@ -13,16 +13,7 @@
             [webchange.common.hmac-sha256 :as sign]
             [clojure.data.json :as json]
             [webchange.secondary.guid :as guid]
-            [webchange.assets.core :as assets])
-  (:import (java.io InputStream File ByteArrayOutputStream ByteArrayInputStream EOFException BufferedReader)
-           (java.net URL UnknownHostException)
-           (org.apache.http.entity BufferedHttpEntity ByteArrayEntity
-                                   InputStreamEntity FileEntity StringEntity)
-           (org.apache.http.impl.conn PoolingHttpClientConnectionManager)
-           (org.apache.http.impl.nio.conn PoolingNHttpClientConnectionManager)
-           (org.apache.http.impl.nio.client HttpAsyncClients))
-
-  )
+            [webchange.assets.core :as assets]))
 
 (import '(java.util.concurrent Executors))
 

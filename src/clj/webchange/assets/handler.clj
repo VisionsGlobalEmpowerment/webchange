@@ -4,14 +4,17 @@
             [ring.util.response :refer [resource-response response redirect]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [webchange.common.handler :refer [handle current-user]]
+            [ring.middleware.params :refer [wrap-params]]
             [clojure.java.io :as io]
             [mikera.image.core :as imagez]
             [webchange.assets.core :as core]
             [config.core :refer [env]]
+            [clojure.edn :as edn]
             [webchange.common.hmac-sha256 :as sign]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.common.audio-parser.converter :refer [convert-to-mp3 get-changed-extension]]
             [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
+            [webchange.common.voice-recognition.voice-recognition :refer [try-voice-recognition-audio get-subtitles]]
             [webchange.common.files :as f]))
 
 (def types
@@ -19,12 +22,6 @@
    "audio" ["mp3" "wav" "m4a"]
    "video" ["mp4"]
    "blob"  ["blob"]})
-
-(defn get-extension [filename]
-  (-> filename
-      (clojure.string/split #"\.")
-      last
-      clojure.string/lower-case))
 
 (defn get-type [extension]
   (let [match? (fn [es] (some #(= extension %) es))]
@@ -66,10 +63,18 @@
 (defn- process-asset
   [type path]
   (when (= type "audio")
-    (future (try-recognize-audio path))))
+    (future (try-recognize-audio path))
+    (try-voice-recognition-audio path)
+    ))
+
+(defn handle-parse-audio-subtitles
+  [request]
+  (let [{:strs [file start duration]} (:query-params request)]
+    (-> [true (get-subtitles file (edn/read-string start) (edn/read-string duration))]
+        handle)))
 
 (defn upload-asset [{{:keys [tempfile size filename]} "file" type "type" blob-type "blob-type"}]
-  (let [extension (get-extension filename)
+  (let [extension (f/get-extension filename)
         new-name (gen-filename extension)
         path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") new-name)
         type (or (validated-type type) (get-type extension))
@@ -102,7 +107,10 @@
            (POST "/api/assets/" request
              (wrap-multipart-params
                (fn [request]
-                (-> request :multipart-params upload-asset response)))))
+                (-> request :multipart-params upload-asset response))))
+           (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params))
+
+           )
 
 (defroutes asset-maintainer-routes
            (POST "/api/assets/by-path/" request

@@ -71,7 +71,24 @@
     ```
     $ lein figwheel dev
     ```
-  
 - Wait a bit, then browse to [`localhost:3000`](localhost:3000).
-
 Figwheel will automatically push cljs changes to the browser.
+
+- Enable voice recognition:
+    - Download docker image:
+
+        ```
+        $ docker pull webchange/webchange-voice-recognition:latest
+        ```
+    - Run it:
+       ```
+       $ docker run  webchange/webchange-voice-recognition:latest
+       ```
+     - Check status:
+        ```
+         $ docker containter ps
+        ```
+     - Stop container:
+         ```
+          $ docker stop <container-id>
+         ```          

@@ -1,4 +1,5 @@
 (defproject webchange "0.1.0-SNAPSHOT"
+  :resource-paths ["native/vosk" "resources/"]
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.520"]
                  [org.clojure/java.jdbc "0.7.8"]
@@ -47,7 +48,8 @@
                  [ring/ring-codec "1.1.2"]
                  [com.cemerick/url "0.1.1"]
                  [org.clojure/data.csv "1.0.0"]
-                 ]
+                 [me.raynes/fs "1.4.6"]
+                 [io.djy/ezzmq "0.8.2"]]
 
   ;:node-dependencies [[source-map-support "0.2.8"]]
 
@@ -57,7 +59,9 @@
             [lein-sass "0.5.0"]
             [migratus-lein "0.7.0"]]
 
-  :jvm-opts ["-Xmx2g"]
+  :prep-tasks ["javac" "compile"]
+  :jvm-opts ["-Xmx2g" "-Djava.library.path=native/vosk/"]
+  :java-source-paths ["native/vosk/"]
 
   :min-lein-version "2.5.3"
 
@@ -100,7 +104,7 @@
 
     :plugins      [[lein-figwheel "0.5.19"]
                    [lein-doo "0.1.8"]]
-    :main         webchange.server}
+    :main         webchange.server-dev}
    :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths ["env/prod/clj"]
              :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]

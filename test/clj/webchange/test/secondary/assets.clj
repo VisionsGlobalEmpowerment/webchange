@@ -75,7 +75,7 @@
 (deftest can-update-file
   (let [filename "test-file"]
   (mockery/with-mocks
-    [io-copy {:target :webchange.assets.core/save-file-from-uri}]
+    [io-copy {:target :webchange.common.files/save-file-from-uri}]
       (with-global-fake-routes-in-isolation
         {(resources/secondary-asset-difference-resource f/default-school-id)
         (fn [request] {:status 200 :headers {} :body (json/write-str {:update [{:path filename
