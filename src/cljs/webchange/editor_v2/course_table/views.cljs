@@ -17,8 +17,8 @@
                   {:id :lesson :title "Lesson" :width 0}
                   {:id :idx :title "#" :width 0}
                   ;{:id :concepts  :title "Concept"}
-                  {:id :activity :title "Activities" :width 80}
-                  {:id :abbr-global :title "Global Standard Abbreviation" :width 20}
+                  {:id :activity :title "Activities" :width 15}
+                  {:id :abbr-global :title "Global Standard Abbreviation" :width 85}
                   ;{:title "TabSchool Reference"}
                   ;{:title "Standard/Competency"}
                   ])
@@ -36,7 +36,7 @@
    [ui/table-row
     (for [{:keys [id title width]} columns]
       ^{:key id}
-      [ui/table-cell {:style {:width width}} title])]])
+      [ui/table-cell title])]])
 
 (defn- levels-count
   [data current-idx level-id]
@@ -100,6 +100,20 @@
     (finally
       (keyboard/disable))))
 
+(defn- footer
+  [{:keys [columns data]}]
+  (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
+        rows-count @(re-frame/subscribe [::pagination-state/page-rows])
+        from (inc rows-skip)
+        to (+ rows-skip rows-count)
+        total (count data)]
+    [ui/table-footer
+     [ui/table-row
+      [ui/table-cell {:align    "right"
+                      :col-span (count columns)}
+       [ui/typography
+        (str "Rows: " from " - " to " of " total)]]]]))
+
 (defn- get-element-height
   ([el]
    (get-element-height el {}))
@@ -115,13 +129,15 @@
 (defn- get-rows-count
   [content-el]
   (let [header (.querySelector content-el "thead")
+        footer (.querySelector content-el "tfoot")
         content-row (.querySelector content-el "tbody > tr")]
     (when (and (some? header)
                (some? content-row))
       (let [content-height (get-element-height content-el {:without-padding true})
             header-height (get-element-height header)
+            footer-height (get-element-height footer)
             content-row-height (get-element-height content-row)]
-        (-> (- content-height header-height)
+        (-> (- content-height header-height footer-height)
             (/ content-row-height)
             (Math/floor))))))
 
@@ -152,9 +168,11 @@
                                                 {:text "Table"}]
                                   :content-ref handle-container-ref}
                           [ui/paper
-                           [ui/table
+                           [ui/table {:class-name "course-table"}
                             [col-group {:columns header-data}]
                             [header {:columns header-data}]
                             [body {:data    data
                                    :columns header-data
-                                   :ref     handle-row-ref}]]]]))})))
+                                   :ref     handle-row-ref}]
+                            [footer {:data    data
+                                     :columns header-data}]]]]))})))

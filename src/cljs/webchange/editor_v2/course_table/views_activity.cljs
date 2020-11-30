@@ -8,13 +8,6 @@
     [webchange.editor-v2.course-table.utils.cell-data :refer [activity->cell-data cell-data->cell-attributes]]
     [webchange.ui.theme :refer [get-in-theme]]))
 
-(defn- get-styles
-  []
-  (let [shadow-color (get-in-theme [:palette :primary :main])]
-    {:cell                {:cursor     "pointer"
-                           :transition "box-shadow 0.2s ease-out"}
-     :selected-table-item {:box-shadow (str "inset 0 0 5px 1px " shadow-color)}}))
-
 (defn- cell-selected?
   [selection-type selection-data cell-data]
   (and (= selection-type :cell)
@@ -24,12 +17,11 @@
   [{:keys [activity field] :as props}]
   (let [selection @(re-frame/subscribe [::selection-state/selection])
         cell-data (activity->cell-data activity field)
-        selected? (cell-selected? (:type selection) (:data selection) cell-data)
-        styles (get-styles)]
+        selected? (cell-selected? (:type selection) (:data selection) cell-data)]
     (into [ui/table-cell (-> props
                              (merge (cell-data->cell-attributes cell-data))
-                             (assoc :style (merge (:cell styles)
-                                                  (if selected? (:selected-table-item styles) {})))
+                             (assoc :class-name (if selected? "selected" ""))
+                             (assoc :padding "none")
                              (dissoc :activity)
                              (dissoc :field))]
           (-> (r/current-component) (r/children)))))
@@ -48,13 +40,15 @@
 (defn- index
   [{:keys [data field]}]
   [cell {:field    field
-         :activity data}
+         :activity data
+         :align    "center"}
    (:idx data)])
 
 (defn- lesson
   [{:keys [data span field]}]
   (let [props (cond-> {:activity data
-                       :field    field}
+                       :field    field
+                       :align    "center"}
                       (some? span) (assoc :row-span span))]
     [cell props
      (:lesson data)]))
@@ -62,7 +56,8 @@
 (defn- level
   [{:keys [data span field]}]
   (let [props (cond-> {:activity data
-                       :field    field}
+                       :field    field
+                       :align    "center"}
                       (some? span) (assoc :row-span span))]
     [cell props
      (:level data)]))

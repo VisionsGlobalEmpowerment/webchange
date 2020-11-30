@@ -98,7 +98,7 @@
   (fn [{:keys [course-id]}]
     (i/load-course {:course-id course-id}
                    (fn [course]
-                     (let [scenes-names (->> (:scene-list course) (vals) (map :name))]
+                     (let [scenes-names (->> (:scene-list course) (keys) (map clojure.core/name))]
                        (re-frame/dispatch [::set-course-data course])
                        (re-frame/dispatch [::load-scenes-data course-id scenes-names]))))))
 
