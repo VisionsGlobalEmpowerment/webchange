@@ -7,7 +7,7 @@
     [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
-    [webchange.editor-v2.course-table.views-activity :refer [activity-row]]
+    [webchange.editor-v2.course-table.views-row :refer [activity-row]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
     [webchange.editor-v2.layout.views :refer [layout]]
@@ -17,11 +17,9 @@
                   {:id :lesson :title "Lesson" :width 0}
                   {:id :idx :title "#" :width 0}
                   ;{:id :concepts  :title "Concept"}
-                  {:id :activity :title "Activities" :width 15}
-                  {:id :abbr-global :title "Global Standard Abbreviation" :width 85}
-                  ;{:title "TabSchool Reference"}
-                  ;{:title "Standard/Competency"}
-                  ])
+                  {:id :activity :title "Activities" :width 20}
+                  {:id :abbr-global :title "Global Standard Abbreviation" :width 40}
+                  {:id :skills :title "Standard/Competency" :width 40}])
 
 (defn- col-group
   [{:keys [columns]}]
@@ -34,7 +32,7 @@
   [{:keys [columns]}]
   [ui/table-head
    [ui/table-row
-    (for [{:keys [id title width]} columns]
+    (for [{:keys [id title]} columns]
       ^{:key id}
       [ui/table-cell title])]])
 

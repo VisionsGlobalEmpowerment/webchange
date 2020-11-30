@@ -36,7 +36,9 @@
   (fn [{:keys [db]} [_ delta-rows-number total-data-rows]]
     (let [current-skip-rows (skip-rows db)
           page-rows (page-rows db)
-          new-skip (-> (+ current-skip-rows delta-rows-number)
-                       (Math/max 0)
-                       (Math/min (- total-data-rows page-rows)))]
+          new-skip (cond-> (+ current-skip-rows delta-rows-number)
+                           (< delta-rows-number 0) (Math/max 0)
+                           (> delta-rows-number 0) (Math/min (if (> total-data-rows page-rows)
+                                                               (- total-data-rows page-rows)
+                                                               current-skip-rows)))]
       {:dispatch [::set-skip-rows new-skip]})))
