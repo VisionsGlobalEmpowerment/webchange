@@ -5,7 +5,8 @@
             [webchange.interpreter.events :as ie]
             [webchange.fixtures.course-table.course :as table-course]
             [webchange.fixtures.course-table.scene-1 :as table-scene-1]
-            [webchange.fixtures.course-table.scene-2 :as table-scene-2]))
+            [webchange.fixtures.course-table.scene-2 :as table-scene-2]
+            [webchange.fixtures.course-table.lesson-sets :as table-lesson-sets]))
 
 (def test-courses
   {"table-course" table-course/data
@@ -26,6 +27,9 @@
                                     :triggers      {}
                                     :metadata      {}}}})
 
+(def test-lesson-sets
+  {"table-course" table-lesson-sets/data})
+
 (defn get-course
   [course-id]
   (let [c (chan)]
@@ -36,6 +40,12 @@
   [course-id scene-id]
   (let [c (chan)]
     (go (>! c {:body (get-in test-scenes [course-id scene-id])}))
+    c))
+
+(defn get-lesson-sets
+  [course-id]
+  (let [c (chan)]
+    (go (>! c {:body (get test-lesson-sets course-id)}))
     c))
 
 (defn init-scene

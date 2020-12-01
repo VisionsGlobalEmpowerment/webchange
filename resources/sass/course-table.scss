@@ -8,17 +8,52 @@
         td {
             cursor: pointer;
             transition: box-shadow 0.2s ease-out;
+            vertical-align: top;
 
             &.selected {
                 box-shadow: inset 0 0 5px 1px #1272e6;
             }
 
-            &.skills {
-                vertical-align: top;
+            &.activity {
+                 font-size: 1.1rem;
+            }
 
+            &.skills {
                 ul {
                     margin: 0;
-                    padding: 18px;
+                    padding: 0 18px;
+                }
+            }
+
+            &.concepts {
+                padding: 6px;
+
+                ul {
+                    padding: 0;
+
+                    .lesson-set-item {
+                        padding: 10px;
+
+                        .lesson-set-primary {
+                            span:first-child {
+                                margin-right: 8px;
+                                white-space: nowrap;
+                            }
+
+                            span:last-child {
+                                font-size: 0.9rem;
+                                white-space: nowrap;
+                            }
+                        }
+
+                        .lesson-set-secondary {
+                            font-size: 10px;
+                            max-width: 180px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
                 }
             }
         }

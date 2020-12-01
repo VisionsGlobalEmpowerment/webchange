@@ -123,7 +123,8 @@
                         (swap! scenes-data assoc scene-id scene-data)
                         (swap! loads-left dec)
                         (when (= @loads-left 0)
-                          (re-frame/dispatch [::set-scenes-data @scenes-data]))))))))
+                          (re-frame/dispatch [::set-scenes-data @scenes-data])
+                          (re-frame/dispatch [::load-lessons course-id]))))))))
 
 (re-frame/reg-fx
   :load-progress
@@ -141,9 +142,7 @@
     (i/load-lessons {:course-id         course-id
                      :cb                (fn [{:keys [items lesson-sets datasets]}]
                                           (re-frame/dispatch [:complete-request :load-lessons])
-                                          (re-frame/dispatch [::set-course-dataset-items items])
-                                          (re-frame/dispatch [::set-course-datasets datasets])
-                                          (re-frame/dispatch [::set-course-lessons lesson-sets]))
+                                          (re-frame/dispatch [::set-course-lessons-data lesson-sets datasets items]))
                      :on-asset-complete #(do (re-frame/dispatch [::set-dataset-loaded]))})))
 
 (re-frame/reg-fx
@@ -1172,10 +1171,13 @@
                        (assoc-in [:loading :load-lessons-assets] true))
      :load-lessons [course-id]}))
 
+(defn- prepare-datasets-items [data]
+  (into {} (map #(identity [(:id %) %]) data)))
+
 (re-frame/reg-event-fx
   ::set-course-dataset-items
   (fn [{:keys [db]} [_ data]]
-    (let [prepared (into {} (map #(identity [(:id %) %]) data))]
+    (let [prepared (prepare-datasets-items data)]
       {:db (assoc db :dataset-items prepared)})))
 
 (re-frame/reg-event-fx
@@ -1183,13 +1185,16 @@
   (fn [{:keys [db]} [_ data]]
     {:db (assoc db :datasets data)}))
 
-(defn prepare-lesson [{data :data :as lesson}]
+(defn- prepare-lesson [{data :data :as lesson}]
   (assoc lesson :item-ids (map #(:id %) (:items data))))
+
+(defn- prepare-lessons [lessons]
+  (into {} (map #(identity [(:name %) (prepare-lesson %)]) lessons)))
 
 (re-frame/reg-event-fx
   ::set-course-lessons
   (fn [{:keys [db]} [_ data]]
-    (let [prepared (into {} (map #(identity [(:name %) (prepare-lesson %)]) data))]
+    (let [prepared (prepare-lessons data)]
       {:db (assoc db :lessons prepared)})))
 
 (re-frame/reg-event-db
@@ -1201,6 +1206,15 @@
   ::set-dataset-loaded
   (fn [db _]
     (assoc-in db [:loading :load-lessons-assets] false)))
+
+(re-frame/reg-event-fx
+  ::set-course-lessons-data
+  (fn [{:keys [db]} [_ lesson-sets datasets dataset-items]]
+    "Execute ::set-course-lessons, ::set-course-datasets and ::set-course-dataset-items in single event."
+    {:db (-> db
+             (assoc :lessons (prepare-lessons lesson-sets))
+             (assoc :datasets datasets)
+             (assoc :dataset-items (prepare-datasets-items dataset-items)))}))
 
 (re-frame/reg-event-fx
   ::execute-test-transitions-collide

@@ -36,6 +36,26 @@
     (let [lesson-sets (get-in db [:lessons])]
       (map #(get lesson-sets %) lesson-sets-ids))))
 
+(defn- dissoc-keys
+  [data keys-to-remove]
+  (reduce (fn [data key-to-remove]
+            (dissoc data key-to-remove))
+          data
+          keys-to-remove))
+
+(re-frame/reg-sub
+  ::lessons-data
+  (fn [db [_ {:keys [exclude-items-fields]}]]
+    (let [lessons (get-in db [:lessons])
+          dataset-items (get-in db [:dataset-items])]
+      (->> lessons
+           (map (fn [[lesson-name lesson-data]]
+                  (let [lesson-items (->> (:item-ids lesson-data)
+                                          (map (fn [item-id] (cond-> (get dataset-items item-id)
+                                                                     (some? exclude-items-fields) (dissoc-keys exclude-items-fields)))))]
+                    [lesson-name (assoc lesson-data :items lesson-items)])))
+           (into {})))))
+
 (re-frame/reg-sub
   ::current-lesson-sets-data
   (fn [db]

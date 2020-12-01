@@ -16,10 +16,10 @@
 (def header-data [{:id :level :title "Level" :width 0}
                   {:id :lesson :title "Lesson" :width 0}
                   {:id :idx :title "#" :width 0}
-                  ;{:id :concepts  :title "Concept"}
+                  {:id :concepts  :title "Concept" :width 10}
                   {:id :activity :title "Activities" :width 20}
-                  {:id :abbr-global :title "Global Standard Abbreviation" :width 40}
-                  {:id :skills :title "Standard/Competency" :width 40}])
+                  {:id :abbr-global :title "Global Standard Abbreviation" :width 35}
+                  {:id :skills :title "Standard/Competency" :width 35}])
 
 (defn- col-group
   [{:keys [columns]}]
