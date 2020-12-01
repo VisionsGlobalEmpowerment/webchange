@@ -68,4 +68,24 @@
                     (is (= lesson-sets {:assessment-1 {:id    382 :name "assessment1" :dataset-id 92
                                                        :items [{:id 2882 :name "a" :dataset-id 92}
                                                                {:id 2883 :name "b" :dataset-id 92}
-                                                               {:id 2884 :name "c" :dataset-id 92}]}}))))))))
+                                                               {:id 2884 :name "c" :dataset-id 92}]}}))))
+                (testing "set tags are defined"
+                  (let [{:keys [tags]} (->> data
+                                            (filter (fn [{:keys [activity lesson]}]
+                                                      (and (= lesson 1) (= activity "scene-2"))))
+                                            first)]
+                    (is (some? tags))
+                    (is (= (:set-tags tags) {:intermediate [0 75], :advanced [75 101]}))))
+                (testing "tags restrictions are defined"
+                  (let [{:keys [tags]} (->> data
+                                            (filter (fn [{:keys [activity lesson]}]
+                                                      (and (= lesson 2) (= activity "scene-1"))))
+                                            first)]
+                    (is (some? tags))
+                    (is (= (:for-tags tags) [:beginner]))))
+                (testing "rows without tags are correct"
+                  (let [{:keys [tags]} (->> data
+                                            (filter (fn [{:keys [activity lesson]}]
+                                                      (and (= lesson 2) (= activity "scene-2"))))
+                                            first)]
+                    (is (= tags {}))))))))

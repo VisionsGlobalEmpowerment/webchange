@@ -10,7 +10,9 @@
                                     :type        "lesson",
                                     :lesson      1,
                                     :activities  [{:activity "scene-1", :time-expected 300}
-                                                  {:activity "scene-2", :time-expected 300}],
+                                                  {:activity      "scene-2", :time-expected 300,
+                                                   :tags-by-score {:intermediate [0 75],
+                                                                   :advanced     [75 101]}}],
                                     :lesson-sets {:concepts "ls1"}}]}
                         {:name    "Level 2",
                          :level   2,
@@ -19,7 +21,7 @@
                          :lessons [{:name        "Lesson 2",
                                     :type        "lesson",
                                     :lesson      2,
-                                    :activities  [{:activity "scene-1", :time-expected 300}
+                                    :activities  [{:activity "scene-1", :time-expected 300, :only [:beginner]}
                                                   {:activity "scene-2", :time-expected 300}],
                                     :lesson-sets {:current-concept "ls2"}}
                                    {:name        "Assessment",
