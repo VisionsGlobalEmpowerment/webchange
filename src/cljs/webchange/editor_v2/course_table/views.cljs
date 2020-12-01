@@ -16,7 +16,7 @@
 (def header-data [{:id :level :title "Level" :width 0}
                   {:id :lesson :title "Lesson" :width 0}
                   {:id :idx :title "#" :width 0}
-                  {:id :concepts  :title "Concept" :width 10}
+                  {:id :concepts :title "Concept" :width 10}
                   {:id :activity :title "Activities" :width 20}
                   {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
                   {:id :skills :title "Standard/Competency" :width 30}
@@ -55,7 +55,7 @@
        (count)))
 
 (defn- body
-  [{:keys [data columns ref]}]
+  [{:keys [data columns]}]
   (r/with-let [_ (keyboard/enable {:enter           #(print "enter")
                                    :move-selection  #(move-selection data (:data @(re-frame/subscribe [::selection-state/selection])) % columns)
                                    :reset-selection #(print "reset-selection")})]
@@ -86,12 +86,10 @@
                   (recur rest-activities
                          (conj rows
                                ^{:key (get-row-id activity)}
-                               [activity-row (merge {:data         activity
-                                                     :columns      columns
-                                                     :span-columns span-columns
-                                                     :skip-columns skip-columns}
-                                                    (if (= counter 0)
-                                                      {:ref ref} {}))])
+                               [activity-row {:data         activity
+                                              :columns      columns
+                                              :span-columns span-columns
+                                              :skip-columns skip-columns}])
                          (:level activity)
                          (:lesson activity)
                          (inc counter)))
@@ -100,18 +98,17 @@
       (keyboard/disable))))
 
 (defn- footer
-  [{:keys [columns data]}]
+  [{:keys [data]}]
   (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
         rows-count @(re-frame/subscribe [::pagination-state/page-rows])
         from (inc rows-skip)
         to (+ rows-skip rows-count)
         total (count data)]
-    [ui/table-footer
-     [ui/table-row
-      [ui/table-cell {:align    "right"
-                      :col-span (count columns)}
-       [ui/typography
-        (str "Rows: " from " - " to " of " total)]]]]))
+    [:div.footer {:style {:padding    "16px"
+                          :text-align "right"
+                          :border     "solid 1px #414141"}}
+     [ui/typography
+      (str "Rows: " from " - " to " of " total)]]))
 
 (defn- get-element-height
   ([el]
@@ -128,7 +125,7 @@
 (defn- get-rows-count
   [content-el]
   (let [header (.querySelector content-el "thead")
-        footer (.querySelector content-el "tfoot")
+        footer (.querySelector content-el ".footer")
         content-row (.querySelector content-el "tbody > tr")]
     (when (and (some? header)
                (some? content-row))
@@ -138,25 +135,28 @@
             content-row-height (get-element-height content-row)]
         (-> (- content-height header-height footer-height)
             (/ content-row-height)
-            (Math/floor))))))
+            (Math/ceil))))))
 
 (defn course-table
   []
   (let [container (atom nil)
-        handle-container-ref (fn [content-el]
-                               (when (some? content-el)
-                                 (reset! container content-el)))
-        handle-row-ref (fn [el]
-                         (when (and (some? @container) (some? el))
-                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])
-                           (reset! container nil)))]
+        handle-content-ref (fn [el]
+                             (when (some? el)
+                               (reset! container el)))]
     (r/create-class
       {:display-name "course-table"
 
        :component-did-mount
                      (fn [this]
                        (let [{:keys [course-id]} (r/props this)]
-                         (re-frame/dispatch [::data-state/init course-id])))
+                         (re-frame/dispatch [::data-state/init course-id])
+                         (when (some? @container)
+                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)]))))
+
+       :component-did-update
+                     (fn []
+                       (when (some? @container)
+                         (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])))
 
        :reagent-render
                      (fn [{:keys [course-id]}]
@@ -165,13 +165,15 @@
                          [layout {:breadcrumbs [{:text     "Course"
                                                  :on-click #(redirect-to :course-editor-v2 :id course-id)}
                                                 {:text "Table"}]
-                                  :content-ref handle-container-ref}
-                          [ui/paper
-                           [ui/table {:class-name "course-table"}
-                            [col-group {:columns header-data}]
-                            [header {:columns header-data}]
-                            [body {:data    data
-                                   :columns header-data
-                                   :ref     handle-row-ref}]
-                            [footer {:data    data
-                                     :columns header-data}]]]]))})))
+                                  :content-ref handle-content-ref}
+                          [ui/paper {:style {:display        "flex"
+                                             :flex-direction "column"
+                                             :height         "100%"}}
+                           [:div {:style {:flex-grow 1
+                                          :overflow  "hidden"}}
+                            [ui/table {:class-name "course-table"}
+                             [col-group {:columns header-data}]
+                             [header {:columns header-data}]
+                             [body {:data    data
+                                    :columns header-data}]]]
+                           [footer {:data data}]]]))})))

@@ -7,7 +7,9 @@
     [webchange.editor-v2.events :as editor-events]
     [webchange.editor-v2.components.file-input.views :refer [select-file-form]]
     [webchange.editor-v2.concepts.events :as concepts-events]
-    [webchange.editor-v2.subs :as editor-subs]))
+    [webchange.editor-v2.subs :as editor-subs]
+    [webchange.routes :refer [redirect-to]]
+    [webchange.subs :as subs]))
 
 (defn- get-styles
   []
@@ -65,19 +67,27 @@
 
 (defn course-info
   [{:keys [title]}]
-  (let [loading @(re-frame/subscribe [:loading])]
+  (let [course-id @(re-frame/subscribe [::subs/current-course])
+        loading @(re-frame/subscribe [:loading])]
     (if (:course-info loading)
       [ui/circular-progress]
       (r/with-let [info @(re-frame/subscribe [::editor-subs/course-info])
                    data (r/atom info)]
         [ui/card {:style {:margin      "12px"
                           :flex-shrink "0"}}
-         [ui/card-content
+         [ui/card-content {:style {:position "relative"}}
           [ui/typography {:variant "h5"
                           :style   {:margin-bottom   "12px"
                                     :display         "flex"
                                     :justify-content "space-between"}}
            title]
+          [ui/tooltip {:title "Show course table"}
+           [ui/icon-button {:on-click #(redirect-to :course-table :course-id course-id)
+                            :style    {:position "absolute"
+                                       :margin   "8px"
+                                       :top      "0"
+                                       :right    "0"}}
+            [ic/menu]]]
           [ui/grid {:container   true
                     :justify     "space-between"
                     :spacing     24
@@ -85,8 +95,8 @@
            [ui/grid {:item true :xs 4}
             [ui/text-field {:label         "Name"
                             :full-width    true
-                            :variant       "outlined"
                             :default-value (:name @data)
+                            :variant       "outlined"
                             :on-change     #(swap! data assoc :name (-> % .-target .-value))}]]
            [ui/grid {:item true :xs 4}
             [ui/text-field {:label         "Language"
