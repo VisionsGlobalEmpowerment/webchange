@@ -18,17 +18,24 @@
                   [activity-set-name (if-not (empty? lesson-set-data) lesson-set-data nil)])))
          (into {}))))
 
+(defn- get-activity-tags
+  [{:keys [only tags-by-score]}]
+  (cond-> {}
+          (some? only) (assoc :for-tags only)
+          (some? tags-by-score) (assoc :set-tags tags-by-score)))
+
 (defn prepare-course-data
   [course scenes-data lesson-sets-data]
   (->> (:levels course)
        (map (fn [{:keys [level lessons] :as level-data}]
               (map (fn [{:keys [lesson activities] :as lesson-data}]
-                     (map (fn [{:keys [activity]}]
+                     (map (fn [{:keys [activity] :as activity-data}]
                             {:level       level
                              :lesson      lesson
                              :activity    activity
                              :skills      (get-in scenes-data [activity :skills] [])
-                             :lesson-sets (get-lesson-sets level-data lesson-data lesson-sets-data)})
+                             :lesson-sets (get-lesson-sets level-data lesson-data lesson-sets-data)
+                             :tags        (get-activity-tags activity-data)})
                           activities))
                    lessons)))
        (flatten)

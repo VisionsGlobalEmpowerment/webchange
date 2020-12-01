@@ -4,8 +4,9 @@
     [cljs-react-material-ui.reagent :as ui]
     [webchange.ui.theme :refer [get-in-theme]]
     [webchange.editor-v2.course-table.views-row-common :refer [field-cell]]
+    [webchange.editor-v2.course-table.views-row-concepts :refer [concepts]]
     [webchange.editor-v2.course-table.views-row-skills :refer [skills-abbr skills-description]]
-    [webchange.editor-v2.course-table.views-row-concepts :refer [concepts]]))
+    [webchange.editor-v2.course-table.views-row-tags :refer [tags]]))
 
 (defn- activity
   [{:keys [data] :as props}]
@@ -48,7 +49,8 @@
                  :concepts    concepts
                  :activity    activity
                  :abbr-global skills-abbr
-                 :skills      skills-description})
+                 :skills      skills-description
+                 :tags        tags})
 
 (defn- get-component
   [id]

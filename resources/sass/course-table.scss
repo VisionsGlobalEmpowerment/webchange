@@ -56,6 +56,43 @@
                     }
                 }
             }
+
+            &.tags {
+                .tags-block {
+                    margin-bottom: 16px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    .tags-title {
+                        white-space: nowrap;
+                    }
+                }
+
+                .tags-appointments {
+                    margin: 0;
+                    padding: 0 16px;
+
+                    .appointment-range {
+                        font-family: monospace;
+                        font-size: 0.7rem;
+                        margin-left: 8px;
+                        white-space: nowrap;
+                    }
+                }
+
+                .tag-chip {
+                    height: auto;
+                    padding: 4px 8px;
+
+                    span {
+                        font-size: 0.7rem;
+                        line-height: 0.7rem;
+                        padding: 0;
+                    }
+                }
+            }
         }
     }
 
