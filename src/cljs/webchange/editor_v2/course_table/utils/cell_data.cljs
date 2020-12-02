@@ -1,19 +1,29 @@
 (ns webchange.editor-v2.course-table.utils.cell-data)
 
+(defn- ->int
+  [str]
+  (.parseInt js/Number str))
+
 (defn activity->cell-data
   [activity field]
-  {:level    (str (:level activity))
-   :lesson   (str (:lesson activity))
-   :activity (str (:activity activity))
-   :field    (clojure.core/name field)})
+  (merge (select-keys activity [:level :lesson :activity :lesson-idx])
+         {:field field}))
 
 (defn cell->cell-data
   [cell-el]
-  (->> ["level" "lesson" "activity" "field"]
-       (map (fn [field]
-              [(keyword field)
-               (.getAttribute cell-el (str "data-" field))]))
-       (into {})))
+  {:level      (->int (.getAttribute cell-el "data-level"))
+   :lesson     (->int (.getAttribute cell-el "data-lesson"))
+   :lesson-idx (->int (.getAttribute cell-el "data-lesson-idx"))
+   :activity   (.getAttribute cell-el "data-activity")
+   :field      (keyword (.getAttribute cell-el "data-field"))})
+
+(defn- stringify-cell-data
+  [activity]
+  {:level      (str (:level activity))
+   :lesson     (str (:lesson activity))
+   :lesson-idx (str (:lesson-idx activity))
+   :activity   (:activity activity)
+   :field      (clojure.core/name (:field activity))})
 
 (defn cell-data->cell-attributes
   [data]
@@ -21,11 +31,11 @@
                                      (clojure.core/name)
                                      (str "data-")
                                      (keyword)))]
-    (->> data
+    (->> (stringify-cell-data data)
          (map (fn [[field value]]
                 [(data-prefix field) value]))
          (into {}))))
 
 (defn get-row-id
-  [{:keys [level lesson activity]}]
-  (str level "-" lesson "-" activity))
+  [{:keys [level lesson lesson-idx]}]
+  (str level "-" lesson "-" lesson-idx))

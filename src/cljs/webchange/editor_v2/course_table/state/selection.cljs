@@ -6,17 +6,14 @@
 (defn path-to-db
   [relative-path]
   (->> relative-path
-       (concat [:selection] relative-path)
+       (concat [:selection])
        (db/path-to-db)))
 
-;; Subs
+(defn selection
+  [db]
+  (get-in db (path-to-db [])))
 
-(re-frame/reg-sub
-  ::selection
-  (fn [db]
-    (get-in db (path-to-db []))))
-
-;; Events
+(re-frame/reg-sub ::selection selection)
 
 (re-frame/reg-event-fx
   ::set-selection

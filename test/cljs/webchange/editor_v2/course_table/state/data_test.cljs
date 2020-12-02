@@ -39,7 +39,14 @@
                   (doseq [row data]
                     (is (number? (:level row)))
                     (is (number? (:lesson row)))
-                    (is (string? (:activity row)))))
+                    (is (number? (:lesson-idx row)))))
+                (testing "rows has correct in-lesson indexes"
+                  (let [rows (->> data (filter (fn [{:keys [level lesson]}] (and (= level 1) (= lesson 1)))))]
+                    (doseq [[idx row] (map-indexed vector rows)]
+                      (is (= (:lesson-idx row) idx))))
+                  (let [rows (->> data (filter (fn [{:keys [level lesson]}] (and (= level 2) (= lesson 2)))))]
+                    (doseq [[idx row] (map-indexed vector rows)]
+                      (is (= (:lesson-idx row) idx)))))
                 (testing "scene-1 has defined skills"
                   (let [scene-1-rows (filter (fn [{:keys [activity]}] (= activity "scene-1")) data)]
                     (is (not (empty? scene-1-rows)))

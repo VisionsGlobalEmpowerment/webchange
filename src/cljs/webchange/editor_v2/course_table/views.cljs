@@ -5,8 +5,10 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.keyboard-control :as keyboard]
     [webchange.editor-v2.course-table.state.data :as data-state]
+    [webchange.editor-v2.course-table.state.edit :as edit-state]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
+    [webchange.editor-v2.course-table.views-edit-form :refer [edit-form field-editable?]]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
@@ -21,6 +23,13 @@
                   {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
                   {:id :skills :title "Standard/Competency" :width 30}
                   {:id :tags :title "Adaptation" :width 10}])
+
+(defn- field->column
+  [field-id columns]
+  (some (fn [{:keys [id] :as column}]
+          (and (= id field-id)
+               column))
+        columns))
 
 (defn- col-group
   [{:keys [columns]}]
@@ -54,6 +63,13 @@
                       (= lesson lesson-id))))
        (count)))
 
+(defn- click-event->cell-data
+  [event]
+  (-> event
+      (.-target)
+      (.closest "td")
+      (cell->cell-data)))
+
 (defn- body
   [{:keys [data columns]}]
   (r/with-let [_ (keyboard/enable {:enter           #(print "enter")
@@ -63,13 +79,19 @@
           rows-count @(re-frame/subscribe [::pagination-state/page-rows])
 
           handle-cell-click (fn [event]
-                              (let [data (-> event (.-target) (cell->cell-data))]
+                              (let [data (click-event->cell-data event)]
                                 (re-frame/dispatch [::selection-state/set-selection :cell data])))
+          handle-cell-double-click (fn [event]
+                                     (let [{:keys [field] :as cell-data} (click-event->cell-data event)]
+                                       (when (field-editable? cell-data)
+                                         (re-frame/dispatch [::edit-state/open-menu {:field field
+                                                                                     :title (-> field (field->column columns) :title)}]))))
           handle-scroll (fn [event]
                           (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                             (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
-      (into [ui/table-body {:on-click handle-cell-click
-                            :on-wheel handle-scroll}]
+      (into [ui/table-body {:on-click        handle-cell-click
+                            :on-double-click handle-cell-double-click
+                            :on-wheel        handle-scroll}]
             (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
                    rows []
                    current-level nil
@@ -176,4 +198,5 @@
                              [header {:columns header-data}]
                              [body {:data    data
                                     :columns header-data}]]]
-                           [footer {:data data}]]]))})))
+                           [footer {:data data}]
+                           [edit-form]]]))})))
