@@ -21,3 +21,4 @@ Procfile
 .nrepl-port
 profiles.clj
 package-lock.json
+*libvosk_jni.so

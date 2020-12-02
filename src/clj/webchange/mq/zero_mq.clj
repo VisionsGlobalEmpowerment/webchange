@@ -7,6 +7,8 @@
 (def queues {:voice-recognition {:vent (async/chan 100)
                                  :vent-url (:voice-recognition-vent-socket env)
                                  :sink-url (:voice-recognition-sink-socket env)
+                                 :worker-vent-url (:voice-recognition-worker-vent-socket env)
+                                 :worker-sink-url (:voice-recognition-worker-sink-socket env)
                                  }})
 
 (defn init-ventilator
@@ -34,11 +36,14 @@
 
 (defn receive
   [queue-name on-receive-callback]
+  (log/debug "Start receiving " queue-name)
   (zmq/with-new-context
-    (let [vent (zmq/socket :pull {:connect (get-in queues [queue-name :vent-url])})
-          sink (zmq/socket :push {:connect (get-in queues [queue-name :sink-url])})]
+    (let [vent (zmq/socket :pull {:connect (get-in queues [queue-name :worker-vent-url])})
+          sink (zmq/socket :push {:connect (get-in queues [queue-name :worker-sink-url])})]
+      (log/debug "Connection started")
       (while true
         (let [task (-> (zmq/receive-msg vent {:stringify true}) first edn/read-string)
+              (log/debug "Received task" task)
               result (on-receive-callback task)]
           (if result (zmq/send-msg sink (pr-str result))))))))
 
