@@ -36,14 +36,14 @@
 
 (defn receive
   [queue-name on-receive-callback]
-  (println "receive")
+  (log/debug "Start receiving " queue-name)
   (zmq/with-new-context
     (let [vent (zmq/socket :pull {:connect (get-in queues [queue-name :worker-vent-url])})
           sink (zmq/socket :push {:connect (get-in queues [queue-name :worker-sink-url])})]
-      (println "init-complete" queues)
+      (log/debug "Connection started")
       (while true
         (let [task (-> (zmq/receive-msg vent {:stringify true}) first edn/read-string)
-              _ (println "receive" task)
+              (log/debug "Received task" task)
               result (on-receive-callback task)]
           (if result (zmq/send-msg sink (pr-str result))))))))
 
