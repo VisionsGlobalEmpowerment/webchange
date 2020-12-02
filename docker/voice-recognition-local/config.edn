@@ -1,0 +1,9 @@
+{
+ :public-dir "/srv/www/webchange/public"
+ :upload-dir "/srv/www/webchange/public/upload"
+ :secondary {:host-url "http://localhost:3000/"}
+ :voice-recognition-vent-socket "tcp://172.18.0.1:9090"
+ :voice-recognition-sink-socket "tcp://172.18.0.1:9191"
+ :core-http-url "http://172.18.0.1:3000/"
+ :voice-recognition-model "/usr/src/model"
+ }

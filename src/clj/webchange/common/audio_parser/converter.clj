@@ -14,17 +14,19 @@
 (defn get-changed-extension
   [audio-file-path extension]
   (let [directory (f/get-directory audio-file-path)
-        audio-file-name (f/get-file-name audio-file-path)
-        result-file-name (subs audio-file-name 0 (s/last-index-of audio-file-name "."))]
+        result-file-name (f/get-file-name-without-extension audio-file-path)]
     (str directory "/" result-file-name "." extension)))
 
 (defn- convert-to
-  [file-path extension {:keys [remove-origin? absolute-path?]}]
+  [file-path extension {:keys [remove-origin? absolute-path? sample-rate mono?]}]
   (let [converted-file-path (get-changed-extension file-path extension)
         origin-path (if absolute-path? file-path (f/relative->absolute-path file-path))
-        target-path (if absolute-path? converted-file-path (f/relative->absolute-path converted-file-path))]
+        target-path (if absolute-path? converted-file-path (f/relative->absolute-path converted-file-path))
+        additional-options (cond-> []
+                                   sample-rate (concat ["-ar" (str sample-rate)])
+                                   mono? (concat ["-ac" (str 1)]))]
     (when-not (f/file-exist? converted-file-path)
-      (let [result (sh "ffmpeg" "-i" origin-path target-path)]
+      (let [result (apply sh (vec (concat ["ffmpeg" "-i" origin-path] additional-options [target-path])))]
         (if (= (:exit result) 1)
           (throw (Exception. (:err result)))
           (when remove-origin?

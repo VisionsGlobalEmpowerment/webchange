@@ -73,17 +73,12 @@
   (io/delete-file (f/relative->absolute-path (:path asset-hash)))
   (db/remove-asset-hash! {:path_hash (:path-hash asset-hash)}))
 
-(defn save-file-from-uri [uri file]
-  (with-open [in (io/input-stream uri)
-              out (io/output-stream file)]
-    (io/copy in out)))
-
 (defn update-file-from-primary [path]
   (let [uri (f/relative->absolute-primary-uri path)
         file (f/relative->absolute-path path)]
     (try
       (clojure.java.io/make-parents file)
-      (save-file-from-uri uri file)
+      (f/save-file-from-uri uri file)
       (store-asset-hash! file)
       (log/debug (str "Stored " uri " to " file))
       (catch Exception e
