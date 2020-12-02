@@ -94,6 +94,15 @@
                                     (re-frame/dispatch [::set-current-scene (or scene-id (:initial-scene course))]))))))
 
 (re-frame/reg-fx
+  :load-course-data
+  (fn [{:keys [course-id]}]
+    (i/load-course {:course-id course-id}
+                   (fn [course]
+                     (let [scenes-names (->> (:scene-list course) (keys) (map clojure.core/name))]
+                       (re-frame/dispatch [::set-course-data course])
+                       (re-frame/dispatch [::load-scenes-data course-id scenes-names]))))))
+
+(re-frame/reg-fx
   :load-scene
   (fn [{:keys [course-id scene-id]}]
     (i/load-scene {:course-id course-id
@@ -101,6 +110,21 @@
                   (fn [scene]
                     (re-frame/dispatch [::set-scene scene-id scene])
                     (re-frame/dispatch [::store-scene scene-id scene])))))
+
+(re-frame/reg-fx
+  :load-scenes-data
+  (fn [{:keys [course-id scenes-ids]}]
+    (let [loads-left (atom (count scenes-ids))
+          scenes-data (atom {})]
+      (doseq [scene-id scenes-ids]
+        (i/load-scene {:course-id course-id
+                       :scene-id  scene-id}
+                      (fn [scene-data scene-id]
+                        (swap! scenes-data assoc scene-id scene-data)
+                        (swap! loads-left dec)
+                        (when (= @loads-left 0)
+                          (re-frame/dispatch [::set-scenes-data @scenes-data])
+                          (re-frame/dispatch [::load-lessons course-id]))))))))
 
 (re-frame/reg-fx
   :load-progress
@@ -118,9 +142,7 @@
     (i/load-lessons {:course-id         course-id
                      :cb                (fn [{:keys [items lesson-sets datasets]}]
                                           (re-frame/dispatch [:complete-request :load-lessons])
-                                          (re-frame/dispatch [::set-course-dataset-items items])
-                                          (re-frame/dispatch [::set-course-datasets datasets])
-                                          (re-frame/dispatch [::set-course-lessons lesson-sets]))
+                                          (re-frame/dispatch [::set-course-lessons-data lesson-sets datasets items]))
                      :on-asset-complete #(do (re-frame/dispatch [::set-dataset-loaded]))})))
 
 (re-frame/reg-fx
@@ -390,11 +412,11 @@
     (let [current-scene (get-in db [:current-scene])
           scene (get-in db [:course-data :scene-list (keyword current-scene)])
           out-scene-id (->> scene
-                       :outs
-                       (filter #(= (:object %) exit-point))
-                        first
-                        :name
-                       )
+                            :outs
+                            (filter #(= (:object %) exit-point))
+                            first
+                            :name
+                            )
           current-course (:current-course db)
           ]
       (if out-scene-id
@@ -845,14 +867,14 @@
         current-tags (get-in db [:progress-data :current-tags] [])]
     (if tags-by-score
       (let [
-          current-tags (if (nil? current-tags) [] current-tags)
-          current-tags (tags/remove-tags current-tags tags/learning-level-tags)
-          score (activity-score-percentage db)
-          tags-to-add (map (fn [[tag [minm maxm]]]
-                             (if (and (<= minm score) (> maxm score)) (name tag))) tags-by-score)
-          new-tags (filter #(some? %) (concat tags-to-add current-tags))
-          ]
-      new-tags)
+            current-tags (if (nil? current-tags) [] current-tags)
+            current-tags (tags/remove-tags current-tags tags/learning-level-tags)
+            score (activity-score-percentage db)
+            tags-to-add (map (fn [[tag [minm maxm]]]
+                               (if (and (<= minm score) (> maxm score)) (name tag))) tags-by-score)
+            new-tags (filter #(some? %) (concat tags-to-add current-tags))
+            ]
+        new-tags)
       current-tags)))
 
 (re-frame/reg-event-fx
@@ -955,6 +977,18 @@
                      :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
+  ::load-course-data
+  (fn-traced [{:keys [db]} [_ course-id]]
+    (if (not= course-id (:loaded-course db))
+      {:load-course-data {:course-id course-id}})))
+
+(re-frame/reg-event-fx
+  ::load-scenes-data
+  (fn-traced [{:keys [_]} [_ course-id scenes-ids]]
+    {:load-scenes-data {:course-id  course-id
+                        :scenes-ids scenes-ids}}))
+
+(re-frame/reg-event-fx
   ::set-current-course
   (fn [{:keys [db]} [_ course-name]]
     {:db (assoc db :current-course course-name)}))
@@ -1025,6 +1059,15 @@
           merged-scene (merge-with-templates db scene)]
       {:db (cond-> (assoc-in db [:scenes scene-id] merged-scene)
                    (= current-scene scene-id) (assoc :current-scene-data merged-scene))})))
+
+(re-frame/reg-event-fx
+  ::set-scenes-data
+  (fn [{:keys [db]} [_ scenes-data]]
+    (let [processed-scenes (->> scenes-data
+                                (map (fn [[scene-name scene-data]]
+                                       [scene-name (merge-with-templates db scene-data)]))
+                                (into {}))]
+      {:db (update-in db [:scenes] merge processed-scenes)})))
 
 (re-frame/reg-event-fx
   ::store-scene
@@ -1099,7 +1142,7 @@
 (re-frame/reg-event-fx
   ::back-scene
   (fn [{:keys [db]} [_ _]]
-        {:dispatch-n (list [::execute-scene-exit {:exit-point "back"}])}))
+    {:dispatch-n (list [::execute-scene-exit {:exit-point "back"}])}))
 
 (re-frame/reg-event-fx
   ::open-student-dashboard
@@ -1128,10 +1171,13 @@
                        (assoc-in [:loading :load-lessons-assets] true))
      :load-lessons [course-id]}))
 
+(defn- prepare-datasets-items [data]
+  (into {} (map #(identity [(:id %) %]) data)))
+
 (re-frame/reg-event-fx
   ::set-course-dataset-items
   (fn [{:keys [db]} [_ data]]
-    (let [prepared (into {} (map #(identity [(:id %) %]) data))]
+    (let [prepared (prepare-datasets-items data)]
       {:db (assoc db :dataset-items prepared)})))
 
 (re-frame/reg-event-fx
@@ -1139,13 +1185,16 @@
   (fn [{:keys [db]} [_ data]]
     {:db (assoc db :datasets data)}))
 
-(defn prepare-lesson [{data :data :as lesson}]
+(defn- prepare-lesson [{data :data :as lesson}]
   (assoc lesson :item-ids (map #(:id %) (:items data))))
+
+(defn- prepare-lessons [lessons]
+  (into {} (map #(identity [(:name %) (prepare-lesson %)]) lessons)))
 
 (re-frame/reg-event-fx
   ::set-course-lessons
   (fn [{:keys [db]} [_ data]]
-    (let [prepared (into {} (map #(identity [(:name %) (prepare-lesson %)]) data))]
+    (let [prepared (prepare-lessons data)]
       {:db (assoc db :lessons prepared)})))
 
 (re-frame/reg-event-db
@@ -1157,6 +1206,15 @@
   ::set-dataset-loaded
   (fn [db _]
     (assoc-in db [:loading :load-lessons-assets] false)))
+
+(re-frame/reg-event-fx
+  ::set-course-lessons-data
+  (fn [{:keys [db]} [_ lesson-sets datasets dataset-items]]
+    "Execute ::set-course-lessons, ::set-course-datasets and ::set-course-dataset-items in single event."
+    {:db (-> db
+             (assoc :lessons (prepare-lessons lesson-sets))
+             (assoc :datasets datasets)
+             (assoc :dataset-items (prepare-datasets-items dataset-items)))}))
 
 (re-frame/reg-event-fx
   ::execute-test-transitions-collide

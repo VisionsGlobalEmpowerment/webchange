@@ -12,8 +12,9 @@
   {:main-container             {:height         "100%"
                                 :display        "flex"
                                 :flex-direction "column"}
-   :toolbar-container          {:height    "64px"
-                                :flex-grow 0}
+   :toolbar-container          {:height      "64px"
+                                :flex-grow   0
+                                :flex-shrink 0}
    :content-container          {:padding   "32px"
                                 :flex-grow 1
                                 :overflow  "auto"}
@@ -30,8 +31,9 @@
    [delete-dataset-item-modal]])
 
 (defn layout
-  [{:keys [align]
-    :or   {align "left"}}]
+  [{:keys [align content-ref]
+    :or   {align       "left"
+           content-ref #()}}]
   (let [this (r/current-component)
         styles (get-styles)
         content-styles (cond-> (:content-container styles)
@@ -39,6 +41,7 @@
     [:div {:style (:main-container styles)}
      [:div {:style (:toolbar-container styles)}
       [toolbar (select-keys (r/props this) [:title :breadcrumbs])]]
-     (into [:div {:style content-styles}]
+     (into [:div {:style content-styles
+                  :ref   content-ref}]
            (r/children this))
      [modal-windows]]))

@@ -1,0 +1,104 @@
+.course-table {
+    th, td {
+        border: solid 1px #414141;
+        padding: 16px;
+    }
+
+    tbody {
+        td {
+            cursor: pointer;
+            transition: box-shadow 0.2s ease-out;
+            vertical-align: top;
+
+            &.selected {
+                box-shadow: inset 0 0 5px 1px #1272e6;
+            }
+
+            &.activity {
+                 font-size: 1.1rem;
+            }
+
+            &.skills {
+                ul {
+                    margin: 0;
+                    padding: 0 18px;
+                }
+            }
+
+            &.concepts {
+                padding: 6px;
+
+                ul {
+                    padding: 0;
+
+                    .lesson-set-item {
+                        padding: 10px;
+
+                        .lesson-set-primary {
+                            span:first-child {
+                                margin-right: 8px;
+                                white-space: nowrap;
+                            }
+
+                            span:last-child {
+                                font-size: 0.9rem;
+                                white-space: nowrap;
+                            }
+                        }
+
+                        .lesson-set-secondary {
+                            font-size: 10px;
+                            max-width: 180px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+
+            &.tags {
+                .tags-block {
+                    margin-bottom: 16px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    .tags-title {
+                        white-space: nowrap;
+                    }
+                }
+
+                .tags-appointments {
+                    margin: 0;
+                    padding: 0 16px;
+
+                    .appointment-range {
+                        font-family: monospace;
+                        font-size: 0.7rem;
+                        margin-left: 8px;
+                        white-space: nowrap;
+                    }
+                }
+
+                .tag-chip {
+                    height: auto;
+                    padding: 4px 8px;
+
+                    span {
+                        font-size: 0.7rem;
+                        line-height: 0.7rem;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    tfoot {
+        td {
+            padding: 8px;
+        }
+    }
+}

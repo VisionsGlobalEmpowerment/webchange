@@ -108,7 +108,7 @@
   [{:keys [course-id scene-id]} cb]
   (go (let [scene-response (<! (get-scene course-id scene-id))
             scene (:body scene-response)]
-        (cb scene))))
+        (cb scene scene-id))))
 
 (defn load-progress
   [course-id cb]

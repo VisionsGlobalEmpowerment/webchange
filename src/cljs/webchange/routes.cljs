@@ -18,6 +18,7 @@
                   "courses"           {["/" :id]           :course
                                        ["/" :id "/editor"] :course-editor
                                        ["/" :id "/editor-v2"] :course-editor-v2
+                                       ["/" :course-id "/table"] :course-table
                                        ["/" :course-id "/editor-v2/concepts/" :concept-id] :course-editor-v2-concept
                                        ["/" :course-id "/editor-v2/add-concept"] :course-editor-v2-add-concept
                                        ["/" :course-id "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson
