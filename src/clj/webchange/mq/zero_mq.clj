@@ -1,6 +1,7 @@
 (ns webchange.mq.zero-mq
   (:require [ezzmq.core :as zmq]
             [config.core :refer [env]]
+            [clojure.tools.logging :as log]
             [clojure.core.async :as async]
             [clojure.edn :as edn]))
 
@@ -43,7 +44,7 @@
       (log/debug "Connection started")
       (while true
         (let [task (-> (zmq/receive-msg vent {:stringify true}) first edn/read-string)
-              (log/debug "Received task" task)
+              _ (log/debug "Received task" task)
               result (on-receive-callback task)]
           (if result (zmq/send-msg sink (pr-str result))))))))
 
