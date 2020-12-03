@@ -17,30 +17,35 @@
   (:gen-class))
 
 (defn -main [& args]
-  (mount/start-without #'zmq-init/zero-mq-init)
   (cond
     (migrations/migration? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (migrations/migrate args (select-keys env [:database-url]))
       (System/exit 0))
     (datasets/command? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (datasets/execute args (select-keys env [:dataset-dir]))
       (System/exit 0))
     (assets/command? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (assets/execute args env)
       (System/exit 0))
     (kitkit-book-import/command? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (kitkit-book-import/execute args env)
       (System/exit 0))
     (onebillion-book-import/command? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (onebillion-book-import/execute args env)
       (System/exit 0))
     (hackathon/command? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (hackathon/execute args {})
       (System/exit 0))
     (voice-recognizer/command? args)
@@ -49,15 +54,17 @@
       (System/exit 0))
     (courses/command? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (courses/execute args (select-keys env [:course-dir]))
       (System/exit 0))
     (secondary/command? args)
     (do
+      (mount/start-without #'zmq-init/zero-mq-init)
       (secondary/execute args {})
       (System/exit 0))
     :else
     (let [port (Integer/parseInt (or (env :port) "3000"))]
-      (mount/start #'zmq-init/zero-mq-init)
+      (mount/start)
       (run-jetty handler {:port port :join? false}))))
 
 (defn dev [& args]

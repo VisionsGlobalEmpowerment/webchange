@@ -69,9 +69,13 @@
 
 (defn handle-parse-audio-subtitles
   [request]
-  (let [{:strs [file start duration]} (:query-params request)]
-    (-> [true (get-subtitles file (edn/read-string start) (edn/read-string duration))]
-        handle)))
+  (let [{:strs [file]} (:query-params request)]
+    (try
+      (-> [true (get-subtitles file)]
+          handle)
+      (catch java.io.FileNotFoundException e
+        (-> [false {:message "File not found"}]
+            handle)))))
 
 (defn upload-asset [{{:keys [tempfile size filename]} "file" type "type" blob-type "blob-type"}]
   (let [extension (f/get-extension filename)
@@ -108,9 +112,7 @@
              (wrap-multipart-params
                (fn [request]
                 (-> request :multipart-params upload-asset response))))
-           (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params))
-
-           )
+           (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params)))
 
 (defroutes asset-maintainer-routes
            (POST "/api/assets/by-path/" request
