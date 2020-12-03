@@ -4,6 +4,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.editor-v2.components.audio-wave-form.state :as wave-form-state]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
@@ -28,8 +29,8 @@
                             :width           "100%"}
    :form-button            {:margin-left "8px"
                             :padding     "8px"}
-   :form-button-save       {:margin-left "8px"
-                            :padding     "6px"
+   :form-button-save       {:margin-left      "8px"
+                            :padding          "6px"
                             :background-color (get-in-theme [:palette :secondary :main])}
    :alias-form             {:width "170px"}
    :target-form            {:margin-right "16px"}
@@ -120,7 +121,7 @@
           "Delete"]]]])))
 
 (defn- header
-  [{:keys [alias target selected? on-change-data on-bring-to-top on-delete on-clear-selection]}]
+  [{:keys [alias target selected? on-change-data on-bring-to-top on-delete on-clear-selection loading?]}]
   (r/with-let [edit-state? (r/atom false)]
     (let [styles (get-styles)
           handle-edit #(reset! edit-state? true)
@@ -138,17 +139,19 @@
                            :on-cancel handle-cancel}]
          [audio-info {:alias  alias
                       :target target}])
-       (when (and selected?
-                  (not @edit-state?))
-         [audio-menu {:on-edit            handle-edit
-                      :on-bring-to-top    handle-bring-to-top
-                      :on-clear-selection handle-clear-selection
-                      :on-delete          handle-delete}])])))
+       (if loading?
+         [ui/circular-progress {:size 20 :color "secondary"}]
+         (when (and selected?
+                    (not @edit-state?))
+           [audio-menu {:on-edit            handle-edit
+                        :on-bring-to-top    handle-bring-to-top
+                        :on-clear-selection handle-clear-selection
+                        :on-delete          handle-delete}]))])))
 
 (defn audios-list-item
   [audio-data]
-  (let [
-        {:keys [url alias start duration selected? target]} audio-data
+  (let [{:keys [url alias start duration selected? target]} audio-data
+        wave-state-loading? @(re-frame/subscribe [::wave-form-state/audio-script-loading url])
         handle-change-data (fn [data] (re-frame/dispatch [::translator-form.scene/update-asset url data]))
         handle-select (fn [] (re-frame/dispatch [::dialog-form.actions/set-phrase-dialog-action-audio url]))
         handle-change-region (fn [region] (re-frame/dispatch [::dialog-form.actions/set-phrase-action-audio-region
@@ -174,7 +177,8 @@
                :on-change-data     handle-change-data
                :on-bring-to-top    handle-bring-to-top
                :on-clear-selection handle-clear-selection
-               :on-delete          handle-delete}]
+               :on-delete          handle-delete
+               :loading?           wave-state-loading?}]
       [audio-wave-form (merge audio-data
                               {:height         64
                                :on-change      handle-change-region

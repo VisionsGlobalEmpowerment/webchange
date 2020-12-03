@@ -2,6 +2,7 @@
   (:require
     [ajax.core :refer [json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.components.audio-wave-form.state :as audio-wave-state]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
@@ -58,7 +59,8 @@
     (let [asset-data (merge audio-props data)]
       {:dispatch-n (list [:complete-request :upload-audio]
                          [::translator-form.scene/add-asset asset-data]
-                         [::set-default-target asset-data])})))
+                         [::set-default-target asset-data]
+                         [::audio-wave-state/init-audio-script-poll (:url asset-data) 1000 4])})))
 
 (re-frame/reg-event-fx
   ::set-current-target

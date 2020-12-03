@@ -157,6 +157,9 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/pixi-build.js"
                                     :provides ["pixi"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/audio-script.js"
+                                    :provides ["audio-script"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
@@ -210,6 +213,9 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/pixi-build.js"
                                     :provides ["pixi"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/audio-script.js"
+                                    :provides ["audio-script"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :language-in :ecmascript6}}
@@ -243,6 +249,9 @@
                                     :module-type :commonjs}
                                    {:file "src/libs/pixi-build.js"
                                     :provides ["pixi"]
+                                    :module-type :commonjs}
+                                   {:file "src/libs/audio-script.js"
+                                    :provides ["audio-script"]
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations :none}}

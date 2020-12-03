@@ -1,12 +1,15 @@
 (ns webchange.editor-v2.components.audio-wave-form.views
   (:require
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.components.audio-wave-form.core :refer [create-wavesurfer
                                                                  handle-audio-region!
-                                                                 init-audio-region!]]
-    [webchange.editor-v2.components.audio-wave-form.views-controls :refer [float-control]]))
+                                                                 init-audio-region!
+                                                                 update-script!]]
+    [webchange.editor-v2.components.audio-wave-form.views-controls :refer [float-control]]
+    [webchange.editor-v2.components.audio-wave-form.state :as state]))
 
-(defn audio-wave-form
+(defn- audio-wave-form-core
   [{:keys [start end]}]
   (let [ws (r/atom nil)
         region (r/atom {:start start :end end})
@@ -20,13 +23,15 @@
                          (reset! ws (create-wavesurfer @element url {:height height}))
                          (reset! region {:start start :end end})
                          (handle-audio-region! @ws region url on-change)
-                         (init-audio-region! @ws region true url)))
+                         (init-audio-region! @ws region true url)
+                         (re-frame/dispatch [::state/init-audio-script url])))
 
        :component-did-update
                      (fn [this]
-                       (let [{:keys [url start end]} (r/props this)]
+                       (let [{:keys [url start end script]} (r/props this)]
                          (reset! region {:start start :end end})
-                         (init-audio-region! @ws region true url)))
+                         (init-audio-region! @ws region true url)
+                         (update-script! @ws script)))
 
        :component-will-unmount
                      (fn []
@@ -41,3 +46,8 @@
                                        (reset! element %))}]
                         (when show-controls?
                           [float-control ws region])])})))
+
+(defn audio-wave-form
+  [{:keys [url] :as props}]
+  (let [{:keys [data]} @(re-frame/subscribe [::state/audio-script-data url])]
+    [audio-wave-form-core (merge props {:script data})]))
