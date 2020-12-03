@@ -70,8 +70,12 @@
 (defn handle-parse-audio-subtitles
   [request]
   (let [{:strs [file]} (:query-params request)]
-    (-> [true (get-subtitles file)]
-        handle)))
+    (try
+      (-> [true (get-subtitles file)]
+          handle)
+      (catch java.io.FileNotFoundException e
+        (-> [false {:message "File not found"}]
+            handle)))))
 
 (defn upload-asset [{{:keys [tempfile size filename]} "file" type "type" blob-type "blob-type"}]
   (let [extension (f/get-extension filename)
