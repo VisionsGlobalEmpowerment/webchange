@@ -25,15 +25,12 @@
   (mq/send :voice-recognition {:file-path file-path}))
 
 (defn get-subtitles
-  [filename start duration]
+  [filename]
   (-> filename
       (get-result-filename)
       (slurp)
       (json/read-json)
-      :result
-      (animation/cut-extra-data start duration)
-      )
-  )
+      :result))
 
 
 
