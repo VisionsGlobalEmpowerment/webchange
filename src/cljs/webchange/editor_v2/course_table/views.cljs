@@ -84,8 +84,8 @@
           handle-cell-double-click (fn [event]
                                      (let [{:keys [field] :as cell-data} (click-event->cell-data event)]
                                        (when (field-editable? cell-data)
-                                         (re-frame/dispatch [::edit-state/open-menu {:field field
-                                                                                     :title (-> field (field->column columns) :title)}]))))
+                                         (re-frame/dispatch [::edit-state/open-menu {:cell-data cell-data
+                                                                                     :title     (-> field (field->column columns) :title)}]))))
           handle-scroll (fn [event]
                           (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                             (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]

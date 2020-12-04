@@ -12,11 +12,12 @@
 
 (re-frame/reg-event-fx
   ::open-menu
-  (fn [{:keys [db]} [_ {:keys [field title]}]]
-    (cond-> {:db (-> db
-                     (assoc-in (path-to-db [:open?]) true)
-                     (assoc-in (path-to-db [:title]) title))}
-            (= field :skills) (assoc :dispatch [::skills/init-skills]))))
+  (fn [{:keys [db]} [_ {:keys [cell-data title]}]]
+    (let [{:keys [field]} cell-data]
+      (cond-> {:db (-> db
+                       (assoc-in (path-to-db [:open?]) true)
+                       (assoc-in (path-to-db [:title]) title))}
+              (= field :skills) (assoc :dispatch [::skills/init-skills cell-data])))))
 
 (re-frame/reg-event-fx
   ::close-menu

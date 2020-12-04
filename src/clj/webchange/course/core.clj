@@ -55,16 +55,20 @@
         templates (get-course-templates course-slug)]
     (merge course {:templates templates})))
 
+(defn- get-scene-skills
+  [scene-id]
+  (->> (db/get-scene-skills-by-scene {:scene_id scene-id})
+       (map (fn [{:keys [skill-id]}]
+              (some (fn [skill]
+                      (and (= (:id skill) skill-id) skill))
+                    skills)))))
+
 (defn get-scene-latest-version
   [course-slug scene-name]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
         latest-version (db/get-latest-scene-version {:scene_id scene-id})
-        scene-skills (->> (db/get-scene-skills-by-scene {:scene_id scene-id})
-                          (map (fn [{:keys [skill-id]}]
-                                 (some (fn [skill]
-                                         (and (= (:id skill) skill-id) skill))
-                                       skills))))]
+        scene-skills (get-scene-skills scene-id)]
     (merge (:data latest-version)
            {:skills scene-skills})))
 
@@ -96,6 +100,11 @@
            :course-slug course-slug
            :created-at (str created-at)}]))
 
+(defn- reset-scene-skills!
+  [scene-id skills]
+  (db/delete-scene-skills! {:scene_id scene-id})
+  (doall (map #(db/create-scene-skill! {:scene_id scene-id :skill_id %}) skills)))
+
 (defn update-scene!
   [course-slug scene-name scene-data owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
@@ -112,6 +121,14 @@
            :name       scene-name
            :course-slug course-slug
            :created-at (str created-at)}]))
+
+(defn update-scene-skills!
+  [course-slug scene-name skills _]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scene-id (get-or-create-scene! course-id scene-name)]
+    (reset-scene-skills! scene-id skills)
+    [true {:scene  scene-name
+           :skills (get-scene-skills scene-id)}]))
 
 (defn save-course!
   [course-slug data owner-id]
@@ -408,11 +425,6 @@
          (sort-by :name)
          (into []))))
 
-(defn- save-skills-on-create!
-  [scene-id skills]
-  (db/delete-scene-skills! {:scene_id scene-id})
-  (doall (map #(db/create-scene-skill! {:scene_id scene-id :skill_id %}) skills)))
-
 (defn save-dataset-on-create!
   [course-id scene-slug {:keys [fields lesson-sets]}]
   (let [course-lessons (db/get-course-lessons {:course_id course-id})]
@@ -455,7 +467,7 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         scene-slug (->kebab-case scene-name)
         {scene-id :scene-id} (save-scene-on-create! course-id scene-slug scene-data owner-id)]
-    (save-skills-on-create! scene-id skills)
+    (reset-scene-skills! scene-id skills)
     (save-dataset-on-create! course-id scene-slug metadata)
     (save-course-on-create! course-id scene-slug metadata scene-name owner-id)
     [true {:id          scene-id

@@ -25,6 +25,8 @@
             &.skills {
                 ul {
                     margin: 0;
+                    max-height: 300px;
+                    overflow: auto;
                     padding: 0 18px;
                 }
             }

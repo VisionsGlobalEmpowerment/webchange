@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.db :as db]
     [webchange.warehouse :as warehouse]
+    [webchange.editor.events :as editor]
     [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]))
 
@@ -16,14 +17,17 @@
 
 (re-frame/reg-event-fx
   ::init-skills
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n (list [::warehouse/load-skills ::load-skills-success]
-                       [::reset-selected-skills])}))
+  (fn [{:keys [db]} [_ {:keys [activity]}]]
+    (let [scene-skills (->> (editor/scene-skills db activity)
+                            (map (fn [{:keys [id]}] [id true]))
+                            (into {}))]
+      {:dispatch-n (list [::warehouse/load-skills {:on-success [::load-skills-success]}]
+                         [::reset-selected-skills scene-skills])})))
 
 (re-frame/reg-event-fx
   ::load-skills-success
-  (fn [{:keys [db]} [_ data]]
-    {:db (assoc-in db (path-to-db [:data]) data)}))
+  (fn [{:keys [db]} [_ {:keys [skills]}]]
+    {:db (assoc-in db (path-to-db [:data :skills]) skills)}))
 
 (re-frame/reg-sub
   ::skills
@@ -40,8 +44,8 @@
 
 (re-frame/reg-event-fx
   ::reset-selected-skills
-  (fn [{:keys [db]} [_]]
-    {:db (assoc-in db (path-to-db [:data :selected-skills]) {})}))
+  (fn [{:keys [db]} [_ init-skills]]
+    {:db (assoc-in db (path-to-db [:data :selected-skills]) init-skills)}))
 
 (re-frame/reg-event-fx
   ::add-selected-skill
@@ -72,18 +76,14 @@
   (fn [{:keys [db]} [_]]
     (let [skills-ids (-> db (selected-skills) (keys))
           scene-id (-> db (selection-state/selection) (get-in [:data :activity]))
-          course-id (data-state/course-id db)
-          data-patch {:skills skills-ids}]
-      (print "::save-skills")
-      (print "skills-ids" skills-ids)
-      (print "scene-id" scene-id)
-      (print "course-id" course-id)
-      ;{:dispatch [::warehouse/update-scene course-id scene-id data-patch ::save-skills-success]} :: ToDo: Rewrite scene skill update
-      )))
-
+          course-id (data-state/course-id db)]
+      {:dispatch [::warehouse/update-scene-skills
+                  {:course-id  course-id
+                   :scene-id   scene-id
+                   :skills-ids skills-ids}
+                  {:on-success [::save-skills-success]}]})))
 
 (re-frame/reg-event-fx
   ::save-skills-success
-  (fn [{:keys [_]} [_ result]]
-    (print "::save-skills-success" result)
-    {}))
+  (fn [{:keys [_]} [_ {:keys [scene skills]}]]
+    {:dispatch [::editor/reset-scene-skills scene skills]}))
