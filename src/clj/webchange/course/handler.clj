@@ -12,6 +12,7 @@
             [webchange.auth.core :as auth]
             [webchange.auth.website :as website]
             [spec-tools.data-spec :as ds]
+            [webchange.db.core :refer [*db*] :as db]
             [schema.core :as s]
             [config.core :refer [env]]
             [webchange.common.hmac-sha256 :as sign]
@@ -96,6 +97,19 @@
         metadata (templates/metadata-from-template data)]
     (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) owner-id)
         handle)))
+
+(defn handle-update-activity
+  [course-slug data scene-slug request]
+  (let [owner-id (current-user request)
+        scene-data (core/get-scene-data course-slug scene-slug)
+        activity (templates/update-activity-from-template scene-data data)]
+    (-> (core/save-scene! course-slug scene-slug activity owner-id)
+        (second)
+        ((fn [data]
+           [true (assoc data :data (:data (db/get-latest-scene-version {:scene_id (:id data)})))]))
+        handle)
+    )
+  )
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int})
@@ -183,7 +197,14 @@
       :return Activity
       :body [activity-data CreateActivity]
       :summary "Creates a new course"
-      (handle-create-activity course-slug activity-data request)))
+      (handle-create-activity course-slug activity-data request))
+    (POST "/:course-slug/update-activity/:scene-slug" request
+      :path-params [course-slug :- s/Str scene-slug :- s/Str]
+      :return s/Any
+      :body [activity-data s/Any]
+      :summary "Creates a new course"
+      (handle-update-activity course-slug activity-data scene-slug request))
+    )
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills

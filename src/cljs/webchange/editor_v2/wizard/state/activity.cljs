@@ -62,11 +62,30 @@
                   :on-failure      [:api-request-error :create-activity]}}))
 
 (re-frame/reg-event-fx
+  ::update-activity
+  (fn [{:keys [db]} [_ course-slug data scene-id callback]]
+    {:db         (assoc-in db [:loading :update-activity] true)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/courses/" course-slug "/update-activity/"scene-id)
+                  :params          data
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::update-activity-success callback]
+                  :on-failure      [:api-request-error :update-activity]}}))
+
+(re-frame/reg-event-fx
   ::create-activity-success
   (fn [{:keys [db]} [_ callback result]]
     (when (some? callback)
       (callback result))
     {:dispatch-n (list [:complete-request :create-course])}))
+
+(re-frame/reg-event-fx
+  ::update-activity-success
+  (fn [{:keys [db]} [_ callback result]]
+    (when (some? callback)
+      (callback result))
+    {:dispatch-n (list [:complete-request :update-course])}))
 
 (re-frame/reg-event-fx
   ::create-simple-activity
