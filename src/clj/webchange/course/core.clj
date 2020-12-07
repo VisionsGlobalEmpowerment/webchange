@@ -138,7 +138,8 @@
                       :data       data
                       :owner_id   owner-id
                       :created_at created-at})
-    [true {:created-at (str created-at)}]))
+    [true {:created-at (str created-at)
+           :data       data}]))
 
 (defn restore-course-version!
   [version-id owner-id]

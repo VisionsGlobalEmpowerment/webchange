@@ -2,10 +2,10 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.db :as db]
-    [webchange.warehouse :as warehouse]
     [webchange.editor.events :as editor]
     [webchange.editor-v2.course-table.state.data :as data-state]
-    [webchange.editor-v2.course-table.state.selection :as selection-state]))
+    [webchange.editor-v2.course-table.state.selection :as selection-state]
+    [webchange.warehouse :as warehouse]))
 
 (defn path-to-db
   [relative-path]

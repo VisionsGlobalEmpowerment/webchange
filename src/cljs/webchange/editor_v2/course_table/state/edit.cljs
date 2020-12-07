@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.db :as db]
-    [webchange.editor-v2.course-table.state.edit-skills :as skills]))
+    [webchange.editor-v2.course-table.state.edit-skills :as skills]
+    [webchange.editor-v2.course-table.state.edit-tags :as tags]))
 
 (defn path-to-db
   [relative-path]
@@ -17,7 +18,8 @@
       (cond-> {:db (-> db
                        (assoc-in (path-to-db [:open?]) true)
                        (assoc-in (path-to-db [:title]) title))}
-              (= field :skills) (assoc :dispatch [::skills/init-skills cell-data])))))
+              (= field :skills) (assoc :dispatch [::skills/init-skills cell-data])
+              (= field :tags) (assoc :dispatch [::tags/init-tags cell-data])))))
 
 (re-frame/reg-event-fx
   ::close-menu

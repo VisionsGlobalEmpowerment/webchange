@@ -2,7 +2,6 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.editor-v2.course-table.state.edit-skills :as skills-state]
     [webchange.editor-v2.course-table.views-edit-menu :refer [edit-menu]]))
 

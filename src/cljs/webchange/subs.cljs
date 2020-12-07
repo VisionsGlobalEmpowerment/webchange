@@ -51,10 +51,11 @@
 
 (re-frame/reg-sub ::current-course current-course)
 
-(re-frame/reg-sub
-  ::course-data
-  (fn [db]
-    (:course-data db)))
+(defn course-data
+  [db]
+  (:course-data db))
+
+(re-frame/reg-sub ::course-data course-data)
 
 (re-frame/reg-sub
   ::scene
