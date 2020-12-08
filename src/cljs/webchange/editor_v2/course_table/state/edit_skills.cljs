@@ -13,8 +13,6 @@
        (concat [:edit-from :skills])
        (db/path-to-db)))
 
-;; Available skills
-
 (re-frame/reg-event-fx
   ::init-skills
   (fn [{:keys [db]} [_ {:keys [activity]}]]

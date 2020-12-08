@@ -5,8 +5,6 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.views-row-common :refer [field-cell]]))
 
-
-
 (defn concepts
   [{:keys [data] :as props}]
   [field-cell (merge props

@@ -15,7 +15,8 @@
                          (on-save))]
     [ui/dialog {:open       open?
                 :on-close   handle-close
-                :PaperProps {:style {:width "500px"}}}
+                :PaperProps {:style      {:width "500px"}
+                             :class-name "course-table-edit-form"}}
      [ui/dialog-title title]
      (into [ui/dialog-content]
            (r/children this))

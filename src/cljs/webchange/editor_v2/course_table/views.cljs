@@ -18,7 +18,7 @@
 (def header-data [{:id :level :title "Level" :width 0}
                   {:id :lesson :title "Lesson" :width 0}
                   {:id :idx :title "#" :width 0}
-                  {:id :concepts :title "Concept" :width 10}
+                  {:id :concepts :title "Concepts" :width 10}
                   {:id :activity :title "Activities" :width 20}
                   {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
                   {:id :skills :title "Standard/Competency" :width 30}

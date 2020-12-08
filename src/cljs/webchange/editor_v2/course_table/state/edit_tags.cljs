@@ -15,23 +15,6 @@
        (concat [:edit-from :tags])
        (db/path-to-db)))
 
-(defn- get-list-item
-  [list field-name field-value]
-  (some (fn [item]
-          (and (= (get item field-name) field-value)
-               item))
-        list))
-
-(defn- get-activity-data
-  [course-data {:keys [level lesson lesson-idx]}]
-  (-> course-data
-      (:levels)
-      (get-list-item :level level)
-      (:lessons)
-      (get-list-item :lesson lesson)
-      (:activities)
-      (nth lesson-idx)))
-
 (defn- activity->tags-appointment
   [activity-data]
   (->> (:tags-by-score activity-data)
@@ -66,7 +49,7 @@
   ::init-tags
   (fn [{:keys [db]} [_ selection]]
     (let [course-data (subs/course-data db)
-          activity-data (get-activity-data course-data selection)
+          activity-data (utils/get-activity-data course-data selection)
           tags-appointment (activity->tags-appointment activity-data)
           available-tags-restriction (course->available-tags-restriction course-data)
           selected-tags-restriction (activity->selected-tags-restriction activity-data)]

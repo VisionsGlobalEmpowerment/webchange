@@ -109,3 +109,24 @@
         }
     }
 }
+
+.concepts-option-menu {
+    .concepts-option-item {
+        display: flex;
+        justify-content: space-between;
+
+        :first-child {
+            display: inline;
+        }
+
+        :nth-child(2) {
+            max-width: 200px;
+            margin-left: 32px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.875rem;
+            color: #bcbcbc;
+            display: inline;
+        }
+    }
+}
