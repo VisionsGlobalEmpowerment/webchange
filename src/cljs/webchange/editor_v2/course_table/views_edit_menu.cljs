@@ -13,8 +13,9 @@
         handle-close #(re-frame/dispatch [::edit-state/close-menu])
         handle-save #(do (handle-close)
                          (on-save))]
-    [ui/dialog {:open     open?
-                :on-close handle-close}
+    [ui/dialog {:open       open?
+                :on-close   handle-close
+                :PaperProps {:style {:width "500px"}}}
      [ui/dialog-title title]
      (into [ui/dialog-content]
            (r/children this))

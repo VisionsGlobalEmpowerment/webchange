@@ -41,13 +41,38 @@
                          :score-high score-high}]))
        (into {})))
 
+(defn- course->available-tags-restriction
+  [course-data]
+  (->> (:levels course-data)
+       (map :lessons)
+       (flatten)
+       (map :activities)
+       (flatten)
+       (map :tags-by-score)
+       (remove nil?)
+       (map keys)
+       (flatten)
+       (distinct)
+       (sort)))
+
+(defn- activity->selected-tags-restriction
+  [activity-data]
+  (->> (get activity-data :only [])
+       (map keyword)
+       (map (fn [tag] [tag true]))
+       (into {})))
+
 (re-frame/reg-event-fx
   ::init-tags
   (fn [{:keys [db]} [_ selection]]
-    (let [activity-data (-> db (subs/course-data) (get-activity-data selection))
-          tags-appointment (activity->tags-appointment activity-data)]
-      {:dispatch-n (list [::reset-tags-appointment tags-appointment])})))
-
+    (let [course-data (subs/course-data db)
+          activity-data (get-activity-data course-data selection)
+          tags-appointment (activity->tags-appointment activity-data)
+          available-tags-restriction (course->available-tags-restriction course-data)
+          selected-tags-restriction (activity->selected-tags-restriction activity-data)]
+      {:dispatch-n (list [::reset-tags-appointment tags-appointment]
+                         [::reset-available-tags-restriction available-tags-restriction]
+                         [::reset-selected-restriction selected-tags-restriction])})))
 
 ;; Tags appointment
 
@@ -91,6 +116,66 @@
   (fn [{:keys [db]} [_ tags-appointment]]
     {:db (assoc-in db (path-to-db [:appointment]) tags-appointment)}))
 
+;; Tags restriction
+
+(re-frame/reg-event-fx
+  ::add-restriction-tag
+  (fn [{:keys [_]} [_ tag]]
+    (let [fixed-tag (-> tag ->kebab-case keyword)]
+      {:dispatch-n (list [::add-available-tags-restriction fixed-tag]
+                         [::add-selected-restriction fixed-tag])})))
+
+; available
+
+(re-frame/reg-sub
+  ::available-tags-restriction
+  (fn [db]
+    (get-in db (path-to-db [:restriction :available]) [])))
+
+(re-frame/reg-event-fx
+  ::reset-available-tags-restriction
+  (fn [{:keys [db]} [_ tags]]
+    {:db (assoc-in db (path-to-db [:restriction :available]) tags)}))
+
+(re-frame/reg-event-fx
+  ::add-available-tags-restriction
+  (fn [{:keys [db]} [_ tag]]
+    {:db (update-in db (path-to-db [:restriction :available]) conj tag)}))
+
+; selected
+
+(defn- selected-tags-restriction
+  [db]
+  (get-in db (path-to-db [:restriction :selected]) {}))
+
+(re-frame/reg-sub ::selected-tags-restriction selected-tags-restriction)
+
+(re-frame/reg-event-fx
+  ::reset-selected-restriction
+  (fn [{:keys [db]} [_ tags]]
+    {:db (assoc-in db (path-to-db [:restriction :selected]) tags)}))
+
+(re-frame/reg-event-fx
+  ::add-selected-restriction
+  (fn [{:keys [db]} [_ tag]]
+    {:db (assoc-in db (path-to-db [:restriction :selected tag]) true)}))
+
+(re-frame/reg-event-fx
+  ::remove-selected-restriction
+  (fn [{:keys [db]} [_ tag]]
+    {:db (update-in db (path-to-db [:restriction :selected]) dissoc tag)}))
+
+(re-frame/reg-sub
+  ::tags-restriction
+  (fn []
+    [(re-frame/subscribe [::available-tags-restriction])
+     (re-frame/subscribe [::selected-tags-restriction])])
+  (fn [[available-tags selected-tags]]
+    (map (fn [tag]
+           {:tag       tag
+            :selected? (contains? selected-tags tag)})
+         available-tags)))
+
 ;; Save
 
 (defn- find-data-idx
@@ -115,14 +200,22 @@
                        (into {}))]
     (assoc-in course-data (conj path :tags-by-score) tags-data)))
 
+(defn- update-tags-restriction
+  [course-data restrictions selection-data]
+  (let [path (get-activity-path course-data selection-data)
+        tags-data (keys restrictions)]
+    (assoc-in course-data (conj path :only) tags-data)))
+
 (re-frame/reg-event-fx
   ::save-tags
   (fn [{:keys [db]} [_]]
     (let [course-id (data-state/course-id db)
           selection-data (-> db selection/selection :data)
           appointments (tags-appointment db)
+          restrictions (selected-tags-restriction db)
           course-data (-> (subs/course-data db)
-                          (update-tags-appointment appointments selection-data))]
+                          (update-tags-appointment appointments selection-data)
+                          (update-tags-restriction restrictions selection-data))]
       {:dispatch [::warehouse/save-course
                   {:course-id   course-id
                    :course-data course-data}
