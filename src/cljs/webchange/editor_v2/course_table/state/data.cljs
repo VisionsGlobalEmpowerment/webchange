@@ -50,3 +50,21 @@
   (fn [[selection table-data]]
     {:field    (-> selection (get-in [:data :field]) (keyword))
      :activity (find-activity-row table-data (:data selection))}))
+
+(re-frame/reg-sub
+  ::course-activities
+  (fn []
+    [(re-frame/subscribe [::subs/course-data])])
+  (fn [[course-data]]
+    (->> (:scene-list course-data)
+         (map (fn [[id {:keys [name]}]] {:id id :name name})))))
+
+(re-frame/reg-sub
+  ::course-activity
+  (fn []
+    [(re-frame/subscribe [::course-activities])])
+  (fn [[course-activities] [_ activity-id]]
+    (some (fn [{:keys [id] :as activity}]
+            (and (= id activity-id)
+                 activity))
+          course-activities)))

@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.db :as db]
+    [webchange.editor-v2.course-table.state.edit-activity :as activity]
     [webchange.editor-v2.course-table.state.edit-skills :as skills]
     [webchange.editor-v2.course-table.state.edit-tags :as tags]))
 
@@ -20,7 +21,8 @@
                        (assoc-in (path-to-db [:title]) title))}
               (or (= field :skills)
                   (= field :abbr-global)) (assoc :dispatch [::skills/init-skills cell-data])
-              (= field :tags) (assoc :dispatch [::tags/init-tags cell-data])))))
+              (= field :tags) (assoc :dispatch [::tags/init-tags cell-data])
+              (= field :activity) (assoc :dispatch [::activity/init-activities cell-data])))))
 
 (re-frame/reg-event-fx
   ::close-menu

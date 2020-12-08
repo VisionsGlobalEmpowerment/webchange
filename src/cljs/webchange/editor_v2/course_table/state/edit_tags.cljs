@@ -4,10 +4,10 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.state.db :as db]
+    [webchange.editor-v2.course-table.state.edit-common :as common]
+    [webchange.editor-v2.course-table.state.edit-utils :as utils]
     [webchange.editor-v2.course-table.state.selection :as selection]
-    [webchange.interpreter.events :as events]
-    [webchange.subs :as subs]
-    [webchange.warehouse :as warehouse]))
+    [webchange.subs :as subs]))
 
 (defn path-to-db
   [relative-path]
@@ -178,22 +178,9 @@
 
 ;; Save
 
-(defn- find-data-idx
-  [list field value]
-  (some (fn [[idx item-data]]
-          (and (= (get item-data field) value)
-               [idx item-data]))
-        (map-indexed vector list)))
-
-(defn- get-activity-path
-  [course-data selection-data]
-  (let [[level-idx level-data] (find-data-idx (:levels course-data) :level (:level selection-data))
-        [lesson-idx _] (find-data-idx (:lessons level-data) :lesson (:lesson selection-data))]
-    [:levels level-idx :lessons lesson-idx :activities (:lesson-idx selection-data)]))
-
 (defn- update-tags-appointment
   [course-data appointments selection-data]
-  (let [path (get-activity-path course-data selection-data)
+  (let [path (utils/get-activity-path course-data selection-data)
         tags-data (->> appointments
                        (map (fn [{:keys [tag score-low score-high]}]
                               [tag [score-low score-high]]))
@@ -202,7 +189,7 @@
 
 (defn- update-tags-restriction
   [course-data restrictions selection-data]
-  (let [path (get-activity-path course-data selection-data)
+  (let [path (utils/get-activity-path course-data selection-data)
         tags-data (keys restrictions)]
     (assoc-in course-data (conj path :only) tags-data)))
 
@@ -216,12 +203,4 @@
           course-data (-> (subs/course-data db)
                           (update-tags-appointment appointments selection-data)
                           (update-tags-restriction restrictions selection-data))]
-      {:dispatch [::warehouse/save-course
-                  {:course-id   course-id
-                   :course-data course-data}
-                  {:on-success [::save-tags-success]}]})))
-
-(re-frame/reg-event-fx
-  ::save-tags-success
-  (fn [{:keys [_]} [_ {:keys [data]}]]
-    {:dispatch [::events/set-course-data data]}))
+      {:dispatch [::common/update-course course-id course-data]})))

@@ -2,7 +2,9 @@
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
+    [re-frame.core :as re-frame]
     [webchange.ui.theme :refer [get-in-theme]]
+    [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.views-row-common :refer [field-cell]]
     [webchange.editor-v2.course-table.views-row-concepts :refer [concepts]]
     [webchange.editor-v2.course-table.views-row-skills :refer [skills-abbr skills-description]]
@@ -10,9 +12,12 @@
 
 (defn- activity
   [{:keys [data] :as props}]
-  [field-cell (merge props
-                     {:cell-props {:class-name "activity"}})
-   (:activity data)])
+  (let [{:keys [id name]} @(re-frame/subscribe [::data-state/course-activity (-> data :activity keyword)])]
+    [field-cell (merge props
+                       {:cell-props {:class-name "activity"}})
+     [ui/typography {:variant "body1"} name]
+     [ui/typography {:variant "body2"
+                     :style   {:color "#bcbcbc"}} id]]))
 
 (defn- index
   [{:keys [data] :as props}]
