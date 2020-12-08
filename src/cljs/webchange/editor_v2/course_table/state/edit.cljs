@@ -18,7 +18,8 @@
       (cond-> {:db (-> db
                        (assoc-in (path-to-db [:open?]) true)
                        (assoc-in (path-to-db [:title]) title))}
-              (= field :skills) (assoc :dispatch [::skills/init-skills cell-data])
+              (or (= field :skills)
+                  (= field :abbr-global)) (assoc :dispatch [::skills/init-skills cell-data])
               (= field :tags) (assoc :dispatch [::tags/init-tags cell-data])))))
 
 (re-frame/reg-event-fx
