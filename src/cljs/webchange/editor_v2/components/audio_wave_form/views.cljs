@@ -49,5 +49,5 @@
 
 (defn audio-wave-form
   [{:keys [url] :as props}]
-  (let [{:keys [data]} @(re-frame/subscribe [::state/audio-script-data url])]
-    [audio-wave-form-core (merge props {:script data})]))
+  (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
+    [audio-wave-form-core (merge props {:script script-data})]))

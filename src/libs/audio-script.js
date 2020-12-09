@@ -215,7 +215,8 @@ var AudioScriptPlugin = /*#__PURE__*/function () {
             }
 
             if (this.audioscript) {
-              this.audioscript.timing = data; // this.audioscript.render();
+              this.audioscript.timing = data;
+              this.audioscript.render();
             }
           }
         }
