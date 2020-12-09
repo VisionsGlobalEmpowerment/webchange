@@ -73,7 +73,7 @@
 (defn- body
   [{:keys [data columns]}]
   (r/with-let [_ (keyboard/enable {:enter           #(print "enter")
-                                   :move-selection  #(move-selection data (:data @(re-frame/subscribe [::selection-state/selection])) % columns)
+                                   :move-selection  #(move-selection % columns)
                                    :reset-selection #(print "reset-selection")})]
     (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
           rows-count @(re-frame/subscribe [::pagination-state/page-rows])
