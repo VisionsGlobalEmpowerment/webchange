@@ -502,10 +502,6 @@
     (update-school! school))
   (if-let [courses (:courses data)]
     (update-courses! courses))
-  (if-let [scene-skills (:scene-skills data)]
-    (update-scene-skills! scene-skills))
-  (if-let [courses (:courses data)]
-    (update-courses! courses))
   (if-let [course-versions (:course-versions data)]
     (update-course-versions! course-versions))
   (if-let [datasets (:datasets data)]
@@ -520,6 +516,8 @@
     (update-scene! scenes))
   (if-let [scene-versions (:scene-versions data)]
     (update-scene-versions! scene-versions))
+  (if-let [scene-skills (:scene-skills data)]
+    (update-scene-skills! scene-skills))
   (let [courses (db/get-courses)
         datasets (db/get-datasets)
         dataset-items (db/get-dataset-items-by-school)
