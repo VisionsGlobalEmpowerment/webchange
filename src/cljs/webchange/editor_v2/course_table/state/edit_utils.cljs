@@ -17,7 +17,8 @@
 (defn get-activity-path
   [course-data selection-data]
   (-> (get-lesson-path course-data selection-data)
-      (concat [:activities (:lesson-idx selection-data)])))
+      (concat [:activities (:lesson-idx selection-data)])
+      (vec)))
 
 (defn- get-list-item
   [list field-name field-value]

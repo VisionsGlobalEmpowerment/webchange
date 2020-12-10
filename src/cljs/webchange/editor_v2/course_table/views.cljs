@@ -72,9 +72,9 @@
 
 (defn- body
   [{:keys [data columns]}]
-  (r/with-let [_ (keyboard/enable {:enter           #(print "enter")
+  (r/with-let [_ (keyboard/enable {:enter           #(re-frame/dispatch [::edit-state/open-menu])
                                    :move-selection  #(move-selection % columns)
-                                   :reset-selection #(print "reset-selection")})]
+                                   :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])})]
     (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
           rows-count @(re-frame/subscribe [::pagination-state/page-rows])
 
@@ -82,10 +82,9 @@
                               (let [data (click-event->cell-data event)]
                                 (re-frame/dispatch [::selection-state/set-selection :cell data])))
           handle-cell-double-click (fn [event]
-                                     (let [{:keys [field] :as cell-data} (click-event->cell-data event)]
+                                     (let [cell-data (click-event->cell-data event)]
                                        (when (field-editable? cell-data)
-                                         (re-frame/dispatch [::edit-state/open-menu {:cell-data cell-data
-                                                                                     :title     (-> field (field->column columns) :title)}]))))
+                                         (re-frame/dispatch [::edit-state/open-menu]))))
           handle-scroll (fn [event]
                           (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                             (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
