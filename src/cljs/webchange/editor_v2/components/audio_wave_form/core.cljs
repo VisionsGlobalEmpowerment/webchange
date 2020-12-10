@@ -2,6 +2,8 @@
   (:require
     ["wavesurfer.js/dist/plugin/wavesurfer.regions.js" :as RegionsPlugin]
     ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]
+    ["wavesurfer.js/dist/plugin/wavesurfer.timeline.js" :as TimelinePlugin]
+    [audio-script :as AudioScriptPlugin]
     [wavesurfer.js :as WaveSurfer]
     [webchange.editor-v2.components.audio-wave-form.audio-loader :as loader]
     [webchange.ui.theme :refer [get-in-theme]]))
@@ -30,26 +32,34 @@
     (.addEventListener wave "scroll" (fn [event] (.preventDefault event)))))
 
 (defn create-wavesurfer
-  ([element key]
-   (create-wavesurfer element key {:height 256}))
-  ([element key {:keys [height]}]
-   (while (.-firstChild element) (-> element .-firstChild .remove))
-   (let [font-color (get-in-theme [:palette :text :primary])
-         ws-div (.insertBefore element (js/document.createElement "div") nil)
-         timeline-div (.insertBefore element (js/document.createElement "div") nil)
-         wavesurfer (.create WaveSurfer (clj->js {:container    ws-div
-                                                  :height       (or height 256)
-                                                  :minPxPerSec  75
-                                                  :scrollParent true
-                                                  :plugins      [(.create RegionsPlugin (clj->js {:dragSelection false
-                                                                                                  :slop          5
-                                                                                                  :color         "hsla(400, 100%, 30%, 0.5)"}))
-                                                                 (.create TimelinePlugin (clj->js {:container          timeline-div
-                                                                                                   :primaryFontColor   font-color
-                                                                                                   :secondaryFontColor font-color}))]}))]
-     (disable-default-scroll-handler ws-div)
-     (loader/get-audio-blob key #(.loadBlob wavesurfer %))
-     wavesurfer)))
+  [element key {:keys [height zoom]
+                :or   {height 256
+                       zoom   300}}]
+  (while (.-firstChild element) (-> element .-firstChild .remove))
+  (let [font-color (get-in-theme [:palette :text :primary])
+        script-div (.insertBefore element (js/document.createElement "div") nil)
+        ws-div (.insertBefore element (js/document.createElement "div") nil)
+        timeline-div (.insertBefore element (js/document.createElement "div") nil)
+
+        wavesurfer (.create WaveSurfer (clj->js {:container    ws-div
+                                                 :height       (or height 256)
+                                                 :minPxPerSec  75
+                                                 :scrollParent true
+                                                 :plugins      [(.create RegionsPlugin (clj->js {:dragSelection false
+                                                                                                 :slop          5
+                                                                                                 :color         "hsla(400, 100%, 30%, 0.5)"}))
+                                                                (.create AudioScriptPlugin (clj->js {:container        script-div
+                                                                                                     :primaryColor     "#979797"
+                                                                                                     :secondaryColor   "#979797"
+                                                                                                     :primaryFontColor "#979797"
+                                                                                                     :timing           []}))
+                                                                (.create TimelinePlugin (clj->js {:container          timeline-div
+                                                                                                  :primaryFontColor   font-color
+                                                                                                  :secondaryFontColor font-color}))]}))]
+    (disable-default-scroll-handler ws-div)
+    (loader/get-audio-blob key #(.loadBlob wavesurfer %))
+    (.zoom wavesurfer zoom)
+    wavesurfer))
 
 (defn- set-audio-region!
   [wave-surfer region-atom edit key]
@@ -74,6 +84,10 @@
   (if (.-isReady wave-surfer)
     (set-audio-region! wave-surfer region-atom edit key)
     (.on wave-surfer "ready" #(set-audio-region! wave-surfer region-atom edit key))))
+
+(defn update-script!
+  [wave-surfer data]
+  (.setAudioScript wave-surfer (clj->js (if (some? data) data []))))
 
 (defn- is-default-created?
   [{:keys [start end]}]

@@ -22,11 +22,10 @@
 
 (defn cut-extra-data
   [data start duration]
-  (let [end (+ start duration)]
-    (filter
-      #(and (> (:start %) start)
-            (< (:start %) end))
-      data)))
+  (cond->> data
+           (some? start) (filter #(> (:start %) start))
+           (some? duration) (let [end (if (some? start) (+ start duration) duration)]
+                              (filter #(< (:start %) end)))))
 
 (defn filter-empty-animations
   [animations]
