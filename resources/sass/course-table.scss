@@ -11,7 +11,11 @@
             vertical-align: top;
 
             &.selected {
-                box-shadow: inset 0 0 5px 1px #1272e6;
+                box-shadow: inset 0 0 5px 1px #c3deff;
+
+                &.editable {
+                    box-shadow: inset 0 0 5px 1px #1272e6;
+                }
             }
 
             &.activity {
@@ -21,6 +25,8 @@
             &.skills {
                 ul {
                     margin: 0;
+                    max-height: 300px;
+                    overflow: auto;
                     padding: 0 18px;
                 }
             }
@@ -84,6 +90,7 @@
 
                 .tag-chip {
                     height: auto;
+                    margin: 3px;
                     padding: 4px 8px;
 
                     span {
@@ -99,6 +106,27 @@
     tfoot {
         td {
             padding: 8px;
+        }
+    }
+}
+
+.concepts-option-menu {
+    .concepts-option-item {
+        display: flex;
+        justify-content: space-between;
+
+        :first-child {
+            display: inline;
+        }
+
+        :nth-child(2) {
+            max-width: 200px;
+            margin-left: 32px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.875rem;
+            color: #bcbcbc;
+            display: inline;
         }
     }
 }

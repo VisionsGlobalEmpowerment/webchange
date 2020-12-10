@@ -29,14 +29,15 @@
   (->> (:levels course)
        (map (fn [{:keys [level lessons] :as level-data}]
               (map (fn [{:keys [lesson activities] :as lesson-data}]
-                     (map (fn [{:keys [activity] :as activity-data}]
-                            {:level       level
-                             :lesson      lesson
-                             :activity    activity
-                             :skills      (get-in scenes-data [activity :skills] [])
-                             :lesson-sets (get-lesson-sets level-data lesson-data lesson-sets-data)
-                             :tags        (get-activity-tags activity-data)})
-                          activities))
+                     (map-indexed (fn [in-lesson-index {:keys [activity] :as activity-data}]
+                                    {:level       level
+                                     :lesson      lesson
+                                     :lesson-idx  in-lesson-index
+                                     :activity    activity
+                                     :skills      (get-in scenes-data [activity :skills] [])
+                                     :lesson-sets (get-lesson-sets level-data lesson-data lesson-sets-data)
+                                     :tags        (get-activity-tags activity-data)})
+                                  activities))
                    lessons)))
        (flatten)
        (map-indexed (fn [idx activity]

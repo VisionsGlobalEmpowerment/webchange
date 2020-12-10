@@ -38,6 +38,16 @@
         save
         handle)))
 
+(defn handle-update-scene-skills
+  [course-slug scene-name request]
+  (let [owner-id (current-user request)
+        save (fn [data] (core/update-scene-skills! course-slug scene-name data owner-id))]
+    (-> request
+        :body
+        :skills
+        save
+        handle)))
+
 (defn handle-save-course
   [course-slug request]
   (let [owner-id (current-user request)
@@ -192,11 +202,16 @@
 
 (defroutes course-routes
   (GET "/api/courses/:course-slug" [course-slug] (-> course-slug core/get-course-data response))
+
+  ;; Scenes
   (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name] (-> (core/get-scene-data course-slug scene-name) response))
   (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
     (handle-save-scene course-slug scene-name request))
   (PUT "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
     (handle-update-scene course-slug scene-name request))
+  (POST "/api/courses/:course-slug/scenes/:scene-name/skills" [course-slug scene-name :as request]
+    (handle-update-scene-skills course-slug scene-name request))
+
   (POST "/api/courses/:course-slug" [course-slug :as request]
     (handle-save-course course-slug request))
 

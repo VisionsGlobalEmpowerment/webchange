@@ -5,5 +5,5 @@
 (defn path-to-db
   [relative-path]
   (->> relative-path
-       (concat [:course-table] relative-path)
+       (concat [:course-table])
        (db/path-to-db)))
