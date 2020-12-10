@@ -87,7 +87,9 @@
 
 (defn update-script!
   [wave-surfer data]
-  (.setAudioScript wave-surfer (clj->js (if (some? data) data []))))
+  (if (.-isReady wave-surfer)
+    (.setAudioScript wave-surfer (clj->js (if (some? data) data [])))
+    (.on wave-surfer "ready" #(.setAudioScript wave-surfer (clj->js (if (some? data) data []))))))
 
 (defn- is-default-created?
   [{:keys [start end]}]

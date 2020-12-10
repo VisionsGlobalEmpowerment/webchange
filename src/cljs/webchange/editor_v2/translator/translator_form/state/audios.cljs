@@ -60,7 +60,7 @@
       {:dispatch-n (list [:complete-request :upload-audio]
                          [::translator-form.scene/add-asset asset-data]
                          [::set-default-target asset-data]
-                         [::audio-wave-state/init-audio-script-poll (:url asset-data) 1000 4])})))
+                         [::audio-wave-state/init-audio-script-poll (:url asset-data) 1000 400])})))
 
 (re-frame/reg-event-fx
   ::set-current-target
