@@ -8,16 +8,20 @@
     [webchange.editor-v2.course-table.state.edit :refer [field-editable?]]))
 
 (defn- cell-selected?
-  [selection-type selection-data cell-data]
-  (and (= selection-type :cell)
-       (= selection-data cell-data)))
+  [selection-type selection-data cell-data field]
+  (let [fields-to-check (if (some #{field} [:level :lesson :concepts])
+                          [:level :lesson :field]
+                          (keys selection-data))]
+    (and (= selection-type :cell)
+         (= (select-keys selection-data fields-to-check)
+            (select-keys cell-data fields-to-check)))))
 
 (defn field-cell
   [{:keys [data field span] :as props}]
   (let [selection @(re-frame/subscribe [::selection-state/selection])
         cell-data (activity->cell-data data field)
         spanned? (some? span)
-        selected? (cell-selected? (:type selection) (:data selection) cell-data)
+        selected? (cell-selected? (:type selection) (:data selection) cell-data field)
         editable? (field-editable? (:field cell-data))]
     (into [ui/table-cell (cond-> (merge (:cell-props props)
                                         (cell-data->cell-attributes cell-data))
