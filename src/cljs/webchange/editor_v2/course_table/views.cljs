@@ -8,7 +8,7 @@
     [webchange.editor-v2.course-table.state.edit :as edit-state]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
-    [webchange.editor-v2.course-table.views-edit-form :refer [edit-form field-editable?]]
+    [webchange.editor-v2.course-table.views-edit-form :refer [edit-form]]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
@@ -23,13 +23,6 @@
                   {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
                   {:id :skills :title "Standard/Competency" :width 30}
                   {:id :tags :title "Adaptation" :width 10}])
-
-(defn- field->column
-  [field-id columns]
-  (some (fn [{:keys [id] :as column}]
-          (and (= id field-id)
-               column))
-        columns))
 
 (defn- col-group
   [{:keys [columns]}]
@@ -81,10 +74,7 @@
           handle-cell-click (fn [event]
                               (let [data (click-event->cell-data event)]
                                 (re-frame/dispatch [::selection-state/set-selection :cell data])))
-          handle-cell-double-click (fn [event]
-                                     (let [cell-data (click-event->cell-data event)]
-                                       (when (field-editable? cell-data)
-                                         (re-frame/dispatch [::edit-state/open-menu]))))
+          handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
           handle-scroll (fn [event]
                           (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                             (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]

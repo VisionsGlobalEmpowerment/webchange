@@ -14,17 +14,23 @@
        (concat [:edit])
        (db/path-to-db)))
 
+(defn field-editable?
+  [field]
+  (some #{field} [:abbr-global :activity :concepts :skills :tags]))
+
 (re-frame/reg-event-fx
   ::open-menu
   (fn [{:keys [db]} [_]]
     (let [{:keys [data]} (selection-state/selection db)
           {:keys [field]} data]
-      (cond-> {:db (assoc-in db (path-to-db [:open?]) true)}
-              (or (= field :skills)
-                  (= field :abbr-global)) (assoc :dispatch [::skills/init-skills data])
-              (= field :tags) (assoc :dispatch [::tags/init-tags data])
-              (= field :activity) (assoc :dispatch [::activity/init-activities data])
-              (= field :concepts) (assoc :dispatch [::concepts/init-concepts data])))))
+      (if (field-editable? field)
+        (cond-> {:db (assoc-in db (path-to-db [:open?]) true)}
+                (or (= field :skills)
+                    (= field :abbr-global)) (assoc :dispatch [::skills/init-skills data])
+                (= field :tags) (assoc :dispatch [::tags/init-tags data])
+                (= field :activity) (assoc :dispatch [::activity/init-activities data])
+                (= field :concepts) (assoc :dispatch [::concepts/init-concepts data]))
+        {}))))
 
 (re-frame/reg-event-fx
   ::close-menu
