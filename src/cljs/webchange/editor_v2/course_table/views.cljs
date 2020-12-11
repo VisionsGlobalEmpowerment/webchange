@@ -10,6 +10,7 @@
     [webchange.editor-v2.course-table.state.selection :as selection-state]
     [webchange.editor-v2.course-table.views-edit-form :refer [edit-form]]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
+    [webchange.editor-v2.course-table.views-table-pagination :refer [pagination]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
     [webchange.editor-v2.layout.views :refer [layout]]
@@ -64,11 +65,8 @@
       (cell->cell-data)))
 
 (defn- body
-  [{:keys [data columns]}]
-  (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
-        rows-count @(re-frame/subscribe [::pagination-state/page-rows])
-
-        handle-cell-click (fn [event]
+  [{:keys [data columns rows-skip rows-count]}]
+  (let [handle-cell-click (fn [event]
                             (let [data (click-event->cell-data event)]
                               (re-frame/dispatch [::selection-state/set-selection :cell data])))
         handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
@@ -102,19 +100,6 @@
                        (:lesson activity)
                        (inc counter)))
               rows)))))
-
-(defn- footer
-  [{:keys [data]}]
-  (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
-        rows-count @(re-frame/subscribe [::pagination-state/page-rows])
-        from (inc rows-skip)
-        to (+ rows-skip rows-count)
-        total (count data)]
-    [:div.footer {:style {:padding    "16px"
-                          :text-align "right"
-                          :border     "solid 1px #414141"}}
-     [ui/typography
-      (str "Rows: " from " - " to " of " total)]]))
 
 (defn- get-element-height
   ([el]
@@ -167,12 +152,14 @@
        :component-did-update
                      (fn []
                        (when (some? @container)
-                         (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])))
+                         (js/setTimeout #(re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])
+                                        100)))
 
        :reagent-render
                      (fn [{:keys [course-id]}]
-
-                       (let [data @(re-frame/subscribe [::data-state/table-data])]
+                       (let [data @(re-frame/subscribe [::data-state/table-data])
+                             rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
+                             rows-count @(re-frame/subscribe [::pagination-state/page-rows])]
                          [layout {:breadcrumbs [{:text     "Course"
                                                  :on-click #(redirect-to :course-editor-v2 :id course-id)}
                                                 {:text "Table"}]
@@ -187,7 +174,9 @@
                             [ui/table {:class-name "course-table"}
                              [col-group {:columns header-data}]
                              [header {:columns header-data}]
-                             [body {:data    data
-                                    :columns header-data}]]]
-                           [footer {:data data}]
+                             [body {:data       data
+                                    :rows-skip  rows-skip
+                                    :rows-count rows-count
+                                    :columns    header-data}]]]
+                           [pagination {:data data}]
                            [edit-form]]]))})))
