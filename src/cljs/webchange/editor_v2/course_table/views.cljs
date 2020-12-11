@@ -65,48 +65,43 @@
 
 (defn- body
   [{:keys [data columns]}]
-  (r/with-let [_ (keyboard/enable {:enter           #(re-frame/dispatch [::edit-state/open-menu])
-                                   :move-selection  #(move-selection % columns)
-                                   :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])})]
-    (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
-          rows-count @(re-frame/subscribe [::pagination-state/page-rows])
+  (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
+        rows-count @(re-frame/subscribe [::pagination-state/page-rows])
 
-          handle-cell-click (fn [event]
-                              (let [data (click-event->cell-data event)]
-                                (re-frame/dispatch [::selection-state/set-selection :cell data])))
-          handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
-          handle-scroll (fn [event]
-                          (let [delta (if (> (.-deltaY event) 0) 1 -1)]
-                            (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
-      (into [ui/table-body {:on-click        handle-cell-click
-                            :on-double-click handle-cell-double-click
-                            :on-wheel        handle-scroll}]
-            (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
-                   rows []
-                   current-level nil
-                   current-lesson nil
-                   counter 0]
-              (if (some? activity)
-                (let [{:keys [idx level lesson]} activity
-                      span-columns (cond-> {}
-                                           (not= level current-level) (assoc :level (levels-count data idx level))
-                                           (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson)))
-                      skip-columns (cond-> {}
-                                           (= level current-level) (assoc :level true)
-                                           (= lesson current-lesson) (assoc :lesson true))]
-                  (recur rest-activities
-                         (conj rows
-                               ^{:key (get-row-id activity)}
-                               [activity-row {:data         activity
-                                              :columns      columns
-                                              :span-columns span-columns
-                                              :skip-columns skip-columns}])
-                         (:level activity)
-                         (:lesson activity)
-                         (inc counter)))
-                rows))))
-    (finally
-      (keyboard/disable))))
+        handle-cell-click (fn [event]
+                            (let [data (click-event->cell-data event)]
+                              (re-frame/dispatch [::selection-state/set-selection :cell data])))
+        handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
+        handle-scroll (fn [event]
+                        (let [delta (if (> (.-deltaY event) 0) 1 -1)]
+                          (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
+    (into [ui/table-body {:on-click        handle-cell-click
+                          :on-double-click handle-cell-double-click
+                          :on-wheel        handle-scroll}]
+          (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
+                 rows []
+                 current-level nil
+                 current-lesson nil
+                 counter 0]
+            (if (some? activity)
+              (let [{:keys [idx level lesson]} activity
+                    span-columns (cond-> {}
+                                         (not= level current-level) (assoc :level (levels-count data idx level))
+                                         (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson)))
+                    skip-columns (cond-> {}
+                                         (= level current-level) (assoc :level true)
+                                         (= lesson current-lesson) (assoc :lesson true))]
+                (recur rest-activities
+                       (conj rows
+                             ^{:key (get-row-id activity)}
+                             [activity-row {:data         activity
+                                            :columns      columns
+                                            :span-columns span-columns
+                                            :skip-columns skip-columns}])
+                       (:level activity)
+                       (:lesson activity)
+                       (inc counter)))
+              rows)))))
 
 (defn- footer
   [{:keys [data]}]
@@ -153,7 +148,12 @@
   (let [container (atom nil)
         handle-content-ref (fn [el]
                              (when (some? el)
-                               (reset! container el)))]
+                               (reset! container el)))
+        handle-key-down (fn [event]
+                          (keyboard/handle-event event
+                                                 {:enter           #(re-frame/dispatch [::edit-state/open-menu])
+                                                  :move-selection  #(move-selection % header-data)
+                                                  :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])}))]
     (r/create-class
       {:display-name "course-table"
 
@@ -180,8 +180,10 @@
                           [ui/paper {:style {:display        "flex"
                                              :flex-direction "column"
                                              :height         "100%"}}
-                           [:div {:style {:flex-grow 1
-                                          :overflow  "hidden"}}
+                           [:div {:tab-index   0
+                                  :on-key-down handle-key-down
+                                  :style       {:flex-grow 1
+                                                :overflow  "hidden"}}
                             [ui/table {:class-name "course-table"}
                              [col-group {:columns header-data}]
                              [header {:columns header-data}]

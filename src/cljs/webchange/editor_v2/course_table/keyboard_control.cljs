@@ -21,8 +21,8 @@
              (contains? handlers handler-key))
     (apply (get handlers handler-key) args)))
 
-(defn- event-handler
-  [handlers event]
+(defn handle-event
+  [event handlers]
   (let [key-code (.-which event)
         shifted? (.-shiftKey event)
         handle (partial call-handler handlers)]
@@ -37,16 +37,3 @@
       (is? key-code :arrow-down) (handle :move-selection :down)
       (is? key-code :esc) (handle :reset-selection)
       :else nil)))
-
-(def handler-instance (atom nil))
-
-(defn enable
-  [handlers]
-  (print "enable")
-  (reset! handler-instance (partial event-handler handlers))
-  (.addEventListener js/document "keyup" @handler-instance))
-
-(defn disable
-  []
-  (print "disable")
-  (.removeEventListener js/document "keyup" @handler-instance))
