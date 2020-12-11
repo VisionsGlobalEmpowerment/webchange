@@ -4,9 +4,14 @@
         padding: 16px;
     }
 
+    th {
+        padding: 8px !important;
+    }
+
     tbody {
         td {
             cursor: pointer;
+            padding: 8px !important;
             transition: box-shadow 0.2s ease-out;
             vertical-align: top;
 
@@ -38,7 +43,8 @@
                     padding: 0;
 
                     .lesson-set-item {
-                        padding: 10px;
+                        padding: 0;
+                        margin-bottom: 10px;
 
                         .lesson-set-primary {
                             span:first-child {

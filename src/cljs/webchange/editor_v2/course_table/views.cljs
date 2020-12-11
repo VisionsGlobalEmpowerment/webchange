@@ -16,9 +16,9 @@
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
-(def header-data [{:id :level :title "Level" :width 0}
+(def header-data [{:id :idx :title "#" :width 3}
+                  {:id :level :title "Level" :width 0}
                   {:id :lesson :title "Lesson" :width 0}
-                  {:id :idx :title "#" :width 0}
                   {:id :concepts :title "Concepts" :width 10}
                   {:id :activity :title "Activities" :width 20}
                   {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
@@ -85,10 +85,12 @@
               (let [{:keys [idx level lesson]} activity
                     span-columns (cond-> {}
                                          (not= level current-level) (assoc :level (levels-count data idx level))
-                                         (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson)))
+                                         (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson))
+                                         (not= lesson current-lesson) (assoc :concepts (lessons-count data idx level lesson)))
                     skip-columns (cond-> {}
                                          (= level current-level) (assoc :level true)
-                                         (= lesson current-lesson) (assoc :lesson true))]
+                                         (= lesson current-lesson) (assoc :lesson true)
+                                         (= lesson current-lesson) (assoc :concepts true))]
                 (recur rest-activities
                        (conj rows
                              ^{:key (get-row-id activity)}
@@ -171,7 +173,8 @@
                                   :on-key-down handle-key-down
                                   :style       {:flex-grow 1
                                                 :overflow  "hidden"}}
-                            [ui/table {:class-name "course-table"}
+                            [ui/table {:class-name "course-table"
+                                       :padding    "none"}
                              [col-group {:columns header-data}]
                              [header {:columns header-data}]
                              [body {:data       data

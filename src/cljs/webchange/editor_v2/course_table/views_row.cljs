@@ -27,6 +27,7 @@
 
 (defn- lesson
   [{:keys [data] :as props}]
+  (print "render lesson")
   [field-cell (merge props
                      {:cell-props {:align "center"}})
    (:lesson data)])
