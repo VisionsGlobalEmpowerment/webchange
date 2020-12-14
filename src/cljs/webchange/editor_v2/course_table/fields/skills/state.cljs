@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.course-table.state.edit-skills
+(ns webchange.editor-v2.course-table.fields.skills.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.db :as db]

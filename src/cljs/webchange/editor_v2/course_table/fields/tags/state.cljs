@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.course-table.state.edit-tags
+(ns webchange.editor-v2.course-table.fields.tags.state
   (:require
     [camel-snake-kebab.core :refer [->kebab-case]]
     [re-frame.core :as re-frame]

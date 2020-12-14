@@ -1,10 +1,10 @@
-(ns webchange.editor-v2.course-table.views-edit-form-tags-appointment
+(ns webchange.editor-v2.course-table.fields.tags.views-edit-appointment
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.course-table.state.edit-tags :as tags-state]))
+    [webchange.editor-v2.course-table.fields.tags.state :as tags-state]))
 
 (defn- input
   [{:keys [value on-change type style enabled?]

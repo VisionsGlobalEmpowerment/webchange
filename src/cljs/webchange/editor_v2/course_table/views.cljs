@@ -8,7 +8,6 @@
     [webchange.editor-v2.course-table.state.edit :as edit-state]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
-    [webchange.editor-v2.course-table.views-edit-form :refer [edit-form]]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
     [webchange.editor-v2.course-table.views-table-pagination :refer [pagination]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
@@ -59,16 +58,19 @@
 
 (defn- click-event->cell-data
   [event]
-  (-> event
-      (.-target)
-      (.closest "td")
-      (cell->cell-data)))
+  (let [target (if (some? (.-nativeEvent event))
+                 (.. event -nativeEvent -target)
+                 (.-target event))
+        cell (.closest target "td")]
+    (when (some? cell)
+      (cell->cell-data cell))))
 
 (defn- body
   [{:keys [data columns rows-skip rows-count]}]
   (let [handle-cell-click (fn [event]
                             (let [data (click-event->cell-data event)]
-                              (re-frame/dispatch [::selection-state/set-selection :cell data])))
+                              (when (some? data)
+                                (re-frame/dispatch [::selection-state/set-selection :cell data]))))
         handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
         handle-scroll (fn [event]
                         (let [delta (if (> (.-deltaY event) 0) 1 -1)]
@@ -181,5 +183,4 @@
                                     :rows-skip  rows-skip
                                     :rows-count rows-count
                                     :columns    header-data}]]]
-                           [pagination {:data data}]
-                           [edit-form]]]))})))
+                           [pagination {:data data}]]]))})))

@@ -2,10 +2,10 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.db :as db]
-    [webchange.editor-v2.course-table.state.edit-activity :as activity]
-    [webchange.editor-v2.course-table.state.edit-concepts :as concepts]
-    [webchange.editor-v2.course-table.state.edit-skills :as skills]
-    [webchange.editor-v2.course-table.state.edit-tags :as tags]
+    [webchange.editor-v2.course-table.fields.activities.state :as activity]
+    [webchange.editor-v2.course-table.fields.concepts.state :as concepts]
+    [webchange.editor-v2.course-table.fields.skills.state :as skills]
+    [webchange.editor-v2.course-table.fields.tags.state :as tags]
     [webchange.editor-v2.course-table.state.selection :as selection-state]))
 
 (defn path-to-db

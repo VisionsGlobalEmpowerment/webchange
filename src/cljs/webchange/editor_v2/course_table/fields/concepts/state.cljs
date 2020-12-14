@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.course-table.state.edit-concepts
+(ns webchange.editor-v2.course-table.fields.concepts.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.data :as data-state]
