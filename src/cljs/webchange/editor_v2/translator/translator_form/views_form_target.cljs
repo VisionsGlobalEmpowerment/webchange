@@ -35,6 +35,7 @@
       "Character:"]
      [ui/select {:value         (or current-target "")
                  :display-empty true
+                 :variant       "outlined"
                  :on-change     handle-target-change
                  :style         (:control styles)}
       (for [{:keys [text value]} targets]

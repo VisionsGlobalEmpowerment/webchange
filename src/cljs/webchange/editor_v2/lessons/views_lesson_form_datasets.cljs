@@ -45,6 +45,7 @@
       [ui/form-control {:full-width true
                         :margin     "dense"}
        [ui/select {:value     ""
+                   :variant   "outlined"
                    :on-change #(swap! data
                                       update-in
                                       [:lesson-sets lesson-key :items]

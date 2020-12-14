@@ -22,6 +22,7 @@
       [ui/form-control {:style {:margin-top "-18px"}}
        [ui/input-label "Value"]
        [ui/select {:value     @lookup-data
+                   :variant   "outlined"
                    :on-change #(reset! lookup-data (-> % .-target .-value))
                    :style     {:min-width "150px"}}
         (for [{:keys [name value]} (:options option)]

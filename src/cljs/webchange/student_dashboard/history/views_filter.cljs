@@ -21,6 +21,7 @@
                       :style      {:margin-top "-8px"}}
      [ui/input-label title]
      [ui/select {:value     (get @filter key "")
+                 :variant   "outlined"
                  :on-change handle-change}
       (for [value (conj (vec values) default-value)]
         ^{:key value}

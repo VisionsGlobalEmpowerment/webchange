@@ -71,6 +71,7 @@
       [ui/input-label label]
       [ui/select {:value        (or value (if multiple? [] ""))
                   :multiple     multiple?
+                  :variant      "outlined"
                   :render-value (fn [value]
                                   (->> (fn []
                                          (let [value (js->clj value)]

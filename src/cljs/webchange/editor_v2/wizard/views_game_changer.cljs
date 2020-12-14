@@ -17,9 +17,9 @@
                          (filter #(not (some? (:lesson-sets %)))))
           current-template (->> templates (filter #(= (:template-id @data) (:id %))) first)]
       [ui/grid {:container   true
-                  :justify     "center"
-                  :spacing     24
-                  :align-items "center"}
+                :justify     "center"
+                :spacing     24
+                :align-items "center"}
        [ui/grid {:item true :xs 8}
         [ui/card {:style {:margin      "12px"
                           :flex-shrink "0"}}
@@ -43,6 +43,7 @@
              [ui/input-label "Template"]
              [ui/select {:value     (or (:template-id @data) "")
                          :on-change #(swap! data assoc :template-id (-> % .-target .-value))
+                         :variant   "outlined"
                          :style     {:min-width "150px"}}
               (for [template templates]
                 ^{:key (:id template)}

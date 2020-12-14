@@ -43,6 +43,7 @@
                         :margin     "normal"}
        [ui/select {:value        (or (:id current-concept) "")
                    :render-value (fn [value] (some #(and (= (:id %) value) (:name %)) concepts-list))
+                   :variant      "outlined"
                    :on-change    #(handle-concept-changed (get-concept concepts-list (.. % -target -value)))}
         (for [concept concepts-list]
           ^{:key (:id concept)}

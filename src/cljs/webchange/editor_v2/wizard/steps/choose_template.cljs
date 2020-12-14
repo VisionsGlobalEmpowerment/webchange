@@ -67,6 +67,7 @@
              [ui/input-label "Template"]
              [ui/select {:value        (or @data "")
                          :on-change    #(handle-change-template (-> % .-target .-value))
+                         :variant      "outlined"
                          :render-value (fn [value]
                                          (->> (fn []
                                                 (let [{:keys [name]} (some (fn [{:keys [id] :as template}]

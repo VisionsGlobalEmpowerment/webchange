@@ -47,6 +47,7 @@
   (let [current-course @(re-frame/subscribe [::subs/current-course])
         styles (get-styles)]
     [ui/select {:value     current-course
+                :variant   "outlined"
                 :on-change #(re-frame/dispatch [::ie/open-student-course-dashboard (-> % .-target .-value)])
                 :style     (:main styles)}
      (for [course courses]
