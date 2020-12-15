@@ -119,3 +119,19 @@
         text-overflow: ellipsis;
     }
 }
+
+.selected-skills-list {
+    li {
+        & > div {
+            padding: 2px 0;
+        }
+
+        button {
+            padding: 4px;
+
+            svg {
+                font-size: 12px;
+            }
+        }
+    }
+}

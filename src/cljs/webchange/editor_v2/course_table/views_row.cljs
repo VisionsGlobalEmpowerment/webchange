@@ -35,14 +35,14 @@
                           :margin-right "8px"}}]
      [ui/typography {:style {:color color}} (str "<" field ">")]]))
 
-(def components {:level       level
-                 :lesson      lesson
-                 :idx         index
-                 :concepts    concepts
-                 :activity    activities
-                 :abbr-global skills
-                 :skills      skills
-                 :tags        tags})
+(def components {:level       [level]
+                 :lesson      [lesson]
+                 :idx         [index]
+                 :concepts    [concepts]
+                 :activity    [activities]
+                 :abbr-global [skills {:field :abbr}]
+                 :skills      [skills {:field :name}]
+                 :tags        [tags]})
 
 (defn- get-component
   [id]
@@ -69,15 +69,17 @@
         cell-data (activity->cell-data data field)
         spanned? (some? span)
         selected? (cell-selected? (:type selection) (:data selection) cell-data field)
-        editable? (field-editable? (:field cell-data))]
+        editable? (field-editable? (:field cell-data))
+        [component component-props] (get-component field)]
     [ui/table-cell (cond-> (merge (:cell-props props)
                                   (cell-data->cell-attributes cell-data)
                                   {:class-name (clojure.core/name field)})
                            spanned? (assoc :row-span span)
                            selected? (update :class-name str " selected")
                            editable? (update :class-name str " editable"))
-     [(get-component field) {:edit? selected?
-                             :data  data}]]))
+     [component (merge component-props
+                       {:edit? selected?
+                        :data  data})]]))
 
 (defn activity-row
   [{:keys [data columns span-columns skip-columns]}]

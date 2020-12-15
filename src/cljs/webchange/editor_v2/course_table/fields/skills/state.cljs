@@ -4,69 +4,89 @@
     [webchange.editor-v2.course-table.state.db :as db]
     [webchange.editor.events :as editor]
     [webchange.editor-v2.course-table.state.data :as data-state]
-    [webchange.editor-v2.course-table.state.selection :as selection-state]
+    [webchange.editor-v2.course-table.state.selection :as selection]
     [webchange.subs :as subs]
     [webchange.warehouse :as warehouse]))
 
 (defn path-to-db
-  [relative-path]
+  [relative-path component-id]
   (->> relative-path
-       (concat [:edit-from :skills])
+       (concat [:edit-from :skills component-id])
        (db/path-to-db)))
 
 (re-frame/reg-event-fx
-  ::init-skills
-  (fn [{:keys [db]} [_ {:keys [activity]}]]
+  ::init
+  (fn [{:keys [db]} [_ {:keys [activity]} component-id]]
     (let [scene-skills (->> (editor/scene-skills db activity)
                             (map (fn [{:keys [id]}] [id true]))
-                            (into {}))]
-      {:dispatch-n (list [::warehouse/load-skills {:on-success [::load-skills-success]}]
-                         [::reset-selected-skills scene-skills])})))
+                            (into {}))
+          selection-data (-> db selection/selection :data)]
+      {:db         (-> db
+                       (assoc-in (path-to-db [:initial-value] component-id) (keys scene-skills))
+                       (assoc-in (path-to-db [:selection-data] component-id) selection-data))
+       :dispatch-n (list [::warehouse/load-skills {:on-success [::load-skills-success component-id]}]
+                         [::reset-selected-skills scene-skills component-id])})))
 
 (re-frame/reg-event-fx
   ::load-skills-success
-  (fn [{:keys [db]} [_ {:keys [skills]}]]
-    {:db (assoc-in db (path-to-db [:data :skills]) skills)}))
+  (fn [{:keys [db]} [_ component-id {:keys [skills]}]]
+    {:db (assoc-in db (path-to-db [:data :skills] component-id) (->> skills
+                                                                     (map (fn [{:keys [id] :as skill}] [id skill]))
+                                                                     (into {})))}))
 
 (re-frame/reg-sub
   ::skills
-  (fn [db]
-    (get-in db (path-to-db [:data :skills]))))
+  (fn [db [_ component-id]]
+    (->> (path-to-db [:data :skills] component-id)
+         (get-in db))))
 
 ;; Selected skills
 
 (defn- selected-skills
-  [db]
-  (get-in db (path-to-db [:data :selected-skills]) {}))
+  [db component-id]
+  (get-in db (path-to-db [:data :selected-skills] component-id) {}))
 
-(re-frame/reg-sub ::selected-skills selected-skills)
+(re-frame/reg-sub
+  ::selected-skills
+  (fn [db [_ component-id]]
+    (->> (selected-skills db component-id)
+         (keys))))
+
+(re-frame/reg-sub
+  ::current-skills
+  (fn [[_ component-id]]
+    [(re-frame/subscribe [::skills component-id])
+     (re-frame/subscribe [::selected-skills component-id])])
+  (fn [[all-skills selected-skills-ids]]
+    (->> selected-skills-ids
+         (map (fn [skill-id] (get all-skills skill-id)))
+         (remove nil?))))
 
 (re-frame/reg-event-fx
   ::reset-selected-skills
-  (fn [{:keys [db]} [_ init-skills]]
-    {:db (assoc-in db (path-to-db [:data :selected-skills]) init-skills)}))
+  (fn [{:keys [db]} [_ init-skills component-id]]
+    {:db (assoc-in db (path-to-db [:data :selected-skills] component-id) init-skills)}))
 
 (re-frame/reg-event-fx
   ::add-selected-skill
-  (fn [{:keys [db]} [_ skill-id]]
-    {:db (assoc-in db (path-to-db [:data :selected-skills skill-id]) true)}))
+  (fn [{:keys [db]} [_ skill-id component-id]]
+    {:db (assoc-in db (path-to-db [:data :selected-skills skill-id] component-id) true)}))
 
 (re-frame/reg-event-fx
   ::remove-selected-skill
-  (fn [{:keys [db]} [_ skill-id]]
-    {:db (update-in db (path-to-db [:data :selected-skills]) dissoc skill-id)}))
+  (fn [{:keys [db]} [_ skill-id component-id]]
+    {:db (update-in db (path-to-db [:data :selected-skills] component-id) dissoc skill-id)}))
 
 ;; Skills list
 
 (re-frame/reg-sub
   ::skills-list
-  (fn []
-    [(re-frame/subscribe [::skills])
-     (re-frame/subscribe [::selected-skills])])
-  (fn [[skills selected-skills]]
-    (map (fn [{:keys [id] :as skill}]
-           (assoc skill :selected? (contains? selected-skills id)))
-         skills)))
+  (fn [[_ component-id]]
+    [(re-frame/subscribe [::skills component-id])])
+  (fn [[skills]]
+    (->> skills
+         (vals)
+         (sort-by :name))))
 
 ;; Save
 
@@ -80,17 +100,21 @@
     (:activity activity)))
 
 (re-frame/reg-event-fx
-  ::save-skills
-  (fn [{:keys [db]} [_]]
-    (let [skills-ids (-> db (selected-skills) (keys))
-          scene-id (get-scene-id (:data (selection-state/selection db))
-                                 (subs/course-data db))
-          course-id (data-state/course-id db)]
-      {:dispatch [::warehouse/update-scene-skills
-                  {:course-id  course-id
-                   :scene-id   scene-id
-                   :skills-ids skills-ids}
-                  {:on-success [::save-skills-success]}]})))
+  ::save
+  (fn [{:keys [db]} [_ component-id]]
+    (let [initial-value (get-in db (path-to-db [:initial-value] component-id))
+          current-value (-> (selected-skills db component-id) (keys))]
+      (if-not (= initial-value current-value)
+        (let [selection-data (get-in db (path-to-db [:selection-data] component-id))
+              scene-id (get-scene-id selection-data
+                                     (subs/course-data db))
+              course-id (data-state/course-id db)]
+          {:dispatch [::warehouse/update-scene-skills
+                      {:course-id  course-id
+                       :scene-id   scene-id
+                       :skills-ids current-value}
+                      {:on-success [::save-skills-success]}]})
+        {}))))
 
 (re-frame/reg-event-fx
   ::save-skills-success

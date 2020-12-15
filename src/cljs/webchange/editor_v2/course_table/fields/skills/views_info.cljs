@@ -1,15 +1,8 @@
-(ns webchange.editor-v2.course-table.fields.skills.views-info)
+(ns webchange.editor-v2.course-table.fields.skills.views-info
+  (:require
+    [webchange.editor-v2.course-table.fields.skills.views-edit :refer [selected-skills-list]]))
 
 (defn info-from
-  [{:keys [data]}]
-  [:ul
-   (for [{:keys [abbr]} (:skills data)]
-     ^{:key abbr}
-     [:li abbr])])
-
-(defn skills-description
-  [{:keys [data]}]
-  [:ul
-   (for [{:keys [abbr name]} (:skills data)]
-     ^{:key abbr}
-     [:li name])])
+  [{:keys [data field]}]
+  [selected-skills-list {:skills     (:skills data)
+                         :show-field field}])
