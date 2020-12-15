@@ -3,7 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.course-table.fields.concepts.state :as concepts-state]))
+    [webchange.editor-v2.course-table.fields.concepts.state :as state]))
 
 (defn- lesson-set-item
   [{:keys [name current-value options on-change]}]
@@ -33,11 +33,11 @@
 
 (defn edit-form
   [{:keys [data]}]
-  (r/with-let [_ (re-frame/dispatch [::concepts-state/init data])]
-    (let [lesson-sets @(re-frame/subscribe [::concepts-state/available-sets])
-          current-sets @(re-frame/subscribe [::concepts-state/current-lesson-sets])
+  (r/with-let [_ (re-frame/dispatch [::state/init data])]
+    (let [lesson-sets @(re-frame/subscribe [::state/available-sets])
+          current-sets @(re-frame/subscribe [::state/current-lesson-sets])
           handle-change (fn [name lesson-set]
-                          (re-frame/dispatch [::concepts-state/set-current-lesson-set name lesson-set]))]
+                          (re-frame/dispatch [::state/set-current-lesson-set name lesson-set]))]
       [:div
        (for [[name lesson-set-name] current-sets]
          ^{:key name}
@@ -46,4 +46,4 @@
                            :options       lesson-sets
                            :on-change     handle-change}])])
     (finally
-      (re-frame/dispatch [::concepts-state/save-concepts]))))
+      (re-frame/dispatch [::state/save]))))

@@ -6,8 +6,8 @@
 
 (defn info-from
   [{:keys [data]}]
-  (let [{:keys [id name]} @(re-frame/subscribe [::data-state/course-activity (-> data :activity keyword)])]
+  (let [{:keys [name]} @(re-frame/subscribe [::data-state/course-activity (-> data :activity keyword)])]
     [:div
-     [ui/typography {:variant "body1"} name]
-     [ui/typography {:variant "body2"
-                     :style   {:color "#bcbcbc"}} id]]))
+     [ui/typography {:variant "body1"
+                     :style   {:padding "2px 0"}}
+      name]]))

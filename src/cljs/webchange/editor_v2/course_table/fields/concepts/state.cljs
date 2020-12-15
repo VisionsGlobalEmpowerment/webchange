@@ -69,7 +69,7 @@
     (assoc-in course-data (conj lesson-path :lesson-sets) lesson-sets)))
 
 (re-frame/reg-event-fx
-  ::save-concepts
+  ::save
   (fn [{:keys [db]} [_]]
     (let [course-id (data-state/course-id db)
           lesson-sets (current-lesson-sets db)

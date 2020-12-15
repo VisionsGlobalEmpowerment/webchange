@@ -5,7 +5,6 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.keyboard-control :as keyboard]
     [webchange.editor-v2.course-table.state.data :as data-state]
-    [webchange.editor-v2.course-table.state.edit :as edit-state]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]

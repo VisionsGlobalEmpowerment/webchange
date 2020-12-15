@@ -2,25 +2,23 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.editor-v2.course-table.fields.activities.state :as state]))
 
-(defn- activity-item
-  [{:keys [data on-click]}]
-  (let [{:keys [id name selected?]} data]
-    [ui/list-item {:dense    true
-                   :button   true
-                   :selected selected?
-                   :on-click #(on-click data)}
-     [ui/list-item-text {:primary   name
-                         :secondary id}]]))
-
 (defn edit-form
-  []
-  (let [activities @(re-frame/subscribe [::state/activities])
-        handle-item-click (fn [{:keys [id]}] (re-frame/dispatch [::state/reset-current-activity id]))
-        handle-save (fn [] (re-frame/dispatch [::state/save-activity]))]
-    [ui/list
-     (for [{:keys [id] :as activity} activities]
-       ^{:key id}
-       [activity-item {:data     activity
-                       :on-click handle-item-click}])]))
+  [{:keys [data]}]
+  (r/with-let [_ (re-frame/dispatch [::state/init data])]
+    (let [activities @(re-frame/subscribe [::state/activities])
+          current-activity @(re-frame/subscribe [::state/current-activity])
+          handle-item-click (fn [event]
+                              (let [id (->> event .-target .-value)]
+                                (re-frame/dispatch [::state/reset-current-activity id])))]
+      [ui/select
+       {:value     (or current-activity "")
+        :on-change handle-item-click
+        :on-wheel  #(.stopPropagation %)}
+       (for [{:keys [id name]} activities]
+         ^{:key id}
+         [ui/menu-item {:value id} name])])
+    (finally
+      (re-frame/dispatch [::state/save]))))

@@ -15,19 +15,18 @@
        (db/path-to-db)))
 
 (re-frame/reg-event-fx
-  ::init-activities
-  (fn [{:keys [_]} [_ {:keys [activity]}]]
-    {:dispatch [::reset-current-activity (keyword activity)]}))
+  ::init
+  (fn [{:keys [db]} [_ {:keys [activity]}]]
+    (let [current-value (keyword activity)]
+      {:db       (assoc-in db (path-to-db [:initial-value]) current-value)
+       :dispatch [::reset-current-activity current-value]})))
 
 (re-frame/reg-sub
   ::activities
   (fn []
-    [(re-frame/subscribe [::data-state/course-activities])
-     (re-frame/subscribe [::current-activity])])
-  (fn [[available-activities current-activity]]
+    [(re-frame/subscribe [::data-state/course-activities])])
+  (fn [[available-activities]]
     (->> available-activities
-         (map (fn [{:keys [id] :as activity}]
-                (assoc activity :selected? (= id current-activity))))
          (sort-by :name))))
 
 ;; Current
@@ -51,11 +50,14 @@
     (assoc-in course-data (conj path :activity) (clojure.core/name current-activity))))
 
 (re-frame/reg-event-fx
-  ::save-activity
+  ::save
   (fn [{:keys [db]} [_]]
-    (let [course-id (data-state/course-id db)
-          selection-data (-> db selection/selection :data)
-          current (current-activity db)
-          course-data (-> (subs/course-data db)
-                          (update-activity current selection-data))]
-      {:dispatch [::common/update-course course-id course-data]})))
+    (let [initial-activity (get-in db (path-to-db [:initial-value]))
+          current-activity (current-activity db)]
+      (if-not (= current-activity initial-activity)
+        (let [course-id (data-state/course-id db)
+              selection-data (-> db selection/selection :data)
+              course-data (-> (subs/course-data db)
+                              (update-activity current-activity selection-data))]
+          {:dispatch [::common/update-course course-id course-data]})
+        {}))))
