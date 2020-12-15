@@ -33,11 +33,12 @@
 
 (defn edit-form
   [{:keys [data]}]
-  (r/with-let [_ (re-frame/dispatch [::state/init data])]
+  (r/with-let [component-id (:idx data)
+               _ (re-frame/dispatch [::state/init data component-id])]
     (let [lesson-sets @(re-frame/subscribe [::state/available-sets])
-          current-sets @(re-frame/subscribe [::state/current-lesson-sets])
+          current-sets @(re-frame/subscribe [::state/current-lesson-sets component-id])
           handle-change (fn [name lesson-set]
-                          (re-frame/dispatch [::state/set-current-lesson-set name lesson-set]))]
+                          (re-frame/dispatch [::state/set-current-lesson-set name lesson-set component-id]))]
       [:div
        (for [[name lesson-set-name] current-sets]
          ^{:key name}
@@ -46,4 +47,4 @@
                            :options       lesson-sets
                            :on-change     handle-change}])])
     (finally
-      (re-frame/dispatch [::state/save]))))
+      (re-frame/dispatch [::state/save component-id]))))

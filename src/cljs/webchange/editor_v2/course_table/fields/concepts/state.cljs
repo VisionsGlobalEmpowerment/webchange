@@ -10,9 +10,9 @@
     [webchange.subs :as subs]))
 
 (defn path-to-db
-  [relative-path]
+  [relative-path component-id]
   (->> relative-path
-       (concat [:edit-from :concepts])
+       (concat [:edit-from :concepts component-id])
        (db/path-to-db)))
 
 (defn- get-current-value
@@ -27,12 +27,16 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [db]} [_ selection]]
+  (fn [{:keys [db]} [_ selection component-id]]
     (let [course-data (subs/course-data db)
           lesson-data (utils/get-lesson-data course-data selection)
           level-data (utils/get-level-data course-data selection)
-          current-value (get-current-value level-data lesson-data)]
-      {:dispatch [::reset-current-lesson-sets current-value]})))
+          current-value (get-current-value level-data lesson-data)
+          selection-data (-> db selection/selection :data)]
+      {:db       (-> db
+                     (assoc-in (path-to-db [:initial-value] component-id) current-value)
+                     (assoc-in (path-to-db [:selection-data] component-id) selection-data))
+       :dispatch [::reset-current-lesson-sets current-value component-id]})))
 
 (re-frame/reg-sub
   ::available-sets
@@ -46,20 +50,23 @@
 ;; Current value
 
 (defn- current-lesson-sets
-  [db]
-  (get-in db (path-to-db [:current-lesson-sets]) {}))
+  [db component-id]
+  (get-in db (path-to-db [:current-lesson-sets] component-id) {}))
 
-(re-frame/reg-sub ::current-lesson-sets current-lesson-sets)
+(re-frame/reg-sub
+  ::current-lesson-sets
+  (fn [db [_ component-id]]
+    (current-lesson-sets db component-id)))
 
 (re-frame/reg-event-fx
   ::set-current-lesson-set
-  (fn [{:keys [db]} [_ name lesson-set-name]]
-    {:db (assoc-in db (path-to-db [:current-lesson-sets name]) lesson-set-name)}))
+  (fn [{:keys [db]} [_ name lesson-set-name component-id]]
+    {:db (assoc-in db (path-to-db [:current-lesson-sets name] component-id) lesson-set-name)}))
 
 (re-frame/reg-event-fx
   ::reset-current-lesson-sets
-  (fn [{:keys [db]} [_  current-lesson-sets]]
-    {:db (assoc-in db (path-to-db [:current-lesson-sets]) current-lesson-sets)}))
+  (fn [{:keys [db]} [_ current-lesson-sets component-id]]
+    {:db (assoc-in db (path-to-db [:current-lesson-sets] component-id) current-lesson-sets)}))
 
 ;; Save
 
@@ -70,10 +77,13 @@
 
 (re-frame/reg-event-fx
   ::save
-  (fn [{:keys [db]} [_]]
-    (let [course-id (data-state/course-id db)
-          lesson-sets (current-lesson-sets db)
-          selection-data (-> db selection/selection :data)
-          course-data (-> (subs/course-data db)
-                          (update-lesson-sets lesson-sets selection-data))]
-      {:dispatch [::common/update-course course-id course-data]})))
+  (fn [{:keys [db]} [_ component-id]]
+    (let [initial-value (get-in db (path-to-db [:initial-value] component-id))
+          current-value (current-lesson-sets db component-id)]
+      (if-not (= initial-value current-value)
+        (let [selection-data (get-in db (path-to-db [:selection-data] component-id))
+              course-id (data-state/course-id db)
+              course-data (-> (subs/course-data db)
+                              (update-lesson-sets current-value selection-data))]
+          {:dispatch [::common/update-course course-id course-data]})
+        {}))))

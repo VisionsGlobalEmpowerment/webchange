@@ -7,7 +7,6 @@
 (re-frame/reg-event-fx
   ::update-course
   (fn [{:keys [_]} [_ course-id course-data]]
-    (print "::update-course")
     {:dispatch [::warehouse/save-course
                 {:course-id   course-id
                  :course-data course-data}

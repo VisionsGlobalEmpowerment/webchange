@@ -7,12 +7,13 @@
 
 (defn edit-form
   [{:keys [data]}]
-  (r/with-let [_ (re-frame/dispatch [::state/init data])]
+  (r/with-let [component-id (:idx data)
+               _ (re-frame/dispatch [::state/init data component-id])]
     (let [activities @(re-frame/subscribe [::state/activities])
-          current-activity @(re-frame/subscribe [::state/current-activity])
+          current-activity @(re-frame/subscribe [::state/current-activity component-id])
           handle-item-click (fn [event]
-                              (let [id (->> event .-target .-value)]
-                                (re-frame/dispatch [::state/reset-current-activity id])))]
+                              (let [activity-id (->> event .-target .-value)]
+                                (re-frame/dispatch [::state/reset-current-activity activity-id component-id])))]
       [ui/select
        {:value     (or current-activity "")
         :on-change handle-item-click
@@ -21,4 +22,4 @@
          ^{:key id}
          [ui/menu-item {:value id} name])])
     (finally
-      (re-frame/dispatch [::state/save]))))
+      (re-frame/dispatch [::state/save component-id]))))
