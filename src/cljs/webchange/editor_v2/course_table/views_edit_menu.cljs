@@ -9,7 +9,6 @@
   [{:keys [on-save]}]
   (let [this (r/current-component)
         open? @(re-frame/subscribe [::edit-state/open?])
-        title @(re-frame/subscribe [::edit-state/title])
         handle-close #(re-frame/dispatch [::edit-state/close-menu])
         handle-save #(do (handle-close)
                          (on-save))]
@@ -17,7 +16,7 @@
                 :on-close   handle-close
                 :PaperProps {:style      {:width "500px"}
                              :class-name "course-table-edit-form"}}
-     [ui/dialog-title title]
+     [ui/dialog-title ""]
      (into [ui/dialog-content]
            (r/children this))
      [ui/dialog-actions

@@ -20,3 +20,8 @@
   (fn [{:keys [db]} [_ type data]]
     {:db (assoc-in db (path-to-db []) {:type type
                                        :data data})}))
+
+(re-frame/reg-event-fx
+  ::reset-selection
+  (fn [{:keys [db]} [_ ]]
+    {:db (assoc-in db (path-to-db []) nil)}))

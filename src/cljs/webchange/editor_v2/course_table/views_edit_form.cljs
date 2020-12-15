@@ -13,10 +13,6 @@
                        :skills      skills-form
                        :tags        tags-form})
 
-(defn field-editable?
-  [{:keys [field]}]
-  (contains? available-fields field))
-
 (defn- default-form [] nil)
 
 (defn edit-form

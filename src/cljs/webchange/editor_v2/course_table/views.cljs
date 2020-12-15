@@ -8,28 +8,22 @@
     [webchange.editor-v2.course-table.state.edit :as edit-state]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
-    [webchange.editor-v2.course-table.views-edit-form :refer [edit-form field-editable?]]
+    [webchange.editor-v2.course-table.views-edit-form :refer [edit-form]]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
+    [webchange.editor-v2.course-table.views-table-pagination :refer [pagination]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
-(def header-data [{:id :level :title "Level" :width 0}
+(def header-data [{:id :idx :title "#" :width 3}
+                  {:id :level :title "Level" :width 0}
                   {:id :lesson :title "Lesson" :width 0}
-                  {:id :idx :title "#" :width 0}
                   {:id :concepts :title "Concepts" :width 10}
                   {:id :activity :title "Activities" :width 20}
                   {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
                   {:id :skills :title "Standard/Competency" :width 30}
                   {:id :tags :title "Adaptation" :width 10}])
-
-(defn- field->column
-  [field-id columns]
-  (some (fn [{:keys [id] :as column}]
-          (and (= id field-id)
-               column))
-        columns))
 
 (defn- col-group
   [{:keys [columns]}]
@@ -71,66 +65,43 @@
       (cell->cell-data)))
 
 (defn- body
-  [{:keys [data columns]}]
-  (r/with-let [_ (keyboard/enable {:enter           #(print "enter")
-                                   :move-selection  #(move-selection data (:data @(re-frame/subscribe [::selection-state/selection])) % columns)
-                                   :reset-selection #(print "reset-selection")})]
-    (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
-          rows-count @(re-frame/subscribe [::pagination-state/page-rows])
-
-          handle-cell-click (fn [event]
-                              (let [data (click-event->cell-data event)]
-                                (re-frame/dispatch [::selection-state/set-selection :cell data])))
-          handle-cell-double-click (fn [event]
-                                     (let [{:keys [field] :as cell-data} (click-event->cell-data event)]
-                                       (when (field-editable? cell-data)
-                                         (re-frame/dispatch [::edit-state/open-menu {:cell-data cell-data
-                                                                                     :title     (-> field (field->column columns) :title)}]))))
-          handle-scroll (fn [event]
-                          (let [delta (if (> (.-deltaY event) 0) 1 -1)]
-                            (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
-      (into [ui/table-body {:on-click        handle-cell-click
-                            :on-double-click handle-cell-double-click
-                            :on-wheel        handle-scroll}]
-            (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
-                   rows []
-                   current-level nil
-                   current-lesson nil
-                   counter 0]
-              (if (some? activity)
-                (let [{:keys [idx level lesson]} activity
-                      span-columns (cond-> {}
-                                           (not= level current-level) (assoc :level (levels-count data idx level))
-                                           (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson)))
-                      skip-columns (cond-> {}
-                                           (= level current-level) (assoc :level true)
-                                           (= lesson current-lesson) (assoc :lesson true))]
-                  (recur rest-activities
-                         (conj rows
-                               ^{:key (get-row-id activity)}
-                               [activity-row {:data         activity
-                                              :columns      columns
-                                              :span-columns span-columns
-                                              :skip-columns skip-columns}])
-                         (:level activity)
-                         (:lesson activity)
-                         (inc counter)))
-                rows))))
-    (finally
-      (keyboard/disable))))
-
-(defn- footer
-  [{:keys [data]}]
-  (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
-        rows-count @(re-frame/subscribe [::pagination-state/page-rows])
-        from (inc rows-skip)
-        to (+ rows-skip rows-count)
-        total (count data)]
-    [:div.footer {:style {:padding    "16px"
-                          :text-align "right"
-                          :border     "solid 1px #414141"}}
-     [ui/typography
-      (str "Rows: " from " - " to " of " total)]]))
+  [{:keys [data columns rows-skip rows-count]}]
+  (let [handle-cell-click (fn [event]
+                            (let [data (click-event->cell-data event)]
+                              (re-frame/dispatch [::selection-state/set-selection :cell data])))
+        handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
+        handle-scroll (fn [event]
+                        (let [delta (if (> (.-deltaY event) 0) 1 -1)]
+                          (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
+    (into [ui/table-body {:on-click        handle-cell-click
+                          :on-double-click handle-cell-double-click
+                          :on-wheel        handle-scroll}]
+          (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
+                 rows []
+                 current-level nil
+                 current-lesson nil
+                 counter 0]
+            (if (some? activity)
+              (let [{:keys [idx level lesson]} activity
+                    span-columns (cond-> {}
+                                         (not= level current-level) (assoc :level (levels-count data idx level))
+                                         (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson))
+                                         (not= lesson current-lesson) (assoc :concepts (lessons-count data idx level lesson)))
+                    skip-columns (cond-> {}
+                                         (= level current-level) (assoc :level true)
+                                         (= lesson current-lesson) (assoc :lesson true)
+                                         (= lesson current-lesson) (assoc :concepts true))]
+                (recur rest-activities
+                       (conj rows
+                             ^{:key (get-row-id activity)}
+                             [activity-row {:data         activity
+                                            :columns      columns
+                                            :span-columns span-columns
+                                            :skip-columns skip-columns}])
+                       (:level activity)
+                       (:lesson activity)
+                       (inc counter)))
+              rows)))))
 
 (defn- get-element-height
   ([el]
@@ -164,7 +135,12 @@
   (let [container (atom nil)
         handle-content-ref (fn [el]
                              (when (some? el)
-                               (reset! container el)))]
+                               (reset! container el)))
+        handle-key-down (fn [event]
+                          (keyboard/handle-event event
+                                                 {:enter           #(re-frame/dispatch [::edit-state/open-menu])
+                                                  :move-selection  #(move-selection % header-data)
+                                                  :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])}))]
     (r/create-class
       {:display-name "course-table"
 
@@ -178,12 +154,14 @@
        :component-did-update
                      (fn []
                        (when (some? @container)
-                         (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])))
+                         (js/setTimeout #(re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])
+                                        100)))
 
        :reagent-render
                      (fn [{:keys [course-id]}]
-
-                       (let [data @(re-frame/subscribe [::data-state/table-data])]
+                       (let [data @(re-frame/subscribe [::data-state/table-data])
+                             rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
+                             rows-count @(re-frame/subscribe [::pagination-state/page-rows])]
                          [layout {:breadcrumbs [{:text     "Course"
                                                  :on-click #(redirect-to :course-editor-v2 :id course-id)}
                                                 {:text "Table"}]
@@ -191,12 +169,17 @@
                           [ui/paper {:style {:display        "flex"
                                              :flex-direction "column"
                                              :height         "100%"}}
-                           [:div {:style {:flex-grow 1
-                                          :overflow  "hidden"}}
-                            [ui/table {:class-name "course-table"}
+                           [:div {:tab-index   0
+                                  :on-key-down handle-key-down
+                                  :style       {:flex-grow 1
+                                                :overflow  "hidden"}}
+                            [ui/table {:class-name "course-table"
+                                       :padding    "none"}
                              [col-group {:columns header-data}]
                              [header {:columns header-data}]
-                             [body {:data    data
-                                    :columns header-data}]]]
-                           [footer {:data data}]
+                             [body {:data       data
+                                    :rows-skip  rows-skip
+                                    :rows-count rows-count
+                                    :columns    header-data}]]]
+                           [pagination {:data data}]
                            [edit-form]]]))})))

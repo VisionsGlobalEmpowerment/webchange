@@ -5,6 +5,7 @@
     [webchange.editor.events :as editor]
     [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
+    [webchange.subs :as subs]
     [webchange.warehouse :as warehouse]))
 
 (defn path-to-db
@@ -69,11 +70,21 @@
 
 ;; Save
 
+(defn- get-scene-id
+  [selection course-data]
+  (let [level (some (fn [{:keys [level] :as level-data}] (and (= level (:level selection)) level-data))
+                    (:levels course-data))
+        lesson (some (fn [{:keys [lesson] :as lesson-data}] (and (= lesson (:lesson selection)) lesson-data))
+                     (:lessons level))
+        activity (nth (:activities lesson) (:lesson-idx selection))]
+    (:activity activity)))
+
 (re-frame/reg-event-fx
   ::save-skills
   (fn [{:keys [db]} [_]]
     (let [skills-ids (-> db (selected-skills) (keys))
-          scene-id (-> db (selection-state/selection) (get-in [:data :activity]))
+          scene-id (get-scene-id (:data (selection-state/selection db))
+                                 (subs/course-data db))
           course-id (data-state/course-id db)]
       {:dispatch [::warehouse/update-scene-skills
                   {:course-id  course-id

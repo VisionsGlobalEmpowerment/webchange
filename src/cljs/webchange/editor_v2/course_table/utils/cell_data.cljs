@@ -6,7 +6,7 @@
 
 (defn activity->cell-data
   [activity field]
-  (merge (select-keys activity [:level :lesson :activity :lesson-idx])
+  (merge (select-keys activity [:level :lesson :lesson-idx])
          {:field field}))
 
 (defn cell->cell-data
@@ -14,7 +14,6 @@
   {:level      (->int (.getAttribute cell-el "data-level"))
    :lesson     (->int (.getAttribute cell-el "data-lesson"))
    :lesson-idx (->int (.getAttribute cell-el "data-lesson-idx"))
-   :activity   (.getAttribute cell-el "data-activity")
    :field      (keyword (.getAttribute cell-el "data-field"))})
 
 (defn- stringify-cell-data
@@ -22,7 +21,6 @@
   {:level      (str (:level activity))
    :lesson     (str (:lesson activity))
    :lesson-idx (str (:lesson-idx activity))
-   :activity   (:activity activity)
    :field      (clojure.core/name (:field activity))})
 
 (defn cell-data->cell-attributes

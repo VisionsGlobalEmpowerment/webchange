@@ -2,6 +2,7 @@
   (:require [doo.runner :refer-macros [doo-tests]]
             [webchange.core-test]
             [webchange.editor-v2.course-table.state.data-test]
+            [webchange.editor-v2.course-table.utils.move-selection-test]
             [webchange.editor-v2.creation-progress.validate-action-test]
             [webchange.editor-v2.graph-builder.graph.book-test]
             [webchange.editor-v2.graph-builder.graph.cinema-test]
@@ -50,6 +51,7 @@
 (doo-tests
   'webchange.core-test
   'webchange.editor-v2.course-table.state.data-test
+  'webchange.editor-v2.course-table.utils.move-selection-test
   'webchange.editor-v2.creation-progress.validate-action-test
   'webchange.editor-v2.graph-builder.graph.book-test
   'webchange.editor-v2.graph-builder.graph.cinema-test
