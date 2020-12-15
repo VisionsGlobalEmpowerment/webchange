@@ -9,7 +9,6 @@
     [webchange.editor-v2.course-table.fields.skills.views :refer [skills]]
     [webchange.editor-v2.course-table.fields.tags.views :refer [tags]]
 
-    [webchange.editor-v2.course-table.state.edit :refer [field-editable?] :as edit-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
     [webchange.editor-v2.course-table.utils.cell-data :refer [activity->cell-data cell-data->cell-attributes]]
     [webchange.ui.theme :refer [get-in-theme]]))
@@ -60,21 +59,24 @@
          (= (select-keys selection-data fields-to-check)
             (select-keys cell-data fields-to-check)))))
 
+(defn- field-editable?
+  [field]
+  (some #{field} [:abbr-global :activity :concepts :skills :tags]))
+
 (defn- field-cell
   [{:keys [data field span] :as props}]
   (let [selection @(re-frame/subscribe [::selection-state/selection])
-        edit-mode? @(re-frame/subscribe [::edit-state/open?])
         cell-data (activity->cell-data data field)
         spanned? (some? span)
         selected? (cell-selected? (:type selection) (:data selection) cell-data field)
         editable? (field-editable? (:field cell-data))]
     [ui/table-cell (cond-> (merge (:cell-props props)
-                                  (cell-data->cell-attributes cell-data))
+                                  (cell-data->cell-attributes cell-data)
+                                  {:class-name (clojure.core/name field)})
                            spanned? (assoc :row-span span)
                            selected? (update :class-name str " selected")
                            editable? (update :class-name str " editable"))
-     [(get-component field) {:edit? (and edit-mode?
-                                         selected?)
+     [(get-component field) {:edit? selected?
                              :data  data}]]))
 
 (defn activity-row

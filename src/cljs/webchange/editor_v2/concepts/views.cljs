@@ -42,6 +42,7 @@
            [ui/card-content
             [ui/select {:value     dataset-id
                         :on-change #(swap! data assoc :dataset-id (-> % .-target .-value))
+                        :variant   "outlined"
                         :style     {:min-width "150px"}}
              (for [dataset datasets]
                ^{:key (:id dataset)}

@@ -11,15 +11,14 @@
      ^{:key lesson-set-name}
      [ui/list-item {:class-name "lesson-set-item"}
       (if-not (empty? lesson-set-data)
-        (let [{:keys [items name]} lesson-set-data
+        (let [{:keys [items]} lesson-set-data
               concepts-names (->> (map :name items)
                                   (map s/capitalize)
                                   (s/join ", "))]
           [ui/tooltip {:title concepts-names}
-           [ui/list-item-text {:primary                  (r/as-element [:div.lesson-set-primary
-                                                                        [:span (clojure.core/name lesson-set-name) ":"]
-                                                                        [:span "\"" name "\""]])
-                               :secondary                (r/as-element concepts-names)
+           [ui/list-item-text {:primary                  lesson-set-name
+                               :secondary                concepts-names
+                               :primaryTypographyProps   {:class-name "lesson-set-primary"}
                                :secondaryTypographyProps {:class-name "lesson-set-secondary"}}]])
         [ui/list-item-text {:secondary                "Not defined"
                             :secondaryTypographyProps {:class-name "lesson-set-secondary"}}])])])

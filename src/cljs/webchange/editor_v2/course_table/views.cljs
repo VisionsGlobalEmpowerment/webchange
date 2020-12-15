@@ -71,12 +71,10 @@
                             (let [data (click-event->cell-data event)]
                               (when (some? data)
                                 (re-frame/dispatch [::selection-state/set-selection :cell data]))))
-        handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
         handle-scroll (fn [event]
                         (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                           (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
     (into [ui/table-body {:on-click        handle-cell-click
-                          :on-double-click handle-cell-double-click
                           :on-wheel        handle-scroll}]
           (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
                  rows []
@@ -140,7 +138,7 @@
                                (reset! container el)))
         handle-key-down (fn [event]
                           (keyboard/handle-event event
-                                                 {:enter           #(re-frame/dispatch [::edit-state/open-menu])
+                                                 {          ;:enter           #(re-frame/dispatch [::edit-state/open-menu])
                                                   :move-selection  #(move-selection % header-data)
                                                   :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])}))]
     (r/create-class

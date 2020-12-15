@@ -26,9 +26,8 @@
         (select-keys (keys scheme)))))
 
 (re-frame/reg-event-fx
-  ::init-concepts
+  ::init
   (fn [{:keys [db]} [_ selection]]
-
     (let [course-data (subs/course-data db)
           lesson-data (utils/get-lesson-data course-data selection)
           level-data (utils/get-level-data course-data selection)
