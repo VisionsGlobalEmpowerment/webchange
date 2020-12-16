@@ -10,7 +10,9 @@
   [{:keys [value on-change type style]
     :or   {on-change #()}}]
   [ui/text-field (cond-> {:value      value
-                          :on-change  #(on-change (.. % -target -value))
+                          :on-change  (fn [event]
+                                        (on-change (cond->> (.. event -target -value)
+                                                            (= type "number") (.parseInt js/Number))))
                           :style      {:border-bottom "solid 1px #616161"}
                           :InputProps {:style {:font-size   "0.8rem"
                                                :white-space "nowrap"}}}
