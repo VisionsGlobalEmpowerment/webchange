@@ -1,50 +1,32 @@
 (ns webchange.interpreter.lessons.activity
   (:require
-    [webchange.progress.activity :as activity]
-    [re-frame.core :as re-frame]))
-
-(defn- get-activity
-  [activities activity]
-  (activity/first-by-key activities :activity activity))
+    [webchange.progress.activity :as activity]))
 
 (defn get-activities
   [db level lesson]
-  (let [levels (get-in db [:course-data :levels])
-        lessons (-> (activity/get-level levels level) :lessons)
-        activities (-> (activity/get-lesson lessons lesson) :activities)]
-    activities
-  ))
+  (get-in db [:course-data :levels level :lessons lesson :activities]))
 
 (defn workflow-action
   [db {:keys [level lesson activity]}]
-  (let [levels (get-in db [:course-data :levels])
-        lessons (-> (activity/get-level levels level) :lessons)
-        activities (-> (activity/get-lesson lessons lesson) :activities)]
-    (get-activity activities activity)))
-
-(defn- num->keyword
-  [n]
-  (-> n str keyword))
+  (get-in db [:course-data :levels level :lessons lesson :activities activity]))
 
 (defn finished?
-  [db {:keys [level lesson activity]}]
-  (let [activities (get-in db [:progress-data :finished (num->keyword level) (num->keyword lesson)])]
-    (some #(= activity %) activities)))
+  [db activity]
+  (let [finished (get-in db [:progress-data :finished])]
+    (activity/finished? finished activity)))
 
 (defn next-not-finished-for
   [db activity]
-  (let [levels (get-in db [:course-data :levels])
-        current-tags (get-in db [:progress-data :current-tags] [])]
-    (loop [next (activity/next-for current-tags levels activity)]
-      (if (finished? db next)
-        (recur (activity/next-for current-tags levels next))
-        next))))
+  (let [current-tags (get-in db [:progress-data :current-tags] [])
+        levels (get-in db [:course-data :levels])
+        finished (get-in db [:progress-data :finished])]
+    (activity/next-not-finished-for current-tags levels finished activity)))
 
 (defn finish
-  [db {:keys [level lesson activity] :as finished}]
+  [db finished]
   (let [next (next-not-finished-for db finished)]
     (-> db
-        (update-in [:progress-data :finished (num->keyword level) (num->keyword lesson)] #(-> % set (conj activity)))
+        (update-in [:progress-data :finished] activity/finish finished)
         (assoc-in [:progress-data :next] next))))
 
 (defn activity-progress
@@ -57,13 +39,26 @@
          (map count)
          (reduce +))))
 
+(defn- workflow-action-idx
+  "Return activity if its correct index
+  otherwise find index in course workflow by activity-name"
+  [db {:keys [level lesson activity activity-name]}]
+  (let [activities (get-in db [:course-data :levels level :lessons lesson :activities])
+        workflow-action (get activities activity)]
+    (if (= activity-name (:activity workflow-action))
+      activity
+      (-> (keep-indexed #(when (= (:activity %2) activity-name) %1) activities)
+          first))))
+
 ;TODO: level what if scene is not available in current level/lesson?
 (defn name->activity-action
   [db scene-name]
-  (let [default {:level 1 :lesson 1}
+  (let [default {:level 0 :lesson 0 :activity 0}
         current (get-in db [:loaded-activity])
-        next (get-in db [:progress-data :next])]
-    (merge default next current {:activity scene-name})))
+        next (get-in db [:progress-data :next])
+        activity-action (merge default next current {:activity-name scene-name})
+        activity-idx (workflow-action-idx db activity-action)]
+    (assoc activity-action :activity activity-idx)))
 
 (defn clear-loaded-activity
   [db]
@@ -74,19 +69,20 @@
   (assoc db :loaded-activity activity))
 
 (defn- flatten-activity
-  [level lesson activity]
-  (assoc activity :level (:level level) :lesson (:lesson lesson)))
+  [level-idx lesson-idx activity-idx activity]
+  (let [activity-name (:activity activity)]
+    (assoc activity :level level-idx :lesson lesson-idx :activity activity-idx :activity-name activity-name)))
 
 (defn- flatten-lesson
-  [level lesson]
-  (map #(flatten-activity level lesson %) (:activities lesson)))
+  [level-idx lesson-idx lesson]
+  (map-indexed (fn [activity-idx activity] (flatten-activity level-idx lesson-idx activity-idx activity)) (:activities lesson)))
 
 (defn- flatten-level
-  [level]
-  (map #(flatten-lesson level %) (:lessons level)))
+  [level-idx level]
+  (map-indexed (fn [lesson-idx lesson] (flatten-lesson level-idx lesson-idx lesson)) (:lessons level)))
 
 (defn flatten-activities
   [levels]
   (->> levels
-       (map flatten-level)
+       (map-indexed flatten-level)
        flatten))

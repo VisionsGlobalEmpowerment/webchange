@@ -176,11 +176,11 @@
                  "magic-hat"
                  "pinata"],
  :locations
-                {:home            [{:level 1, :scene "home"} {:level 2, :scene "letter-intro"}],
-                 :cycling         [{:level 1, :scene "cycling"} {:level 2, :scene "cycling-letters"}],
-                 :sandbox         [{:level 1, :scene "sandbox"} {:level 2, :scene "park-poem"}],
-                 :volleyball      [{:level 1, :scene "volleyball"} {:level 2, :scene "volleyball-letters"}],
-                 :painting-tablet [{:level 1, :scene "painting-tablet"} {:level 2, :scene "writing-practice"}]},
+                {:home            [{:level 0, :scene "home"} {:level 1, :scene "letter-intro"}],
+                 :cycling         [{:level 0, :scene "cycling"} {:level 1, :scene "cycling-letters"}],
+                 :sandbox         [{:level 0, :scene "sandbox"} {:level 1, :scene "park-poem"}],
+                 :volleyball      [{:level 0, :scene "volleyball"} {:level 1, :scene "volleyball-letters"}],
+                 :painting-tablet [{:level 0, :scene "painting-tablet"} {:level 1, :scene "writing-practice"}]},
  :levels
                 [{:name  "Level 1",
                   :level 1,
@@ -846,5 +846,5 @@
                            :activities  [{:scored true, :activity "pinata", :time-expected 300, :expected-score-percentage 90}],
                            :lesson-sets {:assessment "assessment6"}}]}],
  :default-progress
-                {:next {:level 1, :lesson 1, :activity "home"}, :finished {:1 {:1 []}}, :variables {:last-location "home"}},
+                {:next {:level 0, :lesson 0, :activity 0, :activity-name "home"}, :finished {:0 {:0 []}}, :variables {:last-location "home"}},
  :navigation-mode "activity"}

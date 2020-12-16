@@ -25,7 +25,7 @@
   ::open-activity
   (fn [{:keys [db]} [_ activity]]
     (let [course (:current-course db)
-          activity (select-keys activity [:level :lesson :activity])]
+          activity (select-keys activity [:level :lesson :activity :activity-name])]
       {:db (lessons-activity/add-loaded-activity db activity)
-       :dispatch-n (list [::ie/set-current-scene (:activity activity)]
+       :dispatch-n (list [::ie/set-current-scene (:activity-name activity)]
                          [::events/redirect (str "/courses/" course)])})))

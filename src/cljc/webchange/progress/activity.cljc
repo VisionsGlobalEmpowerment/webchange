@@ -4,9 +4,11 @@
 
 (defn activity-data-by-index
   [levels level lesson activity]
-  (merge (get-in levels [level :lessons lesson :activities activity])
-         {:level (get-in levels [level :level])
-          :lesson (get-in levels [level :lessons lesson :lesson])}))
+  (let [{activity-name :activity} (get-in levels [level :lessons lesson :activities activity])]
+    {:level         level
+     :lesson        lesson
+     :activity      activity
+     :activity-name activity-name}))
 
 (defn- indices
   [pred coll]
@@ -32,26 +34,45 @@
   [lessons lesson]
   (first-by-key lessons :lesson lesson))
 
-(defn next-for
-  [current-tags levels {:keys [level lesson activity]}]
-  (let [level-index (or (index-by-key levels :level level) 0)
-        lessons (-> (get-level levels level) :lessons)
-        lesson-index (or (index-by-key lessons :lesson lesson) 0)
-        activities (-> (get-lesson lessons lesson) :activities)
-        activity-index (index-by-key activities :activity activity)
-        levels (assoc-in levels [level-index :lessons lesson-index :activities]
-                          (vec (filter some? (map-indexed
-                                          (fn [idx act]
-                                            (if (<= idx activity-index)
-                                              act
-                                              (if (:only act)
-                                                (if (tags/has-one-from current-tags (:only act)) act nil)
-                                                act)
-                                            )) activities))))
-        activities (get-in levels [level-index :lessons lesson-index :activities])
-        activity-index (index-by-key activities :activity activity)]
-    (cond
-      (not-last? activities activity-index) (activity-data-by-index levels level-index lesson-index (inc activity-index))
-      (not-last? lessons lesson-index) (activity-data-by-index levels level-index (inc lesson-index) 0)
-      (not-last? levels level-index) (activity-data-by-index levels (inc level-index) 0 0))))
+(defn- num->keyword
+  [n]
+  (-> n str keyword))
 
+(defn finish
+  "Add given activity (level index, lesson index, activity index)
+  into finished map from students progress"
+  [finished {:keys [level lesson activity]}]
+  (update-in finished [(num->keyword level) (num->keyword lesson)] #(-> % set (conj activity))))
+
+(defn finished?
+  "Check if given activity (level index, lesson index, activity index)
+  is in finished map from students progress"
+  [finished {:keys [level lesson activity]}]
+  (let [activities (get-in finished [(num->keyword level) (num->keyword lesson)])]
+    (some #(= activity %) activities)))
+
+(defn- excluded-by-tags?
+  [tags levels {:keys [level lesson activity]}]
+  (let [workflow-action (get-in levels [level :lessons lesson :activities activity])]
+    (and
+      (:only workflow-action)
+      (not (tags/has-one-from tags (:only workflow-action))))))
+
+(defn next-for
+  [levels {:keys [level lesson activity]}]
+  (let [lessons (get-in levels [level :lessons])
+        activities (get-in lessons [lesson :activities])]
+    (cond
+      (not-last? activities activity) (activity-data-by-index levels level lesson (inc activity))
+      (not-last? lessons lesson) (activity-data-by-index levels level (inc lesson) 0)
+      (not-last? levels level) (activity-data-by-index levels (inc level) 0 0))))
+
+(defn next-not-finished-for
+  "Return next activity in course levels that is
+  - not finished yet
+  - satisfies provided tags"
+  [tags levels finished activity]
+  (loop [next (next-for levels activity)]
+    (if (or (finished? finished next) (excluded-by-tags? tags levels next))
+      (recur (next-for levels next))
+      next)))

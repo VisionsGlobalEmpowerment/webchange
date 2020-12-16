@@ -16,7 +16,7 @@
     (let [scenes (get-in db [:course-data :scene-list])
           activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
       (->> activities
-           (map #(merge % (scene-name->scene (:activity %) scenes)))))))
+           (map #(merge % (scene-name->scene (:activity-name %) scenes)))))))
 
 (re-frame/reg-sub
   ::finished-activities
@@ -25,14 +25,14 @@
           activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))]
       (->> activities
            (filter #(lessons-activity/finished? db %))
-           (map #(merge % (scene-name->scene (:activity %) scenes)))
+           (map #(merge % (scene-name->scene (:activity-name %) scenes)))
            (map #(assoc % :completed true))))))
 
 (defn next-activity
   [db]
   (let [scenes (get-in db [:course-data :scene-list])
         next (get-in db [:progress-data :next])]
-    (merge next (scene-name->scene (:activity next) scenes))))
+    (merge next (scene-name->scene (:activity-name next) scenes))))
 
 (re-frame/reg-sub
   ::next-activity
@@ -45,7 +45,7 @@
           activities (lessons-activity/flatten-activities (get-in db [:course-data :levels]))
           is-assessment? #(= "assessment" (:type %))]
       (->> activities
-           (map #(merge % (scene-name->scene (:activity %) scenes)))
+           (map #(merge % (scene-name->scene (:activity-name %) scenes)))
            (map #(if (lessons-activity/finished? db %) (assoc % :completed true) %))
            (filter is-assessment?)))))
 
@@ -60,8 +60,7 @@
   (apply max (map #(int (name %)) (keys progress-data))))
 
 (defn last-lesson-done [progress-data level]
-    (apply max (map #(int (name %))  (keys ((keyword (str level)) progress-data))))
-  )
+  (apply max (map #(int (name %)) (keys ((keyword (str level)) progress-data)))))
 
 (re-frame/reg-sub
   ::finished-level-lesson-activities
@@ -79,7 +78,7 @@
         last-level (last-level-done progress-data)
         last-lesson (last-lesson-done progress-data last-level)
 
-        finished-activities ((keyword (str last-lesson)) ((keyword (str last-level)) progress-data))
+        finished-activities (get-in progress-data [last-level last-lesson]) #_((keyword (str last-lesson)) ((keyword (str last-level)) progress-data))
         activities (lessons-activity/get-activities db last-level last-lesson)]
     (/ (count finished-activities)
        (count activities))))

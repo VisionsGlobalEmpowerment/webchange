@@ -15,25 +15,25 @@
 
 (def progress  {:test "test"})
 
-(defn course-started [] {:id (.toString (java.util.UUID/randomUUID))
-                     :created-at (jt/format (jt/offset-date-time)) :type "course-started"})
-(defn activity-started [] {:id (.toString (java.util.UUID/randomUUID))
-                       :created-at (jt/format (jt/offset-date-time)) :type "activity-started"
-                       :activity "volleyball" :lesson 1 :level 1})
-(defn activity-stopped [] {:id (.toString (java.util.UUID/randomUUID))
-                       :created-at (jt/format (jt/offset-date-time)) :type "activity-stopped" :activity "volleyball"
-                       :lesson 1 :level 1 :time-spent 50})
-(defn activity-finished [] {:id (.toString (java.util.UUID/randomUUID))
-                        :created-at (jt/format (jt/offset-date-time)) :type "activity-finished"
-                        :activity "volleyball" :lesson 1 :level 1
-                        :score {:correct 10 :mistake 4 :incorrect 2} :time-spent 100})
-(defn activity-progress [] {:id (.toString (java.util.UUID/randomUUID))
-                        :created-at (jt/format (jt/offset-date-time)) :type "activity-progress" :activity-progress 5})
+(defn course-started [] {:id         (.toString (java.util.UUID/randomUUID))
+                         :created-at (jt/format (jt/offset-date-time)) :type "course-started"})
+(defn activity-started [] {:id            (.toString (java.util.UUID/randomUUID))
+                           :created-at    (jt/format (jt/offset-date-time)) :type "activity-started"
+                           :activity-name "volleyball" :activity 1 :lesson 1 :level 1})
+(defn activity-stopped [] {:id            (.toString (java.util.UUID/randomUUID))
+                           :created-at    (jt/format (jt/offset-date-time)) :type "activity-stopped"
+                           :activity-name "volleyball" :activity 1 :lesson 1 :level 1 :time-spent 50})
+(defn activity-finished [] {:id            (.toString (java.util.UUID/randomUUID))
+                            :created-at    (jt/format (jt/offset-date-time)) :type "activity-finished"
+                            :activity-name "volleyball" :activity 1 :lesson 1 :level 1
+                            :score         {:correct 10 :mistake 4 :incorrect 2} :time-spent 100})
+(defn activity-progress [] {:id         (.toString (java.util.UUID/randomUUID))
+                            :created-at (jt/format (jt/offset-date-time)) :type "activity-progress" :activity-progress 5})
 
 
 (defn event->activity-id
   [event]
-  (sp/activity->id (:level event) (:lesson event) (:activity event)))
+  (sp/activity->id (:level event) (:lesson event) (:activity event) (:activity-name event)))
 
 (defn stats-for
   [stats event]

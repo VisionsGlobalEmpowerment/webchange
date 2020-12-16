@@ -6,13 +6,13 @@
             [webchange.auth.core :as auth]
             [webchange.events :as events]))
 
-(defn activity->id [level lesson activity]
-  (str level "-" lesson "-" activity))
+(defn activity->id [level lesson activity activity-name]
+  (str level "-" lesson "-" activity "-" activity-name))
 
 (events/reg
   ::student-activity-score :activity-finished
-  (fn [{:keys [user-id course-id score level lesson activity time-spent] :or {time-spent 0}}]
-    (let [activity-id (activity->id level lesson activity)]
+  (fn [{:keys [user-id course-id score level lesson activity activity-name time-spent] :or {time-spent 0}}]
+    (let [activity-id (activity->id level lesson activity activity-name)]
       (if-let [{:keys [id data]} (db/get-activity-stat {:user_id user-id :course_id course-id :activity_id activity-id})]
         (let [old-score (:score data)]
           (db/save-activity-stat! {:id id :data (-> data
@@ -29,8 +29,8 @@
 
 (events/reg
   ::student-activity-time :activity-stopped
-  (fn [{:keys [user-id course-id level lesson activity time-spent] :or {time-spent 0}}]
-    (let [activity-id (activity->id level lesson activity)]
+  (fn [{:keys [user-id course-id level lesson activity activity-name time-spent] :or {time-spent 0}}]
+    (let [activity-id (activity->id level lesson activity activity-name)]
       (if-let [{:keys [id data]} (db/get-activity-stat {:user_id user-id :course_id course-id :activity_id activity-id})]
         (do
           (db/save-activity-stat! {:id id :data (update-in data [:time-spent] (fnil + 0) time-spent)})
