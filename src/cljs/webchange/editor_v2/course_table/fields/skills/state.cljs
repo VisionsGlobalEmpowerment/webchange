@@ -113,10 +113,14 @@
                       {:course-id  course-id
                        :scene-id   scene-id
                        :skills-ids current-value}
-                      {:on-success [::save-skills-success]}]})
+                      {:on-success [::save-skills-success component-id]}]})
         {}))))
 
 (re-frame/reg-event-fx
   ::save-skills-success
-  (fn [{:keys [_]} [_ {:keys [scene skills]}]]
-    {:dispatch [::editor/reset-scene-skills scene skills]}))
+  (fn [{:keys [_]} [_ component-id {:keys [scene skills]}]]
+    (let [selected-skills-map (->> skills
+                                   (map (fn [{:keys [id]}] [id true]))
+                                   (into {}))]
+      {:dispatch-n (list [::editor/reset-scene-skills scene skills]
+                         [::reset-selected-skills selected-skills-map component-id])})))
