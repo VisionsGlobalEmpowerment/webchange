@@ -10,9 +10,9 @@
     [webchange.subs :as subs]))
 
 (defn path-to-db
-  [relative-path]
+  [relative-path component-id]
   (->> relative-path
-       (concat [:edit-from :tags])
+       (concat [:edit-from :tags component-id])
        (db/path-to-db)))
 
 (defn- activity->tags-appointment
@@ -46,118 +46,118 @@
        (into {})))
 
 (re-frame/reg-event-fx
-  ::init-tags
-  (fn [{:keys [db]} [_ selection]]
+  ::init
+  (fn [{:keys [db]} [_ selection component-id]]
     (let [course-data (subs/course-data db)
           activity-data (utils/get-activity-data course-data selection)
           tags-appointment (activity->tags-appointment activity-data)
           available-tags-restriction (course->available-tags-restriction course-data)
           selected-tags-restriction (activity->selected-tags-restriction activity-data)]
-      {:dispatch-n (list [::reset-tags-appointment tags-appointment]
-                         [::reset-available-tags-restriction available-tags-restriction]
-                         [::reset-selected-restriction selected-tags-restriction])})))
+      {:dispatch-n (list [::reset-tags-appointment tags-appointment component-id]
+                         [::reset-available-tags-restriction available-tags-restriction component-id]
+                         [::reset-selected-restriction selected-tags-restriction component-id])})))
 
 ;; Tags appointment
 
 (defn- tags-appointment
-  [db]
-  (->> (get-in db (path-to-db [:appointment]) {})
+  [db component-id]
+  (->> (get-in db (path-to-db [:appointment] component-id) {})
        (vals)
        (sort-by :tag)))
 
-(re-frame/reg-sub ::tags-appointment tags-appointment)
+(re-frame/reg-sub
+  ::tags-appointment
+  (fn [db [_ component-id]]
+    (tags-appointment db component-id)))
 
 (re-frame/reg-event-fx
   ::add-tag-appointment
-  (fn [{:keys [db]} [_ {:keys [tag score-low score-high]
-                        :or   {score-low  0
-                               score-high 100}}]]
-    (let [tag (if (some? tag) tag (->> (tags-appointment db) (count) (str "new-tag-") (keyword)))]
-      {:db (assoc-in db (path-to-db [:appointment tag]) {:tag        tag
-                                                         :score-low  score-low
-                                                         :score-high score-high})})))
+  (fn [{:keys [db]} [_ component-id]]
+    (let [tag (->> (tags-appointment db component-id) (count) (str "new-tag-") (keyword))]
+      {:db (assoc-in db (path-to-db [:appointment tag] component-id) {:tag        tag
+                                                                      :score-low  0
+                                                                      :score-high 100})})))
 
 (re-frame/reg-event-fx
   ::edit-tag-appointment
-  (fn [{:keys [db]} [_ tag tag-data]]
-    (if-not (= tag (:tag tag-data))
+  (fn [{:keys [db]} [_ tag tag-data component-id]]
+    (if (some? (:tag tag-data))
       (let [new-tag (-> tag-data :tag ->kebab-case keyword)
-            tag-data (-> (get-in db (path-to-db [:appointment tag]))
+            tag-data (-> (get-in db (path-to-db [:appointment tag] component-id))
                          (merge tag-data {:tag new-tag}))]
         {:db (-> db
-                 (assoc-in (path-to-db [:appointment new-tag]) tag-data)
-                 (update-in (path-to-db [:appointment]) dissoc tag))})
-      {:db (update-in db (path-to-db [:appointment tag]) merge tag-data)})))
+                 (assoc-in (path-to-db [:appointment new-tag] component-id) tag-data)
+                 (update-in (path-to-db [:appointment] component-id) dissoc tag))})
+      {:db (update-in db (path-to-db [:appointment tag] component-id) merge tag-data)})))
 
 (re-frame/reg-event-fx
   ::delete-tag-appointment
-  (fn [{:keys [db]} [_ tag]]
-    {:db (update-in db (path-to-db [:appointment]) dissoc tag)}))
+  (fn [{:keys [db]} [_ tag component-id]]
+    {:db (update-in db (path-to-db [:appointment] component-id) dissoc tag)}))
 
 (re-frame/reg-event-fx
   ::reset-tags-appointment
-  (fn [{:keys [db]} [_ tags-appointment]]
-    {:db (assoc-in db (path-to-db [:appointment]) tags-appointment)}))
+  (fn [{:keys [db]} [_ tags-appointment component-id]]
+    {:db (assoc-in db (path-to-db [:appointment] component-id) tags-appointment)}))
 
 ;; Tags restriction
 
 (re-frame/reg-event-fx
   ::add-restriction-tag
-  (fn [{:keys [_]} [_ tag]]
+  (fn [{:keys [_]} [_ tag component-id]]
     (let [fixed-tag (-> tag ->kebab-case keyword)]
-      {:dispatch-n (list [::add-available-tags-restriction fixed-tag]
-                         [::add-selected-restriction fixed-tag])})))
+      {:dispatch-n (list [::add-available-tags-restriction fixed-tag component-id]
+                         [::add-selected-restriction fixed-tag component-id])})))
 
 ; available
 
 (re-frame/reg-sub
   ::available-tags-restriction
-  (fn [db]
-    (get-in db (path-to-db [:restriction :available]) [])))
+  (fn [db [_ component-id]]
+    (get-in db (path-to-db [:restriction :available] component-id) [])))
 
 (re-frame/reg-event-fx
   ::reset-available-tags-restriction
-  (fn [{:keys [db]} [_ tags]]
-    {:db (assoc-in db (path-to-db [:restriction :available]) tags)}))
+  (fn [{:keys [db]} [_ tags component-id]]
+    {:db (assoc-in db (path-to-db [:restriction :available] component-id) tags)}))
 
 (re-frame/reg-event-fx
   ::add-available-tags-restriction
-  (fn [{:keys [db]} [_ tag]]
-    {:db (update-in db (path-to-db [:restriction :available]) conj tag)}))
+  (fn [{:keys [db]} [_ tag component-id]]
+    {:db (update-in db (path-to-db [:restriction :available] component-id) conj tag)}))
 
 ; selected
 
 (defn- selected-tags-restriction
-  [db]
-  (get-in db (path-to-db [:restriction :selected]) {}))
+  [db component-id]
+  (get-in db (path-to-db [:restriction :selected] component-id) {}))
 
-(re-frame/reg-sub ::selected-tags-restriction selected-tags-restriction)
+(re-frame/reg-sub
+  ::selected-tags-restriction
+  (fn [db [_ component-id]]
+    (selected-tags-restriction db component-id)))
 
 (re-frame/reg-event-fx
   ::reset-selected-restriction
-  (fn [{:keys [db]} [_ tags]]
-    {:db (assoc-in db (path-to-db [:restriction :selected]) tags)}))
+  (fn [{:keys [db]} [_ tags component-id]]
+    {:db (assoc-in db (path-to-db [:restriction :selected] component-id) tags)}))
 
 (re-frame/reg-event-fx
   ::add-selected-restriction
-  (fn [{:keys [db]} [_ tag]]
-    {:db (assoc-in db (path-to-db [:restriction :selected tag]) true)}))
+  (fn [{:keys [db]} [_ tag component-id]]
+    {:db (assoc-in db (path-to-db [:restriction :selected tag] component-id) true)}))
 
 (re-frame/reg-event-fx
   ::remove-selected-restriction
-  (fn [{:keys [db]} [_ tag]]
-    {:db (update-in db (path-to-db [:restriction :selected]) dissoc tag)}))
+  (fn [{:keys [db]} [_ tag component-id]]
+    {:db (update-in db (path-to-db [:restriction :selected] component-id) dissoc tag)}))
 
 (re-frame/reg-sub
   ::tags-restriction
-  (fn []
-    [(re-frame/subscribe [::available-tags-restriction])
-     (re-frame/subscribe [::selected-tags-restriction])])
-  (fn [[available-tags selected-tags]]
-    (map (fn [tag]
-           {:tag       tag
-            :selected? (contains? selected-tags tag)})
-         available-tags)))
+  (fn [[_ component-id]]
+    [(re-frame/subscribe [::selected-tags-restriction component-id])])
+  (fn [[selected-tags]]
+    (keys selected-tags)))
 
 ;; Save
 
@@ -178,11 +178,11 @@
 
 (re-frame/reg-event-fx
   ::save-tags
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ component-id]]
     (let [course-id (data-state/course-id db)
           selection-data (-> db selection/selection :data)
-          appointments (tags-appointment db)
-          restrictions (selected-tags-restriction db)
+          appointments (tags-appointment db component-id)
+          restrictions (selected-tags-restriction db component-id)
           course-data (-> (subs/course-data db)
                           (update-tags-appointment appointments selection-data)
                           (update-tags-restriction restrictions selection-data))]

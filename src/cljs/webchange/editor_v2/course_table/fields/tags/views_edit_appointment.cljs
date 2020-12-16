@@ -7,81 +7,59 @@
     [webchange.editor-v2.course-table.fields.tags.state :as tags-state]))
 
 (defn- input
-  [{:keys [value on-change type style enabled?]
+  [{:keys [value on-change type style]
     :or   {on-change #()}}]
-  [ui/text-field (cond-> {:value     value
-                          :variant   "outlined"
-                          :on-change #(on-change (.. % -target -value))}
+  [ui/text-field (cond-> {:value      value
+                          :on-change  #(on-change (.. % -target -value))
+                          :style      {:border-bottom "solid 1px #616161"}
+                          :InputProps {:style {:font-size   "0.8rem"
+                                               :white-space "nowrap"}}}
                          (some? style) (update :style merge style)
-                         (not enabled?) (-> (assoc :disabled true)
-                                            (dissoc :variant)
-                                            (update :style merge {:padding "10px 19px"}))
-                         (some? type) (assoc :type type))])
+                         (some? type) (assoc :type type)
+                         (= type "number") (update-in [:InputProps :style] merge {:font-family "monospace"}))])
 
-(defn- tag-form
-  [{:keys [data edit-mode?]}]
-  (let [{:keys [tag score-low score-high]} @data
-        handle-edit-score-low #(swap! data assoc :score-low %)
-        handle-edit-score-high #(swap! data assoc :score-high %)
-        handle-edit-name #(swap! data assoc :tag %)]
-    [:div
+(defn- tag-row
+  [{:keys [data on-edit on-delete]}]
+  (let [{:keys [tag score-low score-high]} data
+        handle-edit-score-low #(on-edit tag {:score-low %})
+        handle-edit-score-high #(on-edit tag {:score-high %})
+        handle-edit-name #(on-edit tag {:tag %})
+        handle-delete #(on-delete tag)]
+    [:li {:style {:min-width "230px"}}
      [input {:value     tag
              :on-change handle-edit-name
-             :enabled?  edit-mode?
-             :style     {:width "150px"}}]
+             :style     {:width "80px"}}]
      [input {:value     score-low
              :type      "number"
              :on-change handle-edit-score-low
-             :enabled?  edit-mode?
-             :style     {:width       "80px"
+             :style     {:width       "35px"
                          :margin-left "16px"}}]
      [input {:value     score-high
              :type      "number"
              :on-change handle-edit-score-high
-             :enabled?  edit-mode?
-             :style     {:width       "80px"
-                         :margin-left "16px"}}]]))
-
-(defn- actions
-  [{:keys [data]}]
-  [:div {:style {:margin-left "16px"}}
-   (for [[idx {:keys [icon on-click color]
-               :or   {color "default"}}] (map-indexed vector data)]
-     ^{:key idx}
-     [ui/icon-button {:on-click on-click
-                      :color    color}
-      [icon {:style {:font-size "18px"}}]])])
-
-(defn- tag-row
-  [{:keys [tag] :as tag-data}]
-  (r/with-let [edit-mode? (r/atom false)
-               data (r/atom tag-data)
-               handle-edit-click (fn [] (reset! edit-mode? true))
-               handle-save-click (fn []
-                                   (re-frame/dispatch [::tags-state/edit-tag-appointment tag @data])
-                                   (reset! edit-mode? false))
-               handle-delete-click (fn [] (re-frame/dispatch [::tags-state/delete-tag-appointment tag]))
-               handle-cancel-click (fn []
-                                     (reset! data tag-data)
-                                     (reset! edit-mode? false))]
-    [ui/list-item {:style {:padding "0"}}
-     [tag-form {:data       data
-                :edit-mode? @edit-mode?}]
-     (if @edit-mode?
-       [actions {:data [{:icon ic/clear :on-click handle-cancel-click}
-                        {:icon ic/done :on-click handle-save-click :color "secondary"}]}]
-       [actions {:data [{:icon ic/edit :on-click handle-edit-click}
-                        {:icon ic/delete :on-click handle-delete-click}]}])]))
+             :style     {:width       "35px"
+                         :margin-left "16px"}}]
+     [ui/icon-button {:on-click handle-delete
+                      :style    {:margin-left "16px"
+                                 :padding     "8px"}}
+      [ic/close {:style {:font-size "0.8rem"}}]]]))
 
 (defn tags-appointment-form
-  []
-  (let [tags @(re-frame/subscribe [::tags-state/tags-appointment])
-        handle-add (fn [] (re-frame/dispatch [::tags-state/add-tag-appointment]))]
-    [:div {:style {:text-align "right"}}
-     [ui/list {:style {:padding "16px 0"}}
+  [{:keys [component-id]}]
+  (let [tags @(re-frame/subscribe [::tags-state/tags-appointment component-id])
+        handle-add (fn [] (re-frame/dispatch [::tags-state/add-tag-appointment component-id]))
+        handle-delete-click (fn [tag] (re-frame/dispatch [::tags-state/delete-tag-appointment tag component-id]))
+        handle-edit-appointment (fn [tag data] (re-frame/dispatch [::tags-state/edit-tag-appointment tag data component-id]))]
+    [:div
+     [:ul.tags-appointments
       (for [{:keys [tag] :as tag-data} tags]
         ^{:key tag}
-        [tag-row tag-data])]
-     [ui/button {:on-click handle-add
-                 :color    "secondary"}
-      "Add" [ic/add]]]))
+        [tag-row {:data      tag-data
+                  :on-edit   handle-edit-appointment
+                  :on-delete handle-delete-click}])]
+
+     [ui/icon-button {:on-click handle-add
+                      :variant  "outlined"
+                      :style    {:margin-left "206px"
+                                 :padding     "8px"}}
+      [ic/add {:style {:font-size "0.8rem"}}]]]))

@@ -54,9 +54,6 @@
                             padding: 8px;
                             font-size: 10px;
                             max-width: 180px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
                         }
                     }
                 }
@@ -76,8 +73,9 @@
                 }
 
                 .tags-appointments {
+                    list-style: none;
                     margin: 0;
-                    padding: 0 16px;
+                    padding: 0 8px;
 
                     .appointment-range {
                         font-family: monospace;
@@ -96,6 +94,12 @@
                         font-size: 0.7rem;
                         line-height: 0.7rem;
                         padding: 0;
+                    }
+
+                    svg {
+                        font-size: 9px;
+                        left: 12px;
+                        position: relative;
                     }
                 }
             }

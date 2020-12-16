@@ -14,14 +14,14 @@
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
-(def header-data [{:id :idx :title "#" :width 3}
-                  {:id :level :title "Level" :width 0}
-                  {:id :lesson :title "Lesson" :width 0}
-                  {:id :concepts :title "Concepts" :width 10}
+(def header-data [{:id :idx :title "#" :width 1}
+                  {:id :level :title "Level" :width 1}
+                  {:id :lesson :title "Lesson" :width 1}
+                  {:id :concepts :title "Concepts" :width 5}
                   {:id :activity :title "Activities" :width 20}
-                  {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
-                  {:id :skills :title "Standard/Competency" :width 30}
-                  {:id :tags :title "Adaptation" :width 10}])
+                  {:id :abbr-global :title "Global Standard Abbreviation" :width 20}
+                  {:id :skills :title "Standard/Competency" :width 20}
+                  {:id :tags :title "Adaptation" :width 20}])
 
 (defn- col-group
   [{:keys [columns]}]
