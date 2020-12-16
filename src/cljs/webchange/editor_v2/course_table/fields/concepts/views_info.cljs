@@ -13,6 +13,7 @@
       (if-not (empty? lesson-set-data)
         (let [{:keys [items]} lesson-set-data
               concepts-names (->> (map :name items)
+                                  (sort)
                                   (map s/capitalize)
                                   (s/join ", "))]
           [ui/tooltip {:title concepts-names}

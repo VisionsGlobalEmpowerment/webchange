@@ -30,11 +30,21 @@
     (->> (get-in db [:progress-data :next])
          (activity/next-not-finished-for db))))
 
+(defn lesson-sets-data
+  [db lesson-sets-ids]
+  (let [lesson-sets (get-in db [:lessons])]
+    (map #(get lesson-sets %) lesson-sets-ids)))
+
+(defn lesson-set-data
+  [db lesson-set-ids]
+  (->> [lesson-set-ids]
+       (lesson-sets-data db)
+       (first)))
+
 (re-frame/reg-sub
   ::lesson-sets-data
   (fn [db [_ lesson-sets-ids]]
-    (let [lesson-sets (get-in db [:lessons])]
-      (map #(get lesson-sets %) lesson-sets-ids))))
+    (lesson-sets-data db lesson-sets-ids)))
 
 (defn- dissoc-keys
   [data keys-to-remove]
@@ -72,10 +82,19 @@
                                          (get lessons id)))]
       (map get-lesson lesson-sets))))
 
+(defn dataset-items
+  ([db]
+   (dataset-items db {}))
+  ([db {:keys [exclude-items-fields]}]
+   (cond-> (get-in db [:dataset-items])
+           (some? exclude-items-fields) (->> (map (fn [[dataset-item-id dataset-item]]
+                                                    [dataset-item-id (dissoc-keys dataset-item exclude-items-fields)]))
+                                             (into {})))))
+
 (re-frame/reg-sub
   ::dataset-items
-  (fn [db]
-    (get-in db [:dataset-items])))
+  (fn [db [_ options]]
+    (dataset-items db options)))
 
 (re-frame/reg-sub
   ::dataset-item
