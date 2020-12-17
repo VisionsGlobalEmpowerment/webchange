@@ -36,7 +36,7 @@
        [ui/input-label {:required true} label]
        [ui/select
         (merge (-> props
-                   (dissoc :variant "outlined")
+                   (dissoc :variant)
                    (dissoc :on-change)
                    (dissoc :spec)
                    (dissoc :label)
