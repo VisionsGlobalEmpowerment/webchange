@@ -99,7 +99,8 @@
   [id data]
   (let [prepared-data (assoc data :id id)]
     (db/update-lesson-set! prepared-data)
-    [true {:id id}]))
+    [true {:id     id
+           :lesson prepared-data}]))
 
 (defn delete-lesson-set!
   [id]

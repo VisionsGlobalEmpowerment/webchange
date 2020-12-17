@@ -27,7 +27,8 @@
                  font-size: 1.1rem;
             }
 
-            &.skills {
+            &.skills,
+            &.abbr-global {
                 ul {
                     margin: 0;
                     max-height: 300px;
@@ -47,24 +48,32 @@
                         margin-bottom: 10px;
 
                         .lesson-set-primary {
-                            span:first-child {
-                                margin-right: 8px;
-                                white-space: nowrap;
-                            }
-
-                            span:last-child {
-                                font-size: 0.9rem;
-                                white-space: nowrap;
-                            }
+                            white-space: nowrap;
                         }
 
                         .lesson-set-secondary {
+                            padding: 8px;
                             font-size: 10px;
                             max-width: 180px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
                         }
+                    }
+                }
+
+                .dataset-item-chip {
+                    height: auto;
+                    margin: 3px;
+                    padding: 4px 12px 4px 8px;
+
+                    span {
+                        font-size: 0.7rem;
+                        line-height: 0.7rem;
+                        padding: 0;
+                    }
+
+                    svg {
+                        font-size: 9px;
+                        left: 12px;
+                        position: relative;
                     }
                 }
             }
@@ -83,8 +92,9 @@
                 }
 
                 .tags-appointments {
+                    list-style: none;
                     margin: 0;
-                    padding: 0 16px;
+                    padding: 0 8px;
 
                     .appointment-range {
                         font-family: monospace;
@@ -104,6 +114,12 @@
                         line-height: 0.7rem;
                         padding: 0;
                     }
+
+                    svg {
+                        font-size: 9px;
+                        left: 12px;
+                        position: relative;
+                    }
                 }
             }
         }
@@ -116,23 +132,29 @@
     }
 }
 
-.concepts-option-menu {
-    .concepts-option-item {
-        display: flex;
-        justify-content: space-between;
+.concepts-option-menu,
+.concepts-select-control {
+    max-width: 300px;
 
-        :first-child {
-            display: inline;
+    p {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.selected-skills-list {
+    li {
+        & > div {
+            padding: 2px 0;
         }
 
-        :nth-child(2) {
-            max-width: 200px;
-            margin-left: 32px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 0.875rem;
-            color: #bcbcbc;
-            display: inline;
+        button {
+            padding: 4px;
+
+            svg {
+                font-size: 12px;
+            }
         }
     }
 }

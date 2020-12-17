@@ -24,12 +24,8 @@
 (defn handle-event
   [event handlers]
   (let [key-code (.-which event)
-        shifted? (.-shiftKey event)
         handle (partial call-handler handlers)]
     (cond
-      (is? key-code :tab) (if shifted?
-                            (handle :move-selection :left)
-                            (handle :move-selection :right))
       (is? key-code :enter) (handle :enter)
       (is? key-code :arrow-left) (handle :move-selection :left)
       (is? key-code :arrow-up) (handle :move-selection :up)

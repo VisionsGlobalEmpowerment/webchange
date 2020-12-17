@@ -1197,6 +1197,12 @@
     (let [prepared (prepare-lessons data)]
       {:db (assoc db :lessons prepared)})))
 
+(re-frame/reg-event-fx
+  ::update-course-lessons
+  (fn [{:keys [db]} [_ data]]
+    (let [prepared (prepare-lessons data)]
+      {:db (update db :lessons merge prepared)})))
+
 (re-frame/reg-event-db
   ::set-dataset-loading-progress
   (fn [db [_ value]]

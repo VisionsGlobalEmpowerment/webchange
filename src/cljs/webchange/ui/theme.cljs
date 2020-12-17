@@ -65,16 +65,17 @@
                                    :MuiMenuItem      {:root {:padding       "5px 11px"
                                                              :border-radius "6px"
                                                              :margin        "5px 0"}}
-                                   :MuiSelect        {:selectMenu {:border-color  (get-in color-themes [theme :palette :border :default])
-                                                                   :border-width  "1px"
-                                                                   :border-style  "solid"
-                                                                   :border-radius "6px"
-                                                                   :padding       "10px 19px"
-                                                                   :text-align    "start"
-                                                                   :&:focus       {:border-radius "6px"}}
-                                                      :select     {:&:focus {:background-color (get-in color-themes [theme :palette :background :paper])}}
-                                                      :icon       {:right "9px"
-                                                                   :color (get-in color-themes [theme :palette :border :default])}}
+                                   :MuiSelect        {:outlined {:border-color  (get-in color-themes [theme :palette :border :default])
+                                                                 :border-width  "1px"
+                                                                 :border-style  "solid"
+                                                                 :border-radius "6px"
+                                                                 :padding       "10px 19px"
+                                                                 :text-align    "start"
+                                                                 :&:focus       {:border-radius "6px"}}
+
+                                                      :select   {:&:focus {:background-color (get-in color-themes [theme :palette :background :paper])}}
+                                                      :icon     {:right "9px"
+                                                                 :color (get-in color-themes [theme :palette :border :default])}}
                                    :MuiDialog        {:paperScrollPaper {:max-height "calc(100% - 150px)"}}}}]
     (create-mui-theme (deep-merge common-theme color-theme))))
 

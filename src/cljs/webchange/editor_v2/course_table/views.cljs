@@ -5,10 +5,8 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.keyboard-control :as keyboard]
     [webchange.editor-v2.course-table.state.data :as data-state]
-    [webchange.editor-v2.course-table.state.edit :as edit-state]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
-    [webchange.editor-v2.course-table.views-edit-form :refer [edit-form]]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
     [webchange.editor-v2.course-table.views-table-pagination :refer [pagination]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
@@ -16,14 +14,14 @@
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
-(def header-data [{:id :idx :title "#" :width 3}
-                  {:id :level :title "Level" :width 0}
-                  {:id :lesson :title "Lesson" :width 0}
-                  {:id :concepts :title "Concepts" :width 10}
+(def header-data [{:id :idx :title "#" :width 1}
+                  {:id :level :title "Level" :width 1}
+                  {:id :lesson :title "Lesson" :width 1}
+                  {:id :concepts :title "Concepts" :width 5}
                   {:id :activity :title "Activities" :width 20}
-                  {:id :abbr-global :title "Global Standard Abbreviation" :width 30}
-                  {:id :skills :title "Standard/Competency" :width 30}
-                  {:id :tags :title "Adaptation" :width 10}])
+                  {:id :abbr-global :title "Global Standard Abbreviation" :width 20}
+                  {:id :skills :title "Standard/Competency" :width 20}
+                  {:id :tags :title "Adaptation" :width 20}])
 
 (defn- col-group
   [{:keys [columns]}]
@@ -59,22 +57,23 @@
 
 (defn- click-event->cell-data
   [event]
-  (-> event
-      (.-target)
-      (.closest "td")
-      (cell->cell-data)))
+  (let [target (if (some? (.-nativeEvent event))
+                 (.. event -nativeEvent -target)
+                 (.-target event))
+        cell (.closest target "td")]
+    (when (some? cell)
+      (cell->cell-data cell))))
 
 (defn- body
   [{:keys [data columns rows-skip rows-count]}]
   (let [handle-cell-click (fn [event]
                             (let [data (click-event->cell-data event)]
-                              (re-frame/dispatch [::selection-state/set-selection :cell data])))
-        handle-cell-double-click (fn [] (re-frame/dispatch [::edit-state/open-menu]))
+                              (when (some? data)
+                                (re-frame/dispatch [::selection-state/set-selection :cell data]))))
         handle-scroll (fn [event]
                         (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                           (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
     (into [ui/table-body {:on-click        handle-cell-click
-                          :on-double-click handle-cell-double-click
                           :on-wheel        handle-scroll}]
           (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
                  rows []
@@ -138,7 +137,7 @@
                                (reset! container el)))
         handle-key-down (fn [event]
                           (keyboard/handle-event event
-                                                 {:enter           #(re-frame/dispatch [::edit-state/open-menu])
+                                                 {          ;:enter           #(re-frame/dispatch [::edit-state/open-menu])
                                                   :move-selection  #(move-selection % header-data)
                                                   :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])}))]
     (r/create-class
@@ -181,5 +180,4 @@
                                     :rows-skip  rows-skip
                                     :rows-count rows-count
                                     :columns    header-data}]]]
-                           [pagination {:data data}]
-                           [edit-form]]]))})))
+                           [pagination {:data data}]]]))})))

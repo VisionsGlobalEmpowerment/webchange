@@ -140,6 +140,7 @@
                           :style      (:control-container styles)}
          [ui/input-label "Target text"]
          [ui/select {:value     (or text-object-name "")
+                     :variant   "outlined"
                      :on-change #(re-frame/dispatch [::translator-form.actions/set-text-animation-target (-> % .-target .-value)])}
           (for [[object-name {:keys [text]}] available-text-objects]
             ^{:key object-name}

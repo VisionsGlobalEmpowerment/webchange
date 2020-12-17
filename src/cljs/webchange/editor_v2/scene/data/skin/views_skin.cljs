@@ -17,6 +17,7 @@
       [ui/select {:value         (or current-skin "")
                   :disabled      (not enabled?)
                   :display-empty true
+                  :variant       "outlined"
                   :on-click      #(when enabled? (translation-steps/set-select-skin-complete))
                   :on-change     #(re-frame/dispatch [::skin/change-skin (.. % -target -value)])}
        [ui/menu-item {:value "" :disabled true} "Select skin"]

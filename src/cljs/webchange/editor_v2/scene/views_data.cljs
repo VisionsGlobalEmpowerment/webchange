@@ -38,6 +38,7 @@
                            :margin     "normal"}
           [ui/input-label "Select Object"]
           [ui/select {:value     ""
+                      :variant   "outlined"
                       :on-change #(let [object-id (-> % (.. -target -value) (keyword))]
                                     (re-frame/dispatch [::editor-events/show-configure-object-form {:path [object-id]}]))}
            (for [[object-id {:keys [type]}] objects]

@@ -32,37 +32,38 @@
 (defn login-switch
   []
   (r/with-let [current-course (r/atom "spanish")]
-              (let [translation-module-url (str "/courses/" @current-course "/editor-v2")
-                    styles (get-styles)]
-                [ui/card {:style (:card styles)}
-                 [ui/card-content
-                  [ui/typography {:variant "h2"
-                                  :align   "center"
-                                  :style   (:title styles)}
-                   "Login as"]
-                  [ui/grid {:container true
-                            :style     (:main-content styles)}
-                   [ui/grid {:item true :xs 5 :style (:button-container styles)}
-                    [ui/button {:on-click #(re-frame/dispatch [::events/redirect :login])} "Teacher"]]
-                   [ui/grid {:item true :xs 2}
-                    [:div {:style (:divider styles)}]]
-                   [ui/grid {:item true :xs 5 :style (:button-container styles)}
-                    [ui/button {:on-click #(re-frame/dispatch [::events/redirect :student-login])} "Student"]]]
-                  [ui/grid {:container true}
-                   [ui/grid {:item true :xs 12 :style (:footer-row styles)}
-                    [ui/typography {:variant "subtitle1"
-                                    :inline  true
-                                    :style   (:course-label styles)}
-                     "Course"]
-                    [ui/select {:value     @current-course
-                                :on-change (fn [event]
-                                             (let [selected-course (->> event .-target .-value)]
-                                               (reset! current-course selected-course)
-                                               (re-frame/dispatch [::ie/set-current-course selected-course])))
-                                :style     (:course-selector styles)}
-                     (for [{:keys [key value text]} courses]
-                       ^{:key key}
-                       [ui/menu-item {:value value} text])]]
-                   [ui/grid {:item true :xs 12 :style (:footer-row styles)}
-                    [ui/button {:href translation-module-url}
-                     "Translation Module"]]]]])))
+    (let [translation-module-url (str "/courses/" @current-course "/editor-v2")
+          styles (get-styles)]
+      [ui/card {:style (:card styles)}
+       [ui/card-content
+        [ui/typography {:variant "h2"
+                        :align   "center"
+                        :style   (:title styles)}
+         "Login as"]
+        [ui/grid {:container true
+                  :style     (:main-content styles)}
+         [ui/grid {:item true :xs 5 :style (:button-container styles)}
+          [ui/button {:on-click #(re-frame/dispatch [::events/redirect :login])} "Teacher"]]
+         [ui/grid {:item true :xs 2}
+          [:div {:style (:divider styles)}]]
+         [ui/grid {:item true :xs 5 :style (:button-container styles)}
+          [ui/button {:on-click #(re-frame/dispatch [::events/redirect :student-login])} "Student"]]]
+        [ui/grid {:container true}
+         [ui/grid {:item true :xs 12 :style (:footer-row styles)}
+          [ui/typography {:variant "subtitle1"
+                          :inline  true
+                          :style   (:course-label styles)}
+           "Course"]
+          [ui/select {:value     @current-course
+                      :variant   "outlined"
+                      :on-change (fn [event]
+                                   (let [selected-course (->> event .-target .-value)]
+                                     (reset! current-course selected-course)
+                                     (re-frame/dispatch [::ie/set-current-course selected-course])))
+                      :style     (:course-selector styles)}
+           (for [{:keys [key value text]} courses]
+             ^{:key key}
+             [ui/menu-item {:value value} text])]]
+         [ui/grid {:item true :xs 12 :style (:footer-row styles)}
+          [ui/button {:href translation-module-url}
+           "Translation Module"]]]]])))

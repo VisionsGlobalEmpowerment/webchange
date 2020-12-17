@@ -32,6 +32,7 @@
         styles (get-styles)]
     [ui/select {:value         (or current-target "")
                 :display-empty true
+                :variant       "outlined"
                 :on-change     #(re-frame/dispatch [::dialog-form.actions/set-phrase-action-target (->> % .-target .-value)])
                 :style         (:control styles)}
      (for [{:keys [text value]} targets]

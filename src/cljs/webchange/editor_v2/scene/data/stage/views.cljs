@@ -14,6 +14,7 @@
                         :margin     "normal"}
        [ui/select {:value         (or current-stage "")
                    :display-empty true
+                   :variant       "outlined"
                    :on-change     #(re-frame/dispatch [::stage-state/select-stage (.. % -target -value)])}
         [ui/menu-item {:value "" :disabled true} "Select stage"]
         (for [{:keys [idx name]} stages]

@@ -31,6 +31,7 @@
      [ui/form-control {:full-width true
                        :margin     "normal"}
       [ui/select {:value     (or (:id current-concept) "")
+                  :variant   "outlined"
                   :on-change #(handle-concept-changed (get-concept concepts-list (.. % -target -value)))}
        (for [concept concepts-list]
          ^{:key (:id concept)}

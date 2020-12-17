@@ -1,7 +1,6 @@
-(ns webchange.editor-v2.course-table.views-row-tags
+(ns webchange.editor-v2.course-table.fields.tags.views-info
   (:require
-    [cljs-react-material-ui.reagent :as ui]
-    [webchange.editor-v2.course-table.views-row-common :refer [field-cell]]))
+    [cljs-react-material-ui.reagent :as ui]))
 
 (defn- tags-restriction
   [{:keys [tags]}]
@@ -19,17 +18,16 @@
   [:div.tags-block
    [:span.tags-title "Tags appointment:"]
    [:ul.tags-appointments
-    (for [[name range] tags]
+    (for [[name range] (sort-by :name tags)]
       ^{:key name}
       [:li
        name
        [:span.appointment-range (str "[ " (first range) " : " (last range) " ]")]])]])
 
-(defn tags
-  [{:keys [data] :as props}]
+(defn info-from
+  [{:keys [data]}]
   (let [{:keys [for-tags set-tags]} (:tags data)]
-    [field-cell (merge props
-                     {:cell-props {:class-name "tags"}})
+    [:div
      (when (some? for-tags)
        [tags-restriction {:tags for-tags}])
      (when (some? set-tags)

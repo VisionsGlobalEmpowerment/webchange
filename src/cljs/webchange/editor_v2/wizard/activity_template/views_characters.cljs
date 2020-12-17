@@ -31,6 +31,7 @@
       [ui/form-control {:full-width true}
        [ui/input-label "Character"]
        [ui/select {:value     (get @character-data :skeleton "")
+                   :variant   "outlined"
                    :on-change #(swap! character-data assoc :skeleton (-> % .-target .-value))}
         (for [animation-name animation-names]
           ^{:key animation-name}

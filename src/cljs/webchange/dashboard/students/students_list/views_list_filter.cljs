@@ -8,7 +8,7 @@
 
 (defn translate
   [path]
-  (get-in {:class {:label "Filter Classes"
+  (get-in {:class {:label     "Filter Classes"
                    :none-item "None"}}
           path))
 
@@ -26,6 +26,7 @@
       [ui/input-label (translate [:class :label])]
       [ui/select
        {:value     class
+        :variant   "outlined"
         :on-change #(on-class-changed (->> % .-target .-value))}
        [ui/menu-item {:value nil} [:em (translate [:class :none-item])]]
        (for [{:keys [id name]} classes]
@@ -57,4 +58,4 @@
     :classes          classes
     :on-class-changed #(swap! filter assoc :class-id %)
     :on-name-changed  #(swap! filter assoc :name (if (s/blank? %) nil %))
-    :style style}])
+    :style            style}])

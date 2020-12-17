@@ -57,6 +57,7 @@
                   :on-click      #(reset! open? (not @open?))
                   :on-change     #(on-change (->> % .-target .-value))
                   :style         (:control styles)
+                  :variant       "outlined"
                   :MenuProps     {:open @open?}}
        (for [{:keys [text value]} targets]
          ^{:key value}

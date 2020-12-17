@@ -95,6 +95,7 @@
       [ui/form-control {:full-width true}
        [ui/input-label "Dataset"]
        [ui/select {:value     current-dataset-id
+                   :variant   "outlined"
                    :on-change #(re-frame/dispatch [::set-lesson-set-data name (.. % -target -value)])}
         (for [{:keys [id name]} datasets]
           ^{:key id}
@@ -103,6 +104,7 @@
       [ui/form-control {:full-width true}
        [ui/input-label "Items"]
        [ui/select {:value     current-dataset-items
+                   :variant   "outlined"
                    :on-change #(re-frame/dispatch [::set-lesson-set-data name current-dataset-id (js->clj (.. % -target -value))])
                    :multiple  true}
         (for [{:keys [id name]} dataset-items]

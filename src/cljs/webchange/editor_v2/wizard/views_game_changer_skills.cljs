@@ -10,8 +10,8 @@
   []
   (merge (styles/activity)
          {:skills-list      {:padding 0}
-          :skills-list-item {:padding "8px 0"
-                             :white-space  "normal"}}))
+          :skills-list-item {:padding     "8px 0"
+                             :white-space "normal"}}))
 
 (defn- render-selected
   [{:keys [values options]}]
@@ -59,6 +59,7 @@
        [ui/input-label label]
        [ui/select {:value        (or value (if multiple? [] ""))
                    :multiple     multiple?
+                   :variant      "outlined"
                    :render-value (fn [value]
                                    (->> (fn []
                                           (let [value (js->clj value)]
@@ -103,7 +104,7 @@
                               (filter (fn [{:keys [topic]}]
                                         (some #{topic} @current-topics)))
                               (map (fn [{:keys [id name abbr]}] {:value id
-                                                            :text (str name "  (" abbr ")")}))
+                                                                 :text  (str name "  (" abbr ")")}))
                               (doall))
           handle-skills-changed (fn [skills] (swap! data assoc :skills skills))]
       (if (some? skills-data)
