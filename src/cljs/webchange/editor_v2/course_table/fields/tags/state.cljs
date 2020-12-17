@@ -2,10 +2,10 @@
   (:require
     [camel-snake-kebab.core :refer [->kebab-case]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.course-table.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.state.db :as db]
     [webchange.editor-v2.course-table.state.edit-common :as common]
-    [webchange.editor-v2.course-table.state.edit-utils :as utils]
     [webchange.editor-v2.course-table.state.selection :as selection]
     [webchange.subs :as subs]))
 
@@ -17,30 +17,16 @@
 
 (defn- activity->tags-appointment
   [activity-data]
-  (->> (:tags-by-score activity-data)
+  (->> activity-data
        (map (fn [[tag-name [score-low score-high]]]
               [tag-name {:tag        tag-name
                          :score-low  score-low
                          :score-high score-high}]))
        (into {})))
 
-(defn- course->available-tags-restriction
-  [course-data]
-  (->> (:levels course-data)
-       (map :lessons)
-       (flatten)
-       (map :activities)
-       (flatten)
-       (map :tags-by-score)
-       (remove nil?)
-       (map keys)
-       (flatten)
-       (distinct)
-       (sort)))
-
 (defn- activity->selected-tags-restriction
   [activity-data]
-  (->> (get activity-data :only [])
+  (->> activity-data
        (map keyword)
        (map (fn [tag] [tag true]))
        (into {})))
@@ -49,12 +35,11 @@
   ::init
   (fn [{:keys [db]} [_ selection component-id]]
     (let [course-data (subs/course-data db)
-          activity-data (utils/get-activity-data course-data selection)
-          tags-appointment (activity->tags-appointment activity-data)
-          available-tags-restriction (course->available-tags-restriction course-data)
-          selected-tags-restriction (activity->selected-tags-restriction activity-data)]
+          tags-appointment (-> (utils/get-activity-tags-appointment course-data selection)
+                               (activity->tags-appointment))
+          selected-tags-restriction (-> (utils/get-activity-tags-restriction course-data selection)
+                                        (activity->selected-tags-restriction))]
       {:dispatch-n (list [::reset-tags-appointment tags-appointment component-id]
-                         [::reset-available-tags-restriction available-tags-restriction component-id]
                          [::reset-selected-restriction selected-tags-restriction component-id])})))
 
 ;; Tags appointment
@@ -106,27 +91,7 @@
   ::add-restriction-tag
   (fn [{:keys [_]} [_ tag component-id]]
     (let [fixed-tag (-> tag ->kebab-case keyword)]
-      {:dispatch-n (list [::add-available-tags-restriction fixed-tag component-id]
-                         [::add-selected-restriction fixed-tag component-id])})))
-
-; available
-
-(re-frame/reg-sub
-  ::available-tags-restriction
-  (fn [db [_ component-id]]
-    (get-in db (path-to-db [:restriction :available] component-id) [])))
-
-(re-frame/reg-event-fx
-  ::reset-available-tags-restriction
-  (fn [{:keys [db]} [_ tags component-id]]
-    {:db (assoc-in db (path-to-db [:restriction :available] component-id) tags)}))
-
-(re-frame/reg-event-fx
-  ::add-available-tags-restriction
-  (fn [{:keys [db]} [_ tag component-id]]
-    {:db (update-in db (path-to-db [:restriction :available] component-id) conj tag)}))
-
-; selected
+      {:dispatch [::add-selected-restriction fixed-tag component-id]})))
 
 (defn- selected-tags-restriction
   [db component-id]
@@ -163,18 +128,16 @@
 
 (defn- update-tags-appointment
   [course-data appointments selection-data]
-  (let [path (utils/get-activity-path course-data selection-data)
-        tags-data (->> appointments
+  (let [tags-data (->> appointments
                        (map (fn [{:keys [tag score-low score-high]}]
                               [tag [score-low score-high]]))
                        (into {}))]
-    (assoc-in course-data (conj path :tags-by-score) tags-data)))
+    (utils/update-activity course-data selection-data {:tags-by-score tags-data})))
 
 (defn- update-tags-restriction
   [course-data restrictions selection-data]
-  (let [path (utils/get-activity-path course-data selection-data)
-        tags-data (keys restrictions)]
-    (assoc-in course-data (conj path :only) tags-data)))
+  (let [tags-data (keys restrictions)]
+    (utils/update-activity course-data selection-data {:only tags-data})))
 
 (re-frame/reg-event-fx
   ::save-tags

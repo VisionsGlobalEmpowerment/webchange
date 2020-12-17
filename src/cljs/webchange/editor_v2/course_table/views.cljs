@@ -5,18 +5,19 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.keyboard-control :as keyboard]
     [webchange.editor-v2.course-table.state.data :as data-state]
+    [webchange.editor-v2.course-table.state.change-data :as change-data]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
     [webchange.editor-v2.course-table.views-table-pagination :refer [pagination]]
-    [webchange.editor-v2.course-table.utils.cell-data :refer [cell->cell-data get-row-id]]
+    [webchange.editor-v2.course-table.utils.cell-data :refer [cell-data->cell-attributes cell->cell-data get-row-id]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
 (def header-data [{:id :idx :title "#" :width 1}
-                  {:id :level :title "Level" :width 1}
-                  {:id :lesson :title "Lesson" :width 1}
+                  {:id :level-idx :title "Level" :width 1}
+                  {:id :lesson-idx :title "Lesson" :width 1}
                   {:id :concepts :title "Concepts" :width 5}
                   {:id :activity :title "Activities" :width 20}
                   {:id :abbr-global :title "Global Standard Abbreviation" :width 20}
@@ -39,20 +40,20 @@
       [ui/table-cell title])]])
 
 (defn- levels-count
-  [data current-idx level-id]
+  [data current-idx level-index]
   (->> data
-       (filter (fn [{:keys [idx level]}]
+       (filter (fn [{:keys [idx level-idx]}]
                  (and (>= idx current-idx)
-                      (= level level-id))))
+                      (= level-idx level-index))))
        (count)))
 
 (defn- lessons-count
-  [data current-idx level-id lesson-id]
+  [data current-idx level-index lesson-index]
   (->> data
-       (filter (fn [{:keys [idx level lesson]}]
+       (filter (fn [{:keys [idx level-idx lesson-idx]}]
                  (and (>= idx current-idx)
-                      (= level level-id)
-                      (= lesson lesson-id))))
+                      (= level-idx level-index)
+                      (= lesson-idx lesson-index))))
        (count)))
 
 (defn- click-event->cell-data
@@ -73,23 +74,22 @@
         handle-scroll (fn [event]
                         (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                           (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
-    (into [ui/table-body {:on-click        handle-cell-click
-                          :on-wheel        handle-scroll}]
+    (into [ui/table-body {:on-click handle-cell-click
+                          :on-wheel handle-scroll}]
           (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
                  rows []
-                 current-level nil
-                 current-lesson nil
-                 counter 0]
+                 current-level-idx nil
+                 current-lesson-idx nil]
             (if (some? activity)
-              (let [{:keys [idx level lesson]} activity
+              (let [{:keys [idx level-idx lesson-idx]} activity
                     span-columns (cond-> {}
-                                         (not= level current-level) (assoc :level (levels-count data idx level))
-                                         (not= lesson current-lesson) (assoc :lesson (lessons-count data idx level lesson))
-                                         (not= lesson current-lesson) (assoc :concepts (lessons-count data idx level lesson)))
+                                         (not= level-idx current-level-idx) (assoc :level-idx (levels-count data idx level-idx))
+                                         (not= lesson-idx current-lesson-idx) (assoc :lesson-idx (lessons-count data idx level-idx lesson-idx))
+                                         (not= lesson-idx current-lesson-idx) (assoc :concepts (lessons-count data idx level-idx lesson-idx)))
                     skip-columns (cond-> {}
-                                         (= level current-level) (assoc :level true)
-                                         (= lesson current-lesson) (assoc :lesson true)
-                                         (= lesson current-lesson) (assoc :concepts true))]
+                                         (= level-idx current-level-idx) (assoc :level-idx true)
+                                         (= lesson-idx current-lesson-idx) (assoc :lesson-idx true)
+                                         (= lesson-idx current-lesson-idx) (assoc :concepts true))]
                 (recur rest-activities
                        (conj rows
                              ^{:key (get-row-id activity)}
@@ -97,9 +97,8 @@
                                             :columns      columns
                                             :span-columns span-columns
                                             :skip-columns skip-columns}])
-                       (:level activity)
-                       (:lesson activity)
-                       (inc counter)))
+                       (:level-idx activity)
+                       (:lesson-idx activity)))
               rows)))))
 
 (defn- get-element-height
@@ -129,6 +128,27 @@
             (/ content-row-height)
             (Math/ceil))))))
 
+(defn- context-menu
+  [{:keys [container]}]
+  (let [selection @(re-frame/subscribe [::selection-state/selection])
+        menu-open? @(re-frame/subscribe [::selection-state/menu-open?])
+
+        handle-close-menu #(re-frame/dispatch [::selection-state/close-context-menu])
+        handle-item-click #(re-frame/dispatch [::change-data/insert %])]
+    (when (and menu-open? (some? @container))
+      (let [query (->> (:data selection)
+                       (cell-data->cell-attributes)
+                       (map (fn [[key value]] (str "[" (clojure.core/name key) "=\"" value "\"]")))
+                       (clojure.string/join ""))
+            cell (.querySelector @container query)]
+        [ui/menu {:open          menu-open?
+                  :on-close      handle-close-menu
+                  :anchor-el     cell
+                  :anchor-origin {:horizontal "right"
+                                  :vertical   "top"}}
+         [ui/menu-item {:on-click #(handle-item-click :before)} "Insert before"]
+         [ui/menu-item {:on-click #(handle-item-click :after)} "Insert after"]]))))
+
 (defn course-table
   []
   (let [container (atom nil)
@@ -137,9 +157,10 @@
                                (reset! container el)))
         handle-key-down (fn [event]
                           (keyboard/handle-event event
-                                                 {          ;:enter           #(re-frame/dispatch [::edit-state/open-menu])
-                                                  :move-selection  #(move-selection % header-data)
-                                                  :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])}))]
+                                                 {:move-selection  #(move-selection % header-data)
+                                                  :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])
+                                                  :copy            #(re-frame/dispatch [::selection-state/save-selection])
+                                                  :paste           #(re-frame/dispatch [::selection-state/open-context-menu])}))]
     (r/create-class
       {:display-name "course-table"
 
@@ -148,7 +169,12 @@
                        (let [{:keys [course-id]} (r/props this)]
                          (re-frame/dispatch [::data-state/init course-id])
                          (when (some? @container)
-                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)]))))
+                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)]))
+
+                         ;(js/document.addEventListener "contextmenu" (fn [event]
+                         ;                                              (js/console.log "Content menu")
+                         ;                                              (.preventDefault event)))
+                         ))
 
        :component-did-update
                      (fn []
@@ -180,4 +206,5 @@
                                     :rows-skip  rows-skip
                                     :rows-count rows-count
                                     :columns    header-data}]]]
-                           [pagination {:data data}]]]))})))
+                           [pagination {:data data}]
+                           [context-menu {:container container}]]]))})))

@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.course-table.fields.skills.state
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.course-table.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.db :as db]
     [webchange.editor.events :as editor]
     [webchange.editor-v2.course-table.state.data :as data-state]
@@ -106,8 +107,8 @@
           current-value (-> (selected-skills db component-id) (keys))]
       (if-not (= initial-value current-value)
         (let [selection-data (get-in db (path-to-db [:selection-data] component-id))
-              scene-id (get-scene-id selection-data
-                                     (subs/course-data db))
+              scene-id (-> (subs/course-data db)
+                           (utils/get-activity-name selection-data))
               course-id (data-state/course-id db)]
           {:dispatch [::warehouse/update-scene-skills
                       {:course-id  course-id

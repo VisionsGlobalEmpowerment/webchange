@@ -18,7 +18,7 @@
   [:div.tags-block
    [:span.tags-title "Tags appointment:"]
    [:ul.tags-appointments
-    (for [[name range] (sort-by :name tags)]
+    (for [[name range] (sort-by first tags)]
       ^{:key name}
       [:li
        name

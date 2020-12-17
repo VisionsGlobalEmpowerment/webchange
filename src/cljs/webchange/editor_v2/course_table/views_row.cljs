@@ -19,11 +19,11 @@
 
 (defn- lesson
   [{:keys [data]}]
-  (:lesson data))
+  (:lesson-idx data))
 
 (defn- level
   [{:keys [data]}]
-  (:level data))
+  (:level-idx data))
 
 (defn- default-component
   [{:keys [field]}]
@@ -35,8 +35,8 @@
                           :margin-right "8px"}}]
      [ui/typography {:style {:color color}} (str "<" field ">")]]))
 
-(def components {:level       [level]
-                 :lesson      [lesson]
+(def components {:level-idx   [level]
+                 :lesson-idx  [lesson]
                  :idx         [index]
                  :concepts    [concepts]
                  :activity    [activities]
@@ -52,8 +52,8 @@
 
 (defn- cell-selected?
   [selection-type selection-data cell-data field]
-  (let [fields-to-check (if (some #{field} [:level :lesson :concepts])
-                          [:level :lesson :field]
+  (let [fields-to-check (if (some #{field} [:level-idx :lesson-idx :concepts])
+                          [:level-idx :lesson-idx :field]
                           (keys selection-data))]
     (and (= selection-type :cell)
          (= (select-keys selection-data fields-to-check)

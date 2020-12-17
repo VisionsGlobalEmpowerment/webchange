@@ -32,21 +32,29 @@
                 (testing "result is defined"
                   (is (sequential? data))
                   (is (not (empty? data))))
+
                 (testing "rows are indexed"
                   (doseq [[idx row] (map-indexed vector data)]
                     (is (= (inc idx) (:idx row)))))
+
                 (testing "each row has required fields"
                   (doseq [row data]
-                    (is (number? (:level row)))
-                    (is (number? (:lesson row)))
-                    (is (number? (:lesson-idx row)))))
-                (testing "rows has correct in-lesson indexes"
-                  (let [rows (->> data (filter (fn [{:keys [level lesson]}] (and (= level 1) (= lesson 1)))))]
-                    (doseq [[idx row] (map-indexed vector rows)]
-                      (is (= (:lesson-idx row) idx))))
-                  (let [rows (->> data (filter (fn [{:keys [level lesson]}] (and (= level 2) (= lesson 2)))))]
-                    (doseq [[idx row] (map-indexed vector rows)]
-                      (is (= (:lesson-idx row) idx)))))
+                    (is (number? (:level-idx row)))
+                    (is (number? (:lesson-idx row)))
+                    (is (number? (:activity-idx row)))))
+
+                (testing "rows has correct level indexes"
+                  (let [level-indexes (map :level-idx data)]
+                    (is (= level-indexes [0 0 1 1 1]))))
+
+                (testing "rows has correct lesson indexes"
+                  (let [lesson-indexes (map :lesson-idx data)]
+                    (is (= lesson-indexes [0 0 0 0 1]))))
+
+                (testing "rows has correct activity indexes"
+                  (let [activity-indexes (map :activity-idx data)]
+                    (is (= activity-indexes [0 1 0 1 0]))))
+
                 (testing "scene-1 has defined skills"
                   (let [scene-1-rows (filter (fn [{:keys [activity]}] (= activity "scene-1")) data)]
                     (is (not (empty? scene-1-rows)))
@@ -55,44 +63,46 @@
                       (doseq [skill (:skills row)]
                         (is (string? (:name skill)))
                         (is (string? (:abbr skill)))))))
+
                 (testing "scene-2 has empty skills"
                   (let [scene-2-rows (filter (fn [{:keys [activity]}] (= activity "scene-2")) data)]
                     (is (not (empty? scene-2-rows)))
                     (doseq [row scene-2-rows]
                       (is (sequential? (:skills row)))
                       (is (empty? (:skills row))))))
-                (testing "lesson set items data data is defined"
-                  (let [lesson-sets (->> data (filter (fn [{:keys [lesson]}] (= lesson 1))) first :lesson-sets)]
+
+                (testing "lesson set items data is defined"
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx]}] (and (= level-idx 0) (= lesson-idx 0)))
+                        lesson-sets (->> data (filter target-filter) first :lesson-sets)]
                     (is (= lesson-sets {:concepts {:id    382 :name "ls1" :dataset-id 92
                                                    :items [{:id 2882 :name "a" :dataset-id 92}
                                                            {:id 2883 :name "b" :dataset-id 92}]}})))
-                  (let [lesson-sets (->> data (filter (fn [{:keys [lesson]}] (= lesson 2))) first :lesson-sets)]
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx]}] (and (= level-idx 1) (= lesson-idx 0)))
+                        lesson-sets (->> data (filter target-filter) first :lesson-sets)]
                     (is (= lesson-sets {:current-concept {:id    382 :name "ls2" :dataset-id 92
                                                           :items [{:id 2883 :name "b" :dataset-id 92}
                                                                   {:id 2884 :name "c" :dataset-id 92}]}
                                         :all-concepts    nil})))
-                  (let [lesson-sets (->> data (filter (fn [{:keys [lesson]}] (= lesson 3))) first :lesson-sets)]
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx]}] (and (= level-idx 1) (= lesson-idx 1)))
+                        lesson-sets (->> data (filter target-filter) first :lesson-sets)]
                     (is (= lesson-sets {:assessment-1 {:id    382 :name "assessment1" :dataset-id 92
                                                        :items [{:id 2882 :name "a" :dataset-id 92}
                                                                {:id 2883 :name "b" :dataset-id 92}
                                                                {:id 2884 :name "c" :dataset-id 92}]}}))))
+
                 (testing "set tags are defined"
-                  (let [{:keys [tags]} (->> data
-                                            (filter (fn [{:keys [activity lesson]}]
-                                                      (and (= lesson 1) (= activity "scene-2"))))
-                                            first)]
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx activity-idx]}] (and (= level-idx 0) (= lesson-idx 0) (= activity-idx 1)))
+                        tags (->> data (filter target-filter) first :tags)]
                     (is (some? tags))
                     (is (= (:set-tags tags) {:intermediate [0 75], :advanced [75 101]}))))
+
                 (testing "tags restrictions are defined"
-                  (let [{:keys [tags]} (->> data
-                                            (filter (fn [{:keys [activity lesson]}]
-                                                      (and (= lesson 2) (= activity "scene-1"))))
-                                            first)]
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx activity-idx]}] (and (= level-idx 1) (= lesson-idx 0) (= activity-idx 0)))
+                        tags (->> data (filter target-filter) first :tags)]
                     (is (some? tags))
                     (is (= (:for-tags tags) [:beginner]))))
+
                 (testing "rows without tags are correct"
-                  (let [{:keys [tags]} (->> data
-                                            (filter (fn [{:keys [activity lesson]}]
-                                                      (and (= lesson 2) (= activity "scene-2"))))
-                                            first)]
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx activity-idx]}] (and (= level-idx 1) (= lesson-idx 0) (= activity-idx 1)))
+                        tags (->> data (filter target-filter) first :tags)]
                     (is (= tags {}))))))))
