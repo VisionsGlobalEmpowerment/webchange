@@ -121,7 +121,6 @@
         image-mask (create-sprite-mask props)
         image-container (create-sprite-container props)
         wrapped-image (wrap type object-name image-container image)]
-
     (.addChild image-container image)
     (.addChild parent image-container)
 

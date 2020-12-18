@@ -74,6 +74,8 @@
                              :set-path       [:path]
                              :set-fill       [:fill]
                              :set-highlight  [:highlight]
+                             :set-draggable [:draggable]
+                             :set-children  [:children]
                              :set-font-size  [:font-size]}
           execute-actions (->> available-actions
                                (map (fn [[action params]] [action (select-keys filtered-state params)]))
@@ -84,13 +86,17 @@
         (logger/warn (str "[Set object state] Not-processed-params for <" object-name "> object:") (clj->js not-handled-params)))
       {:dispatch [::change-scene-object object-name execute-actions]})))
 
+(defn- get-object-name
+  [db object-name]
+  (or (get-scene-object db object-name)
+               (get-scene-group db object-name)))
+
 (re-frame/reg-event-fx
   ::change-scene-object
   (fn [{:keys [db]} [_ object-name actions]]
-    (let [wrappers (or (get-scene-object db object-name)
-                       (get-scene-group db object-name))]
+    (let [wrappers (get-object-name db object-name)]
       (->> actions
-           (map (fn [[action params]] [action [wrappers params]]))
+           (map (fn [[action params]] [action [wrappers params db]]))
            (into {})))))
 
 (defn- apply-to-wrapper
@@ -148,6 +154,26 @@
   :set-highlight
   (fn [[object-wrapper {:keys [highlight options]}]]
     (apply-to-wrapper w/set-highlight object-wrapper highlight options)))
+
+(re-frame/reg-fx
+  :set-draggable
+  (fn [[object-wrapper {:keys [draggable options]}]]
+    (apply-to-wrapper w/set-draggable object-wrapper draggable options)))
+
+(re-frame/reg-fx
+  :set-children
+  (fn [[object-wrapper {:keys [children options]} db]]
+    (let [object (:object object-wrapper)
+          parent (.-parent (.-parent object))
+          children (vec (array-seq (.-children object)))]
+      (doseq [child children]
+        (.addChild parent child))
+
+      (doseq [child children]
+        (.removeChild object child)))
+
+    (doseq [child children]
+      (apply-to-wrapper w/set-parent (get-object-name db (keyword child)) object-wrapper  options))))
 
 (re-frame/reg-fx
   :set-opacity
