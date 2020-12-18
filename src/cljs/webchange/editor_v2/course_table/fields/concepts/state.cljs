@@ -34,7 +34,7 @@
     (let [course-data (subs/course-data db)
           current-lesson-names (utils/get-lesson-sets-names course-data selection)
           current-value (get-current-value db current-lesson-names)
-          selection-data (-> db selection/selection :data)]
+          selection-data (selection/selection db)]
       {:db       (-> db
                      (assoc-in (path-to-db [:initial-value] component-id) current-value)
                      (assoc-in (path-to-db [:selection-data] component-id) selection-data)

@@ -17,8 +17,8 @@
 
 (re-frame/reg-event-fx
   ::set-selection
-  (fn [{:keys [db]} [_ type data]]
-    {:db (assoc-in db (path-to-db [:current-selection]) {:type type :data data})}))
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc-in db (path-to-db [:current-selection]) data)}))
 
 (re-frame/reg-event-fx
   ::reset-selection
@@ -29,13 +29,15 @@
   [db]
   (get-in db (path-to-db [:saved-selection])))
 
+(re-frame/reg-sub ::saved-selection saved-selection)
+
 (re-frame/reg-event-fx
   ::save-selection
   (fn [{:keys [db]} [_]]
     (let [current-selection (selection db)]
       {:db (assoc-in db (path-to-db [:saved-selection]) current-selection)})))
 
-;;
+;; Context menu
 
 (re-frame/reg-sub
   ::menu-open?

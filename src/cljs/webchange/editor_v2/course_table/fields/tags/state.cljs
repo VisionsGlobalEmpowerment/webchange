@@ -143,7 +143,7 @@
   ::save-tags
   (fn [{:keys [db]} [_ component-id]]
     (let [course-id (data-state/course-id db)
-          selection-data (-> db selection/selection :data)
+          selection-data (selection/selection db)
           appointments (tags-appointment db component-id)
           restrictions (selected-tags-restriction db component-id)
           course-data (-> (subs/course-data db)

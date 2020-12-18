@@ -4,6 +4,7 @@
 
 (defn- get-level-path
   [{:keys [level-idx]}]
+  {:pre [(number? level-idx)]}
   [:levels level-idx])
 
 (defn- get-level
@@ -15,6 +16,7 @@
 
 (defn- get-lesson-path
   [{:keys [lesson-idx] :as selection}]
+  {:pre [(number? lesson-idx)]}
   (-> (get-level-path selection)
       (concat [:lessons lesson-idx])))
 
@@ -24,14 +26,14 @@
        (get-in course-data)))
 
 (defn add-lesson
-  [course-data level-index]
+  [course-data {:keys [level-index position]} ]
   ;(let [level (get-level course-data level-index)
   ;      lesson-data {:name        "New-Lesson",
   ;                   :type        "lesson",
   ;                   :activities  [{}],
   ;                   :lesson-sets {}}]
   ;  (update-in course-data (concat (get-level-path level-index) [:lessons]) conj lesson-data))
-  )
+  course-data)
 
 (defn update-lesson
   [course-data selection lesson-data-patch]
@@ -55,6 +57,7 @@
 
 (defn- get-activity-path
   [{:keys [activity-idx] :as selection}]
+  {:pre [(number? activity-idx)]}
   (-> (get-lesson-path selection)
       (concat [:activities activity-idx])))
 

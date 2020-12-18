@@ -5,12 +5,12 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.keyboard-control :as keyboard]
     [webchange.editor-v2.course-table.state.data :as data-state]
-    [webchange.editor-v2.course-table.state.change-data :as change-data]
     [webchange.editor-v2.course-table.state.pagination :as pagination-state]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
+    [webchange.editor-v2.course-table.views-context-menu :refer [context-menu]]
     [webchange.editor-v2.course-table.views-row :refer [activity-row]]
     [webchange.editor-v2.course-table.views-table-pagination :refer [pagination]]
-    [webchange.editor-v2.course-table.utils.cell-data :refer [cell-data->cell-attributes cell->cell-data get-row-id]]
+    [webchange.editor-v2.course-table.utils.cell-data :refer [get-row-id click-event->cell-data]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
@@ -56,21 +56,13 @@
                       (= lesson-idx lesson-index))))
        (count)))
 
-(defn- click-event->cell-data
-  [event]
-  (let [target (if (some? (.-nativeEvent event))
-                 (.. event -nativeEvent -target)
-                 (.-target event))
-        cell (.closest target "td")]
-    (when (some? cell)
-      (cell->cell-data cell))))
-
 (defn- body
   [{:keys [data columns rows-skip rows-count]}]
   (let [handle-cell-click (fn [event]
                             (let [data (click-event->cell-data event)]
                               (when (some? data)
-                                (re-frame/dispatch [::selection-state/set-selection :cell data]))))
+                                (re-frame/dispatch [::selection-state/close-context-menu])
+                                (re-frame/dispatch [::selection-state/set-selection data]))))
         handle-scroll (fn [event]
                         (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                           (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
@@ -128,27 +120,6 @@
             (/ content-row-height)
             (Math/ceil))))))
 
-(defn- context-menu
-  [{:keys [container]}]
-  (let [selection @(re-frame/subscribe [::selection-state/selection])
-        menu-open? @(re-frame/subscribe [::selection-state/menu-open?])
-
-        handle-close-menu #(re-frame/dispatch [::selection-state/close-context-menu])
-        handle-item-click #(re-frame/dispatch [::change-data/insert %])]
-    (when (and menu-open? (some? @container))
-      (let [query (->> (:data selection)
-                       (cell-data->cell-attributes)
-                       (map (fn [[key value]] (str "[" (clojure.core/name key) "=\"" value "\"]")))
-                       (clojure.string/join ""))
-            cell (.querySelector @container query)]
-        [ui/menu {:open          menu-open?
-                  :on-close      handle-close-menu
-                  :anchor-el     cell
-                  :anchor-origin {:horizontal "right"
-                                  :vertical   "top"}}
-         [ui/menu-item {:on-click #(handle-item-click :before)} "Insert before"]
-         [ui/menu-item {:on-click #(handle-item-click :after)} "Insert after"]]))))
-
 (defn course-table
   []
   (let [container (atom nil)
@@ -158,9 +129,7 @@
         handle-key-down (fn [event]
                           (keyboard/handle-event event
                                                  {:move-selection  #(move-selection % header-data)
-                                                  :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])
-                                                  :copy            #(re-frame/dispatch [::selection-state/save-selection])
-                                                  :paste           #(re-frame/dispatch [::selection-state/open-context-menu])}))]
+                                                  :reset-selection #(re-frame/dispatch [::selection-state/reset-selection])}))]
     (r/create-class
       {:display-name "course-table"
 
@@ -169,12 +138,7 @@
                        (let [{:keys [course-id]} (r/props this)]
                          (re-frame/dispatch [::data-state/init course-id])
                          (when (some? @container)
-                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)]))
-
-                         ;(js/document.addEventListener "contextmenu" (fn [event]
-                         ;                                              (js/console.log "Content menu")
-                         ;                                              (.preventDefault event)))
-                         ))
+                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)]))))
 
        :component-did-update
                      (fn []

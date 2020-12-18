@@ -51,11 +51,11 @@
     default-component))
 
 (defn- cell-selected?
-  [selection-type selection-data cell-data field]
+  [selection-data cell-data field]
   (let [fields-to-check (if (some #{field} [:level-idx :lesson-idx :concepts])
                           [:level-idx :lesson-idx :field]
                           (keys selection-data))]
-    (and (= selection-type :cell)
+    (and (some? selection-data)
          (= (select-keys selection-data fields-to-check)
             (select-keys cell-data fields-to-check)))))
 
@@ -68,7 +68,7 @@
   (let [selection @(re-frame/subscribe [::selection-state/selection])
         cell-data (activity->cell-data data field)
         spanned? (some? span)
-        selected? (cell-selected? (:type selection) (:data selection) cell-data field)
+        selected? (cell-selected? selection cell-data field)
         editable? (field-editable? (:field cell-data))
         [component component-props] (get-component field)]
     [ui/table-cell (cond-> (merge (:cell-props props)

@@ -34,6 +34,15 @@
                 [(data-prefix field) value]))
          (into {}))))
 
+(defn click-event->cell-data
+  [event]
+  (let [target (if (some? (.-nativeEvent event))
+                 (.. event -nativeEvent -target)
+                 (.-target event))
+        cell (.closest target "td")]
+    (when (some? cell)
+      (cell->cell-data cell))))
+
 (defn get-row-id
   [{:keys [level-idx lesson-idx activity-idx]}]
   (str level-idx "-" lesson-idx "-" activity-idx))

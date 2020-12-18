@@ -21,7 +21,7 @@
     (let [scene-skills (->> (editor/scene-skills db activity)
                             (map (fn [{:keys [id]}] [id true]))
                             (into {}))
-          selection-data (-> db selection/selection :data)]
+          selection-data (selection/selection db)]
       {:db         (-> db
                        (assoc-in (path-to-db [:initial-value] component-id) (keys scene-skills))
                        (assoc-in (path-to-db [:selection-data] component-id) selection-data))
