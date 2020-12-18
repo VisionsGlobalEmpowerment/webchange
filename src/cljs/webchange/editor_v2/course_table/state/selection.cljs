@@ -37,6 +37,11 @@
     (let [current-selection (selection db)]
       {:db (assoc-in db (path-to-db [:saved-selection]) current-selection)})))
 
+(re-frame/reg-event-fx
+  ::reset-saved-selection
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db (path-to-db [:saved-selection]) nil)}))
+
 ;; Context menu
 
 (re-frame/reg-sub

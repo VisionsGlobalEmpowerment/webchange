@@ -44,6 +44,7 @@
   [relative-position]
   (let [current-selection @(re-frame/subscribe [::selection-state/selection])
         saved-selection @(re-frame/subscribe [::selection-state/saved-selection])]
+    (re-frame/dispatch [::selection-state/reset-saved-selection])
     (re-frame/dispatch [::course-data.events/copy-lesson {:selection-from    saved-selection
                                                           :selection-to      current-selection
                                                           :relative-position relative-position}])))
@@ -80,12 +81,7 @@
                                           :saved-selection   saved-selection})]
           (when (and (some? cell)
                      (not (empty? menu-items)))
-            (print "menu-items" menu-items)
             [menu {:open?    menu-open?
                    :on-close handle-close-menu
                    :anchor   cell
                    :items    menu-items}]))))))
-
-; handle-item-click #(re-frame/dispatch [::change-data/insert %])
-; :copy             #(re-frame/dispatch [::selection-state/save-selection])
-; :paste            #(re-frame/dispatch [::selection-state/open-context-menu])

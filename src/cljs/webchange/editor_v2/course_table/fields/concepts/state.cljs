@@ -17,8 +17,7 @@
 
 (defn- lesson-set-name->lesson-set-items
   [lesson-set-name db]
-  (-> (interpreter.subs/lesson-sets-data db [lesson-set-name])
-      (first)
+  (-> (interpreter.subs/lesson-set-data db lesson-set-name)
       (get-in [:item-ids])))
 
 (defn- get-current-value

@@ -1,5 +1,10 @@
 (ns webchange.editor-v2.course-table.course-data-utils.utils)
 
+(defn- insert-to-list
+  [list index item]
+  (let [[before after] (split-at index list)]
+    (vec (concat before [item] after))))
+
 ;; Levels
 
 (defn- get-level-path
@@ -12,28 +17,40 @@
   (->> (get-level-path selection)
        (get-in course-data)))
 
+(defn get-lesson-sets-scheme
+  ([course-data selection]
+   (get-lesson-sets-scheme course-data selection nil))
+  ([course-data selection type]
+   {:pre [(number? (:level-idx selection))]}
+   (let [level-data (get-level course-data selection)]
+     (cond-> (:scheme level-data)
+             (some? type) (get-in [type :lesson-sets])))))
+
+(defn- update-level
+  [course-data selection level-data-patch]
+  (update-in course-data (get-level-path selection) merge level-data-patch))
+
 ;; Lessons
 
 (defn- get-lesson-path
   [{:keys [lesson-idx] :as selection}]
-  {:pre [(number? lesson-idx)]}
+  {:pre [(number? (:lesson-idx selection))
+         (number? (:level-idx selection))]}
   (-> (get-level-path selection)
       (concat [:lessons lesson-idx])))
 
-(defn- get-lesson
+(defn get-lesson
   [course-data selection]
   (->> (get-lesson-path selection)
        (get-in course-data)))
 
 (defn add-lesson
-  [course-data {:keys [level-index position]} ]
-  ;(let [level (get-level course-data level-index)
-  ;      lesson-data {:name        "New-Lesson",
-  ;                   :type        "lesson",
-  ;                   :activities  [{}],
-  ;                   :lesson-sets {}}]
-  ;  (update-in course-data (concat (get-level-path level-index) [:lessons]) conj lesson-data))
-  course-data)
+  [course-data {:keys [level-index position lesson-data]}]
+  (let [level-selection {:level-idx level-index}
+        updated-lessons (-> (get-level course-data level-selection)
+                            (get :lessons)
+                            (insert-to-list position lesson-data))]
+    (update-level course-data level-selection {:lessons updated-lessons})))
 
 (defn update-lesson
   [course-data selection lesson-data-patch]
@@ -43,21 +60,22 @@
 
 (defn get-lesson-sets-names
   [course-data selection]
-  (let [level-data (get-level course-data selection)
-        lesson-data (get-lesson course-data selection)]
-    (let [lesson-type (-> (:type lesson-data) (keyword))
-          scheme (->> (get-in level-data [:scheme lesson-type :lesson-sets])
-                      (map (fn [name] [(keyword name) nil]))
-                      (into {}))]
-      (-> scheme
-          (merge (:lesson-sets lesson-data))
-          (select-keys (keys scheme))))))
+  (let [lesson-data (get-lesson course-data selection)
+        lesson-type (-> (:type lesson-data) (keyword))
+        scheme (->> (get-lesson-sets-scheme course-data selection lesson-type)
+                    (map (fn [name] [(keyword name) nil]))
+                    (into {}))]
+    (-> scheme
+        (merge (:lesson-sets lesson-data))
+        (select-keys (keys scheme)))))
 
 ;; Activities
 
 (defn- get-activity-path
   [{:keys [activity-idx] :as selection}]
-  {:pre [(number? activity-idx)]}
+  {:pre [(number? (:activity-idx selection))
+         (number? (:lesson-idx selection))
+         (number? (:level-idx selection))]}
   (-> (get-lesson-path selection)
       (concat [:activities activity-idx])))
 
