@@ -16,6 +16,11 @@
                                       (if (and (not highlight) highlight-filter-set) (f/set-filter sprite-object "" {}))
                                       (if (and highlight (not highlight-filter-set))
                                           (f/set-filter sprite-object "glow" {}))))
+                   :set-draggable (fn [draggable]
+                                    (doto container
+                                      (set! -interactive draggable)))
+                   :set-parent (fn [parent]
+                                 (.addChild (:object parent) container))
                    :set-src       (fn [src]
                                     (let [resource (resources/get-resource src)]
                                       (when (nil? resource)

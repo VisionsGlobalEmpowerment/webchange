@@ -4,6 +4,7 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [webchange.common.events :as e]
+    [webchange.logger :as logger]
     [webchange.state.lessons.subs :as lessons]
     [webchange.interpreter.variables.core :as core]))
 
@@ -19,6 +20,7 @@
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :calc ::execute-calc)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
+(e/reg-simple-executor :set-variable-list ::execute-set-variable-list)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
 (e/reg-simple-executor :clear-vars ::execute-clear-vars)
@@ -38,6 +40,23 @@
      :var-name 'answer-clickable'
      :var-value false}"
     (core/set-variable! var-name var-value)
+    {:dispatch (e/success-event action)}))
+
+(re-frame/reg-event-fx
+  ::execute-set-variable-list
+  (fn [{:keys [db]} [_ {:keys [var-names values] :as action}]]
+    "Execute `set-variable-list` action - allow to set value list to corresponding variables.
+
+    Action params:
+    :var-names - variable names to set.
+    :values - values to set.
+
+    Example:
+    {:type     'set-variable-list'
+     :values   [false false]
+     :var-names ['var1' [var2]}]\n                                                               }"
+    (doall (map-indexed (fn [idx var-name]
+                          (core/set-variable! var-name (get values idx))) var-names))
     {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
@@ -256,7 +275,7 @@
             :<= (<= test value)
             :>= (>= test value))
         {:dispatch [::e/execute-action (cond-action db action success)]}
-        {:dispatch [::e/execute-action (cond-action db action fail)]}))))
+        (if fail {:dispatch [::e/execute-action (cond-action db action fail)]})))))
 
 
 (re-frame/reg-event-fx

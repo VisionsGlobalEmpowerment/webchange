@@ -149,8 +149,12 @@
 (defn from-template
   [template value]
   (if template
-    (clojure.string/replace template "%" value)
-    value))
+    (if (vector? value)
+      (vec (map (fn [val]
+             (clojure.string/replace template "%" val)) value))
+      (clojure.string/replace template "%" value))
+      value)
+  )
 
 (defn with-var-property
   []
@@ -269,8 +273,8 @@
   ::execute-action
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-    (execute-action db action)
-    {}))
+             (execute-action db action)
+             {}))
 
 (defn remove-tag
   [flow tag]
@@ -444,18 +448,18 @@
   ::execute-sequence
   [event-as-action with-vars]
   (fn-traced [{:keys [db]} action]
-    "Execute `sequence` action - run a sequence of actions defined by their names.
+             "Execute `sequence` action - run a sequence of actions defined by their names.
 
-    Action params:
-    :data - actions names vector.
+             Action params:
+             :data - actions names vector.
 
-    Example:
-    {:type        'sequence',
-     :data        ['start-activity' 'clear-instruction' 'reset-tools' 'init-current-tool']}"
-    (let [data (->> (:data action)
-                    (map #(get-action % db action))
-                    (into []))]
-      {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
+             Example:
+             {:type        'sequence',
+              :data        ['start-activity' 'clear-instruction' 'reset-tools' 'init-current-tool']}"
+             (let [data (->> (:data action)
+                             (map #(get-action % db action))
+                             (into []))]
+               {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
 (defn execute-sequence-data!
   [db action]
@@ -492,17 +496,17 @@
   ::execute-sequence-data
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-    "Execute `sequence-data` action - run a sequence of actions defined by their data.
+             "Execute `sequence-data` action - run a sequence of actions defined by their data.
 
-    Action params:
-    :data - actions data vector.
+             Action params:
+             :data - actions data vector.
 
-    Example:
-    {:type 'sequence-data',
-     :data [{:type 'animation', :id 'volley_call', :target 'vera'}
-            {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
-    (execute-sequence-data! db action)
-    {}))
+             Example:
+             {:type 'sequence-data',
+              :data [{:type 'animation', :id 'volley_call', :target 'vera'}
+                     {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
+             (execute-sequence-data! db action)
+             {}))
 
 (defn execute-parallel!
   [db action]
@@ -532,17 +536,17 @@
   ::execute-parallel
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-    "Execute `parallel` action - run in parallel several actions defined by their data.
+             "Execute `parallel` action - run in parallel several actions defined by their data.
 
-    Action params:
-    :data - actions data vector.
+             Action params:
+             :data - actions data vector.
 
-    Example:
-    {:type 'parallel',
-     :data [{:type 'state', :id 'hidden', :target 'letter-trace'}
-            {:type 'state', :id 'hidden', :target 'letter-tutorial-path'}]}"
-    (execute-parallel! db action)
-    {}))
+             Example:
+             {:type 'parallel',
+              :data [{:type 'state', :id 'hidden', :target 'letter-trace'}
+                     {:type 'state', :id 'hidden', :target 'letter-tutorial-path'}]}"
+             (execute-parallel! db action)
+             {}))
 
 (defn execute-callback!
   [db {:keys [callback] :as action}]

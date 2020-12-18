@@ -23,6 +23,7 @@
 (ce/reg-simple-executor :play-video ::execute-play-video)
 (ce/reg-simple-executor :path-animation ::execute-path-animation)
 (ce/reg-simple-executor :state ::execute-state)
+(ce/reg-simple-executor :mass-state ::execute-mass-state)
 (ce/reg-simple-executor :set-attribute ::execute-set-attribute)
 (ce/reg-simple-executor :add-alias ::execute-add-alias)
 (ce/reg-simple-executor :empty ::execute-empty)
@@ -43,6 +44,7 @@
 (ce/reg-simple-executor :placeholder-audio ::execute-placeholder-audio)
 (ce/reg-simple-executor :test-transitions-collide ::execute-test-transitions-collide)
 (ce/reg-simple-executor :test-transition-and-pointer-collide ::execute-test-transition-and-pointer-collide)
+(ce/reg-simple-executor :test-transitions-and-pointer-collide ::execute-test-transitions-and-pointer-collide)
 (ce/reg-simple-executor :start-activity ::execute-start-activity)
 (ce/reg-simple-executor :stop-activity ::execute-stop-activity)
 (ce/reg-simple-executor :finish-activity ::execute-finish-activity)
@@ -552,6 +554,22 @@
     (let [scene-id (:current-scene db)]
       {:db       (assoc-in db [:scenes scene-id :objects (keyword target) :states-aliases (keyword alias)] state)
        :dispatch (ce/success-event action)})))
+
+(re-frame/reg-event-fx
+  ::execute-mass-state
+  (fn [{:keys [db]} [_ {:keys [targets] :as action}]]
+    "Execute `state` action - apply component state.
+
+    Action params:
+    :target - component name.
+    :id - state name.
+
+    Example:
+    {:type   'state',
+     :target 'bubble-1',
+     :id     'hidden'}"
+    (let [actions (map (fn [target] [::execute-state (assoc action :target target)]) targets)]
+      {:dispatch-n actions})))
 
 (re-frame/reg-event-fx
   ::execute-state
@@ -1265,6 +1283,32 @@
         {:dispatch-n (list [::ce/execute-action success] (ce/success-event action))}
         {:dispatch-n (list [::ce/execute-action fail] (ce/success-event action))}))))
 
+
+(re-frame/reg-event-fx
+  ::execute-test-transitions-and-pointer-collide
+  (fn [{:keys [db]} [_ {:keys [transitions success fail] :as action}]]
+    "Execute `transitions-and-pointer-collide` action - if mouse and component intersect.
+
+    Action params:
+    :success - name of action to call if components intersect.
+    :fail - name of action to call if components don't intersect.
+    :transitions - transitions name to check collide.
+
+    Example:
+    {:type        'test-transitions-and-pointer-collide',
+     :success     'highlight',
+     :fail        'unhighlight',
+     :transition ['transition-1' 'transition-2' 'transition-3']}]}"
+    (let [transition-wrappers (into {} (map (fn [transition] [transition (->> transition keyword (scene/get-scene-object db))])  transitions))
+          success (ce/get-action success db action)
+          fail (ce/get-action fail db action)
+          actions (doall (map (fn [[transition transition-wrapper]]
+                         (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
+                           [::ce/execute-action (assoc success :params {:transition transition})]
+                           [::ce/execute-action (assoc fail :params {:transition transition})]
+                         )) transition-wrappers))]
+      {:dispatch-n (vec (conj actions (ce/success-event action)))})))
+
 (re-frame/reg-event-fx
   ::execute-text-animation
   (fn [{:keys [db]} [_ action]]
@@ -1426,7 +1470,9 @@
      :id       'reminder'
      :interval 17000
      :action   'show-click-reminder'}"
-    (let [interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action (ce/get-action action db)])) interval)]
+    (let [scene-action (-> (ce/get-action action db)
+                           (assoc :params (:params main-action)))
+          interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action scene-action])) interval)]
       {:dispatch-n (list [::ce/execute-register-timer {:name id
                                                        :id   interval-id
                                                        :type "interval"}]
