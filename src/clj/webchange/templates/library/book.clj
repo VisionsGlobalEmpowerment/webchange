@@ -7,6 +7,10 @@
         :name        "book"
         :tags        ["Book Creator"]
         :description "Simple book"
+        :actions {:add-page {:title "Add page",
+                             :options  {:pages {:label "Pages"
+                                                   :type  "pages"
+                                                   :max   10}}}}
         :options     {:title {:label "Title"
                               :type  "string"}
                       :pages {:label "Pages"
@@ -62,8 +66,13 @@
                                                 {:type "action" :id "dialog-1-title"}]}}
         :triggers
                        {:start {:on "start", :action "intro"}}
-        :metadata      {:stages [{:name    "Title"
-                                  :objects ["background" "next-page-arrow" "group-0"]}]}})
+        :metadata      {
+                        :history []
+                        :stages [{:name    "Title"
+                                  :objects ["background" "next-page-arrow" "group-0"]}]
+                        :pages-counter 0}
+
+        })
 
 (defn- group-name
   [idx]
@@ -132,15 +141,16 @@
 
 (defn- add-pages
   [t pages]
-  (let [page-container (->> pages
-                            (map-indexed (fn [idx p] (create-page (inc idx) p)))
+  (let [pages-counter (get-in t [:metadata :pages-counter])
+        page-container (->> pages
+                            (map-indexed (fn [idx p] (create-page (+ pages-counter (inc idx)) p)))
                             (reduce merge))
         dialog-container (->> pages
-                              (map-indexed (fn [idx p] (create-page-dialog (inc idx) p)))
+                              (map-indexed (fn [idx p] (create-page-dialog (+ pages-counter (inc idx)) p)))
                               (reduce merge))
         assets (map create-asset pages)
-        group-names (->> (count pages) (range) (map inc) (map group-name) (into []))
-        stages (->> (count pages) (range) (map inc) (map create-page-stage) (into []))]
+        group-names (->> (+ pages-counter (count pages)) (range pages-counter) (map inc) (map group-name) (into []))
+        stages (->> (+ pages-counter (count pages)) (range pages-counter) (map inc) (map create-page-stage) (into []))]
     (-> t
         (update :assets concat assets)
         (update :assets vec)
@@ -148,7 +158,9 @@
         (update :scene-objects conj group-names)
         (update :actions merge dialog-container)
         (update-in [:metadata :stages] concat stages)
-        (update-in [:metadata :stages] vec))))
+        (update-in [:metadata :stages] vec)
+        (update-in [:metadata :pages-counter] + (count pages)
+                   ))))
 
 (defn- add-title
   [t title]
@@ -157,11 +169,19 @@
       (assoc-in [:objects :title :chunks] (text->chunks title))
       (assoc-in [:actions :dialog-1-title :data 0 :data 1 :phrase-text] title)))
 
+(defn fu
+  [old-data args]
+  (-> old-data
+      (add-pages (:pages args))
+      (update-in [:metadata :history] conj {:type :update :args args})))
+
 (defn f
   [args]
   (-> t
       (add-title (:title args))
-      (add-pages (:pages args))))
+      (add-pages (:pages args))
+      (assoc-in [:metadata :actions] (:actions m))
+      (assoc-in [:metadata :history] [{:type :create :args args}])))
 
 (core/register-template
-  (:id m) m f)
+  (:id m) m f fu)

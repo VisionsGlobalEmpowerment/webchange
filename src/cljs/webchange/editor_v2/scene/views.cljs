@@ -8,6 +8,7 @@
     [webchange.editor-v2.scene.views-canvas :refer [scene-canvas]]
     [webchange.editor-v2.scene.views-data :refer [data]]
     [webchange.editor-v2.state :as state]
+    [webchange.editor-v2.scene.action.views :as action-views]
     [webchange.subs :as subs]))
 
 (defn- get-styles
@@ -25,18 +26,20 @@
                      :justify-content "center"}})
 
 (defn scene-translate
-  []
+  [course-id]
   (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])]
-    (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
-          fullscreen? @(re-frame/subscribe [::state/diagram-fullscreen?])
-          styles (get-styles)]
-      [:div {:style (:main-container styles)}
-       [:div {:style (merge (:top-panel styles)
-                            (if fullscreen? {:display "none"} {}))}
-        [:div {:style (:data-container styles)}
-         [data]]
-        [:div {:style (:scene-container styles)}
-         [scene-canvas]]]
-       [:div {:style {:margin-bottom "16px"}}
-        [translation-steps/fill-dialogs]]
-       [dialogs-diagram {:scene-data scene-data}]])))
+              (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
+                    fullscreen? @(re-frame/subscribe [::state/diagram-fullscreen?])
+                    styles (get-styles)]
+                [:div {:style (:main-container styles)}
+                 [:div {:style (merge (:top-panel styles)
+                                      (if fullscreen? {:display "none"} {}))}
+                  [:div {:style (:data-container styles)}
+                   [data]
+                   [:div [action-views/actions {:scene-data scene-data}]]]
+                  [:div {:style (:scene-container styles)}
+                   [scene-canvas]]]
+                 [:div {:style {:margin-bottom "16px"}}
+                  [translation-steps/fill-dialogs]]
+                 [dialogs-diagram {:scene-data scene-data}]
+                 [action-views/action-modal course-id]])))

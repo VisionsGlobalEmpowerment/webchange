@@ -10,6 +10,7 @@
                        :name                         s/Str
                        :description                  s/Str
                        :tags                         [s/Str]
+                       (s/optional-key :actions)     (s/maybe s/Any)
                        (s/optional-key :options)     (s/maybe s/Any)
                        (s/optional-key :fields)      (s/maybe s/Any)
                        (s/optional-key :lesson-sets) (s/maybe s/Any)})

@@ -43,4 +43,5 @@
   [layout {:breadcrumbs [{:text     "Course"
                           :on-click #(redirect-to :course-editor-v2 :id course-id)}
                          {:text "Scene"}]}
-   [scene-translate]])
+
+   [scene-translate course-id]])
