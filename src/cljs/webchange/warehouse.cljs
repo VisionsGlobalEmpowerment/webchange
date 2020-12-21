@@ -78,3 +78,10 @@
   (fn [{:keys [_]} [_ {:keys [on-success]} {:keys [id] :as response}]]
     {:dispatch-n (cond-> [[::state/delete-lesson-set-by-id id]]
                          (some? on-success) (conj (conj on-success response)))}))
+
+(re-frame/reg-event-fx
+  ::create-activity-placeholder
+  (fn [_ [_ {:keys [course-id data]} handlers]]
+    (create-request {:method :post
+                     :uri    (str "/api/courses/" course-id "/activity-placeholder")
+                     :params {:data data}} handlers)))
