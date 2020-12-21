@@ -38,8 +38,13 @@
           tags-appointment (-> (utils/get-activity-tags-appointment course-data selection)
                                (activity->tags-appointment))
           selected-tags-restriction (-> (utils/get-activity-tags-restriction course-data selection)
-                                        (activity->selected-tags-restriction))]
-      {:dispatch-n (list [::reset-tags-appointment tags-appointment component-id]
+                                        (activity->selected-tags-restriction))
+          selection-data (selection/selection db)]
+      {:db         (-> db
+                       (assoc-in (path-to-db [:initial-tags-appointment] component-id) tags-appointment)
+                       (assoc-in (path-to-db [:initial-tags-restriction] component-id) selected-tags-restriction)
+                       (assoc-in (path-to-db [:selection-data] component-id) selection-data))
+       :dispatch-n (list [::reset-tags-appointment tags-appointment component-id]
                          [::reset-selected-restriction selected-tags-restriction component-id])})))
 
 ;; Tags appointment
@@ -142,11 +147,16 @@
 (re-frame/reg-event-fx
   ::save-tags
   (fn [{:keys [db]} [_ component-id]]
-    (let [course-id (data-state/course-id db)
-          selection-data (selection/selection db)
-          appointments (tags-appointment db component-id)
-          restrictions (selected-tags-restriction db component-id)
-          course-data (-> (subs/course-data db)
-                          (update-tags-appointment appointments selection-data)
-                          (update-tags-restriction restrictions selection-data))]
-      {:dispatch [::common/update-course course-id course-data]})))
+    (let [initial-tags-appointment (get-in db (path-to-db [:initial-tags-appointment] component-id))
+          initial-tags-restriction (get-in db (path-to-db [:initial-tags-restriction] component-id))
+          current-tags-appointment (tags-appointment db component-id)
+          current-tags-restriction (selected-tags-restriction db component-id)]
+      (if-not (or (= initial-tags-appointment current-tags-appointment)
+                  (= initial-tags-restriction current-tags-restriction))
+        (let [course-id (data-state/course-id db)
+              selection-data (get-in db (path-to-db [:selection-data] component-id))
+              course-data (-> (subs/course-data db)
+                              (update-tags-appointment current-tags-appointment selection-data)
+                              (update-tags-restriction current-tags-restriction selection-data))]
+          {:dispatch [::common/update-course course-id course-data]})
+        {}))))
