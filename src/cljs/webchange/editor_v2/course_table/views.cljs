@@ -15,21 +15,21 @@
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
-(def header-data [{:id :idx :title "#" :width 1}
-                  {:id :level-idx :title "Level" :width 1}
-                  {:id :lesson-idx :title "Lesson" :width 1}
-                  {:id :concepts :title "Concepts" :width 5}
-                  {:id :activity :title "Activities" :width 20}
-                  {:id :abbr-global :title "Global Standard Abbreviation" :width 20}
-                  {:id :skills :title "Standard/Competency" :width 20}
-                  {:id :tags :title "Adaptation" :width 20}])
+(def header-data [{:id :idx :title "#" :width "2%"}
+                  {:id :level-idx :title "Level" :width "2%"}
+                  {:id :lesson-idx :title "Lesson" :width "2%"}
+                  {:id :concepts :title "Concepts" :width "10%"}
+                  {:id :activity :title "Activities" :width "6%"}
+                  {:id :abbr-global :title "Global Standard Abbreviation" :width "10%"}
+                  {:id :skills :title "Standard/Competency" :width "10%"}
+                  {:id :tags :title "Adaptation" :width "9%"}])
 
 (defn- col-group
   [{:keys [columns]}]
   [:colgroup
    (for [{:keys [id width]} columns]
      ^{:key id}
-     [:col {:style {:width (str width "%")}}])])
+     [:col {:style {:width width}}])])
 
 (defn- header
   [{:keys [columns]}]
