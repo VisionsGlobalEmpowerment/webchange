@@ -9,23 +9,49 @@
     [webchange.subs :as subs]
     [webchange.warehouse :as warehouse]))
 
-(defn- generate-lesson-set-name
+(defn- lesson-set-name-unique?
+  [course-data lesson-set-name]
+  (->> (utils/get-course-lesson-sets-names course-data)
+       (some #{lesson-set-name})
+       (not)))
+
+(defn- get-new-lesson-set-name
   [scheme-name]
   (->> (str (random-uuid))
        (take 8)
        (clojure.string/join "")
-       (str "ls-" scheme-name "-")))
+       (str "ls-" (clojure.core/name scheme-name) "-")))
 
-(defn- get-lesson-sets
-  [course-data {:keys [selection-from selection-to]}]
-  (let [lesson-type (-> (utils/get-lesson course-data selection-from)
-                        (get :type)
-                        (keyword))
+(defn- generate-lesson-set-name
+  [course-data scheme-name]
+  (loop [name (get-new-lesson-set-name scheme-name)]
+    (if-not (lesson-set-name-unique? course-data name)
+      (recur (get-new-lesson-set-name scheme-name))
+      name)))
+
+(defn- get-lesson-set-items
+  [db lesson-data scheme-name]
+  (let [lesson-set-name (get-in lesson-data [:lesson-sets scheme-name])]
+    (-> (interpreter.subs/lesson-set-data db lesson-set-name)
+        (get-in [:data :items] []))))
+
+(defn- get-lesson-sets-map
+  [db course-data {:keys [selection-from selection-to]}]
+  (let [lesson-data (utils/get-lesson course-data selection-from)
+        lesson-type (-> lesson-data (get :type) (keyword))
         scheme (utils/get-lesson-sets-scheme course-data selection-to lesson-type)]
     (->> scheme
+         (map keyword)
          (map (fn [scheme-name]
-                [(keyword scheme-name) (generate-lesson-set-name scheme-name)]))
+                [scheme-name {:new-name (generate-lesson-set-name course-data scheme-name)
+                              :items    (get-lesson-set-items db lesson-data scheme-name)}]))
          (into {}))))
+
+(defn- lessons-map->lessons-names
+  [lessons-map]
+  (->> lessons-map
+       (map (fn [[scheme-name {:keys [new-name]}]] [scheme-name new-name]))
+       (into {})))
 
 (re-frame/reg-event-fx
   ::copy-lesson
@@ -34,10 +60,10 @@
           course-data (subs/course-data db)
 
           dataset-id (-> (interpreter.subs/course-datasets db) (first) (get :id))
-          lesson-sets (get-lesson-sets course-data params)
+          lesson-sets-map (get-lesson-sets-map db course-data params)
           lesson-data (-> (utils/get-lesson course-data selection-from)
                           (select-keys [:type :activities])
-                          (assoc :lesson-sets lesson-sets))
+                          (assoc :lesson-sets (lessons-map->lessons-names lesson-sets-map)))
 
           target-position (cond-> (:lesson-idx selection-to)
                                   (= relative-position :before) (identity)
@@ -47,13 +73,12 @@
                                                      :lesson-data lesson-data
                                                      :position    target-position}))]
       {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
-                           (map (fn [lesson-set-name]
+                           (map (fn [[_ {:keys [new-name items]}]]
                                   [::warehouse/save-lesson-set {:dataset-id dataset-id
-                                                                :name       lesson-set-name
-                                                                :data       {:name  lesson-set-name
-                                                                             :items []}}
-                                   {:on-success [::save-lesson-set-success lesson-set-name]}])
-                                (vals lesson-sets)))})))
+                                                                :name       new-name
+                                                                :data       {:items items}}
+                                   {:on-success [::save-lesson-set-success new-name]}])
+                                lesson-sets-map))})))
 
 (re-frame/reg-event-fx
   ::save-lesson-set-success

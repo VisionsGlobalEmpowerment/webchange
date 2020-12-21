@@ -12,6 +12,10 @@
   {:pre [(number? level-idx)]}
   [:levels level-idx])
 
+(defn- get-levels
+  [course-data]
+  (get course-data :levels []))
+
 (defn- get-level
   [course-data selection]
   (->> (get-level-path selection)
@@ -30,6 +34,7 @@
   [course-data selection level-data-patch]
   (update-in course-data (get-level-path selection) merge level-data-patch))
 
+
 ;; Lessons
 
 (defn- get-lesson-path
@@ -43,6 +48,10 @@
   [course-data selection]
   (->> (get-lesson-path selection)
        (get-in course-data)))
+
+(defn get-level-lessons
+  [level-data]
+  (get level-data :lessons []))
 
 (defn add-lesson
   [course-data {:keys [level-index position lesson-data]}]
@@ -104,3 +113,21 @@
 (defn update-activity
   [course-data selection activity-data-patch]
   (update-in course-data (get-activity-path selection) merge activity-data-patch))
+
+;;
+
+(defn- get-lesson-lesson-sets-names
+  [lesson-data]
+  (->> (get lesson-data :lesson-sets)
+       (vals)))
+
+(defn- get-level-lesson-sets-names
+  [level-data]
+  (->> (get-level-lessons level-data)
+       (map get-lesson-lesson-sets-names)))
+
+(defn get-course-lesson-sets-names
+  [course-data]
+  (->> (get-levels course-data)
+       (map get-level-lesson-sets-names)
+       (flatten)))
