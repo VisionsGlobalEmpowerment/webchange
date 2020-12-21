@@ -31,29 +31,32 @@
        (map (fn [tag] [tag true]))
        (into {})))
 
+(defn- tags-appointment
+  ([db component-id]
+   (->> (get-in db (path-to-db [:appointment] component-id) {})
+        (tags-appointment)))
+  ([data]
+   (->> data
+        (vals)
+        (sort-by :tag))))
+
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [db]} [_ selection component-id]]
     (let [course-data (subs/course-data db)
-          tags-appointment (-> (utils/get-activity-tags-appointment course-data selection)
-                               (activity->tags-appointment))
-          selected-tags-restriction (-> (utils/get-activity-tags-restriction course-data selection)
-                                        (activity->selected-tags-restriction))
+          current-tags-appointment (-> (utils/get-activity-tags-appointment course-data selection)
+                                       (activity->tags-appointment))
+          current-tags-restriction (-> (utils/get-activity-tags-restriction course-data selection)
+                                       (activity->selected-tags-restriction))
           selection-data (selection/selection db)]
       {:db         (-> db
-                       (assoc-in (path-to-db [:initial-tags-appointment] component-id) tags-appointment)
-                       (assoc-in (path-to-db [:initial-tags-restriction] component-id) selected-tags-restriction)
+                       (assoc-in (path-to-db [:initial-tags-appointment] component-id) (tags-appointment current-tags-appointment))
+                       (assoc-in (path-to-db [:initial-tags-restriction] component-id) current-tags-restriction)
                        (assoc-in (path-to-db [:selection-data] component-id) selection-data))
-       :dispatch-n (list [::reset-tags-appointment tags-appointment component-id]
-                         [::reset-selected-restriction selected-tags-restriction component-id])})))
+       :dispatch-n (list [::reset-tags-appointment current-tags-appointment component-id]
+                         [::reset-selected-restriction current-tags-restriction component-id])})))
 
 ;; Tags appointment
-
-(defn- tags-appointment
-  [db component-id]
-  (->> (get-in db (path-to-db [:appointment] component-id) {})
-       (vals)
-       (sort-by :tag)))
 
 (re-frame/reg-sub
   ::tags-appointment
@@ -151,8 +154,8 @@
           initial-tags-restriction (get-in db (path-to-db [:initial-tags-restriction] component-id))
           current-tags-appointment (tags-appointment db component-id)
           current-tags-restriction (selected-tags-restriction db component-id)]
-      (if-not (or (= initial-tags-appointment current-tags-appointment)
-                  (= initial-tags-restriction current-tags-restriction))
+      (if-not (and (= initial-tags-appointment current-tags-appointment)
+                   (= initial-tags-restriction current-tags-restriction))
         (let [course-id (data-state/course-id db)
               selection-data (get-in db (path-to-db [:selection-data] component-id))
               course-data (-> (subs/course-data db)
