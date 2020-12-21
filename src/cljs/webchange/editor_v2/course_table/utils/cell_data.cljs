@@ -5,9 +5,11 @@
   (.parseInt js/Number str))
 
 (defn activity->cell-data
-  [activity field]
-  (merge (select-keys activity [:level-idx :lesson-idx :activity-idx])
-         {:field field}))
+  ([activity]
+   (activity->cell-data activity nil))
+  ([activity field]
+   (cond-> (select-keys activity [:level-idx :lesson-idx :activity-idx])
+           (some? field) (assoc :field field))))
 
 (defn cell->cell-data
   [cell-el]

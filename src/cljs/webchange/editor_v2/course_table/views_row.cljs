@@ -81,14 +81,25 @@
                        {:edit? selected?
                         :data  data})]]))
 
+(defn- lesson-row-selected?
+  [selection-data cell-data]
+  (let [fields-to-check [:level-idx :lesson-idx]]
+    (and (= (:field selection-data) :lesson-idx)
+         (= (select-keys selection-data fields-to-check)
+            (select-keys cell-data fields-to-check)))))
+
 (defn activity-row
   [{:keys [data columns span-columns skip-columns]}]
   (let [filtered-columns (->> columns
                               (filter (fn [{:keys [id]}]
                                         (-> skip-columns
                                             (contains? id)
-                                            (not)))))]
-    [ui/table-row
+                                            (not)))))
+
+        selection @(re-frame/subscribe [::selection-state/selection])
+        cell-data (activity->cell-data data)
+        lesson-selected? (lesson-row-selected? selection cell-data)]
+    [ui/table-row {:class-name (if lesson-selected? "row-selected" "row-not-selected")}
      (for [{:keys [id]} filtered-columns]
        ^{:key id}
        [field-cell {:data  data

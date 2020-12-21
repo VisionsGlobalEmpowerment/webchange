@@ -44,6 +44,7 @@
   [relative-position]
   (let [current-selection @(re-frame/subscribe [::selection-state/selection])
         saved-selection @(re-frame/subscribe [::selection-state/saved-selection])]
+    (re-frame/dispatch [::selection-state/reset-selection])
     (re-frame/dispatch [::selection-state/reset-saved-selection])
     (re-frame/dispatch [::course-data.events/copy-lesson {:selection-from    saved-selection
                                                           :selection-to      current-selection
