@@ -56,36 +56,34 @@
       (get-in db [:loading :load-course])
       (get-in db [:loading :load-progress]))))
 
-(defn last-level-done [progress-data]
-  (apply max (map #(int (name %)) (keys progress-data))))
+(defn last-level-done [finished]
+  (apply max (map #(int (name %)) (keys finished))))
 
-(defn last-lesson-done [progress-data level]
-  (apply max (map #(int (name %)) (keys ((keyword (str level)) progress-data)))))
+(defn last-lesson-done [finished level]
+  (apply max (map #(int (name %)) (keys ((keyword (str level)) finished)))))
 
 (re-frame/reg-sub
   ::finished-level-lesson-activities
   (fn [db]
-    (let [progress-data (get-in db [:progress-data :finished])
-          last-level (last-level-done progress-data)
-          last-lesson (last-lesson-done progress-data last-level)
-          finished-activities ((keyword (str last-lesson))  ((keyword (str last-level)) progress-data))
-          ]
-      finished-activities)))
+    (let [levels (get-in db [:course-data :levels])
+          finished (get-in db [:progress-data :finished])
+          last-level (last-level-done finished)
+          last-lesson (last-lesson-done finished last-level)
+          lesson-activities (get-in levels [last-level :lessons last-lesson :activities])]
+      (->> (get-in finished [last-level last-lesson])
+           (map #(get lesson-activities %))
+           (map :activity)))))
 
 (defn lesson-progress
   [db]
-  (let [progress-data (get-in db [:progress-data :finished])
-        last-level (last-level-done progress-data)
-        last-lesson (last-lesson-done progress-data last-level)
+  (let [finished (get-in db [:progress-data :finished])
+        last-level (last-level-done finished)
+        last-lesson (last-lesson-done finished last-level)
 
-        finished-activities (get-in progress-data [last-level last-lesson]) #_((keyword (str last-lesson)) ((keyword (str last-level)) progress-data))
+        finished-activities (get-in finished [last-level last-lesson])
         activities (lessons-activity/get-activities db last-level last-lesson)]
     (/ (count finished-activities)
        (count activities))))
-
-(re-frame/reg-sub
-  ::lesson-progress
-  lesson-progress)
 
 (re-frame/reg-sub
   ::overall-progress

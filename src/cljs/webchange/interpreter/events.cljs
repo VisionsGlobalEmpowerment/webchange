@@ -126,14 +126,18 @@
                           (re-frame/dispatch [::set-scenes-data @scenes-data])
                           (re-frame/dispatch [::load-lessons course-id]))))))))
 
+(defn- progress-initialized?
+  [progress]
+  (and progress (:next progress)))
+
 (re-frame/reg-fx
   :load-progress
   (fn [course-id]
     (i/load-progress course-id (fn [progress]
                                  (re-frame/dispatch [:complete-request :load-progress])
-                                 (if progress
+                                 (if (progress-initialized? progress)
                                    (re-frame/dispatch [::set-progress-data progress])
-                                   (re-frame/dispatch [::init-default-progress]))
+                                   (re-frame/dispatch [::init-default-progress progress]))
                                  (re-frame/dispatch [::progress-loaded])))))
 
 (re-frame/reg-fx
@@ -1074,9 +1078,9 @@
 
 (re-frame/reg-event-fx
   ::init-default-progress
-  (fn [{:keys [db]} [_ _]]
+  (fn [{:keys [db]} [_ progress]]
     (let [default-progress (get-in db [:course-data :default-progress])]
-      {:db (update-in db [:progress-data] merge default-progress)})))
+      {:db (update-in db [:progress-data] merge progress default-progress)})))
 
 (def default-triggers
   {:start [[::reset-navigation] [::ce/execute-reset-skip]]})
