@@ -16,7 +16,8 @@
             [config.core :refer [env]]
             [webchange.common.hmac-sha256 :as sign]
             [compojure.api.middleware :as mw]
-            [webchange.templates.core :as templates]))
+            [webchange.templates.core :as templates]
+            [webchange.db.core :refer [*db*] :as db]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
