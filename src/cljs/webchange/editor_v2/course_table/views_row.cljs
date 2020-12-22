@@ -52,9 +52,10 @@
 
 (defn- cell-selected?
   [selection-data cell-data field]
-  (let [fields-to-check (if (some #{field} [:level-idx :lesson-idx :concepts])
-                          [:level-idx :lesson-idx :field]
-                          (keys selection-data))]
+  (let [fields-to-check (cond
+                          (= field :idx) [:level-idx :lesson-idx :activity-idx]
+                          (some #{field} [:level-idx :lesson-idx :concepts]) [:level-idx :lesson-idx :field]
+                          :else (keys selection-data))]
     (and (some? selection-data)
          (= (select-keys selection-data fields-to-check)
             (select-keys cell-data fields-to-check)))))

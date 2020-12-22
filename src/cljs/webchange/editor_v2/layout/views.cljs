@@ -1,11 +1,12 @@
 (ns webchange.editor-v2.layout.views
   (:require
+    [reagent.core :as r]
     [webchange.editor-v2.concepts.views :refer [delete-dataset-item-modal]]
     [webchange.editor-v2.layout.toolbar.views :refer [toolbar]]
     [webchange.editor-v2.translator.views-modal :refer [translator-modal]]
     [webchange.editor-v2.dialog.views-modal :refer [dialog-modal]]
     [webchange.editor-v2.translator.text.views-text-chunks-editor :refer [configuration-modal]]
-    [reagent.core :as r]))
+    [webchange.ui.utils :refer [deep-merge]]))
 
 (defn- get-styles
   []
@@ -31,11 +32,13 @@
    [delete-dataset-item-modal]])
 
 (defn layout
-  [{:keys [align content-ref]
+  [{:keys [align content-ref styles]
     :or   {align       "left"
-           content-ref #()}}]
+           content-ref #()
+           styles      {}}}]
   (let [this (r/current-component)
-        styles (get-styles)
+        styles (-> (get-styles)
+                   (deep-merge styles))
         content-styles (cond-> (:content-container styles)
                                (= align "center") (merge (:content-container-centered styles)))]
     [:div {:style (:main-container styles)}

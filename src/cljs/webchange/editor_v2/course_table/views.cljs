@@ -38,7 +38,7 @@
    [ui/table-row
     (for [{:keys [id title]} columns]
       ^{:key id}
-      [ui/table-cell title])]])
+      [ui/table-cell {:class-name (clojure.core/name id)} title])]])
 
 (defn- levels-count
   [data current-idx level-index]
@@ -65,10 +65,11 @@
                                 (re-frame/dispatch [::selection-state/close-context-menu])
                                 (re-frame/dispatch [::selection-state/set-selection data]))))
         handle-scroll (fn [event]
+                        (.stopPropagation event)
                         (let [delta (if (> (.-deltaY event) 0) 1 -1)]
                           (re-frame/dispatch [::pagination-state/shift-skip-rows delta (count data)])))]
-    (into [ui/table-body {:on-click handle-cell-click
-                          :on-wheel handle-scroll}]
+    (into [ui/table-body {:on-mouse-down handle-cell-click
+                          :on-wheel      handle-scroll}]
           (loop [[activity & rest-activities] (->> data (drop rows-skip) (take rows-count))
                  rows []
                  current-level-idx nil
@@ -130,6 +131,7 @@
                          [layout {:breadcrumbs [{:text     "Course"
                                                  :on-click #(redirect-to :course-editor-v2 :id course-id)}
                                                 {:text "Table"}]
+                                  :styles      {:content-container {:padding "0"}}
                                   :content-ref handle-content-ref}
                           [ui/paper {:style {:display        "flex"
                                              :flex-direction "column"
@@ -137,7 +139,8 @@
                            [:div {:tab-index   0
                                   :on-key-down handle-key-down
                                   :style       {:flex-grow 1
-                                                :overflow  "hidden"}}
+                                                :overflow  "hidden"
+                                                :outline   "none"}}
                             [ui/table {:class-name "course-table"
                                        :padding    "none"}
                              [col-group {:columns header-data}]

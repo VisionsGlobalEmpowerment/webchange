@@ -8,11 +8,17 @@
 
     th {
         padding: 8px !important;
+
+        &.idx,
+        &.level-idx,
+        &.lesson-idx {
+            text-align: center;
+        }
     }
 
-
     tbody {
-        .row-selected {
+        .row-selected,
+        .row-selected ul {
            background-color: #3e3e3e;
         }
 
@@ -22,8 +28,15 @@
             transition: box-shadow 0.2s ease-out;
             vertical-align: top;
 
-            &.selected {
+            &.selected,
+            &.selected ul {
                 background-color: #3e3e3e;
+            }
+
+            &.idx,
+            &.level-idx,
+            &.lesson-idx {
+                text-align: center;
             }
 
             &.level-idx {
