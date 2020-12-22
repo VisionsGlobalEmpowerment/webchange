@@ -84,3 +84,18 @@
   ::save-lesson-set-success
   (fn [{:keys [_]} [_ lesson-name {:keys [lesson]}]]
     {:dispatch [::interpreter.events/update-course-lessons [(assoc lesson :name lesson-name)]]}))
+
+(re-frame/reg-event-fx
+  ::add-activity
+  (fn [{:keys [db]} [_ {:keys [selection relative-position]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+
+          target-position (cond-> (:activity-idx selection)
+                                  (= relative-position :before) (identity)
+                                  (= relative-position :after) (inc))
+          updated-course-data (-> course-data
+                                  (utils/add-activity {:level-index  (:level-idx selection)
+                                                       :lesson-index (:lesson-idx selection)
+                                                       :position     target-position}))]
+      {:dispatch [::common/update-course course-id updated-course-data]})))

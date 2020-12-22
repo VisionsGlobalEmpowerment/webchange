@@ -93,6 +93,16 @@
   (->> (get-activity-path selection)
        (get-in course-data)))
 
+(defn add-activity
+  [course-data {:keys [level-index lesson-index position activity-data]
+                :or   {activity-data {}}}]
+  (let [lesson-selection {:level-idx  level-index
+                          :lesson-idx lesson-index}
+        updated-activities (-> (get-lesson course-data lesson-selection)
+                               (get :activities)
+                               (insert-to-list position activity-data))]
+    (update-lesson course-data lesson-selection {:activities updated-activities})))
+
 ;;
 
 (defn get-activity-name

@@ -50,6 +50,13 @@
                                                           :selection-to      current-selection
                                                           :relative-position relative-position}])))
 
+(defn handle-add-activity
+  [relative-position]
+  (let [current-selection @(re-frame/subscribe [::selection-state/selection])]
+    (re-frame/dispatch [::selection-state/reset-selection])
+    (re-frame/dispatch [::course-data.events/add-activity {:selection         current-selection
+                                                           :relative-position relative-position}])))
+
 (defn- get-lesson-menu-items
   [{:keys [saved-selection]}]
   (cond-> [{:id      :copy-lesson
@@ -62,10 +69,20 @@
                                             :title   "Paste lesson after"
                                             :handler [handle-paste-lesson :after]}])))
 
+(defn- get-row-menu-items
+  [{:keys [_]}]
+  [{:id      :add-activity-before
+    :title   "Add activity before"
+    :handler [handle-add-activity :before]}
+   {:id      :add-activity-after
+    :title   "Add activity after"
+    :handler [handle-add-activity :after]}])
+
 (defn- get-menu-items
   [{:keys [current-selection] :as params}]
   (cond-> []
-          (= (:field current-selection) :lesson-idx) (concat (get-lesson-menu-items params))))
+          (= (:field current-selection) :lesson-idx) (concat (get-lesson-menu-items params))
+          (not (some #{(:field current-selection)} [:level-idx :lesson-idx :concepts])) (concat (get-row-menu-items params))))
 
 (defn context-menu
   [{:keys [container]}]

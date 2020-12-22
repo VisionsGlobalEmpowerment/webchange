@@ -12,12 +12,8 @@
 
 
     tbody {
-        .row-not-selected + .row-selected {
-           box-shadow: inset 0 5px 6px -3px #c3deff
-        }
-
-        .row-selected + .row-not-selected {
-           box-shadow: 0 -5px 6px -3px #c3deff;
+        .row-selected {
+           background-color: #3e3e3e;
         }
 
         td {
@@ -27,8 +23,14 @@
             vertical-align: top;
 
             &.selected {
-                &.editable {
-                    box-shadow: inset 0 0 5px 1px #1272e6;
+                background-color: #3e3e3e;
+            }
+
+            &.level-idx {
+                background-color: #323232;
+
+                &.selected {
+                    background-color: #3e3e3e;
                 }
             }
 
