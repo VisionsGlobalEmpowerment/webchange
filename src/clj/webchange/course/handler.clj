@@ -44,8 +44,10 @@
 
 (defn handle-update-scene-skills
   [course-slug scene-name request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/update-scene-skills! course-slug scene-name data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/update-scene-skills! course-slug scene-name data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :skills
@@ -126,16 +128,16 @@
 
 (defn handle-update-activity
   [course-slug data scene-slug request]
-  (let [owner-id (current-user request)
+  (let [user-id (current-user request)
         scene-data (core/get-scene-data course-slug scene-slug)
         activity (templates/update-activity-from-template scene-data data)]
-    (-> (core/save-scene! course-slug scene-slug activity owner-id)
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/save-scene! course-slug scene-slug activity user-id)
         (second)
         ((fn [data]
            [true (assoc data :data (:data (db/get-latest-scene-version {:scene_id (:id data)})))]))
-        handle)
-    )
-  )
+        handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int})
@@ -222,15 +224,14 @@
       :path-params [course-slug :- s/Str]
       :return Activity
       :body [activity-data CreateActivity]
-      :summary "Creates a new course"
+      :summary "Creates a new activity from template"
       (handle-create-activity course-slug activity-data request))
     (POST "/:course-slug/update-activity/:scene-slug" request
       :path-params [course-slug :- s/Str scene-slug :- s/Str]
       :return s/Any
       :body [activity-data s/Any]
-      :summary "Creates a new course"
-      (handle-update-activity course-slug activity-data scene-slug request))
-    )
+      :summary "Updates activity using template"
+      (handle-update-activity course-slug activity-data scene-slug request)))
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills
