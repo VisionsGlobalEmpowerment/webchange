@@ -22,15 +22,16 @@
   [{:keys [data]}]
   (let [rows-skip @(re-frame/subscribe [::pagination-state/skip-rows])
         rows-count @(re-frame/subscribe [::pagination-state/page-rows])
+        actual-rows-count @(re-frame/subscribe [::pagination-state/actual-page-rows])
         from (inc rows-skip)
-        to (+ rows-skip rows-count)
+        to (+ rows-skip actual-rows-count)
         total (count data)
 
         handle-prev-page-click (fn [] (re-frame/dispatch [::pagination-state/shift-skip-rows (- rows-count) total]))
-        handle-next-page-click (fn [] (re-frame/dispatch [::pagination-state/shift-skip-rows rows-count total]))
+        handle-next-page-click (fn [] (re-frame/dispatch [::pagination-state/shift-skip-rows actual-rows-count total]))
 
         handle-first-page-click (fn [] (re-frame/dispatch [::pagination-state/set-skip-rows 0]))
-        handle-last-page-click (fn [] (re-frame/dispatch [::pagination-state/set-skip-rows (- total rows-count)]))]
+        handle-last-page-click (fn [] (re-frame/dispatch [::pagination-state/set-skip-rows (- total 1)]))]
     [:div.footer {:style {:padding    "8px"
                           :text-align "right"
                           :border     "solid 1px #414141"}}

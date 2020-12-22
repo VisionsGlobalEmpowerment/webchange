@@ -93,7 +93,8 @@
   [data]
   (let [prepared-data (transform-keys ->snake_case_keyword data)
         [{id :id}] (db/create-lesson-set! prepared-data)]
-    [true {:id id}]))
+    [true {:id     id
+           :lesson (assoc prepared-data :id id)}]))
 
 (defn update-lesson-set!
   [id data]

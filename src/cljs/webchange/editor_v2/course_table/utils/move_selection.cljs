@@ -53,10 +53,10 @@
         selection @(re-frame/subscribe [::selection-state/selection])
         new-selection (update-selection {:columns    columns
                                          :direction  direction
-                                         :selection  (:data selection)
+                                         :selection  selection
                                          :table-data table-data})]
-    (when-not (= new-selection (:data selection))
+    (when-not (= new-selection selection)
       (update-pagination {:table-data     table-data
-                          :prev-selection (:data selection)
+                          :prev-selection selection
                           :new-selection  new-selection})
-      (re-frame/dispatch [::selection-state/set-selection (:type selection) new-selection]))))
+      (re-frame/dispatch [::selection-state/set-selection new-selection new-selection]))))

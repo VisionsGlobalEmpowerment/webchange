@@ -20,6 +20,17 @@
   (fn [{:keys [db]} [_ rows-number]]
     {:db (assoc-in db (path-to-db [:rows]) (if (some? rows-number) rows-number 1))}))
 
+(defn- actual-page-rows
+  [db]
+  (get-in db (path-to-db [:actual-rows]) 1))
+
+(re-frame/reg-sub ::actual-page-rows actual-page-rows)
+
+(re-frame/reg-event-fx
+  ::set-actual-page-rows
+  (fn [{:keys [db]} [_ rows-number]]
+    {:db (assoc-in db (path-to-db [:actual-rows]) rows-number)}))
+
 (defn- skip-rows
   [db]
   (get-in db (path-to-db [:skip]) 0))
@@ -35,10 +46,7 @@
   ::shift-skip-rows
   (fn [{:keys [db]} [_ delta-rows-number total-data-rows]]
     (let [current-skip-rows (skip-rows db)
-          page-rows (page-rows db)
           new-skip (cond-> (+ current-skip-rows delta-rows-number)
                            (< delta-rows-number 0) (Math/max 0)
-                           (> delta-rows-number 0) (Math/min (if (> total-data-rows page-rows)
-                                                               (- total-data-rows page-rows)
-                                                               current-skip-rows)))]
+                           (> delta-rows-number 0) (Math/min (dec total-data-rows)))]
       {:dispatch [::set-skip-rows new-skip]})))

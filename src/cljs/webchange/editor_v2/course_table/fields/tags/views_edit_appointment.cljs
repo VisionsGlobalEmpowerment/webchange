@@ -9,13 +9,13 @@
 (defn- input
   [{:keys [value on-change type style]
     :or   {on-change #()}}]
-  [ui/text-field (cond-> {:value      value
-                          :on-change  (fn [event]
-                                        (on-change (cond->> (.. event -target -value)
-                                                            (= type "number") (.parseInt js/Number))))
-                          :style      {:border-bottom "solid 1px #616161"}
-                          :InputProps {:style {:font-size   "0.8rem"
-                                               :white-space "nowrap"}}}
+  [ui/text-field (cond-> {:default-value value
+                          :on-change     (fn [event]
+                                           (on-change (cond->> (.. event -target -value)
+                                                               (= type "number") (.parseInt js/Number))))
+                          :style         {:border-bottom "solid 1px #616161"}
+                          :InputProps    {:style {:font-size   "0.8rem"
+                                                  :white-space "nowrap"}}}
                          (some? style) (update :style merge style)
                          (some? type) (assoc :type type)
                          (= type "number") (update-in [:InputProps :style] merge {:font-family "monospace"}))])
@@ -54,8 +54,8 @@
         handle-edit-appointment (fn [tag data] (re-frame/dispatch [::tags-state/edit-tag-appointment tag data component-id]))]
     [:div
      [:ul.tags-appointments
-      (for [{:keys [tag] :as tag-data} tags]
-        ^{:key tag}
+      (for [[idx tag-data] (map-indexed vector tags)]
+        ^{:key idx}
         [tag-row {:data      tag-data
                   :on-edit   handle-edit-appointment
                   :on-delete handle-delete-click}])]

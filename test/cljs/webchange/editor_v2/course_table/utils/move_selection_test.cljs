@@ -3,29 +3,29 @@
     [cljs.test :refer [deftest testing is]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [update-selection]]))
 
-(def columns (->> [:level :lesson :idx :concepts :activity :skills]
+(def columns (->> [:idx :level-idx :lesson-idx :concepts :activity :skills]
                   (map (fn [id] {:id id}))))
 
-(def table-data [{:level 1, :lesson 1, :lesson-idx 0, :idx 1}
-                 {:level 1, :lesson 1, :lesson-idx 1, :idx 2}
-                 {:level 1, :lesson 1, :lesson-idx 2, :idx 3}
+(def table-data [{:idx 1, :level-idx 0, :lesson-idx 0, :activity-idx 0}
+                 {:idx 2, :level-idx 0, :lesson-idx 0, :activity-idx 1}
+                 {:idx 3, :level-idx 0, :lesson-idx 0, :activity-idx 2}
 
-                 {:level 1, :lesson 2, :lesson-idx 0, :idx 4}
-                 {:level 1, :lesson 2, :lesson-idx 1, :idx 5}
-                 {:level 1, :lesson 2, :lesson-idx 2, :idx 6}
+                 {:idx 4, :level-idx 0, :lesson-idx 1, :activity-idx 0}
+                 {:idx 5, :level-idx 0, :lesson-idx 1, :activity-idx 1}
+                 {:idx 6, :level-idx 0, :lesson-idx 1, :activity-idx 2}
 
-                 {:level 2, :lesson 3, :lesson-idx 0, :idx 7}
-                 {:level 2, :lesson 3, :lesson-idx 1, :idx 8}
-                 {:level 2, :lesson 3, :lesson-idx 2, :idx 9}
+                 {:idx 7, :level-idx 1, :lesson-idx 0, :activity-idx 0}
+                 {:idx 8, :level-idx 1, :lesson-idx 0, :activity-idx 1}
+                 {:idx 9, :level-idx 1, :lesson-idx 0, :activity-idx 2}
 
-                 {:level 2, :lesson 4, :lesson-idx 0, :idx 10}
-                 {:level 2, :lesson 4, :lesson-idx 1, :idx 11}
-                 {:level 2, :lesson 4, :lesson-idx 2, :idx 12}])
+                 {:idx 10, :level-idx 1, :lesson-idx 1, :activity-idx 0}
+                 {:idx 11, :level-idx 1, :lesson-idx 1, :activity-idx 1}
+                 {:idx 12, :level-idx 1, :lesson-idx 1, :activity-idx 2}])
 
-(def default-selection {:level      1
-                        :lesson     1
-                        :lesson-idx 0
-                        :field      :skills})
+(def default-selection {:level-idx    0
+                        :lesson-idx   0
+                        :activity-idx 0
+                        :field        :skills})
 
 (deftest test-move-selection--left
   (let [direction :left]
@@ -37,17 +37,17 @@
                                      {:field :concepts})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:field :idx})]
+                                   {:field :lesson-idx})]
         (is (= actual-result expected-result))))
     (testing "move from left position"
       (let [data {:columns    columns
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:field :level})}
+                                     {:field :idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:field :level})]
+                                   {:field :idx})]
         (is (= actual-result expected-result))))))
 
 (deftest test-move-selection--right
@@ -62,6 +62,7 @@
             expected-result (merge default-selection
                                    {:field :activity})]
         (is (= actual-result expected-result))))
+
     (testing "move from right position"
       (let [data {:columns    columns
                   :direction  direction
@@ -83,10 +84,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 1, :lesson-idx 0, :field :level})}
+                                     {:level-idx 0, :lesson-idx 0, :activity-idx 0, :field :level-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 1, :lesson-idx 0, :field :level})]
+                                   {:level-idx 0, :lesson-idx 0, :activity-idx 0, :field :level-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on level from 1st level row"
@@ -94,10 +95,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 2, :lesson-idx 0, :field :level})}
+                                     {:level-idx 1, :lesson-idx 0, :activity-idx 0, :field :level-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 1, :lesson-idx 0, :field :level})]
+                                   {:level-idx 0, :lesson-idx 0, :activity-idx 0, :field :level-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on level from middle level row"
@@ -105,10 +106,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 4, :lesson-idx 0, :field :level})}
+                                     {:level-idx 1, :lesson-idx 1, :activity-idx 1, :field :level-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 1, :lesson-idx 0, :field :level})]
+                                   {:level-idx 0, :lesson-idx 0, :activity-idx 0, :field :level-idx})]
         (is (= actual-result expected-result))))
 
     ;; Lesson column
@@ -118,10 +119,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 1, :lesson-idx 0, :field :lesson})}
+                                     {:level-idx 0, :lesson-idx 0, :activity-idx 0, :field :lesson-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 1, :lesson-idx 0, :field :lesson})]
+                                   {:level-idx 0, :lesson-idx 0, :activity-idx 0, :field :lesson-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on lesson from 1st level row"
@@ -129,10 +130,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 3, :lesson-idx 1, :field :lesson})}
+                                     {:level-idx 1, :lesson-idx 0, :activity-idx 0, :field :lesson-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 2, :lesson-idx 0, :field :lesson})]
+                                   {:level-idx 0, :lesson-idx 1, :activity-idx 0, :field :lesson-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on lesson from middle level row"
@@ -140,10 +141,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 4, :lesson-idx 1, :field :lesson})}
+                                     {:level-idx 1, :lesson-idx 1, :activity-idx 1, :field :lesson-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 3, :lesson-idx 0, :field :lesson})]
+                                   {:level-idx 1, :lesson-idx 0, :activity-idx 0, :field :lesson-idx})]
         (is (= actual-result expected-result))))
 
     ;; Rest columns
@@ -153,10 +154,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 1, :lesson-idx 1})}
+                                     {:level-idx 0, :lesson-idx 0, :activity-idx 2})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 1, :lesson-idx 0})]
+                                   {:level-idx 0, :lesson-idx 0, :activity-idx 1})]
         (is (= actual-result expected-result))))
 
     (testing "move from 1st lesson row"
@@ -164,10 +165,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 4, :lesson-idx 0})}
+                                     {:level-idx 0, :lesson-idx 1, :activity-idx 0})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 3, :lesson-idx 2})]
+                                   {:level-idx 0, :lesson-idx 0, :activity-idx 2})]
         (is (= actual-result expected-result))))
 
     (testing "move from 1st level row"
@@ -175,10 +176,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 3, :lesson-idx 0})}
+                                     {:level-idx 1, :lesson-idx 0, :activity-idx 0})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 2, :lesson-idx 2})]
+                                   {:level-idx 0, :lesson-idx 1, :activity-idx 2})]
         (is (= actual-result expected-result))))
 
     (testing "move from 1st table row"
@@ -186,10 +187,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 1, :lesson-idx 0})}
+                                     {:level-idx 0, :lesson-idx 0, :activity-idx 0})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 1, :lesson-idx 0})]
+                                   {:level-idx 0, :lesson-idx 0, :activity-idx 0})]
         (is (= actual-result expected-result))))))
 
 (deftest test-move-selection--down
@@ -202,10 +203,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 4, :lesson-idx 2, :field :level})}
+                                     {:level-idx 1, :lesson-idx 1, :activity-idx 2 :field :level-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 3, :lesson-idx 0, :field :level})]
+                                   {:level-idx 1, :lesson-idx 1, :activity-idx 2 :field :level-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on level from last level row"
@@ -213,10 +214,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 3, :lesson-idx 2, :field :level})}
+                                     {:level-idx 0, :lesson-idx 1, :activity-idx 2, :field :level-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 3, :lesson-idx 0, :field :level})]
+                                   {:level-idx 1, :lesson-idx 0, :activity-idx 0, :field :level-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on level from middle level row"
@@ -224,10 +225,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 2, :lesson-idx 0, :field :level})}
+                                     {:level-idx 0, :lesson-idx 0, :activity-idx 1, :field :level-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 3, :lesson-idx 0, :field :level})]
+                                   {:level-idx 1, :lesson-idx 0, :activity-idx 0, :field :level-idx})]
         (is (= actual-result expected-result))))
 
     ;; Lesson column
@@ -237,10 +238,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 4, :lesson-idx 2, :field :lesson})}
+                                     {:level-idx 1, :lesson-idx 1, :activity-idx 2, :field :lesson-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 4, :lesson-idx 2, :field :lesson})]
+                                   {:level-idx 1, :lesson-idx 1, :activity-idx 2, :field :lesson-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on lesson from last level row"
@@ -248,10 +249,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 2, :lesson-idx 1, :field :lesson})}
+                                     {:level-idx 0, :lesson-idx 1, :activity-idx 2, :field :lesson-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 3, :lesson-idx 0, :field :lesson})]
+                                   {:level-idx 1, :lesson-idx 0, :activity-idx 0, :field :lesson-idx})]
         (is (= actual-result expected-result))))
 
     (testing "move on lesson from middle level row"
@@ -259,10 +260,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 1, :lesson-idx 1, :field :lesson})}
+                                     {:level-idx 0, :lesson-idx 0, :activity-idx 1, :field :lesson-idx})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 2, :lesson-idx 0, :field :lesson})]
+                                   {:level-idx 0, :lesson-idx 1, :activity-idx 0, :field :lesson-idx})]
         (is (= actual-result expected-result))))
 
     ;; Rest columns
@@ -272,10 +273,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 1, :lesson-idx 1})}
+                                     {:level-idx 0, :lesson-idx 1, :activity-idx 1})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 1, :lesson-idx 2})]
+                                   {:level-idx 0, :lesson-idx 1, :activity-idx 2})]
         (is (= actual-result expected-result))))
 
     (testing "move from last lesson row"
@@ -283,10 +284,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 1, :lesson-idx 2})}
+                                     {:level-idx 0, :lesson-idx 0, :activity-idx 2})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 1, :lesson 2, :lesson-idx 0})]
+                                   {:level-idx 0, :lesson-idx 1, :activity-idx 0})]
         (is (= actual-result expected-result))))
 
     (testing "move from last level row"
@@ -294,10 +295,10 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 1, :lesson 2, :lesson-idx 2})}
+                                     {:level-idx 0, :lesson-idx 1, :activity-idx 2})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 3, :lesson-idx 0})]
+                                   {:level-idx 1, :lesson-idx 0, :activity-idx 0})]
         (is (= actual-result expected-result))))
 
     (testing "move from last table row"
@@ -305,8 +306,8 @@
                   :direction  direction
                   :table-data table-data
                   :selection  (merge default-selection
-                                     {:level 2, :lesson 4, :lesson-idx 2})}
+                                     {:level-idx 1, :lesson-idx 1, :activity-idx 2})}
             actual-result (update-selection data)
             expected-result (merge default-selection
-                                   {:level 2, :lesson 4, :lesson-idx 2})]
+                                   {:level-idx 1, :lesson-idx 1, :activity-idx 2})]
         (is (= actual-result expected-result))))))

@@ -49,7 +49,7 @@
      (re-frame/subscribe [::table-data])])
   (fn [[selection table-data]]
     {:field    (-> selection (get-in [:data :field]) (keyword))
-     :activity (find-activity-row table-data (:data selection))}))
+     :activity (find-activity-row table-data selection)}))
 
 (re-frame/reg-sub
   ::course-activities

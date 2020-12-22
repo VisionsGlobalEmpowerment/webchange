@@ -7,7 +7,9 @@
                 :enter       13
                 :esc         27
                 :shift       16
-                :tab         9})
+                :tab         9
+                :c           67
+                :v           86})
 
 (defn- is?
   [code name]
@@ -24,7 +26,8 @@
 (defn handle-event
   [event handlers]
   (let [key-code (.-which event)
-        handle (partial call-handler handlers)]
+        handle (partial call-handler handlers)
+        with-ctrl? (.-ctrlKey event)]
     (cond
       (is? key-code :enter) (handle :enter)
       (is? key-code :arrow-left) (handle :move-selection :left)
@@ -32,4 +35,6 @@
       (is? key-code :arrow-right) (handle :move-selection :right)
       (is? key-code :arrow-down) (handle :move-selection :down)
       (is? key-code :esc) (handle :reset-selection)
+      (and (is? key-code :c) with-ctrl?) (handle :copy)
+      (and (is? key-code :v) with-ctrl?) (handle :paste)
       :else nil)))

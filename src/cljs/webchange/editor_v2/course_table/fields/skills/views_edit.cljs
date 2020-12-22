@@ -40,7 +40,7 @@
 
 (defn edit-form
   [{:keys [data field]}]
-  (r/with-let [component-id (keyword (:idx data))
+  (r/with-let [component-id (:idx data)
                _ (re-frame/dispatch [::skills-state/init data component-id])]
     (let [skills @(re-frame/subscribe [::skills-state/skills-list component-id])
           current-skills @(re-frame/subscribe [::skills-state/current-skills component-id])
