@@ -27,8 +27,8 @@
                            (take-last max-count data)
                            data)]
     [:div {:style (:list styles)}
-     (for [{:keys [id activity-id] :as assessment} assessments-list]
-       ^{:key (str id "-" activity-id)}
+     (for [{:keys [level lesson activity] :as assessment} assessments-list]
+       ^{:key (str level "-" lesson "-" activity)}
        [assessments-list-item (merge (prepare-data assessment)
                                      {:on-click on-click
                                       :style    (if (last? assessment data)

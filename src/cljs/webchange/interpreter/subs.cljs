@@ -71,11 +71,7 @@
   (fn [db]
     (let [activity-name (:current-scene db)
           {:keys [level lesson]} (activity/name->activity-action db activity-name)
-          lesson-sets (-> (get-in db [:course-data :levels])
-                          (common.activity/get-level level)
-                          :lessons
-                          (common.activity/get-lesson lesson)
-                          :lesson-sets)
+          lesson-sets (get-in db [:course-data :levels level :lessons lesson :lesson-sets])
           lessons (get-in db [:lessons])
           loaded-lessons (get-in db [:sandbox :loaded-lessons])
           get-lesson (fn [[name id]] (or (get loaded-lessons name)

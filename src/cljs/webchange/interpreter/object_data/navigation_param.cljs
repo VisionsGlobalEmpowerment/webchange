@@ -12,7 +12,7 @@
               (assoc :filter "grayscale"))]
     o))
 
-(defn- get-lesson-based-open-activity []
+(defn- get-lesson-based-open-activity-names []
   (let [{:keys [id]} @(re-frame/subscribe [::student-dashboard-subs/next-activity])
         finished-level-lesson-activities @(re-frame/subscribe [::student-dashboard-subs/finished-level-lesson-activities])
         activities (conj finished-level-lesson-activities id)]
@@ -26,9 +26,9 @@
 
 (defn with-navigation-params [scene-id object-name o]
   (let [navigation-mode @(re-frame/subscribe [::subs/navigation-mode])
-        activities (if (= navigation-mode :lesson) (get-lesson-based-open-activity) (get-activity-based-open-activity))
+        activity-names (if (= navigation-mode :lesson) (get-lesson-based-open-activity-names) (get-activity-based-open-activity))
         scene-list @(re-frame/subscribe [::subs/scene-list])
-        all-activities (set (flatten (map #(find-path scene-id % scene-list) activities)))
+        all-activities (set (flatten (map #(find-path scene-id % scene-list) activity-names)))
         outs (set (flatten (map #(:name %) (:outs ((keyword scene-id) scene-list)))))]
     (if (contains? outs object-name)
       (if (contains? all-activities object-name) o (lock-object o))

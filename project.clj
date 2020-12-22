@@ -66,7 +66,7 @@
   :min-lein-version "2.5.3"
 
   :source-paths ["src/clj" "src/cljc" "src/cljs"]
-  :test-paths ["test/clj"]
+  :test-paths ["test/clj" "test/cljc"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"
                                     "test/js"]
@@ -221,7 +221,7 @@
                     :language-in :ecmascript6}}
 
     {:id           "test"
-     :source-paths ["src/cljs" "test/cljs"]
+     :source-paths ["src/cljs" "src/cljc" "test/cljs" "test/cljc"]
      :compiler     {:main          webchange.runner
                     :output-to     "resources/public/js/compiled/test.js"
                     :output-dir    "resources/public/js/compiled/test/out"

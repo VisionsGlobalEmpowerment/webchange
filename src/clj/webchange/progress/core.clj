@@ -167,35 +167,28 @@
       (create-progress! owner-id course-id progress))))
 
 (defn- levels->finished
-  [levels level-id lesson-id]
-  (let [->lesson (fn [lesson] [(:lesson lesson) (->> (:activities lesson) (map :activity) (into #{}))])
-        ->level (fn [level] [(:level level) (->> (:lessons level) (map ->lesson) (into {}))])
-        prepared (->> levels (map ->level) (into {}))]
-    (if level-id
+  [levels level-idx lesson-idx]
+  (let [->lesson (fn [idx lesson] [idx (->> (:activities lesson) (map-indexed (fn [idx _] idx)) (into #{}))])
+        ->level (fn [idx level] [idx (->> (:lessons level) (map-indexed ->lesson) (into {}))])
+        prepared (->> levels (map-indexed ->level) (into {}))]
+    (if level-idx
       (let [filtered-levels (->> prepared
-                                 (keep (fn [[idx item]] (when (>= level-id idx) [idx item])))
+                                 (keep (fn [[idx item]] (when (>= level-idx idx) [idx item])))
                                  (into {}))]
-        (if lesson-id
+        (if lesson-idx
           (let [[last-level last-lessons] (last filtered-levels)
                 filtered-lessons (->> last-lessons
-                                      (keep (fn [[idx item]] (when (>= lesson-id idx) [idx item])))
+                                      (keep (fn [[idx item]] (when (>= lesson-idx idx) [idx item])))
                                       (into {}))]
             (-> filtered-levels
                 (assoc last-level filtered-lessons)))
           filtered-levels))
       prepared)))
 
-(defn next-not-finished
-  [current-tags levels finished]
-  (let [[level-num level] (apply max-key key finished)
-        [lesson-num _] (apply max-key key level)
-        level (first (filter #(= level-num (:level %)) levels))
-        lesson (first (filter #(= lesson-num (:lesson %)) (:lessons level)))
-        activity (:activity (last (:activities lesson)))]
-    (activity/next-for current-tags levels {:level level-num :lesson lesson-num :activity activity})))
-
-(defn complete-individual-progress! [course-slug student-id {lesson :lesson level :level}]
-  (let [{user-id :user-id} (db/get-student {:id student-id})
+(defn complete-individual-progress! [course-slug student-id {lesson-val :lesson level-val :level}]
+  (let [level (dec level-val)
+        lesson (dec lesson-val)
+        {user-id :user-id} (db/get-student {:id student-id})
         {course-id :id} (db/get-course {:slug course-slug})
         levels (-> (course/get-course-data course-slug) :levels)
         finished (-> levels
@@ -204,7 +197,7 @@
                    (db/get-progress {:user_id user-id :course_id course-id})
                    :data
                    :current-tags)
-        next (next-not-finished current-tags levels finished)
+        next (activity/next-not-finished-for current-tags levels finished {:level level :lesson lesson :activity 0})
         progress (->
                    (db/get-progress {:user_id user-id :course_id course-id})
                    :data

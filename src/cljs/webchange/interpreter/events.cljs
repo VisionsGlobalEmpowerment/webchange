@@ -128,14 +128,18 @@
                           (re-frame/dispatch [::set-scenes-data @scenes-data])
                           (re-frame/dispatch [::load-lessons course-id]))))))))
 
+(defn- progress-initialized?
+  [progress]
+  (and progress (:next progress)))
+
 (re-frame/reg-fx
   :load-progress
   (fn [course-id]
     (i/load-progress course-id (fn [progress]
                                  (re-frame/dispatch [:complete-request :load-progress])
-                                 (if progress
+                                 (if (progress-initialized? progress)
                                    (re-frame/dispatch [::set-progress-data progress])
-                                   (re-frame/dispatch [::init-default-progress]))
+                                   (re-frame/dispatch [::init-default-progress progress]))
                                  (re-frame/dispatch [::progress-loaded])))))
 
 (re-frame/reg-fx
@@ -193,19 +197,6 @@
 (defn get-audio-key
   [db id]
   (get-in db [:scenes (:current-scene db) :audio (keyword id)]))
-
-(defn workflow-action
-  [db id]
-  (let [actions (get-in db [:course-data :workflow-actions])]
-    (->> actions
-         (filter #(= id (:id %)))
-         first)))
-
-(defn current-level
-  [db]
-  (let [current-workflow-action (get-in db [:progress-data :current-workflow-action])
-        current-action (workflow-action db current-workflow-action)]
-    (:level current-action)))
 
 (re-frame/reg-event-fx
   ::execute-placeholder-audio
@@ -390,8 +381,9 @@
      :location-id 'painting-tablet'}"
     (let [location-key (keyword location-id)
           locations (get-in db [:course-data :locations])
+          next (get-in db [:progress-data :next])
           scene-id (if (contains? locations location-key)
-                     (resolve-scene-id (get locations location-key) {:level (current-level db)})
+                     (resolve-scene-id (get locations location-key) next)
                      location-id)]
       {:dispatch-n (list [::set-current-scene scene-id] (ce/success-event action))})))
 
@@ -807,8 +799,7 @@
       {:db         (assoc db
                      :activity-started true
                      :activity-start-time (js/Date.)
-                     :activity-lesson (:lesson activity-action)
-                     :activity (select-keys activity-action [:level :lesson :activity]))
+                     :activity (select-keys activity-action [:level :lesson :activity :activity-name]))
        :dispatch-n (list
                      [::disable-navigation]
                      [::add-pending-event :activity-started activity-action]
@@ -825,7 +816,8 @@
     Example:
     {:type 'stop-activity'
      :id   'pinata'}"
-    (let [activity-action (lessons-activity/name->activity-action db activity-name)
+    (let [activity-name (or activity-name (:current-scene db))
+          activity-action (lessons-activity/name->activity-action db activity-name)
           start-time (get db :activity-start-time)
           time-spent (if start-time
                        (- (js/Date.) (get db :activity-start-time))
@@ -855,8 +847,10 @@
           js/Math.round)
       100)))
 
-(defn activity-finished-event [db {activity-name :id}]
-  (let [activity-action (lessons-activity/name->activity-action db activity-name)
+(defn activity-finished-event
+  [db {activity-name :id}]
+  (let [activity-name (or activity-name (:current-scene db))
+        activity-action (lessons-activity/name->activity-action db activity-name)
         score (activity-score db)
         start-time (get db :activity-start-time)
         time-spent (if start-time
@@ -868,6 +862,7 @@
 (defn lesson-activity-finished?
   [db {activity-name :id}]
   (let [next (get-in db [:progress-data :next])
+        activity-name (or activity-name (:current-scene db))
         activity-action (lessons-activity/name->activity-action db activity-name)
         current-activity? (= next activity-action)
 
@@ -880,7 +875,8 @@
 
 (defn get-lesson-activity-tags
   [db {activity-name :id}]
-  (let [activity-action (lessons-activity/name->activity-action db activity-name)
+  (let [activity-name (or activity-name (:current-scene db))
+        activity-action (lessons-activity/name->activity-action db activity-name)
         tags-by-score (-> (lessons-activity/workflow-action db activity-action) :tags-by-score)
         current-tags (get-in db [:progress-data :current-tags] [])]
     (if tags-by-score
@@ -921,7 +917,8 @@
          :dispatch-n events}
         {:dispatch (ce/success-event action)}))))
 
-(defn activity-progress-event [db]
+(defn activity-progress-event
+  [db]
   (let [activity-progress (lessons-activity/activity-progress db)]
     [::add-pending-event :activity-progress {:activity-progress activity-progress}]))
 
@@ -1099,9 +1096,9 @@
 
 (re-frame/reg-event-fx
   ::init-default-progress
-  (fn [{:keys [db]} [_ _]]
+  (fn [{:keys [db]} [_ progress]]
     (let [default-progress (get-in db [:course-data :default-progress])]
-      {:db (update-in db [:progress-data] merge default-progress)})))
+      {:db (update-in db [:progress-data] merge progress default-progress)})))
 
 (def default-triggers
   {:start [[::reset-navigation] [::ce/execute-reset-skip]]})
@@ -1120,9 +1117,13 @@
           default-actions (get default-triggers trigger)]
       {:dispatch-n (concat actions default-actions)})))
 
+(defn- next-activity-name
+  [db]
+  (get-in db [:progress-data :next :activity-name]))
+
 (defn- next-scene-location
   [db]
-  (let [next-activity (get-in db [:progress-data :next :activity])
+  (let [next-activity (next-activity-name db)
         current-scene (get-in db [:current-scene])
         scene-list (get-in db [:course-data :scene-list])]
     (->> (find-path current-scene next-activity scene-list)
@@ -1132,7 +1133,7 @@
 
 (defn- next-location
   [db]
-  (let [next-activity (get-in db [:progress-data :next :activity])
+  (let [next-activity (next-activity-name db)
         current-scene (get-in db [:current-scene])
         scene-list (get-in db [:course-data :scene-list])]
     (find-exit-position current-scene next-activity scene-list)))
@@ -1146,7 +1147,7 @@
 (re-frame/reg-event-fx
   ::run-next-activity
   (fn [{:keys [db]} [_ _]]
-    (let [next-activity (get-in db [:progress-data :next :activity])]
+    (let [next-activity (next-activity-name db)]
       {:dispatch-n (list [::set-current-scene next-activity])})))
 
 (re-frame/reg-event-fx
@@ -1344,7 +1345,7 @@
 (re-frame/reg-event-fx
   ::reset-navigation
   (fn [{:keys [db]} _]
-    (let [next-activity (get-in db [:progress-data :next :activity])
+    (let [next-activity (next-activity-name db)
           current-scene (get-in db [:current-scene])
           scene-list (get-in db [:course-data :scene-list])
           exit (next-location db)
@@ -1413,13 +1414,10 @@
     Example:
     {:type         'pick-correct',
      :concept-name 'ardilla'}"
-    (let [current-activity (:activity db)
-          counter-value (or (vars.core/get-variable :score-correct) 0)]
+    (let [counter-value (or (vars.core/get-variable :score-correct) 0)]
       (vars.core/set-variable! :score-correct (inc counter-value))
       (vars.core/set-variable! :score-first-attempt false)
-      {:dispatch-n (list
-                     [::add-pending-event :concept-picked-correct (merge current-activity {:concept-name concept-name})]
-                     (ce/success-event action))})))
+      {:dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-pick-wrong
@@ -1434,18 +1432,14 @@
     {:type         'pick-wrong',
      :concept-name 'ardilla'
      :option       'oso'}"
-    (let [current-activity (:activity db)
-          counter-incorrect (or (vars.core/get-variable :score-incorrect) 0)
+    (let [counter-incorrect (or (vars.core/get-variable :score-incorrect) 0)
           counter-mistake (or (vars.core/get-variable :score-mistake) 0)
           first-attempt? (vars.core/get-variable :score-first-attempt)]
       (when first-attempt?
         (vars.core/set-variable! :score-incorrect (inc counter-incorrect)))
       (vars.core/set-variable! :score-mistake (inc counter-mistake))
       (vars.core/set-variable! :score-first-attempt false)
-      {:dispatch-n (list
-                     [::add-pending-event :concept-picked-wrong (merge current-activity {:concept-name concept-name
-                                                                                         :option       option})]
-                     (ce/success-event action))})))
+      {:dispatch-n (list (ce/success-event action))})))
 
 (re-frame/reg-event-fx
   ::execute-set-current-concept

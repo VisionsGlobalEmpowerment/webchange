@@ -126,7 +126,7 @@
 (defn- parse-next-activity-preview
   []
   (let [next-activity @(re-frame/subscribe [::subs/after-current-activity])
-        next-activity-preview (->> (:activity next-activity)
+        next-activity-preview (->> (:activity-name next-activity)
                                    (keyword)
                                    (parse-scenes-previews))]
     [next-activity-preview]))

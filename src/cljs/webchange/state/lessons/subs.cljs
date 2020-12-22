@@ -15,14 +15,8 @@
   [db lesson-name]
   (if-let [loaded (get-in db [:sandbox :loaded-lessons (keyword lesson-name)])]
     loaded
-    (let [current-activity (:activity db)
-          lesson-sets (->> (get-in db [:course-data :levels])
-                           (filter #(= (:level current-activity) (:level %)))
-                           first
-                           :lessons
-                           (filter #(= (:lesson current-activity) (:lesson %)))
-                           first
-                           :lesson-sets)
+    (let [{:keys [level lesson]} (:activity db)
+          lesson-sets (get-in db [:course-data :levels level :lessons lesson :lesson-sets])
           lesson-set-name (or (get lesson-sets (keyword lesson-name))
                               lesson-name)]
       (lesson-set db lesson-set-name))))
