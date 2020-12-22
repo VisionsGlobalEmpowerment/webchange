@@ -125,6 +125,11 @@ VALUES (:scene_id, :data, :owner_id, :created_at) RETURNING id
 SELECT * from scenes
 WHERE course_id = :course_id AND name = :name;
 
+-- :name get-scene-by-id :? :1
+-- :doc retrieve a scene record given the id
+SELECT * from scenes
+WHERE id = :id;
+
 -- :name get-scenes :? :*
 -- :doc retrieve all scene records
 SELECT * from scenes;
@@ -161,3 +166,10 @@ SELECT * FROM scene_skills;
 -- :doc retrieve all scene skill records
 SELECT * FROM scene_skills WHERE scene_id=:scene_id;
 
+-- :name add-collaborator! :! :n
+-- :doc creates a new course-collaborator link
+INSERT INTO collaborators (course_id, user_id) VALUES (:course_id, :user_id);
+
+-- :name is-collaborator? :? :1
+-- :doc check if user is collaborator on given course
+SELECT true as result from collaborators WHERE course_id = :course_id AND user_id = :user_id

@@ -8,6 +8,21 @@
             [buddy.auth :as buddy]
             [webchange.auth.core :as core]))
 
+(defn website-profile-page
+  []
+  (let [website-host (env :website-host)]
+    (str "https://" website-host "/user/profile")))
+
+(defn website-courses-page
+  []
+  (let [website-host (env :website-host)]
+    (str "https://" website-host "/user/courses")))
+
+(defn website-login-page
+  []
+  (let [website-host (env :website-host)]
+    (str "https://" website-host "/user/login")))
+
 (defn coerce-user-types
   [{id :id :as user}]
   (assoc user :id (if (int? id) id (Integer/parseInt id))))

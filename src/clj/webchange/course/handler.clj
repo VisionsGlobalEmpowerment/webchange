@@ -12,17 +12,19 @@
             [webchange.auth.core :as auth]
             [webchange.auth.website :as website]
             [spec-tools.data-spec :as ds]
-            [webchange.db.core :refer [*db*] :as db]
             [schema.core :as s]
             [config.core :refer [env]]
             [webchange.common.hmac-sha256 :as sign]
             [compojure.api.middleware :as mw]
-            [webchange.templates.core :as templates]))
+            [webchange.templates.core :as templates]
+            [webchange.db.core :refer [*db*] :as db]))
 
 (defn handle-save-scene
   [course-slug scene-name request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/save-scene! course-slug scene-name data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/save-scene! course-slug scene-name data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :scene
@@ -31,8 +33,10 @@
 
 (defn handle-update-scene
   [course-slug scene-name request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/update-scene! course-slug scene-name data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/update-scene! course-slug scene-name data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :scene
@@ -41,8 +45,10 @@
 
 (defn handle-update-scene-skills
   [course-slug scene-name request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/update-scene-skills! course-slug scene-name data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/update-scene-skills! course-slug scene-name data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :skills
@@ -51,8 +57,10 @@
 
 (defn handle-save-course
   [course-slug request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/save-course! course-slug data owner-id))]
+  (let [user-id (current-user request)
+        save (fn [data] (core/save-course! course-slug data user-id))]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         :course
@@ -61,8 +69,11 @@
 
 (defn handle-save-course-info
   [course-id request]
-  (let [owner-id (current-user request)
-        save (fn [data] (core/save-course-info! (Integer/parseInt course-id) data))]
+  (let [course-id (Integer/parseInt course-id)
+        user-id (current-user request)
+        save (fn [data] (core/save-course-info! course-id data))]
+    (when-not (core/collaborator-by-course-id? user-id course-id)
+      (throw-unauthorized {:role :educator}))
     (-> request
         :body
         save
@@ -70,14 +81,20 @@
 
 (defn handle-restore-course-version
   [version-id request]
-  (let [owner-id (current-user request)]
-    (-> (core/restore-course-version! (Integer/parseInt version-id) owner-id)
+  (let [version-id (Integer/parseInt version-id)
+        user-id (current-user request)]
+    (when-not (core/collaborator-by-course-version? user-id version-id)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/restore-course-version! version-id user-id)
         handle)))
 
 (defn handle-restore-scene-version
   [version-id request]
-  (let [owner-id (current-user request)]
-    (-> (core/restore-scene-version! (Integer/parseInt version-id) owner-id)
+  (let [version-id (Integer/parseInt version-id)
+        user-id (current-user request)]
+    (when-not (core/collaborator-by-scene-version? user-id version-id)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/restore-scene-version! version-id user-id)
         handle)))
 
 (defn handle-localize-course
@@ -102,24 +119,26 @@
 
 (defn handle-create-activity
   [course-slug data request]
-  (let [owner-id (current-user request)
+  (let [user-id (current-user request)
         activity (templates/activity-from-template data)
         metadata (templates/metadata-from-template data)]
-    (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) owner-id)
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) user-id)
         handle)))
 
 (defn handle-update-activity
   [course-slug data scene-slug request]
-  (let [owner-id (current-user request)
+  (let [user-id (current-user request)
         scene-data (core/get-scene-data course-slug scene-slug)
         activity (templates/update-activity-from-template scene-data data)]
-    (-> (core/save-scene! course-slug scene-slug activity owner-id)
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/save-scene! course-slug scene-slug activity user-id)
         (second)
         ((fn [data]
            [true (assoc data :data (:data (db/get-latest-scene-version {:scene_id (:id data)})))]))
-        handle)
-    )
-  )
+        handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
 (s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int})
@@ -206,26 +225,43 @@
       :path-params [course-slug :- s/Str]
       :return Activity
       :body [activity-data CreateActivity]
-      :summary "Creates a new course"
+      :summary "Creates a new activity from template"
       (handle-create-activity course-slug activity-data request))
     (POST "/:course-slug/update-activity/:scene-slug" request
       :path-params [course-slug :- s/Str scene-slug :- s/Str]
       :return s/Any
       :body [activity-data s/Any]
-      :summary "Creates a new course"
-      (handle-update-activity course-slug activity-data scene-slug request))
-    )
+      :summary "Updates activity using template"
+      (handle-update-activity course-slug activity-data scene-slug request)))
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills
     :summary "Returns list of skills with strands and topics"
     (-> (skills/get-skills) response)))
 
+(defn collaborator-route
+  [{{course-slug :course-slug} :route-params :as request}]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator})))
+  (resource-response "index.html" {:root "public"}))
+
+(defroutes course-pages-routes
+  (GET "/courses/:course-slug/editor" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/:scene-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/concepts/:concept-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/add-concept" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/levels/:level-id/lessons/:lesson-id" request (collaborator-route request))
+  (GET "/courses/:course-slug/editor-v2/levels/:level-id/add-lesson" request (collaborator-route request))
+  (GET "/courses/:course-slug/table" request (collaborator-route request)))
+
 (defroutes course-routes
   (GET "/api/courses/:course-slug" [course-slug] (-> course-slug core/get-course-data response))
 
   ;; Scenes
-  (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name] (-> (core/get-scene-data course-slug scene-name) response))
+  (GET "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name]
+    (-> (core/get-scene-data course-slug scene-name) response))
   (POST "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
     (handle-save-scene course-slug scene-name request))
   (PUT "/api/courses/:course-slug/scenes/:scene-name" [course-slug scene-name :as request]
@@ -242,7 +278,8 @@
     (handle-save-course-info course-id request))
 
   (GET "/api/courses/:course-slug/versions" [course-slug] (-> course-slug core/get-course-versions response))
-  (GET "/api/courses/:course-slug/scenes/:scene-name/versions" [course-slug scene-name] (-> (core/get-scene-versions course-slug scene-name) response))
+  (GET "/api/courses/:course-slug/scenes/:scene-name/versions" [course-slug scene-name]
+    (-> (core/get-scene-versions course-slug scene-name) response))
   (POST "/api/course-versions/:version-id/restore" [version-id :as request]
     (handle-restore-course-version version-id request))
   (POST "/api/scene-versions/:version-id/restore" [version-id :as request]

@@ -21,6 +21,35 @@
 
 (def hardcoded (env :hardcoded-courses {"test" true}))
 
+(defn collaborator?
+  [user-id {course-id :id owner-id :owner-id}]
+  (let [owner? (= owner-id user-id)
+        {collaborator? :result} (db/is-collaborator? {:course_id course-id :user_id user-id})]
+    (or owner? collaborator?)))
+
+(defn collaborator-by-course-slug?
+  [user-id course-slug]
+  (let [course (db/get-course {:slug course-slug})]
+    (collaborator? user-id course)))
+
+(defn collaborator-by-course-id?
+  [user-id course-id]
+  (let [course (db/get-course-by-id {:id course-id})]
+    (collaborator? user-id course)))
+
+(defn collaborator-by-course-version?
+  [user-id course-version]
+  (let [{course-id :course-id} (db/get-course-version {:id course-version})
+        course (db/get-course-by-id {:id course-id})]
+    (collaborator? user-id course)))
+
+(defn collaborator-by-scene-version?
+  [user-id scene-version]
+  (let [{scene-id :scene-id} (db/get-scene-version {:id scene-version})
+        {course-id :course-id} (db/get-scene-by-id {:id scene-id})
+        course (db/get-course-by-id {:id course-id})]
+    (collaborator? user-id course)))
+
 (defn get-course-templates
   [course-slug]
   (if (contains? hardcoded course-slug)

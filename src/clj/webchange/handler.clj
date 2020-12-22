@@ -1,14 +1,14 @@
 (ns webchange.handler
   (:require [compojure.api.sweet :refer [api context ANY GET POST PUT DELETE PATCH defroutes routes swagger-routes]]
             [compojure.route :refer [resources files not-found]]
-            [ring.util.response :refer [resource-response response redirect]]
+            [ring.util.response :refer [resource-response response redirect status]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
             [webchange.auth.handler :refer [auth-routes]]
             [webchange.common.audio-parser :refer [get-talking-animation]]
-            [webchange.course.handler :refer [course-routes website-api-routes editor-api-routes courses-api-routes]]
+            [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.school.handler :refer [school-routes]]
             [webchange.secondary.handler :refer [secondary-school-routes]]
@@ -28,10 +28,18 @@
             [webchange.common.hmac-sha256 :as sign]
             [ring.middleware.session.memory :as mem]
             [webchange.common.handler :refer [handle current-user]]
-            [config.core :refer [env]])
+            [config.core :refer [env]]
+            [webchange.auth.website :as website])
   )
 
 (defn api-request? [request] (= "application/json" (:accept request)))
+
+(defn- login-resource
+  [{role :role} prev]
+  (case role
+    :student (str "/student-login" "?redirect=" prev)
+    :teacher (str "/login" "?redirect=" prev)
+    (str (website/website-login-page) "?redirect=" prev)))
 
 (defn unauthorized-handler
   [request metadata]
@@ -42,10 +50,8 @@
       {:status 401
        :body   {:errors [{:message "Unauthenticated"}]}})
     (if (authenticated? request)
-      (resource-response "error403.html" {:root "public"})
-      (redirect (if (:student-page metadata)
-                  (str "/student-login" "?redirect=" (:uri request))
-                  (str "/login" "?redirect=" (:uri request)))))))
+      (-> (resource-response "error403.html" {:root "public"}) (status 403))
+      (redirect (login-resource metadata (:uri request))))))
 
 (def auth-backend
   (session-backend {:unauthorized-handler unauthorized-handler}))
@@ -68,6 +74,7 @@
         handle)))
 
 (defn public-route [] (resource-response "index.html" {:root "public"}))
+
 (defn authenticated-route
   ([request]
    (authenticated-route request {}))
@@ -82,7 +89,7 @@
 
 (defn teachers-route [request]
   (if-not (teacher? request)
-    (throw-unauthorized)
+    (throw-unauthorized {:role :teacher})
     (resource-response "index.html" {:root "public"})))
 
 (defroutes pages-routes
@@ -94,16 +101,7 @@
            (GET "/s/:course-id/:scene-id" [] (public-route))
            (GET "/s/:course-id/:scene-id/:encoded-items" [] (public-route))
 
-           (GET "/courses/:id" request (authenticated-route request))
-           (GET "/courses/:id/editor" request (authenticated-route request))
-           (GET "/courses/:id/editor-v2" request (authenticated-route request))
-           (GET "/courses/:id/editor-v2/:scene-id" request (authenticated-route request))
-           (GET "/courses/:id/editor-v2/concepts/:concept-id" request (authenticated-route request))
-           (GET "/courses/:id/editor-v2/add-concept" request (authenticated-route request))
-           (GET "/courses/:id/editor-v2/levels/:level-id/lessons/:lesson-id" request (authenticated-route request))
-           (GET "/courses/:id/editor-v2/levels/:level-id/add-lesson" request (authenticated-route request))
-           (GET "/courses/:id/table" request (authenticated-route request))
-
+           ;; teacher routes
            (GET "/dashboard" request (teachers-route request))
            (GET "/dashboard/classes" request (teachers-route request))
            (GET "/dashboard/schools" request (teachers-route request))
@@ -111,13 +109,14 @@
            (GET "/dashboard/classes/:class-id/students" request (teachers-route request))
            (GET "/dashboard/classes/:class-id/students/:student-id" request (teachers-route request))
 
-           ;; student dashboard
-           (GET "/courses/:id/dashboard" request (authenticated-route request {:student-page true}))
-           (GET "/courses/:id/dashboard/finished" request (authenticated-route request {:student-page true}))
+           ;; student routes
+           (GET "/courses/:id" request (authenticated-route request {:role :student}))
+           (GET "/courses/:id/dashboard" request (authenticated-route request {:role :student}))
+           (GET "/courses/:id/dashboard/finished" request (authenticated-route request {:role :student}))
 
            ;; Wizard
-           (GET "/game-changer" request (authenticated-route request))
-           (GET "/wizard" request (authenticated-route request))
+           (GET "/game-changer" request (authenticated-route request {:role :educator}))
+           (GET "/wizard" request (authenticated-route request {:role :educator}))
 
            (files "/upload/" {:root (env :upload-dir)})
            (resources "/"))
@@ -160,6 +159,7 @@
            pages-routes
            animation-routes
            auth-routes
+           course-pages-routes
            course-routes
            class-routes
            school-routes

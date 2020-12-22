@@ -6,7 +6,8 @@
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.editor-v2.wizard.state.activity :as state-activity]
     [webchange.editor-v2.wizard.views-game-changer-skills :refer [skills]]
-    [webchange.editor-v2.wizard.activity-template.views :refer [template]]))
+    [webchange.editor-v2.wizard.activity-template.views :refer [template]]
+    [webchange.editor-v2.layout.breadcrumbs :refer [root-breadcrumbs]]))
 
 (defn- simple-activity-info
   []
@@ -61,5 +62,5 @@
   []
   (re-frame/dispatch [::state-activity/load-templates])
   (re-frame/dispatch [::state-activity/load-skills])
-  [layout {:title "Create Activity"}
+  [layout {:breadcrumbs (root-breadcrumbs "Create Activity")}
    [simple-activity-info]])

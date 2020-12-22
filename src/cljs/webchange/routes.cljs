@@ -70,6 +70,14 @@
                key)]
     (pushy/set-token! history path)))
 
+(defn location
+  [name]
+  (let [locations {:profile "/user/profile"
+                   :courses "/user/courses"
+                   :login "/user/login"}
+        href (get locations name)]
+    (set! js/document.location href)))
+
 (re-frame/reg-fx
   :redirect
   (fn [args]
