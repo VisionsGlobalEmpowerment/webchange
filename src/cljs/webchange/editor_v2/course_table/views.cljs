@@ -12,6 +12,7 @@
     [webchange.editor-v2.course-table.views-table-pagination :refer [pagination]]
     [webchange.editor-v2.course-table.utils.cell-data :refer [get-row-id click-event->cell-data]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
+    [webchange.editor-v2.course-table.utils-rows-number :refer [get-row-height get-rows-number get-actual-rows-number]]
     [webchange.editor-v2.layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
@@ -93,36 +94,10 @@
                        (:lesson-idx activity)))
               rows)))))
 
-(defn- get-element-height
-  ([el]
-   (get-element-height el {}))
-  ([el {:keys [without-padding]
-        :or   {without-padding false}}]
-   (let [style (.getComputedStyle js/window el nil)
-         ->int #(.parseInt js/Number %)
-         get-prop #(.getPropertyValue style %)]
-     (cond-> (-> "height" get-prop ->int)
-             without-padding (-> (- (-> "padding-top" get-prop ->int))
-                                 (- (-> "padding-bottom" get-prop ->int)))))))
-
-(defn- get-rows-count
-  [content-el]
-  (let [header (.querySelector content-el "thead")
-        footer (.querySelector content-el ".footer")
-        content-row (.querySelector content-el "tbody > tr")]
-    (when (and (some? header)
-               (some? content-row))
-      (let [content-height (get-element-height content-el {:without-padding true})
-            header-height (get-element-height header)
-            footer-height (get-element-height footer)
-            content-row-height (get-element-height content-row)]
-        (-> (- content-height header-height footer-height)
-            (/ content-row-height)
-            (Math/ceil))))))
-
 (defn course-table
   []
   (let [container (atom nil)
+        initialized? (r/atom false)
         handle-content-ref (fn [el]
                              (when (some? el)
                                (reset! container el)))
@@ -137,14 +112,15 @@
                      (fn [this]
                        (let [{:keys [course-id]} (r/props this)]
                          (re-frame/dispatch [::data-state/init course-id])
-                         (when (some? @container)
-                           (re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)]))))
+                         (let [row-height (get-row-height @container)
+                               rows-number (get-rows-number @container row-height)]
+                           (re-frame/dispatch [::pagination-state/set-page-rows rows-number])
+                           (reset! initialized? true))))
 
        :component-did-update
                      (fn []
-                       (when (some? @container)
-                         (js/setTimeout #(re-frame/dispatch [::pagination-state/set-page-rows (get-rows-count @container)])
-                                        100)))
+                       (let [actual-rows-number (get-actual-rows-number @container)]
+                         (re-frame/dispatch [::pagination-state/set-actual-page-rows actual-rows-number])))
 
        :reagent-render
                      (fn [{:keys [course-id]}]
@@ -166,9 +142,13 @@
                                        :padding    "none"}
                              [col-group {:columns header-data}]
                              [header {:columns header-data}]
-                             [body {:data       data
-                                    :rows-skip  rows-skip
-                                    :rows-count rows-count
-                                    :columns    header-data}]]]
+                             [body (merge {:columns header-data}
+                                          (if @initialized?
+                                            {:data       data
+                                             :rows-skip  rows-skip
+                                             :rows-count rows-count}
+                                            {:data       [{}]
+                                             :rows-skip  0
+                                             :rows-count 1}))]]]
                            [pagination {:data data}]
                            [context-menu {:container container}]]]))})))
