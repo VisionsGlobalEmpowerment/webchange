@@ -116,6 +116,7 @@
 
            ;; Wizard
            (GET "/game-changer" request (authenticated-route request {:role :educator}))
+           (GET "/book-creator" request (authenticated-route request {:role :educator}))
            (GET "/wizard" request (authenticated-route request {:role :educator}))
 
            (files "/upload/" {:root (env :upload-dir)})

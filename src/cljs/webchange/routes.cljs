@@ -11,8 +11,9 @@
                   "login"             :login
                   "student-login"     :student-login
                   "register"          :register-user
-                  "wizard"            :wizard
-                  "game-changer"      :game-changer
+                  "wizard"            :wizard ;deprecated
+                  "game-changer"      :wizard ;migrating full wizard to /game-changer address
+                  "book-creator"      :game-changer ;migrating simple activity creation to /book-creator
                   "s"                 {["/" :course-id "/" :scene-id] :sandbox
                                        ["/" :course-id "/" :scene-id "/" [#".+" :encoded-items]] :sandbox}
                   "courses"           {["/" :id]           :course
