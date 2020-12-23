@@ -102,3 +102,13 @@
                                                        :position      target-position
                                                        :activity-data activity-data}))]
       {:dispatch [::common/update-course course-id updated-course-data]})))
+
+(re-frame/reg-event-fx
+  ::remove-activity
+  (fn [{:keys [db]} [_ {:keys [selection]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+          updated-course-data (utils/remove-activity course-data {:level-index    (:level-idx selection)
+                                                                  :lesson-index   (:lesson-idx selection)
+                                                                  :activity-index (:activity-idx selection)})]
+      {:dispatch [::common/update-course course-id updated-course-data]})))

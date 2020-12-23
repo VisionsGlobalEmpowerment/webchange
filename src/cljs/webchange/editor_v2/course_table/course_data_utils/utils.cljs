@@ -5,6 +5,12 @@
   (let [[before after] (split-at index list)]
     (vec (concat before [item] after))))
 
+(defn- remove-from-list
+  [list index]
+  (-> (concat (subvec list 0 index)
+              (subvec list (inc index)))
+      (vec)))
+
 ;; Levels
 
 (defn- get-level-path
@@ -112,6 +118,15 @@
         updated-activities (-> (get-lesson course-data lesson-selection)
                                (get :activities)
                                (insert-to-list position activity-data))]
+    (update-lesson course-data lesson-selection {:activities updated-activities})))
+
+(defn remove-activity
+  [course-data {:keys [level-index lesson-index activity-index]}]
+  (let [lesson-selection {:level-idx  level-index
+                          :lesson-idx lesson-index}
+        updated-activities (-> (get-lesson course-data lesson-selection)
+                               (get :activities)
+                               (remove-from-list activity-index))]
     (update-lesson course-data lesson-selection {:activities updated-activities})))
 
 ;;

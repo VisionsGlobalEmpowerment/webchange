@@ -50,12 +50,18 @@
                                                           :selection-to      current-selection
                                                           :relative-position relative-position}])))
 
-(defn handle-add-activity
+(defn- handle-add-activity
   [relative-position]
   (let [current-selection @(re-frame/subscribe [::selection-state/selection])]
     (re-frame/dispatch [::selection-state/reset-selection])
     (re-frame/dispatch [::course-data.events/add-activity {:selection         current-selection
                                                            :relative-position relative-position}])))
+
+(defn- handle-remove-activity
+  []
+  (let [current-selection @(re-frame/subscribe [::selection-state/selection])]
+    (re-frame/dispatch [::selection-state/reset-selection])
+    (re-frame/dispatch [::course-data.events/remove-activity {:selection         current-selection}])))
 
 (defn- get-lesson-menu-items
   [{:keys [saved-selection]}]
@@ -76,7 +82,10 @@
     :handler [handle-add-activity :before]}
    {:id      :add-activity-after
     :title   "Add activity after"
-    :handler [handle-add-activity :after]}])
+    :handler [handle-add-activity :after]}
+   {:id      :remove-activity
+    :title   "Remove activity"
+    :handler handle-remove-activity}])
 
 (defn- get-menu-items
   [{:keys [current-selection] :as params}]
