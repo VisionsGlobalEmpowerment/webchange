@@ -53,13 +53,37 @@
        (map (fn [[scheme-name {:keys [new-name]}]] [scheme-name new-name]))
        (into {})))
 
+
+
+(defn- get-default-activity-data
+  [course-data]
+  {:activity (-> (utils/get-available-activities-ids course-data) (first))})
+
+(defn- get-default-lesson-data
+  [course-data level-index]
+  (let [lesson-type "lesson"
+        scheme (utils/get-lesson-sets-scheme course-data {:level-idx level-index} (keyword lesson-type))
+        lesson-sets (->> scheme
+                         (map keyword)
+                         (map (fn [scheme-name]
+                                [scheme-name (generate-lesson-set-name course-data scheme-name)]))
+                         (into {}))]
+
+    (print "level-index" level-index)
+    (print "scheme" scheme)
+    (print "lesson-sets" lesson-sets)
+
+    {:type        lesson-type
+     :activities  [(get-default-activity-data course-data)]
+     :lesson-sets lesson-sets}))
+
 (re-frame/reg-event-fx
   ::copy-lesson
   (fn [{:keys [db]} [_ {:keys [selection-from selection-to relative-position] :as params}]]
     (let [course-id (data-state/course-id db)
           course-data (subs/course-data db)
-
           dataset-id (-> (interpreter.subs/course-datasets db) (first) (get :id))
+
           lesson-sets-map (get-lesson-sets-map db course-data params)
           lesson-data (-> (utils/get-lesson course-data selection-from)
                           (select-keys [:type :activities])
@@ -81,6 +105,29 @@
                                 lesson-sets-map))})))
 
 (re-frame/reg-event-fx
+  ::add-lesson
+  (fn [{:keys [db]} [_ {:keys [selection relative-position]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+          dataset-id (-> (interpreter.subs/course-datasets db) (first) (get :id))
+
+          target-position (cond-> (:lesson-idx selection)
+                                  (= relative-position :before) (identity)
+                                  (= relative-position :after) (inc))
+          lesson-data (get-default-lesson-data course-data (:level-idx selection))
+          updated-course-data (-> course-data
+                                  (utils/add-lesson {:level-index (:level-idx selection)
+                                                     :position    target-position
+                                                     :lesson-data lesson-data}))]
+      {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
+                           (map (fn [[_ lesson-set-name]]
+                                  [::warehouse/save-lesson-set {:dataset-id dataset-id
+                                                                :name       lesson-set-name
+                                                                :data       {:items []}}
+                                   {:on-success [::save-lesson-set-success lesson-set-name]}])
+                                (:lesson-sets lesson-data)))})))
+
+(re-frame/reg-event-fx
   ::save-lesson-set-success
   (fn [{:keys [_]} [_ lesson-name {:keys [lesson]}]]
     {:dispatch [::interpreter.events/update-course-lessons [(assoc lesson :name lesson-name)]]}))
@@ -94,8 +141,7 @@
           target-position (cond-> (:activity-idx selection)
                                   (= relative-position :before) (identity)
                                   (= relative-position :after) (inc))
-          activity-data {:activity (-> (utils/get-available-activities-ids course-data)
-                                       (first))}
+          activity-data (get-default-activity-data course-data)
           updated-course-data (-> course-data
                                   (utils/add-activity {:level-index   (:level-idx selection)
                                                        :lesson-index  (:lesson-idx selection)

@@ -22,6 +22,12 @@
                      (clojure.string/join ""))]
       (.querySelector container query))))
 
+(defn- handle-menu-item-click
+  [handler args]
+  (let [selection @(re-frame/subscribe [::selection-state/selection])]
+    (re-frame/dispatch [::selection-state/reset-selection])
+    (apply handler (concat [{:selection selection}] args))))
+
 (defn- menu
   [{:keys [anchor open? items on-close]}]
   [ui/menu {:open          open?
@@ -30,10 +36,10 @@
             :anchor-origin {:horizontal "right"
                             :vertical   "top"}}
    (for [{:keys [id title handler]} items]
-     (let [[func & args] (if (sequential? handler) handler [handler])]
+     (let [[handler & args] (if (sequential? handler) handler [handler])]
        ^{:key id}
        [ui/menu-item {:on-click #(do (on-close)
-                                     (apply func args))}
+                                     (handle-menu-item-click handler args))}
         title]))])
 
 (defn- handle-copy-lesson
@@ -41,33 +47,38 @@
   (re-frame/dispatch [::selection-state/save-selection]))
 
 (defn- handle-paste-lesson
-  [relative-position]
-  (let [current-selection @(re-frame/subscribe [::selection-state/selection])
-        saved-selection @(re-frame/subscribe [::selection-state/saved-selection])]
-    (re-frame/dispatch [::selection-state/reset-selection])
+  [{:keys [selection]} relative-position]
+  (let [saved-selection @(re-frame/subscribe [::selection-state/saved-selection])]
     (re-frame/dispatch [::selection-state/reset-saved-selection])
     (re-frame/dispatch [::course-data.events/copy-lesson {:selection-from    saved-selection
-                                                          :selection-to      current-selection
+                                                          :selection-to      selection
                                                           :relative-position relative-position}])))
 
+(defn- handle-add-lesson
+  [{:keys [selection]} relative-position]
+  (re-frame/dispatch [::course-data.events/add-lesson {:selection         selection
+                                                       :relative-position relative-position}]))
+
 (defn- handle-add-activity
-  [relative-position]
-  (let [current-selection @(re-frame/subscribe [::selection-state/selection])]
-    (re-frame/dispatch [::selection-state/reset-selection])
-    (re-frame/dispatch [::course-data.events/add-activity {:selection         current-selection
-                                                           :relative-position relative-position}])))
+  [{:keys [selection]} relative-position]
+  (re-frame/dispatch [::course-data.events/add-activity {:selection         selection
+                                                         :relative-position relative-position}]))
 
 (defn- handle-remove-activity
-  []
-  (let [current-selection @(re-frame/subscribe [::selection-state/selection])]
-    (re-frame/dispatch [::selection-state/reset-selection])
-    (re-frame/dispatch [::course-data.events/remove-activity {:selection         current-selection}])))
+  [{:keys [selection]}]
+  (re-frame/dispatch [::course-data.events/remove-activity {:selection selection}]))
 
 (defn- get-lesson-menu-items
   [{:keys [saved-selection]}]
   (cond-> [{:id      :copy-lesson
             :title   "Copy lesson"
-            :handler handle-copy-lesson}]
+            :handler handle-copy-lesson}
+           {:id      :add-lesson-before
+            :title   "Add lesson before"
+            :handler [handle-add-lesson :before]}
+           {:id      :add-lesson-after
+            :title   "Add lesson after"
+            :handler [handle-add-lesson :after]}]
           (some? saved-selection) (concat [{:id      :paste-lesson-before
                                             :title   "Paste lesson before"
                                             :handler [handle-paste-lesson :before]}
