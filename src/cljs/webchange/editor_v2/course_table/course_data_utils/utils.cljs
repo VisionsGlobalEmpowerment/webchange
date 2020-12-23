@@ -80,6 +80,17 @@
 
 ;; Activities
 
+(defn- get-available-activities
+  [course-data]
+  (->> (:scene-list course-data)
+       (map (fn [[id data]] (assoc data :id id)))))
+
+(defn get-available-activities-ids
+  [course-data]
+  (->> (get-available-activities course-data)
+       (map :id)
+       (map clojure.core/name)))
+
 (defn- get-activity-path
   [{:keys [activity-idx] :as selection}]
   {:pre [(number? (:activity-idx selection))

@@ -94,8 +94,11 @@
           target-position (cond-> (:activity-idx selection)
                                   (= relative-position :before) (identity)
                                   (= relative-position :after) (inc))
+          activity-data {:activity (-> (utils/get-available-activities-ids course-data)
+                                       (first))}
           updated-course-data (-> course-data
-                                  (utils/add-activity {:level-index  (:level-idx selection)
-                                                       :lesson-index (:lesson-idx selection)
-                                                       :position     target-position}))]
+                                  (utils/add-activity {:level-index   (:level-idx selection)
+                                                       :lesson-index  (:lesson-idx selection)
+                                                       :position      target-position
+                                                       :activity-data activity-data}))]
       {:dispatch [::common/update-course course-id updated-course-data]})))
