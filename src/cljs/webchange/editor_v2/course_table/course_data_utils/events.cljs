@@ -53,8 +53,6 @@
        (map (fn [[scheme-name {:keys [new-name]}]] [scheme-name new-name]))
        (into {})))
 
-
-
 (defn- get-default-activity-data
   [course-data]
   {:activity (-> (utils/get-available-activities-ids course-data) (first))})
@@ -71,6 +69,10 @@
     {:type        lesson-type
      :activities  [(get-default-activity-data course-data)]
      :lesson-sets lesson-sets}))
+
+(defn- get-default-level-data
+  []
+  {:lessons []})
 
 (re-frame/reg-event-fx
   ::copy-lesson
@@ -98,6 +100,26 @@
                                                                 :data       {:items items}}
                                    {:on-success [::save-lesson-set-success new-name]}])
                                 lesson-sets-map))})))
+
+(re-frame/reg-event-fx
+  ::add-level
+  (fn [{:keys [db]} [_ {:keys [selection relative-position]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+
+          target-position (cond-> (:level-idx selection)
+                                  (= relative-position :before) (identity)
+                                  (= relative-position :after) (inc))
+          level-data (get-default-level-data)
+          updated-course-data (-> course-data
+                                  (utils/add-level {:position   target-position
+                                                    :level-data level-data}))]
+      {:dispatch [::common/update-course
+                  course-id
+                  updated-course-data
+                  {:on-success [::add-lesson {:selection         {:level-idx  target-position
+                                                                  :lesson-idx 0}
+                                              :relative-position :before}]}]})))
 
 (re-frame/reg-event-fx
   ::add-lesson

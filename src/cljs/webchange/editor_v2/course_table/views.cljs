@@ -82,8 +82,10 @@
                                          (not= lesson-idx current-lesson-idx) (assoc :concepts (lessons-count data idx level-idx lesson-idx)))
                     skip-columns (cond-> {}
                                          (= level-idx current-level-idx) (assoc :level-idx true)
-                                         (= lesson-idx current-lesson-idx) (assoc :lesson-idx true)
-                                         (= lesson-idx current-lesson-idx) (assoc :concepts true))]
+                                         (and (= level-idx current-level-idx)
+                                              (= lesson-idx current-lesson-idx)) (assoc :lesson-idx true)
+                                         (and (= level-idx current-level-idx)
+                                              (= lesson-idx current-lesson-idx)) (assoc :concepts true))]
                 (recur rest-activities
                        (conj rows
                              ^{:key (get-row-id activity)}

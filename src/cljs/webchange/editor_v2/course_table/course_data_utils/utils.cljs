@@ -27,6 +27,12 @@
   (->> (get-level-path selection)
        (get-in course-data)))
 
+(defn add-level
+  [course-data {:keys [position level-data]}]
+  (let [updated-levels (-> (get-levels course-data)
+                           (insert-to-list position level-data))]
+    (assoc course-data :levels updated-levels)))
+
 (defn get-lesson-sets-scheme
   ([course-data selection]
    (get-lesson-sets-scheme course-data selection nil))

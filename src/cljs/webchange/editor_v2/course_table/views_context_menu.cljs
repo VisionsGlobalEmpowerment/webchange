@@ -5,7 +5,8 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.course-data-utils.events :as course-data.events]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
-    [webchange.editor-v2.course-table.utils.cell-data :refer [cell-data->cell-attributes click-event->cell-data]]))
+    [webchange.editor-v2.course-table.utils.cell-data :refer [cell-data->cell-attributes click-event->cell-data]]
+    [webchange.editor-v2.course-table.utils-rows-number :refer [get-element-height]]))
 
 (defn- init-mouse-event
   [{:keys [on-right-click]}]
@@ -30,17 +31,21 @@
 
 (defn- menu
   [{:keys [anchor open? items on-close]}]
-  [ui/menu {:open          open?
-            :on-close      on-close
-            :anchor-el     anchor
-            :anchor-origin {:horizontal "right"
-                            :vertical   "top"}}
+  [ui/menu {:open      open?
+            :on-close  on-close
+            :anchor-el anchor
+            :style     {:margin-top (- 30 (/ (get-element-height anchor) 2))}}
    (for [{:keys [id title handler]} items]
      (let [[handler & args] (if (sequential? handler) handler [handler])]
        ^{:key id}
        [ui/menu-item {:on-click #(do (on-close)
                                      (handle-menu-item-click handler args))}
         title]))])
+
+(defn- handle-add-level
+  [{:keys [selection]} relative-position]
+  (re-frame/dispatch [::course-data.events/add-level {:selection         selection
+                                                      :relative-position relative-position}]))
 
 (defn- handle-copy-lesson
   [{:keys [selection]}]
@@ -71,6 +76,19 @@
 (defn- handle-remove-activity
   [{:keys [selection]}]
   (re-frame/dispatch [::course-data.events/remove-activity {:selection selection}]))
+
+(defn- get-level-menu-items
+  [_]
+  [{:id      :add-level-before
+    :title   "Add level before"
+    :handler [handle-add-level :before]}
+   {:id      :add-level-after
+    :title   "Add level after"
+    :handler [handle-add-level :after]}
+   ;{:id      :remove-lesson
+   ; :title   "Remove lesson"
+   ; :handler handle-remove-lesson}
+   ])
 
 (defn- get-lesson-menu-items
   [{:keys [saved-selection]}]
@@ -108,6 +126,7 @@
 (defn- get-menu-items
   [{:keys [current-selection] :as params}]
   (cond-> []
+          (= (:field current-selection) :level-idx) (concat (get-level-menu-items params))
           (= (:field current-selection) :lesson-idx) (concat (get-lesson-menu-items params))
           (not (some #{(:field current-selection)} [:level-idx :lesson-idx :concepts])) (concat (get-row-menu-items params))))
 

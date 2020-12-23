@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.course-table.utils-rows-number)
 
-(defn- get-element-height
+(defn get-element-height
   ([el]
    (get-element-height el {}))
   ([el {:keys [without-padding]
