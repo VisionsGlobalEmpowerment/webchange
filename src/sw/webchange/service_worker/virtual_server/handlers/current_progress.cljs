@@ -87,6 +87,10 @@
         (then require-status-ok!)
         (catch #(post-offline cloned)))))
 
+(defn- is-dirty?
+  [progress-data]
+  (and (:progress progress-data) (:offline progress-data)))
+
 (defn flush-current-progress
   []
   (logger/debug "[current-progress] Flush current progress ")
@@ -97,7 +101,7 @@
                               (db-events/get-events current-user)])
                 (promise-reject "Cant not flush progress data. User is undefined."))))
       (then (fn [[progress-data events-data]]
-              (if-not (nil? (:progress progress-data))
+              (if (is-dirty? progress-data)
                 (let [progress (merge progress-data {:events (map :data events-data)})]
                   (logger/debug "Flush progress" (clj->js progress))
                   (-> (api/post-current-progress progress)
