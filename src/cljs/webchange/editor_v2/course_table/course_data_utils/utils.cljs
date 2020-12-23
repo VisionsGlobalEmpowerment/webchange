@@ -71,6 +71,14 @@
   [course-data selection lesson-data-patch]
   (update-in course-data (get-lesson-path selection) merge lesson-data-patch))
 
+(defn remove-lesson
+  [course-data {:keys [level-index lesson-index]}]
+  (let [level-selection {:level-idx level-index}
+        updated-lessons (-> (get-level course-data level-selection)
+                            (get :lessons)
+                            (remove-from-list lesson-index))]
+    (update-level course-data level-selection {:lessons updated-lessons})))
+
 ;;
 
 (defn get-lesson-sets-names

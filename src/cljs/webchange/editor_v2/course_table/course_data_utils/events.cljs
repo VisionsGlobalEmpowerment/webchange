@@ -68,11 +68,6 @@
                          (map (fn [scheme-name]
                                 [scheme-name (generate-lesson-set-name course-data scheme-name)]))
                          (into {}))]
-
-    (print "level-index" level-index)
-    (print "scheme" scheme)
-    (print "lesson-sets" lesson-sets)
-
     {:type        lesson-type
      :activities  [(get-default-activity-data course-data)]
      :lesson-sets lesson-sets}))
@@ -126,6 +121,15 @@
                                                                 :data       {:items []}}
                                    {:on-success [::save-lesson-set-success lesson-set-name]}])
                                 (:lesson-sets lesson-data)))})))
+
+(re-frame/reg-event-fx
+  ::remove-lesson
+  (fn [{:keys [db]} [_ {:keys [selection]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+          updated-course-data (utils/remove-lesson course-data {:level-index  (:level-idx selection)
+                                                                :lesson-index (:lesson-idx selection)})]
+      {:dispatch [::common/update-course course-id updated-course-data]})))
 
 (re-frame/reg-event-fx
   ::save-lesson-set-success

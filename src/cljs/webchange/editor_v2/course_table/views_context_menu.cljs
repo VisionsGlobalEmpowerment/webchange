@@ -59,6 +59,10 @@
   (re-frame/dispatch [::course-data.events/add-lesson {:selection         selection
                                                        :relative-position relative-position}]))
 
+(defn- handle-remove-lesson
+  [{:keys [selection]}]
+  (re-frame/dispatch [::course-data.events/remove-lesson {:selection selection}]))
+
 (defn- handle-add-activity
   [{:keys [selection]} relative-position]
   (re-frame/dispatch [::course-data.events/add-activity {:selection         selection
@@ -78,7 +82,10 @@
             :handler [handle-add-lesson :before]}
            {:id      :add-lesson-after
             :title   "Add lesson after"
-            :handler [handle-add-lesson :after]}]
+            :handler [handle-add-lesson :after]}
+           {:id      :remove-lesson
+            :title   "Remove lesson"
+            :handler handle-remove-lesson}]
           (some? saved-selection) (concat [{:id      :paste-lesson-before
                                             :title   "Paste lesson before"
                                             :handler [handle-paste-lesson :before]}
