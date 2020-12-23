@@ -47,6 +47,10 @@
   (re-frame/dispatch [::course-data.events/add-level {:selection         selection
                                                       :relative-position relative-position}]))
 
+(defn- handle-remove-level
+  [{:keys [selection]}]
+  (re-frame/dispatch [::course-data.events/remove-level {:selection selection}]))
+
 (defn- handle-copy-lesson
   [{:keys [selection]}]
   (re-frame/dispatch [::selection-state/save-selection selection]))
@@ -85,10 +89,9 @@
    {:id      :add-level-after
     :title   "Add level after"
     :handler [handle-add-level :after]}
-   ;{:id      :remove-lesson
-   ; :title   "Remove lesson"
-   ; :handler handle-remove-lesson}
-   ])
+   {:id      :remove-level
+    :title   "Remove level"
+    :handler handle-remove-level}])
 
 (defn- get-lesson-menu-items
   [{:keys [saved-selection]}]

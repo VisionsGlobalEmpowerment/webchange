@@ -46,6 +46,11 @@
   [course-data selection level-data-patch]
   (update-in course-data (get-level-path selection) merge level-data-patch))
 
+(defn remove-level
+  [course-data {:keys [level-index]}]
+  (let [updated-levels (-> (get-levels course-data)
+                           (remove-from-list level-index))]
+    (assoc course-data :levels updated-levels)))
 
 ;; Lessons
 

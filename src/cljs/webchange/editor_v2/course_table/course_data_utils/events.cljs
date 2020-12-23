@@ -122,6 +122,14 @@
                                               :relative-position :before}]}]})))
 
 (re-frame/reg-event-fx
+  ::remove-level
+  (fn [{:keys [db]} [_ {:keys [selection]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+          updated-course-data (utils/remove-level course-data {:level-index  (:level-idx selection)})]
+      {:dispatch [::common/update-course course-id updated-course-data]})))
+
+(re-frame/reg-event-fx
   ::add-lesson
   (fn [{:keys [db]} [_ {:keys [selection relative-position]}]]
     (let [course-id (data-state/course-id db)
