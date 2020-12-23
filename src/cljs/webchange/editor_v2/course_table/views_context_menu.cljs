@@ -43,8 +43,8 @@
         title]))])
 
 (defn- handle-copy-lesson
-  []
-  (re-frame/dispatch [::selection-state/save-selection]))
+  [{:keys [selection]}]
+  (re-frame/dispatch [::selection-state/save-selection selection]))
 
 (defn- handle-paste-lesson
   [{:keys [selection]} relative-position]
@@ -74,10 +74,7 @@
 
 (defn- get-lesson-menu-items
   [{:keys [saved-selection]}]
-  (cond-> [{:id      :copy-lesson
-            :title   "Copy lesson"
-            :handler handle-copy-lesson}
-           {:id      :add-lesson-before
+  (cond-> [{:id      :add-lesson-before
             :title   "Add lesson before"
             :handler [handle-add-lesson :before]}
            {:id      :add-lesson-after
@@ -85,7 +82,10 @@
             :handler [handle-add-lesson :after]}
            {:id      :remove-lesson
             :title   "Remove lesson"
-            :handler handle-remove-lesson}]
+            :handler handle-remove-lesson}
+           {:id      :copy-lesson
+            :title   "Copy lesson"
+            :handler handle-copy-lesson}]
           (some? saved-selection) (concat [{:id      :paste-lesson-before
                                             :title   "Paste lesson before"
                                             :handler [handle-paste-lesson :before]}
