@@ -37,7 +37,7 @@
                                                      :skills       (get-in scenes-data [activity :skills] [])
                                                      :lesson-sets  (get-lesson-sets level lesson lesson-sets-data)
                                                      :tags         (get-activity-tags activity-data)
-                                                     :comment      comment})
+                                                     :comment      (or comment "")})
                                                   activities))
                                    lessons)))
        (flatten)

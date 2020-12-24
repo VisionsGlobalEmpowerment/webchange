@@ -78,8 +78,10 @@
               (let [{:keys [idx level-idx lesson-idx]} activity
                     span-columns (cond-> {}
                                          (not= level-idx current-level-idx) (assoc :level-idx (levels-count data idx level-idx))
-                                         (not= lesson-idx current-lesson-idx) (assoc :lesson-idx (lessons-count data idx level-idx lesson-idx))
-                                         (not= lesson-idx current-lesson-idx) (assoc :concepts (lessons-count data idx level-idx lesson-idx)))
+                                         (or (not= level-idx current-level-idx)
+                                             (not= lesson-idx current-lesson-idx)) (assoc :lesson-idx (lessons-count data idx level-idx lesson-idx))
+                                         (or (not= level-idx current-level-idx)
+                                             (not= lesson-idx current-lesson-idx)) (assoc :concepts (lessons-count data idx level-idx lesson-idx)))
                     skip-columns (cond-> {}
                                          (= level-idx current-level-idx) (assoc :level-idx true)
                                          (and (= level-idx current-level-idx)
