@@ -27,6 +27,10 @@
   (->> (get-level-path selection)
        (get-in course-data)))
 
+(defn get-level-lessons
+  [level-data]
+  (get level-data :lessons []))
+
 (defn add-level
   [course-data {:keys [position level-data]}]
   (let [updated-levels (-> (get-levels course-data)
@@ -65,10 +69,6 @@
   [course-data selection]
   (->> (get-lesson-path selection)
        (get-in course-data)))
-
-(defn get-level-lessons
-  [level-data]
-  (get level-data :lessons []))
 
 (defn add-lesson
   [course-data {:keys [level-index position lesson-data]}]
@@ -171,10 +171,13 @@
 
 ;;
 
-(defn- get-lesson-lesson-sets-names
-  [lesson-data]
-  (->> (get lesson-data :lesson-sets)
-       (vals)))
+(defn get-lesson-lesson-sets-names
+  ([course-data selection]
+   (-> (get-lesson course-data selection)
+       (get-lesson-lesson-sets-names)))
+  ([lesson-data]
+   (->> (get lesson-data :lesson-sets)
+        (vals))))
 
 (defn- get-level-lesson-sets-names
   [level-data]
