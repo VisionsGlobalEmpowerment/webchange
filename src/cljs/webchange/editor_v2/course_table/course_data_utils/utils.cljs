@@ -103,6 +103,15 @@
         (merge (:lesson-sets lesson-data))
         (select-keys (keys scheme)))))
 
+(defn get-lesson-comment
+  [course-data selection]
+  (-> (get-lesson course-data selection)
+      (get-in [:comment])))
+
+(defn update-lesson-comment
+  [course-data selection comment]
+  (update-lesson course-data selection {:comment comment}))
+
 ;; Activities
 
 (defn- get-available-activities
