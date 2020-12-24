@@ -177,15 +177,22 @@
        (get-lesson-lesson-sets-names)))
   ([lesson-data]
    (->> (get lesson-data :lesson-sets)
-        (vals))))
+        (vals)
+        (distinct))))
 
-(defn- get-level-lesson-sets-names
-  [level-data]
-  (->> (get-level-lessons level-data)
-       (map get-lesson-lesson-sets-names)))
+(defn get-level-lesson-sets-names
+  ([course-data selection]
+   (-> (get-level course-data selection)
+       (get-level-lesson-sets-names)))
+  ([level-data]
+   (->> (get-level-lessons level-data)
+        (map get-lesson-lesson-sets-names)
+        (flatten)
+        (distinct))))
 
 (defn get-course-lesson-sets-names
   [course-data]
   (->> (get-levels course-data)
        (map get-level-lesson-sets-names)
-       (flatten)))
+       (flatten)
+       (distinct)))

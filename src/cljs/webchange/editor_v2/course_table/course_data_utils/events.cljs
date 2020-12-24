@@ -125,8 +125,16 @@
   (fn [{:keys [db]} [_ {:keys [selection]}]]
     (let [course-id (data-state/course-id db)
           course-data (subs/course-data db)
+
+          lesson-sets-ids (->> (utils/get-level-lesson-sets-names course-data selection)
+                               (interpreter.subs/lesson-sets-data db)
+                               (map :id))
+
           updated-course-data (utils/remove-level course-data {:level-index (:level-idx selection)})]
-      {:dispatch [::common/update-course course-id updated-course-data]})))
+      {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
+                           (map (fn [lesson-set-id]
+                                  [::warehouse/delete-lesson-set {:id lesson-set-id}])
+                                lesson-sets-ids))})))
 
 (re-frame/reg-event-fx
   ::add-lesson
