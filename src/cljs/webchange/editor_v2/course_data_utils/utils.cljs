@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.course-table.course-data-utils.utils)
+(ns webchange.editor-v2.course-data-utils.utils)
 
 (defn- insert-to-list
   [list index item]
@@ -11,6 +11,38 @@
               (subvec list (inc index)))
       (vec)))
 
+;; Scenes
+
+(defn course-scenes-list
+  [course-data]
+  (->> (:scene-list course-data)
+       (map (fn [[scene-id scene-data]] (assoc scene-data :id scene-id)))))
+
+(defn get-scene-data
+  [course-data scene-id]
+  (->> (course-scenes-list course-data)
+       (some (fn [{:keys [id] :as scene-data}]
+               (and (= id scene-id)
+                    scene-data)))))
+
+(defn update-scene-data
+  [course-data scene-id data-key data-value]
+  (assoc-in course-data [:scene-list scene-id data-key] data-value))
+
+(defn get-scene-outs
+  [course-data scene-id]
+  (-> (get-scene-data course-data scene-id)
+      (get :outs [])))
+
+(defn set-scene-out
+  [course-data scene-id scene-object out-scene-id]
+  (->> (get-scene-outs course-data scene-id)
+       (map (fn [{:keys [object] :as scene-out-data}]
+              (if (= object scene-object)
+                (assoc scene-out-data :name out-scene-id)
+                scene-out-data)))
+       (update-scene-data course-data scene-id :outs)))
+
 ;; Levels
 
 (defn- get-level-path
@@ -18,7 +50,7 @@
   {:pre [(number? level-idx)]}
   [:levels level-idx])
 
-(defn- get-levels
+(defn get-levels
   [course-data]
   (get course-data :levels []))
 
@@ -55,6 +87,51 @@
   (let [updated-levels (-> (get-levels course-data)
                            (remove-from-list level-index))]
     (assoc course-data :levels updated-levels)))
+
+;; Locations
+
+(defn scenes-locations
+  [course-data]
+  (get course-data :locations {}))
+
+(defn scene-locations
+  [course-data scene-id]
+  (-> (scenes-locations course-data)
+      (get scene-id)))
+
+(defn set-scene-location
+  [course-data scene-id locations-data]
+  (assoc-in course-data [:locations scene-id] locations-data))
+
+(defn init-scene-locations
+  [course-data scene-id]
+  (if-not (some? (scene-locations course-data scene-id))
+    (let [locations-data (->> (get-levels course-data)
+                              (map-indexed (fn [level-idx _]
+                                             {:level level-idx
+                                              :scene (clojure.core/name scene-id)})))]
+      (set-scene-location course-data scene-id locations-data))
+    course-data))
+
+(defn add-scene-location
+  "Set record in :locations for scene
+  - scene-id - the scene-id for which the alternative location will be recorded;
+  - location - the name of alternative location;
+  - level - current level;
+
+  Result:
+  :locations
+      {:_scene-id_ [{:level 0, :scene '_scene-id_'} {:level _level_, :scene _location_}],"
+  [course-data scene-id level location]
+  {:pre [(keyword? scene-id) (number? level) (string? location)]}
+  (let [course-data (init-scene-locations course-data scene-id)
+        scene-locations (scene-locations course-data scene-id)
+        location-idx (->> (map-indexed vector scene-locations)
+                          (some (fn [[idx location-data]]
+                                  (and (= (:level location-data) level)
+                                       idx))))]
+    (->> (update-in scene-locations [location-idx] assoc :scene location)
+         (set-scene-location course-data scene-id))))
 
 ;; Lessons
 

@@ -2,6 +2,21 @@
   (:require
     [re-frame.core :as re-frame]))
 
+;; Course-data
+
+(defn course-data
+  [db]
+  (get db :course-data))
+
+(re-frame/reg-sub
+  ::course-data
+  course-data)
+
+(re-frame/reg-event-fx
+  ::set-course-data
+  (fn [{:keys [db]} [_ course-data]]
+    {:db (assoc db :course-data course-data)}))
+
 ;; Lesson sets
 
 (defn lesson-sets

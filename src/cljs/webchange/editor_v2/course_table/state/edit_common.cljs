@@ -6,9 +6,9 @@
 
 (re-frame/reg-event-fx
   ::update-course
-  (fn [{:keys [_]} [_ course-id course-data callbacks]]
+  (fn [{:keys [_]} [_ course-slug course-data callbacks]]
     {:dispatch [::warehouse/save-course
-                {:course-id   course-id
+                {:course-slug course-slug
                  :course-data course-data}
                 {:on-success [::update-course-success callbacks]}]}))
 

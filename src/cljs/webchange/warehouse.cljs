@@ -33,10 +33,24 @@
                      :params {:skills skills-ids}} handlers)))
 
 (re-frame/reg-event-fx
+  ::load-course
+  (fn [{:keys [_]} [_ course-slug handlers]]
+    (create-request {:method :get
+                     :uri    (str "/api/courses/" course-slug)}
+                    {:on-success [::load-course-success handlers]
+                     :on-failure (:on-failure handlers)})))
+
+(re-frame/reg-event-fx
+  ::load-course-success
+  (fn [{:keys [_]} [_ {:keys [on-success]} {:keys [id] :as response}]]
+    {:dispatch-n (cond-> [[::state/set-course-data response]]
+                         (some? on-success) (conj (conj on-success response)))}))
+
+(re-frame/reg-event-fx
   ::save-course
-  (fn [{:keys [_]} [_ {:keys [course-id course-data]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [course-slug course-data]} handlers]]
     (create-request {:method :post
-                     :uri    (str "/api/courses/" course-id)
+                     :uri    (str "/api/courses/" course-slug)
                      :params {:course course-data}} handlers)))
 
 ;; Lesson sets
