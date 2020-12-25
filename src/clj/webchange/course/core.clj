@@ -98,8 +98,9 @@
         {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
         latest-version (db/get-latest-scene-version {:scene_id scene-id})
         scene-skills (get-scene-skills scene-id)]
-    (merge (:data latest-version)
-           {:skills scene-skills})))
+    (when latest-version
+      (merge (:data latest-version)
+             {:skills scene-skills}))))
 
 (defn get-scene-data
   [course-slug scene-name]
@@ -500,6 +501,16 @@
     (reset-scene-skills! scene-id skills)
     (save-dataset-on-create! course-id scene-slug metadata)
     (save-course-on-create! course-id scene-slug metadata scene-name owner-id)
+    [true {:id          scene-id
+           :name        scene-name
+           :scene-slug  scene-slug
+           :course-slug course-slug}]))
+
+(defn create-activity-placeholder!
+  [course-slug scene-name]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scene-slug (->kebab-case scene-name)
+        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
     [true {:id          scene-id
            :name        scene-name
            :scene-slug  scene-slug

@@ -44,7 +44,7 @@
   (run-test-async
     (re-frame/dispatch [::data-state/init "table-course"])
     (wait-for [::ie/set-course-lessons-data]
-              (re-frame/dispatch [::selection-state/set-selection :cell {:level 1, :lesson 1, :lesson-idx 0, :field :activity}])
+              (re-frame/dispatch [::selection-state/set-selection {:level-idx 0, :lesson-idx 0, :activity-idx 0, :field :activity}])
               (re-frame/dispatch [::activities-state/init {:activity "scene-1"} 0])
               (wait-for [::activities-state/reset-current-activity]
                         (let [component-id 0

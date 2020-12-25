@@ -76,7 +76,7 @@
                    :data activity}
                   {:on-success [::create-success component-id]}]})))
 
-(defn- add-activity
+(defn- add-scene
   [course-data scene-slug activity-data]
   (assoc-in course-data [:scene-list (keyword scene-slug)] activity-data))
 
@@ -87,6 +87,6 @@
           course-id (data-state/course-id db)
           selection-data (get-in db (path-to-db [:selection-data] component-id))
           course-data (-> (subs/course-data db)
-                          (add-activity scene-slug activity-data)
-                          (update-activity name selection-data))]
+                          (add-scene scene-slug activity-data)
+                          (utils/update-activity selection-data {:activity name}))]
       {:dispatch [::common/update-course course-id course-data]})))

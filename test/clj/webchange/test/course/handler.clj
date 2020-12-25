@@ -78,6 +78,25 @@
       (is (not (nil? (:scene-slug saved-value))))
       (is (not (nil? (:objects retrieved-value)))))))
 
+(deftest create-activity-placeholder
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        name "Test Activity"
+        activity-data {:name name}
+        saved-response (f/create-activity-placeholder! (:slug course) user-id activity-data)
+        saved-value (-> saved-response :body slurp (json/read-str :key-fn keyword))
+        retrieved-response (f/get-scene (:course-slug saved-value) (:scene-slug saved-value))
+        retrieved-value (-> retrieved-response :body)]
+    (testing "Activity placeholder can be created"
+      (is (= 200 (:status saved-response)))
+      (is (= 200 (:status retrieved-response)))
+      (is (= name (:name saved-value)))
+      (is (not (nil? (:id saved-value))))
+      (is (not (nil? (:course-slug saved-value))))
+      (is (not (nil? (:scene-slug saved-value)))))
+    (testing "Activity data is empty"
+      (is (nil? retrieved-value)))))
+
 (deftest scene-can-be-retrieved
          (let [scene (f/scene-created)
                response (f/get-scene (:course-slug scene) (:name scene))]

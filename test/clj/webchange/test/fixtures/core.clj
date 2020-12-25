@@ -286,6 +286,14 @@
                     (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
+(defn create-activity-placeholder!
+  [course-slug user-id data]
+  (let [url (str "/api/courses/" course-slug "/create-activity-placeholder")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
 (defn save-course!
   [course-slug user-id data]
   (let [course-url (str "/api/courses/" course-slug)

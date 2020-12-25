@@ -83,5 +83,5 @@
   ::create-activity-placeholder
   (fn [_ [_ {:keys [course-id data]} handlers]]
     (create-request {:method :post
-                     :uri    (str "/api/courses/" course-id "/activity-placeholder")
-                     :params {:data data}} handlers)))
+                     :uri    (str "/api/courses/" course-id "/create-activity-placeholder")
+                     :params data} handlers)))
