@@ -5,6 +5,12 @@
   (let [[before after] (split-at index list)]
     (vec (concat before [item] after))))
 
+(defn- remove-from-list
+  [list index]
+  (-> (concat (subvec list 0 index)
+              (subvec list (inc index)))
+      (vec)))
+
 ;; Levels
 
 (defn- get-level-path
@@ -21,6 +27,16 @@
   (->> (get-level-path selection)
        (get-in course-data)))
 
+(defn get-level-lessons
+  [level-data]
+  (get level-data :lessons []))
+
+(defn add-level
+  [course-data {:keys [position level-data]}]
+  (let [updated-levels (-> (get-levels course-data)
+                           (insert-to-list position level-data))]
+    (assoc course-data :levels updated-levels)))
+
 (defn get-lesson-sets-scheme
   ([course-data selection]
    (get-lesson-sets-scheme course-data selection nil))
@@ -34,6 +50,11 @@
   [course-data selection level-data-patch]
   (update-in course-data (get-level-path selection) merge level-data-patch))
 
+(defn remove-level
+  [course-data {:keys [level-index]}]
+  (let [updated-levels (-> (get-levels course-data)
+                           (remove-from-list level-index))]
+    (assoc course-data :levels updated-levels)))
 
 ;; Lessons
 
@@ -49,10 +70,6 @@
   (->> (get-lesson-path selection)
        (get-in course-data)))
 
-(defn get-level-lessons
-  [level-data]
-  (get level-data :lessons []))
-
 (defn add-lesson
   [course-data {:keys [level-index position lesson-data]}]
   (let [level-selection {:level-idx level-index}
@@ -64,6 +81,14 @@
 (defn update-lesson
   [course-data selection lesson-data-patch]
   (update-in course-data (get-lesson-path selection) merge lesson-data-patch))
+
+(defn remove-lesson
+  [course-data {:keys [level-index lesson-index]}]
+  (let [level-selection {:level-idx level-index}
+        updated-lessons (-> (get-level course-data level-selection)
+                            (get :lessons)
+                            (remove-from-list lesson-index))]
+    (update-level course-data level-selection {:lessons updated-lessons})))
 
 ;;
 
@@ -78,7 +103,27 @@
         (merge (:lesson-sets lesson-data))
         (select-keys (keys scheme)))))
 
+(defn get-lesson-comment
+  [course-data selection]
+  (-> (get-lesson course-data selection)
+      (get-in [:comment])))
+
+(defn update-lesson-comment
+  [course-data selection comment]
+  (update-lesson course-data selection {:comment comment}))
+
 ;; Activities
+
+(defn- get-available-activities
+  [course-data]
+  (->> (:scene-list course-data)
+       (map (fn [[id data]] (assoc data :id id)))))
+
+(defn get-available-activities-ids
+  [course-data]
+  (->> (get-available-activities course-data)
+       (map :id)
+       (map clojure.core/name)))
 
 (defn- get-activity-path
   [{:keys [activity-idx] :as selection}]
@@ -101,6 +146,15 @@
         updated-activities (-> (get-lesson course-data lesson-selection)
                                (get :activities)
                                (insert-to-list position activity-data))]
+    (update-lesson course-data lesson-selection {:activities updated-activities})))
+
+(defn remove-activity
+  [course-data {:keys [level-index lesson-index activity-index]}]
+  (let [lesson-selection {:level-idx  level-index
+                          :lesson-idx lesson-index}
+        updated-activities (-> (get-lesson course-data lesson-selection)
+                               (get :activities)
+                               (remove-from-list activity-index))]
     (update-lesson course-data lesson-selection {:activities updated-activities})))
 
 ;;
@@ -126,18 +180,28 @@
 
 ;;
 
-(defn- get-lesson-lesson-sets-names
-  [lesson-data]
-  (->> (get lesson-data :lesson-sets)
-       (vals)))
+(defn get-lesson-lesson-sets-names
+  ([course-data selection]
+   (-> (get-lesson course-data selection)
+       (get-lesson-lesson-sets-names)))
+  ([lesson-data]
+   (->> (get lesson-data :lesson-sets)
+        (vals)
+        (distinct))))
 
-(defn- get-level-lesson-sets-names
-  [level-data]
-  (->> (get-level-lessons level-data)
-       (map get-lesson-lesson-sets-names)))
+(defn get-level-lesson-sets-names
+  ([course-data selection]
+   (-> (get-level course-data selection)
+       (get-level-lesson-sets-names)))
+  ([level-data]
+   (->> (get-level-lessons level-data)
+        (map get-lesson-lesson-sets-names)
+        (flatten)
+        (distinct))))
 
 (defn get-course-lesson-sets-names
   [course-data]
   (->> (get-levels course-data)
        (map get-level-lesson-sets-names)
-       (flatten)))
+       (flatten)
+       (distinct)))

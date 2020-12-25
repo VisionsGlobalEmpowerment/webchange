@@ -105,4 +105,14 @@
                 (testing "rows without tags are correct"
                   (let [target-filter (fn [{:keys [level-idx lesson-idx activity-idx]}] (and (= level-idx 1) (= lesson-idx 0) (= activity-idx 1)))
                         tags (->> data (filter target-filter) first :tags)]
-                    (is (= tags {}))))))))
+                    (is (= tags {}))))
+
+                (testing "lesson comment is defined"
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx]}] (and (= level-idx 0) (= lesson-idx 0)))
+                        comment (->> data (filter target-filter) first :comment)]
+                    (is (= comment "Lesson 1 comment"))))
+
+                (testing "lesson comment is empty string if not defined"
+                  (let [target-filter (fn [{:keys [level-idx lesson-idx]}] (and (= level-idx 1) (= lesson-idx 0)))
+                        comment (->> data (filter target-filter) first :comment)]
+                    (is (= comment ""))))))))

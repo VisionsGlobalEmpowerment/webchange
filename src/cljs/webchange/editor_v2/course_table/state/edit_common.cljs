@@ -6,13 +6,14 @@
 
 (re-frame/reg-event-fx
   ::update-course
-  (fn [{:keys [_]} [_ course-id course-data]]
+  (fn [{:keys [_]} [_ course-id course-data callbacks]]
     {:dispatch [::warehouse/save-course
                 {:course-id   course-id
                  :course-data course-data}
-                {:on-success [::update-course-success]}]}))
+                {:on-success [::update-course-success callbacks]}]}))
 
 (re-frame/reg-event-fx
   ::update-course-success
-  (fn [{:keys [_]} [_ {:keys [data]}]]
-    {:dispatch [::events/set-course-data data]}))
+  (fn [{:keys [_]} [_ {:keys [on-success]} {:keys [data]}]]
+    {:dispatch-n (cond-> [[::events/set-course-data data]]
+                         (some? on-success) (conj on-success))}))

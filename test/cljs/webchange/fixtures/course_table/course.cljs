@@ -9,6 +9,7 @@
                          :lessons [{:name        "Lesson 1",
                                     :type        "lesson",
                                     :lesson      1,
+                                    :comment     "Lesson 1 comment"
                                     :activities  [{:activity "scene-1", :time-expected 300}
                                                   {:activity      "scene-2", :time-expected 300,
                                                    :tags-by-score {:intermediate [0 75],

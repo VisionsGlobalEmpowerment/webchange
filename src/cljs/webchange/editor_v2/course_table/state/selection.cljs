@@ -33,9 +33,8 @@
 
 (re-frame/reg-event-fx
   ::save-selection
-  (fn [{:keys [db]} [_]]
-    (let [current-selection (selection db)]
-      {:db (assoc-in db (path-to-db [:saved-selection]) current-selection)})))
+  (fn [{:keys [db]} [_ selection]]
+    {:db (assoc-in db (path-to-db [:saved-selection]) selection)}))
 
 (re-frame/reg-event-fx
   ::reset-saved-selection

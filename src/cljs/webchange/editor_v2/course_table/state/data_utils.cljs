@@ -28,7 +28,7 @@
   [course scenes-data lesson-sets-data]
   (->> (:levels course)
        (map-indexed (fn [level-index {:keys [lessons] :as level}]
-                      (map-indexed (fn [lesson-index {:keys [activities] :as lesson}]
+                      (map-indexed (fn [lesson-index {:keys [activities comment] :as lesson}]
                                      (map-indexed (fn [activity-index {:keys [activity] :as activity-data}]
                                                     {:level-idx    level-index
                                                      :lesson-idx   lesson-index
@@ -36,7 +36,8 @@
                                                      :activity     activity
                                                      :skills       (get-in scenes-data [activity :skills] [])
                                                      :lesson-sets  (get-lesson-sets level lesson lesson-sets-data)
-                                                     :tags         (get-activity-tags activity-data)})
+                                                     :tags         (get-activity-tags activity-data)
+                                                     :comment      (or comment "")})
                                                   activities))
                                    lessons)))
        (flatten)

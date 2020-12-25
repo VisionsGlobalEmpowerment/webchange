@@ -53,13 +53,34 @@
        (map (fn [[scheme-name {:keys [new-name]}]] [scheme-name new-name]))
        (into {})))
 
+(defn- get-default-activity-data
+  [course-data]
+  {:activity (-> (utils/get-available-activities-ids course-data) (first))})
+
+(defn- get-default-lesson-data
+  [course-data level-index]
+  (let [lesson-type "lesson"
+        scheme (utils/get-lesson-sets-scheme course-data {:level-idx level-index} (keyword lesson-type))
+        lesson-sets (->> scheme
+                         (map keyword)
+                         (map (fn [scheme-name]
+                                [scheme-name (generate-lesson-set-name course-data scheme-name)]))
+                         (into {}))]
+    {:type        lesson-type
+     :activities  [(get-default-activity-data course-data)]
+     :lesson-sets lesson-sets}))
+
+(defn- get-default-level-data
+  []
+  {:lessons []})
+
 (re-frame/reg-event-fx
   ::copy-lesson
   (fn [{:keys [db]} [_ {:keys [selection-from selection-to relative-position] :as params}]]
     (let [course-id (data-state/course-id db)
           course-data (subs/course-data db)
-
           dataset-id (-> (interpreter.subs/course-datasets db) (first) (get :id))
+
           lesson-sets-map (get-lesson-sets-map db course-data params)
           lesson-data (-> (utils/get-lesson course-data selection-from)
                           (select-keys [:type :activities])
@@ -76,14 +97,83 @@
                            (map (fn [[_ {:keys [new-name items]}]]
                                   [::warehouse/save-lesson-set {:dataset-id dataset-id
                                                                 :name       new-name
-                                                                :data       {:items items}}
-                                   {:on-success [::save-lesson-set-success new-name]}])
+                                                                :data       {:items items}}])
                                 lesson-sets-map))})))
 
 (re-frame/reg-event-fx
-  ::save-lesson-set-success
-  (fn [{:keys [_]} [_ lesson-name {:keys [lesson]}]]
-    {:dispatch [::interpreter.events/update-course-lessons [(assoc lesson :name lesson-name)]]}))
+  ::add-level
+  (fn [{:keys [db]} [_ {:keys [selection relative-position]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+
+          target-position (cond-> (:level-idx selection)
+                                  (= relative-position :before) (identity)
+                                  (= relative-position :after) (inc))
+          level-data (get-default-level-data)
+          updated-course-data (-> course-data
+                                  (utils/add-level {:position   target-position
+                                                    :level-data level-data}))]
+      {:dispatch [::common/update-course
+                  course-id
+                  updated-course-data
+                  {:on-success [::add-lesson {:selection         {:level-idx  target-position
+                                                                  :lesson-idx 0}
+                                              :relative-position :before}]}]})))
+
+(re-frame/reg-event-fx
+  ::remove-level
+  (fn [{:keys [db]} [_ {:keys [selection]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+
+          lesson-sets-ids (->> (utils/get-level-lesson-sets-names course-data selection)
+                               (interpreter.subs/lesson-sets-data db)
+                               (map :id))
+
+          updated-course-data (utils/remove-level course-data {:level-index (:level-idx selection)})]
+      {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
+                           (map (fn [lesson-set-id]
+                                  [::warehouse/delete-lesson-set {:id lesson-set-id}])
+                                lesson-sets-ids))})))
+
+(re-frame/reg-event-fx
+  ::add-lesson
+  (fn [{:keys [db]} [_ {:keys [selection relative-position]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+          dataset-id (-> (interpreter.subs/course-datasets db) (first) (get :id))
+
+          target-position (cond-> (:lesson-idx selection)
+                                  (= relative-position :before) (identity)
+                                  (= relative-position :after) (inc))
+          lesson-data (get-default-lesson-data course-data (:level-idx selection))
+          updated-course-data (-> course-data
+                                  (utils/add-lesson {:level-index (:level-idx selection)
+                                                     :position    target-position
+                                                     :lesson-data lesson-data}))]
+      {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
+                           (map (fn [[_ lesson-set-name]]
+                                  [::warehouse/save-lesson-set {:dataset-id dataset-id
+                                                                :name       lesson-set-name
+                                                                :data       {:items []}}])
+                                (:lesson-sets lesson-data)))})))
+
+(re-frame/reg-event-fx
+  ::remove-lesson
+  (fn [{:keys [db]} [_ {:keys [selection]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+
+          lesson-sets-ids (->> (utils/get-lesson-lesson-sets-names course-data selection)
+                               (interpreter.subs/lesson-sets-data db)
+                               (map :id))
+
+          updated-course-data (utils/remove-lesson course-data {:level-index  (:level-idx selection)
+                                                                :lesson-index (:lesson-idx selection)})]
+      {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
+                           (map (fn [lesson-set-id]
+                                  [::warehouse/delete-lesson-set {:id lesson-set-id}])
+                                lesson-sets-ids))})))
 
 (re-frame/reg-event-fx
   ::add-activity
@@ -94,8 +184,20 @@
           target-position (cond-> (:activity-idx selection)
                                   (= relative-position :before) (identity)
                                   (= relative-position :after) (inc))
+          activity-data (get-default-activity-data course-data)
           updated-course-data (-> course-data
-                                  (utils/add-activity {:level-index  (:level-idx selection)
-                                                       :lesson-index (:lesson-idx selection)
-                                                       :position     target-position}))]
+                                  (utils/add-activity {:level-index   (:level-idx selection)
+                                                       :lesson-index  (:lesson-idx selection)
+                                                       :position      target-position
+                                                       :activity-data activity-data}))]
+      {:dispatch [::common/update-course course-id updated-course-data]})))
+
+(re-frame/reg-event-fx
+  ::remove-activity
+  (fn [{:keys [db]} [_ {:keys [selection]}]]
+    (let [course-id (data-state/course-id db)
+          course-data (subs/course-data db)
+          updated-course-data (utils/remove-activity course-data {:level-index    (:level-idx selection)
+                                                                  :lesson-index   (:lesson-idx selection)
+                                                                  :activity-index (:activity-idx selection)})]
       {:dispatch [::common/update-course course-id updated-course-data]})))

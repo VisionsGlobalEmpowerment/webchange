@@ -1,8 +1,7 @@
 (ns webchange.editor-v2.course-table.fields.concepts.views-info
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [clojure.string :as s]
-    [reagent.core :as r]))
+    [clojure.string :as s]))
 
 (defn info-from
   [{:keys [data]}]
