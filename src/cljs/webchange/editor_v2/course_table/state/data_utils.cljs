@@ -25,7 +25,7 @@
           (some? tags-by-score) (assoc :set-tags tags-by-score)))
 
 (defn prepare-course-data
-  [course scene-skills-data lesson-sets-data]
+  [course scene-skills-data scene-placeholders lesson-sets-data]
   (->> (:levels course)
        (map-indexed (fn [level-index {:keys [lessons] :as level}]
                       (map-indexed (fn [lesson-index {:keys [activities comment] :as lesson}]
@@ -35,6 +35,7 @@
                                                      :activity-idx activity-index
                                                      :activity     activity
                                                      :skills       (get scene-skills-data activity [])
+                                                     :is-placeholder (get scene-placeholders activity false)
                                                      :lesson-sets  (get-lesson-sets level lesson lesson-sets-data)
                                                      :tags         (get-activity-tags activity-data)
                                                      :comment      (or comment "")})

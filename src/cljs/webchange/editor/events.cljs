@@ -101,16 +101,7 @@
 (re-frame/reg-event-fx
   ::reset-scene-skills
   (fn [{:keys [db]} [_ scene-id skills]]
-    {:db (assoc-in db [:scenes scene-id :skills] skills)}))
-
-(defn scene-skills
-  [db scene-id]
-  (get-in db [:scenes scene-id :skills]))
-
-(re-frame/reg-sub
-  ::scene-skills
-  (fn [db [_ scene-id]]
-    (scene-skills db scene-id)))
+    {:db (assoc-in db [:scene-skills scene-id] skills)}))
 
 (re-frame/reg-event-fx
   ::reset-asset

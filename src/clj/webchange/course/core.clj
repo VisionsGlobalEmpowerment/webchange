@@ -516,10 +516,19 @@
            :scene-slug  scene-slug
            :course-slug course-slug}]))
 
+(defn- is-placeholder
+  [scene-id]
+  (let [latest-version (db/get-latest-scene-version {:scene_id scene-id})]
+    (-> latest-version
+        boolean
+        not)))
+
 (defn get-course-scene-skills
   [course-slug]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         scenes (db/get-scenes-by-course-id {:course_id course-id})
-        with-skills (fn [scene] (assoc scene :skills (get-scene-skills (:id scene))))]
+        with-skills (fn [scene] (assoc scene :skills (get-scene-skills (:id scene))))
+        with-is-placeholder (fn [scene] (assoc scene :is-placeholder (is-placeholder (:id scene))))]
     (->> scenes
-         (map with-skills))))
+         (map with-skills)
+         (map with-is-placeholder))))

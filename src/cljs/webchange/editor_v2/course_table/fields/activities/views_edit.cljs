@@ -16,19 +16,23 @@
           handle-item-click (fn [event]
                               (let [activity-id (->> event .-target .-value)]
                                 (re-frame/dispatch [::state/reset-current-activity activity-id component-id])))]
-      [ui/select
-       {:value     (or current-activity "")
-        :on-change handle-item-click
-        :on-wheel  #(.stopPropagation %)}
-       (for [{:keys [id name]} activities]
-         ^{:key id}
-         [ui/menu-item {:value id} name])
-       [ui/menu-item
-        [ui/text-field {:placeholder "New Activity"
-                        :on-click #(.stopPropagation %)
-                        :on-change #(reset! new-activity-name (->> % .-target .-value))}]
-        [ui/icon-button {:on-click #(re-frame/dispatch [::state/create @new-activity-name component-id])}
-         [ic/add]]
-        ]])
+      [:div
+       [ui/select
+        {:value     (or current-activity "")
+         :on-change handle-item-click
+         :on-wheel  #(.stopPropagation %)}
+        (for [{:keys [id name]} activities]
+          ^{:key id}
+          [ui/menu-item {:value id} name])
+        [ui/menu-item
+         [ui/text-field {:placeholder "New Activity"
+                         :on-click    #(.stopPropagation %)
+                         :on-change   #(reset! new-activity-name (->> % .-target .-value))}]
+         [ui/icon-button {:on-click #(re-frame/dispatch [::state/create @new-activity-name component-id])}
+          [ic/add]]
+         ]]
+       (when (:is-placeholder data)
+         [ui/icon-button {:on-click #(js/console.log "create activity...")}
+          [ic/warning]])])
     (finally
       (re-frame/dispatch [::state/save component-id]))))

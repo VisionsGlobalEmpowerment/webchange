@@ -18,15 +18,17 @@
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [db]} [_ {:keys [activity]} component-id]]
-    (let [scene-skills (->> (editor/scene-skills db activity)
-                            (map (fn [{:keys [id]}] [id true]))
-                            (into {}))
+    (let [scene-skills (-> (subs/scene-skills db)
+                           (get activity))
+          prepared-skills (->> scene-skills
+                               (map (fn [{:keys [id]}] [id true]))
+                               (into {}))
           selection-data (selection/selection db)]
       {:db         (-> db
-                       (assoc-in (path-to-db [:initial-value] component-id) (keys scene-skills))
+                       (assoc-in (path-to-db [:initial-value] component-id) (keys prepared-skills))
                        (assoc-in (path-to-db [:selection-data] component-id) selection-data))
        :dispatch-n (list [::warehouse/load-skills {:on-success [::load-skills-success component-id]}]
-                         [::reset-selected-skills scene-skills component-id])})))
+                         [::reset-selected-skills prepared-skills component-id])})))
 
 (re-frame/reg-event-fx
   ::load-skills-success

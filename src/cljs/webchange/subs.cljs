@@ -62,10 +62,18 @@
   (fn [db [_ scene-id]]
     (get-in db [:scenes scene-id] {})))
 
+(defn scene-skills
+  [db]
+  (get db :scene-skills {}))
+
 (re-frame/reg-sub
   ::scene-skills
+  scene-skills)
+
+(re-frame/reg-sub
+  ::scene-placeholders
   (fn [db]
-    (get db :scene-skills {})))
+    (get db :scene-placeholders {})))
 
 (re-frame/reg-sub
   ::scene-objects

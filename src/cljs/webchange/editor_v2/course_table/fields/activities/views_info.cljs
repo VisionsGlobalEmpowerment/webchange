@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.course-table.fields.activities.views-info
   (:require
     [cljs-react-material-ui.reagent :as ui]
+    [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.course-table.state.data :as data-state]))
 
@@ -10,4 +11,6 @@
     [:div
      [ui/typography {:variant "body1"
                      :style   {:padding "2px 0"}}
-      name]]))
+      name]
+     (when (:is-placeholder data)
+       [ic/warning])]))

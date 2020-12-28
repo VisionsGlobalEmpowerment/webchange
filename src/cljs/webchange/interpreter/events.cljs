@@ -988,10 +988,14 @@
   (fn [{:keys [db]} [_ scenes-with-skills]]
     (let [scene-skills (->> scenes-with-skills
                             (map (juxt :name :skills))
-                            (into {}))]
+                            (into {}))
+          scene-placeholders (->> scenes-with-skills
+                                  (map (juxt :name :is-placeholder))
+                                  (into {}))]
       {:db (-> db
                (assoc-in [:loading :load-scenes-with-skills] false)
-               (assoc :scene-skills scene-skills))})))
+               (assoc :scene-skills scene-skills)
+               (assoc :scene-placeholders scene-placeholders))})))
 
 (re-frame/reg-event-fx
   ::load-course-data
