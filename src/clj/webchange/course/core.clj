@@ -515,3 +515,11 @@
            :name        scene-name
            :scene-slug  scene-slug
            :course-slug course-slug}]))
+
+(defn get-course-scene-skills
+  [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scenes (db/get-scenes-by-course-id {:course_id course-id})
+        with-skills (fn [scene] (assoc scene :skills (get-scene-skills (:id scene))))]
+    (->> scenes
+         (map with-skills))))

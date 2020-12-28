@@ -89,4 +89,5 @@
           course-data (-> (subs/course-data db)
                           (add-scene scene-slug activity-data)
                           (utils/update-activity selection-data {:activity name}))]
-      {:dispatch [::common/update-course course-id course-data]})))
+      {:dispatch-n (list [::common/update-course course-id course-data]
+                         [::reset-current-activity scene-slug component-id])})))

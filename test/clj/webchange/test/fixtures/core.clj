@@ -141,10 +141,10 @@
      :version-id version-id})))
 
 (defn scene-skills-created
-  ([scene-id skill-id]
-   (let [_ (db/create-scene-skill!{:scene_id scene-id :skill_id skill-id})]
-     {:scene-id scene-id
-      :skill-id skill-id})))
+  [scene-id skill-id]
+  (db/create-scene-skill! {:scene_id scene-id :skill_id skill-id})
+  {:scene-id scene-id
+   :skill-id skill-id})
 
 (defn dataset-created
   ([]
@@ -839,3 +839,10 @@
 (defn add-collaborator
   [{:keys [course-id user-id]}]
   (db/add-collaborator! {:course_id course-id :user_id user-id}))
+
+(defn get-scene-with-skills
+  [course-slug]
+  (let [url (str "/api/courses/" course-slug "/scenes-with-skills")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))

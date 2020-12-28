@@ -163,6 +163,8 @@
 (s/defschema Skill {:id s/Int :name s/Str :abbr s/Str :grade s/Str :topic s/Keyword :tags [s/Str]})
 (s/defschema Skills {:levels {s/Keyword s/Str} :subjects {s/Keyword s/Str} :skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
 
+(s/defschema ActivityWithSkills {:id s/Int :name s/Str :course-id s/Int :skills [Skill]})
+
 (defn character-skins []
   (response (core/find-all-character-skins)))
 
@@ -247,7 +249,13 @@
       :return s/Any
       :body [activity-data s/Any]
       :summary "Updates activity using template"
-      (handle-update-activity course-slug activity-data scene-slug request)))
+      (handle-update-activity course-slug activity-data scene-slug request))
+    (GET "/:course-slug/scenes-with-skills" []
+      :path-params [course-slug :- s/Str]
+      :tags ["skill"]
+      :return [ActivityWithSkills]
+      :summary "Returns list of skills for each scene inside given course"
+      (-> course-slug core/get-course-scene-skills response)))
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills

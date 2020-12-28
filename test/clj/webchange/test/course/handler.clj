@@ -270,3 +270,17 @@
     (is (not (empty? (:strands retrieved))))
     (is (not (empty? (:topics retrieved))))
     (is (not (empty? (:skills retrieved))))))
+
+(deftest scenes-with-skills-can-be-retrieved
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        skill-id 3
+        _ (f/scene-skills-created (:id scene) skill-id)
+        retrieved (-> (f/get-scene-with-skills (:slug course))
+                      :body
+                      slurp
+                      (json/read-str :key-fn keyword))]
+    (is (= 1 (count retrieved)))
+    (is (= 1 (count (-> retrieved (get 0) :skills))))
+    (is (= skill-id (get-in retrieved [0 :skills 0 :id])))))

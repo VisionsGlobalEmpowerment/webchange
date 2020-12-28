@@ -134,6 +134,11 @@ WHERE id = :id;
 -- :doc retrieve all scene records
 SELECT * from scenes;
 
+-- :name get-scenes-by-course-id :? :*
+-- :doc retrieve scenes by course id
+SELECT * from scenes
+WHERE course_id = :course_id;
+
 -- :name get-scene-version :? :1
 -- :doc retrieve scene version by id
 SELECT * from scene_versions
