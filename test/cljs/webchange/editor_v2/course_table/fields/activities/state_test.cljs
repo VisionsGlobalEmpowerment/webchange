@@ -38,7 +38,7 @@
   (re-frame/reg-event-fx
     ::common/update-course
     (fn [{:keys [_]} [_ course-id course-data]]
-      {:dispatch [::common/update-course-success {:data course-data}]})))
+      {:dispatch [::common/update-course-success nil {:data course-data}]})))
 
 (deftest create-activity
   (run-test-async
