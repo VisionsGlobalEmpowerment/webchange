@@ -3,7 +3,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.course-table.course-data-utils.events :as course-data.events]
+    [webchange.editor-v2.course-data-utils.events :as course-data.events]
     [webchange.editor-v2.course-table.state.selection :as selection-state]
     [webchange.editor-v2.course-table.utils.cell-data :refer [cell-data->cell-attributes click-event->cell-data]]
     [webchange.editor-v2.course-table.utils-rows-number :refer [get-element-height]]))

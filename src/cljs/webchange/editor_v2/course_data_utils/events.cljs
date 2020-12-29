@@ -1,10 +1,9 @@
-(ns webchange.editor-v2.course-table.course-data-utils.events
+(ns webchange.editor-v2.course-data-utils.events
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.course-table.course-data-utils.utils :as utils]
+    [webchange.editor-v2.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.state.edit-common :as common]
-    [webchange.interpreter.events :as interpreter.events]
     [webchange.interpreter.subs :as interpreter.subs]
     [webchange.subs :as subs]
     [webchange.warehouse :as warehouse]))

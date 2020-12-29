@@ -254,7 +254,8 @@
   (GET "/courses/:course-slug/editor-v2/add-concept" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2/levels/:level-id/lessons/:lesson-id" request (collaborator-route request))
   (GET "/courses/:course-slug/editor-v2/levels/:level-id/add-lesson" request (collaborator-route request))
-  (GET "/courses/:course-slug/table" request (collaborator-route request)))
+  (GET "/courses/:course-slug/table" request (collaborator-route request))
+  (GET "/courses/:course-slug/scenes-crossing" request (collaborator-route request)))
 
 (defroutes course-routes
   (GET "/api/courses/:course-slug" [course-slug] (-> course-slug core/get-course-data response))

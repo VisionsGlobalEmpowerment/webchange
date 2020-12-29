@@ -1,7 +1,7 @@
 (ns webchange.editor-v2.course-table.fields.concepts.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.course-table.course-data-utils.utils :as utils]
+    [webchange.editor-v2.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.db :as db]
     [webchange.editor-v2.course-table.state.selection :as selection]
     [webchange.interpreter.events :as interpreter.events]
