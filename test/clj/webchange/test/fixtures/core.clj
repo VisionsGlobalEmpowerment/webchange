@@ -141,10 +141,10 @@
      :version-id version-id})))
 
 (defn scene-skills-created
-  ([scene-id skill-id]
-   (let [_ (db/create-scene-skill!{:scene_id scene-id :skill_id skill-id})]
-     {:scene-id scene-id
-      :skill-id skill-id})))
+  [scene-id skill-id]
+  (db/create-scene-skill! {:scene_id scene-id :skill_id skill-id})
+  {:scene-id scene-id
+   :skill-id skill-id})
 
 (defn dataset-created
   ([]
@@ -281,6 +281,14 @@
 (defn create-activity!
   [course-slug user-id data]
   (let [url (str "/api/courses/" course-slug "/create-activity")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn create-activity-placeholder!
+  [course-slug user-id data]
+  (let [url (str "/api/courses/" course-slug "/create-activity-placeholder")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     (teacher-logged-in user-id))]
@@ -831,3 +839,10 @@
 (defn add-collaborator
   [{:keys [course-id user-id]}]
   (db/add-collaborator! {:course_id course-id :user_id user-id}))
+
+(defn get-scene-with-skills
+  [course-slug]
+  (let [url (str "/api/courses/" course-slug "/scenes-with-skills")
+        request (-> (mock/request :get url)
+                    teacher-logged-in)]
+    (handler/dev-handler request)))

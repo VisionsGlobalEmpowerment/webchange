@@ -98,8 +98,9 @@
         {scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
         latest-version (db/get-latest-scene-version {:scene_id scene-id})
         scene-skills (get-scene-skills scene-id)]
-    (merge (:data latest-version)
-           {:skills scene-skills})))
+    (when latest-version
+      (merge (:data latest-version)
+             {:skills scene-skills}))))
 
 (defn get-scene-data
   [course-slug scene-name]
@@ -504,3 +505,30 @@
            :name        scene-name
            :scene-slug  scene-slug
            :course-slug course-slug}]))
+
+(defn create-activity-placeholder!
+  [course-slug scene-name]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scene-slug (->kebab-case scene-name)
+        [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
+    [true {:id          scene-id
+           :name        scene-name
+           :scene-slug  scene-slug
+           :course-slug course-slug}]))
+
+(defn- is-placeholder
+  [scene-id]
+  (let [latest-version (db/get-latest-scene-version {:scene_id scene-id})]
+    (-> latest-version
+        boolean
+        not)))
+
+(defn get-course-scene-skills
+  [course-slug]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        scenes (db/get-scenes-by-course-id {:course_id course-id})
+        with-skills (fn [scene] (assoc scene :skills (get-scene-skills (:id scene))))
+        with-is-placeholder (fn [scene] (assoc scene :is-placeholder (is-placeholder (:id scene))))]
+    (->> scenes
+         (map with-skills)
+         (map with-is-placeholder))))

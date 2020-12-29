@@ -6,7 +6,8 @@
     [webchange.editor-v2.course-table.state.db :as db]
     [webchange.editor-v2.course-table.state.edit-common :as common]
     [webchange.editor-v2.course-table.state.selection :as selection]
-    [webchange.subs :as subs]))
+    [webchange.subs :as subs]
+    [webchange.warehouse :as warehouse]))
 
 (defn path-to-db
   [relative-path component-id]
@@ -62,3 +63,31 @@
                               (utils/update-activity selection-data {:activity current-activity}))]
           {:dispatch [::common/update-course course-id course-data]})
         {}))))
+
+;; Create
+
+(re-frame/reg-event-fx
+  ::create
+  (fn [{:keys [db]} [_ name component-id]]
+    (let [course-id (data-state/course-id db)
+          activity {:name name}]
+      {:dispatch [::warehouse/create-activity-placeholder
+                  {:course-id course-id
+                   :data activity}
+                  {:on-success [::create-success component-id]}]})))
+
+(defn- add-scene
+  [course-data scene-slug activity-data]
+  (assoc-in course-data [:scene-list (keyword scene-slug)] activity-data))
+
+(re-frame/reg-event-fx
+  ::create-success
+  (fn [{:keys [db]} [_ component-id {:keys [name scene-slug]}]]
+    (let [activity-data {:name name}
+          course-id (data-state/course-id db)
+          selection-data (get-in db (path-to-db [:selection-data] component-id))
+          course-data (-> (subs/course-data db)
+                          (add-scene scene-slug activity-data)
+                          (utils/update-activity selection-data {:activity name}))]
+      {:dispatch-n (list [::common/update-course course-id course-data]
+                         [::reset-current-activity scene-slug component-id])})))

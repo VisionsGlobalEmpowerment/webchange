@@ -78,6 +78,25 @@
       (is (not (nil? (:scene-slug saved-value))))
       (is (not (nil? (:objects retrieved-value)))))))
 
+(deftest create-activity-placeholder
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        name "Test Activity"
+        activity-data {:name name}
+        saved-response (f/create-activity-placeholder! (:slug course) user-id activity-data)
+        saved-value (-> saved-response :body slurp (json/read-str :key-fn keyword))
+        retrieved-response (f/get-scene (:course-slug saved-value) (:scene-slug saved-value))
+        retrieved-value (-> retrieved-response :body)]
+    (testing "Activity placeholder can be created"
+      (is (= 200 (:status saved-response)))
+      (is (= 200 (:status retrieved-response)))
+      (is (= name (:name saved-value)))
+      (is (not (nil? (:id saved-value))))
+      (is (not (nil? (:course-slug saved-value))))
+      (is (not (nil? (:scene-slug saved-value)))))
+    (testing "Activity data is empty"
+      (is (nil? retrieved-value)))))
+
 (deftest scene-can-be-retrieved
          (let [scene (f/scene-created)
                response (f/get-scene (:course-slug scene) (:name scene))]
@@ -251,3 +270,17 @@
     (is (not (empty? (:strands retrieved))))
     (is (not (empty? (:topics retrieved))))
     (is (not (empty? (:skills retrieved))))))
+
+(deftest scenes-with-skills-can-be-retrieved
+  (let [{user-id :id} (f/website-user-created)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
+        skill-id 3
+        _ (f/scene-skills-created (:id scene) skill-id)
+        retrieved (-> (f/get-scene-with-skills (:slug course))
+                      :body
+                      slurp
+                      (json/read-str :key-fn keyword))]
+    (is (= 1 (count retrieved)))
+    (is (= 1 (count (-> retrieved (get 0) :skills))))
+    (is (= skill-id (get-in retrieved [0 :skills 0 :id])))))

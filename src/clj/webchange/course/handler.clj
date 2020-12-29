@@ -127,6 +127,14 @@
     (-> (core/create-scene! activity metadata course-slug (:name data) (:skills data) user-id)
         handle)))
 
+(defn handle-create-activity-placeholder
+  [course-slug data request]
+  (let [user-id (current-user request)]
+    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+      (throw-unauthorized {:role :educator}))
+    (-> (core/create-activity-placeholder! course-slug (:name data))
+        handle)))
+
 (defn handle-update-activity
   [course-slug data scene-slug request]
   (let [user-id (current-user request)
@@ -148,11 +156,14 @@
 (s/defschema CharacterSkin {:name s/Str :width s/Num :height s/Num :skins [s/Str] :animations [s/Str]})
 
 (s/defschema CreateActivity {:name s/Str :template-id s/Int :skills [s/Int] s/Keyword s/Any})
+(s/defschema CreateActivityPlaceholder {:name s/Str})
 (s/defschema Activity {:id s/Int :name s/Str :scene-slug s/Str :course-slug s/Str})
 
 (s/defschema Topic {:name s/Str :strand s/Keyword})
 (s/defschema Skill {:id s/Int :name s/Str :abbr s/Str :grade s/Str :topic s/Keyword :tags [s/Str]})
 (s/defschema Skills {:levels {s/Keyword s/Str} :subjects {s/Keyword s/Str} :skills [Skill] :topics {s/Keyword Topic} :strands {s/Keyword s/Str}})
+
+(s/defschema ActivityWithSkills {:id s/Int :name s/Str :course-id s/Int :is-placeholder s/Bool :skills [Skill]})
 
 (defn character-skins []
   (response (core/find-all-character-skins)))
@@ -227,12 +238,24 @@
       :body [activity-data CreateActivity]
       :summary "Creates a new activity from template"
       (handle-create-activity course-slug activity-data request))
+    (POST "/:course-slug/create-activity-placeholder" request
+      :path-params [course-slug :- s/Str]
+      :return Activity
+      :body [activity-data CreateActivityPlaceholder]
+      :summary "Creates a new activity placeholder"
+      (handle-create-activity-placeholder course-slug activity-data request))
     (POST "/:course-slug/update-activity/:scene-slug" request
       :path-params [course-slug :- s/Str scene-slug :- s/Str]
       :return s/Any
       :body [activity-data s/Any]
       :summary "Updates activity using template"
-      (handle-update-activity course-slug activity-data scene-slug request)))
+      (handle-update-activity course-slug activity-data scene-slug request))
+    (GET "/:course-slug/scenes-with-skills" []
+      :path-params [course-slug :- s/Str]
+      :tags ["skill"]
+      :return [ActivityWithSkills]
+      :summary "Returns list of skills for each scene inside given course"
+      (-> course-slug core/get-course-scene-skills response)))
   (GET "/api/skills" []
     :tags ["skill"]
     :return Skills

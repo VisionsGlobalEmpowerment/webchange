@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.course-table.fields.activities.views-edit
   (:require
     [cljs-react-material-ui.reagent :as ui]
+    [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.course-table.fields.activities.state :as state]))
@@ -8,18 +9,30 @@
 (defn edit-form
   [{:keys [data]}]
   (r/with-let [component-id (:idx data)
-               _ (re-frame/dispatch [::state/init data component-id])]
+               _ (re-frame/dispatch [::state/init data component-id])
+               new-activity-name (r/atom "")]
     (let [activities @(re-frame/subscribe [::state/activities])
           current-activity @(re-frame/subscribe [::state/current-activity component-id])
           handle-item-click (fn [event]
                               (let [activity-id (->> event .-target .-value)]
                                 (re-frame/dispatch [::state/reset-current-activity activity-id component-id])))]
-      [ui/select
-       {:value     (or current-activity "")
-        :on-change handle-item-click
-        :on-wheel  #(.stopPropagation %)}
-       (for [{:keys [id name]} activities]
-         ^{:key id}
-         [ui/menu-item {:value id} name])])
+      [:div
+       [ui/select
+        {:value     (or current-activity "")
+         :on-change handle-item-click
+         :on-wheel  #(.stopPropagation %)}
+        (for [{:keys [id name]} activities]
+          ^{:key id}
+          [ui/menu-item {:value id} name])
+        [ui/menu-item
+         [ui/text-field {:placeholder "New Activity"
+                         :on-click    #(.stopPropagation %)
+                         :on-change   #(reset! new-activity-name (->> % .-target .-value))}]
+         [ui/icon-button {:on-click #(re-frame/dispatch [::state/create @new-activity-name component-id])}
+          [ic/add]]
+         ]]
+       (when (:is-placeholder data)
+         [ui/icon-button {:on-click #(js/console.log "create activity...")}
+          [ic/warning]])])
     (finally
       (re-frame/dispatch [::state/save component-id]))))

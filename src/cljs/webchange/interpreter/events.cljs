@@ -98,11 +98,7 @@
 (re-frame/reg-fx
   :load-course-data
   (fn [{:keys [course-id]}]
-    (i/load-course {:course-id course-id}
-                   (fn [course]
-                     (let [scenes-names (->> (:scene-list course) (keys) (map clojure.core/name))]
-                       (re-frame/dispatch [::set-course-data course])
-                       (re-frame/dispatch [::load-scenes-data course-id scenes-names]))))))
+    (i/load-course {:course-id course-id} #(re-frame/dispatch [::set-course-data %]))))
 
 (re-frame/reg-fx
   :load-scene
@@ -112,21 +108,6 @@
                   (fn [scene]
                     (re-frame/dispatch [::set-scene scene-id scene])
                     (re-frame/dispatch [::store-scene scene-id scene])))))
-
-(re-frame/reg-fx
-  :load-scenes-data
-  (fn [{:keys [course-id scenes-ids]}]
-    (let [loads-left (atom (count scenes-ids))
-          scenes-data (atom {})]
-      (doseq [scene-id scenes-ids]
-        (i/load-scene {:course-id course-id
-                       :scene-id  scene-id}
-                      (fn [scene-data scene-id]
-                        (swap! scenes-data assoc scene-id scene-data)
-                        (swap! loads-left dec)
-                        (when (= @loads-left 0)
-                          (re-frame/dispatch [::set-scenes-data @scenes-data])
-                          (re-frame/dispatch [::load-lessons course-id]))))))))
 
 (defn- progress-initialized?
   [progress]
@@ -992,16 +973,37 @@
                      :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
+  ::load-scenes-with-skills
+  (fn [{:keys [db]} [_ course-id]]
+    {:db         (assoc-in db [:loading :load-scenes-with-skills] true)
+     :http-xhrio {:method          :get
+                  :uri             (str "/api/courses/" course-id "/scenes-with-skills")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::load-scenes-with-skills-success]
+                  :on-failure      [:api-request-error :load-scenes-with-skills]}}))
+
+(re-frame/reg-event-fx
+  ::load-scenes-with-skills-success
+  (fn [{:keys [db]} [_ scenes-with-skills]]
+    (let [scene-skills (->> scenes-with-skills
+                            (map (juxt :name :skills))
+                            (into {}))
+          scene-placeholders (->> scenes-with-skills
+                                  (map (juxt :name :is-placeholder))
+                                  (into {}))]
+      {:db (-> db
+               (assoc-in [:loading :load-scenes-with-skills] false)
+               (assoc :scene-skills scene-skills)
+               (assoc :scene-placeholders scene-placeholders))})))
+
+(re-frame/reg-event-fx
   ::load-course-data
   (fn-traced [{:keys [db]} [_ course-id]]
     (if (not= course-id (:loaded-course db))
-      {:load-course-data {:course-id course-id}})))
-
-(re-frame/reg-event-fx
-  ::load-scenes-data
-  (fn-traced [{:keys [_]} [_ course-id scenes-ids]]
-    {:load-scenes-data {:course-id  course-id
-                        :scenes-ids scenes-ids}}))
+      {:dispatch [::load-scenes-with-skills course-id]
+       :load-course-data {:course-id course-id}
+       :load-lessons [course-id]})))
 
 (re-frame/reg-event-fx
   ::set-current-course

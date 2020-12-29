@@ -28,10 +28,11 @@
   ::table-data
   (fn []
     [(re-frame/subscribe [::subs/course-data])
-     (re-frame/subscribe [::subs/scenes-data [:skills]])
+     (re-frame/subscribe [::subs/scene-skills])
+     (re-frame/subscribe [::subs/scene-placeholders])
      (re-frame/subscribe [::interpreter.subs/lessons-data {:exclude-items-fields [:data]}])])
-  (fn [[course-data scenes-data lessons-data]]
-    (prepare-course-data course-data scenes-data lessons-data)))
+  (fn [[course-data scene-skills-data scene-placeholders lessons-data]]
+    (prepare-course-data course-data scene-skills-data scene-placeholders lessons-data)))
 
 (defn- find-activity-row
   [rows selection]

@@ -59,4 +59,4 @@
       (update-pagination {:table-data     table-data
                           :prev-selection selection
                           :new-selection  new-selection})
-      (re-frame/dispatch [::selection-state/set-selection new-selection new-selection]))))
+      (re-frame/dispatch [::selection-state/set-selection new-selection]))))
