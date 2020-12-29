@@ -10,6 +10,7 @@
                     :y               {}
                     :width           {}
                     :height          {}
+                    :on-click      {}
                     :fill            {}
                     :border-radius   {}
                     :border-width    {}
@@ -59,14 +60,14 @@
   :border-color - color of border
   :shadow-color - color of shadow. E.g. 0x75016e
   :shadow-distance - width of shadow."
-  [{:keys [parent type object-name fill] :as props}]
+  [{:keys [parent type on-click object-name fill] :as props}]
   (let [mask (create-mask props)
         sprite (create-sprite props)
         container (create-container props)]
-
     (aset sprite "mask" mask)
     (.addChild container sprite)
     (.addChild container mask)
     (.addChild parent container)
+    (when-not (nil? on-click) (utils/set-handler container "click" on-click))
 
-    (wrap type object-name container sprite)))
+    (wrap type object-name container sprite props)))

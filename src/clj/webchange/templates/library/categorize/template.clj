@@ -14,30 +14,31 @@
         })
 
 (defn replace-data
-  [action action-key-fn object-map]
+  [action action-key-fn object-key-fn]
   (cond-> action
-          (contains? action :target) (assoc :target (get object-map (:keyword (:target action))))
+          (contains? action :target) (assoc :target (object-key-fn (:target action)))
           (contains? action :success) (assoc :success (action-key-fn (:success action)))
           (contains? action :fail) (assoc :fail (action-key-fn (:fail action)))
-          (contains? action :transition) (assoc :transition (name (get object-map (keyword (:transition action)))))))
+          (contains? action :skip) (assoc :skip (action-key-fn (:skip action)))
+          (contains? action :transition) (assoc :transition (object-key-fn (:transition action)))))
 
 (defn replace-name
   [data func]
   (if (vector? data) (vec (map (fn [item] (func item)) data)) (func data)))
 
 (defn process-action
-  [action action-key-fn object-key-fn object-map params-object-names var-object-names var-action-names]
+  [action action-key-fn object-key-fn params-object-names var-object-names var-action-names]
   (cond->
     (case (:type action)
       "action" (if (contains? action :id) (assoc action :id (action-key-fn (:id action))) action)
-      "parallel" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn object-map params-object-names var-object-names var-action-names)) (:data action)))
-      "sequence-data" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn object-map params-object-names var-object-names var-action-names)) (:data action)))
+      "parallel" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
+      "sequence-data" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
       "set-interval" (assoc action :action (action-key-fn (:action action)))
       "set-variable" (cond-> action
                              (some #(= (:var-name action) %) var-object-names) (assoc :var-value (replace-name (:var-value action) object-key-fn))
-                             (some #(= (:var-name action) %) var-action-names) (assoc :var-value (replace-name (:var-value action) action-key-fn))
-                             )
-      (replace-data action action-key-fn object-map))
+                             (some #(= (:var-name action) %) var-action-names) (assoc :var-value (replace-name (:var-value action) action-key-fn)))
+      "show-question" (assoc action :data (replace-data (:data action) action-key-fn object-key-fn))
+      (replace-data action action-key-fn object-key-fn))
     (contains? action :params) (assoc :params (into {} (map (fn [[key data]]
                                                               (if (some #(= key %) params-object-names)
                                                                 [key (replace-name data object-key-fn)]
@@ -71,7 +72,7 @@
   (reduce (fn [result [key action]]
             (let [
                   action-key (action-key-fn key)
-                  prepared-action (process-action action action-key-fn object-key-fn object-map params-object-names
+                  prepared-action (process-action action action-key-fn object-key-fn params-object-names
                                                   var-object-names var-action-names)]
               (cond-> result
                       true (update :actions #(assoc % (keyword action-key) prepared-action))
@@ -80,7 +81,7 @@
 
 (defn process-object-actions
   [objects action-key-fn object-key-fn
-   prepared-objects params-object-names
+   params-object-names
    var-object-names var-action-names]
   (into {} (map (fn [[key object]]
                   (if (contains? object :actions)
@@ -90,7 +91,7 @@
                                                     [key
                                                      (process-action
                                                        action action-key-fn object-key-fn
-                                                       prepared-objects params-object-names
+                                                       params-object-names
                                                        var-object-names var-action-names)])
                                                   (:actions object))))]
                     [key object])
@@ -131,7 +132,7 @@
                                           object-key-fn (:object-map prepared-objects)
                                           params-object-names var-object-names var-action-names)
         result-objects (process-object-actions (:objects prepared-objects) action-key-fn object-key-fn
-                                               prepared-objects params-object-names
+                                               params-object-names
                                                var-object-names var-action-names)
         prepared-scene-objects (prepare-scene-objects prepared-objects (:scene-objects template))
         prepared-triggers (prepare-triggers prepared-actions (:triggers template))
@@ -190,7 +191,6 @@
 
 (defn prepare-intermediate-action
   [init-round-actions start-actions]
-  (println start-actions)
   (map-indexed
     (fn [idx [action-name action]]
       [(keyword (str "intermediate-action-" idx))
@@ -239,8 +239,7 @@
                              (assoc :objects (merge (:objects result) (:objects item)))
                              (assoc :actions (merge (:actions result) (:actions item)))
                              (assoc :scene-objects (concat (:scene-objects result) (:scene-objects item)))
-                             (update-in [:metadata :tracks] concat (get-in item [:metadata :tracks]))
-                             )
+                             (update-in [:metadata :tracks] concat (get-in item [:metadata :tracks])))
                          ) {} rounds)
         init-round-actions (init-actions merged rounds)
         start-actions (exctract-start-actions rounds)
@@ -252,33 +251,16 @@
                    (replace-stop-actions stop-actions intermediate-action)
                    (add-technical-states)
                    (hide-all-objects)
-                   (add-stages rounds)
-                   )
-        ]
-    ;:assets        (:assets template)
-    ;:objects       result-objects
-    ;:actions       (:actions prepared-actions)
-    ;:scene-objects prepared-scene-objects
-    ;:triggers      prepared-triggers
-    ;:metadata      (:metadata template)
-    ;merged
-    ;(-> merged
-    ;
-    ;    ;(add-init-action pt "r1")
-    ;    )
-    ;;(:triggers pt)M
-    ;)
-
-    ;{}
+                   (add-stages rounds))]
     merged
     ))
 
 (defn f
-  [t args]
-  t)
+  [args]
+  (prepare-templates))
 
 (core/register-template
   (:id m)
   m
-  (partial f (prepare-templates)))
+  (partial f))
 

@@ -73,6 +73,7 @@
                              :set-data       [:data]
                              :set-path       [:path]
                              :set-fill       [:fill]
+                             :set-border-color   [:border-color]
                              :set-highlight  [:highlight]
                              :set-draggable [:draggable]
                              :set-children  [:children]
@@ -86,7 +87,7 @@
         (logger/warn (str "[Set object state] Not-processed-params for <" object-name "> object:") (clj->js not-handled-params)))
       {:dispatch [::change-scene-object object-name execute-actions]})))
 
-(defn- get-object-name
+(defn get-object-name
   [db object-name]
   (or (get-scene-object db object-name)
                (get-scene-group db object-name)))
@@ -209,6 +210,11 @@
   :set-fill
   (fn [[object-wrapper {:keys [fill]}]]
     (apply-to-wrapper w/set-fill object-wrapper fill)))
+
+(re-frame/reg-fx
+  :set-border-color
+  (fn [[object-wrapper {:keys [border-color]}]]
+    (apply-to-wrapper w/set-border-color object-wrapper border-color)))
 
 (re-frame/reg-fx
   :set-stroke

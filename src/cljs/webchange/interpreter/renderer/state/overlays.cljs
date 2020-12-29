@@ -40,6 +40,21 @@
                        [::scene/change-scene-object :settings-overlay [[:set-visibility {:visible false}]]])}))
 
 (re-frame/reg-event-fx
+  ::show-question
+  (fn [{:keys [db]}]
+      (set-scene-interactive db false)
+      {:dispatch-n (list [::hide-navigation-menu]
+                         [::scene/change-scene-object :question-overlay [[:set-visibility {:visible true}]]]
+                         )}))
+
+(re-frame/reg-event-fx
+  ::hide-question
+  (fn [{:keys [db]}]
+    (set-scene-interactive db true)
+    {:dispatch-n (list [::show-navigation-menu]
+                       [::scene/change-scene-object :question-overlay [[:set-visibility {:visible false}]]])}))
+
+(re-frame/reg-event-fx
   ::show-activity-finished
   (fn [{:keys [db]}]
     (let [next-activity (subs/next-activity db)

@@ -3,6 +3,7 @@
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
     [webchange.interpreter.renderer.scene.filters.filters :as f]
     [webchange.resources.manager :as resources]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :as f]))
 
 
@@ -16,11 +17,16 @@
                                       (if (and (not highlight) highlight-filter-set) (f/set-filter sprite-object "" {}))
                                       (if (and highlight (not highlight-filter-set))
                                           (f/set-filter sprite-object "glow" {}))))
+                   :set-on-click-handler #(do
+                                            (utils/set-handler sprite-object "click" %)
+                                            )
                    :set-draggable (fn [draggable]
                                     (doto container
                                       (set! -interactive draggable)))
                    :set-parent (fn [parent]
                                  (.addChild (:object parent) container))
+                   :set-position (fn [position]
+                                   (utils/set-position container position))
                    :set-src       (fn [src]
                                     (let [resource (resources/get-resource src)]
                                       (when (nil? resource)
