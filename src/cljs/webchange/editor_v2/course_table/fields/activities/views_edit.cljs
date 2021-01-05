@@ -11,7 +11,8 @@
   (r/with-let [component-id (:idx data)
                _ (re-frame/dispatch [::state/init data component-id])
                new-activity-name (r/atom "")]
-    (let [activities @(re-frame/subscribe [::state/activities])
+    (let [errors @(re-frame/subscribe [::state/errors component-id])
+          activities @(re-frame/subscribe [::state/activities])
           current-activity @(re-frame/subscribe [::state/current-activity component-id])
           handle-item-click (fn [event]
                               (let [activity-id (->> event .-target .-value)]
@@ -26,13 +27,15 @@
           [ui/menu-item {:value id} name])
         [ui/menu-item
          [ui/text-field {:placeholder "New Activity"
+                         :required true
+                         :error (when (:new-activity errors) true)
                          :on-click    #(.stopPropagation %)
                          :on-change   #(reset! new-activity-name (->> % .-target .-value))}]
          [ui/icon-button {:on-click #(re-frame/dispatch [::state/create @new-activity-name component-id])}
           [ic/add]]
          ]]
        (when (:is-placeholder data)
-         [ui/icon-button {:on-click #(js/console.log "create activity...")}
+         [ui/icon-button {:on-click #(re-frame/dispatch [::state/open-configured-wizard current-activity])}
           [ic/warning]])])
     (finally
       (re-frame/dispatch [::state/save component-id]))))

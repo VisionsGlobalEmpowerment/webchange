@@ -97,6 +97,17 @@
     (testing "Activity data is empty"
       (is (nil? retrieved-value)))))
 
+(deftest create-activity-version
+  (let [{:keys [course-slug scene-slug owner-id name]} (f/activity-placeholder-created)
+        activity-data {:template-id 1 :characters [{:skeleton "vera" :name "vera"}] :boxes 3}
+        saved-response (f/create-activity-version! course-slug scene-slug owner-id activity-data)
+        retrieved-response (f/get-scene course-slug scene-slug)
+        retrieved-value (-> retrieved-response :body)]
+    (testing "Activity version can be created"
+      (is (= 200 (:status saved-response)))
+      (is (= 200 (:status retrieved-response)))
+      (is (not (nil? retrieved-value))))))
+
 (deftest scene-can-be-retrieved
          (let [scene (f/scene-created)
                response (f/get-scene (:course-slug scene) (:name scene))]

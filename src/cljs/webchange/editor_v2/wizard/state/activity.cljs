@@ -62,6 +62,18 @@
                   :on-failure      [:api-request-error :create-activity]}}))
 
 (re-frame/reg-event-fx
+  ::create-activity-version
+  (fn [{:keys [db]} [_ course-slug scene-slug data callback]]
+    {:db         (assoc-in db [:loading :create-activity-version] true)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/courses/" course-slug "/scenes/" scene-slug "/versions")
+                  :params          data
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [::create-activity-version-success callback]
+                  :on-failure      [:api-request-error :create-activity-version]}}))
+
+(re-frame/reg-event-fx
   ::update-activity
   (fn [{:keys [db]} [_ course-slug data scene-id callback]]
     {:db         (assoc-in db [:loading :update-activity] true)
@@ -78,14 +90,21 @@
   (fn [{:keys [db]} [_ callback result]]
     (when (some? callback)
       (callback result))
-    {:dispatch-n (list [:complete-request :create-course])}))
+    {:dispatch-n (list [:complete-request :create-activity])}))
 
 (re-frame/reg-event-fx
   ::update-activity-success
   (fn [{:keys [db]} [_ callback result]]
     (when (some? callback)
       (callback result))
-    {:dispatch-n (list [:complete-request :update-course])}))
+    {:dispatch-n (list [:complete-request :update-activity])}))
+
+(re-frame/reg-event-fx
+  ::create-activity-version-success
+  (fn [{:keys [db]} [_ callback result]]
+    (when (some? callback)
+      (callback result))
+    {:dispatch-n (list [:complete-request :create-activity-version])}))
 
 (re-frame/reg-event-fx
   ::create-simple-activity

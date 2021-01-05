@@ -8,9 +8,11 @@
 (defn info-from
   [{:keys [data]}]
   (let [{:keys [name]} @(re-frame/subscribe [::data-state/course-activity (-> data :activity keyword)])]
-    [:div
-     [ui/typography {:variant "body1"
-                     :style   {:padding "2px 0"}}
-      name]
+    [:div {:style {:display "flex"}}
+     [:div
+      [ui/typography {:variant "body1"
+                      :style   {:padding "2px 0"}}
+       name]]
      (when (:is-placeholder data)
-       [ic/warning])]))
+       [:div
+        [ic/warning]])]))

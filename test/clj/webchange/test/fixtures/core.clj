@@ -5,6 +5,7 @@
             [webchange.assets.core :as assets]
             [webchange.handler :as handler]
             [webchange.course.handler :as course-handler]
+            [webchange.course.core :as course]
             [config.core :refer [env]]
             [mount.core :as mount]
             [luminus-migrations.core :as migrations]
@@ -289,6 +290,14 @@
 (defn create-activity-placeholder!
   [course-slug user-id data]
   (let [url (str "/api/courses/" course-slug "/create-activity-placeholder")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (teacher-logged-in user-id))]
+    (handler/dev-handler request)))
+
+(defn create-activity-version!
+  [course-slug scene-slug user-id data]
+  (let [url (str "/api/courses/" course-slug "/scenes/" scene-slug "/versions")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     (teacher-logged-in user-id))]
@@ -846,3 +855,15 @@
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
+
+(defn activity-placeholder-created
+  []
+  (let [{user-id :id} (website-user-created)
+        {course-id :id course-slug :slug course-data :data} (course-created {:owner-id user-id})
+        scene-name "Test Scene"
+        placeholder (-> (course/create-activity-placeholder! course-slug scene-name) second)]
+    (db/save-course! {:course_id course-id
+                      :data (assoc-in course-data [:scene-list (-> placeholder :scene-slug keyword)] {:name scene-name})
+                      :owner_id user-id
+                      :created_at (jt/local-date-time)})
+    (assoc placeholder :owner-id user-id)))
