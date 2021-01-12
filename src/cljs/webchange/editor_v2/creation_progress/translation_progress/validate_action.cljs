@@ -52,7 +52,7 @@
       (validate-concept-phrase-action action-data)
       (validate-activity-phrase-action action-data))))
 
-(defn- empty-dialog-action?
+(defn empty-dialog-action?
   [action-data]
   (let [default-action actions/default-action]
     (and (= (count (:data action-data)) 1)

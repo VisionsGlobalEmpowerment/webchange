@@ -12,7 +12,9 @@
                     :name         {}
                     :data         {}
                     :dash         {}
+                    :on-click     {}
                     :stroke       {:default "#000000"}
+                    :fill         {:default false}
                     :stroke-width {}
                     :line-cap     {:default "round"}
                     :scale        {:default {:x 1 :y 1}}})
@@ -24,7 +26,7 @@
     (utils/set-scale scale)))
 
 (defn- create-graphics
-  [{:keys [data width height stroke stroke-width line-cap dash]}]
+  [{:keys [data width height stroke stroke-width line-cap dash fill]}]
   (let [canvas (doto
                  (.createElement js/document "canvas")
                  (set! -width (* width 2))
@@ -36,6 +38,7 @@
               (set! -lineCap line-cap))
         texture (.from Texture canvas)]
     (svg-utils/set-svg-path texture ctx {:data data
+                                         :fill fill
                                          :dash dash})
     {:sprite         (Sprite. texture)
      :texture        texture
@@ -56,17 +59,20 @@
   :data - string with svg data. e.g M144.76,92.43a37.5,37.5,0,1,0,0,39.28m0-57.21v75
   :dash - An Array of numbers that specify distances to alternately draw a line and a gap (in coordinate space units). If the number of elements in the array is odd, the elements of the array get copied and concatenated. For example, [5, 15, 25] will become [5, 15, 25, 5, 15, 25]. If the array is empty, the line dash list is cleared and line strokes return to being solid.
   :stroke - line color. default #000000.
+  :fill - fill shape instead of stroke.
   :stroke-width - A number specifying the line width, in coordinate space units.
   :line-cap - determines the shape used to draw the end points of lines.
               'butt' The ends of lines are squared off at the endpoints.
               'round' The ends of lines are rounded.
               'square' The ends of lines are squared off by adding a box with an equal width and half the height of the line's thickness."
-  [{:keys [parent type object-name group-name] :as props}]
+  [{:keys [parent type object-name group-name on-click] :as props}]
   (let [container (create-container props)
         {:keys [sprite texture canvas-context]} (create-graphics props)
         wrapped-container (wrap type object-name group-name container texture canvas-context)]
 
     (.addChild container sprite)
     (.addChild parent container)
+
+    (when-not (nil? on-click) (utils/set-handler container "click" on-click))
 
     wrapped-container))

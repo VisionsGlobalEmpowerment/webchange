@@ -4,7 +4,7 @@
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-outline-filter
                                                                   apply-shadow-filter]]
-    [webchange.interpreter.renderer.scene.components.rectangle.wrapper :refer [wrap]]))
+    [webchange.interpreter.renderer.scene.components.rectangle.wrapper :refer [wrap set-border-radius]]))
 
 (def default-props {:x               {}
                     :y               {}
@@ -16,13 +16,14 @@
                     :border-width    {}
                     :border-color    {}
                     :shadow-color    {}
-                    :shadow-distance {}})
+                    :shadow-distance {}
+                    :ref             {}})
 
 (defn- create-mask
-  [{:keys [width height border-radius]}]
+  [{:keys [width height]}]
   (doto (Graphics.)
     (.beginFill 0x000000)
-    (.drawRoundedRect 0 0 width height border-radius)
+    (.drawRect 0 0 width height)
     (.endFill 0x000000)))
 
 (defn- create-sprite
@@ -60,14 +61,21 @@
   :border-color - color of border
   :shadow-color - color of shadow. E.g. 0x75016e
   :shadow-distance - width of shadow."
-  [{:keys [parent type on-click object-name fill] :as props}]
-  (let [mask (create-mask props)
+  [{:keys [parent type object-name ref border-radius on-click] :as props}]
+  (let [state (atom (select-keys props [:border-radius]))
+        mask (-> (create-mask props)
+                 (set-border-radius border-radius state))
         sprite (create-sprite props)
-        container (create-container props)]
+        container (create-container props)
+
+        wrapped-component (wrap type object-name state container sprite mask props)]
+
     (aset sprite "mask" mask)
     (.addChild container sprite)
     (.addChild container mask)
     (.addChild parent container)
-    (when-not (nil? on-click) (utils/set-handler container "click" on-click))
 
-    (wrap type object-name container sprite props)))
+    (when-not (nil? on-click) (utils/set-handler container "click" on-click))
+    (when-not (nil? ref) (ref wrapped-component))
+
+    wrapped-component))
