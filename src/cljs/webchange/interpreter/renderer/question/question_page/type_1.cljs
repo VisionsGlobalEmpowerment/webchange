@@ -107,7 +107,7 @@
     ))
 
 (defn create-question
-  [parent image question audio-data skip-action]
+  [parent image text chunks audio-data skip-action]
   (if skip-action
     (image/create
       {:type        "image"
@@ -139,12 +139,12 @@
                                        :font-size      60,
                                        :width          1500,
                                        :parent         parent
-                                       :text           question,
+                                       :text           text,
                                        :align          "left",
                                        :vertical-align "middle"
                                        :font-weight    "normal"
                                        :scale          {:x 1, :y 1}
-                                       :chunks         (text-utils/text->chunks question)
+                                       :chunks         chunks     ;(text-utils/text->chunks text)
                                        })
         x-text-position (image-x-to-center (:object question-wrapper))
         _ ((:set-position question-wrapper) {:x x-text-position :y 80})
@@ -160,10 +160,11 @@
 
 (defn create-type-1-answers
   [answers parent success-action fail-action]
-  (let [total (count answers)]
+  (let [answers (:data answers)
+        total (count answers)]
     (doall
       (map-indexed
-        (fn [idx {:keys [audio-data text correct]}]
+        (fn [idx {:keys [audio-data text chunks correct]}]
           (let [{x :x y :y} (get-coord total idx)
 
                 rectangle (rectangle/create {:type          "rectangle"
@@ -198,7 +199,7 @@
                                        :align          "left",
                                        :vertical-align "middle"
                                        :font-weight    "normal"
-                                       :chunks         (text-utils/text->chunks text)
+                                       :chunks         chunks ; (text-utils/text->chunks text)
                                        :scale          {:x 1, :y 1}})]
             (create-sound-icon {:x          (- x 132)
                                 :y          (- y 48)
@@ -213,12 +214,12 @@
         ))))
 
 (defn create-page
-  [{:keys [image parent question answers success fail skip audio-data]} db]
+  [{:keys [image parent text chunks answers success fail skip audio-data]} db]
   (create-page-background parent)
   (let [success-action (ce/get-action success db)
         fail-action (ce/get-action fail db)
         skip-action (if skip (ce/get-action skip db))]
-    (create-question parent image question audio-data skip-action)
+    (create-question parent image text chunks audio-data skip-action)
     (create-type-1-answers answers parent success-action fail-action)
     )
   )

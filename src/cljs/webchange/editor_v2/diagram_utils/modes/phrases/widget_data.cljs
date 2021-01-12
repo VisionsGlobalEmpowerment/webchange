@@ -43,6 +43,11 @@
                         :margin-top       "-12px"
                         :background-color "#6BC784"
                         :cursor           "pointer"}
+   :question-node        {:width            "180px"
+                        :height           "64px"
+                        :margin-top       "-12px"
+                        :background-color "#FFC784"
+                        :cursor           "pointer"}
    :track-label        {:height           "40px"
                         :border-radius    "0"
                         :display          "flex"
@@ -88,7 +93,7 @@
   [node-data]
   (let [styles (get-styles)]
     [:h3 {:style (:header-description styles)}
-     (str->caption (:name node-data))]))
+     (str->caption (or (:name node-data) (get-in node-data [:data :description])))]))
 
 (defn- header
   [node-data]
@@ -146,6 +151,22 @@
                                        :bottom   "2px"}}}])
       (into [:div] (r/children this))]]))
 
+
+(defn- question-wrapper
+  [{:keys [node-data this]}]
+  (let [
+        current-node? (->> @(re-frame/subscribe [::translator-form.actions/current-dialog-action-data])
+                           (= (:data node-data)))
+        styles (get-styles)]
+    [:div
+     [:div {:on-click        (fn []
+                               (re-frame/dispatch [::translator-form.actions/set-current-dialog-action (if current-node? nil node-data)]))
+            :on-double-click (fn []
+                                 (re-frame/dispatch [::ee/show-question-form node-data]))
+            :style           (merge custom-wrapper/node-style
+                                    (:question-node styles))}
+      (into [:div] (r/children this))]]))
+
 (defn- track-wrapper
   [{:keys [this]}]
   (let [styles (get-styles)]
@@ -171,7 +192,10 @@
                                 :this      this}]
       "track" [track-wrapper {:this this}]
       "prompt" [prompt-wrapper {:node-data node-data}]
-      [:div "Unhandled type"])))
+      "question" [question-wrapper {:node-data node-data
+                                  :this      this
+                                  }]
+      [:div (str "Unhandled type " (:type node-data))])))
 
 (defn get-widget-data
   []
