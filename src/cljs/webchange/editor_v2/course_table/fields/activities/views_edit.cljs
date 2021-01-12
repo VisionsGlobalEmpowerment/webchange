@@ -6,6 +6,15 @@
     [reagent.core :as r]
     [webchange.editor-v2.course-table.fields.activities.state :as state]))
 
+(defn- placeholder-warning
+  [current-activity id]
+  (if (= current-activity id)
+    [ui/icon-button {:on-click #(do
+                                  (.stopPropagation %)
+                                  (re-frame/dispatch [::state/open-configured-wizard id]))}
+     [ic/warning]]
+    [ic/warning]))
+
 (defn edit-form
   [{:keys [data]}]
   (r/with-let [component-id (:idx data)
@@ -22,9 +31,10 @@
         {:value     (or current-activity "")
          :on-change handle-item-click
          :on-wheel  #(.stopPropagation %)}
-        (for [{:keys [id name]} activities]
+        (for [{:keys [id name is-placeholder]} activities]
           ^{:key id}
-          [ui/menu-item {:value id} name])
+          [ui/menu-item {:value id} name
+           (when is-placeholder [placeholder-warning current-activity id])])
         [ui/menu-item
          [ui/text-field {:placeholder "New Activity"
                          :required true
@@ -34,8 +44,6 @@
          [ui/icon-button {:on-click #(re-frame/dispatch [::state/create @new-activity-name component-id])}
           [ic/add]]
          ]]
-       (when (:is-placeholder data)
-         [ui/icon-button {:on-click #(re-frame/dispatch [::state/open-configured-wizard current-activity])}
-          [ic/warning]])])
+       ])
     (finally
       (re-frame/dispatch [::state/save component-id]))))

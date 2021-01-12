@@ -171,14 +171,8 @@
 
 (defn get-lesson-sets-names
   [course-data selection]
-  (let [lesson-data (get-lesson course-data selection)
-        lesson-type (-> (:type lesson-data) (keyword))
-        scheme (->> (get-lesson-sets-scheme course-data selection lesson-type)
-                    (map (fn [name] [(keyword name) nil]))
-                    (into {}))]
-    (-> scheme
-        (merge (:lesson-sets lesson-data))
-        (select-keys (keys scheme)))))
+  (let [lesson-data (get-lesson course-data selection)]
+    (:lesson-sets lesson-data)))
 
 (defn get-lesson-comment
   [course-data selection]
@@ -282,3 +276,50 @@
        (map get-level-lesson-sets-names)
        (flatten)
        (distinct)))
+
+(defn activities->lesson-sets-scheme
+  [course-data activities]
+  (let [activity-name->lesson-sets #(get-in course-data [:scene-list (keyword %) :lesson-sets])]
+    (->> activities
+         (map :activity)
+         (mapcat activity-name->lesson-sets)
+         (distinct))))
+
+(defn- lesson-set-name-unique?
+  [course-data lesson-set-name]
+  (->> (get-course-lesson-sets-names course-data)
+       (some #{lesson-set-name})
+       (not)))
+
+(defn- get-new-lesson-set-name
+  [scheme-name]
+  (->> (str (random-uuid))
+       (take 8)
+       (clojure.string/join "")
+       (str "ls-" (clojure.core/name scheme-name) "-")))
+
+(defn generate-lesson-set-name
+  [course-data scheme-name]
+  (loop [name (get-new-lesson-set-name scheme-name)]
+    (if-not (lesson-set-name-unique? course-data name)
+      (recur (get-new-lesson-set-name scheme-name))
+      name)))
+
+(defn update-lesson-sets
+  [course-data selection]
+  (let [lesson (get-lesson course-data selection)
+        scheme (->> (activities->lesson-sets-scheme course-data (:activities lesson))
+                    (map keyword))
+        scheme-lesson-sets (->> scheme
+                                (map (fn [scheme-name]
+                                       [scheme-name (generate-lesson-set-name course-data scheme-name)]))
+                                (into {}))
+        lesson-sets (-> scheme-lesson-sets
+                        (merge (:lesson-sets lesson))
+                        (select-keys scheme))]
+    (update-lesson course-data selection {:lesson-sets lesson-sets})))
+
+(defn get-lessons-sets-diff
+  [old-lesson-sets new-lesson-sets]
+  {:removed (-> (apply dissoc old-lesson-sets (keys new-lesson-sets)) vals)
+   :added (-> (apply dissoc new-lesson-sets (keys old-lesson-sets)) vals)})

@@ -19,11 +19,11 @@
 
 (defn- lesson
   [{:keys [data]}]
-  (:lesson-idx data))
+  (-> data :lesson-idx inc))
 
 (defn- level
   [{:keys [data]}]
-  (:level-idx data))
+  (-> data :level-idx inc))
 
 (defn- default-component
   [{:keys [field]}]

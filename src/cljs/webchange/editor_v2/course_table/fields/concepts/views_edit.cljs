@@ -48,7 +48,7 @@
                _ (re-frame/dispatch [::state/init data component-id])]
     (let [current-sets @(re-frame/subscribe [::state/current-lesson-sets component-id])]
       [:div {:style {:min-width "200px"}}
-       (for [[concepts-name] current-sets]
+       (for [[concepts-name _] current-sets]
          ^{:key concepts-name}
          [lesson-set {:name         concepts-name
                       :component-id component-id}])])

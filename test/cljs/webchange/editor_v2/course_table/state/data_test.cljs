@@ -81,8 +81,7 @@
                         lesson-sets (->> data (filter target-filter) first :lesson-sets)]
                     (is (= lesson-sets {:current-concept {:id    382 :name "ls2" :dataset-id 92
                                                           :items [{:id 2883 :name "b" :dataset-id 92}
-                                                                  {:id 2884 :name "c" :dataset-id 92}]}
-                                        :all-concepts    nil})))
+                                                                  {:id 2884 :name "c" :dataset-id 92}]}})))
                   (let [target-filter (fn [{:keys [level-idx lesson-idx]}] (and (= level-idx 1) (= lesson-idx 1)))
                         lesson-sets (->> data (filter target-filter) first :lesson-sets)]
                     (is (= lesson-sets {:assessment-1 {:id    382 :name "assessment1" :dataset-id 92
