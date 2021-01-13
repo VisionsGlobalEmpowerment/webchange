@@ -18,6 +18,7 @@
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.components.flipbook.state]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.audio-utils.recorder :as audio-recorder]
     [webchange.resources.manager :as resources-manager]
@@ -44,6 +45,7 @@
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :location ::execute-location)
 (ce/reg-simple-executor :transition ::execute-transition)
+(ce/reg-simple-executor :flip ::execute-flip)
 (ce/reg-simple-executor :stop-transition ::execute-stop-transition)
 (ce/reg-simple-executor :move ::execute-move)
 (ce/reg-simple-executor :scene-exit ::execute-scene-exit)
@@ -416,6 +418,25 @@
     (if (:path to)
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
+
+(defn- get-container
+  [db transition-id]
+  (let [scene-id (:current-scene db)
+        transition (get-in db [:transitions scene-id transition-id])]
+    (when (some? transition)
+      (:object @transition))))
+
+(re-frame/reg-event-fx
+  ::execute-flip
+  (fn [{:keys [db]} [_ {:keys [target-1 target-2 target-3] :as action}]]
+    (let [target-1 (get-container db target-1)
+          target-2 (get-container db target-2)
+          target-3 (get-container db target-3)]
+      {:flip-toward {:target-1 target-1
+                     :target-2 target-2
+                     :target-3 target-3
+                     :on-end   (fn []
+                                 (ce/dispatch-success-fn action))}})))
 
 (re-frame/reg-event-fx
   ::execute-stop-transition
@@ -1158,9 +1179,9 @@
   ::load-course-data
   (fn-traced [{:keys [db]} [_ course-id]]
     (if (not= course-id (:loaded-course db))
-      {:dispatch [::load-scenes-with-skills course-id]
+      {:dispatch         [::load-scenes-with-skills course-id]
        :load-course-data {:course-id course-id}
-       :load-lessons [course-id]})))
+       :load-lessons     [course-id]})))
 
 (re-frame/reg-event-fx
   ::set-current-course

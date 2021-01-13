@@ -1,4 +1,4 @@
-{:initial-scene "map",
+{:initial-scene "flip-book",
  :scene-list
                 {:home
                  {:name    "Casa",
