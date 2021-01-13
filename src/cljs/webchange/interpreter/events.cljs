@@ -10,6 +10,7 @@
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.sound :as sound]
+    [webchange.interpreter.renderer.question.component :as question-component]
     [webchange.progress.tags :as tags]
     [webchange.interpreter.utils :refer [add-scene-tag merge-scene-data]]
     [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
@@ -55,6 +56,115 @@
 (ce/reg-simple-executor :set-interval ::execute-set-interval)
 (ce/reg-simple-executor :remove-interval ::execute-remove-interval)
 (ce/reg-simple-executor :set-traffic-light ::execute-set-traffic-light)
+(ce/reg-simple-executor :show-question ::execute-show-question)
+(ce/reg-simple-executor :hide-question ::execute-hide-question)
+
+(re-frame/reg-event-fx
+  ::execute-show-question
+  (fn [{:keys [db]} [_ {:keys [data] :as action}]]
+    "Execute `show-question` action - allows to popup with question functionality
+
+    Action params:
+    :data - keep question and answer description.
+      :type - type of question page, it incapsulate some logic and basic layout
+      :question - text of question
+      :success - action will be called in case correct answer
+      :fail - action will be called in case wrong answer
+      :skip - action will be called in case skip clicked
+      :audio-data - data which describe how to play and animate text in case listen icon is clicked
+      :image - question image
+      :answers - array which describes each available answer
+        :text - answer text
+        :correct - boolean show if this is correct answer or not
+        :audio-data - data which describe how to play and animate text in case listen icon is clicked
+    Audio data:
+       :audio - audio file to play
+       :start - start audio position in seconds
+       :duration - duration of fragment to play
+       :animation - animation type (e.g. 'color', 'bounce')
+       :fill - color which will be used to highlight in case 'color' animation
+       :data - data which describes duration, start time, chunk number and other data to animate text
+          :start - time position to start animation
+          :end - time position to end animation
+          :duration - duration of animation,
+          :at - the same as start
+          :chunk - chunk number
+
+    :Example
+    {
+        :type 'show-question'
+        :data {
+            :type 'type-1'
+            :question   'What is the same about these two groups?'
+            :success    'correct-answer-question',
+            :fail       'fail-answer-question'
+            :skip       'skip-question'
+            :audio-data {
+                :audio     '/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a',
+                :start     2.826,
+                :duration  4.785,
+                :animation 'color',
+                :fill 0x00B2FF
+                :data [
+                    {:start 2.826, :end 3.052, :duration 0.226, :at 2.826, :chunk 0}
+                    {:start 3.092, :end 3.252, :duration 0.16, :at 3.092, :chunk 1}
+                    {:start 3.306, :end 3.492, :duration 0.186, :at 3.306, :chunk 2}
+                    {:start 3.692, :end 3.799, :duration 0.107, :at 3.692, :chunk 3}
+                    {:start 3.839, :end 4.092, :duration 0.253, :at 3.839, :chunk 4}
+                    {:start 4.212, :end 4.399, :duration 0.187, :at 4.212, :chunk 5}
+                    {:start 4.465, :end 4.612, :duration 0.147, :at 4.465, :chunk 6}
+                    {:start 4.665, :end 4.785, :duration 0.12, :at 4.665, :chunk 7}
+                ]
+            }
+            :image      '/raw/img/categorize/question.png'
+            :answers    [
+                {:text       'A. They are both red'
+                :correct    false
+                :audio-data {
+                    :audio     '/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a',
+                    :start     2.826,
+                    :duration  4.785,
+                    :animation  'color',
+                    :fill 0x00B2FF
+                    :data [
+                        {:start 2.826, :end 3.052, :duration 0.226, :at 2.826, :chunk 0}
+                        {:start 3.092, :end 3.252, :duration 0.16, :at 3.092, :chunk 1}
+                        {:start 3.306, :end 3.492, :duration 0.186, :at 3.306, :chunk 2}
+                        {:start 3.692, :end 3.799, :duration 0.107, :at 3.692, :chunk 3}
+                        {:start 3.839, :end 4.092, :duration 0.253, :at 3.839, :chunk 4}
+                    ]
+                }
+                ....
+            ]
+        }
+    }
+
+
+    "
+    (let [scene-id (:current-scene db)
+          wrappers (scene/get-object-name db :question-overlay)
+          ]
+      (question-component/create (assoc data :parent (:object wrappers)) db)
+    {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/show-question]
+                       (ce/success-event action))})))
+
+
+(re-frame/reg-event-fx
+  ::execute-hide-question
+  (fn [{:keys [db]} [_ {:keys [data] :as action}]]
+    "Execute `hide-question` action - allows to close overlay with question
+
+    Example:
+    {:type 'hide-question'}"
+    (let [wrappers (scene/get-object-name db :question-overlay)
+          object (:object wrappers)
+          children (vec (array-seq (.-children object)))]
+        (doseq [child children]
+          (.removeChild object child))
+      {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/hide-question]
+                         (ce/success-event action))})))
+
+
 
 (re-frame/reg-fx
   :execute-audio
@@ -1338,7 +1448,7 @@
      :duration  2.999,
      :data      [{:at 2.826, :chunk 0}
                  {:at 3.092, :chunk 1}]}"
-    (let [animation-actions (i/text-animation-sequence->actions action)
+    (let [animation-actions (i/text-animation-sequence->actions db action)
           audio-action (i/animation-sequence->audio-action action)]
       (if audio-action
         {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}

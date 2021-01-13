@@ -134,7 +134,11 @@
 (defn- parse-additional-resources
   []
   ["/raw/img/bg.png"
-   "/raw/img/ui/logo.png"])
+   "/raw/img/ui/logo.png"
+   "/raw/img/questions/sound-icon.png"
+   "/raw/img/questions/sound-icon-white.png"
+   "/raw/img/questions/skip.png"
+   ])
 
 (defn- cleanup-resources
   [resources]

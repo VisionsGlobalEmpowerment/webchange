@@ -5,7 +5,9 @@
     [webchange.interpreter.events :as ie]
     [webchange.editor-v2.translator.state.window :as translator.window]
     [webchange.editor-v2.dialog.state.window :as dialog.window]
+    [webchange.editor-v2.question.state.window :as question.window]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.question.question-form.state.actions :as question-form.actions]
     [webchange.editor-v2.translator.text.views-text-chunks-editor :as translator.text]
     [webchange.subs :as subs]))
 
@@ -91,6 +93,14 @@
   (fn [{:keys [_]} [_ action-node]]
     {:dispatch-n (list [::translator-form.actions/set-current-dialog-action action-node]
                        [::dialog.window/open])}))
+
+(re-frame/reg-event-fx
+  ::show-question-form
+  (fn [{:keys [_]} [_ action-node]]
+    {:dispatch-n (list [::question-form.actions/set-current-question-action
+                        (-> action-node
+                            (assoc-in [:data :question-path] [(first (:path action-node))]))]
+                       [::question.window/open])}))
 
 (re-frame/reg-event-fx
   ::show-translator-form-by-id

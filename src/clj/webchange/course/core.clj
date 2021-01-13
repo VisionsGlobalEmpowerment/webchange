@@ -19,7 +19,7 @@
 
 (def editor_asset_types [editor_asset_type_single-background editor_asset_type_background editor_asset_type_surface editor_asset_type_decoration])
 
-(def hardcoded (env :hardcoded-courses {"test" true}))
+(def hardcoded (env :hardcoded-courses {}))
 
 (defn collaborator?
   [user-id {course-id :id owner-id :owner-id}]

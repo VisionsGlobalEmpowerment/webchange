@@ -36,6 +36,15 @@
                              :path [action-id]}
                   :position position})))
 
+(defn- create-question-node
+  [scene-data {:keys [action-id]} position]
+  (let [action-id (keyword action-id)
+        action-data (get-in scene-data [:actions action-id])]
+    (create-node {:type     "question"
+                  :data     {:data action-data
+                             :path [action-id]}
+                  :position position})))
+
 (defn- create-prompt-node
   [node position]
   (create-node {:type     "prompt"
@@ -51,6 +60,7 @@
   [scene-data {:keys [type] :as node} position]
   (case type
     "dialog" (create-dialog-node scene-data node position)
+    "question" (create-question-node scene-data node position)
     "prompt" (create-prompt-node node position)
     (create-empty-node node position)))
 

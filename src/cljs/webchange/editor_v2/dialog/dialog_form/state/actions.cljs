@@ -169,7 +169,7 @@
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::load-lip-sync-data-success rest-data]
-                  :on-failure      [::load-lip-sync-data-failure start duration rest-data]}}))
+                  :on-failure      [::load-lip-sync-data-failure rest-data start duration]}}))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data-success

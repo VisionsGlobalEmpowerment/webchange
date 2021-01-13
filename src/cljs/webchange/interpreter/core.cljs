@@ -197,7 +197,9 @@
                     (contains? params-to-animate :y)) (merge (w/get-position object))
                 (contains? params-to-animate :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
                 (contains? params-to-animate :rotation) (assoc :rotation (w/get-rotation object))
-                (contains? params-to-animate :opacity) (assoc :opacity (w/get-opacity object)))
+                (contains? params-to-animate :opacity) (assoc :opacity (w/get-opacity object))
+                (contains? params-to-animate :fill) (assoc :fill (w/get-fill object))
+                )
         (clj->js))))
 
 (defn- set-tween-object-params
@@ -210,7 +212,10 @@
   (when (contains? params :rotation)
     (w/set-rotation object (:rotation params)))
   (when (contains? params :opacity)
-    (w/set-opacity object (:opacity params))))
+    (w/set-opacity object (:opacity params)))
+  (when (contains? params :fill)
+    (w/set-fill object (:fill params)))
+  )
 
 ;; ToDo: Test :loop param
 ;; ToDo: Test :skippable param
@@ -269,9 +274,9 @@
         r2x (:x coords)
         r2y (:y coords)]
     (and (< r2x (+ r1x r1width))
-             (> r2x r1x)
-             (< r2y (+ r1y r1height))
-             (> r2y r1y))))
+         (> r2x r1x)
+         (< r2y (+ r1y r1height))
+         (> r2y r1y))))
 
 (defn animation-sequence->actions [{audio-start :start :keys [target track data skippable] :or {track 1}}]
   (into [] (map (fn [{:keys [start end anim]}]
@@ -290,12 +295,25 @@
             :id   audio}
            (select-keys action [:duration :start :volume]))))
 
-(defn text-animation-sequence->actions [{:keys [target animation start data] :as action}]
-  (into [] (map (fn [{:keys [at chunk]}]
-                  {:type "sequence-data"
-                   :data [{:type "empty" :duration (* (- at start) 1000)}
-                          {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y -20 :duration 0.01}}
-                          {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}]})
+(defn text-animation-sequence->actions [db {:keys [target animation start data fill] :as action}]
+  (into [] (map (fn [{:keys [at chunk duration]}]
+                  (case animation
+                    ("bounce") {:type "sequence-data"
+                                :data [{:type "empty" :duration (* (- at start) 1000)}
+                                       {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y -20 :duration 0.01}}
+                                       {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}]}
+                    ("color") (let [scene-id (:current-scene db)
+                                    transition-id (chunk-transition-name target chunk)
+                                    transition (get-in db [:transitions scene-id transition-id])
+                                    start-fill ((:get-fill @transition))
+                                    ]
+                                {:type "sequence-data"
+                                 :data [{:type "empty" :duration (* (- at start) 1000)}
+                                        {:type "transition" :transition-id transition-id :to {:fill fill :duration 0.01}}
+                                        {:type "empty" :duration (* duration 1000)}
+                                        {:type "transition" :transition-id transition-id :to {:fill start-fill :duration 0.1}}
+                                        ]})
+                    ))
                 data)))
 
 (defn find-nav-path

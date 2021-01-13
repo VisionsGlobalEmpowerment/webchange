@@ -5,6 +5,7 @@
     [webchange.interpreter.pixi :refer [Application clear-texture-cache]]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
     [webchange.interpreter.renderer.state.scene :as state]
+    [webchange.interpreter.renderer.question.overlay :as question]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays update-viewport]]
     [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app get-renderer get-stage]]
     [webchange.interpreter.renderer.scene.components.modes :as modes]
@@ -63,6 +64,10 @@
                                (.on "resize" handle-renderer-resize))
                            (create-overlays {:parent   (get-stage)
                                              :viewport viewport}))
+
+                         (create-component (question/create {:parent   (get-stage)
+                                           :viewport viewport}))
+
                          (when (modes/start-on-ready? mode)
                            (on-ready))))
 

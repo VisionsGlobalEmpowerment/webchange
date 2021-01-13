@@ -10,5 +10,9 @@
                    :chunks        chunks
                    :set-text      (fn [value]
                                     (aset text "text" value))
+                   :set-fill      (fn [value]
+                                    (aset (.-style text) "fill" value))
+                   :get-fill      (fn []
+                                    (.-fill (.-style text)))
                    :set-font-size (fn [font-size]
                                     (aset (.-style text) "fontSize" font-size))}))

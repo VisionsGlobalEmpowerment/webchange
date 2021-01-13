@@ -1,6 +1,7 @@
 (ns webchange.migrations.onebillion.book-horizontal
   (:require
     [webchange.templates.core :as core]
+    [webchange.utils.text :as text-utils]
     [clojure.string :refer [index-of]]))
 
 (def m {:id          5
@@ -69,27 +70,6 @@
   [idx]
   (str "group-" idx))
 
-(defn- part->chunk
-  [phrase part start]
-  (let [start (index-of phrase part start)
-        end (+ start (count part))]
-    {:start start :end end}))
-
-(defn- parts->chunks
-  [phrase parts]
-  (loop [idx 0
-         tail parts
-         chunks []]
-    (if (empty? tail)
-      chunks
-      (let [chunk (part->chunk phrase (first tail) idx)]
-        (recur (:end chunk)
-               (rest tail)
-               (conj chunks chunk))))))
-
-(defn- text->chunks
-  [text]
-  (parts->chunks text (clojure.string/split text #" ")))
 
 (defn- create-page
   [idx {:keys [img text]}]
@@ -100,7 +80,7 @@
      (keyword image-name) {:type "image" :src img :x 590 :y 320 :origin {:type "center-center"} :max-width 1180 :max-height 640}
      (keyword text-name)  {:type "text" :x 0 :y 640 :width 1180 :vertical-align "top"
                            :font-family "Lexend Deca" :font-size (if (> (count text) 50) 60 80)
-                           :text text :chunks (text->chunks text)}}))
+                           :text text :chunks (text-utils/text->chunks text)}}))
 
 (defn- create-page-dialog
   [idx {:keys [text audio anim]}]
@@ -161,7 +141,7 @@
   [t title]
   (-> t
       (assoc-in [:objects :title :text] title)
-      (assoc-in [:objects :title :chunks] (text->chunks title))
+      (assoc-in [:objects :title :chunks] (text-utils/text->chunks title))
       (assoc-in [:actions :dialog-1-title :data 0 :data 1 :phrase-text] title)))
 
 (defn- add-title-audio

@@ -2,6 +2,7 @@
   (:require
     [clojure.edn :as edn]
     [clojure.java.io :as io]
+    [webchange.utils.text :as text-utils]
     [webchange.templates.library.categorize.round-1 :refer [template-round-1]]
     [webchange.templates.library.categorize.round-2 :refer [template-round-2]]
     [webchange.templates.library.categorize.round-3 :refer [template-round-3]]
@@ -11,33 +12,37 @@
         :name        "Categorize - 3 rounds"
         :tags        ["Independent Practice"]
         :description "Categorize"
-        })
+        :actions     {:add-question {:title   "Add question",
+                                     :options {:question-page {:label "Question"
+                                                               :type  "questions-no-image"
+                                                               :max-answers   5}}}}})
 
 (defn replace-data
-  [action action-key-fn object-map]
+  [action action-key-fn object-key-fn]
   (cond-> action
-          (contains? action :target) (assoc :target (get object-map (:keyword (:target action))))
+          (contains? action :target) (assoc :target (object-key-fn (:target action)))
           (contains? action :success) (assoc :success (action-key-fn (:success action)))
           (contains? action :fail) (assoc :fail (action-key-fn (:fail action)))
-          (contains? action :transition) (assoc :transition (name (get object-map (keyword (:transition action)))))))
+          (contains? action :skip) (assoc :skip (action-key-fn (:skip action)))
+          (contains? action :transition) (assoc :transition (object-key-fn (:transition action)))))
 
 (defn replace-name
   [data func]
   (if (vector? data) (vec (map (fn [item] (func item)) data)) (func data)))
 
 (defn process-action
-  [action action-key-fn object-key-fn object-map params-object-names var-object-names var-action-names]
+  [action action-key-fn object-key-fn params-object-names var-object-names var-action-names]
   (cond->
     (case (:type action)
       "action" (if (contains? action :id) (assoc action :id (action-key-fn (:id action))) action)
-      "parallel" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn object-map params-object-names var-object-names var-action-names)) (:data action)))
-      "sequence-data" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn object-map params-object-names var-object-names var-action-names)) (:data action)))
+      "parallel" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
+      "sequence-data" (assoc action :data (map (fn [value] (process-action value action-key-fn object-key-fn params-object-names var-object-names var-action-names)) (:data action)))
       "set-interval" (assoc action :action (action-key-fn (:action action)))
       "set-variable" (cond-> action
                              (some #(= (:var-name action) %) var-object-names) (assoc :var-value (replace-name (:var-value action) object-key-fn))
-                             (some #(= (:var-name action) %) var-action-names) (assoc :var-value (replace-name (:var-value action) action-key-fn))
-                             )
-      (replace-data action action-key-fn object-map))
+                             (some #(= (:var-name action) %) var-action-names) (assoc :var-value (replace-name (:var-value action) action-key-fn)))
+      "show-question" (assoc action :data (replace-data (:data action) action-key-fn object-key-fn))
+      (replace-data action action-key-fn object-key-fn))
     (contains? action :params) (assoc :params (into {} (map (fn [[key data]]
                                                               (if (some #(= key %) params-object-names)
                                                                 [key (replace-name data object-key-fn)]
@@ -71,7 +76,7 @@
   (reduce (fn [result [key action]]
             (let [
                   action-key (action-key-fn key)
-                  prepared-action (process-action action action-key-fn object-key-fn object-map params-object-names
+                  prepared-action (process-action action action-key-fn object-key-fn params-object-names
                                                   var-object-names var-action-names)]
               (cond-> result
                       true (update :actions #(assoc % (keyword action-key) prepared-action))
@@ -80,7 +85,7 @@
 
 (defn process-object-actions
   [objects action-key-fn object-key-fn
-   prepared-objects params-object-names
+   params-object-names
    var-object-names var-action-names]
   (into {} (map (fn [[key object]]
                   (if (contains? object :actions)
@@ -90,7 +95,7 @@
                                                     [key
                                                      (process-action
                                                        action action-key-fn object-key-fn
-                                                       prepared-objects params-object-names
+                                                       params-object-names
                                                        var-object-names var-action-names)])
                                                   (:actions object))))]
                     [key object])
@@ -131,11 +136,14 @@
                                           object-key-fn (:object-map prepared-objects)
                                           params-object-names var-object-names var-action-names)
         result-objects (process-object-actions (:objects prepared-objects) action-key-fn object-key-fn
-                                               prepared-objects params-object-names
+                                               params-object-names
                                                var-object-names var-action-names)
         prepared-scene-objects (prepare-scene-objects prepared-objects (:scene-objects template))
         prepared-triggers (prepare-triggers prepared-actions (:triggers template))
-        template (assoc-in template [:metadata :tracks] (prepare-tracks (get-in template [:metadata :tracks]) action-key-fn))]
+        template (cond-> template
+                         true (assoc-in [:metadata :tracks] (prepare-tracks (get-in template [:metadata :tracks]) action-key-fn))
+                         (get-in template [:metadata :question-placeholder]) (update-in [:metadata :question-placeholder] action-key-fn))
+        ]
 
     {:assets        (:assets template)
      :objects       result-objects
@@ -190,7 +198,6 @@
 
 (defn prepare-intermediate-action
   [init-round-actions start-actions]
-  (println start-actions)
   (map-indexed
     (fn [idx [action-name action]]
       [(keyword (str "intermediate-action-" idx))
@@ -230,17 +237,19 @@
         pt (prepare-template template-round-1 "r1" [:target] [] [])
         pt1 (prepare-template template-round-2 "r2" [:target :box] [] [])
         pt2 (prepare-template template-round-3 "r3" [:target :self :colliders :crayon]
-              ["object-1" "object-2" "check-collide" "group-name" "ungroup-object-1" "ungroup-object-2"]
-              ["next-task" "correct-answer"])
+                              ["object-1" "object-2" "check-collide" "group-name" "ungroup-object-1" "ungroup-object-2"]
+                              ["next-task" "correct-answer"])
         rounds [pt pt1 pt2]
         merged (reduce (fn [result item]
-                         (-> result
-                             (assoc :assets (concat (:assets result) (:assets item)))
-                             (assoc :objects (merge (:objects result) (:objects item)))
-                             (assoc :actions (merge (:actions result) (:actions item)))
-                             (assoc :scene-objects (concat (:scene-objects result) (:scene-objects item)))
-                             (update-in [:metadata :tracks] concat (get-in item [:metadata :tracks]))
-                             )
+                         (cond-> result
+                                 true (assoc :assets (concat (:assets result) (:assets item)))
+                                 true (assoc :objects (merge (:objects result) (:objects item)))
+                                 true (assoc :actions (merge (:actions result) (:actions item)))
+                                 true (assoc :scene-objects (concat (:scene-objects result) (:scene-objects item)))
+                                 true (update-in [:metadata :tracks] concat (get-in item [:metadata :tracks]))
+                                 (get-in item [:metadata :question-placeholder]) (assoc-in [:metadata :question-placeholder]
+                                                                                           (get-in item [:metadata :question-placeholder])
+                                                                                           ))
                          ) {} rounds)
         init-round-actions (init-actions merged rounds)
         start-actions (exctract-start-actions rounds)
@@ -252,33 +261,106 @@
                    (replace-stop-actions stop-actions intermediate-action)
                    (add-technical-states)
                    (hide-all-objects)
-                   (add-stages rounds)
-                   )
-        ]
-    ;:assets        (:assets template)
-    ;:objects       result-objects
-    ;:actions       (:actions prepared-actions)
-    ;:scene-objects prepared-scene-objects
-    ;:triggers      prepared-triggers
-    ;:metadata      (:metadata template)
-    ;merged
-    ;(-> merged
-    ;
-    ;    ;(add-init-action pt "r1")
-    ;    )
-    ;;(:triggers pt)M
-    ;)
-
-    ;{}
+                   (add-stages rounds))]
     merged
     ))
 
+(defn create-question
+  [args old-question-action-name new-question-action-name number-questions]
+  (let [
+        success (str "correct-answer-question" "-" number-questions)
+        success-dialog (str "correct-answer-dialog" "-" number-questions)
+        fail-answer-dialog (str "fail-answer-dialog" "-" number-questions)
+        fail (str "fail-answer-question" "-" number-questions)
+        skip (str "skip-question" "-" number-questions)
+        ]
+    {(keyword old-question-action-name) {
+                                         :type "show-question"
+                                         :description   (get-in args [:question-page :question])
+                                         :data {
+                                                :type       "type-1"
+                                                :text   (get-in args [:question-page :question])
+                                                :chunks (text-utils/text->chunks (get-in args [:question-page :question]))
+                                                :success    success
+                                                :fail       fail
+                                                :skip       skip
+                                                :audio-data {
+                                                             :audio     ""
+                                                             :start     0,
+                                                             :duration  0,
+                                                             :animation "color",
+                                                             :fill      0x00B2FF
+                                                             :data      []}
+                                                :image      (get-in args [:question-page :img])
+                                                :answers {:data    (map (fn [{:keys [text checked]}]
+                                                                   {:text       text
+                                                                    :correct    (if checked true false)
+                                                                    :chunks (text-utils/text->chunks text)
+                                                                    :audio-data {
+                                                                                 :audio     ""
+                                                                                 :start     0,
+                                                                                 :duration  0,
+                                                                                 :animation "color",
+                                                                                 :fill      0x00B2FF
+                                                                                 :data      []}
+                                                                    }
+                                                                   ) (get-in args [:question-page :answers]))}
+                                                }
+                                         }
+     (keyword fail)                     {:type "sequence-data",
+                                         :data [{:type "action" :id fail-answer-dialog}]}
+     (keyword success)                  {:type "sequence-data",
+                                         :data [
+                                                {:type "empty" :duration 500}
+                                                {:type "hide-question"}
+                                                {:type "action" :id success-dialog}
+                                                {:type "action" :id new-question-action-name}
+                                                ],
+                                         }
+     (keyword skip)                     {:type "sequence-data",
+                                         :data [
+                                                {:type "hide-question"}
+                                                {:type "action" :id new-question-action-name}
+                                                ],
+                                         }
+     (keyword success-dialog)           {:type               "sequence-data",
+                                         :editor-type        "dialog",
+                                         :data               [{:type "sequence-data"
+                                                               :data [{:type "empty" :duration 0}
+                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                         :phrase             "finish-dialog",
+                                         :phrase-description "finish dialog"}
+     (keyword fail-answer-dialog)       {:type               "sequence-data",
+                                         :editor-type        "dialog",
+                                         :data               [{:type "sequence-data"
+                                                               :data [{:type "empty" :duration 0}
+                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                         :phrase             "finish-dialog",
+                                         :phrase-description "finish dialog"}}))
+
 (defn f
-  [t args]
-  t)
+  [args]
+  (prepare-templates)
+  (-> (prepare-templates)
+      (assoc-in [:metadata :actions] (:actions m))
+      (assoc-in [:metadata :questions-number] 0)
+      (assoc-in [:metadata :history] [{:type :create :args args}]))
+  )
+
+(defn fu
+  [old-data args]
+  (let [old-question-action-name (get-in old-data [:metadata :question-placeholder])
+        number-questions (get-in old-data [:metadata :questions-number])
+        new-question-action-name (str old-question-action-name "-" number-questions)
+        actions (create-question args old-question-action-name new-question-action-name number-questions)
+        result (-> old-data
+                   (assoc-in [:actions (keyword new-question-action-name)] (get-in old-data [:actions (keyword old-question-action-name)]))
+                   (update-in [:actions] merge actions)
+                   (assoc-in [:metadata :question-placeholder] new-question-action-name)
+                   (update-in [:metadata :questions-number] inc))
+        ]
+    result))
 
 (core/register-template
-  (:id m)
-  m
-  (partial f (prepare-templates)))
+  (:id m) m f fu)
 
