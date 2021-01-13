@@ -119,6 +119,7 @@
     ;;wizard
     :game-changer [wizard/game-changer-panel]
     :wizard [wizard/wizard]
+    :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
     [page-404]))
 
 (defn main-panel []

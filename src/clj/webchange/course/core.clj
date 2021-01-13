@@ -474,7 +474,7 @@
        (distinct)
        (into [])))
 
-(defn save-course-on-create!
+(defn- save-course-on-create!
   [course-id scene-slug {:keys [lesson-sets]} scene-name owner-id]
   (let [created-at (jt/local-date-time)
         {course-data :data} (db/get-latest-course-version {:course_id course-id})
@@ -513,6 +513,32 @@
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
     [true {:id          scene-id
            :name        scene-name
+           :scene-slug  scene-slug
+           :course-slug course-slug}]))
+
+(defn- add-activity-lesson-sets!
+  [course-id scene-slug {:keys [lesson-sets]} owner-id]
+  (let [created-at (jt/local-date-time)
+        {course-data :data} (db/get-latest-course-version {:course_id course-id})]
+    (db/save-course! {:course_id  course-id
+                      :data       (assoc-in course-data [:scene-list (keyword scene-slug) :lesson-sets] lesson-sets)
+                      :owner_id   owner-id
+                      :created_at created-at})))
+
+(defn create-activity-version!
+  [scene-data metadata course-slug scene-slug owner-id]
+  (let [{course-id :id} (db/get-course {:slug course-slug})
+        {scene-id :id} (db/get-scene {:course_id course-id :name scene-slug})
+        {course-data :data} (db/get-latest-course-version {:course_id course-id})
+        created-at (jt/local-date-time)]
+    (db/save-scene! {:scene_id   scene-id
+                     :data       scene-data
+                     :owner_id   owner-id
+                     :created_at created-at})
+    (save-dataset-on-create! course-id scene-slug metadata)
+    (add-activity-lesson-sets! course-id scene-slug metadata owner-id)
+    [true {:id          scene-id
+           :name        (get-in course-data [:scene-list (keyword scene-slug) :name])
            :scene-slug  scene-slug
            :course-slug course-slug}]))
 

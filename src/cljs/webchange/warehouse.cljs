@@ -56,18 +56,18 @@
 ;; Lesson sets
 
 (re-frame/reg-event-fx
-  ::save-lesson-set
+  ::create-lesson-set
   (fn [{:keys [_]} [_ {:keys [dataset-id name data]} handlers]]
     (create-request {:method :post
                      :uri    (str "/api/lesson-sets")
                      :params {:dataset-id dataset-id
                               :name       name
                               :data       data}}
-                    {:on-success [::save-lesson-set-success handlers]
+                    {:on-success [::create-lesson-set-success handlers]
                      :on-failure (:on-failure handlers)})))
 
 (re-frame/reg-event-fx
-  ::save-lesson-set-success
+  ::create-lesson-set-success
   (fn [{:keys [_]} [_ {:keys [on-success]} {:keys [lesson] :as response}]]
     {:dispatch-n (cond-> [[::state/update-lesson-set (:name lesson) lesson]]
                          (some? on-success) (conj (conj on-success response)))}))
