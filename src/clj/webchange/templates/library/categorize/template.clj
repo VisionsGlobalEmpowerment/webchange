@@ -15,6 +15,7 @@
         :actions     {:add-question {:title   "Add question",
                                      :options {:question-page {:label "Question"
                                                                :type  "questions-no-image"
+                                                               :answers-label "Answers"
                                                                :max-answers   5}}}}})
 
 (defn replace-data

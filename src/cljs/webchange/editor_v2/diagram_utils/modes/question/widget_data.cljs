@@ -15,35 +15,25 @@
     [webchange.editor-v2.question.question-form.state.actions :as question-form.actions]
     [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]))
 
-(defn get-node-speech
-  [node-data]
-  (let [action-data (:data node-data)]
-    {:data (get-inner-action action-data)}))
-
-(defn effect-action?
-  [node-data]
-  (let [node-type (get-node-type node-data)]
-    (= node-type "action")))
-
 (defn get-node-color
   [node-data]
-  (println "get-node-color" (get-in node-data [:data :type]))
-  (let [
-        type (get-in node-data [:data :type])
+  (let [type (get-in node-data [:data :type])
         dialog? (if (= type :dialog) true false)
         question? (if (= type :question) true false)]
     (if dialog?
-        "#6BC784"
+      "#6BC784"
       (if question?
-          "#FFAF52"
-          "#9BC784")
-        )))
+        "#FFAF52"
+        "#9BC784"))))
 
 (defn- get-styles
   [node-data]
   {:node   {:background-color (get-node-color node-data)
-            :padding-bottom   "30px"}
-   :header {:display "flex"}})
+            :padding-right    "54px"}
+   :header {:display       "flex"
+            :max-height    "128px"
+            :overflow      "auto"
+            :text-overflow "ellipsis"}})
 
 (defn- header
   [{:keys [node-data] :as node}]
@@ -53,18 +43,14 @@
 
 (defn- wrapper
   [{:keys [node-data]}]
-  (let [valid-node? (validate-phrase-action (:data node-data))
-        this (r/current-component)
+  (let [this (r/current-component)
         styles (get-styles node-data)]
-    (println "wrapper node-data" node-data)
-    (into [:div {:on-click #(do
-                              (re-frame/dispatch [::question-form.actions/set-current-question-action node-data])
-                              )
+    (into [:div {:on-click #(re-frame/dispatch [::question-form.actions/set-current-question-action node-data])
+                 :on-wheel #(.stopPropagation %)
                  :style    (merge custom-wrapper/node-style
                                   (:node styles))}
            [play-button node-data]
-           [config-button {:node-data node-data}]
-           ]
+           [config-button {:node-data node-data}]]
           (r/children this))))
 
 (defn get-widget-data

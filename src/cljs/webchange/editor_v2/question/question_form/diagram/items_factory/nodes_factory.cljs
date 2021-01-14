@@ -1,18 +1,16 @@
 (ns webchange.editor-v2.question.question-form.diagram.items-factory.nodes-factory
   (:require
     [clojure.string :refer [join]]
-    [re-frame.core :as re-frame]
     [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-model :refer [get-custom-model]]
     [webchange.editor-v2.scene-diagram.scene-parser.actions-tracks :refer [default-track]]
     [webchange.editor-v2.graph-builder.scene-parser.concepts-replacer.replacer :refer [override-concept-actions]]
     [webchange.editor-v2.graph-builder.scene-parser.scene-parser :refer [parse-data]]
-    [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer :refer [normalize-graph]]
-    ))
+    [webchange.editor-v2.graph-builder.graph-normalizer.graph-normalizer :refer [normalize-graph]]))
 
 (def coordinate-params {:x-offset 50
                         :y-offset 50
-                        :x-step   300
-                        :y-step   100})
+                        :x-step   350
+                        :y-step   170})
 
 (defn- index->coordinate
   [index offset step]
@@ -32,9 +30,6 @@
     (.setPosition node (:x position) (:y position))
     node))
 
-(defn- clean-path [path]
-  (vec (filter (fn [key] (not= key :data)) path)))
-
 (defn- create-action-node
   [action-data position]
   (create-node {:data     {:data action-data
@@ -47,16 +42,15 @@
 
 (defn- get-dialog
   [scene-data action-path]
- (:path (first  (filter
-    (fn [action]
-      (= (:editor-type action) "dialog"))
-    (map-indexed (fn [idx action]
-           (if (= "action" (:type action))
-             (-> (get-in scene-data (concat [:actions] [(keyword (get-in action [:id]))]))
-                 (assoc :path [(keyword (get-in action [:id]))])
-                 )
-             (assoc action :path (conj action-path idx))))
-         (:data (get-in scene-data (concat [:actions] action-path))))))))
+  (:path (first (filter
+                  (fn [action]
+                    (= (:editor-type action) "dialog"))
+                  (map-indexed (fn [idx action]
+                                 (if (= "action" (:type action))
+                                   (-> (get-in scene-data (concat [:actions] [(keyword (get-in action [:id]))]))
+                                       (assoc :path [(keyword (get-in action [:id]))]))
+                                   (assoc action :path (conj action-path idx))))
+                               (:data (get-in scene-data (concat [:actions] action-path))))))))
 
 (defn prepare-nodes
   [scene-data path]
@@ -82,18 +76,18 @@
                                           :index         idx})
                                        (get-in action [:data :answers :data])))
                   (concat
-                    [{:action-path (concat success-dialog [0])
+                    [{:action-path   (concat success-dialog [0])
                       :question-path path
                       :type          :dialog
                       :action        (get-in scene-data (concat [:actions] success-dialog))
-                      :x 0
-                      :y 2}
-                     {:action-path (concat fail-dialog [0])
+                      :x             0
+                      :y             2}
+                     {:action-path   (concat fail-dialog [0])
                       :question-path path
                       :type          :dialog
                       :action        (get-in scene-data (concat [:actions] fail-dialog))
-                      :x 1
-                      :y 2}]))]
+                      :x             1
+                      :y             2}]))]
     nodes))
 
 (defn get-diagram-items
@@ -101,7 +95,7 @@
   (let [prepare-nodes (prepare-nodes scene-data path)
         nodes (flatten (map (fn [node]
                               (create-action-node node {:x (index->coordinate-x (:x node))
-                                                                   :y (index->coordinate-y (:y node))}))
+                                                        :y (index->coordinate-y (:y node))}))
                             prepare-nodes))]
     {:nodes nodes
      :links []}))

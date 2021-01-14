@@ -22,31 +22,22 @@
   [{:keys [node-data get-target-node styles]
     :or   {get-target-node identity
            styles          {}}}]
-  (let [
-        ;node (get-target-node node-data)
-        node node-data
+  (let [node node-data
         type (get-in node [:data :type])
         audio-data (case type
-                      :question (get-in node [:data :action :data :audio-data])
-                      :answer (get-in node [:data :answer :audio-data])
-                      {}
-                     )
+                     :question (get-in node [:data :action :data :audio-data])
+                     :answer (get-in node [:data :answer :audio-data])
+                     {})
         node-data (case type
                     :question (get-in node [:data :action :data])
                     :answer (get-in node [:data :answer])
-                    {}
-                    )
-        ;action-type (-> action-data :type keyword)
+                    {})
         styles (-> (get-styles)
                    (deep-merge styles))]
-    (println "config-button node-data 2"  audio-data node-data type)
     (when (or (= type :answer) (= type :question))
       [fab {:style    (:config-button styles)
             :size     "small"
             :on-click (fn [event]
-                        (println "config-button node-data :on-click"
-                                 node
-                                 )
                         (.stopPropagation event)
                         (re-frame/dispatch [::translator-form.actions/set-current-phrase-action node])
                         (re-frame/dispatch [::chunks/open audio-data node-data]))}
