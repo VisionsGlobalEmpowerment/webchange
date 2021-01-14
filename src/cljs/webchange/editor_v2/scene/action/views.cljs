@@ -1,13 +1,12 @@
 (ns webchange.editor-v2.scene.action.views
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [cljs-react-material-ui.reagent :as ui]
     [webchange.subs :as subs]
     [webchange.editor-v2.scene.action.events :as scene-action.events]
     [webchange.interpreter.events :as interpreter.events]
-    [webchange.editor-v2.wizard.activity-template.views :refer [template]]
-    ))
+    [webchange.editor-v2.wizard.activity-template.views :refer [template]]))
 
 (defn action-modal
   [course-id]
@@ -43,7 +42,7 @@
           "Save"]]]])))
 
 (defn action-button
-  [name handle-click]
+  [{:keys [name handle-click]}]
   [ui/form-control {:full-width true
                     :margin     "normal"}
    [ui/button
@@ -53,6 +52,8 @@
 (defn actions
   [{:keys [scene-data]}]
   (let [actions (get-in scene-data [:metadata :actions])]
-    [:div (map (fn [[name action]]
-                 [action-button (:title action) #(re-frame/dispatch [::scene-action.events/show-actions-form name])]
-                 ) actions)]))
+    [:div
+     (for [[name action] actions]
+       ^{:key name}
+       [action-button {:name         (:title action)
+                       :handle-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])}])]))
