@@ -1,21 +1,27 @@
 {:initial-scene "map",
  :scene-list
- {:home
+ {:rhyme {:name "Rhyme"},
+  :home
   {:name "Casa",
-   :outs [{:x 1457, :y 630, :name "map", :object "door"},
-          {:x 100, :y 100, :name "park", :object "back"}],
+   :outs [{:x 1457, :y 630, :name "map", :object "door"} {:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
+   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
+   :lesson-sets ["concepts"]},
+  :recording-studio {:name "Recording Studio"},
   :cinema
   {:name "Cinema",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
+   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"
+   :lesson-sets ["concepts-all"]},
+  :storybook-reading {:name "Storybook Reading"},
   :park-poem
   {:name "Poem",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Park_Main.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_Main.jpg"
+   :lesson-sets ["concepts-group"]},
+  :alliteration-sandbox {:name "Alliteration Sandbox"},
   :stadium
   {:name "Stadium",
    :outs
@@ -25,41 +31,49 @@
     {:x 1300, :y 870, :name "running", :object "running"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Stadium_Main.jpg"},
+  :interactive-read-aloud {:name "Interactive Read-Aloud"},
   :book
   {:name "Book",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Library_Book.jpg"},
+   :preview "/images/dashboard/scene-preview/Library_Book.jpg"
+   :lesson-sets ["concepts"]},
   :swings
   {:name "Swings",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Park_Swing.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_Swing.jpg"
+   :lesson-sets ["concepts"]},
   :volleyball
   {:name "Volleyball",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"
+   :lesson-sets ["concepts"]},
   :magic-hat
   {:name "Magic Hat",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Library_Magic-Hat.jpg"},
+   :preview "/images/dashboard/scene-preview/Library_Magic-Hat.jpg"
+   :lesson-sets ["concepts-single" "concepts-all"]},
   :sandbox
   {:name "Sandbox",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_Sandbox.jpg"
+   :lesson-sets ["concepts"]},
   :running
   {:name "Running",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Running.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Running.jpg"
+   :lesson-sets ["concepts-group"]},
   :cycling
   {:name "Cycling",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"
+   :lesson-sets ["concepts"]},
   :library
   {:name "Library",
    :outs
@@ -74,27 +88,33 @@
   {:name "Cinema Video",
    :outs [{:x 100, :y 100, :name "map", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"},
+   :preview "/images/dashboard/scene-preview/Cinema_Room.jpg"
+   :lesson-sets ["concepts-single"]},
   :cycling-letters
   {:name "Cycling",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Cycling-Race.jpg"
+   :lesson-sets ["concepts-group"]},
   :hide-n-seek
   {:name "Hide and Seek",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "assessment",
-   :preview "/images/dashboard/scene-preview/Park_Hide-and-seek.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_Hide-and-seek.jpg"
+   :lesson-sets ["assessment-1"]},
   :see-saw
   {:name "Sea-saw",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Park_See-Saw.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_See-Saw.jpg"
+   :lesson-sets ["concepts"]},
   :slide
   {:name "Slide",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Park_Slide.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_Slide.jpg"
+   :lesson-sets ["concepts-group"]},
+  :conversation {:name "Conversation"},
   :painting-tablet
   {:name "Painting",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
@@ -104,17 +124,20 @@
   {:name "Pinata",
    :outs [{:x 100, :y 100, :name "park", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Park_Pinata.jpg"},
+   :preview "/images/dashboard/scene-preview/Park_Pinata.jpg"
+   :lesson-sets ["assessment"]},
   :writing-practice
   {:name "Painting",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"},
+   :preview "/images/dashboard/scene-preview/Library_Drawing-Lesson.jpg"
+   :lesson-sets ["concepts-single"]},
   :letter-intro
   {:name "Letter Intro",
    :outs [{:x 1457, :y 330, :name "map", :object "door"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"},
+   :preview "/images/dashboard/scene-preview/Casa_Room.jpg"
+   :lesson-sets ["concepts-single"]},
   :park
   {:name "Park",
    :outs
@@ -127,6 +150,7 @@
     {:x 715, :y 250, :name "pinata", :object "pinata"}],
    :type "non-scored",
    :preview "/images/dashboard/scene-preview/Park_Main.jpg"},
+  :i-spy {:name "I Spy"},
   :map
   {:name "Map",
    :outs
@@ -143,12 +167,15 @@
   {:name "Volleyball",
    :outs [{:x 100, :y 100, :name "stadium", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"},
+   :preview "/images/dashboard/scene-preview/Stadium_Volleyball.jpg"
+   :lesson-sets ["concepts-group" "concepts-all"]},
+  :categorize {:name "Categorize"},
   :writing-lesson
   {:name "Writing Lesson",
    :outs [{:x 100, :y 100, :name "library", :object "back"}],
    :type "non-scored",
-   :preview "/images/dashboard/scene-preview/Library_Room.jpg"}},
+   :preview "/images/dashboard/scene-preview/Library_Room.jpg"
+   :lesson-sets ["concepts-single"]}},
  :scenes
  ["home"
   "map"
@@ -193,13 +220,12 @@
      :lesson 1,
      :activities
      [{:activity "home", :time-expected 300}
-      {:activity "see-saw", :time-expected 300}
-      {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "conversation"}
+      {:activity "interactive-read-aloud", :time-expected 300}
+      {:activity "painting-tablet"}
+      {:scored true, :activity "cycling", :time-expected 300}],
      :lesson-sets {:concepts "ls1"}}
     {:name "Lesson 2",
      :type "lesson",
@@ -209,10 +235,15 @@
       {:activity "see-saw", :time-expected 300}
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
-      {:scored true, :activity "volleyball", :time-expected 300}
+      {:only nil,
+       :scored true,
+       :activity "volleyball",
+       :tags-by-score {:new-tag-0 [0 74], :new-tag-1 [75 100]},
+       :time-expected 300}
+      {:activity "categorize"}
       {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "painting-tablet"}
+      {:scored true, :activity "cycling", :time-expected 300}],
      :lesson-sets {:concepts "ls2"}}
     {:name "Lesson 3",
      :type "lesson",
@@ -223,9 +254,10 @@
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "conversation"}
+      {:activity "i-spy"}
+      {:scored true, :activity "painting-tablet", :time-expected 300}
+      {:activity "cycling", :time-expected 300}],
      :lesson-sets {:concepts "ls3"}}
     {:name "Assessment 1",
      :type "assessment",
@@ -241,9 +273,10 @@
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "categorize", :time-expected 300}
+      {:scored true, :activity "interactive-read-aloud", :time-expected 300}
+      {:activity "painting-tablet", :time-expected 300}
+      {:activity "cycling"}],
      :lesson-sets {:concepts "ls4"}}
     {:name "Lesson 5",
      :type "lesson",
@@ -254,9 +287,10 @@
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "conversation", :time-expected 300}
+      {:scored true, :activity "book", :time-expected 300}
+      {:activity "painting-tablet", :time-expected 300}
+      {:activity "cycling"}],
      :lesson-sets {:concepts "ls5"}}
     {:name "Lesson 6",
      :type "lesson",
@@ -267,10 +301,14 @@
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "categorize", :time-expected 300}
+      {:scored true, :activity "i-spy", :time-expected 300}
+      {:activity "painting-tablet", :time-expected 300}
+      {:activity "cycling"}],
      :lesson-sets {:concepts "ls6"}}
+    {:type "assessment",
+     :activities [{:scored true, :activity "hide-n-seek", :time-expected 300, :expected-score-percentage 90}],
+     :lesson-sets {:assessment-1 "ls-assessment-1-5b74b8e3"}}
     {:name "Lesson 7",
      :type "lesson",
      :lesson 8,
@@ -280,15 +318,11 @@
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "conversation", :time-expected 300}
+      {:scored true, :activity "interactive-read-aloud", :time-expected 300}
+      {:activity "painting-tablet", :time-expected 300}
+      {:activity "cycling"}],
      :lesson-sets {:concepts "ls7"}}
-    {:name "Assessment 2",
-     :type "assessment",
-     :lesson 9,
-     :activities [{:scored true, :activity "hide-n-seek", :time-expected 300, :expected-score-percentage 90}],
-     :lesson-sets {:assessment-1 "assessment2"}}
     {:name "Lesson 8",
      :type "lesson",
      :lesson 10,
@@ -298,9 +332,10 @@
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "categorize", :time-expected 300}
+      {:scored true, :activity "book", :time-expected 300}
+      {:activity "painting-tablet", :time-expected 300}
+      {:activity "cycling"}],
      :lesson-sets {:concepts "ls8"}}
     {:name "Lesson 9",
      :type "lesson",
@@ -311,41 +346,14 @@
       {:activity "swings", :time-expected 300}
       {:activity "sandbox", :time-expected 300}
       {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
+      {:activity "conversation", :time-expected 300}
+      {:scored true, :activity "i-spy", :time-expected 300}
+      {:activity "painting-tablet", :time-expected 300}
+      {:activity "cycling"}],
      :lesson-sets {:concepts "ls9"}}
-    {:name "Lesson 10",
-     :type "lesson",
-     :lesson 12,
-     :activities
-     [{:activity "home", :time-expected 300}
-      {:activity "see-saw", :time-expected 300}
-      {:activity "swings", :time-expected 300}
-      {:activity "sandbox", :time-expected 300}
-      {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
-     :lesson-sets {:concepts "ls10"}}
-    {:name "Lesson 11",
-     :type "lesson",
-     :lesson 13,
-     :activities
-     [{:activity "home", :time-expected 300}
-      {:activity "see-saw", :time-expected 300}
-      {:activity "swings", :time-expected 300}
-      {:activity "sandbox", :time-expected 300}
-      {:scored true, :activity "volleyball", :time-expected 300}
-      {:activity "book", :time-expected 300}
-      {:scored true, :activity "cycling", :time-expected 300}
-      {:activity "painting-tablet", :time-expected 300}],
-     :lesson-sets {:concepts "ls11"}}
-    {:name "Assessment 3",
-     :type "assessment",
-     :lesson 14,
+    {:type "assessment",
      :activities [{:scored true, :activity "hide-n-seek", :time-expected 300, :expected-score-percentage 90}],
-     :lesson-sets {:assessment-1 "assessment3"}}]}
+     :lesson-sets {:assessment-1 "ls-assessment-1-1395f907"}}]}
   {:name "Level 2",
    :level 2,
    :scheme
@@ -357,35 +365,37 @@
      :lesson 1,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio", :time-expected 300}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
-      {:activity "park-poem", :time-expected 300}
+      {:scored true, :activity "park-poem", :time-expected 300}
       {:scored true, :activity "running", :time-expected 300}
-      {:scored true, :activity "slide", :time-expected 300}
+      {:activity "alliteration-sandbox", :time-expected 300}
       {:activity "writing-lesson", :time-expected 300}
-      {:activity "writing-practice", :time-expected 300}
-      {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls1-3", :concepts-single "l2-ls1-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "writing-practice", :time-expected 300}
+      {:activity "magic-hat"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls1-3", :concepts-single "l2-ls1-1"}}
     {:name "Lesson 13",
      :type "lesson",
      :lesson 2,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
       {:scored true, :activity "running", :time-expected 300}
-      {:scored true, :activity "slide", :time-expected 300}
+      {:scored true, :activity "alliteration-sandbox", :time-expected 300}
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
-      {:scored true, :activity "magic-hat", :time-expected 300}
-      {:scored true, :activity "cycling-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls2-3", :concepts-single "l2-ls2-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "magic-hat", :time-expected 300}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls2-3", :concepts-single "l2-ls2-1"}}
     {:name "Lesson 14",
      :type "lesson",
      :lesson 3,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
@@ -394,27 +404,31 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}
-      {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls3-3", :concepts-single "l2-ls3-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "volleyball-letters", :time-expected 300}
+      {:activity "storybook-reading"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls3-3", :concepts-single "l2-ls3-1"}}
     {:name "Lesson 15",
      :type "lesson",
      :lesson 4,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
       {:scored true, :activity "running", :time-expected 300}
-      {:scored true, :activity "slide", :time-expected 300}
+      {:scored true, :activity "alliteration-sandbox", :time-expected 300}
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
-      {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls4-3", :concepts-single "l2-ls4-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "magic-hat", :time-expected 300}
+      {:activity "cycling-letters"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls4-3", :concepts-single "l2-ls4-1"}}
     {:name "Lesson 16",
      :type "lesson",
      :lesson 5,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
@@ -423,28 +437,31 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}
-      {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls5-3", :concepts-single "l2-ls5-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls5-3", :concepts-single "l2-ls5-1"}}
     {:name "Lesson 17",
      :type "lesson",
      :lesson 6,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
       {:scored true, :activity "running", :time-expected 300}
-      {:scored true, :activity "slide", :time-expected 300}
+      {:activity "rhyme"}
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
-      {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls6-3", :concepts-single "l2-ls6-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "magic-hat", :time-expected 300}
+      {:activity "cycling-letters"}
+      {:activity "storybook-reading"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls6-3", :concepts-single "l2-ls6-1"}}
     {:name "Lesson 18",
      :type "lesson",
      :lesson 7,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
@@ -453,28 +470,33 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}
-      {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls7-3", :concepts-single "l2-ls7-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls7-3", :concepts-single "l2-ls7-1"}}
+    {:type "assessment",
+     :activities [{:scored true, :activity "pinata", :time-expected 300, :expected-score-percentage 90}],
+     :lesson-sets {:assessment "ls-assessment-f1dcbf72"}}
     {:name "Lesson 19",
      :type "lesson",
      :lesson 8,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
       {:scored true, :activity "running", :time-expected 300}
-      {:scored true, :activity "slide", :time-expected 300}
+      {:scored true, :activity "rhyme", :time-expected 300}
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
-      {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls8-3", :concepts-single "l2-ls8-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "magic-hat", :time-expected 300}
+      {:activity "cycling-letters"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls8-3", :concepts-single "l2-ls8-1"}}
     {:name "Lesson 20",
      :type "lesson",
      :lesson 9,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
@@ -483,47 +505,31 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}
-      {:scored true, :activity "cycling-letters", :time-expected 300}
-      {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls9-3", :concepts-single "l2-ls9-1", :concepts-all "concepts-all"}}
-    {:name "Assessment 1",
-     :type "assessment",
-     :lesson 10,
-     :activities [{:scored true, :activity "pinata", :time-expected 300, :expected-score-percentage 90}],
-     :lesson-sets {:assessment "assessment4"}}
+      {:scored true, :activity "volleyball-letters", :time-expected 300}
+      {:activity "storybook-reading"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls9-3", :concepts-single "l2-ls9-1"}}
     {:name "Lesson 21",
      :type "lesson",
      :lesson 11,
      :activities
      [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
       {:scored true, :activity "running", :time-expected 300}
-      {:scored true, :activity "slide", :time-expected 300}
+      {:scored true, :activity "rhyme", :time-expected 300}
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
-      {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls10-3", :concepts-single "l2-ls10-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "magic-hat", :time-expected 300}
+      {:activity "cycling-letters"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls10-3", :concepts-single "l2-ls10-1"}}
     {:name "Lesson 22",
      :type "lesson",
      :lesson 12,
      :activities
      [{:activity "cinema", :time-expected 300}
-      {:activity "cinema-video", :time-expected 300}
-      {:activity "letter-intro", :time-expected 300}
-      {:activity "park-poem", :time-expected 300}
-      {:scored true, :activity "running", :time-expected 300}
-      {:scored true, :activity "slide", :time-expected 300}
-      {:activity "writing-lesson", :time-expected 300}
-      {:activity "writing-practice", :time-expected 300}
-      {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls11-3", :concepts-single "l2-ls11-1", :concepts-all "concepts-all"}}
-    {:name "Lesson 23",
-     :type "lesson",
-     :lesson 13,
-     :activities
-     [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
       {:activity "cinema-video", :time-expected 300}
       {:activity "letter-intro", :time-expected 300}
       {:activity "park-poem", :time-expected 300}
@@ -532,9 +538,25 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}
+      {:activity "volleyball-letters"}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls11-3", :concepts-single "l2-ls11-1"}}
+    {:name "Lesson 23",
+     :type "lesson",
+     :lesson 13,
+     :activities
+     [{:activity "cinema", :time-expected 300}
+      {:activity "recording-studio"}
+      {:activity "cinema-video", :time-expected 300}
+      {:activity "letter-intro", :time-expected 300}
+      {:activity "park-poem", :time-expected 300}
+      {:scored true, :activity "running", :time-expected 300}
+      {:scored true, :activity "rhyme", :time-expected 300}
+      {:activity "writing-lesson", :time-expected 300}
+      {:activity "writing-practice", :time-expected 300}
+      {:scored true, :activity "magic-hat", :time-expected 300}
       {:scored true, :activity "cycling-letters", :time-expected 300}
-      {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls12-3", :concepts-single "l2-ls12-1", :concepts-all "concepts-all"}}
+      {:scored true, :activity "storybook-reading", :time-expected 300}],
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls12-3", :concepts-single "l2-ls12-1"}}
     {:name "Lesson 24",
      :type "lesson",
      :lesson 14,
@@ -548,7 +570,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls13-3", :concepts-single "l2-ls13-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls13-3", :concepts-single "l2-ls13-1"}}
     {:name "Lesson 25",
      :type "lesson",
      :lesson 15,
@@ -562,7 +584,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls14-3", :concepts-single "l2-ls14-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls14-3", :concepts-single "l2-ls14-1"}}
     {:name "Lesson 26",
      :type "lesson",
      :lesson 16,
@@ -578,7 +600,7 @@
       {:scored true, :activity "magic-hat", :time-expected 300}
       {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls15-3", :concepts-single "l2-ls15-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls15-3", :concepts-single "l2-ls15-1"}}
     {:name "Lesson 27",
      :type "lesson",
      :lesson 17,
@@ -592,7 +614,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls16-3", :concepts-single "l2-ls16-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls16-3", :concepts-single "l2-ls16-1"}}
     {:name "Lesson 28",
      :type "lesson",
      :lesson 18,
@@ -606,7 +628,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls17-3", :concepts-single "l2-ls17-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls17-3", :concepts-single "l2-ls17-1"}}
     {:name "Lesson 29",
      :type "lesson",
      :lesson 19,
@@ -622,7 +644,7 @@
       {:scored true, :activity "magic-hat", :time-expected 300}
       {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls18-3", :concepts-single "l2-ls18-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls18-3", :concepts-single "l2-ls18-1"}}
     {:name "Lesson 30",
      :type "lesson",
      :lesson 20,
@@ -636,7 +658,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls19-3", :concepts-single "l2-ls19-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls19-3", :concepts-single "l2-ls19-1"}}
     {:name "Lesson 31",
      :type "lesson",
      :lesson 21,
@@ -650,7 +672,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls20-3", :concepts-single "l2-ls20-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls20-3", :concepts-single "l2-ls20-1"}}
     {:name "Lesson 32",
      :type "lesson",
      :lesson 22,
@@ -666,7 +688,7 @@
       {:scored true, :activity "magic-hat", :time-expected 300}
       {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls21-3", :concepts-single "l2-ls21-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls21-3", :concepts-single "l2-ls21-1"}}
     {:name "Assessment 2",
      :type "assessment",
      :lesson 23,
@@ -685,7 +707,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls22-3", :concepts-single "l2-ls22-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls22-3", :concepts-single "l2-ls22-1"}}
     {:name "Lesson 34",
      :type "lesson",
      :lesson 25,
@@ -699,7 +721,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls23-3", :concepts-single "l2-ls23-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls23-3", :concepts-single "l2-ls23-1"}}
     {:name "Lesson 35",
      :type "lesson",
      :lesson 26,
@@ -715,7 +737,7 @@
       {:scored true, :activity "magic-hat", :time-expected 300}
       {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls24-3", :concepts-single "l2-ls24-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls24-3", :concepts-single "l2-ls24-1"}}
     {:name "Lesson 36",
      :type "lesson",
      :lesson 27,
@@ -729,7 +751,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls25-3", :concepts-single "l2-ls25-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls25-3", :concepts-single "l2-ls25-1"}}
     {:name "Lesson 37",
      :type "lesson",
      :lesson 28,
@@ -743,7 +765,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls26-3", :concepts-single "l2-ls26-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls26-3", :concepts-single "l2-ls26-1"}}
     {:name "Lesson 38",
      :type "lesson",
      :lesson 29,
@@ -759,7 +781,7 @@
       {:scored true, :activity "magic-hat", :time-expected 300}
       {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls27-3", :concepts-single "l2-ls27-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls27-3", :concepts-single "l2-ls27-1"}}
     {:name "Lesson 39",
      :type "lesson",
      :lesson 30,
@@ -773,7 +795,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls28-3", :concepts-single "l2-ls28-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls28-3", :concepts-single "l2-ls28-1"}}
     {:name "Lesson 40",
      :type "lesson",
      :lesson 31,
@@ -787,7 +809,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls29-3", :concepts-single "l2-ls29-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls29-3", :concepts-single "l2-ls29-1"}}
     {:name "Lesson 41",
      :type "lesson",
      :lesson 32,
@@ -801,7 +823,7 @@
       {:activity "writing-lesson", :time-expected 300}
       {:activity "writing-practice", :time-expected 300}
       {:scored true, :activity "magic-hat", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls30-3", :concepts-single "l2-ls30-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls30-3", :concepts-single "l2-ls30-1"}}
     {:name "Lesson 42",
      :type "lesson",
      :lesson 33,
@@ -817,16 +839,119 @@
       {:scored true, :activity "magic-hat", :time-expected 300}
       {:scored true, :activity "cycling-letters", :time-expected 300}
       {:scored true, :activity "volleyball-letters", :time-expected 300}],
-     :lesson-sets {:concepts-group "l2-ls31-3", :concepts-single "l2-ls31-1", :concepts-all "concepts-all"}}
+     :lesson-sets {:concepts-all "concepts-all", :concepts-group "l2-ls31-3", :concepts-single "l2-ls31-1"}}
     {:name "Assessment 3",
      :type "assessment",
      :lesson 34,
      :activities [{:scored true, :activity "pinata", :time-expected 300, :expected-score-percentage 90}],
      :lesson-sets {:assessment "assessment6"}}]}],
  :default-progress
-  {:next {:level 0, :lesson 0, :activity 0, :activity-name "home"}, :finished {:0 {:0 []}}, :variables {:last-location "home"}},
+ {:next {:level 0, :lesson 0, :activity 0, :activity-name "home"},
+  :finished {:0 {:0 []}},
+  :variables {:last-location "home"}},
  :templates
- {:click-pointer
+ {:coaching
+  {:assets [{:url "/raw/audio/l1/mari-coaching.m4a", :size 2, :type "audio", :alias "statements"}],
+   :actions
+   {:mari-correct
+    {:data
+     [{:id "init-audio-correct", :type "action"}
+      {:from ["audio-correct1" "audio-correct2" "audio-correct3" "audio-correct4" "audio-correct5"],
+       :type "vars-var-provider",
+       :shuffled true,
+       :variables ["current-audio-correct"]}
+      {:type "action", :from-var [{:var-name "current-audio-correct", :action-property "id"}]}],
+     :type "sequence-data",
+     :phrase "correct",
+     :phrase-description "Correct answer"},
+    :mari-audio-correct-2
+    {:data [{:end 5.66, :anim "talk", :start 4.42}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/mari-coaching.m4a",
+     :start 4.417,
+     :track 1,
+     :offset 4.417,
+     :target "mari",
+     :duration 1.358},
+    :mari-audio-try-again-1
+    {:data [{:end 17.35, :anim "talk", :start 16.09}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/mari-coaching.m4a",
+     :start 15.988,
+     :track 1,
+     :offset 15.988,
+     :target "mari",
+     :duration 1.466},
+    :mari-audio-correct-1
+    {:data [{:end 3.12, :anim "talk", :start 2.06}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/mari-coaching.m4a",
+     :start 1.511,
+     :track 1,
+     :offset 1.511,
+     :target "mari",
+     :duration 1.837},
+    :mari-wrong
+    {:data
+     [{:id "init-audio-try-again", :type "action"}
+      {:from ["audio-try-again1" "audio-try-again2"],
+       :type "vars-var-provider",
+       :shuffled true,
+       :variables ["current-audio-try-again"]}
+      {:type "action", :from-var [{:var-name "current-audio-try-again", :action-property "id"}]}],
+     :type "sequence-data",
+     :phrase "pick-wrong",
+     :phrase-description "Wrong answer"},
+    :mari-audio-correct-5
+    {:data [{:end 13.59, :anim "talk", :start 11.46}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/mari-coaching.m4a",
+     :start 11.347,
+     :track 1,
+     :offset 11.347,
+     :target "mari",
+     :duration 2.294},
+    :mari-audio-correct-4
+    {:data [{:end 10.45, :anim "talk", :start 8.93}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/mari-coaching.m4a",
+     :start 8.824,
+     :track 1,
+     :offset 8.824,
+     :target "mari",
+     :duration 1.627},
+    :init-audio-correct
+    {:data
+     [{:type "set-variable", :var-name "audio-correct1", :var-value "mari-audio-correct-1"}
+      {:type "set-variable", :var-name "audio-correct2", :var-value "mari-audio-correct-2"}
+      {:type "set-variable", :var-name "audio-correct3", :var-value "mari-audio-correct-3"}
+      {:type "set-variable", :var-name "audio-correct4", :var-value "mari-audio-correct-4"}
+      {:type "set-variable", :var-name "audio-correct5", :var-value "mari-audio-correct-5"}],
+     :type "parallel"},
+    :mari-audio-try-again-2
+    {:data [{:end 19.9, :anim "talk", :start 19.05} {:end 22.01, :anim "talk", :start 20.04}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/mari-coaching.m4a",
+     :start 18.83,
+     :track 1,
+     :offset 18.83,
+     :target "mari",
+     :duration 3.491},
+    :mari-audio-correct-3
+    {:data [{:end 8.04, :anim "talk", :start 7.12}],
+     :type "animation-sequence",
+     :audio "/raw/audio/l1/mari-coaching.m4a",
+     :start 6.456,
+     :track 1,
+     :offset 6.456,
+     :target "mari",
+     :duration 1.345},
+    :init-audio-try-again
+    {:data
+     [{:type "set-variable", :var-name "audio-try-again1", :var-value "mari-audio-try-again-1"}
+      {:type "set-variable", :var-name "audio-try-again2", :var-value "mari-audio-try-again-2"}],
+     :type "parallel"}}},
+  :click-pointer
   {:assets [{:url "/raw/img/ui/hand.png", :size 1, :type "image"}],
    :actions
    {:set-reminder-on {:id "reminder", :type "set-interval", :action "show-click-reminder", :interval 17000},
