@@ -34,5 +34,5 @@
           styles (get-styles)]
       (if-not (nil? text)
         [:div {:style (:title styles)}
-         [:span text text text]]
+         [:span text]]
         [:div {:style (:title styles)}]))))
