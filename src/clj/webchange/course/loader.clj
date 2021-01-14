@@ -38,7 +38,7 @@
           y-i (index-of order y)]
       (compare [x-i x] [y-i y]))))
 
-(defn- sort-by
+(defn- sort-by-keys-order
   "Sort map keys by provided vector of keys.
   Keys not in order list will be ordered by name and conj-ed at the end of result"
   [data order]
@@ -51,7 +51,7 @@
 (defn- sort-course
   [data]
   (let [order [:initial-scene :scene-list :scenes :locations :levels :default-progress]]
-    (sort-by data order)))
+    (sort-by-keys-order data order)))
 
 (defn- sort-action
   [data]
@@ -62,7 +62,7 @@
                :var-name :var-value :value :value1 :value2 :success :fail
                :from-var :from-params
                ]]
-    (sort-by data order)))
+    (sort-by-keys-order data order)))
 
 (defn- sort-actions
   [actions]
@@ -77,7 +77,7 @@
                :x :y :width :height :scale :origin
                :scene-name :transition
                ]]
-    (sort-by data order)))
+    (sort-by-keys-order data order)))
 
 (defn- sort-objects
   [objects]
@@ -92,7 +92,7 @@
     (-> data
         (update-in [:actions] sort-actions)
         (update-in [:objects] sort-objects)
-        (sort-by order))))
+        (sort-by-keys-order order))))
 
 (defn save-scene
   ([config course-slug scene-name] (save-scene config course-slug course-slug scene-name))
@@ -156,6 +156,23 @@
       (doseq [scene-name scenes]
         (load-scene config course-slug saved-name scene-name)))))
 
+(defn save-course-info
+  [config course-slug new-name]
+  (let [course-info (-> (core/get-course-latest-version course-slug)
+                        sort-course)
+        path (course-path config new-name)]
+    (clojure.java.io/make-parents path)
+    (binding [p/*print-right-margin* 121]
+      (p/pprint
+        course-info
+        (clojure.java.io/writer path)))))
+
+(defn load-course-info
+  [config course-slug saved-name]
+  (let [path (course-path config saved-name)
+        data (-> path io/reader java.io.PushbackReader. edn/read)]
+    (core/save-course! course-slug data owner-id)))
+
 (defn merge-course-info
   [config course-slug saved-name & fields]
   (let [ks (->> fields (map keyword) (into []))
@@ -173,6 +190,14 @@
    "load-course"
    (fn [config args]
      (apply load-course config args))
+
+   "save-course-info"
+   (fn [config args]
+     (apply save-course-info config args))
+
+   "load-course-info"
+   (fn [config args]
+     (apply load-course-info config args))
 
    "update-character-skins"
    (fn [config args]
