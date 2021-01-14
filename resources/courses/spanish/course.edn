@@ -148,7 +148,12 @@
                  {:name    "Writing Lesson",
                   :outs    [{:x 100, :y 100, :name "library", :object "back"}],
                   :type    "non-scored",
-                  :preview "/images/dashboard/scene-preview/Library_Room.jpg"}},
+                  :preview "/images/dashboard/scene-preview/Library_Room.jpg"},
+                 :recording-studio
+                 {:name    "Recording Studio",
+                  :outs    [{:x 100, :y 100, :name "library", :object "back"}],
+                  :type    "non-scored",
+                  :preview "/images/dashboard/scene-preview/Recording_Room.png"}},
  :scenes
                 ["home"
                  "map"

@@ -3,6 +3,7 @@
     [webchange.interpreter.pixi :refer [Container Graphics Sprite WHITE]]
     [webchange.interpreter.renderer.scene.components.utils :as utils :refer [set-handler]]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
+    [webchange.interpreter.renderer.scene.components.image.utils :as image-utils]
     [webchange.interpreter.renderer.scene.components.image.wrapper :refer [wrap]]
     [webchange.resources.manager :as resources]
     [webchange.logger :as logger]))
@@ -21,36 +22,9 @@
                     :border-radius {}
                     :origin        {}
                     :max-width     {}
-                    :max-height    {}})
-
-(defn- apply-boundaries
-  [container {:keys [max-width max-height]}]
-  (when (and max-width (< max-width (.-width container)))
-    (let [ratio (/ max-width (.-width container))]
-      (set! (.-width container) (* ratio (.-width container)))
-      (set! (.-height container) (* ratio (.-height container)))))
-  (when (and max-height (< max-height (.-height container)))
-    (let [ratio (/ max-height (.-height container))]
-      (set! (.-width container) (* ratio (.-width container)))
-      (set! (.-height container) (* ratio (.-height container))))))
-
-(defn- apply-origin
-  [container {{origin :type} :origin {x :x y :x} :offset}]
-  (when (and origin (= 0 (int x)) (= 0 (int y)))
-    (let [[h v] (clojure.string/split origin #"-")
-          pivot (.-pivot container)]
-      (case h
-        "left" (set! (.-x pivot) 0)
-        "center" (set! (.-x pivot) (/ (.-width container) 2))
-        "right" (set! (.-x pivot) (.-width container))
-        (do (logger/warn (str "Wrong horizontal align option <" h ">. 'Left' will be used."))
-            (set! (.-x pivot) 0)))
-      (case v
-        "top" (set! (.-y pivot) 0)
-        "center" (set! (.-y pivot) (/ (.-height container) 2))
-        "bottom" (set! (.-y pivot) (.-height container))
-        (do (logger/warn (str "Wrong vertical align option <" v ">. 'Top' will be used."))
-            (set! (.-y pivot) 0))))))
+                    :max-height    {}
+                    :min-width     {}
+                    :min-height    {}})
 
 (defn- create-sprite
   [{:keys [src scale object-name width height]}]
@@ -113,14 +87,18 @@
   :offset - container position offset. Default: {:x 0 :y 0}.
   :filters - filters params to be applied to sprite. Default: [].
   :border-radius - make rounded corners. Radius in pixels. Default: 0.
-  :origin - where image pivot will be set. Can be '(left|center|right)-(top|center|bottom)'. Default: 'left-top'.
+  :origin - where image pivot will be set. Can be '(left|center|right)-(top|center|bottom)'. Must be a value of `:type` field.
+            Default: 'left-top'. Example: {:type 'center-center'}
   :max-width - max image width.
-  :max-height - max image height."
+  :max-height - max image height.
+  :min-width - min image width.
+  :min-height - min image height."
   [{:keys [parent type on-click ref object-name] :as props}]
-  (let [image (create-sprite props)
+  (let [state (atom props)
+        image (create-sprite props)
         image-mask (create-sprite-mask props)
         image-container (create-sprite-container props)
-        wrapped-image (wrap type object-name image-container image)]
+        wrapped-image (wrap type object-name image-container image state)]
     (.addChild image-container image)
     (.addChild parent image-container)
 
@@ -131,7 +109,7 @@
     (when-not (nil? on-click) (set-handler image "click" on-click))
     (when-not (nil? ref) (ref wrapped-image))
 
-    (apply-origin image-container props)
-    (apply-boundaries image-container props)
+    (image-utils/apply-origin image-container props)
+    (image-utils/apply-boundaries image-container props)
 
     wrapped-image))

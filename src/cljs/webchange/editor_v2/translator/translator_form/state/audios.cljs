@@ -8,7 +8,8 @@
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.translator-form.state.audios-utils :refer [get-audio-assets-data
-                                                                               get-form-data]]))
+                                                                               get-form-data]]
+    [webchange.warehouse :as warehouse]))
 
 ;; Subs
 
@@ -43,15 +44,13 @@
 (re-frame/reg-event-fx
   ::upload-audio
   (fn [{:keys [db]} [_ js-file-value audio-props form-params]]
-    (let [form-data (get-form-data (concat [["file" js-file-value]] (or form-params [])))
-          asset-data {:date (.now js/Date)}]
-      {:db         (assoc-in db [:loading :upload-audio] true)
-       :http-xhrio {:method          :post
-                    :uri             (str "/api/assets/")
-                    :body            form-data
-                    :response-format (json-response-format {:keywords? true})
-                    :on-success      [::upload-audio-success (merge audio-props asset-data)]
-                    :on-failure      [:api-request-error :upload-audio]}})))
+    (let [asset-data {:date (.now js/Date)}]
+      {:db       (assoc-in db [:loading :upload-audio] true)
+       :dispatch [::warehouse/upload-audio
+                  {:file        js-file-value
+                   :form-params form-params}
+                  {:on-success [::upload-audio-success (merge audio-props asset-data)]
+                   :on-failure :on-failure}]})))
 
 (re-frame/reg-event-fx
   ::upload-audio-success

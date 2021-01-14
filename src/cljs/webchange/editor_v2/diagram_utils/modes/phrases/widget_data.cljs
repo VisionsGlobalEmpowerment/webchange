@@ -5,7 +5,7 @@
     [clojure.string :refer [join]]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.creation-progress.translation-progress.validate-action :refer [validate-dialog-action]]
+    [webchange.editor-v2.creation-progress.translation-progress.validate-action :refer [empty-dialog-action? validate-dialog-action]]
     [webchange.editor-v2.creation-progress.warning-icon :refer [warning-icon]]
     [webchange.editor-v2.events :as ee]
     [webchange.editor-v2.diagram-utils.diagram-model.custom-nodes.custom-widget.colors :refer [colors]]
@@ -28,51 +28,55 @@
 
 (defn- get-styles
   []
-  {:header-description {:margin             "0"
-                        :padding            "5px"
-                        :text-align         "center"
-                        :max-width          "200px"
-                        :overflow           "hidden"
-                        :text-overflow      "ellipsis"
-                        :-webkit-line-clamp 2
-                        :-webkit-box-orient "vertical"
-                        :display            "-webkit-box"
-                        :height             "50px"}
-   :dialog-node        {:width            "180px"
-                        :height           "64px"
-                        :margin-top       "-12px"
-                        :background-color "#6BC784"
-                        :cursor           "pointer"}
-   :question-node        {:width            "180px"
-                        :height           "64px"
-                        :margin-top       "-12px"
-                        :background-color "#FFC784"
-                        :cursor           "pointer"}
-   :track-label        {:height           "40px"
-                        :border-radius    "0"
-                        :display          "flex"
-                        :flex-direction   "column"
-                        :justify-content  "center"
-                        :align-items      "center"
-                        :padding          "3px"
-                        :background-color "#156874"
-                        :white-space      "nowrap"}
-   :prompt             {:width         "180px"
-                        :top           "-20px"
-                        :border        "none"
-                        :border-radius "20px"
-                        :cursor        "default"}
-   :prompt-text        {:margin          "5px"
-                        :height          "66px"
-                        :overflow        "auto"
-                        :text-align      "center"
-                        :font-size       "18px"
-                        :font-style      "italic"
-                        :color           "#404040"
-                        :display         "flex"
-                        :align-items     "center"
-                        :justify-content "center"
-                        :padding-bottom  "5px"}})
+  (let [dialog-node-common {:width            "180px"
+                            :height           "64px"
+                            :margin-top       "-12px"
+                            :background-color "#6BC784"
+                            :cursor           "pointer"}]
+    {:header-description {:margin             "0"
+                          :padding            "5px"
+                          :text-align         "center"
+                          :max-width          "200px"
+                          :overflow           "hidden"
+                          :text-overflow      "ellipsis"
+                          :-webkit-line-clamp 2
+                          :-webkit-box-orient "vertical"
+                          :display            "-webkit-box"
+                          :height             "50px"}
+     :dialog-node        (merge dialog-node-common
+                                {:background-color "#6BC784"})
+     :dialog-empty-node  (merge dialog-node-common
+                                {:background-color "#9CB9A4"})
+     :track-label        {:height           "40px"
+                          :border-radius    "0"
+                          :display          "flex"
+                          :flex-direction   "column"
+                          :justify-content  "center"
+                          :align-items      "center"
+                          :padding          "3px"
+                          :background-color "#156874"
+                          :white-space      "nowrap"}
+     :prompt             {:width         "180px"
+                          :top           "-20px"
+                          :border        "none"
+                          :border-radius "20px"
+                          :cursor        "default"}
+     :prompt-text        {:margin          "5px"
+                          :height          "66px"
+                          :overflow        "auto"
+                          :text-align      "center"
+                          :font-size       "18px"
+                          :font-style      "italic"
+                          :color           "#404040"
+                          :display         "flex"
+                          :align-items     "center"
+                          :justify-content "center"
+                          :padding-bottom  "5px"}
+     :question-node      {:width            "180px"
+                          :height           "64px"
+                          :margin-top       "-12px"
+                          :background-color "#FFC784"
+                          :cursor           "pointer"}}))
 
 (defn- phrase-header
   [node-data]
@@ -132,7 +136,8 @@
 
 (defn- dialog-wrapper
   [{:keys [node-data this]}]
-  (let [valid-node? (validate-dialog-action (:data node-data))
+  (let [empty-node? (empty-dialog-action? (:data node-data))
+        valid-node? (validate-dialog-action (:data node-data))
         current-node? (->> @(re-frame/subscribe [::translator-form.actions/current-dialog-action-data])
                            (= (:data node-data)))
         styles (get-styles)]
@@ -145,7 +150,9 @@
                                  (re-frame/dispatch [::ee/show-dialog-translator-form node-data])
                                  (re-frame/dispatch [::ee/show-translator-form node-data])))
             :style           (merge custom-wrapper/node-style
-                                    (:dialog-node styles))}
+                                    (if empty-node?
+                                      (:dialog-empty-node styles)
+                                      (:dialog-node styles)))}
       (when-not valid-node?
         [warning-icon {:styles {:main {:position "absolute"
                                        :bottom   "2px"}}}])

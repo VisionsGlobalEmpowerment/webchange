@@ -191,8 +191,16 @@
   [object params]
   (let [params-to-animate (if (contains? params :bezier)
                             (get-in params [:bezier 0])
-                            params)]
-    (-> (cond-> {}
+                            params)
+        params-handled-manually [:x :y :brightness :rotation :opacity]
+        rest-params (->> (keys params-to-animate)
+                         (filter (fn [param] (->> params-handled-manually (some #{param}) (not)))))]
+    (-> (cond-> (reduce (fn [result param]
+                          (if (some #{param} (w/get-wrapped-props object))
+                            (assoc result param (w/get-prop object param))
+                            result))
+                        {}
+                        rest-params)
                 (or (contains? params-to-animate :x)
                     (contains? params-to-animate :y)) (merge (w/get-position object))
                 (contains? params-to-animate :brightness) (assoc :brightness (w/get-filter-value object "brightness"))
@@ -204,18 +212,24 @@
 
 (defn- set-tween-object-params
   [object params]
-  (when (or (contains? params :x)
-            (contains? params :y))
-    (w/set-position object (select-keys params [:x :y])))
-  (when (contains? params :brightness)
-    (w/set-filter-value object "brightness" (:brightness params)))
-  (when (contains? params :rotation)
-    (w/set-rotation object (:rotation params)))
-  (when (contains? params :opacity)
-    (w/set-opacity object (:opacity params)))
-  (when (contains? params :fill)
-    (w/set-fill object (:fill params)))
-  )
+  (let [params-handled-manually [:x :y :brightness :rotation :opacity :fill]
+        rest-params (->> (keys params)
+                         (filter (fn [param] (->> params-handled-manually (some #{param}) (not)))))]
+    (when (or (contains? params :x)
+              (contains? params :y))
+      (w/set-position object (select-keys params [:x :y])))
+    (when (contains? params :brightness)
+      (w/set-filter-value object "brightness" (:brightness params)))
+    (when (contains? params :rotation)
+      (w/set-rotation object (:rotation params)))
+    (when (contains? params :opacity)
+      (w/set-opacity object (:opacity params)))
+    (when (contains? params :fill)
+      (w/set-fill object (:fill params)))
+
+    (doseq [param rest-params]
+      (when (some #{param} (w/get-wrapped-props object))
+        (w/set-prop object param (get params param))))))
 
 ;; ToDo: Test :loop param
 ;; ToDo: Test :skippable param

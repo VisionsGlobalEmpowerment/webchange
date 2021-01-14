@@ -1,13 +1,13 @@
 (ns webchange.editor-v2.wizard.activity-template.views-image
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.components.file-input.views :as file-input]
     [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
-(def string-validation-map {:root [(fn [value] (when (= value "") "Required field"))]})
+(def image-validation-map {:src [(fn [value] (when-not (some? value) "Image is required"))]})
 
 (defn- get-styles
   []
@@ -32,41 +32,42 @@
 (defn image-field
   [value on-change]
   (r/with-let [uploading (r/atom false)]
-              (let [styles (get-styles)]
-                [ui/grid {:container true :justify "flex-start" :align-items "flex-end"
-                          :spacing   16}
-                 (when value
-                   [ui/grid {:item  true :xs 12
-                             :style {:display         "flex"
-                                     :justify-content "center"}}
-                    (if @uploading
-                      [ui/circular-progress]
-                      [:img {:src   value
-                             :style {:max-width "100%"}}])])
+    (let [styles (get-styles)]
+      [ui/grid {:container true :justify "flex-start" :align-items "flex-end"
+                :spacing   16}
+       (when value
+         [ui/grid {:item  true :xs 12
+                   :style {:display         "flex"
+                           :justify-content "center"}}
+          (if @uploading
+            [ui/circular-progress]
+            [:img {:src   value
+                   :style {:max-width "100%"}}])])
 
-                 [ui/grid {:item  true :xs 12
-                           :style {:display "flex"}}
-                  [select-file-form :image uploading on-change]
-                  [ui/text-field {:value     (str value)
-                                  :style     (:image-src styles)
-                                  :on-change #(on-change (-> % .-target .-value))}]]])))
-
+       [ui/grid {:item  true :xs 12
+                 :style {:display "flex"}}
+        [select-file-form :image uploading on-change]
+        [ui/text-field {:value     (str value)
+                        :style     (:image-src styles)
+                        :on-change #(on-change (-> % .-target .-value))}]]])))
 
 
 (defn image-option
   [{:keys [key option data validator]}]
-  (println "key option data" key option data)
-  (r/with-let [image-data (connect-data data [key] {:img ""})
-               {:keys [error-message]} (v/init image-data string-validation-map validator)]
-    [ui/grid {:container   true
-              :justify     "center"
-              :spacing     16
-              :align-items "center"}
-     [ui/grid {:item true :xs 10}
-      [image-field (get @image-data :img "") #(do
-                                                (println "image-data 1" image-data)
-                                                (println "image-data 2" %)
-                                                (swap! image-data assoc :img %))]
-      [error-message {:field-name :img}]]])
-
-  )
+  (r/with-let [page-data (connect-data data [key] nil)
+               {:keys [error-message destroy]} (v/init page-data image-validation-map validator)]
+    [ui/paper {:style {:padding "20px 10px"}}
+     [ui/grid {:container true
+               :spacing   16
+               :style     {:margin-top "-16px"}}
+      [ui/grid {:item true :xs 12}
+       [ui/typography {:variant "h6"
+                       :style   {:display      "inline-block"
+                                 :margin-right "16px"}}
+        (:label option)]
+       [error-message {:field-name :root}]]
+      [ui/grid {:item true :xs 12}
+       [image-field (get @page-data :src "") #(swap! page-data assoc :src %)]
+       [error-message {:field-name :src}]]]]
+    (finally
+      (destroy))))

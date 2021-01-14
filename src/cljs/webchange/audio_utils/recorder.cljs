@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.translator.translator-form.audio-assets.add-audio.recorder)
+(ns webchange.audio-utils.recorder)
 
 (def stream (atom nil))
 (def recorder (atom nil))
@@ -18,18 +18,20 @@
 (defn- handle-data-available
   [event]
   (->> (.-data event)
-       (conj @recorded-audio-chunks )
-       (reset! recorded-audio-chunks )))
+       (conj @recorded-audio-chunks)
+       (reset! recorded-audio-chunks)))
 
 (defn start
-  [on-success]
-  (get-audio-stream (fn [audio-stream]
-                      (reset! stream audio-stream)
-                      (reset! recorder (js/MediaRecorder. @stream))
-                      (reset! recorded-audio-chunks [])
-                      (.addEventListener @recorder "dataavailable" handle-data-available)
-                      (.start @recorder)
-                      (on-success))))
+  ([]
+   (start #()))
+  ([on-success]
+   (get-audio-stream (fn [audio-stream]
+                       (reset! stream audio-stream)
+                       (reset! recorder (js/MediaRecorder. @stream))
+                       (reset! recorded-audio-chunks [])
+                       (.addEventListener @recorder "dataavailable" handle-data-available)
+                       (.start @recorder)
+                       (on-success)))))
 
 (defn stop
   [on-success]

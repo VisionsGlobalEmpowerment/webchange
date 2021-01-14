@@ -4,14 +4,23 @@
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.state :as state]))
 
+(defn- get-form-data
+  [form-params]
+  (reduce (fn [form-data [key value]]
+            (.append form-data key value)
+            form-data)
+          (js/FormData.)
+          form-params))
+
 (defn- create-request
-  [{:keys [method uri params]} {:keys [on-success on-failure]}]
+  [{:keys [method uri body params]} {:keys [on-success on-failure]}]
   {:http-xhrio (cond-> {:method          method
                         :uri             uri
                         :format          (json-request-format)
                         :response-format (json-response-format {:keywords? true})
                         :on-success      [::empty-success-handler]}
                        (some? params) (assoc :params params)
+                       (some? body) (assoc :body body)
                        (some? on-success) (assoc :on-success on-success)
                        (some? on-failure) (assoc :on-failure on-failure))})
 
@@ -99,3 +108,21 @@
     (create-request {:method :post
                      :uri    (str "/api/courses/" course-id "/create-activity-placeholder")
                      :params data} handlers)))
+
+;; Static assets
+
+(re-frame/reg-event-fx
+  ::upload-audio
+  (fn [{:keys [db]} [_ {:keys [file form-params]
+                        :or   {form-params []}} handlers]]
+    (let [form-data (get-form-data (concat [["file" file]] form-params))]
+      (create-request {:method :post
+                       :uri    (str "/api/assets/")
+                       :body   form-data} handlers))))
+
+(re-frame/reg-event-fx
+  ::upload-audio-blob
+  (fn [{:keys [_]} [_ {:keys [blob]} handlers]]
+    {:dispatch [::upload-audio {:file        blob
+                                :form-params [["type" "blob"]
+                                              ["blob-type" "audio"]]} handlers]}))

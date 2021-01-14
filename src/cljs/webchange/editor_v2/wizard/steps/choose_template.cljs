@@ -31,11 +31,13 @@
                styles (get-styles)]
     (let [templates @(re-frame/subscribe [::state-activity/templates])]
       (if (some? templates)
-        (let [filtered-templates (filter (fn [{:keys [tags]}]
+        (let [filtered-templates (->> templates
+                                      (filter (fn [{:keys [tags]}]
                                            (if (some? @current-tag)
                                              (some #{@current-tag} tags)
-                                             true))
-                                         templates)
+                                             true)))
+                                      (sort #(compare (clojure.string/lower-case (:name %1))
+                                                      (clojure.string/lower-case (:name %2)))))
               tags (->> templates
                         (map :tags)
                         (apply concat)

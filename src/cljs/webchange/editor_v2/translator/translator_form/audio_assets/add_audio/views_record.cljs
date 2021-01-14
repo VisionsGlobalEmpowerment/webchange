@@ -4,7 +4,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.translator.translator-form.audio-assets.add-audio.recorder :as recorder]
+    [webchange.audio-utils.recorder :as recorder]
     [webchange.editor-v2.translator.translator-form.state.audios :as translator-form.audios]))
 
 (defn- get-styles

@@ -132,15 +132,24 @@
        [select-lesson-sets-form]]
       [ui/grid {:item true :xs 8}
        [ui/text-field (merge text-input-params
-                             {:id    "share-link-text-input"
-                              :label "Link"
-                              :value link})]]
+                             {:id         "share-link-text-input"
+                              :label      "Link"
+                              :value      link
+                              :InputProps {:style {:height "100px"}}})]]
       [ui/grid {:item true :xs 4}
+       [ui/button {:href   link
+                   :target "_blank"
+                   :style  {:margin-top "18px"
+                            :width      "130px"
+                            :padding    "4px 16px"}}
+        [ic/launch {:style {:margin "6px"}}] "Open"]
        [ui/button {:on-click #(let [text-field (js/document.getElementById "share-link-text-input")]
                                 (.focus text-field)
                                 (.select text-field)
                                 (js/document.execCommand "copy"))
-                   :style    {:margin-top "19px"}}
+                   :style    {:margin-top "8px"
+                              :width      "130px"
+                              :padding    "4px 16px"}}
         [ic/content-copy {:style {:margin "6px"}}] "Copy link"]]]]))
 
 (defn share-modal

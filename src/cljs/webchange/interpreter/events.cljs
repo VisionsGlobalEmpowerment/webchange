@@ -18,9 +18,14 @@
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.renderer.state.scene :as scene]
-    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    [webchange.audio-utils.recorder :as audio-recorder]
+    [webchange.resources.manager :as resources-manager]
+    [webchange.warehouse :as warehouse]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
+(ce/reg-simple-executor :start-audio-recording ::execute-start-audio-recording)
+(ce/reg-simple-executor :stop-audio-recording ::execute-stop-audio-recording)
 (ce/reg-simple-executor :play-video ::execute-play-video)
 (ce/reg-simple-executor :path-animation ::execute-path-animation)
 (ce/reg-simple-executor :state ::execute-state)
@@ -181,6 +186,34 @@
   :stop-all-audio
   (fn []
     (sound/stop-all-audio!)))
+
+(re-frame/reg-fx
+  :start-audio-recording
+  (fn []
+    (audio-recorder/start)))
+
+(re-frame/reg-fx
+  :stop-audio-recording
+  (fn [{:keys [var-name on-ended]}]
+    (audio-recorder/stop (fn [audio-blob]
+                           (re-frame/dispatch [::warehouse/upload-audio-blob
+                                               {:blob audio-blob}
+                                               {:on-success [::stop-audio-recording-success var-name on-ended]}])))))
+
+(re-frame/reg-event-fx
+  ::stop-audio-recording-success
+  (fn [{:keys [_]} [_ var-name on-ended {:keys [url]}]]
+    {:dispatch       [::vars.events/execute-set-variable {:var-name  var-name
+                                                          :var-value url}]
+     :load-resources {:urls     [url]
+                      :on-ended on-ended}}))
+
+(re-frame/reg-fx
+  :load-resources
+  (fn [{:keys [urls on-ended]
+        :or   {urls     []
+               on-ended #{}}}]
+    (resources-manager/load-resources urls {:on-complete on-ended})))
 
 (re-frame/reg-fx
   :music-volume
@@ -558,6 +591,20 @@
     {:execute-audio (-> action
                         (assoc :key (or audio (get-audio-key db id) id))
                         (assoc :on-ended #(ce/dispatch-success-fn action)))}))
+
+(re-frame/reg-event-fx
+  ::execute-start-audio-recording
+  [ce/event-as-action ce/with-flow]
+  (fn [{:keys [_]} action]
+    {:start-audio-recording nil
+     :dispatch              (ce/success-event action)}))
+
+(re-frame/reg-event-fx
+  ::execute-stop-audio-recording
+  [ce/event-as-action ce/with-flow]
+  (fn [{:keys [_]} action]
+    {:stop-audio-recording (-> action
+                               (assoc :on-ended #(ce/dispatch-success-fn action)))}))
 
 (re-frame/reg-event-fx
   ::execute-stop-audio
@@ -1418,14 +1465,14 @@
      :success     'highlight',
      :fail        'unhighlight',
      :transition ['transition-1' 'transition-2' 'transition-3']}]}"
-    (let [transition-wrappers (into {} (map (fn [transition] [transition (->> transition keyword (scene/get-scene-object db))])  transitions))
+    (let [transition-wrappers (into {} (map (fn [transition] [transition (->> transition keyword (scene/get-scene-object db))]) transitions))
           success (ce/get-action success db action)
           fail (ce/get-action fail db action)
           actions (doall (map (fn [[transition transition-wrapper]]
-                         (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
-                           [::ce/execute-action (assoc success :params {:transition transition})]
-                           [::ce/execute-action (assoc fail :params {:transition transition})]
-                         )) transition-wrappers))]
+                                (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
+                                  [::ce/execute-action (assoc success :params {:transition transition})]
+                                  [::ce/execute-action (assoc fail :params {:transition transition})]
+                                  )) transition-wrappers))]
       {:dispatch-n (vec (conj actions (ce/success-event action)))})))
 
 (re-frame/reg-event-fx

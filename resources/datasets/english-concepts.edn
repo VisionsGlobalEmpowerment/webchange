@@ -103,7 +103,7 @@
   {:name "image-src",
    :type "image",
    :template nil,
-   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "cycling-letters" "volleyball" "volleyball-letters" "pinata" "writing-lesson" "writing-practice" "hide-n-seek" "running" "slide" "magic-hat" "letter-intro" "park-poem"]}
+   :scenes ["home" "see-saw" "swings" "cinema" "cycling" "cycling-letters" "volleyball" "volleyball-letters" "pinata" "writing-lesson" "writing-practice" "hide-n-seek" "running" "slide" "magic-hat" "letter-intro" "park-poem" "recording-studio"]}
   {:name "letter", :type "string", :scenes ["cinema" "cycling-letters" "letter-intro" "magic-hat" "pinata" "running" "sandbox" "volleyball-letters"]}
   {:name "letter-big", :type "string", :scenes ["letter-intro"]}
   {:name "letter-intro-letter",

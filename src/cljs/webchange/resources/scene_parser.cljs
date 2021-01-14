@@ -101,13 +101,18 @@
   (->> (:audio scene-data)
        (vals)))
 
+(defn- parse-scene-metadata
+  [scene-data]
+  (get-in scene-data [:metadata :resources]))
+
 (defn- parse-scene
   ([scene-data]
    (parse-scene scene-data {}))
   ([scene-data options]
    (concat (parse-scene-assets scene-data)
            (parse-scene-objects scene-data options)
-           (parse-scene-audio scene-data))))
+           (parse-scene-audio scene-data)
+           (parse-scene-metadata scene-data))))
 
 (defn- parse-scenes-previews
   ([]

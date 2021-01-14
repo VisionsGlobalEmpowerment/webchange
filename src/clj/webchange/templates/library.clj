@@ -3,6 +3,7 @@
     [webchange.templates.library.casa]
     [webchange.templates.library.cycling]
     [webchange.templates.library.pinata]
+    [webchange.templates.library.recording-studio]
     [webchange.templates.library.dialog]
     [webchange.templates.library.see-saw]
     [webchange.templates.library.sandbox]

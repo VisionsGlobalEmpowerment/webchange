@@ -16,10 +16,11 @@
 
 (defn- get-scenes-options
   [scenes-list]
-  (map (fn [scene-id]
-         {:value scene-id
-          :text  (s/replace scene-id #"-" " ")})
-       scenes-list))
+  (->> scenes-list
+       (map (fn [scene-id]
+              {:value scene-id
+               :text  (s/replace scene-id #"-" " ")}))
+       (sort-by :text)))
 
 (defn- scene-info-data
   [{:keys [scene-id]}]
