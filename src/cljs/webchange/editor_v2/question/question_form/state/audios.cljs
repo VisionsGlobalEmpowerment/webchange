@@ -15,7 +15,6 @@
     [(re-frame/subscribe [::translator-form.actions/current-phrase-action])
      (re-frame/subscribe [::translator-form.scene/audio-assets])])
   (fn [[current-phrase-action scene-audios]]
-    (println "scene-audios" scene-audios)
     (let [question-or-answer? (nil? (get-in current-phrase-action [:type]))]
       (if question-or-answer?
         (get-audio-assets-data current-phrase-action scene-audios)

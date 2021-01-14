@@ -9,12 +9,12 @@
 
 
 (defn simple-dialog
-  [{:keys [path]}]                    ;; data coming in is a string
+  [{:keys [path]}]                                          ;; data coming in is a string
   (let [scene-data @(re-frame/subscribe [::translator-form.scene/scene-data])
         {:keys [nodes links]} (get-diagram-items scene-data path)
         {:keys [engine]} (init-diagram-model :question nodes links {:locked? true})]
-      [diagram-widget {:engine engine
-                 :zoom?  true}]))
+    [diagram-widget {:engine engine
+                     :zoom?  true}]))
 
 (defn diagram-block
   []

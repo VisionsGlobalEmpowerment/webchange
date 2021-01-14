@@ -14,8 +14,7 @@
                   :max-width   "250px"
                   :min-width   "180px"
                   :font-size   "1.5rem"
-                  :line-height "1.28571429em"
-                  }
+                  :line-height "1.28571429em"}
    :title-target {:font-size       "1.7rem"
                   :font-weight     "bold"
                   :margin-right    "16px"
@@ -29,14 +28,11 @@
   [node]
   (if (= :dialog (get-in node [:data :type]))
     (dialog.widget-phrase/phrase (get-phrase-node node))
-  (let [
-        text (case (get-in node [:data :type])
-               :question (get-in node [:data :action :data :text])
-               :answer (get-in node [:data :answer :text])
-               )
-        styles (get-styles)]
-    (if-not (nil? text)
-      [:div {:style (:title styles)}
-       [:span text]]
-      [:div {:style (:title styles)}])))
-  )
+    (let [text (case (get-in node [:data :type])
+                 :question (get-in node [:data :action :data :text])
+                 :answer (get-in node [:data :answer :text]))
+          styles (get-styles)]
+      (if-not (nil? text)
+        [:div {:style (:title styles)}
+         [:span text text text]]
+        [:div {:style (:title styles)}]))))
