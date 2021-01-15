@@ -5,6 +5,7 @@
     [webchange.editor-v2.wizard.activity-template.views-characters :refer [characters-option]]
     [webchange.editor-v2.wizard.activity-template.views-image :refer [image-option]]
     [webchange.editor-v2.wizard.activity-template.views-lookup :refer [lookup-option]]
+    [webchange.editor-v2.wizard.activity-template.views-lookup-image :refer [lookup-image-option]]
     [webchange.editor-v2.wizard.activity-template.views-pages :refer [pages-option]]
     [webchange.editor-v2.wizard.activity-template.views-string :refer [string-option]]))
 
@@ -14,6 +15,7 @@
     "characters" [characters-option props]
     "image" [image-option props]
     "lookup" [lookup-option props]
+    "lookup-image" [lookup-image-option props]
     "pages" [pages-option props]
     "string" [string-option props]
     "questions-no-image" [answers-option props false]
