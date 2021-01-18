@@ -4,7 +4,8 @@
     [webchange.interpreter.pixi :refer [Graphics]]))
 
 (defn- interpolate
-  [{:keys [from to duration on-progress on-end]}]
+  [{:keys [from to duration on-progress on-end]
+    :or   {duration 10}}]
   (let [container (clj->js from)
         tween-params (-> to
                          (assoc :onUpdate (fn [] (on-progress (-> container
@@ -66,42 +67,110 @@
   (set! (.-visible display-object) value))
 
 (re-frame/reg-fx
-  :flip-toward
-  (fn [{:keys [target-1 target-2 target-3 on-end]}]
-    (let [target-1-position (get-position target-1)
+  :flip-forward
+  (fn [{:keys [flipped-page flipped-page-back flipped-page-back-neighbor on-end]}]
+    (let [flipped-page-position (get-position flipped-page)
 
-          target-1-size (get-size target-1)
-          target-2-size (get-size target-2)
+          flipped-page-size (get-size flipped-page)
+          flipped-page-back-size (get-size flipped-page-back)
 
-          target-1-mask-params target-1-size
-          target-1-mask (create-mask target-1-mask-params)
+          flipped-page-mask-params flipped-page-size
+          flipped-page-mask (create-mask flipped-page-mask-params)
 
-          target-2-mask-params {:width  0
-                                :height (:height target-2-size)}
-          target-2-mask (create-mask target-2-mask-params)
-          target-2-initial-position (+ (:x target-1-position) (:width target-1-size))
-          target-2-destination-position (- (:x target-1-position) (:width target-1-size))]
+          flipped-page-back-mask-params {:width  0
+                                         :height (:height flipped-page-back-size)}
+          flipped-page-back-mask (create-mask flipped-page-back-mask-params)
+          flipped-page-back-initial-position (+ (:x flipped-page-position) (:width flipped-page-size))
+          flipped-page-back-destination-position (- (:x flipped-page-position) (:width flipped-page-size))]
+
+      (let [container (.-parent flipped-page)]
+        (set! (.-sortableChildren container) true)
+        (set! (.-zIndex flipped-page) 2)
+        (set! (.-zIndex flipped-page-back) 3)
+        (set! (.-zIndex flipped-page-back-neighbor) 1))
 
       ; Set initial position
-      (apply-mask target-1 target-1-mask)
+      (apply-mask flipped-page flipped-page-mask)
 
-      (set-position target-2 (assoc target-1-position :x target-2-initial-position))
-      (apply-mask target-2 target-2-mask)
-      (set-visibility target-2 true)
+      (set-position flipped-page-back (assoc flipped-page-position :x flipped-page-back-initial-position))
+      (apply-mask flipped-page-back flipped-page-back-mask)
+      (set-visibility flipped-page-back true)
 
-      (when (some? target-3)
-        (set-visibility target-3 true))
+      (when (some? flipped-page-back-neighbor)
+        (set-visibility flipped-page-back-neighbor true))
 
       ; Animate
-      (interpolate {:duration    1
-                    :from        {:target-1-width    (:width target-1-mask-params)
-                                  :target-2-position target-2-initial-position
-                                  :target-2-width    0}
-                    :to          {:target-1-width    0
-                                  :target-2-position target-2-destination-position
-                                  :target-2-width    (:width target-2-size)}
-                    :on-progress (fn [{:keys [target-1-width target-2-position target-2-width]}]
-                                   (update-mask target-1-mask (assoc target-2-mask-params :width target-1-width))
-                                   (update-mask target-2-mask (assoc target-2-mask-params :width target-2-width))
-                                   (set-position-x target-2 target-2-position))
+      (interpolate {:from        {:flipped-page-width         (:width flipped-page-mask-params)
+                                  :flipped-page-back-position flipped-page-back-initial-position
+                                  :flipped-page-back-width    0}
+                    :to          {:flipped-page-width         0
+                                  :flipped-page-back-position flipped-page-back-destination-position
+                                  :flipped-page-back-width    (:width flipped-page-back-size)}
+                    :on-progress (fn [{:keys [flipped-page-width flipped-page-back-position flipped-page-back-width]}]
+                                   (update-mask flipped-page-mask (assoc flipped-page-back-mask-params :width flipped-page-width))
+                                   (update-mask flipped-page-back-mask (assoc flipped-page-back-mask-params :width flipped-page-back-width))
+                                   (set-position-x flipped-page-back flipped-page-back-position))
+                    :on-end      on-end}))))
+
+(re-frame/reg-fx
+  :flip-backward
+  (fn [{:keys [flipped-page flipped-page-back flipped-page-back-neighbor on-end]}]
+    (let [page-size (get-size flipped-page)
+          left-page-position (-> flipped-page get-position)
+          right-page-position (update left-page-position :x + (:width page-size))
+
+          flipped-page-front-mask (create-mask page-size)
+          flipped-page-back-mask (create-mask (-> page-size
+                                                  (assoc :x 200)
+                                                  (assoc :width 100)))]
+
+      (let [container (.-parent flipped-page)]
+        (set! (.-sortableChildren container) true)
+        (set! (.-zIndex flipped-page) 2)
+        (set! (.-zIndex flipped-page-back) 3)
+        (set! (.-zIndex flipped-page-back-neighbor) 1))
+
+      ;; Flipped front side
+      (apply-mask flipped-page flipped-page-front-mask)
+
+      ;; Flipped back side
+      (set-position flipped-page-back left-page-position)
+      (apply-mask flipped-page-back flipped-page-back-mask)
+      (set-visibility flipped-page-back true)
+
+      ;; Flipped back side neighbor
+      (when (some? flipped-page-back-neighbor)
+        (set-visibility flipped-page-back-neighbor true))
+
+      ; Animate
+      (interpolate {:from        {;; Flipped front side
+                                  :front-page-mask-x     0
+                                  :front-page-mask-width (:width page-size)
+                                  ;; Flipped back side
+                                  :back-page-x           (:x left-page-position)
+                                  :back-page-mask-x      (:width page-size)
+                                  :back-page-mask-width  0}
+                    :to          {;; Flipped front side
+                                  :front-page-mask-x     (:width page-size)
+                                  :front-page-mask-width 0
+                                  ;; Flipped back side
+                                  :back-page-x           (:x right-page-position)
+                                  :back-page-mask-x      0
+                                  :back-page-mask-width  (:width page-size)}
+                    :on-progress (fn [{:keys [front-page-mask-x
+                                              front-page-mask-width
+
+                                              back-page-x
+                                              back-page-mask-x
+                                              back-page-mask-width]}]
+                                   ;; Flipped front side
+                                   (update-mask flipped-page-front-mask (-> page-size
+                                                                            (assoc :x front-page-mask-x)
+                                                                            (assoc :width front-page-mask-width)))
+
+                                   ;; Flipped back side
+                                   (set-position-x flipped-page-back (- back-page-x back-page-mask-x))
+                                   (update-mask flipped-page-back-mask (-> page-size
+                                                                           (assoc :x back-page-mask-x)
+                                                                           (assoc :width back-page-mask-width))))
                     :on-end      on-end}))))

@@ -4,12 +4,7 @@
                  {:url "/raw/flip_page/spread-1-right.png" :size 1 :type "image"}
                  {:url "/raw/flip_page/spread-2-left.png" :size 1 :type "image"}
                  {:url "/raw/flip_page/spread-2-right.png" :size 1 :type "image"}]
- :objects       {:page-1       {:type       "group"
-                                :x          960
-                                :y          250
-                                :transition "page-1"
-                                :children   ["page-1-image" "page-1-text"]}
-                 :page-1-image {:type    "image"
+ :objects       {:page-1-image {:type    "image"
                                 :x       0
                                 :y       0
                                 :width   960
@@ -26,12 +21,6 @@
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 1"}
-                 :page-2       {:type       "group"
-                                :x          480
-                                :y          250
-                                :visible    false
-                                :transition "page-2"
-                                :children   ["page-2-image" "page-2-text"]}
                  :page-2-image {:type    "image"
                                 :x       0
                                 :y       0
@@ -49,12 +38,6 @@
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 2"}
-                 :page-3       {:type       "group"
-                                :x          960
-                                :y          250
-                                :visible    false
-                                :transition "page-3"
-                                :children   ["page-3-image" "page-3-text"]}
                  :page-3-image {:type    "image"
                                 :x       0
                                 :y       0
@@ -72,12 +55,6 @@
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 3"}
-                 :page-4       {:type       "group"
-                                :x          480
-                                :y          250
-                                :visible    false
-                                :transition "page-4"
-                                :children   ["page-4-image" "page-4-text"]}
                  :page-4-image {:type    "image"
                                 :x       0
                                 :y       0
@@ -95,12 +72,6 @@
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 4"}
-                 :page-5       {:type       "group"
-                                :x          960
-                                :y          250
-                                :visible    false
-                                :transition "page-5"
-                                :children   ["page-5-image" "page-5-text"]}
                  :page-5-image {:type    "image"
                                 :x       0
                                 :y       0
@@ -118,12 +89,6 @@
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 5"}
-                 :page-6       {:type       "group"
-                                :x          480
-                                :y          250
-                                :visible    false
-                                :transition "page-6"
-                                :children   ["page-6-image" "page-6-text"]}
                  :page-6-image {:type    "image"
                                 :x       0
                                 :y       0
@@ -141,23 +106,74 @@
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 6"}
+                 :page-1       {:type       "group"
+                                :x          960
+                                :y          250
+                                :visible    false
+                                :transition "page-1"
+                                :children   ["page-1-image" "page-1-text"]}
+                 :page-2       {:type       "group"
+                                :x          480
+                                :y          250
+                                :visible    false
+                                :transition "page-2"
+                                :children   ["page-2-image" "page-2-text"]}
+                 :page-3       {:type       "group"
+                                :x          960
+                                :y          250
+                                :visible    false
+                                :transition "page-3"
+                                :children   ["page-3-image" "page-3-text"]}
+                 :page-4       {:type       "group"
+                                :x          480
+                                :y          250
+                                ;:visible    false
+                                :transition "page-4"
+                                :children   ["page-4-image" "page-4-text"]}
+                 :page-5       {:type       "group"
+                                :x          960
+                                :y          250
+                                ;:visible    false
+                                :transition "page-5"
+                                :children   ["page-5-image" "page-5-text"]}
+                 :page-6       {:type       "group"
+                                :x          480
+                                :y          250
+                                :visible    false
+                                :transition "page-6"
+                                :children   ["page-6-image" "page-6-text"]}
+                 :book         {:type  "flipbook"
+                                :pages ["page-1" "page-2" "page-3" "page-4" "page-5" "page-6"]}
                  }
- :scene-objects [["page-5"  "page-3" "page-1" "page-2" "page-4"  "page-6"]]
+ :scene-objects [["page-1" "page-2" "page-3" "page-4" "page-5" "page-6"]]
  :actions       {:start-scene {:type "sequence-data"
-                               :data [{:type "empty" :duration 1000}
-                                      {:type     "flip"
-                                       :target-1 "page-1"
-                                       :target-2 "page-2"
-                                       :target-3 "page-3"}
+                               :data [
+                                      ;{:type "empty" :duration 1000}
+                                      ;{:type                       "flip"
+                                      ; :direction                  "forward"
+                                      ; :flipped-page               "page-1"
+                                      ; :flipped-page-back          "page-2"
+                                      ; :flipped-page-back-neighbor "page-3"}
+
+
+                                      {:type                       "flip"
+                                       :direction                  "backward"
+                                       :flipped-page               "page-4"
+                                       :flipped-page-back          "page-3"
+                                       :flipped-page-back-neighbor "page-2"}
                                       {:type "empty" :duration 1000}
-                                      {:type     "flip"
-                                       :target-1 "page-3"
-                                       :target-2 "page-4"
-                                       :target-3 "page-5"}
-                                      {:type "empty" :duration 1000}
-                                      {:type     "flip"
-                                       :target-1 "page-5"
-                                       :target-2 "page-6"}]}}
+                                      {:type                       "flip"
+                                       :direction                  "forward"
+                                       :flipped-page               "page-3"
+                                       :flipped-page-back          "page-4"
+                                       :flipped-page-back-neighbor "page-5"}
+                                      ;{:type "empty" :duration 1000}
+
+                                      ;{:type              "flip"
+                                      ; :direction         "forward"
+                                      ; :flipped-page      "page-5"
+                                      ; :flipped-page-back "page-6"}
+                                      ]}}
  :triggers      {:start {:on     "start"
                          :action "start-scene"}}
  :metadata      {:autostart true}

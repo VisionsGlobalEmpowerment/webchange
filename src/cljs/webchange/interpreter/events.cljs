@@ -152,8 +152,8 @@
           wrappers (scene/get-object-name db :question-overlay)
           ]
       (question-component/create (assoc data :parent (:object wrappers)) db)
-    {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/show-question]
-                       (ce/success-event action))})))
+      {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/show-question]
+                         (ce/success-event action))})))
 
 
 (re-frame/reg-event-fx
@@ -166,8 +166,8 @@
     (let [wrappers (scene/get-object-name db :question-overlay)
           object (:object wrappers)
           children (vec (array-seq (.-children object)))]
-        (doseq [child children]
-          (.removeChild object child))
+      (doseq [child children]
+        (.removeChild object child))
       {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/hide-question]
                          (ce/success-event action))})))
 
@@ -428,15 +428,14 @@
 
 (re-frame/reg-event-fx
   ::execute-flip
-  (fn [{:keys [db]} [_ {:keys [target-1 target-2 target-3] :as action}]]
-    (let [target-1 (get-container db target-1)
-          target-2 (get-container db target-2)
-          target-3 (get-container db target-3)]
-      {:flip-toward {:target-1 target-1
-                     :target-2 target-2
-                     :target-3 target-3
-                     :on-end   (fn []
-                                 (ce/dispatch-success-fn action))}})))
+  (fn [{:keys [db]} [_ {:keys [direction flipped-page flipped-page-back flipped-page-back-neighbor] :as action}]]
+    (let [params {:flipped-page               (get-container db flipped-page)
+                  :flipped-page-back          (get-container db flipped-page-back)
+                  :flipped-page-back-neighbor (get-container db flipped-page-back-neighbor)
+                  :on-end                     (fn [] (ce/dispatch-success-fn action))}]
+      (case direction
+        "forward" {:flip-forward params}
+        "backward" {:flip-backward params}))))
 
 (re-frame/reg-event-fx
   ::execute-stop-transition
