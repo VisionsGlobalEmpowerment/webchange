@@ -85,5 +85,8 @@
         "animation" (-> props
                         (add-editor-frame)
                         (assoc :start false))
+        "image" (-> props
+                        (add-editor-frame)
+                        (assoc :start false))
         props)
       (modify-common-props)))

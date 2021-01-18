@@ -1,7 +1,7 @@
 (ns webchange.templates.library.categorize.template
   (:require
-    [clojure.edn :as edn]
-    [clojure.java.io :as io]
+    [webchange.templates.utils.common :as common]
+    [webchange.templates.utils.question :as question]
     [webchange.utils.text :as text-utils]
     [webchange.templates.library.categorize.round-1 :refer [template-round-1]]
     [webchange.templates.library.categorize.round-2 :refer [template-round-2]]
@@ -13,8 +13,8 @@
         :tags        ["Independent Practice"]
         :description "Categorize"
         :actions     {:add-question {:title   "Add question",
-                                     :options {:question-page {:label "Question"
-                                                               :type  "questions-no-image"
+                                     :options {:question-page {:label         "Question"
+                                                               :type          "questions-no-image"
                                                                :answers-label "Answers"
                                                                :max-answers   5}}}}})
 
@@ -143,9 +143,7 @@
         prepared-triggers (prepare-triggers prepared-actions (:triggers template))
         template (cond-> template
                          true (assoc-in [:metadata :tracks] (prepare-tracks (get-in template [:metadata :tracks]) action-key-fn))
-                         (get-in template [:metadata :question-placeholder]) (update-in [:metadata :question-placeholder] action-key-fn))
-        ]
-
+                         (get-in template [:metadata :last-insert]) (update-in [:metadata :last-insert] action-key-fn))]
     {:assets        (:assets template)
      :objects       result-objects
      :actions       (:actions prepared-actions)
@@ -248,9 +246,8 @@
                                  true (assoc :actions (merge (:actions result) (:actions item)))
                                  true (assoc :scene-objects (concat (:scene-objects result) (:scene-objects item)))
                                  true (update-in [:metadata :tracks] concat (get-in item [:metadata :tracks]))
-                                 (get-in item [:metadata :question-placeholder]) (assoc-in [:metadata :question-placeholder]
-                                                                                           (get-in item [:metadata :question-placeholder])
-                                                                                           ))
+                                 (get-in item [:metadata :last-insert]) (assoc-in [:metadata :last-insert]
+                                                                                  (get-in item [:metadata :last-insert])))
                          ) {} rounds)
         init-round-actions (init-actions merged rounds)
         start-actions (exctract-start-actions rounds)
@@ -266,101 +263,16 @@
     merged
     ))
 
-(defn create-question
-  [args old-question-action-name new-question-action-name number-questions]
-  (let [
-        success (str "correct-answer-question" "-" number-questions)
-        success-dialog (str "correct-answer-dialog" "-" number-questions)
-        fail-answer-dialog (str "fail-answer-dialog" "-" number-questions)
-        fail (str "fail-answer-question" "-" number-questions)
-        skip (str "skip-question" "-" number-questions)
-        ]
-    {(keyword old-question-action-name) {
-                                         :type "show-question"
-                                         :description   (get-in args [:question-page :question])
-                                         :data {
-                                                :type       "type-1"
-                                                :text   (get-in args [:question-page :question])
-                                                :chunks (text-utils/text->chunks (get-in args [:question-page :question]))
-                                                :success    success
-                                                :fail       fail
-                                                :skip       skip
-                                                :audio-data {
-                                                             :audio     ""
-                                                             :start     0,
-                                                             :duration  0,
-                                                             :animation "color",
-                                                             :fill      0x00B2FF
-                                                             :data      []}
-                                                :image      (get-in args [:question-page :img])
-                                                :answers {:data    (map (fn [{:keys [text checked]}]
-                                                                   {:text       text
-                                                                    :correct    (if checked true false)
-                                                                    :chunks (text-utils/text->chunks text)
-                                                                    :audio-data {
-                                                                                 :audio     ""
-                                                                                 :start     0,
-                                                                                 :duration  0,
-                                                                                 :animation "color",
-                                                                                 :fill      0x00B2FF
-                                                                                 :data      []}
-                                                                    }
-                                                                   ) (get-in args [:question-page :answers]))}
-                                                }
-                                         }
-     (keyword fail)                     {:type "sequence-data",
-                                         :data [{:type "action" :id fail-answer-dialog}]}
-     (keyword success)                  {:type "sequence-data",
-                                         :data [
-                                                {:type "empty" :duration 500}
-                                                {:type "hide-question"}
-                                                {:type "action" :id success-dialog}
-                                                {:type "action" :id new-question-action-name}
-                                                ],
-                                         }
-     (keyword skip)                     {:type "sequence-data",
-                                         :data [
-                                                {:type "hide-question"}
-                                                {:type "action" :id new-question-action-name}
-                                                ],
-                                         }
-     (keyword success-dialog)           {:type               "sequence-data",
-                                         :editor-type        "dialog",
-                                         :data               [{:type "sequence-data"
-                                                               :data [{:type "empty" :duration 0}
-                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                         :phrase             "finish-dialog",
-                                         :phrase-description "finish dialog"}
-     (keyword fail-answer-dialog)       {:type               "sequence-data",
-                                         :editor-type        "dialog",
-                                         :data               [{:type "sequence-data"
-                                                               :data [{:type "empty" :duration 0}
-                                                                      {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                         :phrase             "finish-dialog",
-                                         :phrase-description "finish dialog"}}))
-
 (defn f
   [args]
-  (prepare-templates)
-  (-> (prepare-templates)
-      (assoc-in [:metadata :actions] (:actions m))
-      (assoc-in [:metadata :questions-number] 0)
-      (assoc-in [:metadata :history] [{:type :create :args args}]))
-  )
+  (common/init-metadata m (prepare-templates) args))
 
 (defn fu
   [old-data args]
-  (let [old-question-action-name (get-in old-data [:metadata :question-placeholder])
-        number-questions (get-in old-data [:metadata :questions-number])
-        new-question-action-name (str old-question-action-name "-" number-questions)
-        actions (create-question args old-question-action-name new-question-action-name number-questions)
-        result (-> old-data
-                   (assoc-in [:actions (keyword new-question-action-name)] (get-in old-data [:actions (keyword old-question-action-name)]))
-                   (update-in [:actions] merge actions)
-                   (assoc-in [:metadata :question-placeholder] new-question-action-name)
-                   (update-in [:metadata :questions-number] inc))
-        ]
-    result))
+  (let [params (common/get-replace-params old-data)
+        [_ actions assets] (question/create (:question-page args) params)
+        old-data (update-in old-data [:assets] concat assets)]
+    (common/merge-new-action old-data actions params)))
 
 (core/register-template
   (:id m) m f fu)

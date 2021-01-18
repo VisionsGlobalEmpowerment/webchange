@@ -44,7 +44,7 @@
   [scene-data action-path]
   (:path (first (filter
                   (fn [action]
-                    (= (:editor-type action) "dialog"))
+                    (= (get-in action [:data 0 :data 1 :type]) "animation-sequence"))
                   (map-indexed (fn [idx action]
                                  (if (= "action" (:type action))
                                    (-> (get-in scene-data (concat [:actions] [(keyword (get-in action [:id]))]))
