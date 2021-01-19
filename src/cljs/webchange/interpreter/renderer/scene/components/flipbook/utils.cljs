@@ -6,7 +6,6 @@
 
 (defn flip-page
   [props]
-  (print ">> flip-page" props)
   (re-frame/dispatch [::flipbook-state/execute-flip props]))
 
 (defn set-position

@@ -4,13 +4,15 @@
     [webchange.interpreter.renderer.scene.components.flipbook.wrapper :refer [wrap]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]))
 
-(def default-props {:x      {}
-                    :y      {}
-                    :width  {}
-                    :height {}
-                    :ref    {}
-                    :pages  {}
-                    :type   {:default "flipbook"}})
+(def default-props {:x            {}
+                    :y            {}
+                    :width        {}
+                    :height       {}
+                    :ref          {}
+                    :pages        {}
+                    :prev-control {}
+                    :next-control {}
+                    :type         {:default "flipbook"}})
 
 (defn- create-container
   [{:keys [x y]}]

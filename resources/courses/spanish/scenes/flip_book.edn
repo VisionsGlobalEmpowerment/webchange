@@ -5,33 +5,24 @@
                  {:url "/raw/flip_page/spread-2-left.png" :size 1 :type "image"}
                  {:url "/raw/flip_page/spread-2-right.png" :size 1 :type "image"}
 
-
                  {:url "/raw/img/flipbook/next-page.png" :size 1 :type "image"}
-                 {:url "/raw/img/flipbook/prev-page.png" :size 1 :type "image"}
-
-                 ]
+                 {:url "/raw/img/flipbook/prev-page.png" :size 1 :type "image"}]
  :objects       {:page-1-image {:type    "image"
                                 :x       0
                                 :y       0
                                 :width   960
                                 :height  1080
-                                :scale-x 0.5
-                                :scale-y 0.5
                                 :src     "/raw/flip_page/front.png"}
                  :page-1-text  {:type           "text"
                                 :x              300
                                 :y              50
                                 :font-size      90
-                                :scale-x        0.5
-                                :scale-y        0.5
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 1"}
                  :page-2-image {:type    "image"
                                 :x       0
                                 :y       0
-                                :scale-x 0.5
-                                :scale-y 0.5
                                 :width   1000
                                 :height  650
                                 :src     "/raw/flip_page/spread-1-left.png"}
@@ -39,8 +30,6 @@
                                 :x              50
                                 :y              50
                                 :font-size      90
-                                :scale-x        0.5
-                                :scale-y        0.5
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 2"}
@@ -49,23 +38,17 @@
                                 :y       0
                                 :width   960
                                 :height  1080
-                                :scale-x 0.5
-                                :scale-y 0.5
                                 :src     "/raw/flip_page/spread-1-right.png"}
                  :page-3-text  {:type           "text"
                                 :x              300
                                 :y              50
                                 :font-size      90
-                                :scale-x        0.5
-                                :scale-y        0.5
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 3"}
                  :page-4-image {:type    "image"
                                 :x       0
                                 :y       0
-                                :scale-x 0.5
-                                :scale-y 0.5
                                 :width   1000
                                 :height  650
                                 :src     "/raw/flip_page/spread-2-left.png"}
@@ -73,8 +56,6 @@
                                 :x              50
                                 :y              50
                                 :font-size      90
-                                :scale-x        0.5
-                                :scale-y        0.5
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 4"}
@@ -83,23 +64,17 @@
                                 :y       0
                                 :width   960
                                 :height  1080
-                                :scale-x 0.5
-                                :scale-y 0.5
                                 :src     "/raw/flip_page/spread-2-right.png"}
                  :page-5-text  {:type           "text"
                                 :x              300
                                 :y              50
                                 :font-size      90
-                                :scale-x        0.5
-                                :scale-y        0.5
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 5"}
                  :page-6-image {:type    "image"
                                 :x       0
                                 :y       0
-                                :scale-x 0.5
-                                :scale-y 0.5
                                 :width   1000
                                 :height  650
                                 :src     "/raw/flip_page/back.png"}
@@ -107,8 +82,6 @@
                                 :x              50
                                 :y              50
                                 :font-size      90
-                                :scale-x        0.5
-                                :scale-y        0.5
                                 :vertical-align "top"
                                 :fill           "white"
                                 :text           "Page 6"}
@@ -132,10 +105,10 @@
                                 :children   ["page-6-image" "page-6-text"]}
                  :book         {:type         "flipbook"
                                 :transition   "book"
-                                :x            480
-                                :y            250
-                                :width        960
-                                :height       540
+                                :x            0
+                                :y            0
+                                :width        1920
+                                :height       1080
                                 :pages        ["page-1" "page-2" "page-3" "page-4" "page-5" "page-6"]
                                 :prev-control "prev-page"
                                 :next-control "next-page"}
@@ -147,9 +120,7 @@
                                 :scale-x 0.2
                                 :scale-y 0.2
                                 :src     "/raw/img/flipbook/prev-page.png"
-                                :actions {:click {:id "prev-page-click" :on "click" :type "action"}}
-                                :states  {:visible {:visible true}
-                                          :hidden  {:visible false}}}
+                                :actions {:click {:id "prev-page-click" :on "click" :type "action"}}}
                  :next-page    {:type    "image"
                                 :x       1700
                                 :y       950
@@ -158,31 +129,17 @@
                                 :scale-x 0.2
                                 :scale-y 0.2
                                 :src     "/raw/img/flipbook/next-page.png"
-                                :actions {:click {:id "next-page-click" :on "click" :type "action"}}
-                                :states  {:visible {:visible true}
-                                          :hidden  {:visible false}}}}
+                                :actions {:click {:id "next-page-click" :on "click" :type "action"}}}}
  :scene-objects [["book"] ["prev-page" "next-page"]]
  :actions       {:start-scene     {:type "sequence-data"
                                    :data [{:type   "flipbook-init"
                                            :target "book"}]}
                  :prev-page-click {:type "sequence-data"
-                                   :data [{:type   "state"
-                                           :target "prev-page"
-                                           :id     "hidden"}
-                                          {:type   "flipbook-flip-backward"
-                                           :target "book"}
-                                          {:type   "state"
-                                           :target "prev-page"
-                                           :id     "visible"}]}
+                                   :data [{:type   "flipbook-flip-backward"
+                                           :target "book"}]}
                  :next-page-click {:type "sequence-data"
-                                   :data [{:type   "state"
-                                           :target "next-page"
-                                           :id     "hidden"}
-                                          {:type   "flipbook-flip-forward"
-                                           :target "book"}
-                                          {:type   "state"
-                                           :target "next-page"
-                                           :id     "visible"}]}}
+                                   :data [{:type   "flipbook-flip-forward"
+                                           :target "book"}]}}
  :triggers      {:start {:on     "start"
                          :action "start-scene"}}
  :metadata      {:autostart true}
