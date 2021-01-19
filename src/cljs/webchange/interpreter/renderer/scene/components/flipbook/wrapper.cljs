@@ -22,33 +22,31 @@
                          (map :object-name)
                          (map clojure.core/name))]
     (when (and (> index -1)
-               (< (count pages-names)))
+               (< index (count pages-names)))
       (nth pages-names index))))
+
+(defn- spread-numbers->names
+  [state {:keys [left right]}]
+  {:left  (get-page-name state left)
+   :right (get-page-name state right)})
 
 (defn- flip
   [state direction on-end]
-  (let [get-page (partial get-page-name @state)]
-    (utils/flip-page (cond-> {:direction           direction
-                              :left-page-position  (get-left-page-position @state)
-                              :right-page-position (get-right-page-position @state)
-                              :page-size           (get-page-size @state)}
-                             (= direction "forward") (merge (let [right-page-index (get-in @state [:current-page :right])]
-                                                              {:flipped-page               (get-page right-page-index)
-                                                               :flipped-page-back          (get-page (+ right-page-index 1))
-                                                               :flipped-page-back-neighbor (get-page (+ right-page-index 2))
-                                                               :on-end                     (fn []
-                                                                                             (swap! state assoc :current-page {:left  (+ right-page-index 1)
-                                                                                                                               :right (+ right-page-index 2)})
-                                                                                             (on-end))}))
-                             (= direction "backward") (merge (let [left-page-index (get-in @state [:current-page :left])]
-                                                               {:flipped-page               (get-page left-page-index)
-                                                                :flipped-page-back          (get-page (- left-page-index 1))
-                                                                :flipped-page-back-neighbor (get-page (- left-page-index 2))
-                                                                :on-end                     (fn []
-                                                                                              (swap! state assoc :current-page {:left  (- left-page-index 2)
-                                                                                                                                :right (- left-page-index 1)})
-                                                                                              (on-end))
-                                                                }))))))
+  (let [current-spread (get @state :current-spread)
+        next-spread (case direction
+                      "forward" {:left  (+ (get current-spread :left) 2)
+                                 :right (+ (get current-spread :right) 2)}
+                      "backward" {:left  (- (get current-spread :left) 2)
+                                  :right (- (get current-spread :right) 2)})]
+    (utils/flip-page {:direction       direction
+                      :current-spread  (spread-numbers->names @state current-spread)
+                      :next-spread     (spread-numbers->names @state next-spread)
+                      :page-dimensions {:left-page-position  (get-left-page-position @state)
+                                        :right-page-position (get-right-page-position @state)
+                                        :page-size           (get-page-size @state)}
+                      :on-end          (fn []
+                                         (swap! state assoc :current-spread next-spread)
+                                         (on-end))})))
 
 (defn wrap
   [type name container state]
@@ -59,7 +57,8 @@
                    :init          (fn []
                                     (let [first-page-index 0
                                           first-page (keyword (get-page-name @state first-page-index))]
-                                      (swap! state assoc :current-page {:left nil :right first-page-index})
+                                      (swap! state assoc :current-spread {:left  (dec first-page-index)
+                                                                          :right first-page-index})
                                       (utils/set-position first-page (get-right-page-position @state))
                                       (utils/set-visibility first-page true)))
                    :flip-forward  (fn [{:keys [on-end]}]

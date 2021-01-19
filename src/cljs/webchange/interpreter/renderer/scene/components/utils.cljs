@@ -103,3 +103,7 @@
 (defn set-sortable-children
   [object value]
   (set! (.-sortableChildren object) value))
+
+(defn sort-children
+  [object]
+  (.sortChildren object))

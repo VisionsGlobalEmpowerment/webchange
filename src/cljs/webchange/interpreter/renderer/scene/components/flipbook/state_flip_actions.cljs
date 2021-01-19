@@ -17,12 +17,11 @@
     (TweenMax.to container duration tween-params)))
 
 (defn- create-mask
-  [{:keys [x y width height] :as params
+  [{:keys [x y width height]
     :or   {x      0
            y      0
            width  0
            height 0}}]
-  (print "create-mask" x y width height)
   (doto (Graphics.)
     (.beginFill 0x000000)
     (.drawRect x y width height)
@@ -63,16 +62,30 @@
     (when (some? transition)
       (:object @transition))))
 
+(defn- spread-names->containers
+  [db {:keys [left right]}]
+  {:left  (get-container db left)
+   :right (get-container db right)})
+
 (re-frame/reg-event-fx
   ::execute-flip
-  (fn [{:keys [db]} [_ {:keys [direction flipped-page flipped-page-back flipped-page-back-neighbor] :as params}]]
+  (fn [{:keys [db]} [_ {:keys [direction current-spread next-spread] :as params}]]
     (let [params (-> params
-                     (merge {:flipped-page               (get-container db flipped-page)
-                             :flipped-page-back          (get-container db flipped-page-back)
-                             :flipped-page-back-neighbor (get-container db flipped-page-back-neighbor)}))]
+                     (merge {:current-spread (spread-names->containers db current-spread)
+                             :next-spread    (spread-names->containers db next-spread)}))]
       (case direction
         "forward" {:flip-forward params}
         "backward" {:flip-backward params}))))
+
+(defn- set-position
+  [object position]
+  (when (some? object)
+    (components-utils/set-position object position)))
+
+(defn- set-visibility
+  [object visible?]
+  (when (some? object)
+    (components-utils/set-visibility object visible?)))
 
 (defn- set-z-index
   [object index]
@@ -81,66 +94,66 @@
 
 (re-frame/reg-fx
   :flip-forward
-  (fn [{:keys [flipped-page flipped-page-back flipped-page-back-neighbor left-page-position right-page-position page-size on-end]}]
-    (let [flipped-page-position (components-utils/get-position flipped-page)
+  (fn [{:keys [current-spread next-spread page-dimensions on-end]}]
+    (let [{:keys [left-page-position right-page-position page-size]} page-dimensions
 
-          flipped-page-size (components-utils/get-size flipped-page)
-          flipped-page-back-size (components-utils/get-size flipped-page-back)
+          current-right-mask-params page-size
+          current-right-mask (create-mask current-right-mask-params)
 
-          flipped-page-mask-params flipped-page-size
-          flipped-page-mask (create-mask flipped-page-mask-params)
+          next-left-mask-params (assoc page-size :width 0)
+          next-left-mask (create-mask next-left-mask-params)
 
-          flipped-page-back-mask-params {:width  0
-                                         :height (:height flipped-page-back-size)}
-          flipped-page-back-mask (create-mask flipped-page-back-mask-params)
-          flipped-page-back-initial-position (+ (:x flipped-page-position) (:width flipped-page-size))
-          flipped-page-back-destination-position (- (:x flipped-page-position) (:width flipped-page-size))]
+          next-left-initial-position (+ (:x right-page-position) (:width page-size))
+          next-left-destination-position (:x left-page-position)]
 
-      (let [container (.-parent flipped-page)]
+      (let [container (.-parent (:right current-spread))]
         (components-utils/set-sortable-children container true)
-        (set-z-index flipped-page 2)
-        (set-z-index flipped-page-back 3)
-        (set-z-index flipped-page-back-neighbor 1))
+        (set-z-index (:left current-spread) 0)
+        (set-z-index (:right current-spread) 2)
+        (set-z-index (:left next-spread) 3)
+        (set-z-index (:right next-spread) 1)
+        (components-utils/sort-children container))
 
-      ;; Flipped front side
-      (apply-mask flipped-page flipped-page-mask)
-      (components-utils/set-position flipped-page right-page-position)
+      ;; current left page
+      (set-position (:left current-spread) left-page-position)
+      (set-visibility (:left current-spread) true)
 
-      ;; Flipped back side
-      (print ">> Flipped back side")
-      (print "set-position" right-page-position)
-      (print "flipped-page-back-mask-params" flipped-page-back-mask-params)
+      ;; current right page
+      (apply-mask (:right current-spread) current-right-mask)
+      (set-position (:right current-spread) right-page-position)
+      (set-visibility (:right current-spread) true)
 
-      (apply-mask flipped-page-back flipped-page-back-mask)
-      (components-utils/set-position flipped-page-back right-page-position)
-      (components-utils/set-visibility flipped-page-back true)
+      ;; next left page
+      (apply-mask (:left next-spread) next-left-mask)
+      (set-position (:left next-spread) (assoc right-page-position :x next-left-initial-position))
+      (set-visibility (:left next-spread) true)
 
-      ;; Flipped back side neighbor
-      (when (some? flipped-page-back-neighbor)
-        (components-utils/set-position flipped-page-back-neighbor right-page-position)
-        (components-utils/set-visibility flipped-page-back-neighbor true))
+      ;; next right page
+      (when (some? (:right next-spread))
+        (set-position (:right next-spread) right-page-position)
+        (set-visibility (:right next-spread) true))
 
       ; Animate
-      (interpolate {:from        {:flipped-page-width         (:width flipped-page-mask-params)
-                                  :flipped-page-back-position flipped-page-back-initial-position
+      (interpolate {:from        {:flipped-page-width         (:width current-right-mask-params)
+                                  :flipped-page-back-position next-left-initial-position
                                   :flipped-page-back-width    0}
                     :to          {:flipped-page-width         0
-                                  :flipped-page-back-position flipped-page-back-destination-position
-                                  :flipped-page-back-width    (:width flipped-page-back-size)}
+                                  :flipped-page-back-position next-left-destination-position
+                                  :flipped-page-back-width    (:width page-size)}
                     :on-progress (fn [{:keys [flipped-page-width flipped-page-back-position flipped-page-back-width]}]
-                                   (update-mask flipped-page-mask (assoc flipped-page-back-mask-params :width flipped-page-width))
-                                   (update-mask flipped-page-back-mask (assoc flipped-page-back-mask-params :width flipped-page-back-width))
-                                   (components-utils/set-position flipped-page-back {:x flipped-page-back-position}))
-                    :on-end      on-end}))))
+                                   (update-mask current-right-mask (assoc next-left-mask-params :width flipped-page-width))
+                                   (update-mask next-left-mask (assoc next-left-mask-params :width flipped-page-back-width))
+                                   (set-position (:left next-spread) {:x flipped-page-back-position}))
+                    :on-end      (fn []
+                                   (set-visibility (:left current-spread) false)
+                                   (set-visibility (:right current-spread) false)
+                                   (on-end))}))))
 
 (re-frame/reg-fx
   :flip-backward
   (fn [{:keys [flipped-page flipped-page-back flipped-page-back-neighbor on-end left-page-position right-page-position page-size]}]
-    (let [_ (print "flipped-page-front-mask")
-          flipped-page-front-mask (create-mask page-size)
+    (let [flipped-page-front-mask (create-mask page-size)
           flipped-page-back-mask (create-mask page-size)]
-
-      (print "page-size" page-size)
 
       (let [container (.-parent flipped-page)]
         (components-utils/set-sortable-children container true)
@@ -149,18 +162,18 @@
         (set-z-index flipped-page-back-neighbor 1))
 
       ;; Flipped front side
-      (components-utils/set-position flipped-page left-page-position)
-      (components-utils/set-visibility flipped-page-back true)
+      (set-position flipped-page left-page-position)
+      (set-visibility flipped-page-back true)
       (apply-mask flipped-page flipped-page-front-mask)
 
       ;; Flipped back side
-      (components-utils/set-position flipped-page-back left-page-position)
+      (set-position flipped-page-back left-page-position)
       (apply-mask flipped-page-back flipped-page-back-mask)
-      (components-utils/set-visibility flipped-page-back true)
+      (set-visibility flipped-page-back true)
 
       ;; Flipped back side neighbor
       (when (some? flipped-page-back-neighbor)
-        (components-utils/set-visibility flipped-page-back-neighbor true))
+        (set-visibility flipped-page-back-neighbor true))
 
       ; Animate
       (interpolate {:from        {;; Flipped front side
