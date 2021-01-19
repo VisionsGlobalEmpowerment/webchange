@@ -95,3 +95,11 @@
   [object rotation]
   (when rotation
     (set! (.-alpha object) rotation)))
+
+(defn set-z-index
+  [object index]
+  (set! (.-zIndex object) index))
+
+(defn set-sortable-children
+  [object value]
+  (set! (.-sortableChildren object) value))

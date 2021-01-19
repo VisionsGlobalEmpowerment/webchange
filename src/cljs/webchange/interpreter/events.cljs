@@ -45,7 +45,6 @@
 (ce/reg-simple-executor :scene ::execute-scene)
 (ce/reg-simple-executor :location ::execute-location)
 (ce/reg-simple-executor :transition ::execute-transition)
-(ce/reg-simple-executor :flip ::execute-flip)
 (ce/reg-simple-executor :stop-transition ::execute-stop-transition)
 (ce/reg-simple-executor :move ::execute-move)
 (ce/reg-simple-executor :scene-exit ::execute-scene-exit)
@@ -418,24 +417,6 @@
     (if (:path to)
       (execute-transitions-sequence (path-utils/path->transitions to) action)
       (execute-transition db action))))
-
-(defn- get-container
-  [db transition-id]
-  (let [scene-id (:current-scene db)
-        transition (get-in db [:transitions scene-id transition-id])]
-    (when (some? transition)
-      (:object @transition))))
-
-(re-frame/reg-event-fx
-  ::execute-flip
-  (fn [{:keys [db]} [_ {:keys [direction flipped-page flipped-page-back flipped-page-back-neighbor] :as action}]]
-    (let [params {:flipped-page               (get-container db flipped-page)
-                  :flipped-page-back          (get-container db flipped-page-back)
-                  :flipped-page-back-neighbor (get-container db flipped-page-back-neighbor)
-                  :on-end                     (fn [] (ce/dispatch-success-fn action))}]
-      (case direction
-        "forward" {:flip-forward params}
-        "backward" {:flip-backward params}))))
 
 (re-frame/reg-event-fx
   ::execute-stop-transition

@@ -3,7 +3,13 @@
                  {:url "/raw/flip_page/spread-1-left.png" :size 1 :type "image"}
                  {:url "/raw/flip_page/spread-1-right.png" :size 1 :type "image"}
                  {:url "/raw/flip_page/spread-2-left.png" :size 1 :type "image"}
-                 {:url "/raw/flip_page/spread-2-right.png" :size 1 :type "image"}]
+                 {:url "/raw/flip_page/spread-2-right.png" :size 1 :type "image"}
+
+
+                 {:url "/raw/img/flipbook/next-page.png" :size 1 :type "image"}
+                 {:url "/raw/img/flipbook/prev-page.png" :size 1 :type "image"}
+
+                 ]
  :objects       {:page-1-image {:type    "image"
                                 :x       0
                                 :y       0
@@ -107,73 +113,76 @@
                                 :fill           "white"
                                 :text           "Page 6"}
                  :page-1       {:type       "group"
-                                :x          960
-                                :y          250
-                                :visible    false
                                 :transition "page-1"
                                 :children   ["page-1-image" "page-1-text"]}
                  :page-2       {:type       "group"
-                                :x          480
-                                :y          250
-                                :visible    false
                                 :transition "page-2"
                                 :children   ["page-2-image" "page-2-text"]}
                  :page-3       {:type       "group"
-                                :x          960
-                                :y          250
-                                :visible    false
                                 :transition "page-3"
                                 :children   ["page-3-image" "page-3-text"]}
                  :page-4       {:type       "group"
-                                :x          480
-                                :y          250
-                                ;:visible    false
                                 :transition "page-4"
                                 :children   ["page-4-image" "page-4-text"]}
                  :page-5       {:type       "group"
-                                :x          960
-                                :y          250
-                                ;:visible    false
                                 :transition "page-5"
                                 :children   ["page-5-image" "page-5-text"]}
                  :page-6       {:type       "group"
-                                :x          480
-                                :y          250
-                                :visible    false
                                 :transition "page-6"
                                 :children   ["page-6-image" "page-6-text"]}
-                 :book         {:type  "flipbook"
-                                :pages ["page-1" "page-2" "page-3" "page-4" "page-5" "page-6"]}
-                 }
- :scene-objects [["page-1" "page-2" "page-3" "page-4" "page-5" "page-6"]]
- :actions       {:start-scene {:type "sequence-data"
-                               :data [
-                                      ;{:type "empty" :duration 1000}
-                                      ;{:type                       "flip"
-                                      ; :direction                  "forward"
-                                      ; :flipped-page               "page-1"
-                                      ; :flipped-page-back          "page-2"
-                                      ; :flipped-page-back-neighbor "page-3"}
-
-
-                                      {:type                       "flip"
-                                       :direction                  "backward"
-                                       :flipped-page               "page-4"
-                                       :flipped-page-back          "page-3"
-                                       :flipped-page-back-neighbor "page-2"}
-                                      {:type "empty" :duration 1000}
-                                      {:type                       "flip"
-                                       :direction                  "forward"
-                                       :flipped-page               "page-3"
-                                       :flipped-page-back          "page-4"
-                                       :flipped-page-back-neighbor "page-5"}
-                                      ;{:type "empty" :duration 1000}
-
-                                      ;{:type              "flip"
-                                      ; :direction         "forward"
-                                      ; :flipped-page      "page-5"
-                                      ; :flipped-page-back "page-6"}
-                                      ]}}
+                 :book         {:type         "flipbook"
+                                :transition   "book"
+                                :x            480
+                                :y            250
+                                :width        960
+                                :height       540
+                                :pages        ["page-1" "page-2" "page-3" "page-4" "page-5" "page-6"]
+                                :prev-control "prev-page"
+                                :next-control "next-page"}
+                 :prev-page    {:type    "image"
+                                :x       120
+                                :y       950
+                                :width   474
+                                :height  474
+                                :scale-x 0.2
+                                :scale-y 0.2
+                                :src     "/raw/img/flipbook/prev-page.png"
+                                :actions {:click {:id "prev-page-click" :on "click" :type "action"}}
+                                :states  {:visible {:visible true}
+                                          :hidden  {:visible false}}}
+                 :next-page    {:type    "image"
+                                :x       1700
+                                :y       950
+                                :width   474
+                                :height  474
+                                :scale-x 0.2
+                                :scale-y 0.2
+                                :src     "/raw/img/flipbook/next-page.png"
+                                :actions {:click {:id "next-page-click" :on "click" :type "action"}}
+                                :states  {:visible {:visible true}
+                                          :hidden  {:visible false}}}}
+ :scene-objects [["book"] ["prev-page" "next-page"]]
+ :actions       {:start-scene     {:type "sequence-data"
+                                   :data [{:type   "flipbook-init"
+                                           :target "book"}]}
+                 :prev-page-click {:type "sequence-data"
+                                   :data [{:type   "state"
+                                           :target "prev-page"
+                                           :id     "hidden"}
+                                          {:type   "flipbook-flip-backward"
+                                           :target "book"}
+                                          {:type   "state"
+                                           :target "prev-page"
+                                           :id     "visible"}]}
+                 :next-page-click {:type "sequence-data"
+                                   :data [{:type   "state"
+                                           :target "next-page"
+                                           :id     "hidden"}
+                                          {:type   "flipbook-flip-forward"
+                                           :target "book"}
+                                          {:type   "state"
+                                           :target "next-page"
+                                           :id     "visible"}]}}
  :triggers      {:start {:on     "start"
                          :action "start-scene"}}
  :metadata      {:autostart true}
