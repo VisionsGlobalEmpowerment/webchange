@@ -92,6 +92,20 @@
   (when (some? object)
     (components-utils/set-z-index object index)))
 
+(defn- set-z-indexes
+  [spreads indexes]
+  (let [current-page (or (get-in spreads [:current :left])
+                         (get-in spreads [:current :right]))
+        container (.-parent current-page)]
+    (components-utils/set-sortable-children container true)
+    (doseq [path [[:current :left]
+                  [:current :right]
+                  [:next :left]
+                  [:next :right]]]
+      (set-z-index (get-in spreads path)
+                   (get-in indexes path)))
+    (components-utils/sort-children container)))
+
 (re-frame/reg-fx
   :flip-forward
   (fn [{:keys [current-spread next-spread page-dimensions on-end]}]
@@ -106,13 +120,12 @@
           next-left-initial-position (+ (:x right-page-position) (:width page-size))
           next-left-destination-position (:x left-page-position)]
 
-      (let [container (.-parent (:right current-spread))]
-        (components-utils/set-sortable-children container true)
-        (set-z-index (:left current-spread) 0)
-        (set-z-index (:right current-spread) 2)
-        (set-z-index (:left next-spread) 3)
-        (set-z-index (:right next-spread) 1)
-        (components-utils/sort-children container))
+      (set-z-indexes {:current current-spread
+                      :next    next-spread}
+                     {:current {:left  0
+                                :right 2}
+                      :next    {:left  3
+                                :right 1}})
 
       ;; current left page
       (set-position (:left current-spread) left-page-position)
@@ -129,9 +142,8 @@
       (set-visibility (:left next-spread) true)
 
       ;; next right page
-      (when (some? (:right next-spread))
-        (set-position (:right next-spread) right-page-position)
-        (set-visibility (:right next-spread) true))
+      (set-position (:right next-spread) right-page-position)
+      (set-visibility (:right next-spread) true)
 
       ; Animate
       (interpolate {:from        {:flipped-page-width         (:width current-right-mask-params)
@@ -151,29 +163,35 @@
 
 (re-frame/reg-fx
   :flip-backward
-  (fn [{:keys [flipped-page flipped-page-back flipped-page-back-neighbor on-end left-page-position right-page-position page-size]}]
-    (let [flipped-page-front-mask (create-mask page-size)
+  (fn [{:keys [current-spread next-spread page-dimensions on-end]}]
+    (let [{:keys [left-page-position right-page-position page-size]} page-dimensions
+          flipped-page-front-mask (create-mask page-size)
           flipped-page-back-mask (create-mask page-size)]
 
-      (let [container (.-parent flipped-page)]
-        (components-utils/set-sortable-children container true)
-        (set-z-index flipped-page 2)
-        (set-z-index flipped-page-back 3)
-        (set-z-index flipped-page-back-neighbor 1))
+      (set-z-indexes {:current current-spread
+                      :next    next-spread}
+                     {:current {:left  2
+                                :right 0}
+                      :next    {:left  1
+                                :right 3}})
 
-      ;; Flipped front side
-      (set-position flipped-page left-page-position)
-      (set-visibility flipped-page-back true)
-      (apply-mask flipped-page flipped-page-front-mask)
+      ;; current left page
+      (apply-mask (:left current-spread) flipped-page-front-mask)
+      (set-position (:left current-spread) left-page-position)
+      (set-visibility (:left current-spread) true)
 
-      ;; Flipped back side
-      (set-position flipped-page-back left-page-position)
-      (apply-mask flipped-page-back flipped-page-back-mask)
-      (set-visibility flipped-page-back true)
+      ;; current right page
+      (set-position (:right current-spread) right-page-position)
+      (set-visibility (:right current-spread) true)
 
-      ;; Flipped back side neighbor
-      (when (some? flipped-page-back-neighbor)
-        (set-visibility flipped-page-back-neighbor true))
+      ;; next left page
+      (set-position (:left next-spread) left-page-position)
+      (set-visibility (:left next-spread) true)
+
+      ;; next right page
+      (set-position (:right next-spread) left-page-position)
+      (apply-mask (:right next-spread) flipped-page-back-mask)
+      (set-visibility (:right next-spread) true)
 
       ; Animate
       (interpolate {:from        {;; Flipped front side
@@ -202,8 +220,11 @@
                                                                             (assoc :width front-page-mask-width)))
 
                                    ;; Flipped back side
-                                   (components-utils/set-position flipped-page-back {:x (- back-page-x back-page-mask-x)})
+                                   (components-utils/set-position (:right next-spread) {:x (- back-page-x back-page-mask-x)})
                                    (update-mask flipped-page-back-mask (-> page-size
                                                                            (assoc :x back-page-mask-x)
                                                                            (assoc :width back-page-mask-width))))
-                    :on-end      on-end}))))
+                    :on-end      (fn []
+                                   (set-visibility (:left current-spread) false)
+                                   (set-visibility (:right current-spread) false)
+                                   (on-end))}))))
