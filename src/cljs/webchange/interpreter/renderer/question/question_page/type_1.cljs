@@ -4,9 +4,7 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.scene.components.image.component :as image]
     [webchange.interpreter.renderer.scene.components.text.component :as text]
-    [webchange.interpreter.renderer.scene.components.rectangle.component :as rectangle]
-    [webchange.interpreter.renderer.overlays.utils :as overlays-utils]
-    [webchange.utils.text :as text-utils]))
+    [webchange.interpreter.renderer.scene.components.rectangle.component :as rectangle]))
 
 (defn sleep [f ms]
   (js/setTimeout f ms))
@@ -119,9 +117,7 @@
        :object-name :question-skip-image
        :parent      parent
        :on-click    #(re-frame/dispatch [::ce/execute-action skip-action])
-       })
-
-    )
+       }))
   (let [image-wrapper (image/create
                         {:type        "image"
                          :src         image

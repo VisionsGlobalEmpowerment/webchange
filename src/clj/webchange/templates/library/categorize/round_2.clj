@@ -558,28 +558,28 @@
                        :triggers
                                       {:back  {:on "back", :action "stop-activity"},
                                        :start {:on "start", :action "init-activity"}},
-                       :metadata      {:autostart            true
-                                       :question-placeholder "technical-question-placeholder"
-                                       :tracks               [{:title "Round 2"
-                                                               :nodes [{:type      "dialog"
-                                                                        :action-id :intro}
-                                                                       {:type "prompt"
-                                                                        :text "Correct answer"}
-                                                                       {:type      "dialog"
-                                                                        :action-id :correct-answer}
-                                                                       {:type "prompt"
-                                                                        :text "Wrong answer"}
-                                                                       {:type      "dialog"
-                                                                        :action-id :wrong-answer}
-                                                                       {:type "prompt"
-                                                                        :text "Continue sorting"}
-                                                                       {:type      "dialog"
-                                                                        :action-id :continue-sorting}
-                                                                       {:type "prompt"
-                                                                        :text "Finish dialog"}
-                                                                       {:type      "dialog"
-                                                                        :action-id :finish-dialog}
-                                                                       ]}
-                                                              ]
+                       :metadata      {:autostart   true
+                                       :last-insert "technical-question-placeholder"
+                                       :tracks      [{:title "Round 2"
+                                                      :nodes [{:type      "dialog"
+                                                               :action-id :intro}
+                                                              {:type "prompt"
+                                                               :text "Correct answer"}
+                                                              {:type      "dialog"
+                                                               :action-id :correct-answer}
+                                                              {:type "prompt"
+                                                               :text "Wrong answer"}
+                                                              {:type      "dialog"
+                                                               :action-id :wrong-answer}
+                                                              {:type "prompt"
+                                                               :text "Continue sorting"}
+                                                              {:type      "dialog"
+                                                               :action-id :continue-sorting}
+                                                              {:type "prompt"
+                                                               :text "Finish dialog"}
+                                                              {:type      "dialog"
+                                                               :action-id :finish-dialog}
+                                                              ]}
+                                                     ]
                                        },
                        })
