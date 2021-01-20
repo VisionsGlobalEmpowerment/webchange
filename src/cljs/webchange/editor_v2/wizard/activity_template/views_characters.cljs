@@ -55,8 +55,6 @@
                characters-data (connect-data data [key] [])
                {:keys [error-message] :as validator} (v/init characters-data characters-validation-map validator)]
     (let [handle-add-option (fn []
-                              (print "handle-add-option")
-                              (print ":max" (:max option))
                               (if (< (count @characters-data) (:max option))
                                 (swap! characters-data conj {})
                                 (reset! add-tooltip-open? true)))

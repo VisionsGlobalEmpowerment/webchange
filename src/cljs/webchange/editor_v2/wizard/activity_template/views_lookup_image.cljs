@@ -7,8 +7,9 @@
 (def lookup-validation-map {:root [(fn [value] (when-not (some? value) "Required field"))]})
 
 (defn- image-option-block
-  [{:keys [name src value selected? on-click]}]
-  [ui/grid {:item  true :xs 6
+  [{:keys [name src value selected? image-size on-click]
+    :or   {image-size 6}}]
+  [ui/grid {:item  true :xs image-size
             :style {:text-align "center"}}
    [ui/typography {:variant       "h6"
                    :align         "center"
@@ -24,7 +25,7 @@
                              :padding       "2px"})}]])
 
 (defn- image-options-list
-  [{:keys [options current-value on-click]}]
+  [{:keys [options current-value image-size on-click]}]
   [ui/grid {:item true :xs 12}
    [ui/grid {:container   true
              :spacing     16
@@ -33,8 +34,9 @@
     (for [{:keys [value] :as option} options]
       ^{:key value}
       [image-option-block (merge option
-                                 {:selected? (= value current-value)
-                                  :on-click  on-click})])]])
+                                 {:selected?  (= value current-value)
+                                  :image-size image-size
+                                  :on-click   on-click})])]])
 
 (defn lookup-image-option
   [{:keys [key option data validator]}]
@@ -54,5 +56,6 @@
       [error-message {:field-name :root}]]
      [ui/grid {:item true :xs 12}
       [image-options-list {:options       (:options option)
+                           :image-size    (:image-size option)
                            :current-value @lookup-image-data
                            :on-click      handle-option-click}]]]))

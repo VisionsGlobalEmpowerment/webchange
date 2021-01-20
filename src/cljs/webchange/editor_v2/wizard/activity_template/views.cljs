@@ -7,7 +7,8 @@
     [webchange.editor-v2.wizard.activity-template.views-lookup :refer [lookup-option]]
     [webchange.editor-v2.wizard.activity-template.views-lookup-image :refer [lookup-image-option]]
     [webchange.editor-v2.wizard.activity-template.views-pages :refer [pages-option]]
-    [webchange.editor-v2.wizard.activity-template.views-string :refer [string-option]]))
+    [webchange.editor-v2.wizard.activity-template.views-string :refer [string-option]]
+    [webchange.editor-v2.wizard.activity-template.views-strings-list :refer [strings-list-option]]))
 
 (defn- option-info
   [{:keys [option] :as props}]
@@ -18,19 +19,49 @@
     "lookup-image" [lookup-image-option props]
     "pages" [pages-option props]
     "string" [string-option props]
+    "strings-list" [strings-list-option props]
     "questions-no-image" [answers-option props false]
     nil))
 
+(defn- template->options
+  "Support both versions of options declaration:
+   1. {:options [{:key :some-key
+                  ...}]}
+   2. {:options {:some-key {...}}}"
+  [template]
+  (if (sequential? (:options template))
+    (->> (:options template)
+         (map (fn [{:keys [key] :as option}]
+                [key option])))
+    (:options template)))
+
+(defn- check-condition
+  [{:keys [key state value]} data]
+  (case state
+    :not-in (not (some #{(get data key)} value))
+    true))
+
+(defn- filter-options
+  [data options]
+  (->> options
+       (filter (fn [[_ {:keys [conditions]}]]
+                 (if (some? conditions)
+                   (every? #(check-condition % data) conditions)
+                   true)))))
+
 (defn template
   [{:keys [template data validator]}]
-  [ui/grid {:container   true
-            :justify     "space-between"
-            :spacing     24
-            :align-items "center"}
-   (for [[key option] (:options template)]
-     ^{:key key}
-     [ui/grid {:item true :xs 12}
-      [option-info {:key       key
-                    :option    option
-                    :data      data
-                    :validator validator}]])])
+  (let [options (->> template
+                     (template->options)
+                     (filter-options @data))]
+    [ui/grid {:container   true
+              :justify     "space-between"
+              :spacing     24
+              :align-items "center"}
+     (for [[key option] options]
+       ^{:key key}
+       [ui/grid {:item true :xs 12}
+        [option-info {:key       key
+                      :option    option
+                      :data      data
+                      :validator validator}]])]))
