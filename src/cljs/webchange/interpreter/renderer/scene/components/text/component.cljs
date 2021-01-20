@@ -12,18 +12,19 @@
                     :y               {}
                     :text            {}
                     :font-family     {:default "Liberation Sans"}
-                    :font-size       {:default 12}
+                    :font-size       {}
                     :fill            {:default "#000000"}
                     :shadow-color    {}
                     :shadow-distance {:default 5}
                     :shadow-blur     {}
                     :shadow-opacity  {}
-                    :scale           {:default {:x 1 :y 1}}
+                    :scale           {}
                     :align           {:default "left"}
                     :vertical-align  {:default "bottom"}
                     :font-weight     {:default "normal"}
                     :chunks          {}
                     :width           {:default 0}
+                    :word-wrap       {:default false}
                     :height          {:default 0}
                     :on-click        {}
                     :ref             {}})
@@ -60,15 +61,22 @@
     "middle" (aset (.-anchor text) "y" 0.5)
     "bottom" (aset (.-anchor text) "y" 1)))
 
+(defn set-scale
+  [object scale]
+  (when (some? scale)
+    (utils/set-scale object scale)))
+
 (defn- create-text
-  [{:keys [text font-family font-size font-weight fill scale] :as props}]
+  [{:keys [text font-family font-size font-weight fill scale width word-wrap] :as props}]
   (let [position (calculate-position props)]
-    (doto (Text. text (clj->js {:fontSize   font-size
-                                :fontFamily font-family
-                                :fontWeight font-weight
-                                :fill       fill}))
+    (doto (Text. text (clj->js (cond-> {:fontFamily    font-family
+                                        :fontWeight    font-weight
+                                        :fill          fill}
+                                       (some? font-size) (assoc :fontSize font-size)
+                                       (true? word-wrap) (-> (assoc :wordWrap true)
+                                                             (assoc :wordWrapWidth width)))))
       (utils/set-position position)
-      (utils/set-scale scale)
+      (set-scale scale)
       (set-shadow props)
       (set-align props))))
 

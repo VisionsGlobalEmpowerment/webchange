@@ -142,7 +142,7 @@
                                          (with-group-params)
                                          (with-filter-params)
                                          (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
-                      (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined"))))]
+                      (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined (" name ")"))))]
     (-> object-data
         (filter-extra-props [:actions :states :scene-name :transition :filter-transition]))))
 
