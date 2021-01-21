@@ -41,7 +41,8 @@
                                                          :target "book"}]}}
                :triggers      {:start {:on     "start"
                                        :action "start-scene"}}
-               :metadata      {:autostart true}
+               :metadata      {:autostart  true
+                               :stage-size :contain}
                :audio         {}})
 
 

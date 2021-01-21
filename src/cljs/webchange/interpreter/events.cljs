@@ -1214,7 +1214,13 @@
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
-       :dispatch-n (list [::load-scene scene-id])})))
+       :dispatch-n (list [::load-scene scene-id]
+                         [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))])})))
+
+(re-frame/reg-event-fx
+  ::set-stage-size
+  (fn [{:keys [db]} [_ stage-size]]
+    {:db (assoc-in db [:stage-size] stage-size)}))
 
 (re-frame/reg-event-fx
   ::reset-scene-flows
@@ -1233,7 +1239,8 @@
     (let [current-scene (:current-scene db)
           merged-scene (merge-with-templates db scene)]
       {:db (cond-> (assoc-in db [:scenes scene-id] merged-scene)
-                   (= current-scene scene-id) (assoc :current-scene-data merged-scene))})))
+                   (= current-scene scene-id) (assoc :current-scene-data merged-scene))
+       :dispatch [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))]})))
 
 (re-frame/reg-event-fx
   ::set-scenes-data
