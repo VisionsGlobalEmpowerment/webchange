@@ -2,7 +2,9 @@
   (:require
     [clojure.string :refer [join]]))
 
-(def cover-name "page-cover")
+(def page-name "page-cover")
+
+(def resources [])
 
 (def template
   {:page-cover            {:type       "group"
@@ -46,59 +48,56 @@
                            :text           "---"}})
 
 (defn- apply-page-size
-  [template {:keys [width height]}]
+  [page-data {:keys [width height]}]
   (let [page-center (/ width 2)]
-    (-> template
+    (-> page-data
         (assoc-in [:page-cover-background :width] width)
         (assoc-in [:page-cover-background :height] height)
         (assoc-in [:page-cover-title :x] page-center)
         (assoc-in [:page-cover-image :x] page-center))))
 
 (defn- set-layout
-  [template {:keys [layout]}]
+  [page-data {:keys [layout]}]
   (let [title-top-y 150
         title-bottom-y 750
         image-top-y 350
         image-bottom-y 650]
     (case layout
-      :title-top (-> template
+      :title-top (-> page-data
                      (assoc-in [:page-cover-title :y] title-top-y)
                      (assoc-in [:page-cover-image :y] image-bottom-y))
-      :title-bottom (-> template
+      :title-bottom (-> page-data
                         (assoc-in [:page-cover-title :y] title-bottom-y)
                         (assoc-in [:page-cover-image :y] image-top-y)))))
 
 (defn- set-content
-  [template {:keys [image-src title authors]}]
+  [page-data {:keys [image-src title authors]}]
   (let [authors-text (join "     " authors)]
-    (-> template
+    (-> page-data
         (assoc-in [:page-cover-image :src] image-src)
         (assoc-in [:page-cover-title-text :text] title)
         (assoc-in [:page-cover-authors :text] authors-text))))
 
 (defn- set-colors
-  [template {:keys [background-color text-color]
-             :or   {background-color 0xff9800
-                    text-color       0x000000}}]
-  (-> template
+  [page-data {:keys [background-color text-color]}]
+  (-> page-data
       (assoc-in [:page-cover-title-text :fill] text-color)
       (assoc-in [:page-cover-authors :fill] text-color)
       (assoc-in [:page-cover-background :fill] background-color)))
 
 (defn create
-  "props:
+  "content-params:
      :layout - `:title-top` or `:title-bottom`
      :image-src - cover image url
      :title - book title
      :authors - array of authors
      :background-color (default=0xff9800)
      :text-color (default=0x000000)"
-  [props]
-  (let [page-size {:width  880
-                   :height 1080}]
-    {:name    cover-name
-     :objects (-> template
-                  (apply-page-size page-size)
-                  (set-layout props)
-                  (set-content props)
-                  (set-colors props))}))
+  [page-params content-params]
+  {:name      page-name
+   :resources resources
+   :objects   (-> template
+                  (apply-page-size page-params)
+                  (set-layout content-params)
+                  (set-content content-params)
+                  (set-colors page-params))})

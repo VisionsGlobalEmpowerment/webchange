@@ -35,8 +35,9 @@
   (= right 0))
 
 (defn- last-spread?
-  [state {:keys [left]}]
-  (= left (-> (:pages state) (count) (dec))))
+  [state {:keys [right]}]
+  (or (= right (-> (:pages state) (count) (dec)))
+      (not (some? right))))
 
 (defn- flip
   [state direction on-end]

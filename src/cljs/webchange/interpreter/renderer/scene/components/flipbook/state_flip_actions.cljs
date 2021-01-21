@@ -119,7 +119,6 @@
 
           next-left-initial-position (+ (:x right-page-position) (:width page-size))
           next-left-destination-position (:x left-page-position)]
-
       (set-z-indexes {:current current-spread
                       :next    next-spread}
                      {:current {:left  0
