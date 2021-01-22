@@ -40,23 +40,23 @@
                                                                 {:src   "/images/templates/page_layout/text_small_at_bottom.png"
                                                                  :value :text-small-at-bottom}
                                                                 {:src   "/images/templates/page_layout/only_image.png"
-                                                                 :value :only-image}
+                                                                 :value :image-only}
                                                                 {:src   "/images/templates/page_layout/text_at_top.png"
                                                                  :value :text-at-top}
                                                                 {:src   "/images/templates/page_layout/text_full_page.png"
-                                                                 :value :only-text}]}
+                                                                 :value :text-only}]}
                                                   {:key        :text
                                                    :type       "string"
                                                    :label      "Text"
                                                    :conditions [{:key   :layout
                                                                  :state :not-in
-                                                                 :value [:only-image]}]}
+                                                                 :value [:image-only]}]}
                                                   {:key        :image
                                                    :type       "image"
                                                    :label      "Image"
                                                    :conditions [{:key   :layout
                                                                  :state :not-in
-                                                                 :value [:only-text]}]}]}}})
+                                                                 :value [:text-only]}]}]}}})
 
 (def page-params {:width            960
                   :height           1080

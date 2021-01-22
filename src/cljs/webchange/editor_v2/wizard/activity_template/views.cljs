@@ -37,8 +37,9 @@
 
 (defn- check-condition
   [{:keys [key state value]} data]
-  (case state
-    :not-in (not (some #{(get data key)} value))
+  (case (keyword state)
+    :not-in (let []
+              (not (some #{(get data key)} value)))
     true))
 
 (defn- filter-options
@@ -46,7 +47,7 @@
   (->> options
        (filter (fn [[_ {:keys [conditions]}]]
                  (if (some? conditions)
-                   (every? #(check-condition % data) conditions)
+                   (every? (fn [condition] (check-condition condition data)) conditions)
                    true)))))
 
 (defn template
