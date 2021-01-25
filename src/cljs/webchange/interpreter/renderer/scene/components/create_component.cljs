@@ -54,7 +54,7 @@
      (when (container-component? type)
        (let [group-instance (:container component-wrapper)
              children (case type
-                        "flipbook" (:pages modified-props)
+                        "flipbook" (->> (:pages modified-props) (map first))
                         (:children modified-props))]
          (doseq [child children]
            (create-component mode (assoc child :parent group-instance)))))

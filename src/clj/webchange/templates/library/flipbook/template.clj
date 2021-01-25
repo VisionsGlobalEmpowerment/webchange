@@ -1,5 +1,6 @@
 (ns webchange.templates.library.flipbook.template
   (:require
+    [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
     [webchange.templates.library.flipbook.credits :as credits]
@@ -65,22 +66,46 @@
                   :border-color     0xe46a02
                   :text-color       0x000000})
 
+
+(defn- get-action-data
+  [{:keys [action-name text-name text-value]}]
+  {:type               "sequence-data"
+   :editor-type        "dialog"
+   :concept-var        "current-word"
+   :data               [{:type "sequence-data"
+                         :data [{:type "empty" :duration 0}
+                                {:data        []
+                                 :type        "text-animation"
+                                 :audio       nil,
+                                 :target      text-name
+                                 :animation   "bounce"
+                                 :phrase-text text-value}]}]
+   :phrase             action-name
+   :phrase-description "Page Action"})
+
 (defn- add-page-to-book
-  [activity-data {:keys [name resources objects]}]
-  (-> activity-data
-      (update :assets concat resources)
-      (update :objects merge objects)
-      (update-in [:objects :book :pages] conj name)))
+  [activity-data {:keys [with-action?]} {:keys [name resources objects text-name]}]
+  (let [action-name (str name "-action")
+        action-data (get-action-data {:action-name action-name
+                                      :text-name   text-name
+                                      :text-value (get-in objects [(keyword text-name) :text])})
+        page-data (cond-> {:object name}
+                          with-action? (assoc :action action-name))]
+    (cond-> (-> activity-data
+                (update :assets concat resources)
+                (update :objects merge objects)
+                (update-in [:objects :book :pages] conj page-data))
+            with-action? (update :actions merge (assoc {} (keyword action-name) action-data)))))
 
 (defn- add-page
   ([activity-data page-constructor]
    (add-page activity-data page-constructor {}))
   ([activity-data page-constructor content-data]
    (->> (page-constructor page-params content-data)
-        (add-page-to-book activity-data))))
+        (add-page-to-book activity-data content-data))))
 
 (defn create-activity
-  [{:keys [authors illustrators cover-layout cover-image cover-title] :as props}]
+  [{:keys [authors illustrators cover-layout cover-image cover-title]}]
   (let []
     (-> (get-template page-params)
         (add-page front-cover/create {:layout    (keyword cover-layout)
@@ -96,9 +121,10 @@
 (defn update-activity
   [activity-data {:keys [layout image text]}]
   (-> activity-data
-      (add-page custom-page/create {:page-type (keyword layout)
-                                    :image-src (:src image)
-                                    :text      text})))
+      (add-page custom-page/create {:page-type    (keyword layout)
+                                    :image-src    (:src image)
+                                    :text         text
+                                    :with-action? true})))
 
 (core/register-template
   (:id metadata) metadata create-activity update-activity)

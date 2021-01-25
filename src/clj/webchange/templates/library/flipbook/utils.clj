@@ -39,3 +39,11 @@
                (assoc (keyword target-name) data))
            (concat rest-que to-rename)))
        result-template))))
+
+(defn get-text-name
+  [template]
+  (->> template
+       (filter (fn [[_ {:keys [type]}]] (= type "text")))
+       (map first)
+       (first)
+       (clojure.core/name)))

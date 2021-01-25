@@ -65,12 +65,14 @@
                                    (filter-extra-props [:width :height])))
                       :flipbook (let [group-params (with-group-params object)
                                       pages-params (->> (:pages object)
-                                                        (map (fn [name] (prepare-object-data name scene-id get-data)))
-                                                        (map (fn [page-params]
-                                                               (-> page-params
-                                                                   (assoc :visible false)
-                                                                   (dissoc :x)
-                                                                   (dissoc :y))))
+                                                        (map (fn [{:keys [object action]}]
+                                                               [(prepare-object-data object scene-id get-data) action]))
+                                                        (map (fn [[object-params action]]
+                                                               [(-> object-params
+                                                                    (assoc :visible false)
+                                                                    (dissoc :x)
+                                                                    (dissoc :y))
+                                                                action]))
                                                         (remove nil?))]
                                   (-> (merge object
                                              group-params
@@ -142,7 +144,8 @@
                                          (with-group-params)
                                          (with-filter-params)
                                          (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
-                      (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined (" name ")"))))]
+                      (do (print "object" object)
+                          (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined (" name ")" )))))]
     (-> object-data
         (filter-extra-props [:actions :states :scene-name :transition :filter-transition]))))
 

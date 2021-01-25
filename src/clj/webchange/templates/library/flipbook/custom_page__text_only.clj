@@ -1,6 +1,7 @@
 (ns webchange.templates.library.flipbook.custom-page--text-only
   (:require
-    [webchange.templates.library.flipbook.utils :as utils]))
+    [webchange.templates.library.flipbook.utils :as utils]
+    [webchange.utils.text :as text-utils]))
 
 (def template
   {:page                 {:type       "group"
@@ -15,6 +16,8 @@
    :page-text            {:type           "text"
                           :word-wrap      true
                           :vertical-align "top"
+                          :font-size      38
+                          :chunks         "---"
                           :x              "---"
                           :y              "---"
                           :width          "---"
@@ -42,17 +45,20 @@
 (defn- set-content
   [page-data {:keys [text]}]
   (-> page-data
-      (assoc-in [:page-text :text] text)))
+      (assoc-in [:page-text :text] text)
+      (assoc-in [:page-text :chunks] (text-utils/text->chunks text))))
 
 (defn create
   "content-params:
      :text - book title"
   [page-params {:keys [image-src] :as content-params}]
-  (let [page-name (utils/generate-name "page")]
+  (let [page-name (utils/generate-name "page")
+        objects-data (-> template
+                         (apply-page-size page-params)
+                         (set-colors page-params)
+                         (set-content content-params)
+                         (utils/rename-object "page" page-name))]
     {:name      page-name
+     :text-name (utils/get-text-name objects-data)
      :resources [image-src]
-     :objects   (-> template
-                    (apply-page-size page-params)
-                    (set-colors page-params)
-                    (set-content content-params)
-                    (utils/rename-object "page" page-name))}))
+     :objects   objects-data}))

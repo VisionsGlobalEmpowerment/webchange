@@ -1,8 +1,13 @@
 (ns webchange.interpreter.renderer.scene.components.flipbook.utils
   (:require
     [re-frame.core :as re-frame]
+    [webchange.common.events :as executor]
     [webchange.interpreter.renderer.scene.components.flipbook.state-flip-actions :as flipbook-state]
     [webchange.interpreter.renderer.state.scene :as scene-state]))
+
+(defn execute-action
+  [action]
+  (re-frame/dispatch [::executor/execute-action action]))
 
 (defn flip-page
   [props]
