@@ -721,6 +721,7 @@
           states (get object :states)
           states-with-aliases (reduce-kv (fn [m k v] (assoc m k (get states (keyword v)))) states (get object :states-aliases))
           state (merge (get states-with-aliases (keyword id)) params)]
+      (println "::execute-state" target id params action object states state)
       {:db         (update-in db [:scenes scene-id :objects (keyword target)] merge state)
        :dispatch-n (list [::scene/set-scene-object-state (keyword target) state]
                          (ce/success-event action))})))

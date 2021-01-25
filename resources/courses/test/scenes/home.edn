@@ -1,365 +1,147 @@
 {:assets
-                [{:url "/raw/audio/background/Casa.mp3", :size 10, :type "audio"}
-                 {:url "/raw/audio/l1/a1/mari.m4a", :size 1, :type "audio" :alias "mari" :target "mari"}
-                 {:url "/raw/audio/l1/a1/vera-casa-1.mp3", :size 2, :type "audio" :alias "vera 1" :target "vera"}
-                 {:url "/raw/audio/l1/a1/vera-casa-2.mp3", :size 2, :type "audio" :alias "vera 2" :target "vera"}
-                 {:url "/raw/audio/l1/a1/vera-casa-3.mp3", :size 2, :type "audio" :alias "vera 3" :target "vera"}
-                 {:url "/raw/audio/effects/correct.mp3", :size 1, :type "audio"}
-                 {:url "/raw/audio/effects/incorrect.mp3", :size 1, :type "audio"}
-                 {:url "/raw/audio/effects/box-appear.mp3", :size 1, :type "audio"}
-
-                 {:url "/raw/img/casa/background.jpg", :size 10 :type "image"}
-                 {:url "/raw/img/casa_door.png", :size 1, :type "image"}
-
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a", :size 2, :type "audio" :alias "vaca voice 1" :target "vaca"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a", :size 2, :type "audio" :alias "vaca voice 2" :target "vaca"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a", :size 2, :type "audio" :alias "vaca voice 3" :target "vaca"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Diamente.m4a", :size 2, :type "audio" :alias "vaca voice diamante" :target "vaca"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_1_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 1" :target "vaca"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_2_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 2" :target "vaca"}
-                 {:url "/raw/audio/l1/a1/L1_A1_Vaca_Object_3_insertions.m4a", :size 2, :type "audio" :alias "vaca insertions 3" :target "vaca"}
+                [{:url "/raw/img/onset-and-rime/background.jpg", :size 10 :type "image"}
+                 {:url "/raw/img/onset-and-rime/cloud.png", :size 1, :type "image"}
                  ],
  :objects
-                {:background   {:type "background", :src "/raw/img/casa/background.jpg"},
-                 :vera         {:type  "animation" :x 1128 :y 960 :name "vera" :anim "idle" :speed 0.3
-                                :width 1800 :height 2558 :scale {:x 0.2 :y 0.2} :start true}
-                 :senora-vaca  {:type    "animation" :x 655 :y 960 :name "senoravaca" :anim "idle" :speed 0.3 :skin "vaca"
-                                :width   351 :height 717 :scale {:x 1 :y 1} :start true
-                                :actions {:click {:type "action" :id "restart" :on "click"}}}
+                {:background       {:type "background", :src "/raw/img/onset-and-rime/background.jpg"},
+                 :senora-vaca      {:type    "animation" :x 1100 :y 970 :name "senoravaca" :anim "idle" :speed 0.3 :skin "vaca"
+                                    :scale-x 0.75 :scale-y 0.75 :start true
+                                    }
+                 :cloud-left-img   {:type   "image"
+                                    :src    "/raw/img/onset-and-rime/cloud.png"
+                                    :x      0
+                                    :states {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                    :y      0}
+                 :cloud-left-text  {:type           "text"
+                                    :text           "c"
+                                    :x              250
+                                    :y              180
+                                    :align          "center"
+                                    :vertical-align "bottom"
+                                    :font-family    "Lexend Deca"
+                                    :font-size      110
+                                    :fill           "black"}
+                 :cloud-left       {:type       "group"
+                                    :x          100
+                                    :y          100
+                                    :transition "cloud-left"
+                                    :children   ["cloud-left-img" "cloud-left-text"]
+                                    :actions    {:click {:type   "action"
+                                                         :id     "cloud-left-clicked"
+                                                         :on     "click"
+                                                         :params {:target "cloud-left"}
+                                                         }}
+                                    },
 
-                 :mari         {:type    "animation" :scene-name "mari" :name "mari" :anim "idle"
-                                :start   true :speed 0.35 :transition "mari"
-                                :x       2200 :y 311 :width 473 :height 511 :anim-offset {:x 0 :y -150}
-                                :scale-y 0.5 :scale-x 0.5}
+                 :cloud-right-img  {:type       "image"
+                                    :src        "/raw/img/onset-and-rime/cloud.png"
+                                    :transition "cloud-right-img"
+                                    :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                    :x          0
+                                    :y          0}
+                 :cloud-right-text {:type           "text"
+                                    :text           "at"
+                                    :x              250
+                                    :y              180
+                                    :align          "center"
+                                    :vertical-align "bottom"
+                                    :font-family    "Lexend Deca"
+                                    :font-size      110
+                                    :fill           "black"}
+                 :cloud-right      {:type       "group"
+                                    :x          1300
+                                    :y          100
+                                    :transition "cloud-right"
+                                    :children   ["cloud-right-img" "cloud-right-text"]
+                                    :actions    {:click {:type   "action"
+                                                         :id     "cloud-right-clicked"
+                                                         :on     "click"
+                                                         :params {:target "cloud-right"}
+                                                         }}
+                                    }
+                 }
+ :scene-objects [["background"] ["senora-vaca"] ["cloud-left" "cloud-right"]],
+ :actions       {
+                 :sync-highlightion           {:type "sequence-data"
+                                               :data [{:type     "state" :id "highlighted"
+                                                       :from-var [{:template "%-img" :var-name "next-cloud" :action-property "target"}]}
+                                                      {:type     "state" :id "not-highlighted"
+                                                       :from-var [{:template "%-img" :var-name "prev-cloud" :action-property "target"}]}
+                                                      ]}
+                 :init-vars                   {:type "sequence-data"
+                                               :data [{:type "set-variable" :var-name "cloud-left-x" :var-value 100}
+                                                      {:type "set-variable" :var-name "cloud-right-x" :var-value 1300}
+                                                      {:type "set-variable" :var-name "next-cloud" :var-value "cloud-left"}
+                                                      {:type "set-variable" :var-name "prev-cloud" :var-value "cloud-right"}
+                                                      ]}
+                 :update-left                 {:type "sequence-data"
+                                               :data [{:type     "calc" :var-name "cloud-left-x" :operation "plus" :value-1 140
+                                                       :from-var [{:var-name "cloud-left-x" :action-property "value-2"}]}
+                                                      {:type "set-variable" :var-name "next-cloud" :var-value "cloud-right"}
+                                                      {:type "set-variable" :var-name "prev-cloud" :var-value "cloud-left"}
+                                                      ]}
+                 :update-right                {:type "sequence-data"
+                                               :data [{:type     "calc" :var-name "cloud-right-x" :operation "plus" :value-1 -140
+                                                       :from-var [{:var-name "cloud-right-x" :action-property "value-2"}]}
+                                                      {:type "set-variable" :var-name "next-cloud" :var-value "cloud-left"}
+                                                      {:type "set-variable" :var-name "prev-cloud" :var-value "cloud-right"}
+                                                      ]}
+                 :animate-clouds              {:type "sequence-data"
+                                               :data [
+                                                      {:type          "transition"
+                                                       :transition-id "cloud-left"
+                                                       :to            {:duration 1}
+                                                       :from-var      [{:var-name "cloud-left-x" :action-property "to.x"}]
+                                                       }
+                                                      {:type          "transition"
+                                                       :transition-id "cloud-right"
+                                                       :to            {:duration 1}
+                                                       :from-var      [{:var-name "cloud-right-x" :action-property "to.x"}]
+                                                       }
+                                                      {:type "action" :id "sync-highlightion"}
+                                                      ]}
+                 :cloud-left-clicked          {:type        "test-var-scalar",
+                                               :success     "cloud-left-clicked-correct",
+                                               :fail        "shake",
+                                               :var-name    "next-cloud"
+                                               :from-params [{:param-property "target", :action-property "value"}]}
 
-                 :door         {:type   "image" :x 1146 :y 42 :width 732 :height 810 :src "/raw/img/casa/door.png"
-                                :filter "brighten" :transition "door"}
-
-                 :door-trigger {:type    "transparent" :x 1146 :y 42 :width 732 :height 810
-                                :actions {:click {:type "action", :id "exit", :on "click"}}}
-
-                 :box1         {:type       "transparent"
-                                :x 505 :y 375
-                                :width 772 :height 1032
-                                :scale {:x 0.3 :y 0.3}
-                                :origin {:type "center-center"}
-                                :scene-name "box1"
-                                :transition "box1"
-                                :states     {:default {:type "transparent"}
-                                             :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :speed 0.3 :loop false :start true}}
-                                :actions    {:click {:type "action" :id "click-on-box1" :on "click"}}}
-
-                 :box2         {:type       "transparent"
-                                :x 955 :y 375
-                                :width 772 :height 1032
-                                :scale {:x 0.3 :y 0.3}
-                                :origin {:type "center-center"}
-                                :scene-name "box2" :transition "box2"
-                                :states     {:default {:type "transparent"}
-                                             :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :speed 0.3 :loop false :start true}}
-                                :actions    {:click {:type "action" :id "click-on-box2" :on "click"}}}
-
-                 :box3         {:type       "transparent"
-                                :x 1405 :y 375
-                                :width 772 :height 1032
-                                :scale {:x 0.3 :y 0.3}
-                                :origin {:type "center-center"}
-                                :scene-name "box3" :transition "box3"
-                                :states     {:default {:type "transparent"}
-                                             :visible {:type  "animation" :name "boxes" :anim "come" :skin "qwestion"
-                                                       :speed 0.3 :loop false :start true}}
-                                :actions    {:click {:type "action" :id "click-on-box3" :on "click"}}}
-
-                 },
- :scene-objects [["background" "door"] ["vera" "senora-vaca" "mari"] ["door-trigger"] ["box1" "box2" "box3"]],
- :actions
-                {:senora-vaca-audio-1 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 1.089
-                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 1.089, :duration 2.749
-                                       :data [{:start 1.089 :end 3.596 :anim "talk"}]
-                                       :phrase             :intro
-                                       :phrase-description "Introduce activity"
-                                       :phrase-text "Vamos a aprender nuevas palabras.",}
-
-                 :senora-vaca-audio-2 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 4.395
-                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 4.395, :duration 10.042
-                                       :data [{:start 4.395 :end 5.484 :anim "talk"}
-                                              {:start 6.423 :end 8.745 :anim "talk"}
-                                              {:start 9.607 :end 10.342 :anim "talk"}
-                                              {:start 11.226 :end 14.302 :anim "talk"}]
-                                       :phrase             :touch-first-box
-                                       :phrase-description "Touch the first box"
-                                       :phrase-text        "Mira esto! Que podria estar dentro de las cajas? Vamos a ver adentro! Toca la primera caja par ver que hay adentro.",}
-
-                 :senora-vaca-audio-touch-second-box
-                                      {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.587
-                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Oso.m4a" :start 0.587, :duration 8.772
-                                       :data [{:start 0.873 :end 2.053 :anim "talk"}
-                                              {:start 2.794 :end 4.952 :anim "talk"}
-                                              {:start 5.336 :end 6.67 :anim "talk"}
-                                              {:start 7.697 :end 9.136 :anim "talk"}]
-                                       :phrase             :touch-second-box
-                                       :phrase-description "Touch the second box"
-                                       :phrase-text        "Muy bien! Vamos a ver que hay dentro de la segunda caja. Toco la siguiente caja para ver que hay adentro.",}
-
-                 :senora-vaca-audio-touch-third-box
-                                      {:type "animation-sequence" :target "senoravaca" :track 1 :offset 0.76
-                                       :audio "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a" :start 0.76, :duration 4.986
-                                       :data [{:start 0.844 :end 1.844 :anim "talk"}
-                                              {:start 2.214 :end 2.733 :anim "talk"}
-                                              {:start 2.928 :end 5.674 :anim "talk"}]
-                                       :phrase             :touch-third-box
-                                       :phrase-description "Touch the third box"
-                                       :phrase-text "Muy bien! Ahora hay que ver dentro de la tercera caja. Toca la ultima caja para ver que hay adentro.",}
-
-                 :show-boxes                       {:type "parallel"
-                                                    :data [{:type "state" :target "box1" :id "visible"}
-                                                           {:type "state" :target "box2" :id "visible"}
-                                                           {:type "state" :target "box3" :id "visible"}
-                                                           #_{:type "audio" :id "/raw/audio/effects/box-appear.mp3" :start 0 :duration 0.527}]}
-
-                 :switch-box-animations-idle       {:type "parallel"
-                                                    :data [{:type "add-animation" :target "box1" :id "idle_fly1" :loop true}
-                                                           {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}
-                                                           {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
-
-                 :wait-for-box-animations          {:type "empty" :duration 500}
-
-                 :intro                            {:type "sequence",
-                                                    :data ["empty-big"
-                                                           "start-activity"
-                                                           "renew-words"
-                                                           "senora-vaca-audio-1"
-                                                           "show-boxes"
-                                                           "wait-for-box-animations"
-                                                           "switch-box-animations-idle"
-                                                           "senora-vaca-audio-2"
-                                                           "set-current-box1"
-                                                           ]},
-
-                 :set-current-box1                 {:type "set-variable" :var-name "current-box" :var-value "box1"}
-                 :set-current-box2                 {:type "set-variable" :var-name "current-box" :var-value "box2"}
-                 :set-current-box3                 {:type "set-variable" :var-name "current-box" :var-value "box3"}
-
-                 :click-on-box1                    {:type     "test-var-scalar"
-                                                    :var-name "current-box"
-                                                    :value    "box1"
-                                                    :success  "first-word"
-                                                    :fail     "pick-wrong"}
-
-                 :click-on-box2                    {:type     "test-var-scalar"
-                                                    :var-name "current-box"
-                                                    :value    "box2"
-                                                    :success  "second-word"
-                                                    :fail     "pick-wrong"}
-
-                 :click-on-box3                    {:type     "test-var-scalar"
-                                                    :var-name "current-box"
-                                                    :value    "box3"
-                                                    :success  "third-word"
-                                                    :fail     "pick-wrong"}
-
-                 :first-word                       {:type "sequence"
-                                                    :data ["show-first-box-word"
-                                                           "introduce-word"
-                                                           "bye-current-box"
-                                                           "set-current-box2"
-                                                           "senora-vaca-audio-touch-second-box"]
-                                                    :unique-tag "box"}
-
-                 :second-word                      {:type "sequence"
-                                                    :data ["show-second-box-word"
-                                                           "introduce-word"
-                                                           "bye-current-box"
-                                                           "set-current-box3"
-                                                           "senora-vaca-audio-touch-third-box"]
-                                                    :unique-tag "box"}
-
-                 :third-word                       {:type "sequence"
-                                                    :data ["show-third-box-word"
-                                                           "introduce-word"
-                                                           "bye-current-box"
-                                                           "finish-activity"
-                                                           "mari-finish"]
-                                                    :unique-tag "box"}
-
-                 :bye-current-box                    {:type "sequence-data"
-                                                      :data [{:type "parallel"
-                                                              :data [{:type     "animation" :id "jump"
-                                                                      :from-var [{:var-name "current-box" :action-property "target"}]}
-                                                                     {:type     "transition" :to {:y -100 :duration 2}
-                                                                      :from-var [{:var-name "current-box" :action-property "transition-id"}
-                                                                                 {:var-name "current-position-x" :action-property "to.x"}]}]}
-                                                             {:type     "state" :id "default"
-                                                              :from-var [{:var-name "current-box" :action-property "target"}]}]}
-
-                 :show-first-box-word              {:type "parallel"
-                                                    :data [{:type "animation" :target "box1" :id "wood" :loop false}
-                                                           {:type "set-slot" :target "box1" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
-                                                            :from-var [{:var-name "item-1" :action-property "image" :var-property "image-src"}]}
-                                                           {:type "copy-variable" :var-name "current-word" :from "item-1"}
-                                                           {:type "add-animation" :target "box1" :id "idle_fly1" :loop true}]}
-
-                 :show-second-box-word             {:type "parallel"
-                                                    :data [{:type "animation" :target "box2" :id "wood" :loop false}
-                                                           {:type "set-slot" :target "box2" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
-                                                            :from-var [{:var-name "item-2" :action-property "image" :var-property "image-src"}]}
-                                                           {:type "copy-variable" :var-name "current-word" :from "item-2"}
-                                                           {:type "add-animation" :target "box2" :id "idle_fly2" :loop true}]}
-
-                 :show-third-box-word              {:type "parallel"
-                                                    :data [{:type "animation" :target "box3" :id "wood" :loop false}
-                                                           {:type "set-slot" :target "box3" :slot-name "box1" :attachment {:scale-x 4 :scale-y 4 :x 40}
-                                                            :from-var [{:var-name "item-3" :action-property "image" :var-property "image-src"}]}
-                                                           {:type "copy-variable" :var-name "current-word" :from "item-3"}
-                                                           {:type "add-animation" :target "box3" :id "idle_fly3" :loop true}]}
-
-                 :vaca-this-is-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-this-is-action"}]}
-
-                 :vaca-can-you-say                 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 11.75
-                                                    :audio "/raw/audio/l1/a1/L1_A1_Vaca_Iman.m4a" :start 11.75, :duration 0.935
-                                                    :data [{:start 11.75 :end 12.62 :anim "talk"}]
-                                                    :phrase-text "Puedes decir"}
-
-                 :vaca-question-var                {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-question-action"}]}
-
-                 :vaca-word-var                    {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-word-action"}]}
-
-                 :group-word-var                   {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-word-action"}]}
-
-                 :vaca-say-3-times                 {:type "animation-sequence" :target "senoravaca" :track 1 :offset 25.079
-                                                    :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 25.079, :duration 2.381
-                                                    :data [{:start 25.152 :end 25.513 :anim "talk"}
-                                                           {:start 25.853 :end 27.2 :anim "talk"}]
-                                                    :phrase-text "Bueno. Digalo tres veces"}
-
-                 :vaca-3-times-var                 {:type "action" :from-var [{:var-name "current-word" :var-property "home-vaca-3-times-action"}]}
-
-                 :group-3-times-var                {:type "action" :from-var [{:var-name "current-word" :var-property "home-group-3-times-action"}]}
-
-                 :vaca-once-more                   {:type "animation-sequence" :target "senoravaca" :track 1 :offset 37.751
-                                                    :audio "/raw/audio/l1/a1/L1_A1_Vaca_Ardilla.m4a" :start 37.751, :duration 1.187
-                                                    :data [{:start 37.751 :end 38.792 :anim "talk"}]
-                                                    :phrase-text "Una vez mas!"}
-
-                 :vaca-goodbye-var                 {:type "action"
-                                                    :from-var [{:var-name "current-word" :var-property "home-vaca-goodbye-action"}]
-                                                    :phrase                        :concept-goodbye
-                                                    :phrase-description            "Adios concepto"}
-
-                 :introduce-word                   {:type "sequence"
-                                                    :data ["audio-correct"
-                                                           "empty-big"
-                                                           "concept-intro"
-                                                           "empty-big"
-                                                           "concept-chant"
-                                                           "empty-small"
-                                                           "vaca-goodbye-var"
-                                                           "empty-big"]}
-
-                 :concept-intro                      {:type               "sequence"
-                                                      :data               ["vaca-this-is-var"
-                                                                           "empty-small"
-                                                                           "vaca-can-you-say"
-                                                                           "vaca-question-var"
-                                                                           "empty-small"
-                                                                           "vaca-word-var"
-                                                                           "empty-small-1"
-                                                                           "group-word-var"]
-                                                      :phrase             :this-is-concept
-                                                      :phrase-description "Introduce concept"}
-
-                 :concept-chant                      {:type               "sequence"
-                                                      :data               ["vaca-say-3-times"
-                                                                           "vaca-3-times-var"
-                                                                           "empty-big"
-                                                                           "group-3-times-var"
-                                                                           "empty-small-2"
-                                                                           "vaca-once-more"
-                                                                           "empty-small"
-                                                                           "group-3-times-var"
-                                                                           ]
-                                                      :phrase             :concept-chant
-                                                      :phrase-description "Chant concept"}
-
-                 :senora-vaca-anim-idle            {:type "animation" :target "senoravaca" :id "idle"}
-                 :senora-vaca-anim-clapping-start  {:type "animation" :target "senoravaca" :id "clapping_start" :loop false}
-                 :senora-vaca-anim-clapping-finish {:type "animation" :target "senoravaca" :id "clapping_finish" :loop false}
-                 :vera-anim-idle                   {:type "animation" :target "vera" :id "idle"}
-                 :vera-anim-clapping-start         {:type "animation" :target "vera" :id "clapping_start" :loop false}
-                 :vera-anim-clapping-finish        {:type "animation" :target "vera" :id "clapping_finish" :loop false}
-
-
-                 :pick-wrong                       {:type "sequence-data"
-                                                    :data [{:type "audio" :id "/raw/audio/effects/incorrect.mp3" :start 0 :duration 0.527 :phrase-text "Intenta de nuevo!"}]
-                                                    :phrase-description "Wrong answer"}
-
-                 :audio-correct {:type "audio" :id "/raw/audio/effects/correct.mp3" :start 0 :duration 1.71}
-                 :renew-words                      {:type        "lesson-var-provider"
-                                                    :provider-id "words-set"
-                                                    :variables   ["item-1" "item-2" "item-3"]
-                                                    :from        "concepts"}
-
-                 :empty-small                      {:type "empty" :duration 500}
-                 ;; ToDo: eliminate when graph normalizer is fixed
-                 :empty-small-1                      {:type "empty" :duration 500}
-                 :empty-small-2                      {:type "empty" :duration 500}
-
-                 :empty-big                        {:type "empty" :duration 1000}
-                 :clear-instruction                {:type "remove-flows" :flow-tag "instruction"}
-                 :start-background-music           {:type "audio" :id "/raw/audio/background/Casa.mp3" :loop true}
-                 :start-activity                   {:type "start-activity" :id "home"}
-                 :finish-activity                  {:type "finish-activity" :id "home"}
-                 :stop-activity                    {:type "stop-activity" :id "home"}
-                 :exit {:type "sequence-data"
-                        :data [{:type "action" :id "stop-activity"}
-                               {:type "scene" :scene-id "map"}]}
-
-                 :mari-finish                        {:type               "sequence-data",
-                                                      :data
-                                                                          [{:to {:x 1403, :y 657, :duration 1.3}, :type "transition", :transition-id "mari"}
-                                                                           {:offset   0.745,
-                                                                            :phrase-text
-                                                                                      "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad.",
-                                                                            :start    0.745,
-                                                                            :type     "animation-sequence",
-                                                                            :duration 22.05,
-                                                                            :audio    "/raw/audio/l1/a1/mari.m4a",
-                                                                            :target   "mari",
-                                                                            :phrase-text-translated
-                                                                                      "Tremendo trabajo pequeno genio! Quieres ver que hay dentro de la cajas otra vez? Toca a la Senora Vaca para poder ver adentro. Si no, toca a la puerta para ir al parque a tu proxima actividad.",
-                                                                            :track    1,
-                                                                            :data
-                                                                                      [{:end 3.11, :anim "talk", :start 0.85}
-                                                                                       {:end 6.59, :anim "talk", :start 3.6}
-                                                                                       {:end 10.22, :anim "talk", :start 7.51}
-                                                                                       {:end 16.01, :anim "talk", :start 10.7}
-                                                                                       {:end 16.51, :anim "talk", :start 16.19}
-                                                                                       {:end 18.61, :anim "talk", :start 17.23}
-                                                                                       {:end 22.56, :anim "talk", :start 19.04}]}
-                                                                           {:type "set-variable", :var-name "restart", :var-value true}],
-                                                      :phrase             "finish-activity",
-                                                      :phrase-description "Repeat or go to the next activity"},
-
-                 :restart                          {:type     "test-value"
-                                                    :value1   true
-                                                    :from-var [{:var-name "restart" :action-property "value2"}]
-                                                    :success  {:type "sequence-data"
-                                                               :data [{:type "set-variable" :var-name "restart" :var-value false}
-                                                                      {:type          "transition",
-                                                                       :transition-id "mari",
-                                                                       :to            {:x 2200 :y 311, :duration 1.3}}
-                                                                      {:type "clear-vars"}
-                                                                      {:type "parallel"
-                                                                       :data [{:type "state" :target "box1" :id "default"}
-                                                                              {:type "state" :target "box2" :id "default"}
-                                                                              {:type "state" :target "box3" :id "default"}]}
-                                                                      {:type "action" :id "intro"}]}}
+                 :cloud-left-clicked-correct {:type "sequence-data"
+                                               :data [{:type "action" :id "update-left"}
+                                                      {:type "action" :id "animate-clouds"}]}
+                 :shake-step                  {:type "sequence-data"
+                                               :data [
+                                                      {:type        "transition",
+                                                       :from-var    [{:var-name        "cloud-right-x"
+                                                                      :action-property "to.x"
+                                                                      :offset          10}]
+                                                       :to          {:loop true, :duration 0.1},
+                                                       :from-params [{:param-property "target", :action-property "transition-id"}]
+                                                       }
+                                                      {:type "empty" :duration 500}
+                                                      {:type        "stop-transition",
+                                                       :from-params [{:param-property "target", :action-property "id"}]
+                                                       }
+                                                      {:type "empty" :duration 50}
+                                                      ]}
+                 :shake                       {:type "sequence-data"
+                                               :data [
+                                                      {:type "action" :id "shake-step"}
+                                                      ]}
+                 :cloud-right-clicked         {:type        "test-var-scalar",
+                                               :success     "cloud-right-clicked-correct",
+                                               :fail        "shake",
+                                               :var-name    "next-cloud"
+                                               :from-params [{:param-property "target", :action-property "value"}]}
+                 :cloud-right-clicked-correct {:type "sequence-data"
+                                               :data [{:type "action" :id "update-right"}
+                                                      {:type "action" :id "animate-clouds"}]}
+                 :init-scene                  {:type "sequence-data"
+                                               :data [{:type "action" :id "init-vars"}
+                                                      {:type "action" :id "sync-highlightion"}
+                                                      ]}
                  }
 
- :triggers      {:music {:on "start" :action "start-background-music"}
-                 :back  {:on "back" :action "stop-activity"}
-                 :start {:on "start" :action "intro"}}
- :metadata      {:autostart true
-                 :prev      "map"}}
+ :triggers      {:start {:on "start" :action "init-scene"}}
+ :metadata      {}
+ }
