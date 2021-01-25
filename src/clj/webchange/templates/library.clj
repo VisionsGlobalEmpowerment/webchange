@@ -22,6 +22,7 @@
     [webchange.templates.library.categorize]
     [webchange.templates.library.categorize-hard]
     [webchange.templates.library.conversation]
+    [webchange.templates.library.rhyme]
     [webchange.templates.library.writing-lesson]
     [webchange.templates.library.categorize.template]
     [webchange.templates.library.running]))
