@@ -44,7 +44,7 @@
                                  (assoc :object-name (keyword name))
                                  (with-group-params)
                                  (with-filter-params)
-                                 (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
+                                 (filter-extra-props [:actions :brightness :filter :highlight :eager]))
                       :questions (-> object
                                      (assoc :object-name (keyword name))
                                      (with-group-params)

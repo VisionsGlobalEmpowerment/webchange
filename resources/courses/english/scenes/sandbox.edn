@@ -115,8 +115,6 @@
                              {:type    "image",
                               :x       1120,
                               :y       500,
-                              :width   287,
-                              :height  430,
                               :scale-x 1,
                               :scale-y 1,
                               :src     "/raw/img/casa/painting_canvas.png"},

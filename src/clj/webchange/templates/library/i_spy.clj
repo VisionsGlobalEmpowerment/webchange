@@ -160,24 +160,18 @@
                         :icon-1       {:type       "image",
                                        :x          700,
                                        :y          940,
-                                       :width      72,
-                                       :height     72,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/bakery_02.png"}
                         :icon-2       {:type       "image",
                                        :x          812,
                                        :y          960,
-                                       :width      72,
-                                       :height     32.62,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/car_plate_02.png"}
                         :icon-3       {:type       "image",
                                        :x          924,
                                        :y          957,
-                                       :width      72,
-                                       :height     38.04,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/hat_02.png"}
@@ -192,8 +186,6 @@
                         :icon-5       {:type       "image",
                                        :x          1148,
                                        :y          942,
-                                       :width      72,
-                                       :height     67.62,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/newspaper_02.png"}
@@ -207,8 +199,6 @@
                         :icon-br-im-1 {:type       "image",
                                        :x          700,
                                        :y          940,
-                                       :width      72,
-                                       :height     72,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/bakery_01.png"
@@ -255,8 +245,6 @@
                         :icon-br-im-2 {:type       "image",
                                        :x          812,
                                        :y          960,
-                                       :width      72,
-                                       :height     32.62,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/car_plate_01.png"}
@@ -286,8 +274,6 @@
                         :icon-br-im-3 {:type       "image",
                                        :x          924,
                                        :y          957,
-                                       :width      72,
-                                       :height     38.04,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/hat_01.png"}
@@ -320,8 +306,6 @@
                         :icon-br-im-4 {:type       "image",
                                        :x          1036,
                                        :y          966,
-                                       :width      72,
-                                       :height     19.36,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/fire_station_01.png"}
@@ -351,8 +335,6 @@
                         :icon-br-im-5 {:type       "image",
                                        :x          1148,
                                        :y          942,
-                                       :width      72,
-                                       :height     67.62,
                                        :transition "door",
                                        :filter     "brighten",
                                        :src        "/raw/img/i-spy/icons/newspaper_01.png"}

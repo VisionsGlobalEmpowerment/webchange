@@ -144,8 +144,6 @@
                  {:type       "image",
                   :x          1096,
                   :y          142,
-                  :width      732,
-                  :height     810,
                   :transition "door",
                   :filter     "brighten",
                   :src        "/raw/img/casa/door.png"},

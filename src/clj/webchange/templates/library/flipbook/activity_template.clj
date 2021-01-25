@@ -14,8 +14,6 @@
                                :prev-page {:type    "image"
                                            :x       "---"
                                            :y       "---"
-                                           :width   474
-                                           :height  474
                                            :scale-x 0.2
                                            :scale-y 0.2
                                            :src     "/raw/img/flipbook/prev-page.png"
@@ -23,8 +21,6 @@
                                :next-page {:type    "image"
                                            :x       "---"
                                            :y       "---"
-                                           :width   474
-                                           :height  474
                                            :scale-x 0.2
                                            :scale-y 0.2
                                            :src     "/raw/img/flipbook/next-page.png"

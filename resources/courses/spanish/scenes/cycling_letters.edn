@@ -120,9 +120,9 @@
                           :actions     {},
                           :children   ["box3" "letter3" "image3"],
                           :states     {:init {:visible false}, :reset {:visible true}}},
-                 :image1 {:type "image", :x 0, :y -280, :width 100, :height 100, :origin {:type "center-top"}},
-                 :image2 {:type "image", :x 0, :y -280, :width 100, :height 100, :origin {:type "center-top"}},
-                 :image3 {:type "image", :x 0, :y -280, :width 100, :height 100, :origin {:type "center-top"}},
+                 :image1 {:type "image", :x 0, :y -280, :origin {:type "center-top"}},
+                 :image2 {:type "image", :x 0, :y -280, :origin {:type "center-top"}},
+                 :image3 {:type "image", :x 0, :y -280, :origin {:type "center-top"}},
                  :letter1
                          {:type           "text",
                           :x              -110,

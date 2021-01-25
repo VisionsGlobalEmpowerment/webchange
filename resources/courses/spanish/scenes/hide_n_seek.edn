@@ -341,8 +341,6 @@
             {:type       "image",
              :x          0,
              :y          0,
-             :width      1920,
-             :height     1080,
              :scene-name "front-objects",
              :rotation   0,
              :scale-x    1,

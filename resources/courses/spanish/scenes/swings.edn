@@ -203,13 +203,11 @@
                               :transition "swings",
                               :children   ["swings-image" "box-ph"]},
                  :swings-image
-                             {:type "image", :width 248, :height 681, :origin {:type "center-top"}, :src "/raw/img/park/swings/swings.png"},
+                             {:type "image", :origin {:type "center-top"}, :src "/raw/img/park/swings/swings.png"},
                  :tree-image
                              {:type   "image",
                               :x      656,
                               :y      0,
-                              :width  592,
-                              :height 196,
                               :origin {:type "center-top"},
                               :src    "/raw/img/park/swings/tree.png"},
                  :vera

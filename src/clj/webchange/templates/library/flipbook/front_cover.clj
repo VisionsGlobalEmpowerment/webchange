@@ -16,15 +16,13 @@
                            :width  "---"
                            :height "---"
                            :fill   "---"}
-   :page-cover-image      {:type       "image"
-                           :x          "---"
-                           :y          "---"
-                           :max-width  600
-                           :max-height 600
-                           :scale-x    10
-                           :scale-y    10
-                           :origin     {:type "center-center"}
-                           :src        "---"}
+   :page-cover-image      {:type   "image"
+                           :x      "---"
+                           :y      "---"
+                           :width  600
+                           :height 600
+                           :origin {:type "center-center"}
+                           :src    "---"}
    :page-cover-title      {:type     "group"
                            :x        "---"
                            :y        "---"
