@@ -1,11 +1,12 @@
 (ns webchange.interpreter.renderer.scene.components.image.utils
   (:require
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.logger :as logger]))
 
 (defn apply-boundaries
   [container {:keys [max-width max-height min-width min-height]}]
   (when (and min-width (> min-width (.-width container)))
-    (let [ratio (/ min-width (.-width container) )]
+    (let [ratio (/ min-width (.-width container))]
       (set! (.-width container) (* ratio (.-width container)))
       (set! (.-height container) (* ratio (.-height container)))))
 
@@ -42,3 +43,19 @@
         "bottom" (set! (.-y pivot) (+ (.-y local-bounds) (.-height local-bounds)))
         (do (logger/warn (str "Wrong vertical align option <" v ">. 'Top' will be used."))
             (set! (.-y pivot) 0))))))
+
+(defn apply-image-size
+  [sprite {:keys [image-size width height]}]
+    (if (some? image-size)
+    (let [sprite-size (utils/get-size sprite)
+          w-scale (/ width (:width sprite-size))
+          h-scale (/ height (:height sprite-size))
+          scale (case image-size
+                  "cover" (Math/max w-scale h-scale)
+                  "contain" (Math/min w-scale h-scale))
+          x (->> (:width sprite-size) (* scale) (- width) (* 0.5))
+          y (->> (:height sprite-size) (* scale) (- height) (* 0.5))]
+      (utils/set-scale sprite scale)
+      (utils/set-position sprite x y))
+    (do (utils/set-not-nil-value sprite "width" width)
+        (utils/set-not-nil-value sprite "height" height))))

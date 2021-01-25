@@ -26,13 +26,14 @@
                                           :width  "---"
                                           :height "---"
                                           :fill   "---"}
-   :generic-front-page-logo              {:type   "image"
-                                          :x      "---"
-                                          :y      350
-                                          :width  600
-                                          :height 600
-                                          :origin {:type "center-center"}
-                                          :src    "---"}})
+   :generic-front-page-logo              {:type       "image"
+                                          :x          "---"
+                                          :y          350
+                                          :width      600
+                                          :height     600
+                                          :image-size "contain"
+                                          :origin     {:type "center-center"}
+                                          :src        "---"}})
 
 (defn- apply-page-size
   [page-data {:keys [width height padding]}]

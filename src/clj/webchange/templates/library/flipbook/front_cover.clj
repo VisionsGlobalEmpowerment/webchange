@@ -16,13 +16,14 @@
                            :width  "---"
                            :height "---"
                            :fill   "---"}
-   :page-cover-image      {:type   "image"
-                           :x      "---"
-                           :y      "---"
-                           :width  600
-                           :height 600
-                           :origin {:type "center-center"}
-                           :src    "---"}
+   :page-cover-image      {:type       "image"
+                           :x          "---"
+                           :y          "---"
+                           :width      600
+                           :height     600
+                           :image-size "contain"
+                           :origin     {:type "center-center"}
+                           :src        "---"}
    :page-cover-title      {:type     "group"
                            :x        "---"
                            :y        "---"

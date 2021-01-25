@@ -26,11 +26,13 @@
          :y (+ (:y position) (:y parent-position))}))))
 
 (defn set-position
-  [display-object position]
+  ([display-object x y]
+   (set-position display-object {:x x :y y}))
+  ([display-object position]
   (let [{:keys [x y]} (merge (get-position display-object)
                              (remove-nil-fields position))]
     (-> (.-position display-object)
-        (.set x y))))
+        (.set x y)))))
 
 (defn get-scale
   [display-object]

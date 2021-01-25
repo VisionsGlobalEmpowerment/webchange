@@ -6,12 +6,13 @@
   {:page       {:type       "group"
                 :transition "page-1"
                 :children   ["page-image"]}
-   :page-image {:type   "image"
-                :x      0
-                :y      0
-                :width  "---"
-                :height "---"
-                :src    "---"}})
+   :page-image {:type       "image"
+                :x          0
+                :y          0
+                :width      "---"
+                :height     "---"
+                :image-size "cover"
+                :src        "---"}})
 
 (defn- apply-page-size
   [page-data {:keys [width height]}]

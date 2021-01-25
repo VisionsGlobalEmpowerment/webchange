@@ -32,4 +32,5 @@
                                              (let [texture (.-texture resource)]
                                                (aset sprite-object "texture" texture)
                                                (image-utils/apply-boundaries container @state)
-                                               (image-utils/apply-origin container @state))))}))
+                                               (image-utils/apply-origin container @state)
+                                               (image-utils/apply-image-size sprite-object @state))))}))

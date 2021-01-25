@@ -6,12 +6,13 @@
   {:page                 {:type       "group"
                           :transition "page-1"
                           :children   ["page-image" "page-text-background" "page-text"]}
-   :page-image           {:type   "image"
-                          :x      0
-                          :y      0
-                          :width  "---"
-                          :height "---"
-                          :src    "---"}
+   :page-image           {:type       "image"
+                          :x          0
+                          :y          0
+                          :width      "---"
+                          :height     "---"
+                          :image-size "cover"
+                          :src        "---"}
    :page-text-background {:type   "rectangle"
                           :x      0
                           :y      "---"
