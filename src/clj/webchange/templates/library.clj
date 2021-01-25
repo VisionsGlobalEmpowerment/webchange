@@ -30,4 +30,5 @@
     [webchange.templates.library.categorize-antonims.template]
     [webchange.templates.library.categorize-synonyms.template]
     [webchange.templates.library.alliteration]
-    [webchange.templates.library.running]))
+    [webchange.templates.library.running]
+    [webchange.templates.library.interactive-read-aloud]))

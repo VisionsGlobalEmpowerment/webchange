@@ -9,7 +9,7 @@
     [webchange.templates.core :as core]))
 
 (def m {:id          22
-        :name        "Categorize - 3 rounds"
+        :name        "Categorize - Colors"
         :tags        ["Independent Practice"]
         :description "Categorize"
         :actions     {:add-question {:title   "Add question",
@@ -35,7 +35,7 @@
 (defn fu
   [old-data args]
   (let [params (common/get-replace-params old-data)
-        [_ actions assets] (question/create (:question-page args) params)
+        [_ actions assets] (question/create-and-place-before (:question-page args) params)
         old-data (update-in old-data [:assets] concat assets)]
     (common/merge-new-action old-data actions params)))
 
