@@ -1,4 +1,4 @@
-(ns webchange.templates.library.flipbook.front-cover
+(ns webchange.templates.library.flipbook.cover-front
   (:require
     [clojure.string :refer [join]]))
 
