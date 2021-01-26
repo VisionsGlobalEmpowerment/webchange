@@ -7,11 +7,11 @@
                 :transition "page-1"
                 :children   ["page-image"]}
    :page-image {:type       "image"
+                :image-size "cover"
                 :x          0
                 :y          0
                 :width      "---"
                 :height     "---"
-                :image-size "cover"
                 :src        "---"}})
 
 (defn- apply-page-size

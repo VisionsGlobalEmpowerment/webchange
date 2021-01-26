@@ -8,11 +8,11 @@
                           :transition "page-1"
                           :children   ["page-image" "page-text-background" "page-text"]}
    :page-image           {:type       "image"
+                          :image-size "cover"
                           :x          0
                           :y          "---"
                           :width      "---"
                           :height     "---"
-                          :image-size "cover"
                           :src        "---"}
    :page-text-background {:type   "rectangle"
                           :x      0
