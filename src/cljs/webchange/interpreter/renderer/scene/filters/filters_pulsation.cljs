@@ -51,22 +51,23 @@
 
 (defn- get-time-cycled
   "Transform time interval [0..1] to [0..1..-1..0]."
-  [time]
-  (Math/sin (* time 2 Math/PI)))
+  [time speed]
+  (let [speed (if (not speed) 2 speed)]
+    (Math/sin (* time speed Math/PI))))
 
 (defn- apply-transformation
   [object {:keys [scale rotation]}]
   (when-not (nil? scale)
-      (-> (.-scale object) (.set scale)))
+    (-> (.-scale object) (.set scale)))
   (when-not (nil? rotation)
-      (.setRotation object rotation)))
+    (.setRotation object rotation)))
 
 (defn animation-eager
-  [object frame state]
+  [object frame state speed no-interval]
   (init-state! state (:time frame) interval-duration)
-  (let [time (-> (get-time (:time frame) interval-duration state)
-                 (apply-intervals! (:time frame) state intervals interval-duration)
-                 (get-time-cycled))
+  (let [time (cond-> (get-time (:time frame) interval-duration state)
+                     (not no-interval) (apply-intervals! (:time frame) state intervals interval-duration)
+                     true (get-time-cycled speed))
         scale (+ 1 (* (+ 1 time) scale-diff))
         rotation (* rotation-angle time)]
     (apply-transformation object {;:rotation rotation

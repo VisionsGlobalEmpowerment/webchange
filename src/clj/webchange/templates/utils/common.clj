@@ -58,3 +58,13 @@
             (not (get-in scene-data [:metadata :tracks])) (assoc-in [:metadata :tracks] [])
             item (update-in [:metadata :tracks (first item) :nodes] conj step)
             (not item) (update-in [:metadata :tracks] conj {:title track-name :nodes [step]}))))
+
+(defn add-track-actions
+  [scene-data action-names type track-name]
+  (reduce (fn [scene-data action-name]
+            (add-track-action scene-data {
+                                          :track-name track-name
+                                          :type       type
+                                          :action-id  action-name
+                                          })
+            ) scene-data action-names))

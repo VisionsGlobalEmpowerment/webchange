@@ -75,6 +75,7 @@
                              :set-fill       [:fill]
                              :set-border-color   [:border-color]
                              :set-highlight  [:highlight]
+                             :set-permanent-pulsation  [:permanent-pulsation]
                              :set-draggable [:draggable]
                              :set-children  [:children]
                              :set-font-size  [:font-size]}
@@ -155,6 +156,11 @@
   :set-highlight
   (fn [[object-wrapper {:keys [highlight options]}]]
     (apply-to-wrapper w/set-highlight object-wrapper highlight options)))
+
+(re-frame/reg-fx
+  :set-permanent-pulsation
+  (fn [[object-wrapper {:keys [permanent-pulsation options]}]]
+    (apply-to-wrapper w/set-permanent-pulsation object-wrapper permanent-pulsation options)))
 
 (re-frame/reg-fx
   :set-draggable

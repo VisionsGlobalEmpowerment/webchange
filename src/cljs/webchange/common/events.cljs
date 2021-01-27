@@ -21,9 +21,7 @@
 
 (defn prepare-params
   [action params from-params]
-  (println "prepare-params" action params from-params)
   (reduce-kv (fn [m k v]
-               (println "prepare-params m k v" m k v)
                (assoc m k (get params (keyword v)))) action from-params))
 
 (defn prepare-action
