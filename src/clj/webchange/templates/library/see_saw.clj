@@ -124,17 +124,21 @@
                                         :start      true},
                         :see-saw       {:type "group", :x 694, :y 716, :children ["see-saw-3" "see-saw-plank" "see-saw-2"]},
                         :see-saw-1
-                                       {:type "image", :origin {:type "center-center"}, :src "/raw/img/park/see-saw/saw_01.png"},
+                                       {:type "image", :width 889, :height 106, :origin {:type "center-center"}, :src "/raw/img/park/see-saw/saw_01.png"},
                         :see-saw-2
                                        {:type   "image",
                                         :x      0,
                                         :y      67,
+                                        :width  195,
+                                        :height 175,
                                         :origin {:type "center-center"},
                                         :src    "/raw/img/park/see-saw/saw_02.png"},
                         :see-saw-3
                                        {:type   "image",
                                         :x      -10,
                                         :y      48,
+                                        :width  195,
+                                        :height 179,
                                         :origin {:type "center-center"},
                                         :src    "/raw/img/park/see-saw/saw_03.png"},
                         :see-saw-plank {:type "group", :transition "see-saw-plank", :children ["see-saw-1" "box-ph" "vera"], :rotation -13},

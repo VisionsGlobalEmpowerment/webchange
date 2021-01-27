@@ -82,8 +82,8 @@
                                      :scale-y    0.5,
                                      :speed      0.35,
                                      :start      true},
-                        :slide      {:type "image", :x 200, :y 190, :src "/raw/img/park/slide/slide.png"},
-                        :slide-side {:type "image", :x 591, :y 450, :src "/raw/img/park/slide/side.png"}},
+                        :slide      {:type "image", :x 200, :y 190, :width 997, :height 758, :src "/raw/img/park/slide/slide.png"},
+                        :slide-side {:type "image", :x 591, :y 450, :width 234, :height 497, :src "/raw/img/park/slide/side.png"}},
         :scene-objects [["background"] ["slide" "slide-side" "mari" "box1" "box3" "box2"]],
         :actions
                        {:dialog-1-welcome

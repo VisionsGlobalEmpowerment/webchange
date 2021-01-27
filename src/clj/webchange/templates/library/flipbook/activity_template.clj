@@ -14,15 +14,15 @@
                                :prev-page {:type    "image"
                                            :x       "---"
                                            :y       "---"
-                                           :scale-x 0.2
-                                           :scale-y 0.2
+                                           :width   95
+                                           :height  95
                                            :src     "/raw/img/flipbook/prev-page.png"
                                            :actions {:click {:id "prev-page-click" :on "click" :type "action"}}}
                                :next-page {:type    "image"
                                            :x       "---"
                                            :y       "---"
-                                           :scale-x 0.2
-                                           :scale-y 0.2
+                                           :width   95
+                                           :height  95
                                            :src     "/raw/img/flipbook/next-page.png"
                                            :actions {:click {:id "next-page-click" :on "click" :type "action"}}}}
                :scene-objects [["book"] ["prev-page" "next-page"]]

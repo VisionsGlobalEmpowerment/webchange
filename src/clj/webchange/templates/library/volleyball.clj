@@ -31,6 +31,8 @@
                                      :src     "/raw/img/stadium/volleyball/ball.png"
                                      :x       -1
                                      :y       -1
+                                     :width   128,
+                                     :height  128,
                                      :origin  {:type "center-center"},
                                      :scale-x 0.55,
                                      :scale-y 0.55,

@@ -1,6 +1,7 @@
 {:assets        [{:url "/raw/img/ui/hand.png" :size 1 :type "image"}]
  :objects       {:common-pointer {:type   "transparent"
                                   :x      300 :y 300
+                                  :width  117 :height 135
                                   :src    "/raw/img/ui/hand.png"
                                   :states {:hidden  {:type "transparent"}
                                            :visible {:type "image"}}}}

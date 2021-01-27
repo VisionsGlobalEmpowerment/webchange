@@ -978,5 +978,7 @@
      :y 300,
      :src "/raw/img/ui/hand.png",
      :type "transparent",
+     :width 117,
+     :height 135,
      :states {:hidden {:type "transparent"}, :visible {:type "image"}}}},
    :scene-objects [["common-pointer"]]}}}

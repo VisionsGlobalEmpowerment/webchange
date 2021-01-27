@@ -25,6 +25,8 @@
                         :next-page-arrow {:type    "image",
                                           :x       1770
                                           :y       500
+                                          :width   97,
+                                          :height  99,
                                           :actions {:click {:id "next-page", :on "click", :type "action"}},
                                           :scale-x -1,
                                           :src     "/raw/img/ui/back_button_01.png"}

@@ -91,6 +91,8 @@
                              {:type   "image",
                               :x      342,
                               :y      109,
+                              :width  1238,
+                              :height 678,
                               :visible true,
                               :src    "/raw/img/cinema/screen-off.png",
                               :states {:hidden {:visible false}, :visible {:visible true}}},
