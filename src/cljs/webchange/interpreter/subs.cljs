@@ -54,6 +54,11 @@
           keys-to-remove))
 
 (re-frame/reg-sub
+  ::stage-size
+  (fn [db]
+    (:stage-size db)))
+
+(re-frame/reg-sub
   ::lessons-data
   (fn [db [_ {:keys [exclude-items-fields]}]]
     (let [lessons (get-in db [:lessons])

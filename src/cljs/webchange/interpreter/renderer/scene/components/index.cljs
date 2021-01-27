@@ -6,6 +6,7 @@
     [webchange.interpreter.renderer.scene.components.button.component :as button]
     [webchange.interpreter.renderer.scene.components.carousel.component :as carousel]
     [webchange.interpreter.renderer.scene.components.colors-palette.component :as colors-palette]
+    [webchange.interpreter.renderer.scene.components.flipbook.component :as flipbook]
     [webchange.interpreter.renderer.scene.components.group.component :as group]
     [webchange.interpreter.renderer.scene.components.image.component :as image]
     [webchange.interpreter.renderer.scene.components.layered-background.component :as layered-background]
@@ -31,6 +32,8 @@
                                                           :default-props carousel/default-props}
                                  colors-palette/component-type {:constructor   colors-palette/create
                                                                 :default-props colors-palette/default-props}
+                                 flipbook/component-type {:constructor   flipbook/create
+                                                          :default-props flipbook/default-props}
                                  group/component-type {:constructor   group/create
                                                        :default-props group/default-props}
                                  image/component-type {:constructor   image/create

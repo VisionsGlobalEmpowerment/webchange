@@ -5,6 +5,7 @@
     [webchange.templates.library.pinata]
     [webchange.templates.library.recording-studio]
     [webchange.templates.library.dialog]
+    [webchange.templates.library.flipbook.template]
     [webchange.templates.library.see-saw]
     [webchange.templates.library.sandbox]
     [webchange.templates.library.magic_hat]

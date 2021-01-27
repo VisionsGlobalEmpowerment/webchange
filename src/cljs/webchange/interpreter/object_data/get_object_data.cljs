@@ -44,12 +44,12 @@
                                  (assoc :object-name (keyword name))
                                  (with-group-params)
                                  (with-filter-params)
-                                 (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
+                                 (filter-extra-props [:actions :brightness :filter :highlight :eager]))
                       :questions (-> object
-                                 (assoc :object-name (keyword name))
-                                 (with-group-params)
-                                 (with-filter-params)
-                                 (filter-extra-props []))
+                                     (assoc :object-name (keyword name))
+                                     (with-group-params)
+                                     (with-filter-params)
+                                     (filter-extra-props []))
                       :transparent (-> object
                                        (with-group-params)
                                        (assoc :object-name (keyword name))
@@ -63,6 +63,22 @@
                                           {:object-name (keyword name)
                                            :children    children-params})
                                    (filter-extra-props [:width :height])))
+                      :flipbook (let [group-params (with-group-params object)
+                                      pages-params (->> (:pages object)
+                                                        (map (fn [{:keys [object action]}]
+                                                               [(prepare-object-data object scene-id get-data) action]))
+                                                        (map (fn [[object-params action]]
+                                                               [(-> object-params
+                                                                    (assoc :visible false)
+                                                                    (dissoc :x)
+                                                                    (dissoc :y))
+                                                                action]))
+                                                        (remove nil?))]
+                                  (-> (merge object
+                                             group-params
+                                             {:object-name (keyword name)
+                                              :pages       pages-params})
+                                      (filter-extra-props [])))
                       :animation (let [anim-object (prepare-anim-object-params object)
                                        animation-name (or (:scene-name anim-object) (:name anim-object))]
                                    (-> anim-object
@@ -75,9 +91,9 @@
                                 (merge {:object-name (keyword name)})
                                 (filter-extra-props []))
                       :rectangle (-> object
-                                (with-group-params)
-                                (merge {:object-name (keyword name)})
-                                (filter-extra-props []))
+                                     (with-group-params)
+                                     (merge {:object-name (keyword name)})
+                                     (filter-extra-props []))
                       :carousel (-> object
                                     (merge {:object-name (keyword name)})
                                     (filter-extra-props []))
@@ -128,7 +144,7 @@
                                          (with-group-params)
                                          (with-filter-params)
                                          (filter-extra-props [:actions :brightness :filter :highlight :width :height :eager]))
-                      (throw (js/Error. (str "Object with type " type " can not be drawn because it is not defined"))))]
+                      (-> (str "Object with type " type " can not be drawn because it is not defined (" name ")") (js/Error.) (throw)))]
     (-> object-data
         (filter-extra-props [:actions :states :scene-name :transition :filter-transition]))))
 

@@ -8,12 +8,12 @@
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
-(def default-object-props {:draggable   {}
-                           :on-drag-end {}
+(def default-object-props {:draggable     {}
+                           :on-drag-end   {}
                            :on-drag-start {}
-                           :visible     {:default true}
-                           :rotation    {:default 0}
-                           :opacity     {}})
+                           :visible       {:default true}
+                           :rotation      {:default 0}
+                           :opacity       {}})
 
 (defn- init-display-object!
   [{object :object :as wrapper} props props-to-exclude]
@@ -38,6 +38,10 @@
       (-> (str "Default props for <" type "> are not defined") js/Error. throw))
     component))
 
+(defn- container-component?
+  [component-type]
+  (some #{component-type} ["flipbook" "group"]))
+
 (defn create-component
   ([props]
    (create-component ::modes/game props))
@@ -47,9 +51,11 @@
          component-wrapper (->> (get-props type modified-props default-props {:exclude-check (keys default-object-props)})
                                 (constructor))]
      (init-display-object! component-wrapper modified-props (keys default-props))
-     (when (= type "group")
+     (when (container-component? type)
        (let [group-instance (:container component-wrapper)
-             children (:children modified-props)]
+             children (case type
+                        "flipbook" (->> (:pages modified-props) (map first))
+                        (:children modified-props))]
          (doseq [child children]
            (create-component mode (assoc child :parent group-instance)))))
      (when (nil? component-wrapper)

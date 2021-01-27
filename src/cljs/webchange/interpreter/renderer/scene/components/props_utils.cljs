@@ -28,11 +28,14 @@
                             (:alias prop-data)
                             prop-name)
         current-prop-value (get current-props current-prop-name)
+        has-default? (contains? prop-data :default)
         default-prop-value (:default prop-data)
         prop-passed? (contains? current-props current-prop-name)]
-    (assoc {} prop-name (if prop-passed?
-                          current-prop-value
-                          default-prop-value))))
+    (if (or prop-passed? has-default?)
+      (assoc {} prop-name (if prop-passed?
+                            current-prop-value
+                            default-prop-value))
+      {})))
 
 (defn- get-processed-props
   [current-props default-props]

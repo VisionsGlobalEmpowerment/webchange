@@ -18,6 +18,7 @@
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.components.flipbook.state]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.audio-utils.recorder :as audio-recorder]
     [webchange.resources.manager :as resources-manager]
@@ -150,8 +151,8 @@
           wrappers (scene/get-object-name db :question-overlay)
           ]
       (question-component/create (assoc data :parent (:object wrappers)) db)
-    {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/show-question]
-                       (ce/success-event action))})))
+      {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/show-question]
+                         (ce/success-event action))})))
 
 
 (re-frame/reg-event-fx
@@ -164,8 +165,8 @@
     (let [wrappers (scene/get-object-name db :question-overlay)
           object (:object wrappers)
           children (vec (array-seq (.-children object)))]
-        (doseq [child children]
-          (.removeChild object child))
+      (doseq [child children]
+        (.removeChild object child))
       {:dispatch-n (list [::webchange.interpreter.renderer.state.overlays/hide-question]
                          (ce/success-event action))})))
 
@@ -1158,9 +1159,9 @@
   ::load-course-data
   (fn-traced [{:keys [db]} [_ course-id]]
     (if (not= course-id (:loaded-course db))
-      {:dispatch [::load-scenes-with-skills course-id]
+      {:dispatch         [::load-scenes-with-skills course-id]
        :load-course-data {:course-id course-id}
-       :load-lessons [course-id]})))
+       :load-lessons     [course-id]})))
 
 (re-frame/reg-event-fx
   ::set-current-course
@@ -1213,7 +1214,13 @@
                        (assoc :current-scene-data (get-in db [:scenes scene-id]))
                        (assoc :scene-started false)
                        (assoc-in [:progress-data :variables :last-location] current-scene))
-       :dispatch-n (list [::load-scene scene-id])})))
+       :dispatch-n (list [::load-scene scene-id]
+                         [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))])})))
+
+(re-frame/reg-event-fx
+  ::set-stage-size
+  (fn [{:keys [db]} [_ stage-size]]
+    {:db (assoc-in db [:stage-size] stage-size)}))
 
 (re-frame/reg-event-fx
   ::reset-scene-flows
@@ -1232,7 +1239,8 @@
     (let [current-scene (:current-scene db)
           merged-scene (merge-with-templates db scene)]
       {:db (cond-> (assoc-in db [:scenes scene-id] merged-scene)
-                   (= current-scene scene-id) (assoc :current-scene-data merged-scene))})))
+                   (= current-scene scene-id) (assoc :current-scene-data merged-scene))
+       :dispatch [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))]})))
 
 (re-frame/reg-event-fx
   ::set-scenes-data

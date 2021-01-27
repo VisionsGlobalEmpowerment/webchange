@@ -1,6 +1,5 @@
 (ns webchange.interpreter.renderer.scene.components.wrapper
   (:require
-    [clojure.set :refer [difference]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :as filters]
     [webchange.logger :as logger]))
@@ -22,23 +21,6 @@
   (when (-> wrapper :object nil?)
     (logger/warn "Wrapped object :object is not defined"))
   wrapper)
-
-(defn- check-interface
-  [wrapper]
-  (let [methods-with-interface (->> 'webchange.interpreter.renderer.scene.components.wrapper-interface
-                                    (ns-publics)
-                                    (keys)
-                                    (map keyword)
-                                    (set))
-        wrapper-object-methods (->> wrapper
-                                    (filter (fn [[_ value]]
-                                              (fn? value)))
-                                    (map first)
-                                    (set))
-        methods-without-interface (difference wrapper-object-methods methods-with-interface)]
-    (when-not (empty? methods-without-interface)
-      (logger/warn "Wrapped methods don't have interface:" (clj->js methods-without-interface)))
-    wrapper))
 
 (defn- add-default-methods
   [wrapper-object]
@@ -82,5 +64,4 @@
       (check-name-prop)
       (check-type-prop)
       (check-object-prop)
-      (check-interface)
       (add-default-methods)))

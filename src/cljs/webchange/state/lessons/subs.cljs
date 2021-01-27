@@ -5,11 +5,11 @@
   (get-in db [:lessons]))
 
 (defn- lesson-set
-  [db lesson-set-name]
+  [db lesson-set-name level-idx lesson-idx]
   (if-let [lesson (-> (lessons db)
                       (get-in [lesson-set-name]))]
     lesson
-    (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined")))))
+    (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined in level " level-idx ", lesson " lesson-idx)))))
 
 (defn- lesson-by-name
   [db lesson-name]
@@ -19,7 +19,7 @@
           lesson-sets (get-in db [:course-data :levels level :lessons lesson :lesson-sets])
           lesson-set-name (or (get lesson-sets (keyword lesson-name))
                               lesson-name)]
-      (lesson-set db lesson-set-name))))
+      (lesson-set db lesson-set-name level lesson))))
 
 (defn lesson-dataset-items
   [db lesson-name]
