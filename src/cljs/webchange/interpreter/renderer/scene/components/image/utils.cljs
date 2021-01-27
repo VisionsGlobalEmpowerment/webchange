@@ -44,18 +44,19 @@
         (do (logger/warn (str "Wrong vertical align option <" v ">. 'Top' will be used."))
             (set! (.-y pivot) 0))))))
 
-(defn apply-image-size
-  [sprite {:keys [image-size width height]}]
-    (if (some? image-size)
-    (let [sprite-size (utils/get-size sprite)
-          w-scale (/ width (:width sprite-size))
-          h-scale (/ height (:height sprite-size))
-          scale (case image-size
-                  "cover" (Math/max w-scale h-scale)
-                  "contain" (Math/min w-scale h-scale))
-          x (->> (:width sprite-size) (* scale) (- width) (* 0.5))
-          y (->> (:height sprite-size) (* scale) (- height) (* 0.5))]
-      (utils/set-scale sprite scale)
-      (utils/set-position sprite x y))
-    (do (utils/set-not-nil-value sprite "width" width)
-        (utils/set-not-nil-value sprite "height" height))))
+(defn set-image-size
+  [sprite {:keys [image-size width height scale]}]
+  (cond
+    (some? scale) (utils/set-scale sprite scale)
+    (some? image-size) (let [sprite-size (utils/get-size sprite)
+                             w-scale (/ width (:width sprite-size))
+                             h-scale (/ height (:height sprite-size))
+                             scale (case image-size
+                                     "cover" (Math/max w-scale h-scale)
+                                     "contain" (Math/min w-scale h-scale))
+                             x (->> (:width sprite-size) (* scale) (- width) (* 0.5))
+                             y (->> (:height sprite-size) (* scale) (- height) (* 0.5))]
+                         (utils/set-scale sprite scale)
+                         (utils/set-position sprite x y))
+    :else (do (utils/set-not-nil-value sprite "width" width)
+              (utils/set-not-nil-value sprite "height" height))))

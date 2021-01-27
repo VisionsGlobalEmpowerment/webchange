@@ -31,6 +31,6 @@
                                                (throw (js/Error. (str "Resources for '" src "' were not loaded"))))
                                              (let [texture (.-texture resource)]
                                                (aset sprite-object "texture" texture)
+                                               (image-utils/set-image-size sprite-object @state)
                                                (image-utils/apply-boundaries container @state)
-                                               (image-utils/apply-origin container @state)
-                                               (image-utils/apply-image-size sprite-object @state))))}))
+                                               (image-utils/apply-origin container @state))))}))

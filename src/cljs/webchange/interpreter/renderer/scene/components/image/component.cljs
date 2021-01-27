@@ -12,7 +12,7 @@
                     :y             {}
                     :width         {}
                     :height        {}
-                    :scale         {:default {:x 1 :y 1}}
+                    :scale         {}
                     :name          {}
                     :on-click      {}
                     :ref           {}
@@ -28,21 +28,19 @@
                     :min-height    {}})
 
 (defn- create-sprite
-  [{:keys [src scale object-name]}]
+  [{:keys [src object-name]}]
   (let [resource (resources/get-resource src)]
     (when (and (-> resource nil?)
                (-> src nil? not)
                (-> src empty? not))
       (logger/warn (js/Error. (str "Resources for " src " were not loaded"))))
-    (let [sprite (if (-> resource nil? not)
-                   (Sprite. (.-texture resource))
-                   (Sprite.))]
-      (aset sprite "name" (str object-name "-sprite"))
-      (utils/set-scale sprite scale)
-      sprite)))
+    (doto (if (-> resource nil? not)
+            (Sprite. (.-texture resource))
+            (Sprite.))
+      (aset "name" (str object-name "-sprite")))))
 
 (defn- create-sprite-mask
-  [{:keys [border-radius width height]}]
+  [{:keys [border-radius width height image-size]}]
   (cond
     (some? border-radius) (let [[lt rt rb lb] border-radius]
                             (doto (Graphics.)
@@ -57,14 +55,16 @@
                               (.lineTo 0 lt)                ; left
                               (.arc lt lt lt Math/PI (* 0.75 Math/PI)) ; top-left
                               (.endFill 0x000000)))
-    (and (some? width)
+    (and (some? image-size)
+         (some? width)
          (some? height)) (doto (Graphics.)
                            (.beginFill 0x000000)
                            (.drawRect 0 0 width height)
                            (.endFill 0x000000))))
 
 (defn- create-sprite-container
-  [{:keys [x y offset scale filters name]}]
+  [{:keys [x y offset scale filters name]
+    :or   {scale {:x 1 :y 1}}}]
   (let [position {:x (- x (* (:x offset) (:x scale)))
                   :y (- y (* (:y offset) (:y scale)))}]
     (doto (Container.)
@@ -82,7 +82,7 @@
   :y - component y-position.
   :width - image width.
   :height - image height.
-  :scale - image scale. Default: {:x 1 :y 1}.
+  :scale - image scale.
   :name - component name that will be set to sprite and container with corresponding suffixes.
   :on-click - on click event handler.
   :ref - callback function that must be called with component wrapper.
@@ -112,8 +112,8 @@
     (when-not (nil? on-click) (utils/set-handler image "click" on-click))
     (when-not (nil? ref) (ref wrapped-image))
 
+    (image-utils/set-image-size image props)
     (image-utils/apply-origin image-container props)
     (image-utils/apply-boundaries image-container props)
-    (image-utils/apply-image-size image props)
 
     wrapped-image))
