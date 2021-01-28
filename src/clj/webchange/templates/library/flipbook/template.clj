@@ -1,6 +1,5 @@
 (ns webchange.templates.library.flipbook.template
   (:require
-    [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
     [webchange.templates.library.flipbook.credits :as credits]
@@ -8,7 +7,8 @@
     [webchange.templates.library.flipbook.custom-spread :as custom-spread]
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
-    [webchange.templates.library.flipbook.generic-front :as generic-front]))
+    [webchange.templates.library.flipbook.generic-front :as generic-front]
+    [webchange.templates.library.flipbook.page-number :refer [add-page-number]]))
 
 (def metadata {:id          24
                :name        "flipbook"
@@ -123,7 +123,7 @@
     (vec (concat before [item] after))))
 
 (defn- add-page-to-book
-  [activity-data {:keys [with-action?]} {:keys [name resources objects text-name] :as page-data}]
+  [activity-data {:keys [with-action? with-page-number?]} {:keys [name resources objects text-name] :as page-data}]
   (let [current-pages-count (count (get-in activity-data [:objects :book :pages] []))
         new-page-position (if with-action? (- current-pages-count 1) current-pages-count)]
     (cond-> (-> activity-data
@@ -131,7 +131,8 @@
                 (update :objects merge objects)
                 (update-in [:objects :book :pages] insert-to {:object name} new-page-position))
             (and with-action?
-                 (some? text-name)) (add-text-animation-action new-page-position page-data))))
+                 (some? text-name)) (add-text-animation-action new-page-position page-data)
+            with-page-number? (add-page-number name page-params))))
 
 (defn- add-pages-to-book
   [activity-data content-data pages-data]
@@ -173,10 +174,11 @@
     (-> activity-data
         (add-page
           constructor
-          {:page-type    layout
-           :image-src    (:src image)
-           :text         text
-           :with-action? true}))))
+          {:page-type         layout
+           :image-src         (:src image)
+           :text              text
+           :with-action?      true
+           :with-page-number? true}))))
 
 (core/register-template
   (:id metadata) metadata create-activity update-activity)
