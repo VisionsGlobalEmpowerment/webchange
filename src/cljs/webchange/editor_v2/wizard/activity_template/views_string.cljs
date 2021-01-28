@@ -8,7 +8,7 @@
 
 (defn string-option
   [{:keys [key option data validator]}]
-  (r/with-let [string-data (connect-data data [key] (get option :default ""))
+  (r/with-let [string-data (connect-data data [key] "")
                {:keys [error-message]} (v/init string-data string-validation-map validator)]
     [ui/grid {:container   true
               :justify     "center"

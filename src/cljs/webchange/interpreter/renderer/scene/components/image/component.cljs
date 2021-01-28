@@ -107,10 +107,6 @@
   :min-width - min image width.
   :min-height - min image height."
   [{:keys [parent type on-click ref object-name src] :as props}]
-
-  (print ">>> Image" src)
-  (print (select-keys props [:mask-height :mask-width :mask-align]))
-
   (let [state (atom props)
         image (create-sprite props)
         image-mask (create-sprite-mask props)

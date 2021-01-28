@@ -37,13 +37,17 @@
                                         :options [{:key     :type
                                                    :type    "lookup"
                                                    :label   "Type"
-                                                   :default "spread"
+                                                   :default "page"
                                                    :options [{:name "Page" :value "page"}
                                                              {:name "Spread" :value "spread"}]}
-                                                  {:key        :layout
+                                                  {:key        :page-layout
                                                    :type       "lookup-image"
                                                    :label      "Page layout"
                                                    :image-size 4
+                                                   :default    :text-big-at-bottom
+                                                   :conditions [{:key   :type
+                                                                 :state :in
+                                                                 :value ["page"]}]
                                                    :options    [{:src   "/images/templates/page_layout/text_big_at_bottom.png"
                                                                  :value :text-big-at-bottom}
                                                                 {:src   "/images/templates/page_layout/text_small_at_bottom.png"
@@ -52,21 +56,28 @@
                                                                  :value :image-only}
                                                                 {:src   "/images/templates/page_layout/text_at_top.png"
                                                                  :value :text-at-top}
-                                                                {:src   "/images/templates/page_layout/text_small_transparent.png"
-                                                                 :value :text-small-transparent}
                                                                 {:src   "/images/templates/page_layout/text_full_page.png"
                                                                  :value :text-only}]}
+                                                  {:key        :spread-layout
+                                                   :type       "lookup-image"
+                                                   :label      "Spread layout"
+                                                   :image-size 4
+                                                   :default    :text-small-transparent
+                                                   :conditions [{:key   :type
+                                                                 :state :in
+                                                                 :value ["spread"]}]
+                                                   :options    [{:src   "/images/templates/page_layout/text_small_transparent.png"
+                                                                 :value :text-small-transparent}]}
                                                   {:key        :text
                                                    :type       "string"
                                                    :label      "Text"
-                                                   :default    "Page text example"
-                                                   :conditions [{:key   :layout
+                                                   :conditions [{:key   :page-layout
                                                                  :state :not-in
                                                                  :value [:image-only]}]}
                                                   {:key        :image
                                                    :type       "image"
                                                    :label      "Image"
-                                                   :conditions [{:key   :layout
+                                                   :conditions [{:key   :page-layout
                                                                  :state :not-in
                                                                  :value [:text-only]}]}]}}})
 
@@ -155,16 +166,17 @@
       (assoc-in [:metadata :actions] (:actions metadata))))
 
 (defn update-activity
-  [activity-data {:keys [type layout image text]}]
-  (-> activity-data
-      (add-page
-        (case type
-          "page" custom-page/create
-          "spread" custom-spread/create)
-        {:page-type    (keyword layout)
-         :image-src    (:src image)
-         :text         text
-         :with-action? true})))
+  [activity-data {:keys [type page-layout spread-layout image text]}]
+  (let [[constructor layout] (case type
+                               "page" [custom-page/create (keyword page-layout)]
+                               "spread" [custom-spread/create (keyword spread-layout)])]
+    (-> activity-data
+        (add-page
+          constructor
+          {:page-type    layout
+           :image-src    (:src image)
+           :text         text
+           :with-action? true}))))
 
 (core/register-template
   (:id metadata) metadata create-activity update-activity)

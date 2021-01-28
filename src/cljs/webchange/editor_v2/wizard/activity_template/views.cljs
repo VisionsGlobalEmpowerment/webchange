@@ -38,8 +38,8 @@
 (defn- check-condition
   [{:keys [key state value]} data]
   (case (keyword state)
-    :not-in (let []
-              (not (some #{(get data key)} value)))
+    :in (some #{(get data key)} value)
+    :not-in (not (some #{(get data key)} value))
     true))
 
 (defn- filter-options
@@ -50,16 +50,22 @@
                    (every? (fn [condition] (check-condition condition data)) conditions)
                    true)))))
 
+(defn- set-default-values!
+  [data options]
+  (doseq [[key {:keys [default]}] options]
+    (when (and (some? default)
+               (not (some? (get @data key))))
+      (swap! data assoc key default))))
+
 (defn template
   [{:keys [template data validator]}]
-  (let [options (->> template
-                     (template->options)
-                     (filter-options @data))]
+  (let [options (template->options template)]
+    (set-default-values! data options)
     [ui/grid {:container   true
               :justify     "space-between"
               :spacing     24
               :align-items "center"}
-     (for [[key option] options]
+     (for [[key option] (filter-options @data options)]
        ^{:key key}
        [ui/grid {:item true :xs 12}
         [option-info {:key       key

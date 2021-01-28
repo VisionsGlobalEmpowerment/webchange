@@ -8,7 +8,7 @@
 
 (defn lookup-option
   [{:keys [key option data validator]}]
-  (r/with-let [lookup-data (connect-data data [key] (get option :default ""))
+  (r/with-let [lookup-data (connect-data data [key] "")
                {:keys [error-message]} (v/init lookup-data lookup-validation-map validator)]
     [ui/grid {:container   true
               :justify     "center"
