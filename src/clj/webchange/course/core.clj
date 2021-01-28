@@ -248,14 +248,15 @@
 (defn localize
   [course-id {:keys [lang owner-id website-user-id]}]
   (let [current-time (jt/local-date-time)
-        {course-name :name course-slug :slug image :image-src} (db/get-course-by-id {:id course-id})
+        {course-name :name course-slug :slug image :image-src type :type} (db/get-course-by-id {:id course-id})
         localized-course-data {:name            course-name
                                :slug            (slug course-slug lang)
                                :lang            lang
                                :owner_id        owner-id
                                :image_src       image
                                :website_user_id website-user-id
-                               :status          "draft"}
+                               :status          "draft"
+                               :type            type}
         [{new-course-id :id}] (db/create-course! localized-course-data)
         course-data (:data (db/get-latest-course-version {:course_id course-id}))
         scenes (->> course-data
@@ -280,18 +281,27 @@
 
 (defn get-available-courses
   []
-  (->> (db/get-available-courses)
+  (->> (db/get-courses-by-status-and-type {:type "course" :status "published"})
        (map ->website-course)))
 
 (defn get-courses-by-website-user
   [website-user-id]
-  (->> (db/get-courses-by-website-user {:website_user_id website-user-id})
+  (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "course"})
+       (map ->website-course)))
+
+(defn get-book-library
+  []
+  (->> (db/get-courses-by-status-and-type {:type "book" :status "published"})
+       (map ->website-course)))
+
+(defn get-books-by-website-user
+  [website-user-id]
+  (->> (db/get-courses-by-website-user {:website_user_id website-user-id :type "book"})
        (map ->website-course)))
 
 (defn read-character-data [dir]
   (let [filename (str dir "/skeleton.json")
-        data (json/read-str (slurp filename) :key-fn keyword)
-        ]
+        data (json/read-str (slurp filename) :key-fn keyword)]
     (as-> {} character-data
           (assoc character-data :name (last (string/split dir #"/")))
           (assoc character-data :width (get-in data [:skeleton :width]))
@@ -384,11 +394,14 @@
   (let [current-time (jt/local-date-time)
         user (db/get-user {:id owner-id})
         website-id (:website-id user)
-        new-course-data (merge data {:slug            (slug (->kebab-case name) (->kebab-case lang))
-                                     :owner_id        owner-id
-                                     :website_user_id website-id
-                                     :image_src       nil
-                                     :status          "draft"})
+        defaults {:type "course"}
+        new-course-data (merge defaults
+                               data
+                               {:slug            (slug (->kebab-case name) (->kebab-case lang))
+                                :owner_id        owner-id
+                                :website_user_id website-id
+                                :image_src       nil
+                                :status          "draft"})
         [{new-course-id :id}] (db/create-course! new-course-data)
         course-data {:initial-scene    nil
                      :navigation-mode  :activity

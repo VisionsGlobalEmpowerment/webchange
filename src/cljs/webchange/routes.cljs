@@ -14,7 +14,7 @@
                   "wizard"            :wizard ;deprecated
                   "game-changer"      {[""] :wizard ;migrating full wizard to /game-changer address
                                        ["/" :course-slug "/" :scene-slug] :wizard-configured}
-                  "book-creator"      :game-changer ;migrating simple activity creation to /book-creator
+                  "book-creator"      :book-creator
                   "s"                 {["/" :course-id "/" :scene-id] :sandbox
                                        ["/" :course-id "/" :scene-id "/" [#".+" :encoded-items]] :sandbox}
                   "courses"           {["/" :id]           :course

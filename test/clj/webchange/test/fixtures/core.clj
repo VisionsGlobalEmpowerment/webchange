@@ -111,7 +111,8 @@
                    :image-src nil
                    :status "draft"
                    :website-user-id nil
-                   :owner-id 1}
+                   :owner-id 1
+                   :type "course"}
          course-data (->> (merge defaults options)
                           (transform-keys ->snake_case_keyword))
          [{course-id :id}] (db/create-course! course-data)
@@ -328,9 +329,25 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn get-books-by-website-user
+  [user-id]
+  (let [url (str "/api/books/by-website-user/" user-id)
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
 (defn get-available-courses
   []
   (let [url (str "/api/courses/available")
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-book-library
+  []
+  (let [url (str "/api/books/library")
         request (-> (mock/request :get url)
                     (mock/header :content-type "application/json")
                     teacher-logged-in)]
