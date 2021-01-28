@@ -37,11 +37,11 @@
                                                          :target "book"}]}}
                :triggers      {:start {:on     "start"
                                        :action "start-scene"}}
-               :metadata      {:autostart  true
-                               :stage-size :contain}
+               :metadata      {:autostart      true
+                               :stage-size     :contain
+                               :flipbook-pages {:total        0
+                                                :current-side "right"}}
                :audio         {}})
-
-
 
 (defn- apply-page-size
   [activity-data {:keys [width height padding]}]

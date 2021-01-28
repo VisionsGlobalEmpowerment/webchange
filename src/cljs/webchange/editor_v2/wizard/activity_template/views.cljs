@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.wizard.activity-template.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
+    [webchange.editor-v2.wizard.activity-template.utils :refer [check-conditions]]
     [webchange.editor-v2.wizard.activity-template.views-answers :refer [answers-option]]
     [webchange.editor-v2.wizard.activity-template.views-characters :refer [characters-option]]
     [webchange.editor-v2.wizard.activity-template.views-image :refer [image-option]]
@@ -35,34 +36,34 @@
                 [key option])))
     (:options template)))
 
-(defn- check-condition
-  [{:keys [key state value]} data]
-  (case (keyword state)
-    :not-in (let []
-              (not (some #{(get data key)} value)))
-    true))
-
 (defn- filter-options
-  [data options]
+  [data metadata options]
   (->> options
        (filter (fn [[_ {:keys [conditions]}]]
                  (if (some? conditions)
-                   (every? (fn [condition] (check-condition condition data)) conditions)
+                   (check-conditions conditions data metadata)
                    true)))))
 
+(defn- set-default-values!
+  [data options]
+  (doseq [[key {:keys [default]}] options]
+    (when (and (some? default)
+               (not (some? (get @data key))))
+      (swap! data assoc key default))))
+
 (defn template
-  [{:keys [template data validator]}]
-  (let [options (->> template
-                     (template->options)
-                     (filter-options @data))]
+  [{:keys [template metadata data validator]}]
+  (let [options (template->options template)]
+    (set-default-values! data options)
     [ui/grid {:container   true
               :justify     "space-between"
               :spacing     24
               :align-items "center"}
-     (for [[key option] options]
+     (for [[key option] (filter-options @data metadata options)]
        ^{:key key}
        [ui/grid {:item true :xs 12}
         [option-info {:key       key
                       :option    option
                       :data      data
+                      :metadata  metadata
                       :validator validator}]])]))
