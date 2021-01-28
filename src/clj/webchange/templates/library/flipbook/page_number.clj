@@ -11,14 +11,6 @@
    :fill           "---"
    :text           "---"})
 
-(defn- get-page-position
-  [page-number starts-from]
-  (let [name->number (fn [name] (if (= name "left") 0 1))
-        number->name (fn [number] (if (= number 0) "left" "right"))]
-    (if (even? page-number)
-      (->> starts-from name->number (- 1) number->name)
-      starts-from)))
-
 (defn- set-position
   [object-data {:keys [width height padding page-side]}]
   (let [[x y] (case page-side
@@ -42,8 +34,8 @@
 (defn add-page-number
   [activity-data page-group-name page-data]
   (let [current-page-number (-> activity-data (get-in [:metadata :flipbook-pages :total] 0) (inc))
-        pages-start-from (-> activity-data (get-in [:metadata :flipbook-pages :start-from] "left"))
-        page-side (get-page-position current-page-number pages-start-from)
+        current-page-side (-> activity-data (get-in [:metadata :flipbook-pages :current-side] "left"))
+        page-side (if (= current-page-side "left") "right" "left")
 
         object-name (utils/generate-name "page-number")
         object-data (-> template
@@ -54,4 +46,5 @@
     (-> activity-data
         (update-in [:objects (keyword page-group-name) :children] add-child object-name)
         (assoc-in [:objects (keyword object-name)] object-data)
-        (update-in [:metadata :flipbook-pages :total] inc))))
+        (update-in [:metadata :flipbook-pages :total] inc)
+        (assoc-in [:metadata :flipbook-pages :current-side] page-side))))

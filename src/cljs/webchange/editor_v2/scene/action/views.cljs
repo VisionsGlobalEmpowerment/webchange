@@ -16,7 +16,8 @@
         current-action @(re-frame/subscribe [::scene-action.events/current-action])
         scene-id (re-frame/subscribe [::subs/current-scene])
         scene-data @(re-frame/subscribe [::subs/scene @scene-id])
-        action (get-in scene-data [:metadata :actions current-action])
+        metadata (get scene-data :metadata)
+        action (get-in metadata [:actions current-action])
         data (r/atom {})
         close #(re-frame/dispatch [::scene-action.events/close])
         save #(re-frame/dispatch [::scene-action.events/save course-id @data @scene-id
@@ -36,6 +37,7 @@
        [ui/dialog-title (:title action)]
        [ui/dialog-content {:class-name "translation-form"}
         [template {:template action
+                   :metadata metadata
                    :data     data}]]
        [ui/dialog-actions
         [ui/button {:on-click close}

@@ -39,7 +39,10 @@
                                                    :label   "Type"
                                                    :default "page"
                                                    :options [{:name "Page" :value "page"}
-                                                             {:name "Spread" :value "spread"}]}
+                                                             {:name    "Spread" :value "spread"
+                                                              :enable? {:key   [:metadata :flipbook-pages :current-side]
+                                                                        :state :equal
+                                                                        :value "right"}}]}
                                                   {:key        :page-layout
                                                    :type       "lookup-image"
                                                    :label      "Page layout"
