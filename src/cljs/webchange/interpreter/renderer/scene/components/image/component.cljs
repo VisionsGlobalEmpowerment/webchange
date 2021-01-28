@@ -22,6 +22,9 @@
                     :border-radius {}
                     :origin        {}
                     :image-size    {}
+                    :mask-height   {}
+                    :mask-width    {}
+                    :mask-align    {}
                     :max-width     {}
                     :max-height    {}
                     :min-width     {}
@@ -40,7 +43,7 @@
       (aset "name" (str object-name "-sprite")))))
 
 (defn- create-sprite-mask
-  [{:keys [border-radius width height image-size]}]
+  [{:keys [border-radius width height image-size mask-width mask-height]}]
   (cond
     (some? border-radius) (let [[lt rt rb lb] border-radius]
                             (doto (Graphics.)
@@ -55,6 +58,13 @@
                               (.lineTo 0 lt)                ; left
                               (.arc lt lt lt Math/PI (* 0.75 Math/PI)) ; top-left
                               (.endFill 0x000000)))
+
+    (and (some? mask-width)
+         (some? mask-height)) (doto (Graphics.)
+                                (.beginFill 0x000000)
+                                (.drawRect 0 0 mask-width mask-height)
+                                (.endFill 0x000000))
+
     (and (some? image-size)
          (some? width)
          (some? height)) (doto (Graphics.)
@@ -96,7 +106,11 @@
   :max-height - max image height.
   :min-width - min image width.
   :min-height - min image height."
-  [{:keys [parent type on-click ref object-name] :as props}]
+  [{:keys [parent type on-click ref object-name src] :as props}]
+
+  (print ">>> Image" src)
+  (print (select-keys props [:mask-height :mask-width :mask-align]))
+
   (let [state (atom props)
         image (create-sprite props)
         image-mask (create-sprite-mask props)
@@ -113,6 +127,7 @@
     (when-not (nil? ref) (ref wrapped-image))
 
     (image-utils/set-image-size image props)
+    (image-utils/set-image-position image props)
     (image-utils/apply-origin image-container props)
     (image-utils/apply-boundaries image-container props)
 

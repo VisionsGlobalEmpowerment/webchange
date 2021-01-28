@@ -60,3 +60,12 @@
                          (utils/set-position sprite x y))
     :else (do (utils/set-not-nil-value sprite "width" width)
               (utils/set-not-nil-value sprite "height" height))))
+
+(defn set-image-position
+  [sprite {:keys [mask-width mask-height mask-align]}]
+  (when (and (every? some? [mask-width mask-height mask-align]))
+    (let [{:keys [width]} (utils/get-size sprite)
+          position (case mask-align
+                     "right-of-center" {:x (* -1 (/ width 2))}
+                     "left-of-center" {:x (- mask-width (/ width 2))})]
+      (utils/set-position sprite position))))
