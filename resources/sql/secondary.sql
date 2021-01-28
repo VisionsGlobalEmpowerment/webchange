@@ -62,11 +62,11 @@ DO UPDATE SET name=:name, school_id=:school_id WHERE classes.guid=:guid
 
 -- :name create-or-update-courses! :! :n
 -- :doc creates a new course record
-INSERT INTO courses (id, name, slug, lang, image_src, status, owner_id, website_user_id)
-VALUES (:id, :name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id)
+INSERT INTO courses (id, name, slug, lang, image_src, status, owner_id, website_user_id, type)
+VALUES (:id, :name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id, :type)
 ON CONFLICT ON CONSTRAINT courses_pkey
 DO UPDATE SET name=:name, slug=:slug, lang=:lang, image_src=:image_src, status=:status,
-owner_id=:owner_id, website_user_id=:website_user_id
+owner_id=:owner_id, website_user_id=:website_user_id, type=:type
 WHERE courses.id=:id
 
 -- :name reset-courses-seq! :? :1

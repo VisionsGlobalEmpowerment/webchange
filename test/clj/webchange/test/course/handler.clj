@@ -60,6 +60,16 @@
         retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
     (is (= edited-value retrieved-value))))
 
+(deftest book-can-be-created
+  (let [name "My test Book"
+        course-data {:name name :lang "English" :type "book"}
+        saved-value (-> (f/create-course! course-data) :body slurp (json/read-str :key-fn keyword))
+        retrieved-value (-> (:slug saved-value) f/get-course :body slurp (json/read-str :key-fn keyword))]
+    (is (= name (:name saved-value)))
+    (is (not (nil? (:id saved-value))))
+    (is (not (nil? (:slug saved-value))))
+    (is (not (nil? (:scene-list retrieved-value))))))
+
 (deftest activity-can-be-created-from-template
   (let [{user-id :id} (f/website-user-created)
         course (f/course-created {:owner-id user-id})
@@ -170,7 +180,7 @@
            (is (= original-value retrieved-value))))
 
 (deftest course-info-can-be-retrieved
-  (let [keys [:id :slug :name :lang :image-src :status :website-user-id :owner-id]
+  (let [keys [:id :slug :name :lang :image-src :status :website-user-id :owner-id :type]
         course (f/course-created)
         response (f/get-course-info (:slug course))
         body (-> response :body slurp (json/read-str :key-fn keyword))]
@@ -211,10 +221,30 @@
             my-courses (-> (f/get-courses-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
         (is (= 1 (count my-courses)))))))
 
+(deftest localized-book-is-still-a-book
+  (let [course (f/course-created {:type "book"})
+        new-language "new-language"]
+    (with-global-fake-routes-in-isolation
+      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
+      (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
+            my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))
+            first-book-info (-> my-books first :slug (f/get-course-info) :body slurp (json/read-str :key-fn keyword))]
+        (is (= 1 (count my-books)))
+        (is (= "book" (:type first-book-info)))))))
+
 (deftest available-courses-can-be-retrieved
   (let [course-name "available course"
         _ (f/course-created {:name course-name :status "published"})
         response (f/get-available-courses)
+        courses (-> response :body slurp (json/read-str :key-fn keyword))]
+    (is (= 200 (:status response)))
+    (is (= 1 (count courses)))
+    (is (= course-name (-> courses first :name)))))
+
+(deftest book-library-can-be-retrieved
+  (let [course-name "published book"
+        _ (f/course-created {:name course-name :status "published" :type "book"})
+        response (f/get-book-library)
         courses (-> response :body slurp (json/read-str :key-fn keyword))]
     (is (= 200 (:status response)))
     (is (= 1 (count courses)))

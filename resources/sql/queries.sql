@@ -52,7 +52,7 @@ WHERE t.school_id = :school_id or s.school_id = :school_id;
 
 -- :name create-course! :<!
 -- :doc creates a new course record
-INSERT INTO courses (name, slug, lang, image_src, status, owner_id, website_user_id) VALUES (:name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id) RETURNING id
+INSERT INTO courses (name, slug, lang, image_src, status, owner_id, website_user_id, type) VALUES (:name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id, :type) RETURNING id
 
 -- :name save-course-info! :! :n
 -- :doc updates an existing course record
@@ -81,10 +81,15 @@ WHERE slug = :slug;
 SELECT * from courses
 WHERE status = 'published' ORDER BY name DESC LIMIT 30;
 
+-- :name get-courses-by-status-and-type :? :*
+-- :doc retrieve all available courses
+SELECT * from courses
+WHERE status = :status AND type = :type ORDER BY name DESC LIMIT 30;
+
 -- :name get-courses-by-website-user :? :*
 -- :doc retrieve draft courses given website user id
 SELECT * from courses
-WHERE status = 'draft' AND website_user_id = :website_user_id ORDER BY name DESC LIMIT 30;
+WHERE status = 'draft' AND type = :type AND website_user_id = :website_user_id ORDER BY name DESC LIMIT 30;
 
 -- :name get-course-version :? :1
 -- :doc retrieve course version by id

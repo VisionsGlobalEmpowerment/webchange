@@ -117,7 +117,7 @@
     :finished-activities [student-dashboard-finished-page]
 
     ;;wizard
-    :game-changer [wizard/game-changer-panel]
+    :book-creator [wizard/book-creator-panel]
     :wizard [wizard/wizard]
     :wizard-configured [wizard/wizard-configured (:course-slug route-params) (:scene-slug route-params)]
     [page-404]))

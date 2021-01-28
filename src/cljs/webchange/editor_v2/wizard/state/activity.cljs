@@ -125,3 +125,26 @@
     (let [redirect #(redirect-to :course-editor-v2-scene :id (:course-slug %) :scene-id (:scene-slug %))]
       {:dispatch-n (list [:complete-request :create-course]
                          [::create-activity (:slug result) data redirect])})))
+
+(re-frame/reg-event-fx
+  ::create-book
+  (fn [{:keys [db]} [_ data]]
+    (let [course-data {:name (:course-name data)
+                       :lang (:lang data)
+                       :type "book"}]
+      {:db         (assoc-in db [:loading :create-course] true)
+       :http-xhrio {:method          :post
+                    :uri             (str "/api/courses")
+                    :params          course-data
+                    :format          (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success      [::create-book-success data]
+                    :on-failure      [:api-request-error :create-course]}})))
+
+(re-frame/reg-event-fx
+  ::create-book-success
+  (fn [{:keys [db]} [_ data result]]
+    (let [redirect #(redirect-to :course-editor-v2-scene :id (:course-slug %) :scene-id (:scene-slug %))
+          activity-name (:activity-name data)]
+      {:dispatch-n (list [:complete-request :create-course]
+                         [::create-activity (:slug result) (assoc data :name activity-name) redirect])})))

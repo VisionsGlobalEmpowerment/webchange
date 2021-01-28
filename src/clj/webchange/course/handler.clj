@@ -159,7 +159,7 @@
         handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
-(s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int})
+(s/defschema CreateCourse {:name s/Str :lang s/Str (s/optional-key :level) s/Str (s/optional-key :subject) s/Str (s/optional-key :concept-list-id) s/Int (s/optional-key :type) s/Str})
 (s/defschema Translate {:user-id s/Int :language s/Str})
 (s/defschema EditorTag {:id s/Int :name s/Str})
 (s/defschema EditorAsset {:id s/Int :path s/Str :thumbnail-path s/Str :type (s/enum "single-background" "background" "surface" "decoration")})
@@ -233,6 +233,19 @@
       :return [Course]
       :summary "Returns courses by website user id"
       (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
+          sign/wrap-api-with-signature)))
+  (context "/api/books" []
+    :tags ["book"]
+    (GET "/library" []
+      :return CoursesOrError
+      :summary "Returns all published books"
+      (-> (fn [request] (-> (core/get-book-library) response))
+          sign/wrap-api-with-signature))
+    (GET "/by-website-user/:website-user-id" request
+      :path-params [website-user-id :- s/Int]
+      :return [Course]
+      :summary "Returns books by website user id"
+      (-> (fn [request] (-> (core/get-books-by-website-user website-user-id) response))
           sign/wrap-api-with-signature)))))
 
 (defroutes courses-api-routes
