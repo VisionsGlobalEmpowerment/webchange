@@ -10,7 +10,8 @@
             [clojure.string :as string]
             [camel-snake-kebab.extras :refer [transform-keys]]
             [camel-snake-kebab.core :refer [->snake_case_keyword ->kebab-case-keyword ->kebab-case]]
-            [webchange.course.skills :refer [skills]]))
+            [webchange.course.skills :refer [skills]]
+            [ring.util.codec :as codec]))
 
 (def editor_asset_type_single-background "single-background")
 (def editor_asset_type_background "background")
@@ -232,25 +233,42 @@
 (defn- ->website-course
   [course]
   (-> (select-keys course [:id :name :language :slug :image-src :lang :level :subject])
+      (assoc :slug (-> course :slug (codec/url-encode)))
       (with-course-page)
       (with-default-image)
       (with-host-name :image-src)))
+
+(defn- ->website-scene
+  [scene]
+  (-> scene
+      (assoc :course-slug (-> scene :course-slug (codec/url-encode)))
+      (assoc :scene-slug (-> scene :scene-slug (codec/url-encode)))))
 
 (defn- rand-str [len]
   (apply str (take len (repeatedly #(char (+ (rand 26) 65))))))
 
 (defn- slug
+  [text]
+  (-> (->kebab-case text)
+      (string/replace #"[_~.]" "")
+      (clojure.string/lower-case)))
+
+(defn- course-slug
   [original lang]
   (let [suffix (rand-str 8)]
     (-> (str original "-" lang "-" suffix)
-        (clojure.string/lower-case))))
+        (slug))))
+
+(defn- scene-slug
+  [original]
+  (slug original))
 
 (defn localize
   [course-id {:keys [lang owner-id website-user-id]}]
   (let [current-time (jt/local-date-time)
-        {course-name :name course-slug :slug image :image-src type :type} (db/get-course-by-id {:id course-id})
+        {course-name :name image :image-src type :type} (db/get-course-by-id {:id course-id})
         localized-course-data {:name            course-name
-                               :slug            (slug course-slug lang)
+                               :slug            (course-slug course-name lang)
                                :lang            lang
                                :owner_id        owner-id
                                :image_src       image
@@ -397,7 +415,7 @@
         defaults {:type "course"}
         new-course-data (merge defaults
                                data
-                               {:slug            (slug (->kebab-case name) (->kebab-case lang))
+                               {:slug            (course-slug name lang)
                                 :owner_id        owner-id
                                 :website_user_id website-id
                                 :image_src       nil
@@ -509,25 +527,25 @@
 (defn create-scene!
   [scene-data metadata course-slug scene-name skills owner-id]
   (let [{course-id :id} (db/get-course {:slug course-slug})
-        scene-slug (->kebab-case scene-name)
+        scene-slug (scene-slug scene-name)
         {scene-id :scene-id} (save-scene-on-create! course-id scene-slug scene-data owner-id)]
     (reset-scene-skills! scene-id skills)
     (save-dataset-on-create! course-id scene-slug metadata)
     (save-course-on-create! course-id scene-slug metadata scene-name owner-id)
-    [true {:id          scene-id
-           :name        scene-name
-           :scene-slug  scene-slug
-           :course-slug course-slug}]))
+    [true (->website-scene {:id          scene-id
+                            :name        scene-name
+                            :scene-slug  scene-slug
+                            :course-slug course-slug})]))
 
 (defn create-activity-placeholder!
   [course-slug scene-name]
   (let [{course-id :id} (db/get-course {:slug course-slug})
-        scene-slug (->kebab-case scene-name)
+        scene-slug (scene-slug scene-name)
         [{scene-id :id}] (db/create-scene! {:course_id course-id :name scene-slug})]
-    [true {:id          scene-id
-           :name        scene-name
-           :scene-slug  scene-slug
-           :course-slug course-slug}]))
+    [true (->website-scene {:id          scene-id
+                            :name        scene-name
+                            :scene-slug  scene-slug
+                            :course-slug course-slug})]))
 
 (defn- add-activity-lesson-sets!
   [course-id scene-slug {:keys [lesson-sets]} owner-id]
