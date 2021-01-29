@@ -32,11 +32,31 @@
 (re-frame/reg-event-fx
   ::select-stage
   (fn [{:keys [db]} [_ idx]]
-    (let [objects (get-in db [:current-scene-data :scene-objects])
-          stage (get-in db [:current-scene-data :metadata :stages idx])
-          visible? (fn [name] (some #{name} (:objects stage)))]
-      {:db (assoc-in db (path-to-db [:current-stage]) idx)
-       :dispatch-n (->> objects
-                        flatten
-                        (map (fn [object-name]
-                               [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]])))})))
+    (let [metadata (get-in db [:current-scene-data :metadata])]
+      (if (contains? metadata :flipbook-name)
+        {:dispatch [::select-flipbook-stage idx]}
+        (let [objects (get-in db [:current-scene-data :scene-objects])
+              stage (get-in db [:current-scene-data :metadata :stages idx])
+              visible? (fn [name] (some #{name} (:objects stage)))]
+          {:db         (assoc-in db (path-to-db [:current-stage]) idx)
+           :dispatch-n (->> objects
+                            flatten
+                            (map (fn [object-name]
+                                   [::scene/change-scene-object (keyword object-name) [[:set-visibility {:visible (visible? object-name)}]]])))})))))
+
+(re-frame/reg-event-fx
+  ::select-flipbook-stage
+  (fn [{:keys [db]} [_ idx]]
+    (let [metadata (get-in db [:current-scene-data :metadata])
+          book-name (get metadata :flipbook-name)
+          stage (get-in metadata [:stages idx])
+          scene-id (:current-scene db)
+          component-wrapper @(get-in db [:transitions scene-id book-name])]
+      {:db                   (assoc-in db (path-to-db [:current-stage]) idx)
+       :flipbook-show-spread {:component-wrapper component-wrapper
+                              :spread-idx        (:idx stage)}})))
+
+(re-frame/reg-fx
+  :flipbook-show-spread
+  (fn [{:keys [component-wrapper spread-idx]}]
+    ((:show-spread component-wrapper) spread-idx)))

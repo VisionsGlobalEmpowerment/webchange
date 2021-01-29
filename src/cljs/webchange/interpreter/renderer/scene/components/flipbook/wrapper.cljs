@@ -22,7 +22,8 @@
                          (map first)
                          (map :object-name)
                          (map clojure.core/name))]
-    (when (and (> index -1)
+    (when (and (some? index)
+               (> index -1)
                (< index (count pages-names)))
       (nth pages-names index))))
 
@@ -87,6 +88,22 @@
                                                (on-end))}))
       (on-end))))
 
+(defn- show-spread
+  [state spread]
+  (let [{:keys [left right]} (spread-numbers->object-names state spread)]
+    (when (some? left)
+      (utils/set-position (keyword left) (get-left-page-position state))
+      (utils/set-visibility (keyword left) true))
+    (when (some? right)
+      (utils/set-position (keyword right) (get-right-page-position state))
+      (utils/set-visibility (keyword right) true))))
+
+(defn- hide-spread
+  [state spread]
+  (let [{:keys [left right]} (spread-numbers->object-names state spread)]
+    (when (some? left) (utils/set-visibility (keyword left) false))
+    (when (some? right) (utils/set-visibility (keyword right) false))))
+
 (defn wrap
   [type name container state]
   (create-wrapper {:name          name
@@ -109,4 +126,11 @@
                    :flip-forward  (fn [{:keys [on-end]}]
                                     (flip state "forward" on-end))
                    :flip-backward (fn [{:keys [on-end]}]
-                                    (flip state "backward" on-end))}))
+                                    (flip state "backward" on-end))
+                   :show-spread   (fn [spread-idx]
+                                    (let [current-spread (:current-spread @state)
+                                          new-spread {:left  (->> (* spread-idx 2) (dec))
+                                                      :right (->> (* spread-idx 2))}]
+                                      (show-spread @state new-spread)
+                                      (hide-spread @state current-spread)
+                                      (swap! state assoc :current-spread new-spread)))}))
