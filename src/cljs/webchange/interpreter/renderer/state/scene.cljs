@@ -90,7 +90,7 @@
 (defn get-object-name
   [db object-name]
   (or (get-scene-object db object-name)
-               (get-scene-group db object-name)))
+      (get-scene-group db object-name)))
 
 (re-frame/reg-event-fx
   ::change-scene-object

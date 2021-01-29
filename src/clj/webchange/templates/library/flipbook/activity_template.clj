@@ -40,6 +40,7 @@
                :metadata      {:autostart      true
                                :stage-size     :contain
                                :stages         []
+                               :flipbook-name  "book"
                                :flipbook-pages {:total        0
                                                 :current-side "right"}}
                :audio         {}})
