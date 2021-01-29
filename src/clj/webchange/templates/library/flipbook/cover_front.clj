@@ -1,6 +1,8 @@
 (ns webchange.templates.library.flipbook.cover-front
   (:require
-    [clojure.string :refer [join]]))
+    [clojure.string :refer [join]]
+    [clojure.tools.logging :as log]
+    [webchange.utils.text :as text-utils]))
 
 (def page-name "page-cover")
 
@@ -29,13 +31,15 @@
                            :y        "---"
                            :children ["page-cover-title-text" "page-cover-authors"]}
    :page-cover-title-text {:type           "text"
-                           :x              0
                            :y              0
-                           :vertical-align "top"
-                           :fill           "---"
                            :font-size      60
                            :font-family    "Lexend Deca"
                            :align          "center"
+                           :vertical-align "top"
+                           :x              "---"
+                           :width          "---"
+                           :chunks         "---"
+                           :fill           "---"
                            :text           "---"}
    :page-cover-authors    {:type           "text"
                            :x              0
@@ -53,7 +57,9 @@
         (assoc-in [:page-cover-background :width] width)
         (assoc-in [:page-cover-background :height] height)
         (assoc-in [:page-cover-title :x] page-center)
-        (assoc-in [:page-cover-image :x] page-center))))
+        (assoc-in [:page-cover-image :x] page-center)
+        (assoc-in [:page-cover-title-text :x] (- (/ width 4)))
+        (assoc-in [:page-cover-title-text :width] (/ width 2)))))
 
 (defn- set-layout
   [page-data {:keys [layout]}]
@@ -75,6 +81,7 @@
     (-> page-data
         (assoc-in [:page-cover-image :src] image-src)
         (assoc-in [:page-cover-title-text :text] title)
+        (assoc-in [:page-cover-title-text :chunks] (text-utils/text->chunks title))
         (assoc-in [:page-cover-authors :text] authors-text))))
 
 (defn- set-colors
@@ -94,6 +101,7 @@
      :text-color (default=0x000000)"
   [page-params content-params]
   {:name      page-name
+   :text-name "page-cover-title-text"
    :resources resources
    :objects   (-> template
                   (apply-page-size page-params)

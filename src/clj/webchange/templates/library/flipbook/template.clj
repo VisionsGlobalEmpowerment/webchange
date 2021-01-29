@@ -1,5 +1,6 @@
 (ns webchange.templates.library.flipbook.template
   (:require
+    [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
     [webchange.templates.library.flipbook.credits :as credits]
@@ -126,9 +127,12 @@
     (vec (concat before [item] after))))
 
 (defn- add-page-to-book
-  [activity-data {:keys [with-action? with-page-number?]} {:keys [name resources objects text-name] :as page-data}]
+  [activity-data
+   {:keys [with-action? with-page-number? shift-from-end]
+    :or   {shift-from-end 0}}
+   {:keys [name resources objects text-name] :as page-data}]
   (let [current-pages-count (count (get-in activity-data [:objects :book :pages] []))
-        new-page-position (if with-action? (- current-pages-count 1) current-pages-count)]
+        new-page-position (- current-pages-count shift-from-end)]
     (cond-> (-> activity-data
                 (update :assets concat resources)
                 (update :objects merge objects)
@@ -156,10 +160,11 @@
 (defn create-activity
   [{:keys [authors illustrators cover-layout cover-image cover-title]}]
   (-> (get-template page-params)
-      (add-page front-cover/create {:layout    (keyword cover-layout)
-                                    :image-src (:src cover-image)
-                                    :title     cover-title
-                                    :authors   authors})
+      (add-page front-cover/create {:layout       (keyword cover-layout)
+                                    :image-src    (:src cover-image)
+                                    :title        cover-title
+                                    :authors      authors
+                                    :with-action? true})
       (add-page generic-front/create)
       (add-page credits/create {:title        cover-title
                                 :authors      authors
@@ -181,7 +186,8 @@
            :image-src         (:src image)
            :text              text
            :with-action?      true
-           :with-page-number? true}))))
+           :with-page-number? true
+           :shift-from-end    1}))))
 
 (core/register-template
   (:id metadata) metadata create-activity update-activity)
