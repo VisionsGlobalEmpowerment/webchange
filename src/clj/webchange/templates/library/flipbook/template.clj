@@ -9,7 +9,8 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.templates.library.flipbook.page-number :refer [add-page-number]]))
+    [webchange.templates.library.flipbook.page-number :refer [add-page-number]]
+    [webchange.templates.library.flipbook.stages :refer [update-stages]]))
 
 (def metadata {:id          24
                :name        "flipbook"
@@ -131,12 +132,14 @@
    {:keys [with-action? with-page-number? shift-from-end]
     :or   {shift-from-end 0}}
    {:keys [name resources objects text-name] :as page-data}]
-  (let [current-pages-count (count (get-in activity-data [:objects :book :pages] []))
+  (let [book-object-name :book
+        current-pages-count (count (get-in activity-data [:objects book-object-name :pages] []))
         new-page-position (- current-pages-count shift-from-end)]
     (cond-> (-> activity-data
                 (update :assets concat resources)
                 (update :objects merge objects)
-                (update-in [:objects :book :pages] insert-to {:object name} new-page-position))
+                (update-in [:objects book-object-name :pages] insert-to {:object name :text text-name} new-page-position)
+                (update-stages {:book-name book-object-name}))
             (and with-action?
                  (some? text-name)) (add-text-animation-action new-page-position page-data)
             with-page-number? (add-page-number name page-params))))

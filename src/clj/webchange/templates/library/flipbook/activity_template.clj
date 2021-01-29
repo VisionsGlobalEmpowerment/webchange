@@ -39,6 +39,7 @@
                                        :action "start-scene"}}
                :metadata      {:autostart      true
                                :stage-size     :contain
+                               :stages         []
                                :flipbook-pages {:total        0
                                                 :current-side "right"}}
                :audio         {}})
