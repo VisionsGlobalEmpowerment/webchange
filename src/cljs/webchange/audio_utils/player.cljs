@@ -8,7 +8,6 @@
 
 (defn play
   [audio-object]
-  (print "audio-object" audio-object)
   (when-not (nil? audio-object)
     (.play audio-object)))
 

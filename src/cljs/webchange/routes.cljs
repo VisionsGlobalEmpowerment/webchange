@@ -13,22 +13,22 @@
                   "register"          :register-user
                   "wizard"            :wizard ;deprecated
                   "game-changer"      {[""] :wizard ;migrating full wizard to /game-changer address
-                                       ["/" [#".+" :course-slug] "/" [#".+" :scene-slug]] :wizard-configured}
+                                       ["/" [#"[\w-%]+" :course-slug] "/" [#"[\w-%]+" :scene-slug]] :wizard-configured}
                   "book-creator"      :book-creator
-                  "s"                 {["/" [#".+" :course-id] "/" [#".+" :scene-id]] :sandbox
-                                       ["/" [#".+" :course-id] "/" [#".+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
-                  "courses"           {["/" [#".+" :id]]           :course
-                                       ["/" [#".+" :id] "/editor"] :course-editor
-                                       ["/" [#".+" :id] "/editor-v2"] :course-editor-v2
-                                       ["/" [#".+" :course-id] "/table"] :course-table
-                                       ["/" [#".+" :course-id] "/scenes-crossing"] :scenes-crossing
-                                       ["/" [#".+" :course-id] "/editor-v2/concepts/" :concept-id] :course-editor-v2-concept
-                                       ["/" [#".+" :course-id] "/editor-v2/add-concept"] :course-editor-v2-add-concept
-                                       ["/" [#".+" :course-id] "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson
-                                       ["/" [#".+" :course-id] "/editor-v2/levels/" :level-id "/add-lesson"] :course-editor-v2-add-lesson
-                                       ["/" [#".+" :id] "/editor-v2/" [#".+" :scene-id]] :course-editor-v2-scene
-                                       ["/" [#".+" :id] "/dashboard"] :student-course-dashboard
-                                       ["/" [#".+" :id] "/dashboard/finished"] :finished-activities}
+                  "s"                 {["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id]] :sandbox
+                                       ["/" [#"[\w-%]+" :course-id] "/" [#"[\w-%]+" :scene-id] "/" [#".+" :encoded-items]] :sandbox}
+                  "courses"           {["/" [#"[\w-%]+" :id]]           :course
+                                       ["/" [#"[\w-%]+" :id] "/editor"] :course-editor
+                                       ["/" [#"[\w-%]+" :id] "/editor-v2"] :course-editor-v2
+                                       ["/" [#"[\w-%]+" :course-id] "/table"] :course-table
+                                       ["/" [#"[\w-%]+" :course-id] "/scenes-crossing"] :scenes-crossing
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/concepts/" :concept-id] :course-editor-v2-concept
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/add-concept"] :course-editor-v2-add-concept
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/levels/" :level-id "/lessons/" :lesson-id] :course-editor-v2-lesson
+                                       ["/" [#"[\w-%]+" :course-id] "/editor-v2/levels/" :level-id "/add-lesson"] :course-editor-v2-add-lesson
+                                       ["/" [#"[\w-%]+" :id] "/editor-v2/" [#"[\w-%]+" :scene-id]] :course-editor-v2-scene
+                                       ["/" [#"[\w-%]+" :id] "/dashboard"] :student-course-dashboard
+                                       ["/" [#"[\w-%]+" :id] "/dashboard/finished"] :finished-activities}
                   "dashboard"         {[""]                                             :dashboard
                                        ["/classes"]                                     :dashboard-classes
                                        ["/schools"]                                     :dashboard-schools

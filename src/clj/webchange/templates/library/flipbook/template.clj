@@ -48,7 +48,7 @@
                                                   {:key        :page-layout
                                                    :type       "lookup-image"
                                                    :label      "Page layout"
-                                                   :image-size 4
+                                                   :image-size 2
                                                    :default    :text-big-at-bottom
                                                    :conditions [{:key   :type
                                                                  :state :in
@@ -66,13 +66,19 @@
                                                   {:key        :spread-layout
                                                    :type       "lookup-image"
                                                    :label      "Spread layout"
-                                                   :image-size 4
-                                                   :default    :text-small-transparent
+                                                   :image-size 2
+                                                   :default    :text-right-top
                                                    :conditions [{:key   :type
                                                                  :state :in
                                                                  :value ["spread"]}]
-                                                   :options    [{:src   "/images/templates/page_layout/text_small_transparent.png"
-                                                                 :value :text-small-transparent}]}
+                                                   :options    [{:src   "/images/templates/page_layout/spread_text_right_top.png"
+                                                                 :value :text-right-top}
+                                                                {:src   "/images/templates/page_layout/spread_text_right_bottom.png"
+                                                                 :value :text-right-bottom}
+                                                                {:src   "/images/templates/page_layout/spread_text_left_top.png"
+                                                                 :value :text-left-top}
+                                                                {:src   "/images/templates/page_layout/spread_text_left_bottom.png"
+                                                                 :value :text-left-bottom}]}
                                                   {:key        :text
                                                    :type       "string"
                                                    :label      "Text"
@@ -104,7 +110,8 @@
                                  :type        "text-animation"
                                  :audio       nil,
                                  :target      text-name
-                                 :animation   "bounce"
+                                 :animation   "color"
+                                 :fill        0x00B2FF
                                  :phrase-text text-value}]}]
    :phrase             action-name
    :phrase-description "Page Action"})
