@@ -58,7 +58,6 @@
         activity-data (get-activity-data data)]
     (-> (save-course course-data)
         (.then (fn [new-course]
-                 (print "new-course" new-course)
                  (save-activity activity-data (:slug new-course))))
         (.then callback))))
 

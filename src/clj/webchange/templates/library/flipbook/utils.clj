@@ -42,7 +42,7 @@
 
 (defn get-text-name
   [template]
-  (->> template
+  (some->> template
        (filter (fn [[_ {:keys [type]}]] (= type "text")))
        (map first)
        (first)

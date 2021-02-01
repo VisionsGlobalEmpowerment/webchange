@@ -36,7 +36,6 @@
 
 (defn add-track-action
   [scene-data {:keys [track-name type action-id]}]
-  (println "track-name type action-id" track-name type action-id)
   (let
     [step {:type type, :action-id action-id}
      item (->> (get-in scene-data [:metadata :tracks])

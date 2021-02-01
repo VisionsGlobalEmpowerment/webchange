@@ -153,13 +153,10 @@
   (let [{:keys [url alias start duration selected? target]} audio-data
         wave-state-loading? @(re-frame/subscribe [::wave-form-state/audio-script-loading url])
         handle-change-data (fn [data]
-                             (println "handle-change-data" url data)
                              (re-frame/dispatch [::translator-form.scene/update-asset url data]))
         handle-select (fn []
-                        (println "handle-select" url)
                         (re-frame/dispatch [::translator-form.actions/set-phrase-action-audio url]))
         handle-change-region (fn [region]
-                               (println "handle-change-region" url region)
                                (re-frame/dispatch [::translator-form.actions/set-phrase-action-audio-region
                                                               url
                                                               (:start region)
