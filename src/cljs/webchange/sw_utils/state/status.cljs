@@ -1,6 +1,7 @@
 (ns webchange.sw-utils.state.status
   (:require
     [re-frame.core :as re-frame]
+    [webchange.error-message.state :as error-message]
     [webchange.logger :as logger]
     [webchange.sw-utils.message :refer [set-current-course]]
     [webchange.sw-utils.state.db :refer [path-to-db]]))
@@ -114,16 +115,5 @@
 (re-frame/reg-event-fx
   ::handle-error
   (fn [{:keys [db]} [_ error]]
-    {:db (-> db
-             (update-in (path-to-db [:errors]) conj error)
-             (assoc-in (path-to-db [:current-error]) error))}))
-
-(re-frame/reg-sub
-  ::current-error
-  (fn [db]
-    (get-in db (path-to-db [:current-error]))))
-
-(re-frame/reg-event-fx
-  ::reset-current-error
-  (fn [{:keys [db]} [_]]
-    {:db (assoc-in db (path-to-db [:current-error]) nil)}))
+    {:db       (update-in db (path-to-db [:errors]) conj error)
+     :dispatch [::error-message/show :sw-error error]}))
