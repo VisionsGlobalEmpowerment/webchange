@@ -1,6 +1,7 @@
 (ns webchange.editor-v2.scene.state.stage
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.scene.data.stage.state :as stage]
     [webchange.editor-v2.scene.state.db :refer [path-to-db]]
     [webchange.interpreter.renderer.state.scene :as scene]))
 
@@ -47,14 +48,10 @@
 (re-frame/reg-event-fx
   ::select-flipbook-stage
   (fn [{:keys [db]} [_ idx]]
-    (let [metadata (get-in db [:current-scene-data :metadata])
-          book-name (get metadata :flipbook-name)
-          stage (get-in metadata [:stages idx])
-          scene-id (:current-scene db)
-          component-wrapper @(get-in db [:transitions scene-id book-name])]
-      {:db                   (assoc-in db (path-to-db [:current-stage]) idx)
-       :flipbook-show-spread {:component-wrapper component-wrapper
-                              :spread-idx        (:idx stage)}})))
+    (let [stage (-> (get-in db [:current-scene-data :metadata])
+                    (get-in [:stages idx]))]
+      {:db       (assoc-in db (path-to-db [:current-stage]) idx)
+       :dispatch [::stage/show-flipbook-stage (:idx stage)]})))
 
 (re-frame/reg-fx
   :flipbook-show-spread

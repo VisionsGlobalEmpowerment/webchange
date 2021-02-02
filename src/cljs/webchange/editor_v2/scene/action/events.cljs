@@ -48,6 +48,4 @@
 (re-frame/reg-event-fx
   ::save
   (fn [{:keys [_]} [_ course-slug data scene-id callback]]
-    {:dispatch-n (list [::activity/update-activity course-slug data scene-id callback]
-                       )}))
-
+    {:dispatch-n (list [::activity/update-activity course-slug data scene-id callback])}))

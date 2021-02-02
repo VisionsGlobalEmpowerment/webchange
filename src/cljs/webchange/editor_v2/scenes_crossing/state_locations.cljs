@@ -4,7 +4,7 @@
     [webchange.editor-v2.scenes-crossing.state :as crossing-state]
     [webchange.editor-v2.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.edit-common :as common]
-    [webchange.state :as state]))
+    [webchange.state.state :as state]))
 
 (re-frame/reg-sub
   ::has-locations?

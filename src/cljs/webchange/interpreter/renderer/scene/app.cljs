@@ -56,7 +56,8 @@
 
 (defn get-renderer
   []
-  (.-renderer @pixi-app))
+  (when (some? @pixi-app)
+    (.-renderer @pixi-app)))
 
 (defn get-stage
   ([]
@@ -77,3 +78,9 @@
       (aset scale "x" scale-x)
       (aset scale "y" scale-y)
       (.resize renderer width height))))
+
+(defn take-screenshot
+  [callback]
+  (let [renderer (get-renderer)
+        canvas (.-view renderer)]
+    (.toBlob canvas callback)))

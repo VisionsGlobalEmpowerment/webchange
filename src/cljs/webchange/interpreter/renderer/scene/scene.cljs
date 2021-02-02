@@ -26,13 +26,14 @@
      (aset "y" scale-y))))
 
 (defn- init-app
-  [viewport]
+  [viewport mode]
   (if (app-exists?)
     (get-app)
     (let [{:keys [x y width height scale-x scale-y]} viewport]
-      (doto (Application. (clj->js {:antialias false
-                                    :width     width
-                                    :height    height}))
+      (doto (Application. (clj->js (cond-> {:antialias false
+                                            :width     width
+                                            :height    height}
+                                           (= mode ::modes/editor) (assoc :preserveDrawingBuffer true))))
         (-> get-stage (set-scale scale-x scale-y))
         (-> get-stage (set-position x y))
         (register-app)))))
@@ -53,7 +54,7 @@
                      (fn [this]
                        (re-frame/dispatch [::state/init])
                        (let [{:keys [mode on-ready viewport objects]} (r/props this)
-                             app (init-app viewport)]
+                             app (init-app viewport mode)]
                          (.appendChild @container (.-view app))
                          (create-component mode {:type        "group"
                                                  :object-name :scene
@@ -66,10 +67,9 @@
                                              :viewport viewport}))
 
                          (create-component (question/create {:parent   (get-stage)
-                                           :viewport viewport}))
+                                                             :viewport viewport}))
 
-                         (when (modes/start-on-ready? mode)
-                           (on-ready))))
+                         (on-ready)))
 
        :component-will-unmount
                      (fn []
@@ -81,6 +81,7 @@
 
        :reagent-render
                      (fn [{:keys []}]
-                       [:div {:style {:width  "100%"
-                                      :height "100%"}
+                       [:div {:style {:position "absolute"
+                                      :width    "100%"
+                                      :height   "100%"}
                               :ref   #(when % (reset! container %))}])})))

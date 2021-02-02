@@ -6,7 +6,7 @@
     [webchange.editor-v2.course-table.state.edit-common :as common]
     [webchange.interpreter.subs :as interpreter.subs]
     [webchange.subs :as subs]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.state :as state]))
 
 (defn- get-lesson-set-items
   [db lesson-data scheme-name]
@@ -72,9 +72,9 @@
                                                      :position    target-position}))]
       {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
                            (map (fn [[_ {:keys [new-name items]}]]
-                                  [::warehouse/create-lesson-set {:dataset-id dataset-id
-                                                                  :name       new-name
-                                                                  :data       {:items items}}])
+                                  [::state/create-lesson-set {:dataset-id dataset-id
+                                                              :name       new-name
+                                                              :data       {:items items}}])
                                 lesson-sets-map))})))
 
 (re-frame/reg-event-fx
@@ -110,7 +110,7 @@
           updated-course-data (utils/remove-level course-data {:level-index (:level-idx selection)})]
       {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
                            (map (fn [lesson-set-id]
-                                  [::warehouse/delete-lesson-set {:id lesson-set-id}])
+                                  [::state/delete-lesson-set {:id lesson-set-id}])
                                 lesson-sets-ids))})))
 
 (re-frame/reg-event-fx
@@ -130,9 +130,9 @@
                                                      :lesson-data lesson-data}))]
       {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
                            (map (fn [[_ lesson-set-name]]
-                                  [::warehouse/create-lesson-set {:dataset-id dataset-id
-                                                                  :name       lesson-set-name
-                                                                  :data       {:items []}}])
+                                  [::state/create-lesson-set {:dataset-id dataset-id
+                                                              :name       lesson-set-name
+                                                              :data       {:items []}}])
                                 (:lesson-sets lesson-data)))})))
 
 (re-frame/reg-event-fx
@@ -149,7 +149,7 @@
                                                                 :lesson-index (:lesson-idx selection)})]
       {:dispatch-n (concat [[::common/update-course course-id updated-course-data]]
                            (map (fn [lesson-set-id]
-                                  [::warehouse/delete-lesson-set {:id lesson-set-id}])
+                                  [::state/delete-lesson-set {:id lesson-set-id}])
                                 lesson-sets-ids))})))
 
 (re-frame/reg-event-fx

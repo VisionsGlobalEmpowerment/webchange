@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.student-dashboard.subs :as subs]
+    [webchange.interpreter.renderer.state.db :refer [path-to-db]]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
 
@@ -82,3 +83,19 @@
   ::hide-skip-menu
   (fn [_]
     {:dispatch [::scene/change-scene-object :skip-menu [[:set-visibility {:visible false}]]]}))
+
+(re-frame/reg-event-fx
+  ::show-waiting-screen
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db (path-to-db [:overlays :waiting-screen]) true)}))
+
+(re-frame/reg-event-fx
+  ::hide-waiting-screen
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db (path-to-db [:overlays :waiting-screen]) false)}))
+
+(re-frame/reg-sub
+  ::show-waiting-screen?
+  (fn scene-data
+    [db]
+    (get-in db (path-to-db [:overlays :waiting-screen]) false)))

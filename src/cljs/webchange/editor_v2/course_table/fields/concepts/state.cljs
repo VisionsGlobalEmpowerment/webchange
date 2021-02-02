@@ -7,7 +7,7 @@
     [webchange.interpreter.events :as interpreter.events]
     [webchange.interpreter.subs :as interpreter.subs]
     [webchange.subs :as subs]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
   [relative-path component-id]

@@ -1,8 +1,7 @@
-(ns webchange.warehouse
+(ns webchange.state.warehouse
   (:require
     [re-frame.core :as re-frame]
-    [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.state :as state]))
+    [ajax.core :refer [json-request-format json-response-format]]))
 
 (defn- get-form-data
   [form-params]
@@ -55,14 +54,7 @@
     (create-request {:key    :load-course
                      :method :get
                      :uri    (str "/api/courses/" course-slug)}
-                    {:on-success [::load-course-success handlers]
-                     :on-failure (:on-failure handlers)})))
-
-(re-frame/reg-event-fx
-  ::load-course-success
-  (fn [{:keys [_]} [_ {:keys [on-success]} {:keys [id] :as response}]]
-    {:dispatch-n (cond-> [[::state/set-course-data response]]
-                         (some? on-success) (conj (conj on-success response)))}))
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::save-course
@@ -71,6 +63,17 @@
                      :method :post
                      :uri    (str "/api/courses/" course-slug)
                      :params {:course course-data}} handlers)))
+
+;; Scene
+
+(re-frame/reg-event-fx
+  ::save-scene
+  (fn [{:keys [_]} [_ {:keys [course-id scene-id scene-data]} handlers]]
+    (create-request {:key    :save-scene
+                     :method :put
+                     :uri    (str "/api/courses/" course-id "/scenes/" scene-id)
+                     :params {:scene scene-data}}
+                    handlers)))
 
 ;; Lesson sets
 
@@ -83,14 +86,7 @@
                      :params {:dataset-id dataset-id
                               :name       name
                               :data       data}}
-                    {:on-success [::create-lesson-set-success handlers]
-                     :on-failure (:on-failure handlers)})))
-
-(re-frame/reg-event-fx
-  ::create-lesson-set-success
-  (fn [{:keys [_]} [_ {:keys [on-success]} {:keys [lesson] :as response}]]
-    {:dispatch-n (cond-> [[::state/update-lesson-set (:name lesson) lesson]]
-                         (some? on-success) (conj (conj on-success response)))}))
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::update-lesson-set
@@ -106,14 +102,7 @@
     (create-request {:key    :delete-lesson-set
                      :method :delete
                      :uri    (str "/api/lesson-sets/" id)}
-                    {:on-success [::delete-lesson-set-success handlers]
-                     :on-failure (:on-failure handlers)})))
-
-(re-frame/reg-event-fx
-  ::delete-lesson-set-success
-  (fn [{:keys [_]} [_ {:keys [on-success]} {:keys [id] :as response}]]
-    {:dispatch-n (cond-> [[::state/delete-lesson-set-by-id id]]
-                         (some? on-success) (conj (conj on-success response)))}))
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::create-activity-placeholder
@@ -126,11 +115,11 @@
 ;; Static assets
 
 (re-frame/reg-event-fx
-  ::upload-audio
+  ::upload-file
   (fn [{:keys [db]} [_ {:keys [file form-params]
                         :or   {form-params []}} handlers]]
     (let [form-data (get-form-data (concat [["file" file]] form-params))]
-      (create-request {:key    :upload-audio
+      (create-request {:key    :upload-file
                        :method :post
                        :uri    (str "/api/assets/")
                        :body   form-data} handlers))))
@@ -138,6 +127,13 @@
 (re-frame/reg-event-fx
   ::upload-audio-blob
   (fn [{:keys [_]} [_ {:keys [blob]} handlers]]
-    {:dispatch [::upload-audio {:file        blob
-                                :form-params [["type" "blob"]
-                                              ["blob-type" "audio"]]} handlers]}))
+    {:dispatch [::upload-file {:file        blob
+                               :form-params [["type" "blob"]
+                                             ["blob-type" "audio"]]} handlers]}))
+
+(re-frame/reg-event-fx
+  ::upload-image-blob
+  (fn [{:keys [_]} [_ {:keys [blob]} handlers]]
+    {:dispatch [::upload-file {:file        blob
+                               :form-params [["type" "blob"]
+                                             ["blob-type" "image"]]} handlers]}))
