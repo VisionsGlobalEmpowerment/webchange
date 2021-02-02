@@ -5,7 +5,7 @@
    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
    [day8.re-frame.http-fx]
    [ajax.core :refer [json-request-format json-response-format]]
-   ))
+   [webchange.error-message.state :as error-message]))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -99,7 +99,8 @@
   :api-request-error                                                                         ;; triggered when we get request-error from the server
   (fn-traced [{:keys [db]} [_ request-type response]]                                        ;; destructure to obtain request-type and response
              {:db (assoc-in db [:errors request-type] (get-in response [:response :errors])) ;; save in db so that we can display it to the user
-              :dispatch [:complete-request request-type]}))
+              :dispatch-n (list [:complete-request request-type]
+                                [::error-message/show request-type (get-in response [:response :errors])])}))
 
 (re-frame/reg-event-fx
   ::set-active-route
