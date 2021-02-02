@@ -48,7 +48,7 @@
                                                   {:key        :page-layout
                                                    :type       "lookup-image"
                                                    :label      "Page layout"
-                                                   :image-size 2
+                                                   :image-size 1
                                                    :default    :text-big-at-bottom
                                                    :conditions [{:key   :type
                                                                  :state :in
@@ -62,7 +62,11 @@
                                                                 {:src   "/images/templates/page_layout/text_at_top.png"
                                                                  :value :text-at-top}
                                                                 {:src   "/images/templates/page_layout/text_full_page.png"
-                                                                 :value :text-only}]}
+                                                                 :value :text-only}
+                                                                {:src   "/images/templates/page_layout/icons_16.png"
+                                                                 :value :text-over-image-at-top}
+                                                                {:src   "/images/templates/page_layout/icons_17.png"
+                                                                 :value :text-over-image-at-bottom}]}
                                                   {:key        :spread-layout
                                                    :type       "lookup-image"
                                                    :label      "Spread layout"
@@ -95,8 +99,8 @@
 (def page-params {:width            960
                   :height           1080
                   :padding          50
-                  :background-color 0xff9800
-                  :border-color     0xe46a02
+                  :background-color 0xffffff
+                  :border-color     0xdadada
                   :text-color       0x000000})
 
 (defn- get-action-data
