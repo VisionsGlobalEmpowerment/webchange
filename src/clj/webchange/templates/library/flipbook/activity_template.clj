@@ -2,7 +2,13 @@
 
 (def template {:assets        [{:url "/raw/img/flipbook/next-page.png" :size 1 :type "image"}
                                {:url "/raw/img/flipbook/prev-page.png" :size 1 :type "image"}]
-               :objects       {:book      {:type         "flipbook"
+               :objects       {:background {:type   "rectangle"
+                                            :x      0
+                                            :y      0
+                                            :width  "---"
+                                            :height "---"
+                                            :fill   "---"}
+                               :book      {:type         "flipbook"
                                            :transition   "book"
                                            :x            0
                                            :y            0
@@ -25,7 +31,7 @@
                                            :height  95
                                            :src     "/raw/img/flipbook/next-page.png"
                                            :actions {:click {:id "next-page-click" :on "click" :type "action"}}}}
-               :scene-objects [["book"] ["prev-page" "next-page"]]
+               :scene-objects [["background"] ["book"] ["prev-page" "next-page"]]
                :actions       {:start-scene     {:type "sequence-data"
                                                  :data [{:type   "flipbook-init"
                                                          :target "book"}]}
@@ -46,10 +52,13 @@
                :audio         {}})
 
 (defn- apply-page-size
-  [activity-data {:keys [width height padding]}]
+  [activity-data {:keys [width height padding background-color]}]
   (let [flip-button-size {:width  95
                           :height 95}]
     (-> activity-data
+        (assoc-in [:objects :background :width] (* width 2))
+        (assoc-in [:objects :background :height] height)
+        (assoc-in [:objects :background :fill] background-color)
         (assoc-in [:objects :book :width] (* width 2))
         (assoc-in [:objects :book :height] height)
         (assoc-in [:objects :prev-page :x] padding)
