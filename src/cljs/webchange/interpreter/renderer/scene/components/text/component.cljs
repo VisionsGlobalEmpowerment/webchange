@@ -15,6 +15,8 @@
                     :font-size       {}
                     :fill            {:default "#000000"}
                     :shadow-color    {}
+                    :skew-x           {:default 0}
+                    :skew-y           {:default 0}
                     :shadow-distance {:default 5}
                     :shadow-blur     {}
                     :shadow-opacity  {}
@@ -61,13 +63,18 @@
     "middle" (aset (.-anchor text) "y" 0.5)
     "bottom" (aset (.-anchor text) "y" 1)))
 
+(defn- set-skew
+  [display-object skew-x skew-y]
+  (.setTransform display-object 0 0 1 1 0 skew-x skew-y 0 0))
+
+
 (defn set-scale
   [object scale]
   (when (some? scale)
     (utils/set-scale object scale)))
 
 (defn- create-text
-  [{:keys [text font-family font-size font-weight fill scale width word-wrap] :as props}]
+  [{:keys [text font-family font-size font-weight fill scale skew-x skew-y width word-wrap] :as props}]
   (let [position (calculate-position props)]
     (doto (Text. text (clj->js (cond-> {:fontFamily    font-family
                                         :fontWeight    font-weight
@@ -75,6 +82,7 @@
                                        (some? font-size) (assoc :fontSize font-size)
                                        (true? word-wrap) (-> (assoc :wordWrap true)
                                                              (assoc :wordWrapWidth width)))))
+      (set-skew skew-x skew-y)
       (utils/set-position position)
       (set-scale scale)
       (set-shadow props)

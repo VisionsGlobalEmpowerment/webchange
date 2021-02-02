@@ -10,10 +10,6 @@
   (when (nil? (.-filters container))
     (aset container "filters" (clj->js []))))
 
-(defn- remove-all-filters
-  [container]
-  (aset container "filters" nil))
-
 (defn- add-filter
   [filter container]
   (init-filters container)
@@ -24,12 +20,7 @@
   (->> (.-filters container)
        (js->clj)
        (some (fn [filter]
-               (and (= (.-name filter) filter-name)
-                    filter)))))
-
-(defn has-filter-by-name
-  [container filter-name]
-  (not (nil? (get-filter-by-name container filter-name))))
+               (and (= (.-name filter) filter-name) filter)))))
 
 (defn- set-brightness
   [filter value]
@@ -116,14 +107,27 @@
 (defn apply-pulsation-filter
   ([container]
    (apply-pulsation-filter container {}))
-  ([container {:keys [remove]}]
+  ([container {:keys [remove speed no-interval]}]
    (let [state (atom nil)]
      (if remove
-       (remove-ticker (get @pulsation-fns container))
+       (do
+        (remove-ticker (get @pulsation-fns container))
+        (swap! pulsation-fns assoc container nil))
        (do
          (move-pivot-to-center container)
-         (swap! pulsation-fns assoc container (fn [] (animation-eager container {:time (.now js/Date)} state)))
+         (swap! pulsation-fns assoc container (fn [] (animation-eager container {:time (.now js/Date)} state speed no-interval)))
          (create-ticker (get @pulsation-fns container)))))))
+
+(defn- remove-all-filters
+  [container]
+  (apply-pulsation-filter container {:remove true})
+  (aset container "filters" nil))
+
+(defn has-filter-by-name
+  [container filter-name]
+  (case filter-name
+    "pulsation" (not (nil? (get @pulsation-fns container)))
+    (not (nil? (get-filter-by-name container filter-name)))))
 
 (defn apply-filters
   [container filters]

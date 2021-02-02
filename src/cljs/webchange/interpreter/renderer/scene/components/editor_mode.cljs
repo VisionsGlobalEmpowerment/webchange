@@ -26,6 +26,19 @@
    :select   (fn [] (aset sprite "tint" frame-selected-color))
    :deselect (fn [] (aset sprite "tint" frame-default-color))})
 
+(defn- draw-border
+  [mask width height]
+  (let [d (/ frame-width 2)]
+    (doto mask
+      (.clear)
+      (.lineStyle frame-width 0xffffff)
+      (.moveTo 0 d)
+      (.lineTo (- width d) d)
+      (.lineTo (- width d) (- height d))
+      (.lineTo d (- height d))
+      (.lineTo d 0))
+    ))
+
 (defn- create-frame
   [component-container object-props wrapper]
   (let [{:keys [x y width height]} (let [local-bounds (.getLocalBounds (:object wrapper))]
@@ -38,15 +51,20 @@
                  (aset "width" width)
                  (aset "height" height)
                  (utils/set-position {:x x :y y}))
-        mask (let [d (/ frame-width 2)]
-               (doto (Graphics.)
-                 (.lineStyle frame-width 0xffffff)
-                 (.moveTo 0 d)
-                 (.lineTo (- width d) d)
-                 (.lineTo (- width d) (- height d))
-                 (.lineTo d (- height d))
-                 (.lineTo d 0)
-                 (utils/set-position {:x x :y y})))]
+        mask (doto (Graphics.)
+               (draw-border width height)
+               (utils/set-position {:x x :y y}))]
+    (if (instance? Container (:object wrapper))
+      (utils/set-handler (:object wrapper) "childAdded"
+                         #(let [local-bounds (.getLocalBounds (:object wrapper))
+                                width (.-width local-bounds)
+                                height (.-height local-bounds)]
+                            + (doto sprite
+                                (aset "width" width)
+                                (aset "height" height))
+                            (draw-border mask width height)
+                            (aset component-container "hitArea" (Rectangle. x y width height)))))
+
     (aset sprite "mask" mask)
     (aset component-container "hitArea" (Rectangle. x y width height))
     (.addChild component-container mask)
@@ -67,6 +85,7 @@
   (if editable?
     (let [component-container (create-editor-container props)]
       (-> props
+          (assoc :draggable false)
           (assoc :x 0)
           (assoc :y 0)
           (assoc :parent component-container)
@@ -74,19 +93,19 @@
     props))
 
 (defn- modify-common-props
-  [props]
-  (-> props
-      (dissoc :filters)
-      (dissoc :on-click)))
+  [{:keys [editable?] :as props}]
+  (cond-> props
+          editable? (assoc :draggable false)
+          editable? (dissoc :on-drag-start)
+          editable? (dissoc :on-drag-end)
+          true (dissoc :filters)
+          true (dissoc :on-click)))
 
 (defn enable
   [{:keys [type] :as props}]
   (-> (case type
         "animation" (-> props
-                        (add-editor-frame)
-                        (assoc :start false))
-        "image" (-> props
-                        (add-editor-frame)
                         (assoc :start false))
         props)
+      (add-editor-frame)
       (modify-common-props)))

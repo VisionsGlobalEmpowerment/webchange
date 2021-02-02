@@ -420,6 +420,8 @@
      }"
     (let [fn (case (keyword operation)
                :div-floor (comp Math/floor /)
-               :div-ceil (comp Math/ceil /))]
+               :div-ceil (comp Math/ceil /)
+               :plus (comp +)
+               )]
       (core/set-variable! var-name (fn value-1 value-2))
       {:dispatch (e/success-event action)})))

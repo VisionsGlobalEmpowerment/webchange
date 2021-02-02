@@ -2,18 +2,30 @@
 
 (defn init-metadata
   [metadata template args]
-  (-> template
-      (assoc-in [:metadata :actions] (:actions metadata))
-      (assoc-in [:metadata :unique-suffix] 0)
-      (assoc-in [:metadata :history] [{:type :create :args args}])))
+  (cond-> template
+          (:actions metadata) (assoc-in [:metadata :actions] (:actions metadata))
+          true (assoc-in [:metadata :unique-suffix] 0)
+          true (assoc-in [:metadata :history] [{:type :create :args args}])))
+
+(defn get-unique-suffix
+  [scene-data]
+  (get-in scene-data [:metadata :unique-suffix]))
+
+(defn make-name-unique
+  [scene-data name]
+  (keyword (str name "-" (get-unique-suffix scene-data))))
 
 (defn get-replace-params
   [scene-data]
   (let [old-action-name (get-in scene-data [:metadata :last-insert])
-        unique-suffix (get-in scene-data [:metadata :unique-suffix])]
+        unique-suffix (get-unique-suffix scene-data)]
     {:old-action-name old-action-name
      :unique-suffix   unique-suffix
      :new-action-name (str old-action-name "-" unique-suffix)}))
+
+(defn update-unique-suffix
+  [scene-data]
+  (update-in scene-data [:metadata :unique-suffix] inc))
 
 (defn merge-new-action
   [scene-data actions {:keys [old-action-name new-action-name]}]
@@ -21,7 +33,7 @@
       (assoc-in [:actions (keyword new-action-name)] (get-in scene-data [:actions (keyword old-action-name)]))
       (update-in [:actions] merge actions)
       (assoc-in [:metadata :last-insert] new-action-name)
-      (update-in [:metadata :unique-suffix] inc)))
+      (update-unique-suffix)))
 
 
 (defn add-scene-object
@@ -46,3 +58,13 @@
             (not (get-in scene-data [:metadata :tracks])) (assoc-in [:metadata :tracks] [])
             item (update-in [:metadata :tracks (first item) :nodes] conj step)
             (not item) (update-in [:metadata :tracks] conj {:title track-name :nodes [step]}))))
+
+(defn add-track-actions
+  [scene-data action-names type track-name]
+  (reduce (fn [scene-data action-name]
+            (add-track-action scene-data {
+                                          :track-name track-name
+                                          :type       type
+                                          :action-id  action-name
+                                          })
+            ) scene-data action-names))

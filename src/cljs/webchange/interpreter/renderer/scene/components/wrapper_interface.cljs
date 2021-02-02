@@ -35,6 +35,7 @@
 (defn set-slot [wrapper & params] (execute wrapper :set-slot params))
 (defn set-src [wrapper & params] (execute wrapper :set-src params))
 (defn set-highlight [wrapper & params] (execute wrapper :set-highlight params))
+(defn set-permanent-pulsation [wrapper & params] (execute wrapper :set-permanent-pulsation params))
 (defn set-draggable [wrapper & params] (execute wrapper :set-draggable params))
 (defn set-parent [wrapper & params] (execute wrapper :set-parent params))
 (defn set-text [wrapper & params] (execute wrapper :set-text params))

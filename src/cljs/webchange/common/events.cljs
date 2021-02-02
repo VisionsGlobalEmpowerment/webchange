@@ -21,7 +21,8 @@
 
 (defn prepare-params
   [action params from-params]
-  (reduce-kv (fn [m k v] (assoc m k (get params (keyword v)))) action from-params))
+  (reduce-kv (fn [m k v]
+               (assoc m k (get params (keyword v)))) action from-params))
 
 (defn prepare-action
   [{:keys [params from-params var from-var] :as action}]
@@ -158,13 +159,14 @@
 
 (defn with-var-property
   []
-  (fn [action {:keys [var-name var-property var-key action-property template to-vector]}]
+  (fn [action {:keys [var-name var-property var-key action-property template to-vector offset]}]
     (let [var (get @variables var-name)
           value (cond->> var
                          var-property ((keyword var-property))
                          var-key (hash-map (keyword var-key))
                          to-vector (conj [])
-                         template (from-template template))
+                         template (from-template template)
+                         offset (+ offset))
           should-merge-to-root (and var-name (not action-property))]
       (if should-merge-to-root
         (merge (dissoc action :from-var) value)
