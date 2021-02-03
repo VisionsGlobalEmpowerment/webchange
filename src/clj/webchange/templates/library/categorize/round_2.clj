@@ -3,9 +3,9 @@
 (def template-round-2 {:assets        [{:url "/raw/img/categorize/01.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize/02.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize/03.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize/yellow_box.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize/blue_box.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize/red_box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize/yellow_table.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize/blue_table.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize/red_table.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize/blue_crayons.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize/question.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize/red_crayons.png", :size 10, :type "image"}
@@ -15,37 +15,37 @@
                                                             :decoration {:src "/raw/img/categorize/03.png"},
                                                             :surface    {:src "/raw/img/categorize/02.png"}
                                                             }
-                                       :yellow-box
+                                       :yellow-table
                                                            {:type       "image",
-                                                            :x          786,
-                                                            :y          754,
+                                                            :x          745,
+                                                            :y          773,
                                                             :width      428,
                                                             :height     549,
                                                             :scale      0.8,
-                                                            :src        "/raw/img/categorize/yellow_box.png",
-                                                            :transition "yellow-box",
+                                                            :src        "/raw/img/categorize/yellow_table.png",
+                                                            :transition "yellow-table",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
                                                             },
-                                       :blue-box           {:type       "image",
-                                                            :x          320,
-                                                            :y          754,
-                                                            :width      428,
-                                                            :height     549,
-                                                            :scale      0.8,
-                                                            :transition "blue-box",
-                                                            :src        "/raw/img/categorize/blue_box.png",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            }
-                                       :red-box            {:type       "image",
-                                                            :x          1252,
-                                                            :y          754,
-                                                            :width      428,
-                                                            :height     549,
-                                                            :scale      0.8,
-                                                            :transition "red-box",
-                                                            :src        "/raw/img/categorize/red_box.png",
-                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                            },
+                                       :blue-table           {:type       "image",
+                                                              :x          330,
+                                                              :y          667,
+                                                              :width      428,
+                                                              :height     549,
+                                                              :scale      0.8,
+                                                              :transition "blue-table",
+                                                              :src        "/raw/img/categorize/blue_table.png",
+                                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                              }
+                                       :red-table            {:type       "image",
+                                                              :x          1160,
+                                                              :y          652,
+                                                              :width      428,
+                                                              :height     549,
+                                                              :scale      0.8,
+                                                              :transition "red-table",
+                                                              :src        "/raw/img/categorize/red_table.png",
+                                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                              },
                                        :blue-crayon-1      {
                                                             :type       "image",
                                                             :x          46,
@@ -64,10 +64,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "blue-box"
+                                                                                      :params {:box            "blue-table"
                                                                                                :target         "blue-crayon-1"
                                                                                                :init-position  {:x 46, :y 1050, :duration 1}
-                                                                                               :check-variable "blue-box-selected"
+                                                                                               :check-variable "blue-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}},
                                        :blue-crayon-2      {
@@ -89,10 +89,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "blue-box"
+                                                                                      :params {:box            "blue-table"
                                                                                                :target         "blue-crayon-2"
                                                                                                :init-position  {:x 592, :y 500, :duration 1}
-                                                                                               :check-variable "blue-box-selected"
+                                                                                               :check-variable "blue-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}},
                                        :blue-crayon-3      {
@@ -113,10 +113,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "blue-box"
+                                                                                      :params {:box            "blue-table"
                                                                                                :target         "blue-crayon-3"
                                                                                                :init-position  {:x 17, :y 438, :duration 1}
-                                                                                               :check-variable "blue-box-selected"
+                                                                                               :check-variable "blue-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}},
                                        :yellow-crayon-1    {
@@ -137,10 +137,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "yellow-box"
+                                                                                      :params {:box            "yellow-table"
                                                                                                :target         "yellow-crayon-1"
                                                                                                :init-position  {:x 764, :y 691, :duration 1}
-                                                                                               :check-variable "yellow-box-selected"
+                                                                                               :check-variable "yellow-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}
                                                             },
@@ -162,10 +162,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "yellow-box"
+                                                                                      :params {:box            "yellow-table"
                                                                                                :target         "yellow-crayon-2"
                                                                                                :init-position  {:x 1171, :y 126, :duration 1}
-                                                                                               :check-variable "yellow-box-selected"
+                                                                                               :check-variable "yellow-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}
                                                             },
@@ -187,10 +187,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "yellow-box"
+                                                                                      :params {:box            "yellow-table"
                                                                                                :target         "yellow-crayon-3"
                                                                                                :init-position  {:x 1618, :y 440, :duration 1}
-                                                                                               :check-variable "yellow-box-selected"
+                                                                                               :check-variable "yellow-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}
                                                             },
@@ -212,10 +212,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "red-box"
+                                                                                      :params {:box            "red-table"
                                                                                                :target         "red-crayon-1"
                                                                                                :init-position  {:x 924, :y 500, :duration 1}
-                                                                                               :check-variable "red-box-selected"
+                                                                                               :check-variable "red-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}
                                                             },
@@ -237,10 +237,10 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "red-box"
+                                                                                      :params {:box            "red-table"
                                                                                                :target         "red-crayon-2"
                                                                                                :init-position  {:x 1618, :y 958, :duration 1}
-                                                                                               :check-variable "red-box-selected"
+                                                                                               :check-variable "red-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}
                                                             }
@@ -262,14 +262,14 @@
                                                                                      {:id     "drag-crayon",
                                                                                       :on     "drag-end",
                                                                                       :type   "action",
-                                                                                      :params {:box            "red-box"
+                                                                                      :params {:box            "red-table"
                                                                                                :target         "red-crayon-3"
                                                                                                :init-position  {:x 1548, :y 164, :duration 1}
-                                                                                               :check-variable "red-box-selected"
+                                                                                               :check-variable "red-table-selected"
                                                                                                }}},
                                                             :states     {:hide {:visible false}}}},
                        :scene-objects [["layered-background"]
-                                       ["yellow-box" "blue-box" "red-box"]
+                                       ["yellow-table" "blue-table" "red-table"]
                                        ["blue-crayon-1" "blue-crayon-2" "blue-crayon-3"]
                                        ["yellow-crayon-1" "yellow-crayon-2" "yellow-crayon-3"]
                                        ["red-crayon-1" "red-crayon-2" "red-crayon-3"]],
@@ -299,7 +299,7 @@
                                                                                 }
                                                                                ]}
                                        :check-option                   {:type      "test-var-list-at-least-one-true"
-                                                                        :var-names ["yellow-box-selected" "blue-box-selected" "red-box-selected"]
+                                                                        :var-names ["yellow-table-selected" "blue-table-selected" "red-table-selected"]
                                                                         :success   "wrong-option",
                                                                         :fail      "crayon-revert"
                                                                         }
@@ -321,46 +321,28 @@
                                        :highlight                      {:type "sequence-data"
                                                                         :data [{:type        "set-variable",
                                                                                 :var-value   true
-                                                                                :from-params [{:action-property "var-name" :param-property "variable"}]
+                                                                                :from-params [{:action-property "var-name" :param-property "check-variable"}]
                                                                                 }
                                                                                {:type        "state"
                                                                                 :id          "highlighted"
-                                                                                :from-params [{:action-property "target" :param-property "target"}]
+                                                                                :from-params [{:action-property "target" :param-property "transition"}]
                                                                                 }]
                                                                         }
                                        :unhighlight                    {:type "sequence-data"
                                                                         :data [{:type        "state"
                                                                                 :id          "not-highlighted"
-                                                                                :from-params [{:action-property "target" :param-property "target"}]}]
+                                                                                :from-params [{:action-property "target" :param-property "transition"}]}]
                                                                         }
-                                       :check-collide                  {:type "sequence-data"
-                                                                        :data [
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "yellow-box",
-                                                                                :params     {:target   "yellow-box"
-                                                                                             :variable "yellow-box-selected"}
-                                                                                }
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "blue-box"
-                                                                                :params     {:target   "blue-box"
-                                                                                             :variable "blue-box-selected"
-                                                                                             }
-                                                                                }
-                                                                               {:type       "test-transition-and-pointer-collide",
-                                                                                :success    "highlight",
-                                                                                :fail       "unhighlight",
-                                                                                :transition "red-box"
-                                                                                :params     {:target   "red-box"
-                                                                                             :variable "red-box-selected"
-                                                                                             }
-                                                                                }
-                                                                               ]
+                                       :check-collide       {:type "sequence-data"
+                                                             :data [
+                                                                    {:type          "test-transitions-and-pointer-collide",
+                                                                     :success       "highlight",
+                                                                     :fail          "unhighlight",
+                                                                     :transitions   ["yellow-table" "blue-table" "red-table"]
+                                                                     :action-params [{:check-variable "yellow-table-selected"}
+                                                                                     {:check-variable "blue-table-selected"}
+                                                                                     {:check-variable "red-table-selected"}]}]}
 
-                                                                        }
 
                                        :init-activity                  {:type "sequence-data"
                                                                         :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-crayons"}
@@ -368,9 +350,9 @@
                                                                         }
                                        :start-drag                     {:type "sequence-data"
                                                                         :data [
-                                                                               {:type "set-variable", :var-name "yellow-box-selected", :var-value false}
-                                                                               {:type "set-variable", :var-name "blue-box-selected", :var-value false}
-                                                                               {:type "set-variable", :var-name "red-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "yellow-table-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "blue-table-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "red-table-selected", :var-value false}
                                                                                {:type     "set-interval"
                                                                                 :id       "check-collide-2"
                                                                                 :interval 100
