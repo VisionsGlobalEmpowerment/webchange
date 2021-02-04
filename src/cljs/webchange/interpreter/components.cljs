@@ -12,7 +12,8 @@
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
-    [webchange.interpreter.renderer.scene.components.group.propagate]))
+    [webchange.interpreter.renderer.scene.components.group.propagate]
+    [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn- get-layer-objects-data
   [scene-id layer-objects]
@@ -65,11 +66,15 @@
         (re-frame/dispatch [::ie/trigger :start])))))
 
 (defn stage-wrapper
-  [{:keys [mode scene-id scene-data dataset-items]}]
+  [{:keys [mode scene-id scene-data dataset-items on-ready]
+    :or   {on-ready #()}}]
   ^{:key scene-id}
   [stage {:mode           mode
           :scene-data     (get-scene-data scene-id scene-data dataset-items)
-          :on-ready       start-triggers
+          :on-ready       (fn []
+                            (when (modes/start-on-ready? mode)
+                              (start-triggers))
+                            (on-ready))
           :on-start-click start-scene}])
 
 (defn- component-will-unmount

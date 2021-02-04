@@ -151,7 +151,8 @@
     [true {:id         scene-id
            :name       scene-name
            :course-slug course-slug
-           :created-at (str created-at)}]))
+           :created-at (str created-at)
+           :data       new-scene-data}]))
 
 (defn update-scene-skills!
   [course-slug scene-name skills _]

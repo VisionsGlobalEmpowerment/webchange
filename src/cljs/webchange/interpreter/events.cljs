@@ -22,7 +22,7 @@
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.audio-utils.recorder :as audio-recorder]
     [webchange.resources.manager :as resources-manager]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
 (ce/reg-simple-executor :start-audio-recording ::execute-start-audio-recording)

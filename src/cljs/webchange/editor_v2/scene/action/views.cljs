@@ -7,6 +7,7 @@
     [webchange.editor-v2.scene.action.events :as scene-action.events]
     [webchange.interpreter.events :as interpreter.events]
     [webchange.editor.events :as edit-scene]
+    [webchange.editor-v2.scene.data.stage.state :as stage-screenshot]
     [webchange.editor-v2.scene.state.stage :as stage-state]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]))
 
@@ -26,8 +27,7 @@
                                     (re-frame/dispatch [::interpreter.events/store-scene @scene-id (:data result)])
                                     (re-frame/dispatch [::edit-scene/save-current-scene scene-id])
                                     (re-frame/dispatch [::stage-state/reset-stage])
-                                    (close)
-                                    )])]
+                                    (close))])]
     (when open?
       [ui/dialog
        {:open       true

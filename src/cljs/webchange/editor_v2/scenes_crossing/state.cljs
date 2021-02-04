@@ -4,8 +4,8 @@
     [webchange.editor-v2.course-data-utils.utils :as utils]
     [webchange.editor-v2.course-table.state.edit-common :as common]
     [webchange.editor-v2.state :as db]
-    [webchange.state :as state]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.state :as state]
+    [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
   [relative-path]

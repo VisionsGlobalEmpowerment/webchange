@@ -1,12 +1,15 @@
 (ns webchange.interpreter.renderer.stage
   (:require
+    [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.interpreter.pixi :refer [Loader]]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
+    [webchange.interpreter.renderer.waiting-screen :refer [waiting-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
     [webchange.interpreter.renderer.scene.app :refer [reset-app! resize-app!]]
     [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
+    [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.components.modes :as modes]
     [webchange.interpreter.variables.core :as vars.core]))
 
@@ -40,6 +43,23 @@
   [f & args]
   (apply partial (concat [f] args)))
 
+(defn- overlay-wrapper
+  [{:keys [viewport]}]
+  (let [scale-x (:scale-x viewport)
+        scale-y (:scale-y viewport)
+        translate-x (* -100 (- (/ 1 (* 2 scale-x)) 0.5))
+        translate-y (* -100 (- (/ 1 (* 2 scale-y)) 0.5))
+        this (r/current-component)]
+    (into [:div {:style {:position  "absolute"
+                         :x         0
+                         :y         0
+                         :transform (str "scale(" scale-x ", " scale-y ")"
+                                         "translate(" translate-x "%, " translate-y "%)"
+                                         "translate(" (:x viewport) "px, " (:y viewport) "px)")
+                         :width     (:target-width viewport)
+                         :height    (:target-height viewport)}}]
+          (r/children this))))
+
 (defn stage
   []
   (let [container (r/atom nil)
@@ -65,7 +85,8 @@
        :reagent-render
                      (fn [{:keys [mode on-ready on-start-click scene-data]}]
                        (let [viewport (-> (element->viewport @container)
-                                          (get-stage-params))]
+                                          (get-stage-params))
+                             show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])]
                          [:div {:ref   #(when % (reset! container (.-parentNode %)))
                                 :style {:width  "100%"
                                         :height "100%"}}
@@ -82,15 +103,12 @@
                                      (or (not (:done @loading))
                                          (and (not (:started? scene-data))
                                               (not= mode ::modes/editor))))
-                            (let [scale-x (:scale-x viewport)
-                                  scale-y (:scale-y viewport)
-                                  translate-x (* -100 (- (/ 1 (* 2 scale-x)) 0.5))
-                                  translate-y (* -100 (- (/ 1 (* 2 scale-y)) 0.5))]
-                              [:div {:style {:position  "absolute"
-                                             :transform (str "scale(" scale-x ", " scale-y ")"
-                                                             "translate(" translate-x "%, " translate-y "%)"
-                                                             "translate(" (:x viewport) "px, " (:y viewport) "px)")
-                                             :width     (:target-width viewport)
-                                             :height    (:target-height viewport)}}
-                               [loader-screen {:on-start-click on-start-click
-                                               :loading        @loading}]]))]))})))
+                            [overlay-wrapper {:viewport viewport}
+                             [loader-screen {:on-start-click on-start-click
+                                             :loading        @loading}]])
+                          (when (and (some? viewport)
+                                     (:done @loading)
+                                     show-waiting-screen?)
+                            [overlay-wrapper {:viewport viewport}
+                             [waiting-screen {:on-start-click on-start-click
+                                              :loading        @loading}]])]))})))

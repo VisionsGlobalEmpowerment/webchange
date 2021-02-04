@@ -12,7 +12,7 @@
             [webchange.editor-v2.course-table.state.edit-common :as common]
             [webchange.subs :as subs]
             [webchange.editor-v2.course-table.state.selection :as selection-state]
-            [webchange.warehouse :as warehouse]))
+            [webchange.state.warehouse :as warehouse]))
 
 (use-fixtures :once
               {:before (fn []

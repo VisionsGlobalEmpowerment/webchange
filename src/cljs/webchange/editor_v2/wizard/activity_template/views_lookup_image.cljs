@@ -9,7 +9,6 @@
 (defn- image-option-block
   [{:keys [name src value selected? image-size on-click]
     :or   {image-size 6}}]
-  (js/console.log "image-size" image-size)
   [ui/grid {:item  true :xs image-size
             :style {:text-align "center"}}
    [ui/typography {:variant       "h6"

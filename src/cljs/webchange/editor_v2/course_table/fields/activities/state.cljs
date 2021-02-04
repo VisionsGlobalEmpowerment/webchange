@@ -9,7 +9,8 @@
     [webchange.subs :as subs]
     [webchange.interpreter.subs :as interpreter.subs]
     [webchange.events :as events]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.state.state :as state]))
 
 (defn path-to-db
   [relative-path component-id]
@@ -69,12 +70,12 @@
                                    (map :id))
         dataset-id (-> (interpreter.subs/course-datasets db) (first) (get :id))]
     (concat (map (fn [lesson-set-name]
-                   [::warehouse/create-lesson-set {:dataset-id dataset-id
-                                                   :name       lesson-set-name
-                                                   :data       {:items []}}])
+                   [::state/create-lesson-set {:dataset-id dataset-id
+                                               :name       lesson-set-name
+                                               :data       {:items []}}])
                  lessons-to-add)
             (map (fn [lesson-set-id]
-                   [::warehouse/delete-lesson-set {:id lesson-set-id}])
+                   [::state/delete-lesson-set {:id lesson-set-id}])
                  lessons-to-remove-ids))))
 
 (re-frame/reg-event-fx
@@ -89,7 +90,7 @@
                               (utils/update-activity selection-data {:activity current-activity})
                               (utils/update-lesson-sets selection-data))]
           {:dispatch-n (concat [[::common/update-course course-id course-data]]
-                             (lesson-sets-events db course-data selection-data))})
+                               (lesson-sets-events db course-data selection-data))})
         {}))))
 
 ;; Create

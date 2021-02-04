@@ -9,7 +9,7 @@
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.editor-v2.translator.translator-form.state.audios-utils :refer [get-audio-assets-data
                                                                                get-form-data]]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]))
 
 ;; Subs
 
@@ -46,7 +46,7 @@
   (fn [{:keys [db]} [_ js-file-value audio-props form-params]]
     (let [asset-data {:date (.now js/Date)}]
       {:db       (assoc-in db [:loading :upload-audio] true)
-       :dispatch [::warehouse/upload-audio
+       :dispatch [::warehouse/upload-file
                   {:file        js-file-value
                    :form-params form-params}
                   {:on-success [::upload-audio-success (merge audio-props asset-data)]

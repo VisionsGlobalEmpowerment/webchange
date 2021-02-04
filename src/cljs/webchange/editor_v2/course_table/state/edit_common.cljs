@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.events :as events]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]))
 
 (re-frame/reg-event-fx
   ::update-course

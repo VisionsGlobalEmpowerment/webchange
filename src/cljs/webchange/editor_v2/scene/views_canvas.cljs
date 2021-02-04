@@ -4,8 +4,16 @@
     [webchange.subs :as subs]
     [webchange.interpreter.components :as i]
     [webchange.interpreter.subs :as isubs]
+    [webchange.editor-v2.scene.data.stage.state :as stage]
     [webchange.editor-v2.scene.state.stage :as scene-state]
     [webchange.interpreter.renderer.scene.components.modes :as modes]))
+
+(defn- scene-ready-handler
+  [{:keys [scene-data]}]
+  (let [metadata (get scene-data :metadata {})
+        flipbook? (contains? metadata :flipbook-name)]
+    (when flipbook?
+      (re-frame/dispatch [::stage/generate-stages-screenshots]))))
 
 (defn scene-canvas
   []
@@ -25,4 +33,5 @@
      [i/stage-wrapper {:mode          ::modes/editor
                        :scene-id      scene-id
                        :scene-data    scene-data
-                       :dataset-items dataset-items}]]))
+                       :dataset-items dataset-items
+                       :on-ready      #(scene-ready-handler {:scene-data scene-data})}]]))

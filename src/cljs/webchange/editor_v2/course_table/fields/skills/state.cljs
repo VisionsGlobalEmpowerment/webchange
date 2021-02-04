@@ -7,7 +7,7 @@
     [webchange.editor-v2.course-table.state.data :as data-state]
     [webchange.editor-v2.course-table.state.selection :as selection]
     [webchange.subs :as subs]
-    [webchange.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]))
 
 (defn path-to-db
   [relative-path component-id]
