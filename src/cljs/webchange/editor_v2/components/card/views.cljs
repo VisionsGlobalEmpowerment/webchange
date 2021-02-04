@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.card.views
+(ns webchange.editor-v2.components.card.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]

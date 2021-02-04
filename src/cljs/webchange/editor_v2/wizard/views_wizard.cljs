@@ -2,7 +2,7 @@
   (:require
     [reagent.core :as r]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.components.page-layout.views :refer [layout]]
     [webchange.editor-v2.wizard.steps.choose-template :as choose-template]
     [webchange.editor-v2.wizard.steps.fill-template :as fill-template]
     [webchange.editor-v2.wizard.steps.final-step :as final-step]
@@ -10,7 +10,7 @@
     [webchange.editor-v2.wizard.steps.skills :as skills]
     [webchange.editor-v2.wizard.steps.welcome :as welcome]
     [webchange.editor-v2.wizard.validator :as validator :refer [connect-data]]
-    [webchange.editor-v2.layout.breadcrumbs :refer [root-breadcrumbs]]))
+    [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs]]))
 
 (defn- get-styles
   []

@@ -6,7 +6,7 @@
     [cljs-react-material-ui.icons :as ic]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
-    [webchange.editor-v2.layout.card.views :refer [list-card] :as list]))
+    [webchange.editor-v2.components.card.views :refer [list-card] :as list]))
 
 (defn- level-item
   [level]

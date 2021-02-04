@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.breadcrumbs
+(ns webchange.editor-v2.components.breadcrumbs.views
   (:require
     [webchange.routes :refer [redirect-to location]]))
 

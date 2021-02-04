@@ -5,8 +5,8 @@
     [webchange.editor-v2.course-dashboard.views-course-info :refer [course-info]]
     [webchange.editor-v2.course-dashboard.views-lessons :refer [lessons-list]]
     [webchange.editor-v2.course-dashboard.views-scenes :refer [scenes-list]]
-    [webchange.editor-v2.layout.views :refer [layout]]
-    [webchange.editor-v2.layout.breadcrumbs :refer [root-breadcrumbs]]))
+    [webchange.editor-v2.components.page-layout.views :refer [layout]]
+    [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs]]))
 
 (defn- get-styles
   []

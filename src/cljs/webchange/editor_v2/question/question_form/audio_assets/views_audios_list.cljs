@@ -6,7 +6,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.components.audio-wave-form.state :as wave-form-state]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
-    [webchange.editor-v2.layout.confirm.views :refer [with-confirmation]]
+    [webchange.editor-v2.components.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]

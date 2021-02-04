@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.toolbar.avatar
+(ns webchange.editor-v2.components.toolbar.avatar
   (:require
     [re-frame.core :as re-frame]
     [webchange.auth.subs :as as]

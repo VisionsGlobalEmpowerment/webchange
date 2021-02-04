@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.logo.svg)
+(ns webchange.editor-v2.components.logo.svg)
 
 (defn get-shape
   [{:keys [color]}]

@@ -1,10 +1,10 @@
-(ns webchange.editor-v2.layout.toolbar.views
+(ns webchange.editor-v2.components.toolbar.views
   (:require
     [reagent.core :as r]
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.editor-v2.layout.logo.views :refer [logo]]
-    [webchange.editor-v2.layout.toolbar.avatar :refer [avatar-panel]]
+    [webchange.editor-v2.components.logo.views :refer [logo]]
+    [webchange.editor-v2.components.toolbar.avatar :refer [avatar-panel]]
     [webchange.routes :refer [redirect-to]]
     [webchange.ui.theme :refer [get-in-theme]]))
 

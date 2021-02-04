@@ -1,7 +1,7 @@
-(ns webchange.editor-v2.layout.logo.views
+(ns webchange.editor-v2.components.logo.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.editor-v2.layout.logo.svg :refer [get-shape]]
+    [webchange.editor-v2.components.logo.svg :refer [get-shape]]
     [webchange.ui.theme :refer [get-in-theme]]))
 
 (def styles {:logo {:display      "flex"

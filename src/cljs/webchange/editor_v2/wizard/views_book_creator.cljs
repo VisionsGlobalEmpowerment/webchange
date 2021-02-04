@@ -3,10 +3,10 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.components.page-layout.views :refer [layout]]
     [webchange.editor-v2.wizard.state.activity :as state-activity]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]
-    [webchange.editor-v2.layout.breadcrumbs :refer [root-breadcrumbs]]))
+    [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs]]))
 
 (defn- book-activity-info
   []

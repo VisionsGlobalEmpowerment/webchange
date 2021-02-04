@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.confirm.views
+(ns webchange.editor-v2.components.confirm.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [reagent.core :as r]))

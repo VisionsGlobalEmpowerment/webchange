@@ -4,9 +4,9 @@
     [webchange.editor-v2.concepts.views :refer [add-dataset-item-form edit-dataset-item-form]]
     [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]
     [webchange.editor-v2.lessons.views :refer [add-lesson-form edit-lesson-form]]
-    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.components.page-layout.views :refer [layout]]
     [webchange.editor-v2.scene.views :refer [scene-translate]]
-    [webchange.editor-v2.layout.breadcrumbs :refer [root-breadcrumbs course-breadcrumbs]]))
+    [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs course-breadcrumbs]]))
 
 (def course-view course-dashboard)
 

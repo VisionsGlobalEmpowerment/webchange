@@ -5,7 +5,7 @@
     [clojure.string :as s]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.layout.card.views :refer [list-card] :as card]
+    [webchange.editor-v2.components.card.views :refer [list-card] :as card]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]
     [webchange.ui.theme :refer [get-in-theme]]))
