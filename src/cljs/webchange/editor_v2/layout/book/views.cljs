@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.common.views
+(ns webchange.editor-v2.layout.book.views
   (:require
     [webchange.editor-v2.layout.components.activity-action.views :refer [activity-actions]]
     [webchange.editor-v2.layout.components.activity-stage.views :refer [select-stage]]
@@ -13,9 +13,8 @@
 (defn layout
   [{:keys [course-id scene-data]}]
   [skeleton {:top-left-component  [:div
-                                   [change-background]
-                                   [change-skin]
                                    [object-selector]
+                                   [select-stage]
                                    [activity-actions {:course-id  course-id
                                                       :scene-data scene-data}]
                                    [share-button]]

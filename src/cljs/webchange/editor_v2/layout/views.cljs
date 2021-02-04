@@ -4,7 +4,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.creation-progress.state :as progress-state]
     [webchange.editor-v2.layout.common.views :as common]
-    [webchange.editor-v2.state :as state]
+    [webchange.editor-v2.layout.book.views :as book]
     [webchange.subs :as subs]))
 
 (defn- get-activity-type
@@ -15,10 +15,10 @@
   [{:keys [course-id]}]
   (r/with-let [_ (re-frame/dispatch [::progress-state/show-translation-progress])]
     (let [scene-data @(re-frame/subscribe [::subs/current-scene-data])
-          fullscreen? @(re-frame/subscribe [::state/diagram-fullscreen?])
           layout (-> (get-activity-type scene-data)
                      (case
+                       "book" book/layout
+                       "flipbook" book/layout
                        common/layout))]
       [layout {:course-id   course-id
-               :scene-data  scene-data
-               :fullscreen? fullscreen?}])))
+               :scene-data  scene-data}])))
