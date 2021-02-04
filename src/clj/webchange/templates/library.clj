@@ -26,4 +26,7 @@
     [webchange.templates.library.onset-and-rime]
     [webchange.templates.library.writing-lesson]
     [webchange.templates.library.categorize.template]
+    [webchange.templates.library.categorize-shapes.template]
+    [webchange.templates.library.categorize-antonims.template]
+    [webchange.templates.library.categorize-synonyms.template]
     [webchange.templates.library.running]))

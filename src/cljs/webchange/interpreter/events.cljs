@@ -1460,7 +1460,7 @@
 
 (re-frame/reg-event-fx
   ::execute-test-transitions-and-pointer-collide
-  (fn [{:keys [db]} [_ {:keys [transitions success fail] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [transitions success fail action-params] :as action}]]
     "Execute `transitions-and-pointer-collide` action - if mouse and component intersect.
 
     Action params:
@@ -1476,10 +1476,10 @@
     (let [transition-wrappers (into {} (map (fn [transition] [transition (->> transition keyword (scene/get-scene-object db))]) transitions))
           success (ce/get-action success db action)
           fail (ce/get-action fail db action)
-          actions (doall (map (fn [[transition transition-wrapper]]
+          actions (doall (map-indexed (fn [idx [transition transition-wrapper]]
                                 (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
-                                  [::ce/execute-action (assoc success :params {:transition transition})]
-                                  [::ce/execute-action (assoc fail :params {:transition transition})]
+                                  [::ce/execute-action (assoc success :params (merge (get action-params idx) {:transition transition}))]
+                                  [::ce/execute-action (assoc fail :params (merge (get action-params idx) {:transition transition}))]
                                   )) transition-wrappers))]
       {:dispatch-n (vec (conj actions (ce/success-event action)))})))
 
