@@ -7,23 +7,22 @@
    (swap! templates assoc id {:metadata metadata
                               :template template}))
   ([id metadata template template-update]
-  (swap! templates assoc id {:metadata metadata
-                             :template template
-                             :template-update template-update})))
+   (swap! templates assoc id {:metadata        metadata
+                              :template        template
+                              :template-update template-update})))
 
 (defn get-available-templates
   []
   (->> @templates
-      (map second)
-      (map :metadata)))
+       (map second)
+       (map :metadata)))
 
 (defn activity-from-template
   [{id :template-id :as data}]
-  (let [template (get-in @templates [id :template])]
+  (let [{:keys [template metadata]} (get-in @templates [id])]
     (-> (template data)
         (assoc-in [:metadata :template-id] id)
-        )
-    ))
+        (assoc-in [:metadata :template-name] (:name metadata)))))
 
 (defn update-activity-from-template
   [scene-data data]

@@ -1,14 +1,13 @@
 (ns webchange.editor-v2.wizard.views-wizard-configured
   (:require
     [reagent.core :as r]
-    [re-frame.core :as re-frame]
     [cljs-react-material-ui.reagent :as ui]
-    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.components.page-layout.views :refer [layout]]
     [webchange.editor-v2.wizard.steps.choose-template :as choose-template]
     [webchange.editor-v2.wizard.steps.fill-template :as fill-template]
     [webchange.editor-v2.wizard.steps.final-step-configured :as final-step]
     [webchange.editor-v2.wizard.validator :as validator :refer [connect-data]]
-    [webchange.editor-v2.layout.breadcrumbs :refer [course-breadcrumbs root-breadcrumbs]]))
+    [webchange.editor-v2.components.breadcrumbs.views :refer [course-breadcrumbs root-breadcrumbs]]))
 
 (defn- get-styles
   []

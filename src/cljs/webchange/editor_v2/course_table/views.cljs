@@ -13,7 +13,7 @@
     [webchange.editor-v2.course-table.utils.cell-data :refer [get-row-id click-event->cell-data]]
     [webchange.editor-v2.course-table.utils.move-selection :refer [move-selection]]
     [webchange.editor-v2.course-table.utils-rows-number :refer [get-row-height get-rows-number get-actual-rows-number]]
-    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.components.page-layout.views :refer [layout]]
     [webchange.routes :refer [redirect-to]]))
 
 (def header-data [{:id :idx :title "#" :width "2%"}

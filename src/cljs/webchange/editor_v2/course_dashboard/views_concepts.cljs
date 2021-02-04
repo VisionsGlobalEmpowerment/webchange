@@ -5,7 +5,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.concepts.subs :as concepts-subs]
-    [webchange.editor-v2.layout.card.views :refer [list-card get-styles]]
+    [webchange.editor-v2.components.card.views :refer [list-card get-styles]]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
 

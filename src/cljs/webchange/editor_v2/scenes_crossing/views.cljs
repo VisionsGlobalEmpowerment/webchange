@@ -4,7 +4,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.layout.views :refer [layout]]
+    [webchange.editor-v2.components.page-layout.views :refer [layout]]
     [webchange.editor-v2.scenes-crossing.state :as state]
     [webchange.editor-v2.scenes-crossing.state-locations :as state-locations]
     [webchange.editor-v2.scenes-crossing.views-locations :refer [location-settings]]
