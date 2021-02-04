@@ -1,8 +1,8 @@
-(ns webchange.editor-v2.scene.state.stage
+(ns webchange.editor-v2.layout.components.activity-stage.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.scene.data.stage.state :as stage]
-    [webchange.editor-v2.scene.state.db :refer [path-to-db]]
+    [webchange.editor-v2.layout.components.activity-stage.screenshots :as stage]
+    [webchange.editor-v2.layout.state :refer [path-to-db]]
     [webchange.interpreter.renderer.state.scene :as scene]))
 
 (re-frame/reg-sub

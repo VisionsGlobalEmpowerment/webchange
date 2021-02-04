@@ -1,11 +1,11 @@
-(ns webchange.editor-v2.scene.views-canvas
+(ns webchange.editor-v2.layout.components.interpreter_stage.views
   (:require
     [re-frame.core :as re-frame]
     [webchange.subs :as subs]
     [webchange.interpreter.components :as i]
     [webchange.interpreter.subs :as isubs]
-    [webchange.editor-v2.scene.data.stage.state :as stage]
-    [webchange.editor-v2.scene.state.stage :as scene-state]
+    [webchange.editor-v2.layout.components.activity-stage.screenshots :as stage-screenshots]
+    [webchange.editor-v2.layout.components.activity-stage.state :as scene-state]
     [webchange.interpreter.renderer.scene.components.modes :as modes]))
 
 (defn- scene-ready-handler
@@ -13,9 +13,9 @@
   (let [metadata (get scene-data :metadata {})
         flipbook? (contains? metadata :flipbook-name)]
     (when flipbook?
-      (re-frame/dispatch [::stage/generate-stages-screenshots]))))
+      (re-frame/dispatch [::stage-screenshots/generate-stages-screenshots]))))
 
-(defn scene-canvas
+(defn interpreter-stage
   []
   (let [scale 0.3
         width (* 1920 scale)

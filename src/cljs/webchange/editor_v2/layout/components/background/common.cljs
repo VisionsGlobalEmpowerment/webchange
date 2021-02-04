@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.scene.data.background.common)
+(ns webchange.editor-v2.layout.components.background.common)
 
 (def available-layers {:single  [{:type  :single-background
                                   :title "Background"}]

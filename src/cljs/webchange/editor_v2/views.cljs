@@ -5,7 +5,7 @@
     [webchange.editor-v2.course-dashboard.views :refer [course-dashboard]]
     [webchange.editor-v2.lessons.views :refer [add-lesson-form edit-lesson-form]]
     [webchange.editor-v2.components.page-layout.views :refer [layout]]
-    [webchange.editor-v2.scene.views :refer [scene-translate]]
+    [webchange.editor-v2.layout.views :refer [activity-edit-form]]
     [webchange.editor-v2.components.breadcrumbs.views :refer [root-breadcrumbs course-breadcrumbs]]))
 
 (def course-view course-dashboard)
@@ -33,4 +33,4 @@
 (defn scene-view
   [course-id _]
   [layout {:breadcrumbs (course-breadcrumbs course-id "Scene")}
-   [scene-translate course-id]])
+   [activity-edit-form {:course-id course-id}]])

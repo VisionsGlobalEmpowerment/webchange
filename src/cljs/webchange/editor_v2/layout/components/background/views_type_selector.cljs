@@ -1,8 +1,8 @@
-(ns webchange.editor-v2.scene.data.background.views-type-selector
+(ns webchange.editor-v2.layout.components.background.views-type-selector
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.scene.state.background :as background]))
+    [webchange.editor-v2.layout.components.background.state :as background]))
 
 (def available-types [{:value :single
                        :title "Single Image"}

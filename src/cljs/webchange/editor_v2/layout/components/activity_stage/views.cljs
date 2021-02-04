@@ -1,9 +1,9 @@
-(ns webchange.editor-v2.scene.data.stage.views
+(ns webchange.editor-v2.layout.components.activity-stage.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.scene.state.stage :as stage-state]))
+    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]))
 
 (defn- get-styles
   []

@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.scene.action.events
+(ns webchange.editor-v2.layout.components.activity-action.state
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.wizard.state.activity :as activity]

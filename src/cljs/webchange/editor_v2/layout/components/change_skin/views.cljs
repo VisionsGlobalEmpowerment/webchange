@@ -1,9 +1,9 @@
-(ns webchange.editor-v2.scene.data.skin.views-skin
+(ns webchange.editor-v2.layout.components.change-skin.views
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.scene.state.skin :as skin]
-    [webchange.editor-v2.scene.translation-steps :as translation-steps]))
+    [webchange.editor-v2.layout.components.change-skin.state :as skin]
+    [webchange.editor-v2.layout.components.workflow-steps.views :as translation-steps]))
 
 (defn change-skin
   []

@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.scene.translation-steps
+(ns webchange.editor-v2.layout.components.workflow-steps.views
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]

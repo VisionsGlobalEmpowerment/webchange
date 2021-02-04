@@ -1,9 +1,9 @@
-(ns webchange.editor-v2.scene.data.background.views-image-selector
+(ns webchange.editor-v2.layout.components.background.views-image-selector
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.scene.data.background.common :refer [available-layers]]
-    [webchange.editor-v2.scene.state.background :as background]))
+    [webchange.editor-v2.layout.components.background.common :refer [available-layers]]
+    [webchange.editor-v2.layout.components.background.state :as background]))
 
 (defn- get-styles
   []

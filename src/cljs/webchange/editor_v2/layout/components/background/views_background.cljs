@@ -1,12 +1,12 @@
-(ns webchange.editor-v2.scene.data.background.views-background
+(ns webchange.editor-v2.layout.components.background.views-background
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.scene.state.background :as background]
-    [webchange.editor-v2.scene.data.background.views-image-selector :refer [image-selector]]
-    [webchange.editor-v2.scene.data.background.views-preview :refer [preview]]
-    [webchange.editor-v2.scene.data.background.views-type-selector :refer [type-selector]]
-    [webchange.editor-v2.scene.translation-steps :as translation-steps]))
+    [webchange.editor-v2.layout.components.background.views-image-selector :refer [image-selector]]
+    [webchange.editor-v2.layout.components.background.views-preview :refer [preview]]
+    [webchange.editor-v2.layout.components.background.views-type-selector :refer [type-selector]]
+    [webchange.editor-v2.layout.components.background.state :as background]
+    [webchange.editor-v2.layout.components.workflow-steps.views :as translation-steps]))
 
 (defn- get-styles
   []

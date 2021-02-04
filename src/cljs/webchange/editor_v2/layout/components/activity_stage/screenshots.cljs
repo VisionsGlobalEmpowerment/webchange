@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.scene.data.stage.state
+(ns webchange.editor-v2.layout.components.activity-stage.screenshots
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.scene.app :as app]

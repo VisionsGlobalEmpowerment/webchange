@@ -1,8 +1,8 @@
-(ns webchange.editor-v2.scene.state.skin
+(ns webchange.editor-v2.layout.components.change-skin.state
   (:require
     [re-frame.core :as re-frame]
     [ajax.core :refer [json-request-format json-response-format]]
-    [webchange.editor-v2.scene.state.db :refer [path-to-db]]
+    [webchange.editor-v2.layout.state :refer [path-to-db]]
     [webchange.subs :as subs]
     [webchange.interpreter.renderer.state.editor :as editor-renderer-state]
     [webchange.editor.events :as edit-scene]))
