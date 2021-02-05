@@ -1,9 +1,9 @@
 (ns webchange.editor-v2.layout.components.activity-stage.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.layout.components.activity-stage.screenshots :as stage]
     [webchange.editor-v2.layout.state :refer [path-to-db]]
-    [webchange.interpreter.renderer.state.scene :as scene]))
+    [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.state.state :as state]))
 
 (re-frame/reg-sub
   ::stage-options
@@ -15,10 +15,13 @@
                        (assoc stage :idx idx))
                      stages)))))
 
+(defn current-stage
+  [db]
+  (get-in db (path-to-db [:current-stage])))
+
 (re-frame/reg-sub
   ::current-stage
-  (fn [db]
-    (get-in db (path-to-db [:current-stage]))))
+  current-stage)
 
 (re-frame/reg-sub
   ::stage-key
@@ -51,7 +54,17 @@
     (let [stage (-> (get-in db [:current-scene-data :metadata])
                     (get-in [:stages idx]))]
       {:db       (assoc-in db (path-to-db [:current-stage]) idx)
-       :dispatch [::stage/show-flipbook-stage (:idx stage)]})))
+       :dispatch [::show-flipbook-stage (:idx stage)]})))
+
+(re-frame/reg-event-fx
+  ::show-flipbook-stage
+  (fn [{:keys [db]} [_ spread-index]]
+    (let [metadata (state/scene-metadata db)
+          book-name (get metadata :flipbook-name)
+          scene-id (:current-scene db)
+          component-wrapper @(get-in db [:transitions scene-id book-name])]
+      {:flipbook-show-spread {:component-wrapper component-wrapper
+                              :spread-idx        spread-index}})))
 
 (re-frame/reg-fx
   :flipbook-show-spread

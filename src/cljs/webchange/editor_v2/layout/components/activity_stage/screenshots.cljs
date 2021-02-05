@@ -1,30 +1,22 @@
 (ns webchange.editor-v2.layout.components.activity-stage.screenshots
   (:require
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.layout.components.activity-stage.state :as stage]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.state.state :as state]))
 
 (re-frame/reg-event-fx
-  ::show-flipbook-stage
-  (fn [{:keys [db]} [_ spread-index]]
-    (let [metadata (state/scene-metadata db)
-          book-name (get metadata :flipbook-name)
-          scene-id (:current-scene db)
-          component-wrapper @(get-in db [:transitions scene-id book-name])]
-      {:flipbook-show-spread {:component-wrapper component-wrapper
-                              :spread-idx        spread-index}})))
-
-(re-frame/reg-event-fx
   ::generate-stages-screenshots
   (fn [{:keys [db]} [_]]
-    (let [stages-idx (->> (state/scene-metadata db)
+    (let [current-stage (stage/current-stage db)
+          stages-idx (->> (state/scene-metadata db)
                           (:stages)
                           (map :idx))]
       {:dispatch                [::overlays/show-waiting-screen]
        :take-stages-screenshots {:stages-idx stages-idx
                                  :callback   #(do (re-frame/dispatch [::update-stages-screenshots %])
-                                                  (re-frame/dispatch [::show-flipbook-stage 0])
+                                                  (re-frame/dispatch [::stage/show-flipbook-stage (or current-stage 0)])
                                                   (re-frame/dispatch [::overlays/hide-waiting-screen]))}})))
 
 (defn- run-seq
@@ -44,7 +36,7 @@
 (defn- take-stage-screenshot
   [stage-idx]
   (fn [callback]
-    (re-frame/dispatch [::show-flipbook-stage stage-idx])
+    (re-frame/dispatch [::stage/show-flipbook-stage stage-idx])
     (js/setTimeout (fn [] (app/take-screenshot callback)) 100)))
 
 (re-frame/reg-fx
