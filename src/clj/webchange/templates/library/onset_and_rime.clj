@@ -400,4 +400,4 @@
         )))
 
 (core/register-template
-  (:id m) m f fu)
+  m f fu)

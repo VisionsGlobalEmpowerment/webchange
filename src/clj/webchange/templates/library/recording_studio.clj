@@ -354,7 +354,7 @@
                                                                     "demonstration"
                                                                     "enable-help"
                                                                     "next-concept"]}
-                        :finish                             {:type "sequence"
+                        :finish                             {:type "sequence-data"
                                                              :data [{:type "action" :id "finish-activity"}
                                                                     {:type "scene-exit" :exit-point "back"}]}
                         :exit                               {:type "sequence-data"
@@ -404,6 +404,5 @@
         (update-in [:metadata :resources] conj demo-image))))
 
 (core/register-template
-  (:id m)
   m
   (partial f t))

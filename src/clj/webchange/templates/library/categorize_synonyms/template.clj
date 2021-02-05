@@ -41,5 +41,5 @@
     (common/merge-new-action old-data actions params)))
 
 (core/register-template
-  (:id m) m f fu)
+  m f fu)
 
