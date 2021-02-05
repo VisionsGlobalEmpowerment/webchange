@@ -12,6 +12,10 @@
                 :justify-content "space-between"
                 :align-items     "center"
                 :padding-right   "16px"}
+   :text       {:overflow      "hidden"
+                :text-overflow "ellipsis"
+                :max-width     "200px"
+                :margin-right  "16px"}
    :image      {:max-width     "120px"
                 :max-height    "60px"
                 :border-radius "5px"
@@ -45,7 +49,7 @@
           ^{:key idx}
           [ui/menu-item {:value idx
                          :style (if (some? img) (:img-option styles) {})}
-           name
+           [:div {:style (:text styles)} name]
            (when (some? img)
              [:img {:src   img
                     :style (:image styles)}])])]])))

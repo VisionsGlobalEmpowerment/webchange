@@ -36,13 +36,16 @@
   (let [pages (get-in activity-data [:objects book-name :pages])
         stages-number (-> (count pages) (quot 2) (inc))
         stages (map (fn [stage-index]
-                      (let [right-page (-> (* stage-index 2) (check-index (count pages)) (index->page pages))
-                            left-page (-> (* stage-index 2) (dec) (check-index (count pages)) (index->page pages))
+                      (let [left-page-index (-> (* stage-index 2) (dec) (check-index (count pages)))
+                            left-page (index->page left-page-index pages)
+                            right-page-index (-> (* stage-index 2) (check-index (count pages)))
+                            right-page (index->page right-page-index pages)
                             stage-title (get-stage-title {:left-page  left-page
                                                           :right-page right-page
                                                           :activity   activity-data
                                                           :stage-idx  stage-index})]
-                        {:name stage-title
-                         :idx  stage-index}))
+                        {:name      stage-title
+                         :idx       stage-index
+                         :pages-idx [left-page-index right-page-index]}))
                     (range stages-number))]
     (assoc-in activity-data [:metadata :stages] stages)))

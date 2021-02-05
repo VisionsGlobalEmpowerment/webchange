@@ -13,8 +13,8 @@
 (defn layout
   [{:keys [course-id scene-data]}]
   [skeleton {:top-left-component  [:div
-                                   [object-selector]
                                    [select-stage]
+                                   [object-selector]
                                    [activity-actions {:course-id  course-id
                                                       :scene-data scene-data}]
                                    [share-button]]

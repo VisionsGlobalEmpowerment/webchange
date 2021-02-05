@@ -3,21 +3,15 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [webchange.editor-v2.events :as editor-events]
-    [webchange.subs :as subs]))
-
-(defn- scene-data->objects-list
-  [scene-data]
-  (->> (:objects scene-data)
-       (filter (fn [[_ object-data]] (= "text" (:type object-data))))))
+    [webchange.editor-v2.layout.components.object-selector.state :as state]))
 
 (defn object-selector
   []
-  (let [scene-id (re-frame/subscribe [::subs/current-scene])
-        scene-data (re-frame/subscribe [::subs/scene @scene-id])
-        objects (scene-data->objects-list @scene-data)]
+  (let [objects @(re-frame/subscribe [::state/text-objects])]
     (when (not-empty objects)
       [ui/form-control {:full-width true
-                        :margin     "normal"}
+                        :margin     "normal"
+                        :style      {:margin-top 0}}
        [ui/input-label "Select Object"]
        [ui/select {:value     ""
                    :variant   "outlined"

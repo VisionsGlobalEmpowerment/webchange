@@ -5,11 +5,8 @@
     [webchange.editor-v2.creation-progress.state :as progress-state]
     [webchange.editor-v2.layout.common.views :as common]
     [webchange.editor-v2.layout.book.views :as book]
+    [webchange.editor-v2.layout.utils :refer [get-activity-type]]
     [webchange.subs :as subs]))
-
-(defn- get-activity-type
-  [scene-data]
-  (get-in scene-data [:metadata :template-name]))
 
 (defn activity-edit-form
   [{:keys [course-id]}]

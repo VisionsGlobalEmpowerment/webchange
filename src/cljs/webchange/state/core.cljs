@@ -10,6 +10,18 @@
   [db]
   (get db :current-scene))
 
+(re-frame/reg-sub
+  ::current-scene-id
+  current-scene-id)
+
+(defn scenes-data
+  [db]
+  (get db :scenes))
+
+(re-frame/reg-sub
+  ::scenes-data
+  scenes-data)
+
 (defn get-scene-data
   [db scene-id]
   (get-in db [:scenes scene-id]))
