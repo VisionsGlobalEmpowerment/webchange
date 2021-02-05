@@ -147,4 +147,4 @@
   ::open-configured-wizard
   (fn [{:keys [db]} [_ activity-id]]
     (let [course-id (data-state/course-id db)]
-      {:dispatch [::events/redirect :wizard-configured :course-slug course-id :scene-slug activity-id]})))
+      {:dispatch [::events/redirect :wizard-configured :course-slug (name course-id) :scene-slug (name activity-id)]})))

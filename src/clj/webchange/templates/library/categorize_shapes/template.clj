@@ -8,7 +8,7 @@
     [webchange.templates.library.categorize-shapes.round-3 :refer [template-round-3]]
     [webchange.templates.core :as core]))
 
-(def m {:id          27
+(def m {:id          30
         :name        "Categorize shapes - 3 rounds"
         :tags        ["Independent Practice"]
         :description "Categorize"
@@ -41,5 +41,5 @@
     (common/merge-new-action old-data actions params)))
 
 (core/register-template
-  (:id m) m f fu)
+  m f fu)
 

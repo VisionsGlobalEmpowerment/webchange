@@ -1,12 +1,9 @@
 (ns webchange.templates.library.rhyme
   (:require
     [webchange.templates.utils.common :as common]
-    [webchange.templates.utils.question :as question]
-    [webchange.templates.utils.dialog :as dialog]
-    [webchange.templates.utils.image :as image]
     [webchange.templates.core :as core]))
 
-(def m {:id          24
+(def m {:id          27
         :name        "Rhyme"
         :tags        ["Independent Practice"]
         :description "Rhyme"
@@ -277,5 +274,5 @@
         )))
 
 (core/register-template
-  (:id m) m f fu)
+  m f fu)
 

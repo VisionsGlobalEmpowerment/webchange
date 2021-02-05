@@ -6,7 +6,7 @@
     [webchange.templates.utils.image :as image]
     [webchange.templates.core :as core]))
 
-(def m {:id          23
+(def m {:id          26
         :name        "Conversation"
         :tags        ["Independent Practice"]
         :description "Conversation"
@@ -79,5 +79,5 @@
       old-data)))
 
 (core/register-template
-  (:id m) m f fu)
+  m f fu)
 

@@ -2,11 +2,20 @@
 
 (def templates (atom {}))
 
+(defn- template-registered?
+  [id name]
+  (let [registered-name (-> @templates (get id) :name)]
+    (and registered-name (not= name registered-name))))
+
 (defn register-template
-  ([id metadata template]
-   (swap! templates assoc id {:metadata metadata
-                              :template template}))
-  ([id metadata template template-update]
+  ([metadata template]
+   (register-template metadata template nil))
+  ([{:keys [id name] :as metadata} template template-update]
+   (when (template-registered? id name)
+     (throw (new Exception
+                 (str "Failed to register " name "!"
+                      " Template with id " id " already registered"
+                      " (" (-> @templates (get id) :metadata :name) ")"))))
    (swap! templates assoc id {:metadata        metadata
                               :template        template
                               :template-update template-update})))

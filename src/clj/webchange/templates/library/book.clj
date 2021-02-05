@@ -163,4 +163,4 @@
       (assoc-in [:metadata :history] [{:type :create :args args}])))
 
 (core/register-template
-  (:id m) m f fu)
+  m f fu)

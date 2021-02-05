@@ -130,6 +130,5 @@
   (add-teacher template (:teacher args)))
 
 (core/register-template
-  (:id metadata)
   metadata
   (partial create template))

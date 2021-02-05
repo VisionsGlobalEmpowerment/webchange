@@ -494,6 +494,5 @@
   t)
 
 (core/register-template
-  (:id m)
   m
   (partial f t))

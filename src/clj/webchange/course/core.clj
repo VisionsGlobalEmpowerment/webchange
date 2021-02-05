@@ -473,17 +473,20 @@
 
 (defn- merge-fields
   [original fields scene-slug]
-  (let [existing-names (->> original
+  (let [field-names (->> fields
+                         (map :name)
+                         (into #{}))
+        existing-fields (->> original
+                             (filter #(contains? field-names (:name %)))
+                             (map #(add-field-scene % scene-slug)))
+        original-names (->> original
                             (map :name)
                             (into #{}))
-        existing-fields (->> original
-                             (filter #(contains? existing-names %))
-                             (map #(add-field-scene % scene-slug)))
         new-fields (->> fields
-                       (remove #(contains? existing-names %))
+                       (remove #(contains? original-names (:name %)))
                        (map #(add-field-scene % scene-slug)))]
     (->> original
-         (remove #(contains? existing-names %))
+         (remove #(contains? field-names %))
          (concat existing-fields new-fields)
          (sort-by :name)
          (into []))))

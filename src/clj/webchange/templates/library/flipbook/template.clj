@@ -12,7 +12,7 @@
     [webchange.templates.library.flipbook.page-number :refer [add-page-number]]
     [webchange.templates.library.flipbook.stages :refer [update-stages]]))
 
-(def metadata {:id          26
+(def metadata {:id          24
                :name        "flipbook"
                :tags        ["Book Creator"]
                :description "Some description of flipbook mechanics and covered skills"
@@ -204,4 +204,4 @@
            :shift-from-end    1}))))
 
 (core/register-template
-  (:id metadata) metadata create-activity update-activity)
+  metadata create-activity update-activity)
