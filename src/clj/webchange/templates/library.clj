@@ -29,4 +29,5 @@
     [webchange.templates.library.categorize-shapes.template]
     [webchange.templates.library.categorize-antonims.template]
     [webchange.templates.library.categorize-synonyms.template]
+    [webchange.templates.library.alliteration]
     [webchange.templates.library.running]))

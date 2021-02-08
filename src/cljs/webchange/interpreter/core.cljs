@@ -242,7 +242,11 @@
 
   (let [container (get-tween-object-params @component to)
         duration (transition-duration @component to params)
+        position (w/get-position @component)
         ease-params (or (:ease params) [1 1])
+        to (cond-> to
+                (contains? to :offset-x) (assoc :x (+ (:offset-x to) (:x position)))
+                (contains? to :offset-y) (assoc :y (+ (:offset-y to) (:y position))))
         vars (cond-> (-> to
                          (merge params)
                          (assoc :ease (apply SlowMo.ease.config (conj ease-params false)))
@@ -253,7 +257,9 @@
                                                 (on-ended)
                                                 (this-as t (.kill t))))))
                      (:yoyo params) (merge {:yoyo   true
-                                            :repeat -1}))
+                                            :repeat -1})
+
+                     )
         tween (TweenMax.to container duration (clj->js vars))]
 
     (when skippable

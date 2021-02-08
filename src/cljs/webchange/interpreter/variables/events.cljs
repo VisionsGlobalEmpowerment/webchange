@@ -44,7 +44,7 @@
 
 (re-frame/reg-event-fx
   ::execute-set-variable-list
-  (fn [{:keys [db]} [_ {:keys [var-names values] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [var-names values shuffled] :as action}]]
     "Execute `set-variable-list` action - allow to set value list to corresponding variables.
 
     Action params:
@@ -55,8 +55,10 @@
     {:type     'set-variable-list'
      :values   [false false]
      :var-names ['var1' [var2]}]\n                                                               }"
-    (doall (map-indexed (fn [idx var-name]
-                          (core/set-variable! var-name (get values idx))) var-names))
+    (let [var-names (cond-> var-names
+                            shuffled (shuffle))]
+      (doall (map-indexed (fn [idx var-name]
+                            (core/set-variable! var-name (get values idx))) var-names)))
     {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
@@ -307,47 +309,47 @@
 (re-frame/reg-event-fx
   ::execute-test-var-list
   (fn-traced [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
-    "Execute `test-var-list` action - compare variables list value with test values list.
-    Variables are compared with values according to their positions in the list.
-
-    Action params:
-    :var-names - list of variables names that we want to test.
-    :values - list values to compare with.
-    :success - action name to execute if the comparison is successful.
-    :fail - action name to execute if the comparison is failed.
-
-    Example:
-    {:type      'test-var-list',
-     :success   'mari-voice-finish',
-     :values    [true true true],
-     :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
-    (let [test (map core/get-variable var-names)]
-      (if (= values test)
-        {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
-        (if fail
-          {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
-          {:dispatch-n (list (e/success-event action))})))))
-
-(re-frame/reg-event-fx
-  ::execute-test-var-list-at-least-one-true
-  (fn [{:keys [db]} [_ {:keys [var-names success fail] :as action}]]
-             "Execute `test-var-list-or` action - check that at least one variable from list are true.
+             "Execute `test-var-list` action - compare variables list value with test values list.
+             Variables are compared with values according to their positions in the list.
 
              Action params:
              :var-names - list of variables names that we want to test.
+             :values - list values to compare with.
              :success - action name to execute if the comparison is successful.
              :fail - action name to execute if the comparison is failed.
 
              Example:
-             {:type      'test-var-list-at-least-one-true',
+             {:type      'test-var-list',
               :success   'mari-voice-finish',
+              :values    [true true true],
               :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
-             (let [count (count (filter #(= true %) (map core/get-variable var-names)))]
-               (if (not (= count 0))
+             (let [test (map core/get-variable var-names)]
+               (if (= values test)
                  {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
                  (if fail
                    {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
                    {:dispatch-n (list (e/success-event action))})))))
+
+(re-frame/reg-event-fx
+  ::execute-test-var-list-at-least-one-true
+  (fn [{:keys [db]} [_ {:keys [var-names success fail] :as action}]]
+    "Execute `test-var-list-or` action - check that at least one variable from list are true.
+
+    Action params:
+    :var-names - list of variables names that we want to test.
+    :success - action name to execute if the comparison is successful.
+    :fail - action name to execute if the comparison is failed.
+
+    Example:
+    {:type      'test-var-list-at-least-one-true',
+     :success   'mari-voice-finish',
+     :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
+    (let [count (count (filter #(= true %) (map core/get-variable var-names)))]
+      (if (not (= count 0))
+        {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
+        (if fail
+          {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
+          {:dispatch-n (list (e/success-event action))})))))
 
 (re-frame/reg-event-fx
   ::execute-case
