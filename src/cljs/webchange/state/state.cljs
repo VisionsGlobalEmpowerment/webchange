@@ -69,6 +69,17 @@
                                        :scene-data data}]}))
 
 (re-frame/reg-event-fx
+  ::update-scene-object
+  (fn [{:keys [db]} [_ {:keys [scene-id object-name object-data-patch]}]]
+    {:pre [(keyword? object-name)]}
+    (let [scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
+          objects-data (-> (core/get-scene-data db scene-id)
+                           (get :objects {})
+                           (update object-name merge object-data-patch))]
+      {:dispatch [::update-scene {:scene-id         scene-id
+                                  :scene-data-patch {:objects objects-data}}]})))
+
+(re-frame/reg-event-fx
   ::update-scene-metadata
   (fn [{:keys [db]} [_ {:keys [scene-id metadata-patch]}]]
     (let [scene-id (if (some? scene-id) scene-id (core/current-scene-id db))

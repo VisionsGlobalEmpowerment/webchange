@@ -1,7 +1,7 @@
-(ns webchange.editor-v2.layout.book.state
+(ns webchange.editor-v2.layout.flipbook.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.layout.book.utils :refer [get-stage-data]]
+    [webchange.editor-v2.layout.flipbook.utils :refer [get-stage-data]]
     [webchange.editor-v2.layout.components.activity-stage.state :as stage]
     [webchange.state.state :as state]))
 

@@ -5,6 +5,7 @@
     [webchange.editor-v2.creation-progress.state :as progress-state]
     [webchange.editor-v2.layout.common.views :as common]
     [webchange.editor-v2.layout.book.views :as book]
+    [webchange.editor-v2.layout.flipbook.views :as flipbook]
     [webchange.editor-v2.layout.utils :refer [get-activity-type]]
     [webchange.subs :as subs]))
 
@@ -15,7 +16,7 @@
           layout (-> (get-activity-type scene-data)
                      (case
                        "book" book/layout
-                       "flipbook" book/layout
+                       "flipbook" flipbook/layout
                        common/layout))]
-      [layout {:course-id   course-id
-               :scene-data  scene-data}])))
+      [layout {:course-id  course-id
+               :scene-data scene-data}])))
