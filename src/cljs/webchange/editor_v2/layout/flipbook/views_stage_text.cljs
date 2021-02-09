@@ -20,11 +20,24 @@
                              phrase-node {:path phrase-action-path}]
                          (re-frame/dispatch [::translator-form.actions/set-current-dialog-action action-node])
                          (re-frame/dispatch [::translator-form.actions/set-current-phrase-action phrase-node])
-                         (re-frame/dispatch [::dialog.window/open])))
+                         (re-frame/dispatch [::dialog.window/open {:components {:description  {:hide? true}
+                                                                                :node-options {:hide? true}
+                                                                                :target       {:hide? true}
+                                                                                :phrase       {:hide? true}
+                                                                                :diagram      {:context-menu {:hide? true}}}}])))
         styles (get-styles)]
     [ui/button {:on-click handle-click
                 :style    (:edit-button styles)}
      "Edit Audio"]))
+
+(defn- form-placeholder
+  []
+  [ui/typography {:style {:font-size  "24px"
+                          :text-align "center"
+                          :width      "100%"
+                          :padding    "64px"
+                          :color      "#757575"}}
+   "Nothing to edit on this stage"])
 
 (defn stage-text
   []
@@ -32,13 +45,15 @@
         handle-change (fn [text-name text-data-patch]
                         (re-frame/dispatch [::state/update-scene-object {:object-name       text-name
                                                                          :object-data-patch text-data-patch}]))]
-    [ui/grid {:container true
-              :spacing   16
-              :justify   "space-between"}
-     (for [{:keys [action text phrase-action-path]} text-objects]
-       ^{:key (:name text)}
-       [ui/grid {:item true :xs 6}
-        [chunks-editor-form (merge (select-keys (:data text) [:text :chunks])
-                                   {:on-change (fn [data] (handle-change (:name text) data))})]
-        [edit-text-action-button {:text-name          (keyword action)
-                                  :phrase-action-path phrase-action-path}]])]))
+    (if (empty? text-objects)
+      [form-placeholder]
+      [ui/grid {:container true
+                :spacing   16
+                :justify   "space-between"}
+       (for [{:keys [action text phrase-action-path]} text-objects]
+         ^{:key (:name text)}
+         [ui/grid {:item true :xs 6}
+          [chunks-editor-form (merge (select-keys (:data text) [:text :chunks])
+                                     {:on-change (fn [data] (handle-change (:name text) data))})]
+          [edit-text-action-button {:text-name          (keyword action)
+                                    :phrase-action-path phrase-action-path}]])])))

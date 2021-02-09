@@ -4,6 +4,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [clojure.string :refer [capitalize]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.dialog.dialog-form.audio-assets.views-filter :refer [audios-filter]]
     [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
@@ -41,18 +42,20 @@
 
 (defn target-block
   []
-  (let [current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
+  (let [settings @(re-frame/subscribe [::translator-form/components-settings :target])
+        current-phrase-action @(re-frame/subscribe [::translator-form.actions/current-phrase-action])
         styles (get-styles)]
-    [ui/grid {:container true
-              :spacing   16
-              :style     (:wrapper styles)}
-     [ui/grid {:item true
-               :xs   6}
-      [ui/typography {:variant "h6"
-                      :style   (:title styles)}
-       "Character:"]
-      [character-selector]]
-     [ui/grid {:item true
-               :xs   6}
-      (when (some? current-phrase-action)
-        [audios-filter])]]))
+    (when-not (:hide? settings)
+      [ui/grid {:container true
+                :spacing   16
+                :style     (:wrapper styles)}
+       [ui/grid {:item true
+                 :xs   6}
+        [ui/typography {:variant "h6"
+                        :style   (:title styles)}
+         "Character:"]
+        [character-selector]]
+       [ui/grid {:item true
+                 :xs   6}
+        (when (some? current-phrase-action)
+          [audios-filter])]])))

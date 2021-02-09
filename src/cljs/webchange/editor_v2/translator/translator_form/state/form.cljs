@@ -23,10 +23,11 @@
 
 (re-frame/reg-event-fx
   ::init-state
-  (fn [{:keys [_]} [_]]
+  (fn [{:keys [_]} [_ {:keys [components]}]]
     {:dispatch-n (list [::translator-form.scene/init-state]
                        [::translator-form.concepts/init-state]
-                       [::translator-form.audios/init-state])}))
+                       [::translator-form.audios/init-state]
+                       [::set-components-settings components])}))
 
 (re-frame/reg-event-fx
   ::reset-state
@@ -54,3 +55,13 @@
                                               [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])]
                                               )))
        :reset-before-leave true})))
+
+(re-frame/reg-event-fx
+  ::set-components-settings
+  (fn [{:keys [db]} [_ settings]]
+    {:db (assoc-in db (db/path-to-db [:settings]) settings)}))
+
+(re-frame/reg-sub
+  ::components-settings
+  (fn [db [_ component]]
+    (get-in db (db/path-to-db [:settings component]))))

@@ -48,6 +48,6 @@
   [scene-data stage-idx]
   (let [{:keys [left-page right-page]} (get-stage-data scene-data stage-idx)]
     (->> (cond-> []
-                 (some? left-page) (conj (populate-page-text-data left-page scene-data))
-                 (some? right-page) (conj (populate-page-text-data right-page scene-data)))
+                 (some? (:text left-page)) (conj (populate-page-text-data left-page scene-data))
+                 (some? (:text right-page)) (conj (populate-page-text-data right-page scene-data)))
          (remove nil?))))

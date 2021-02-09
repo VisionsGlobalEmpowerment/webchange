@@ -19,9 +19,9 @@
 
 (re-frame/reg-event-fx
   ::open
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ props]]
     {:db         (assoc-in db (path-to-db [:translator-dialog-modal-state]) true)
-     :dispatch-n (list [::translator-form/init-state]
+     :dispatch-n (list [::translator-form/init-state props]
                        [::history/init-history])}))
 
 (re-frame/reg-event-fx
