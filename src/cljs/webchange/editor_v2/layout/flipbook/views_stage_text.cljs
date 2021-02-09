@@ -14,11 +14,12 @@
                  :margin-top "16px"}})
 
 (defn- edit-text-action-button
-  [{:keys [text-name]}]
-
+  [{:keys [text-name phrase-action-path]}]
   (let [handle-click (fn []
-                       (let [action-node {:path [text-name]}]
+                       (let [action-node {:path [text-name]}
+                             phrase-node {:path phrase-action-path}]
                          (re-frame/dispatch [::translator-form.actions/set-current-dialog-action action-node])
+                         (re-frame/dispatch [::translator-form.actions/set-current-phrase-action phrase-node])
                          (re-frame/dispatch [::dialog.window/open])))
         styles (get-styles)]
     [ui/button {:on-click handle-click
@@ -34,9 +35,10 @@
     [ui/grid {:container true
               :spacing   16
               :justify   "space-between"}
-     (for [{:keys [action text]} text-objects]
+     (for [{:keys [action text phrase-action-path]} text-objects]
        ^{:key (:name text)}
        [ui/grid {:item true :xs 6}
         [chunks-editor-form (merge (select-keys (:data text) [:text :chunks])
                                    {:on-change (fn [data] (handle-change (:name text) data))})]
-        [edit-text-action-button {:text-name (keyword action)}]])]))
+        [edit-text-action-button {:text-name          (keyword action)
+                                  :phrase-action-path phrase-action-path}]])]))
