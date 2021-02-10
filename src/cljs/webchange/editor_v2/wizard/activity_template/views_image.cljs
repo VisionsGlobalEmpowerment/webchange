@@ -16,13 +16,14 @@
                :flex-grow   1}})
 
 (defn- select-file-form
-  [type uploading-atom on-change]
+  [type uploading-atom on-change options]
   (let [on-finish (fn [result]
                     (on-change (:url result))
                     (reset! uploading-atom false))
         on-change (fn [js-file]
                     (reset! uploading-atom true)
-                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish}]))]
+                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:options options
+                                                                                :type type :on-finish on-finish}]))]
     [file-input/select-file-form {:on-change on-change
                                   :styles    {:wrapper      {:display "inline-block"}
                                               :button       {:padding "0 25px"}
@@ -30,7 +31,9 @@
                                               :icon         {:font-size "24px"}}}]))
 
 (defn image-field
-  [value on-change]
+  ([value on-change]
+   (image-field value on-change nil))
+  ([value on-change upload-options]
   (r/with-let [uploading (r/atom false)]
     (let [styles (get-styles)]
       [ui/grid {:container true :justify "flex-start" :align-items "flex-end"
@@ -49,10 +52,10 @@
                            :padding       "4px"}}])])
        [ui/grid {:item  true :xs 12
                  :style {:display "flex"}}
-        [select-file-form :image uploading on-change]
+        [select-file-form :image uploading on-change upload-options]
         [ui/text-field {:value     (str value)
                         :style     (:image-src styles)
-                        :on-change #(on-change (-> % .-target .-value))}]]])))
+                        :on-change #(on-change (-> % .-target .-value))}]]]))))
 
 
 (defn image-option
@@ -69,7 +72,7 @@
        (:label option)]
       [error-message {:field-name :root}]]
      [ui/grid {:item true :xs 12}
-      [image-field (get @page-data :src "") #(swap! page-data assoc :src %)]
+      [image-field (get @page-data :src "") #(swap! page-data assoc :src %) (:options option)]
       [error-message {:field-name :src}]]]
     (finally
       (destroy))))

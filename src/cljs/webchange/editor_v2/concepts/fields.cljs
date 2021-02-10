@@ -18,14 +18,16 @@
   [ui/text-field {:full-width true :default-value value :on-change #(on-change (-> % .-target .-value))}])
 
 (defn- select-file-form
-  [type uploading-atom on-change]
+  ([type uploading-atom on-change]
+    (select-file-form type uploading-atom on-change nil))
+  ([type uploading-atom on-change options]
   (let [on-finish (fn [result]
                     (on-change (:url result))
                     (reset! uploading-atom false))
         on-change (fn [js-file]
                     (reset! uploading-atom true)
-                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish}]))]
-    [file-input/select-file-form {:on-change on-change}]))
+                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish :options options}]))]
+    [file-input/select-file-form {:on-change on-change}])))
 
 ;
 ; Image-typed

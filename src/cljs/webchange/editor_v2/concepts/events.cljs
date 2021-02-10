@@ -64,11 +64,12 @@
 
 (re-frame/reg-event-fx
   ::upload-asset
-  (fn [{:keys [db]} [_ js-file-value {:keys [type] :as params}]]
+  (fn [{:keys [db]} [_ js-file-value {:keys [type options] :as params}]]
     (let [form-data (doto
                       (js/FormData.)
                       (.append "file" js-file-value)
                       (.append "type" (name type)))]
+      (if options (.append form-data "options" options))
       {:db (assoc-in db [:loading :upload-asset] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/assets/")

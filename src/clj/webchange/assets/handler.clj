@@ -6,9 +6,9 @@
             [webchange.common.handler :refer [handle current-user]]
             [ring.middleware.params :refer [wrap-params]]
             [clojure.java.io :as io]
-            [mikera.image.core :as imagez]
             [webchange.assets.core :as core]
             [config.core :refer [env]]
+            [webchange.common.image-manipulation :as im]
             [clojure.edn :as edn]
             [webchange.common.hmac-sha256 :as sign]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
@@ -36,9 +36,7 @@
     type))
 
 (defn get-additional-image-params [file]
-  (let [image (imagez/load-image file)]
-    {:width  (imagez/width image)
-     :height (imagez/height image)}))
+  (im/get-image-info file))
 
 (defn get-additional-params [type file]
   (if (= type "image")
@@ -55,10 +53,16 @@
 
 (defn- convert-asset
   [relative-path type convert-params]
-  (if (and (= type "blob")
-           (= (:blob-type convert-params) "audio"))
-    ["audio" (convert-to-mp3 relative-path {:remove-origin? true})]
-    [type relative-path]))
+  (cond (and (= type "blob")
+             (= (:blob-type convert-params) "audio"))
+        ["audio" (convert-to-mp3 relative-path {:remove-origin? true})]
+        (= type "image") (let [target (f/replace-extension relative-path "png")]
+                           (im/scale-to-window
+                             (f/relative->absolute-path relative-path)
+                             (f/relative->absolute-path target)
+                             convert-params)
+                           [type target])
+        :else [type relative-path]))
 
 (defn- process-asset
   [type path]
@@ -77,18 +81,18 @@
         (-> [false {:message "File not found"}]
             handle)))))
 
-(defn upload-asset [{{:keys [tempfile size filename]} "file" type "type" blob-type "blob-type"}]
+(defn upload-asset [{{:keys [tempfile size filename]} "file" type "type" blob-type "blob-type" options "options"}]
   (let [extension (f/get-extension filename)
         new-name (gen-filename extension)
         path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") new-name)
         type (or (validated-type type) (get-type extension))
-        params (get-additional-params type tempfile)
         relative-path (str "/upload/" new-name)]
     (try
       (with-open [xin (io/input-stream tempfile)
                   xout (io/output-stream path)]
         (io/copy xin xout))
-      (let [[type relative-path] (convert-asset relative-path type {:blob-type blob-type})
+      (let [upload-options (if options (edn/read-string options) {})
+            [type relative-path] (convert-asset relative-path type (merge {:blob-type blob-type} upload-options))
             path (f/relative->absolute-path relative-path)]
         (process-asset type relative-path)
         (core/store-asset-hash! path)
@@ -96,7 +100,7 @@
           {:url  relative-path
            :type type
            :size (normalize-size size)}
-          params)))))
+          (get-additional-params type path))))))
 
 
 (defn upload-asset-by-path [{{:keys [tempfile]} "file" target-path "target-path" :as request}]
