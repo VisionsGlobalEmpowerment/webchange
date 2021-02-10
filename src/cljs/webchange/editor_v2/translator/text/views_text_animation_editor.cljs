@@ -5,8 +5,10 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.utils.text :refer [chunks->parts]]
+    [webchange.editor-v2.translator.text.views-chunks-editor-form :refer [chunks-editor-form]]
     [webchange.editor-v2.translator.text.views-text-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
+    [webchange.state.state :as state]
     [webchange.ui.components.message :refer [message]]))
 
 (def modal-state-path [:editor-v2 :translator :text :chunks-modal-state])
@@ -120,6 +122,12 @@
         selected-chunk @(re-frame/subscribe [::selected-chunk])
         selected-audio @(re-frame/subscribe [::selected-audio])
         parts (chunks->parts (:text text-object-data) (:chunks text-object-data))
+        handle-chunks-change (fn [text-name text-data-patch]
+                               (print ">> handle-chunks-change")
+                               (print "text-name" text-name)
+                               (print "text-data-patch" text-data-patch)
+                               (re-frame/dispatch [::state/update-scene-object {:object-name       text-name
+                                                                                :object-data-patch text-data-patch}]))
         styles (get-styles)]
     (if (or (nil? selected-audio)
             (nil? (:start selected-audio))
@@ -148,7 +156,16 @@
        [ui/grid {:item true :xs 12}
         [text-chunks {:parts              parts
                       :selected-chunk-idx selected-chunk
-                      :on-click           #(re-frame/dispatch [::select-chunk %])}]]])))
+                      :on-click           #(re-frame/dispatch [::select-chunk %])}]]
+
+       [ui/grid {:item true :xs 12}
+        "---"]
+
+       [ui/grid {:item true :xs 12}
+        [chunks-editor-form (merge (select-keys text-object-data [:text :chunks])
+                                   {:on-change (fn [data] (handle-chunks-change (keyword text-object-name) data))})]
+
+        ]])))
 
 (defn text-chunks-modal
   []

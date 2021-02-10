@@ -32,7 +32,7 @@
                 :justify   "space-between"}
        [ui/grid {:item true :xs 12}
         [ui/text-field (merge text-input-params
-                              {:label     "Origin"
+                              {:label     "Text"
                                :value     (or text "")
                                :on-change handle-text-change})]]
        [ui/grid {:item true :xs 12}

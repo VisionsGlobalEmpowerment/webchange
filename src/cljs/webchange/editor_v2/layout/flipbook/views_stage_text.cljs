@@ -2,16 +2,17 @@
   (:require
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.layout.flipbook.state :as flipbook-state]
-    [webchange.editor-v2.translator.text.views-chunks-editor-form :refer [chunks-editor-form]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.state.state :as state]))
 
 (defn- get-styles
   []
-  {:edit-button {:float      "right"
-                 :margin-top "16px"}})
+  {:save-text-button {:float         "right"
+                      :margin-bottom "16px"}
+   :edit-animation   {:position "absolute"}})
 
 (defn- edit-text-action-button
   [{:keys [text-name phrase-action-path]}]
@@ -27,8 +28,46 @@
                                                                                 :diagram      {:context-menu {:hide? true}}}}])))
         styles (get-styles)]
     [ui/button {:on-click handle-click
-                :style    (:edit-button styles)}
-     "Edit Audio"]))
+                :style    (:edit-animation styles)}
+     "Edit Animation"]))
+
+(defn- text-control
+  [{:keys [name data]}]
+  (r/with-let [styles (get-styles)
+               changed? (r/atom false)
+               initial-value (r/atom (get data :text ""))
+               current-value (r/atom @initial-value)
+               handle-change (fn [event]
+                               (->> (.. event -target -value)
+                                    (reset! current-value))
+                               (->> (not= @current-value @initial-value)
+                                    (reset! changed?)))
+               handle-save (fn []
+                             (reset! initial-value @current-value)
+                             (reset! changed? false)
+                             (re-frame/dispatch [::flipbook-state/set-loading-status :loading])
+                             (re-frame/dispatch [::state/update-scene-object {:object-name       name
+                                                                              :object-data-patch {:text @current-value}}
+                                                 {:on-success [::flipbook-state/set-loading-status :done]}]))]
+    (let [loading-status @(re-frame/subscribe [::flipbook-state/loading-status])
+          control-disabled (= loading-status :loading)]
+      [:div
+       [ui/button {:on-click handle-save
+                   :color    "secondary"
+                   :disabled (or control-disabled (not @changed?))
+                   :style    (:save-text-button styles)}
+        (case loading-status
+          :loading [ui/circular-progress {:size 20}]
+          "Save")]
+       [ui/text-field {:default-value @initial-value
+                       :placeholder   "Enter page text here"
+                       :on-change     handle-change
+                       :multiline     true
+                       :full-width    true
+                       :variant       "outlined"
+                       :disabled      control-disabled
+                       :inputProps    {:style {:overflow "hidden"}}}]
+       ])))
 
 (defn- form-placeholder
   []
@@ -41,10 +80,7 @@
 
 (defn stage-text
   []
-  (let [text-objects @(re-frame/subscribe [::flipbook-state/stage-text-data])
-        handle-change (fn [text-name text-data-patch]
-                        (re-frame/dispatch [::state/update-scene-object {:object-name       text-name
-                                                                         :object-data-patch text-data-patch}]))]
+  (let [text-objects @(re-frame/subscribe [::flipbook-state/stage-text-data])]
     (if (empty? text-objects)
       [form-placeholder]
       [ui/grid {:container true
@@ -53,7 +89,6 @@
        (for [{:keys [action text phrase-action-path]} text-objects]
          ^{:key (:name text)}
          [ui/grid {:item true :xs 6}
-          [chunks-editor-form (merge (select-keys (:data text) [:text :chunks])
-                                     {:on-change (fn [data] (handle-change (:name text) data))})]
           [edit-text-action-button {:text-name          (keyword action)
-                                    :phrase-action-path phrase-action-path}]])])))
+                                    :phrase-action-path phrase-action-path}]
+          [text-control text]])])))
