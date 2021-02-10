@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.animation.wrapper
   (:require
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
+    [webchange.interpreter.renderer.scene.filters.filters :as f]
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]))
 
 (defn wrap
@@ -8,6 +9,11 @@
   (create-wrapper {:name             name
                    :type             type
                    :object           container
+                   :set-highlight           (fn [highlight]
+                                              (let [highlight-filter-set (f/has-filter-by-name spine-object "glow")]
+                                                (if (and (not highlight) highlight-filter-set) (f/set-filter spine-object "" {}))
+                                                (if (and highlight (not highlight-filter-set))
+                                                  (f/set-filter spine-object "glow" {}))))
                    :set-slot         (fn [slot-name image-src slot-params]
                                        ;; ToDo: Remove double set-animation-slot call
                                        ;; Without this slot is not updated if new skin is created inside the method

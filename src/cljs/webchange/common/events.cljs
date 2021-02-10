@@ -152,16 +152,17 @@
   (if template
     (if (vector? value)
       (vec (map (fn [val]
-             (clojure.string/replace template "%" val)) value))
+                  (clojure.string/replace template "%" val)) value))
       (clojure.string/replace template "%" value))
-      value)
+    value)
   )
 
 (defn with-var-property
   []
-  (fn [action {:keys [var-name var-property var-key action-property template to-vector offset]}]
+  (fn [action {:keys [var-name var-property var-key action-property template to-vector offset var-property-from-var]}]
     (let [var (get @variables var-name)
           value (cond->> var
+                         var-property-from-var ((keyword (get @variables var-property-from-var)))
                          var-property ((keyword var-property))
                          var-key (hash-map (keyword var-key))
                          to-vector (conj [])
@@ -292,11 +293,21 @@
                   (into #{}))]
     (assoc flow :tags tags)))
 
+
+
 (defn destroy-timer
   [timer]
   (case (:type timer)
     "interval" (.clearInterval js/window (:id timer))
     (throw (js/Error. (str "Timer type '" (:type timer) "' is not supported")))))
+
+(defn remove-timer
+  [name]
+  (let [timer (get @timers name)]
+    (when-not (nil? timer)
+      (destroy-timer timer))
+    (swap! timers dissoc name)
+    {}))
 
 (re-frame/reg-event-fx
   ::execute-register-timer
@@ -307,11 +318,7 @@
 (re-frame/reg-event-fx
   ::execute-remove-timer
   (fn [{:keys [db]} [_ {:keys [name]}]]
-    (let [timer (get @timers name)]
-      (when-not (nil? timer)
-        (destroy-timer timer))
-      (swap! timers dissoc name)
-      {})))
+    (remove-timer name)))
 
 (defn remove-timers!
   []

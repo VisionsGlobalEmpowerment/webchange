@@ -1637,6 +1637,7 @@
      :id       'reminder'
      :interval 17000
      :action   'show-click-reminder'}"
+    (ce/remove-timer id)
     (let [scene-action (-> (ce/get-action action db)
                            (assoc :params (:params main-action)))
           interval-id (.setInterval js/window (fn [] (re-frame/dispatch [::ce/execute-action scene-action])) interval)]

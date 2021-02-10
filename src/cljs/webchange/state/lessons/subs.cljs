@@ -9,7 +9,10 @@
   (if-let [lesson (-> (lessons db)
                       (get-in [lesson-set-name]))]
     lesson
-    (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined in level " level-idx ", lesson " lesson-idx)))))
+    (if (:activity-started db)
+      (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined in level " level-idx ", lesson " lesson-idx)))
+      (throw (js/Error. (str "Lesson '" lesson-set-name "' is not defined in level " level-idx ", lesson " lesson-idx ". Activity not started, please start activity before using lesson set.")))
+      )))
 
 (defn- lesson-by-name
   [db lesson-name]
