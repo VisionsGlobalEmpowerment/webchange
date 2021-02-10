@@ -26,6 +26,14 @@
        (assoc :path relative-path)
        str)))
 
+(defn replace-extension
+  [filename new-extension]
+  (-> filename
+      (clojure.string/split #"\.")
+      (drop-last)
+      (vec)
+      (conj new-extension)
+      (#(clojure.string/join "." %))))
 
 (defn get-extension [filename]
   (-> filename

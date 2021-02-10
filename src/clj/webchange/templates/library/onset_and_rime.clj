@@ -16,7 +16,15 @@
                                            :right-text {:label "Right cloud"
                                                         :type  "string"}
                                            :whole-text {:label "Whole word cloud"
-                                                        :type  "string"}}}}})
+                                                        :type  "string"}
+                                           :image {:label "Image at result"
+                                                        :type  "image"
+                                                   :options {:max-width 100
+                                                            :max-height 100
+                                                            :min-height 50
+                                                            :min-width 50}
+                                                   }
+                                           }}}})
 
 (def t {:assets
                        [{:url "/raw/img/onset-and-rime/background.png", :size 10 :type "image"}
@@ -203,14 +211,15 @@
                                                       :data [
                                                              {:type "counter" :counter-action "reset" :counter-value 0 :counter-id "step-counter"}
                                                              {:type "counter" :counter-action "increase" :counter-id "goal-counter"}
-                                                             {:type       "test-var-inequality"
-                                                              :var-name   "goal-counter",
-                                                              :value      0,
-                                                              :inequality ">=",
-                                                              :success    "finish-scene",
-                                                              :fail       "init-next",
-                                                              }
+                                                             {:type "action" :id "check-scene-finished"}
                                                              ]}
+                        :check-scene-finished {:type       "test-var-inequality"
+                                               :var-name   "goal-counter",
+                                               :value      0,
+                                               :inequality ">=",
+                                               :success    "finish-scene",
+                                               :fail       "init-next",
+                                               }
                         :init-next                   {:type "sequence-data"
                                                       :data [
                                                              {:type "counter" :counter-action "increase" :counter-id "unique-suffix"}
@@ -360,9 +369,14 @@
                                                          :transition (common/make-name-unique scene "cloud-center-img")
                                                          :x          0
                                                          :y          0}
+    (common/make-name-unique scene "cloud-center-text-img")  {:type       "image"
+                                                         :src        (get-in args [:image :src])
+                                                         :transition (common/make-name-unique scene "cloud-center-text-img")
+                                                         :x          400
+                                                         :y          120}
     (common/make-name-unique scene "cloud-center-text") {:type           "text"
                                                          :text           (:whole-text args)
-                                                         :x              320
+                                                         :x              250
                                                          :y              220
                                                          :align          "center"
                                                          :vertical-align "bottom"
@@ -376,7 +390,9 @@
                                                          :visible    false
                                                          :opacity    0
                                                          :children   [(common/make-name-unique scene "cloud-center-img")
-                                                                      (common/make-name-unique scene "cloud-center-text")]
+                                                                      (common/make-name-unique scene "cloud-center-text")
+                                                                      (common/make-name-unique scene "cloud-center-text-img")
+                                                                      ]
                                                          :states     {:hide {:visible false} :show {:visible true}}
                                                          }}
    [(common/make-name-unique scene "cloud-center") (common/make-name-unique scene "moving-clouds")]
@@ -393,7 +409,7 @@
     (-> scene
         (update-in [:objects] merge objects)
         (update-in [:actions] merge actions)
-        (update-in [:actions :next-step :data (dec (count (get-in scene [:actions :next-step :data]))) :value] inc)
+        (update-in [:actions :check-scene-finished :value] inc)
         (common/add-scene-object scene-objects)
         (common/add-track-actions (vec (map name (keys actions))) "dialog" (str "Word " (common/get-unique-suffix scene)))
         (common/update-unique-suffix)

@@ -1,6 +1,7 @@
 (ns webchange.templates.library.dialog
   (:require
-    [webchange.templates.core :as core]))
+    [webchange.templates.core :as core]
+    [webchange.templates.utils.characters :as characters]))
 
 (def m {:id          4
         :name        "dialog"
@@ -58,13 +59,6 @@
                               :name   "mari"
                               :skin   "01 mari"}})
 
-(defn- create-character
-  [character]
-  (if-let [c (get animations (-> character :skeleton keyword))]
-    (merge c
-           {:type "animation" :editable? true :anim "idle" :start true :scene-name (-> character :name)}
-           (select-keys character [:x :y]))))
-
 (def character-positions
   [{:x 428
     :y 960}
@@ -73,21 +67,10 @@
    {:x 1428
     :y 960}])
 
-(defn- add-characters
-  [t characters]
-  (let [cs (->> characters
-                (map-indexed (fn [idx c] (merge c (get character-positions idx))))
-                (map (fn [c] [(-> c :name keyword) (create-character c)]))
-                (into {}))
-        names (->> cs keys (map name) (into []))]
-    (-> t
-        (update :objects merge cs)
-        (update :scene-objects conj names))))
-
 (defn f
   [t args]
   (-> t
-      (add-characters (:characters args))))
+      (characters/add-characters (:characters args) character-positions animations)))
 
 (core/register-template
   m
