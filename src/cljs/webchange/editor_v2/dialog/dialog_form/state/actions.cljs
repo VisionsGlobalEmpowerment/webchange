@@ -2,6 +2,7 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.audio-analyzer :as audio-analyzer]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as defaults]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as actions]
@@ -133,21 +134,40 @@
   (fn [{:keys [_]} [_ volume]]
     {:dispatch-n (list [::update-inner-action {:volume (float volume)} 1])}))
 
+(defn get-action-path-data
+  [db target-action]
+  (-> (translator-form.actions/get-action-path-data db target-action)
+      (update 0 concat [:data 1])))
+
 (re-frame/reg-event-fx
   ::update-dialog-audio-action
   (fn [{:keys [db]} [_ target-action data-patch]]
-    (let [{:keys [path type]} (cond
-                                (= target-action :dialog) (translator-form.actions/current-dialog-action-info db)
-                                (= target-action :phrase) (translator-form.actions/current-phrase-action-info db))
-          action-path (concat (au/node-path->action-path path) [:data 1])]
+    (let [[action-path type] (get-action-path-data db target-action)]
       (cond
         (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}
         (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action action-path data-patch])}))))
 
 (re-frame/reg-event-fx
+  ::update-phrase-region-data
+  (fn [{:keys [db]} [_ audio-url]]
+    (let [action-path-data (get-action-path-data db :phrase)
+          action (translator-form.actions/get-action-data db action-path-data)]
+      (if (and (= (:audio action) audio-url) (not (and (:start action) (:duration action))))
+        (let [region-data (audio-analyzer/get-region-data-if-possible
+                            (translator-form.actions/get-phrase-text db action)
+                            audio-url)]
+          (if (contains? region-data :end)
+            {:dispatch-n (list [::set-phrase-action-audio-region
+                                audio-url
+                                (:start region-data)
+                                (- (:end region-data) (:start region-data))])}))))))
+
+(re-frame/reg-event-fx
   ::set-phrase-dialog-action-audio
-  (fn [{:keys [_]} [_ audio-url]]
-    {:dispatch-n (list [::update-dialog-audio-action :phrase {:audio audio-url}])}))
+  (fn [{:keys [db]} [_ audio-url]]
+    {:dispatch-n (list
+                   [::update-phrase-region-data audio-url]
+                   [::update-dialog-audio-action :phrase {:audio audio-url}])}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-audio-region

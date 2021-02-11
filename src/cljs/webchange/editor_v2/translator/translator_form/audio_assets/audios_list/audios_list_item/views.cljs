@@ -161,7 +161,10 @@
         audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
-        styles (get-styles)]
+        styles (get-styles)
+        _ @(re-frame/subscribe [::wave-form-state/audio-script-data url])
+        _ (re-frame/dispatch [::translator-form.actions/update-phrase-region-data url])
+        ]
     [ui/card {:on-click handle-select
               :style    (if selected?
                           (:block-wrapper-selected styles)

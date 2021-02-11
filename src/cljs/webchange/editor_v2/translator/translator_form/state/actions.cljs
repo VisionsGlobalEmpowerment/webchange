@@ -2,6 +2,7 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.audio-analyzer :as audio-analyzer]
     [webchange.utils.text :refer [text->chunks]]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.actions-shared :as actions-shared]
@@ -9,6 +10,11 @@
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.subs :as subs]))
+
+(defn- get-object-by-name
+  [db object-name]
+  (-> (translator-form.scene/objects-data db)
+      (get (keyword object-name))))
 
 ;; Subs
 
@@ -83,14 +89,52 @@
 
 ;; Events
 
+
+(defn get-action-path-data
+  ([db target-action]
+   (get-action-path-data db target-action nil))
+  ([db target-action sub-path]
+   (let [{:keys [path type]} (cond
+                               (= target-action :dialog) (current-dialog-action-info db)
+                               (= target-action :phrase) (current-phrase-action-info db))
+         action-path (cond-> (actions/node-path->action-path path)
+                             (some? sub-path) (concat sub-path))]
+     [action-path type])))
+
+(defn get-action-data
+  [db path-data]
+  (let [[action-path type] path-data]
+    (cond
+      (= type :concept-action) (get-in (translator-form.concepts/current-concept db) (concat [:data] action-path))
+      (= type :scene-action) (get-in (translator-form.scene/actions-data db) action-path))))
+
+(defn get-phrase-text
+  [db action]
+  (cond
+    (= (:type action) "text-animation") (:text (get-object-by-name db (:target action)))
+    (:phrase-text-translated action) (:phrase-text-translated action)
+    (:phrase-text action) (:phrase-text action)
+    :else nil))
+
+(re-frame/reg-event-fx
+  ::update-phrase-region-data
+  (fn [{:keys [db]} [_ audio-url]]
+    (let [action-path-data (get-action-path-data db :phrase)
+          action (get-action-data db action-path-data)]
+      (if (and (= (:audio action) audio-url) (not (and (:start action) (:duration action))))
+        (let [region-data (audio-analyzer/get-region-data-if-possible
+                            (get-phrase-text db action)
+                            audio-url)]
+          (if (contains? region-data :end)
+            {:dispatch-n (list [::set-phrase-action-audio-region
+                                audio-url
+                                (:start region-data)
+                                (- (:end region-data) (:start region-data))])}))))))
+
 (re-frame/reg-event-fx
   ::update-action
   (fn [{:keys [db]} [_ target-action data-patch sub-path]]
-    (let [{:keys [path type]} (cond
-                                (= target-action :dialog) (current-dialog-action-info db)
-                                (= target-action :phrase) (current-phrase-action-info db))
-          action-path (cond-> (actions/node-path->action-path path)
-                              (some? sub-path) (concat sub-path))]
+    (let [[action-path type] (get-action-path-data db target-action sub-path)]
       (cond
         (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}
         (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action action-path data-patch])}))))
@@ -130,8 +174,7 @@
 (re-frame/reg-event-fx
   ::set-text-animation-target
   (fn [{:keys [db]} [_ object-name]]
-    (let [target-data (-> (translator-form.scene/objects-data db)
-                          (get (keyword object-name)))]
+    (let [target-data (get-object-by-name db object-name)]
       (if (contains? target-data :chunks)
         {:dispatch [::update-action :phrase {:target object-name}]}
         (let [chunks (text->chunks (:text target-data))]
@@ -156,7 +199,9 @@
 (re-frame/reg-event-fx
   ::set-phrase-action-audio
   (fn [{:keys [_]} [_ audio-url]]
-    {:dispatch-n (list [::update-action :phrase {:audio audio-url}])}))
+    {:dispatch-n (list
+                   [::update-phrase-region-data audio-url]
+                   [::update-action :phrase {:audio audio-url}])}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-audio-region
