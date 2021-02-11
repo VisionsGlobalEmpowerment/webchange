@@ -70,6 +70,11 @@
   ::edited-concepts
   edited-concepts)
 
+(defn current-concept-data
+  [db]
+  (-> (current-concept db)
+      (get :data)))
+
 (re-frame/reg-sub
   ::current-concept-data
   (fn []

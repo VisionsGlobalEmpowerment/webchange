@@ -6,6 +6,7 @@
     [webchange.editor-v2.components.confirm-dialog.views :refer [confirm-dialog]]
     [webchange.editor-v2.dialog.state.window :as translator.window]
     [webchange.editor-v2.history.views :as history]
+    [webchange.editor-v2.translator.text.views-text-animation-editor :as animation-editor]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form.form]
     [webchange.editor-v2.dialog.dialog-form.views-form :refer [translator-form]]))
 
@@ -37,9 +38,11 @@
   (r/with-let [confirm-close? (r/atom false)
                confirm-save? (r/atom false)]
     (let [open? @(re-frame/subscribe [::translator.window/modal-state])
+          {:keys [single-phrase?]} @(re-frame/subscribe [::translator.window/modal-params])
           has-changes? @(re-frame/subscribe [::translator-form.form/has-changes])
           handle-save #(do (save-edited-data!)
                            (reset! confirm-save? true))
+          handle-configure #(re-frame/dispatch [::animation-editor/open])
           handle-close #(if-not has-changes?
                           (close-window!)
                           (reset! confirm-close? true))
@@ -75,6 +78,11 @@
         [:div {:style {:display "flex"}}
          [ui/button {:on-click handle-close}
           "Cancel"]
+         (when single-phrase?
+           [:div {:style (:save-button-wrapper styles)}
+            [ui/button {:color    "primary"
+                        :on-click handle-configure}
+             "Configure"]])
          [:div {:style (:save-button-wrapper styles)}
           [ui/button {:color    "secondary"
                       :variant  "contained"

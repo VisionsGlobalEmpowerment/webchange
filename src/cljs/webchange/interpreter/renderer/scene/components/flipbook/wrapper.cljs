@@ -131,6 +131,6 @@
                                     (let [current-spread (:current-spread @state)
                                           new-spread {:left  (->> (* spread-idx 2) (dec))
                                                       :right (->> (* spread-idx 2))}]
-                                      (show-spread @state new-spread)
                                       (hide-spread @state current-spread)
+                                      (show-spread @state new-spread)
                                       (swap! state assoc :current-spread new-spread)))}))

@@ -1,24 +1,25 @@
 (ns webchange.interpreter.renderer.scene.components.text.wrapper
   (:require
-    [webchange.interpreter.renderer.scene.filters.filters :as f]
-    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]))
+    [webchange.interpreter.renderer.scene.components.text.utils :as utils]
+    [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
+    [webchange.interpreter.renderer.scene.filters.filters :as f]))
 
 (defn wrap
-  [type name text chunks]
+  [type name text-object chunks]
   (create-wrapper {:name          name
                    :type          type
-                   :object        text
+                   :object        text-object
                    :chunks        chunks
                    :set-text      (fn [value]
-                                    (aset text "text" value))
-                   :set-highlight           (fn [highlight]
-                                              (let [highlight-filter-set (f/has-filter-by-name text "glow")]
-                                                (if (and (not highlight) highlight-filter-set) (f/set-filter text "" {}))
-                                                (if (and highlight (not highlight-filter-set))
-                                                  (f/set-filter text "glow" {}))))
+                                    (aset text-object "text" value))
+                   :set-highlight (fn [highlight]
+                                    (let [highlight-filter-set (f/has-filter-by-name text-object "glow")]
+                                      (if (and (not highlight) highlight-filter-set) (f/set-filter text-object "" {}))
+                                      (if (and highlight (not highlight-filter-set))
+                                        (f/set-filter text-object "glow" {}))))
                    :set-fill      (fn [value]
-                                    (aset (.-style text) "fill" value))
+                                    (utils/set-fill text-object value))
                    :get-fill      (fn []
-                                    (.-fill (.-style text)))
+                                    (utils/get-fill text-object))
                    :set-font-size (fn [font-size]
-                                    (aset (.-style text) "fontSize" font-size))}))
+                                    (utils/set-font-size text-object font-size))}))

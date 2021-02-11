@@ -106,6 +106,8 @@
   (-> (case type
         "animation" (-> props
                         (assoc :start false))
+        "text" (-> props
+                   (dissoc :chunks))
         props)
       (add-editor-frame)
       (modify-common-props)))

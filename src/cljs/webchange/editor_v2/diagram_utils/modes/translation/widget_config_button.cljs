@@ -32,6 +32,6 @@
             :size     "small"
             :on-click (fn [event]
                         (.stopPropagation event)
-                        (re-frame/dispatch [::translator-form.actions/set-current-phrase-action node])
-                        (re-frame/dispatch [::chunks/open action-data]))}
+                        (re-frame/dispatch [::translator-form.actions/set-current-phrase-action node-data])
+                        (re-frame/dispatch [::chunks/open]))}
        [ic/settings]])))

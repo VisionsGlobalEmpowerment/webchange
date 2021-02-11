@@ -49,19 +49,28 @@
   ::current-phrase-action-info
   current-phrase-action-info)
 
+(defn current-phrase-action
+  ([db]
+   (let [phrase-action-info (current-phrase-action-info db)
+         actions-data (translator-form.scene/actions-data db)
+         current-concept (translator-form.concepts/current-concept-data db)]
+     (current-phrase-action phrase-action-info actions-data current-concept)))
+  ([{:keys [path type]} actions-data current-concept]
+   (let [action-path (actions/node-path->action-path path)]
+     (when-not (nil? action-path)
+       (cond
+         (= type :concept-action) (get-in current-concept action-path)
+         (= type :scene-action) (get-in actions-data action-path)
+         :else nil)))))
+
 (re-frame/reg-sub
   ::current-phrase-action
   (fn []
     [(re-frame/subscribe [::current-phrase-action-info])
      (re-frame/subscribe [::translator-form.scene/actions-data])
      (re-frame/subscribe [::translator-form.concepts/current-concept-data])])
-  (fn [[{:keys [path type]} actions-data current-concept]]
-    (let [action-path (actions/node-path->action-path path)]
-      (when-not (nil? action-path)
-        (cond
-          (= type :concept-action) (get-in current-concept action-path)
-          (= type :scene-action) (get-in actions-data action-path)
-          :else nil)))))
+  (fn [[phrase-action-info actions-data current-concept]]
+    (current-phrase-action phrase-action-info actions-data current-concept)))
 
 (re-frame/reg-sub
   ::phrase-node-available-actions
@@ -76,11 +85,12 @@
 
 (re-frame/reg-event-fx
   ::update-action
-  (fn [{:keys [db]} [_ target-action data-patch]]
+  (fn [{:keys [db]} [_ target-action data-patch sub-path]]
     (let [{:keys [path type]} (cond
                                 (= target-action :dialog) (current-dialog-action-info db)
                                 (= target-action :phrase) (current-phrase-action-info db))
-          action-path (actions/node-path->action-path path)]
+          action-path (cond-> (actions/node-path->action-path path)
+                              (some? sub-path) (concat sub-path))]
       (cond
         (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}
         (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action action-path data-patch])}))))

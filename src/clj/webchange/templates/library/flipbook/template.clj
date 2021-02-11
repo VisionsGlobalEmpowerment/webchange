@@ -108,15 +108,14 @@
   {:type               "sequence-data"
    :editor-type        "dialog"
    :concept-var        "current-word"
-   :data               [{:type "sequence-data"
-                         :data [{:type "empty" :duration 0}
-                                {:data        []
-                                 :type        "text-animation"
-                                 :audio       nil,
-                                 :target      text-name
-                                 :animation   "color"
-                                 :fill        0x00B2FF
-                                 :phrase-text text-value}]}]
+   :data               [{:type "empty" :duration 0}
+                        {:data        []
+                         :type        "text-animation"
+                         :audio       nil,
+                         :target      text-name
+                         :animation   "color"
+                         :fill        0x00B2FF
+                         :phrase-text text-value}]
    :phrase             action-name
    :phrase-description "Page Action"})
 

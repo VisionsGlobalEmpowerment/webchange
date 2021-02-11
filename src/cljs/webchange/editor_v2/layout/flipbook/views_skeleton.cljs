@@ -25,11 +25,7 @@
                              :flex-grow      1
                              :flex-shrink    1
                              :padding-bottom (* padding 2)
-                             :width          "100%"}
-
-     :diagram               {:display   "flex"
-                             :flex-grow 1
-                             :height    "100%"}}))
+                             :width          "100%"}}))
 
 (defn- top-panel
   [{:keys [top-left-component top-right-component]}]
@@ -46,16 +42,9 @@
     [:div {:style (:middle-panel styles)}
      middle-component]))
 
-(defn- diagram
-  [{:keys [bottom-component]}]
-  (let [styles (get-styles)]
-    [:div {:style (:diagram styles)}
-     bottom-component]))
-
 (defn skeleton
   [props]
   (let [styles (get-styles)]
     [:div {:style (:main-container styles)}
      [top-panel props]
-     [middle-panel props]
-     [diagram props]]))
+     [middle-panel props]]))

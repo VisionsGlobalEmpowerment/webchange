@@ -52,7 +52,7 @@
 
 (re-frame/reg-event-fx
   ::update-scene
-  (fn [{:keys [db]} [_ {:keys [scene-id scene-data-patch]}]]
+  (fn [{:keys [db]} [_ {:keys [scene-id scene-data-patch]} {:keys [on-success]}]]
     (let [course-id (core/current-course-id db)
           scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
           current-scene-data (core/get-scene-data db scene-id)
@@ -60,24 +60,26 @@
       {:dispatch [::warehouse/save-scene {:course-id  course-id
                                           :scene-id   scene-id
                                           :scene-data scene-data}
-                  {:on-success [::update-scene-success]}]})))
+                  {:on-success [::update-scene-success on-success]}]})))
 
 (re-frame/reg-event-fx
   ::update-scene-success
-  (fn [{:keys [_]} [_ {:keys [name data]}]]
-    {:dispatch [::core/set-scene-data {:scene-id   name
-                                       :scene-data data}]}))
+  (fn [{:keys [_]} [_ on-success {:keys [name data] :as response}]]
+    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
+                                                  :scene-data data}]]
+                         (some? on-success) (conj (conj on-success response)))}))
 
 (re-frame/reg-event-fx
   ::update-scene-object
-  (fn [{:keys [db]} [_ {:keys [scene-id object-name object-data-patch]}]]
+  (fn [{:keys [db]} [_ {:keys [scene-id object-name object-data-patch]} handlers]]
     {:pre [(keyword? object-name)]}
     (let [scene-id (if (some? scene-id) scene-id (core/current-scene-id db))
           objects-data (-> (core/get-scene-data db scene-id)
                            (get :objects {})
                            (update object-name merge object-data-patch))]
       {:dispatch [::update-scene {:scene-id         scene-id
-                                  :scene-data-patch {:objects objects-data}}]})))
+                                  :scene-data-patch {:objects objects-data}}
+                  handlers]})))
 
 (re-frame/reg-event-fx
   ::update-scene-metadata

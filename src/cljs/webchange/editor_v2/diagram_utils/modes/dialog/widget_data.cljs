@@ -13,6 +13,7 @@
     [webchange.editor-v2.diagram-utils.modes.translation.widget-loop-icon :refer [loop-icon]]
     [webchange.editor-v2.graph-builder.utils.node-data :refer [speech-node? concept-action-node? get-node-type]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :refer [get-inner-action]]))
 
 (defn get-node-speech
@@ -50,10 +51,12 @@
 
 (defn- header
   [{:keys [node-data] :as node}]
-  (let [styles (get-styles node-data)]
+  (let [{:keys [context-menu]} @(re-frame/subscribe [::translator-form/components-settings :diagram])
+        styles (get-styles node-data)]
     [:div {:style (:header styles)}
      [phrase node]
-     [menu node]]))
+     (when-not (:hide? context-menu)
+       [menu node])]))
 
 (defn- get-target-node
   [node-data]

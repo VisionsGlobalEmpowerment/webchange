@@ -5,6 +5,7 @@
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.utils.text :refer [chunks->parts]]
+    [webchange.editor-v2.translator.text.views-chunks-editor-form :refer [chunks-editor-form]]
     [webchange.editor-v2.translator.text.views-text-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.ui.components.message :refer [message]]))
@@ -14,6 +15,8 @@
 (def audio-path [:editor-v2 :translator :text :chunks :audio])
 (def bounds-path [:editor-v2 :translator :text :chunks :bounds])
 (def data-path [:editor-v2 :translator :text :chunks :data])
+(def text-data-path [:editor-v2 :translator :text :text-data])
+(def text-name [:editor-v2 :translator :text :text-name])
 
 (defn bound
   [{:keys [start end]} value]
@@ -21,6 +24,30 @@
     (> start value) start
     (< end value) end
     :else value))
+
+(defn- get-text-name
+  [db]
+  (get-in db text-name))
+
+(defn- get-current-text-data
+  [db]
+  (get-in db text-data-path {}))
+
+(re-frame/reg-sub
+  ::current-text-data
+  get-current-text-data)
+
+(re-frame/reg-event-fx
+  ::set-current-text-data
+  (fn [{:keys [db]} [_ name data]]
+    {:db (-> db
+             (update-in text-data-path merge data)
+             (assoc-in text-name name))}))
+
+(re-frame/reg-event-fx
+  ::reset-current-text-data
+  (fn [{:keys [db]} [_]]
+    {:db (assoc-in db text-data-path {})}))
 
 (re-frame/reg-sub
   ::modal-state
@@ -33,9 +60,12 @@
   ::text-object
   (fn []
     [(re-frame/subscribe [::translator-form.actions/current-phrase-action])
-     (re-frame/subscribe [::translator-form.scene/objects-data])])
-  (fn [[{:keys [target]} objects]]
-    [target (get objects (keyword target))]))
+     (re-frame/subscribe [::translator-form.scene/objects-data])
+     (re-frame/subscribe [::current-text-data])])
+  (fn [[current-phrase-action objects current-text-data]]
+    (let [text-animation-action (get-in current-phrase-action [:data 1])
+          {:keys [target]} text-animation-action]
+      [target (-> objects (get (keyword target)) (merge current-text-data))])))
 
 (re-frame/reg-sub
   ::selected-chunk
@@ -64,8 +94,10 @@
 
 (re-frame/reg-event-fx
   ::open
-  (fn [{:keys [db]} [_ {:keys [audio start duration data target]}]]
-    (let [chunks-count (-> (translator-form.scene/objects-data db)
+  (fn [{:keys [db]} [_]]
+    (let [current-phrase-action (translator-form.actions/current-phrase-action db)
+          {:keys [audio start duration data target]} (get-in current-phrase-action [:data 1])
+          chunks-count (-> (translator-form.scene/objects-data db)
                            (get (keyword target))
                            (get :chunks)
                            count)
@@ -80,14 +112,19 @@
 (re-frame/reg-event-fx
   ::cancel
   (fn [{:keys [db]} [_]]
-    {:db (assoc-in db modal-state-path false)}))
+    {:db       (assoc-in db modal-state-path false)
+     :dispatch [::reset-current-text-data]}))
 
 (re-frame/reg-event-fx
   ::apply
   (fn [{:keys [db]} [_]]
-    (let [data (get-in db data-path)]
-      {:db       (assoc-in db modal-state-path false)
-       :dispatch [::translator-form.actions/update-action :phrase {:data data}]})))
+    (let [data (get-in db data-path)
+          text-name (get-text-name db)
+          text-data-patch (get-current-text-data db)]
+      {:db         (assoc-in db modal-state-path false)
+       :dispatch-n (cond-> [[::translator-form.actions/update-action :phrase {:data data} [:data 1]]
+                            [::reset-current-text-data]]
+                           (some? text-name) (conj [::translator-form.scene/update-object [text-name] text-data-patch]))})))
 
 (re-frame/reg-event-fx
   ::select-chunk
@@ -116,10 +153,11 @@
 (defn- text-chunks-form
   []
   (let [[text-object-name text-object-data] @(re-frame/subscribe [::text-object])
-        available-text-objects @(re-frame/subscribe [::translator-form.scene/text-objects])
         selected-chunk @(re-frame/subscribe [::selected-chunk])
         selected-audio @(re-frame/subscribe [::selected-audio])
         parts (chunks->parts (:text text-object-data) (:chunks text-object-data))
+        handle-chunks-change (fn [text-name text-data-patch]
+                               (re-frame/dispatch [::set-current-text-data text-name text-data-patch]))
         styles (get-styles)]
     (if (or (nil? selected-audio)
             (nil? (:start selected-audio))
@@ -136,19 +174,15 @@
                                   :on-change      #(re-frame/dispatch [::select-audio %])
                                   :show-controls? true})]]]
        [ui/grid {:item true :xs 12}
-        [ui/form-control {:full-width true
-                          :style      (:control-container styles)}
-         [ui/input-label "Target text"]
-         [ui/select {:value     (or text-object-name "")
-                     :variant   "outlined"
-                     :on-change #(re-frame/dispatch [::translator-form.actions/set-text-animation-target (-> % .-target .-value)])}
-          (for [[object-name {:keys [text]}] available-text-objects]
-            ^{:key object-name}
-            [ui/menu-item {:value object-name} text])]]]
-       [ui/grid {:item true :xs 12}
         [text-chunks {:parts              parts
                       :selected-chunk-idx selected-chunk
-                      :on-click           #(re-frame/dispatch [::select-chunk %])}]]])))
+                      :on-click           #(re-frame/dispatch [::select-chunk %])}]]
+
+       [ui/grid {:item true :xs 12}
+        [chunks-editor-form (merge (select-keys text-object-data [:text :chunks])
+                                   {:on-change             (fn [data] (handle-chunks-change (keyword text-object-name) data))
+                                    :show-chunks?          false
+                                    :origin-text-disabled? true})]]])))
 
 (defn text-chunks-modal
   []
