@@ -11,11 +11,12 @@
 
 (defn edit-animation-button
   [{:keys [id]}]
-  (let [window-options {:components {:description  {:hide? true}
-                                     :node-options {:hide? true}
-                                     :target       {:hide? true}
-                                     :phrase       {:hide? true}
-                                     :diagram      {:context-menu {:hide? true}}}}
+  (let [window-options {:components     {:description  {:hide? true}
+                                         :node-options {:hide? true}
+                                         :target       {:hide? true}
+                                         :phrase       {:hide? true}
+                                         :diagram      {:hide? true}}
+                        :single-phrase? true}
         handle-click (fn []
                        (re-frame/dispatch [::state/open-dialog-window id window-options]))
         loading? @(re-frame/subscribe [::state/loading? id])

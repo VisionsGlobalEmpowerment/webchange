@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.layout.flipbook.state :as db]
-    [webchange.editor-v2.translator.text.core :refer [parts->chunks]]
+    [webchange.utils.text :refer [parts->chunks]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.state.state :as state]))

@@ -8,7 +8,6 @@
     [webchange.editor-v2.translator.text.views-chunks-editor-form :refer [chunks-editor-form]]
     [webchange.editor-v2.translator.text.views-text-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
-    [webchange.state.state :as state]
     [webchange.ui.components.message :refer [message]]))
 
 (def modal-state-path [:editor-v2 :translator :text :chunks-modal-state])
@@ -63,8 +62,10 @@
     [(re-frame/subscribe [::translator-form.actions/current-phrase-action])
      (re-frame/subscribe [::translator-form.scene/objects-data])
      (re-frame/subscribe [::current-text-data])])
-  (fn [[{:keys [target]} objects current-text-data]]
-    [target (-> objects (get (keyword target)) (merge current-text-data))]))
+  (fn [[current-phrase-action objects current-text-data]]
+    (let [text-animation-action (get-in current-phrase-action [:data 1])
+          {:keys [target]} text-animation-action]
+      [target (-> objects (get (keyword target)) (merge current-text-data))])))
 
 (re-frame/reg-sub
   ::selected-chunk
@@ -93,8 +94,10 @@
 
 (re-frame/reg-event-fx
   ::open
-  (fn [{:keys [db]} [_ {:keys [audio start duration data target]}]]
-    (let [chunks-count (-> (translator-form.scene/objects-data db)
+  (fn [{:keys [db]} [_]]
+    (let [current-phrase-action (translator-form.actions/current-phrase-action db)
+          {:keys [audio start duration data target]} (get-in current-phrase-action [:data 1])
+          chunks-count (-> (translator-form.scene/objects-data db)
                            (get (keyword target))
                            (get :chunks)
                            count)
@@ -116,12 +119,12 @@
   ::apply
   (fn [{:keys [db]} [_]]
     (let [data (get-in db data-path)
-          text-path [(get-text-name db)]
+          text-name (get-text-name db)
           text-data-patch (get-current-text-data db)]
       {:db         (assoc-in db modal-state-path false)
-       :dispatch-n [[::translator-form.actions/update-action :phrase {:data data}]
-                    [::translator-form.scene/update-object text-path text-data-patch]
-                    [::reset-current-text-data]]})))
+       :dispatch-n (cond-> [[::translator-form.actions/update-action :phrase {:data data} [:data 1]]
+                            [::reset-current-text-data]]
+                           (some? text-name) (conj [::translator-form.scene/update-object [text-name] text-data-patch]))})))
 
 (re-frame/reg-event-fx
   ::select-chunk
