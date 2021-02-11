@@ -3,7 +3,9 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.dialog.state.window :as dialog.window]
     [webchange.editor-v2.layout.flipbook.state :as db]
+    [webchange.editor-v2.translator.text.core :refer [parts->chunks]]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
+    [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.state.state :as state]))
 
 (defn path-to-db
@@ -67,7 +69,13 @@
 (re-frame/reg-event-fx
   ::set-current-text
   (fn [{:keys [db]} [_ id text]]
-    {:db (assoc-in db (path-to-db id [:current-data :text]) text)}))
+    (let [text-object-name (get-text-object-name db id)
+          parts (clojure.string/split text #" ")
+          chunks (parts->chunks text parts)]
+      {:db (-> db
+               (assoc-in (path-to-db id [:current-data :text]) text)
+               (assoc-in (path-to-db id [:current-data :chunks]) chunks))
+       :dispatch [::scene/set-scene-object-state text-object-name {:text text}]})))
 
 (re-frame/reg-sub
   ::current-font-size
@@ -80,7 +88,9 @@
 (re-frame/reg-event-fx
   ::set-current-font-size
   (fn [{:keys [db]} [_ id font-size]]
-    {:db (assoc-in db (path-to-db id [:current-data :font-size]) font-size)}))
+    (let [text-object-name (get-text-object-name db id)]
+      {:db       (assoc-in db (path-to-db id [:current-data :font-size]) font-size)
+       :dispatch [::scene/set-scene-object-state text-object-name {:font-size font-size}]})))
 
 (re-frame/reg-event-fx
   ::open-dialog-window

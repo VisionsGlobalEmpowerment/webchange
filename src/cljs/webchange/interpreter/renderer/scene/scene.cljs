@@ -44,6 +44,16 @@
                                     :height new-height})]
     (update-viewport viewport)))
 
+(defn- register-handler
+  [object event handler]
+  (when (some? object)
+    (.on object event handler)))
+
+(defn- unregister-handler
+  [object event handler]
+  (when (some? object)
+    (.off object event handler)))
+
 (defn scene
   [{:keys []}]
   (let [container (atom nil)]
@@ -62,7 +72,7 @@
                                                  :children    objects})
                          (when (modes/show-overlays? mode)
                            (-> (get-renderer)
-                               (.on "resize" handle-renderer-resize))
+                               (register-handler "resize" handle-renderer-resize))
                            (create-overlays {:parent   (get-stage)
                                              :viewport viewport}))
 
@@ -74,7 +84,7 @@
        :component-will-unmount
                      (fn []
                        (-> (get-renderer)
-                           (.off "resize" handle-renderer-resize)))
+                           (unregister-handler "resize" handle-renderer-resize)))
 
        :should-component-update
                      (fn [] false)
