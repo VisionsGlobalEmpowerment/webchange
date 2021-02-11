@@ -5,7 +5,6 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.sandbox.parse-actions :refer [find-all-actions]]
-    [webchange.editor-v2.translator.text.core :refer [parts->chunks chunks->parts]]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.subs :as subs]))
 
