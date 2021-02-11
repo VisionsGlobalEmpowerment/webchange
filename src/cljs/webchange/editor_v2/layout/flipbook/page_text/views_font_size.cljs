@@ -10,8 +10,9 @@
   []
   {:container {:display     "flex"
                :align-items "center"}
-   :control   {:margin "0 16px"
-               :width  "73px"}})
+   :control   {:margin    "0 16px"
+               :min-width "74px"
+               :width     "74px"}})
 
 (defn- get-available-font-sizes
   [current-value]

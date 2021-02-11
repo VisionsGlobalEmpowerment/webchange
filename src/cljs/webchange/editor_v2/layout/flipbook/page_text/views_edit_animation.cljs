@@ -4,6 +4,11 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.flipbook.page-text.state :as state]))
 
+(defn- get-styles
+  []
+  {:button {:margin      "0 16px"
+            :white-space "nowrap"}})
+
 (defn edit-animation-button
   [{:keys [id]}]
   (let [window-options {:components {:description  {:hide? true}
@@ -13,7 +18,9 @@
                                      :diagram      {:context-menu {:hide? true}}}}
         handle-click (fn []
                        (re-frame/dispatch [::state/open-dialog-window id window-options]))
-        loading? @(re-frame/subscribe [::state/loading? id])]
+        loading? @(re-frame/subscribe [::state/loading? id])
+        styles (get-styles)]
     [ui/button {:on-click handle-click
-                :disabled loading?}
+                :disabled loading?
+                :style    (:button styles)}
      "Edit Animation"]))
