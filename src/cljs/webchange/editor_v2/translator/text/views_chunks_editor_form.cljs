@@ -15,7 +15,9 @@
   (.. event -target -value))
 
 (defn chunks-editor-form
-  [{:keys [text chunks on-change]}]
+  [{:keys [text chunks on-change show-chunks? origin-text-disabled?]
+    :or   {show-chunks?          true
+           origin-text-disabled? false}}]
   (let [handle-text-change (fn [event]
                              (let [current-text (event->value event)
                                    current-chunks (text->chunks current-text)]
@@ -34,6 +36,7 @@
         [ui/text-field (merge text-input-params
                               {:label     "Text"
                                :value     (or text "")
+                               :disabled  origin-text-disabled?
                                :on-change handle-text-change})]]
        [ui/grid {:item true :xs 12}
         [ui/text-field (merge text-input-params
@@ -41,5 +44,6 @@
                                :value       (clojure.string/join " " parts)
                                :on-change   handle-parts-change
                                :helper-text "Use space to divide text into chunks"})]]
-       [ui/grid {:item true :xs 12}
-        [text-chunks {:parts parts}]]])))
+       (when show-chunks?
+         [ui/grid {:item true :xs 12}
+          [text-chunks {:parts parts}]])])))
