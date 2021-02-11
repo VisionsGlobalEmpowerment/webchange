@@ -62,6 +62,13 @@
        (map :width)
        (reduce + 0)))
 
+(defn- ends-with-new-line?
+  [chunk]
+  (let [last-symbol (-> chunk :text last)]
+    (or
+      (identical? \newline last-symbol)
+      (identical? \return last-symbol))))
+
 (defn- get-words [chunks]
   (loop [current []
          next (first chunks)
@@ -69,10 +76,10 @@
          words []]
     (cond
       (nil? next) (conj words current)
+      (ends-with-new-line? next) (recur [] (first tail) (rest tail) (conj words (conj current next)))
       (and (empty-chunk? next) (empty? current)) (recur [next] (first tail) (rest tail) words)
       (empty-chunk? next) (recur [next] (first tail) (rest tail) (conj words current))
       :default (recur (conj current next) (first tail) (rest tail) words))))
-
 
 (defn- new-line [chunks rest]
   (let [trimmed (trim-chunks chunks)
@@ -91,6 +98,7 @@
       (cond
         (nil? word) (new-line line-chunks words-to-process)
         (and (seq line-chunks) (< width new-width)) (new-line line-chunks words-to-process)
+        (-> line-chunks last ends-with-new-line?) (new-line line-chunks words-to-process)
         :default (recur tail new-width (concat line-chunks word))))))
 
 (defn- get-lines [{:keys [width] :as props}]

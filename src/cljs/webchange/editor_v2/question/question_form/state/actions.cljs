@@ -2,7 +2,6 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.translator.text.core :refer [parts->chunks]]
     [webchange.editor-v2.question.question-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.question.question-form.state.actions-utils :as actions]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]

@@ -4,7 +4,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.editor-v2.translator.text.core :refer [parts->chunks chunks->parts]]
+    [webchange.utils.text :refer [text->chunks chunks->parts]]
     [webchange.editor-v2.translator.text.views-text-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as au]
@@ -99,9 +99,8 @@
 (re-frame/reg-event-fx
   ::set-parts
   (fn [{:keys [db]} [_ parts]]
-    (let [parts (clojure.string/split parts #" ")
-          original (get-in db (concat text-object-path [:text]))
-          chunks (parts->chunks original parts)]
+    (let [original (get-in db (concat text-object-path [:text]))
+          chunks (text->chunks original parts)]
     {:db (assoc-in db (concat text-object-path [:chunks]) chunks)})))
 
 (re-frame/reg-event-fx

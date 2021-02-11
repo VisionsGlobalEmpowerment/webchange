@@ -2,7 +2,7 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.translator.text.core :refer [parts->chunks]]
+    [webchange.utils.text :refer [text->chunks]]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.translator.translator-form.state.actions-shared :as actions-shared]
     [webchange.editor-v2.translator.translator-form.state.actions-utils :as actions]
@@ -124,8 +124,7 @@
                           (get (keyword object-name)))]
       (if (contains? target-data :chunks)
         {:dispatch [::update-action :phrase {:target object-name}]}
-        (let [parts (clojure.string/split (:text target-data) #" ")
-              chunks (parts->chunks (:text target-data) parts)]
+        (let [chunks (text->chunks (:text target-data))]
           {:dispatch-n (list [::update-action :phrase {:target object-name}]
                              [::translator-form.scene/update-object [(keyword object-name)] {:chunks chunks}])})))))
 

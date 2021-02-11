@@ -4,7 +4,7 @@
     [re-frame.core :as re-frame]
     [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
-    [webchange.editor-v2.translator.text.core :refer [chunks->parts]]
+    [webchange.utils.text :refer [chunks->parts]]
     [webchange.editor-v2.translator.text.views-text-chunks :refer [text-chunks]]
     [webchange.editor-v2.components.audio-wave-form.views :refer [audio-wave-form]]
     [webchange.ui.components.message :refer [message]]))
