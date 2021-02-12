@@ -15,8 +15,7 @@
                              :padding-bottom  (* padding 2)
                              :width           "100%"}
      :top-panel--left-side  {:flex-grow     1
-                             :padding-right padding
-                             :max-width     "300px"}
+                             :padding-right padding}
      :top-panel--right-side {:display       "flex"
                              :flex-grow     0
                              :padding-right padding}

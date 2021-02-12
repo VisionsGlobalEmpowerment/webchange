@@ -1,5 +1,6 @@
 (ns webchange.editor-v2.layout.flipbook.views
   (:require
+    [cljs-react-material-ui.reagent :as ui]
     [webchange.editor-v2.layout.components.activity-action.views :refer [activity-actions]]
     [webchange.editor-v2.layout.components.activity-stage.views :refer [select-stage]]
     [webchange.editor-v2.layout.components.interpreter_stage.views :refer [interpreter-stage]]
@@ -11,9 +12,17 @@
 (defn layout
   [{:keys [course-id scene-data]}]
   [skeleton {:top-left-component  [:div
-                                     [select-stage]
-                                     [activity-actions {:course-id  course-id
-                                                        :scene-data scene-data}]
-                                     [share-button]]
-               :top-right-component [interpreter-stage]
-               :middle-component    [stage-text]}])
+                                   [:div {:style {:display     "flex"
+                                                  :align-items "center"}}
+                                    [ui/typography {:inline  true
+                                                    :variant "body1"
+                                                    :style   {:margin-right "16px"}}
+                                     "Stage:"]
+                                    [select-stage {:styles {:container {:flex-grow 1}
+                                                            :image     {:max-width  "200px"
+                                                                        :max-height "100px"}}}]]
+                                   [activity-actions {:course-id  course-id
+                                                      :scene-data scene-data}]
+                                   [share-button]]
+             :top-right-component [interpreter-stage]
+             :middle-component    [stage-text]}])

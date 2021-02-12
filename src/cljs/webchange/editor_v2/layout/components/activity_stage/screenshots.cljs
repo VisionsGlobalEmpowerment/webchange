@@ -16,7 +16,7 @@
       {:dispatch                [::overlays/show-waiting-screen]
        :take-stages-screenshots {:stages-idx stages-idx
                                  :callback   #(do (re-frame/dispatch [::update-stages-screenshots %])
-                                                  (re-frame/dispatch [::stage/show-flipbook-stage (or current-stage 0)])
+                                                  (re-frame/dispatch [::stage/select-stage (or current-stage 0)])
                                                   (re-frame/dispatch [::overlays/hide-waiting-screen]))}})))
 
 (defn- run-seq
