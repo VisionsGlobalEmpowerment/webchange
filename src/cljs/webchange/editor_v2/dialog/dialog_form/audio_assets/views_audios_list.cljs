@@ -9,6 +9,7 @@
     [webchange.editor-v2.components.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.ui.theme :refer [get-in-theme]]))
 
@@ -167,7 +168,7 @@
                     :end   (+ start duration)}
         styles (get-styles)
         _ @(re-frame/subscribe [::wave-form-state/audio-script-data url])
-        _ (re-frame/dispatch [::dialog-form.actions/update-phrase-region-data url])
+        _ (re-frame/dispatch [::translator-form.actions/update-phrase-region-data url dialog-form.actions/dialog-sub-path])
         ]
     [ui/card {:on-click handle-select
               :style    (if selected?

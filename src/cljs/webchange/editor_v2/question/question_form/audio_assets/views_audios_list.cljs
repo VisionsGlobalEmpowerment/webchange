@@ -162,13 +162,16 @@
                                                               (:start region)
                                                               (:duration region)]))
         handle-bring-to-top (fn [] (re-frame/dispatch [::translator-form.scene/update-asset-date url (.now js/Date)]))
-        handle-clear-selection (fn [] (re-frame/dispatch [::translator-form.actions/update-dialog-audio-action :phrase
+        handle-clear-selection (fn [] (re-frame/dispatch [::translator-form.actions/update-action :phrase
                                                           {:audio url :start nil :end nil :duration nil}]))
         handle-delete (fn [] (re-frame/dispatch [::translator-form.scene/delete-asset url]))
         audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
-        styles (get-styles)]
+        styles (get-styles)
+        _ @(re-frame/subscribe [::wave-form-state/audio-script-data url])
+        _ (re-frame/dispatch [::translator-form.actions/update-phrase-region-data url])
+        ]
     [ui/card {:on-click handle-select
               :style    (if selected?
                           (:block-wrapper-selected styles)

@@ -108,28 +108,62 @@
       (= type :concept-action) (get-in (translator-form.concepts/current-concept db) (concat [:data] action-path))
       (= type :scene-action) (get-in (translator-form.scene/actions-data db) action-path))))
 
+(defn text-animation?
+  [action]
+  (= (:type action) "text-animation"))
+
+(defn question-audio-data?
+  [action]
+  (not (:type action)))
+
+(defn update-text-animation-data?
+  [action]
+  (or (question-audio-data? action) (text-animation? action)))
+
+(defn animation-sequence?
+  [action]
+  (= (:type action) "animation-sequence"))
+
+(defn current-phrase-action-animation-sequence?
+  ([db target-action]
+   (current-phrase-action-animation-sequence? db target-action nil))
+  ([db target-action sub-path]
+   (let [action-path-data (get-action-path-data db target-action sub-path)
+         action (get-action-data db action-path-data)]
+     (animation-sequence? action))))
+
 (defn get-phrase-text
-  [db action]
+  [db action action-path-data]
   (cond
-    (= (:type action) "text-animation") (:text (get-object-by-name db (:target action)))
+    (question-audio-data? action) (:text (get-action-data db (update action-path-data 0 drop-last)))
+    (text-animation? action) (:text (get-object-by-name db (:target action)))
     (:phrase-text-translated action) (:phrase-text-translated action)
     (:phrase-text action) (:phrase-text action)
     :else nil))
 
 (re-frame/reg-event-fx
   ::update-phrase-region-data
-  (fn [{:keys [db]} [_ audio-url]]
-    (let [action-path-data (get-action-path-data db :phrase)
+  (fn [{:keys [db]} [_ audio-url sub-path]]
+    (let [action-path-data (get-action-path-data db :phrase sub-path)
           action (get-action-data db action-path-data)]
       (if (and (= (:audio action) audio-url) (not (and (:start action) (:duration action))))
-        (let [region-data (audio-analyzer/get-region-data-if-possible
-                            (get-phrase-text db action)
+        (let [phrase-text (get-phrase-text db action action-path-data)
+              region-data (audio-analyzer/get-region-data-if-possible
+                            phrase-text
                             audio-url)]
           (if (contains? region-data :end)
-            {:dispatch-n (list [::set-phrase-action-audio-region
-                                audio-url
-                                (:start region-data)
-                                (- (:end region-data) (:start region-data))])}))))))
+
+            {:dispatch-n (list [::update-action :phrase
+                                (cond-> {:audio    audio-url
+                                         :start    (:start region-data)
+                                         :duration (- (:end region-data) (:start region-data))
+                                         :end      (:end region-data)}
+                                        (update-text-animation-data? action)
+                                        (assoc :data
+                                               (audio-analyzer/get-chunks-data-if-possible
+                                                 phrase-text audio-url region-data)
+                                               )
+                                        ) sub-path])}))))))
 
 (re-frame/reg-event-fx
   ::update-action
@@ -205,12 +239,14 @@
 
 (re-frame/reg-event-fx
   ::set-phrase-action-audio-region
-  (fn [{:keys [_]} [_ audio-url start duration]]
+  (fn [{:keys [db]} [_ audio-url start duration]]
     (let [region-data {:audio    audio-url
                        :start    start
                        :duration duration}]
       {:dispatch-n (list [::update-action :phrase region-data]
-                         [::load-lip-sync-data audio-url start duration])})))
+                         (if (current-phrase-action-animation-sequence? db :phrase)
+                         [::load-lip-sync-data audio-url start duration]
+                         ))})))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data
