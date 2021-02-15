@@ -12,7 +12,7 @@
         end (+ start (count part))]
     {:start start :end end}))
 
-(defn- parts->chunks
+(defn parts->chunks
   [phrase parts]
   (loop [idx 0
          tail parts

@@ -146,13 +146,12 @@
   (fn [{:keys [db]} [_ audio-url sub-path]]
     (let [action-path-data (get-action-path-data db :phrase sub-path)
           action (get-action-data db action-path-data)]
-      (if (and (= (:audio action) audio-url) (not (and (:start action) (:duration action))))
+      (if (or (not= (:audio action) audio-url) (not (and (:start action) (:duration action))))
         (let [phrase-text (get-phrase-text db action action-path-data)
               region-data (audio-analyzer/get-region-data-if-possible
                             phrase-text
                             audio-url)]
           (if (contains? region-data :end)
-
             {:dispatch-n (list [::update-action :phrase
                                 (cond-> {:audio    audio-url
                                          :start    (:start region-data)

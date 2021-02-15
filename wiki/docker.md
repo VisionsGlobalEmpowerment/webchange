@@ -36,6 +36,15 @@ $ docker run --mount type=bind,source="$(pwd)",target=/usr/src/app webchange-voi
 ```
 Here mount option will bind you local directory instead of instance app folder, so all your changes will be applied immediately
 
+You can even mount maven cache to the image...
+```
+$ docker run \
+ --mount type=bind,source="$(pwd)",target=/usr/src/app \
+ --mount type=bind,source="$HOME/.m2",target=/root/.m2 \
+ webchange/webchange-voice-recognition-dev
+```
+
+
 
 ### Usefull commands
 List of containers:

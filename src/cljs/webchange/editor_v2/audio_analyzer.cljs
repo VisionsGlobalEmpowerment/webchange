@@ -47,7 +47,8 @@
 
 (defn prepare-text
   [text]
-  (-> (clojure.string/replace text #"[^A-Za-z ]" "")
+  (-> (or text "")
+      (clojure.string/replace #"[^A-Za-z ]" "")
       (clojure.string/replace #" +" " ")
       (clojure.string/lower-case)))
 

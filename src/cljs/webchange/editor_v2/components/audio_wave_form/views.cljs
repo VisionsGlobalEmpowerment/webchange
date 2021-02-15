@@ -48,12 +48,11 @@
                           [float-control ws region])])})))
 
 (defn audio-wave-form
-  [{:keys [url on-audio-data-change] :as props}]
+  [_]
   (let [data (r/atom {})]
     (fn [{:keys [url on-audio-data-change] :as props}]
       (let [script-data @(re-frame/subscribe [::state/audio-script-data url])]
-        (println "audio-wave-form" on-audio-data-change (not (= script-data @data)) (and  on-audio-data-change (not (= script-data @data))))
-        (when (and  on-audio-data-change (not (= script-data @data)))
+        (when (and on-audio-data-change (not (= script-data @data)))
           (reset! data script-data)
           (on-audio-data-change))
         [audio-wave-form-core (merge props {:script script-data})]))))
