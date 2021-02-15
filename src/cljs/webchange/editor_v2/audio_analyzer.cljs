@@ -81,23 +81,15 @@
 
 (defn get-start-end-for-text
   [text data]
-  (println "get-start-end-for-text" text data)
   (let [data-text (clojure.string/join " " (map (fn [item] (:word item)) data))
         data-text-length (count data-text)
-
         text (prepare-text text)
         text-length (count text)
-        _ (println "prepare-text" text)
-
         text-to-search-length (min 30 text-length)
         text-to-search (subs text 0 text-to-search-length)
-
         result-items (prepare-result-items data)
         candidates (get-candidates text-to-search-length data-text text-to-search data-text-length)
-        _ (println "candidates" candidates)
         best-candidate (select-best-candidate candidates)
-        _ (println "best-candidate" best-candidate)
-
         final-result (reduce (fn [result item]
                                (if (and (contains? best-candidate :start)
                                         (contains? best-candidate :end)
@@ -109,46 +101,6 @@
                                  result))
                              {:start 1000000} (:items result-items))]
     final-result))
-
-
-
-(def ot ["game" "li" "in" "in" "for" "the" "syllables" "lets"])
-(def rt [{:conf       0.996899,
-          :end        20.399894,
-          :start      19.92,
-          :word       "game",
-          :start-text 177,
-          :end-text   181}
-         {:conf       0.531265,
-          :end        20.970088,
-          :start      20.61,
-          :word       "live",
-          :start-text 182,
-          :end-text   186}
-         {:conf       0.517923,
-          :end        21.15,
-          :start      20.970088,
-          :word       "in",
-          :start-text 187,
-          :end-text   189}
-         {:conf       0.975353,
-          :end        21.45,
-          :start      21.15,
-          :word       "for",
-          :start-text 190,
-          :end-text   193}
-         {:conf       0.960079,
-          :end        21.6,
-          :start      21.45,
-          :word       "the",
-          :start-text 194,
-          :end-text   197}
-         {:conf       1,
-          :end        22.44,
-          :start      21.601198,
-          :word       "syllables",
-          :start-text 198,
-          :end-text   207}])
 
 (defn- pack-chunks
   [items]
@@ -236,7 +188,6 @@
   [text data region]
   (let [chunks (filter (fn [item]
                          (and (<= (:start region) (:start item)) (>= (:end region) (:end item)))) data)]
-    (println "get-chunks-for-text" (clojure.string/split text " ") chunks)
     (get-chunks (clojure.string/split text " ") chunks)))
 
 (defn get-chunks-data-if-possible
