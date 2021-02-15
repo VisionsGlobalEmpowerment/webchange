@@ -1,8 +1,12 @@
 (ns webchange.editor-v2.layout.components.activity-action.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor-v2.wizard.state.activity :as activity]
-    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]))
+    [webchange.editor.events :as edit-scene]
+    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
+    [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
+    [webchange.interpreter.events :as interpreter.events]
+    [webchange.state.state :as state]
+    [webchange.subs :as subs]))
 
 (def actions-modal-state-path [:editor-v2 :translator :actions-modal-state])
 (def current-action-name-path [:editor-v2 :translator :current-action-name])
@@ -14,11 +18,13 @@
         (get-in actions-modal-state-path)
         boolean)))
 
+(defn- get-current-action
+  [db]
+  (get-in db current-action-name-path))
+
 (re-frame/reg-sub
   ::current-action
-  (fn [db]
-    (-> db
-        (get-in current-action-name-path))))
+  get-current-action)
 
 (re-frame/reg-event-fx
   ::open
@@ -47,5 +53,31 @@
 
 (re-frame/reg-event-fx
   ::save
-  (fn [{:keys [_]} [_ course-slug data scene-id callback]]
-    {:dispatch-n (list [::activity/update-activity course-slug data scene-id callback])}))
+  (fn [{:keys [db]} [_ data]]
+    (let [current-action (get-current-action db)]
+      {:dispatch [::call-activity-action
+                  {:action current-action
+                   :data   data}
+                  {:on-success [::close]}]})))
+
+(re-frame/reg-event-fx
+  ::call-activity-action
+  (fn [{:keys [db]} [_ {:keys [course-id scene-id action data] :or {data {}}} {:keys [on-success]}]]
+    (let [course-id (or course-id (subs/current-course db))
+          scene-id (or scene-id (subs/current-scene db))
+          action (or action (get-current-action db))]
+      {:dispatch [::state/call-activity-action
+                  {:course-id course-id
+                   :scene-id  scene-id
+                   :action    action
+                   :data      data}
+                  {:on-success [::call-activity-action-success on-success]}]})))
+
+(re-frame/reg-event-fx
+  ::call-activity-action-success
+  (fn [{:keys [_]} [_ on-success {:keys [name data]}]]
+    {:pre [(string? name) (map? data)]}
+    {:dispatch-n (cond-> [[::interpreter.events/set-scene name data]
+                          [::interpreter.events/store-scene name data]
+                          [::stage-state/reset-stage]]
+                         (some? on-success) (conj on-success))}))

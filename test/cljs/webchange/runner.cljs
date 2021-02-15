@@ -48,7 +48,8 @@
             [webchange.interpreter.utils.find-exit-test]
             [webchange.common.svg-path.path-to-transitions-test]
             [webchange.common.svg-path.path-splitter-test]
-            [webchange.interpreter.lessons.activity-test]))
+            [webchange.interpreter.lessons.activity-test]
+            [webchange.utils.list-test]))
 
 (doo-tests
   'webchange.core-test
@@ -100,4 +101,5 @@
   'webchange.common.svg-path.path-to-transitions-test
   'webchange.common.svg-path.path-splitter-test
   'webchange.interpreter.lessons.activity-test
+  'webchange.utils.list-test
   )

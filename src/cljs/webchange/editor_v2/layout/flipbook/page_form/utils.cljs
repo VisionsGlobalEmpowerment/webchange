@@ -1,4 +1,4 @@
-(ns webchange.editor-v2.layout.flipbook.utils
+(ns webchange.editor-v2.layout.flipbook.page-form.utils
   (:require
     [webchange.editor-v2.graph-builder.scene-parser.scene-parser :refer [parse-data]]))
 
@@ -45,9 +45,11 @@
       page-data)))
 
 (defn scene-data->objects-list
-  [scene-data stage-idx]
-  (let [{:keys [left-page right-page]} (get-stage-data scene-data stage-idx)]
-    (->> (cond-> []
-                 (some? (:text left-page)) (conj (populate-page-text-data left-page scene-data))
-                 (some? (:text right-page)) (conj (populate-page-text-data right-page scene-data)))
-         (remove nil?))))
+  [scene-data stage-idx page-side]
+  (let [page-key (-> page-side (clojure.core/name) (str "-page") (keyword))
+        data (-> (get-stage-data scene-data stage-idx)
+                 (get page-key))]
+    ;(print "data" data)
+    (if (some? (:text data))
+      (populate-page-text-data data scene-data)
+      data)))

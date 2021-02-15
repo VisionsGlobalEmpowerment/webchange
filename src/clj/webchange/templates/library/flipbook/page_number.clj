@@ -1,6 +1,9 @@
 (ns webchange.templates.library.flipbook.page-number
   (:require
-    [webchange.templates.library.flipbook.utils :as utils]))
+    [webchange.templates.library.flipbook.utils :as utils]
+    [webchange.utils.list :refer [without-item]]))
+
+(def number-object-prefix "page-number")
 
 (def template
   {:type           "text"
@@ -31,20 +34,53 @@
       (vec)
       (conj child-name)))
 
-(defn add-page-number
-  [activity-data page-group-name page-data]
-  (let [current-page-number (-> activity-data (get-in [:metadata :flipbook-pages :total] 0) (inc))
-        current-page-side (-> activity-data (get-in [:metadata :flipbook-pages :current-side] "left"))
-        page-side (if (= current-page-side "left") "right" "left")
+(defn- add-page-number-object
+  ([activity-data page-group-name page-data page-number page-side]
+   (let [object-name (utils/generate-name number-object-prefix)
+         object-data (-> template
+                         (assoc :text page-number)
+                         (set-color page-data)
+                         (set-position (merge page-data
+                                              {:page-side page-side})))]
+     (-> activity-data
+         (update-in [:objects (keyword page-group-name) :children] add-child object-name)
+         (assoc-in [:objects (keyword object-name)] object-data)))))
 
-        object-name (utils/generate-name "page-number")
-        object-data (-> template
-                        (assoc :text current-page-number)
-                        (set-color page-data)
-                        (set-position (merge page-data
-                                             {:page-side page-side})))]
-    (-> activity-data
-        (update-in [:objects (keyword page-group-name) :children] add-child object-name)
-        (assoc-in [:objects (keyword object-name)] object-data)
-        (update-in [:metadata :flipbook-pages :total] inc)
-        (assoc-in [:metadata :flipbook-pages :current-side] page-side))))
+(defn add-page-number
+  [activity-data page-group-name page-data page-number page-side]
+  (if-not (= page-number 0)
+    (add-page-number-object activity-data page-group-name page-data page-number page-side)
+    activity-data))
+
+(defn- remove-page-number
+  [activity-data page-object-name]
+  (let [page-children (get-in activity-data [:objects page-object-name :children])
+        page-number-names (->> page-children
+                               (filter (fn [child-name]
+                                         (clojure.string/starts-with? child-name number-object-prefix)))
+                               (map keyword))]
+    (reduce (fn [activity-data page-number-name]
+              (-> activity-data
+                  (update :objects dissoc page-number-name)
+                  (update-in [:objects page-object-name :children] without-item (clojure.core/name page-number-name))))
+            activity-data
+            page-number-names)))
+
+(defn update-pages-numbers
+  [activity-data page-data]
+  (let [{:keys [flipbook-name]} (get activity-data :metadata)
+        pages (->> (get-in activity-data [:objects (keyword flipbook-name) :pages])
+                   (map :object)
+                   (map keyword))]
+
+    (->> pages
+         (reduce (fn [{:keys [data page-number page-side]} page-object-name]
+                   {:page-side   (if (= page-side "right") "left" "right")
+                    :page-number (inc page-number)
+                    :data        (-> data
+                                     (remove-page-number page-object-name)
+                                     (add-page-number page-object-name page-data page-number page-side))})
+                 {:data        activity-data
+                  :page-number 0
+                  :page-side   "right"})
+         (:data))))

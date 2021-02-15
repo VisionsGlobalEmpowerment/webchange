@@ -1,15 +1,6 @@
-(ns webchange.editor-v2.course-data-utils.utils)
-
-(defn- insert-to-list
-  [list index item]
-  (let [[before after] (split-at index list)]
-    (vec (concat before [item] after))))
-
-(defn- remove-from-list
-  [list index]
-  (-> (concat (subvec list 0 index)
-              (subvec list (inc index)))
-      (vec)))
+(ns webchange.editor-v2.course-data-utils.utils
+  (:require
+    [webchange.utils.list :refer [insert-at-position remove-at-position]]))
 
 ;; Scenes
 
@@ -66,7 +57,7 @@
 (defn add-level
   [course-data {:keys [position level-data]}]
   (let [updated-levels (-> (get-levels course-data)
-                           (insert-to-list position level-data))]
+                           (insert-at-position position level-data))]
     (assoc course-data :levels updated-levels)))
 
 (defn get-lesson-sets-scheme
@@ -85,7 +76,7 @@
 (defn remove-level
   [course-data {:keys [level-index]}]
   (let [updated-levels (-> (get-levels course-data)
-                           (remove-from-list level-index))]
+                           (remove-at-position level-index))]
     (assoc course-data :levels updated-levels)))
 
 ;; Locations
@@ -152,7 +143,7 @@
   (let [level-selection {:level-idx level-index}
         updated-lessons (-> (get-level course-data level-selection)
                             (get :lessons)
-                            (insert-to-list position lesson-data))]
+                            (insert-at-position position lesson-data))]
     (update-level course-data level-selection {:lessons updated-lessons})))
 
 (defn update-lesson
@@ -164,7 +155,7 @@
   (let [level-selection {:level-idx level-index}
         updated-lessons (-> (get-level course-data level-selection)
                             (get :lessons)
-                            (remove-from-list lesson-index))]
+                            (remove-at-position lesson-index))]
     (update-level course-data level-selection {:lessons updated-lessons})))
 
 ;;
@@ -216,7 +207,7 @@
                           :lesson-idx lesson-index}
         updated-activities (-> (get-lesson course-data lesson-selection)
                                (get :activities)
-                               (insert-to-list position activity-data))]
+                               (insert-at-position position activity-data))]
     (update-lesson course-data lesson-selection {:activities updated-activities})))
 
 (defn remove-activity
@@ -225,7 +216,7 @@
                           :lesson-idx lesson-index}
         updated-activities (-> (get-lesson course-data lesson-selection)
                                (get :activities)
-                               (remove-from-list activity-index))]
+                               (remove-at-position activity-index))]
     (update-lesson course-data lesson-selection {:activities updated-activities})))
 
 ;;
