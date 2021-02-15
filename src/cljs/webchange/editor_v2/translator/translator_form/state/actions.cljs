@@ -143,10 +143,10 @@
 
 (re-frame/reg-event-fx
   ::update-phrase-region-data
-  (fn [{:keys [db]} [_ audio-url sub-path]]
+  (fn [{:keys [db]} [_ audio-url sub-path force]]
     (let [action-path-data (get-action-path-data db :phrase sub-path)
           action (get-action-data db action-path-data)]
-      (if (or (not= (:audio action) audio-url) (not (and (:start action) (:duration action))))
+      (if (or force (and (= (:audio action) audio-url) (not (and (:start action) (:duration action)))))
         (let [phrase-text (get-phrase-text db action action-path-data)
               region-data (audio-analyzer/get-region-data-if-possible
                             phrase-text
@@ -232,7 +232,7 @@
   ::set-phrase-action-audio
   (fn [{:keys [_]} [_ audio-url]]
     {:dispatch-n (list
-                   [::update-phrase-region-data audio-url]
+                   [::update-phrase-region-data audio-url nil true]
                    [::update-action :phrase {:audio audio-url}])}))
 
 (re-frame/reg-event-fx

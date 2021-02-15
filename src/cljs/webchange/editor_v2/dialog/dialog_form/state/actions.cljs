@@ -156,8 +156,9 @@
   ::set-phrase-dialog-action-audio
   (fn [{:keys [db]} [_ audio-url]]
     {:dispatch-n (list
-                   [::translator-form.actions/update-phrase-region-data audio-url dialog-sub-path]
-                   [::update-dialog-audio-action :phrase {:audio audio-url}])}))
+                   [::update-dialog-audio-action :phrase {:audio audio-url}]
+                   [::translator-form.actions/update-phrase-region-data audio-url dialog-sub-path true]
+                   )}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-audio-region
