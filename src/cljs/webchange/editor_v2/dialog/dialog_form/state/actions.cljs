@@ -2,6 +2,7 @@
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
     [re-frame.core :as re-frame]
+    [webchange.editor-v2.audio-analyzer :as audio-analyzer]
     [webchange.editor-v2.translator.translator-form.state.db :refer [path-to-db]]
     [webchange.editor-v2.dialog.dialog-form.state.actions-defaults :as defaults]
     [webchange.editor-v2.dialog.dialog-form.state.actions-utils :as actions]
@@ -11,6 +12,8 @@
     [webchange.editor-v2.translator.translator-form.state.concepts :as translator-form.concepts]
     [webchange.editor-v2.dialog.dialog-form.state.concepts :as dialog-form.concepts]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]))
+
+(def dialog-sub-path [:data 1])
 
 ;; Evenst
 (re-frame/reg-event-fx
@@ -133,29 +136,40 @@
   (fn [{:keys [_]} [_ volume]]
     {:dispatch-n (list [::update-inner-action {:volume (float volume)} 1])}))
 
+(defn get-action-path-data
+  ([db target-action]
+   (get-action-path-data db target-action dialog-sub-path))
+  ([db target-action sub-path]
+   (translator-form.actions/get-action-path-data db target-action sub-path)))
+
+
+
 (re-frame/reg-event-fx
   ::update-dialog-audio-action
   (fn [{:keys [db]} [_ target-action data-patch]]
-    (let [{:keys [path type]} (cond
-                                (= target-action :dialog) (translator-form.actions/current-dialog-action-info db)
-                                (= target-action :phrase) (translator-form.actions/current-phrase-action-info db))
-          action-path (concat (au/node-path->action-path path) [:data 1])]
+    (let [[action-path type] (get-action-path-data db target-action)]
       (cond
         (= type :concept-action) {:dispatch-n (list [::translator-form.concepts/update-current-concept action-path data-patch])}
         (= type :scene-action) {:dispatch-n (list [::translator-form.scene/update-action action-path data-patch])}))))
 
 (re-frame/reg-event-fx
   ::set-phrase-dialog-action-audio
-  (fn [{:keys [_]} [_ audio-url]]
-    {:dispatch-n (list [::update-dialog-audio-action :phrase {:audio audio-url}])}))
+  (fn [{:keys [db]} [_ audio-url]]
+    {:dispatch-n (list
+                   [::translator-form.actions/update-phrase-region-data audio-url dialog-sub-path]
+                   [::update-dialog-audio-action :phrase {:audio audio-url}])}))
 
 (re-frame/reg-event-fx
   ::set-phrase-action-audio-region
-  (fn [{:keys [_]} [_ audio-url start duration]]
+  (fn [{:keys [db]} [_ audio-url start duration]]
     (let [region-data {:audio    audio-url
                        :start    start
                        :duration duration}]
-      {:dispatch [::load-lip-sync-data audio-url start duration region-data]})))
+      {:dispatch
+       (if (translator-form.actions/current-phrase-action-animation-sequence? db :phrase dialog-sub-path)
+         [::load-lip-sync-data audio-url start duration region-data]
+         [::update-dialog-audio-action :phrase region-data]
+         )})))
 
 (re-frame/reg-event-fx
   ::load-lip-sync-data

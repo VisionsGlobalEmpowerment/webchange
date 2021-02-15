@@ -9,6 +9,7 @@
     [webchange.editor-v2.components.confirm.views :refer [with-confirmation]]
     [webchange.editor-v2.translator.translator-form.common.views-audio-target-selector :refer [audio-target-selector]]
     [webchange.editor-v2.dialog.dialog-form.state.actions :as dialog-form.actions]
+    [webchange.editor-v2.translator.translator-form.state.actions :as translator-form.actions]
     [webchange.editor-v2.translator.translator-form.state.scene :as translator-form.scene]
     [webchange.ui.theme :refer [get-in-theme]]))
 
@@ -165,7 +166,9 @@
         audio-data {:url   url
                     :start (or start 0)
                     :end   (+ start duration)}
-        styles (get-styles)]
+        styles (get-styles)
+        on-audio-data-change #(re-frame/dispatch [::translator-form.actions/update-phrase-region-data url])
+        ]
     [ui/card {:on-click handle-select
               :style    (if selected?
                           (:block-wrapper-selected styles)
@@ -182,6 +185,7 @@
       [audio-wave-form (merge audio-data
                               {:height         64
                                :on-change      handle-change-region
+                               :on-audio-data-change  on-audio-data-change
                                :show-controls? selected?})]]]))
 
 (defn audios-list
