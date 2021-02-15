@@ -161,8 +161,7 @@
                                         (update-text-animation-data? action)
                                         (assoc :data
                                                (audio-analyzer/get-chunks-data-if-possible
-                                                 phrase-text audio-url region-data)
-                                               )
+                                                 phrase-text audio-url region-data))
                                         ) sub-path])}))))))
 
 (re-frame/reg-event-fx

@@ -169,8 +169,7 @@
                     :start (or start 0)
                     :end   (+ start duration)}
         styles (get-styles)
-        _ @(re-frame/subscribe [::wave-form-state/audio-script-data url])
-        _ (re-frame/dispatch [::translator-form.actions/update-phrase-region-data url])
+        on-audio-data-change #(re-frame/dispatch [::translator-form.actions/update-phrase-region-data url])
         ]
     [ui/card {:on-click handle-select
               :style    (if selected?
@@ -188,6 +187,7 @@
       [audio-wave-form (merge audio-data
                               {:height         64
                                :on-change      handle-change-region
+                               :on-audio-data-change  on-audio-data-change
                                :show-controls? selected?})]]]))
 
 (defn audios-list
