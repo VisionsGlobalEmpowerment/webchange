@@ -3,11 +3,13 @@
     [cljs-react-material-ui.reagent :as ui]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]))
+    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
+    [webchange.ui.utils :refer [deep-merge]]))
 
 (defn- get-styles
   []
-  {:img-option {:height          "auto"
+  {:container  {}
+   :img-option {:height          "auto"
                 :display         "flex"
                 :justify-content "space-between"
                 :align-items     "center"
@@ -22,14 +24,16 @@
                 :border        "solid 1px #464646"}})
 
 (defn select-stage
-  []
+  [{:keys [styles]
+    :or   {styles {}}}]
   (let [stages @(re-frame/subscribe [::stage-state/stage-options])
         enabled? (seq stages)
         current-stage @(re-frame/subscribe [::stage-state/current-stage])
-        styles (get-styles)]
+        styles (-> (get-styles)
+                   (deep-merge styles))]
     (when enabled?
-      [ui/form-control {:full-width true
-                        :margin     "normal"}
+      [ui/form-control {:margin "normal"
+                        :style  (:container styles)}
        [ui/select {:value         (or current-stage "")
                    :display-empty true
                    :variant       "outlined"
