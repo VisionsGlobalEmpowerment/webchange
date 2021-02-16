@@ -64,12 +64,11 @@
                    :start    i
                    :end      end-subs
                    })
-                ) (reduce (fn [result item]
-                            (let [pos (+ (last result) 1 (count item))]
-                              (if (< pos (- data-text-length text-to-search-length))
-                                (conj result pos)
-                                result))
-                            ) [0] (clojure.string/split data-text " "))))
+                ) (filter #(or (= % 0) ( <= % (- data-text-length text-to-search-length)))
+                          (reduce (fn [result item]
+                                    (let [pos (+ (last result) 1 (count item))]
+                                      (conj result pos))
+                                    ) [0] (clojure.string/split data-text " ")))))
   )
 
 (defn select-best-candidate
@@ -173,14 +172,17 @@
                                             (update :idx inc)
                                             (update :stack conj item)))))
                                   {:items [] :stack [] :last 0 :idx 0} (:items orig-items))
-          stack-len (count processed-items)
-          step-duration (if (> stack-len 0) (/ 0.5 stack-len) 0)
-          start-stack (:end (last (:items processed-items)))
+          stack-len (count (:stack processed-items))
+          end-fragment (:end (last rec-text))
+          next-unprocessed (get rec-text (inc (:last processed-items)))
+          start-stack (if next-unprocessed (:start next-unprocessed) (:end (last (:items processed-items))))
+          time-duration (max 0.5 (- end-fragment start-stack))
+          step-duration (if (> stack-len 0) (/ time-duration stack-len) 0)
           processed-items (-> processed-items
                               (update :items concat (map-indexed (fn [idx item]
                                                                    (-> item
-                                                                       (assoc :start (* (+ 1 idx) start-stack))
-                                                                       (assoc :end (+ step-duration (* (+ 1 idx) start-stack))))
+                                                                       (assoc :start (+ (* step-duration idx) start-stack))
+                                                                       (assoc :end (+ start-stack (* (+ 1 idx) step-duration))))
                                                                    ) (:stack processed-items))))
           result-items (pack-chunks (:items processed-items))]
       result-items)))
@@ -189,7 +191,7 @@
   [text data region]
   (let [chunks (filter (fn [item]
                          (and (<= (:start region) (:start item)) (>= (:end region) (:end item)))) data)]
-    (get-chunks (clojure.string/split text " ") chunks)))
+    (get-chunks (-> text (prepare-text) (clojure.string/split " ")) (vec chunks))))
 
 (defn get-chunks-data-if-possible
   [text url region]
@@ -198,6 +200,8 @@
 
 (defn get-region-data-if-possible
   [text url]
-  (let [script-data @(re-frame/subscribe [::state/audio-script-data url])
-        region (get-start-end-for-text text script-data)]
-    region))
+  (if (= 0 (count text))
+    {}
+    (let [script-data @(re-frame/subscribe [::state/audio-script-data url])
+          region (get-start-end-for-text text script-data)]
+      region)))
