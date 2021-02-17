@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.wizard.steps.final-step-configured
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.editor-v2.wizard.state.activity :as state-activity]
     [webchange.editor-v2.wizard.state.course :as state-course]
     [webchange.editor-v2.wizard.steps.common :refer [progress-block]]))
