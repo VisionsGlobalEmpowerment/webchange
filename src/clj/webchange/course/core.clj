@@ -408,15 +408,6 @@
      (doseq [file (filter (fn [f] (. f isFile)) (assets/files source-path))]
        (store-editor-asset source-path target-path (config :public-dir) (. file getPath))))))
 
-(defn- rename-props
-  [data rename-map]
-  (reduce (fn [data [from to]]
-            (-> data
-                (assoc to (get data from))
-                (dissoc from)))
-          data
-          rename-map))
-
 (defn create-course
   [{:keys [name lang] :as data} owner-id]
   (let [current-time (jt/local-date-time)
@@ -425,7 +416,7 @@
         defaults {:type      "course"
                   :image_src nil}
         new-course-data (merge defaults
-                               (rename-props data [[:image-src :image_src]])
+                               (transform-keys ->snake_case_keyword data)
                                {:slug            (course-slug name lang)
                                 :owner_id        owner-id
                                 :website_user_id website-id
