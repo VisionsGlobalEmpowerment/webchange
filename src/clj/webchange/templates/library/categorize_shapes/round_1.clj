@@ -1,71 +1,85 @@
 (ns webchange.templates.library.categorize-shapes.round-1)
 (def template-round-1 {:assets        [
-                                       {:url "/raw/img/categorize-antonims/background.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/day.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/night.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/down.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/up.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/back.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/front.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/in.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/out.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/left.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/right.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/loud.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-antonims/quiet.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/background-white.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/circle.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/oval.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/rectangle.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/square.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/star.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/triangle.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/circle-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/oval-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/rectangle-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/square-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/star-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/triangle-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/question.png", :size 10, :type "image"}
                                        ],
-                       :objects       {:background      {:type "background", :src "/raw/img/categorize-antonims/background.png"},
-                                       :right-box
-                                                        {:type       "image",
-                                                         :x          15,
-                                                         :y          800,
-                                                         :src        "/raw/img/categorize-antonims/right.png",
-                                                         :transition "right-box",
-                                                         :states     {:highlighted     {:highlight true}
-                                                                      :not-highlighted {:highlight false}},
-                                                         },
-                                       :front-box        {:type       "image",
-                                                          :x          250,
-                                                          :y          800,
-                                                          :transition "front-box",
-                                                          :src        "/raw/img/categorize-antonims/front.png",
-                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                          }
-                                       :down-box   {:type       "image",
-                                                    :x          500,
-                                                    :y          800,
-                                                    :transition "down-box",
-                                                    :src        "/raw/img/categorize-antonims/down.png",
-                                                    :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                    }
-                                       :quiet-box      {:type       "image",
-                                                        :x          800,
-                                                        :y          800,
-                                                        :transition "quiet-box",
-                                                        :src        "/raw/img/categorize-antonims/quiet.png",
-                                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                        }
-                                       :day-box        {:type       "image",
-                                                        :x          1100,
-                                                        :y          800,
-                                                        :transition "day-box",
-                                                        :src        "/raw/img/categorize-antonims/day.png",
-                                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                        }
-                                       :in-box    {:type       "image",
-                                                   :x          1400,
-                                                   :y          800,
-                                                   :transition "in-box",
-                                                   :src        "/raw/img/categorize-antonims/in.png",
-                                                   :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                   }
-                                       :left-1        {
+                       :objects       {:background    {:type "background", :src "/raw/img/categorize-shapes/background-white.png"},
+                                       :circle-box
+                                                      {:type       "image",
+                                                       :x          1572,
+                                                       :y          777,
+                                                       :width      277,
+                                                       :height     250,
+                                                       :src        "/raw/img/categorize-shapes/circle-box.png",
+                                                       :transition "circle-box",
+                                                       :states     {:highlighted     {:highlight true}
+                                                                    :not-highlighted {:highlight false}},
+                                                       },
+                                       :oval-box      {:type       "image",
+                                                       :x          69,
+                                                       :y          777,
+                                                       :width      277,
+                                                       :height     250,
+                                                       :transition "oval-box",
+                                                       :src        "/raw/img/categorize-shapes/oval-box.png",
+                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                       }
+                                       :rectangle-box {:type       "image",
+                                                       :x          369,
+                                                       :y          777,
+                                                       :width      277,
+                                                       :height     250,
+                                                       :transition "rectangle-box",
+                                                       :src        "/raw/img/categorize-shapes/rectangle-box.png",
+                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                       }
+                                       :square-box    {:type       "image",
+                                                       :x          670,
+                                                       :y          777,
+                                                       :width      277,
+                                                       :height     250,
+                                                       :transition "square-box",
+                                                       :src        "/raw/img/categorize-shapes/square-box.png",
+                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                       }
+                                       :star-box      {:type       "image",
+                                                       :x          971,
+                                                       :y          777,
+                                                       :width      277,
+                                                       :height     250,
+                                                       :transition "star-box",
+                                                       :src        "/raw/img/categorize-shapes/star-box.png",
+                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                       }
+                                       :triangle-box  {:type       "image",
+                                                       :x          1271,
+                                                       :y          777,
+                                                       :width      277,
+                                                       :height     250,
+                                                       :transition "triangle-box",
+                                                       :src        "/raw/img/categorize-shapes/triangle-box.png",
+                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                       }
+                                       :circle-1      {
                                                        :type       "image",
-                                                       :x          46,
-                                                       :y          700,
-                                                       :scale      0.35,
-                                                       :src        "/raw/img/categorize-antonims/left.png",
-                                                       :transition "left-1",
+                                                       :width 198,
+                                                       :height 197,
+                                                       :y 442,
+                                                       :x 710,
+                                                       :src        "/raw/img/categorize-shapes/circle.png",
+                                                       :transition "circle-1",
                                                        :draggable  true,
                                                        :actions    {:drag-start {:type "action",
                                                                                  :on   "drag-start",
@@ -74,311 +88,343 @@
                                                                                 {:id     "dragged",
                                                                                  :on     "drag-end",
                                                                                  :type   "action",
-                                                                                 :params {:box            "right-box"
-                                                                                          :target         "left-1"
-                                                                                          :init-position  {:x 46, :y 700, :duration 1}
-                                                                                          :check-variable "right-box-selected"
+                                                                                 :params {:box            "circle-box"
+                                                                                          :target         "circle-1"
+                                                                                          :init-position  {:x 710, :y 442, :duration 1}
+                                                                                          :check-variable "circle-box-selected"
                                                                                           }}},
                                                        :states     {:hide {:visible false}}},
-                                       :back-1   {
-                                                  :type       "image",
-                                                  :x          592,
-                                                  :y          500,
-                                                  :rotation   -90,
-                                                  :scale      0.35,
-                                                  :src        "/raw/img/categorize-antonims/back.png",
-                                                  :transition "back-1",
-                                                  :draggable  true,
-                                                  :actions    {:drag-start {
-                                                                            :type "action",
-                                                                            :on   "drag-start",
-                                                                            :id   "start-drag"}
-                                                               :drag-end
-                                                                           {:id     "dragged",
-                                                                            :on     "drag-end",
-                                                                            :type   "action",
-                                                                            :params {:box            "front-box"
-                                                                                     :target         "back-1"
-                                                                                     :init-position  {:x 592, :y 500, :duration 1}
-                                                                                     :check-variable "front-box-selected"
-                                                                                     }}},
-                                                  :states     {:hide {:visible false}}},
-                                       :up-1   {
-                                                :type       "image",
-                                                :x          392,
-                                                :y          700,
-                                                :rotation   -90,
-                                                :scale      0.35,
-                                                :src        "/raw/img/categorize-antonims/up.png",
-                                                :transition "up-1",
-                                                :draggable  true,
-                                                :actions    {:drag-start {
-                                                                          :type "action",
-                                                                          :on   "drag-start",
-                                                                          :id   "start-drag"}
-                                                             :drag-end
-                                                                         {:id     "dragged",
-                                                                          :on     "drag-end",
-                                                                          :type   "action",
-                                                                          :params {:box            "down-box"
-                                                                                   :target         "up-1"
-                                                                                   :init-position  {:x 392, :y 700, :duration 1}
-                                                                                   :check-variable "down-box-selected"
-                                                                                   }}},
-                                                :states     {:hide {:visible false}}}
-                                       :loud-1   {
-                                                  :type       "image",
-                                                  :x          1192,
-                                                  :y          700,
-                                                  :rotation   -90,
-                                                  :scale      0.35,
-                                                  :src        "/raw/img/categorize-antonims/loud.png",
-                                                  :transition "loud-1",
-                                                  :draggable  true,
-                                                  :actions    {:drag-start {
-                                                                            :type "action",
-                                                                            :on   "drag-start",
-                                                                            :id   "start-drag"}
-                                                               :drag-end
-                                                                           {:id     "dragged",
-                                                                            :on     "drag-end",
-                                                                            :type   "action",
-                                                                            :params {:box            "quiet-box"
-                                                                                     :target         "loud-1"
-                                                                                     :init-position  {:x 1192, :y 700, :duration 1}
-                                                                                     :check-variable "quiet-box-selected"
-                                                                                     }}},
-                                                  :states     {:hide {:visible false}}}
-                                       :night-1   {
-                                                   :type       "image",
-                                                   :x          992,
-                                                   :y          200,
-                                                   :rotation   -90,
-                                                   :scale      0.35,
-                                                   :src        "/raw/img/categorize-antonims/night.png",
-                                                   :transition "night-1",
-                                                   :draggable  true,
-                                                   :actions    {:drag-start {
-                                                                             :type "action",
-                                                                             :on   "drag-start",
-                                                                             :id   "start-drag"}
-                                                                :drag-end
-                                                                            {:id     "dragged",
-                                                                             :on     "drag-end",
-                                                                             :type   "action",
-                                                                             :params {:box            "day-box"
-                                                                                      :target         "night-1"
-                                                                                      :init-position  {:x 992, :y 200, :duration 1}
-                                                                                      :check-variable "day-box-selected"
-                                                                                      }}},
-                                                   :states     {:hide {:visible false}}}
-                                       :out-1   {
-                                                 :type       "image",
-                                                 :x          392,
-                                                 :y          200,
-                                                 :rotation   -90,
-                                                 :scale      0.35,
-                                                 :src        "/raw/img/categorize-antonims/out.png",
-                                                 :transition "out-1",
-                                                 :draggable  true,
-                                                 :actions    {:drag-start {
-                                                                           :type "action",
-                                                                           :on   "drag-start",
-                                                                           :id   "start-drag"}
-                                                              :drag-end
-                                                                          {:id     "dragged",
-                                                                           :on     "drag-end",
-                                                                           :type   "action",
-                                                                           :params {:box            "in-box"
-                                                                                    :target         "out-1"
-                                                                                    :init-position  {:x 392, :y 200, :duration 1}
-                                                                                    :check-variable "in-box-selected"
-                                                                                    }}},
-                                                 :states     {:hide {:visible false}}}
+                                       :oval-1        {
+                                                       :type       "image",
+                                                       :x          925,
+                                                       :y          124,
+                                                       :width 237,
+                                                       :height 165,
+                                                       :src        "/raw/img/categorize-shapes/oval.png",
+                                                       :transition "oval-1",
+                                                       :draggable  true,
+                                                       :actions    {:drag-start {
+                                                                                 :type "action",
+                                                                                 :on   "drag-start",
+                                                                                 :id   "start-drag"}
+                                                                    :drag-end
+                                                                                {:id     "dragged",
+                                                                                 :on     "drag-end",
+                                                                                 :type   "action",
+                                                                                 :params {:box            "oval-box"
+                                                                                          :target         "oval-1"
+                                                                                          :init-position  {:x 925, :y 124, :duration 1}
+                                                                                          :check-variable "oval-box-selected"
+                                                                                          }}},
+                                                       :states     {:hide {:visible false}}},
+                                       :rectangle-1   {
+                                                       :type       "image",
+                                                       :width 256,
+                                                       :height 180,
+                                                       :x          617,
+                                                       :y          146,
+                                                       :src        "/raw/img/categorize-shapes/rectangle.png",
+                                                       :transition "rectangle-1",
+                                                       :draggable  true,
+                                                       :actions    {:drag-start {
+                                                                                 :type "action",
+                                                                                 :on   "drag-start",
+                                                                                 :id   "start-drag"}
+                                                                    :drag-end
+                                                                                {:id     "dragged",
+                                                                                 :on     "drag-end",
+                                                                                 :type   "action",
+                                                                                 :params {:box            "rectangle-box"
+                                                                                          :target         "rectangle-1"
+                                                                                          :init-position  {:x 617, :y 146, :duration 1}
+                                                                                          :check-variable "rectangle-box-selected"
+                                                                                          }}},
+                                                       :states     {:hide {:visible false}}}
+                                       :square-1      {
+                                                       :type       "image",
+                                                       :x          982,
+                                                       :y          360,
+                                                       :width 180,
+                                                       :height 180,
+                                                       :src        "/raw/img/categorize-shapes/square.png",
+                                                       :transition "square-1",
+                                                       :draggable  true,
+                                                       :actions    {:drag-start {
+                                                                                 :type "action",
+                                                                                 :on   "drag-start",
+                                                                                 :id   "start-drag"}
+                                                                    :drag-end
+                                                                                {:id     "dragged",
+                                                                                 :on     "drag-end",
+                                                                                 :type   "action",
+                                                                                 :params {:box            "square-box"
+                                                                                          :target         "square-1"
+                                                                                          :init-position  {:x 982, :y 360, :duration 1}
+                                                                                          :check-variable "square-box-selected"
+                                                                                          }}},
+                                                       :states     {:hide {:visible false}}}
+                                       :star-1        {
+                                                       :type       "image",
+                                                       :x          1214,
+                                                       :y          289,
+                                                       :width 245,
+                                                       :height 233,
+                                                       :src        "/raw/img/categorize-shapes/star.png",
+                                                       :transition "star-1",
+                                                       :draggable  true,
+                                                       :actions    {:drag-start {
+                                                                                 :type "action",
+                                                                                 :on   "drag-start",
+                                                                                 :id   "start-drag"}
+                                                                    :drag-end
+                                                                                {:id     "dragged",
+                                                                                 :on     "drag-end",
+                                                                                 :type   "action",
+                                                                                 :params {:box            "star-box"
+                                                                                          :target         "star-1"
+                                                                                          :init-position  {:x 1214, :y 289, :duration 1}
+                                                                                          :check-variable "star-box-selected"
+                                                                                          }}},
+                                                       :states     {:hide {:visible false}}}
+                                       :triangle-1    {
+                                                       :type       "image",
+                                                       :x          424,
+                                                       :y          377,
+                                                       :width 223,
+                                                       :height 193,
+                                                       :src        "/raw/img/categorize-shapes/triangle.png",
+                                                       :transition "triangle-1",
+                                                       :draggable  true,
+                                                       :actions    {:drag-start {
+                                                                                 :type "action",
+                                                                                 :on   "drag-start",
+                                                                                 :id   "start-drag"}
+                                                                    :drag-end
+                                                                                {:id     "dragged",
+                                                                                 :on     "drag-end",
+                                                                                 :type   "action",
+                                                                                 :params {:box            "triangle-box"
+                                                                                          :target         "triangle-1"
+                                                                                          :init-position  {:x 424, :y 377, :duration 1}
+                                                                                          :check-variable "triangle-box-selected"
+                                                                                          }}},
+                                                       :states     {:hide {:visible false}}}
 
                                        },
                        :scene-objects [["background"]
-                                       ["right-box" "front-box" "down-box"]
-                                       ["quiet-box" "day-box" "in-box"]
-                                       ["left-1" "back-1" "up-1"]
-                                       ["loud-1" "night-1" "out-1"]],
-                       :actions {
+                                       ["circle-box" "oval-box" "rectangle-box"]
+                                       ["square-box" "star-box" "triangle-box"]
+                                       ["circle-1" "oval-1" "rectangle-1"]
+                                       ["square-1" "star-1" "triangle-1"]],
+                       :actions       {
 
-                                 :crayon-in-right-box            {:id          "hide",
-                                                                  :type        "state",
-                                                                  :from-params [{:action-property "target" :param-property "target"}]},
-                                 :object-revert                  {:type        "transition",
-                                                                  :from-params [{:action-property "transition-id" :param-property "target"}
-                                                                                {:action-property "to" :param-property "init-position"}]
-                                                                  }
-                                 :wrong-option                   {:type "sequence-data",
-                                                                  :data [{:id "object-revert", :type "action"}
-                                                                         {:id "wrong-answer", :type "action"}],}
+                                       :object-in-right-box            {:id          "hide",
+                                                                        :type        "state",
+                                                                        :from-params [{:action-property "target" :param-property "target"}]},
+                                       :object-revert                  {:type        "transition",
+                                                                        :from-params [{:action-property "transition-id" :param-property "target"}
+                                                                                      {:action-property "to" :param-property "init-position"}]
+                                                                        }
+                                       :wrong-option                   {:type "sequence-data",
+                                                                        :data [{:id "object-revert", :type "action"}
+                                                                               {:id "wrong-answer", :type "action"}],}
 
-                                 :correct-option                 {:type "sequence-data",
-                                                                  :data [{:type "remove-interval" :id   "check-collide-2"}
-                                                                         {:type "counter" :counter-action "increase" :counter-id "sorted-crayons"}
-                                                                         {:id "crayon-in-right-box", :type "action"}
-                                                                         {:id "correct-answer", :type "action"}
-                                                                         {:type       "test-var-inequality"
-                                                                          :var-name   "sorted-crayons",
-                                                                          :value      6,
-                                                                          :inequality ">=",
-                                                                          :success    "finish-scene",
-                                                                          :fail       "continue-sorting"
-                                                                          }
-                                                                         ]}
-                                 :check-option                   {:type      "test-var-list-at-least-one-true"
-                                                                  :var-names ["front-box-selected" "right-box-selected" "down-box-selected"
-                                                                              "quiet-box-selected" "day-box-selected" "in-box-selected"]
-                                                                  :success   "wrong-option",
-                                                                  :fail      "object-revert"
-                                                                  }
-                                 :dragged                    {:type "sequence-data"
-                                                              :data [
-                                                                     {:type        "test-var-scalar",
-                                                                      :success     "correct-option",
-                                                                      :fail        "check-option",
-                                                                      :value       true,
-                                                                      :from-params [{:param-property "check-variable", :action-property "var-name"}]
-                                                                      }
-                                                                     {:type "remove-interval"
-                                                                      :id   "check-collide-2"}
-                                                                     {:type        "state"
-                                                                      :id          "not-highlighted"
-                                                                      :from-params [{:action-property "target" :param-property "box"}]}
-                                                                     ]
-                                                              }
-                                 :highlight                      {:type "sequence-data"
-                                                                  :data [{:type "action", :id "reset-selected-vars"}
-                                                                         {:type        "set-variable",
-                                                                          :var-value   true
-                                                                          :from-params [{:action-property "var-name" :param-property "variable"}]
-                                                                          }
-                                                                         {:type        "set-variable",
-                                                                          :var-value   true
-                                                                          :from-params [{:action-property "var-name",
-                                                                                         :template        "%-selected",
-                                                                                         :param-property  "transition"}]
-                                                                          }
-                                                                         {:type        "state"
-                                                                          :id          "highlighted"
-                                                                          :from-params [{:action-property "target" :param-property "transition"}]
-                                                                          }]
-                                                                  }
-                                 :unhighlight                    {:type "sequence-data"
-                                                                  :data [{:type        "state"
-                                                                          :id          "not-highlighted"
-                                                                          :from-params [{:action-property "target" :param-property "transition"}]}]
-                                                                  }
-                                 :check-collide {:type "sequence-data"
-                                                 :data [
-                                                        {:type        "test-transitions-and-pointer-collide",
-                                                         :success     "highlight",
-                                                         :fail        "unhighlight",
-                                                         :transitions ["front-box" "right-box" "down-box" "quiet-box" "day-box" "in-box"]
-                                                         :action-params [{:var-name "front-box"}
-                                                                             {:var-name "right-box"}
-                                                                             {:var-name "down-box"}
-                                                                             {:var-name "quiet-box"}
-                                                                             {:var-name "day-box"}
-                                                                             {:var-name  "in-box"}]
-                                                         }]}
+                                       :correct-option                 {:type "sequence-data",
+                                                                        :data [{:type "remove-interval"
+                                                                                :id   "check-collide-2"}
+                                                                               {:type "counter" :counter-action "increase" :counter-id "sorted-objects"}
+                                                                               {:id "object-in-right-box", :type "action"}
+                                                                               {:id "correct-answer", :type "action"}
+                                                                               {:type       "test-var-inequality"
+                                                                                :var-name   "sorted-objects",
+                                                                                :value      6,
+                                                                                :inequality ">",
+                                                                                :success    "finish-scene",
+                                                                                :fail       "continue-sorting"
+                                                                                }
+                                                                               ]}
+                                       :check-option                   {:type      "test-var-list-at-least-one-true"
+                                                                        :var-names ["front-box-selected" "right-box-selected" "down-box-selected"
+                                                                                    "quiet-box-selected" "day-box-selected" "in-box-selected"]
+                                                                        :success   "wrong-option",
+                                                                        :fail      "object-revert"
+                                                                        }
+                                       :dragged                        {:type "sequence-data"
+                                                                        :data [
+                                                                               {:type        "test-var-scalar",
+                                                                                :success     "correct-option",
+                                                                                :fail        "check-option",
+                                                                                :value       true,
+                                                                                :from-params [{:param-property "check-variable", :action-property "var-name"}]
+                                                                                }
+                                                                               {:type "remove-interval"
+                                                                                :id   "check-collide-2"}
+                                                                               {:type        "state"
+                                                                                :id          "not-highlighted"
+                                                                                :from-params [{:action-property "target" :param-property "box"}]}
+                                                                               ]
+                                                                        }
+                                       :highlight                      {:type "sequence-data"
+                                                                        :data [{:type "action", :id "reset-selected-vars"}
+                                                                               {:type        "set-variable",
+                                                                                :var-value   true
+                                                                                :from-params [{:action-property "var-name" :param-property "variable"}]
+                                                                                }
+                                                                               {:type        "state"
+                                                                                :id          "highlighted"
+                                                                                :from-params [{:action-property "target" :param-property "target"}]
+                                                                                }]
+                                                                        }
+                                       :unhighlight                    {:type "sequence-data"
+                                                                        :data [{:type        "state"
+                                                                                :id          "not-highlighted"
+                                                                                :from-params [{:action-property "target" :param-property "target"}]}]
+                                                                        }
+                                       :check-collide                  {:type "sequence-data"
+                                                                        :data [
+                                                                               {:type       "test-transition-and-pointer-collide",
+                                                                                :success    "highlight",
+                                                                                :fail       "unhighlight",
+                                                                                :transition "oval-box",
+                                                                                :params     {:target   "oval-box"
+                                                                                             :variable "oval-box-selected"}
+                                                                                }
+                                                                               {:type       "test-transition-and-pointer-collide",
+                                                                                :success    "highlight",
+                                                                                :fail       "unhighlight",
+                                                                                :transition "circle-box"
+                                                                                :params     {:target   "circle-box"
+                                                                                             :variable "circle-box-selected"
+                                                                                             }
+                                                                                }
+                                                                               {:type       "test-transition-and-pointer-collide",
+                                                                                :success    "highlight",
+                                                                                :fail       "unhighlight",
+                                                                                :transition "rectangle-box"
+                                                                                :params     {:target   "rectangle-box"
+                                                                                             :variable "rectangle-box-selected"
+                                                                                             }
+                                                                                }
+                                                                               {:type       "test-transition-and-pointer-collide",
+                                                                                :success    "highlight",
+                                                                                :fail       "unhighlight",
+                                                                                :transition "square-box"
+                                                                                :params     {:target   "square-box"
+                                                                                             :variable "square-box-selected"
+                                                                                             }
+                                                                                }
+                                                                               {:type       "test-transition-and-pointer-collide",
+                                                                                :success    "highlight",
+                                                                                :fail       "unhighlight",
+                                                                                :transition "star-box"
+                                                                                :params     {:target   "star-box"
+                                                                                             :variable "star-box-selected"
+                                                                                             }
+                                                                                }
+                                                                               {:type       "test-transition-and-pointer-collide",
+                                                                                :success    "highlight",
+                                                                                :fail       "unhighlight",
+                                                                                :transition "triangle-box"
+                                                                                :params     {:target   "triangle-box"
+                                                                                             :variable "triangle-box-selected"
+                                                                                             }
+                                                                                }]}
 
-                                 :init-activity                  {:type "sequence-data"
-                                                                  :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-crayons"}
-                                                                         {:type "action" :id "intro"}]
-                                                                  }
-                                 :reset-selected-vars {:type "sequence-data"
-                                                       :data [
-                                                              {:type "set-variable", :var-name "front-box-selected", :var-value false}
-                                                              {:type "set-variable", :var-name "right-box-selected", :var-value false}
-                                                              {:type "set-variable", :var-name "down-box-selected", :var-value false}
-                                                              {:type "set-variable", :var-name "quiet-box-selected", :var-value false}
-                                                              {:type "set-variable", :var-name "day-box-selected", :var-value false}
-                                                              {:type "set-variable", :var-name "in-box-selected", :var-value false}
-                                                              ]
-                                                       }
-                                 :start-drag                     {:type "sequence-data"
-                                                                  :data [
-                                                                         {:type "action", :id "reset-selected-vars"}
-                                                                         {:type     "set-interval"
-                                                                          :id       "check-collide-2"
-                                                                          :interval 100
-                                                                          :action   "check-collide"}
-                                                                         ]
-                                                                  }
-                                 :intro                          {:type               "sequence-data",
-                                                                  :editor-type        "dialog",
-                                                                  :data               [{:type "sequence-data"
-                                                                                        :data [{:type "empty" :duration 0}
-                                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                  :phrase             "intro",
-                                                                  :phrase-description "Introduce task"}
-                                 :correct-answer                 {:type               "sequence-data",
-                                                                  :editor-type        "dialog",
-                                                                  :data               [{:type "sequence-data"
-                                                                                        :data [{:type "empty" :duration 0}
-                                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                  :phrase             "correct-answer",
-                                                                  :phrase-description "correct answer"}
-                                 :wrong-answer                   {:type               "sequence-data",
-                                                                  :editor-type        "dialog",
-                                                                  :data               [{:type "sequence-data"
-                                                                                        :data [{:type "empty" :duration 0}
-                                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                  :phrase             "wrong-answer",
-                                                                  :phrase-description "wrong answer"}
-                                 :finish-scene                   {:type "sequence-data",
-                                                                  :data [
-                                                                         {:type "action" :id "finish-dialog"}
-                                                                         {:type "remove-interval"
-                                                                          :id   "check-collide-2"}
-                                                                         {:type "action", :id "stop-activity"}
-                                                                         ],
-                                                                  }
-                                 :finish-dialog                  {:type               "sequence-data",
-                                                                  :editor-type        "dialog",
-                                                                  :data               [{:type "sequence-data"
-                                                                                        :data [{:type "empty" :duration 0}
-                                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                  :phrase             "finish-dialog",
-                                                                  :phrase-description "finish dialog"}
-                                 :continue-sorting               {:type               "sequence-data",
-                                                                  :editor-type        "dialog",
-                                                                  :data               [{:type "sequence-data"
-                                                                                        :data [{:type "empty" :duration 0}
-                                                                                               {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                                                  :phrase             "continue-sorting",
-                                                                  :phrase-description "Continue sorting"}
-                                 :stop-activity                  {:type "stop-activity", :id "categorize"},
+                                       :init-activity                  {:type "sequence-data"
+                                                                        :data [{:type "counter" :counter-action "reset" :counter-value 0 :counter-id "sorted-objects"}
+                                                                               {:type "action" :id "intro"}]
+                                                                        }
+                                       :reset-selected-vars            {:type "sequence-data"
+                                                                        :data [
+                                                                               {:type "set-variable", :var-name "oval-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "circle-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "rectangle-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "square-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "star-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "triangle-box-selected", :var-value false}
+                                                                               ]
+                                                                        }
+                                       :start-drag                     {:type "sequence-data"
+                                                                        :data [
+                                                                               {:type "action", :id "reset-selected-vars"}
+                                                                               {:type     "set-interval"
+                                                                                :id       "check-collide-2"
+                                                                                :interval 100
+                                                                                :action   "check-collide"}
+                                                                               ]
+                                                                        }
+                                       :intro                          {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                                        :phrase             "intro",
+                                                                        :phrase-description "Introduce task"}
+                                       :correct-answer                 {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                                        :phrase             "correct-answer",
+                                                                        :phrase-description "correct answer"}
+                                       :wrong-answer                   {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                                        :phrase             "wrong-answer",
+                                                                        :phrase-description "wrong answer"}
 
-                                 },
+                                       :finish-scene                   {:type "sequence-data",
+                                                                        :data [
+                                                                               {:type "action" :id "finish-dialog"}
+                                                                               {:type "remove-interval"
+                                                                                :id   "check-collide-2"}
+                                                                               {:type "action", :id "stop-activity"}
+                                                                               ],
+                                                                        }
+                                       :finish-dialog                  {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                                        :phrase             "finish-dialog",
+                                                                        :phrase-description "finish dialog"}
+                                       :continue-sorting               {:type               "sequence-data",
+                                                                        :editor-type        "dialog",
+                                                                        :data               [{:type "sequence-data"
+                                                                                              :data [{:type "empty" :duration 0}
+                                                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                                        :phrase             "continue-sorting",
+                                                                        :phrase-description "Continue sorting"}
+                                       :stop-activity                  {:type "stop-activity", :id "categorize"},
+
+                                       },
 
                        :triggers
                                       {:back  {:on "back", :action "stop-activity"},
                                        :start {:on "start", :action "init-activity"}},
-                       :metadata {:autostart   true
-                                  :tracks      [{:title "Round 1"
-                                                 :nodes [{:type      "dialog"
-                                                          :action-id :intro}
-                                                         {:type "prompt"
-                                                          :text "Correct answer"}
-                                                         {:type      "dialog"
-                                                          :action-id :correct-answer}
-                                                         {:type "prompt"
-                                                          :text "Wrong answer"}
-                                                         {:type      "dialog"
-                                                          :action-id :wrong-answer}
-                                                         {:type "prompt"
-                                                          :text "Continue sorting"}
-                                                         {:type      "dialog"
-                                                          :action-id :continue-sorting}
-                                                         {:type "prompt"
-                                                          :text "Finish dialog"}
-                                                         {:type      "dialog"
-                                                          :action-id :finish-dialog}
-                                                         ]}
-                                                ]
-                                  },
+                       :metadata      {:autostart   true
+                                       :tracks      [{:title "Round 1"
+                                                      :nodes [{:type      "dialog"
+                                                               :action-id :intro}
+                                                              {:type "prompt"
+                                                               :text "Correct answer"}
+                                                              {:type      "dialog"
+                                                               :action-id :correct-answer}
+                                                              {:type "prompt"
+                                                               :text "Wrong answer"}
+                                                              {:type      "dialog"
+                                                               :action-id :wrong-answer}
+                                                              {:type "prompt"
+                                                               :text "Continue sorting"}
+                                                              {:type      "dialog"
+                                                               :action-id :continue-sorting}
+                                                              {:type "prompt"
+                                                               :text "Finish dialog"}
+                                                              {:type      "dialog"
+                                                               :action-id :finish-dialog}
+                                                              ]}
+                                                     ]
+                                       },
                        })

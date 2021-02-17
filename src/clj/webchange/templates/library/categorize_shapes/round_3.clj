@@ -1,385 +1,375 @@
 (ns webchange.templates.library.categorize-shapes.round-3)
 
-(def template-round-3 {:assets        [{:url "/raw/img/categorize-shapes/background.png", :size 10, :type "image"}
+(def template-round-3 {:assets        [{:url "/raw/img/categorize-shapes/background-class.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/surface.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/decoration.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/circle-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/oval-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/rectangle-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/square-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/star-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/triangle-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/circle-table.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/oval-box.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/rectangle-box.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/star-box.png", :size 10, :type "image"}
-
-                                       {:url "/raw/img/categorize-shapes/circle.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/oval.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/rectangle.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/square.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/star.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/triangle.png", :size 10, :type "image"}
-
-                                       {:url "/raw/img/categorize-shapes/circle-table.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/square-table.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/star-box.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/triangle-table.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/question.png", :size 10, :type "image"}
                                        ],
-                       :objects       {:background      {:type "background", :src "/raw/img/categorize-shapes/background.png"},
-                                       :star-group       {
-                                                          :type       "group",
-                                                          :children   [],
-                                                          :draggable  true,
-                                                          :transition "star-group",
-                                                          :states     {:group-all {:children ["star-box" "star-object"]}
-                                                                       :ungroup   {:children []}
-                                                                       :hidden    {:visible false}},
+                       :objects       {:layered-background {:type       "layered-background",
+                                                            :background {:src "/raw/img/categorize-shapes/background-class.png"},
+                                                            :decoration {:src "/raw/img/categorize-shapes/decoration.png"},
+                                                            :surface    {:src "/raw/img/categorize-shapes/surface.png"}
+                                                            },
+                                       :star-group         {
+                                                            :type       "group",
+                                                            :children   [],
+                                                            :draggable  true,
+                                                            :transition "star-group",
+                                                            :states     {:group-all {:children ["star-box" "star-object"]}
+                                                                         :ungroup   {:children []}
+                                                                         :hidden    {:visible false}},
 
-                                                          :actions    {:drag-start {
-                                                                                    :type   "action",
-                                                                                    :on     "drag-start",
-                                                                                    :id     "start-drag",
-                                                                                    :params {:colliders ["rectangle-box" "oval-box"
-                                                                                                         "triangle-table" "square-table"
-                                                                                                         "circle-table"]
-                                                                                             :self      "star-group"
-                                                                                             :object    "star-object"
-                                                                                             }}
-                                                                       :drag-end   {
-                                                                                    :id     "stop-drag-hide",
-                                                                                    :on     "drag-end",
-                                                                                    :type   "action",
-                                                                                    :params {
-                                                                                             :colliders     ["rectangle-box" "oval-box"
-                                                                                                             "triangle-table" "square-table"
-                                                                                                             "circle-table"]
-                                                                                             :self          "star-group"
-                                                                                             :target        "triangle-table"
-                                                                                             :object        "star-object"
-                                                                                             :init-position {:x        100,
-                                                                                                             :y        600,
-                                                                                                             :duration 1}}}},
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["rectangle-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "star-group"
+                                                                                               :object    "star-object"
+                                                                                               }}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "star-group"
+                                                                                               :target        "triangle-table"
+                                                                                               :object        "star-object"
+                                                                                               :init-position {:x        100,
+                                                                                                               :y        600,
+                                                                                                               :duration 1}}}},
 
-                                                          }
-                                       :star-group-1     {
-                                                          :type       "group",
-                                                          :children   [],
-                                                          :draggable  true,
-                                                          :transition "star-group-1",
-                                                          :states     {:group-all {:children ["star-box" "star-object"]}
-                                                                       :ungroup   {:children []}
-                                                                       :hidden    {:visible false}},
+                                                            }
+                                       :star-group-1       {
+                                                            :type       "group",
+                                                            :children   [],
+                                                            :draggable  true,
+                                                            :transition "star-group-1",
+                                                            :states     {:group-all {:children ["star-box" "star-object"]}
+                                                                         :ungroup   {:children []}
+                                                                         :hidden    {:visible false}},
 
-                                                          :actions    {:drag-start {
-                                                                                    :type   "action",
-                                                                                    :on     "drag-start",
-                                                                                    :id     "start-drag",
-                                                                                    :params {:colliders ["rectangle-box" "oval-box"
-                                                                                                         "triangle-table" "square-table"
-                                                                                                         "circle-table"]
-                                                                                             :self      "star-group-1"
-                                                                                             :object    "star-object"
-                                                                                             }}
-                                                                       :drag-end   {
-                                                                                    :id     "stop-drag-hide",
-                                                                                    :on     "drag-end",
-                                                                                    :type   "action",
-                                                                                    :params {
-                                                                                             :colliders     ["rectangle-box" "oval-box"
-                                                                                                             "triangle-table" "square-table"
-                                                                                                             "circle-table"]
-                                                                                             :self          "star-group"
-                                                                                             :target        "circle-table"
-                                                                                             :object        "star-object"
-                                                                                             :init-position {:x        100,
-                                                                                                             :y        600,
-                                                                                                             :duration 1}}}},
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["rectangle-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "star-group-1"
+                                                                                               :object    "star-object"
+                                                                                               }}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "star-group"
+                                                                                               :target        "circle-table"
+                                                                                               :object        "star-object"
+                                                                                               :init-position {:x        100,
+                                                                                                               :y        600,
+                                                                                                               :duration 1}}}},
 
-                                                          }
-                                       :rectangle-group         {
-                                                                 :type       "group",
-                                                                 :children   [],
-                                                                 :draggable  true,
-                                                                 :transition "rectangle-group",
-                                                                 :states     {:group-all {:children ["rectangle-box" "rectangle-object"]}
-                                                                              :ungroup   {:children []}
-                                                                              :hidden    {:visible false}},
+                                                            }
+                                       :rectangle-group    {
+                                                            :type       "group",
+                                                            :children   [],
+                                                            :draggable  true,
+                                                            :transition "rectangle-group",
+                                                            :states     {:group-all {:children ["rectangle-box" "rectangle-object"]}
+                                                                         :ungroup   {:children []}
+                                                                         :hidden    {:visible false}},
 
-                                                                 :actions    {:drag-start {
-                                                                                           :type   "action",
-                                                                                           :on     "drag-start",
-                                                                                           :id     "start-drag",
-                                                                                           :params {:colliders ["star-box" "oval-box"
-                                                                                                                "triangle-table" "square-table"
-                                                                                                                "circle-table"]
-                                                                                                    :self      "rectangle-group"}}
-                                                                              :drag-end   {
-                                                                                           :id     "stop-drag-hide",
-                                                                                           :on     "drag-end",
-                                                                                           :type   "action",
-                                                                                           :params {
-                                                                                                    :colliders     ["rectangle-box" "oval-box"
-                                                                                                                    "triangle-table" "square-table"
-                                                                                                                    "circle-table"]
-                                                                                                    :self          "rectangle-group"
-                                                                                                    :target        "circle-table"
-                                                                                                    :init-position {:x        100,
-                                                                                                                    :y        600,
-                                                                                                                    :duration 1}}}},
-                                                                 }
-                                       :oval-group          {
-                                                             :type       "group",
-                                                             :children   [],
-                                                             :draggable  true,
-                                                             :transition "oval-group",
-                                                             :states     {:group-all {:children ["oval-box" "oval-object"]}
-                                                                          :ungroup   {:children []}
-                                                                          :hidden    {:visible false}},
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["star-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "rectangle-group"}}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "rectangle-group"
+                                                                                               :target        "circle-table"
+                                                                                               :init-position {:x        100,
+                                                                                                               :y        600,
+                                                                                                               :duration 1}}}},
+                                                            }
+                                       :oval-group         {
+                                                            :type       "group",
+                                                            :children   [],
+                                                            :draggable  true,
+                                                            :transition "oval-group",
+                                                            :states     {:group-all {:children ["oval-box" "oval-object"]}
+                                                                         :ungroup   {:children []}
+                                                                         :hidden    {:visible false}},
 
-                                                             :actions    {:drag-start {
-                                                                                       :type   "action",
-                                                                                       :on     "drag-start",
-                                                                                       :id     "start-drag",
-                                                                                       :params {:colliders ["rectangle-box" "star-box"
-                                                                                                            "triangle-table" "square-table"
-                                                                                                            "circle-table"]
-                                                                                                :self      "oval-group"}}
-                                                                          :drag-end   {
-                                                                                       :id     "stop-drag-hide",
-                                                                                       :on     "drag-end",
-                                                                                       :type   "action",
-                                                                                       :params {
-                                                                                                :colliders     ["rectangle-box" "oval-box"
-                                                                                                                "triangle-table" "square-table"
-                                                                                                                "circle-table"]
-                                                                                                :self          "oval-group"
-                                                                                                :target        "square-table"
-                                                                                                :init-position {:x        100,
-                                                                                                                :y        600,
-                                                                                                                :duration 1}}}},
-                                                             }
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["rectangle-box" "star-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "oval-group"}}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "oval-group"
+                                                                                               :target        "square-table"
+                                                                                               :init-position {:x        100,
+                                                                                                               :y        600,
+                                                                                                               :duration 1}}}},
+                                                            }
 
-                                       :star-box
-                                       {:type       "image",
-                                        :x          786,
-                                        :y          874,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-shapes/star-box.png",
-                                        :transition "star-box",
-                                        :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                     :init-position {:x 786, :y 874, :visible true}
-                                                     },
-                                        },
-                                       :rectangle-box           {:type       "image",
-                                                                 :x          320,
-                                                                 :y          874,
-                                                                 :width      428,
-                                                                 :height     549,
-                                                                 :scale      0.5,
-                                                                 :transition "rectangle-box",
-                                                                 :src        "/raw/img/categorize-shapes/rectangle-box.png",
-                                                                 :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                                 }
-                                       :oval-box            {:type       "image",
-                                                             :x          1252,
-                                                             :y          874,
-                                                             :width      428,
-                                                             :height     549,
-                                                             :scale      0.5,
-                                                             :transition "oval-box",
-                                                             :src        "/raw/img/categorize-shapes/oval-box.png",
-                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                             },
-                                       :oval-object         {
-                                                             :type       "image",
-                                                             :x          100,
-                                                             :y          600,
-                                                             :width      100,
-                                                             :height     224,
-                                                             :rotation   -90,
-                                                             :scale      0.35,
-                                                             :src        "/raw/img/categorize-shapes/oval.png",
-                                                             :transition "oval-object",
-                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                          :hidden        {:visible false}, :init-position {:x 100, :y 600,}
-                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                          },
-                                                             :draggable  true,
-                                                             :actions    {:drag-start {
-                                                                                       :type   "action",
-                                                                                       :on     "drag-start",
-                                                                                       :id     "start-drag",
-                                                                                       :params {:colliders ["star-box" "rectangle-box" "oval-box"
-                                                                                                            "triangle-table" "square-table"
-                                                                                                            "circle-table"]
-                                                                                                :self      "oval-object"}}
-                                                                          :drag-end   {
-                                                                                       :id     "stop-drag-hide",
-                                                                                       :on     "drag-end",
-                                                                                       :type   "action",
-                                                                                       :params {
-                                                                                                :colliders     ["star-box" "rectangle-box" "oval-box"
-                                                                                                                "triangle-table" "square-table"
-                                                                                                                "circle-table"]
-                                                                                                :self          "oval-object"
-                                                                                                :target        "oval-box"
-                                                                                                :init-position {:x        100,
-                                                                                                                :y        600,
-                                                                                                                :duration 1}}}},},
-                                       :triangle-object      {
-                                                              :type       "image",
-                                                              :x          200,
-                                                              :y          700,
-                                                              :width      100,
-                                                              :height     224,
-                                                              :rotation   -90,
-                                                              :scale      0.35,
-                                                              :src        "/raw/img/categorize-shapes/triangle.png",
-                                                              :transition "triangle-object",
-                                                              :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                           :hidden      {:visible false}, :init-position {:x 200,
-                                                                                                                          :y 700}
-                                                                           },
-                                                              :draggable  true,
-                                                              :actions    {:drag-start {
-                                                                                        :type   "action",
-                                                                                        :on     "drag-start",
-                                                                                        :id     "start-drag",
-                                                                                        :params {:colliders ["star-box" "rectangle-box" "oval-box"
-                                                                                                             "triangle-table" "square-table"
-                                                                                                             "circle-table"]
-                                                                                                 :self      "triangle-object"}}
-                                                                           :drag-end   {
-                                                                                        :id     "stop-drag-hide",
-                                                                                        :on     "drag-end",
-                                                                                        :type   "action",
-                                                                                        :params {
-                                                                                                 :colliders     ["star-box" "rectangle-box" "oval-box"
-                                                                                                                 "triangle-table" "square-table"
-                                                                                                                 "circle-table"]
-                                                                                                 :self          "triangle-object"
-                                                                                                 :target        "triangle-table"
-                                                                                                 :init-position {:x        200,
-                                                                                                                 :y        700,
-                                                                                                                 :duration 1}}}}
-                                                              },
-                                       :star-object      {
-                                                          :type       "image",
-                                                          :x          150,
-                                                          :y          800,
-                                                          :width      100,
-                                                          :height     224,
-                                                          :rotation   -90,
-                                                          :scale      0.35,
-                                                          :src        "/raw/img/categorize-shapes/star.png",
-                                                          :transition "star-object",
-                                                          :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                       :hidden        {:visible false}, :init-position {:x 150, :y 800, :visible true}
-                                                                       :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                       },
-                                                          :draggable  true,
-                                                          :actions    {:drag-start {
-                                                                                    :type   "action",
-                                                                                    :on     "drag-start",
-                                                                                    :id     "start-drag",
-                                                                                    :params {:colliders ["star-box" "rectangle-box" "oval-box"
-                                                                                                         "triangle-table" "square-table"
-                                                                                                         "circle-table"]
-                                                                                             :self      "star-object"}}
-                                                                       :drag-end   {
-                                                                                    :id     "stop-drag-hide",
-                                                                                    :on     "drag-end",
-                                                                                    :type   "action",
-                                                                                    :params {
-                                                                                             :colliders     ["star-box" "rectangle-box" "oval-box"
-                                                                                                             "triangle-table" "square-table"
-                                                                                                             "circle-table"]
-                                                                                             :self          "star-object"
-                                                                                             :target        "star-box"
-                                                                                             :init-position {:x        150,
-                                                                                                             :y        800,
-                                                                                                             :duration 1}}}}
-                                                          },
-                                       :circle-object       {
-                                                             :type       "image",
-                                                             :x          550,
-                                                             :y          800,
-                                                             :width      100,
-                                                             :height     224,
-                                                             :rotation   -90,
-                                                             :scale      0.35,
-                                                             :src        "/raw/img/categorize-shapes/circle.png",
-                                                             :transition "circle-object",
-                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                          :hidden      {:visible false}, :init-position {:x 550,
-                                                                                                                         :y 800,}
-                                                                          },
-                                                             :draggable  true,
-                                                             :actions    {:drag-start {
-                                                                                       :type   "action",
-                                                                                       :on     "drag-start",
-                                                                                       :id     "start-drag",
-                                                                                       :params {:colliders ["star-box" "rectangle-box" "oval-box"
-                                                                                                            "triangle-table" "square-table"
-                                                                                                            "circle-table"]
-                                                                                                :self      "circle-object"}}
-                                                                          :drag-end   {
-                                                                                       :id     "stop-drag-hide",
-                                                                                       :on     "drag-end",
-                                                                                       :type   "action",
-                                                                                       :params {
-                                                                                                :colliders     ["star-box" "rectangle-box" "oval-box"
-                                                                                                                "triangle-table" "square-table"
-                                                                                                                "circle-table"]
-                                                                                                :self          "circle-object"
-                                                                                                :target        "circle-table"
-                                                                                                :init-position {:x        550,
-                                                                                                                :y        800,
-                                                                                                                :duration 1}}}}
-                                                             },
-                                       :rectangle-object        {
-                                                                 :type       "image",
-                                                                 :x          46,
-                                                                 :y          650,
-                                                                 :width      100,
-                                                                 :height     224,
-                                                                 :rotation   -90,
-                                                                 :scale      0.35,
-                                                                 :src        "/raw/img/categorize-shapes/rectangle.png",
-                                                                 :transition "rectangle-object",
-                                                                 :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                              :hidden        {:visible false}, :init-position {:x 46, :y 650,}
-                                                                              :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                              },
-                                                                 :draggable  true,
-                                                                 :actions    {:drag-start {
-                                                                                           :type   "action",
-                                                                                           :on     "drag-start",
-                                                                                           :id     "start-drag",
-                                                                                           :params {:colliders ["star-box" "rectangle-box" "oval-box"
-                                                                                                                "triangle-table" "square-table"
-                                                                                                                "circle-table"]
-                                                                                                    :self      "rectangle-object"}}
-                                                                              :drag-end   {
-                                                                                           :id     "stop-drag-hide",
-                                                                                           :on     "drag-end",
-                                                                                           :type   "action",
-                                                                                           :params {
-                                                                                                    :colliders     ["star-box" "rectangle-box" "oval-box"
-                                                                                                                    "triangle-table" "square-table"
-                                                                                                                    "circle-table"]
-                                                                                                    :self          "rectangle-object"
-                                                                                                    :target        "rectangle-box"
-                                                                                                    :init-position {:x        46,
-                                                                                                                    :y        650,
-                                                                                                                    :duration 1}}}}
-                                                                 },
+                                       :star-box           {:type       "image",
+                                                            :x          1181,
+                                                            :y          835,
+                                                            :width      221,
+                                                            :height     200,
+                                                            :src        "/raw/img/categorize-shapes/star-box.png",
+                                                            :transition "star-box",
+                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                         :init-position {:x 1181, :y 835, :visible true}
+                                                                         },
+                                                            },
+                                       :rectangle-box      {:type       "image",
+                                                            :x          922,
+                                                            :y          835,
+                                                            :width      222,
+                                                            :height     200,
+                                                            :transition "rectangle-box",
+                                                            :src        "/raw/img/categorize-shapes/rectangle-box.png",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
+                                       :oval-box           {:type       "image",
+                                                            :x          663,
+                                                            :y          835,
+                                                            :width      222,
+                                                            :height     200
+                                                            :transition "oval-box",
+                                                            :src        "/raw/img/categorize-shapes/oval-box.png",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            },
+                                       :oval-object        {
+                                                            :type       "image",
+                                                            :x          1685,
+                                                            :y          113,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/oval-group.png",
+                                                            :transition "oval-object",
+                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                         :hidden        {:visible false}, :init-position {:x 1685, :y 113,}
+                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}
+                                                                         },
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["star-box" "rectangle-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "oval-object"}}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["star-box" "rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "oval-object"
+                                                                                               :target        "oval-box"
+                                                                                               :init-position {:x 1685, :y 113,
+                                                                                                               :duration 1}}}},},
+                                       :triangle-object    {
+                                                            :type       "image",
+                                                            :x          410,
+                                                            :y          584,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/triangle-group.png",
+                                                            :transition "triangle-object",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
+                                                                         :hidden      {:visible false}, :init-position {:x          410,
+                                                                                                                        :y          584,}
+                                                                         },
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["star-box" "rectangle-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "triangle-object"}}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["star-box" "rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "triangle-object"
+                                                                                               :target        "triangle-table"
+                                                                                               :init-position {:x          410,
+                                                                                                               :y          584,
+                                                                                                               :duration 1}}}}
+                                                            },
+                                       :star-object        {
+                                                            :type       "image",
+                                                            :x          830,
+                                                            :y          404,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/star-group.png",
+                                                            :transition "star-object",
+                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                         :hidden        {:visible false}, :init-position {:x          830,
+                                                                                                                          :y          404, :visible true}
+                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}
+                                                                         },
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["star-box" "rectangle-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "star-object"}}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["star-box" "rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "star-object"
+                                                                                               :target        "star-box"
+                                                                                               :init-position {:x          830,
+                                                                                                               :y          404,
+                                                                                                               :duration 1}}}}
+                                                            },
+                                       :circle-object      {
+                                                            :type       "image",
+                                                            :x          143,
+                                                            :y          921,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/circle-group.png",
+                                                            :transition "circle-object",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
+                                                                         :hidden      {:visible false}, :init-position {:x          143,
+                                                                                                                        :y          921,}
+                                                                         },
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["star-box" "rectangle-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "circle-object"}}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["star-box" "rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "circle-object"
+                                                                                               :target        "circle-table"
+                                                                                               :init-position {:x          143,
+                                                                                                               :y          921,
+                                                                                                               :duration 1}}}}
+                                                            },
+                                       :rectangle-object   {
+                                                            :type       "image",
+                                                            :x          123,
+                                                            :y          51,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/rectangle-group.png",
+                                                            :transition "rectangle-object",
+                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                         :hidden        {:visible false}, :init-position {:x          123,
+                                                                                                                          :y          51,}
+                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}
+                                                                         },
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type   "action",
+                                                                                      :on     "drag-start",
+                                                                                      :id     "start-drag",
+                                                                                      :params {:colliders ["star-box" "rectangle-box" "oval-box"
+                                                                                                           "triangle-table" "square-table"
+                                                                                                           "circle-table"]
+                                                                                               :self      "rectangle-object"}}
+                                                                         :drag-end   {
+                                                                                      :id     "stop-drag-hide",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {
+                                                                                               :colliders     ["star-box" "rectangle-box" "oval-box"
+                                                                                                               "triangle-table" "square-table"
+                                                                                                               "circle-table"]
+                                                                                               :self          "rectangle-object"
+                                                                                               :target        "rectangle-box"
+                                                                                               :init-position {:x          123,
+                                                                                                               :y          51,
+                                                                                                               :duration 1}}}}
+                                                            },
                                        :square-object      {
                                                             :type       "image",
-                                                            :x          350,
-                                                            :y          800,
-                                                            :width      100,
-                                                            :height     224,
-                                                            :rotation   -90,
-                                                            :scale      0.35,
-                                                            :src        "/raw/img/categorize-shapes/square.png",
+                                                            :x          512,
+                                                            :y          232,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/square-group.png",
                                                             :transition "square-object",
                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden      {:visible false}, :init-position {:x 350,
-                                                                                                                        :y 800,}
+                                                                         :hidden      {:visible false}, :init-position {:x          512,
+                                                                                                                        :y          232,}
                                                                          },
                                                             :draggable  true,
                                                             :actions    {:drag-start {
@@ -400,49 +390,46 @@
                                                                                                                "circle-table"]
                                                                                                :self          "square-object"
                                                                                                :target        "square-table"
-                                                                                               :init-position {:x        350,
-                                                                                                               :y        800,
+                                                                                               :init-position {:x          512,
+                                                                                                               :y          232,
                                                                                                                :duration 1}}}}
                                                             },
                                        :triangle-table
-                                       {:type       "image",
-                                        :x          286,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-shapes/triangle-table.png",
-                                        :transition "triangle-table",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
+                                                           {:type       "image",
+                                                            :x          196,
+                                                            :y          631,
+                                                            :width      460,
+                                                            :height     243
+                                                            :src        "/raw/img/categorize-shapes/triangle-table.png",
+                                                            :transition "triangle-table",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
                                        :circle-table
-                                       {:type       "image",
-                                        :x          756,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-shapes/circle-table.png",
-                                        :transition "circle-table",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
+                                                           {:type       "image",
+                                                            :x          1222,
+                                                            :y          650,
+                                                            :width      429,
+                                                            :height     221,
+                                                            :src        "/raw/img/categorize-shapes/circle-table.png",
+                                                            :transition "circle-table",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
                                        :square-table
-                                       {:type       "image",
-                                        :x          1086,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-shapes/square-table.png",
-                                        :transition "square-table",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
+                                                           {:type       "image",
+                                                            :x          691,
+                                                            :y          665,
+                                                            :width      512
+                                                            :height     251
+                                                            :src        "/raw/img/categorize-shapes/square-table.png",
+                                                            :transition "square-table",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
 
                                        },
 
-                       :scene-objects [["background"]
-                                       ["star-box" "rectangle-box" "oval-box"]
+                       :scene-objects [["layered-background"]
                                        ["triangle-table" "square-table" "circle-table"]
+                                       ["star-box" "rectangle-box" "oval-box"]
                                        ["oval-object" "triangle-object" "star-object" "circle-object" "rectangle-object" "square-object"]
                                        ["star-group-1" "star-group" "oval-group" "rectangle-group"]
                                        ],
@@ -884,58 +871,58 @@
                                                                             {:type "action", :id "instruction-8-2"}]
                                                                      }
 
-                                       :task-9-1                   {
-                                                                    :type "sequence-data",
-                                                                    :data [
-                                                                           {:type "set-variable", :var-name "object-1", :var-value "star-object"}
-                                                                           {:type "set-variable", :var-name "object-2", :var-value "star-box"}
-                                                                           {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-object" "colliding-star-box"]}
-                                                                           {:type "set-variable", :var-name "next-task", :var-value "task-9-2"}
-                                                                           {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                           {:type "set-variable", :var-name "group-name", :var-value "star-group-1"}
-                                                                           {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                           {:type "action", :id "instruction-9-1"}]
-                                                                    }
+                                       :task-9-1                    {
+                                                                     :type "sequence-data",
+                                                                     :data [
+                                                                            {:type "set-variable", :var-name "object-1", :var-value "star-object"}
+                                                                            {:type "set-variable", :var-name "object-2", :var-value "star-box"}
+                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-object" "colliding-star-box"]}
+                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-9-2"}
+                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
+                                                                            {:type "set-variable", :var-name "group-name", :var-value "star-group-1"}
+                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
+                                                                            {:type "action", :id "instruction-9-1"}]
+                                                                     }
 
-                                       :task-9-2                   {
-                                                                    :type "sequence-data",
-                                                                    :data [
-                                                                           {:type "set-variable", :var-name "object-1", :var-value "star-group-1"}
-                                                                           {:type "set-variable", :var-name "object-2", :var-value "triangle-table"}
-                                                                           {:type "set-variable", :var-name "ungroup-object-1", :var-value "star-box"}
-                                                                           {:type "set-variable", :var-name "ungroup-object-2", :var-value "star-object"}
-                                                                           {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-group-1" "colliding-triangle-table"]}
-                                                                           {:type "set-variable", :var-name "next-task", :var-value "task-10-1"}
-                                                                           {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                           {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                           {:type "action", :id "instruction-9-2"}]
-                                                                    }
-                                       :task-10-1                    {
-                                                                      :type "sequence-data",
-                                                                      :data [
-                                                                             {:type "set-variable", :var-name "object-1", :var-value "oval-object"}
-                                                                             {:type "set-variable", :var-name "object-2", :var-value "oval-box"}
-                                                                             {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-oval-object" "colliding-oval-box"]}
-                                                                             {:type "set-variable", :var-name "next-task", :var-value "task-10-2"}
-                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
-                                                                             {:type "set-variable", :var-name "group-name", :var-value "oval-group"}
-                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                             {:type "action", :id "instruction-10-1"}]
-                                                                      }
-                                       :task-10-2                    {
-                                                                      :type "sequence-data",
-                                                                      :data [
-                                                                             {:type "set-variable", :var-name "object-1", :var-value "oval-group"}
-                                                                             {:type "set-variable", :var-name "object-2", :var-value "circle-table"}
-                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "oval-box"}
-                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "oval-object"}
+                                       :task-9-2                    {
+                                                                     :type "sequence-data",
+                                                                     :data [
+                                                                            {:type "set-variable", :var-name "object-1", :var-value "star-group-1"}
+                                                                            {:type "set-variable", :var-name "object-2", :var-value "triangle-table"}
+                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "star-box"}
+                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "star-object"}
+                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-star-group-1" "colliding-triangle-table"]}
+                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-10-1"}
+                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
+                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
+                                                                            {:type "action", :id "instruction-9-2"}]
+                                                                     }
+                                       :task-10-1                   {
+                                                                     :type "sequence-data",
+                                                                     :data [
+                                                                            {:type "set-variable", :var-name "object-1", :var-value "oval-object"}
+                                                                            {:type "set-variable", :var-name "object-2", :var-value "oval-box"}
+                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-oval-object" "colliding-oval-box"]}
+                                                                            {:type "set-variable", :var-name "next-task", :var-value "task-10-2"}
+                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-group"}
+                                                                            {:type "set-variable", :var-name "group-name", :var-value "oval-group"}
+                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
+                                                                            {:type "action", :id "instruction-10-1"}]
+                                                                     }
+                                       :task-10-2                   {
+                                                                     :type "sequence-data",
+                                                                     :data [
+                                                                            {:type "set-variable", :var-name "object-1", :var-value "oval-group"}
+                                                                            {:type "set-variable", :var-name "object-2", :var-value "circle-table"}
+                                                                            {:type "set-variable", :var-name "ungroup-object-1", :var-value "oval-box"}
+                                                                            {:type "set-variable", :var-name "ungroup-object-2", :var-value "oval-object"}
 
-                                                                             {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-oval-group" "colliding-circle-table"]}
-                                                                             {:type "set-variable", :var-name "next-task", :var-value "finish"}
-                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
-                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
-                                                                             {:type "action", :id "instruction-10-2"}]
-                                                                      }
+                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-oval-group" "colliding-circle-table"]}
+                                                                            {:type "set-variable", :var-name "next-task", :var-value "finish"}
+                                                                            {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
+                                                                            {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
+                                                                            {:type "action", :id "instruction-10-2"}]
+                                                                     }
 
                                        :start-activity              {:type "sequence-data",
                                                                      :data [{:type "action", :id "intro"}

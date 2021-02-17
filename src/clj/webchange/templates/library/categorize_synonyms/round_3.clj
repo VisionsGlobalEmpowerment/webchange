@@ -1,6 +1,8 @@
 (ns webchange.templates.library.categorize-synonyms.round-3)
 
-(def template-round-3 {:assets        [{:url "/raw/img/categorize-synonyms/background.png", :size 10, :type "image"}
+(def template-round-3 {:assets        [{:url "/raw/img/categorize-synonyms/background-class.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-synonyms/surface.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-synonyms/decoration.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-synonyms/cold.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-synonyms/trash.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-synonyms/happy.png", :size 10, :type "image"}
@@ -16,221 +18,86 @@
                                        {:url "/raw/img/categorize-synonyms/large.png", :size 10, :type "image"}
 
                                        ],
-                       :objects       {:background       {:type "background", :src "/raw/img/categorize-synonyms/background.png"},
-                                       :large-big-group {
-                                                         :type       "group",
-                                                         :children   [],
-                                                         :draggable  true,
-                                                         :transition "large-big-group",
-                                                         :states     {:group-all {:children ["big" "large-object"]}
-                                                                      :ungroup   {:children []}
-                                                                      :hidden    {:visible false}},
-
-                                                         :actions    {:drag-start {
-                                                                                   :type   "action",
-                                                                                   :on     "drag-start",
-                                                                                   :id     "start-drag",
-                                                                                   :params {:colliders ["trash" "happy"
-                                                                                                        "cold" "child"
-                                                                                                        "scared"]
-                                                                                            :self      "large-big-group"
-                                                                                            :object    "large-object"
-                                                                                            }}
-                                                                      :drag-end   {
-                                                                                   :id     "stop-drag-hide",
-                                                                                   :on     "drag-end",
-                                                                                   :type   "action",
-                                                                                   :params {
-                                                                                            :colliders     ["trash" "happy"
-                                                                                                            "cold" "child"
-                                                                                                            "scared"]
-                                                                                            :self          "large-big-group"
-                                                                                            :target        "trash"
-                                                                                            :object        "large-object"
-                                                                                            :init-position {:x        100,
-                                                                                                            :y        600,
-                                                                                                            :duration 1}}}},
-
-                                                         }
-                                       :scared-afraid-group  {
-                                                              :type       "group",
-                                                              :children   [],
-                                                              :draggable  true,
-                                                              :transition "scared-afraid-group",
-                                                              :states     {:group-all {:children ["scared" "afraid-object"]}
-                                                                           :ungroup   {:children []}
-                                                                           :hidden    {:visible false}},
-
-                                                              :actions    {:drag-start {
-                                                                                        :type   "action",
-                                                                                        :on     "drag-start",
-                                                                                        :id     "start-drag",
-                                                                                        :params {:colliders ["trash" "cold"
-                                                                                                             "big" "child"
-                                                                                                             "happy"]
-                                                                                                 :self      "scared-afraid-group"
-                                                                                                 :object    "afraid-object"
-                                                                                                 }}
-                                                                           :drag-end   {
-                                                                                        :id     "stop-drag-hide",
-                                                                                        :on     "drag-end",
-                                                                                        :type   "action",
-                                                                                        :params {
-                                                                                                 :colliders     ["trash" "cold"
-                                                                                                                 "big" "child"
-                                                                                                                 "happy"]
-                                                                                                 :self          "scared-afraid-group"
-                                                                                                 :target        "scared"
-                                                                                                 :object        "afraid-object"
-                                                                                                 :init-position {:x        100,
-                                                                                                                 :y        600,
-                                                                                                                 :duration 1}}}},
-
-                                                              }
-                                       :kid-child-group {
-                                                         :type       "group",
-                                                         :children   [],
-                                                         :draggable  true,
-                                                         :transition "kid-child-group",
-                                                         :states     {:group-all {:children ["child" "kid-object"]}
-                                                                      :ungroup   {:children []}
-                                                                      :hidden    {:visible false}},
-                                                         :actions    {:drag-start {
-                                                                                   :type   "action",
-                                                                                   :on     "drag-start",
-                                                                                   :id     "start-drag",
-                                                                                   :params {:colliders ["big" "scared"
-                                                                                                        "trash" "cold"
-                                                                                                        "happy"]
-                                                                                            :self      "kid-child-group"}}
-                                                                      :drag-end   {
-                                                                                   :id     "stop-drag-hide",
-                                                                                   :on     "drag-end",
-                                                                                   :type   "action",
-                                                                                   :params {
-                                                                                            :colliders     ["big" "scared"
-                                                                                                            "trash" "cold"
-                                                                                                            "happy"]
-                                                                                            :self          "kid-child-group"
-                                                                                            :target        "child"
-                                                                                            :object        "kid-object"
-                                                                                            :init-position {:x        100,
-                                                                                                            :y        600,
-                                                                                                            :duration 1}}}},
-                                                         }
-                                       :glad-happy-group       {
-                                                                :type       "group",
-                                                                :children   [],
-                                                                :draggable  true,
-                                                                :transition "glad-happy-group",
-                                                                :states     {:group-all {:children ["happy" "glad-object"]}
-                                                                             :ungroup   {:children []}
-                                                                             :hidden    {:visible false}},
-
-                                                                :actions    {:drag-start {
-                                                                                          :type   "action",
-                                                                                          :on     "drag-start",
-                                                                                          :id     "start-drag",
-                                                                                          :params {:colliders ["trash" "cold"
-                                                                                                               "big" "child"
-                                                                                                               "scared"]
-                                                                                                   :self      "glad-happy-group"}}
-                                                                             :drag-end   {
-                                                                                          :id     "stop-drag-hide",
-                                                                                          :on     "drag-end",
-                                                                                          :type   "action",
-                                                                                          :params {
-                                                                                                   :colliders     ["trash" "cold"
-                                                                                                                   "big" "child"
-                                                                                                                   "scared"]
-                                                                                                   :self          "glad-happy-group"
-                                                                                                   :target        "happy"
-                                                                                                   :init-position {:x        100,
-                                                                                                                   :y        600,
-                                                                                                                   :duration 1}}}},
-                                                                }
-
-                                       :happy               {:type       "image",
-                                                             :x          786,
-                                                             :y          874,
-                                                             :width      428,
-                                                             :height     549,
-                                                             :scale      0.5,
-                                                             :src        "/raw/img/categorize-synonyms/happy.png",
-                                                             :transition "happy",
+                       :objects       {:layered-background  {:type       "layered-background",
+                                                             :background {:src "/raw/img/categorize-shapes/background-class.png"},
+                                                             :decoration {:src "/raw/img/categorize-shapes/decoration.png"},
+                                                             :surface    {:src "/raw/img/categorize-shapes/surface.png"}},
+                                       :large-big-group     {
+                                                             :type       "group",
+                                                             :children   [],
+                                                             :transition "large-big-group",
+                                                             :states     {:group-all {:children ["big" "large-object"]}
+                                                                          :ungroup   {:children []}
+                                                                          :hidden    {:visible false}},
+                                                             }
+                                       :scared-afraid-group {
+                                                             :type       "group",
+                                                             :children   [],
+                                                             :transition "scared-afraid-group",
+                                                             :states     {:group-all {:children ["scared" "afraid-object"]}
+                                                                          :ungroup   {:children []}
+                                                                          :hidden    {:visible false}},
+                                                             }
+                                       :kid-child-group     {
+                                                             :type       "group",
+                                                             :children   [],
+                                                             :transition "kid-child-group",
+                                                             :states     {:group-all {:children ["child" "kid-object"]}
+                                                                          :ungroup   {:children []}
+                                                                          :hidden    {:visible false}}}
+                                       :glad-happy-group    {
+                                                             :type       "group",
+                                                             :children   [],
+                                                             :transition "glad-happy-group",
+                                                             :states     {:group-all {:children ["happy" "glad-object"]}
+                                                                          :ungroup   {:children []}
+                                                                          :hidden    {:visible false}}}
+                                       :chilly-object       {
+                                                             :type       "image",
+                                                             :width      159,
+                                                             :height     160,
+                                                             :x          768,
+                                                             :y          481,
+                                                             :src        "/raw/img/categorize-synonyms/chilly.png",
+                                                             :transition "chilly-object",
                                                              :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                          :init-position {:x 786, :y 874, :visible true}
+                                                                          :hidden        {:visible false}, :init-position {:x 768,
+                                                                                                                           :y 481,}
+                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                           },
-                                                             },
-                                       :trash            {:type       "image",
-                                                          :x          320,
-                                                          :y          874,
-                                                          :width      428,
-                                                          :height     549,
-                                                          :scale      0.5,
-                                                          :transition "trash",
-                                                          :src        "/raw/img/categorize-synonyms/trash.png",
-                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                          }
-                                       :cold            {:type       "image",
-                                                         :x          1252,
-                                                         :y          874,
-                                                         :width      428,
-                                                         :height     549,
-                                                         :scale      0.5,
-                                                         :transition "cold",
-                                                         :src        "/raw/img/categorize-synonyms/cold.png",
-                                                         :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                         },
-                                       :chilly-object      {
-                                                            :type       "image",
-                                                            :x          100,
-                                                            :y          600,
-                                                            :width      100,
-                                                            :height     224,
-                                                            :rotation   -90,
-                                                            :scale      0.35,
-                                                            :src        "/raw/img/categorize-synonyms/chilly.png",
-                                                            :transition "chilly-object",
-                                                            :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                         :hidden        {:visible false}, :init-position {:x 100, :y 600,}
-                                                                         :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                         },
-                                                            :draggable  true,
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
-                                                                                      :on     "drag-start",
-                                                                                      :id     "start-drag",
-                                                                                      :params {:colliders ["happy" "trash" "cold"
-                                                                                                           "big" "child"
-                                                                                                           "scared"]
-                                                                                               :self      "chilly-object"}}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
-                                                                                      :on     "drag-end",
-                                                                                      :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["happy" "trash" "cold"
-                                                                                                               "big" "child"
-                                                                                                               "scared"]
-                                                                                               :self          "chilly-object"
-                                                                                               :target        "cold"
-                                                                                               :init-position {:x        100,
-                                                                                                               :y        600,
-                                                                                                               :duration 1}}}},},
+                                                             :draggable  true,
+                                                             :actions    {:drag-start {
+                                                                                       :type   "action",
+                                                                                       :on     "drag-start",
+                                                                                       :id     "start-drag",
+                                                                                       :params {:colliders ["happy" "trash" "cold"
+                                                                                                            "big" "child"
+                                                                                                            "scared"]
+                                                                                                :self      "chilly-object"}}
+                                                                          :drag-end   {
+                                                                                       :id     "stop-drag-hide",
+                                                                                       :on     "drag-end",
+                                                                                       :type   "action",
+                                                                                       :params {
+                                                                                                :colliders     ["happy" "trash" "cold"
+                                                                                                                "big" "child"
+                                                                                                                "scared"]
+                                                                                                :self          "chilly-object"
+                                                                                                :target        "cold"
+                                                                                                :init-position {:x        768,
+                                                                                                                :y        481,
+                                                                                                                :duration 1}}}},},
                                        :large-object        {
                                                              :type       "image",
-                                                             :x          200,
-                                                             :y          700,
-                                                             :width      100,
-                                                             :height     224,
-                                                             :rotation   -90,
-                                                             :scale      0.35,
+                                                             :width      160,
+                                                             :height     159,
+                                                             :x          415,
+                                                             :y          355,
                                                              :src        "/raw/img/categorize-synonyms/large.png",
                                                              :transition "large-object",
-                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                          :hidden      {:visible false}, :init-position {:x 200,
-                                                                                                                         :y 700}
+                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                          :hidden        {:visible false}, :init-position {:x 415,
+                                                                                                                           :y 355,}
                                                                           :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                           },
                                                              :draggable  true,
@@ -252,97 +119,93 @@
                                                                                                                 "scared"]
                                                                                                 :self          "large-object"
                                                                                                 :target        "big"
-                                                                                                :init-position {:x        200,
-                                                                                                                :y        700,
+                                                                                                :init-position {:x        415,
+                                                                                                                :y        355,
                                                                                                                 :duration 1}}}}
                                                              },
-                                       :glad-object       {
-                                                           :type       "image",
-                                                           :x          150,
-                                                           :y          800,
-                                                           :width      100,
-                                                           :height     224,
-                                                           :rotation   -90,
-                                                           :scale      0.35,
-                                                           :src        "/raw/img/categorize-synonyms/glad.png",
-                                                           :transition "glad-object",
-                                                           :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                        :hidden        {:visible false}, :init-position {:x 150, :y 800, :visible true}
-                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                        },
-                                                           :draggable  true,
-                                                           :actions    {:drag-start {
-                                                                                     :type   "action",
-                                                                                     :on     "drag-start",
-                                                                                     :id     "start-drag",
-                                                                                     :params {:colliders ["happy" "trash" "cold"
-                                                                                                          "big" "child"
-                                                                                                          "scared"]
-                                                                                              :self      "glad-object"}}
-                                                                        :drag-end   {
-                                                                                     :id     "stop-drag-hide",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {
-                                                                                              :colliders     ["happy" "trash" "cold"
-                                                                                                              "big" "child"
-                                                                                                              "scared"]
-                                                                                              :self          "glad-object"
-                                                                                              :target        "happy"
-                                                                                              :init-position {:x        150,
-                                                                                                              :y        800,
-                                                                                                              :duration 1}}}}
-                                                           },
-                                       :afraid-object     {
-                                                           :type       "image",
-                                                           :x          550,
-                                                           :y          800,
-                                                           :width      100,
-                                                           :height     224,
-                                                           :rotation   -90,
-                                                           :scale      0.35,
-                                                           :src        "/raw/img/categorize-synonyms/afraid.png",
-                                                           :transition "afraid-object",
-                                                           :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                        :hidden      {:visible false}, :init-position {:x 550,
-                                                                                                                       :y 800,}
-                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                        },
-                                                           :draggable  true,
-                                                           :actions    {:drag-start {
-                                                                                     :type   "action",
-                                                                                     :on     "drag-start",
-                                                                                     :id     "start-drag",
-                                                                                     :params {:colliders ["happy" "trash" "cold"
-                                                                                                          "big" "child"
-                                                                                                          "scared"]
-                                                                                              :self      "afraid-object"}}
-                                                                        :drag-end   {
-                                                                                     :id     "stop-drag-hide",
-                                                                                     :on     "drag-end",
-                                                                                     :type   "action",
-                                                                                     :params {
-                                                                                              :colliders     ["happy" "trash" "cold"
-                                                                                                              "big" "child"
-                                                                                                              "scared"]
-                                                                                              :self          "afraid-object"
-                                                                                              :target        "scared"
-                                                                                              :init-position {:x        550,
-                                                                                                              :y        800,
-                                                                                                              :duration 1}}}}
-                                                           },
+                                       :glad-object         {
+                                                             :type       "image",
+                                                             :width      160,
+                                                             :height     161,
+                                                             :x          1674,
+                                                             :y          434,
+                                                             :src        "/raw/img/categorize-synonyms/glad.png",
+                                                             :transition "glad-object",
+                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                          :hidden        {:visible false}, :init-position {:x 1674,
+                                                                                                                           :y 434, :visible true}
+                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
+                                                                          },
+                                                             :draggable  true,
+                                                             :actions    {:drag-start {
+                                                                                       :type   "action",
+                                                                                       :on     "drag-start",
+                                                                                       :id     "start-drag",
+                                                                                       :params {:colliders ["happy" "trash" "cold"
+                                                                                                            "big" "child"
+                                                                                                            "scared"]
+                                                                                                :self      "glad-object"}}
+                                                                          :drag-end   {
+                                                                                       :id     "stop-drag-hide",
+                                                                                       :on     "drag-end",
+                                                                                       :type   "action",
+                                                                                       :params {
+                                                                                                :colliders     ["happy" "trash" "cold"
+                                                                                                                "big" "child"
+                                                                                                                "scared"]
+                                                                                                :self          "glad-object"
+                                                                                                :target        "happy"
+                                                                                                :init-position {:x        1674,
+                                                                                                                :y        434,
+                                                                                                                :duration 1}}}}
+                                                             },
+                                       :afraid-object       {
+                                                             :type       "image",
+                                                             :width      160,
+                                                             :height     160,
+                                                             :x          1636,
+                                                             :y          107,
+                                                             :src        "/raw/img/categorize-synonyms/afraid.png",
+                                                             :transition "afraid-object",
+                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                          :hidden        {:visible false}, :init-position {:x 1636,
+                                                                                                                           :y 107,}
+                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
+                                                                          },
+                                                             :draggable  true,
+                                                             :actions    {:drag-start {
+                                                                                       :type   "action",
+                                                                                       :on     "drag-start",
+                                                                                       :id     "start-drag",
+                                                                                       :params {:colliders ["happy" "trash" "cold"
+                                                                                                            "big" "child"
+                                                                                                            "scared"]
+                                                                                                :self      "afraid-object"}}
+                                                                          :drag-end   {
+                                                                                       :id     "stop-drag-hide",
+                                                                                       :on     "drag-end",
+                                                                                       :type   "action",
+                                                                                       :params {
+                                                                                                :colliders     ["happy" "trash" "cold"
+                                                                                                                "big" "child"
+                                                                                                                "scared"]
+                                                                                                :self          "afraid-object"
+                                                                                                :target        "scared"
+                                                                                                :init-position {:x        1636,
+                                                                                                                :y        107,
+                                                                                                                :duration 1}}}}
+                                                             },
                                        :garbage-object      {
                                                              :type       "image",
-                                                             :x          46,
-                                                             :y          650,
-                                                             :width      100,
-                                                             :height     224,
-                                                             :rotation   -90,
-                                                             :scale      0.35,
+                                                             :width      160,
+                                                             :height     160,
+                                                             :x          1388,
+                                                             :y          561,
                                                              :src        "/raw/img/categorize-synonyms/garbage.png",
                                                              :transition "garbage-object",
                                                              :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                          :hidden        {:visible false}, :init-position {:x 46, :y 650,}
+                                                                          :hidden        {:visible false}, :init-position {:x 1388,
+                                                                                                                           :y 561,}
                                                                           :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                           },
                                                              :draggable  true,
@@ -364,87 +227,138 @@
                                                                                                                 "scared"]
                                                                                                 :self          "garbage-object"
                                                                                                 :target        "trash"
-                                                                                                :init-position {:x        46,
-                                                                                                                :y        650,
+                                                                                                :init-position {:x        1388,
+                                                                                                                :y        561,
                                                                                                                 :duration 1}}}}
                                                              },
-                                       :kid-object      {
-                                                         :type       "image",
-                                                         :x          350,
-                                                         :y          800,
-                                                         :width      100,
-                                                         :height     224,
-                                                         :rotation   -90,
-                                                         :scale      0.35,
-                                                         :src        "/raw/img/categorize-synonyms/kid.png",
-                                                         :transition "kid-object",
-                                                         :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                      :hidden      {:visible false}, :init-position {:x 350,
-                                                                                                                     :y 800,}
-                                                                      :not-draggable {:draggable false}, :draggable {:draggable true}
-                                                                      },
-                                                         :draggable  true,
-                                                         :actions    {:drag-start {
-                                                                                   :type   "action",
-                                                                                   :on     "drag-start",
-                                                                                   :id     "start-drag",
-                                                                                   :params {:colliders ["happy" "trash" "cold"
-                                                                                                        "big" "child" "scared"]
-                                                                                            :self      "kid-object"}}
-                                                                      :drag-end   {
-                                                                                   :id     "stop-drag-hide",
-                                                                                   :on     "drag-end",
-                                                                                   :type   "action",
-                                                                                   :params {
-                                                                                            :colliders     ["happy" "trash" "cold"
+                                       :kid-object          {
+                                                             :type       "image",
+                                                             :width      161,
+                                                             :height     160,
+                                                             :x          1094,
+                                                             :y          223,
+                                                             :src        "/raw/img/categorize-synonyms/kid.png",
+                                                             :transition "kid-object",
+                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                          :hidden        {:visible false}, :init-position {:x 1094,
+                                                                                                                           :y 223,}
+                                                                          :not-draggable {:draggable false}, :draggable {:draggable true}
+                                                                          },
+                                                             :draggable  true,
+                                                             :actions    {:drag-start {
+                                                                                       :type   "action",
+                                                                                       :on     "drag-start",
+                                                                                       :id     "start-drag",
+                                                                                       :params {:colliders ["happy" "trash" "cold"
                                                                                                             "big" "child" "scared"]
-                                                                                            :self          "kid-object"
-                                                                                            :target        "child"
-                                                                                            :init-position {:x        350,
-                                                                                                            :y        800,
-                                                                                                            :duration 1}}}}
-                                                         },
-                                       :big
-                                       {:type       "image",
-                                        :x          286,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-synonyms/big.png",
-                                        :transition "big",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
-                                       :scared
-                                       {:type       "image",
-                                        :x          756,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-synonyms/scared.png",
-                                        :transition "scared",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
-                                       :child
-                                       {:type       "image",
-                                        :x          1086,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-synonyms/child.png",
-                                        :transition "child",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
+                                                                                                :self      "kid-object"}}
+                                                                          :drag-end   {
+                                                                                       :id     "stop-drag-hide",
+                                                                                       :on     "drag-end",
+                                                                                       :type   "action",
+                                                                                       :params {
+                                                                                                :colliders     ["happy" "trash" "cold"
+                                                                                                                "big" "child" "scared"]
+                                                                                                :self          "kid-object"
+                                                                                                :target        "child"
+                                                                                                :init-position {:x        1094,
+                                                                                                                :y        223,
+                                                                                                                :duration 1}}}}
+                                                             },
+                                       :big                 {:type       "image",
+                                                             :width      253,
+                                                             :height     253,
+                                                             :x          392,
+                                                             :y          762,
+                                                             :src        "/raw/img/categorize-synonyms/big.png",
+                                                             :transition "big",
+                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                             :actions    {:click {:id     "click-on-box",
+                                                                                  :on     "click",
+                                                                                  :type   "action",
+                                                                                  :params {:target "big"}
+                                                                                  }}
+                                                             }
+                                       :scared              {:type       "image",
+                                                             :width      253,
+                                                             :height     253,
+                                                             :x          686,
+                                                             :y          763,
+                                                             :src        "/raw/img/categorize-synonyms/scared.png",
+                                                             :transition "scared",
+                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                             :actions    {:click {:id     "click-on-box",
+                                                                                  :on     "click",
+                                                                                  :type   "action",
+                                                                                  :params {:target "scared"}
+                                                                                  }}
+                                                             }
+                                       :child               {:type       "image",
+                                                             :width      253,
+                                                             :height     252,
+                                                             :x          1274,
+                                                             :y          763,
+                                                             :src        "/raw/img/categorize-synonyms/child.png",
+                                                             :transition "child",
+                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                             :actions    {:click {:id     "click-on-box",
+                                                                                  :on     "click",
+                                                                                  :type   "action",
+                                                                                  :params {:target "child"}
+                                                                                  }}
+                                                             }
+
+                                       :happy               {:type       "image",
+                                                             :width      253,
+                                                             :height     253,
+                                                             :x          99,
+                                                             :y          763,
+                                                             :src        "/raw/img/categorize-synonyms/happy.png",
+                                                             :transition "happy",
+                                                             :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                          :init-position {:x 99, :y 763, :visible true}},
+                                                             :actions    {:click {:id     "click-on-box",
+                                                                                  :on     "click",
+                                                                                  :type   "action",
+                                                                                  :params {:target "happy"}
+                                                                                  }}
+                                                             },
+                                       :trash               {:type       "image",
+                                                             :width      253,
+                                                             :height     253,
+                                                             :x          1568,
+                                                             :y          762,
+                                                             :transition "trash",
+                                                             :src        "/raw/img/categorize-synonyms/trash.png",
+                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                             :actions    {:click {:id     "click-on-box",
+                                                                                  :on     "click",
+                                                                                  :type   "action",
+                                                                                  :params {:target "trash"}
+                                                                                  }}
+                                                             }
+                                       :cold                {:type       "image",
+                                                             :width      253,
+                                                             :height     253,
+                                                             :x          980,
+                                                             :y          763,
+                                                             :transition "cold",
+                                                             :src        "/raw/img/categorize-synonyms/cold.png",
+                                                             :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                             :actions    {:click {:id     "click-on-box",
+                                                                                  :on     "click",
+                                                                                  :type   "action",
+                                                                                  :params {:target "cold"}
+                                                                                  }}
+                                                             },
 
                                        },
 
-                       :scene-objects [["background"]
+                       :scene-objects [["layered-background"]
                                        ["happy" "trash" "cold"]
                                        ["big" "child" "scared"]
                                        ["chilly-object" "large-object" "glad-object" "afraid-object" "garbage-object" "kid-object"]
-                                       ["scared-afraid-group" "large-big-group" "glad-happy-group" "kid-child-group"]
+                                       ["scared-afraid-group" "large-big-group" "kid-child-group" "glad-happy-group"]
                                        ],
                        :actions       {
                                        :object-revert               {:type        "state",
@@ -551,6 +465,11 @@
                                                                      :from-var [{:var-name "check-collide", :action-property "var-names"}
                                                                                 {:var-name "correct-answer", :action-property "success"}]
                                                                      }
+                                       :click-on-box                {:type        "test-var-scalar",
+                                                                     :fail        "wrong-answer",
+                                                                     :var-name    "object-2"
+                                                                     :from-params [{:action-property "value" :param-property "target"}]
+                                                                     :from-var    [{:var-name "correct-answer", :action-property "success"}]},
                                        :stop-drag-hide              {:type "sequence-data"
                                                                      :data [
                                                                             {:type        "test-var-list-at-least-one-true",
@@ -564,12 +483,7 @@
                                                                              :type        "mass-state"
                                                                              :id          "not-highlighted"
                                                                              :from-params [{:action-property "targets" :param-property "colliders"}]
-                                                                             }
-
-                                                                            ]
-
-                                                                     },
-
+                                                                             }]},
                                        :start-drag                  {:type "sequence-data"
                                                                      :data [
                                                                             {:type     "set-variable-list"
@@ -601,8 +515,7 @@
                                                                              }
                                                                             {:type        "state"
                                                                              :id          "highlighted"
-                                                                             :from-params [{:action-property "target" :param-property "transition"}]
-                                                                             }]
+                                                                             :from-params [{:action-property "target" :param-property "transition"}]}]
                                                                      }
                                        :unhighlight                 {:type "sequence-data"
                                                                      :data [
@@ -853,11 +766,11 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "happy"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "scared"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "afraid-object"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-scared-afraid-group" "colliding-happy"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "task-8-1"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
                                                                             {:type "action", :id "instruction-7-2"}]}
+
                                        :task-8-1                    {
                                                                      :type "sequence-data",
                                                                      :data [
@@ -876,7 +789,6 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "cold"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "kid-object"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "child"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-kid-child-group" "colliding-cold"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "task-9-1"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
@@ -903,7 +815,6 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "trash"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "big"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "large-object"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-large-big-group" "colliding-trash"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "task-10-1"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
@@ -928,8 +839,6 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "big"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "happy"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "glad-object"}
-
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-glad-happy-group" "colliding-big"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "finish"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
@@ -966,61 +875,61 @@
                                                             ]}
                                                    {:title "Round 3 - First 6 tasks"
                                                     :nodes [{:type "prompt"
-                                                             :text "Put the chilly in its box."}
+                                                             :text "Put the chilly picture on the cold picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-1}
                                                             {:type "prompt"
-                                                             :text "Put the up on its table."}
+                                                             :text "Put the garbage picture on the trash picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-2}
                                                             {:type "prompt"
-                                                             :text "Put the afraid on its table."}
+                                                             :text "Put the glad picture on the happy picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-3}
                                                             {:type "prompt"
-                                                             :text "Put the out in its box."}
+                                                             :text "Put the afraid picture on the scared picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-4}
                                                             {:type "prompt"
-                                                             :text "Put the garbage in its box."}
+                                                             :text "Put the kid picture on the child picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-5}
                                                             {:type "prompt"
-                                                             :text "Put the kid on its table."}
+                                                             :text "Put the large picture on the big picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-6}
                                                             ]}
                                                    {:title "Round 3 - Second 4 tasks"
                                                     :nodes [{:type "prompt"
-                                                             :text "Put the out in its box;"}
+                                                             :text "Put the afraid picture on the scared picture"}
                                                             {:type      "dialog"
                                                              :action-id :instruction-7-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the afraid table."}
+                                                             :text "then tap on the happy picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-7-2}
                                                             {:type "prompt"
-                                                             :text "Put the garbage in its box; "}
+                                                             :text "Put the kid picture on the child picture "}
                                                             {:type      "dialog"
                                                              :action-id :instruction-8-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the kid table."}
+                                                             :text "then tap on the cold picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-8-2}
                                                             {:type "prompt"
-                                                             :text "Put the out in its box;"}
+                                                             :text "Put the large picture on the big picture;"}
                                                             {:type      "dialog"
                                                              :action-id :instruction-9-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the up table."}
+                                                             :text "then tap on the trash picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-9-2}
                                                             {:type "prompt"
-                                                             :text "Put the chilly in its box;"}
+                                                             :text "Put the glad picture on the happy picture;"}
                                                             {:type      "dialog"
                                                              :action-id :instruction-10-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the afraid table."}
+                                                             :text "then tap on the big picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-10-2}
                                                             ]

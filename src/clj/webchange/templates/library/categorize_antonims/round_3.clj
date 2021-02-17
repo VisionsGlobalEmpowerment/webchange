@@ -1,6 +1,8 @@
 (ns webchange.templates.library.categorize-antonims.round-3)
 
-(def template-round-3 {:assets        [{:url "/raw/img/categorize-antonims/background.png", :size 10, :type "image"}
+(def template-round-3 {:assets        [{:url "/raw/img/categorize-antonims/background-class.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-antonims/surface.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-antonims/decoration.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-antonims/right.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-antonims/quiet.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-antonims/in.png", :size 10, :type "image"}
@@ -16,184 +18,50 @@
                                        {:url "/raw/img/categorize-antonims/up.png", :size 10, :type "image"}
 
                                        ],
-                       :objects       {:background       {:type "background", :src "/raw/img/categorize-antonims/background.png"},
+                       :objects       {:layered-background {:type       "layered-background",
+                                                            :background {:src "/raw/img/categorize-antonims/background-class.png"},
+                                                            :decoration {:src "/raw/img/categorize-antonims/decoration.png"},
+                                                            :surface    {:src "/raw/img/categorize-antonims/surface.png"}
+                                                            },
                                        :left-right-group {
                                                           :type       "group",
                                                           :children   [],
-                                                          :draggable  true,
                                                           :transition "left-right-group",
                                                           :states     {:group-all {:children ["right" "left-object"]}
                                                                        :ungroup   {:children []}
-                                                                       :hidden    {:visible false}},
-
-                                                          :actions    {:drag-start {
-                                                                                    :type   "action",
-                                                                                    :on     "drag-start",
-                                                                                    :id     "start-drag",
-                                                                                    :params {:colliders ["quiet" "in"
-                                                                                                         "down" "front"
-                                                                                                         "day"]
-                                                                                             :self      "left-right-group"
-                                                                                             :object    "left-object"
-                                                                                             }}
-                                                                       :drag-end   {
-                                                                                    :id     "stop-drag-hide",
-                                                                                    :on     "drag-end",
-                                                                                    :type   "action",
-                                                                                    :params {
-                                                                                             :colliders     ["quiet" "in"
-                                                                                                             "down" "front"
-                                                                                                             "day"]
-                                                                                             :self          "left-right-group"
-                                                                                             :target        "right"
-                                                                                             :object        "left-object"
-                                                                                             :init-position {:x        100,
-                                                                                                             :y        600,
-                                                                                                             :duration 1}}}},
-
-                                                          }
+                                                                       :hidden    {:visible false}}}
                                        :day-night-group  {
                                                           :type       "group",
                                                           :children   [],
-                                                          :draggable  true,
                                                           :transition "day-night-group",
                                                           :states     {:group-all {:children ["day" "night-object"]}
                                                                        :ungroup   {:children []}
-                                                                       :hidden    {:visible false}},
-
-                                                          :actions    {:drag-start {
-                                                                                    :type   "action",
-                                                                                    :on     "drag-start",
-                                                                                    :id     "start-drag",
-                                                                                    :params {:colliders ["quiet" "right"
-                                                                                                         "down" "front"
-                                                                                                         "in"]
-                                                                                             :self      "day-night-group"
-                                                                                             :object    "night-object"
-                                                                                             }}
-                                                                       :drag-end   {
-                                                                                    :id     "stop-drag-hide",
-                                                                                    :on     "drag-end",
-                                                                                    :type   "action",
-                                                                                    :params {
-                                                                                             :colliders     ["quiet" "right"
-                                                                                                             "down" "front"
-                                                                                                             "in"]
-                                                                                             :self          "day-night-group"
-                                                                                             :target        "day"
-                                                                                             :object        "night-object"
-                                                                                             :init-position {:x        100,
-                                                                                                             :y        600,
-                                                                                                             :duration 1}}}},
-
-                                                          }
+                                                                       :hidden    {:visible false}}}
                                        :back-front-group {
                                                           :type       "group",
                                                           :children   [],
-                                                          :draggable  true,
                                                           :transition "back-front-group",
                                                           :states     {:group-all {:children ["front" "back-object"]}
                                                                        :ungroup   {:children []}
-                                                                       :hidden    {:visible false}},
-                                                          :actions    {:drag-start {
-                                                                                    :type   "action",
-                                                                                    :on     "drag-start",
-                                                                                    :id     "start-drag",
-                                                                                    :params {:colliders ["down" "day"
-                                                                                                         "quiet" "right"
-                                                                                                         "in"]
-                                                                                             :self      "back-front-group"}}
-                                                                       :drag-end   {
-                                                                                    :id     "stop-drag-hide",
-                                                                                    :on     "drag-end",
-                                                                                    :type   "action",
-                                                                                    :params {
-                                                                                             :colliders     ["down" "day"
-                                                                                                             "quiet" "right"
-                                                                                                             "in"]
-                                                                                             :self          "back-front-group"
-                                                                                             :target        "front"
-                                                                                             :object        "back-object"
-                                                                                             :init-position {:x        100,
-                                                                                                             :y        600,
-                                                                                                             :duration 1}}}},
-                                                          }
-                                       :out-in-group       {
-                                                            :type       "group",
-                                                            :children   [],
-                                                            :draggable  true,
-                                                            :transition "out-in-group",
-                                                            :states     {:group-all {:children ["in" "out-object"]}
-                                                                         :ungroup   {:children []}
-                                                                         :hidden    {:visible false}},
-
-                                                            :actions    {:drag-start {
-                                                                                      :type   "action",
-                                                                                      :on     "drag-start",
-                                                                                      :id     "start-drag",
-                                                                                      :params {:colliders ["quiet" "right"
-                                                                                                           "down" "front"
-                                                                                                           "day"]
-                                                                                               :self      "out-in-group"}}
-                                                                         :drag-end   {
-                                                                                      :id     "stop-drag-hide",
-                                                                                      :on     "drag-end",
-                                                                                      :type   "action",
-                                                                                      :params {
-                                                                                               :colliders     ["quiet" "right"
-                                                                                                               "down" "front"
-                                                                                                               "day"]
-                                                                                               :self          "out-in-group"
-                                                                                               :target        "in"
-                                                                                               :init-position {:x        100,
-                                                                                                               :y        600,
-                                                                                                               :duration 1}}}},
-                                                            }
-
-                                       :in               {:type       "image",
-                                                          :x          786,
-                                                          :y          874,
-                                                          :width      428,
-                                                          :height     549,
-                                                          :scale      0.5,
-                                                          :src        "/raw/img/categorize-antonims/in.png",
-                                                          :transition "in",
-                                                          :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                       :init-position {:x 786, :y 874, :visible true}
-                                                                       },
-                                                          },
-                                       :quiet            {:type       "image",
-                                                          :x          320,
-                                                          :y          874,
-                                                          :width      428,
-                                                          :height     549,
-                                                          :scale      0.5,
-                                                          :transition "quiet",
-                                                          :src        "/raw/img/categorize-antonims/quiet.png",
-                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                          }
-                                       :right            {:type       "image",
-                                                          :x          1252,
-                                                          :y          874,
-                                                          :width      428,
-                                                          :height     549,
-                                                          :scale      0.5,
-                                                          :transition "right",
-                                                          :src        "/raw/img/categorize-antonims/right.png",
-                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                          },
+                                                                       :hidden    {:visible false}}}
+                                       :out-in-group     {
+                                                          :type       "group",
+                                                          :children   [],
+                                                          :transition "out-in-group",
+                                                          :states     {:group-all {:children ["in" "out-object"]}
+                                                                       :ungroup   {:children []}
+                                                                       :hidden    {:visible false}}}
                                        :left-object      {
                                                           :type       "image",
-                                                          :x          100,
-                                                          :y          600,
-                                                          :width      100,
-                                                          :height     224,
-                                                          :rotation   -90,
-                                                          :scale      0.35,
+                                                          :width      160,
+                                                          :height     160,
+                                                          :x          1635,
+                                                          :y          107,
                                                           :src        "/raw/img/categorize-antonims/left.png",
                                                           :transition "left-object",
                                                           :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                       :hidden        {:visible false}, :init-position {:x 100, :y 600,}
+                                                                       :hidden        {:visible false}, :init-position {:x          1635,
+                                                                                                                        :y          107,}
                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                        },
                                                           :draggable  true,
@@ -215,22 +83,20 @@
                                                                                                              "day"]
                                                                                              :self          "left-object"
                                                                                              :target        "right"
-                                                                                             :init-position {:x        100,
-                                                                                                             :y        600,
+                                                                                             :init-position {:x          1635,
+                                                                                                             :y          107,
                                                                                                              :duration 1}}}},},
                                        :up-object        {
                                                           :type       "image",
-                                                          :x          200,
-                                                          :y          700,
-                                                          :width      100,
-                                                          :height     224,
-                                                          :rotation   -90,
-                                                          :scale      0.35,
+                                                          :width      160,
+                                                          :height     160,
+                                                          :x          801,
+                                                          :y          481,
                                                           :src        "/raw/img/categorize-antonims/up.png",
                                                           :transition "up-object",
-                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                       :hidden      {:visible false}, :init-position {:x 200,
-                                                                                                                      :y 700}
+                                                          :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                       :hidden        {:visible false}, :init-position {:x          801,
+                                                                                                                        :y          481,}
                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                        },
                                                           :draggable  true,
@@ -258,16 +124,15 @@
                                                           },
                                        :out-object       {
                                                           :type       "image",
-                                                          :x          150,
-                                                          :y          800,
-                                                          :width      100,
-                                                          :height     224,
-                                                          :rotation   -90,
-                                                          :scale      0.35,
+                                                          :width      160,
+                                                          :height     160,
+                                                          :x          1095,
+                                                          :y          223,
                                                           :src        "/raw/img/categorize-antonims/out.png",
                                                           :transition "out-object",
                                                           :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                       :hidden        {:visible false}, :init-position {:x 150, :y 800, :visible true}
+                                                                       :hidden        {:visible false}, :init-position {:x          1095,
+                                                                                                                        :y          223, :visible true}
                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                        },
                                                           :draggable  true,
@@ -289,23 +154,21 @@
                                                                                                              "day"]
                                                                                              :self          "out-object"
                                                                                              :target        "in"
-                                                                                             :init-position {:x        150,
-                                                                                                             :y        800,
+                                                                                             :init-position {:x          1095,
+                                                                                                             :y          223,
                                                                                                              :duration 1}}}}
                                                           },
                                        :night-object     {
                                                           :type       "image",
-                                                          :x          550,
-                                                          :y          800,
-                                                          :width      100,
-                                                          :height     224,
-                                                          :rotation   -90,
-                                                          :scale      0.35,
+                                                          :width      160,
+                                                          :height     160,
+                                                          :x          1274,
+                                                          :y          481,
                                                           :src        "/raw/img/categorize-antonims/night.png",
                                                           :transition "night-object",
-                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                       :hidden      {:visible false}, :init-position {:x 550,
-                                                                                                                      :y 800,}
+                                                          :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                       :hidden        {:visible false}, :init-position {:x          1274,
+                                                                                                                        :y          481,}
                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                        },
                                                           :draggable  true,
@@ -327,22 +190,21 @@
                                                                                                              "day"]
                                                                                              :self          "night-object"
                                                                                              :target        "day"
-                                                                                             :init-position {:x        550,
-                                                                                                             :y        800,
+                                                                                             :init-position {:x          1274,
+                                                                                                             :y          481,
                                                                                                              :duration 1}}}}
                                                           },
                                        :loud-object      {
                                                           :type       "image",
-                                                          :x          46,
-                                                          :y          650,
-                                                          :width      100,
-                                                          :height     224,
-                                                          :rotation   -90,
-                                                          :scale      0.35,
+                                                          :width      160,
+                                                          :height     160,
+                                                          :x          790,
+                                                          :y          160,
                                                           :src        "/raw/img/categorize-antonims/loud.png",
                                                           :transition "loud-object",
                                                           :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
-                                                                       :hidden        {:visible false}, :init-position {:x 46, :y 650,}
+                                                                       :hidden        {:visible false}, :init-position {:x          790,
+                                                                                                                        :y          160,}
                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                        },
                                                           :draggable  true,
@@ -364,23 +226,21 @@
                                                                                                              "day"]
                                                                                              :self          "loud-object"
                                                                                              :target        "quiet"
-                                                                                             :init-position {:x        46,
-                                                                                                             :y        650,
+                                                                                             :init-position {:x          790,
+                                                                                                             :y          160,
                                                                                                              :duration 1}}}}
                                                           },
                                        :back-object      {
                                                           :type       "image",
-                                                          :x          350,
-                                                          :y          800,
-                                                          :width      100,
-                                                          :height     224,
-                                                          :rotation   -90,
-                                                          :scale      0.35,
+                                                          :width      160,
+                                                          :height     160,
+                                                          :x          415,
+                                                          :y          354,
                                                           :src        "/raw/img/categorize-antonims/back.png",
                                                           :transition "back-object",
-                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}
-                                                                       :hidden      {:visible false}, :init-position {:x 350,
-                                                                                                                      :y 800,}
+                                                          :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                       :hidden        {:visible false}, :init-position {:x          415,
+                                                                                                                        :y          354,}
                                                                        :not-draggable {:draggable false}, :draggable {:draggable true}
                                                                        },
                                                           :draggable  true,
@@ -400,47 +260,101 @@
                                                                                                              "down" "front" "day"]
                                                                                              :self          "back-object"
                                                                                              :target        "front"
-                                                                                             :init-position {:x        350,
-                                                                                                             :y        800,
+                                                                                             :init-position {:x          415,
+                                                                                                             :y          354,
                                                                                                              :duration 1}}}}
                                                           },
-                                       :down
-                                       {:type       "image",
-                                        :x          286,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-antonims/down.png",
-                                        :transition "down",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
-                                       :day
-                                       {:type       "image",
-                                        :x          756,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-antonims/day.png",
-                                        :transition "day",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
-                                       :front
-                                       {:type       "image",
-                                        :x          1086,
-                                        :y          374,
-                                        :width      428,
-                                        :height     549,
-                                        :scale      0.5,
-                                        :src        "/raw/img/categorize-antonims/front.png",
-                                        :transition "front",
-                                        :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                        }
+                                       :down             {:type       "image",
+                                                          :width      253,
+                                                          :height     253,
+                                                          :x          1568,
+                                                          :y          763,
+                                                          :src        "/raw/img/categorize-antonims/down.png",
+                                                          :transition "down",
+                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                          :actions    {:click {:id     "click-on-box",
+                                                                               :on     "click",
+                                                                               :type   "action",
+                                                                               :params {:target "down"}
+                                                                               }}
+                                                          }
+                                       :day              {:type       "image",
+                                                          :width      253,
+                                                          :height     253,
+                                                          :x          980,
+                                                          :y          763,
+                                                          :src        "/raw/img/categorize-antonims/day.png",
+                                                          :transition "day",
+                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                          :actions    {:click {:id     "click-on-box",
+                                                                               :on     "click",
+                                                                               :type   "action",
+                                                                               :params {:target "day"}
+                                                                               }}
+                                                          }
+                                       :front            {:type       "image",
+                                                          :width      252,
+                                                          :height     252,
+                                                          :x          686,
+                                                          :y          763,
+                                                          :src        "/raw/img/categorize-antonims/front.png",
+                                                          :transition "front",
+                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                          :actions    {:click {:id     "click-on-box",
+                                                                               :on     "click",
+                                                                               :type   "action",
+                                                                               :params {:target "front"}
+                                                                               }}
+                                                          }
+                                       :in               {:type       "image",
+                                                          :width      253,
+                                                          :height     252,
+                                                          :x          1274,
+                                                          :y          763,
+                                                          :src        "/raw/img/categorize-antonims/in.png",
+                                                          :transition "in",
+                                                          :states     {:highlighted   {:highlight true} :not-highlighted {:highlight false}
+                                                                       :init-position {:x          1274,
+                                                                                       :y          763, :visible true}
+                                                                       },
+                                                          :actions    {:click {:id     "click-on-box",
+                                                                               :on     "click",
+                                                                               :type   "action",
+                                                                               :params {:target "in"}
+                                                                               }}
+                                                          },
+                                       :quiet            {:type       "image",
+                                                          :width      253,
+                                                          :height     253,
+                                                          :y          763,
+                                                          :x          393,
+                                                          :transition "quiet",
+                                                          :src        "/raw/img/categorize-antonims/quiet.png",
+                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                          :actions    {:click {:id     "click-on-box",
+                                                                               :on     "click",
+                                                                               :type   "action",
+                                                                               :params {:target "quiet"}
+                                                                               }}
+                                                          }
+                                       :right            {:type       "image",
+                                                          :width      252,
+                                                          :height     253,
+                                                          :x          99,
+                                                          :y          763,
+                                                          :transition "right",
+                                                          :src        "/raw/img/categorize-antonims/right.png",
+                                                          :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                          :actions    {:click {:id     "click-on-box",
+                                                                               :on     "click",
+                                                                               :type   "action",
+                                                                               :params {:target "right"}
+                                                                               }}
+                                                          },
 
                                        },
 
-                       :scene-objects [["background"]
+                       :scene-objects [["layered-background"]
                                        ["in" "quiet" "right"]
                                        ["down" "front" "day"]
                                        ["left-object" "up-object" "out-object" "night-object" "loud-object" "back-object"]
@@ -567,8 +481,12 @@
                                                                              }
 
                                                                             ]
-
                                                                      },
+                                       :click-on-box                {:type        "test-var-scalar",
+                                                                     :fail        "wrong-answer",
+                                                                     :var-name    "object-2"
+                                                                     :from-params [{:action-property "value" :param-property "target"}]
+                                                                     :from-var    [{:var-name "correct-answer", :action-property "success"}]},
 
                                        :start-drag                  {:type "sequence-data"
                                                                      :data [
@@ -853,7 +771,6 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "quiet"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "right"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "left-object"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-left-right-group" "colliding-quiet"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "task-8-1"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
@@ -876,7 +793,6 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "down"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "back-object"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "front"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-back-front-group" "colliding-down"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "task-9-1"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
@@ -903,7 +819,6 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "right"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "day"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "night-object"}
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-day-night-group" "colliding-right"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "task-10-1"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
@@ -928,8 +843,6 @@
                                                                             {:type "set-variable", :var-name "object-2", :var-value "right"}
                                                                             {:type "set-variable", :var-name "ungroup-object-1", :var-value "in"}
                                                                             {:type "set-variable", :var-name "ungroup-object-2", :var-value "out-object"}
-
-                                                                            {:type "set-variable", :var-name "check-collide", :var-value ["colliding-object-out-in-group" "colliding-right"]}
                                                                             {:type "set-variable", :var-name "next-task", :var-value "finish"}
                                                                             {:type "set-variable", :var-name "correct-answer", :var-value "correct-answer-init-ungroup"}
                                                                             {:type "counter" :counter-action "reset" :counter-id "wrong-answers-counter"}
@@ -966,61 +879,61 @@
                                                             ]}
                                                    {:title "Round 3 - First 6 tasks"
                                                     :nodes [{:type "prompt"
-                                                             :text "Put the left in its box."}
+                                                             :text "Put the left picture on the right picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-1}
                                                             {:type "prompt"
-                                                             :text "Put the up on its table."}
+                                                             :text "Put the loud picture on the quiet picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-2}
                                                             {:type "prompt"
-                                                             :text "Put the night on its table."}
+                                                             :text "Put the out picture on the in picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-3}
                                                             {:type "prompt"
-                                                             :text "Put the out in its box."}
+                                                             :text "Put the night picture on the day picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-4}
                                                             {:type "prompt"
-                                                             :text "Put the loud in its box."}
+                                                             :text "Put the back picture on the front picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-5}
                                                             {:type "prompt"
-                                                             :text "Put the back on its table."}
+                                                             :text "Put the up picture on the down picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-6}
                                                             ]}
                                                    {:title "Round 3 - Second 4 tasks"
                                                     :nodes [{:type "prompt"
-                                                             :text "Put the out in its box;"}
+                                                             :text "Put the left picture on the right picture;"}
                                                             {:type      "dialog"
                                                              :action-id :instruction-7-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the night table."}
+                                                             :text "then tap on the quiet picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-7-2}
                                                             {:type "prompt"
-                                                             :text "Put the loud in its box; "}
+                                                             :text "Put the back picture on the front picture;"}
                                                             {:type      "dialog"
                                                              :action-id :instruction-8-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the back table."}
+                                                             :text "then tap on the down picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-8-2}
                                                             {:type "prompt"
-                                                             :text "Put the out in its box;"}
+                                                             :text "Put the night picture on the day picture;"}
                                                             {:type      "dialog"
                                                              :action-id :instruction-9-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the up table."}
+                                                             :text "then tap on the right picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-9-2}
                                                             {:type "prompt"
-                                                             :text "Put the left in its box;"}
+                                                             :text "Put the out picture on the in picture;"}
                                                             {:type      "dialog"
                                                              :action-id :instruction-10-1}
                                                             {:type "prompt"
-                                                             :text "then put the whole box on the night table."}
+                                                             :text "then tap on the right picture."}
                                                             {:type      "dialog"
                                                              :action-id :instruction-10-2}
                                                             ]
