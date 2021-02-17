@@ -137,3 +137,13 @@
     {:dispatch [::upload-file {:file        blob
                                :form-params [["type" "blob"]
                                              ["blob-type" "image"]]} handlers]}))
+
+;; Activity Template
+
+(re-frame/reg-event-fx
+  ::update-activity
+  (fn [{:keys [_]} [_ {:keys [course-id scene-id data]} handlers]]
+    (create-request {:key    :update-activity
+                     :method :post
+                     :uri    (str "/api/courses/" course-id "/update-activity/" scene-id)
+                     :params data} handlers)))

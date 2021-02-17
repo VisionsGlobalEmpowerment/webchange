@@ -1,6 +1,5 @@
 (ns webchange.templates.library.flipbook.template
   (:require
-    [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
     [webchange.templates.library.flipbook.credits :as credits]
@@ -9,8 +8,11 @@
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
     [webchange.templates.library.flipbook.generic-front :as generic-front]
-    [webchange.templates.library.flipbook.page-number :refer [add-page-number]]
-    [webchange.templates.library.flipbook.stages :refer [update-stages]]))
+    [webchange.templates.library.flipbook.page-number :refer [update-pages-numbers]]
+    [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
+    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
+    [webchange.templates.library.flipbook.stages :refer [update-stages]]
+    [webchange.utils.list :refer [insert-at-position]]))
 
 (def metadata {:id          24
                :name        "flipbook"
@@ -129,18 +131,11 @@
         (assoc-in [:objects :book :pages page-position :action] action-name)
         (assoc-in [:actions (keyword action-name)] action-data))))
 
-(defn- insert-to
-  [list item position]
-  (let [position (if (< position 0)
-                   (+ position (count list))
-                   position)
-        [before after] (split-at position list)]
-    (vec (concat before [item] after))))
-
 (defn- add-page-to-book
   [activity-data
-   {:keys [with-action? with-page-number? shift-from-end]
-    :or   {shift-from-end 0}}
+   {:keys [with-action? shift-from-end removable?]
+    :or   {shift-from-end 0
+           removable?     true}}
    {:keys [name resources objects text-name] :as page-data}]
   (let [book-object-name :book
         current-pages-count (count (get-in activity-data [:objects book-object-name :pages] []))
@@ -148,11 +143,10 @@
     (cond-> (-> activity-data
                 (update :assets concat resources)
                 (update :objects merge objects)
-                (update-in [:objects book-object-name :pages] insert-to {:object name :text text-name} new-page-position)
+                (update-in [:objects book-object-name :pages] insert-at-position {:object name :text text-name :removable? removable?} new-page-position)
                 (update-stages {:book-name book-object-name}))
             (and with-action?
-                 (some? text-name)) (add-text-animation-action new-page-position page-data)
-            with-page-number? (add-page-number name page-params))))
+                 (some? text-name)) (add-text-animation-action new-page-position page-data))))
 
 (defn- add-pages-to-book
   [activity-data content-data pages-data]
@@ -177,17 +171,20 @@
                                     :image-src    (:src cover-image)
                                     :title        cover-title
                                     :authors      authors
-                                    :with-action? true})
-      (add-page generic-front/create)
+                                    :with-action? true
+                                    :removable?   false})
+      (add-page generic-front/create {:removable? false})
       (add-page credits/create {:title        cover-title
                                 :authors      authors
-                                :illustrators illustrators})
+                                :illustrators illustrators
+                                :removable?   false})
       (add-page back-cover/create {:image-src    (:src cover-image)
                                    :authors      authors
-                                   :illustrators illustrators})
+                                   :illustrators illustrators
+                                   :removable?   false})
       (assoc-in [:metadata :actions] (:actions metadata))))
 
-(defn update-activity
+(defn add-page-handler
   [activity-data {:keys [type page-layout spread-layout image text]}]
   (let [[constructor layout] (case type
                                "page" [custom-page/create (keyword page-layout)]
@@ -195,12 +192,20 @@
     (-> activity-data
         (add-page
           constructor
-          {:page-type         layout
-           :image-src         (:src image)
-           :text              text
-           :with-action?      true
-           :with-page-number? true
-           :shift-from-end    1}))))
+          {:page-type      layout
+           :image-src      (:src image)
+           :text           text
+           :with-action?   true
+           :shift-from-end 1})
+        (update-pages-numbers page-params))))
+
+(defn update-activity
+  [activity-data props action]
+  (case action
+    "add-page" (add-page-handler activity-data props)
+    "remove-page" (remove-page activity-data props page-params)
+    "move-page" (move-page activity-data props page-params)))
 
 (core/register-template
-  metadata create-activity update-activity)
+  metadata create-activity {:handler update-activity
+                            :props   {:with-action? true}})

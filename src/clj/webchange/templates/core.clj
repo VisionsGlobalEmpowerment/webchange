@@ -16,9 +16,13 @@
                  (str "Failed to register " name "!"
                       " Template with id " id " already registered"
                       " (" (-> @templates (get id) :metadata :name) ")"))))
-   (swap! templates assoc id {:metadata        metadata
-                              :template        template
-                              :template-update template-update})))
+   (let [{:keys [handler props]} (if (fn? template-update)
+                                   {:handler template-update}
+                                   template-update)]
+     (swap! templates assoc id {:metadata              metadata
+                                :template              template
+                                :template-update       handler
+                                :template-update-props props}))))
 
 (defn get-available-templates
   []
@@ -34,10 +38,12 @@
         (assoc-in [:metadata :template-name] (:name metadata)))))
 
 (defn update-activity-from-template
-  [scene-data data]
+  [scene-data {:keys [action data]}]
   (let [template-id (get-in scene-data [:metadata :template-id])
-        template-update (get-in @templates [template-id :template-update])]
-    (template-update scene-data data)))
+        {:keys [template-update template-update-props]} (get-in @templates [template-id])]
+    (if (:with-action? template-update-props)
+      (template-update scene-data data action)
+      (template-update scene-data data))))
 
 (defn metadata-from-template
   [{id :template-id}]

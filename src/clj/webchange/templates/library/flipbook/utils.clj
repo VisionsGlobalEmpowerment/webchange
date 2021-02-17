@@ -43,7 +43,22 @@
 (defn get-text-name
   [template]
   (some->> template
-       (filter (fn [[_ {:keys [type]}]] (= type "text")))
-       (map first)
-       (first)
-       (clojure.core/name)))
+           (filter (fn [[_ {:keys [type]}]] (= type "text")))
+           (map first)
+           (first)
+           (clojure.core/name)))
+
+(defn get-page-data
+  [activity-data stage-number page-side]
+  (let [{:keys [objects metadata]} activity-data
+        {:keys [flipbook-name stages]} metadata
+        {:keys [pages-idx]} (nth stages stage-number)
+        page-number (case page-side
+                      "left" (nth pages-idx 0)
+                      "right" (nth pages-idx 1))
+        pages-data (get-in objects [(keyword flipbook-name) :pages])
+        page-data (nth pages-data page-number)]
+    {:book-name   (keyword flipbook-name)
+     :page-number page-number
+     :page-data   page-data
+     :pages-count (count pages-data)}))

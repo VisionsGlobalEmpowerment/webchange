@@ -5,9 +5,6 @@
     [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
-    [webchange.interpreter.events :as interpreter.events]
-    [webchange.editor.events :as edit-scene]
-    [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]))
 
 (defn action-modal
@@ -20,13 +17,7 @@
         action (get-in metadata [:actions current-action])
         data (r/atom {})
         close #(re-frame/dispatch [::scene-action.events/close])
-        save #(re-frame/dispatch [::scene-action.events/save course-id @data @scene-id
-                                  (fn [result]
-                                    (re-frame/dispatch [::interpreter.events/set-scene @scene-id (:data result)])
-                                    (re-frame/dispatch [::interpreter.events/store-scene @scene-id (:data result)])
-                                    (re-frame/dispatch [::edit-scene/save-current-scene scene-id])
-                                    (re-frame/dispatch [::stage-state/reset-stage])
-                                    (close))])]
+        save #(re-frame/dispatch [::scene-action.events/save @data])]
     (when open?
       [ui/dialog
        {:open       true

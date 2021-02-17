@@ -136,3 +136,25 @@
   ::delete-lesson-set-by-id
   (fn [{:keys [db]} [_ {:keys [id]}]]
     {:dispatch [::delete-lesson-set-by-name (lesson-set-id->name db id)]}))
+
+;; Activity Template
+
+(re-frame/reg-event-fx
+  ::call-activity-action
+  (fn [{:keys [db]} [_ {:keys [course-id scene-id action data] :or {data {}}} {:keys [on-success]}]]
+    {:pre [(some? action)]}
+    (let [course-id (or course-id (core/current-course-id db))
+          scene-id (or scene-id (core/current-scene-id db))]
+      {:dispatch [::warehouse/update-activity
+                  {:course-id course-id
+                   :scene-id  scene-id
+                   :data      {:action action
+                               :data   data}}
+                  {:on-success [::call-activity-action-success on-success]}]})))
+
+(re-frame/reg-event-fx
+  ::call-activity-action-success
+  (fn [{:keys [_]} [_ on-success {:keys [name data] :as response}]]
+    {:dispatch-n (cond-> [[::core/set-scene-data {:scene-id   name
+                                                  :scene-data data}]]
+                         (some? on-success) (conj (conj on-success response)))}))
