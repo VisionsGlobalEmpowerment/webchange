@@ -132,7 +132,7 @@
     (let [course-data {:name      (:course-name data)
                        :lang      (:lang data)
                        :type      "book"
-                       :image_src (get-in data [:cover-image :src])}]
+                       :image-src (get-in data [:cover-image :src])}]
       {:db         (assoc-in db [:loading :create-course] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/courses")

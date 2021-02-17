@@ -126,10 +126,10 @@
                        :data       scene-data
                        :owner_id   owner-id
                        :created_at created-at}))
-    [true {:id         scene-id
-           :name       scene-name
+    [true {:id          scene-id
+           :name        scene-name
            :course-slug course-slug
-           :created-at (str created-at)}]))
+           :created-at  (str created-at)}]))
 
 (defn- reset-scene-skills!
   [scene-id skills]
@@ -148,11 +148,11 @@
                        :data       new-scene-data
                        :owner_id   owner-id
                        :created_at created-at}))
-    [true {:id         scene-id
-           :name       scene-name
+    [true {:id          scene-id
+           :name        scene-name
            :course-slug course-slug
-           :created-at (str created-at)
-           :data       new-scene-data}]))
+           :created-at  (str created-at)
+           :data        new-scene-data}]))
 
 (defn update-scene-skills!
   [course-slug scene-name skills _]
@@ -408,6 +408,15 @@
      (doseq [file (filter (fn [f] (. f isFile)) (assets/files source-path))]
        (store-editor-asset source-path target-path (config :public-dir) (. file getPath))))))
 
+(defn- rename-props
+  [data rename-map]
+  (reduce (fn [data [from to]]
+            (-> data
+                (assoc to (get data from))
+                (dissoc from)))
+          data
+          rename-map))
+
 (defn create-course
   [{:keys [name lang] :as data} owner-id]
   (let [current-time (jt/local-date-time)
@@ -416,7 +425,7 @@
         defaults {:type      "course"
                   :image_src nil}
         new-course-data (merge defaults
-                               data
+                               (rename-props data [[:image-src :image_src]])
                                {:slug            (course-slug name lang)
                                 :owner_id        owner-id
                                 :website_user_id website-id
@@ -426,11 +435,11 @@
                      :navigation-mode  :activity
                      :scene-list       {}
                      :default-progress {}
-                     :levels [{:level 1 :name "Level 1" :scheme {:lesson {:name "Lesson" :lesson-sets []}}
-                               :lessons [{:lesson 1
-                                          :name "Lesson 1"
-                                          :type :lesson
-                                          :activities []}]}]}]
+                     :levels           [{:level   1 :name "Level 1" :scheme {:lesson {:name "Lesson" :lesson-sets []}}
+                                         :lessons [{:lesson     1
+                                                    :name       "Lesson 1"
+                                                    :type       :lesson
+                                                    :activities []}]}]}]
     (db/save-course! {:course_id  new-course-id
                       :data       course-data
                       :owner_id   owner-id
@@ -483,8 +492,8 @@
                             (map :name)
                             (into #{}))
         new-fields (->> fields
-                       (remove #(contains? original-names (:name %)))
-                       (map #(add-field-scene % scene-slug)))]
+                        (remove #(contains? original-names (:name %)))
+                        (map #(add-field-scene % scene-slug)))]
     (->> original
          (remove #(contains? field-names %))
          (concat existing-fields new-fields)
