@@ -413,13 +413,13 @@
   (let [current-time (jt/local-date-time)
         user (db/get-user {:id owner-id})
         website-id (:website-id user)
-        defaults {:type "course"}
+        defaults {:type      "course"
+                  :image_src nil}
         new-course-data (merge defaults
                                data
                                {:slug            (course-slug name lang)
                                 :owner_id        owner-id
                                 :website_user_id website-id
-                                :image_src       nil
                                 :status          "draft"})
         [{new-course-id :id}] (db/create-course! new-course-data)
         course-data {:initial-scene    nil

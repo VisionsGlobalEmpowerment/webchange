@@ -129,9 +129,10 @@
 (re-frame/reg-event-fx
   ::create-book
   (fn [{:keys [db]} [_ data]]
-    (let [course-data {:name (:course-name data)
-                       :lang (:lang data)
-                       :type "book"}]
+    (let [course-data {:name      (:course-name data)
+                       :lang      (:lang data)
+                       :type      "book"
+                       :image_src (get-in data [:cover-image :src])}]
       {:db         (assoc-in db [:loading :create-course] true)
        :http-xhrio {:method          :post
                     :uri             (str "/api/courses")
