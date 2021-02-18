@@ -140,7 +140,7 @@
    {:keys [with-action? shift-from-end removable?]
     :or   {shift-from-end 0
            removable?     true}}
-   {:keys [name resources objects text-name] :as page-data}]
+   {:keys [name resources objects text-name action] :as page-data}]
   (let [book-object-name :book
         current-pages-count (count (get-in activity-data [:objects book-object-name :pages] []))
         new-page-position (- current-pages-count shift-from-end)]
@@ -150,7 +150,8 @@
                 (update-in [:objects book-object-name :pages] insert-at-position {:object name :text text-name :removable? removable?} new-page-position)
                 (update-stages {:book-name book-object-name}))
             (and with-action?
-                 (some? text-name)) (add-text-animation-action new-page-position page-data))))
+                 (or (some? action)
+                     (some? text-name))) (add-text-animation-action new-page-position page-data))))
 
 (defn- add-pages-to-book
   [activity-data content-data pages-data]
@@ -181,6 +182,7 @@
       (add-page credits/create {:title        cover-title
                                 :authors      authors
                                 :illustrators illustrators
+                                :with-action? true
                                 :removable?   false})
       (add-page back-cover/create {:image-src    (:src cover-image)
                                    :authors      authors
