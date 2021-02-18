@@ -12,7 +12,8 @@
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
     [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
     [webchange.templates.library.flipbook.stages :refer [update-stages]]
-    [webchange.utils.list :refer [insert-at-position]]))
+    [webchange.utils.list :refer [insert-at-position]]
+    [clojure.tools.logging :as log]))
 
 (def metadata {:id          24
                :name        "flipbook"
@@ -122,14 +123,17 @@
    :phrase-description "Page Action"})
 
 (defn- add-text-animation-action
-  [activity-data page-position {:keys [name objects text-name]}]
-  (let [action-name (str name "-action")
-        action-data (get-action-data {:action-name action-name
-                                      :text-name   text-name
-                                      :text-value  (get-in objects [(keyword text-name) :text])})]
+  [activity-data page-position {:keys [name objects text-name action]}]
+  (let [{:keys [name data]} (if (some? action)
+                              action
+                              (let [action-name (str name "-action")]
+                                {:name action-name
+                                 :data (get-action-data {:action-name action-name
+                                                         :text-name   text-name
+                                                         :text-value  (get-in objects [(keyword text-name) :text])})}))]
     (-> activity-data
-        (assoc-in [:objects :book :pages page-position :action] action-name)
-        (assoc-in [:actions (keyword action-name)] action-data))))
+        (assoc-in [:objects :book :pages page-position :action] name)
+        (assoc-in [:actions (keyword name)] data))))
 
 (defn- add-page-to-book
   [activity-data
