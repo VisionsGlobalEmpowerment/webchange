@@ -90,9 +90,9 @@
 
 (re-frame/reg-event-fx
   ::show-dialog-translator-form
-  (fn [{:keys [_]} [_ action-node]]
+  (fn [{:keys [_]} [_ action-node params]]
     {:dispatch-n (list [::translator-form.actions/set-current-dialog-action action-node]
-                       [::dialog.window/open])}))
+                       [::dialog.window/open params])}))
 
 (re-frame/reg-event-fx
   ::show-question-form
@@ -104,10 +104,10 @@
 
 (re-frame/reg-event-fx
   ::show-translator-form-by-id
-  (fn [{:keys [db]} [_ action-id]]
+  (fn [{:keys [db]} [_ action-id params]]
     (let [action-data (subs/current-scene-action db action-id)
           node-data {:data action-data
                      :path [action-id]}]
       (if (= "dialog" (get-in node-data [:data :editor-type]))
-        {:dispatch [::show-dialog-translator-form node-data]}
+        {:dispatch [::show-dialog-translator-form node-data params]}
         {:dispatch [::show-translator-form node-data]}))))

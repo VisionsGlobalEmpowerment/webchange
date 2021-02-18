@@ -35,8 +35,11 @@
 
 (defn- open-action-dialog-button
   [{:keys [action-name]}]
-  (let [handle-click (fn []
-                       (re-frame/dispatch [::editor/show-translator-form-by-id action-name]))]
+  (let [window-params {:components {:description  {:hide? true}
+                                    :node-options {:hide? true}
+                                    :target       {:hide? true}}}
+        handle-click (fn []
+                       (re-frame/dispatch [::editor/show-translator-form-by-id action-name window-params]))]
     [ui/button {:on-click handle-click
                 :style    {:margin-left "8px"}}
      "Edit Action"]))
