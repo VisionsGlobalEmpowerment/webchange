@@ -51,7 +51,7 @@
                                                   texts-data)}))
 
 (defn- generate-list-block
-  [{:keys [name label data label-width vertical-step]}]
+  [{:keys [name label data label-width value-width vertical-step]}]
   (let [label-name (str name "-label")]
     (->> data
          (map-indexed vector)
@@ -64,6 +64,7 @@
                          (assoc-in [:data (keyword object-name)] {:type        "text"
                                                                   :x           label-width
                                                                   :y           (* index vertical-step)
+                                                                  :width       value-width
                                                                   :fill        "black"
                                                                   :font-size   32
                                                                   :font-family "Lexend Deca"
@@ -79,6 +80,7 @@
                                   (assoc (keyword label-name) {:type        "text"
                                                                :x           0
                                                                :y           0
+                                                               :width       label-width
                                                                :fill        "black"
                                                                :font-size   32
                                                                :font-family "Lexend Deca"
@@ -88,6 +90,7 @@
 (defn- generate-authors-block
   [{:keys [data]}]
   (let [block-params {:label-width   250
+                      :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
                                 {:name     "credits-page-authors"
@@ -99,6 +102,7 @@
 (defn- generate-illustrators-block
   [{:keys [data]}]
   (let [block-params {:label-width   250
+                      :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
                                 {:name     "credits-page-illustrators"
