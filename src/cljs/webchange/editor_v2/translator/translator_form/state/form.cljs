@@ -41,19 +41,19 @@
           edited-concepts-ids (translator-form.concepts/edited-concepts db)
           edited-concepts (select-keys concepts edited-concepts-ids)
           current-dataset-concept (translator-form.concepts/current-dataset-concept db)
-
           scene-id (translator-form.scene/scene-id db)
           actions (translator-form.scene/actions-data db)
           assets (translator-form.scene/assets-data db)
-          objects (translator-form.scene/objects-data db)]
+          objects (translator-form.scene/objects-data db)
+          metadata (translator-form.scene/metadata-data db)]
       {:dispatch-n         (->> edited-concepts
                                 (map (fn [[id {:keys [data]}]] [::editor/update-dataset-item id data]))
                                 (concat (list [::editor/reset-scene-actions scene-id actions]
                                               [::editor/reset-scene-assets scene-id assets]
                                               [::editor/reset-scene-objects scene-id objects]
+                                              [::editor/reset-scene-metadata scene-id metadata]
                                               [::editor/save-current-scene scene-id]
-                                              [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])]
-                                              )))
+                                              [::editor/edit-dataset (:id current-dataset-concept) (get-in current-dataset-concept [:scheme])])))
        :reset-before-leave true})))
 
 (re-frame/reg-event-fx

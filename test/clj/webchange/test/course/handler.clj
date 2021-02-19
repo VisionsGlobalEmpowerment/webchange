@@ -3,6 +3,7 @@
             [ring.mock.request :as mock]
             [webchange.test.fixtures.core :as f]
             [clojure.data.json :as json]
+            [mockery.core :as mockery]
             [clojure.tools.logging :as log]
             [webchange.auth.website :as website]
             [webchange.test.course.core :as core]
@@ -56,11 +57,11 @@
       (is (not (nil? (:scene-list retrieved-value)))))))
 
 (deftest course-can-be-retrieved
-         (let [course (f/course-created)
-               response (f/get-course (:slug course))
-               body (-> response :body slurp (json/read-str :key-fn keyword))]
-           (is (= 200 (:status response)))
-           (is (= (get-in course [:data :initial-scene]) (:initial-scene body)))))
+  (let [course (f/course-created)
+        response (f/get-course (:slug course))
+        body (-> response :body slurp (json/read-str :key-fn keyword))]
+    (is (= 200 (:status response)))
+    (is (= (get-in course [:data :initial-scene]) (:initial-scene body)))))
 
 (deftest course-can-be-saved
   (let [{user-id :id} (f/website-user-created)
@@ -129,65 +130,65 @@
       (is (not (nil? retrieved-value))))))
 
 (deftest scene-can-be-retrieved
-         (let [scene (f/scene-created)
-               response (f/get-scene (:course-slug scene) (:name scene))]
-           (is (= 200 (:status response)))
-           (is (= (get-in scene [:data :test]) (-> response :body slurp (json/read-str :key-fn keyword) :test)))))
+  (let [scene (f/scene-created)
+        response (f/get-scene (:course-slug scene) (:name scene))]
+    (is (= 200 (:status response)))
+    (is (= (get-in scene [:data :test]) (-> response :body slurp (json/read-str :key-fn keyword) :test)))))
 
 (deftest scene-can-be-saved
-         (let [{user-id :id} (f/website-user-created)
+  (let [{user-id :id} (f/website-user-created)
                course (f/course-created {:owner-id user-id})
                scene (f/scene-created course)
-               edited-value "test-edited"
-               _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test edited-value}})
-               retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
-                                   :body
-                                   slurp
-                                   (json/read-str :key-fn keyword)
-                                   :test)]
-           (is (= edited-value retrieved-value))))
-
-(deftest course-versions-can-be-retrieved
-         (let [{user-id :id} (f/website-user-created)
-               course (f/course-created {:owner-id user-id})
-               _ (f/save-course! (:slug course) user-id {:course {:initial-scene "edited-value"}})
-               versions (-> (:slug course) f/get-course-versions :body slurp (json/read-str :key-fn keyword) :versions)]
-           (is (= 2 (count versions)))))
-
-(deftest course-version-can-be-restored
-         (let [{user-id :id} (f/website-user-created)
-               course (f/course-created {:owner-id user-id})
-               original-value (-> course :data :initial-scene)
-               _ (f/save-course! (:slug course) user-id {:course {:initial-scene "edited-value"}})
-               _ (f/restore-course-version! (:version-id course) user-id)
-               retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
-           (is (= original-value retrieved-value))))
-
-(deftest scene-versions-can-be-retrieved
-         (let [{user-id :id} (f/website-user-created)
-               course (f/course-created {:owner-id user-id})
-               scene (f/scene-created course)
-               _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test "edited-value"}})
-               versions (-> (f/get-scene-versions (:course-slug scene) (:name scene))
+        edited-value "test-edited"
+        _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test edited-value}})
+        retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
                             :body
                             slurp
                             (json/read-str :key-fn keyword)
-                            :versions)]
-           (is (= 2 (count versions)))))
+                            :test)]
+    (is (= edited-value retrieved-value))))
 
-(deftest scene-version-can-be-restored
-         (let [{user-id :id} (f/website-user-created)
+(deftest course-versions-can-be-retrieved
+  (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
+        _ (f/save-course! (:slug course) user-id {:course {:initial-scene "edited-value"}})
+        versions (-> (:slug course) f/get-course-versions :body slurp (json/read-str :key-fn keyword) :versions)]
+    (is (= 2 (count versions)))))
+
+(deftest course-version-can-be-restored
+  (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
+        original-value (-> course :data :initial-scene)
+        _ (f/save-course! (:slug course) user-id {:course {:initial-scene "edited-value"}})
+        _ (f/restore-course-version! (:version-id course) user-id)
+        retrieved-value (-> (:slug course) f/get-course :body slurp (json/read-str :key-fn keyword) :initial-scene)]
+    (is (= original-value retrieved-value))))
+
+(deftest scene-versions-can-be-retrieved
+  (let [{user-id :id} (f/website-user-created)
                course (f/course-created {:owner-id user-id})
                scene (f/scene-created course)
-               original-value (-> scene :data :test)
-               _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test "edited-value"}})
-               _ (f/restore-scene-version! (:version-id scene) user-id)
-               retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
-                                   :body
-                                   slurp
-                                   (json/read-str :key-fn keyword)
-                                   :test)]
-           (is (= original-value retrieved-value))))
+        _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test "edited-value"}})
+        versions (-> (f/get-scene-versions (:course-slug scene) (:name scene))
+                     :body
+                     slurp
+                     (json/read-str :key-fn keyword)
+                     :versions)]
+    (is (= 2 (count versions)))))
+
+(deftest scene-version-can-be-restored
+  (let [{user-id :id} (f/website-user-created)
+               course (f/course-created {:owner-id user-id})
+               scene (f/scene-created course)
+        original-value (-> scene :data :test)
+        _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test "edited-value"}})
+        _ (f/restore-scene-version! (:version-id scene) user-id)
+        retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
+                            :body
+                            slurp
+                            (json/read-str :key-fn keyword)
+                            :test)]
+    (is (= original-value retrieved-value))))
 
 (deftest course-info-can-be-retrieved
   (let [keys [:id :slug :name :lang :image-src :status :website-user-id :owner-id :type]
@@ -335,3 +336,51 @@
     (is (= 1 (count retrieved)))
     (is (= 1 (count (-> retrieved (get 0) :skills))))
     (is (= skill-id (get-in retrieved [0 :skills 0 :id])))))
+
+(def scene-data {
+                 :actions {:act-1
+                           {:type  "animation-sequence",
+                            :audio "/raw/audio/english/l1/a1/vaca.m4a",
+                            :data  [{:start 3.436, :end 6.436, :duration 3, :anim "talk"}],
+                            },
+                           :act-2
+                           {:type "parallel",
+                            :data
+                                  [{:type  "animation-sequence",
+                                    :audio "/raw/audio/english/l1/a1/vaca.m4a",
+                                    :data  [{:start 3.436, :end 6.436, :duration 3, :anim "talk"}],
+                                    },
+                                   {:id "visible", :type "state", :target "box2"}
+                                   {:type "sequence-data"
+                                    :data [{:type  "animation-sequence",
+                                            :audio "/raw/audio/english/l1/a1/vaca.m4a",
+                                            :data  [{:start 3.436, :end 6.436, :duration 3, :anim "talk"}],
+                                            }
+                                           {:id "mari-voice-touch", :type "action"}]}
+                                   ]},
+                           }
+                  :metadata {:autostart    true
+                                     :prev         "map"
+                                     :lip-not-sync true}
+                 })
+
+
+(def talking-animation ["ook"])
+
+(deftest save-scene-with-audio-processing
+  (mockery/with-mock mock
+                     {:target :webchange.common.audio-parser/get-talking-animation
+                      :return talking-animation}
+                     (let [{course-id :course-id course-slug :course-slug name :name} (f/scene-created)
+                           {user-id :id} (f/website-user-created)
+                           _ (f/add-collaborator {:course-id course-id :user-id user-id})
+                            scene-data (:data (-> (f/save-scene! course-slug name user-id {:scene scene-data})
+                                      :body
+                                      slurp
+                                      (json/read-str :key-fn keyword)))]
+                       (is (false? (get-in scene-data [:metadata :lip-not-sync])))
+                       (is (= (get-in scene-data [:actions :act-1 :data]) talking-animation))
+                       (is (= (get-in scene-data [:actions :act-2 :data 0 :data]) talking-animation))
+                       (is (nil? (get-in scene-data [:actions :act-2 :data 1 :data])))
+                       (is (= (get-in scene-data [:actions :act-2 :data 2 :data 0 :data]) talking-animation))
+                       (is (nil? (get-in scene-data [:actions :act-2 :data 2 :data 1 :data]))))))

@@ -22,7 +22,7 @@
 (defn handle-save-scene
   [course-slug scene-name request]
   (let [user-id (current-user request)
-        save (fn [data] (core/save-scene! course-slug scene-name data user-id))]
+        save (fn [data] (core/save-scene-with-processing course-slug scene-name data user-id))]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator}))
     (-> request
