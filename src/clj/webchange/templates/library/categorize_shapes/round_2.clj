@@ -1,209 +1,229 @@
 (ns webchange.templates.library.categorize-shapes.round-2)
 
 (def template-round-2 {:assets        [
-                                       {:url "/raw/img/categorize-shapes/background.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/circle.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/oval.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/rectangle.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/square.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/star.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/triangle.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/circle-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/background-class.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/surface.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/decoration.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/circle-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/oval-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/rectangle-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/square-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/star-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/triangle-group.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/circle-table.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/oval-box.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/rectangle-box.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/square-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/square-table.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/star-box.png", :size 10, :type "image"}
-                                       {:url "/raw/img/categorize-shapes/triangle-box.png", :size 10, :type "image"}
+                                       {:url "/raw/img/categorize-shapes/triangle-table.png", :size 10, :type "image"}
                                        {:url "/raw/img/categorize-shapes/question.png", :size 10, :type "image"}
                                        ],
-                       :objects       {:background    {:type "background", :src "/raw/img/categorize/background.png"},
-                                       :circle-box
-                                                      {:type       "image",
-                                                       :x          15,
-                                                       :y          800,
-                                                       :src        "/raw/img/categorize-shapes/circle-box.png",
-                                                       :transition "circle-box",
-                                                       :states     {:highlighted     {:highlight true}
-                                                                    :not-highlighted {:highlight false}},
-                                                       },
-                                       :oval-box      {:type       "image",
-                                                       :x          250,
-                                                       :y          800,
-                                                       :transition "oval-box",
-                                                       :src        "/raw/img/categorize-shapes/oval-box.png",
-                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                       }
-                                       :rectangle-box {:type       "image",
-                                                       :x          500,
-                                                       :y          800,
-                                                       :transition "rectangle-box",
-                                                       :src        "/raw/img/categorize-shapes/rectangle-box.png",
-                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                       }
-                                       :square-box    {:type       "image",
-                                                       :x          800,
-                                                       :y          800,
-                                                       :transition "square-box",
-                                                       :src        "/raw/img/categorize-shapes/square-box.png",
-                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                       }
-                                       :star-box      {:type       "image",
-                                                       :x          1100,
-                                                       :y          800,
-                                                       :transition "star-box",
-                                                       :src        "/raw/img/categorize-shapes/star-box.png",
-                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                       }
-                                       :triangle-box  {:type       "image",
-                                                       :x          1400,
-                                                       :y          800,
-                                                       :transition "triangle-box",
-                                                       :src        "/raw/img/categorize-shapes/triangle-box.png",
-                                                       :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
-                                                       }
-                                       :circle-1      {
-                                                       :type       "image",
-                                                       :x          46,
-                                                       :y          700,
-                                                       :scale      0.35,
-                                                       :src        "/raw/img/categorize-shapes/circle.png",
-                                                       :transition "circle-1",
-                                                       :draggable  true,
-                                                       :actions    {:drag-start {:type "action",
-                                                                                 :on   "drag-start",
-                                                                                 :id   "start-drag"}
-                                                                    :drag-end
-                                                                                {:id     "dragged",
-                                                                                 :on     "drag-end",
-                                                                                 :type   "action",
-                                                                                 :params {:box            "circle-box"
-                                                                                          :target         "circle-1"
-                                                                                          :init-position  {:x 46, :y 700, :duration 1}
-                                                                                          :check-variable "circle-box-selected"
-                                                                                          }}},
-                                                       :states     {:hide {:visible false}}},
-                                       :oval-1        {
-                                                       :type       "image",
-                                                       :x          592,
-                                                       :y          500,
-                                                       :rotation   -90,
-                                                       :scale      0.35,
-                                                       :src        "/raw/img/categorize-shapes/oval.png",
-                                                       :transition "oval-1",
-                                                       :draggable  true,
-                                                       :actions    {:drag-start {
-                                                                                 :type "action",
-                                                                                 :on   "drag-start",
-                                                                                 :id   "start-drag"}
-                                                                    :drag-end
-                                                                                {:id     "dragged",
-                                                                                 :on     "drag-end",
-                                                                                 :type   "action",
-                                                                                 :params {:box            "oval-box"
-                                                                                          :target         "oval-1"
-                                                                                          :init-position  {:x 592, :y 500, :duration 1}
-                                                                                          :check-variable "oval-box-selected"
-                                                                                          }}},
-                                                       :states     {:hide {:visible false}}},
-                                       :rectangle-1   {
-                                                       :type       "image",
-                                                       :x          392,
-                                                       :y          700,
-                                                       :rotation   -90,
-                                                       :scale      0.35,
-                                                       :src        "/raw/img/categorize-shapes/rectangle.png",
-                                                       :transition "rectangle-1",
-                                                       :draggable  true,
-                                                       :actions    {:drag-start {
-                                                                                 :type "action",
-                                                                                 :on   "drag-start",
-                                                                                 :id   "start-drag"}
-                                                                    :drag-end
-                                                                                {:id     "dragged",
-                                                                                 :on     "drag-end",
-                                                                                 :type   "action",
-                                                                                 :params {:box            "rectangle-box"
-                                                                                          :target         "rectangle-1"
-                                                                                          :init-position  {:x 392, :y 700, :duration 1}
-                                                                                          :check-variable "rectangle-box-selected"
-                                                                                          }}},
-                                                       :states     {:hide {:visible false}}}
-                                       :square-1      {
-                                                       :type       "image",
-                                                       :x          1192,
-                                                       :y          700,
-                                                       :rotation   -90,
-                                                       :scale      0.35,
-                                                       :src        "/raw/img/categorize-shapes/square.png",
-                                                       :transition "square-1",
-                                                       :draggable  true,
-                                                       :actions    {:drag-start {
-                                                                                 :type "action",
-                                                                                 :on   "drag-start",
-                                                                                 :id   "start-drag"}
-                                                                    :drag-end
-                                                                                {:id     "dragged",
-                                                                                 :on     "drag-end",
-                                                                                 :type   "action",
-                                                                                 :params {:box            "square-box"
-                                                                                          :target         "square-1"
-                                                                                          :init-position  {:x 1192, :y 700, :duration 1}
-                                                                                          :check-variable "square-box-selected"
-                                                                                          }}},
-                                                       :states     {:hide {:visible false}}}
-                                       :star-1        {
-                                                       :type       "image",
-                                                       :x          992,
-                                                       :y          200,
-                                                       :rotation   -90,
-                                                       :scale      0.35,
-                                                       :src        "/raw/img/categorize-shapes/star.png",
-                                                       :transition "star-1",
-                                                       :draggable  true,
-                                                       :actions    {:drag-start {
-                                                                                 :type "action",
-                                                                                 :on   "drag-start",
-                                                                                 :id   "start-drag"}
-                                                                    :drag-end
-                                                                                {:id     "dragged",
-                                                                                 :on     "drag-end",
-                                                                                 :type   "action",
-                                                                                 :params {:box            "star-box"
-                                                                                          :target         "star-1"
-                                                                                          :init-position  {:x 992, :y 200, :duration 1}
-                                                                                          :check-variable "star-box-selected"
-                                                                                          }}},
-                                                       :states     {:hide {:visible false}}}
-                                       :triangle-1    {
-                                                       :type       "image",
-                                                       :x          392,
-                                                       :y          200,
-                                                       :rotation   -90,
-                                                       :scale      0.35,
-                                                       :src        "/raw/img/categorize-shapes/triangle.png",
-                                                       :transition "triangle-1",
-                                                       :draggable  true,
-                                                       :actions    {:drag-start {
-                                                                                 :type "action",
-                                                                                 :on   "drag-start",
-                                                                                 :id   "start-drag"}
-                                                                    :drag-end
-                                                                                {:id     "dragged",
-                                                                                 :on     "drag-end",
-                                                                                 :type   "action",
-                                                                                 :params {:box            "triangle-box"
-                                                                                          :target         "triangle-1"
-                                                                                          :init-position  {:x 392, :y 200, :duration 1}
-                                                                                          :check-variable "triangle-box-selected"
-                                                                                          }}},
-                                                       :states     {:hide {:visible false}}}
+                       :objects       {:layered-background {:type       "layered-background",
+                                                            :background {:src "/raw/img/categorize-shapes/background-class.png"},
+                                                            :decoration {:src "/raw/img/categorize-shapes/decoration.png"},
+                                                            :surface    {:src "/raw/img/categorize-shapes/surface.png"}
+                                                            },
+                                       :circle-table
+                                                           {:type       "image",
+                                                            :x          1222,
+                                                            :y          650,
+                                                            :width      429,
+                                                            :height     221,
+                                                            :src        "/raw/img/categorize-shapes/circle-table.png",
+                                                            :transition "circle-table",
+                                                            :states     {:highlighted     {:highlight true}
+                                                                         :not-highlighted {:highlight false}},
+                                                            },
+                                       :oval-box           {:type       "image",
+                                                            :x          663,
+                                                            :y          835,
+                                                            :width      222,
+                                                            :height     200
+                                                            :transition "oval-box",
+                                                            :src        "/raw/img/categorize-shapes/oval-box.png",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
+                                       :rectangle-box      {:type       "image",
+                                                            :x          922,
+                                                            :y          835,
+                                                            :width      222,
+                                                            :height     200,
+                                                            :transition "rectangle-box",
+                                                            :src        "/raw/img/categorize-shapes/rectangle-box.png",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
+                                       :square-table       {:type       "image",
+                                                            :x          691,
+                                                            :y          665,
+                                                            :width      512
+                                                            :height     251
+                                                            :transition "square-table",
+                                                            :src        "/raw/img/categorize-shapes/square-table.png",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
+                                       :star-box           {:type       "image",
+                                                            :x          1181,
+                                                            :y          835,
+                                                            :width      221,
+                                                            :height     200,
+                                                            :transition "star-box",
+                                                            :src        "/raw/img/categorize-shapes/star-box.png",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
+                                       :triangle-table     {:type       "image",
+                                                            :x          196,
+                                                            :y          631,
+                                                            :width      460,
+                                                            :height     243
+                                                            :transition "triangle-table",
+                                                            :src        "/raw/img/categorize-shapes/triangle-table.png",
+                                                            :states     {:highlighted {:highlight true} :not-highlighted {:highlight false}},
+                                                            }
+                                       :circle-1           {
+                                                            :type       "image",
+                                                            :x          1661,
+                                                            :y          809,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/circle-group.png",
+                                                            :transition "circle-1",
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {:type "action",
+                                                                                      :on   "drag-start",
+                                                                                      :id   "start-drag"}
+                                                                         :drag-end
+                                                                                     {:id     "dragged",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {:box            "circle-table"
+                                                                                               :target         "circle-1"
+                                                                                               :init-position  {:x 1661, :y 809, :duration 1}
+                                                                                               :check-variable "circle-table-selected"
+                                                                                               }}},
+                                                            :states     {:hide {:visible false}}},
+                                       :oval-1             {
+                                                            :type       "image",
+                                                            :x          169,
+                                                            :y          49,
+                                                            :width      75,
+                                                            :height     94
+                                                            :src        "/raw/img/categorize-shapes/oval-group.png",
+                                                            :transition "oval-1",
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type "action",
+                                                                                      :on   "drag-start",
+                                                                                      :id   "start-drag"}
+                                                                         :drag-end
+                                                                                     {:id     "dragged",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {:box            "oval-box"
+                                                                                               :target         "oval-1"
+                                                                                               :init-position  {:x 169, :y 49, :duration 1}
+                                                                                               :check-variable "oval-box-selected"
+                                                                                               }}},
+                                                            :states     {:hide {:visible false}}},
+                                       :rectangle-1        {
+                                                            :type       "image",
+                                                            :x          59,
+                                                            :y          359,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/rectangle-group.png",
+                                                            :transition "rectangle-1",
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type "action",
+                                                                                      :on   "drag-start",
+                                                                                      :id   "start-drag"}
+                                                                         :drag-end
+                                                                                     {:id     "dragged",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {:box            "rectangle-box"
+                                                                                               :target         "rectangle-1"
+                                                                                               :init-position  {:x 59, :y 359, :duration 1}
+                                                                                               :check-variable "rectangle-box-selected"
+                                                                                               }}},
+                                                            :states     {:hide {:visible false}}}
+                                       :square-1           {
+                                                            :type       "image",
+                                                            :x          1682,
+                                                            :y          136,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/square-group.png",
+                                                            :transition "square-1",
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type "action",
+                                                                                      :on   "drag-start",
+                                                                                      :id   "start-drag"}
+                                                                         :drag-end
+                                                                                     {:id     "dragged",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {:box            "square-table"
+                                                                                               :target         "square-1"
+                                                                                               :init-position  {:x 1682, :y 136, :duration 1}
+                                                                                               :check-variable "square-table-selected"
+                                                                                               }}},
+                                                            :states     {:hide {:visible false}}}
+                                       :star-1             {
+                                                            :type       "image",
+                                                            :x          826,
+                                                            :y          402,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/star-group.png",
+                                                            :transition "star-1",
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type "action",
+                                                                                      :on   "drag-start",
+                                                                                      :id   "start-drag"}
+                                                                         :drag-end
+                                                                                     {:id     "dragged",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {:box            "star-box"
+                                                                                               :target         "star-1"
+                                                                                               :init-position  {:x 826, :y 402, :duration 1}
+                                                                                               :check-variable "star-box-selected"
+                                                                                               }}},
+                                                            :states     {:hide {:visible false}}}
+                                       :triangle-1         {
+                                                            :type       "image",
+                                                            :x          126,
+                                                            :y          936,
+                                                            :width      75,
+                                                            :height     94,
+                                                            :src        "/raw/img/categorize-shapes/triangle-group.png",
+                                                            :transition "triangle-1",
+                                                            :draggable  true,
+                                                            :actions    {:drag-start {
+                                                                                      :type "action",
+                                                                                      :on   "drag-start",
+                                                                                      :id   "start-drag"}
+                                                                         :drag-end
+                                                                                     {:id     "dragged",
+                                                                                      :on     "drag-end",
+                                                                                      :type   "action",
+                                                                                      :params {:box            "triangle-table"
+                                                                                               :target         "triangle-1"
+                                                                                               :init-position  {:x 126, :y 936, :duration 1}
+                                                                                               :check-variable "triangle-table-selected"
+                                                                                               }}},
+                                                            :states     {:hide {:visible false}}}
 
                                        },
-                       :scene-objects [["background"]
-                                       ["circle-box" "oval-box" "rectangle-box"]
-                                       ["square-box" "star-box" "triangle-box"]
+                       :scene-objects [["layered-background"]
+                                       ["square-table" "triangle-table"]
+                                       ["circle-table" "oval-box" "rectangle-box" "star-box"]
                                        ["circle-1" "oval-1" "rectangle-1"]
-                                       ["square-1" "star-1" "triangle-1"]],
+                                       ["square-1" "star-1" "triangle-1"]
+                                       ],
                        :actions       {
 
                                        :object-in-right-box            {:id          "hide",
@@ -280,9 +300,9 @@
                                                                                {:type       "test-transition-and-pointer-collide",
                                                                                 :success    "highlight",
                                                                                 :fail       "unhighlight",
-                                                                                :transition "circle-box"
-                                                                                :params     {:target   "circle-box"
-                                                                                             :variable "circle-box-selected"
+                                                                                :transition "circle-table"
+                                                                                :params     {:target   "circle-table"
+                                                                                             :variable "circle-table-selected"
                                                                                              }
                                                                                 }
                                                                                {:type       "test-transition-and-pointer-collide",
@@ -296,9 +316,9 @@
                                                                                {:type       "test-transition-and-pointer-collide",
                                                                                 :success    "highlight",
                                                                                 :fail       "unhighlight",
-                                                                                :transition "square-box"
-                                                                                :params     {:target   "square-box"
-                                                                                             :variable "square-box-selected"
+                                                                                :transition "square-table"
+                                                                                :params     {:target   "square-table"
+                                                                                             :variable "square-table-selected"
                                                                                              }
                                                                                 }
                                                                                {:type       "test-transition-and-pointer-collide",
@@ -312,9 +332,9 @@
                                                                                {:type       "test-transition-and-pointer-collide",
                                                                                 :success    "highlight",
                                                                                 :fail       "unhighlight",
-                                                                                :transition "triangle-box"
-                                                                                :params     {:target   "triangle-box"
-                                                                                             :variable "triangle-box-selected"
+                                                                                :transition "triangle-table"
+                                                                                :params     {:target   "triangle-table"
+                                                                                             :variable "triangle-table-selected"
                                                                                              }
                                                                                 }]}
 
@@ -325,11 +345,11 @@
                                        :reset-selected-vars            {:type "sequence-data"
                                                                         :data [
                                                                                {:type "set-variable", :var-name "oval-box-selected", :var-value false}
-                                                                               {:type "set-variable", :var-name "circle-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "circle-table-selected", :var-value false}
                                                                                {:type "set-variable", :var-name "rectangle-box-selected", :var-value false}
-                                                                               {:type "set-variable", :var-name "square-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "square-table-selected", :var-value false}
                                                                                {:type "set-variable", :var-name "star-box-selected", :var-value false}
-                                                                               {:type "set-variable", :var-name "triangle-box-selected", :var-value false}
+                                                                               {:type "set-variable", :var-name "triangle-table-selected", :var-value false}
                                                                                ]
                                                                         }
                                        :start-drag                     {:type "sequence-data"
