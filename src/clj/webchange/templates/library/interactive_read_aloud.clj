@@ -79,12 +79,7 @@
 (def empty-audio {:audio "" :start 0 :duration  0 :animation "color" :fill 0x00B2FF :data []})
 (def template {:assets        [{:url "/raw/img/casa/background_casa.png", :size 10, :type "image"}
                                {:url "/raw/img/casa/decoration_casa.png", :size 10, :type "image"}
-                               {:url "/raw/img/casa/surface_casa.png", :size 10, :type "image"}
-
-                               {:url "/raw/flip_page/front.png" :size 1 :type "image"}
-
-                               {:url "/raw/img/flipbook/next-page.png" :size 1 :type "image"}
-                               {:url "/raw/img/flipbook/prev-page.png" :size 1 :type "image"}]
+                               {:url "/raw/img/casa/surface_casa.png", :size 10, :type "image"}]
                :objects       {:layered-background {:type       "layered-background"
                                                     :background {:src "/raw/img/casa/background_casa.png"}
                                                     :decoration {:src "/raw/img/casa/decoration_casa.png"}
