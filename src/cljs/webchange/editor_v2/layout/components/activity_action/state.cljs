@@ -1,7 +1,6 @@
 (ns webchange.editor-v2.layout.components.activity-action.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor.events :as edit-scene]
     [webchange.editor-v2.layout.components.activity-stage.state :as stage-state]
     [webchange.editor-v2.translator.translator-form.state.form :as translator-form]
     [webchange.interpreter.events :as interpreter.events]

@@ -2,10 +2,12 @@
   (:require [webchange.db.core :refer [*db*] :as db]
             [java-time :as jt]
             [clojure.tools.logging :as log]
+            [webchange.templates.core :as templates]
             [webchange.assets.core :as assets]
             [webchange.common.files :as f]
             [clojure.data.json :as json]
             [webchange.common.audio-parser :as ap]
+            [webchange.templates.common-actions :as common-actions]
             [webchange.scene :as scene]
             [config.core :refer [env]]
             [clojure.string :as string]
@@ -628,3 +630,16 @@
         {scene-version-data :data} (db/get-latest-scene-version {:scene_id scene-id})]
     [true {:scene-id scene-name
            :data     scene-version-data}]))
+
+
+(defn update-activity
+  [course-slug data scene-slug user-id]
+  (let [scene-data (get-scene-data course-slug scene-slug)
+        activity (if (:common-action? data)
+                   (common-actions/update-activity scene-data data)
+                   (templates/update-activity-from-template scene-data data))]
+    (-> (save-scene! course-slug scene-slug activity user-id)
+        (second)
+        ((fn [data]
+           (assoc data :data (:data (db/get-latest-scene-version {:scene_id (:id data)})))))
+        )))
