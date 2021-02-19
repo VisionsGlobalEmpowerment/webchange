@@ -611,7 +611,7 @@
 (defn- init-workflow-indexes
   [{:keys [data] :as action}]
   (let [with-indexes (->> data
-                          (map (fn [idx action] (assoc action :index idx)))
+                          (map-indexed (fn [idx action] (assoc action :index idx)))
                           (into []))]
     (assoc action :data with-indexes)))
 
@@ -630,15 +630,22 @@
 (defn- complete-workflow-action!
   [workflow {idx :index}]
   (let [workflow-key (workflow-key workflow)
-        state (get @variables workflow-key)]
+        state (get @variables workflow-key #{})]
     (when idx
       (swap! variables assoc workflow-key (conj state idx)))))
+
+(defn- with-on-end
+  [{on-end :on-end :as action}]
+  (if on-end
+    (update action :data conj {:type "action" :id on-end})
+    action))
 
 (defn- init-workflow
   [action]
   (if (:initialized action)
     action
     (-> action
+        (with-on-end)
         (init-workflow-indexes)
         (drop-completed-actions)
         (assoc :initialized true))))
@@ -655,7 +662,8 @@
           next #(execute-workflow! db (-> action (assoc :data rest)))
           flow-id (random-uuid)
           action-id (random-uuid)
-          flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
+          flow-data {:flow-id flow-id :actions [action-id] :type :all :next next
+                     :parent (:flow-id action) :tags (get-action-tags action)
                      :current-scene (:current-scene db)}
           current-action (-> current
                              (assoc :flow-id flow-id)
@@ -663,6 +671,7 @@
                              (with-prev action))]
       (register-flow! flow-data)
 
+      (js/console.log "workflow..." current)
       (complete-workflow-action! action current-action)
       (execute-action db current-action))))
 

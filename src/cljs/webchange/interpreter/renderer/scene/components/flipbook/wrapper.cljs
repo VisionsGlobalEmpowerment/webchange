@@ -47,15 +47,37 @@
 
 (defn- first-spread?
   [_ {:keys [right]}]
-  (= right 0))
+  (<= right 0))
 
 (defn- last-spread?
   [state {:keys [right]}]
-  (or (= right (-> (:pages state) (count) (dec)))
+  (or (>= right (-> (:pages state) (count) (dec)))
       (not (some? right))))
 
+(defn- sequence-for
+  ([action-name on-end]
+   (cond-> {:type "sequence-data" :data []}
+           (some? action-name)
+           (update :data conj {:type "action" :id action-name})
+
+           :always
+           (update :data conj {:type "callback" :callback on-end})))
+  ([left right on-end]
+   (cond-> {:type "sequence-data" :data []}
+           (some? left)
+           (update :data conj {:type "action" :id left})
+
+           (and (some? left) (some? right))
+           (update :data conj {:type "empty" :duration 1000})
+
+           (some? right)
+           (update :data conj {:type "action" :id right})
+
+           :always
+           (update :data conj {:type "callback" :callback on-end}))))
+
 (defn- flip
-  [state direction on-end]
+  [state direction on-end read]
   (let [prev-control (-> @state :prev-control keyword)
         next-control (-> @state :next-control keyword)
         current-spread (get @state :current-spread)
@@ -79,13 +101,11 @@
                                                (swap! state assoc :current-spread next-spread)
                                                (utils/set-visibility prev-control (not (first-spread? @state next-spread)))
                                                (utils/set-visibility next-control (not (last-spread? @state next-spread)))
-                                               (let [{:keys [left right]} (spread-numbers->action-names @state next-spread)
-                                                     action (cond-> {:type "sequence"
-                                                                     :data []}
-                                                                    (some? left) (update :data conj left)
-                                                                    (some? right) (update :data conj right))]
-                                                 (utils/execute-action action))
-                                               (on-end))}))
+                                               (if read
+                                                 (let [{:keys [left right]} (spread-numbers->action-names @state next-spread)
+                                                       action (sequence-for left right on-end)]
+                                                   (utils/execute-action action))
+                                                 (on-end)))}))
       (on-end))))
 
 (defn- show-spread
@@ -110,7 +130,7 @@
                    :type          type
                    :object        container
                    :container     container
-                   :init          (fn []
+                   :init          (fn [{:keys [on-end read]}]
                                     (let [first-page-index 0
                                           first-page (keyword (get-page-object-name @state first-page-index))
                                           first-action (get-page-action-name @state first-page-index)
@@ -120,17 +140,28 @@
                                       (utils/set-position first-page (get-right-page-position @state))
                                       (utils/set-visibility first-page true)
                                       (utils/set-visibility prev-control false)
-                                      (when (some? first-action)
-                                        (utils/execute-action {:type "action"
-                                                               :id   first-action}))))
-                   :flip-forward  (fn [{:keys [on-end]}]
-                                    (flip state "forward" on-end))
-                   :flip-backward (fn [{:keys [on-end]}]
-                                    (flip state "backward" on-end))
+                                      (if read
+                                        (let [action (sequence-for first-action on-end)]
+                                          (utils/execute-action action))
+                                        (on-end))))
+                   :flip-forward  (fn [{:keys [on-end read]}]
+                                    (flip state "forward" on-end read))
+                   :flip-backward (fn [{:keys [on-end read]}]
+                                    (flip state "backward" on-end read))
                    :show-spread   (fn [spread-idx]
                                     (let [current-spread (:current-spread @state)
                                           new-spread {:left  (->> (* spread-idx 2) (dec))
                                                       :right (->> (* spread-idx 2))}]
                                       (hide-spread @state current-spread)
                                       (show-spread @state new-spread)
-                                      (swap! state assoc :current-spread new-spread)))}))
+                                      (swap! state assoc :current-spread new-spread)))
+                   :read-left     (fn [on-end]
+                                    (let [current-spread (get @state :current-spread)
+                                          {:keys [left]} (spread-numbers->action-names @state current-spread)
+                                          action (sequence-for left on-end)]
+                                      (utils/execute-action action)))
+                   :read-right    (fn [on-end]
+                                    (let [current-spread (get @state :current-spread)
+                                          {:keys [right]} (spread-numbers->action-names @state current-spread)
+                                          action (sequence-for right on-end)]
+                                      (utils/execute-action action)))}))

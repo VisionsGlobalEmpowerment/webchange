@@ -21,7 +21,7 @@
     [webchange.templates.library.flipbook.page-number :refer [add-page-number]]
     [webchange.templates.library.flipbook.stages :refer [update-stages]]))
 
-(def metadata {:id          23
+(def metadata {:id          32
                :name        "Interactive Read Aloud"
                :tags        ["Direct Instruction - Animated Instructor"]
                :description "Users learn new reading skills through a mini-lesson from a teacher character. Then, the teacher reads a book aloud (these books should be high-quality and longer/more rigorous than what students could read on their own) and stops to help users practice the skills they just learned."
@@ -105,28 +105,11 @@
                                            :width        1920
                                            :height       1080
                                            :pages        []
-                                           :prev-control "prev-page"
-                                           :next-control "next-page"
-                                           :visible false}
-                               :prev-page {:type    "image"
-                                           :x       "---"
-                                           :y       "---"
-                                           :width   95
-                                           :height  95
-                                           :src     "/raw/img/flipbook/prev-page.png"
-                                           :actions {:click {:id "prev-page-click" :on "click" :type "action"}}
-                                           :visible false}
-                               :next-page {:type    "image"
-                                           :x       "---"
-                                           :y       "---"
-                                           :width   95
-                                           :height  95
-                                           :src     "/raw/img/flipbook/next-page.png"
-                                           :actions {:click {:id "next-page-click" :on "click" :type "action"}}
                                            :visible false}}
-               :scene-objects [["layered-background"] ["book-background"] ["book"] ["prev-page" "next-page"]]
+               :scene-objects [["layered-background"]]
                :actions       {:script {:type   "workflow"
-                                        :data   [{:type "action" :id "dialog-intro"}
+                                        :data   [{:type "start-activity"}
+                                                 {:type "action" :id "dialog-intro"}
                                                  {:type "action" :id "front-page"}]
                                         :on-end "finish"}
                                :finish
@@ -134,24 +117,20 @@
                                :show-book
                                        {:type "parallel"
                                         :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "book-background"}
-                                               {:type "set-attribute" :attr-name "visible", :attr-value true :target "book"}
-                                               {:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-page"}
-                                               {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-page"}]}
+                                               {:type "set-attribute" :attr-name "visible", :attr-value true :target "book"}]}
                                :hide-book
                                        {:type "parallel"
                                         :data [{:type "set-attribute" :attr-name "visible", :attr-value false :target "book-background"}
-                                               {:type "set-attribute" :attr-name "visible", :attr-value false :target "book"}
-                                               {:type "set-attribute" :attr-name "visible", :attr-value false :target "prev-page"}
-                                               {:type "set-attribute" :attr-name "visible", :attr-value false :target "next-page"}]}
-                               :next-page
-                                       {:type "sequence-data"
-                                        :data [{:type     "set-attribute" :attr-name "visible", :attr-value false
-                                                :from-var [{:template "group-%", :var-name "current-page", :action-property "target"}]}
-                                               {:type "counter", :counter-id "current-page", :counter-action "increase"}
-                                               {:type     "set-attribute" :attr-name "visible", :attr-value true
-                                                :from-var [{:template "group-%", :var-name "current-page", :action-property "target"}]}
-                                               {:type     "action"
-                                                :from-var [{:template "dialog-%-page", :var-name "current-page", :action-property "id"}]}]}
+                                               {:type "set-attribute" :attr-name "visible", :attr-value false :target "book"}]}
+
+                               :next-page {:type "sequence-data"
+                                           :data [{:type   "flipbook-flip-forward"
+                                                   :target "book"
+                                                   :read   false}]}
+
+                               :read-left-page {:type "flipbook-read-left" :target "book"}
+                               :read-right-page {:type "flipbook-read-right" :target "book"}
+
                                :dialog-intro
                                        {:type               "sequence-data",
                                         :editor-type        "dialog",
@@ -162,25 +141,24 @@
                                         :phrase             "instruction",
                                         :phrase-description "Instruction"}
 
-                               :dialog-2-front-page
-                                       {:type               "sequence-data",
-                                        :editor-type        "dialog",
-                                        :concept-var        "current-word",
-                                        :data               [{:type "sequence-data"
-                                                              :data [{:type "empty" :duration 0}
-                                                                     {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
-                                        :phrase             "frontpage",
-                                        :phrase-description "Frontpage"}
                                :front-page
                                        {:type "sequence-data"
                                         :data [{:type "action" :id "show-book"}
-                                               {:type "action" :id "dialog-2-front-page"}]}}
-               :metadata {:next-action-index 0
+                                               {:type "flipbook-init" :target "book" :read false}]}}
+               :triggers
+                              {:start {:on "start", :action "script"}}
+               :metadata {:tracks [{:title "Sequence"
+                                    :nodes [{:type      "dialog"
+                                             :action-id "dialog-intro"}
+                                            {:type "prompt"
+                                             :text "Show book"}]}]
+                          :next-action-index 0
                           :stage-size     :contain
                           :stages         []
                           :flipbook-name  "book"
                           :flipbook-pages {:total        0
-                                           :current-side "right"}}})
+                                           :current-side "right"
+                                           :visible true}}})
 
 (def animations {:vera       {:width  380,
                               :height 537,
@@ -224,27 +202,60 @@
   [activity-data actions action-name]
   (-> activity-data
       (update :actions merge actions)
-      (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})))
+      (update-in [:actions :script :data] conj {:type "action" :id action-name :workflow-user-input true})
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "question" :action-id action-name})))
 
 (defn- place-dialog
   [activity-data actions action-name]
   (-> activity-data
       (update :actions merge actions)
-      (update-in [:actions :script :data] conj {:type "action" :id action-name})))
+      (update-in [:actions :script :data] conj {:type "action" :id action-name})
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "dialog" :action-id action-name})))
 
 (defn- add-assets
   [activity-data assets]
   (-> activity-data
       (update :assets concat assets)))
 
+(defn- add-hide-to-sequence
+  [activity-data]
+  (-> activity-data
+      (update-in [:actions :script :data] conj {:type "action" :id "hide-book"})
+      (assoc-in [:metadata :flipbook-pages :visible] false)
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "prompt" :text "Hide book"})))
+
+(defn- add-show-to-sequence
+  [activity-data]
+  (-> activity-data
+      (update-in [:actions :script :data] conj {:type "action" :id "show-book"})
+      (assoc-in [:metadata :flipbook-pages :visible] true)
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "prompt" :text "Show book"})))
+
+(defn- add-read-page-to-sequence
+  [activity-data page-position action-name _]
+  (let [read-page (if (even? page-position)
+                    "read-right-page"
+                    "read-left-page")]
+    (-> activity-data
+        (update-in [:actions :script :data] conj {:type "action" :id read-page})
+        (update-in [:metadata :tracks 0 :nodes] conj {:type "dialog" :action-id action-name}))))
+
+(defn- add-flip-page
+  [activity-data]
+  (-> activity-data
+      (update-in [:actions :script :data] conj {:type "action" :id "next-page"})
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "prompt" :text "Flip page"})))
+
 (defn- add-dialog
   [activity-data args]
   (let [index (get-next-action-index activity-data)
         action-name (str "dialog-" index)
-        default-dialog (dialog/default (str "dialog-" index))]
-    (-> activity-data
-        (increase-next-action-index)
-        (place-dialog {(keyword action-name) default-dialog} action-name))))
+        default-dialog (dialog/default (str "dialog-" index))
+        add-hide? (get-in activity-data [:metadata :flipbook-pages :visible])]
+    (cond-> activity-data
+            add-hide? (add-hide-to-sequence)
+            :always (increase-next-action-index)
+            :always (place-dialog {(keyword action-name) default-dialog} action-name))))
 
 (defn- add-question
   [activity-data args]
@@ -264,16 +275,21 @@
   [activity-data {:keys [type page-layout spread-layout image text]}]
   (let [[constructor layout] (case type
                                "page" [custom-page/create (keyword page-layout)]
-                               "spread" [custom-spread/create (keyword spread-layout)])]
-    (-> activity-data
-        (add-page
-          constructor
-          {:page-type         layout
-           :image-src         (:src image)
-           :text              text
-           :with-action?      true
-           :with-page-number? true
-           :shift-from-end    1}))))
+                               "spread" [custom-spread/create (keyword spread-layout)])
+        add-flip-node-to-sequence? (-> (get-in activity-data [:objects :book :pages] []) count even?)
+        add-show? (not (get-in activity-data [:metadata :flipbook-pages :visible]))]
+    (cond-> activity-data
+            add-show? (add-show-to-sequence)
+            add-flip-node-to-sequence? (add-flip-page)
+            :always (add-page
+                      constructor
+                      {:page-type                layout
+                       :image-src                (:src image)
+                       :text                     text
+                       :with-action?             true
+                       :with-page-number?        true
+                       :shift-from-end           1
+                       :on-text-animation-action add-read-page-to-sequence}))))
 
 (defn- config-frontpage
   [activity-data args]
@@ -305,16 +321,20 @@
   [{:keys [authors illustrators cover-layout cover-image cover-title] :as args}]
   (-> template
       (characters/add-characters (:characters args) character-positions animations)
+      (update :scene-objects concat [["book-background"] ["book"]])
       (apply-page-size page-params)
-      (add-page front-cover/create {:layout       (keyword cover-layout)
-                                    :image-src    (:src cover-image)
-                                    :title        cover-title
-                                    :authors      authors
-                                    :with-action? true})
+      (add-page front-cover/create {:layout                   (keyword cover-layout)
+                                    :image-src                (:src cover-image)
+                                    :title                    cover-title
+                                    :authors                  authors
+                                    :with-action?             true
+                                    :on-text-animation-action add-read-page-to-sequence})
+      (add-flip-page)
       (add-page generic-front/create)
-      (add-page credits/create {:title        cover-title
-                                :authors      authors
-                                :illustrators illustrators})
+      (add-page credits/create {:title                    cover-title
+                                :authors                  authors
+                                :illustrators             illustrators
+                                :on-text-animation-action add-read-page-to-sequence})
       (add-page back-cover/create {:image-src    (:src cover-image)
                                    :authors      authors
                                    :illustrators illustrators})

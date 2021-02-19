@@ -2,7 +2,7 @@
   (:require
     [webchange.templates.core :as core]))
 
-(def m {:id          30
+(def m {:id          31
         :name        "Alliteration"
         :tags        ["Alliteration"]
         :description "Some description of Alliteration mechanics and covered skills"
