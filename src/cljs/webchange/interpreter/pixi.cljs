@@ -4,6 +4,7 @@
 
 (def PIXI (.. pixi -PIXI))
 
+(set! (.. PIXI -settings -FAIL_IF_MAJOR_PERFORMANCE_CAVEAT) false)
 
 (def Application (.. PIXI -Application))
 (def Loader (.. PIXI -Loader))
