@@ -106,8 +106,9 @@
                :options     book-options
                :actions     {:add-page      {:title   "Add page",
                                              :options page-options}
-                             :remake-covers {:title   "Remake covers",
-                                             :options book-options}}})
+                             :remake-covers {:title         "Remake covers",
+                                             :options       book-options
+                                             :default-props :wizard}}})
 
 (def page-params {:width            960
                   :height           1080
@@ -123,7 +124,8 @@
       (add-page generic-front/create page-params (page/activity->generic-front-props props))
       (add-page credits/create page-params (page/activity->credits-props props))
       (add-page back-cover/create page-params (page/activity->back-cover-props props))
-      (assoc-in [:metadata :actions] (:actions metadata))))
+      (assoc-in [:metadata :actions] (:actions metadata))
+      (assoc-in [:metadata :saved-props :wizard] props)))
 
 (defn add-page-handler
   [activity-data {:keys [type page-layout spread-layout image text]}]
@@ -147,7 +149,8 @@
     "add-page" (add-page-handler activity-data props)
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)
-    "remake-covers" (remake-covers activity-data props page-params)))
+    "remake-covers" (-> (remake-covers activity-data props page-params)
+                        (assoc-in [:metadata :saved-props :wizard] props))))
 
 (core/register-template
   metadata create-activity {:handler update-activity

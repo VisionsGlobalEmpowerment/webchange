@@ -1,11 +1,9 @@
 (ns webchange.templates.library.flipbook.remake-covers
   (:require
-    [clojure.tools.logging :as log]
     [webchange.templates.library.flipbook.add-page :refer [add-page] :as page]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
     [webchange.templates.library.flipbook.utils :refer [get-book-object-name]]
     [webchange.utils.list :refer [find-item-position]]
-
     [webchange.templates.library.flipbook.credits :as credits]
     [webchange.templates.library.flipbook.cover-back :as back-cover]
     [webchange.templates.library.flipbook.cover-front :as front-cover]
