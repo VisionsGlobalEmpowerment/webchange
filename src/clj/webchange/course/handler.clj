@@ -207,42 +207,42 @@
       (GET "/editor/character-skin" []
         :summary "Return skins available for objects"
         :return [CharacterSkin]
-        (character-skins))))
+        (character-skins)))))
 
-  (defroutes website-api-routes
-    (context "/api/courses" []
-      :tags ["course"]
-      ;should go before general "/api/courses/:course-slug" to be accessible
-      (GET "/available" []
-        :return CoursesOrError
-        :summary "Returns all available courses"
-        (-> (fn [request] (-> (core/get-available-courses) response))
-            sign/wrap-api-with-signature))
-      (POST "/:course-id/translate" request
-        :path-params [course-id :- s/Int]
-        :return Course
-        :body [translate Translate]
-        :summary "Starts course translation"
-        (handle-localize-course course-id translate request))
-      (GET "/by-website-user/:website-user-id" request
-        :path-params [website-user-id :- s/Int]
-        :return [Course]
-        :summary "Returns courses by website user id"
-        (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
-            sign/wrap-api-with-signature)))
-    (context "/api/books" []
-      :tags ["book"]
-      (GET "/library" []
-        :return CoursesOrError
-        :summary "Returns all published books"
-        (-> (fn [request] (-> (core/get-book-library) response))
-            sign/wrap-api-with-signature))
-      (GET "/by-website-user/:website-user-id" request
-        :path-params [website-user-id :- s/Int]
-        :return [Course]
-        :summary "Returns books by website user id"
-        (-> (fn [request] (-> (core/get-books-by-website-user website-user-id) response))
-            sign/wrap-api-with-signature)))))
+(defroutes website-api-routes
+  (context "/api/courses" []
+    :tags ["course"]
+    ;should go before general "/api/courses/:course-slug" to be accessible
+    (GET "/available" []
+      :return CoursesOrError
+      :summary "Returns all available courses"
+      (-> (fn [request] (-> (core/get-available-courses) response))
+          sign/wrap-api-with-signature))
+    (POST "/:course-id/translate" request
+      :path-params [course-id :- s/Int]
+      :return Course
+      :body [translate Translate]
+      :summary "Starts course translation"
+      (handle-localize-course course-id translate request))
+    (GET "/by-website-user/:website-user-id" request
+      :path-params [website-user-id :- s/Int]
+      :return [Course]
+      :summary "Returns courses by website user id"
+      (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
+          sign/wrap-api-with-signature)))
+  (context "/api/books" []
+    :tags ["book"]
+    (GET "/library" []
+      :return CoursesOrError
+      :summary "Returns all published books"
+      (-> (fn [request] (-> (core/get-book-library) response))
+          sign/wrap-api-with-signature))
+    (GET "/by-website-user/:website-user-id" request
+      :path-params [website-user-id :- s/Int]
+      :return [Course]
+      :summary "Returns books by website user id"
+      (-> (fn [request] (-> (core/get-books-by-website-user website-user-id) response))
+          sign/wrap-api-with-signature))))
 
 (defroutes courses-api-routes
   (context "/api/courses" []
