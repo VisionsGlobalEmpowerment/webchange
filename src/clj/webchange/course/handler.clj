@@ -147,15 +147,11 @@
 
 (defn handle-update-activity
   [course-slug data scene-slug request]
-  (let [user-id (current-user request)
-        scene-data (core/get-scene-data course-slug scene-slug)
-        activity (templates/update-activity-from-template scene-data data)]
+  (let [user-id (current-user request)]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator}))
-    (-> (core/save-scene! course-slug scene-slug activity user-id)
-        (second)
-        ((fn [data]
-           [true (assoc data :data (:data (db/get-latest-scene-version {:scene_id (:id data)})))]))
+    (-> (core/update-activity course-slug data scene-slug user-id)
+        ((fn [data] [true data]))
         handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
@@ -190,63 +186,63 @@
 (s/defschema CoursesOrError (s/either [Course] Error403))
 
 
-  {:errors [{:message "Api Unauthorized"}]}
+{:errors [{:message "Api Unauthorized"}]}
 
 (defroutes editor-api-routes
   (api
-  (swagger-routes {:ui   "/api-docs"
-                   :data {:info     {:title       "TabSchools API"}
-                          :tags     [{:name "course", :description "Course APIs"}]}})
-  (context "/api/courses" []
-    :tags ["editor-assets"]
-    (GET "/editor/assets" []
-      :summary "Return list of available assets"
-      :query-params [{type :- s/Str nil}, {tag :- s/Int nil}]
-      :return [EditorAsset]
-      (editor-assets tag type))
-    (GET "/editor/tags" []
-      :summary "Return list of available assets"
-      :return [EditorTag]
-      (find-all-tags))
-    (GET "/editor/character-skin" []
-      :summary "Return skins available for objects"
-      :return [CharacterSkin]
-      (character-skins))))
+    (swagger-routes {:ui   "/api-docs"
+                     :data {:info {:title "TabSchools API"}
+                            :tags [{:name "course", :description "Course APIs"}]}})
+    (context "/api/courses" []
+      :tags ["editor-assets"]
+      (GET "/editor/assets" []
+        :summary "Return list of available assets"
+        :query-params [{type :- s/Str nil}, {tag :- s/Int nil}]
+        :return [EditorAsset]
+        (editor-assets tag type))
+      (GET "/editor/tags" []
+        :summary "Return list of available assets"
+        :return [EditorTag]
+        (find-all-tags))
+      (GET "/editor/character-skin" []
+        :summary "Return skins available for objects"
+        :return [CharacterSkin]
+        (character-skins))))
 
-(defroutes website-api-routes
-  (context "/api/courses" []
-    :tags ["course"]
-    ;should go before general "/api/courses/:course-slug" to be accessible
-    (GET "/available" []
-      :return CoursesOrError
-      :summary "Returns all available courses"
-      (-> (fn [request] (-> (core/get-available-courses) response))
-          sign/wrap-api-with-signature))
-    (POST "/:course-id/translate" request
-      :path-params [course-id :- s/Int]
-      :return Course
-      :body [translate Translate]
-      :summary "Starts course translation"
-      (handle-localize-course course-id translate request))
-    (GET "/by-website-user/:website-user-id" request
-      :path-params [website-user-id :- s/Int]
-      :return [Course]
-      :summary "Returns courses by website user id"
-      (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
-          sign/wrap-api-with-signature)))
-  (context "/api/books" []
-    :tags ["book"]
-    (GET "/library" []
-      :return CoursesOrError
-      :summary "Returns all published books"
-      (-> (fn [request] (-> (core/get-book-library) response))
-          sign/wrap-api-with-signature))
-    (GET "/by-website-user/:website-user-id" request
-      :path-params [website-user-id :- s/Int]
-      :return [Course]
-      :summary "Returns books by website user id"
-      (-> (fn [request] (-> (core/get-books-by-website-user website-user-id) response))
-          sign/wrap-api-with-signature)))))
+  (defroutes website-api-routes
+    (context "/api/courses" []
+      :tags ["course"]
+      ;should go before general "/api/courses/:course-slug" to be accessible
+      (GET "/available" []
+        :return CoursesOrError
+        :summary "Returns all available courses"
+        (-> (fn [request] (-> (core/get-available-courses) response))
+            sign/wrap-api-with-signature))
+      (POST "/:course-id/translate" request
+        :path-params [course-id :- s/Int]
+        :return Course
+        :body [translate Translate]
+        :summary "Starts course translation"
+        (handle-localize-course course-id translate request))
+      (GET "/by-website-user/:website-user-id" request
+        :path-params [website-user-id :- s/Int]
+        :return [Course]
+        :summary "Returns courses by website user id"
+        (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
+            sign/wrap-api-with-signature)))
+    (context "/api/books" []
+      :tags ["book"]
+      (GET "/library" []
+        :return CoursesOrError
+        :summary "Returns all published books"
+        (-> (fn [request] (-> (core/get-book-library) response))
+            sign/wrap-api-with-signature))
+      (GET "/by-website-user/:website-user-id" request
+        :path-params [website-user-id :- s/Int]
+        :return [Course]
+        :summary "Returns books by website user id"
+        (-> (fn [request] (-> (core/get-books-by-website-user website-user-id) response))
+            sign/wrap-api-with-signature)))))
 
 (defroutes courses-api-routes
   (context "/api/courses" []
