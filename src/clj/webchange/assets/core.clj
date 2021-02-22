@@ -68,7 +68,7 @@
      :full-path full-path}))
 
 (defn remove-file-with-hash! [asset-hash]
-  (io/delete-file (f/relative->absolute-path (:path asset-hash)))
+  (io/delete-file (f/relative->absolute-path (:path asset-hash)) true)
   (db/remove-asset-hash! {:path_hash (:path-hash asset-hash)}))
 
 (defn update-file-from-primary [path]

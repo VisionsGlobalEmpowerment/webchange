@@ -88,8 +88,8 @@
   (if (or (contains? args :dialog) (contains? args :question-page))
     (let [params (common/get-replace-params old-data)
           [action-name actions assets] (if (contains? args :dialog)
-                                         (dialog/create (:dialog args) params)
-                                         (question/create (:question-page args) params))
+                                         (dialog/create-and-place-before (:dialog args) params)
+                                         (question/create-and-place-before (:question-page args) params))
           old-data (-> old-data
                        (common/add-track-action {:track-name "Dialog"
                                                  :action-id  (keyword action-name)

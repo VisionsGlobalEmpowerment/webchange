@@ -4,7 +4,7 @@
 
 (defn- template-registered?
   [id name]
-  (let [registered-name (-> @templates (get id) :name)]
+  (let [registered-name (-> @templates (get id) :metadata :name)]
     (and registered-name (not= name registered-name))))
 
 (defn register-template

@@ -37,19 +37,20 @@
   {:type               "sequence-data"
    :editor-type        "dialog"
    :concept-var        "current-word"
-   :data               [{:type "empty" :duration 0}
-                        {:data        []
-                         :type        "text-animation"
-                         :audio       nil,
-                         :target      text-name
-                         :animation   "color"
-                         :fill        0x00B2FF
-                         :phrase-text text-value}]
+   :data               [{:type "sequence-data"
+                         :data [{:type "empty" :duration 0}
+                                {:data        []
+                                 :type        "text-animation"
+                                 :audio       nil,
+                                 :target      text-name
+                                 :animation   "color"
+                                 :fill        0x00B2FF
+                                 :phrase-text text-value}]}]
    :phrase             action-name
-   :phrase-description "Page Action"})
+   :phrase-description "Read page"})
 
 (defn- add-text-animation-action
-  [activity-data page-position {:keys [name objects text-name action]}]
+  [activity-data page-position {:keys [on-text-animation-action]} {:keys [name objects text-name action]}]
   (let [{:keys [name data]} (if (some? action)
                               action
                               (let [action-name (str name "-action")]
@@ -57,16 +58,19 @@
                                  :data (get-action-data {:action-name action-name
                                                          :text-name   text-name
                                                          :text-value  (get-in objects [(keyword text-name) :text])})}))
-        book-object-name (get-book-object-name activity-data)]
+        book-object-name (get-book-object-name activity-data)
+        on-text-animation-action (or on-text-animation-action (fn [x & _] x))]
     (-> activity-data
         (assoc-in [:objects book-object-name :pages page-position :action] name)
-        (assoc-in [:actions (keyword name)] data))))
+        (assoc-in [:actions (keyword name)] data)
+        (on-text-animation-action page-position name data))))
 
 (defn- add-page-to-book
   [activity-data
    {:keys [with-action? shift-from-end removable? position]
     :or   {shift-from-end 0
-           removable?     true}}
+           removable?     true}
+    :as content-data}
    {:keys [name resources objects text-name action] :as page-data}]
   (let [book-object-name (get-book-object-name activity-data)
         new-page-position (if (some? position)
@@ -82,7 +86,7 @@
                 (update-stages {:book-name book-object-name}))
             (and with-action?
                  (or (some? action)
-                     (some? text-name))) (add-text-animation-action new-page-position page-data))))
+                     (some? text-name))) (add-text-animation-action new-page-position content-data page-data))))
 
 (defn- add-pages-to-book
   [activity-data content-data pages-data]

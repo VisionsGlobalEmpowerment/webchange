@@ -74,7 +74,7 @@
 (reg-simple-executor :remove-flow-tag ::execute-remove-flow-tag)
 (reg-simple-executor :callback ::execute-callback)
 (reg-simple-executor :hide-skip ::execute-hide-skip)
-
+(reg-simple-executor :workflow ::execute-workflow)
 
 (def on-skip-handlers
   "A list of functions to invoke on skip actions.
@@ -457,18 +457,18 @@
   ::execute-sequence
   [event-as-action with-vars]
   (fn-traced [{:keys [db]} action]
-             "Execute `sequence` action - run a sequence of actions defined by their names.
+    "Execute `sequence` action - run a sequence of actions defined by their names.
 
-             Action params:
-             :data - actions names vector.
+    Action params:
+    :data - actions names vector.
 
-             Example:
-             {:type        'sequence',
-              :data        ['start-activity' 'clear-instruction' 'reset-tools' 'init-current-tool']}"
-             (let [data (->> (:data action)
-                             (map #(get-action % db action))
-                             (into []))]
-               {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
+    Example:
+    {:type        'sequence',
+     :data        ['start-activity' 'clear-instruction' 'reset-tools' 'init-current-tool']}"
+    (let [data (->> (:data action)
+                    (map #(get-action % db action))
+                    (into []))]
+      {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
 (defn execute-sequence-data!
   [db action]
@@ -505,17 +505,17 @@
   ::execute-sequence-data
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-             "Execute `sequence-data` action - run a sequence of actions defined by their data.
+    "Execute `sequence-data` action - run a sequence of actions defined by their data.
 
-             Action params:
-             :data - actions data vector.
+    Action params:
+    :data - actions data vector.
 
-             Example:
-             {:type 'sequence-data',
-              :data [{:type 'animation', :id 'volley_call', :target 'vera'}
-                     {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
-             (execute-sequence-data! db action)
-             {}))
+    Example:
+    {:type 'sequence-data',
+     :data [{:type 'animation', :id 'volley_call', :target 'vera'}
+            {:type 'add-animation', :id 'volley_idle', :target 'vera', :loop true}]}"
+    (execute-sequence-data! db action)
+    {}))
 
 (defn execute-parallel!
   [db action]
@@ -545,17 +545,17 @@
   ::execute-parallel
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-             "Execute `parallel` action - run in parallel several actions defined by their data.
+    "Execute `parallel` action - run in parallel several actions defined by their data.
 
-             Action params:
-             :data - actions data vector.
+    Action params:
+    :data - actions data vector.
 
-             Example:
-             {:type 'parallel',
-              :data [{:type 'state', :id 'hidden', :target 'letter-trace'}
-                     {:type 'state', :id 'hidden', :target 'letter-tutorial-path'}]}"
-             (execute-parallel! db action)
-             {}))
+    Example:
+    {:type 'parallel',
+     :data [{:type 'state', :id 'hidden', :target 'letter-trace'}
+            {:type 'state', :id 'hidden', :target 'letter-tutorial-path'}]}"
+    (execute-parallel! db action)
+    {}))
 
 (defn execute-callback!
   [db {:keys [callback] :as action}]
@@ -607,3 +607,88 @@
       (doseq [on-skip on-skip-list]
         (on-skip)))
     {:dispatch [::overlays/hide-skip-menu]}))
+
+(defn- init-workflow-indexes
+  [{:keys [data] :as action}]
+  (let [with-indexes (->> data
+                          (map-indexed (fn [idx action] (assoc action :index idx)))
+                          (into []))]
+    (assoc action :data with-indexes)))
+
+(defn- workflow-key
+  [{key :key}]
+  (or key "default-workflow-key"))
+
+(defn- drop-completed-actions
+  [{:keys [data] :as action}]
+  (let [state (get @variables (workflow-key action) #{})
+        filtered (->> data
+                      (remove #(contains? state (:index %)))
+                      (into []))]
+    (assoc action :data filtered)))
+
+(defn- complete-workflow-action!
+  [workflow {idx :index}]
+  (let [workflow-key (workflow-key workflow)
+        state (get @variables workflow-key #{})]
+    (when idx
+      (swap! variables assoc workflow-key (conj state idx)))))
+
+(defn- with-on-end
+  [{on-end :on-end :as action}]
+  (if on-end
+    (update action :data conj {:type "action" :id on-end})
+    action))
+
+(defn- init-workflow
+  [action]
+  (if (:initialized action)
+    action
+    (-> action
+        (with-on-end)
+        (init-workflow-indexes)
+        (drop-completed-actions)
+        (assoc :initialized true))))
+
+(defn execute-workflow!
+  [db action]
+  (if (empty? (:data action))
+    (dispatch-success-fn action)
+    (let [action (->> action
+                      (->with-vars db)
+                      (init-workflow))
+          [current & rest] (:data action)
+          rest (if (:workflow-user-input current) [] rest)
+          next #(execute-workflow! db (-> action (assoc :data rest)))
+          flow-id (random-uuid)
+          action-id (random-uuid)
+          flow-data {:flow-id flow-id :actions [action-id] :type :all :next next
+                     :parent (:flow-id action) :tags (get-action-tags action)
+                     :current-scene (:current-scene db)}
+          current-action (-> current
+                             (assoc :flow-id flow-id)
+                             (assoc :action-id action-id)
+                             (with-prev action))]
+      (register-flow! flow-data)
+
+      (js/console.log "workflow..." current)
+      (complete-workflow-action! action current-action)
+      (execute-action db current-action))))
+
+(re-frame/reg-event-fx
+  ::execute-workflow
+  [event-as-action]
+  (fn-traced [{:keys [db]} action]
+    "Execute `workflow` action - run a sequence of actions defined by their data.
+    Each finished action is marked as completed. Next time this workflow sequence is executed all
+    completed actions will be skipped. This allows executing workflow several times.
+
+    Action params:
+    :data - actions data vector.
+
+    Example:
+    {:type 'workflow',
+     :data [{:type 'action', :id 'dialog'}
+            {:type 'action', :id 'question', :workflow-user-input true}]}"
+    (execute-workflow! db action)
+    {}))

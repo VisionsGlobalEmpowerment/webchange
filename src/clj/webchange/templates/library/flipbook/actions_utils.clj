@@ -49,7 +49,7 @@
   [{:keys [concept-var phrase dialog-actions phrase-description]
     :or   {concept-var        "current-word"
            dialog-actions     [(create-animation-sequence-action)]
-           phrase-description "Page Action"}}]
+           phrase-description "Read Page"}}]
   {:type               "sequence-data"
    :editor-type        "dialog"
    :phrase             phrase
@@ -58,8 +58,9 @@
    :data               (->> dialog-actions
                             (map (fn [action]
                                    {:type "sequence-data"
-                                    :data [(create-empty-action)
-                                           (if (map? action)
-                                             action
-                                             (create-action (first action) (second action)))]}))
+                                    :data [{:type "sequence-data"
+                                            :data [(create-empty-action)
+                                                   (if (map? action)
+                                                     action
+                                                     (create-action (first action) (second action)))]}]}))
                             (vec))})
