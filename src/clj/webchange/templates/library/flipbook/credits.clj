@@ -1,4 +1,8 @@
-(ns webchange.templates.library.flipbook.credits)
+(ns webchange.templates.library.flipbook.credits
+  (:require
+    [clojure.tools.logging :as log]
+    [webchange.templates.library.flipbook.actions-utils :refer [create-dialog-action]]
+    [webchange.utils.text :as text-utils]))
 
 (def page-name "credits-page")
 
@@ -37,39 +41,56 @@
                                     :align       "center"
                                     :text        "My Book"}})
 
+(defn- get-action-data
+  [{:keys [action-name texts-data]}]
+  (create-dialog-action {:phrase             action-name
+                         :phrase-description "Read credentials"
+                         :dialog-actions     (map (fn [{:keys [name text]}]
+                                                    [:text-animation {:target      name
+                                                                      :phrase-text text}])
+                                                  texts-data)}))
 
 (defn- generate-list-block
-  [{:keys [name label data label-width vertical-step]}]
+  [{:keys [name label data label-width value-width vertical-step]}]
   (let [label-name (str name "-label")]
     (->> data
          (map-indexed vector)
-         (reduce (fn [result [index illustrator-name]]
+         (reduce (fn [result [index text]]
                    (let [object-name (str name "-" index)]
                      (-> result
-                         (update-in [(keyword name) :children] conj object-name)
-                         (assoc (keyword object-name) {:type        "text"
-                                                       :x           label-width
-                                                       :y           (* index vertical-step)
-                                                       :fill        "black"
-                                                       :font-size   32
-                                                       :font-family "Lexend Deca"
-                                                       :text        illustrator-name}))))
-                 (-> {}
-                     (assoc (keyword name) {:type     "group"
-                                            :x        "---"
-                                            :y        "---"
-                                            :children [label-name]})
-                     (assoc (keyword label-name) {:type        "text"
-                                                  :x           0
-                                                  :y           0
-                                                  :fill        "black"
-                                                  :font-size   32
-                                                  :font-family "Lexend Deca"
-                                                  :text        label}))))))
+                         (update :texts-data conj {:text text
+                                                   :name object-name})
+                         (update-in [:data (keyword name) :children] conj object-name)
+                         (assoc-in [:data (keyword object-name)] {:type        "text"
+                                                                  :x           label-width
+                                                                  :y           (* index vertical-step)
+                                                                  :width       value-width
+                                                                  :fill        "black"
+                                                                  :font-size   32
+                                                                  :font-family "Lexend Deca"
+                                                                  :text        text
+                                                                  :chunks      (text-utils/text->chunks text)}))))
+                 {:texts-data [{:name label-name
+                                :text label}]
+                  :data       (-> {}
+                                  (assoc (keyword name) {:type     "group"
+                                                         :x        "---"
+                                                         :y        "---"
+                                                         :children [label-name]})
+                                  (assoc (keyword label-name) {:type        "text"
+                                                               :x           0
+                                                               :y           0
+                                                               :width       label-width
+                                                               :fill        "black"
+                                                               :font-size   32
+                                                               :font-family "Lexend Deca"
+                                                               :text        label
+                                                               :chunks      (text-utils/text->chunks label)}))}))))
 
 (defn- generate-authors-block
   [{:keys [data]}]
   (let [block-params {:label-width   250
+                      :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
                                 {:name     "credits-page-authors"
@@ -81,6 +102,7 @@
 (defn- generate-illustrators-block
   [{:keys [data]}]
   (let [block-params {:label-width   250
+                      :value-width   250
                       :vertical-step 50}]
     (generate-list-block (merge block-params
                                 {:name     "credits-page-illustrators"
@@ -118,13 +140,19 @@
       (assoc-in [:credits-page-background-border :fill] border-color)))
 
 (defn create
-  ""
   [page-params {:keys [authors illustrators] :as content-params}]
-  {:name      page-name
-   :resources resources
-   :objects   (-> (merge template
-                         (generate-authors-block {:data authors})
-                         (generate-illustrators-block {:data illustrators}))
-                  (apply-page-size page-params)
-                  (set-content content-params)
-                  (set-colors page-params))})
+  (let [authors-data (generate-authors-block {:data authors})
+        illustrators-data (generate-illustrators-block {:data illustrators})
+        action-name "credentials-action"
+        texts-data (concat (:texts-data authors-data) (:texts-data illustrators-data))]
+    {:name      page-name
+     :resources resources
+     :action    {:name action-name
+                 :data (get-action-data {:action-name action-name
+                                         :texts-data  texts-data})}
+     :objects   (-> (merge template
+                           (:data authors-data)
+                           (:data illustrators-data))
+                    (apply-page-size page-params)
+                    (set-content content-params)
+                    (set-colors page-params))}))

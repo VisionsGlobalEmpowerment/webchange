@@ -36,3 +36,13 @@
   (let [item (nth list position-from)]
     (-> (remove-at-position list position-from)
         (insert-at-position item position-to))))
+
+(defn find-item-position
+  [list predicate]
+  "Find item position in list by predicate."
+  {:pre [(sequential? list)
+         (fn? predicate)]}
+  (->> (map-indexed vector list)
+       (some (fn [[index item]]
+               (and (predicate item)
+                    index)))))

@@ -7,15 +7,32 @@
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
     [webchange.editor-v2.wizard.activity-template.views :refer [template]]))
 
+(defn- get-action-default-data
+  [scene-data action-data]
+  (when (some? get-action-default-data)
+    (if (contains? action-data :default-props)
+      (let [props-key (-> action-data (get :default-props) (keyword))
+            saved-props (get-in scene-data [:metadata :saved-props] {})]
+        (->> (get saved-props props-key {})
+             (map (fn [[key value]] [(clojure.core/name key) value]))
+             (into {})))
+      {})))
+
+(defn- get-form-data
+  [scene-data action-data]
+  (let [data (get-action-default-data scene-data action-data)]
+    (when (some? data)
+      (r/atom data))))
+
 (defn action-modal
   [{:keys [course-id]}]
   (let [open? @(re-frame/subscribe [::scene-action.events/modal-state])
-        current-action @(re-frame/subscribe [::scene-action.events/current-action])
         scene-id (re-frame/subscribe [::subs/current-scene])
         scene-data @(re-frame/subscribe [::subs/scene @scene-id])
         metadata (get scene-data :metadata)
-        action (get-in metadata [:actions current-action])
-        data (r/atom {})
+        current-action-name @(re-frame/subscribe [::scene-action.events/current-action])
+        current-action-data (get-in metadata [:actions current-action-name])
+        data (get-form-data scene-data current-action-data)
         close #(re-frame/dispatch [::scene-action.events/close])
         save #(re-frame/dispatch [::scene-action.events/save @data])]
     (when open?
@@ -24,11 +41,12 @@
         :on-close   close
         :full-width true
         :max-width  "xl"}
-       [ui/dialog-title (:title action)]
+       [ui/dialog-title (:title current-action-data)]
        [ui/dialog-content {:class-name "translation-form"}
-        [template {:template action
-                   :metadata metadata
-                   :data     data}]]
+        (when (some? data)
+          [template {:template current-action-data
+                     :metadata metadata
+                     :data     data}])]
        [ui/dialog-actions
         [ui/button {:on-click close}
          "Cancel"]

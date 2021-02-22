@@ -1,7 +1,6 @@
 (ns webchange.templates.library.flipbook.cover-front
   (:require
     [clojure.string :refer [join]]
-    [clojure.tools.logging :as log]
     [webchange.utils.text :as text-utils]))
 
 (def page-name "page-cover")

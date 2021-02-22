@@ -49,7 +49,6 @@
   (let [page-key (-> page-side (clojure.core/name) (str "-page") (keyword))
         data (-> (get-stage-data scene-data stage-idx)
                  (get page-key))]
-    ;(print "data" data)
     (if (some? (:text data))
       (populate-page-text-data data scene-data)
       data)))

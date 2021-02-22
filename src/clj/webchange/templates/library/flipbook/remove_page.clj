@@ -2,7 +2,7 @@
   (:require
     [webchange.templates.library.flipbook.page-number :refer [update-pages-numbers]]
     [webchange.templates.library.flipbook.stages :refer [update-stages]]
-    [webchange.templates.library.flipbook.utils :refer [get-page-data]]))
+    [webchange.templates.library.flipbook.utils :refer [get-book-object-name get-page-data stage-number->page-number]]))
 
 (defn- remove-from-list
   [list index]
@@ -29,9 +29,14 @@
   (update-in activity-data [:actions] dissoc action-name))
 
 (defn remove-page
-  [activity-data {:keys [page-side stage]} page-params]
-  (let [{:keys [book-name page-data page-number]} (get-page-data activity-data stage page-side)]
-    (if (:removable? page-data)
+  [activity-data {:keys [page-side stage page-number force-remove?]} page-params]
+  (let [book-name (get-book-object-name activity-data)
+        page-number (if (some? page-number)
+                      page-number
+                      (stage-number->page-number activity-data stage page-side))
+        page-data (get-page-data activity-data page-number)]
+    (if (or force-remove?
+            (:removable? page-data))
       (-> activity-data
           (remove-object (keyword (:object page-data)))
           (remove-action (keyword (:action page-data)))
