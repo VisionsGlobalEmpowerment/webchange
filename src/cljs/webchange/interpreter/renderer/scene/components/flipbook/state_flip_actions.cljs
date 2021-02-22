@@ -1,5 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.flipbook.state-flip-actions
   (:require
+    ["gsap/umd/TweenMax" :refer [TweenMax]]
     [re-frame.core :as re-frame]
     [webchange.interpreter.pixi :refer [Graphics]]
     [webchange.interpreter.renderer.scene.components.utils :as components-utils]))

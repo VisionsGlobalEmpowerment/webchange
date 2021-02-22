@@ -16,6 +16,7 @@
     [webchange.interpreter.renderer.scene.components.slider.component :as slider]
     [webchange.interpreter.renderer.scene.components.svg-path.component :as svg-path]
     [webchange.interpreter.renderer.scene.components.text.component :as text]
+    [webchange.interpreter.renderer.scene.components.timer.component :as timer]
     [webchange.interpreter.renderer.scene.components.transparent.component :as transparent]
     [webchange.interpreter.renderer.scene.components.video.component :as video]
     [webchange.interpreter.renderer.scene.components.traffic-light.component :as traffic-light]))
@@ -52,6 +53,8 @@
                                                           :default-props svg-path/default-props}
                                  text/component-type {:constructor   text/create
                                                       :default-props text/default-props}
+                                 timer/component-type {:constructor   timer/create
+                                                       :default-props timer/default-props}
                                  transparent/component-type {:constructor   transparent/create
                                                              :default-props transparent/default-props}
                                  video/component-type {:constructor   video/create
