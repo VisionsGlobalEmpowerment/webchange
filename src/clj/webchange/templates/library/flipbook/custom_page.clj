@@ -71,8 +71,9 @@
         (update-in [:page :children] conj "page-text-background"))))
 
 (defn- add-text
-  [page-data {:keys [pos size]} {:keys [width height padding text-color]} {:keys [text] :or {text ""}}]
-  (let [text-height (-> height (* size) int)
+  [page-data {:keys [pos size]} {:keys [width height padding text-color]} {:keys [text]}]
+  (let [text (or text "")
+        text-height (-> height (* size) int)
         y (if (= pos :top)
             0
             (- height text-height))

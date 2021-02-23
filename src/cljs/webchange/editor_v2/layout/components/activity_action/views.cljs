@@ -21,38 +21,44 @@
   [scene-data action-data action-name]
   (let [defaults {:action action-name}
         data (get-action-default-data scene-data action-data)]
-    (atom (merge defaults data))))
+    (merge defaults data)))
 
 (defn action-modal
-  [{:keys [course-id]}]
+  []
+  (r/with-let [scene-id (re-frame/subscribe [::subs/current-scene])
+               scene-data @(re-frame/subscribe [::subs/scene @scene-id])
+               metadata (get scene-data :metadata)
+               current-action-name @(re-frame/subscribe [::scene-action.events/current-action])
+               current-action-data (get-in metadata [:actions current-action-name])
+               data (r/atom (get-form-data scene-data current-action-data current-action-name))
+               close #(re-frame/dispatch [::scene-action.events/close])
+               save #(re-frame/dispatch [::scene-action.events/save @data])]
+    [ui/dialog
+     {:open       true
+      :on-close   close
+      :full-width true
+      :max-width  "xl"}
+     [ui/dialog-title (:title current-action-data)]
+     [ui/dialog-content {:class-name "translation-form"}
+      [template {:template current-action-data
+                 :metadata metadata
+                 :data     data}]]
+     [ui/dialog-actions
+      [ui/button {:on-click close}
+       "Cancel"]
+      [:div {:style {:position "relative"}}
+       [ui/button {:color    "secondary"
+                   :variant  "contained"
+                   :on-click save}
+        "Save"]]]]))
+
+(defn action-modal-container
+  []
   (let [open? @(re-frame/subscribe [::scene-action.events/modal-state])
-        scene-id (re-frame/subscribe [::subs/current-scene])
-        scene-data @(re-frame/subscribe [::subs/scene @scene-id])
-        metadata (get scene-data :metadata)
-        current-action-name @(re-frame/subscribe [::scene-action.events/current-action])
-        current-action-data (get-in metadata [:actions current-action-name])
-        data (get-form-data scene-data current-action-data current-action-name)
-        close #(re-frame/dispatch [::scene-action.events/close])
-        save #(re-frame/dispatch [::scene-action.events/save @data])]
+        current-action-name @(re-frame/subscribe [::scene-action.events/current-action])]
     (when open?
-      [ui/dialog
-       {:open       true
-        :on-close   close
-        :full-width true
-        :max-width  "xl"}
-       [ui/dialog-title (:title current-action-data)]
-       [ui/dialog-content {:class-name "translation-form"}
-        [template {:template current-action-data
-                   :metadata metadata
-                   :data     data}]]
-       [ui/dialog-actions
-        [ui/button {:on-click close}
-         "Cancel"]
-        [:div {:style {:position "relative"}}
-         [ui/button {:color    "secondary"
-                     :variant  "contained"
-                     :on-click save}
-          "Save"]]]])))
+      ^{:key current-action-name}
+      [action-modal])))
 
 (defn- action-button
   [{:keys [name handle-click]}]
@@ -63,11 +69,11 @@
     name]])
 
 (defn activity-actions
-  [{:keys [scene-data course-id]}]
+  [{:keys [scene-data]}]
   (let [actions (get-in scene-data [:metadata :actions])]
     [:div
      (for [[name action] actions]
        ^{:key name}
        [action-button {:name         (:title action)
                        :handle-click #(re-frame/dispatch [::scene-action.events/show-actions-form name])}])
-     [action-modal {:course-id course-id}]]))
+     [action-modal-container]]))
