@@ -26,14 +26,14 @@
 
 (defn- template->options
   "Support both versions of options declaration:
-   1. {:options [{:key :some-key
+   1. {:options [{:key \"some-key\"
                   ...}]}
    2. {:options {:some-key {...}}}"
   [template]
   (if (sequential? (:options template))
     (->> (:options template)
          (map (fn [{:keys [key] :as option}]
-                [key option])))
+                [(keyword key) option])))
     (:options template)))
 
 (defn- filter-options
