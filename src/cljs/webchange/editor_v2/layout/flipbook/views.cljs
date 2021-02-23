@@ -17,7 +17,7 @@
                                     [ui/typography {:inline  true
                                                     :variant "body1"
                                                     :style   {:margin-right "16px"}}
-                                     "Stage:"]
+                                     "Spreads:"]
                                     [select-stage {:styles {:container {:flex-grow 1}
                                                             :image     {:max-width  "200px"
                                                                         :max-height "100px"}}}]]

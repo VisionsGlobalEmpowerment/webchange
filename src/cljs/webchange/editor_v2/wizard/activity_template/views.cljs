@@ -53,13 +53,14 @@
 
 (defn template
   [{:keys [template metadata data validator]}]
-  (let [options (template->options template)]
+  (let [options (template->options template)
+        filtered-options (filter-options @data metadata options)]
     (set-default-values! data options)
     [ui/grid {:container   true
               :justify     "space-between"
               :spacing     24
               :align-items "center"}
-     (for [[key option] (filter-options @data metadata options)]
+     (for [[key option] filtered-options]
        ^{:key key}
        [ui/grid {:item true :xs 12}
         [option-info {:key       key

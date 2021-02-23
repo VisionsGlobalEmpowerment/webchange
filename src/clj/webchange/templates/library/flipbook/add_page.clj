@@ -65,6 +65,10 @@
         (assoc-in [:actions (keyword name)] data)
         (on-text-animation-action page-position name data))))
 
+(defn- update-current-side
+  [activity-data]
+  (update-in activity-data [:metadata :flipbook-pages :current-side] #(if (= % "right") "left" "right")))
+
 (defn- add-page-to-book
   [activity-data
    {:keys [with-action? shift-from-end removable? position]
@@ -83,7 +87,8 @@
                 (update :assets concat resources)
                 (update :objects merge objects)
                 (update-in [:objects book-object-name :pages] insert-at-position {:object name :text text-name :removable? removable?} new-page-position)
-                (update-stages {:book-name book-object-name}))
+                (update-stages {:book-name book-object-name})
+                (update-current-side))
             (and with-action?
                  (or (some? action)
                      (some? text-name))) (add-text-animation-action new-page-position content-data page-data))))

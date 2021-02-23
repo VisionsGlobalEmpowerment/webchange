@@ -71,7 +71,7 @@
 
 (defn get-pages-count
   [activity-data]
-  (let [pages-data (get-pages-data activity-data )]
+  (let [pages-data (get-pages-data activity-data)]
     (count pages-data)))
 
 (defn get-page-data

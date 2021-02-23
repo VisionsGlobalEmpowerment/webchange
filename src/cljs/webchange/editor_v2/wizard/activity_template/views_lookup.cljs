@@ -25,8 +25,7 @@
                         :style   {:display      "inline-block"
                                   :margin-right "16px"}}
          (:label option)]
-        [ui/form-control {:style {:margin-top "-18px"}}
-         [ui/input-label "Value"]
+        [ui/form-control
          [ui/select {:value     @lookup-data
                      :variant   "outlined"
                      :on-change #(reset! lookup-data (-> % .-target .-value))

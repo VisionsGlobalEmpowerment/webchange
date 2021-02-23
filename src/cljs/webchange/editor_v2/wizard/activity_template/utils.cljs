@@ -6,7 +6,7 @@
     (and (sequential? key)
          (= "metadata" (first key))) (let [[_ & path] key]
                                       (get-in metadata (map keyword path)))
-    :else (get form-data key)))
+    :else (get form-data (keyword key))))
 
 (defn- check-condition
   [{:keys [key state value]} data]
