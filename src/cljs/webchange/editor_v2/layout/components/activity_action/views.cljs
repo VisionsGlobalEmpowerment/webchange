@@ -21,7 +21,7 @@
   [scene-data action-data action-name]
   (let [defaults {:action action-name}
         data (get-action-default-data scene-data action-data)]
-    (merge defaults data)))
+    (atom (merge defaults data))))
 
 (defn action-modal
   [{:keys [course-id]}]
