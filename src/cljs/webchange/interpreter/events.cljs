@@ -1328,7 +1328,8 @@
 (re-frame/reg-event-fx
   ::back-scene
   (fn [{:keys [db]} [_ _]]
-    {:dispatch-n (list [::execute-scene-exit {:exit-point "back"}])}))
+    {:dispatch-n (list [::trigger :back]
+                       [::execute-scene-exit {:exit-point "back"}])}))
 
 (re-frame/reg-event-fx
   ::open-student-dashboard

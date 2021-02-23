@@ -33,9 +33,8 @@
   [db]
   (let [finished (get-in db [:progress-data :finished])]
     (->> finished
-         (map second)
-         (map vals)
-         flatten
+         vals
+         (mapcat vals)
          (map count)
          (reduce +))))
 
