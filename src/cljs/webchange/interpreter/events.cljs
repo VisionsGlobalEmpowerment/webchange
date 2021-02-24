@@ -18,6 +18,7 @@
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.sw-utils.state.status :as sw-status]
     [webchange.interpreter.renderer.state.scene :as scene]
+    [webchange.interpreter.renderer.scene.components.counter.state]
     [webchange.interpreter.renderer.scene.components.timer.state]
     [webchange.interpreter.renderer.scene.components.flipbook.state]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
