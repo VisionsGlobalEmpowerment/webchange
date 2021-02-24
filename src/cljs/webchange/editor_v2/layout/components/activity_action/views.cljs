@@ -5,7 +5,8 @@
     [reagent.core :as r]
     [webchange.subs :as subs]
     [webchange.editor-v2.layout.components.activity-action.state :as scene-action.events]
-    [webchange.editor-v2.wizard.activity-template.views :refer [template]]))
+    [webchange.editor-v2.wizard.activity-template.views :refer [template]]
+    [webchange.editor-v2.wizard.validator :as validator]))
 
 (defn- get-action-default-data
   [scene-data action-data]
@@ -31,8 +32,9 @@
                current-action-name @(re-frame/subscribe [::scene-action.events/current-action])
                current-action-data (get-in metadata [:actions current-action-name])
                data (r/atom (get-form-data scene-data current-action-data current-action-name))
+               {:keys [valid?] :as validator} (validator/init data)
                close #(re-frame/dispatch [::scene-action.events/close])
-               save #(re-frame/dispatch [::scene-action.events/save @data])]
+               save #(if (valid?) (re-frame/dispatch [::scene-action.events/save @data]))]
     [ui/dialog
      {:open       true
       :on-close   close
@@ -42,7 +44,8 @@
      [ui/dialog-content {:class-name "translation-form"}
       [template {:template current-action-data
                  :metadata metadata
-                 :data     data}]]
+                 :data     data
+                 :validator validator}]]
      [ui/dialog-actions
       [ui/button {:on-click close}
        "Cancel"]
