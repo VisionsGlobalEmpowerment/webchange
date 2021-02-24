@@ -34,28 +34,28 @@
   ([value on-change]
    (image-field value on-change nil))
   ([value on-change upload-options]
-  (r/with-let [uploading (r/atom false)]
-    (let [styles (get-styles)]
-      [ui/grid {:container true :justify "flex-start" :align-items "flex-end"
-                :spacing   16}
-       (when-not (empty? value)
-         [ui/grid {:item  true :xs 12
-                   :style {:display         "flex"
-                           :justify-content "flex-start"}}
-          (if @uploading
-            [ui/circular-progress]
-            [:img {:src   value
-                   :style {:max-width     "100%"
-                           :max-height    "400px"
-                           :border        "1px solid #4b4b4b"
-                           :border-radius "4px"
-                           :padding       "4px"}}])])
-       [ui/grid {:item  true :xs 12
-                 :style {:display "flex"}}
-        [select-file-form :image uploading on-change upload-options]
-        [ui/text-field {:value     (str value)
-                        :style     (:image-src styles)
-                        :on-change #(on-change (-> % .-target .-value))}]]]))))
+   (r/with-let [uploading (r/atom false)]
+     (let [styles (get-styles)]
+       [ui/grid {:container true :justify "flex-start" :align-items "flex-end"
+                 :spacing   16}
+        [ui/grid {:item  true :xs 12
+                  :style {:display         "flex"
+                          :justify-content "flex-start"}}
+         (if @uploading
+           [ui/circular-progress]
+           (when-not (empty? value)
+             [:img {:src   value
+                    :style {:max-width     "100%"
+                            :max-height    "400px"
+                            :border        "1px solid #4b4b4b"
+                            :border-radius "4px"
+                            :padding       "4px"}}]))]
+        [ui/grid {:item  true :xs 12
+                  :style {:display "flex"}}
+         [select-file-form :image uploading on-change upload-options]
+         [ui/text-field {:value     (str value)
+                         :style     (:image-src styles)
+                         :on-change #(on-change (-> % .-target .-value))}]]]))))
 
 
 (defn image-option
