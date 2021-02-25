@@ -49,6 +49,13 @@
     (assoc object :draggable true)
     object))
 
+(defn- with-collision
+  [{:keys [actions collidable?] :as object}]
+  (if collidable?
+    (let [test (some (fn [[_ {:keys [on test]}]] (and (= on "collide") test)) actions)]
+      (assoc object :collide-test test))
+    object))
+
 (defn- with-scale
   [object]
   (-> (cond-> object
@@ -64,4 +71,5 @@
       with-origin-offset
       with-transition
       with-draggable
+      with-collision
       with-scale))
