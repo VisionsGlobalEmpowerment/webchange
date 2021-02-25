@@ -58,9 +58,8 @@
    :data               (->> dialog-actions
                             (map (fn [action]
                                    {:type "sequence-data"
-                                    :data [{:type "sequence-data"
-                                            :data [(create-empty-action)
-                                                   (if (map? action)
-                                                     action
-                                                     (create-action (first action) (second action)))]}]}))
+                                    :data [(create-empty-action)
+                                           (if (map? action)
+                                             action
+                                             (create-action (first action) (second action)))]}))
                             (vec))})

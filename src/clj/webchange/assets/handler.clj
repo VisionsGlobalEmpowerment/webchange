@@ -35,12 +35,14 @@
   (if (contains? types type)
     type))
 
-(defn get-additional-image-params [file]
-  (im/get-image-info file))
+(defn get-additional-image-params [filepath]
+  (let [file (io/file filepath)]
+    (when (.exists file)
+      (im/get-image-info file))))
 
-(defn get-additional-params [type file]
+(defn get-additional-params [type filepath]
   (if (= type "image")
-    (get-additional-image-params file)))
+    (get-additional-image-params filepath)))
 
 (defn normalize-size [size]
   (int (Math/ceil (/ size 10000))))
