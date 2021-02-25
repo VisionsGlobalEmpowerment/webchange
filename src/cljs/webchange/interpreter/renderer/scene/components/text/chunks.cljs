@@ -127,6 +127,9 @@
 (defn chunk-transition-name [name index]
   (if index (str "chunk-" name "-" index)))
 
+(defn chunk-animated-variable [name]
+  (str "chunk-" name "-animated"))
+
 (defn lines-with-y
   [props]
   (let [lines (get-lines props)
