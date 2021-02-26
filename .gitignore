@@ -9,6 +9,7 @@
 /.idea
 /.sass-cache
 /.calva
+/.lsp
 /tmp
 webchange.iml
 /node_modules

@@ -233,8 +233,9 @@
         course (if course course (second (core/create-course (assoc data :name course-name)  owner-id)))
         metadata (if (= (:orientation book-info) "portrait") book-vertical-page/m book-horizontal-page/m)
         activity (if (= (:orientation book-info) "portrait")  (book-vertical-page/f book-info) (book-horizontal-page/f book-info))
-        scene (if (core/get-scene-data (-> course :slug) (:name data))
-                (second (core/save-scene! (-> course :slug) (:name data) activity owner-id))
-                (second (core/create-scene! activity metadata  (-> course :slug) (:name data) (:skills data) owner-id)))
-        ]
-    (println (str "/s/" (:course-slug scene) "/" (:name scene)))))
+        course-slug (-> course :slug)
+        scene-slug (:name data)]
+    (if (core/get-scene-data course-slug scene-slug)
+      (second (core/save-scene! course-slug scene-slug activity owner-id))
+      (second (core/create-scene! activity metadata course-slug scene-slug (:skills data) owner-id)))
+    (println (str "/s/" course-slug "/" scene-slug))))

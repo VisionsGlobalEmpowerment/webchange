@@ -144,8 +144,8 @@
         (update-pages-numbers page-params))))
 
 (defn update-activity
-  [activity-data props action]
-  (case action
+  [activity-data {action-name :action-name :as props}]
+  (case action-name
     "add-page" (add-page-handler activity-data props)
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)
@@ -153,5 +153,4 @@
                         (assoc-in [:metadata :saved-props :wizard] props))))
 
 (core/register-template
-  metadata create-activity {:handler update-activity
-                            :props   {:with-action? true}})
+  metadata create-activity update-activity)

@@ -105,7 +105,8 @@
     :plugins      [[lein-doo "0.1.8"]]
     :main         webchange.server-dev
     :repl-options {:init-ns webchange.server
-                   :init (dev)}}
+                   :init (dev)}
+    :source-paths ["env/dev/clj"]}
    :prod {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths ["env/prod/clj"]
              :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]
