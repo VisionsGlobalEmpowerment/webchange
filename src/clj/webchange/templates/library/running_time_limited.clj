@@ -12,7 +12,12 @@
                       {:name "concept-name"
                        :type "string"}
                       {:name "letter"
-                       :type "string"}]})
+                       :type "string"}]
+        :options     {:time {:label   "Time in seconds"
+                             :type    "lookup"
+                             :options [{:name "30" :value 30}
+                                       {:name "45" :value 45}
+                                       {:name "60" :value 60}]}}})
 
 (def t {:assets        [{:url "/raw/img/stadium/running/bg_01.jpg" :type "image"}
                         {:url "/raw/img/stadium/running/bg_02.jpg" :type "image"}
@@ -32,14 +37,34 @@
                                               :show-minutes  false
                                               :show-progress true
                                               :time          60
-                                              :actions       {:end {:on "end" :type "action" :id "finish-game"}}}
-                        :counter             {:type       "counter"
-                                              :transition "counter"
-                                              :x          480
-                                              :y          100}
+                                              :actions       {:end {:on "end" :type "action" :id "finish-game"}}
+                                              :states        {:highlighted {:filter "glow"}
+                                                              :normal      {:filter ""}}}
+
+                        :target-group        {:type     "group"
+                                              :x        260
+                                              :y        60
+                                              :children ["letter-target" "box-target" "counter"]}
+                        :letter-target       {:type           "text"
+                                              :x              0
+                                              :y              -10
+                                              :width          150
+                                              :height         150
+                                              :transition     "letter-target"
+                                              :align          "center"
+                                              :fill           0xff9000
+                                              :font-family    "Lexend Deca"
+                                              :font-size      120
+                                              :shadow-blur    5
+                                              :shadow-color   "#1a1a1a"
+                                              :shadow-opacity 0.5
+                                              :text           "a"
+                                              :vertical-align "middle"
+                                              :states         {:highlighted {:filter "glow"}
+                                                               :normal      {:filter ""}}}
                         :box-target          {:type        "animation"
-                                              :x           350
-                                              :y           210
+                                              :x           250
+                                              :y           150
                                               :width       671
                                               :height      633
                                               :scale       {:x 0.25 :y 0.25}
@@ -52,6 +77,11 @@
                                               :skin        "qwestion"
                                               :speed       0.3
                                               :start       true}
+                        :counter             {:type       "counter"
+                                              :transition "counter"
+                                              :x          400
+                                              :y          40}
+
                         :line-1              {:type    "transparent"
                                               :x       0
                                               :y       540
@@ -215,18 +245,18 @@
                                               :skin       "default"
                                               :speed      1
                                               :start      true}
-                        :vera-collision-test {:type        "rectangle"
+                        :vera-collision-test {:type        "transparent"
                                               :x           150
-                                              :y           -50
+                                              :y           -55
                                               :width       10
                                               :height      10
                                               :transition  "vera-collision-test"
                                               :collidable? true
                                               :actions     {:collide {:on "collide" :test ["box1" "box2" "box3"] :type "action" :id "check-line" :pick-event-param "target"}}}}
         :scene-objects [["background"]
-                        ["vera-group" "mari"]
                         ["box-1-group" "box-2-group" "box-3-group"]
-                        ["box-target" "timer" "counter" "line-1" "line-2" "line-3"]]
+                        ["vera-group" "mari"]
+                        ["target-group" "timer" "line-1" "line-2" "line-3"]]
         :actions       {:dialog-1-welcome        {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :concept-var        "current-concept"
@@ -237,17 +267,46 @@
                                                   :phrase-description "Welcome dialog"
                                                   :dialog-track       "1 Welcome"
                                                   :skippable          true}
-                        :dialog-2-chant          {:type               "sequence-data"
+                        :dialog-2-intro-concept  {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
                                                                         :data [{:type "empty" :duration 0}
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                  :phrase             "chant"
-                                                  :phrase-description "Chant dialog"
-                                                  :dialog-track       "2 Chant"
+                                                  :phrase             "concept"
+                                                  :phrase-description "Introduce concept"
+                                                  :dialog-track       "2 Introduce"
                                                   :tags               ["instruction"]}
-                        :dialog-3-correct        {:type               "sequence-data"
+                        :dialog-3-intro-timer    {:type               "sequence-data"
+                                                  :editor-type        "dialog"
+                                                  :concept-var        "current-concept"
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase             "timer"
+                                                  :phrase-description "Introduce timer"
+                                                  :dialog-track       "2 Introduce"
+                                                  :tags               ["instruction"]}
+                        :dialog-4-ready-go       {:type               "sequence-data"
+                                                  :editor-type        "dialog"
+                                                  :concept-var        "current-concept"
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase             "ready-go"
+                                                  :phrase-description "Ready-Go"
+                                                  :dialog-track       "3 Start"}
+                        :dialog-5-starting-noise {:type               "sequence-data"
+                                                  :editor-type        "dialog"
+                                                  :concept-var        "current-concept"
+                                                  :data               [{:type "sequence-data"
+                                                                        :data [{:type "empty" :duration 0}
+                                                                               {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                  :phrase             "noise"
+                                                  :phrase-description "Starting noise"
+                                                  :dialog-track       "3 Start"}
+
+                        :dialog-6-correct        {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
@@ -255,8 +314,8 @@
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
                                                   :phrase             "correct"
                                                   :phrase-description "Correct dialog"
-                                                  :dialog-track       "3 Options"}
-                        :dialog-4-wrong          {:type               "sequence-data"
+                                                  :dialog-track       "4 Options"}
+                        :dialog-7-wrong          {:type               "sequence-data"
                                                   :editor-type        "dialog"
                                                   :concept-var        "current-concept"
                                                   :data               [{:type "sequence-data"
@@ -264,7 +323,7 @@
                                                                                {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
                                                   :phrase             "wrong"
                                                   :phrase-description "Wrong dialog"
-                                                  :dialog-track       "3 Options"}
+                                                  :dialog-track       "4 Options"}
 
                         :go-line                 {:type "sequence-data"
                                                   :data [{:type     "set-variable"
@@ -320,6 +379,22 @@
                                                          {:type "set-variable" :var-name "slot3" :var-value "box3"}
                                                          {:type "set-variable" :var-name "current-line" :var-value "box2"}]}
 
+                        :init-current-concept    {:type "sequence-data"
+                                                  :data [{:from        "concepts-single"
+                                                          :type        "lesson-var-provider"
+                                                          :limit       1
+                                                          :variables   ["current-concept"]
+                                                          :provider-id "current-concept-provider"}
+                                                         {:type       "set-slot"
+                                                          :target     "box-target"
+                                                          :from-var   [{:var-name "current-concept" :var-property "image-src" :action-property "image"}]
+                                                          :slot-name  "box1"
+                                                          :attachment {:x 40 :scale-x 4 :scale-y 4}}
+                                                         {:type      "set-attribute"
+                                                          :target    "letter-target"
+                                                          :from-var  [{:var-name "current-concept" :var-property "letter" :action-property "attr-value"}]
+                                                          :attr-name "text"}]}
+
                         :renew-current-concept   {:type "sequence-data"
                                                   :data [{:data [{:id "init" :type "state" :target "box-1-group"}
                                                                  {:id "init" :type "state" :target "box-2-group"}
@@ -331,12 +406,6 @@
                                                                  {:id "reset" :type "state" :target "box-3-group"}]
                                                           :type "parallel"}
                                                          {:id "wait-for-box-animations" :type "action"}
-                                                         {:from        ["item-1-1" "item-1-2" "item-1-3" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"]
-                                                          :type        "vars-var-provider"
-                                                          :on-end      "finish-activity"
-                                                          :shuffled    true
-                                                          :variables   ["current-concept"]
-                                                          :provider-id "current-concept"}
                                                          {:from      ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"]
                                                           :type      "vars-var-provider"
                                                           :unique    true
@@ -350,12 +419,6 @@
                                                           :type      "vars-var-provider"
                                                           :shuffled  true
                                                           :variables ["box1" "box2" "box3"]}
-                                                         {:data [{:type       "set-slot"
-                                                                  :target     "box-target"
-                                                                  :from-var   [{:var-name "current-concept" :var-property "image-src" :action-property "image"}]
-                                                                  :slot-name  "box1"
-                                                                  :attachment {:x 40 :scale-x 4 :scale-y 4}}]
-                                                          :type "parallel"}
                                                          {:data [{:type      "set-attribute"
                                                                   :target    "letter1"
                                                                   :from-var  [{:var-name "box1" :var-property "letter" :action-property "attr-value"}]
@@ -369,8 +432,7 @@
                                                                   :from-var  [{:var-name "box3" :var-property "letter" :action-property "attr-value"}]
                                                                   :attr-name "text"}]
                                                           :type "parallel"}
-                                                         {:data [{:id "dialog-2-chant" :type "action"}
-                                                                 {:to {:x -700 :duration 7} :type "transition" :transition-id "box-1-group"}
+                                                         {:data [{:to {:x -700 :duration 7} :type "transition" :transition-id "box-1-group"}
                                                                  {:to {:x -500 :duration 7} :type "transition" :transition-id "box-2-group"}
                                                                  {:to {:x -300 :duration 7} :type "transition" :transition-id "box-3-group"}]
                                                           :type "parallel"}
@@ -387,26 +449,31 @@
                                                                 :box3 {:id "check-line-3" :type "action"}}
                                                   :from-params [{:param-property "target" :action-property "value"}]}
                         :check-line-1            {:type "sequence-data"
-                                                  :data [{:type     "test-value"
+                                                  :data [{:type "set-variable" :var-name "current-box-group" :var-value "box-1-group"}
+                                                         {:type     "test-value"
                                                           :from-var [{:var-name "box1" :action-property "value1"}
                                                                      {:var-name "current-concept" :action-property "value2"}]
                                                           :success  "pick-correct"
                                                           :fail     "pick-wrong"}]}
                         :check-line-2            {:type "sequence-data"
-                                                  :data [{:type     "test-value"
+                                                  :data [{:type "set-variable" :var-name "current-box-group" :var-value "box-2-group"}
+                                                         {:type     "test-value"
                                                           :from-var [{:var-name "box2" :action-property "value1"}
                                                                      {:var-name "current-concept" :action-property "value2"}]
                                                           :success  "pick-correct"
                                                           :fail     "pick-wrong"}]}
                         :check-line-3            {:type "sequence-data"
-                                                  :data [{:type     "test-value"
+                                                  :data [{:type "set-variable" :var-name "current-box-group" :var-value "box-3-group"}
+                                                         {:type     "test-value"
                                                           :from-var [{:var-name "box3" :action-property "value1"}
                                                                      {:var-name "current-concept" :action-property "value2"}]
                                                           :success  "pick-correct"
                                                           :fail     "pick-wrong"}]}
 
                         :pick-correct            {:type "sequence-data"
-                                                  :data [{:id "dialog-3-correct" :type "action" :return-immediately true}
+                                                  :data [{:id "dialog-6-correct" :type "action" :return-immediately true}
+                                                         {:type     "state" :id "init"
+                                                          :from-var [{:var-name "current-box-group" :action-property "target"}]}
                                                          {:type "counter-inc" :target "counter"}
                                                          {:data [{:data               [{:id "run_jump" :type "animation" :target "vera" :loop false}
                                                                                        {:id "run" :loop true :type "add-animation" :target "vera"}]
@@ -415,7 +482,7 @@
                                                           :type "parallel"}]}
 
                         :pick-wrong              {:type "sequence-data"
-                                                  :data [{:id "dialog-4-wrong" :type "action"}]}
+                                                  :data [{:id "dialog-7-wrong" :type "action"}]}
 
                         :renew-words             {:type "sequence-data"
                                                   :data
@@ -430,10 +497,30 @@
                                                          {:from "item-1" :type "copy-variable" :var-name "item-1-2"}
                                                          {:from "item-1" :type "copy-variable" :var-name "item-1-3"}]}
 
+                        :welcome                 {:type "sequence-data"
+                                                  :data [{:type "action" :id "dialog-1-welcome"}]}
+
+                        :intro                   {:type "sequence-data"
+                                                  :data [{:type "action" :id "dialog-2-intro-concept"}
+                                                         {:type "state" :id "highlighted" :target "letter-target"}
+                                                         {:type "empty" :duration 2000}
+                                                         {:type "state" :id "normal" :target "letter-target"}
+                                                         {:type "action" :id "dialog-3-intro-timer"}
+                                                         {:type "state" :id "highlighted" :target "timer"}
+                                                         {:type "empty" :duration 2000}
+                                                         {:type "state" :id "normal" :target "timer"}]}
+
+                        :start                   {:type "sequence-data"
+                                                  :data [{:type "action" :id "dialog-4-ready-go"}
+                                                         {:type "action" :id "dialog-5-starting-noise"}]}
+
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
-                                                         "dialog-1-welcome"
+                                                         "welcome"
+                                                         "intro"
+                                                         "start"
                                                          "init-vars"
+                                                         "init-current-concept"
                                                          "renew-words"
                                                          "start-timer"
                                                          "renew-current-concept"]}
@@ -451,9 +538,8 @@
 
 (defn f
   [t args]
-  t)
+  (assoc-in t [:objects :timer :time] (:time args)))
 
 (core/register-template
   m
   (partial f t))
-
