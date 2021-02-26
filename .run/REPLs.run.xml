@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="REPLs" type="CompoundRunConfigurationType">
+    <toRun name="figwheel" type="ClojureREPL" />
+    <toRun name="backend" type="ClojureREPL" />
+    <method v="2" />
+  </configuration>
+</component>
