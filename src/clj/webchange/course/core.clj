@@ -129,10 +129,8 @@
                        :data       scene-data
                        :owner_id   owner-id
                        :created_at created-at}))
-    [true {:id          scene-id
-           :name        scene-name
-           :course-slug course-slug
-           :created-at  (str created-at)}]))
+    [true {:scene-id scene-name
+           :data     scene-data}]))
 
 (defn- reset-scene-skills!
   [scene-id skills]
@@ -624,22 +622,12 @@
 
 (defn save-scene-with-processing
   [course-slug scene-name data owner-id]
-  (let [scene-data (update-scene-lip-data data)
-        save-result (save-scene! course-slug scene-name scene-data owner-id)
-        {scene-name :name scene-id :id} (last save-result)
-        {scene-version-data :data} (db/get-latest-scene-version {:scene_id scene-id})]
-    [true {:scene-id scene-name
-           :data     scene-version-data}]))
+  (let [scene-data (update-scene-lip-data data)]
+    (save-scene! course-slug scene-name scene-data owner-id)))
 
 
-(defn update-activity
-  [course-slug data scene-slug user-id]
-  (let [scene-data (get-scene-data course-slug scene-slug)
-        activity (if (:common-action? data)
-                   (common-actions/update-activity scene-data data)
-                   (templates/update-activity-from-template scene-data data))]
-    (-> (save-scene! course-slug scene-slug activity user-id)
-        (second)
-        ((fn [data]
-           (assoc data :data (:data (db/get-latest-scene-version {:scene_id (:id data)})))))
-        )))
+(defn update-activity!
+  [course-slug scene-slug data user-id]
+  (let [scene-data (-> (get-scene-data course-slug scene-slug)
+                       (templates/update-activity-from-template data))]
+    (save-scene! course-slug scene-slug scene-data user-id)))

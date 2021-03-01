@@ -146,12 +146,11 @@
         handle)))
 
 (defn handle-update-activity
-  [course-slug data scene-slug request]
+  [course-slug scene-slug data request]
   (let [user-id (current-user request)]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator}))
-    (-> (core/update-activity course-slug data scene-slug user-id)
-        ((fn [data] [true data]))
+    (-> [true (core/update-activity! course-slug scene-slug data user-id)]
         handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
@@ -275,7 +274,7 @@
       :return s/Any
       :body [activity-data s/Any]
       :summary "Updates activity using template"
-      (handle-update-activity course-slug activity-data scene-slug request))
+      (handle-update-activity course-slug scene-slug activity-data request))
     (GET "/:course-slug/scenes-with-skills" []
       :path-params [course-slug :- s/Str]
       :tags ["skill"]

@@ -210,7 +210,7 @@
   [activity-data]
   (-> activity-data
       (update-in [:actions :script :data] conj {:type "action" :id "next-page"})
-      (update-in [:metadata :tracks 0 :nodes] conj {:type "prompt" :text "Flip page"})))
+      (update-in [:metadata :tracks 0 :nodes] conj {:type "prompt" :text "Flip the page"})))
 
 (defn- add-dialog
   [activity-data args]

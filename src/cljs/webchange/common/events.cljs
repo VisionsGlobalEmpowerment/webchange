@@ -699,7 +699,6 @@
                              (with-prev action))]
       (register-flow! flow-data)
 
-      (js/console.log "workflow..." current)
       (complete-workflow-action! action current-action)
       (execute-action db current-action))))
 

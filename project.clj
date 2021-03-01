@@ -88,7 +88,8 @@
          :source-maps      false}
 
   :cooper {"styles" ["lein" "sass" "auto"]
-           "cljs"   ["lein" "figwheel" "dev"]}
+           "cljs"   ["lein" "cljsbuild" "auto" "dev"]
+           "clj"    ["lein" "run"]}
 
   :aliases {"dev" ["cooper"]
             "resources" ["run" "-m" "webchange.resources.generate-resources-list"]}
@@ -100,12 +101,13 @@
                    [day8.re-frame/tracing "0.5.1"]
                    [ring/ring-mock "0.3.2"]
                    [mockery "0.1.4"]
-                   ]
-
-    :plugins      [[lein-figwheel "0.5.19"]
-                   [lein-doo "0.1.8"]]
-    :main         webchange.server-dev}
-   :prod { :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
+                   [figwheel-sidecar "0.5.20"]]
+    :plugins      [[lein-doo "0.1.8"]]
+    :main         webchange.server-dev
+    :repl-options {:init-ns webchange.server
+                   :init (dev)}
+    :source-paths ["env/dev/clj"]}
+   :prod {:dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]}
    :uberjar {:source-paths ["env/prod/clj"]
              :dependencies [[day8.re-frame/tracing-stubs "0.5.1"]]
              :omit-source  false
