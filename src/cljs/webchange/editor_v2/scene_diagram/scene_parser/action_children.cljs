@@ -1,6 +1,6 @@
 (ns webchange.editor-v2.scene-diagram.scene-parser.action-children
   (:require
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 ;; action
 

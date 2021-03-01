@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.image.utils
   (:require
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (defn apply-boundaries
   [container {:keys [max-width max-height min-width min-height]}]

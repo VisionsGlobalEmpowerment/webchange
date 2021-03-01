@@ -2,7 +2,7 @@
   (:require
     [clojure.set :refer [difference]]
     [clojure.string :refer [capitalize]]
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (def skip-check-props [:object-name :group-name :parent :children :type :editable?])
 
@@ -20,7 +20,7 @@
         extra-props-names (difference current-names default-names)]
     (when-not (empty? extra-props-names)
       (logger/warn "There are extra props for" entity-id)
-      (logger/debug-folded (str entity-id " extra props") extra-props-names))))
+      (logger/trace-folded (str entity-id " extra props") extra-props-names))))
 
 (defn- get-processed-prop
   [prop-name prop-data current-props]

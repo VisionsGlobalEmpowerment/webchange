@@ -3,7 +3,7 @@
     [webchange.interpreter.pixi :refer [shared-ticker ColorMatrixFilter DropShadowFilter GlowFilter OutlineFilter]]
     [webchange.interpreter.renderer.scene.filters.filters-pulsation :refer [animation-eager]]
     [webchange.interpreter.renderer.scene.filters.utils :as utils]
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (defn- init-filters
   [container]

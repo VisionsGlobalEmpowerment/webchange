@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.wrapper-interface
   (:require
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (defn- execute
   [wrapper method-name params]

@@ -5,12 +5,13 @@
     [webchange.interpreter.object-data.with-transition :refer [with-transition]]))
 
 (defn- prepare-action-data
-  [action event]
+  [{:keys [id] :as action} event]
   (let [event-param-name (keyword (:pick-event-param action))
         params (if event-param-name
                  (merge (:params action) (hash-map event-param-name (get event event-param-name)))
                  (:params action))]
-    (merge action {:params params})))
+    (merge action {:params       params
+                   :display-name id})))
 
 (defn- prepare-action
   [action]

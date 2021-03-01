@@ -5,8 +5,7 @@
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
     [webchange.interpreter.renderer.question.wrapper :refer [wrap]]
     [webchange.interpreter.object-data.get-object-data :refer [prepare-object-data]]
-    [webchange.interpreter.renderer.question.question-page.type-1 :as type-1]
-    [webchange.logger :as logger]))
+    [webchange.interpreter.renderer.question.question-page.type-1 :as type-1]))
 
 (def default-props {
                     :x        {}

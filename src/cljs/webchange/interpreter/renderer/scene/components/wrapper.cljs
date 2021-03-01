@@ -2,7 +2,7 @@
   (:require
     [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :as filters]
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (defn- check-name-prop
   [wrapper]
@@ -25,37 +25,38 @@
 (defn- add-default-methods
   [wrapper-object]
   (let [main-display-object (:object wrapper-object)]
-    (merge {:get-data         (fn []
-                                (merge (utils/get-stage-position main-display-object)))
-            :get-position     (fn []
-                                (utils/get-position main-display-object))
-            :set-position     (fn [position]
-                                (utils/set-position main-display-object position))
-            :get-scale        (fn []
-                                (utils/get-scale main-display-object))
-            :set-scale        (fn [scale]
-                                (utils/set-scale main-display-object scale))
-            :set-visibility   (fn [visible?]
-                                (utils/set-visibility main-display-object visible?))
-            :get-rotation     (fn []
-                                (utils/get-rotation main-display-object))
-            :set-rotation     (fn [value]
-                                (utils/set-rotation main-display-object value))
-            :add-filter       (fn [filter-data]
-                                (filters/apply-filters main-display-object [filter-data]))
-            :get-filter-value (fn [filter-name]
-                                (filters/get-filter-value main-display-object filter-name))
-            :set-filter-value (fn [filter-name value]
-                                (filters/set-filter-value main-display-object filter-name value))
-            :set-filter       (fn [filter-name params]
-                                (filters/set-filter main-display-object filter-name params))
-            :get-opacity      (fn []
-                                (utils/get-opacity main-display-object))
-            :set-opacity      (fn [value]
-                                (utils/set-opacity main-display-object value))
-            :set-interactive  (fn [interactive?]
-                                (set! main-display-object -interactive interactive?)
-                                (set! main-display-object -interactiveChildren interactive?))}
+    (merge {:get-data          (fn []
+                                 (merge (utils/get-stage-position main-display-object)))
+            :get-position      (fn []
+                                 (utils/get-position main-display-object))
+            :set-position      (fn [position]
+                                 (utils/set-position main-display-object position))
+            :get-scale         (fn []
+                                 (utils/get-scale main-display-object))
+            :set-scale         (fn [scale]
+                                 (utils/set-scale main-display-object scale))
+            :set-visibility    (fn [visible?]
+                                 (utils/set-visibility main-display-object visible?))
+            :get-rotation      (fn []
+                                 (utils/get-rotation main-display-object))
+            :set-rotation      (fn [value]
+                                 (utils/set-rotation main-display-object value))
+            :add-filter        (fn [filter-data]
+                                 (filters/apply-filters main-display-object [filter-data]))
+            :get-filter-value  (fn [filter-name]
+                                 (filters/get-filter-value main-display-object filter-name))
+            :set-filter-value  (fn [filter-name value]
+                                 (filters/set-filter-value main-display-object filter-name value))
+            :set-filter        (fn [filter-name params]
+                                 (filters/set-filter main-display-object filter-name params))
+            :get-opacity       (fn []
+                                 (utils/get-opacity main-display-object))
+            :set-opacity       (fn [value]
+                                 (utils/set-opacity main-display-object value))
+            :set-interactive   (fn [interactive?]
+                                 (set! main-display-object -interactive interactive?)
+                                 (set! main-display-object -interactiveChildren interactive?))
+            :get-wrapped-props (fn [] [])}
            wrapper-object)))
 
 (defn create-wrapper
