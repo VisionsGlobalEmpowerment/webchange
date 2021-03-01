@@ -2,10 +2,7 @@
   (:require
     [cljs-react-material-ui.icons :as ic]
     [cljs-react-material-ui.reagent :as ui]
-    [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.components.file-input.views :as file-input]
-    [webchange.editor-v2.concepts.events :as concepts-events]
     [webchange.editor-v2.wizard.activity-template.views-image :as image-field]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
@@ -50,7 +47,7 @@
   [{:keys [key option data validator]}]
   (r/with-let [add-tooltip-open? (r/atom false)
                pages-data (connect-data data [key] [])
-               {:keys [error-message] :as validator} (v/init pages-data pages-validation-map validator)]
+               {:keys [error-message destroy] :as validator} (v/init pages-data pages-validation-map validator)]
     (let [handle-add-page (fn []
                             (if (< (count @pages-data) (:max option))
                               (swap! pages-data conj {})
@@ -92,4 +89,6 @@
                           :data      pages-data
                           :validator validator
                           :on-remove handle-remove-page
-                          :last?     (->> (count pages-list) (dec) (= idx))}]]))])))
+                          :last?     (->> (count pages-list) (dec) (= idx))}]]))])
+    (finally
+      (destroy))))

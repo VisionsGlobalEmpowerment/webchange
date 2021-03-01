@@ -18,12 +18,6 @@
            (into {})))
     {}))
 
-(defn- get-form-data
-  [scene-data action-data action-name]
-  (let [defaults {:action action-name}
-        data (get-action-default-data scene-data action-data)]
-    (merge defaults data)))
-
 (defn action-modal
   []
   (r/with-let [scene-id (re-frame/subscribe [::subs/current-scene])
@@ -31,7 +25,7 @@
                metadata (get scene-data :metadata)
                current-action-name @(re-frame/subscribe [::scene-action.events/current-action])
                current-action-data (get-in metadata [:actions current-action-name])
-               data (r/atom (get-form-data scene-data current-action-data current-action-name))
+               data (r/atom (get-action-default-data scene-data current-action-data))
                {:keys [valid?] :as validator} (validator/init data)
                close #(re-frame/dispatch [::scene-action.events/close])
                save #(if (valid?) (re-frame/dispatch [::scene-action.events/save @data]))]

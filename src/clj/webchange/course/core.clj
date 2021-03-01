@@ -129,8 +129,11 @@
                        :data       scene-data
                        :owner_id   owner-id
                        :created_at created-at}))
-    [true {:scene-id scene-name
-           :data     scene-data}]))
+    [true {:id          scene-id
+           :name        scene-name
+           :course-slug course-slug
+           :scene-id    scene-name
+           :data        scene-data}]))
 
 (defn- reset-scene-skills!
   [scene-id skills]

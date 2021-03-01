@@ -9,7 +9,7 @@
 (defn string-option
   [{:keys [key option data validator]}]
   (r/with-let [string-data (connect-data data [key] "")
-               {:keys [error-message]} (v/init string-data string-validation-map validator)]
+               {:keys [error-message destroy]} (v/init string-data string-validation-map validator)]
     [ui/grid {:container   true
               :justify     "center"
               :spacing     16
@@ -24,4 +24,6 @@
                       :value     @string-data
                       :style     {:min-width "300px"}
                       :on-change #(reset! string-data (-> % .-target .-value))}]
-      [error-message {:field-name :root}]]]))
+      [error-message {:field-name :root}]]]
+    (finally
+      (destroy))))
