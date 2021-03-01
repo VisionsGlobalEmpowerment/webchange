@@ -1,5 +1,6 @@
 (ns webchange.templates.core
-  (:require [webchange.templates.common-actions :as common-actions]))
+  (:require [webchange.templates.common-actions :as common-actions]
+            [clojure.tools.logging :as log]))
 
 (def templates (atom {}))
 
@@ -30,6 +31,7 @@
 (defn activity-from-template
   [{id :template-id :as data}]
   (let [{:keys [template metadata]} (get-in @templates [id])]
+    (log/debug "Create activity" id data)
     (-> (template data)
         (assoc-in [:metadata :template-id] id)
         (assoc-in [:metadata :template-name] (:name metadata))
@@ -37,12 +39,13 @@
                                         :updated []}))))
 
 (defn update-activity-from-template
-  [scene-data {:keys [data]}]
+  [scene-data {:keys [action data]}]
   (let [template-id (get-in scene-data [:metadata :template-id])
         {:keys [template-update]} (get-in @templates [template-id])
         activity (if (:common-action? data)
                    (common-actions/update-activity scene-data data)
-                   (template-update scene-data data))]
+                   (template-update scene-data (assoc data :action-name action)))]
+    (log/debug "Update activity" template-id action data)
     (-> activity
         (update-in [:metadata :history :updated] conj data))))
 

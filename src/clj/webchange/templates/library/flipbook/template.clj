@@ -12,7 +12,8 @@
     [webchange.templates.library.flipbook.page-number :refer [update-pages-numbers]]
     [webchange.templates.library.flipbook.remake-covers :refer [remake-covers]]
     [webchange.templates.library.flipbook.remove-page :refer [remove-page]]
-    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]))
+    [webchange.templates.library.flipbook.reorder-page :refer [move-page]]
+    [clojure.tools.logging :as log]))
 
 (def book-options [{:key     :cover-layout
                     :label   "Cover layout"

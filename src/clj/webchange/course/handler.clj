@@ -150,7 +150,7 @@
   (let [user-id (current-user request)]
     (when-not (core/collaborator-by-course-slug? user-id course-slug)
       (throw-unauthorized {:role :educator}))
-    (-> [true (core/update-activity! course-slug scene-slug data user-id)]
+    (-> (core/update-activity! course-slug scene-slug data user-id)
         handle)))
 
 (s/defschema Course {:id s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str) :url s/Str :lang (s/maybe s/Str) (s/optional-key :level) s/Str (s/optional-key :subject) s/Str})
