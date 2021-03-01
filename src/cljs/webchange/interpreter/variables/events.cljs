@@ -4,7 +4,6 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [webchange.common.events :as e]
-    [webchange.logger :as logger]
     [webchange.state.lessons.subs :as lessons]
     [webchange.interpreter.variables.core :as core]))
 
@@ -224,8 +223,12 @@
         {:dispatch-n (list [::e/execute-action success] (e/success-event action))}
         {:dispatch-n (list [::e/execute-action fail] (e/success-event action))}))))
 
-(defn cond-action [db {:keys [flow-id action-id] :as action} params]
-  (let [action-data (if (string? params) (e/get-action params db action) params)]
+(defn cond-action [db {:keys [display-name flow-id action-id] :as action} handler-type]
+  (let [handler (get action handler-type)
+        action-data (if (string? handler)
+                      (e/get-action handler db action)
+                      (-> handler
+                          (assoc :display-name [display-name handler-type])))]
     (cond-> action-data
             flow-id (assoc :flow-id flow-id)
             action-id (assoc :action-id action-id)
@@ -233,7 +236,7 @@
 
 (re-frame/reg-event-fx
   ::execute-test-var-scalar
-  (fn [{:keys [db]} [_ {:keys [value var-name success fail] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [value var-name] :as action}]]
     "Execute `test-var-scalar` action - compare variable value with test value.
 
     Action params:
@@ -250,12 +253,12 @@
      :fail     'pick-wrong'}"
     (let [test (core/get-variable var-name)]
       (if (= value test)
-        {:dispatch [::e/execute-action (cond-action db action success)]}
-        {:dispatch [::e/execute-action (cond-action db action fail)]}))))
+        {:dispatch [::e/execute-action (cond-action db action :success)]}
+        {:dispatch [::e/execute-action (cond-action db action :fail)]}))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-inequality
-  (fn [{:keys [db]} [_ {:keys [value var-name success fail inequality] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [value var-name fail inequality] :as action}]]
     "Execute `test-var-scalar` action - compare variable value with test value.
 
     Action params:
@@ -276,8 +279,8 @@
       (if (case (keyword inequality)
             :<= (<= test value)
             :>= (>= test value))
-        {:dispatch [::e/execute-action (cond-action db action success)]}
-        (if fail {:dispatch [::e/execute-action (cond-action db action fail)]})))))
+        {:dispatch [::e/execute-action (cond-action db action :success)]}
+        (if fail {:dispatch [::e/execute-action (cond-action db action :fail)]})))))
 
 
 (re-frame/reg-event-fx
@@ -300,35 +303,35 @@
      :success     'pick-correct'
      :fail        'pick-wrong'}"
     (if (= value1 value2)
-      {:dispatch-n (list [::e/execute-action (cond-action db action success)])}
+      {:dispatch-n (list [::e/execute-action (cond-action db action :success)])}
       (if fail
-        {:dispatch-n (list [::e/execute-action (cond-action db action fail)])}
+        {:dispatch-n (list [::e/execute-action (cond-action db action :fail)])}
         {:dispatch-n (list (e/success-event action))}
         ))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-list
   (fn-traced [{:keys [db]} [_ {:keys [values var-names success fail] :as action}]]
-             "Execute `test-var-list` action - compare variables list value with test values list.
-             Variables are compared with values according to their positions in the list.
+    "Execute `test-var-list` action - compare variables list value with test values list.
+    Variables are compared with values according to their positions in the list.
 
-             Action params:
-             :var-names - list of variables names that we want to test.
-             :values - list values to compare with.
-             :success - action name to execute if the comparison is successful.
-             :fail - action name to execute if the comparison is failed.
+    Action params:
+    :var-names - list of variables names that we want to test.
+    :values - list values to compare with.
+    :success - action name to execute if the comparison is successful.
+    :fail - action name to execute if the comparison is failed.
 
-             Example:
-             {:type      'test-var-list',
-              :success   'mari-voice-finish',
-              :values    [true true true],
-              :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
-             (let [test (map core/get-variable var-names)]
-               (if (= values test)
-                 {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
-                 (if fail
-                   {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
-                   {:dispatch-n (list (e/success-event action))})))))
+    Example:
+    {:type      'test-var-list',
+     :success   'mari-voice-finish',
+     :values    [true true true],
+     :var-names ['story-1-passed' 'story-2-passed' 'story-3-passed']}"
+    (let [test (map core/get-variable var-names)]
+      (if (= values test)
+        {:dispatch-n (list [::e/execute-action (e/get-action success db action)] (e/success-event action))}
+        (if fail
+          {:dispatch-n (list [::e/execute-action (e/get-action fail db action)] (e/success-event action))}
+          {:dispatch-n (list (e/success-event action))})))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-list-at-least-one-true
@@ -354,7 +357,7 @@
 (re-frame/reg-event-fx
   ::execute-case
   [e/event-as-action e/with-vars]
-  (fn [{:keys [db]} {:keys [value options] :as action}]
+  (fn [{:keys [db]} {:keys [value options display-name] :as action}]
     "Execute `case` action - action when variable value equal one of option key value.
 
     Action params:
@@ -367,9 +370,14 @@
                :box2 {:id 'stay-on-line', :type 'action'},
                :box3 {:id 'go-to-box2-line-up', :type 'action'}},
      :from-var [{:var-name 'current-line', :action-property 'value'}]}"
-    (let [success (get options (keyword value))
-          default (get options :default)
-          ]
+    (let [success (when (contains? options (keyword value))
+                    (-> options
+                        (get (keyword value))
+                        (assoc :display-name [display-name value])))
+          default (when (contains? options :default)
+                    (-> options
+                        (get :default)
+                        (assoc :display-name [display-name :default])))]
       (if default
         (if success
           {:dispatch-n (list [::e/execute-action success] (e/success-event action))}

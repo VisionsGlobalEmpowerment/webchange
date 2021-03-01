@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.state.db :refer [path-to-db]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (re-frame/reg-event-fx
   ::init

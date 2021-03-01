@@ -46,3 +46,9 @@
        (some (fn [[index item]]
                (and (predicate item)
                     index)))))
+
+(defn in-list?
+  [list item]
+  "Check if item in list."
+  {:pre [(sequential? list)]}
+  (some #{item} list))

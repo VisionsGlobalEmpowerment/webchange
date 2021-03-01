@@ -1,7 +1,7 @@
 (ns webchange.sw-utils.message
   (:require
     [webchange.sw-utils.config :as config]
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (defn- get-worker
   []

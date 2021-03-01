@@ -6,7 +6,7 @@
     [webchange.interpreter.renderer.scene.components.image.utils :as image-utils]
     [webchange.interpreter.renderer.scene.components.image.wrapper :refer [wrap]]
     [webchange.resources.manager :as resources]
-    [webchange.logger :as logger]))
+    [webchange.logger.index :as logger]))
 
 (def default-props {:x             {}
                     :y             {}

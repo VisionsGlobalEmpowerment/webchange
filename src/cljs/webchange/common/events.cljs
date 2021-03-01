@@ -6,7 +6,8 @@
     [webchange.interpreter.variables.core :refer [variables]]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.state.overlays :as overlays]
-    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]))
+    [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
+    [webchange.logger.index :as logger]))
 
 (def executors (atom {}))
 (def flows (atom {}))
@@ -64,6 +65,7 @@
                 (execute-action db (-> action
                                        :id
                                        (get-action db action)
+                                       (assoc :display-name (:id action))
                                        (assoc :flow-id (:flow-id action))
                                        (assoc :action-id (:action-id action))))))
 
@@ -252,11 +254,25 @@
    (let [action (get-in db [:scenes (:current-scene db) :actions (keyword id)])]
      (if-not (nil? action)
        (-> action
+           (assoc :display-name id)
            (with-prev prev))
        (-> (str "Action '" id "' was not found") js/Error. throw)))))
 
 (declare discard-flow!)
 (declare register-flow-tags!)
+
+(defn- action->fold-name
+  [{:keys [display-name]}]
+  (if (sequential? display-name)
+    (->> display-name
+         (map #(if (keyword? %) (clojure.core/name %) %))
+         (clojure.string/join " > ")
+         (keyword))
+    (keyword display-name)))
+
+(defn- sequenced-action->display-name
+  [action sequence-position]
+  (flatten [(:display-name action) sequence-position]))
 
 (defn execute-action
   [db {:keys [unique-tag] :as action}]
@@ -265,7 +281,13 @@
                                                                           (assoc a :current-scene (:current-scene db))
                                                                           (->with-flow a)
                                                                           (->with-vars db a))
-          handler (get @executors (keyword type))]
+          handler (get @executors (keyword type))
+          display-name (action->fold-name action)]
+
+      (if (some? handler)
+        (logger/trace-folded ["execute action" display-name (str "(" type ")")] "action data:" action)
+        (logger/error "Executor for action" display-name "is not defined" action))
+
       (when tags
         (register-flow-tags! flow-id tags))
       (handler {:db db :action action})
@@ -276,8 +298,8 @@
   ::execute-action
   [event-as-action]
   (fn-traced [{:keys [db]} action]
-             (execute-action db action)
-             {}))
+    (execute-action db action)
+    {}))
 
 (defn remove-tag
   [flow tag]
@@ -471,35 +493,37 @@
       {:dispatch [::execute-sequence-data (assoc action :data data :type "sequence-data")]})))
 
 (defn execute-sequence-data!
-  [db action]
-  (if (empty? (:data action))
-    (dispatch-success-fn action)
-    (let [action (->with-vars db action)
-          [current & rest] (:data action)
-          sequence-skippable? (:skippable action)
-          skippable? (:skippable current)
-          rest (if skippable? (into [{:type "hide-skip"}] rest) rest)
-          next #(execute-sequence-data! db (-> action (assoc :data rest)))
-          flow-id (random-uuid)
-          action-id (random-uuid)
-          current-scene (:current-scene db)
-          flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
-                     :current-scene current-scene}
-          current-action (-> current
-                             (assoc :flow-id flow-id)
-                             (assoc :action-id action-id)
-                             (with-prev action))]
-      (register-flow! flow-data)
+  ([db action]
+   (execute-sequence-data! db action 0))
+  ([db action sequence-position]
+   (if (empty? (:data action))
+     (dispatch-success-fn action)
+     (let [action (->with-vars db action)
+           [current & rest] (:data action)
+           sequence-skippable? (:skippable action)
+           skippable? (:skippable current)
+           rest (if skippable? (into [{:type "hide-skip"}] rest) rest)
+           next #(execute-sequence-data! db (-> action (assoc :data rest)) (inc sequence-position))
+           flow-id (random-uuid)
+           action-id (random-uuid)
+           current-scene (:current-scene db)
+           flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next :parent (:flow-id action) :tags (get-action-tags action)
+                      :current-scene current-scene}
+           current-action (-> current
+                              (assoc :display-name (sequenced-action->display-name action sequence-position))
+                              (assoc :flow-id flow-id)
+                              (assoc :action-id action-id)
+                              (with-prev action))]
+       (register-flow! flow-data)
 
-      (when skippable?
-        (on-skip! #(dispatch-success-fn current-action))
-        (re-frame/dispatch [::overlays/show-skip-menu]))
+       (when skippable?
+         (on-skip! #(dispatch-success-fn current-action))
+         (re-frame/dispatch [::overlays/show-skip-menu]))
 
-      (when sequence-skippable?
-        (on-skip! (:on-skip action))
-        (on-skip! #(execute-remove-flows! {:flow-tag "skip"})))
-
-      (execute-action db current-action))))
+       (when sequence-skippable?
+         (on-skip! (:on-skip action))
+         (on-skip! #(execute-remove-flows! {:flow-tag "skip"})))
+       (execute-action db current-action)))))
 
 (re-frame/reg-event-fx
   ::execute-sequence-data
@@ -538,7 +562,11 @@
       (on-skip! #(execute-remove-flows! {:flow-tag "skip"})))
 
     (if (seq actions)
-      (doall (map #(execute-action db %) actions))
+      (doall (map-indexed (fn [sequence-position child-action]
+                            (->> (sequenced-action->display-name action sequence-position)
+                                 (assoc child-action :display-name)
+                                 (execute-action db)))
+                          actions))
       (dispatch-success-fn action))))
 
 (re-frame/reg-event-fx
@@ -662,8 +690,8 @@
           next #(execute-workflow! db (-> action (assoc :data rest)))
           flow-id (random-uuid)
           action-id (random-uuid)
-          flow-data {:flow-id flow-id :actions [action-id] :type :all :next next
-                     :parent (:flow-id action) :tags (get-action-tags action)
+          flow-data {:flow-id       flow-id :actions [action-id] :type :all :next next
+                     :parent        (:flow-id action) :tags (get-action-tags action)
                      :current-scene (:current-scene db)}
           current-action (-> current
                              (assoc :flow-id flow-id)

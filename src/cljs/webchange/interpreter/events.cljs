@@ -1279,8 +1279,8 @@
                        (filter #(= trigger (-> % second :on keyword)))
                        (map second)
                        (map #(-> % :action keyword))
-                       (map #(get-in scene [:actions %]))
-                       (map (fn [action] [::ce/execute-action action])))
+                       (map (fn [action-name] [action-name (get-in scene [:actions action-name])]))
+                       (map (fn [[display-name action]] [::ce/execute-action (assoc action :display-name display-name)])))
           default-actions (get default-triggers trigger)]
       {:dispatch-n (concat actions default-actions)})))
 

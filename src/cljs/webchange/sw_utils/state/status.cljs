@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.error-message.state :as error-message]
-    [webchange.logger :as logger]
+    [webchange.logger.index :as logger]
     [webchange.sw-utils.message :refer [set-current-course]]
     [webchange.sw-utils.state.db :refer [path-to-db]]))
 
