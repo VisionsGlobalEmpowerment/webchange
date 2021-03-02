@@ -1,6 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.collisions
   (:require
-    [webchange.interpreter.pixi :refer [shared-ticker]]))
+    [webchange.interpreter.pixi :refer [shared-ticker]]
+    [webchange.logger.index :as logger]))
 
 (def objects (atom {}))
 
@@ -9,9 +10,16 @@
   (contains? props :on-collide))
 
 (defn register-object
-  [object {:keys [transition-name]}]
+  [object {:keys [transition-name] :as props}]
   (when (some? transition-name)
-    (swap! objects assoc transition-name object)))
+    (logger/group-folded "register collidable" (keyword transition-name))
+    (logger/trace "object props:" props)
+    (logger/trace "display object:" object)
+
+    (swap! objects assoc transition-name {:object object
+                                          :params props})
+
+    (logger/group-end "register collidable" (keyword transition-name))))
 
 (defn- get-bounds
   [object]
@@ -21,7 +29,7 @@
      :width  (.-width bounds)
      :height (.-height bounds)}))
 
-(defn- test-collision
+(defn- collided?
   [object1 object2]
   (let [{x1 :x y1 :y width1 :width height1 :height} (get-bounds object1)
         {x2 :x y2 :y width2 :width height2 :height} (get-bounds object2)]
@@ -30,18 +38,36 @@
          (< y1 (+ y2 height2))
          (> (+ y1 height1) y2))))
 
-(defn- test-objects
-  [object bumped-into collide-test on-collide]
+(defn- get-objects-to-test
+  []
+  (map (fn [[name {:keys [object params]}]]
+         [name object params])
+       @objects))
 
-  (doseq [target-name collide-test]
-    (let [target-object (get @objects target-name)]
-      (if (test-collision object target-object)
-        (do (when-not (get @bumped-into target-name)
-              (on-collide {:target target-name}))
-            (swap! bumped-into assoc target-name true))
-        (swap! bumped-into assoc target-name false)))))
+(defn- test-name
+  [name target-name]
+  (cond
+    (clojure.string/starts-with? name "#") (-> (subs name 1) (re-pattern) (re-matches target-name))
+    :else (= name target-name)))
+
+(defn- interested-target?
+  [object-name target-name interested-names]
+  (and (not (= object-name target-name))
+       (some (fn [name] (test-name name target-name)) interested-names)))
+
+(defn- test-objects
+  [object object-name bumped-into collide-test on-collide]
+  (doseq [[target-name target-object target-props] (get-objects-to-test)]
+    (if (and (collided? object target-object)
+             (interested-target? object-name target-name collide-test))
+      (do (when-not (get @bumped-into target-name)
+            (logger/trace)
+            (on-collide (merge target-props
+                               {:target target-name})))
+          (swap! bumped-into assoc target-name true))
+      (swap! bumped-into assoc target-name false))))
 
 (defn enable-collisions!
-  [object {:keys [collide-test on-collide]}]
+  [object {:keys [object-name collide-test on-collide]}]
   (let [bumped-into (atom {})]
-    (.add shared-ticker (fn [] (test-objects object bumped-into collide-test on-collide)))))
+    (.add shared-ticker (fn [] (test-objects object object-name bumped-into collide-test on-collide)))))

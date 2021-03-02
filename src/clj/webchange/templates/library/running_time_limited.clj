@@ -2,7 +2,7 @@
   (:require
     [webchange.templates.core :as core]))
 
-(def m {:id          31
+(def m {:id          33
         :name        "Running (time limited)"
         :tags        ["Independent Practice"]
         :description "Running"
@@ -77,6 +77,7 @@
                                               :skin        "qwestion"
                                               :speed       0.3
                                               :start       true}
+
                         :counter             {:type       "counter"
                                               :transition "counter"
                                               :x          400
@@ -84,132 +85,22 @@
 
                         :line-1              {:type    "transparent"
                                               :x       0
-                                              :y       540
+                                              :y       630
                                               :width   1920
-                                              :height  140
+                                              :height  85
                                               :actions {:click {:id "go-line" :on "click" :type "action" :params {:line "box1"}}}}
                         :line-2              {:type    "transparent"
                                               :x       0
-                                              :y       655
+                                              :y       717
                                               :width   1920
-                                              :height  140
+                                              :height  105
                                               :actions {:click {:id "go-line" :on "click" :type "action" :params {:line "box2"}}}}
                         :line-3              {:type    "transparent"
                                               :x       0
-                                              :y       790
+                                              :y       825
                                               :width   1920
-                                              :height  150
+                                              :height  155
                                               :actions {:click {:id "go-line" :on "click" :type "action" :params {:line "box3"}}}}
-                        :box-1-group         {:type       "group"
-                                              :children   ["box1" "letter1"]
-                                              :transition "box-1-group"
-                                              :x          2000
-                                              :y          683
-                                              :states     {:init {:visible false} :reset {:x 2000 :visible true}}}
-                        :box1                {:type        "animation"
-                                              :x           0
-                                              :y           0
-                                              :width       671
-                                              :height      633
-                                              :scale       {:x -0.25 :y 0.25}
-                                              :scene-name  "box1"
-                                              :transition  "box1"
-                                              :anim        "idle2"
-                                              :anim-offset {:x 0 :y -300}
-                                              :loop        true
-                                              :name        "boxes"
-                                              :skin        "empty"
-                                              :speed       0.3
-                                              :start       true}
-                        :letter1             {:type           "text"
-                                              :x              -80
-                                              :y              -150
-                                              :width          150
-                                              :height         150
-                                              :transition     "letter1"
-                                              :align          "center"
-                                              :fill           0xff9000
-                                              :font-family    "Lexend Deca"
-                                              :font-size      120
-                                              :shadow-blur    5
-                                              :shadow-color   "#1a1a1a"
-                                              :shadow-opacity 0.5
-                                              :text           "?"
-                                              :vertical-align "middle"}
-
-                        :box-2-group         {:type       "group"
-                                              :children   ["box2" "letter2"]
-                                              :transition "box-2-group"
-                                              :x          2200
-                                              :y          789
-                                              :states     {:init {:visible false} :reset {:x 2200 :visible true}}}
-                        :box2                {:type        "animation"
-                                              :x           0
-                                              :y           0
-                                              :width       671
-                                              :height      633
-                                              :scale       {:x -0.25 :y 0.25}
-                                              :scene-name  "box2"
-                                              :transition  "box2"
-                                              :anim        "idle2"
-                                              :anim-offset {:x 0 :y -300}
-                                              :loop        true
-                                              :name        "boxes"
-                                              :skin        "empty"
-                                              :speed       0.3
-                                              :start       true}
-                        :letter2             {:type           "text"
-                                              :x              -90
-                                              :y              -150
-                                              :width          150
-                                              :height         150
-                                              :transition     "letter2"
-                                              :align          "center"
-                                              :fill           0xff9000
-                                              :font-family    "Lexend Deca"
-                                              :font-size      120
-                                              :shadow-blur    5
-                                              :shadow-color   "#1a1a1a"
-                                              :shadow-opacity 0.5
-                                              :text           "?"
-                                              :vertical-align "middle"}
-
-                        :box-3-group         {:type       "group"
-                                              :children   ["box3" "letter3"]
-                                              :transition "box-3-group"
-                                              :x          2400
-                                              :y          932
-                                              :states     {:init {:visible false} :reset {:x 2400 :visible true}}}
-                        :box3                {:type        "animation"
-                                              :x           0
-                                              :y           0
-                                              :width       671
-                                              :height      633
-                                              :scale       {:x -0.25 :y 0.25}
-                                              :scene-name  "box3"
-                                              :transition  "box3"
-                                              :anim        "idle2"
-                                              :anim-offset {:x 0 :y -300}
-                                              :loop        true
-                                              :name        "boxes"
-                                              :skin        "empty"
-                                              :speed       0.3
-                                              :start       true}
-                        :letter3             {:type           "text"
-                                              :x              -100
-                                              :y              -150
-                                              :width          150
-                                              :height         150
-                                              :transition     "letter3"
-                                              :align          "center"
-                                              :fill           0xff9000
-                                              :font-family    "Lexend Deca"
-                                              :font-size      120
-                                              :shadow-blur    5
-                                              :shadow-color   "#1a1a1a"
-                                              :shadow-opacity 0.5
-                                              :text           "?"
-                                              :vertical-align "middle"}
 
                         :mari                {:type        "animation"
                                               :x           1265
@@ -245,16 +136,15 @@
                                               :skin       "default"
                                               :speed      1
                                               :start      true}
-                        :vera-collision-test {:type        "transparent"
+                        :vera-collision-test {:type        "rectangle"
                                               :x           150
                                               :y           -55
                                               :width       10
                                               :height      10
                                               :transition  "vera-collision-test"
                                               :collidable? true
-                                              :actions     {:collide {:on "collide" :test ["box1" "box2" "box3"] :type "action" :id "check-line" :pick-event-param "target"}}}}
+                                              :actions     {:collide {:on "collide" :test ["#^target-letter-.*"] :type "action" :id "check-box" :pick-event-param ["custom-data" "transition-name"]}}}}
         :scene-objects [["background"]
-                        ["box-1-group" "box-2-group" "box-3-group"]
                         ["vera-group" "mari"]
                         ["target-group" "timer" "line-1" "line-2" "line-3"]]
         :actions       {:dialog-1-welcome        {:type               "sequence-data"
@@ -374,10 +264,14 @@
 
                         :init-vars               {:type "parallel"
                                                   :data [{:type "set-variable" :var-name "game-finished" :var-value false}
-                                                         {:type "set-variable" :var-name "slot1" :var-value "box1"}
-                                                         {:type "set-variable" :var-name "slot2" :var-value "box2"}
-                                                         {:type "set-variable" :var-name "slot3" :var-value "box3"}
-                                                         {:type "set-variable" :var-name "current-line" :var-value "box2"}]}
+                                                         {:type "set-variable" :var-name "current-line" :var-value "box2"}
+                                                         {:from        "concepts-group"
+                                                          :type        "lesson-var-provider"
+                                                          :limit       3
+                                                          :repeat      4
+                                                          :shuffled    false
+                                                          :variables   ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"]
+                                                          :provider-id "words-set"}]}
 
                         :init-current-concept    {:type "sequence-data"
                                                   :data [{:from        "concepts-single"
@@ -395,85 +289,16 @@
                                                           :from-var  [{:var-name "current-concept" :var-property "letter" :action-property "attr-value"}]
                                                           :attr-name "text"}]}
 
-                        :renew-current-concept   {:type "sequence-data"
-                                                  :data [{:data [{:id "init" :type "state" :target "box-1-group"}
-                                                                 {:id "init" :type "state" :target "box-2-group"}
-                                                                 {:id "init" :type "state" :target "box-3-group"}]
-                                                          :type "parallel"}
-                                                         {:id "wait-for-box-animations" :type "action"}
-                                                         {:data [{:id "reset" :type "state" :target "box-1-group"}
-                                                                 {:id "reset" :type "state" :target "box-2-group"}
-                                                                 {:id "reset" :type "state" :target "box-3-group"}]
-                                                          :type "parallel"}
-                                                         {:id "wait-for-box-animations" :type "action"}
-                                                         {:from      ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"]
-                                                          :type      "vars-var-provider"
-                                                          :unique    true
-                                                          :from-var  [{:var-key         "concept-name"
-                                                                       :var-name        "current-concept"
-                                                                       :var-property    "concept-name"
-                                                                       :action-property "exclude-property-values"}]
-                                                          :shuffled  true
-                                                          :variables ["pair-concept-1" "pair-concept-2"]}
-                                                         {:from      ["current-concept" "pair-concept-1" "pair-concept-2"]
-                                                          :type      "vars-var-provider"
-                                                          :shuffled  true
-                                                          :variables ["box1" "box2" "box3"]}
-                                                         {:data [{:type      "set-attribute"
-                                                                  :target    "letter1"
-                                                                  :from-var  [{:var-name "box1" :var-property "letter" :action-property "attr-value"}]
-                                                                  :attr-name "text"}
-                                                                 {:type      "set-attribute"
-                                                                  :target    "letter2"
-                                                                  :from-var  [{:var-name "box2" :var-property "letter" :action-property "attr-value"}]
-                                                                  :attr-name "text"}
-                                                                 {:type      "set-attribute"
-                                                                  :target    "letter3"
-                                                                  :from-var  [{:var-name "box3" :var-property "letter" :action-property "attr-value"}]
-                                                                  :attr-name "text"}]
-                                                          :type "parallel"}
-                                                         {:data [{:to {:x -700 :duration 7} :type "transition" :transition-id "box-1-group"}
-                                                                 {:to {:x -500 :duration 7} :type "transition" :transition-id "box-2-group"}
-                                                                 {:to {:x -300 :duration 7} :type "transition" :transition-id "box-3-group"}]
-                                                          :type "parallel"}
-                                                         {:type "remove-flow-tag" :tag "box"}
-                                                         {:type     "test-var-scalar"
-                                                          :var-name "game-finished"
-                                                          :value    false
-                                                          :success  "renew-current-concept"
-                                                          :fail     "finish-activity"}]}
-
-                        :check-line              {:type        "case"
-                                                  :options     {:box1 {:id "check-line-1" :type "action"}
-                                                                :box2 {:id "check-line-2" :type "action"}
-                                                                :box3 {:id "check-line-3" :type "action"}}
-                                                  :from-params [{:param-property "target" :action-property "value"}]}
-                        :check-line-1            {:type "sequence-data"
-                                                  :data [{:type "set-variable" :var-name "current-box-group" :var-value "box-1-group"}
-                                                         {:type     "test-value"
-                                                          :from-var [{:var-name "box1" :action-property "value1"}
-                                                                     {:var-name "current-concept" :action-property "value2"}]
-                                                          :success  "pick-correct"
-                                                          :fail     "pick-wrong"}]}
-                        :check-line-2            {:type "sequence-data"
-                                                  :data [{:type "set-variable" :var-name "current-box-group" :var-value "box-2-group"}
-                                                         {:type     "test-value"
-                                                          :from-var [{:var-name "box2" :action-property "value1"}
-                                                                     {:var-name "current-concept" :action-property "value2"}]
-                                                          :success  "pick-correct"
-                                                          :fail     "pick-wrong"}]}
-                        :check-line-3            {:type "sequence-data"
-                                                  :data [{:type "set-variable" :var-name "current-box-group" :var-value "box-3-group"}
-                                                         {:type     "test-value"
-                                                          :from-var [{:var-name "box3" :action-property "value1"}
-                                                                     {:var-name "current-concept" :action-property "value2"}]
-                                                          :success  "pick-correct"
-                                                          :fail     "pick-wrong"}]}
+                        :check-box               {:type        "test-value"
+                                                  :from-var    [{:action-property "value1" :var-name "current-concept" :var-property "letter"}]
+                                                  :from-params [{:action-property "value2" :param-property "custom-data"}]
+                                                  :success     "pick-correct"
+                                                  :fail        "pick-wrong"}
 
                         :pick-correct            {:type "sequence-data"
                                                   :data [{:id "dialog-6-correct" :type "action" :return-immediately true}
-                                                         {:type     "state" :id "init"
-                                                          :from-var [{:var-name "current-box-group" :action-property "target"}]}
+                                                         {:type        "set-attribute" :attr-name "visible" :attr-value false
+                                                          :from-params [{:action-property "target" :param-property "transition-name"}]}
                                                          {:type "counter-inc" :target "counter"}
                                                          {:data [{:data               [{:id "run_jump" :type "animation" :target "vera" :loop false}
                                                                                        {:id "run" :loop true :type "add-animation" :target "vera"}]
@@ -483,19 +308,6 @@
 
                         :pick-wrong              {:type "sequence-data"
                                                   :data [{:id "dialog-7-wrong" :type "action"}]}
-
-                        :renew-words             {:type "sequence-data"
-                                                  :data
-                                                        [{:from        "concepts-group"
-                                                          :type        "lesson-var-provider"
-                                                          :limit       3
-                                                          :repeat      4
-                                                          :shuffled    false
-                                                          :variables   ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"]
-                                                          :provider-id "words-set"}
-                                                         {:from "item-1" :type "copy-variable" :var-name "item-1-1"}
-                                                         {:from "item-1" :type "copy-variable" :var-name "item-1-2"}
-                                                         {:from "item-1" :type "copy-variable" :var-name "item-1-3"}]}
 
                         :welcome                 {:type "sequence-data"
                                                   :data [{:type "action" :id "dialog-1-welcome"}]}
@@ -514,6 +326,98 @@
                                                   :data [{:type "action" :id "dialog-4-ready-go"}
                                                          {:type "action" :id "dialog-5-starting-noise"}]}
 
+                        :emit-objects            {:type "sequence-data"
+                                                  :data [{:type "action" :id "shuffle-boxes"}
+                                                         {:type "parallel"
+                                                          :data [{:type "action" :id "emit-object-line-1"}
+                                                                 {:type "action" :id "emit-object-line-2"}
+                                                                 {:type "action" :id "emit-object-line-3"}]}
+                                                         {:type "empty" :duration 3000}
+                                                         {:type     "test-var-scalar"
+                                                          :var-name "game-finished"
+                                                          :value    false
+                                                          :success  "emit-objects"
+                                                          :fail     "finish-activity"}]}
+
+                        :shuffle-boxes           {:type "sequence-data"
+                                                  :data [{:from      ["item-1" "item-2" "item-3" "item-4" "item-5" "item-6" "item-7" "item-8"]
+                                                          :type      "vars-var-provider"
+                                                          :unique    true
+                                                          :from-var  [{:var-key         "concept-name"
+                                                                       :var-name        "current-concept"
+                                                                       :var-property    "concept-name"
+                                                                       :action-property "exclude-property-values"}]
+                                                          :shuffled  true
+                                                          :variables ["pair-concept-1" "pair-concept-2"]}
+                                                         {:from      ["current-concept" "pair-concept-1" "pair-concept-2"]
+                                                          :type      "vars-var-provider"
+                                                          :shuffled  true
+                                                          :variables ["box1" "box2" "box3"]}]}
+
+                        :emit-object-line-1      {:type               "create-object"
+                                                  :root-object        "target-letter"
+                                                  :return-immediately true
+                                                  :on-emit            {:type "action" :id "move-emitted-letter"}
+                                                  :data               {:target-letter      {:type        "group"
+                                                                                            :x           2100
+                                                                                            :y           700
+                                                                                            :custom-data ""
+                                                                                            :children    ["target-letter-text"]}
+                                                                       :target-letter-text {:type        "text"
+                                                                                            :x           0
+                                                                                            :y           0
+                                                                                            :align       "center"
+                                                                                            :fill        0x000000
+                                                                                            :font-family "Lexend Deca"
+                                                                                            :font-size   120
+                                                                                            :text        ""}}
+                                                  :from-var           [{:var-name "box1" :var-property "letter" :action-property "data.target-letter.custom-data"}
+                                                                       {:var-name "box1" :var-property "letter" :action-property "data.target-letter-text.text"}]}
+
+                        :emit-object-line-2      {:type               "create-object"
+                                                  :root-object        "target-letter"
+                                                  :return-immediately true
+                                                  :on-emit            {:type "action" :id "move-emitted-letter"}
+                                                  :data               {:target-letter      {:type        "group"
+                                                                                            :x           2200
+                                                                                            :y           800
+                                                                                            :custom-data ""
+                                                                                            :children    ["target-letter-text"]}
+                                                                       :target-letter-text {:type        "text"
+                                                                                            :x           0
+                                                                                            :y           0
+                                                                                            :align       "center"
+                                                                                            :fill        0x000000
+                                                                                            :font-family "Lexend Deca"
+                                                                                            :font-size   120
+                                                                                            :text        ""}}
+                                                  :from-var           [{:var-name "box2" :var-property "letter" :action-property "data.target-letter.custom-data"}
+                                                                       {:var-name "box2" :var-property "letter" :action-property "data.target-letter-text.text"}]}
+
+                        :emit-object-line-3      {:type               "create-object"
+                                                  :root-object        "target-letter"
+                                                  :return-immediately true
+                                                  :on-emit            {:type "action" :id "move-emitted-letter"}
+                                                  :data               {:target-letter      {:type        "group"
+                                                                                            :x           2300
+                                                                                            :y           930
+                                                                                            :custom-data ""
+                                                                                            :children    ["target-letter-text"]}
+                                                                       :target-letter-text {:type        "text"
+                                                                                            :x           0
+                                                                                            :y           0
+                                                                                            :align       "center"
+                                                                                            :fill        0x000000
+                                                                                            :font-family "Lexend Deca"
+                                                                                            :font-size   120
+                                                                                            :text        ""}}
+                                                  :from-var           [{:var-name "box3" :var-property "letter" :action-property "data.target-letter.custom-data"}
+                                                                       {:var-name "box3" :var-property "letter" :action-property "data.target-letter-text.text"}]}
+
+                        :move-emitted-letter     {:type        "transition"
+                                                  :from-params [{:param-property "transition", :action-property "transition-id"}]
+                                                  :to          {:x -700 :duration 7}}
+
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
                                                          "welcome"
@@ -521,9 +425,8 @@
                                                          "start"
                                                          "init-vars"
                                                          "init-current-concept"
-                                                         "renew-words"
                                                          "start-timer"
-                                                         "renew-current-concept"]}
+                                                         "emit-objects"]}
 
                         :finish-game             {:type "set-variable" :var-name "game-finished" :var-value true}
                         :start-timer             {:type "timer-start" :target "timer"}

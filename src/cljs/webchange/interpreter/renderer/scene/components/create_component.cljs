@@ -17,7 +17,8 @@
                            :transition-name {}
                            :visible         {:default true}
                            :rotation        {:default 0}
-                           :opacity         {}})
+                           :opacity         {}
+                           :custom-data     {}})
 
 (defn- init-display-object!
   [{object :object :as wrapper} props props-to-exclude]

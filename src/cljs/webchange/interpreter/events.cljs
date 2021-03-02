@@ -17,6 +17,7 @@
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.sw-utils.state.status :as sw-status]
+    [webchange.interpreter.events-objects-emitter]
     [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.scene.components.counter.state]
     [webchange.interpreter.renderer.scene.components.timer.state]

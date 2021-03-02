@@ -8,21 +8,21 @@
     [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]
     [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]))
 
-(defn prepare-anim-object-params
+(defn- prepare-anim-object-params
   "Overwrite animation properties. Set default skin if no skin provided."
   [object]
   (if-let [anim-data (get animations-params (-> object :name keyword))]
     (merge object anim-data (select-keys object [:skin]))
     object))
 
-(defn filter-extra-props
+(defn- filter-extra-props
   [props extra-props-names]
   (reduce (fn [props prop-to-remove]
             (dissoc props prop-to-remove))
           props
           extra-props-names))
 
-(defn prepare-object-data
+(defn- prepare-object-data
   [name scene-id get-data]
   (let [object (->> (get-data name)
                     (with-navigation-params scene-id name))

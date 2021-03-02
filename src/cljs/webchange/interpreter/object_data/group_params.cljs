@@ -6,9 +6,12 @@
 
 (defn- prepare-action-data
   [{:keys [id] :as action} event]
-  (let [event-param-name (keyword (:pick-event-param action))
-        params (if event-param-name
-                 (merge (:params action) (hash-map event-param-name (get event event-param-name)))
+  (let [event-params-name (:pick-event-param action)
+        params (if event-params-name
+                 (->> (if (sequential? event-params-name) event-params-name [event-params-name])
+                      (map keyword)
+                      (select-keys event)
+                      (merge (:params action)))
                  (:params action))]
     (merge action {:params       params
                    :display-name id})))
@@ -52,8 +55,10 @@
 (defn- with-collision
   [{:keys [actions collidable?] :as object}]
   (if collidable?
-    (let [test (some (fn [[_ {:keys [on test]}]] (and (= on "collide") test)) actions)]
-      (assoc object :collide-test test))
+    (let [{:keys [test pick-event-param]} (some (fn [[_ {:keys [on test] :as event}]] (and (= on "collide") event)) actions)]
+      (-> object
+          (assoc :collide-test test)
+          (assoc :pick-params (if (sequential? pick-event-param) pick-event-param [pick-event-param]))))
     object))
 
 (defn- with-scale
