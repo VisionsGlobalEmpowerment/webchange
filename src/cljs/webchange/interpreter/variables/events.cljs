@@ -4,6 +4,7 @@
     [re-frame.core :as re-frame]
     [day8.re-frame.tracing :refer-macros [fn-traced]]
     [webchange.common.events :as e]
+    [webchange.auth.subs :as as]
     [webchange.state.lessons.subs :as lessons]
     [webchange.interpreter.variables.core :as core]))
 
@@ -13,18 +14,37 @@
 (e/reg-simple-executor :test-var-scalar ::execute-test-var-scalar)
 (e/reg-simple-executor :test-var-inequality ::execute-test-var-inequality)
 (e/reg-simple-executor :test-var-list-at-least-one-true ::execute-test-var-list-at-least-one-true)
+(e/reg-simple-executor :copy-current-user-to-variable ::execute-copy-current-user-to-variable)
 (e/reg-simple-executor :test-var-list ::execute-test-var-list)
 (e/reg-simple-executor :test-value ::execute-test-value)
 (e/reg-simple-executor :test-random ::execute-test-random)
 (e/reg-simple-executor :case ::execute-case)
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :calc ::execute-calc)
+(e/reg-simple-executor :string-operation ::execute-string-operation)
 (e/reg-simple-executor :set-variable ::execute-set-variable)
 (e/reg-simple-executor :set-variable-list ::execute-set-variable-list)
 (e/reg-simple-executor :set-progress ::execute-set-progress)
 (e/reg-simple-executor :copy-variable ::execute-copy-variable)
 (e/reg-simple-executor :clear-vars ::execute-clear-vars)
 (e/reg-simple-executor :map-value ::execute-map-value)
+
+
+(re-frame/reg-event-fx
+  ::execute-copy-current-user-to-variable
+  (fn [{:keys [db]} [_ {:keys [var-name] :as action}]]
+    "Execute `copy-current-user-to-variable` action - allow to load current user to variable to corresponding variable.
+
+    Action params:
+    :var-name - variable name to set.
+
+    Example:
+    {:type 'copy-current-user-to-variable'
+     :var-name 'answer-clickable'}"
+    (let [current-user @(re-frame/subscribe [::as/user])]
+      (core/set-variable! var-name current-user)
+      {:dispatch (e/success-event action)})))
+
 
 (re-frame/reg-event-fx
   ::execute-set-variable
@@ -457,4 +477,28 @@
                :plus (comp +)
                )]
       (core/set-variable! var-name (fn value-1 value-2))
+      {:dispatch (e/success-event action)})))
+
+
+(re-frame/reg-event-fx
+  ::execute-string-operation
+  (fn [{:keys [db]} [_ {:keys [var-name operation string options] :as action}]]
+    "Execute `string-operation` action - allow to perform simple string manipulation
+
+    Action params:
+    :operation - operation which will be applied to operands. Availble operations: 'div-ceil', 'div-floor'
+    :value-1 - first operand.
+    :value-2 - second operand.
+    :var-name - variable name to store operation result
+
+    Example:
+    {:type 'string-operation',
+     :string 30,
+     :params [0 1],
+     :var-name 'first-letter',
+     :operation 'subs'
+     }"
+    (let [result (case (keyword operation)
+               :subs (apply subs (vec (concat [string] options))))]
+      (core/set-variable! var-name result)
       {:dispatch (e/success-event action)})))

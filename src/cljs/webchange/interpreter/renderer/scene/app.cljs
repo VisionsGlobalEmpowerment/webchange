@@ -82,5 +82,5 @@
 (defn take-screenshot
   [callback]
   (let [renderer (get-renderer)
-        canvas (.-view renderer)]
-    (.toBlob canvas callback)))
+        canvas (.canvas (.-extract renderer) (get-stage))]
+  (.toBlob canvas callback)))

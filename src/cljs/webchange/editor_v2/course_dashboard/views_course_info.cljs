@@ -6,7 +6,7 @@
     [reagent.core :as r]
     [webchange.editor-v2.events :as editor-events]
     [webchange.editor-v2.components.file-input.views :refer [select-file-form]]
-    [webchange.editor-v2.concepts.events :as concepts-events]
+    [webchange.editor-v2.assets.events :as assets-events]
     [webchange.editor-v2.subs :as editor-subs]
     [webchange.routes :refer [redirect-to]]
     [webchange.subs :as subs]))
@@ -47,7 +47,7 @@
                                       (swap! data assoc :image-src (:url result)))
                handle-start-upload (fn [js-file]
                                      (reset! uploading true)
-                                     (re-frame/dispatch [::concepts-events/upload-asset js-file {:type      :image
+                                     (re-frame/dispatch [::assets-events/upload-asset js-file {:type      :image
                                                                                                  :on-finish handle-finish-upload}]))
                handle-input-change #(-> % (.. -target -files) (.item 0) handle-start-upload)
                styles (get-styles)]
