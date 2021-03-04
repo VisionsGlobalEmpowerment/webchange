@@ -32,6 +32,13 @@
     (-> (core/save-scene! course-slug scene-slug activity user-id)
         second)))
 
+(defn get-dialog-actions
+  [course-slug scene-slug]
+  (->> (core/get-scene-data course-slug scene-slug)
+       :actions
+       (filter (fn [[_ {:keys [phrase]}]] (some? phrase)))
+       (map first)))
+
 (comment
   "define new test course"
   (def test-course-slug (-> (create-test-course) :slug))

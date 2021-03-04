@@ -14,6 +14,7 @@
                     :first  {}
                     :last   {}
                     :next   {}
+                    :start  {:default true}
                     :speed  {:default 8}})
 
 (defn- create-container
@@ -84,7 +85,7 @@
    :next - tiling image src. This image will be repeated multiple times, to cover scene.
    :speed - speed of tile movement {:default 8}
     "
-  [{:keys [parent type object-name] :as props}]
+  [{:keys [parent type object-name start] :as props}]
   (let [container (create-container props)
         first (create-sprite :first props)
         last (create-sprite :last props)
@@ -98,5 +99,7 @@
     (.addChild parent container)
 
     (init-carousel! first last next props)
-    (app/add-ticker (start-carousel state first last next props))
+    (when start
+      (app/add-ticker (start-carousel state first last next props)))
+
     wrapped-image))

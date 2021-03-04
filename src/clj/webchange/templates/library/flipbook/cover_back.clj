@@ -1,7 +1,6 @@
 (ns webchange.templates.library.flipbook.cover-back
   (:require
-    [clojure.tools.logging :as log]
-    [webchange.templates.library.flipbook.utils :as utils]))
+    [webchange.utils.scene-data :refer [generate-name rename-object]]))
 
 (def page-name "page-cover-back")
 
@@ -88,12 +87,12 @@
   (->> attributions
        (map-indexed vector)
        (reduce (fn [result [idx attribute]]
-                 (let [attr-name (utils/generate-name)
+                 (let [attr-name (generate-name)
                        attr-data (-> (merge attribute
                                             {:y           (* idx vertical-step)
                                              :label-width attribution-label-width})
                                      (get-attribute-group page-params)
-                                     (utils/rename-object "page-attr" attr-name))]
+                                     (rename-object "page-attr" attr-name))]
                    (-> result
                        (update :names conj attr-name)
                        (update :objects merge attr-data))))

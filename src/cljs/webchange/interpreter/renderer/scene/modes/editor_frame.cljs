@@ -1,11 +1,12 @@
-(ns webchange.interpreter.renderer.scene.components.editor-mode
+(ns webchange.interpreter.renderer.scene.modes.editor-frame
   (:require
     [re-frame.core :as re-frame]
     [webchange.editor-v2.layout.components.change-skin.state :as skin]
     [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE]]
     [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]))
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
+    [webchange.logger.index :as logger]))
 
 (def frame-width 10)
 (def frame-default-color 0x008000)
@@ -36,12 +37,11 @@
       (.lineTo (- width d) d)
       (.lineTo (- width d) (- height d))
       (.lineTo d (- height d))
-      (.lineTo d 0))
-    ))
+      (.lineTo d 0))))
 
 (defn- create-frame
-  [component-container object-props wrapper]
-  (let [{:keys [x y width height]} (let [local-bounds (.getLocalBounds (:object wrapper))]
+  [component-container object-props object]
+  (let [{:keys [x y width height]} (let [local-bounds (.getLocalBounds object)]
                                      {:x      (.-x local-bounds)
                                       :y      (.-y local-bounds)
                                       :width  (.-width local-bounds)
@@ -54,9 +54,9 @@
         mask (doto (Graphics.)
                (draw-border width height)
                (utils/set-position {:x x :y y}))]
-    (if (instance? Container (:object wrapper))
-      (utils/set-handler (:object wrapper) "childAdded"
-                         #(let [local-bounds (.getLocalBounds (:object wrapper))
+    (if (instance? Container object)
+      (utils/set-handler object "childAdded"
+                         #(let [local-bounds (.getLocalBounds object)
                                 width (.-width local-bounds)
                                 height (.-height local-bounds)]
                             + (doto sprite
@@ -80,34 +80,14 @@
     (.addChild parent container)
     container))
 
-(defn- add-editor-frame
-  [{:keys [editable?] :as props}]
-  (if editable?
-    (let [component-container (create-editor-container props)]
-      (-> props
-          (assoc :draggable false)
-          (assoc :x 0)
-          (assoc :y 0)
-          (assoc :parent component-container)
-          (assoc :ref #(create-frame component-container props %))))
-    props))
-
-(defn- modify-common-props
-  [{:keys [editable?] :as props}]
-  (cond-> props
-          editable? (assoc :draggable false)
-          editable? (dissoc :on-drag-start)
-          editable? (dissoc :on-drag-end)
-          true (dissoc :filters)
-          true (dissoc :on-click)))
-
-(defn enable
-  [{:keys [type] :as props}]
-  (-> (case type
-        "animation" (-> props
-                        (assoc :start false))
-        "text" (-> props
-                   (dissoc :chunks))
-        props)
-      (add-editor-frame)
-      (modify-common-props)))
+(defn add-editor-frame
+  [object {:keys [editable?] :as props}]
+  (when editable?
+    (logger/trace "add editor frame" (:object-name props))
+    (let [component-container (create-editor-container props)
+          current-parent (.-parent object)]
+      (.removeChild current-parent object)
+      (.addChild current-parent component-container)
+      (.addChild component-container object)
+      (utils/set-position object 0 0)
+      (create-frame component-container props object))))

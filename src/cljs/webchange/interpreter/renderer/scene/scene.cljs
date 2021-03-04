@@ -8,7 +8,8 @@
     [webchange.interpreter.renderer.question.overlay :as question]
     [webchange.interpreter.renderer.overlays.index :refer [create-overlays update-viewport]]
     [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app get-renderer get-stage]]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! init-mode-props]]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]))
 
 (defn- set-position
@@ -66,10 +67,11 @@
                        (let [{:keys [mode on-ready viewport objects]} (r/props this)
                              app (init-app viewport mode)]
                          (.appendChild @container (.-view app))
-                         (create-component mode {:type        "group"
-                                                 :object-name :scene
-                                                 :parent      (.-stage app)
-                                                 :children    objects})
+                         (-> (create-component {:type        "group"
+                                                :object-name :scene
+                                                :parent      (.-stage app)
+                                                :children    (init-mode-props objects mode)})
+                             (init-mode-helpers! mode))
                          (when (modes/show-overlays? mode)
                            (-> (get-renderer)
                                (register-handler "resize" handle-renderer-resize))

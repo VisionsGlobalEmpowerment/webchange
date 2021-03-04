@@ -6,5 +6,7 @@
 (defn with-transition
   [{:keys [transition] :as object}]
   (if transition
-    (assoc object :ref (fn [ref] (when ref (re-frame/dispatch [::ier/register-transition transition (atom ref)]))))
+    (-> object
+        (assoc :ref (fn [ref] (when ref (re-frame/dispatch [::ier/register-transition transition (atom ref)]))))
+        (assoc :transition-name transition))
     object))

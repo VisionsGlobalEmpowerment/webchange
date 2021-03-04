@@ -6,7 +6,7 @@
     [webchange.interpreter.subs :as isubs]
     [webchange.editor-v2.layout.components.activity-stage.screenshots :as stage-screenshots]
     [webchange.editor-v2.layout.components.activity-stage.state :as scene-state]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn- scene-ready-handler
   [{:keys [scene-data]}]

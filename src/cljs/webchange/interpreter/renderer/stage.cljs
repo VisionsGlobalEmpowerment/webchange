@@ -10,7 +10,7 @@
     [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
     [webchange.interpreter.renderer.state.overlays :as overlays]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.variables.core :as vars.core]))
 
 (defn- init-scene

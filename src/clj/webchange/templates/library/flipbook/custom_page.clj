@@ -1,6 +1,7 @@
 (ns webchange.templates.library.flipbook.custom-page
   (:require
     [webchange.templates.library.flipbook.utils :as utils]
+    [webchange.utils.scene-data :refer [generate-name rename-object]]
     [webchange.utils.text :as text-utils]))
 
 (def page-template
@@ -91,8 +92,8 @@
 
 (defn- create-page
   [objects-data {:keys [image-src]}]
-  (let [page-name (utils/generate-name "page")
-        objects-data (utils/rename-object objects-data "page" page-name)]
+  (let [page-name (generate-name "page")
+        objects-data (rename-object objects-data "page" page-name)]
     {:name      page-name
      :text-name (utils/get-text-name objects-data)
      :resources [image-src]

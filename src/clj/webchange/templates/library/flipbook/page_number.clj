@@ -1,7 +1,7 @@
 (ns webchange.templates.library.flipbook.page-number
   (:require
-    [webchange.templates.library.flipbook.utils :as utils]
-    [webchange.utils.list :refer [without-item]]))
+    [webchange.utils.list :refer [without-item]]
+    [webchange.utils.scene-data :refer [generate-name]]))
 
 (def number-object-prefix "page-number")
 
@@ -36,7 +36,7 @@
 
 (defn- add-page-number-object
   ([activity-data page-group-name page-data page-number page-side]
-   (let [object-name (utils/generate-name number-object-prefix)
+   (let [object-name (generate-name number-object-prefix)
          object-data (-> template
                          (assoc :text page-number)
                          (set-color page-data)
