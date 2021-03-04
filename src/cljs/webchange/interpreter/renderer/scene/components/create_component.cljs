@@ -61,18 +61,27 @@
   (logger/trace "props" props)
   (let [{:keys [constructor default-props]} (get-component type)
         prepared-props (get-props type props default-props {:exclude-check (keys default-object-props)})
-        component-wrapper (constructor prepared-props)]
+        component-wrapper (constructor prepared-props)
+        children (if (container-component? type)
+                   (let [group-instance (:container component-wrapper)]
+                     (->> (case type
+                            "flipbook" (->> (:pages props) (map first))
+                            (:children props))
+                          (map (fn [child]
+                                 (create-component (assoc child :parent group-instance))))
+                          (doall)))
+                   [])]
     (logger/trace "prepared-props" prepared-props)
+
     (set-component-name! component-wrapper prepared-props)
     (init-display-object! component-wrapper props (keys default-props))
-    (when (container-component? type)
-      (let [group-instance (:container component-wrapper)
-            children (case type
-                       "flipbook" (->> (:pages props) (map first))
-                       (:children props))]
-        (doseq [child children]
-          (create-component (assoc child :parent group-instance)))))
+
     (when (nil? component-wrapper)
       (-> (str "Constructor for <" type "> did not return component wrapper") js/Error. throw))
+
     (re-frame/dispatch [::state/register-object component-wrapper])
-    (logger/group-end "create component" type (:object-name props))))
+    (logger/group-end "create component" type (:object-name props))
+
+    {:props    prepared-props
+     :wrapper  component-wrapper
+     :children children}))

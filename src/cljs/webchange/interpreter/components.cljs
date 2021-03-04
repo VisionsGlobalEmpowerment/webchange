@@ -13,7 +13,7 @@
     [webchange.interpreter.subs :as isubs]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
     [webchange.interpreter.renderer.scene.components.group.propagate]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn- get-layer-objects-data
   [scene-id layer-objects]

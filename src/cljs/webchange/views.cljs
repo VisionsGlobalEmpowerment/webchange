@@ -19,7 +19,7 @@
     [webchange.views-login-switch :refer [login-switch]]
     [webchange.editor-v2.wizard.views :as wizard]
     [webchange.error-message.views :refer [error-message]]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]))
+    [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn- str->int-param
   [map key]
