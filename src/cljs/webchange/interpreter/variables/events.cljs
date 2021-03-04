@@ -15,6 +15,7 @@
 (e/reg-simple-executor :test-var-list-at-least-one-true ::execute-test-var-list-at-least-one-true)
 (e/reg-simple-executor :test-var-list ::execute-test-var-list)
 (e/reg-simple-executor :test-value ::execute-test-value)
+(e/reg-simple-executor :test-random ::execute-test-random)
 (e/reg-simple-executor :case ::execute-case)
 (e/reg-simple-executor :counter ::execute-counter)
 (e/reg-simple-executor :calc ::execute-calc)
@@ -308,6 +309,28 @@
         {:dispatch-n (list [::e/execute-action (cond-action db action :fail)])}
         {:dispatch-n (list (e/success-event action))}
         ))))
+
+(re-frame/reg-event-fx
+  ::execute-test-random
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [db]} {:keys [chance fail] :as action}]
+    "Execute `test-random` action - execute action with provided chance.
+
+    Action params:
+    :chance - chance of completing the task. A number from a segment from 0 to 1.
+    :success - action to execute if the comparison is successful. Can be represented as an action name (string) or action data.
+    :fail- action to execute if the comparison is failed. Can be represented as an action name (string) or action data.
+
+    Example:
+    {:type    'test-random'
+     :chance  0.6
+     :success 'pick-correct'
+     :fail    'pick-wrong'}"
+    (if (<= (rand) chance)
+      {:dispatch-n (list [::e/execute-action (cond-action db action :success)])}
+      (if fail
+        {:dispatch-n (list [::e/execute-action (cond-action db action :fail)])}
+        {:dispatch-n (list (e/success-event action))}))))
 
 (re-frame/reg-event-fx
   ::execute-test-var-list

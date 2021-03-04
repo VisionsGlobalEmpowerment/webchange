@@ -335,7 +335,7 @@
                                                           :data [{:type "action" :id "emit-object-line-1"}
                                                                  {:type "action" :id "emit-object-line-2"}
                                                                  {:type "action" :id "emit-object-line-3"}]}
-                                                         {:type "empty" :duration 3000}
+                                                         {:type "empty" :duration 1500}
                                                          {:type     "test-var-scalar"
                                                           :var-name "game-finished"
                                                           :value    false
@@ -357,72 +357,78 @@
                                                           :shuffled  true
                                                           :variables ["box1" "box2" "box3"]}]}
 
-                        :emit-object-line-1      {:type               "create-object"
-                                                  :target             "emit-group"
-                                                  :root-object        "target-letter"
-                                                  :return-immediately true
-                                                  :on-emit            {:type "action" :id "move-emitted-letter"}
-                                                  :data               {:target-letter      {:type        "group"
-                                                                                            :x           2100
-                                                                                            :y           700
-                                                                                            :custom-data ""
-                                                                                            :children    ["target-letter-text"]}
-                                                                       :target-letter-text {:type        "text"
-                                                                                            :x           0
-                                                                                            :y           0
-                                                                                            :align       "center"
-                                                                                            :fill        0x000000
-                                                                                            :font-family "Lexend Deca"
-                                                                                            :font-size   120
-                                                                                            :text        ""}}
-                                                  :from-var           [{:var-name "box1" :var-property "letter" :action-property "data.target-letter.custom-data"}
-                                                                       {:var-name "box1" :var-property "letter" :action-property "data.target-letter-text.text"}]}
+                        :emit-object-line-1      {:type    "test-random"
+                                                  :chance  0.7
+                                                  :success {:type               "create-object"
+                                                            :target             "emit-group"
+                                                            :root-object        "target-letter"
+                                                            :return-immediately true
+                                                            :on-emit            {:type "action" :id "move-emitted-letter"}
+                                                            :data               {:target-letter      {:type        "group"
+                                                                                                      :x           2100
+                                                                                                      :y           700
+                                                                                                      :custom-data ""
+                                                                                                      :children    ["target-letter-text"]}
+                                                                                 :target-letter-text {:type        "text"
+                                                                                                      :x           0
+                                                                                                      :y           0
+                                                                                                      :align       "center"
+                                                                                                      :fill        0x000000
+                                                                                                      :font-family "Lexend Deca"
+                                                                                                      :font-size   120
+                                                                                                      :text        ""}}
+                                                            :from-var           [{:var-name "box1" :var-property "letter" :action-property "data.target-letter.custom-data"}
+                                                                                 {:var-name "box1" :var-property "letter" :action-property "data.target-letter-text.text"}]}}
 
-                        :emit-object-line-2      {:type               "create-object"
-                                                  :target             "emit-group"
-                                                  :root-object        "target-letter"
-                                                  :return-immediately true
-                                                  :on-emit            {:type "action" :id "move-emitted-letter"}
-                                                  :data               {:target-letter      {:type        "group"
-                                                                                            :x           2200
-                                                                                            :y           800
-                                                                                            :custom-data ""
-                                                                                            :children    ["target-letter-text"]}
-                                                                       :target-letter-text {:type        "text"
-                                                                                            :x           0
-                                                                                            :y           0
-                                                                                            :align       "center"
-                                                                                            :fill        0x000000
-                                                                                            :font-family "Lexend Deca"
-                                                                                            :font-size   120
-                                                                                            :text        ""}}
-                                                  :from-var           [{:var-name "box2" :var-property "letter" :action-property "data.target-letter.custom-data"}
-                                                                       {:var-name "box2" :var-property "letter" :action-property "data.target-letter-text.text"}]}
+                        :emit-object-line-2      {:type    "test-random"
+                                                  :chance  0.7
+                                                  :success {:type               "create-object"
+                                                            :target             "emit-group"
+                                                            :root-object        "target-letter"
+                                                            :return-immediately true
+                                                            :on-emit            {:type "action" :id "move-emitted-letter"}
+                                                            :data               {:target-letter      {:type        "group"
+                                                                                                      :x           2200
+                                                                                                      :y           800
+                                                                                                      :custom-data ""
+                                                                                                      :children    ["target-letter-text"]}
+                                                                                 :target-letter-text {:type        "text"
+                                                                                                      :x           0
+                                                                                                      :y           0
+                                                                                                      :align       "center"
+                                                                                                      :fill        0x000000
+                                                                                                      :font-family "Lexend Deca"
+                                                                                                      :font-size   120
+                                                                                                      :text        ""}}
+                                                            :from-var           [{:var-name "box2" :var-property "letter" :action-property "data.target-letter.custom-data"}
+                                                                                 {:var-name "box2" :var-property "letter" :action-property "data.target-letter-text.text"}]}}
 
-                        :emit-object-line-3      {:type               "create-object"
-                                                  :target             "emit-group"
-                                                  :root-object        "target-letter"
-                                                  :return-immediately true
-                                                  :on-emit            {:type "action" :id "move-emitted-letter"}
-                                                  :data               {:target-letter      {:type        "group"
-                                                                                            :x           2300
-                                                                                            :y           930
-                                                                                            :custom-data ""
-                                                                                            :children    ["target-letter-text"]}
-                                                                       :target-letter-text {:type        "text"
-                                                                                            :x           0
-                                                                                            :y           0
-                                                                                            :align       "center"
-                                                                                            :fill        0x000000
-                                                                                            :font-family "Lexend Deca"
-                                                                                            :font-size   120
-                                                                                            :text        ""}}
-                                                  :from-var           [{:var-name "box3" :var-property "letter" :action-property "data.target-letter.custom-data"}
-                                                                       {:var-name "box3" :var-property "letter" :action-property "data.target-letter-text.text"}]}
+                        :emit-object-line-3      {:type    "test-random"
+                                                  :chance  0.7
+                                                  :success {:type               "create-object"
+                                                            :target             "emit-group"
+                                                            :root-object        "target-letter"
+                                                            :return-immediately true
+                                                            :on-emit            {:type "action" :id "move-emitted-letter"}
+                                                            :data               {:target-letter      {:type        "group"
+                                                                                                      :x           2300
+                                                                                                      :y           930
+                                                                                                      :custom-data ""
+                                                                                                      :children    ["target-letter-text"]}
+                                                                                 :target-letter-text {:type        "text"
+                                                                                                      :x           0
+                                                                                                      :y           0
+                                                                                                      :align       "center"
+                                                                                                      :fill        0x000000
+                                                                                                      :font-family "Lexend Deca"
+                                                                                                      :font-size   120
+                                                                                                      :text        ""}}
+                                                            :from-var           [{:var-name "box3" :var-property "letter" :action-property "data.target-letter.custom-data"}
+                                                                                 {:var-name "box3" :var-property "letter" :action-property "data.target-letter-text.text"}]}}
 
                         :move-emitted-letter     {:type        "transition"
                                                   :from-params [{:param-property "transition", :action-property "transition-id"}]
-                                                  :to          {:x -700 :duration 7}}
+                                                  :to          {:x -700 :duration 5}}
 
                         :start-scene             {:type "sequence"
                                                   :data ["start-activity"
