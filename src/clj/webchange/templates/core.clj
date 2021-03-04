@@ -38,6 +38,16 @@
         (assoc-in [:metadata :history] {:created data
                                         :updated []}))))
 
+(defn prepare-history
+  "Check if history of this activity is absent or it is of old format."
+  [{{history :history} :metadata :as scene-data}]
+  (if (map? history)
+    scene-data
+    (-> scene-data
+        (assoc-in [:metadata :history-old] history)
+        (assoc-in [:metadata :history] {:created {}
+                                        :updated []}))))
+
 (defn update-activity-from-template
   [scene-data {:keys [action data]}]
   (let [template-id (get-in scene-data [:metadata :template-id])
@@ -47,6 +57,7 @@
                    (template-update scene-data (assoc data :action-name action)))]
     (log/debug "Update activity" template-id action data)
     (-> activity
+        (prepare-history)
         (update-in [:metadata :history :updated] conj data))))
 
 (defn metadata-from-template
