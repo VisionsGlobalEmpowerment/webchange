@@ -22,6 +22,7 @@
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.audio-utils.recorder :as audio-recorder]
     [webchange.resources.manager :as resources-manager]
+    [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
     [webchange.state.warehouse :as warehouse]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
@@ -56,10 +57,14 @@
 (ce/reg-simple-executor :stop-activity ::execute-stop-activity)
 (ce/reg-simple-executor :finish-activity ::execute-finish-activity)
 (ce/reg-simple-executor :text-animation ::execute-text-animation)
+(ce/reg-simple-executor :animate-next-text ::execute-animate-next-text)
+(ce/reg-simple-executor :reset-animate-text ::execute-reset-animate-text)
 (ce/reg-simple-executor :pick-correct ::execute-pick-correct)
 (ce/reg-simple-executor :pick-wrong ::execute-pick-wrong)
 (ce/reg-simple-executor :set-current-concept ::execute-set-current-concept)
 (ce/reg-simple-executor :set-interval ::execute-set-interval)
+(ce/reg-simple-executor :start-timeout-counter ::execute-start-timeout-counter)
+(ce/reg-simple-executor :next-timeout-counter ::execute-next-timeout-counter)
 (ce/reg-simple-executor :remove-interval ::execute-remove-interval)
 (ce/reg-simple-executor :set-traffic-light ::execute-set-traffic-light)
 (ce/reg-simple-executor :show-question ::execute-show-question)
@@ -1116,19 +1121,19 @@
 (re-frame/reg-event-fx
   ::start-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-    (if (not= course-id (:loaded-course db))
-      {:dispatch-n (list [::load-course course-id scene-id])})))
+             (if (not= course-id (:loaded-course db))
+               {:dispatch-n (list [::load-course course-id scene-id])})))
 
 (re-frame/reg-event-fx
   ::load-course
   (fn-traced [{:keys [db]} [_ course-id scene-id]]
-    (if (not= course-id (:loaded-course db))
-      {:db          (-> db
-                        (assoc :loaded-course course-id)
-                        (assoc :current-course course-id)
-                        (assoc-in [:loading :load-course] true))
-       :load-course {:course-id course-id
-                     :scene-id  scene-id}})))
+             (if (not= course-id (:loaded-course db))
+               {:db          (-> db
+                                 (assoc :loaded-course course-id)
+                                 (assoc :current-course course-id)
+                                 (assoc-in [:loading :load-course] true))
+                :load-course {:course-id course-id
+                              :scene-id  scene-id}})))
 
 (re-frame/reg-event-fx
   ::load-scenes-with-skills
@@ -1158,10 +1163,10 @@
 (re-frame/reg-event-fx
   ::load-course-data
   (fn-traced [{:keys [db]} [_ course-id]]
-    (if (not= course-id (:loaded-course db))
-      {:dispatch         [::load-scenes-with-skills course-id]
-       :load-course-data {:course-id course-id}
-       :load-lessons     [course-id]})))
+             (if (not= course-id (:loaded-course db))
+               {:dispatch         [::load-scenes-with-skills course-id]
+                :load-course-data {:course-id course-id}
+                :load-lessons     [course-id]})))
 
 (re-frame/reg-event-fx
   ::set-current-course
@@ -1238,8 +1243,8 @@
   (fn [{:keys [db]} [_ scene-id scene]]
     (let [current-scene (:current-scene db)
           merged-scene (merge-with-templates db scene)]
-      {:db (cond-> (assoc-in db [:scenes scene-id] merged-scene)
-                   (= current-scene scene-id) (assoc :current-scene-data merged-scene))
+      {:db       (cond-> (assoc-in db [:scenes scene-id] merged-scene)
+                         (= current-scene scene-id) (assoc :current-scene-data merged-scene))
        :dispatch [::set-stage-size (keyword (get-in merged-scene [:metadata :stage-size]))]})))
 
 (re-frame/reg-event-fx
@@ -1478,10 +1483,10 @@
           success (ce/get-action success db action)
           fail (ce/get-action fail db action)
           actions (doall (map-indexed (fn [idx [transition transition-wrapper]]
-                                (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
-                                  [::ce/execute-action (assoc success :params (merge (get action-params idx) {:transition transition}))]
-                                  [::ce/execute-action (assoc fail :params (merge (get action-params idx) {:transition transition}))]
-                                  )) transition-wrappers))]
+                                        (if (i/collide-with-coords? (:object transition-wrapper) (dg/get-mouse-position))
+                                          [::ce/execute-action (assoc success :params (merge (get action-params idx) {:transition transition}))]
+                                          [::ce/execute-action (assoc fail :params (merge (get action-params idx) {:transition transition}))]
+                                          )) transition-wrappers))]
       {:dispatch-n (vec (conj actions (ce/success-event action)))})))
 
 (re-frame/reg-event-fx
@@ -1508,6 +1513,59 @@
           audio-action (i/animation-sequence->audio-action action)]
       (if audio-action
         {:dispatch [::ce/execute-parallel (assoc action :data (conj animation-actions audio-action))]}
+        {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
+
+(re-frame/reg-event-fx
+  ::execute-animate-next-text
+  (fn [{:keys [db]} [_ {:keys [target] :as action}]]
+    "Execute `text-animation` action - play audio file and text chunks animation simultaneously.
+
+    Action params:
+    :target - `text` component name. The component must contain `:chunks` property.
+    :audio - audio file url.
+    :start - start time in sec.
+    :duration - audio interval duration in sec.
+    :data - data defining the animation time for each chunk.
+
+    Example:
+    {:type      'animate-next-text',
+     :target    'title-text',
+     :animation 'color',
+     :fill '#ff0000'
+     }"
+    (let [variable-name (tc/chunk-animated-variable target)
+          last (vars.core/get-variable variable-name)
+          last (if (nil? last) -1 last)
+          animation-actions (i/text-animation-sequence->actions db (-> action
+                                                                       (assoc :start 0)
+                                                                       (assoc :data [{:at 0 :chunk (inc last)}])))]
+      {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]})))
+
+(re-frame/reg-event-fx
+  ::execute-reset-animate-text
+  (fn [{:keys [db]} [_ {:keys [target] :as action}]]
+    "Execute `execute-reset-animate-text` action - reset text animation status
+
+    Action params:
+    :target - `text` component name. The component must contain `:chunks` property.
+    :fill  - color to revert
+
+    Example:
+    {:type      'animate-next-text',
+     :target    'title-text',
+     :animation 'color',
+     :fill '#ff0000'
+     }"
+    (let [variable-name (tc/chunk-animated-variable target)
+          last (vars.core/get-variable variable-name)
+          animation-actions (-> (i/text-animation-sequence->actions db (-> action
+                                                                           (assoc :start 0)
+                                                                           (assoc :data (vec (map (fn [i] {:at 0 :chunk i})
+                                                                                                  (range last -1 -1)))
+                                                                                  )))
+                                (update-in [0 :data] conj {:type "set-variable" :var-name variable-name :var-value nil}))]
+      (if (not last)
+        {:dispatch-n (list (ce/success-event action))}
         {:dispatch [::ce/execute-parallel (assoc action :data animation-actions)]}))))
 
 (re-frame/reg-event-fx
@@ -1622,6 +1680,45 @@
      :value 'ardilla'}"
     (vars.core/set-variable! :score-first-attempt true)
     {:dispatch-n (list (ce/success-event action))}))
+
+
+(def timeout-counter (atom {}))
+
+(re-frame/reg-event-fx
+  ::execute-next-timeout-counter
+  (fn [{:keys [db]} [_ {:keys [id] :as main-action}]]
+    (reset! timeout-counter (-> @timeout-counter
+                                (assoc-in [id :last] (.now js/Date))
+                                (update-in [id :counter] inc)))
+    {:dispatch-n (list
+                   (ce/success-event main-action))}))
+
+(re-frame/reg-event-fx
+  ::execute-start-timeout-counter
+  (fn [{:keys [db]} [_ {:keys [id interval action autostart] :as main-action}]]
+    (reset! timeout-counter (-> @timeout-counter
+                                (assoc-in [id :last] (if autostart 0 nil))
+                                (assoc-in [id :counter] 0)))
+    (ce/remove-timer id)
+    (let [interval-id (.setInterval js/window (fn []
+                                                (let
+                                                  [last (get-in @timeout-counter [id :last])
+                                                   counter (get-in @timeout-counter [id :counter])
+                                                   scene-action (-> (ce/get-action action db)
+                                                                    (assoc :params (:params main-action))
+                                                                    (assoc-in [:params :counter] counter))
+                                                   ]
+                                                  (if (and (< interval (- (.now js/Date) last)) (not (nil? last)))
+                                                    (do
+                                                      (ce/remove-timer id)
+                                                      (vars.core/set-variable! (str id "-value") counter)
+                                                      (re-frame/dispatch [::ce/execute-action scene-action]))))
+                                                ) interval)]
+      {:dispatch-n (list [::ce/execute-register-timer {:name id
+                                                       :id   interval-id
+                                                       :type "interval"}]
+                         (ce/success-event main-action))})
+    ))
 
 (re-frame/reg-event-fx
   ::execute-set-interval

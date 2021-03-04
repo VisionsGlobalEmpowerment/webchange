@@ -11,6 +11,7 @@
     [webchange.templates.library.magic_hat]
     [webchange.templates.library.volleyball]
     [webchange.templates.library.swings]
+    [webchange.templates.library.syllables]
     [webchange.templates.library.book]
     [webchange.templates.library.i-spy]
     [webchange.templates.library.i-spy-2]

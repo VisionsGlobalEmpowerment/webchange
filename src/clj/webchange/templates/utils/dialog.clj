@@ -20,3 +20,15 @@
     (keyword (str "dialog-" unique-suffix)) (default dialog)}
    []
    ])
+
+(defn create-simple
+  [key description unique-suffix available-activities]
+  (let [name (clojure.string/replace key "-" " ")]
+    {(keyword (str key "-" unique-suffix)) (cond-> {:type               "sequence-data",
+                                                   :editor-type        "dialog",
+                                                   :data               [{:type "sequence-data"
+                                                                         :data [{:type "empty" :duration 0}
+                                                                                {:type "animation-sequence", :phrase-text "New action", :audio nil}]}],
+                                                   :phrase             name,
+                                                   :phrase-description (str name " " description)}
+                                                  available-activities (assoc :available-activities available-activities))}))

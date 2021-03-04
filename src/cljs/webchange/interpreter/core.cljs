@@ -7,7 +7,7 @@
     [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]))
+    [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name chunk-animated-variable]]))
 
 (def assets (atom {}))
 
@@ -321,12 +321,15 @@
                     ("bounce") {:type "sequence-data"
                                 :data [{:type "empty" :duration (* (- at start) 1000)}
                                        {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y -20 :duration 0.01}}
-                                       {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}]}
-                    ("color") (let [transition-id (chunk-transition-name target chunk)]
+                                       {:type "transition" :transition-id (chunk-transition-name target chunk) :to {:y 0 :duration 0.1}}
+                                       {:type "set-variable" :var-name (chunk-animated-variable target) :var-value chunk}
+                                       ]}
+                    ("color") (let [transition-id (chunk-transition-name target chunk)
+                                    variable-name (chunk-animated-variable target)]
                                 {:type "sequence-data"
                                  :data [{:type "empty" :duration (* (- at start) 1000)}
-                                        {:type "transition" :transition-id transition-id :to {:fill fill :duration 0.01}}]})
-                    ))
+                                        {:type "transition" :transition-id transition-id :to {:fill fill :duration 0.01}}
+                                        {:type "set-variable" :var-name variable-name :var-value chunk}]})))
                 data)))
 
 (defn find-nav-path

@@ -11,9 +11,21 @@
   [scene-data]
   (get-in scene-data [:metadata :unique-suffix]))
 
+(defn unique-suffix-first?
+  [scene-data]
+  (= 0 (get-unique-suffix scene-data)))
+
+(defn get-prev-unique-suffix
+  [scene-data]
+  (dec (get-unique-suffix scene-data)))
+
 (defn make-name-unique
   [scene-data name]
   (keyword (str name "-" (get-unique-suffix scene-data))))
+
+(defn make-prev-name-unique
+  [scene-data name]
+  (keyword (str name "-" (get-prev-unique-suffix scene-data))))
 
 (defn get-replace-params
   [scene-data]
