@@ -57,7 +57,7 @@
 (defn add-level
   [course-data {:keys [position level-data]}]
   (let [updated-levels (-> (get-levels course-data)
-                           (insert-at-position position level-data))]
+                           (insert-at-position level-data position))]
     (assoc course-data :levels updated-levels)))
 
 (defn get-lesson-sets-scheme
@@ -143,7 +143,7 @@
   (let [level-selection {:level-idx level-index}
         updated-lessons (-> (get-level course-data level-selection)
                             (get :lessons)
-                            (insert-at-position position lesson-data))]
+                            (insert-at-position lesson-data position))]
     (update-level course-data level-selection {:lessons updated-lessons})))
 
 (defn update-lesson
@@ -207,7 +207,7 @@
                           :lesson-idx lesson-index}
         updated-activities (-> (get-lesson course-data lesson-selection)
                                (get :activities)
-                               (insert-at-position position activity-data))]
+                               (insert-at-position activity-data position))]
     (update-lesson course-data lesson-selection {:activities updated-activities})))
 
 (defn remove-activity
