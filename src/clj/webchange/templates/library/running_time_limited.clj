@@ -2,7 +2,7 @@
   (:require
     [webchange.templates.core :as core]))
 
-(def m {:id          33
+(def m {:id          34
         :name        "Running (time limited)"
         :tags        ["Independent Practice"]
         :description "Running"
