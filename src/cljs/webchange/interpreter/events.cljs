@@ -26,6 +26,8 @@
     [webchange.audio-utils.recorder :as audio-recorder]
     [webchange.resources.manager :as resources-manager]
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
+    [webchange.interpreter.renderer.scene.app :as app]
+    [webchange.editor-v2.assets.events :as assets-events]
     [webchange.state.warehouse :as warehouse]))
 
 (ce/reg-simple-executor :audio ::execute-audio)
@@ -60,6 +62,8 @@
 (ce/reg-simple-executor :stop-activity ::execute-stop-activity)
 (ce/reg-simple-executor :finish-activity ::execute-finish-activity)
 (ce/reg-simple-executor :text-animation ::execute-text-animation)
+(ce/reg-simple-executor :set-text ::execute-set-text)
+(ce/reg-simple-executor :clear-painting-area ::execute-clear-painting-area)
 (ce/reg-simple-executor :animate-next-text ::execute-animate-next-text)
 (ce/reg-simple-executor :reset-animate-text ::execute-reset-animate-text)
 (ce/reg-simple-executor :pick-correct ::execute-pick-correct)
@@ -72,6 +76,42 @@
 (ce/reg-simple-executor :set-traffic-light ::execute-set-traffic-light)
 (ce/reg-simple-executor :show-question ::execute-show-question)
 (ce/reg-simple-executor :hide-question ::execute-hide-question)
+(ce/reg-simple-executor :upload-screenshot ::execute-upload-screenshot)
+
+
+(re-frame/reg-event-fx
+  ::update-progress-screenshots
+  (fn [{:keys [db]} [_ screenshot]]
+    (let [activity-name (:current-scene db)
+          {level :level lesson :lesson} (lessons-activity/name->activity-action db activity-name)
+          screenshot (-> screenshot
+                         (assoc :date (.toUTCString (js/Date.))))]
+      {:db (-> db
+               (update-in [:progress-data :student-assets level lesson activity-name] conj screenshot)
+               (update-in [:progress-data :student-assets level lesson activity-name] vec))
+       :dispatch-n (list [:progress-data-changed])
+       })))
+
+
+
+(re-frame/reg-event-fx
+  ::execute-upload-screenshot
+  (fn [{:keys [db]} [_ {:keys [var-name] :as action}]]
+    "Execute `copy-current-user-to-variable` action - allow to load current user to variable to corresponding variable.
+
+    Action params:
+    :var-name - variable name to set.
+
+    Example:
+    {:type 'copy-current-user-to-variable'
+     :var-name 'answer-clickable'}"
+    (app/take-screenshot
+      #(do
+         (re-frame/dispatch [::assets-events/upload-asset % {:type      "image"
+                                                             :on-finish (fn [result]
+                                                                          (re-frame/dispatch [::update-progress-screenshots result]))}])))
+    {:dispatch (ce/success-event action)}))
+
 
 (re-frame/reg-event-fx
   ::execute-show-question
@@ -1491,6 +1531,18 @@
                                           [::ce/execute-action (assoc fail :params (merge (get action-params idx) {:transition transition}))]
                                           )) transition-wrappers))]
       {:dispatch-n (vec (conj actions (ce/success-event action)))})))
+
+(re-frame/reg-event-fx
+  ::execute-set-text
+  (fn [{:keys [db]} [_ {:keys [target text] :as action}]]
+    {:dispatch-n (list [::scene/change-scene-object (keyword target) [[:set-text {:text text}]]]
+                       (ce/success-event action))}))
+
+(re-frame/reg-event-fx
+  ::execute-clear-painting-area
+  (fn [{:keys [db]} [_ {:keys [target] :as action}]]
+    {:dispatch-n (list [::scene/change-scene-object (keyword target) [[:clear-area {}]]]
+                       (ce/success-event action))}))
 
 (re-frame/reg-event-fx
   ::execute-text-animation

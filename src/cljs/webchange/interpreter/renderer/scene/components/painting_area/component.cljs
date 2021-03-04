@@ -77,14 +77,16 @@
   :ref - callback function that must be called with component wrapper.
   :tool - tool which will be used for painting. Default brush. Possible options brush, felt-tip, pencil, eraser
   :color - drawing color. Default 0xffffff"
-  [{:keys [parent type object-name tool color] :as props}]
+  [{:keys [parent type object-name tool color width height on-click] :as props}]
   (let [container (create-container props)
         texture (create-render-texture props)
         color (atom color)
         tool-name (atom tool)
         tool (atom (create-tool @tool-name @color))
         trigger (create-trigger texture tool props)
-        wrapped-container (wrap type object-name container tool tool-name color)]
+        wrapped-container (wrap type object-name container tool tool-name color texture width height)]
+
+    (when-not (nil? on-click) (utils/set-handler container "click" on-click))
 
     (.addChild container (Sprite. texture))
     (.addChild container trigger)

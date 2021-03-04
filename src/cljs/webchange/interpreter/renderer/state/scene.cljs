@@ -65,6 +65,7 @@
                              :set-visibility [:visible]
                              :set-src        [:src]
                              :set-text       [:text]
+                             :clear-area     []
                              :set-filter     [:filter :brightness :eager]
                              :set-opacity    [:opacity]
                              :set-tool       [:tool]
@@ -141,6 +142,11 @@
   :set-text
   (fn [[object-wrapper {:keys [text]}]]
     (apply-to-wrapper w/set-text object-wrapper text)))
+
+(re-frame/reg-fx
+  :clear-area
+  (fn [[object-wrapper {:keys [text]}]]
+    (apply-to-wrapper w/clear-area object-wrapper text)))
 
 (re-frame/reg-fx
   :set-font-size

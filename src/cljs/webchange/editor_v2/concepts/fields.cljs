@@ -5,7 +5,7 @@
     [cljs-react-material-ui.reagent :as ui]
     [cljs-react-material-ui.icons :as ic]
     [webchange.editor-v2.components.file-input.views :as file-input]
-    [webchange.editor-v2.concepts.events :as concepts-events]))
+    [webchange.editor-v2.assets.events :as assets-events]))
 
 (defmulti dataset-item-control #(:type %))
 
@@ -26,7 +26,7 @@
                     (reset! uploading-atom false))
         on-change (fn [js-file]
                     (reset! uploading-atom true)
-                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish :options options}]))]
+                    (re-frame/dispatch [::assets-events/upload-asset js-file {:type type :on-finish on-finish :options options}]))]
     [file-input/select-file-form {:on-change on-change}])))
 
 ;

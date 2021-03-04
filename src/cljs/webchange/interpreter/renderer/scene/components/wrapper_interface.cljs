@@ -39,6 +39,7 @@
 (defn set-draggable [wrapper & params] (execute wrapper :set-draggable params))
 (defn set-parent [wrapper & params] (execute wrapper :set-parent params))
 (defn set-text [wrapper & params] (execute wrapper :set-text params))
+(defn clear-area [wrapper & params] (execute wrapper :clear params))
 (defn set-font-size [wrapper & params] (execute wrapper :set-font-size params))
 (defn set-value [wrapper & params] (execute wrapper :set-value params))
 (defn set-visibility [wrapper & params] (execute wrapper :set-visibility params))

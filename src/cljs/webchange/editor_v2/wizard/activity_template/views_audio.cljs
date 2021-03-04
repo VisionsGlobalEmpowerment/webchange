@@ -4,7 +4,7 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.editor-v2.components.file-input.views :as file-input]
-    [webchange.editor-v2.concepts.events :as concepts-events]
+    [webchange.editor-v2.assets.events :as assets-events]
     [webchange.editor-v2.wizard.validator :as v :refer [connect-data]]))
 
 (def audio-validation-map {:src [(fn [value] (when-not (some? value) "audio is required"))]})
@@ -22,7 +22,7 @@
                     (reset! uploading-atom false))
         on-change (fn [js-file]
                     (reset! uploading-atom true)
-                    (re-frame/dispatch [::concepts-events/upload-asset js-file {:type type :on-finish on-finish}]))]
+                    (re-frame/dispatch [::assets-events/upload-asset js-file {:type type :on-finish on-finish}]))]
     [file-input/select-file-form {:on-change on-change
                                   :styles    {:wrapper      {:display "inline-block"}
                                               :button       {:padding "0 25px"}
