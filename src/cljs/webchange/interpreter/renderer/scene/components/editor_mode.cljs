@@ -1,7 +1,7 @@
 (ns webchange.interpreter.renderer.scene.components.editor-mode
   (:require
     [re-frame.core :as re-frame]
-    ;[webchange.editor-v2.layout.components.change-skin.state :as skin]                 ;; ToDo: Fix it!!!!!
+    [webchange.editor-v2.layout.components.change-skin.state :as skin]
     [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE]]
     [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
@@ -18,9 +18,7 @@
 (defn- handle-drag
   [container]
   (let [{:keys [x y]} (utils/get-position container)]
-    ;; ToDo: Fix it!!!!!
-    ;(re-frame/dispatch [::skin/change-position x y])
-    ))
+    (re-frame/dispatch [::skin/change-position x y])))
 
 (defn- wrap
   [name sprite]
@@ -38,8 +36,7 @@
       (.lineTo (- width d) d)
       (.lineTo (- width d) (- height d))
       (.lineTo d (- height d))
-      (.lineTo d 0))
-    ))
+      (.lineTo d 0))))
 
 (defn- create-frame
   [component-container object-props wrapper]

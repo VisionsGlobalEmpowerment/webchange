@@ -121,6 +121,7 @@
                                               :y          775
                                               :transition "vera-group"
                                               :children   ["vera" "vera-collision-test"]}
+                        :emit-group          {:type "group"}
                         :vera                {:type       "animation"
                                               :x          0
                                               :y          0
@@ -135,8 +136,9 @@
                                               :scale-y    0.4
                                               :skin       "default"
                                               :speed      1
-                                              :start      true}
-                        :vera-collision-test {:type        "rectangle"
+                                              :start      true
+                                              :editable?  true}
+                        :vera-collision-test {:type        "transparent"
                                               :x           150
                                               :y           -55
                                               :width       10
@@ -145,6 +147,7 @@
                                               :collidable? true
                                               :actions     {:collide {:on "collide" :test ["#^target-letter-.*"] :type "action" :id "check-box" :pick-event-param ["custom-data" "transition-name"]}}}}
         :scene-objects [["background"]
+                        ["emit-group"]
                         ["vera-group" "mari"]
                         ["target-group" "timer" "line-1" "line-2" "line-3"]]
         :actions       {:dialog-1-welcome        {:type               "sequence-data"
@@ -355,6 +358,7 @@
                                                           :variables ["box1" "box2" "box3"]}]}
 
                         :emit-object-line-1      {:type               "create-object"
+                                                  :target             "emit-group"
                                                   :root-object        "target-letter"
                                                   :return-immediately true
                                                   :on-emit            {:type "action" :id "move-emitted-letter"}
@@ -375,6 +379,7 @@
                                                                        {:var-name "box1" :var-property "letter" :action-property "data.target-letter-text.text"}]}
 
                         :emit-object-line-2      {:type               "create-object"
+                                                  :target             "emit-group"
                                                   :root-object        "target-letter"
                                                   :return-immediately true
                                                   :on-emit            {:type "action" :id "move-emitted-letter"}
@@ -395,6 +400,7 @@
                                                                        {:var-name "box2" :var-property "letter" :action-property "data.target-letter-text.text"}]}
 
                         :emit-object-line-3      {:type               "create-object"
+                                                  :target             "emit-group"
                                                   :root-object        "target-letter"
                                                   :return-immediately true
                                                   :on-emit            {:type "action" :id "move-emitted-letter"}

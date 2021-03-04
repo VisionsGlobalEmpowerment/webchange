@@ -7,7 +7,7 @@
     [webchange.interpreter.renderer.scene.components.props-utils :refer [get-props get-object-props]]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [webchange.interpreter.renderer.scene.components.modes :as modes]))
+    [webchange.logger.index :as logger]))
 
 (def default-object-props {:draggable       {}
                            :on-drag-end     {}
@@ -50,22 +50,29 @@
   [component-type]
   (some #{component-type} ["flipbook" "group"]))
 
+(defn- set-component-name!
+  [component-wrapper component-props]
+  (set! (.-name (:object component-wrapper))
+        (clojure.core/name (:object-name component-props))))
+
 (defn create-component
-  ([props]
-   (create-component ::modes/game props))
-  ([mode {:keys [type] :as props}]
-   (let [{:keys [constructor default-props]} (get-component type)
-         modified-props (modes/enable-mode mode props)
-         component-wrapper (->> (get-props type modified-props default-props {:exclude-check (keys default-object-props)})
-                                (constructor))]
-     (init-display-object! component-wrapper modified-props (keys default-props))
-     (when (container-component? type)
-       (let [group-instance (:container component-wrapper)
-             children (case type
-                        "flipbook" (->> (:pages modified-props) (map first))
-                        (:children modified-props))]
-         (doseq [child children]
-           (create-component mode (assoc child :parent group-instance)))))
-     (when (nil? component-wrapper)
-       (-> (str "Constructor for <" type "> did not return component wrapper") js/Error. throw))
-     (re-frame/dispatch [::state/register-object component-wrapper]))))
+  [{:keys [type] :as props}]
+  (logger/group-folded "create component" type (:object-name props))
+  (logger/trace "props" props)
+  (let [{:keys [constructor default-props]} (get-component type)
+        prepared-props (get-props type props default-props {:exclude-check (keys default-object-props)})
+        component-wrapper (constructor prepared-props)]
+    (logger/trace "prepared-props" prepared-props)
+    (set-component-name! component-wrapper prepared-props)
+    (init-display-object! component-wrapper props (keys default-props))
+    (when (container-component? type)
+      (let [group-instance (:container component-wrapper)
+            children (case type
+                       "flipbook" (->> (:pages props) (map first))
+                       (:children props))]
+        (doseq [child children]
+          (create-component (assoc child :parent group-instance)))))
+    (when (nil? component-wrapper)
+      (-> (str "Constructor for <" type "> did not return component wrapper") js/Error. throw))
+    (re-frame/dispatch [::state/register-object component-wrapper])
+    (logger/group-end "create component" type (:object-name props))))

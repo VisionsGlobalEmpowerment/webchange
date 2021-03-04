@@ -28,7 +28,6 @@
     :ref - callback function that must be called with component wrapper.
     :children - vector og object names to group"
 
-  ;:type     {:default "group"}
   [{:keys [parent type ref on-click] :as props}]
   (let [group (create-container props)
         wrapped-group (wrap type (:object-name props) group)]

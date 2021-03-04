@@ -66,10 +66,10 @@
                        (let [{:keys [mode on-ready viewport objects]} (r/props this)
                              app (init-app viewport mode)]
                          (.appendChild @container (.-view app))
-                         (create-component mode {:type        "group"
-                                                 :object-name :scene
-                                                 :parent      (.-stage app)
-                                                 :children    objects})
+                         (create-component {:type        "group"
+                                            :object-name :scene
+                                            :parent      (.-stage app)
+                                            :children    objects})
                          (when (modes/show-overlays? mode)
                            (-> (get-renderer)
                                (register-handler "resize" handle-renderer-resize))

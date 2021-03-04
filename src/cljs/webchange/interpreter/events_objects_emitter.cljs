@@ -26,24 +26,32 @@
   (get-object-data nil root-object-name data))
 
 (defn- emit-object
-  [stage {:keys [data root-object on-emit]}]
+  [stage {:keys [data root-object target on-emit] :as props}]
   (let [new-root-object (generate-name root-object)
+        parent (if (some? target)
+                 (.getChildByName stage target true)
+                 stage)
         prepared-data (-> data
                           (set-transition root-object)
                           (rename-object root-object new-root-object)
                           (parse-data new-root-object)
-                          (assoc :parent stage))
+                          (assoc :parent parent))
         emit-event-handler (merge on-emit
                                   {:display-name :on-emit
                                    :params       {:transition new-root-object}})]
 
     (logger/group-folded "emit object" (keyword new-root-object))
+    (logger/trace "stage:" stage)
+    (logger/trace "parent:" parent)
+    (logger/trace "props:" props)
     (logger/trace "prepared object data:" prepared-data)
     (logger/trace "on-emit:" emit-event-handler)
     (logger/group-end "emit object" (keyword new-root-object))
 
-    (create-component prepared-data)
-    (re-frame/dispatch [::ce/execute-action emit-event-handler])))
+    (if (some? parent)
+      (do (create-component prepared-data)
+          (re-frame/dispatch [::ce/execute-action emit-event-handler]))
+      (logger/error "Emit object failed: parent is not defined"))))
 
 (re-frame/reg-fx
   :create-object
@@ -51,8 +59,8 @@
     (let [stage (get-stage)]
       (if (some? emit-interval)
         (set-countdown {:interval           emit-interval
-                      :count              max-count
-                      :start-immediately? true
-                      :on-progress        (fn []
-                                            (emit-object stage action))})
+                        :count              max-count
+                        :start-immediately? true
+                        :on-progress        (fn []
+                                              (emit-object stage action))})
         (emit-object stage action)))))
