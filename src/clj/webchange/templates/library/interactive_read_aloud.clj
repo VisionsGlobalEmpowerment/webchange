@@ -299,7 +299,6 @@
                                                :authors      authors
                                                :illustrators illustrators})
       (assoc-in [:metadata :actions] (:actions metadata))
-      (assoc-in [:metadata :history] [{:type :create :args props}])
       (assoc-in [:metadata :saved-props :wizard] props)))
 
 (defn- update-template

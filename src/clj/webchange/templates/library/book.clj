@@ -151,16 +151,14 @@
 (defn fu
   [old-data args]
   (-> old-data
-      (add-pages (:pages args))
-      (update-in [:metadata :history] conj {:type :update :args args})))
+      (add-pages (:pages args))))
 
 (defn f
   [args]
   (-> t
       (add-title (:title args))
       (add-pages (:pages args))
-      (assoc-in [:metadata :actions] (:actions m))
-      (assoc-in [:metadata :history] [{:type :create :args args}])))
+      (assoc-in [:metadata :actions] (:actions m))))
 
 (core/register-template
   m f fu)

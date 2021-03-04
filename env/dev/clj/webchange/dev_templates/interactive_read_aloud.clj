@@ -31,9 +31,9 @@
     (str "/courses/" test-course-slug "/editor-v2/" scene-slug))
 
   ;add left page
-  (let [data {:data
-              {:action-name   "add-page"
-               :type          "page"
+  (let [data {:action        "add-page"
+              :data
+              {:type          "page"
                :page-layout   "text-small-at-bottom"
                :spread-layout "text-right-top"
                :text          "left page"
@@ -44,9 +44,9 @@
         first))
 
   ;add right page
-  (let [data {:data
-              {:action-name   "add-page"
-               :type          "page"
+  (let [data {:action        "add-page"
+              :data
+              {:type          "page"
                :page-layout   "text-small-at-bottom"
                :spread-layout "text-right-top"
                :text          "right page"
@@ -57,16 +57,16 @@
         first))
 
   ;add dialog
-  (let [data {:data {:action-name "add-dialog" :dialog "dialog one"}}
+  (let [data {:action "add-dialog" :data {:dialog "dialog one"}}
         scene-data (core/get-scene-data test-course-slug scene-slug)
         activity (templates/update-activity-from-template scene-data data)]
     (-> (core/save-scene! test-course-slug scene-slug activity t/user-id)
         first))
 
   ;add question
-  (let [data {:data
-              {:action-name   "add-question"
-               :question-page {:answers  [{:text "answer one"}
+  (let [data {:action        "add-question"
+              :data
+              {:question-page {:answers  [{:text "answer one"}
                                           {:text "answer two"}
                                           {:text "answer three" :checked true}
                                           {:text "answer four"}]
