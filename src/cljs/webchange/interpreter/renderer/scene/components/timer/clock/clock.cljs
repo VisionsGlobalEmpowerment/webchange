@@ -51,4 +51,3 @@
      :set-value     (fn [{:keys [minutes seconds]}]
                       (when (and show-minutes? (some? minutes)) (set-minutes minutes))
                       (when (some? seconds) (set-seconds seconds)))}))
-
