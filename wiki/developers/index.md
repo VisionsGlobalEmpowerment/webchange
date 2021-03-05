@@ -17,3 +17,4 @@
   - [Template](create_content/complete_guide/template.md)
   - [Activity](create_content/complete_guide/activity.md)
   - [Dialogs](create_content/complete_guide/dialogs.md)
+- [Auto dialog generation](auto-dialog-generation.md)
