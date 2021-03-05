@@ -9,7 +9,15 @@
     [webchange.editor-v2.wizard.activity-template.views-lookup-image :refer [lookup-image-option]]
     [webchange.editor-v2.wizard.activity-template.views-pages :refer [pages-option]]
     [webchange.editor-v2.wizard.activity-template.views-string :refer [string-option]]
-    [webchange.editor-v2.wizard.activity-template.views-strings-list :refer [strings-list-option]]))
+    [webchange.editor-v2.wizard.activity-template.views-strings-list :refer [strings-list-option]]
+    [webchange.editor-v2.wizard.activity-template.views-video :refer [video-option]]
+    [webchange.editor-v2.wizard.activity-template.views-video-range :refer [video-range-option]]))
+
+(defn- undefined-option
+  [{:keys [key option]}]
+  [ui/chip {:label   (str "Unhandled option: <" key ">, type: <" (:type option) ">")
+            :color   "secondary"
+            :variant "outlined"}])
 
 (defn- option-info
   [{:keys [option] :as props}]
@@ -22,7 +30,9 @@
     "string" [string-option props]
     "strings-list" [strings-list-option props]
     "questions-no-image" [answers-option props false]
-    nil))
+    "video" [video-option props]
+    "video-range" [video-range-option props]
+    [undefined-option props]))
 
 (defn- template->options
   "Support both versions of options declaration:
