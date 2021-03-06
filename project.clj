@@ -74,8 +74,8 @@
   :figwheel {:css-dirs ["resources/public/css"]
              :ring-handler webchange.handler/dev-handler
              :server-ip   "0.0.0.0"
-             :server-logfile "log/figwheel.log"
-             }
+             :server-logfile "log/figwheel.log"}
+
 
   :migratus {:store :database
              :migration-dir "migrations"
@@ -114,10 +114,11 @@
              :main         webchange.server
              :aot          [webchange.server]
              :uberjar-name "webchange.jar"
+             :jar-exclusions [#"public/raw/.*" #"public/upload/.*"]
+             :uberjar-exclusions [#"public/raw/.*" #"public/upload/.*"]
              :prep-tasks   ["compile" ["sass" "once"]
                             "compile" ["cljsbuild" "once" "sw"]
-                            "compile" ["cljsbuild" "once" "min"]]}
-   }
+                            "compile" ["cljsbuild" "once" "min"]]}}
 
   :cljsbuild
   {:builds
@@ -146,8 +147,8 @@
                                            :pathfinding "^0.4.18"
                                            :paths-js "^0.4.10"
                                            :lodash "^4.17.15"
-                                           "@projectstorm/react-diagrams" "^5.3.2"
-                                           }
+                                           "@projectstorm/react-diagrams" "^5.3.2"}
+
                     :foreign-libs [{:file "src/libs/dagre.js"
                                     :provides ["dagre"]
                                     :module-type :commonjs}
@@ -165,8 +166,8 @@
                                     :module-type :commonjs}]
                     :install-deps true
                     :optimizations   :none
-                    :language-in :ecmascript6
-                    }}
+                    :language-in :ecmascript6}}
+
     {:id           "sw"
      :source-paths ["src/sw"]
      :compiler {:main webchange.service-worker
@@ -202,8 +203,8 @@
                                       :pathfinding "^0.4.18"
                                       :paths-js "^0.4.10"
                                       :lodash "^4.17.15"
-                                      "@projectstorm/react-diagrams" "^5.3.2"
-                                      }
+                                      "@projectstorm/react-diagrams" "^5.3.2"}
+
                     :foreign-libs [{:file "src/libs/dagre.js"
                                     :provides ["dagre"]
                                     :module-type :commonjs}
@@ -238,8 +239,8 @@
                                     :pathfinding "^0.4.18"
                                     :paths-js "^0.4.10"
                                     :lodash "^4.17.15"
-                                    "@projectstorm/react-diagrams" "^5.3.2"
-                                    }
+                                    "@projectstorm/react-diagrams" "^5.3.2"}
+
                     :foreign-libs [{:file "src/libs/dagre.js"
                                     :provides ["dagre"]
                                     :module-type :commonjs}
@@ -256,6 +257,4 @@
                                     :provides ["audio-script"]
                                     :module-type :commonjs}]
                     :install-deps true
-                    :optimizations :none}}
-    ]}
-  )
+                    :optimizations :none}}]})

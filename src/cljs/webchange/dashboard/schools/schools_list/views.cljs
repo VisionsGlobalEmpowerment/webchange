@@ -61,21 +61,18 @@
         is-loading? @(re-frame/subscribe [::schools-subs/schools-loading])]
     (if is-loading?
       [ui/linear-progress]
-      [content-page
-       {:title (translate [:title])}
+      [content-page {:title (translate [:title])}
        [:div
         [schools-list
          {:on-edit-click     (fn [{:keys [id]}] (re-frame/dispatch [::schools-events/show-edit-school-form id]))
           :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::dashboard-events/show-delete-school-form id]))
-          :on-sync-click     (fn [{:keys [id]}] (re-frame/dispatch [::schools-events/show-sync-school-form id]))
-          }
+          :on-sync-click     (fn [{:keys [id]}] (re-frame/dispatch [::schools-events/show-sync-school-form id]))}
          schools]
-        [fab
-         {
-          :on-click   #(re-frame/dispatch [::schools-events/show-add-school-form])
-          :color      "primary"
-          :variant    "extended"
-          :style      (:add-button styles)
-          :aria-label (translate [:add-school :text])}
+        [ui/button {:on-click #(re-frame/dispatch [::schools-events/software-update])} "Software update"]
+        [fab {:on-click   #(re-frame/dispatch [::schools-events/show-add-school-form])
+              :color      "primary"
+              :variant    "extended"
+              :style      (:add-button styles)
+              :aria-label (translate [:add-school :text])}
          [ic/add]
          (translate [:add-school :text])]]])))

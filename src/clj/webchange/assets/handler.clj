@@ -70,8 +70,7 @@
   [type path]
   (when (= type "audio")
     (future (try-recognize-audio path))
-    (try-voice-recognition-audio path)
-    ))
+    (try-voice-recognition-audio path)))
 
 (defn handle-parse-audio-subtitles
   [request]
@@ -103,7 +102,6 @@
            :type type
            :size (normalize-size size)}
           (get-additional-params type path))))))
-
 
 (defn upload-asset-by-path [{{:keys [tempfile]} "file" target-path "target-path" :as request}]
   (let [full-path (f/relative->absolute-path target-path)]

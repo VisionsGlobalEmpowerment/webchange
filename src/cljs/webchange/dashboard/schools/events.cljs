@@ -82,6 +82,16 @@
                   :on-success      [::sync-school-success]
                   :on-failure      [:api-request-error :sync-school]}}))
 
+(re-frame/reg-event-fx
+  ::software-update
+  (fn [{:keys [db]} _]
+    {:db (assoc-in db [:loading :software-update] true)
+     :http-xhrio {:method          :post
+                  :uri             (str "/api/software/update")
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-failure      [:api-request-error :software-update]}}))
+
 
 (re-frame/reg-event-fx
   ::delete-school-success
@@ -160,5 +170,4 @@
   (fn [{:keys [db]} [_ school-id]]
     {:db (assoc-in db [:dashboard :current-school-id] school-id)
      :dispatch-n (list
-                   [::open-sync-modal]
-                   )}))
+                   [::open-sync-modal])}))
