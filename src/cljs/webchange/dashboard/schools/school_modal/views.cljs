@@ -77,22 +77,27 @@
 
 (defn school-sync-modal
   []
-  (let [modal-state @(re-frame/subscribe [::schools-subs/sync-modal-state])
-        school-id @(re-frame/subscribe [::schools-subs/current-school-id])
-        is-loading? false]
-    (when modal-state
-      [ui/dialog {:open true}
-       (if is-loading?
-         [ui/linear-progress]
-         [:div
-          [ui/dialog-title "Are you sure?"]
-          [ui/dialog-content
-           [ui/dialog-content-text "You are about to synchronize this school"]
-           [ui/dialog-actions
-            [ui/button {:on-click #(re-frame/dispatch [::schools-events/close-sync-modal])} "Cancel"]
-            [ui/button
-             {:variant  "contained"
-              :color    "primary"
-              :on-click #(re-frame/dispatch [::schools-events/confirm-sync school-id])}
-             "Confirm"]]]])
-       ])))
+  (r/with-let [data (r/atom {:update-and-restart true})]
+    (let [modal-state @(re-frame/subscribe [::schools-subs/sync-modal-state])
+          school-id @(re-frame/subscribe [::schools-subs/current-school-id])
+          is-loading? (-> @(re-frame/subscribe [:loading]) :sync-school)]
+      (when modal-state
+        [ui/dialog {:open true}
+         (if is-loading?
+           [ui/linear-progress]
+           [:div
+            [ui/dialog-title "Are you sure?"]
+            [ui/dialog-content
+             [ui/dialog-content-text "You are about to synchronize this school"]
+             [ui/form-control-label
+              {:label   "Update and restart"
+               :control (r/as-element [ui/checkbox {:checked (:update-and-restart @data)
+                                                    :on-change #(swap! data assoc :update-and-restart (->> % .-target .-checked))}])}]
+             [ui/dialog-actions
+              [ui/button {:on-click #(re-frame/dispatch [::schools-events/close-sync-modal])} "Cancel"]
+              [ui/button
+               {:variant  "contained"
+                :color    "primary"
+                :on-click #(re-frame/dispatch [::schools-events/confirm-sync school-id @data])}
+               "Confirm"]]]])
+         ]))))

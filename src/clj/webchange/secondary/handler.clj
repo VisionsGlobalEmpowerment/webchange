@@ -26,25 +26,22 @@
     response {}))
 
 (defn handle-load-school-sync [id request]
-  (let [school (db/get-school {:id (Integer/parseInt id)})]
-    (when-not (teacher? request)
-      (throw-unauthorized {:role :teacher}))
-    (core/upload-stat (:id school))
-    (core/update-course-data! (:id school))
-    (core/update-assets!)
-    (response {:result "Ok"})))
+  (if (env :secondary)
+    (let [school (db/get-school {:id (Integer/parseInt id)})
+          data (-> request :body slurp (json/read-str :key-fn keyword))]
+      (when-not (teacher? request)
+        (throw-unauthorized {:role :teacher}))
+      (core/upload-stat (:id school))
+      (core/update-course-data! (:id school))
+      (core/update-assets!)
+      (when (:update-and-restart data)
+        (updater/update-local-instance!))
+      (response {:result "Ok"}))
+    (bad-request "not a secondary school")))
 
 (defn handle-asset-difference [request]
   (let [school-hashes (-> request :body)]
     (response (core/calc-asset-update school-hashes))))
-
-(defn handle-software-update
-  [request]
-  (when-not (teacher? request)
-    (throw-unauthorized {:role :teacher}))
-  (if (env :secondary)
-    (updater/update-local-instance!)
-    (bad-request "not a secondary school")))
 
 (defn handle-get-latest-version
   []
@@ -53,12 +50,14 @@
       (bad-request "no update available")
       (file-response file-path))))
 
-(defroutes secondary-school-routes
-           (GET "/api/school/dump-full/:id" [id :as request] (handle-dump-full id request))
-           (GET "/api/school/update/:id" [id :as request] (handle-get-school-update id request))
-           (PUT "/api/school/update/:id" [id :as request] (handle-load-school-update id request))
-           (POST "/api/school/sync/:id" [id :as request] (handle-load-school-sync id request))
-           (POST "/api/school/asset/difference/" request (handle-asset-difference request))
-           (POST "/api/software/update" request (handle-software-update request))
-           (sign/wrap-api-with-signature
-             (GET "/api/software/latest" _ (handle-get-latest-version))))
+(defroutes local-sync-routes
+  (POST "/api/school/sync/:id" [id :as request] (handle-load-school-sync id request)))
+
+(defroutes global-sync-routes
+  (GET "/api/school/dump-full/:id" [id :as request] (handle-dump-full id request))
+  (PUT "/api/school/update/:id" [id :as request] (handle-load-school-update id request))
+  (GET "/api/school/courses-update/:id" [id :as request] (handle-get-school-update id request))
+  (POST "/api/school/asset/difference/" request (handle-asset-difference request))
+  (sign/wrap-api-with-signature
+    (GET "/api/software/latest" _ (handle-get-latest-version))))
+

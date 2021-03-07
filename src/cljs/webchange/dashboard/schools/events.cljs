@@ -73,10 +73,11 @@
 
 (re-frame/reg-event-fx
   ::sync-school
-  (fn [{:keys [db]} [_ id]]
+  (fn [{:keys [db]} [_ id data]]
     {:db (assoc-in db [:loading :sync-school] true)
      :http-xhrio {:method          :post
                   :uri             (str "/api/school/sync/" id)
+                  :params          data
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [::sync-school-success]
@@ -162,8 +163,8 @@
 
 (re-frame/reg-event-fx
   ::confirm-sync
-  (fn [{:keys [db]} [_ school-id]]
-    {:dispatch [::sync-school school-id]}))
+  (fn [{:keys [db]} [_ school-id data]]
+    {:dispatch [::sync-school school-id data]}))
 
 (re-frame/reg-event-fx
   ::show-sync-school-form

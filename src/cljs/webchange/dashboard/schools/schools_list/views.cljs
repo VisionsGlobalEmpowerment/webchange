@@ -68,7 +68,6 @@
           :on-remove-click   (fn [{:keys [id]}] (re-frame/dispatch [::dashboard-events/show-delete-school-form id]))
           :on-sync-click     (fn [{:keys [id]}] (re-frame/dispatch [::schools-events/show-sync-school-form id]))}
          schools]
-        [ui/button {:on-click #(re-frame/dispatch [::schools-events/software-update])} "Software update"]
         [fab {:on-click   #(re-frame/dispatch [::schools-events/show-add-school-form])
               :color      "primary"
               :variant    "extended"

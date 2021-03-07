@@ -11,7 +11,7 @@
             [webchange.course.handler :refer [course-pages-routes course-routes website-api-routes editor-api-routes courses-api-routes]]
             [webchange.class.handler :refer [class-routes]]
             [webchange.school.handler :refer [school-routes]]
-            [webchange.secondary.handler :refer [secondary-school-routes]]
+            [webchange.secondary.handler :refer [local-sync-routes global-sync-routes]]
             [webchange.progress.handler :refer [progress-routes]]
             [webchange.dataset.handler :refer [dataset-routes dataset-api-routes]]
             [webchange.assets.handler :refer [asset-routes asset-maintainer-routes]]
@@ -148,7 +148,7 @@
     (assoc response :body (slurp body))))
 
 (defroutes app
-           (api
+  (api
              (swagger-routes {:ui   "/api-docs"
                               :data {:info {:title "TabSchools API"}
                                      :tags [{:name "dataset", :description "Dataset APIs"}
@@ -158,21 +158,22 @@
                courses-api-routes
                dataset-api-routes
                templates-api-routes)
-           pages-routes
-           animation-routes
-           auth-routes
-           course-pages-routes
-           course-routes
-           class-routes
-           school-routes
-           secondary-school-routes
-           asset-maintainer-routes
-           dataset-routes
-           progress-routes
-           resources-routes
-           service-worker-route
-           asset-routes
-           (not-found "Not Found"))
+  pages-routes
+  animation-routes
+  auth-routes
+  course-pages-routes
+  course-routes
+  class-routes
+  school-routes
+  global-sync-routes
+  local-sync-routes
+  asset-maintainer-routes
+  dataset-routes
+  progress-routes
+  resources-routes
+  service-worker-route
+  asset-routes
+  (not-found "Not Found"))
 
 (def dev-store (mem/memory-store))
 

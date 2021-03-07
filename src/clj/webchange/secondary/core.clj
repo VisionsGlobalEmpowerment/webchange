@@ -545,7 +545,7 @@
   )
 
 (defn update-course-data! [id]
-  (let [url (make-url-absolute (str "api/school/update/" id))
+  (let [url (make-url-absolute (str "api/school/courses-update/" id))
         data (json/read-str (:body (client/get url)) :key-fn keyword)]
     (import-primary-data! data)))
 
