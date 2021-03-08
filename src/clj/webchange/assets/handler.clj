@@ -54,17 +54,22 @@
   (str (rand-str 16) "." extension))
 
 (defn- convert-asset
-  [relative-path type convert-params]
-  (cond (and (= type "blob")
-             (= (:blob-type convert-params) "audio"))
-        ["audio" (convert-to-mp3 relative-path {:remove-origin? true})]
-        (= type "image") (let [target (f/replace-extension relative-path "png")]
-                           (im/scale-to-window
-                             (f/relative->absolute-path relative-path)
-                             (f/relative->absolute-path target)
-                             convert-params)
-                           [type target])
-        :else [type relative-path]))
+  [relative-path extension {:strs [type blob-type options]}]
+  (let [type (or (validated-type type) (get-type extension))
+        upload-options (if options (edn/read-string options) {})
+        convert-params (merge {:blob-type blob-type} upload-options)]
+    (cond (and (= type "blob")
+               (= (:blob-type convert-params) "audio"))
+          ["audio" (convert-to-mp3 relative-path {:remove-origin? true})]
+          (= extension "wav")
+          ["audio" (convert-to-mp3 relative-path {:remove-origin? true})]
+          (= type "image") (let [target (f/replace-extension relative-path "png")]
+                             (im/scale-to-window
+                               (f/relative->absolute-path relative-path)
+                               (f/relative->absolute-path target)
+                               convert-params)
+                             [type target])
+          :else [type relative-path])))
 
 (defn- process-asset
   [type path]
@@ -83,18 +88,16 @@
         (-> [false {:message "File not found"}]
             handle)))))
 
-(defn upload-asset [{{:keys [tempfile size filename]} "file" type "type" blob-type "blob-type" options "options"}]
+(defn upload-asset [{{:keys [tempfile size filename]} "file" :as params}]
   (let [extension (f/get-extension filename)
         new-name (gen-filename extension)
         path (str (env :upload-dir) (if (.endsWith (env :upload-dir) "/") "" "/") new-name)
-        type (or (validated-type type) (get-type extension))
         relative-path (str "/upload/" new-name)]
     (try
       (with-open [xin (io/input-stream tempfile)
                   xout (io/output-stream path)]
         (io/copy xin xout))
-      (let [upload-options (if options (edn/read-string options) {})
-            [type relative-path] (convert-asset relative-path type (merge {:blob-type blob-type} upload-options))
+      (let [[type relative-path] (convert-asset relative-path extension params)
             path (f/relative->absolute-path relative-path)]
         (process-asset type relative-path)
         (core/store-asset-hash! path)
