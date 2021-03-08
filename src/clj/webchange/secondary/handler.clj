@@ -28,7 +28,7 @@
 (defn handle-load-school-sync [id request]
   (if (env :secondary)
     (let [school (db/get-school {:id (Integer/parseInt id)})
-          data (-> request :body slurp (json/read-str :key-fn keyword))]
+          data (-> request :body)]
       (when-not (teacher? request)
         (throw-unauthorized {:role :teacher}))
       (core/upload-stat (:id school))
@@ -50,8 +50,17 @@
       (bad-request "no update available")
       (file-response file-path))))
 
+(defn handle-software-update
+  [request]
+  (when-not (teacher? request)
+    (throw-unauthorized {:role :teacher}))
+  (if (env :secondary)
+    (updater/update-local-instance!)
+    (bad-request "not a secondary school")))
+
 (defroutes local-sync-routes
-  (POST "/api/school/sync/:id" [id :as request] (handle-load-school-sync id request)))
+  (POST "/api/school/sync/:id" [id :as request] (handle-load-school-sync id request))
+  (POST "/api/software/update" request (handle-software-update request)))
 
 (defroutes global-sync-routes
   (GET "/api/school/dump-full/:id" [id :as request] (handle-dump-full id request))

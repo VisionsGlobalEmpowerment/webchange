@@ -74,4 +74,5 @@
               :style      (:add-button styles)
               :aria-label (translate [:add-school :text])}
          [ic/add]
-         (translate [:add-school :text])]]])))
+         (translate [:add-school :text])]]
+       [ui/button {:on-click #(re-frame/dispatch [::schools-events/software-update])} "Software update"]])))

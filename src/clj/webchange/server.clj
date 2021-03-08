@@ -65,6 +65,7 @@
     :else
     (let [port (Integer/parseInt (or (env :port) "3000"))]
       (mount/start)
+      (migrations/migrate ["migrate"] (select-keys env [:database-url]))
       (run-jetty handler {:port port :join? false}))))
 
 (defn dev [& args]
