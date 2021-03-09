@@ -50,11 +50,14 @@
                                              :width  1200
                                              :height 800
                                              :fill   0x202C6D}
-                        :video              {:type   "video"
-                                             :x      0
-                                             :y      0
-                                             :width  1200
-                                             :height 800}
+                        :video              {:type       "video"
+                                             :transition "video"
+                                             :x          0
+                                             :y          0
+                                             :width      1200
+                                             :height     800
+                                             :visible    false
+                                             :states     {:hidden {:visible false} :visible {:visible true}}}
                         :play-video-button  {:type       "image"
                                              :src        "/raw/clipart/karaoke/play_button.png"
                                              :transition "play-video-button"
@@ -96,51 +99,102 @@
                         ["mic" "play-record-button" "record-button"]
                         ["video-screen" "play-video-button"]
                         ["mari"]]
-        :actions       {:start-scene                  {:type "sequence"
-                                                       :data ["start-activity"
-                                                              "run-round-1"]}
-                        :start-activity               {:type "start-activity"}
+        :actions       {:start-scene                          {:type "sequence"
+                                                               :data ["start-activity"
+                                                                      "run-round-1"]}
+                        :start-activity                       {:type "start-activity"}
+
+                        ;; Common
+
+                        :show-video-screen                    {:type "state" :id "visible" :target "video-screen"}
+                        :hide-video-screen                    {:type "state" :id "hidden" :target "video-screen"}
+                        :show-video                           {:type "state" :id "visible" :target "video"}
+                        :hide-video                           {:type "state" :id "hidden" :target "video"}
+                        :show-play-video-button               {:type "state" :id "visible" :target "play-video-button"}
+                        :hide-play-video-button               {:type "state" :id "hidden" :target "play-video-button"}
+                        :highlight-play-video-button          {:type      "set-attribute"
+                                                               :target    "play-video-button"
+                                                               :attr-name "highlight" :attr-value true}
+                        :unhighlight-play-video-button        {:type      "set-attribute"
+                                                               :target    "play-video-button"
+                                                               :attr-name "highlight" :attr-value false}
+
+                        :play-video-seq                       {:type "sequence"
+                                                               :data ["show-video"
+                                                                      "play-video"
+                                                                      "hide-video"]}
+                        :play-video                           {:type     "empty"
+                                                               :duration 500}
+                        ;{:type   "play-video"
+                        ;                                       :target "video"
+                        ;                                       :src    "---"}
+
+                        :on-play-video-button-clicked         {:type     "case"
+                                                               :from-var [{:var-name "current-round" :action-property "value"}]
+                                                               :options  {:round1 {:type "action" :id "on-play-video-button-clicked-round-1"}
+                                                                          :round2 {:type "action" :id "on-play-video-button-clicked-round-2"}}}
 
                         ;; Round 1
 
-                        :run-round-1                  {:type "sequence"
-                                                       :data ["show-video-screen"
-                                                              "show-play-video-button"
-                                                              "dialog-are-you-ready"
-                                                              "highlight-play-video-button"]}
-                        :dialog-are-you-ready         {:type               "sequence-data"
-                                                       :editor-type        "dialog"
-                                                       :concept-var        "current-concept"
-                                                       :data               [{:type "sequence-data"
-                                                                             :data [{:type "empty" :duration 0}
-                                                                                    {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
-                                                       :phrase             "instructions"
-                                                       :phrase-description "Instructions"
-                                                       :dialog-track       "Round 1"}
-                        :show-video-screen            {:type "state" :id "visible" :target "video-screen"}
-                        :show-play-video-button       {:type "state" :id "visible" :target "play-video-button"}
-                        :hide-play-video-button       {:type "state" :id "hidden" :target "play-video-button"}
-                        :highlight-play-video-button  {:type      "set-attribute"
-                                                       :target    "play-video-button"
-                                                       :attr-name "highlight" :attr-value true}
-                        :play-video                   {:type   "play-video"
-                                                       :target "video"
-                                                       :src    "---"}
-                        :on-play-video-button-clicked {:type "sequence"
-                                                       :data ["hide-play-video-button"
-                                                              "play-video"
-                                                              "run-round-2"]}
+                        :run-round-1                          {:type "sequence"
+                                                               :data ["set-current-round-1"
+                                                                      "show-video-screen"
+                                                                      "show-play-video-button"
+                                                                      "dialog-are-you-ready"
+                                                                      "highlight-play-video-button"]}
+                        :set-current-round-1                  {:type "set-variable" :var-name "current-round" :var-value "round1"}
+                        :dialog-are-you-ready                 {:type               "sequence-data"
+                                                               :editor-type        "dialog"
+                                                               :concept-var        "current-concept"
+                                                               :data               [{:type "sequence-data"
+                                                                                     :data [{:type "empty" :duration 0}
+                                                                                            {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                               :phrase             "instructions"
+                                                               :phrase-description "Instructions"
+                                                               :dialog-track       "Round 1"}
+
+                        :on-play-video-button-clicked-round-1 {:type "sequence"
+                                                               :data ["hide-play-video-button"
+                                                                      "unhighlight-play-video-button"
+                                                                      "play-video-seq"
+                                                                      "run-round-2"]}
 
                         ;; Round 2
 
-                        :run-round-2                  {:type "empty" :duration 200}
+                        :run-round-2                          {:type "sequence"
+                                                               :data ["set-current-round-2"
+                                                                      "show-play-video-button"
+                                                                      "dialog-sing-along"
+                                                                      "highlight-play-video-button"]}
+
+                        :set-current-round-2                  {:type "set-variable" :var-name "current-round" :var-value "round2"}
+
+                        :dialog-sing-along                    {:type               "sequence-data"
+                                                               :editor-type        "dialog"
+                                                               :concept-var        "current-concept"
+                                                               :data               [{:type "sequence-data"
+                                                                                     :data [{:type "empty" :duration 0}
+                                                                                            {:type "animation-sequence" :phrase-text "New action" :audio nil}]}]
+                                                               :phrase             "sing-along"
+                                                               :phrase-description "Can't help but sing along"
+                                                               :dialog-track       "Round 2"}
+
+                        :on-play-video-button-clicked-round-2 {:type "sequence"
+                                                               :data ["hide-play-video-button"
+                                                                      "unhighlight-play-video-button"
+                                                                      "play-video-seq"
+                                                                      "run-round-3"]}
+
+                        ;; Round 3
+
+                        :run-round-3                          {:type "empty" :duration 1000}
 
                         ;; Finish
 
-                        :stop-scene                   {:type "sequence" :data ["stop-activity"]}
-                        :stop-activity                {:type "stop-activity"}
+                        :stop-scene                           {:type "sequence" :data ["stop-activity"]}
+                        :stop-activity                        {:type "stop-activity"}
 
-                        :finish-activity              {:type "finish-activity"}}
+                        :finish-activity                      {:type "finish-activity"}}
         :triggers      {:stop  {:on "back" :action "stop-scene"}
                         :start {:on "start" :action "start-scene"}}
         :metadata      {:autostart true}})
